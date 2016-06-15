@@ -1,0 +1,197 @@
+.wrap.tsf-extension-manager {
+	margin-top: 20px;
+}
+
+.tsf-extension-manager .top-wrap {
+	background-color: #333;
+	padding: 28px;
+	margin-bottom: 14px;
+	border-bottom: 7px solid #0ebfe9;
+}
+
+.tsf-extension-manager h1 {
+	font-family: 'Titillium Web',sans-serif;
+	font-size: 2.5em;
+	font-weight: 700;
+	color: #0ebfe9;
+	margin: 0;
+	padding: 0;
+}
+
+.tsf-extension-manager .connect-wrap {
+	max-width: 690px;
+	min-width: 175px;
+}
+
+.tsf-extension-manager .connect-option {
+	width: 100%;
+	padding: 1.33em 40px;
+	margin-bottom: 20px;
+	border: 1px solid #e2e2e2;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	background: #fafafa;
+	overflow: hidden;
+	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: center;
+}
+
+.tsf-extension-manager .connect-option.connect-highlighted {
+	background: #fff;
+	border: 1px solid #057f9c;
+}
+
+.tsf-extension-manager .connect-option.connect-secondary {
+	background: #eee;
+}
+
+.tsf-extension-manager .connect-description,
+.tsf-extension-manager .connect-action {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	flex-direction: column;
+	-webkit-box-flex: 1;
+	-webkit-flex-grow: 1;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	-webkit-flex-shrink: 1;
+	-ms-flex-negative: 1;
+	flex-shrink: 1;
+}
+
+.tsf-extension-manager .connect-action {
+	text-align: right;
+}
+
+.tsf-extension-manager .connect-description h3 {
+	font-size: 1.66em;
+	color: #057f9c;
+	font-family: 'Titillium Web',sans-serif;
+	margin: 14px 0;
+}
+
+.tsf-extension-manager .connect-fields-row {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsf-extension-manager .connect-fields-row > *:nth-child(1n+2) .button {
+	margin-left: 7px;
+}
+
+.tsf-extension-manager #key {
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	flex-direction: row;
+}
+
+.tsf-extension-manager #key .regular-text,
+.tsf-extension-manager #key .button {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	flex-direction: column;
+	-webkit-box-flex: 1;
+	-webkit-flex-grow: 1;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	-webkit-flex-shrink: 1;
+	-ms-flex-negative: 1;
+	flex-shrink: 1;
+	margin: 0;
+}
+
+.tsf-extension-manager #key .regular-text {
+	width: 100%;
+	min-width: 8em;
+}
+
+.tsf-extension-manager #key .button {
+	margin-left: 4px;
+}
+
+.tsf-extension-manager .button-primary {
+	background: #057f9c;
+	border-color: #056d8c #05617b #05617b;
+	-webkit-box-shadow: 0 1px 0 #05617b;
+	box-shadow: 0 1px 0 #05617b;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 0 -1px 1px #05617b,1px 0 1px #05617b,0 1px 1px #05617b,-1px 0 1px #05617b;
+}
+
+.tsf-extension-manager .button-primary:hover {
+	background: #0588a4;
+	border-color: #05617b;
+	color: #fff;
+}
+
+.tsf-extension-manager .button-primary:active,
+.tsf-extension-manager .button-primary:focus {
+	background: #056d8c;
+	border-color: #05617b;
+	-webkit-box-shadow: inset 0 2px 0 #05617b;
+	box-shadow: inset 0 2px 0 #05617b;
+}
+
+.tsf-extension-manager input[type=text]:focus,
+.tsf-extension-manager input[type=search]:focus,
+.tsf-extension-manager input[type=radio]:focus,
+.tsf-extension-manager input[type=tel]:focus,
+.tsf-extension-manager input[type=time]:focus,
+.tsf-extension-manager input[type=url]:focus,
+.tsf-extension-manager input[type=week]:focus,
+.tsf-extension-manager input[type=password]:focus,
+.tsf-extension-manager input[type=checkbox]:focus,
+.tsf-extension-manager input[type=color]:focus,
+.tsf-extension-manager input[type=date]:focus,
+.tsf-extension-manager input[type=datetime]:focus,
+.tsf-extension-manager input[type=datetime-local]:focus,
+.tsf-extension-manager input[type=email]:focus,
+.tsf-extension-manager input[type=month]:focus,
+.tsf-extension-manager input[type=number]:focus,
+.tsf-extension-manager select:focus,
+.tsf-extension-manager textarea:focus {
+	border-color: #057f9c;
+	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
+	box-shadow: 0 0 2px rgba(66,144,183,.8);
+}
+
+@media only screen and ( max-width:600px ) {
+
+	.tsf-extension-manager .connect-option {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 1em 20px 1.66em;
+	}
+
+}
