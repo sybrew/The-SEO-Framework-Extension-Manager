@@ -75,7 +75,13 @@ define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
  * The plugin class map absolute path.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . '/inc/classes/' );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc/classes/' );
+
+/**
+ * The plugin function map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc/functions/' );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**

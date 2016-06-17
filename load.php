@@ -29,6 +29,23 @@ function tsf_extension_manager() {
 	return init_tsf_extension_manager();
 }
 
+/**
+ * Returns the minimum role required to adjust and access settings.
+ *
+ * @since 1.0.0
+ *
+ * @return string The minimum required capability for extension installation.
+ */
+function can_do_tsf_extension_manager_settings() {
+
+	static $cache = null;
+
+	if ( isset( $cache ) )
+		return $cache;
+
+	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
+}
+
 add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**
  * Loads TSF_Extension_Manager_Load class when in admin.
@@ -79,8 +96,8 @@ function can_load_tsf_extension_manager() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( is_admin() && function_exists( 'the_seo_framework_version' ) )
-		if ( version_compare( the_seo_framework_version(), '2.7', '>=' ) )
+	if ( is_admin() && can_do_tsf_extension_manager_settings() )
+		if ( function_exists( 'the_seo_framework_version' ) && version_compare( the_seo_framework_version(), '2.7', '>=' ) )
 			return $can_load = (bool) apply_filters( 'tsf_extension_manager_enabled', true );
 
 	return $can_load = false;
@@ -105,6 +122,7 @@ function require_tsf_extension_manager_files() {
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'core.class.php' );
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'activation.class.php' );
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'adminpages.class.php' );
+	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'extensions.class.php' );
 
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.class.php' );
 

@@ -24,7 +24,7 @@
  * @since 1.0.0
  * @final Please don't extend this extension.
  */
-final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_AdminPages {
+final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions {
 
 	/**
 	 * Constructor, loads parent constructor.
@@ -43,16 +43,14 @@ final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_AdminPages 
 	 */
 	public function do_activation_notice() {
 
-		if ( $this->is_plugin_connected() || ! current_user_can( $this->settings_capability() ) || $this->is_seo_extension_manager_page() )
+		if ( $this->is_plugin_connected() || ! $this->can_do_settings() || $this->is_seo_extension_manager_page() )
 			return;
 
 		$text = esc_html__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
 		$url = $this->get_admin_page_url();
 		$title = esc_html__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
 
-		$tsf = the_seo_framework();
-
-		echo $tsf->generate_dismissible_notice( sprintf( '%s &mdash; <a href="%s" title="%s" target="_self" class="">%s</a>', $text, $url, $title, $title ) );
+		echo the_seo_framework()->generate_dismissible_notice( sprintf( '%s &mdash; <a href="%s" title="%s" target="_self" class="">%s</a>', $text, $url, $title, $title ) );
 
 	}
 
@@ -71,10 +69,8 @@ final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_AdminPages 
 		if ( isset( $cache ) )
 			return $cache;
 
-		$tsf = the_seo_framework();
-
-		if ( $tsf->can_cache_query() )
-			return $cache = $tsf->is_menu_page( $this->page_id );
+		if ( the_seo_framework()->can_cache_query() )
+			return $cache = the_seo_framework()->is_menu_page( $this->plugin_page_id );
 
 		return false;
 	}

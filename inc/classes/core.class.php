@@ -34,21 +34,16 @@ class TSF_Extension_Manager_Core {
 	/**
 	 * Returns the minimum role required to adjust and access settings.
 	 *
-	 * Applies filter 'tsf_extension_manager_settings_capability' : string
-	 * This filter changes the minimum role for viewing and editing the plugin's settings.
-	 *
 	 * @since 1.0.0
-	 * @access private
 	 *
 	 * @return string The minimum required capability for SEO Settings.
 	 */
-	public function settings_capability() {
-		return (string) apply_filters( 'tsf_extension_manager_settings_capability', 'manage_options' );
+	public function can_do_settings() {
+		return can_do_tsf_extension_manager_settings();
 	}
 
 	/**
 	 * Determines whether the plugin is network activated.
-	 * Only works in admin screens.
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $network_mode
@@ -62,15 +57,17 @@ class TSF_Extension_Manager_Core {
 		if ( isset( $network_mode ) )
 			return $network_mode;
 
-		//* Simply crash on front-end. Calling this is bad practice.
-		if ( is_plugin_active_for_network( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) )
-			return $network_mode = true;
+		if ( ! is_multisite() )
+			return $network_mode = false;
 
-		return $network_mode = false;
+		$plugins = get_site_option( 'active_sitewide_plugins' );
+
+		return $network_mode = isset( $plugins[TSF_EXTENSION_MANAGER_PLUGIN_BASENAME] );
 	}
 
 	/**
-	 * Returns escaped Extension manager URL.
+	 * Returns escaped admin page URL.
+	 * Defaults to the Extension Manager page ID.
 	 *
 	 * @since 1.0.0
 	 *
@@ -80,11 +77,45 @@ class TSF_Extension_Manager_Core {
 	 */
 	public function get_admin_page_url( $page = '', $args = array() ) {
 
-		$page = $page ? $page : $this->page_id;
+		$page = $page ? $page : $this->plugin_page_id;
 
 		$url = add_query_arg( $args, menu_page_url( $page, 0 ) );
 
 		return esc_url( $url );
+	}
+
+	/**
+	 * Fetch an instance of a TSF_Extension_Manager_{*}_List_Table Class.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @return object|bool Object on success, false if the class does not exist.
+	 */
+	public function get_list_table( $class, $args = array() ) {
+
+		$classes = array(
+			//Site Admin
+			'TSF_Extension_Manager_Install_List_Table' => 'install',
+			// Network Admin
+			'TSF_Extension_Manager_Install_List_Table_MS' => 'ms-install',
+		);
+
+		if ( isset( $classes[ $class ] ) ) {
+			foreach ( (array) $classes[ $class ] as $required )
+				require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'tables/' . $required . '-list-table.class.php' );
+
+			if ( isset( $args['screen'] ) )
+				$args['screen'] = convert_to_screen( $args['screen'] );
+			elseif ( isset( $GLOBALS['hook_suffix'] ) )
+				$args['screen'] = get_current_screen();
+			else
+				$args['screen'] = null;
+
+			return new $class( $args );
+		}
+
+		return false;
 	}
 
 }

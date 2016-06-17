@@ -26,15 +26,6 @@
 class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation {
 
 	/**
-	 * Holds the Page ID for this plugin.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @constant string The page ID.
-	 */
-	const PAGE_ID = 'the-seo-framework-extensions';
-
-	/**
 	 * Name of the page hook when the menu is registered.
 	 *
 	 * @since 1.0.0
@@ -44,13 +35,13 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	public $pagehook;
 
 	/**
-	 * The page ID/slug.
+	 * The plugin page ID/slug.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string Page ID/Slug
 	 */
-	protected $page_id;
+	public $plugin_page_id;
 
 	/**
 	 * CSS script name identifier to be used with enqueuing.
@@ -76,7 +67,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	public function __construct() {
 		parent::__construct();
 
-		$this->page_id = self::PAGE_ID;
+		$this->plugin_page_id = 'the-seo-framework-extensions';
 
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, 'init_menu' ) );
@@ -84,12 +75,6 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 		//* Enqueue admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
-		//* Dump stuff. DEBUG var_dump();
-		add_action( 'shutdown', array( $this, 'dump_hook_sequence' ) );
-	}
-
-	function dump_hook_sequence() {
-		var_export( $GLOBALS['wp_actions'] );
 	}
 
 	/**
@@ -108,9 +93,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 			//* TODO. var_dump()
 		//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
-			$tsf = the_seo_framework();
-
-			if ( $tsf->load_options )
+			if ( the_seo_framework()->load_options )
 				add_action( 'admin_menu', array( $this, 'add_menu_link' ), 11 );
 		}
 
@@ -121,19 +104,17 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 * SEO Framework SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
+	 * @uses the_seo_framework()->page_id variable.
 	 * @access private
 	 */
 	public function add_menu_link() {
 
-		$tsf = the_seo_framework();
-
 		$menu = array(
-			'parent_slug'	=> $tsf::PAGE_ID,
+			'parent_slug'	=> the_seo_framework()->page_id,
 			'page_title'	=> __( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'	=> __( 'Extensions', 'the-seo-framework-extension-manager' ),
-			'capability'	=> $this->settings_capability(),
-			'menu_slug'		=> $this->page_id,
+			'capability'	=> 'install_plugins',
+			'menu_slug'		=> $this->plugin_page_id,
 			'callback'		=> array( $this, 'init_extension_manager_page' ),
 		);
 
@@ -221,8 +202,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 
 		$rtl = is_rtl() ? '-rtl' : '';
 
-		$tsf = the_seo_framework();
-		$suffix = $tsf->script_debug ? '' : '.min';
+		$suffix = the_seo_framework()->script_debug ? '' : '.min';
 
 		wp_register_style( $this->css_name, TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/tsf-extension-manager{$rtl}{$suffix}.css", array(), TSF_EXTENSION_MANAGER_VERSION, 'all' );
 
@@ -244,9 +224,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 		if ( isset( $registered ) )
 			return;
 
-		$tsf = the_seo_framework();
-
-		$suffix = $tsf->script_debug ? '' : '.min';
+		$suffix = the_seo_framework()->script_debug ? '' : '.min';
 
 		wp_register_script( $this->js_name, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/tsf-extension-manager{$suffix}.js", array( 'jquery' ), TSF_EXTENSION_MANAGER_VERSION, true );
 
@@ -262,15 +240,12 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	public function init_extension_manager_page() {
 		?>
 		<div class="wrap tsf-extension-manager">
-			<div class="top-wrap">
-				<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			</div>
 			<?php
 
 			if ( $this->is_plugin_connected() )
-				echo $this->output_extension_overview_wrapper();
+				$this->output_extension_overview_wrapper();
 			else
-				echo $this->output_plugin_connect_wrapper();
+				$this->output_plugin_connect_wrapper();
 
 			?>
 		</div>
@@ -283,7 +258,19 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 * @since 1.0.0
 	 */
 	protected function output_extension_overview_wrapper() {
+
+		$network = $this->is_plugin_in_network_mode();
+		$type = $network ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
+
 		?>
+		<div class="top-wrap">
+			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+		</div>
+		<div class="extensions-wrap">
+			<?php
+			$this->output_extensions_overview( $network );
+			?>
+		</div>
 		<?php
 	}
 
@@ -294,9 +281,14 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 */
 	protected function output_plugin_connect_wrapper() {
 
-		$type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' )
+		$network = $this->is_plugin_in_network_mode();
+		$mode = $network ? '&mdash;' . esc_html__( 'Network Mode', 'the-seo-framework-extension-manager' ) : '';
+		$type = $this->is_plugin_in_network_mode() ? esc_html__( 'network', 'the-seo-framework-extension-manager' ) : esc_html__( 'website', 'the-seo-framework-extension-manager' );
 
 		?>
+		<div class="top-wrap">
+			<h1><?php echo esc_html( get_admin_page_title() ) . $mode; ?></h1>
+		</div>
 		<div class="connect-wrap">
 			<p><?php printf( esc_html__( 'Add more powerful SEO features to your %s. To get started, use one of the options below.', 'the-seo-framework-extension-manager' ), $type ); ?></p>
 
@@ -304,7 +296,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 				<div class="connect-description">
 					<h3><?php esc_html_e( 'Activate', 'the-seo-framework-extension-manager' ); ?></h3>
 					<strong><?php esc_html_e( 'Log in or sign up now.', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Connect your account.', 'the-seo-framework-extension-manager' ); ?></p>
+					<p><?php esc_html_e( 'Connect your account. Fast and secure.', 'the-seo-framework-extension-manager' ); ?></p>
 				</div>
 				<div class="connect-action">
 					<div class="connect-fields-row">
