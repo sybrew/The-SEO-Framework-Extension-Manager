@@ -69,6 +69,7 @@
 	-webkit-flex-shrink: 1;
 	-ms-flex-negative: 1;
 	flex-shrink: 1;
+	width: 100%;
 }
 
 .tsf-extension-manager .connect-action {
@@ -99,7 +100,7 @@
 	margin-left: 7px;
 }
 
-.tsf-extension-manager #key {
+.tsf-extension-manager #activation {
 	width: 100%;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -111,15 +112,15 @@
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
-	flex-direction: row;
+	flex-direction: column;
 }
 
-.tsf-extension-manager #key .regular-text,
-.tsf-extension-manager #key .button {
+.tsf-extension-manager #activation .regular-text,
+.tsf-extension-manager #activation .button {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	flex-direction: column;
+	flex-direction: row;
 	-webkit-box-flex: 1;
 	-webkit-flex-grow: 1;
 	-ms-flex-positive: 1;
@@ -130,12 +131,16 @@
 	margin: 0;
 }
 
-.tsf-extension-manager #key .regular-text {
+.tsf-extension-manager #activation .regular-text:nth-child(1n+2) {
+	margin-top: 4px;
+}
+
+.tsf-extension-manager #activation .regular-text {
 	width: 100%;
 }
 
-.tsf-extension-manager #key .button {
-	margin-left: 4px;
+.tsf-extension-manager #activation .button {
+	margin-top: 4px;
 }
 
 .tsf-extension-manager .button-primary {
@@ -191,6 +196,15 @@
 		flex-direction: column;
 		align-items: flex-start;
 		padding: 1em 20px 1.66em;
+	}
+
+	.tsf-extension-manager .connect-action {
+		text-align: left;
+	}
+
+	.tsf-extension-manager .connect-fields-row {
+		-webkit-justify-content: flex-start;
+		justify-content: flex-start;
 	}
 
 }

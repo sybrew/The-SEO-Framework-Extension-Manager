@@ -131,8 +131,8 @@ final class TSF_Extension_Manager_Install_List_Table {
 
 		if ( empty( $this->modes ) ) {
 			$this->modes = array(
-				'list'    => esc_html__( 'List View', 'the-seo-framework-extension-manager' ),
-				'excerpt' => esc_html__( 'Excerpt View', 'the-seo-framework-extension-manager' )
+				'list'    => esc_html__( 'List View', $this->text_domain ),
+				'excerpt' => esc_html__( 'Excerpt View', $this->text_domain )
 			);
 		}
 

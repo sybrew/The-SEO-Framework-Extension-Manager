@@ -111,8 +111,8 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 
 		$menu = array(
 			'parent_slug'	=> the_seo_framework()->page_id,
-			'page_title'	=> __( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
-			'menu_title'	=> __( 'Extensions', 'the-seo-framework-extension-manager' ),
+			'page_title'	=> __( 'SEO Extensions', $this->text_domain ),
+			'menu_title'	=> __( 'Extensions', $this->text_domain ),
 			'capability'	=> 'install_plugins',
 			'menu_slug'		=> $this->plugin_page_id,
 			'callback'		=> array( $this, 'init_extension_manager_page' ),
@@ -260,7 +260,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	protected function output_extension_overview_wrapper() {
 
 		$network = $this->is_plugin_in_network_mode();
-		$type = $network ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
+		$type = $network ? __( 'network', $this->text_domain ) : __( 'website', $this->text_domain );
 
 		?>
 		<div class="top-wrap">
@@ -280,51 +280,51 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 * @since 1.0.0
 	 */
 	protected function output_plugin_connect_wrapper() {
-
+		
 		$network = $this->is_plugin_in_network_mode();
-		$mode = $network ? '&mdash;' . esc_html__( 'Network Mode', 'the-seo-framework-extension-manager' ) : '';
-		$type = $this->is_plugin_in_network_mode() ? esc_html__( 'network', 'the-seo-framework-extension-manager' ) : esc_html__( 'website', 'the-seo-framework-extension-manager' );
+		$mode = $network ? '&mdash;' . esc_html__( 'Network Mode', $this->text_domain ) : '';
+		$type = $this->is_plugin_in_network_mode() ? esc_html__( 'network', $this->text_domain ) : esc_html__( 'website', $this->text_domain );
 
 		?>
 		<div class="top-wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ) . $mode; ?></h1>
 		</div>
 		<div class="connect-wrap">
-			<p><?php printf( esc_html__( 'Add more powerful SEO features to your %s. To get started, use one of the options below.', 'the-seo-framework-extension-manager' ), $type ); ?></p>
+			<p><?php printf( esc_html__( 'Add more powerful SEO features to your %s. To get started, use one of the options below.', $this->text_domain ), $type ); ?></p>
 
 			<div class="connect-option connect-highlighted">
 				<div class="connect-description">
-					<h3><?php esc_html_e( 'Activate', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Log in or sign up now.', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Connect your account. Fast and secure.', 'the-seo-framework-extension-manager' ); ?></p>
+					<h3><?php esc_html_e( 'Activate', $this->text_domain ); ?></h3>
+					<strong><?php esc_html_e( 'Log in or sign up now.', $this->text_domain ); ?></strong>
+					<p><?php esc_html_e( 'Connect your account. Fast and secure.', $this->text_domain ); ?></p>
 				</div>
 				<div class="connect-action">
 					<div class="connect-fields-row">
-						<?php $this->get_view( 'activate', array( 'name' => 'activate', 'action' => 'https://premium.theseoframework.com/get/', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button', 'button-primary' ) ) ); ?>
-						<?php $this->get_view( 'activate', array( 'name' => 'activate', 'action' => 'https://premium.theseoframework.com/get/', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button' ) ) ); ?>
+						<?php $this->get_view( 'activate', array( 'name' => 'activate', 'action' => 'https://premium.theseoframework.com/get/', 'text' => __( 'Get your API key', $this->text_domain ), 'classes' => array( 'button', 'button-primary' ) ) ); ?>
+						<?php $this->get_view( 'activate', array( 'name' => 'activate', 'action' => 'https://premium.theseoframework.com/get/', 'text' => __( 'Connect', $this->text_domain ), 'classes' => array( 'button' ) ) ); ?>
 					</div>
 				</div>
 			</div>
 
 			<div class="connect-option">
 				<div class="connect-description">
-					<h3><?php esc_html_e( 'Use key', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Manually enter an API key', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Already have your key? Enter it here.', 'the-seo-framework-extension-manager' ); ?></p>
+					<h3><?php esc_html_e( 'Use key', $this->text_domain ); ?></h3>
+					<strong><?php esc_html_e( 'Manually enter an API key', $this->text_domain ); ?></strong>
+					<p><?php esc_html_e( 'Already have your key? Enter it here.', $this->text_domain ); ?></p>
 				</div>
 				<div class="connect-action">
-					<?php $this->get_view( 'key', array( 'name' => 'validate-key', 'id' => 'key', 'nonce' => $this->pagehook, 'text' => __( 'Use this key', 'the-seo-framework-extension-manager' ) ) ); ?>
+					<?php $this->get_view( 'key', array( 'name' => 'validate-key', 'id' => 'activation', 'nonce' => $this->pagehook, 'text' => __( 'Use this key', $this->text_domain ) ) ); ?>
 				</div>
 			</div>
 
 			<div class="connect-option connect-secondary">
 				<div class="connect-description">
-					<h3><?php esc_html_e( 'Go free', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Unlimited free access', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Rather go for a test-drive? You can always upgrade later.', 'the-seo-framework-extension-manager' ); ?></p>
+					<h3><?php esc_html_e( 'Go free', $this->text_domain ); ?></h3>
+					<strong><?php esc_html_e( 'Unlimited free access', $this->text_domain ); ?></strong>
+					<p><?php esc_html_e( 'Rather go for a test-drive? You can always upgrade later.', $this->text_domain ); ?></p>
 				</div>
 				<div class="connect-action">
-					<?php $this->get_view( 'free', array( 'name' => 'go-free', 'id' => 'go-free', 'nonce' => $this->pagehook, 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
+					<?php $this->get_view( 'free', array( 'name' => 'go-free', 'id' => 'go-free', 'nonce' => $this->pagehook, 'text' => __( 'Save a few bucks', $this->text_domain ) ) ); ?>
 				</div>
 			</div>
 

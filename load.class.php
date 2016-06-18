@@ -27,6 +27,24 @@
 final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions {
 
 	/**
+	 * The plugin text domain.
+	 *
+	 * @since 1.0.0
+	 * @var string Text domain.
+	 */
+	public $text_domain = 'the-seo-framework-extension-manager';
+
+	/**
+	 * Cloning is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
 	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
@@ -46,9 +64,9 @@ final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions 
 		if ( $this->is_plugin_connected() || ! $this->can_do_settings() || $this->is_seo_extension_manager_page() )
 			return;
 
-		$text = esc_html__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
+		$text = esc_html__( 'Your extensions are only three clicks away', $this->text_domain );
 		$url = $this->get_admin_page_url();
-		$title = esc_html__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
+		$title = esc_html__( 'Activate the SEO Extension Manager', $this->text_domain );
 
 		echo the_seo_framework()->generate_dismissible_notice( sprintf( '%s &mdash; <a href="%s" title="%s" target="_self" class="">%s</a>', $text, $url, $title, $title ) );
 
