@@ -26,13 +26,35 @@
 class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 
 	/**
-	 * Holds activation input.
+	 * Holds activation input key and email.
 	 *
 	 * @since 1.0.0
-	 * @var string
+	 *
+	 * @var string The activation key.
+	 * @var string The activation email.
 	 */
 	protected $activation_key = '';
 	protected $activation_email = '';
+
+	/**
+	 * The activation nonce name and field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce name.
+	 * @var string The validation nonce field.
+	 */
+	protected $activation_nonce_name;
+	protected $activation_nonce_action;
+
+	/**
+	 * The activation request status code option name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string The activation request status code option name.
+	 */
+	protected $activation_notice_option;
 
 	/**
 	 * Cloning is forbidden.
@@ -45,10 +67,624 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	private function __wakeup() { }
 
 	/**
-	 * Constructor. Loads parent constructor and initializes actions.
+	 * Constructor. Loads parent constructor, initializes actions and sets up variables.
 	 */
 	public function __construct() {
 		parent::__construct();
+
+		$this->activation_nonce_name = 'tsf_extension_manager_activation_nonce_name';
+		$this->activation_nonce_action = 'tsf_extension_manager_activation_nonce_action';
+		$this->activation_notice_option = 'tsf_extension_manager_activation_notice_option';
+
+		$this->activation_type = array(
+			'input'    => 'validate-key',
+			'external' => 'external',
+			'free'     => 'free',
+		);
+
+		add_action( 'admin_init', array( $this, 'handle_activation_post' ) );
+		add_action( 'admin_notices', array( $this, 'do_activation_notices' ) );
+	//	add_action( 'shutdown', array( $this, 'dump' ) );
+	}
+
+	function dump() {
+		var_dump( $this->get_all_options() );
+	//	var_dump( $this->do_deactivation() );
+		//global $wp_actions;var_dump( $wp_actions );
+	}
+
+	/**
+	 * Handles (de-)activation POST requests.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool False if nonce failed.
+	 */
+	public function handle_activation_post() {
+
+		if ( false === $this->handle_activation_nonce() )
+			return;
+
+		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
+
+		switch ( $options['action'] ) :
+			case $this->activation_type['input'] :
+				//* Sanitation is handled on the request server as well. We're simply making sure all gets through right.
+				$args = array(
+					'licence_key' => trim( $options['key'] ),
+					'activation_email' => sanitize_email( $options['email'] ),
+				);
+
+				$response = $this->handle_request( 'activation', $args );
+			break;
+
+			case $this->activation_type['free'] :
+				$response = $this->activate_free();
+			break;
+
+			case $this->activation_type['external'] :
+				$response = $this->get_remote_activation_listener_response();
+			break;
+
+			default:
+				wp_die();
+			break;
+		endswitch;
+
+		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
+		exit;
+	}
+
+	/**
+	 * Checks the Activation page nonce. Returns false if nonce can't be found or if user isn't allowed to perform nonce.
+	 * Performs wp_die() when nonce verification fails.
+	 *
+	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $validated Determines whether the nonce has already been verified.
+	 *
+	 * @return bool True if verified and matches. False if can't verify.
+	 */
+	public function handle_activation_nonce() {
+
+		static $validated = null;
+
+		if ( isset( $validated ) )
+			return $validated;
+
+		if ( ! $this->is_tsf_extension_manager_page() || ! $this->can_do_settings() )
+			return $validated = false;
+
+		/**
+		 * If this page doesn't parse the site options,
+		 * There's no need to filter them on each request.
+		 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
+		 *
+		 * @since 1.0.0
+		 */
+		if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+			return $validated = false;
+
+		check_admin_referer( $this->activation_nonce_action, $this->activation_nonce_name );
+
+		return $validated = true;
+	}
+
+	/**
+	 * Outputs activation notice. If any.
+	 *
+	 * @since 1.0.0
+	 */
+	public function do_activation_notices() {
+
+		if ( $option = get_option( $this->activation_notice_option, false ) ) {
+
+			$notice = $this->get_activation_notice( $option );
+
+			if ( empty( $notice ) ) {
+				$this->unset_activation_notice();
+				return;
+			}
+
+			echo the_seo_framework()->generate_dismissible_notice( $notice['message'], $notice['type'] );
+			$this->unset_activation_notice();
+		}
+	}
+
+	/**
+	 * Sets activation notice option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $notice The activation notice.
+	 */
+	protected function set_activation_notice( $notice = array() ) {
+		update_option( $this->activation_notice_option, $notice );
+	}
+
+	/**
+	 * Removes activation notice option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $notice The activation notice.
+	 */
+	protected function unset_activation_notice() {
+		delete_option( $this->activation_notice_option );
+	}
+
+	/**
+	 * Fetches activation notices by option and returns type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The activation notice.
+	 */
+	protected function get_activation_notice( $option ) {
+
+		if ( is_array( $option ) )
+			$key = key( $option );
+
+		if ( empty( $key ) )
+			return '';
+
+		switch ( $key ) :
+			case 101 :
+				$message = esc_html__( 'No valid license key was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 102 :
+				$message = esc_html__( 'No valid license email was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 201 :
+				$message = esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 202 :
+			case 301 :
+			case 401 :
+			case 403 :
+			case 404 :
+			case 503 :
+				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 303 :
+			case 307 :
+				$message = esc_html__( 'Invalid API License Key. Login to your My Account page to find a valid API License Key.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 304 :
+				$message = esc_html__( 'Software API error.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 305 :
+				$message = esc_html__( 'Exceeded maximum number of activations.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 306 :
+				$message = esc_html__( 'Invalid Instance ID. Contact the plugin author.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 308 :
+				$message = esc_html__( 'Subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+			break;
+
+			case 402 :
+				$message = esc_html__( 'Your account has been successfully authorized to be used on this website.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+			break;
+
+			case 501 :
+			case 502 :
+				$message = esc_html__( 'Your account has been successfully deauthorized from this website.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+			break;
+
+			default:
+				$message = esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+		endswitch;
+
+		switch ( $type ) :
+			case 'error' :
+			case 'warning' :
+				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
+			break;
+
+			default :
+				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
+			break;
+		endswitch;
+
+		/* translators: 1: 'Error code:', 2: The error code */
+		$status_i18n = sprintf( esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
+		$additional_info = $option[ $key ];
+
+		/* translators: 1: Error code, 2: Error message, 3: Additional info */
+		$message = sprintf( esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status_i18n, $message, $additional_info );
+
+		return array(
+			'message' => $message,
+			'type' => $type,
+		);
+	}
+
+	/**
+	 * Handles remote activation request.
+	 * Has to validate nonce prior to activating.
+	 * Validation is done two-fold (local and activation server).
+	 *
+	 * @since 1.0.0
+	 */
+	protected function get_remote_activation_listener() {
+
+		if ( false === $this->handle_activation_nonce() )
+			return;
+
+	}
+
+	protected function get_remote_activation_listener_response( $store = false ) {
+
+		static $response = false;
+
+		if ( false !== $store ) {
+			$response = $store;
+		} else {
+			return $response;
+		}
+	}
+
+	protected function set_remote_activation_listener_response( $value = false ) {
+
+		if ( empty( $value ) || is_wp_error( $value ) )
+			return false;
+
+		$this->get_remote_activation_listener_response( $value );
+
+		return true;
+	}
+
+	/**
+	 * Fetches status API request and returns response data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args
+	 * @return array Request Data option details.
+	 */
+	protected function handle_request( $type = 'status', $args = array() ) {
+
+		if ( empty( $args['licence_key'] ) ) {
+			$this->set_activation_notice( array( 101 => '' ) );
+			return false;
+		}
+
+		if ( empty( $args['activation_email'] ) ) {
+			$this->set_activation_notice( array( 102 => '' ) );
+			return false;
+		}
+
+		$this->activation_key = $args['licence_key'];
+		$this->activation_email = $args['activation_email'];
+
+		$request = array(
+			'request'     => $type,
+			'email'       => $args['activation_email'],
+			'licence_key' => $args['licence_key'],
+		);
+
+		$response = $this->get_api_response( $request );
+		$response = $this->handle_response( $type, $response );
+
+		return $response;
+	}
+
+	/**
+	 * Connects to the main plugin activation.
+	 *
+	 * @since 1.0.0
+	 * @see $this->handle_request() The request validation wrapper.
+	 *
+	 * @param array $args
+	 * @return string Response body. Empty string if no body or incorrect parameter given.
+	 */
+	protected function get_api_response( $args ) {
+
+		$defaults = array(
+			'request'          => '',
+			'email'            => '',
+			'licence_key'      => '',
+			'product_id'       => $this->get_activation_product_title(),
+			'instance'         => $this->get_activation_instance(),
+			'platform'         => $this->get_activation_site_domain(),
+			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder".
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( empty( $args['request'] ) ) {
+			$this->set_activation_notice( array( 201 => '' ) );
+			return false;
+		}
+
+		$target_url = $this->get_api_url( $args );
+
+		$request = wp_safe_remote_get( $target_url );
+
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) ) {
+			$this->set_activation_notice( array( 202 => '' ) );
+			return false;
+		}
+
+		$response = wp_remote_retrieve_body( $request );
+
+		return $response;
+	}
+
+	/**
+	 * Handles AME response and sets options.
+	 *
+	 * @since 1.0.0
+	 * @see $this->handle_request() The request validation wrapper.
+	 *
+	 * @param string $type The request type.
+	 * @param string $response The obtained response body.
+	 * @return bool True on successful response, false on failure.
+	 */
+	protected function handle_response( $type = 'status', $response = '' ) {
+
+		if ( empty( $response ) ) {
+			$this->set_activation_notice( array( 301 => '' ) );
+			return false;
+		}
+
+		$results = json_decode( $response, true );
+
+		$_response = '';
+
+		if ( 'status' !== $type ) {
+			if ( 'activation' === $type )
+				$_response = $this->handle_premium_activation( $results );
+			elseif ( 'deactivation' === $type )
+				$_response = $this->handle_premium_deactivation( $results );
+		}
+
+		if ( isset( $results['code'] ) ) {
+			switch ( $results['code'] ) :
+				case '100' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 302 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '101' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 303 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '102' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 304 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '103' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 305 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '104' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 306 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '105' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 307 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				case '106' :
+					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$this->set_activation_notice( array( 308 => $additional_info ) );
+					$this->do_deactivation();
+				break;
+				default :
+				break;
+			endswitch;
+		}
+
+		return $_response;
+	}
+
+	/**
+	 * Handles activation and returns status.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $results The activation response.
+	 * @return bool|null True on success, false on failure. Null on invalid request.
+	 */
+	protected function handle_premium_activation( $results ) {
+
+		if ( isset( $results['activated'] ) && true === $results['activated'] && ! empty( $this->get_option( '_activated' ) ) ) {
+
+			$args = array(
+				'api_key' => $this->activation_key,
+				'activation_email' => $this->activation_email,
+				'_activation_level' => 'Premium',
+				'_activation_expires' => '', // TODO
+			);
+
+			$success = $this->do_activation( $args );
+
+			if ( ! $success ) {
+				$this->do_deactivation();
+				$this->set_activation_notice( array( 401 => '' ) );
+				return false;
+			}
+
+			$this->set_activation_notice( array( 402 => '' ) );
+			return true;
+		} elseif ( ! $results && $this->get_option( '_activated' ) ) {
+			$this->do_deactivation();
+			$this->set_activation_notice( array( 403 => '' ) );
+			return false;
+		} elseif ( isset( $results['code'] ) ) {
+			//* Probably duplicated local activation request. Will be handled later in reponse.
+			return false;
+		}
+
+		$this->set_activation_notice( array( 404 => '' ) );
+		return null;
+	}
+
+	/**
+	 * Handles deactivation and returns status.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $results The deactivation response.
+	 * @return bool|null True on success, false on failure. Null on invalid request.
+	 */
+	protected function handle_premium_deactivation( $results ) {
+
+		if ( ! empty( $results['deactivated'] ) ) {
+			//* If option has once been registered, deregister options and return activation status.
+			if ( $this->get_option( '_activated' ) ) {
+
+				$this->do_deactivation();
+
+				$message = esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . esc_html( $results['activations_remaining'] ) . '.';
+				$this->set_activation_notice( array( 501 => $message ) );
+				return true;
+			}
+
+			$this->set_activation_notice( array( 502 => '' ) );
+			return false;
+		}
+
+		$this->set_activation_notice( array( 503 => '' ) );
+		return null;
+	}
+
+	/**
+	 * Handles product activation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args The activation arguments.
+	 * @return bool True on success. False on failure.
+	 */
+	protected function do_activation( $args ) {
+
+		$success = array();
+
+		$success[] = $this->update_option( 'api_key', $args['api_key'] );
+		$success[] = $this->update_option( 'activation_email', $args['activation_email'] );
+		$success[] = $this->update_option( '_activation_level', $args['_activation_level'] );
+		$success[] = $this->update_option( '_activation_expires', $args['_activation_expires'] );
+		$success[] = $this->update_option( '_activated', 'Activated' );
+
+		return in_array( false, $success, true );
+	}
+
+	/**
+	 * Handles product deactivation.
+	 * Sets all options to empty or 'Deactivated'.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success. False on failure.
+	 */
+	protected function do_deactivation() {
+
+		$success = array();
+
+		$success[] = $this->update_option( 'api_key', '' );
+		$success[] = $this->update_option( 'activation_email', '' );
+		$success[] = $this->update_option( '_activation_level', '' );
+		$success[] = $this->update_option( '_activation_expires', '' );
+		$success[] = $this->update_option( '_activated', 'Deactivated' );
+
+		return in_array( false, $success, true );
+	}
+
+	/**
+	 * Determines whether the plugin's use has been verified.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if the plugin is connected to the API handler.
+	 */
+	protected function is_plugin_connected() {
+		return 'Activated' === $this->get_option( '_activated' );
+	}
+
+	/**
+	 * Determines subscription status.
+	 *
+	 * TODO on activation page:
+	 * Feel free to hack your database and update this option manually. Right
+	 * before this check this option is refreshed. You can't hook into it :(.
+	 * It will also double check externally anyway upon download.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array Current subscription status.
+	 */
+	protected function get_subscription_status() {
+		return array(
+			'key'     => $this->get_option( 'api_key' ),
+			'email'   => $this->get_option( 'activation_email' ),
+			'active'  => $this->get_option( '_activated' ),
+			'level'   => $this->get_option( '_activation_level' ),
+			'expires' => $this->get_option( '_activation_expires' ),
+		);
+	}
+
+	/**
+	 * Updates subscription status in the loop (or at the end of).
+	 * Resets option cache afterwards.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args The subscription arguments.
+	 * @param bool $reset Whether to reset the options cache.
+	 */
+	protected function update_subscription_status( $args, $reset = true ) {
+
+		$this->do_activation( $args );
+
+		if ( $reset )
+			$this->reset_option_cache();
+
+	}
+
+	/**
+	 * Returns subscription authentication values.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array Authentication key, type and expire unix time.
+	 */
+	protected function get_subscription_auth() {
+		// TODO
+		return array(
+			'key' => $this->get_option( 'activation_key' ),
+			'type' => 'key',
+			'expire' => date( 'U', strtotime( '+3 days' ) ), // @TODO get and cache unix time.
+		);
 	}
 
 	/**
@@ -64,7 +700,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	 *
 	 * @return string Domain Host.
 	 */
-	public function get_activation_site_domain() {
+	protected function get_activation_site_domain() {
 		return str_ireplace( array( 'http://', 'https://' ), '', home_url() );
 	}
 
@@ -73,10 +709,11 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $path The URL Path.
 	 * @return string
 	 */
-	public function get_activation_url() {
-		return 'https://premium.theseoframework.com/';
+	protected function get_activation_url( $path = '' ) {
+		return esc_url( 'https://premium.theseoframework.com/' . ltrim( $path, ' \\/' ) );
 	}
 
 	/**
@@ -86,11 +723,18 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	 *
 	 * @return string
 	 */
-	public function get_activation_product_title() {
+	protected function get_activation_product_title() {
 		return 'The SEO Framework Premium';
 	}
 
-	public function get_activation_prefix() {
+	/**
+	 * Returns API option prefix.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string.
+	 */
+	protected function get_activation_prefix() {
 
 		static $prefix = null;
 
@@ -109,12 +753,11 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	 */
 	protected function get_activation_instance() {
 
-		$prefix = $this->get_activation_prefix();
-		$instance = get_option( $prefix . '_instance', false );
+		$instance = $this->get_option( '_instance', false );
 
 		if ( false === $instance ) {
-			update_option( $prefix . '_instance', wp_generate_password( 32, false ) );
-			$instance = get_option( $prefix . '_instance' );
+			$instance = wp_generate_password( 32, false );
+			$this->update_option( '_instance', $instance );
 		}
 
 		return $instance;
@@ -134,274 +777,4 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 
 		return esc_url_raw( $api_url . '&' . http_build_query( $args ) );
 	}
-
-	/**
-	 * Initializes AME Software API keys and options.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True on set, false on fetch.
-	 */
-	protected function set_activation_option_keys() {
-
-		static $set = null;
-
-		if ( isset( $set ) )
-			return false;
-
-		$prefix = $this->get_activation_prefix();
-
-		/**
-		 * Set all AME data defaults.
-		 */
-		$this->ame_data_key                = $prefix . '_data';
-		$this->ame_api_key                 = 'api_key';
-		$this->ame_activation_email        = 'activation_email';
-		$this->ame_product_id_key          = $prefix . '_product_id';
-		$this->ame_instance_key            = $prefix . '_instance';
-		$this->ame_activated_key           = $prefix . '_activated';
-
-		/**
-		 * Set all AME software update data.
-		 */
-		$this->ame_options           = get_option( $this->ame_data_key );
-		$this->ame_plugin_name       = untrailingslashit( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME );
-		$this->ame_product_id        = get_option( $this->ame_product_id_key );
-		$this->ame_renew_license_url = $this->get_activation_url() . 'my-account';
-		$this->ame_instance_id       = get_option( $this->ame_instance_key );
-
-		return $set = true;
-	}
-
-	/**
-	 * Fetches status API request and returns response data.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args
-	 * @return array Request Data option details.
-	 */
-	protected function handle_request( $type = 'status', $args = array() ) {
-
-		if ( ! isset( $args['licence_key'] ) )
-			return false;
-
-		if ( ! isset( $args['activation_email'] ) )
-			return false;
-
-		$this->activation_key = $args['licence_key'];
-		$this->activation_email = $args['activation_email'];
-
-		$request = array(
-			'request'          => $type,
-			'email'            => $args['activation_email'],
-			'licence_key'      => $args['licence_key'],
-		);
-
-		$response = $this->get_api_response( $request );
-		$options = $this->handle_response( $type, $response );
-
-		return $options;
-	}
-
-	/**
-	 * Connects to the main plugin activation.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args
-	 * @return
-	 */
-	protected function get_api_response( $args ) {
-
-		$defaults = array(
-			'request'          => '',
-			'product_id'       => $this->get_activation_product_title(),
-			'instance'         => $this->get_activation_instance(),
-			'platform'         => $this->get_activation_site_domain(),
-			'software_version' => '1.0.0' // Always 1.0.0, as it's not software, but a "placeholder".
-		);
-
-		$args = wp_parse_args( $args, $defaults );
-
-		if ( empty( $args['request'] ) )
-			return false;
-
-		$target_url = $this->get_api_url( $args );
-				var_dump( $target_url );
-		$request = wp_safe_remote_get( $target_url );
-
-		// $request = wp_remote_post( $this->get_api_url() . 'wc-api/am-software-api/', array( 'body' => $args ) );
-		if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
-			// Request failed
-			return false;
-		}
-
-		$response = wp_remote_retrieve_body( $request );
-		return $response;
-	}
-
-	/**
-	 * Handles AME response and sets options.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True on successful response, false on failure.
-	 */
-	protected function handle_response( $type = 'status', $response = '' ) {
-
-		if ( empty( $response ) )
-			return false;
-
-		$results = json_decode( $response, true );
-
-		//* Setup keys.
-		$this->set_activation_option_keys();
-
-		if ( 'status' !== $type ) {
-			if ( 'activation' === $type )
-				$this->handle_activation( $results );
-			else if ( 'deactivation' === $type )
-				$this->handle_deactivation( $results );
-		}
-
-		$options = $this->ame_options;
-
-		if ( isset( $results[ 'code' ] ) && ! empty( $options ) && ! empty( $this->ame_activated_key ) ) {
-			switch ( $results[ 'code' ] ) {
-				case '100':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_email_text', 'api_email_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_activation_email ] = '';
-					$options[ $this->ame_api_key ]          = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '101':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_key_text', 'api_key_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '102':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_key_purchase_incomplete_text', 'api_key_purchase_incomplete_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '103':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_key_exceeded_text', 'api_key_exceeded_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '104':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_key_not_activated_text', 'api_key_not_activated_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '105':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'api_key_invalid_text', 'api_key_invalid_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-				case '106':
-					$additional_info = ! empty( $results[ 'additional info' ] ) ? esc_attr( $results[ 'additional info' ] ) : '';
-					add_settings_error( 'sub_not_active_text', 'sub_not_active_error', "{$results['error']}. {$additional_info}", 'error' );
-					$options[ $this->ame_api_key ]          = '';
-					$options[ $this->ame_activation_email ] = '';
-					update_option( $options[ $this->ame_activated_key ], 'Deactivated' );
-					break;
-			}
-		}
-
-		return $options;
-	}
-
-	protected function handle_activation( $results ) {
-
-		if ( $results[ 'activated' ] === true && ! empty( $this->ame_activated_key ) ) {
-			add_settings_error( 'activate_text', 'activate_msg', sprintf( __( '%s is activated. ', $this->text_domain ), $this->get_activation_product_title() ) . "{$results['message']}.", 'updated' );
-			update_option( $this->ame_activated_key, 'Activated' );
-			update_option( $this->ame_options[ $this->ame_activated_key ], 'Activated' );
-			// TODO decide which option to pick.
-		}
-
-		if ( $results == false && ! empty( $this->ame_options ) && ! empty( $this->ame_activated_key ) ) {
-			add_settings_error( 'api_key_check_text', 'api_key_check_error', __( 'Connection failed to the License Key API server. Please try again later.', $this->text_domain ), 'error' );
-			$this->ame_options[ $this->ame_api_key ] = '';
-			$this->ame_options[ $this->ame_activation_email ] = '';
-			update_option( $this->ame_options[ $this->ame_activated_key ], 'Deactivated' );
-		}
-
-	}
-
-	protected function handle_deactivation( $results ) {
-
-		if ( $results[ 'deactivated' ] === true ) {
-			$update = array(
-				$this->ame_api_key			=> '',
-				$this->ame_activation_email	=> ''
-			);
-			$merge_options = array_merge( $this->ame_options, $update );
-
-			if ( ! empty( $this->ame_activated_key ) ) {
-				update_option( $this->ame_data_key, $merge_options );
-				update_option( $this->ame_activated_key, 'Deactivated' );
-				add_settings_error( 'wc_am_deactivate_text', 'deactivate_msg', __( 'API Key deactivated. ', $this->text_domain ) . "{$results['activations_remaining']}.", 'updated' );
-			}
-		}
-
-	}
-
-	/**
-	 * Determines whether the plugin's use has been verified.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True if the plugin is connected to the API handler.
-	 */
-	protected function is_plugin_connected() {
-	//	return true;
-		return false;
-	}
-
-	/**
-	 * Determines subscription status.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array Current subscription status.
-	 */
-	protected function get_subscription_status() {
-		return array( 'active', 'no-sub' );
-		return array( 'active', 'used-key' );
-		return array( 'active', 'account' );
-		return array( 'active', 'expires-soon' );
-		return array( 'inactive', 'cancelled' );
-		return array( 'inactive', 'suspended' );
-	}
-
-	/**
-	 * Returns subscription authentication values.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array Authentication key, type and expire unix time.
-	 */
-	protected function get_subscription_auth() {
-		// TODO
-		return array(
-			'key' => '83abcf1cc0019755577ec04e6301e8e1',
-			'type' => 'key',
-			'expire' => date( 'U', strtotime( "+3 days" ) ) // @TODO get and cache unix time.
-		);
-	}
-
 }

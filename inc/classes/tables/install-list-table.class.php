@@ -88,6 +88,16 @@ final class TSF_Extension_Manager_Install_List_Table {
 	private $error;
 
 	/**
+	 * Cloning is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
 	 * Constructor.
 	 *
 	 * The child class should call this constructor from its own constructor to override
@@ -131,8 +141,8 @@ final class TSF_Extension_Manager_Install_List_Table {
 
 		if ( empty( $this->modes ) ) {
 			$this->modes = array(
-				'list'    => esc_html__( 'List View', $this->text_domain ),
-				'excerpt' => esc_html__( 'Excerpt View', $this->text_domain )
+				'list'    => esc_html__( 'List View', 'the-seo-framework-extension-manager' ),
+				'excerpt' => esc_html__( 'Excerpt View', 'the-seo-framework-extension-manager' )
 			);
 		}
 

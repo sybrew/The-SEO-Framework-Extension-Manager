@@ -19,7 +19,8 @@
 /**
  * Loads the class from cache.
  * This is the recommended way of calling the class, if needed.
- * Call this after action 'plugins_loaded' priority 6 otherwise it will kill the plugin.
+ * Call this after action 'init' priority 0 otherwise it will kill the plugin,
+ * or even other plugins.
  *
  * @since 1.0.0
  *
@@ -46,19 +47,19 @@ function can_do_tsf_extension_manager_settings() {
 	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
 }
 
-add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
+add_action( 'plugins_loaded', 'init_tsf_extension_manager', 0 );
 /**
  * Loads TSF_Extension_Manager_Load class when in admin.
  *
  * @action plugins_loaded
- * @priority 6 Use anything above 6, or any action later than plugins_loaded and
+ * @priority 0 Use anything above 0, or any action later than plugins_loaded and
  * you can access the class and functions.
  *
  * @since 1.0.0
  * @staticvar object $tsf_extension_manager
  * @access private
  *
- * @return null|object The SEO Framework class.
+ * @return null|object TSF Extension Manager class object.
  */
 function init_tsf_extension_manager() {
 
@@ -96,7 +97,7 @@ function can_load_tsf_extension_manager() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( is_admin() && can_do_tsf_extension_manager_settings() )
+	if ( is_admin() )
 		if ( function_exists( 'the_seo_framework_version' ) && version_compare( the_seo_framework_version(), '2.7', '>=' ) )
 			return $can_load = (bool) apply_filters( 'tsf_extension_manager_enabled', true );
 
@@ -124,7 +125,7 @@ function require_tsf_extension_manager_files() {
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'adminpages.class.php' );
 	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'extensions.class.php' );
 
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.class.php' );
+	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'load.class.php' );
 
 	return $loaded = true;
 }

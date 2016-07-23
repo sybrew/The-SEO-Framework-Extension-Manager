@@ -9,7 +9,7 @@
 	border-bottom: 7px solid #0ebfe9;
 }
 
-.tsf-extension-manager h1 {
+.tsf-extension-manager .tsf-extension-manager-title {
 	font-family: 'Titillium Web',sans-serif;
 	font-size: 2.5em;
 	font-weight: 700;
@@ -76,6 +76,11 @@
 	text-align: right;
 }
 
+.tsf-extension-manager .connect-action form {
+	margin: 0;
+	padding: 0;
+}
+
 .tsf-extension-manager .connect-description h3 {
 	font-size: 1.66em;
 	color: #057f9c;
@@ -100,8 +105,10 @@
 	margin-left: 7px;
 }
 
-.tsf-extension-manager #activation {
+.tsf-extension-manager #input-activation {
 	width: 100%;
+	margin: 0;
+	padding: 0;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -115,8 +122,8 @@
 	flex-direction: column;
 }
 
-.tsf-extension-manager #activation .regular-text,
-.tsf-extension-manager #activation .button {
+.tsf-extension-manager #input-activation .regular-text,
+.tsf-extension-manager #input-activation .button {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -131,15 +138,15 @@
 	margin: 0;
 }
 
-.tsf-extension-manager #activation .regular-text:nth-child(1n+2) {
+.tsf-extension-manager #input-activation .regular-text:nth-child(1n+2) {
 	margin-top: 4px;
 }
 
-.tsf-extension-manager #activation .regular-text {
+.tsf-extension-manager #input-activation .regular-text {
 	width: 100%;
 }
 
-.tsf-extension-manager #activation .button {
+.tsf-extension-manager #input-activation .button {
 	margin-top: 4px;
 }
 

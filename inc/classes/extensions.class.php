@@ -26,6 +26,16 @@
 class TSF_Extension_Manager_Extensions extends TSF_Extension_Manager_AdminPages {
 
 	/**
+	 * Cloning is forbidden.
+	 */
+	private function __clone() { }
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 */
+	private function __wakeup() { }
+
+	/**
 	 * Constructor. Loads parent constructor and initializes actions.
 	 */
 	public function __construct() {

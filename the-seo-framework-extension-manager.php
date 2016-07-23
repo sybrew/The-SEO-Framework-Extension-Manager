@@ -83,6 +83,13 @@ define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH .
  */
 define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc/functions/' );
 
+/**
+ * The plugin options base name.
+ * @since 1.0.0
+ * Applies filters 'tsf_extension_manager_site_options' : string
+ */
+define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
+
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**
  * Plugin locale 'the-seo-framework-extension-manager'
