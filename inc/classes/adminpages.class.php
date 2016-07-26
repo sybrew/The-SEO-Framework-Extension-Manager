@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+namespace TSF_Extension_Manager;
+
+/**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -17,13 +22,13 @@
  */
 
 /**
- * Class TSF_Extension_Manager_AdminPages
+ * Class TSF_Extension_Manager\AdminPages
  *
  * Holds plugin admin page functions.
  *
  * @since 1.0.0
  */
-class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation {
+class AdminPages extends Activation {
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -32,7 +37,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 *
 	 * @var string Page hook.
 	 */
-	public $seo_extensions_menu_page;
+	public $seo_extensions_menu_page_hook;
 
 	/**
 	 * The plugin page ID/slug.
@@ -83,7 +88,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	/**
 	 * Constructor. Loads parent constructor and initializes actions.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		$this->seo_extensions_page_slug = 'theseoframework-extensions';
@@ -114,7 +119,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 
 		if ( $network_mode ) {
 			//* TODO. var_dump()
-		//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
+			//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
 			if ( the_seo_framework()->load_options )
 				add_action( 'admin_menu', array( $this, 'add_menu_link' ), 11 );
@@ -141,7 +146,7 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 			'callback'		=> array( $this, 'init_extension_manager_page' ),
 		);
 
-		$this->seo_extensions_menu_page = add_submenu_page(
+		$this->seo_extensions_menu_page_hook = add_submenu_page(
 			$menu['parent_slug'],
 			$menu['page_title'],
 			$menu['menu_title'],
@@ -161,20 +166,21 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 */
 	public function enqueue_admin_scripts( $hook ) {
 
-		if ( $this->seo_extensions_menu_page === $hook ) {
+		if ( $this->seo_extensions_menu_page_hook === $hook ) {
 
 			//* Set names.
 			$this->css_name = 'tsf-extension-manager';
 			$this->js_name = 'tsf-extension-manager';
 
 			$scheme = is_ssl() ? 'https' : 'http';
+			$font = esc_url_raw( 'http://fonts.googleapis.com/css?family=Titillium+Web:600', array( $scheme ) );
 
-			wp_enqueue_style( 'google-tillitium-font', $scheme . '://fonts.googleapis.com/css?family=Titillium+Web:600', false );
+			wp_enqueue_style( 'google-titillium-web-font', $font, false );
 
 			//* Enqueue styles
-			add_action( 'admin_print_styles-' . $this->seo_extensions_menu_page, array( $this, 'enqueue_admin_css' ), 11 );
+			add_action( 'admin_print_styles-' . $this->seo_extensions_menu_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
 			//* Enqueue scripts
-			add_action( 'admin_print_scripts-' . $this->seo_extensions_menu_page, array( $this, 'enqueue_admin_javascript' ), 11 );
+			add_action( 'admin_print_scripts-' . $this->seo_extensions_menu_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
 		}
 
 	}
@@ -264,14 +270,13 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 */
 	public function init_extension_manager_page() {
 		?>
-		<div class="wrap tsf-extension-manager">
+		<div class="wrap tsfem">
 			<?php
-
-			if ( $this->is_plugin_connected() )
+			if ( $this->is_plugin_connected() ) {
 				$this->output_extension_overview_wrapper();
-			else
+			} else {
 				$this->output_plugin_connect_wrapper();
-
+			}
 			?>
 		</div>
 		<?php
@@ -284,15 +289,12 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 */
 	protected function output_extension_overview_wrapper() {
 
-		$network = $this->is_plugin_in_network_mode();
-		$type = $network ? esc_html__( 'network', 'the-seo-framework-extension-manager' ) : esc_html__( 'website', 'the-seo-framework-extension-manager' );
-
 		$this->do_page_header_wrap( true );
 
 		?>
 		<div class="extensions-wrap">
 			<?php
-			$this->output_extensions_overview( $network );
+			$this->do_extensions_overview();
 			?>
 		</div>
 		<?php
@@ -305,54 +307,13 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 */
 	protected function output_plugin_connect_wrapper() {
 
-		$network = $this->is_plugin_in_network_mode();
-		$mode = $network ? '&mdash;' . esc_html__( 'Network Mode', 'the-seo-framework-extension-manager' ) : '';
-		$type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
-
 		$this->do_page_header_wrap( false );
 
 		?>
 		<div class="connect-wrap">
-			<p><?php printf( esc_html__( 'Add more powerful SEO features to your %s. To get started, use one of the options below.', 'the-seo-framework-extension-manager' ), esc_html( $type ) ); ?></p>
-
-			<div class="connect-option connect-highlighted">
-				<div class="connect-description">
-					<h3><?php esc_html_e( 'Activate', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Log in or sign up now.', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Connect your account. Fast and secure.', 'the-seo-framework-extension-manager' ); ?></p>
-				</div>
-				<div class="connect-action">
-					<div class="connect-fields-row">
-						<?php
-						$this->get_view( 'activate', array( 'name' => $this->activation_type['external'], 'action' => 'https://premium.theseoframework.com/get/', 'redirect' => 'activate', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button', 'button-primary' ) ) );
-						$this->get_view( 'activate', array( 'name' => $this->activation_type['external'], 'action' => 'https://premium.theseoframework.com/get/', 'redirect' => 'connect', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button' ) ) );
-						$this->get_remote_activation_listener();
-						?>
-					</div>
-				</div>
-			</div>
-
-			<div class="connect-option">
-				<div class="connect-description">
-					<h3><?php esc_html_e( 'Use key', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Manually enter an API key', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Already have your key? Enter it here.', 'the-seo-framework-extension-manager' ); ?></p>
-				</div>
-				<div class="connect-action">
-					<?php $this->get_view( 'key', array( 'name' => $this->activation_type['input'], 'id' => 'input-activation', 'nonce' => $this->seo_extensions_menu_page, 'text' => __( 'Use this key', 'the-seo-framework-extension-manager' ) ) ); ?>
-				</div>
-			</div>
-
-			<div class="connect-option connect-secondary">
-				<div class="connect-description">
-					<h3><?php esc_html_e( 'Go free', 'the-seo-framework-extension-manager' ); ?></h3>
-					<strong><?php esc_html_e( 'Unlimited free access', 'the-seo-framework-extension-manager' ); ?></strong>
-					<p><?php esc_html_e( 'Rather go for a test-drive? You can always upgrade later.', 'the-seo-framework-extension-manager' ); ?></p>
-				</div>
-				<div class="connect-action">
-					<?php $this->get_view( 'free', array( 'name' => $this->activation_type['free'], 'id' => 'activate-free', 'nonce' => $this->seo_extensions_menu_page, 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
-				</div>
-			</div>
+			<?php
+			$this->do_connect_overview();
+			?>
 		</div>
 		<?php
 	}
@@ -365,20 +326,51 @@ class TSF_Extension_Manager_AdminPages extends TSF_Extension_Manager_Activation 
 	 * @param bool $options Whether to output the options.
 	 */
 	protected function do_page_header_wrap( $options = true ) {
+		$this->get_view( 'layout/general/header', get_defined_vars() );
+	}
 
-		$title = esc_html( get_admin_page_title() );
+	/**
+	 * Echos the activation overview.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function do_connect_overview() {
+		$this->get_view( 'layout/pages/activate' );
+	}
 
-		?>
-		<div class="top-wrap">
-			<div class="tsf-extension-manager-title"><?php echo $title; ?></h1></div>
-			<?php if ( $options ) : ?>
-			<div class="tsf-extension-manager-account">
-				<div class="dashicons dashicons-admin-generic" title="<?php esc_attr_e( 'Account Settings', 'the-seo-framework-extension-manager' ); ?>"></div>
-			</div>
-			<?php endif; ?>
-		</div>
-		<h1 class="screen-reader-text"><?php echo $title; ?></h1>
-		<?php
+	/**
+	 * Echos the extension overview.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function do_extensions_overview() {
+		$this->get_view( 'layout/pages/extensions' );
+	}
+
+	/**
+	 * Echos a pane wrap.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $title The pane title.
+	 * @param string $content The escaped pane content.
+	 * @param array $args The output arguments : {
+	 *		'full' bool : Whether to output a half or full pane.
+	 *		'collapse' bool : Whether able to collapse the pane.
+	 *		'move' bool : Whether to be able to move the pane.
+	 * }
+	 */
+	protected function do_pane_wrap( $title = '', $content = '', $args = array() ) {
+
+		$defaults = array(
+			'full' => true,
+			'collapse' => true,
+			'move' => false,
+		);
+		$args = wp_parse_args( $args, $defaults );
+		unset( $defaults );
+
+		$this->get_view( 'layout/general/pane', get_defined_vars() );
 	}
 
 	/**

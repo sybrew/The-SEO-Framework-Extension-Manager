@@ -105,4 +105,4 @@ function init_tsf_extension_manager_locale() {
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH
  */
-require_once( TSF_EXTENSION_MANAGER_DIR_PATH . '/load.php' );
+require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );

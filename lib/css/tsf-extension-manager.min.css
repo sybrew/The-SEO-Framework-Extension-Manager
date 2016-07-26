@@ -1,15 +1,15 @@
-.wrap.tsf-extension-manager {
+.wrap.tsfem {
 	margin-top: 20px;
 }
 
-.tsf-extension-manager .top-wrap {
+.tsfem .top-wrap {
 	background-color: #333;
 	padding: 28px;
 	margin-bottom: 14px;
 	border-bottom: 7px solid #0ebfe9;
 }
 
-.tsf-extension-manager .tsf-extension-manager-title {
+.tsfem .tsfem-title {
 	font-family: 'Titillium Web',sans-serif;
 	font-size: 2.5em;
 	font-weight: 700;
@@ -18,12 +18,12 @@
 	padding: 0;
 }
 
-.tsf-extension-manager .connect-wrap {
+.tsfem .connect-wrap {
 	max-width: 690px;
 	min-width: 175px;
 }
 
-.tsf-extension-manager .connect-option {
+.tsfem .connect-option {
 	width: 100%;
 	padding: 1.33em 40px;
 	margin-bottom: 20px;
@@ -47,17 +47,17 @@
 	align-items: center;
 }
 
-.tsf-extension-manager .connect-option.connect-highlighted {
+.tsfem .connect-option.connect-highlighted {
 	background: #fff;
 	border: 1px solid #057f9c;
 }
 
-.tsf-extension-manager .connect-option.connect-secondary {
+.tsfem .connect-option.connect-secondary {
 	background: #eee;
 }
 
-.tsf-extension-manager .connect-description,
-.tsf-extension-manager .connect-action {
+.tsfem .connect-description,
+.tsfem .connect-action {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -72,23 +72,23 @@
 	width: 100%;
 }
 
-.tsf-extension-manager .connect-action {
+.tsfem .connect-action {
 	text-align: right;
 }
 
-.tsf-extension-manager .connect-action form {
+.tsfem .connect-action form {
 	margin: 0;
 	padding: 0;
 }
 
-.tsf-extension-manager .connect-description h3 {
+.tsfem .connect-description h3 {
 	font-size: 1.66em;
 	color: #057f9c;
 	font-family: 'Titillium Web',sans-serif;
 	margin: 14px 0;
 }
 
-.tsf-extension-manager .connect-fields-row {
+.tsfem .connect-fields-row {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -101,11 +101,11 @@
 	justify-content: flex-end;
 }
 
-.tsf-extension-manager .connect-fields-row > *:nth-child(1n+2) .button {
+.tsfem .connect-fields-row > *:nth-child(1n+2) .button {
 	margin-left: 7px;
 }
 
-.tsf-extension-manager #input-activation {
+.tsfem #input-activation {
 	width: 100%;
 	margin: 0;
 	padding: 0;
@@ -122,8 +122,8 @@
 	flex-direction: column;
 }
 
-.tsf-extension-manager #input-activation .regular-text,
-.tsf-extension-manager #input-activation .button {
+.tsfem #input-activation .regular-text,
+.tsfem #input-activation .button {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -138,19 +138,19 @@
 	margin: 0;
 }
 
-.tsf-extension-manager #input-activation .regular-text:nth-child(1n+2) {
+.tsfem #input-activation .regular-text:nth-child(1n+2) {
 	margin-top: 4px;
 }
 
-.tsf-extension-manager #input-activation .regular-text {
+.tsfem #input-activation .regular-text {
 	width: 100%;
 }
 
-.tsf-extension-manager #input-activation .button {
+.tsfem #input-activation .button {
 	margin-top: 4px;
 }
 
-.tsf-extension-manager .button-primary {
+.tsfem .button-primary {
 	background: #057f9c;
 	border-color: #056d8c #05617b #05617b;
 	-webkit-box-shadow: 0 1px 0 #05617b;
@@ -160,38 +160,38 @@
 	text-shadow: 0 -1px 1px #05617b,1px 0 1px #05617b,0 1px 1px #05617b,-1px 0 1px #05617b;
 }
 
-.tsf-extension-manager .button-primary:hover {
+.tsfem .button-primary:hover {
 	background: #0588a4;
 	border-color: #05617b;
 	color: #fff;
 }
 
-.tsf-extension-manager .button-primary:active,
-.tsf-extension-manager .button-primary:focus {
+.tsfem .button-primary:active,
+.tsfem .button-primary:focus {
 	background: #056d8c;
 	border-color: #05617b;
 	-webkit-box-shadow: inset 0 2px 0 #05617b;
 	box-shadow: inset 0 2px 0 #05617b;
 }
 
-.tsf-extension-manager input[type=text]:focus,
-.tsf-extension-manager input[type=search]:focus,
-.tsf-extension-manager input[type=radio]:focus,
-.tsf-extension-manager input[type=tel]:focus,
-.tsf-extension-manager input[type=time]:focus,
-.tsf-extension-manager input[type=url]:focus,
-.tsf-extension-manager input[type=week]:focus,
-.tsf-extension-manager input[type=password]:focus,
-.tsf-extension-manager input[type=checkbox]:focus,
-.tsf-extension-manager input[type=color]:focus,
-.tsf-extension-manager input[type=date]:focus,
-.tsf-extension-manager input[type=datetime]:focus,
-.tsf-extension-manager input[type=datetime-local]:focus,
-.tsf-extension-manager input[type=email]:focus,
-.tsf-extension-manager input[type=month]:focus,
-.tsf-extension-manager input[type=number]:focus,
-.tsf-extension-manager select:focus,
-.tsf-extension-manager textarea:focus {
+.tsfem input[type=text]:focus,
+.tsfem input[type=search]:focus,
+.tsfem input[type=radio]:focus,
+.tsfem input[type=tel]:focus,
+.tsfem input[type=time]:focus,
+.tsfem input[type=url]:focus,
+.tsfem input[type=week]:focus,
+.tsfem input[type=password]:focus,
+.tsfem input[type=checkbox]:focus,
+.tsfem input[type=color]:focus,
+.tsfem input[type=date]:focus,
+.tsfem input[type=datetime]:focus,
+.tsfem input[type=datetime-local]:focus,
+.tsfem input[type=email]:focus,
+.tsfem input[type=month]:focus,
+.tsfem input[type=number]:focus,
+.tsfem select:focus,
+.tsfem textarea:focus {
 	border-color: #057f9c;
 	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
@@ -199,17 +199,17 @@
 
 @media only screen and ( max-width:600px ) {
 
-	.tsf-extension-manager .connect-option {
+	.tsfem .connect-option {
 		flex-direction: column;
 		align-items: flex-start;
 		padding: 1em 20px 1.66em;
 	}
 
-	.tsf-extension-manager .connect-action {
+	.tsfem .connect-action {
 		text-align: left;
 	}
 
-	.tsf-extension-manager .connect-fields-row {
+	.tsfem .connect-fields-row {
 		-webkit-justify-content: flex-start;
 		justify-content: flex-start;
 	}

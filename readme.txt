@@ -58,14 +58,18 @@ Only users who can install and activate plugins are allowed to view and notice t
 The plugins are provided through a secure gateway to any authorized plugin user.
 
 = Does the Extension Manager need to stay activated in order to run the plugins? =
-Yes. The Extension Manager supplies its own plugin activation management system apart from the WordPress core one.
+Yes. The Extension Manager supplies its own plugin activation management system apart from WordPress core.
 
-= Are there MultiSite network SEO plugins? =
-They're planned! This plugin requires a separate network license in order to run them.
+= Are there WordPress MultiSite network SEO plugins? =
+They're planned!
 
 = If I'm using a MultiSite network, do I need to activate the plugins site by site? =
 You're able to choose. In network mode, only the super admin can download extensions. Only the downloaded extensions will be shown within the sub-site activation page.
 Only admin users of those sites can activate the plugins, and only when the Plugins menu is active, see [filters](https://wordpress.org/plugins/the-seo-framework-extension-manager/other_notes/) for expanded options.
+Please note that this plugin requires a network license in order to get any premium extension in network mode. In single site mode a single license is required.
+
+TODO:
+This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
 
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go!
@@ -81,6 +85,15 @@ If you were to get an activation error, either open a support ticket [here](http
 
 == Other Notes ==
 
-= Network Filters =
+= Are you a developer? =
+And do you wish to add your own extension to the extension manager? Please contact me on Slack about your idea.
+A full code review will take place prior to releasing it. The code has to pass at least the WordPress.org plugin standards and all code must be licensed under GPLv2 or later.
+Feedback and points for improvement will be always given. No monetized extensions are being accepted as of yet.
+
+= General Filter Reference =
+
+TODO
+
+= Network Filter Reference =
 
 TODO

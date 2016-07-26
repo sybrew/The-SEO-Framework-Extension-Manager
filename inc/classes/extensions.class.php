@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+namespace TSF_Extension_Manager;
+
+/**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -17,13 +22,13 @@
  */
 
 /**
- * Class TSF_Extension_Manager_Extensions
+ * Class TSF_Extension_Manager\Extensions
  *
  * Holds plugin extension handlers.
  *
  * @since 1.0.0
  */
-class TSF_Extension_Manager_Extensions extends TSF_Extension_Manager_AdminPages {
+class Extensions extends AdminPages {
 
 	/**
 	 * Cloning is forbidden.
@@ -38,34 +43,8 @@ class TSF_Extension_Manager_Extensions extends TSF_Extension_Manager_AdminPages 
 	/**
 	 * Constructor. Loads parent constructor and initializes actions.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
-	}
-
-	/**
-	 * Echos the extension overview.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_extensions_overview( $network = false ) {
-
-		$this->get_extensions();
-
-		?>
-		<div class="extension-wrapper">
-			<?php
-			$this->get_view( 'extension', array(
-					'args' => array(
-						'extensions' => $this->get_extensions(),
-						'auth' => $this->get_subscription_auth(),
-						'network' => $this->is_plugin_in_network_mode()
-					)
-				)
-			);
-			?>
-		</div>
-		<?php
-
 	}
 
 	/**

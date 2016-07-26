@@ -1,4 +1,6 @@
 <?php
+return;
+$this->verify_instance( $_instance ) or die;
 
 if ( ! defined( 'IFRAME_REQUEST' ) && isset( $_GET['tab'] ) && ( 'plugin-information' == $_GET['tab'] ) )
 	define( 'IFRAME_REQUEST', true );

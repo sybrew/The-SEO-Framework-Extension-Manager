@@ -1,4 +1,5 @@
 <?php
+use TSF_Extension_Manager\Load as Load;
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -47,17 +48,23 @@ function can_do_tsf_extension_manager_settings() {
 	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
 }
 
-add_action( 'plugins_loaded', 'init_tsf_extension_manager', 0 );
+add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**
  * Loads TSF_Extension_Manager_Load class when in admin.
  *
  * @action plugins_loaded
- * @priority 0 Use anything above 0, or any action later than plugins_loaded and
- * you can access the class and functions.
+ * @priority 6 Use anything above 6, or any action later than plugins_loaded and
+ * 		you can access the class and functions. Failing to do so will crash the
+ *		plugin.
+ *		This makes sure The SEO Framework has been initialized correctly as well.
+ *		So you can use function `the_seo_framework()` at all times.
+ *
+ * Performs wp_die() when called prior to action `plugins_loaded`.
  *
  * @since 1.0.0
  * @staticvar object $tsf_extension_manager
  * @access private
+ * @global array $wp_current_filter The current filter.
  *
  * @return null|object TSF Extension Manager class object.
  */
@@ -69,9 +76,20 @@ function init_tsf_extension_manager() {
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
 
+	if ( 'plugins_loaded' !== $GLOBALS['wp_current_filter'][0] )
+		wp_die( 'Use tsf_extension_manager() on action `plugins_loaded` priority 7 or later.' );
+
 	if ( can_load_tsf_extension_manager() ) {
-		require_tsf_extension_manager_files();
-		$tsf_extension_manager = new TSF_Extension_Manager_Load();
+		/**
+		 * Register class autoload here.
+		 * This will make sure the website crashes if extensions try to bypass WordPress' loop.
+		 */
+		spl_autoload_register( 'autoload_tsf_extension_manager_classes' );
+
+		/**
+		 * @package TSF_Extension_Manager
+		 */
+		$tsf_extension_manager = new Load;
 	}
 
 	return $tsf_extension_manager;
@@ -105,27 +123,26 @@ function can_load_tsf_extension_manager() {
 }
 
 /**
- * Loads all class files. To be used when requiring access to all or any of the
+ * Autoloads all class files. To be used when requiring access to all or any of the
  * plugin classes.
  *
  * @since 1.0.0
- * @staticvar bool $loaded
+ * @access private
+ * @staticvar array $loaded Whether $class has been loaded.
+ * @note 'TSF_Extension_Manager_' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
  *
- * @return bool True when loaded.
+ * @return bool False if file hasn't yet been included, otherwise true.
  */
-function require_tsf_extension_manager_files() {
+function autoload_tsf_extension_manager_classes( $class ) {
 
-	static $loaded = null;
+	if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\', 0 ) )
+		return;
 
-	if ( isset( $loaded ) )
-		return $loaded;
+	static $loaded = array();
 
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'core.class.php' );
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'activation.class.php' );
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'adminpages.class.php' );
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'extensions.class.php' );
+	if ( isset( $loaded[ $class ] ) )
+		return true;
 
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'load.class.php' );
-
-	return $loaded = true;
+	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
+	return $loaded[ $class ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . $_class . '.class.php' );
 }

@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+namespace TSF_Extension_Manager;
+
+/**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -17,14 +22,14 @@
  */
 
 /**
- * Facade Load class.
+ * Facade Class TSF_Extension_Manager\Load.
  *
  * Extending upon parent classes.
  *
  * @since 1.0.0
  * @final Please don't extend this extension.
  */
-final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions {
+final class Load extends Extensions {
 
 	/**
 	 * Cloning is forbidden.
@@ -40,6 +45,10 @@ final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions 
 	 * Constructor, loads parent constructor.
 	 */
 	public function __construct() {
+
+		//* Don't execute this instance twice.
+		$count = 0; $count < 1 or die; $count++;
+
 		parent::__construct();
 
 		add_action( 'admin_notices', array( $this, 'check_external_blocking' ) );
@@ -112,6 +121,6 @@ final class TSF_Extension_Manager_Load extends TSF_Extension_Manager_Extensions 
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page, $this->seo_extensions_page_slug );
+		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
 	}
 }

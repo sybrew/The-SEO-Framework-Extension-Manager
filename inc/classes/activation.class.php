@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+namespace TSF_Extension_Manager;
+
+/**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -17,13 +22,13 @@
  */
 
 /**
- * Class TSF_Extension_Manager_Activation
+ * Class TSF_Extension_Manager\Activation
  *
  * Holds plugin activation functions.
  *
  * @since 1.0.0
  */
-class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
+class Activation extends Panes {
 
 	/**
 	 * Holds activation input key and email.
@@ -69,7 +74,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	/**
 	 * Constructor. Loads parent constructor, initializes actions and sets up variables.
 	 */
-	public function __construct() {
+	protected function __construct() {
 		parent::__construct();
 
 		$this->activation_nonce_name = 'tsf_extension_manager_activation_nonce_name';
@@ -89,7 +94,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 
 	function dump() {
 		var_dump( $this->get_all_options() );
-	//	var_dump( $this->do_deactivation() );
+		//	var_dump( $this->do_deactivation() );
 		//global $wp_actions;var_dump( $wp_actions );
 	}
 
@@ -130,6 +135,9 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 				wp_die();
 			break;
 		endswitch;
+
+		//* Fetches and saves extra subscription status data.
+		$this->update_extra_subscription_data();
 
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
 		exit;
@@ -410,7 +418,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 			'product_id'       => $this->get_activation_product_title(),
 			'instance'         => $this->get_activation_instance(),
 			'platform'         => $this->get_activation_site_domain(),
-			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder".
+			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder" for the subscription.
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -422,7 +430,19 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 
 		$target_url = $this->get_api_url( $args );
 
-		$request = wp_safe_remote_get( $target_url );
+		/**
+		 * @since 1.0.0:
+		 * Applies filters 'tsf_extension_manager_request_timeout' : int
+		 *		7 seconds should be more than sufficient and equals the API server keep_alive_timeout. Default is 5.
+		 * Applies filters 'tsf_extension_manager_http_request_version' : string
+		 *		1.1 is used for improved performance. Default is '1.0'
+		 */
+		$http_args = array(
+			'timeout' => apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
+			'httpversion' => apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
+		);
+
+		$request = wp_safe_remote_get( $target_url, $http_args );
 
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) ) {
 			$this->set_activation_notice( array( 202 => '' ) );
@@ -460,6 +480,8 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 				$_response = $this->handle_premium_activation( $results );
 			elseif ( 'deactivation' === $type )
 				$_response = $this->handle_premium_deactivation( $results );
+		} else {
+			$_response = $results;
 		}
 
 		if ( isset( $results['code'] ) ) {
@@ -616,6 +638,8 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 		$success[] = $this->update_option( '_activation_level', '' );
 		$success[] = $this->update_option( '_activation_expires', '' );
 		$success[] = $this->update_option( '_activated', 'Deactivated' );
+		$success[] = $this->update_option( '_instance', false );
+		$success[] = $this->update_option( '_data', array() );
 
 		return in_array( false, $success, true );
 	}
@@ -634,11 +658,6 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	/**
 	 * Determines subscription status.
 	 *
-	 * TODO on activation page:
-	 * Feel free to hack your database and update this option manually. Right
-	 * before this check this option is refreshed. You can't hook into it :(.
-	 * It will also double check externally anyway upon download.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @return array Current subscription status.
@@ -649,8 +668,44 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 			'email'   => $this->get_option( 'activation_email' ),
 			'active'  => $this->get_option( '_activated' ),
 			'level'   => $this->get_option( '_activation_level' ),
-			'expires' => $this->get_option( '_activation_expires' ),
+			'data'    => $this->get_option( '_data' ),
 		);
+	}
+
+	/**
+	 * Fetches extra remote subscription information and stores it in the data option.
+	 * Should happen only run once after subscription has been updated to Premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The extra subscription information.
+	 */
+	protected function update_extra_subscription_data() {
+
+		static $response = null;
+
+		if ( isset( $response ) )
+			return $response;
+
+		if ( 'Premium' !== $this->get_option( '_activation_level' ) )
+			return $response = false;
+
+		$args = array(
+			'licence_key' => $this->get_option( 'api_key' ),
+			'activation_email' => $this->get_option( 'activation_email' ),
+		);
+
+		$response = $this->handle_request( 'status', $args );
+
+		$data = $this->get_option( '_data', array() );
+		if ( ! is_array( $data ) )
+			$data = array();
+
+		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;
+
+		$this->update_option( '_data', $data );
+
+		return $data;
 	}
 
 	/**
@@ -669,22 +724,6 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 		if ( $reset )
 			$this->reset_option_cache();
 
-	}
-
-	/**
-	 * Returns subscription authentication values.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array Authentication key, type and expire unix time.
-	 */
-	protected function get_subscription_auth() {
-		// TODO
-		return array(
-			'key' => $this->get_option( 'activation_key' ),
-			'type' => 'key',
-			'expire' => date( 'U', strtotime( '+3 days' ) ), // @TODO get and cache unix time.
-		);
 	}
 
 	/**
@@ -713,7 +752,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 	 * @return string
 	 */
 	protected function get_activation_url( $path = '' ) {
-		return esc_url( 'https://premium.theseoframework.com/' . ltrim( $path, ' \\/' ) );
+		return 'https://premium.theseoframework.com/' . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -756,7 +795,7 @@ class TSF_Extension_Manager_Activation extends TSF_Extension_Manager_Core {
 		$instance = $this->get_option( '_instance', false );
 
 		if ( false === $instance ) {
-			$instance = wp_generate_password( 32, false );
+			$instance = trim( wp_generate_password( 32, false ) );
 			$this->update_option( '_instance', $instance );
 		}
 

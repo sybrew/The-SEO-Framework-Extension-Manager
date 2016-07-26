@@ -1,5 +1,10 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+namespace TSF_Extension_Manager;
+
+/**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -17,13 +22,13 @@
  */
 
 /**
- * Class TSF_Extension_Manager_Core
+ * Class TSF_Extension_Manager\Core
  *
  * Holds plugin core functions.
  *
  * @since 1.0.0
  */
-class TSF_Extension_Manager_Core {
+class Core {
 
 	/**
 	 * Cloning is forbidden.
@@ -39,7 +44,35 @@ class TSF_Extension_Manager_Core {
 	 * Constructor.
 	 * Latest Class. Doesn't have parent.
 	 */
-	public function __construct() { }
+	protected function __construct() { }
+
+	/**
+	 * Verifies views instances.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool True if verified.
+	 */
+	protected function verify_instance( $instance ) {
+		return $instance === $this->get_verification_instance();
+	}
+
+	/**
+	 * Generates view instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string $instance The instance key.
+	 */
+	protected function get_verification_instance() {
+
+		static $instance = null;
+
+		if ( isset( $instance ) )
+			return $instance;
+
+		return $instance = wp_hash( __METHOD__, 'tsf-view-nonce' );
+	}
 
 	/**
 	 * Returns the minimum role required to adjust and access settings.
@@ -133,20 +166,66 @@ class TSF_Extension_Manager_Core {
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *
+	 * @since 1.0.0
+	 * @credits Akismet For most code.
+	 *
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
 	 * 		Each array key is converted to a variable with its value attached.
-	 *
-	 * @credits Akismet For most code.
 	 */
 	protected function get_view( $view, array $args = array() ) {
 
 		foreach ( $args as $key => $val )
 			$$key = $val;
 
+		$_instance = $this->get_verification_instance();
+
 		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views/' . $view . '.php';
 
 		include( $file );
+	}
+
+	/**
+	 * Creates a link and returns it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args The link arguments : {
+	 *		'url'     => string The URL. Required.
+	 *		'target'  => string The target. Default '_self'.
+	 *		'class'   => string The link class. Default ''.
+	 *		'title'   => string The link title. Default ''.
+	 *		'content' => string The link content. Default ''.
+	 * }
+	 * @return string escaped link.
+	 */
+	public function get_link( array $args = array() ) {
+
+		if ( empty( $args ) )
+			return '';
+
+		$defaults = array(
+			'url'     => '',
+			'target'  => '_self',
+			'class'   => '',
+			'title'   => '',
+			'content' => '',
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$url = $args['url'] ? esc_url( $args['url'] ) : '';
+
+		if ( empty( $url ) ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
+			return '';
+		}
+
+		$url = ' href="' . $url . '"';
+		$class = $args['class'] ? ' class="' . esc_attr( $args['class'] ) . '"' : '';
+		$target = ' target="' . esc_attr( $args['target'] ) . '"';
+		$title = $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
+
+		return '<a' . $url . $class . $target . $title . '>' . esc_html( $args['content'] ) . '</a>';
 	}
 
 	/**
