@@ -51,27 +51,70 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool True if verified.
+	 * @param string $instance
+	 * @param int $bit
+	 * @return bool True if verified.
 	 */
-	protected function verify_instance( $instance ) {
-		return $instance === $this->get_verification_instance();
+	protected function verify_instance( $instance, $bit ) {
+		return $instance === $this->get_verification_instance( $bit );
 	}
 
 	/**
-	 * Generates view instance.
+	 * Generates view instance through bittype and hash comparison.
+	 *
+	 * @since 1.0.0
+	 * @staticvar string $instance
+	 * @staticvar int $bit
+	 * @staticvar int $_bit
+	 *
+	 * @param int $bit
+	 * @return string $instance The instance key.
+	 */
+	protected function get_verification_instance( $bit = null ) {
+
+		static $instance = array();
+
+		$bits = $this->get_bits( true );
+		$_bit = $bits[1];
+
+		if ( isset( $instance[ $_bit ] ) ) {
+			if ( empty( $instance[ $bit ] ) )
+				wp_die( 'Instance verification failed.' );
+
+			return $instance[ $bit ];
+		}
+
+		$hash = wp_hash( $_bit . '\\' . __METHOD__ . '\\' . $bit, 'tsf-view-nonce-' . $bit );
+
+		return $instance[ $bit ] = $instance[ $_bit ] = $hash;
+	}
+
+	/**
+	 * Generates verification bits based on time.
+	 * It's crack-able, but you'll need to know exactly when to intercept. One
+	 * bit mistake and the plugin stops :).
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string $instance The instance key.
+	 * @param bool $previous Whether to fetch the previous set of bits.
+	 * @return array The verification bits.
 	 */
-	protected function get_verification_instance() {
+	protected function get_bits( $previous = false ) {
 
-		static $instance = null;
+		static $bit = null;
+		static $_bit = null;
 
-		if ( isset( $instance ) )
-			return $instance;
+		if ( $previous )
+			return array( $bit, $_bit );
 
-		return $instance = wp_hash( __METHOD__, 'tsf-view-nonce' );
+		if ( null === $bit ) {
+			$bit = $_bit = mt_rand( 0, 12034337 );
+			$_bit++;
+		}
+
+		$bit | $_bit && $bit++ ^ ~ $_bit-- && $bit ^ $_bit++ && $bit | $_bit++;
+
+		return array( $bit, $_bit );
 	}
 
 	/**
@@ -109,14 +152,14 @@ class Core {
 	}
 
 	/**
-	 * Returns escaped admin page URL.
+	 * Returns admin page URL.
 	 * Defaults to the Extension Manager page ID.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $page The admin menu page slug.
+	 * @param string $page The admin menu page slug. Defaults to TSF Extension Manager's.
 	 * @param array $args Other query arguments.
-	 * @return string Escaped Admin URL.
+	 * @return string Admin Page URL.
 	 */
 	public function get_admin_page_url( $page = '', $args = array() ) {
 
@@ -124,7 +167,7 @@ class Core {
 
 		$url = add_query_arg( $args, menu_page_url( $page, 0 ) );
 
-		return esc_url( $url );
+		return $url;
 	}
 
 	/**
@@ -171,16 +214,18 @@ class Core {
 	 *
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
-	 * 		Each array key is converted to a variable with its value attached.
+	 *        Each array key is converted to a variable with its value attached.
 	 */
 	protected function get_view( $view, array $args = array() ) {
 
 		foreach ( $args as $key => $val )
 			$$key = $val;
 
-		$_instance = $this->get_verification_instance();
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
 
 		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views/' . $view . '.php';
+		$file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
 
 		include( $file );
 	}
@@ -283,13 +328,13 @@ class Core {
 	}
 
 	/**
-	 * Updates TSF Extension Manager option and flushes that specific cache.
+	 * Updates TSF Extension Manager option.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $option The option name.
 	 * @param mixed $value The option value.
-	 * @return bool True on success, false on failure.
+	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	protected function update_option( $option, $value ) {
 
@@ -298,7 +343,37 @@ class Core {
 
 		$options = $this->get_all_options();
 
+		//* If option is unchanged, return true.
+		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
+			return true;
+
 		$options[ $option ] = $value;
+
+		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+	}
+
+	/**
+	 * Updates multiple TSF Extension Manager options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $options : {
+	 *		$option_name => $value,
+	 * }
+	 * @return bool True on success, false on failure or when options haven't changed.
+	 */
+	protected function update_option_multi( array $options = array() ) {
+
+		if ( empty( $options ) )
+			return false;
+
+		$_options = $this->get_all_options();
+
+		//* If options are unchanged, return true.
+		if ( serialize( $options ) === serialize( $_options ) )
+			return true;
+
+		$options = wp_parse_args( $options, $_options );
 
 		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 	}

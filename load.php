@@ -54,8 +54,7 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
  *
  * @action plugins_loaded
  * @priority 6 Use anything above 6, or any action later than plugins_loaded and
- * 		you can access the class and functions. Failing to do so will crash the
- *		plugin.
+ * 		you can access the class and functions. Failing to do so will perform wp_die().
  *		This makes sure The SEO Framework has been initialized correctly as well.
  *		So you can use function `the_seo_framework()` at all times.
  *
@@ -64,7 +63,6 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
  * @since 1.0.0
  * @staticvar object $tsf_extension_manager
  * @access private
- * @global array $wp_current_filter The current filter.
  *
  * @return null|object TSF Extension Manager class object.
  */
@@ -76,7 +74,7 @@ function init_tsf_extension_manager() {
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
 
-	if ( 'plugins_loaded' !== $GLOBALS['wp_current_filter'][0] )
+	if ( false === doing_action( 'plugins_loaded' ) )
 		wp_die( 'Use tsf_extension_manager() on action `plugins_loaded` priority 7 or later.' );
 
 	if ( can_load_tsf_extension_manager() ) {

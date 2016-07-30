@@ -100,6 +100,9 @@ class AdminPages extends Activation {
 		//* Enqueue admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
+		//* Initialize TSF Extension Manager page actions.
+		add_action( 'admin_init', array( $this, 'load_tsfem_admin_actions' ) );
+
 	}
 
 	/**
@@ -155,6 +158,49 @@ class AdminPages extends Activation {
 			$menu['callback']
 		);
 
+	}
+
+	/**
+	 * Hooks admin actions into the TSF Extension Manager pagehook.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->seo_extensions_menu_page_hook variable.
+	 * @access private
+	 */
+	public function load_tsfem_admin_actions() {
+
+		add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, 'do_tsfem_admin_actions' ) );
+
+	}
+
+	/**
+	 * Hooks admin actions into the TSF Extension Manager pagehook.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->seo_extensions_menu_page_hook variable.
+	 * @access private
+	 */
+	public function do_tsfem_admin_actions() {
+
+		if ( false === $this->is_tsf_extension_manager_page() )
+			return;
+
+		static $run = false;
+
+		if ( $run )
+			return false;
+
+		//* Remove WordPress footer strings.
+		add_filter( 'admin_footer_text', '__return_empty_string' );
+		add_filter( 'update_footer', '__return_empty_string' );
+
+		//* Add something special for Vivaldi
+		add_action( 'admin_head', array( $this, 'output_theme_color_meta' ), 0 );
+
+		//* Add footer output.
+		add_action( 'in_admin_footer', array( $this, 'init_extension_footer_wrap' ) );
+
+		return $run = true;
 	}
 
 	/**
@@ -267,6 +313,7 @@ class AdminPages extends Activation {
 	 * Initializes the admin page output.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
 	public function init_extension_manager_page() {
 		?>
@@ -280,6 +327,38 @@ class AdminPages extends Activation {
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Initializes the admin footer output.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	public function init_extension_footer_wrap() {
+		?>
+		<div class="tsfem-footer-wrap">
+			<?php
+			if ( $this->is_plugin_connected() ) {
+				$this->output_extension_footer();
+			} else {
+				$this->output_plugin_connect_footer();
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
+	 * Does not always work. So many browser bugs...
+	 *
+	 * @since 1.0.0
+	 */
+	public function output_theme_color_meta() {
+		echo '<meta name="theme-color" content="#0ebfe9" />';
+		echo '<meta name="msapplication-navbutton-color" content="#0ebfe9" />';
+		echo '<meta name="apple-mobile-web-app-status-bar-style" content="#0ebfe9" />';
 	}
 
 	/**
@@ -319,6 +398,24 @@ class AdminPages extends Activation {
 	}
 
 	/**
+	 * Echos footer wrapper for extension activation.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function output_extension_footer() {
+		$this->do_page_footer_wrap( true );
+	}
+
+	/**
+	 * Echos footer wrapper for account activation.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function output_plugin_connect_footer() {
+		$this->do_page_footer_wrap( false );
+	}
+
+	/**
 	 * Echos the page title wrap.
 	 *
 	 * @since 1.0.0
@@ -330,12 +427,23 @@ class AdminPages extends Activation {
 	}
 
 	/**
+	 * Echos the page title wrap.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $extra Whether to output extra content.
+	 */
+	protected function do_page_footer_wrap( $extra = true ) {
+		$this->get_view( 'layout/general/footer', get_defined_vars() );
+	}
+
+	/**
 	 * Echos the activation overview.
 	 *
 	 * @since 1.0.0
 	 */
 	protected function do_connect_overview() {
-		$this->get_view( 'layout/pages/activate' );
+		$this->get_view( 'layout/pages/activation' );
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-$this->verify_instance( $_instance ) or die;
+defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 
 $title = esc_html( get_admin_page_title() );
 $actions = '';

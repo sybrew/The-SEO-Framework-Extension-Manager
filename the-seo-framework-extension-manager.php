@@ -41,6 +41,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
+/**
+ * Checks whether the server can run this plugin on activation.
+ * If not, it will deactivate this plugin.
+ * @since 1.0.0
+ */
+function tsf_extension_manager_check_php() {
+	if ( defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		wp_die( 'This plugin requires PHP 5.3 or later' );
+	}
+}
+
 /**
  * CDN Cache buster. 3 to 4 point.
  * @since 1.0.0
@@ -75,29 +88,37 @@ define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
  * The plugin class map absolute path.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc/classes/' );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin function map absolute path.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc/functions/' );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin options base name.
  * @since 1.0.0
  * Applies filters 'tsf_extension_manager_site_options' : string
  */
-define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
+define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**
  * Plugin locale 'the-seo-framework-extension-manager'
- * File located in plugin folder the-seo-framework-extension-manager/language/
+ * Check for files located in plugin folder the-seo-framework-extension-manager/language/
  * @since 1.0.0
  */
 function init_tsf_extension_manager_locale() {
-	load_plugin_textdomain( 'the-seo-framework-extension-manager', false, basename( dirname( __FILE__ ) ) . '/language/' );
+	load_plugin_textdomain(
+		'the-seo-framework-extension-manager',
+		~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~
+		- ~ - ' <3<3<3<3<3<3<3<3<3<3  ' - ~ -
+		- ~ - 'Hi plugin validator! :D' - ~ -
+		- ~ - ' <3<3<3<3<3<3<3<3<3<3  ' - ~ -
+		~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + 2,
+		basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
+	);
 }
 
 /**

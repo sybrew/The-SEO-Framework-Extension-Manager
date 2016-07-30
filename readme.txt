@@ -12,21 +12,34 @@ Add more powerful SEO features to The SEO Framework right from your WordPress Da
 
 == Description ==
 
+= 87.5% lifetime premium discount if you order in 2016! =
+
+This plugin adds an extra dashboard menu item, in which you can download the latest free and premium extensions.
+
 = Note: This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active. =
 = This plugin allows for both free and premium extensions to be acquired. =
 
-> <strong>Warning:</strong><br>
-> This plugin, and all acquired extensions are open source. This means they can be easily altered and shared.<br>
-> If you've acquired extensions for The SEO Framework from outside of this plugin or WordPress.org, they could contain malware.
+= About Premium =
+A premium subscription will allow you to download, update and activate all premium extensions for one single subscription price.
+More extensions are added over time and are fetched securely from our servers.
+As long as the subscription is active, you're allowed to use all old and new extensions.
+
+> <strong>Read carefully:</strong><br>
+> This plugin and all acquired extensions are open source. This means they can be easily altered and shared.<br>
+> If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
 >
-> This also accounts for any premium software acquired for free. Please, be careful.
+> This also accounts for any other premium software acquired for free. Please, be careful.
+
+= Requirements: =
+* This plugin requires **PHP 5.3 or later**, or it will deactivate itself.
+* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it will do nothing at all :).
 
 == Installation ==
 
-1. Install The SEO Framework either via the WordPress.org plugin directory, or by uploading the files to your server.
-1. Either Network Activate that plugin or activate it on a single site.
+1. Install [The SEO Framework](https://wordpress.org/plugins/autodescription/) either via the WordPress.org plugin directory, or by uploading the files to your server.
+1. Follow [those installation instructions](https://wordpress.org/plugins/autodescription/installation/).
 1. Install The SEO Framework extension manager via the WordPress.org plugin directory, or by uploading the files to your server.
-1. Either Network Activate that plugin or activate it on a single site.
+1. Either Network Activate this plugin or activate it on a single site.
 1. Follow the activation steps.
 1. You're good to go!
 

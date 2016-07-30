@@ -84,16 +84,18 @@ class Activation extends Panes {
 		$this->activation_type = array(
 			'input'    => 'validate-key',
 			'external' => 'external',
-			'free'     => 'free',
+			'free'     => 'go-free',
 		);
 
-		add_action( 'admin_init', array( $this, 'handle_activation_post' ) );
+		add_action( 'admin_init', array( $this, 'handle_connection_post' ) );
 		add_action( 'admin_notices', array( $this, 'do_activation_notices' ) );
-	//	add_action( 'shutdown', array( $this, 'dump' ) );
+		add_action( 'admin_footer', array( $this, 'dump' ) );
 	}
 
 	function dump() {
 		var_dump( $this->get_all_options() );
+		var_dump( $this->get_remote_subscription_status() );
+	//	$this->do_deactivation();
 		//	var_dump( $this->do_deactivation() );
 		//global $wp_actions;var_dump( $wp_actions );
 	}
@@ -105,7 +107,7 @@ class Activation extends Panes {
 	 *
 	 * @return bool False if nonce failed.
 	 */
-	public function handle_activation_post() {
+	public function handle_connection_post() {
 
 		if ( false === $this->handle_activation_nonce() )
 			return;
@@ -114,7 +116,6 @@ class Activation extends Panes {
 
 		switch ( $options['action'] ) :
 			case $this->activation_type['input'] :
-				//* Sanitation is handled on the request server as well. We're simply making sure all gets through right.
 				$args = array(
 					'licence_key' => trim( $options['key'] ),
 					'activation_email' => sanitize_email( $options['email'] ),
@@ -124,20 +125,26 @@ class Activation extends Panes {
 			break;
 
 			case $this->activation_type['free'] :
-				$response = $this->activate_free();
+				$response = $this->do_free_activation();
 			break;
 
 			case $this->activation_type['external'] :
 				$response = $this->get_remote_activation_listener_response();
 			break;
 
+			case $this->activation_type['deactivation'] :
+				$args = array(
+					'licence_key' => trim( $this->get_option( 'api_key' ) ),
+					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
+				);
+
+				$response = $this->handle_request( 'deactivation', $args );
+			break;
+
 			default:
-				wp_die();
+				$this->set_activation_notice( array( 701 => '' ) );
 			break;
 		endswitch;
-
-		//* Fetches and saves extra subscription status data.
-		$this->update_extra_subscription_data();
 
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
 		exit;
@@ -249,6 +256,7 @@ class Activation extends Panes {
 			break;
 
 			case 201 :
+			case 701 :
 				$message = esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 			break;
@@ -265,7 +273,8 @@ class Activation extends Panes {
 
 			case 303 :
 			case 307 :
-				$message = esc_html__( 'Invalid API License Key. Login to your My Account page to find a valid API License Key.', 'the-seo-framework-extension-manager' );
+				/* translators: %s = My Account link */
+				$message = sprintf( esc_html__( 'Invalid API License Key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
 				$type = 'error';
 			break;
 
@@ -275,12 +284,13 @@ class Activation extends Panes {
 			break;
 
 			case 305 :
-				$message = esc_html__( 'Exceeded maximum number of activations.', 'the-seo-framework-extension-manager' );
+				/* translators: %s = My Account link */
+				$message = sprintf( esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
 				$type = 'error';
 			break;
 
 			case 306 :
-				$message = esc_html__( 'Invalid Instance ID. Contact the plugin author.', 'the-seo-framework-extension-manager' );
+				$message = esc_html__( 'Invalid Instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 			break;
 
@@ -300,7 +310,18 @@ class Activation extends Panes {
 				$type = 'updated';
 			break;
 
-			default:
+			case 601 :
+				$message = esc_html__( 'Enjoy your free extensions!', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+			break;
+
+			case 9001 :
+				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+			break;
+
+			case 602 :
+			default :
 				$message = esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 			break;
@@ -312,6 +333,7 @@ class Activation extends Panes {
 				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
 			break;
 
+			case 'updated' :
 			default :
 				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
 			break;
@@ -336,26 +358,43 @@ class Activation extends Panes {
 	 * Validation is done two-fold (local and activation server).
 	 *
 	 * @since 1.0.0
+	 * @todo
 	 */
 	protected function get_remote_activation_listener() {
 
 		if ( false === $this->handle_activation_nonce() )
 			return;
 
+		$response = $this->get_remote_activation_listener_response();
 	}
 
+	/**
+	 * Fetches external activation response, periodically.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool|array False if data has not yet been set. Array if data has been set.
+	 */
 	protected function get_remote_activation_listener_response( $store = false ) {
 
 		static $response = false;
 
 		if ( false !== $store ) {
-			$response = $store;
+			return $response = $store;
 		} else {
 			return $response;
 		}
 	}
 
-	protected function set_remote_activation_listener_response( $value = false ) {
+	/**
+	 * Sets external activation response.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $value The data that needs to be set.
+	 * @return bool True
+	 */
+	protected function set_remote_activation_listener_response( $value = array() ) {
 
 		if ( empty( $value ) || is_wp_error( $value ) )
 			return false;
@@ -601,7 +640,36 @@ class Activation extends Panes {
 	}
 
 	/**
-	 * Handles product activation.
+	 * Handles free activation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success. False on failure.
+	 */
+	protected function do_free_activation() {
+
+		$success = $this->update_option_multi( array(
+			'api_key'             => '',
+			'activation_email'    => '',
+			'_activation_level'   => 'Free',
+			'_activation_expires' => '',
+			'_activated'          => 'Activated',
+			'_instance'           => false,
+			'_data'               => array(),
+		) );
+
+		if ( $success ) {
+			$this->set_activation_notice( array( 601 => '' ) );
+			return true;
+		} else {
+			$this->set_activation_notice( array( 602 => '' ) );
+			$this->do_deactivation();
+			return false;
+		}
+	}
+
+	/**
+	 * Handles premium activation.
 	 *
 	 * @since 1.0.0
 	 *
@@ -612,18 +680,27 @@ class Activation extends Panes {
 
 		$success = array();
 
-		$success[] = $this->update_option( 'api_key', $args['api_key'] );
-		$success[] = $this->update_option( 'activation_email', $args['activation_email'] );
-		$success[] = $this->update_option( '_activation_level', $args['_activation_level'] );
-		$success[] = $this->update_option( '_activation_expires', $args['_activation_expires'] );
-		$success[] = $this->update_option( '_activated', 'Activated' );
+		$success[] = $this->update_option_multi( array(
+			'api_key'             => $args['api_key'],
+			'activation_email'    => $args['activation_email'],
+			'_activation_level'   => $args['_activation_level'],
+			'_activation_expires' => $args['_activation_expires'],
+			'_activated'          => 'Activated',
+			'_instance'           => $this->get_activation_instance(),
+			'_data'               => array(),
+		) );
 
-		return in_array( false, $success, true );
+		//* Fetches and saves extra subscription status data. i.e. '_data'
+		$success[] = $this->set_remote_subscription_status( true );
+		$success[] = $this->update_extra_subscription_data();
+
+		return ! in_array( false, $success, true );
 	}
 
 	/**
-	 * Handles product deactivation.
+	 * Handles premium deactivation.
 	 * Sets all options to empty or 'Deactivated'.
+	 * Also resets option cache.
 	 *
 	 * @since 1.0.0
 	 *
@@ -631,17 +708,19 @@ class Activation extends Panes {
 	 */
 	protected function do_deactivation() {
 
-		$success = array();
+		$success = $this->update_option_multi( array(
+			'api_key'             => '',
+			'activation_email'    => '',
+			'_activation_level'   => '',
+			'_activation_expires' => '',
+			'_activated'          => 'Deactivated',
+			'_instance'           => false,
+			'_data'               => array(),
+		) );
 
-		$success[] = $this->update_option( 'api_key', '' );
-		$success[] = $this->update_option( 'activation_email', '' );
-		$success[] = $this->update_option( '_activation_level', '' );
-		$success[] = $this->update_option( '_activation_expires', '' );
-		$success[] = $this->update_option( '_activated', 'Deactivated' );
-		$success[] = $this->update_option( '_instance', false );
-		$success[] = $this->update_option( '_data', array() );
+		$this->reset_option_cache();
 
-		return in_array( false, $success, true );
+		return $success;
 	}
 
 	/**
@@ -656,14 +735,21 @@ class Activation extends Panes {
 	}
 
 	/**
-	 * Determines subscription status.
+	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
+	 * @staticvar array $status.
 	 *
 	 * @return array Current subscription status.
 	 */
 	protected function get_subscription_status() {
-		return array(
+
+		static $status = null;
+
+		if ( null !== $status )
+			return $status;
+
+		return $status = array(
 			'key'     => $this->get_option( 'api_key' ),
 			'email'   => $this->get_option( 'activation_email' ),
 			'active'  => $this->get_option( '_activated' ),
@@ -673,57 +759,80 @@ class Activation extends Panes {
 	}
 
 	/**
-	 * Fetches extra remote subscription information and stores it in the data option.
-	 * Should happen only run once after subscription has been updated to Premium.
+	 * Sets remote subscription status cache.
+	 *
+	 * @since 1.0.0
+	 * @see $this->get_remote_subscription_status()
+	 *
+	 * @param bool $doing_activation Whether the activation process is running.
+	 * @return bool true on success, false on failure.
+	 */
+	protected function set_remote_subscription_status( $doing_activation = false ) {
+		return false !== $this->get_remote_subscription_status( $doing_activation );
+	}
+
+	/**
+	 * Fetches remote subscription status. Use this scarcely.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array The extra subscription information.
+	 * @param bool $doing_activation Whether the activation process is running.
+	 * @return bool|array False on failure. Array subscription status on success.
 	 */
-	protected function update_extra_subscription_data() {
+	protected function get_remote_subscription_status( $doing_activation = false ) {
+
+		if ( false === $doing_activation && 'Premium' !== $this->get_option( '_activation_level' ) )
+			return false;
 
 		static $response = null;
 
 		if ( isset( $response ) )
 			return $response;
 
-		if ( 'Premium' !== $this->get_option( '_activation_level' ) )
-			return $response = false;
+		if ( $doing_activation ) {
+			//* Wait 0.0625 seconds as a second request is following up. (is this enough?)
+			usleep( 62500 );
 
-		$args = array(
-			'licence_key' => $this->get_option( 'api_key' ),
-			'activation_email' => $this->get_option( 'activation_email' ),
-		);
+			//* Fetch data from POST variables. As the options are cached and tainted already at this point.
+			$args = array(
+				'licence_key' => $this->activation_key,
+				'activation_email' => $this->activation_email,
+			);
+		} else {
+			$args = array(
+				'licence_key' => $this->get_option( 'api_key' ),
+				'activation_email' => $this->get_option( 'activation_email' ),
+			);
+		}
 
-		$response = $this->handle_request( 'status', $args );
+		return $response = $this->handle_request( 'status', $args );
+	}
+
+	/**
+	 * Fetches extra remote subscription information and stores it in the data option.
+	 * Should happen only run once after subscription has been updated to Premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success, false on failure or when activation level isn't Premium.
+	 */
+	protected function update_extra_subscription_data() {
+
+		$response = $this->get_remote_subscription_status();
+
+		if ( false === $reponse )
+			return false;
 
 		$data = $this->get_option( '_data', array() );
-		if ( ! is_array( $data ) )
+
+		if ( false === is_array( $data ) )
 			$data = array();
 
 		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;
 
-		$this->update_option( '_data', $data );
+		$success = $this->update_option( '_data', $data );
 
-		return $data;
-	}
-
-	/**
-	 * Updates subscription status in the loop (or at the end of).
-	 * Resets option cache afterwards.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args The subscription arguments.
-	 * @param bool $reset Whether to reset the options cache.
-	 */
-	protected function update_subscription_status( $args, $reset = true ) {
-
-		$this->do_activation( $args );
-
-		if ( $reset )
-			$this->reset_option_cache();
-
+		return $success;
 	}
 
 	/**
@@ -815,5 +924,22 @@ class Activation extends Panes {
 		$api_url = add_query_arg( 'wc-api', 'am-software-api', $this->get_activation_url() );
 
 		return esc_url_raw( $api_url . '&' . http_build_query( $args ) );
+	}
+
+	/**
+	 * Generates software API My Account page HTML link.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The My Account API URL.
+	 */
+	protected function get_my_account_link() {
+		return $this->get_link( array(
+			'url' => $this->get_activation_url( 'my-account/' ),
+			'target' => '_blank',
+			'class' => '',
+			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+			'content' => esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
+		) );
 	}
 }

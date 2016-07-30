@@ -1,5 +1,5 @@
 <?php
-$this->verify_instance( $_instance ) or die;
+defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 
 $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
 

@@ -22,9 +22,9 @@
  * @since 1.0.0
  *
  * @param string $action The current query action. Unused as of now.
- * @param array $args The extension arguments.
+ * @param array|object $args The extension arguments.
  *
- * @return bool|object
+ * @return bool|object False if no extensions are found.
  */
 function tsf_extension_manager_filter_extensions( $action, $args = array() ) {
 

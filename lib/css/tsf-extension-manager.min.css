@@ -18,6 +18,10 @@
 	padding: 0;
 }
 
+.tsfem-top-wrap .notice:first-of-type {
+	margin-top: 18px;
+}
+
 .tsfem .connect-wrap {
 	max-width: 690px;
 	min-width: 175px;
@@ -195,6 +199,50 @@
 	border-color: #057f9c;
 	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
+}
+
+.tsfem-footer-wrap {
+	width: 100%;
+	padding: 1.33em 40px;
+	margin: 0 auto;
+/*	-webkit-box-shadow: 0 -3px 2px 1px rgba(0,0,0,.04);
+	box-shadow: 0 -2px 1px 1px rgba(0,0,0,.04);
+	background: -webkit-linear-gradient( top, #fafafa, #f1f1f1 );
+	background: -o-linear-gradient( bottom, #fafafa, #f1f1f1 );
+	background: -moz-linear-gradient( bottom, #fafafa, #f1f1f1 );
+	background: linear-gradient( to bottom, #fafafa, #f1f1f1 );*/
+	overflow: hidden;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	align-items: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#wpfooter .tsfem-footer-wrap .tsfem-footer-title,
+#wpfooter .tsfem-footer-wrap .tsfem-footer-motto {
+	font-size: 13px;
+	margin: 0;
+	color: #646d78;
+	font-weight: 300;
+}
+
+#wpfooter .tsfem-footer-wrap .tsfem-footer-title {
+	font-weight: 400;
+	color: #555d66;
 }
 
 @media only screen and ( max-width:600px ) {
