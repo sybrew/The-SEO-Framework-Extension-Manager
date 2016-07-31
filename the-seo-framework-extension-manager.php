@@ -48,9 +48,10 @@ register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
  * @since 1.0.0
  */
 function tsf_extension_manager_check_php() {
-	if ( defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
+	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'This plugin requires PHP 5.3 or later' );
+		wp_die( 'The SEO Framework Extension Manager requires PHP 5.3 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
 	}
 }
 

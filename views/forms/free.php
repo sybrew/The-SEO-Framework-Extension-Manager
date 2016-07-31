@@ -1,5 +1,5 @@
 <?php
-defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[0] ) or die;
 
 $class_form = isset( $classes_form ) && count( $classes_form ) > 0 ? implode( ' ', $classes_form ) : '';
 $class_submit = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'button button-secondary';

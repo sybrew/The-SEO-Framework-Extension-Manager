@@ -61,11 +61,10 @@ class Core {
 
 	/**
 	 * Generates view instance through bittype and hash comparison.
+	 * It's a two-factor verification.
 	 *
 	 * @since 1.0.0
 	 * @staticvar string $instance
-	 * @staticvar int $bit
-	 * @staticvar int $_bit
 	 *
 	 * @param int $bit
 	 * @return string $instance The instance key.
@@ -75,7 +74,7 @@ class Core {
 		static $instance = array();
 
 		$bits = $this->get_bits( true );
-		$_bit = $bits[1];
+		$_bit = $bits[0];
 
 		if ( isset( $instance[ $_bit ] ) ) {
 			if ( empty( $instance[ $bit ] ) )
@@ -91,21 +90,23 @@ class Core {
 
 	/**
 	 * Generates verification bits based on time.
-	 * It's crack-able, but you'll need to know exactly when to intercept. One
-	 * bit mistake and the plugin stops :).
+	 * It's crack-able, but you'll need to know exactly when to intercept. You'll
+	 * also need to know the random number. One bit mistake and the plugin stops :).
 	 *
 	 * @since 1.0.0
+	 * @staticvar int $_bit : $bits[0]
+	 * @staticvar int $bit  : $bits[1]
 	 *
 	 * @param bool $previous Whether to fetch the previous set of bits.
 	 * @return array The verification bits.
 	 */
 	protected function get_bits( $previous = false ) {
 
-		static $bit = null;
 		static $_bit = null;
+		static $bit = null;
 
 		if ( $previous )
-			return array( $bit, $_bit );
+			return array( $_bit, $bit );
 
 		if ( null === $bit ) {
 			$bit = $_bit = mt_rand( 0, 12034337 );
@@ -114,7 +115,7 @@ class Core {
 
 		$bit | $_bit && $bit++ ^ ~ $_bit-- && $bit ^ $_bit++ && $bit | $_bit++;
 
-		return array( $bit, $_bit );
+		return array( $_bit, $bit );
 	}
 
 	/**
@@ -292,10 +293,9 @@ class Core {
 	 * @param string $option The Option name.
 	 * @param mixed $default The fallback value if the option doesn't exist.
 	 * @param bool $use_cache Whether to store and use options from cache.
-	 * @param bool $reset_cache Whether to reset the cache.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	protected function get_option( $option, $default = null, $use_cache = true, $reset_cache = false ) {
+	protected function get_option( $option, $default = null, $use_cache = true ) {
 
 		if ( ! $option )
 			return null;
@@ -308,23 +308,12 @@ class Core {
 
 		static $options_cache = array();
 
-		if ( $reset_cache )
-			$options_cache = array();
-		elseif ( isset( $options_cache[ $option ] ) )
+		if ( isset( $options_cache[ $option ] ) )
 			return $options_cache[ $option ];
 
 		$options = $this->get_all_options();
 
 		return $options_cache[ $option ] = isset( $options[ $option ] ) ? $options[ $option ] : $default;
-	}
-
-	/**
-	 * Resets the activation option cache.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function reset_option_cache() {
-		return $this->get_option( true, null, true, true );
 	}
 
 	/**
@@ -349,7 +338,29 @@ class Core {
 
 		$options[ $option ] = $value;
 
+		$this->has_run_update_option();
+
 		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+	}
+
+	/**
+	 * Determines whether update_option has already run.
+	 *
+	 * @since 1.0.0
+	 * @staticvar $run Whether update_option has run.
+	 *
+	 * @return bool True if run, false otherwise.
+	 */
+	protected function has_run_update_option() {
+
+		static $run = false;
+
+		if ( false === $run ) {
+			$run = true;
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -364,6 +375,8 @@ class Core {
 	 */
 	protected function update_option_multi( array $options = array() ) {
 
+		static $run = false;
+
 		if ( empty( $options ) )
 			return false;
 
@@ -373,7 +386,18 @@ class Core {
 		if ( serialize( $options ) === serialize( $_options ) )
 			return true;
 
+		if ( $run ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data deletion.' );
+			wp_die();
+		}
+
+		if ( $this->has_run_update_option() ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data deletion.' );
+			wp_die();
+		}
+
 		$options = wp_parse_args( $options, $_options );
+		$run = true;
 
 		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 	}

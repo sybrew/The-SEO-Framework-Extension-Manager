@@ -52,7 +52,7 @@ final class Load extends Extensions {
 		parent::__construct();
 
 		add_action( 'admin_notices', array( $this, 'check_external_blocking' ) );
-		add_action( 'admin_notices', array( $this, 'do_activation_notice' ) );
+		add_action( 'admin_notices', array( $this, 'do_error_notice' ) );
 	}
 
 	/**
@@ -90,7 +90,7 @@ final class Load extends Extensions {
 	 *
 	 * @since 1.0.0
 	 */
-	public function do_activation_notice() {
+	public function do_error_notice() {
 
 		if ( $this->is_plugin_connected() || ! $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
 			return;
