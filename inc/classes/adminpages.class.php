@@ -219,7 +219,7 @@ class AdminPages extends Activation {
 			$this->js_name = 'tsf-extension-manager';
 
 			$scheme = is_ssl() ? 'https' : 'http';
-			$font = esc_url_raw( 'http://fonts.googleapis.com/css?family=Titillium+Web:600', array( $scheme ) );
+			$font = esc_url_raw( 'http://fonts.googleapis.com/css?family=Titillium+Web:600,400', array( $scheme ) );
 
 			wp_enqueue_style( 'google-titillium-web-font', $font, false );
 
@@ -227,6 +227,7 @@ class AdminPages extends Activation {
 			add_action( 'admin_print_styles-' . $this->seo_extensions_menu_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
 			//* Enqueue scripts
 			add_action( 'admin_print_scripts-' . $this->seo_extensions_menu_page_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
+			add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
 		}
 
 	}
@@ -281,7 +282,13 @@ class AdminPages extends Activation {
 
 		$suffix = the_seo_framework()->script_debug ? '' : '.min';
 
-		wp_register_style( $this->css_name, TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/tsf-extension-manager{$rtl}{$suffix}.css", array(), TSF_EXTENSION_MANAGER_VERSION, 'all' );
+		wp_register_style(
+			$this->css_name,
+			TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/tsf-extension-manager{$rtl}{$suffix}.css",
+			array(),
+			TSF_EXTENSION_MANAGER_VERSION,
+			'all'
+		);
 
 		$registered = true;
 
@@ -291,7 +298,7 @@ class AdminPages extends Activation {
 	 * Registers admin CSS.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $registered : Prevents Re-registering of the style.
+	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 * @access private
 	 */
 	public function register_admin_javascript() {
@@ -303,9 +310,41 @@ class AdminPages extends Activation {
 
 		$suffix = the_seo_framework()->script_debug ? '' : '.min';
 
-		wp_register_script( $this->js_name, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/tsf-extension-manager{$suffix}.js", array( 'jquery' ), TSF_EXTENSION_MANAGER_VERSION, true );
+		wp_register_script(
+			$this->js_name,
+			TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/tsf-extension-manager{$suffix}.js",
+			array( 'jquery' ),
+			TSF_EXTENSION_MANAGER_VERSION,
+			true
+		);
 
 		$registered = true;
+
+	}
+
+	/**
+	 * Registers admin CSS.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $l7d : Prevents relocalizing of the scripts.
+	 * @access private
+	 * @return void early If run twice or more.
+	 */
+	public function localize_admin_javascript() {
+
+		//* Localized.
+		static $l7d = null;
+
+		if ( isset( $l7d ) )
+			return;
+
+		$strings = array(
+			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
+		);
+
+		wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
+
+		$l7d = true;
 
 	}
 
@@ -351,7 +390,7 @@ class AdminPages extends Activation {
 
 	/**
 	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
-	 * Does not always work. So many browser bugs...
+	 * Does not always work. So many browser bugs... It's just fancy.
 	 *
 	 * @since 1.0.0
 	 */
@@ -371,7 +410,7 @@ class AdminPages extends Activation {
 		$this->do_page_header_wrap( true );
 
 		?>
-		<div class="extensions-wrap">
+		<div class="tsfem-extensions-wrap">
 			<?php
 			$this->do_extensions_overview();
 			?>
@@ -389,7 +428,7 @@ class AdminPages extends Activation {
 		$this->do_page_header_wrap( false );
 
 		?>
-		<div class="connect-wrap">
+		<div class="tsfem-connect-wrap">
 			<?php
 			$this->do_connect_overview();
 			?>
@@ -466,14 +505,19 @@ class AdminPages extends Activation {
 	 *		'full' bool : Whether to output a half or full pane.
 	 *		'collapse' bool : Whether able to collapse the pane.
 	 *		'move' bool : Whether to be able to move the pane.
+	 *		'ajax' bool : Whether to use ajax.
+	 *		'ajax_id' string : The AJAX div ID.
 	 * }
+	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	protected function do_pane_wrap( $title = '', $content = '', $args = array() ) {
+	protected function do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
 
 		$defaults = array(
 			'full' => true,
 			'collapse' => true,
 			'move' => false,
+			'ajax' => false,
+			'ajax_id' => '',
 		);
 		$args = wp_parse_args( $args, $defaults );
 		unset( $defaults );

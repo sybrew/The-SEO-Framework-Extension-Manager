@@ -31,6 +31,28 @@ namespace TSF_Extension_Manager;
 class Core {
 
 	/**
+	 * The POST nonce validation name and field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce name.
+	 * @var string The validation nonce field.
+	 */
+	protected $nonce_name;
+	protected $nonce_action = array();
+	protected $request_name = array();
+
+
+	/**
+	 * The POST request status code option name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string The POST request status code option name.
+	 */
+	protected $error_notice_option;
+
+	/**
 	 * Cloning is forbidden.
 	 */
 	private function __clone() { }
@@ -41,10 +63,290 @@ class Core {
 	private function __wakeup() { }
 
 	/**
-	 * Constructor.
+	 * Constructor, initializes actions and sets up variables.
 	 * Latest Class. Doesn't have parent.
 	 */
-	protected function __construct() { }
+	protected function __construct() {
+
+		$this->nonce_name = 'tsf_extension_manager_nonce_name';
+		$this->nonce_action = array(
+			'default'       => 'tsf_extension_manager_nonce_action',
+			'activate-free' => 'tsf_extension_manager_nonce_action_free',
+			'activate-key'  => 'tsf_extension_manager_nonce_action_key',
+			'deactivate'    => 'tsf_extension_manager_nonce_action_deactivate',
+			'enable-feed'   => 'tsf_extension_manager_nonce_action_feed',
+		);
+		$this->request_name = array(
+			'activate-key'      => 'validate-key',
+			'activate-external' => 'external',
+			'activate-free'     => 'go-free',
+			'deactivate'        => 'deactivate',
+			'enable-feed'       => 'enable-feed',
+		);
+		$this->error_notice_option = 'tsf_extension_manager_error_notice_option';
+
+		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
+		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
+	}
+
+	/**
+	 * Handles plugin POST requests.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool False if nonce failed.
+	 */
+	public function handle_update_post() {
+
+		if ( false === $this->handle_update_nonce() )
+			return;
+
+		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
+
+		switch ( $options['action'] ) :
+			case $this->request_name['key'] :
+				$args = array(
+					'licence_key' => trim( $options['key'] ),
+					'activation_email' => sanitize_email( $options['email'] ),
+				);
+
+				$response = $this->handle_request( 'activation', $args );
+			break;
+
+			case $this->request_name['free'] :
+				$response = $this->do_free_activation();
+			break;
+
+			case $this->request_name['external'] :
+				$response = $this->get_remote_activation_listener_response();
+			break;
+
+			case $this->request_name['deactivation'] :
+				$args = array(
+					'licence_key' => trim( $this->get_option( 'api_key' ) ),
+					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
+				);
+
+				$response = $this->handle_request( 'deactivation', $args );
+			break;
+
+			default:
+				$this->set_error_notice( array( 701 => '' ) );
+			break;
+		endswitch;
+
+		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
+		exit;
+	}
+
+	/**
+	 * Checks the Activation page nonce. Returns false if nonce can't be found or if user isn't allowed to perform nonce.
+	 * Performs wp_die() when nonce verification fails.
+	 *
+	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $validated Determines whether the nonce has already been verified.
+	 *
+	 * @param string $key The nonce key to check against.
+	 * @return bool True if verified and matches. False if can't verify.
+	 */
+	public function handle_update_nonce( $key = 'default' ) {
+
+		static $validated = array();
+
+		if ( isset( $validated[ $key ] ) )
+			return $validated[ $key ];
+
+		if ( false === $this->is_tsf_extension_manager_page() && false === $this->can_do_settings() )
+			return $validated = false;
+
+		/**
+		 * If this page doesn't parse the site options,
+		 * There's no need to filter them on each request.
+		 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
+		 *
+		 * @since 1.0.0
+		 */
+		if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+			return $validated = false;
+
+		check_admin_referer( $this->nonce_action[ $key ], $this->nonce_name );
+
+		return $validated[ $key ] = true;
+	}
+
+	/**
+	 * Outputs activation notice. If any.
+	 *
+	 * @since 1.0.0
+	 */
+	public function do_error_notices() {
+
+		if ( $option = get_option( $this->error_notice_option, false ) ) {
+
+			$notice = $this->get_error_notice( $option );
+
+			if ( empty( $notice ) ) {
+				$this->unset_error_notice();
+				return;
+			}
+
+			echo the_seo_framework()->generate_dismissible_notice( $notice['message'], $notice['type'] );
+			$this->unset_error_notice();
+		}
+	}
+
+	/**
+	 * Sets activation notice option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $notice The activation notice.
+	 */
+	protected function set_error_notice( $notice = array() ) {
+		update_option( $this->error_notice_option, $notice );
+	}
+
+	/**
+	 * Removes activation notice option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $notice The activation notice.
+	 */
+	protected function unset_error_notice() {
+		delete_option( $this->error_notice_option );
+	}
+
+	/**
+	 * Fetches activation notices by option and returns type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array|string The activation notice. Empty string when no array key is set.
+	 */
+	protected function get_error_notice( $option ) {
+
+		if ( is_array( $option ) )
+			$key = key( $option );
+
+		if ( empty( $key ) )
+			return '';
+
+		switch ( $key ) :
+			case 101 :
+				$message = esc_html__( 'No valid license key was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 102 :
+				$message = esc_html__( 'No valid license email was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 103 :
+			case 701 :
+				$message = esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 201 :
+				$message = esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 202 :
+			case 301 :
+			case 302 :
+			case 401 :
+			case 403 :
+			case 404 :
+			case 503 :
+				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 303 :
+			case 307 :
+				/* translators: %s = My Account */
+				$message = sprintf( esc_html__( 'Invalid API License Key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$type = 'error';
+				break;
+
+			case 304 :
+				$message = esc_html__( 'Software API error.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 305 :
+				/* translators: %s = My Account */
+				$message = sprintf( esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$type = 'error';
+				break;
+
+			case 306 :
+				$message = esc_html__( 'Invalid Instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 308 :
+				$message = esc_html__( 'Subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 402 :
+				$message = esc_html__( 'Your account has been successfully authorized to be used on this website.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 501 :
+			case 502 :
+				$message = esc_html__( 'Your account has been successfully deauthorized from this website.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 601 :
+				$message = esc_html__( 'Enjoy your free extensions!', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 9001 :
+				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 602 :
+			default :
+				$message = esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+		endswitch;
+
+		switch ( $type ) :
+			case 'error' :
+			case 'warning' :
+				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
+				break;
+
+			case 'updated' :
+			default :
+				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
+				break;
+		endswitch;
+
+		/* translators: 1: 'Error code:', 2: The error code */
+		$status = sprintf( esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
+		$additional_info = $option[ $key ];
+
+		/* translators: 1: Error code, 2: Error message, 3: Additional info */
+		$output = sprintf( esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status, $message, $additional_info );
+
+		return array(
+			'message' => $output,
+			'type' => $type,
+		);
+	}
 
 	/**
 	 * Verifies views instances.
@@ -211,7 +513,6 @@ class Core {
 	 * Passes on input vars.
 	 *
 	 * @since 1.0.0
-	 * @credits Akismet For most code.
 	 *
 	 * @param string $view The file name.
 	 * @param array $args The arguments to be supplied within the file name.
@@ -317,6 +618,27 @@ class Core {
 	}
 
 	/**
+	 * Determines whether update_option has already run. Always returns false on
+	 * first call. Always returns true on second or later call.
+	 *
+	 * @since 1.0.0
+	 * @staticvar $run Whether update_option has run.
+	 *
+	 * @return bool True if run, false otherwise.
+	 */
+	protected function has_run_update_option() {
+
+		static $run = false;
+
+		if ( false === $run ) {
+			$run = true;
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Updates TSF Extension Manager option.
 	 *
 	 * @since 1.0.0
@@ -341,26 +663,6 @@ class Core {
 		$this->has_run_update_option();
 
 		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
-	}
-
-	/**
-	 * Determines whether update_option has already run.
-	 *
-	 * @since 1.0.0
-	 * @staticvar $run Whether update_option has run.
-	 *
-	 * @return bool True if run, false otherwise.
-	 */
-	protected function has_run_update_option() {
-
-		static $run = false;
-
-		if ( false === $run ) {
-			$run = true;
-			return false;
-		}
-
-		return true;
 	}
 
 	/**

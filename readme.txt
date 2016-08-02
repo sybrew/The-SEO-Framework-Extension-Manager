@@ -12,12 +12,12 @@ Add more powerful SEO features to The SEO Framework right from your WordPress Da
 
 == Description ==
 
-= 87.5% lifetime premium discount if you order in 2016! =
+= 87.5% lifetime premium discount if you order a license in 2016! =
 
 This plugin adds an extra dashboard menu item, in which you can download the latest free and premium extensions.
 
-= Note: This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active. =
-= This plugin allows for both free and premium extensions to be acquired. =
+**Note: This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active.**
+**This plugin allows for both free and premium extensions to be acquired.**
 
 = About Premium =
 A premium subscription will allow you to download, update and activate all premium extensions for one single subscription price.
@@ -33,6 +33,9 @@ As long as the subscription is active, you're allowed to use all old and new ext
 = Requirements: =
 * This plugin requires **PHP 5.3 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it will do nothing at all :).
+
+= Privacy =
+* This plugin sends API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).
 
 == Installation ==
 
