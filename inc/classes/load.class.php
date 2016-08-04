@@ -52,7 +52,7 @@ final class Load extends Extensions {
 		parent::__construct();
 
 		add_action( 'admin_notices', array( $this, 'check_external_blocking' ) );
-		add_action( 'admin_notices', array( $this, 'do_error_notice' ) );
+		add_action( 'admin_notices', array( $this, 'do_activation_notice' ) );
 	}
 
 	/**
@@ -63,7 +63,7 @@ final class Load extends Extensions {
 	 */
 	public function check_external_blocking() {
 
-		if ( ! $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
+		if ( false === $this->is_tsf_extension_manager_page() || false === $this->can_do_settings() )
 			return;
 
 		if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && WP_HTTP_BLOCK_EXTERNAL === true ) {
@@ -81,7 +81,6 @@ final class Load extends Extensions {
 				?><div class="error"><p><?php echo $notice; ?></p></div><?php
 			}
 		}
-
 	}
 
 	/**
@@ -90,9 +89,9 @@ final class Load extends Extensions {
 	 *
 	 * @since 1.0.0
 	 */
-	public function do_error_notice() {
+	public function do_activation_notice() {
 
-		if ( $this->is_plugin_connected() || ! $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
+		if ( $this->is_plugin_connected() || false === $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
 		$text = __( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
@@ -100,7 +99,7 @@ final class Load extends Extensions {
 		$title = __( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
 
 		$notice_link = '<a href="' . esc_url( $url ) . '" title="' . esc_attr( $title ) . '" target="_self">' . esc_html( $title ) . '</a>';
-		$notice = esc_html( $text ) . '&mdash;' . $notice_link;
+		$notice = esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		echo the_seo_framework()->generate_dismissible_notice( $notice );
 

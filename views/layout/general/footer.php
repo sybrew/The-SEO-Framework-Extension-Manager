@@ -1,9 +1,6 @@
 <?php
 defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 
-//* @todo.
-//$extra ? '' : '';
-
 if ( $level = $this->get_option( '_activation_level' ) ) {
 	if ( 'Premium' === $level ) {
 		$more_mottos = array( 'premium' );

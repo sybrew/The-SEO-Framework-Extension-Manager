@@ -4,6 +4,8 @@ defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 $class_submit = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'button button-primary';
 $value_redirect = isset( $redirect ) ? $redirect : 'signup';
 
+//* @TODO nonce?
+
 ?>
 <form name="<?php echo esc_attr( $name ); ?>" action="<?php echo esc_url( $action ) ?>" method="POST" target="_blank">
 	<input type="hidden" name="passback_url" value="<?php echo esc_url( $this->get_admin_page_url() ); ?>"/>

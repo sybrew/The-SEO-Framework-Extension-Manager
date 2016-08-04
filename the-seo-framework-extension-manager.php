@@ -59,7 +59,7 @@ function tsf_extension_manager_check_php() {
  * CDN Cache buster. 3 to 4 point.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '1.0.0' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '0.9.0' );
 
 /**
  * The plugin map URL. Used for calling browser files.

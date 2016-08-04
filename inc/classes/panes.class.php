@@ -52,7 +52,7 @@ class Panes extends Core {
 
 	/**
 	 * Parses Google Feed.
-	 * This is a prototype. It's planned to fetch from premium.theseoframework.com
+	 * This is a prototype. It's planned to fetch from https://premium.theseoframework.com/
 	 * With a filtered list that's parsed remotely, which has a history and is loaded from more or personalized sources.
 	 *
 	 * @since 1.0.0
@@ -141,7 +141,7 @@ class Panes extends Core {
 				}
 				unset( $link_object );
 
-				// $object->updated also exists.
+				//* @note: $object->updated also exists.
 				$date = isset( $object->published ) ? $object->published->__toString() : '';
 				$date = $date ? '<time>' . date_i18n( get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
@@ -183,10 +183,11 @@ class Panes extends Core {
 		$enable = __( 'Enable feed?', 'the-seo-framework-extension-manager' );
 
 		$key = sprintf( '<input type="hidden" name="%s" value="validate-key">', $this->get_field_name( 'action' ) );
+		$nonce_action = $this->get_nonce_action_field( $this->request_name['enable-feed'] );
 		$nonce = wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="button-primary" value="%s">', esc_attr( $submit_class ), esc_attr( $enable ) );
+		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="button-primary" value="%s">', esc_attr( $enable ) );
 
-		$form = $key . $nonce . $submit;
+		$form = $key . $nonce_action . $nonce . $submit;
 		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', esc_url( $this->get_admin_page_url() ), $form );
 
 		$js = '<a id="tsfem-enable-feeds" class="button-primary hide-if-no-js">' . esc_html( $enable ) . '</a>';
@@ -243,9 +244,7 @@ class Panes extends Core {
 
 		$output = '';
 
-	//	$feed_enabled = $this->get_option( '_enable_feed', false );
-		$this->update_option( '_enable_feed', false );
-		$feed_enabled = false;
+		$feed_enabled = $this->get_option( '_enable_feed', false );
 
 		if ( $feed_enabled || $ajax ) {
 			$feed = $this->prototype_get_google_webmasters_feed();

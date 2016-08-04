@@ -4,8 +4,6 @@ defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
 
 ?>
-<p><?php printf( esc_html__( 'Add more powerful SEO features to your %s. To get started, use one of the options below.', 'the-seo-framework-extension-manager' ), esc_html( $type ) ); ?></p>
-
 <div class="tsfem-connect-option tsfem-connect-highlighted">
 	<div class="tsfem-connect-description">
 		<h3><?php esc_html_e( 'Activate', 'the-seo-framework-extension-manager' ); ?></h3>
@@ -15,8 +13,8 @@ $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-e
 	<div class="tsfem-connect-action">
 		<div class="tsfem-connect-fields-row">
 			<?php
-			$this->get_view( 'forms/get', array( 'name' => $this->request_name['external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button', 'button-primary' ) ) );
-			$this->get_view( 'forms/get', array( 'name' => $this->request_name['external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button' ) ) );
+			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button', 'button-primary' ) ) );
+			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button' ) ) );
 			$this->get_remote_activation_listener();
 			?>
 		</div>
@@ -30,7 +28,7 @@ $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-e
 		<p><?php esc_html_e( 'Already have your key? Enter it here.', 'the-seo-framework-extension-manager' ); ?></p>
 	</div>
 	<div class="tsfem-connect-action">
-		<?php $this->get_view( 'forms/key', array( 'name' => $this->request_name['key'], 'id' => 'input-activation', 'text' => __( 'Use this key', 'the-seo-framework-extension-manager' ) ) ); ?>
+		<?php $this->get_view( 'forms/key', array( 'name' => $this->request_name['activate-key'], 'id' => 'input-activation', 'text' => __( 'Use this key', 'the-seo-framework-extension-manager' ) ) ); ?>
 	</div>
 </div>
 
@@ -41,7 +39,7 @@ $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-e
 		<p><?php esc_html_e( 'Rather go for a test-drive? You can always upgrade later.', 'the-seo-framework-extension-manager' ); ?></p>
 	</div>
 	<div class="tsfem-connect-action">
-		<?php $this->get_view( 'forms/free', array( 'name' => $this->request_name['free'], 'id' => 'activate-free', 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
+		<?php $this->get_view( 'forms/free', array( 'name' => $this->request_name['activate-free'], 'id' => 'activate-free', 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
 	</div>
 </div>
 <?php

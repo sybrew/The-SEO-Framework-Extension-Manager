@@ -2,12 +2,17 @@
 	margin-top: 20px;
 }
 
+.wrap.tsfem .notice {
+	margin: 0 0 20px;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+}
+
 .tsfem-top-wrap {
 	background-color: #333;
 	-webkit-box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
 	box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
 	width: 100%;
-	margin: 0;
+	margin: 0 0 20px;
 	padding: 20px;
 	overflow: hidden;
 	-webkit-box-sizing: border-box;
@@ -25,6 +30,7 @@
 }
 
 .tsfem-top-actions,
+.tsfem-top-about,
 .tsfem-top-wrap header {
 	text-align: left;
 	-webkit-box-sizing: border-box;
@@ -44,13 +50,41 @@
 	justify-content: flex-start;
 }
 
-.tsfem-top-actions {
+.tsfem-top-actions,
+.tsfem-top-about {
 	justify-content: flex-end;
+}
+
+.tsfem-top-about {
+	max-width: 60%;
 }
 
 .tsfem-top-actions > div {
 	display: inline-block;
 	white-space: pre;
+}
+
+.tsfem-top-about > div {
+	display: inline-block;
+	color: #fff;
+	letter-spacing: .2px;
+	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+}
+
+.tsfem-about-activation:before {
+	display: inline-block;
+	color: #fff;
+	content: "\f112";
+	font-size: 1.2em;
+	line-height: 1.2em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	margin: 0 7px;
+	vertical-align: baseline;
+	white-space: pre-wrap;
+	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
 }
 
 .tsfem-account-active,
@@ -131,6 +165,7 @@
 	margin-bottom: 0;
 	box-shadow: none;
 	color: #fff;
+	outline: 0;
 }
 
 h1.tsfem-title {
@@ -154,6 +189,7 @@ h1.tsfem-title {
 
 .tsfem-connect-option {
 	width: 100%;
+	max-width: 690px;
 	padding: 1.33em 40px;
 	margin-bottom: 20px;
 	border: 1px solid #e2e2e2;
@@ -237,7 +273,7 @@ h1.tsfem-title {
 
 .tsfem-extensions-wrap {
 	width: 100%;
-	margin: 20px 0 0;
+	margin: 0;
 	padding: 0;
 	overflow: hidden;
 	-webkit-box-sizing: border-box;
@@ -274,7 +310,7 @@ h1.tsfem-title {
 
 .tsfem-pane-half,
 .tsfem-pane-full {
-	max-width: calc( 50% - 20px );
+	max-width: calc( 50% - 10px );
 	min-width: 320px;
 	background: #fff;
 	border-radius: 3px;
@@ -310,7 +346,7 @@ h1.tsfem-title {
 }
 
 .tsfem-pane-half:first-of-type {
-	margin-right: 40px;
+	margin-right: 20px;
 }
 
 .tsfem-pane-full {
@@ -537,6 +573,7 @@ h4.tsfem-status-title {
 	border-color: #05617b;
 	-webkit-box-shadow: inset 0 2px 0 #05617b;
 	box-shadow: inset 0 2px 0 #05617b;
+	outline: 0;
 }
 
 .tsfem input[type=text]:focus,

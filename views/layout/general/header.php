@@ -2,13 +2,14 @@
 defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
 
 $title = esc_html( get_admin_page_title() );
+$about = '';
 $actions = '';
 
 if ( $options ) {
 
 	$status = $this->get_subscription_status();
 
-	if ( 'Activated' === $status['active'] ) {
+	if ( 'Activated' === $status['active'] && 'Premium' === $status['level'] ) {
 		$account_url = $this->get_activation_url( 'my-account/' );
 		$account_button_class = 'tsfem-account-active';
 		$account_text = __( 'My Account', 'the-seo-framework-extension-manager' );
@@ -35,11 +36,14 @@ if ( $options ) {
 	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
 
 	$actions = '<div class="tsfem-top-actions">' . $account . '</div>';
+} else {
+	$info = __( 'Add more powerful SEO features to your website. To get started, use one of the options below.', 'the-seo-framework-extension-manager' );
+	$about = '<div class="tsfem-top-about tsfem-about-activation"><div>' . $info . '</div></div>';
 }
 
 ?>
 <section class="tsfem-top-wrap">
-	<?php echo $actions; ?>
+	<?php echo $about . $actions; ?>
 	<header><h1 class="tsfem-title"><?php echo esc_html( get_admin_page_title() ); ?></h1></header>
 </section>
 <?php

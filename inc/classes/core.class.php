@@ -31,17 +31,17 @@ namespace TSF_Extension_Manager;
 class Core {
 
 	/**
-	 * The POST nonce validation name and field.
+	 * The POST nonce validation name, action and name.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation nonce field.
+	 * @var string The validation request name.
+	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
-	protected $nonce_action = array();
 	protected $request_name = array();
-
+	protected $nonce_action = array();
 
 	/**
 	 * The POST request status code option name.
@@ -69,20 +69,23 @@ class Core {
 	protected function __construct() {
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
-		$this->nonce_action = array(
-			'default'       => 'tsf_extension_manager_nonce_action',
-			'activate-free' => 'tsf_extension_manager_nonce_action_free',
-			'activate-key'  => 'tsf_extension_manager_nonce_action_key',
-			'deactivate'    => 'tsf_extension_manager_nonce_action_deactivate',
-			'enable-feed'   => 'tsf_extension_manager_nonce_action_feed',
-		);
 		$this->request_name = array(
-			'activate-key'      => 'validate-key',
-			'activate-external' => 'external',
-			'activate-free'     => 'go-free',
+			'default'           => 'default',
+			'activate-key'      => 'activate-key',
+			'activate-external' => 'activate-external',
+			'activate-free'     => 'activate-free',
 			'deactivate'        => 'deactivate',
 			'enable-feed'       => 'enable-feed',
 		);
+		$this->nonce_action = array(
+			'default'           => 'tsf_extension_manager_nonce_action',
+			'activate-free'     => 'tsf_extension_manager_nonce_action_free',
+			'activate-key'      => 'tsf_extension_manager_nonce_action_key',
+			'activate-external' => 'tsf_extension_manager_nonce_action_external',
+			'deactivate'        => 'tsf_extension_manager_nonce_action_deactivate',
+			'enable-feed'       => 'tsf_extension_manager_nonce_action_feed',
+		);
+
 		$this->error_notice_option = 'tsf_extension_manager_error_notice_option';
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
@@ -98,41 +101,50 @@ class Core {
 	 */
 	public function handle_update_post() {
 
-		if ( false === $this->handle_update_nonce() )
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['action'] ) )
 			return;
 
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
+		if ( false === $this->handle_update_nonce( $options['action'], false ) )
+			return;
+
 		switch ( $options['action'] ) :
-			case $this->request_name['key'] :
+			case $this->request_name['activate-key'] :
 				$args = array(
 					'licence_key' => trim( $options['key'] ),
 					'activation_email' => sanitize_email( $options['email'] ),
 				);
 
 				$response = $this->handle_request( 'activation', $args );
-			break;
+				break;
 
-			case $this->request_name['free'] :
+			case $this->request_name['activate-free'] :
 				$response = $this->do_free_activation();
-			break;
+				break;
 
-			case $this->request_name['external'] :
+			case $this->request_name['activate-external'] :
 				$response = $this->get_remote_activation_listener_response();
-			break;
+				break;
 
-			case $this->request_name['deactivation'] :
+			case $this->request_name['deactivate'] :
 				$args = array(
 					'licence_key' => trim( $this->get_option( 'api_key' ) ),
 					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
 				);
 
 				$response = $this->handle_request( 'deactivation', $args );
-			break;
+				break;
+
+			case $this->request_name['enable-feed'] :
+				$success = $this->update_option( '_enable_feed', true );
+				$code = $success ? 701 : 702;
+				$this->set_error_notice( array( $code => '' ) );
+				break;
 
 			default:
-				$this->set_error_notice( array( 701 => '' ) );
-			break;
+				$this->set_error_notice( array( 703 => '' ) );
+				break;
 		endswitch;
 
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
@@ -148,10 +160,11 @@ class Core {
 	 * @since 1.0.0
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
-	 * @param string $key The nonce key to check against.
+	 * @param string $key The nonce action used for caching.
+	 * @param bool $check_post Whether to check for POST variables.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
-	public function handle_update_nonce( $key = 'default' ) {
+	public function handle_update_nonce( $key = 'default', $check_post = true ) {
 
 		static $validated = array();
 
@@ -159,17 +172,19 @@ class Core {
 			return $validated[ $key ];
 
 		if ( false === $this->is_tsf_extension_manager_page() && false === $this->can_do_settings() )
-			return $validated = false;
+			return $validated[ $key ] = false;
 
-		/**
-		 * If this page doesn't parse the site options,
-		 * There's no need to filter them on each request.
-		 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
-		 *
-		 * @since 1.0.0
-		 */
-		if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
-			return $validated = false;
+		if ( $check_post ) {
+			/**
+			 * If this page doesn't parse the site options,
+			 * There's no need to filter them on each request.
+			 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
+			 *
+			 * @since 1.0.0
+			 */
+			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+				return $validated = false;
+		}
 
 		check_admin_referer( $this->nonce_action[ $key ], $this->nonce_name );
 
@@ -246,7 +261,7 @@ class Core {
 				break;
 
 			case 103 :
-			case 701 :
+			case 703 :
 				$message = esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -311,12 +326,18 @@ class Core {
 				$type = 'updated';
 				break;
 
+			case 701 :
+				$message = esc_html__( 'The feed has been enabled.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
 			case 9001 :
 				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
 			case 602 :
+			case 702 :
 			default :
 				$message = esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' );
 				$type = 'error';

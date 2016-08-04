@@ -285,7 +285,7 @@ class AdminPages extends Activation {
 		wp_register_style(
 			$this->css_name,
 			TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/tsf-extension-manager{$rtl}{$suffix}.css",
-			array(),
+			array( 'dashicons' ),
 			TSF_EXTENSION_MANAGER_VERSION,
 			'all'
 		);
@@ -378,11 +378,7 @@ class AdminPages extends Activation {
 		?>
 		<div class="tsfem-footer-wrap">
 			<?php
-			if ( $this->is_plugin_connected() ) {
-				$this->output_extension_footer();
-			} else {
-				$this->output_plugin_connect_footer();
-			}
+			$this->do_page_footer_wrap();
 			?>
 		</div>
 		<?php
@@ -437,24 +433,6 @@ class AdminPages extends Activation {
 	}
 
 	/**
-	 * Echos footer wrapper for extension activation.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_extension_footer() {
-		$this->do_page_footer_wrap( true );
-	}
-
-	/**
-	 * Echos footer wrapper for account activation.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_plugin_connect_footer() {
-		$this->do_page_footer_wrap( false );
-	}
-
-	/**
 	 * Echos the page title wrap.
 	 *
 	 * @since 1.0.0
@@ -469,10 +447,8 @@ class AdminPages extends Activation {
 	 * Echos the page title wrap.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param bool $extra Whether to output extra content.
 	 */
-	protected function do_page_footer_wrap( $extra = true ) {
+	protected function do_page_footer_wrap() {
 		$this->get_view( 'layout/general/footer', get_defined_vars() );
 	}
 
@@ -584,8 +560,7 @@ class AdminPages extends Activation {
 	}
 
 	/**
-	 * Helper function that returns a setting value from this form's settings
-	 * field for use in form fields.
+	 * Returns a setting value from this form's settings field for use in form fields.
 	 * Fetches blog option.
 	 *
 	 * @since 1.0.0
@@ -598,7 +573,7 @@ class AdminPages extends Activation {
 	}
 
 	/**
-	 * Echo a setting value from this form's settings field for use in form fields.
+	 * Outputs a setting value from this form's settings field for use in form fields.
 	 *
 	 * @since 1.0.0
 	 * @uses $this->get_field_value() Constructs value attributes for use in form fields.
@@ -607,5 +582,27 @@ class AdminPages extends Activation {
 	 */
 	public function field_value( $key ) {
 		echo esc_attr( $this->get_field_value( $key ) );
+	}
+
+	/**
+	 * Outputs nonce action field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The action key.
+	 */
+	public function nonce_action_field( $key ) {
+		echo $this->get_nonce_action_field( $key );
+	}
+
+	/**
+	 * Returns nonce action field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The action key.
+	 */
+	public function get_nonce_action_field( $key ) {
+		return '<input type="hidden" name="' . $this->get_field_name( 'action' ) . '" value="' . esc_attr( $key ) . '">';
 	}
 }

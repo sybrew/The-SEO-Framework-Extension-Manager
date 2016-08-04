@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api
 Requires at least: 4.4.0
 Tested up to: 4.6.0
-Stable tag: 1.0.0
+Stable tag: 0.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -95,9 +95,17 @@ If you were to get an activation error, either open a support ticket [here](http
 
 = 1.0.0 - Amplified SEO =
 
-* Initial release.
+* Initial public release.
+
+= 0.9.0 - Developed SEO =
+
+* Unregistered initial beta release.
 
 == Upgrade Notice ==
+
+= 1.0.0 =
+
+* What are you still doing in beta?
 
 == Other Notes ==
 
@@ -105,6 +113,12 @@ If you were to get an activation error, either open a support ticket [here](http
 And do you wish to add your own extension to the extension manager? Please contact me on Slack about your idea.
 A full code review will take place prior to releasing it. The code has to pass at least the WordPress.org plugin standards and all code must be licensed under GPLv2 or later.
 Feedback and points for improvement will be always given. No monetized extensions are being accepted as of yet.
+
+= For developers: Security =
+Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
+In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
+Many more security techniques, some even newly developed specifically, have been implemented into this plugin.
+If you have any questions, before blindly implementing or circumvate security, feel free to contact me (the plugin author) on Slack.
 
 = General Filter Reference =
 

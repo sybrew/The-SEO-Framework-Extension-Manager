@@ -68,7 +68,7 @@ class Activation extends Panes {
 	 */
 	protected function get_remote_activation_listener() {
 
-		if ( false === $this->handle_update_nonce() )
+		if ( false === $this->handle_update_nonce( $this->request_name['activate-external'] ) )
 			return;
 
 		$response = $this->get_remote_activation_listener_response();
@@ -173,7 +173,7 @@ class Activation extends Panes {
 			'email'            => '',
 			'licence_key'      => '',
 			'product_id'       => $this->get_activation_product_title(),
-			'instance'         => $this->get_activation_instance(),
+			'instance'         => $this->get_activation_instance( false ),
 			'platform'         => $this->get_activation_site_domain(),
 			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder" for the subscription.
 		);
@@ -402,7 +402,7 @@ class Activation extends Panes {
 			'activation_email'    => $args['activation_email'],
 			'_activation_level'   => $args['_activation_level'],
 			'_activated'          => 'Activated',
-			'_instance'           => $this->get_activation_instance(),
+			'_instance'           => $this->get_activation_instance( false ),
 			'_data'               => array(),
 		) );
 
@@ -423,17 +423,17 @@ class Activation extends Panes {
 	 */
 	protected function do_deactivation() {
 
-		$success = $this->update_option_multi( array(
-			'api_key'             => '',
-			'activation_email'    => '',
-			'_activation_level'   => '',
-			'_activation_expires' => '',
-			'_activated'          => 'Deactivated',
-			'_instance'           => false,
-			'_data'               => array(),
-		) );
+		$success = array();
 
-		return $success;
+		$success[] = $this->update_option( 'api_key', '' );
+		$success[] = $this->update_option( 'activation_email', '' );
+		$success[] = $this->update_option( '_activation_level', '' );
+		$success[] = $this->update_option( '_activation_expires', '' );
+		$success[] = $this->update_option( '_activated', 'Deactivated' );
+		$success[] = $this->update_option( '_instance', false );
+		$success[] = $this->update_option( '_data', array() );
+
+		return ! in_array( false, $success, true );
 	}
 
 	/**
@@ -615,9 +615,11 @@ class Activation extends Panes {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param bool $save_option Whether to save the instance in an option. Useful
+	 *             for when you're going to save it later.
 	 * @return string Instance key.
 	 */
-	protected function get_activation_instance() {
+	protected function get_activation_instance( $save_option = true ) {
 
 		static $instance = null;
 
@@ -628,7 +630,9 @@ class Activation extends Panes {
 
 		if ( false === $instance ) {
 			$instance = trim( wp_generate_password( 32, false ) );
-			$this->update_option( '_instance', $instance );
+
+			if ( $save_option )
+				$this->update_option( '_instance', $instance );
 		}
 
 		return $instance;
