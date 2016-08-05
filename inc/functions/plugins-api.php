@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * Filters the plugin list based on arguments.
  *

@@ -1,5 +1,5 @@
 <?php
-defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
 
 $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
 
@@ -13,8 +13,8 @@ $type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-e
 	<div class="tsfem-connect-action">
 		<div class="tsfem-connect-fields-row">
 			<?php
-			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button', 'button-primary' ) ) );
-			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'button' ) ) );
+			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => __( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => array( 'tsfem-button', 'tsfem-button-primary' ) ) );
+			$this->get_view( 'forms/get', array( 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => __( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => array( 'tsfem-button' ) ) );
 			$this->get_remote_activation_listener();
 			?>
 		</div>

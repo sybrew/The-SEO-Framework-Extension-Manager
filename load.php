@@ -80,7 +80,7 @@ function init_tsf_extension_manager() {
 	if ( can_load_tsf_extension_manager() ) {
 		/**
 		 * Register class autoload here.
-		 * This will make sure the website crashes if extensions try to bypass WordPress' loop.
+		 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
 		 */
 		spl_autoload_register( 'autoload_tsf_extension_manager_classes' );
 
@@ -127,7 +127,7 @@ function can_load_tsf_extension_manager() {
  * @since 1.0.0
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.
- * @note 'TSF_Extension_Manager_' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
+ * @NOTE 'TSF_Extension_Manager_' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
  *
  * @return bool False if file hasn't yet been included, otherwise true.
  */
@@ -141,6 +141,12 @@ function autoload_tsf_extension_manager_classes( $class ) {
 	if ( isset( $loaded[ $class ] ) )
 		return true;
 
+	if ( 'TSF_Extension_Manager\\Secure' === $class ) {
+		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
+	} else {
+		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
+	}
+
 	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
-	return $loaded[ $class ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . $_class . '.class.php' );
+	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 }

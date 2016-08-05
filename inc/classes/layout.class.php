@@ -24,16 +24,16 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Class TSF_Extension_Manager\Extensions.
+ * Class TSF_Extension_Manager\Layout.
  *
- * Handles extensions pane and activation.
+ * Outputs layout based on instance.
  *
  * @since 1.0.0
  * @access private
  * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
  * @final Please don't extend this.
  */
-final class Extensions extends Secure {
+final class Layout extends Secure {
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -55,9 +55,9 @@ final class Extensions extends Secure {
 			self::set( '_wpaction' );
 
 			switch ( $type ) :
-				case 'overview' :
+				case 'form' :
 					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
-					self::set( '_type', 'overview' );
+					self::set( '_type', 'form' );
 					break;
 
 				case 'reset' :
@@ -73,11 +73,11 @@ final class Extensions extends Secure {
 	}
 
 	/**
-	 * Returns the trend call.
+	 * Returns the layout call.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Determines what to get.
+	 * @param string $type Required. Determines what to get.
 	 * @return string
 	 */
 	public static function get( $type = '' ) {
@@ -90,12 +90,8 @@ final class Extensions extends Secure {
 		}
 
 		switch ( $type ) :
-			case 'header' :
-				return self::get_header();
-				break;
-
-			case 'content' :
-				return self::get_content();
+			case 'deactivation-button' :
+				return self::get_deactivation_button();
 				break;
 
 			default :
@@ -107,36 +103,70 @@ final class Extensions extends Secure {
 	}
 
 	/**
-	 * Outputs extensions overview header.
+	 * Sets parent class nonce variables.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @return string The extensions overview header.
+	 * @param $type Required. The property you wish to set.
+	 * @param $value Required|Optional. The value the property needs to be set.
 	 */
-	private static function get_header() {
+	public static function set_nonces( $type, $value ) {
 
-		$output = '';
+		self::verify_instance() or die;
 
-		if ( 'overview' === self::get_property( '_type' ) ) {
-			//	$output = 'hi';
-		}
+		switch ( $type ) :
+			case 'nonce_name' :
+			case 'request_name' :
+			case 'nonce_action' :
+				self::set( $type, $value );
+				break;
 
-		return $output;
+			default:
+				the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
+				wp_die();
+				break;
+		endswitch;
+
 	}
 
 	/**
-	 * Outputs extensions overview content.
+	 * Outputs deactivation button.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The extensions overview content.
+	 * @return string The deactivation button.
 	 */
-	private static function get_content() {
+	private static function get_deactivation_button() {
 
 		$output = '';
 
-		if ( 'overview' === self::get_property( '_type' ) ) {
-			//	$output = 'hi';
+		if ( 'form' === self::get_property( '_type' ) ) {
+			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['deactivate'] );
+			$nonce = wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
+
+			$field_id = 'deactivation-switcher';
+			$deactivate_i18n = __( 'Deactivate', 'the-seo-framework-extension-manager' );
+			$ays_i18n = __( 'Are you sure?', 'the-seo-framework-extension-manager' );
+
+			$button = '<input '
+						. 'type="submit" '
+						. 'id="' . $field_id . '-validator" '
+						. 'class="tsfem-button tsfem-switcher-button tsfem-negative" '
+						. 'value="' . esc_attr( $deactivate_i18n ) . '" '
+						. 'title="' . esc_attr( $ays_i18n ) . '" '
+					. '">';
+
+			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
+							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
+							. '<label for="' . $field_id . '-action" class="tsfem-button tsfem-deactivate">' . esc_html( $deactivate_i18n ) . '</label>'
+							. $button
+						. '</div></div>';
+
+			$output = sprintf( '<form name="deactivate" action="%s" method="post" id="tsfem-deactivation-form">%s</form>',
+				esc_url( tsf_extension_manager()->get_admin_page_url() ),
+				$nonce_action . $nonce . $switcher
+			);
+		} else {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The deactivation button only supports the form instance.' );
 		}
 
 		return $output;

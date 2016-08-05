@@ -4,6 +4,8 @@
  */
 namespace TSF_Extension_Manager;
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -136,11 +138,21 @@ class Activation extends Panes {
 		switch ( $type ) :
 			case 'status' :
 			case 'activation' :
+				break;
+
 			case 'deactivation' :
+				if ( false === $this->is_plugin_connected() ) {
+					$this->set_error_notice( array( 103 => '' ) );
+					return false;
+				}
+
+				if ( false === $this->is_premium_user() ) {
+					return $this->do_free_deactivation();
+				}
 				break;
 
 			default :
-				$this->set_error_notice( array( 103 => '' ) );
+				$this->set_error_notice( array( 104 => '' ) );
 				return false;
 				break;
 		endswitch;
@@ -386,6 +398,26 @@ class Activation extends Panes {
 	}
 
 	/**
+	 * Handles free deactivation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success. False on failure.
+	 */
+	protected function do_free_deactivation() {
+
+		$success = $this->do_deactivation();
+
+		if ( $success ) {
+			$this->set_error_notice( array( 801 => '' ) );
+			return true;
+		} else {
+			$this->set_error_notice( array( 802 => '' ) );
+			return false;
+		}
+	}
+
+	/**
 	 * Handles premium activation.
 	 *
 	 * @since 1.0.0
@@ -437,14 +469,25 @@ class Activation extends Panes {
 	}
 
 	/**
-	 * Determines whether the plugin's use has been verified.
+	 * Determines whether the plugin's activated. Either free or premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if the plugin is activated.
+	 */
+	protected function is_plugin_connected() {
+		return 'Activated' === $this->get_option( '_activated' );
+	}
+
+	/**
+	 * Determines whether the plugin's use is premium.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return bool True if the plugin is connected to the API handler.
 	 */
-	protected function is_plugin_connected() {
-		return 'Activated' === $this->get_option( '_activated' );
+	protected function is_premium_user() {
+		return 'Premium' === $this->get_option( '_activation_level' );
 	}
 
 	/**

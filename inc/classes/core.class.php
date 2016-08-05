@@ -4,6 +4,8 @@
  */
 namespace TSF_Extension_Manager;
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -116,37 +118,46 @@ class Core {
 					'activation_email' => sanitize_email( $options['email'] ),
 				);
 
-				$response = $this->handle_request( 'activation', $args );
+				$this->handle_request( 'activation', $args );
 				break;
 
 			case $this->request_name['activate-free'] :
-				$response = $this->do_free_activation();
+				$this->do_free_activation();
 				break;
 
 			case $this->request_name['activate-external'] :
-				$response = $this->get_remote_activation_listener_response();
+				$this->get_remote_activation_listener_response();
 				break;
 
 			case $this->request_name['deactivate'] :
+				if ( false === $this->is_plugin_connected() ) {
+					$this->set_error_notice( array( 701 => '' ) );
+					break;
+				} elseif ( false === $this->is_premium_user() ) {
+					$this->do_free_deactivation();
+					break;
+				}
+
 				$args = array(
 					'licence_key' => trim( $this->get_option( 'api_key' ) ),
 					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
 				);
 
-				$response = $this->handle_request( 'deactivation', $args );
+				$this->handle_request( 'deactivation', $args );
 				break;
 
 			case $this->request_name['enable-feed'] :
 				$success = $this->update_option( '_enable_feed', true );
-				$code = $success ? 701 : 702;
+				$code = $success ? 702 : 703;
 				$this->set_error_notice( array( $code => '' ) );
 				break;
 
 			default:
-				$this->set_error_notice( array( 703 => '' ) );
+				$this->set_error_notice( array( 704 => '' ) );
 				break;
 		endswitch;
 
+		//* Adds action to the URI. It's only used to visualize what has happened.
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
 		exit;
 	}
@@ -261,7 +272,9 @@ class Core {
 				break;
 
 			case 103 :
-			case 703 :
+			case 104 :
+			case 701 :
+			case 704 :
 				$message = esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -290,7 +303,7 @@ class Core {
 				break;
 
 			case 304 :
-				$message = esc_html__( 'Software API error.', 'the-seo-framework-extension-manager' );
+				$message = esc_html__( 'Remote Software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -326,8 +339,13 @@ class Core {
 				$type = 'updated';
 				break;
 
-			case 701 :
+			case 702 :
 				$message = esc_html__( 'The feed has been enabled.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 801 :
+				$message = esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
@@ -337,9 +355,10 @@ class Core {
 				break;
 
 			case 602 :
-			case 702 :
+			case 703 :
+			case 802 :
 			default :
-				$message = esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' );
+				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 		endswitch;
@@ -374,11 +393,11 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $instance
-	 * @param int $bit
+	 * @param string $instance The instance key.
+	 * @param int $bit The instance bit.
 	 * @return bool True if verified.
 	 */
-	protected function verify_instance( $instance, $bit ) {
+	public function verify_instance( $instance, $bit ) {
 		return $instance === $this->get_verification_instance( $bit );
 	}
 
@@ -389,7 +408,7 @@ class Core {
 	 * @since 1.0.0
 	 * @staticvar string $instance
 	 *
-	 * @param int $bit
+	 * @param int|null $bit The instance bit.
 	 * @return string $instance The instance key.
 	 */
 	protected function get_verification_instance( $bit = null ) {
@@ -400,7 +419,7 @@ class Core {
 		$_bit = $bits[0];
 
 		if ( isset( $instance[ $_bit ] ) ) {
-			if ( empty( $instance[ $bit ] ) )
+			if ( empty( $instance[ $bit ] ) || $instance[ $_bit ] !== $instance[ $bit ] )
 				wp_die( 'Instance verification failed.' );
 
 			return $instance[ $bit ];
@@ -495,41 +514,6 @@ class Core {
 	}
 
 	/**
-	 * Fetch an instance of a TSF_Extension_Manager_{*}_List_Table Class.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @return object|bool Object on success, false if the class does not exist.
-	 */
-	public function get_list_table( $class, $args = array() ) {
-
-		$classes = array(
-			//Site Admin
-			'TSF_Extension_Manager_Install_List_Table' => 'install',
-			// Network Admin
-			'TSF_Extension_Manager_Install_List_Table_MS' => 'ms-install',
-		);
-
-		if ( isset( $classes[ $class ] ) ) {
-			foreach ( (array) $classes[ $class ] as $required )
-				require_once( TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'tables/' . $required . '-list-table.class.php' );
-
-			if ( isset( $args['screen'] ) ) {
-				$args['screen'] = convert_to_screen( $args['screen'] );
-			} elseif ( isset( $GLOBALS['hook_suffix'] ) ) {
-				$args['screen'] = get_current_screen();
-			} else {
-				$args['screen'] = null;
-			}
-
-			return new $class( $args );
-		}
-
-		return false;
-	}
-
-	/**
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *
@@ -547,8 +531,7 @@ class Core {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views/' . $view . '.php';
-		$file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
+		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 
 		include( $file );
 	}

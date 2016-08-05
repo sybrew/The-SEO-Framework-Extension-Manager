@@ -4,6 +4,8 @@
  */
 namespace TSF_Extension_Manager;
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -24,12 +26,12 @@ namespace TSF_Extension_Manager;
 /**
  * Facade Class TSF_Extension_Manager\Load.
  *
- * Extending upon parent classes.
+ * Initializes plugin classes.
  *
  * @since 1.0.0
  * @final Please don't extend this extension.
  */
-final class Load extends Extensions {
+final class Load extends AdminPages {
 
 	/**
 	 * Cloning is forbidden.
@@ -119,7 +121,7 @@ final class Load extends Extensions {
 
 		if ( isset( $cache ) )
 			return $cache;
-
-		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+// $this->seo_extensions_page_slug;
+		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 	}
 }

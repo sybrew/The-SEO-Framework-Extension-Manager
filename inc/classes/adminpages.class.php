@@ -4,6 +4,8 @@
  */
 namespace TSF_Extension_Manager;
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -200,6 +202,9 @@ class AdminPages extends Activation {
 		//* Add footer output.
 		add_action( 'in_admin_footer', array( $this, 'init_extension_footer_wrap' ) );
 
+		//* Add body class.
+		add_filter( 'admin_body_class', array( $this, 'add_admin_body_class' ), 999, 1 );
+
 		return $run = true;
 	}
 
@@ -346,6 +351,18 @@ class AdminPages extends Activation {
 
 		$l7d = true;
 
+	}
+
+	/**
+	 * Adds an extra body class on the extensions manager page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $classes The current body classes.
+	 * @return string The expanded body classes.
+	 */
+	public function add_admin_body_class( $classes = '' ) {
+		return $classes . ' tsfem ';
 	}
 
 	/**
@@ -603,6 +620,6 @@ class AdminPages extends Activation {
 	 * @param string $key The action key.
 	 */
 	public function get_nonce_action_field( $key ) {
-		return '<input type="hidden" name="' . $this->get_field_name( 'action' ) . '" value="' . esc_attr( $key ) . '">';
+		return '<input type="hidden" name="' . esc_attr( $this->get_field_name( 'action' ) ) . '" value="' . esc_attr( $key ) . '">';
 	}
 }

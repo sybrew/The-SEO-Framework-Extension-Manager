@@ -1,8 +1,8 @@
 <?php
-defined( 'ABSPATH' ) and $this->verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
 
-if ( $level = $this->get_option( '_activation_level' ) ) {
-	if ( 'Premium' === $level ) {
+if ( $this->is_plugin_connected() ) {
+	if ( $this->is_premium_user() ) {
 		$more_mottos = array( 'premium' );
 	} else {
 		$more_mottos = array( 'free' );
@@ -35,8 +35,7 @@ $mottos = array(
 	'logical',
 );
 $mottos = array_merge( $mottos, $more_mottos );
-
-$motto_key = array_rand( $mottos );
+$motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto = 'A ' . $mottos[ $motto_key ] . ' Initiative';
 
 ?>
