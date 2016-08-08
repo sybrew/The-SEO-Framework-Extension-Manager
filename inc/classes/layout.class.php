@@ -103,32 +103,6 @@ final class Layout extends Secure {
 	}
 
 	/**
-	 * Sets parent class nonce variables.
-	 *
-	 * @since 1.0.0
-	 * @param $type Required. The property you wish to set.
-	 * @param $value Required|Optional. The value the property needs to be set.
-	 */
-	public static function set_nonces( $type, $value ) {
-
-		self::verify_instance() or die;
-
-		switch ( $type ) :
-			case 'nonce_name' :
-			case 'request_name' :
-			case 'nonce_action' :
-				self::set( $type, $value );
-				break;
-
-			default:
-				the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
-				wp_die();
-				break;
-		endswitch;
-
-	}
-
-	/**
 	 * Outputs deactivation button.
 	 *
 	 * @since 1.0.0
@@ -150,14 +124,14 @@ final class Layout extends Secure {
 			$button = '<input '
 						. 'type="submit" '
 						. 'id="' . $field_id . '-validator" '
-						. 'class="tsfem-button tsfem-switcher-button tsfem-negative" '
+						. 'class="tsfem-button tsfem-switcher-button tsfem-button-negative" '
 						. 'value="' . esc_attr( $deactivate_i18n ) . '" '
 						. 'title="' . esc_attr( $ays_i18n ) . '" '
 					. '">';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
-							. '<label for="' . $field_id . '-action" class="tsfem-button tsfem-deactivate">' . esc_html( $deactivate_i18n ) . '</label>'
+							. '<label for="' . $field_id . '-action" class="tsfem-button">' . esc_html( $deactivate_i18n ) . '</label>'
 							. $button
 						. '</div></div>';
 

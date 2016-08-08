@@ -80,6 +80,7 @@ final class Load extends AdminPages {
 					$warning, $host, '<code>WP_ACCESSIBLE_HOSTS</code>'
 				);
 
+				//* Already escaped.
 				?><div class="error"><p><?php echo $notice; ?></p></div><?php
 			}
 		}
@@ -103,8 +104,8 @@ final class Load extends AdminPages {
 		$notice_link = '<a href="' . esc_url( $url ) . '" title="' . esc_attr( $title ) . '" target="_self">' . esc_html( $title ) . '</a>';
 		$notice = esc_html( $text ) . ' &mdash; ' . $notice_link;
 
-		echo the_seo_framework()->generate_dismissible_notice( $notice );
-
+		//* Already escaped.
+		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false );
 	}
 
 	/**
@@ -121,7 +122,8 @@ final class Load extends AdminPages {
 
 		if ( isset( $cache ) )
 			return $cache;
-// $this->seo_extensions_page_slug;
+
+		//* Don't load from $_GET request.
 		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 	}
 }

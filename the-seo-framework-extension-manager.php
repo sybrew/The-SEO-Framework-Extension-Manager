@@ -48,9 +48,9 @@ register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
  * @since 1.0.0
  */
 function tsf_extension_manager_check_php() {
-	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50300 ) {
+	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50400 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework Extension Manager requires PHP 5.3 or later. Sorry about that!<br>
+		wp_die( 'The SEO Framework Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
 				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
 	}
 }
@@ -103,6 +103,12 @@ define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PAT
  * Applies filters 'tsf_extension_manager_site_options' : string
  */
 define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
+
+/**
+ * The plugin extensions path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**

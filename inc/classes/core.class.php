@@ -72,23 +72,42 @@ class Core {
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
 		$this->request_name = array(
+			//* Reference convenience.
 			'default'           => 'default',
+
+			//* Account activation and more.
 			'activate-key'      => 'activate-key',
 			'activate-external' => 'activate-external',
 			'activate-free'     => 'activate-free',
 			'deactivate'        => 'deactivate',
 			'enable-feed'       => 'enable-feed',
+
+			//* Extensions.
+			'download-ext'      => 'download-ext',
+			'update-ext'        => 'update-ext',
+			'delete-ext'        => 'delete-ext',
+			'activate-ext'      => 'activate-ext',
+			'deactivate-ext'    => 'deactivate-ext',
 		);
 		$this->nonce_action = array(
-			'default'           => 'tsf_extension_manager_nonce_action',
-			'activate-free'     => 'tsf_extension_manager_nonce_action_free',
-			'activate-key'      => 'tsf_extension_manager_nonce_action_key',
-			'activate-external' => 'tsf_extension_manager_nonce_action_external',
-			'deactivate'        => 'tsf_extension_manager_nonce_action_deactivate',
-			'enable-feed'       => 'tsf_extension_manager_nonce_action_feed',
+			'default'           => 'tsfem_nonce_action',
+
+			//* Account activation and more.
+			'activate-free'     => 'tsfem_nonce_action_free_account',
+			'activate-key'      => 'tsfem_nonce_action_key_account',
+			'activate-external' => 'tsfem_nonce_action_external_account',
+			'deactivate'        => 'tsfem_nonce_action_deactivate_account',
+			'enable-feed'       => 'tsfem_nonce_action_feed',
+
+			//* Extensions.
+			'download-ext'      => 'tsfem_nonce_action_download_ext',
+			'update-ext'        => 'tsfem_nonce_action_update_ext',
+			'delete-ext'        => 'tsfem_nonce_action_delete_ext',
+			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
+			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		);
 
-		$this->error_notice_option = 'tsf_extension_manager_error_notice_option';
+		$this->error_notice_option = 'tsfem_error_notice_option';
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
@@ -206,6 +225,7 @@ class Core {
 	 * Outputs activation notice. If any.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
 	public function do_error_notices() {
 
@@ -218,7 +238,8 @@ class Core {
 				return;
 			}
 
-			echo the_seo_framework()->generate_dismissible_notice( $notice['message'], $notice['type'] );
+			//* Already escaped.
+			the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], false );
 			$this->unset_error_notice();
 		}
 	}
@@ -250,7 +271,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array|string The activation notice. Empty string when no array key is set.
+	 * @return array|string The escaped activation notice. Empty string when no array key is set.
 	 */
 	protected function get_error_notice( $option ) {
 

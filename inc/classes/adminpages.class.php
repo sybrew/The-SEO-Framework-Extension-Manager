@@ -423,7 +423,7 @@ class AdminPages extends Activation {
 		$this->do_page_header_wrap( true );
 
 		?>
-		<div class="tsfem-extensions-wrap">
+		<div class="tsfem-panes-wrap">
 			<?php
 			$this->do_extensions_overview();
 			?>

@@ -71,17 +71,17 @@ abstract class Secure implements Secure_Static_Abstracts {
 	/**
 	 * Cloning is forbidden.
 	 */
-	protected function __clone() { }
+	final protected function __clone() { }
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
-	protected function __wakeup() { }
+	final protected function __wakeup() { }
 
 	/**
 	 * Constructing is forbidden.
 	 */
-	protected function __construct() { }
+	final protected function __construct() { }
 
 	/**
 	 * Holds the class instance type.
@@ -107,19 +107,28 @@ abstract class Secure implements Secure_Static_Abstracts {
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
+	 * @var array The validation request name.
+	 * @var array The validation nonce action.
 	 */
 	protected static $nonce_name;
 	protected static $request_name = array();
 	protected static $nonce_action = array();
 
 	/**
+	 * The user's account information.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array $account The account information.
+	 */
+	protected static $account = array();
+
+	/**
 	 * Resets current instance.
 	 *
 	 * @since 1.0.0
 	 */
-	public static function reset() {
+	final public static function reset() {
 		self::reset_instance();
 	}
 
@@ -128,18 +137,18 @@ abstract class Secure implements Secure_Static_Abstracts {
 	 *
 	 * @since 1.0.0
 	 */
-	private static function reset_instance() {
-		self::$_type = self::$_wpaction = self::$nonce_name = self::$request_name = self::$nonce_action = '';
+	final private static function reset_instance() {
+		self::$_type = self::$_wpaction = self::$nonce_name = self::$request_name = self::$nonce_action = self::$account = '';
 	}
 
 	/**
 	 * Sets class variables.
 	 *
 	 * @since 1.0.0
-	 * @param $type Required. The property you wish to set.
-	 * @param $value Required|Optional. The value the property needs to be set.
+	 * @param string $type Required. The property you wish to set.
+	 * @param mixed $value Required|Optional. The value the property needs to be set.
 	 */
-	protected static function set( $type, $value = '' ) {
+	final protected static function set( $type, $value = '' ) {
 
 		switch ( $type ) :
 			case '_wpaction' :
@@ -150,6 +159,7 @@ abstract class Secure implements Secure_Static_Abstracts {
 			case 'nonce_name' :
 			case 'request_name' :
 			case 'nonce_action' :
+			case 'account' :
 				self::$$type = $value;
 				break;
 
@@ -162,13 +172,73 @@ abstract class Secure implements Secure_Static_Abstracts {
 	}
 
 	/**
+	 * Sets parent class nonce variables.
+	 *
+	 * @since 1.0.0
+	 * @param $type Required. The property you wish to set.
+	 * @param $value Required|Optional. The value the property needs to be set.
+	 */
+	final public static function set_nonces( $type, $value ) {
+
+		self::verify_instance() or die;
+
+		switch ( $type ) :
+			case 'nonce_name' :
+			case 'request_name' :
+			case 'nonce_action' :
+				self::set( $type, $value );
+				break;
+
+			default:
+				the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
+				wp_die();
+				break;
+		endswitch;
+
+	}
+
+	/**
+	 * Sets parent class nonce variables.
+	 *
+	 * @since 1.0.0
+	 * @param $account Required. The user's account.
+	 */
+	final public static function set_account( $account ) {
+
+		self::verify_instance() or die;
+
+		self::set( 'account', $account );
+
+	}
+
+	/**
+	 * Returns the account level.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool Whether the current account is premium.
+	 */
+	final protected static function is_premium_account() {
+
+		static $is_premium = null;
+
+		if ( isset( $is_premium ) )
+			return $is_premium;
+
+		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
+
+		return $is_premium = 'Premium' === $level;
+	}
+
+	/**
 	 * Gets class property.
 	 *
 	 * @since 1.0.0
 	 * @param $name Required. The property to acquire.
 	 * @param $value Required|Optional. The value the type needs to be set.
+	 * @return mixed The property value.
 	 */
-	protected static function get_property( $name ) {
+	final protected static function get_property( $name ) {
 		return self::$$name;
 	}
 
@@ -179,7 +249,7 @@ abstract class Secure implements Secure_Static_Abstracts {
 	 *
 	 * @return bool Whether the instance has been verified.
 	 */
-	protected static function verify_instance() {
+	final protected static function verify_instance() {
 
 		$verified = false;
 

@@ -31,7 +31,7 @@ As long as the subscription is active, you're allowed to use all old and new ext
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
 = Requirements: =
-* This plugin requires **PHP 5.3 or later**, or it will deactivate itself.
+* This plugin requires **PHP 5.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it will do nothing at all :).
 
 = Privacy =
@@ -88,8 +88,12 @@ TODO:
 This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
 
 = Does my website support this plugin? =
-If it doesn't, it will tell you why. Otherwise, you're good to go!
+If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
 If you were to get an activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable version.
+
+= The layout of the extensions page just doesn't look right, why? =
+Because the extensions page has been completely written in [experimental CSS](https://drafts.csswg.org/css-flexbox/), it's possible not all browsers act alike.
+Although everything should always fit perfectly; if you do find any issue, please state your browser and operating system and tell me where the issue resides. Thanks!
 
 == Changelog ==
 

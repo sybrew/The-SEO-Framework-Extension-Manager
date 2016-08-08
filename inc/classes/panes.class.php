@@ -103,7 +103,7 @@ class Panes extends Core {
 
 		$output = $this->get_extensions_output();
 
-		return sprintf( '<div class="tsfem-extensions-overview-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-extensions-wrap">%s</div>', $output );
 	}
 
 	/**
@@ -180,15 +180,13 @@ class Panes extends Core {
 
 		$enable = __( 'Enable feed?', 'the-seo-framework-extension-manager' );
 
-		$key = sprintf( '<input type="hidden" name="%s" value="validate-key">', esc_attr( $this->get_field_name( 'action' ) ) );
 		$nonce_action = $this->get_nonce_action_field( $this->request_name['enable-feed'] );
 		$nonce = wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary" value="%s">', esc_attr( $enable ) );
+		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">', esc_attr( $enable ) );
+		$form = $nonce_action . $nonce . $submit;
 
-		$form = $key . $nonce_action . $nonce . $submit;
 		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', esc_url( $this->get_admin_page_url() ), $form );
-
-		$js = '<a id="tsfem-enable-feeds" class="tsfem-button-primary hide-if-no-js">' . esc_html( $enable ) . '</a>';
+		$js = '<a id="tsfem-enable-feeds" class="tsfem-button tsfem-button-primary hide-if-no-js">' . esc_html( $enable ) . '</a>';
 
 		return $js . $nojs;
 	}
@@ -245,7 +243,7 @@ class Panes extends Core {
 	 */
 	protected function get_premium_actions_output() {
 
-		$output = '';
+		$output = '<h4>This is still under construction.</h4>';
 		$output .= $this->get_deactivation_button();
 
 		return $output;
@@ -261,7 +259,7 @@ class Panes extends Core {
 	 */
 	protected function get_free_actions_output() {
 
-		$output = '';
+		$output = '<h4>This is still under construction.</h4>';
 		$output .= $this->get_deactivation_button();
 
 		return $output;
@@ -306,11 +304,16 @@ class Panes extends Core {
 
 		Extensions::initialize( 'overview', $_instance, $bits );
 
+		Extensions::set_nonces( 'nonce_name', $this->nonce_name );
+		Extensions::set_nonces( 'request_name', $this->request_name );
+		Extensions::set_nonces( 'nonce_action', $this->nonce_action );
+		Extensions::set_account( $this->get_subscription_status() );
+
 		$header = Extensions::get( 'header' );
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );
 
 		$content = Extensions::get( 'content' );
-		$content = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $content );
+		$content = sprintf( '<div class="tsfem-extensions-overview-content">%s</div>', $content );
 
 		Extensions::reset();
 
