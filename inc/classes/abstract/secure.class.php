@@ -67,21 +67,7 @@ interface Secure_Static_Abstracts {
  *      to the extending classes.
  */
 abstract class Secure implements Secure_Static_Abstracts {
-
-	/**
-	 * Cloning is forbidden.
-	 */
-	final protected function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	final protected function __wakeup() { }
-
-	/**
-	 * Constructing is forbidden.
-	 */
-	final protected function __construct() { }
+	use Enclose_Master, Force_Static_Master;
 
 	/**
 	 * Holds the class instance type.

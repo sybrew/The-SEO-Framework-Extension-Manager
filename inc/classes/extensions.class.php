@@ -24,128 +24,10 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Holds i18n data functions for class TSF_Extension_Manager\Extesnsions.
- *
+ * Require extensions traits.
  * @since 1.0.0
- * @access private
  */
-trait Extensions_i18n {
-
-	/**
-	 * Initializes class i18n.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $i18n
-	 *
-	 * @return array $i18n The internationalization data.
-	 */
-	private static function obtain_i18n() {
-
-		static $i18n = null;
-
-		if ( isset( $i18n ) )
-			return $i18n;
-
-		return $i18n = array(
-			'free'       => __( 'Free', 'the-seo-framework-extension-manager' ),
-			'premium'    => __( 'Premium', 'the-seo-framework-extension-manager' ),
-			'download'   => __( 'Download', 'the-seo-framework-extension-manager' ),
-			'update'     => __( 'Update', 'the-seo-framework-extension-manager' ),
-			'activate'   => __( 'Activate', 'the-seo-framework-extension-manager' ),
-			'deactivate' => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
-			'delete'     => __( 'Delete', 'the-seo-framework-extension-manager' ),
-		);
-	}
-
-	/**
-	 * Returns i18n value from key.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The i18n data.
-	 */
-	private static function get_i18n( $key = '' ) {
-
-		$i18n = static::obtain_i18n();
-
-		return isset( $i18n[ $key ] ) ? $i18n[ $key ] : '';
-	}
-}
-
-/**
- * Holds plugin data check functions for class TSF_Extension_Manager\Extesnsions.
- *
- * @since 1.0.0
- * @access private
- */
-trait Extensions_Properties {
-
-	/**
-	 * Determines whether the input plugin is premium.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $plugin The plugin to check.
-	 * @return bool Whether the plugin is premium.
-	 */
-	private static function is_plugin_premium( $plugin ) {
-		return 'premium' === $plugin['type'];
-	}
-
-	/**
-	 * Determines whether the input plugin is downloaded and available.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $plugin The plugin to check.
-	 * @return bool Whether the plugin is downloaded and available.
-	 */
-	private static function is_plugin_downloaded( $plugin ) {
-		return false;
-	}
-
-	/**
-	 * Determines whether the input plugin has been modified from its source.
-	 * It performs a simple ZIP package MD5 sum comparison check.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $plugin The plugin to check.
-	 * @return bool Whether the plugin is modified.
-	 */
-	private static function is_plugin_modified( $plugin ) {
-		return false;
-	}
-
-	/**
-	 * Determines whether the input plugin is downloaded and requires an update.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $plugin The plugin to check.
-	 * @return bool Whether the plugin requires an update.
-	 */
-	private static function is_plugin_out_of_date( $plugin ) {
-		return false;
-	}
-
-	/**
-	 * Determines whether the input plugin is premium.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $plugin The plugin to check.
-	 * @return bool Whether the plugin is premium.
-	 */
-	private static function is_plugin_active( $plugin ) {
-		return false;
-	}
-}
+tsf_extension_manager_load_trait( 'extensions' );
 
 /**
  * Class TSF_Extension_Manager\Extensions.
@@ -534,17 +416,28 @@ final class Extensions extends Secure {
 	 */
 	private static function make_plugin_list_about( $plugin ) {
 
-		$type = 'free' === $plugin['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
-
-		$title = '<h4 class="tsfem-extension-title">' . esc_html( $plugin['name'] ) . '</h4>';
-		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
-		$header = '<div class="tsfem-extension-header">' . $title . $type . '</div>';
-
-		$button = static::make_plugin_button( $plugin );
-
-		$buttons = '<div class="tsfem-extension-actions-wrap">' . $button . '</div>';
+		$header = static::make_plugin_header( $plugin );
+		$buttons = static::make_plugin_buttons( $plugin );
 
 		return $header . $buttons;
+	}
+
+	/**
+	 * Makes plugin header.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $plugin The plugin to make header from.
+	 * @return string HTML plugin header.
+	 */
+	private static function make_plugin_header( $plugin ) {
+
+		$title = '<h4 class="tsfem-extension-title">' . esc_html( $plugin['name'] ) . '</h4>';
+
+		$type = 'free' === $plugin['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
+		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
+
+		return  '<div class="tsfem-extension-header">' . $title . $type . '</div>';
 	}
 
 	/**
@@ -556,7 +449,7 @@ final class Extensions extends Secure {
 	 * @param array $plugin The plugin to make button from.
 	 * @return string HTML plugin button with nonce.
 	 */
-	private static function make_plugin_button( $plugin ) {
+	private static function make_plugin_buttons( $plugin ) {
 
 		$buttons = array();
 
@@ -595,11 +488,11 @@ final class Extensions extends Secure {
 
 		$output = '';
 
-		foreach ( $buttons as $button ) {
+		foreach ( $buttons as $button ) :
 			$output = static::get_plugin_button_form( $plugin['slug'], $button['type'], $button['disabled'] );
-		}
+		endforeach;
 
-		return $output;
+		return sprintf( '<div class="tsfem-extension-actions-wrap">%s</div>', $output );
 	}
 
 	/**
@@ -648,15 +541,21 @@ final class Extensions extends Secure {
 				break;
 		endswitch;
 
-		$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name[ $nonce_key ] );
-		$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
-		$form = $nonce_action . $nonce . $submit;
+		if ( $disabled ) {
+			$button = sprintf( '<span class="tsfem-button-primary hide-if-no-js %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
+		} else {
+			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name[ $nonce_key ] );
+			$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
+			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
+			$form = $nonce_action . $nonce . $submit;
 
-		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
-		$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_html( $text ) );
+			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
+			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_html( $text ) );
 
-		return sprintf( '<div class="tsfem-extension-actions">%s</div>', $nojs . $js );
+			$button = $nojs . $js;
+		}
+
+		return sprintf( '<div class="tsfem-extension-action">%s</div>', $button );
 	}
 
 	private static function make_plugin_list_description( $plugin ) {

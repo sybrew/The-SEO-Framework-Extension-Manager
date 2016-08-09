@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  */
 class Core {
+	use Enclose, Construct_Final;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -55,20 +56,11 @@ class Core {
 	protected $error_notice_option;
 
 	/**
-	 * Cloning is forbidden.
-	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
 	 * Constructor, initializes actions and sets up variables.
-	 * Latest Class. Doesn't have parent.
+	 *
+	 * @since 1.0.0
 	 */
-	protected function __construct() {
+	private function construct() {
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
 		$this->request_name = array(

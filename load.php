@@ -78,6 +78,12 @@ function init_tsf_extension_manager() {
 		wp_die( 'Use tsf_extension_manager() on action `plugins_loaded` priority 7 or later.' );
 
 	if ( can_load_tsf_extension_manager() ) {
+
+		/**
+		 * Load class overloading traits.
+		 */
+		tsf_extension_manager_load_trait( 'overload' );
+
 		/**
 		 * Register class autoload here.
 		 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
@@ -125,6 +131,7 @@ function can_load_tsf_extension_manager() {
  * plugin classes.
  *
  * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.
  * @NOTE 'TSF_Extension_Manager_' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
@@ -149,4 +156,27 @@ function autoload_tsf_extension_manager_classes( $class ) {
 
 	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
 	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+}
+
+/**
+ * Requires trait files once.
+ *
+ * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT
+ * @access private
+ * @staticvar bool $loaded
+ *
+ * @param string $file Where the trait is for.
+ */
+function tsf_extension_manager_load_trait( $file = '' ) {
+
+	static $loaded;
+
+	if ( isset( $loaded[ $file ] ) )
+		return;
+
+	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
+
+	$loaded[ $file ] = true;
+
 }

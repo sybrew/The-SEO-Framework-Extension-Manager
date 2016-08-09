@@ -92,6 +92,12 @@ define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
 define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
+ * The plugin class map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
+
+/**
  * The plugin function map absolute path.
  * @since 1.0.0
  */

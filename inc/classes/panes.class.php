@@ -31,23 +31,14 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  */
 class Panes extends Core {
+	use Enclose, Construct_Sub;
 
 	/**
-	 * Cloning is forbidden.
+	 * Constructor, initializes WordPress actions.
+	 *
+	 * @since 1.0.0
 	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Constructor. Loads parent constructor and initializes actions.
-	 */
-	protected function __construct() {
-		parent::__construct();
-
+	private function construct() {
 		//* Ajax listener for updating feed option.
 		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, 'wp_ajax_enable_feeds' ) );
 	}
@@ -307,6 +298,7 @@ class Panes extends Core {
 		Extensions::set_nonces( 'nonce_name', $this->nonce_name );
 		Extensions::set_nonces( 'request_name', $this->request_name );
 		Extensions::set_nonces( 'nonce_action', $this->nonce_action );
+
 		Extensions::set_account( $this->get_subscription_status() );
 
 		$header = Extensions::get( 'header' );

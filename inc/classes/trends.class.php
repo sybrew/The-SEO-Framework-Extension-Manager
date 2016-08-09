@@ -34,16 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this.
  */
 final class Trends {
-
-	/**
-	 * Cloning is forbidden.
-	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
+	use Enclose;
 
 	/**
 	 * Constructing is forbidden.

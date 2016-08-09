@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  */
 class Activation extends Panes {
+	use Enclose, Construct_Sub;
 
 	/**
 	 * Holds activation input key and email.
@@ -44,21 +45,11 @@ class Activation extends Panes {
 	protected $activation_email = '';
 
 	/**
-	 * Cloning is forbidden.
+	 * Constructor.
+	 *
+	 * @since 1.0.0
 	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Constructor. Loads parent constructor.
-	 */
-	protected function __construct() {
-		parent::__construct();
-	}
+	private function construct() { }
 
 	/**
 	 * Handles remote activation request.

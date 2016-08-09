@@ -32,27 +32,14 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this extension.
  */
 final class Load extends AdminPages {
+	use Construct_Master, Enclose;
 
 	/**
-	 * Cloning is forbidden.
+	 * Constructor, initializes WordPress actions.
+	 *
+	 * @since 1.0.0
 	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Constructor, loads parent constructor.
-	 */
-	public function __construct() {
-
-		//* Don't execute this instance twice.
-		$count = 0; $count < 1 or die; $count++;
-
-		parent::__construct();
-
+	private function construct() {
 		add_action( 'admin_notices', array( $this, 'check_external_blocking' ) );
 		add_action( 'admin_notices', array( $this, 'do_activation_notice' ) );
 	}

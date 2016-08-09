@@ -60,10 +60,6 @@ final class Layout extends Secure {
 					self::set( '_type', 'form' );
 					break;
 
-				case 'reset' :
-					self::reset();
-					break;
-
 				default :
 					self::reset();
 					the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct initialization type.' );
@@ -91,7 +87,7 @@ final class Layout extends Secure {
 
 		switch ( $type ) :
 			case 'deactivation-button' :
-				return self::get_deactivation_button();
+				return static::get_deactivation_button();
 				break;
 
 			default :

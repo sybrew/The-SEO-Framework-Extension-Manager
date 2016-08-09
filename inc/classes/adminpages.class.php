@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  */
 class AdminPages extends Activation {
+	use Enclose, Construct_Sub;
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -78,20 +79,11 @@ class AdminPages extends Activation {
 	public $js_name;
 
 	/**
-	 * Cloning is forbidden.
+	 * Constructor, initializes WordPress actions and set up variables.
+	 *
+	 * @since 1.0.0
 	 */
-	private function __clone() { }
-
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 */
-	private function __wakeup() { }
-
-	/**
-	 * Constructor. Loads parent constructor and initializes actions.
-	 */
-	protected function __construct() {
-		parent::__construct();
+	private function construct() {
 
 		$this->seo_extensions_page_slug = 'theseoframework-extensions';
 		$this->settings_field = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
@@ -466,7 +458,7 @@ class AdminPages extends Activation {
 	 * @since 1.0.0
 	 */
 	protected function do_page_footer_wrap() {
-		$this->get_view( 'layout/general/footer', get_defined_vars() );
+		$this->get_view( 'layout/general/footer' );
 	}
 
 	/**
@@ -577,36 +569,11 @@ class AdminPages extends Activation {
 	}
 
 	/**
-	 * Returns a setting value from this form's settings field for use in form fields.
-	 * Fetches blog option.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key Field key
-	 * @return string Field value
-	 */
-	public function get_field_value( $key ) {
-		return $this->get_option( $key, $this->settings_field );
-	}
-
-	/**
-	 * Outputs a setting value from this form's settings field for use in form fields.
-	 *
-	 * @since 1.0.0
-	 * @uses $this->get_field_value() Constructs value attributes for use in form fields.
-	 *
-	 * @param string $key Field key
-	 */
-	public function field_value( $key ) {
-		echo esc_attr( $this->get_field_value( $key ) );
-	}
-
-	/**
 	 * Outputs nonce action field.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The action key.
+	 * @param string $key The escaped action key.
 	 */
 	public function nonce_action_field( $key ) {
 		echo $this->get_nonce_action_field( $key );
