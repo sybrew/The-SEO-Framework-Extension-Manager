@@ -124,7 +124,18 @@ abstract class Secure implements Secure_Static_Abstracts {
 	 * @since 1.0.0
 	 */
 	final private static function reset_instance() {
-		self::$_type = self::$_wpaction = self::$nonce_name = self::$request_name = self::$nonce_action = self::$account = '';
+
+		$class_vars = get_class_vars( __CLASS__ );
+		$other_vars = get_class_vars( get_called_class() );
+
+		$properties = array_merge( $class_vars, $other_vars );
+
+		foreach ( $properties as $property => $value ) :
+			//* @TODO consider this statement. It's more secure if it's left out, but also more error prone.
+			//	if ( isset( self::$$property ) )
+				self::$$property = is_array( self::$$property ) ? array() : null;
+		endforeach;
+
 	}
 
 	/**

@@ -360,7 +360,7 @@ body.tsfem .wrap {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
-	flex: 0 1 auto;
+	flex: 1 1 auto;
 	-webkit-flex-wrap: wrap;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
@@ -493,7 +493,9 @@ body.tsfem .wrap {
 .tsfem-actions-wrap,
 .tsfem-extensions-wrap {
 	padding: 20px;
-	height: 110px;
+	height: auto;
+	max-height: 33vh;
+	min-height: 150px;
 	width: 100%;
 	overflow: auto;
 }
@@ -935,6 +937,10 @@ h5.tsfem-extension-type {
 
 	.tsfem-extensions-panes-row .tsfem-pane-half {
 		margin-bottom: 20px;
+	}
+
+	.tsfem-pane-content {
+		max-height: 300px;
 	}
 
 	.tsfem-extensions-panes-row .tsfem-pane-half:last-of-type {
