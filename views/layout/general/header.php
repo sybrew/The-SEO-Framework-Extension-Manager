@@ -45,6 +45,6 @@ if ( $options ) {
 ?>
 <section class="tsfem-top-wrap">
 	<?php echo $about . $actions; ?>
-	<header><h1 class="tsfem-title"><?php echo esc_html( get_admin_page_title() ); ?></h1></header>
+	<div class="tsfem-title"><span class="tsfem-logo"></span><header><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></header></div>
 </section>
 <?php

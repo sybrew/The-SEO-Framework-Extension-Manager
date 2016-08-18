@@ -24,6 +24,12 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * Require activation traits.
+ * @since 1.0.0
+ */
+tsf_extension_manager_load_trait( 'activation' );
+
+/**
  * Class TSF_Extension_Manager\Activation
  *
  * Holds plugin activation functions.
@@ -31,7 +37,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  */
 class Activation extends Panes {
-	use Enclose, Construct_Sub;
+	use Enclose, Construct_Sub, Activation_Data;
 
 	/**
 	 * Holds activation input key and email.
@@ -158,135 +164,6 @@ class Activation extends Panes {
 		$response = $this->handle_response( $type, $response );
 
 		return $response;
-	}
-
-	/**
-	 * Connects to the main plugin activation.
-	 *
-	 * @since 1.0.0
-	 * @see $this->handle_request() The request validation wrapper.
-	 *
-	 * @param array $args
-	 * @return string Response body. Empty string if no body or incorrect parameter given.
-	 */
-	protected function get_api_response( $args ) {
-
-		$defaults = array(
-			'request'          => '',
-			'email'            => '',
-			'licence_key'      => '',
-			'product_id'       => $this->get_activation_product_title(),
-			'instance'         => $this->get_activation_instance( false ),
-			'platform'         => $this->get_activation_site_domain(),
-			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder" for the subscription.
-		);
-
-		$args = wp_parse_args( $args, $defaults );
-
-		if ( empty( $args['request'] ) ) {
-			$this->set_error_notice( array( 201 => '' ) );
-			return false;
-		}
-
-		$target_url = $this->get_api_url( $args );
-
-		/**
-		 * @since 1.0.0:
-		 * Applies filters 'tsf_extension_manager_request_timeout' : int
-		 *		7 seconds should be more than sufficient and equals the API server keep_alive_timeout. Default is 5.
-		 * Applies filters 'tsf_extension_manager_http_request_version' : string
-		 *		1.1 is used for improved performance. Default is '1.0'
-		 */
-		$http_args = array(
-			'timeout' => apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
-			'httpversion' => apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
-		);
-
-		$request = wp_safe_remote_get( $target_url, $http_args );
-
-		if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) ) {
-			$this->set_error_notice( array( 202 => '' ) );
-			return false;
-		}
-
-		$response = wp_remote_retrieve_body( $request );
-
-		return $response;
-	}
-
-	/**
-	 * Handles AME response and sets options.
-	 *
-	 * @since 1.0.0
-	 * @see $this->handle_request() The request validation wrapper.
-	 *
-	 * @param string $type The request type.
-	 * @param string $response The obtained response body.
-	 * @return bool True on successful response, false on failure.
-	 */
-	protected function handle_response( $type = 'status', $response = '' ) {
-
-		if ( empty( $response ) ) {
-			$this->set_error_notice( array( 301 => '' ) );
-			return false;
-		}
-
-		$results = json_decode( $response, true );
-
-		$_response = '';
-
-		if ( 'status' !== $type ) {
-			if ( 'activation' === $type )
-				$_response = $this->handle_premium_activation( $results );
-			elseif ( 'deactivation' === $type )
-				$_response = $this->handle_premium_deactivation( $results );
-		} else {
-			$_response = $results;
-		}
-
-		if ( isset( $results['code'] ) ) {
-			switch ( $results['code'] ) :
-				case '100' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 302 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '101' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 303 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '102' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 304 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '103' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 305 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '104' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 306 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '105' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 307 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				case '106' :
-					$additional_info = ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 308 => $additional_info ) );
-					$this->do_deactivation();
-					break;
-				default :
-					break;
-			endswitch;
-		}
-
-		return $_response;
 	}
 
 	/**
@@ -585,122 +462,5 @@ class Activation extends Panes {
 		$success = $this->update_option( '_data', $data );
 
 		return $success;
-	}
-
-	/**
-	 * Returns domain host of plugin holder.
-	 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
-	 * so only the host portion of the URL can be sent. For example the host portion might be
-	 * www.example.com or example.com. http://www.example.com includes the scheme http,
-	 * and the host www.example.com.
-	 * Sending only the host also eliminates issues when a client site changes from http to https,
-	 * but their activation still uses the original scheme.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string Domain Host.
-	 */
-	protected function get_activation_site_domain() {
-		return str_ireplace( array( 'http://', 'https://' ), '', home_url() );
-	}
-
-	/**
-	 * Returns activation domain URL.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $path The URL Path.
-	 * @return string
-	 */
-	protected function get_activation_url( $path = '' ) {
-		return 'https://premium.theseoframework.com/' . ltrim( $path, ' \\/' );
-	}
-
-	/**
-	 * Returns product title to activate.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	protected function get_activation_product_title() {
-		return 'The SEO Framework Premium';
-	}
-
-	/**
-	 * Returns API option prefix.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string.
-	 */
-	protected function get_activation_prefix() {
-
-		static $prefix = null;
-
-		if ( isset( $prefix ) )
-			return $prefix;
-
-		return $prefix = str_ireplace( array( ' ', '_', '&', '?' ), '_', strtolower( $this->get_activation_product_title() ) );
-	}
-
-	/**
-	 * Returns website's instance key from option. Generates one if non-existent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param bool $save_option Whether to save the instance in an option. Useful
-	 *             for when you're going to save it later.
-	 * @return string Instance key.
-	 */
-	protected function get_activation_instance( $save_option = true ) {
-
-		static $instance = null;
-
-		if ( isset( $instance ) )
-			return $instance;
-
-		$instance = $this->get_option( '_instance' );
-
-		if ( false === $instance ) {
-			$instance = trim( wp_generate_password( 32, false ) );
-
-			if ( $save_option )
-				$this->update_option( '_instance', $instance );
-		}
-
-		return $instance;
-	}
-
-	/**
-	 * Generates software API URL to connect to the API manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args The API query parameters.
-	 * @return string The escaped API URL with parameters.
-	 */
-	protected function get_api_url( $args = array() ) {
-
-		$api_url = add_query_arg( 'wc-api', 'am-software-api', $this->get_activation_url() );
-
-		return esc_url_raw( $api_url . '&' . http_build_query( $args ) );
-	}
-
-	/**
-	 * Generates software API My Account page HTML link.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The My Account API URL.
-	 */
-	protected function get_my_account_link() {
-		return $this->get_link( array(
-			'url' => $this->get_activation_url( 'my-account/' ),
-			'target' => '_blank',
-			'class' => '',
-			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
-			'content' => esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
-		) );
 	}
 }

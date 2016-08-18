@@ -75,9 +75,6 @@ class Core {
 			'enable-feed'       => 'enable-feed',
 
 			//* Extensions.
-			'download-ext'      => 'download-ext',
-			'update-ext'        => 'update-ext',
-			'delete-ext'        => 'delete-ext',
 			'activate-ext'      => 'activate-ext',
 			'deactivate-ext'    => 'deactivate-ext',
 		);
@@ -92,9 +89,6 @@ class Core {
 			'enable-feed'       => 'tsfem_nonce_action_feed',
 
 			//* Extensions.
-			'download-ext'      => 'tsfem_nonce_action_download_ext',
-			'update-ext'        => 'tsfem_nonce_action_update_ext',
-			'delete-ext'        => 'tsfem_nonce_action_delete_ext',
 			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		);
@@ -231,7 +225,7 @@ class Core {
 			}
 
 			//* Already escaped.
-			the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], false );
+			the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
 			$this->unset_error_notice();
 		}
 	}
@@ -590,6 +584,23 @@ class Core {
 		$title = $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
 
 		return '<a' . $url . $class . $target . $title . '>' . esc_html( $args['content'] ) . '</a>';
+	}
+
+	/**
+	 * Generates software API My Account page HTML link.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The My Account API URL.
+	 */
+	protected function get_my_account_link() {
+		return $this->get_link( array(
+			'url' => $this->get_activation_url( 'my-account/' ),
+			'target' => '_blank',
+			'class' => '',
+			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+			'content' => esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
+		) );
 	}
 
 	/**

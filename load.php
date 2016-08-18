@@ -101,9 +101,7 @@ function init_tsf_extension_manager() {
 
 /**
  * Determines whether we can load the the plugin.
- * Call this after action 'plugins_loaded' priority 5 or it will kill the plugin.
  *
- * Applies filters 'tsf_extension_manager_network_enabled' : boolean
  * Applies filters 'tsf_extension_manager_enabled' : boolean
  *
  * @since 1.0.0
@@ -127,8 +125,8 @@ function can_load_tsf_extension_manager() {
 }
 
 /**
- * Autoloads all class files. To be used when requiring access to all or any of the
- * plugin classes.
+ * Autoloads all class files. To be used when requiring access to all or any of
+ * the plugin classes.
  *
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
@@ -168,7 +166,7 @@ function autoload_tsf_extension_manager_classes( $class ) {
  *
  * @param string $file Where the trait is for.
  */
-function tsf_extension_manager_load_trait( $file = '' ) {
+function tsf_extension_manager_load_trait( $file ) {
 
 	static $loaded;
 

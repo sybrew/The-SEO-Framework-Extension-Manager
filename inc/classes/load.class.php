@@ -92,7 +92,7 @@ final class Load extends AdminPages {
 		$notice = esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		//* Already escaped.
-		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false );
+		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
 	}
 
 	/**

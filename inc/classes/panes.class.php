@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-class Panes extends Core {
+class Panes extends API {
 	use Enclose, Construct_Sub;
 
 	/**
@@ -54,7 +54,9 @@ class Panes extends Core {
 
 		$output = '';
 
-		$feed_enabled = $this->get_option( '_enable_feed', false );
+		//$feed_enabled = $this->get_option( '_enable_feed', false );
+		$feed_enabled = false;
+		$this->update_option( '_enable_feed', false );
 
 		if ( $feed_enabled ) {
 			$output = $this->get_trends_output();

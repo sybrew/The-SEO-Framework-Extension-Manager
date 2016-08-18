@@ -34,12 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this.
  */
 final class Trends {
-	use Enclose;
-
-	/**
-	 * Constructing is forbidden.
-	 */
-	private function __construct() { }
+	use Enclose_Master, Force_Static_Master;
 
 	/**
 	 * Returns the trend call.
@@ -131,13 +126,17 @@ final class Trends {
 				$link = '';
 				foreach ( $object->link as $link_object ) {
 
-					$type = isset( $link_object->{0}['type'] ) ? $link_object->{0}['type']->__toString() : '';
+					//* PHP7+ must convert to array...
+					$link_object = (array) $link_object;
+					$link_object = ! empty( $link_object['@attributes'] ) ? $link_object['@attributes'] : '';
+
+					$type = isset( $link_object['type'] ) ? $link_object['type'] : '';
 					if ( 'text/html' === $type ) {
 
-						$rel = isset( $link_object->{0}['rel'] ) ? $link_object->{0}['rel']->__toString() : '';
+						$rel = isset( $link_object['rel'] ) ? $link_object['rel'] : '';
 						if ( 'replies' === $rel ) {
 
-							$link = isset( $link_object->{0}['href'] ) ? $link_object->{0}['href']->__toString() : '';
+							$link = isset( $link_object['href'] ) ? $link_object['href'] : '';
 
 							if ( $link )
 								$link = strtok( $link, '#' );

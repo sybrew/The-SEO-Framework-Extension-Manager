@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Classes
+ * @package TSF_Extension_Manager\Traits
  */
 namespace TSF_Extension_Manager;
 
