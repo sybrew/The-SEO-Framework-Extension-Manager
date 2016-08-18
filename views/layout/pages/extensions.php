@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
 
 ?>
-<div class="tsfem-extensions-panes-row">
+<div class="tsfem-extensions-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	$this->do_pane_wrap(
 		__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $
 	);
 ?>
 </div>
-<div class="tsfem-extensions-panes-row">
+<div class="tsfem-extensions-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	$this->do_pane_wrap(
 		__( 'Extensions', 'the-seo-framework-extension-manager' ),

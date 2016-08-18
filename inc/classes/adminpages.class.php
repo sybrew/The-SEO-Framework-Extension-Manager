@@ -365,7 +365,7 @@ class AdminPages extends Activation {
 	 */
 	public function init_extension_manager_page() {
 		?>
-		<div class="wrap tsfem">
+		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php
 			if ( $this->is_plugin_connected() ) {
 				$this->output_extension_overview_wrapper();
@@ -385,7 +385,7 @@ class AdminPages extends Activation {
 	 */
 	public function init_extension_footer_wrap() {
 		?>
-		<div class="tsfem-footer-wrap">
+		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
 			<?php
 			$this->do_page_footer_wrap();
 			?>
@@ -415,7 +415,7 @@ class AdminPages extends Activation {
 		$this->do_page_header_wrap( true );
 
 		?>
-		<div class="tsfem-panes-wrap">
+		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
 			<?php
 			$this->do_extensions_overview();
 			?>

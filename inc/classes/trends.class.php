@@ -146,6 +146,8 @@ final class Trends {
 					}
 				}
 				unset( $link_object );
+				if ( empty( $link ) )
+					continue;
 
 				//* @note: $object->updated also exists.
 				$date = isset( $object->published ) ? $object->published->__toString() : '';
@@ -162,12 +164,10 @@ final class Trends {
 				$content = the_seo_framework()->trim_excerpt( $content, 251, 250 );
 				$content = the_seo_framework()->escape_description( $content );
 
-				if ( $link ) {
-					//* No need for translations, it's English only.
-					$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', esc_url( $link ), $title );
-				}
+				//* No need for translations, it's English only.
+				$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', esc_url( $link ), $title );
 
-				$output .= sprintf( '<div class="tsfem-feed-entry"><div class="tsfem-feed-top">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
+				$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
 				$i++;
 			}
 

@@ -1,68 +1,117 @@
-body.tsfem .wrap {
-	height: calc( 100vh - 140px );
-	margin-top: 20px;
-	padding: 0;
-	overflow: visible;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 0 0 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: column;
-	justify-content: flex-start;
-}
+/* # Start Normalize.
+/*----------------------------------------------------------------------------*/
 
+/* ## Notices
+/*--------------------------------------*/
 .wrap.tsfem .notice {
 	margin: 0 0 20px;
 	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
 }
 
-.tsfem-top-wrap {
-	background-color: #333;
-	-webkit-box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
-	box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
-	width: 100%;
-	margin: 0 0 20px;
-	padding: 20px;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
+.tsfem-top-wrap .notice:first-of-type {
+	margin-top: 18px;
+}
+
+/* ## Disable cursor
+/*--------------------------------------*/
+.tsfem-disable-cursor {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* # Start Flex.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-flex {
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
-	flex: 0 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.tsfem-flex-row {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+}
+
+.tsfem-flex-nowrap {
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
+}
+
+.tsfem-flex-nogrow {
+	flex: 0 1 auto;
+}
+
+.tsfem-flex-noshrink {
+	flex: 1 0 auto;
+}
+
+.tsfem-flex-nogrowshrink {
+	flex: 0 0 auto;
+}
+
+/* # Start Wraps.
+/*----------------------------------------------------------------------------*/
+
+body.tsfem .wrap {
+	height: calc( 100vh - 140px );
+	margin-top: 20px;
+	overflow: visible;
+	padding: 0;
+}
+
+.tsfem-top-wrap {
+	background-color: #333;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
+	width: 100%;
+	margin: 0 0 20px;
+	padding: 20px;
+	overflow: hidden;
+	-webkit-flex-direction: row-reverse;
 	flex-direction: row-reverse;
 	justify-content: space-between;
 }
+
+.tsfem-footer-wrap {
+	width: 100%;
+	padding: 1.33em 40px;
+	margin: 0 auto;
+	overflow: hidden;
+	align-items: center;
+}
+
+.tsfem.connect-wrap {
+	max-width: 690px;
+	min-width: 175px;
+}
+
+/* # Start Top/Header.
+/*----------------------------------------------------------------------------*/
 
 .tsfem-top-actions,
 .tsfem-top-about,
 .tsfem-top-wrap .tsfem-title {
 	text-align: left;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	flex-direction: column;
-	display: flex;
-	flex: 1 1 auto;
-	flex-direction: row;
 	align-items: center;
-	justify-content: flex-start;
 }
 
 .tsfem-top-actions,
 .tsfem-top-about {
+	-webkit-justify-content: flex-end;
 	justify-content: flex-end;
 }
 
@@ -77,11 +126,72 @@ body.tsfem .wrap {
 
 .tsfem-top-about > div {
 	display: inline-block;
+	text-align: right;
+	max-width: calc( 100% - 1.2em - 14px );
+	min-width: 170px;
 	color: #fff;
 	letter-spacing: .2px;
 	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
 }
 
+/* ## Title.
+/*--------------------------------------*/
+
+.tsfem-top-wrap .tsfem-title header {
+	width: calc( 100% - 1.9em - 8px );
+}
+
+.tsfem-top-wrap .tsfem-title h1 {
+	font-family: 'Titillium Web',sans-serif;
+	word-break: break-word;
+	font-size: 1.9em;
+	font-weight: 600;
+	color: #0ebfe9;
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-top-wrap .tsfem-title .tsfem-logo {
+	background: url('../images/tsflogo.svg') 50% 50%/1.9em 1.9em no-repeat transparent;
+	height: 1.9em;
+	width: 1.9em;
+	min-width: 1.9em;
+	max-width: 1.9em;
+	vertical-align: baseline;
+	margin-right: 8px;
+}
+
+/* # Start Buttons.
+/*----------------------------------------------------------------------------*/
+
+/* ## Normalize input.
+/*--------------------------------------*/
+
+.tsfem input[type=text]:focus,
+.tsfem input[type=search]:focus,
+.tsfem input[type=radio]:focus,
+.tsfem input[type=tel]:focus,
+.tsfem input[type=time]:focus,
+.tsfem input[type=url]:focus,
+.tsfem input[type=week]:focus,
+.tsfem input[type=password]:focus,
+.tsfem input[type=checkbox]:focus,
+.tsfem input[type=color]:focus,
+.tsfem input[type=date]:focus,
+.tsfem input[type=datetime]:focus,
+.tsfem input[type=datetime-local]:focus,
+.tsfem input[type=email]:focus,
+.tsfem input[type=month]:focus,
+.tsfem input[type=number]:focus,
+.tsfem select:focus,
+.tsfem textarea:focus {
+	border-color: #057f9c;
+	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
+	box-shadow: 0 0 2px rgba(66,144,183,.8);
+}
+
+/* ## Buttons input.
+/*--------------------------------------*/
 .tsfem-button,
 .tsfem-button-primary {
 	display: inline-block;
@@ -131,6 +241,7 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
 }
 
+.tsfem-button-love,
 .tsfem-account-active,
 .tsfem-account-inactive,
 .tsfem-account-about-to-expire,
@@ -142,6 +253,7 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #057f9c,1px 0 1px #057f9c,0 1px 1px #057f9c,-1px 0 1px #057f9c;
 }
 
+.tsfem-button-love,
 .tsfem-account-inactive {
 	background: #00cd98;
 	-webkit-box-shadow: 0 3px 0 #008964;
@@ -159,6 +271,7 @@ body.tsfem .wrap {
 
 .tsfem-account-active:after,
 .tsfem-account-inactive:after,
+.tsfem-button-love:after,
 .tsfem-account-about-to-expire:after {
 	display: inline;
 	content: "\f155";
@@ -176,11 +289,13 @@ body.tsfem .wrap {
 	content: "\f534";
 }
 
+.tsfem-button-love:after,
 .tsfem-account-inactive:after {
 	content: "\f487";
 }
 
-.tsfem-button:hover {
+.tsfem-button:hover,
+.tsfem-button-primary:hover {
 	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
 	filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
 }
@@ -188,6 +303,7 @@ body.tsfem .wrap {
 .tsfem-button-primary:hover,
 .tsfem-account-active:hover,
 .tsfem-account-inactive:hover,
+.tsfem-button-love:hover,
 .tsfem-account-about-to-expire:hover {
 	/* Too lazy to figure out exact colors */
 	-webkit-filter: hue-rotate(5deg) saturate(1.2);
@@ -202,6 +318,8 @@ body.tsfem .wrap {
 .tsfem-account-active:focus,
 .tsfem-account-inactive:active,
 .tsfem-account-inactive:focus,
+.tsfem-button-love:active,
+.tsfem-button-love:focus,
 .tsfem-account-about-to-expire:active,
 .tsfem-account-about-to-expire:focus {
 	margin-top: 0;
@@ -219,39 +337,13 @@ body.tsfem .wrap {
 .tsfem-account-inactive:hover,
 .tsfem-account-inactive:active,
 .tsfem-account-inactive:focus,
+.tsfem-button-love:hover,
+.tsfem-button-love:active,
+.tsfem-button-love:focus,
 .tsfem-account-about-to-expire:hover
 .tsfem-account-about-to-expire:active,
 .tsfem-account-about-to-expire:focus {
 	color: #fff;
-}
-
-.tsfem-top-wrap .tsfem-title h1 {
-	font-family: 'Titillium Web',sans-serif;
-	word-break: break-word;
-	font-size: 1.9em;
-	font-weight: 600;
-	color: #0ebfe9;
-	margin: 0;
-	padding: 0;
-}
-
-.tsfem-top-wrap .tsfem-title .tsfem-logo {
-	background: url('../images/tsflogo.svg') 50% 50%/24px 24px no-repeat transparent;
-	height: 24px;
-	width: 24px;
-	min-width: 24px;
-	max-width: 24px;
-	vertical-align: baseline;
-	margin-right: 8px;
-}
-
-.tsfem-top-wrap .notice:first-of-type {
-	margin-top: 18px;
-}
-
-.tsfem.connect-wrap {
-	max-width: 690px;
-	min-width: 175px;
 }
 
 .tsfem-connect-option {
@@ -265,18 +357,6 @@ body.tsfem .wrap {
 	background: #fff;
 	overflow: hidden;
 	border-radius: 3px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: row;
 	align-items: center;
 }
 
@@ -284,463 +364,8 @@ body.tsfem .wrap {
 	border: 1px solid #057f9c;
 }
 
-.tsfem-connect-description,
-.tsfem-connect-action {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	flex-direction: column;
-	flex: 1 1 auto;
-	width: 100%;
-}
-
-.tsfem-connect-action {
-	text-align: right;
-}
-
-.tsfem-connect-action form {
-	margin: 0;
-	padding: 0;
-}
-
-.tsfem-connect-description h3 {
-	font-size: 1.66em;
-	color: #057f9c;
-	font-family: 'Titillium Web',sans-serif;
-	font-weight: 400;
-	margin: 14px 0;
-}
-
-.tsfem-connect-fields-row {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	-webkit-justify-content: flex-end;
-	justify-content: flex-end;
-}
-
-.tsfem-connect-fields-row > *:nth-child(1n+2) .tsfem-button {
-	margin-left: 7px;
-}
-
-.tsfem-panes-wrap {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: column;
-	align-items: center;
-}
-
-.tsfem-extensions-panes-row {
-	width: 100%;
-	margin: 0 0 20px;
-	padding: 0;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: row;
-}
-
-.tsfem-extensions-panes-row:last-of-type {
-	margin: 0;
-}
-
-.tsfem-pane-half,
-.tsfem-pane-full {
-	max-width: calc( 50% - 10px );
-	background: #fff;
-	border-radius: 3px;
-	-webkit-box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
-	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	flex-direction: column;
-}
-
-.tsfem-pane-half ::-webkit-scrollbar,
-.tsfem-pane-full ::-webkit-scrollbar {
-	width: 12px;
-	height: 6px;
-	background: #fafafa;
-}
-
-.tsfem-pane-half ::-webkit-scrollbar-thumb,
-.tsfem-pane-full ::-webkit-scrollbar-thumb {
-	background-color: #0ebfdd;
-	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
-	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
-}
-
-.tsfem-pane-half:first-of-type {
-	margin-right: 20px;
-}
-
-.tsfem-pane-full {
-	flex-direction: row;
-	max-width: 100%;
-}
-
-.tsfem-pane-wrap {
-	padding: 0;
-	margin: 0;
-	overflow: visible;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: column;
-	justify-content: flex-start;
-}
-
-.tsfem-pane-header,
-.tsfem-pane-content {
-	margin: 0;
-	padding: 14px 20px;
-	border-bottom: 1px solid #ddd;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 0 0 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: row;
-}
-
-.tsfem-pane-content {
-	padding: 0;
-	flex: 1 1 auto;
-	border: 0;
-}
-
-.tsfem-pane-header * {
-	font-size: 1em;
-	line-height: 1em;
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	flex-direction: column;
-	display: flex;
-	flex: 1 1 auto;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-end;
-}
-
-.tsfem-pane-header .tsfem-ajax {
-	max-width: 1.1em;
-	font-size: 1.1em;
-	overflow: hidden;
-}
-
-.tsfem-pane-header h3 {
-	font-size: 1.33em;
-	color: #057f9c;
-	font-family: 'Titillium Web',sans-serif;
-	font-weight: 400;
-	justify-content: flex-start;
-}
-
-.tsfem-trends-wrap,
-.tsfem-actions-wrap,
-.tsfem-extensions-wrap {
-	padding: 20px;
-	height: auto;
-	max-height: 33vh;
-	min-height: 150px;
-	width: 100%;
-	overflow: auto;
-}
-
-.tsfem-extensions-wrap {
-	height: auto;
-	max-height: 750px;
-}
-
-h4.tsfem-status-title {
-	margin: 0;
-}
-
-.tsfem-feed-wrap {
-	overflow: hidden;
-}
-
-.tsfem-feed-entry,
-.tsfem-feed-top {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: column;
-}
-
-.tsfem-feed-top,
-.tsfem-feed-content {
-	margin-bottom: 14px;
-}
-
-.tsfem-feed-top {
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: row;
-	justify-content: space-between;
-	word-wrap: break-word;
-	white-space: pre-wrap;
-	overflow-wrap: normal;
-	align-items: baseline;
-}
-
-.tsfem-feed-top h4 {
-	white-space: pre-wrap;
-	margin: 0;
-	padding: 0;
-}
-
-.tsfem-feed-top time {
-	white-space: pre;
-	word-spacing: -1px;
-	font-size: 0.9em;
-	margin: 0 7px;
-	padding: 0;
-	font-style: oblique;
-}
-
-.tsfem-feed-entry {
-	margin-bottom: 14px;
-	box-shadow: 0px 2px 2px 0px rgba(204, 204, 204, 0.4);
-	display: inline-block;
-}
-
-.tsfem-plugin-entry {
-	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
-	margin: 0 0 20px;
-	padding: 0;
-	height: 102px;
-	border: 1px solid #ddd;
-	background: #fdfdfd;
-	width: 100%;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: row;
-	justify-content: flex-start;
-}
-
-.tsfem-plugin-entry:last-of-type {
-	margin: 0;
-}
-
-.tsfem-plugin-entry > * {
-	height: 100px;
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 0 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: column;
-	width: auto;
-	overflow: hidden;
-	justify-content: flex-start;
-}
-
-.tsfem-plugin-icon-wrap {
-	flex: 0 0 auto;
-}
-
-.tsfem-plugin-about-wrap {
-	width: 250px;
-	flex-direction: column;
-	justify-content: space-around;
-	padding: 10px 15px;
-}
-
-.tsfem-extension-header {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 0 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: row;
-	justify-content: space-between;
-}
-
-h4.tsfem-extension-title {
-	width: 120px;
-	font-size: 1.33em;
-	font-family: 'Titillium Web',sans-serif;
-	word-break: break-word;
-	font-weight: 600;
-	color: #0ebfe9;
-	margin: 0;
-	padding: 0;
-}
-
-h5.tsfem-extension-type {
-	margin: 0;
-	padding: 0;
-	font-size: 0.83em;
-}
-
-.tsfem-extension-actions-wrap {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 0 0 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	flex-direction: row;
-	justify-content: flex-start;
-}
-
-.tsfem-footer-wrap {
-	width: 100%;
-	padding: 1.33em 40px;
-	margin: 0 auto;
-	overflow: hidden;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: column;
-	align-items: center;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.tsfem #input-activation {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	flex-direction: column;
-}
-
-.tsfem #input-activation .regular-text,
-.tsfem #input-activation .tsfem-button {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	flex-direction: row;
-	flex: 1 1 auto;
-	margin-left: 0;
-	margin-right: 0;
-	border-radius: 0;
-	width: 100%;
-}
-
-.tsfem #input-activation .regular-text:nth-child(1n+2) {
-	margin-top: 4px;
-	margin-bottom: 8px;
-}
+/* ## Switching/Rotating buttons.
+/*--------------------------------------*/
 
 .tsfem-switch-button-container-wrap {
 	display: inline-block;
@@ -766,7 +391,9 @@ h5.tsfem-extension-type {
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
+	-webkit-flex-direction: column;
 	flex-direction: column;
+	-webkit-justify-content: center;
 	justify-content: center;
 }
 
@@ -821,28 +448,317 @@ h5.tsfem-extension-type {
 	z-index: 2;
 }
 
-.tsfem input[type=text]:focus,
-.tsfem input[type=search]:focus,
-.tsfem input[type=radio]:focus,
-.tsfem input[type=tel]:focus,
-.tsfem input[type=time]:focus,
-.tsfem input[type=url]:focus,
-.tsfem input[type=week]:focus,
-.tsfem input[type=password]:focus,
-.tsfem input[type=checkbox]:focus,
-.tsfem input[type=color]:focus,
-.tsfem input[type=date]:focus,
-.tsfem input[type=datetime]:focus,
-.tsfem input[type=datetime-local]:focus,
-.tsfem input[type=email]:focus,
-.tsfem input[type=month]:focus,
-.tsfem input[type=number]:focus,
-.tsfem select:focus,
-.tsfem textarea:focus {
-	border-color: #057f9c;
-	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
-	box-shadow: 0 0 2px rgba(66,144,183,.8);
+/* # Start Activation/Connect.
+/*----------------------------------------------------------------------------*/
+.tsfem-connect-description,
+.tsfem-connect-action {
+	width: 100%;
 }
+
+.tsfem-connect-action {
+	text-align: right;
+}
+
+.tsfem-connect-action form {
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-connect-description h3 {
+	font-size: 1.66em;
+	color: #057f9c;
+	font-family: 'Titillium Web',sans-serif;
+	font-weight: 400;
+	margin: 14px 0;
+}
+
+.tsfem-connect-fields-row {
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-connect-fields-row > *:nth-child(1n+2) .tsfem-button {
+	margin-left: 7px;
+}
+
+/* # Start Panes.
+/*----------------------------------------------------------------------------*/
+
+/* # Global panes wrap.
+/*--------------------------------------*/
+.tsfem-panes-wrap {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	align-items: center;
+}
+
+.tsfem-extensions-panes-row {
+	width: 100%;
+	margin: 0 0 20px;
+	padding: 0;
+	min-height: 200px;
+}
+
+.tsfem-extensions-panes-row:last-of-type {
+	margin: 0;
+}
+
+/* ## Singular panes layout.
+/*--------------------------------------*/
+.tsfem-pane-half,
+.tsfem-pane-full {
+	max-width: calc( 50% - 10px );
+	background: #fff;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-pane-half ::-webkit-scrollbar,
+.tsfem-pane-full ::-webkit-scrollbar {
+	width: 12px;
+	height: 6px;
+	background: #fafafa;
+}
+
+.tsfem-pane-half ::-webkit-scrollbar-thumb,
+.tsfem-pane-full ::-webkit-scrollbar-thumb {
+	background-color: #0ebfdd;
+	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
+	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
+}
+
+.tsfem-pane-half:first-of-type {
+	margin-right: 20px;
+}
+
+.tsfem-pane-full {
+	flex-direction: row;
+	max-width: 100%;
+}
+
+.tsfem-pane-wrap {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+}
+
+.tsfem-pane-header,
+.tsfem-pane-content {
+	margin: 0;
+	padding: 14px 20px;
+	border: 1px solid #ddd;
+	overflow: hidden;
+}
+
+.tsfem-pane-content {
+	padding: 0;
+	flex: 1 1 auto;
+	border-top: 0;
+}
+
+.tsfem-pane-header * {
+	font-size: 1em;
+	line-height: 1em;
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	flex-direction: column;
+	display: flex;
+	flex: 1 1 auto;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	align-items: center;
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-pane-header .tsfem-ajax {
+	max-width: 1.1em;
+	font-size: 1.1em;
+	overflow: hidden;
+}
+
+.tsfem-pane-header h3 {
+	font-size: 1.33em;
+	color: #057f9c;
+	font-family: 'Titillium Web',sans-serif;
+	font-weight: 400;
+	justify-content: flex-start;
+}
+
+.tsfem-pane-content h4.tsfem-status-title {
+	margin: 0;
+}
+
+/* ## Specific panes.
+/*--------------------------------------*/
+.tsfem-trends-wrap,
+.tsfem-actions-wrap,
+.tsfem-extensions-wrap {
+	padding: 20px;
+	height: auto;
+	max-height: 33vh;
+	min-height: 150px;
+	width: 100%;
+	overflow: auto;
+}
+
+/* ### Extensions pane.
+/*--------------------------------------*/
+.tsfem-extensions-wrap {
+	height: auto;
+	max-height: 750px;
+}
+
+.tsfem-extension-entry {
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	margin: 0 0 20px;
+	padding: 0;
+	height: 102px;
+	border: 1px solid #ddd;
+	background: #fdfdfd;
+	width: 100%;
+	overflow: hidden;
+}
+
+.tsfem-extension-entry:last-of-type {
+	margin: 0;
+}
+
+.tsfem-extension-entry > * {
+	height: 100px;
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	flex: 0 1 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	width: auto;
+	overflow: hidden;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-plugin-about-wrap {
+	min-width: 150px;
+	max-width: 250px;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: space-around;
+	justify-content: space-around;
+	padding: 10px 15px;
+}
+
+.tsfem-extension-header {
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+}
+
+h4.tsfem-extension-title {
+	width: 120px;
+	font-size: 1.33em;
+	font-family: 'Titillium Web',sans-serif;
+	word-break: break-word;
+	font-weight: 600;
+	color: #0ebfe9;
+	margin: 0;
+	padding: 0;
+}
+
+h5.tsfem-extension-type {
+	margin: 0;
+	padding: 0;
+	font-size: 0.83em;
+}
+
+/* ### Feed pane.
+/*--------------------------------------*/
+.tsfem-feed-wrap {
+	overflow: hidden;
+}
+
+.tsfem-feed-entry,
+.tsfem-feed-top {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.tsfem-feed-top,
+.tsfem-feed-content {
+	margin-bottom: 14px;
+}
+
+.tsfem-feed-top {
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	overflow-wrap: normal;
+	align-items: baseline;
+}
+
+.tsfem-feed-top h4 {
+	white-space: pre-wrap;
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-feed-top time {
+	white-space: pre;
+	word-spacing: -1px;
+	font-size: 0.9em;
+	margin: 0 7px;
+	padding: 0;
+	font-style: oblique;
+}
+
+.tsfem-feed-entry {
+	margin-bottom: 14px;
+	box-shadow: 0px 2px 2px 0px rgba(204, 204, 204, 0.4);
+	display: inline-block;
+}
+
+/* # Start Activation Layout.
+/*----------------------------------------------------------------------------*/
+
+.tsfem #input-activation {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem #input-activation .regular-text,
+.tsfem #input-activation .tsfem-button {
+	margin-left: 0;
+	margin-right: 0;
+	border-radius: 0;
+	width: 100%;
+}
+
+.tsfem #input-activation .regular-text:nth-child(1n+2) {
+	margin-top: 4px;
+	margin-bottom: 8px;
+}
+
+/* # Start footer.
+/*----------------------------------------------------------------------------*/
 
 #wpfooter .tsfem-footer-wrap .tsfem-footer-title,
 #wpfooter .tsfem-footer-wrap .tsfem-footer-motto {
@@ -857,6 +773,9 @@ h5.tsfem-extension-type {
 	font-weight: 400;
 	color: #555d66;
 }
+
+/* # Start AJAX.
+/*----------------------------------------------------------------------------*/
 
 .tsfem-ajax:before {
 	display: inline-block;
@@ -911,6 +830,9 @@ h5.tsfem-extension-type {
 	}
 }
 
+/* # Start Media Queries.
+/*----------------------------------------------------------------------------*/
+
 @media screen and ( min-height: 800px ) {
 	.tsfem-extensions-wrap {
 		max-height: initial;
@@ -933,6 +855,10 @@ h5.tsfem-extension-type {
 	.tsfem-pane-full {
 		min-width: 100%;
 		max-width: 100%;
+	}
+
+	.tsfem-extensions-panes-row {
+		min-height: initial;
 	}
 
 	.tsfem-extensions-panes-row .tsfem-pane-half {

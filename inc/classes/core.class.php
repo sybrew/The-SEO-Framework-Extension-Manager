@@ -604,6 +604,42 @@ class Core {
 	}
 
 	/**
+	 * Generates support link for both Free and Premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type The support link type. Accepts 'premium' or anything else for free.
+	 * @param bool $love Whether to show a heart after the button text.
+	 * @return string The Support Link.
+	 */
+	public function get_support_link( $type = 'free', $love = true ) {
+
+		if ( 'premium' === $type ) {
+			$url = $this->get_activation_url( 'get-support' );
+
+			$title = __( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
+			$text = __( 'Premium Support', 'the-seo-framework-extension-manager' );
+
+			$class = $love ? 'tsfem-button tsfem-button-love tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
+		} else {
+			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
+
+			$title = __( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
+			$text = __( 'Free Support', 'the-seo-framework-extension-manager' );
+
+			$class = $love ? 'tsfem-button tsfem-button-love' : 'tsfem-button';
+		}
+
+		return $this->get_link( array(
+			'url' => $url,
+			'target' => '_blank',
+			'class' => $class,
+			'title' => $title,
+			'content' => $text,
+		) );
+	}
+
+	/**
 	 * Returns TSF Extension Manager options array.
 	 *
 	 * @since 1.0.0

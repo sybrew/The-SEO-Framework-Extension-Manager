@@ -146,6 +146,7 @@ class Panes extends API {
 	 * Returns trends activation introduction.
 	 *
 	 * @since 1.0.0
+	 * @todo convert to secure instance.
 	 *
 	 * @return string Trends activation buttons.
 	 */
@@ -166,6 +167,7 @@ class Panes extends API {
 	 * Returns a button that implements an AJAX request for Feed enabling.
 	 *
 	 * @since 1.0.0
+	 * @todo convert to secure instance.
 	 *
 	 * @return string.
 	 */
@@ -238,6 +240,7 @@ class Panes extends API {
 
 		$output = '<h4>This is still under construction.</h4>';
 		$output .= $this->get_deactivation_button();
+		$output .= $this->get_support_buttons();
 
 		return $output;
 	}
@@ -254,6 +257,7 @@ class Panes extends API {
 
 		$output = '<h4>This is still under construction.</h4>';
 		$output .= $this->get_deactivation_button();
+		$output .= $this->get_support_buttons();
 
 		return $output;
 	}
@@ -281,6 +285,31 @@ class Panes extends API {
 		Layout::reset();
 
 		return $button;
+	}
+
+	/**
+	 * Renders and returns support buttons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The support buttons.
+	 */
+	protected function get_support_buttons() {
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Layout::initialize( 'link', $_instance, $bits );
+
+		$buttons = '';
+
+		$buttons = Layout::get( 'free-support-button' );
+		if ( $this->is_premium_user() )
+			$buttons .= Layout::get( 'premium-support-button' );
+
+		Layout::reset();
+
+		return $buttons;
 	}
 
 	/**

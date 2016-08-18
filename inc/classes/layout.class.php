@@ -60,6 +60,11 @@ final class Layout extends Secure {
 					self::set( '_type', 'form' );
 					break;
 
+				case 'link' :
+					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					self::set( '_type', 'link' );
+					break;
+
 				default :
 					self::reset();
 					the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct initialization type.' );
@@ -88,6 +93,14 @@ final class Layout extends Secure {
 		switch ( $type ) :
 			case 'deactivation-button' :
 				return static::get_deactivation_button();
+				break;
+
+			case 'free-support-button' :
+				return static::get_free_support_button();
+				break;
+
+			case 'premium-support-button' :
+				return static::get_premium_support_button();
 				break;
 
 			default :
@@ -140,5 +153,37 @@ final class Layout extends Secure {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Outputs free support button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The free support button link.
+	 */
+	private static function get_free_support_button() {
+
+		if ( 'link' === self::get_property( '_type' ) ) {
+			return tsf_extension_manager()->get_support_link( 'free' );
+		} elseif ( 'form' === self::get_property( 'type' ) ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The free support will most likely never support forms.' );
+		}
+	}
+
+	/**
+	 * Outputs premium support button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The premium support button link.
+	 */
+	private static function get_premium_support_button() {
+
+		if ( 'link' === self::get_property( '_type' ) ) {
+			return tsf_extension_manager()->get_support_link( 'premium' );
+		} elseif ( 'form' === self::get_property( 'type' ) ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium support button does not yet support forms.' );
+		}
 	}
 }

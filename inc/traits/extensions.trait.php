@@ -225,42 +225,64 @@ trait Extensions_Properties {
 	}
 
 	/**
-	* Determines whether the input plugin is premium.
+	* Determines whether the input extension is premium.
 	*
 	* @since 1.0.0
 	* @TODO
 	*
-	* @param array $plugin The plugin to check.
-	* @return bool Whether the plugin is premium.
+	* @param array $extension The extension to check.
+	* @return bool Whether the extension is premium.
 	*/
-	private static function is_plugin_premium( $plugin ) {
-		return 'premium' === $plugin['type'];
+	private static function is_plugin_premium( $extension ) {
+		return 'premium' === $extension['type'];
 	}
 
 	/**
-	* Determines whether the input plugin has been modified from its source.
+	* Determines whether the input extension has been modified from its source.
 	* It performs a simple ZIP package MD5 sum comparison check.
 	*
 	* @since 1.0.0
 	* @TODO
 	*
-	* @param array $plugin The plugin to check.
-	* @return bool Whether the plugin is modified.
+	* @param array $extension The extension to check.
+	* @return bool Whether the extension is modified.
 	*/
-	private static function is_plugin_modified( $plugin ) {
+	private static function is_plugin_modified( $extension ) {
 		return false;
 	}
 
 	/**
-	* Determines whether the input plugin is premium.
+	* Determines whether the input extension is premium.
 	*
 	* @since 1.0.0
 	* @TODO
 	*
-	* @param array $plugin The plugin to check.
-	* @return bool Whether the plugin is premium.
+	* @param array $extension The extension to check.
+	* @return bool Whether the extension is premium.
 	*/
-	private static function is_plugin_active( $plugin ) {
+	private static function is_plugin_active( $extension ) {
 		return false;
+	}
+}
+
+
+/**
+ * Holds extensions activation functions for class TSF_Extension_Manager\Extensions.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+trait Extensions_Actions {
+
+	private static function get_active_plugins() {
+
+	}
+
+	private static function do_plugin_activation() {
+
+	}
+
+	private static function do_plugin_deactivation() {
+
 	}
 }

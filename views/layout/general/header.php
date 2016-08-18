@@ -36,15 +36,15 @@ if ( $options ) {
 	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
 	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
 
-	$actions = '<div class="tsfem-top-actions">' . $account . '</div>';
+	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
 } else {
 	$info = __( 'Add more powerful SEO features to your website. To get started, use one of the options below.', 'the-seo-framework-extension-manager' );
-	$about = '<div class="tsfem-top-about tsfem-about-activation"><div>' . esc_html( $info ) . '</div></div>';
+	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . esc_html( $info ) . '</div></div>';
 }
 
 ?>
-<section class="tsfem-top-wrap">
+<section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap">
 	<?php echo $about . $actions; ?>
-	<div class="tsfem-title"><span class="tsfem-logo"></span><header><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></header></div>
+	<div class="tsfem-title tsfem-flex tsfem-flex-row"><span class="tsfem-logo"></span><header><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></header></div>
 </section>
 <?php

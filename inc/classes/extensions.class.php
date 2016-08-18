@@ -51,7 +51,7 @@ if ( tsf_extension_manager()->is_tsf_extension_manager_page() ) {
  * @final Please don't extend this.
  */
 final class Extensions extends Secure {
-	use Extensions_i18n, Extensions_Properties, Extensions_Layout;
+	use Extensions_i18n, Extensions_Properties, Extensions_Actions, Extensions_Layout;
 
 	/**
 	 * Sets up class variables.
@@ -63,6 +63,10 @@ final class Extensions extends Secure {
 		switch ( self::get_property( '_type' ) ) :
 			case 'overview' :
 				static::$header = array();
+				static::$plugins = static::get_plugins();
+				break;
+
+			case 'check' :
 				static::$plugins = static::get_plugins();
 				break;
 
@@ -93,6 +97,12 @@ final class Extensions extends Secure {
 				case 'overview' :
 					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', 'overview' );
+					static::set_up_variables();
+					break;
+
+				case 'check' :
+					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					self::set( '_type', 'check' );
 					static::set_up_variables();
 					break;
 
@@ -127,11 +137,23 @@ final class Extensions extends Secure {
 
 		switch ( $type ) :
 			case 'header' :
-				return static::get_header();
+				return static::get_layout_header();
 				break;
 
 			case 'content' :
-				return static::get_content();
+				return static::get_layout_content();
+				break;
+
+			case 'check-active' :
+				return static::get_active_plugins();
+				break;
+
+			case 'do-activation' :
+				return static::do_plugin_activation();
+				break;
+
+			case 'do-deactivation' :
+				return static::do_plugin_deactivation();
 				break;
 
 			default :

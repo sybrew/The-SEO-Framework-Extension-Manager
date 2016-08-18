@@ -50,7 +50,7 @@ trait Extensions_Layout {
 	 *
 	 * @return string The extensions overview header.
 	 */
-	private static function get_header() {
+	private static function get_layout_header() {
 
 		$output = '';
 
@@ -70,7 +70,7 @@ trait Extensions_Layout {
 	 *
 	 * @return string The extensions overview content.
 	 */
-	private static function get_content() {
+	private static function get_layout_content() {
 
 		$output = '';
 
@@ -99,11 +99,11 @@ trait Extensions_Layout {
 			if ( ! ( isset( $plugin['slug'] ) && isset( $plugin['type'] ) && isset( $plugin['name'] ) ) )
 				continue;
 
-			$wrap = '<div class="tsfem-plugin-icon-wrap">' . static::make_plugin_list_icon( $plugin ) . '</div>';
+			$wrap = '<div class="tsfem-plugin-icon-wrap tsfem-flex-nogrowshrink">' . static::make_plugin_list_icon( $plugin ) . '</div>';
 			$wrap .= '<div class="tsfem-plugin-about-wrap">' . static::make_plugin_list_about( $plugin ) . '</div>';
 			$wrap .= '<div class="tsfem-plugin-description-wrap">' . static::make_plugin_list_description( $plugin ) . '</div>';
 
-			$output .= sprintf( '<div class="tsfem-plugin-entry" id="%s">%s</div>', esc_attr( $id ), $wrap );
+			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-row" id="%s">%s</div>', esc_attr( $id ), $wrap );
 		}
 
 		return $output;
@@ -188,7 +188,7 @@ trait Extensions_Layout {
 		$type = 'free' === $plugin['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
 
-		return  '<div class="tsfem-extension-header">' . $title . $type . '</div>';
+		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
 
 	/**
@@ -223,7 +223,7 @@ trait Extensions_Layout {
 			$output .= static::get_plugin_button_form( $plugin['slug'], $button['type'], $button['disabled'] );
 		endforeach;
 
-		return sprintf( '<div class="tsfem-extension-actions-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-extension-actions-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
 
 	/**
