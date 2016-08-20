@@ -152,7 +152,7 @@ class Core {
 				break;
 
 			case $this->request_name['enable-feed'] :
-				$success = $this->update_option( '_enable_feed', true );
+				$success = $this->update_option( '_enable_feed', true, 'regular', false );
 				$code = $success ? 702 : 703;
 				$this->set_error_notice( array( $code => '' ) );
 				break;
@@ -751,7 +751,13 @@ class Core {
 
 		$this->initialize_option_update_instance( $type );
 
+	 	if ( empty( $options['_instance'] ) && '_instance' !== $option )
+			wp_die( 'Supply instance key before updating other options.' );
+
 		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+
+		$key = '_instance' === $option ? $value : $options['_instance'];
+		$this->set_options_instance( $options, $key );
 
 		if ( false === $this->verify_option_update_instance( $kill ) )
 			return false;
@@ -799,6 +805,11 @@ class Core {
 
 		$this->initialize_option_update_instance( $type );
 
+	 	if ( empty( $options['_instance'] ) )
+			wp_die( 'Supply instance key before updating other options.' );
+
+		$this->set_options_instance( $options, $options['_instance'] );
+
 		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		if ( false === $this->verify_option_update_instance( $kill ) )
@@ -815,7 +826,37 @@ class Core {
 	 * @return string The hashed option.
 	 */
 	protected function get_options_instance() {
-		return $this->get_option( $this->get_option( '_instance' ) );
+		return get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
+	}
+
+	/**
+	 * Updates verification instance option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $value The option value.
+	 * @param string $key Optional. The options key. Must be supplied when activating account.
+	 * @return bool True on success, false on failure.
+	 */
+	protected function update_options_instance( $value, $key = '' ) {
+
+		$key = $key ? $key : $this->get_option( '_instance' );
+
+		return update_option( 'tsfem_i_' . $key, $value );
+	}
+
+	/**
+	 * Deletes option instance on account deactivation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	protected function delete_options_instance() {
+
+		delete_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
+
+		return true;
 	}
 
 	/**
@@ -823,20 +864,21 @@ class Core {
 	 * This prevents users from altering the options from outside this plugin.
 	 *
 	 * @since 1.0.0
-	 * @param array $options The options to hash.
 	 *
+	 * @param array $options The options to hash.
+	 * @param string $key The instance key, needs to be supplied on plugin activation.
 	 * @return bool True on success, false on failure.
 	 */
-	protected function set_options_instance( $options ) {
+	protected function set_options_instance( $options, $key = '' ) {
 
-		if ( empty( $options['instance'] ) )
+		if ( empty( $options['_instance'] ) )
 			return false;
 
 		$_options = serialize( $options );
-		$hash = $this->make_hash( $_options, 'auth' );
+		$hash = $this->make_hash( $_options );
 
 		if ( $hash ) {
-			$update = update_option( $options['instance'], $hash );
+			$update = $this->update_options_instance( $hash, $key );
 
 			if ( false === $update ) {
 				$this->set_error_notice( array( 7001 => '' ) );
@@ -847,21 +889,6 @@ class Core {
 			$this->set_error_notice( array( 7002 => '' ) );
 			return false;
 		}
-	}
-
-	/**
-	 * Deletes option instance on account deactivation.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True on success, false on failure.
-	 */
-	protected function delete_options_instance() {
-
-		$instance = $this->get_option( '_instance' );
-		delete_option( $instance );
-
-		return true;
 	}
 
 	/**
@@ -894,7 +921,7 @@ class Core {
 	 * @param string $data The data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
 	 */
-	public function verify_options( $data ) {
+	public function verify_options_hash( $data ) {
 		return hash_equals( $this->make_hash( $data ), $this->get_options_instance() );
 	}
 
@@ -905,7 +932,7 @@ class Core {
 	 *
 	 * @param string $type What type of update this is, accepts 'instance' and 'regular'.
 	 */
-	protected function initialize_option_update_instance( $type = '' ) {
+	protected function initialize_option_update_instance( $type = 'regular' ) {
 
 		if ( 'instance' === $type ) {
 			$type = 'update_option_instance';
@@ -937,7 +964,7 @@ class Core {
 
 		$verify = SecureOption::verified_option_update();
 
-		if ( false === $verify && $kill )
+		if ( $kill && false === $verify )
 			$this->kill_options();
 
 		SecureOption::reset();

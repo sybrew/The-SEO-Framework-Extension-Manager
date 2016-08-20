@@ -55,8 +55,6 @@ class Panes extends API {
 		$output = '';
 
 		$feed_enabled = $this->get_option( '_enable_feed', false );
-		//$feed_enabled = false;
-		//$this->update_option( '_enable_feed', false );
 
 		if ( $feed_enabled ) {
 			$output = $this->get_trends_output();
@@ -206,7 +204,7 @@ class Panes extends API {
 						'type' => 'unknown',
 					);
 				} else {
-					$type = $this->update_option( '_enable_feed', true ) ? 'success' : 'error';
+					$type = $this->update_option( '_enable_feed', true, 'regular', false ) ? 'success' : 'error';
 
 					if ( 'success' === $type ) {
 						$results = array(

@@ -58,7 +58,7 @@ function can_do_tsf_extension_manager_settings() {
  */
 add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
 if ( isset( TSF_EXTENSION_MANAGER_SITE_OPTIONS['_instance'] ) )
-	add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+	add_filter( 'pre_update_option_tsfem_i_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**

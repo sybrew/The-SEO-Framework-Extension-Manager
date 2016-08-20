@@ -103,7 +103,7 @@ final class SecureOption extends Secure {
 	public static function set_update_instance( $instance, $bits ) {
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'update_options' :
+			case 'update_option' :
 			case 'update_option_instance' :
 				static::$_instance = array( $instance, $bits );
 				return true;
@@ -132,7 +132,7 @@ final class SecureOption extends Secure {
 
 		$type = self::get_property( '_type' );
 
-		if ( empty( self::$_instance ) ) {
+		if ( empty( self::$_instance ) || empty( $type ) ) {
 			self::reset();
 			wp_die( '<code>' . esc_html( $option ) . '</code> is a protected option.' );
 		}
@@ -153,9 +153,9 @@ final class SecureOption extends Secure {
 			//* Always update instance before updating options when deactivating.
 			if ( 'update_option_instance' === $type ) {
 				$verified = true;
-			} else {
+			} elseif ( 'update_option' === $type ) {
 				$options = get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-				if ( tsf_extension_manager()->verify_options( serialize( $options ) ) ) {
+				if ( tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
 					$verified = true;
 				} else {
 					self::reset();

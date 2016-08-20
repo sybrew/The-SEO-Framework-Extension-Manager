@@ -257,7 +257,6 @@ class AccountActivation extends Panes {
 		$success = $this->update_option_multi( $options );
 
 		if ( $success ) {
-			$this->set_options_instance( $options );
 			$this->set_error_notice( array( 601 => '' ) );
 			return true;
 		} else {

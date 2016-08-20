@@ -67,7 +67,7 @@ final class Trends {
 		if ( ! function_exists( 'simplexml_load_string' ) )
 			return -1;
 
-		$transient_name = 'latest-seo-feed-transient';
+		$transient_name = 'tsfem_latest_seo_feed';
 		$output = get_transient( $transient_name );
 
 		if ( false === $output ) {
