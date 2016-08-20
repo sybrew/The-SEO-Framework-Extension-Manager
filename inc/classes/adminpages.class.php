@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-class AdminPages extends Activation {
+class AdminPages extends AccountActivation {
 	use Enclose, Construct_Sub;
 
 	/**
@@ -400,9 +400,7 @@ class AdminPages extends Activation {
 	 * @since 1.0.0
 	 */
 	public function output_theme_color_meta() {
-		echo '<meta name="theme-color" content="#0ebfe9" />';
-		echo '<meta name="msapplication-navbutton-color" content="#0ebfe9" />';
-		echo '<meta name="apple-mobile-web-app-status-bar-style" content="#0ebfe9" />';
+		$this->get_view( 'layout/pages/meta' );
 	}
 
 	/**

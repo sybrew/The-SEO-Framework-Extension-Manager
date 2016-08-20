@@ -71,7 +71,7 @@ final class Trends {
 		$output = get_transient( $transient_name );
 
 		if ( false === $output ) {
-			//* Google Webmasters official blog link.
+			//* Google Webmasters official blog feed.
 			$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
 			$http_args = array(
@@ -110,41 +110,41 @@ final class Trends {
 
 				$found = false;
 				//* Filter terms.
-				foreach ( $object->category as $category ) {
-					$term = isset( $category->{0}['term'] ) ? $category->{0}['term']->__toString() : '';
-					if ( ! in_array( $term, array( 'search results', 'crawling and indexing', 'general tips' ), true ) ) {
+				foreach ( $object->category as $category ) :
+					//* PHP7+ must convert to array...
+					$term = (array) $category;
+
+					$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
+					if ( $term && in_array( $term, array( 'search results', 'crawling and indexing', 'general tips' ), true ) ) {
 						$found = true;
 						break;
 					}
 					continue;
-				}
+				endforeach;
 				unset( $category );
 				if ( false === $found )
 					continue;
 
-				//* Fetch link.
 				$link = '';
-				foreach ( $object->link as $link_object ) {
-
+				//* Fetch link.
+				foreach ( $object->link as $link_object ) :
 					//* PHP7+ must convert to array...
 					$link_object = (array) $link_object;
-					$link_object = ! empty( $link_object['@attributes'] ) ? $link_object['@attributes'] : '';
 
-					$type = isset( $link_object['type'] ) ? $link_object['type'] : '';
+					$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
 					if ( 'text/html' === $type ) {
 
-						$rel = isset( $link_object['rel'] ) ? $link_object['rel'] : '';
+						$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
 						if ( 'replies' === $rel ) {
 
-							$link = isset( $link_object['href'] ) ? $link_object['href'] : '';
-
+							$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
 							if ( $link )
 								$link = strtok( $link, '#' );
 
 							break;
 						}
 					}
-				}
+				endforeach;
 				unset( $link_object );
 				if ( empty( $link ) )
 					continue;
@@ -160,8 +160,9 @@ final class Trends {
 				$content = $content ? wp_strip_all_tags( $content ) : '';
 				unset( $object );
 
+				$length = 250;
 				//* Do not care for the current length. Always trim.
-				$content = the_seo_framework()->trim_excerpt( $content, 251, 250 );
+				$content = the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
 				$content = the_seo_framework()->escape_description( $content );
 
 				//* No need for translations, it's English only.

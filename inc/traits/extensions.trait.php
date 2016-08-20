@@ -24,52 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Holds i18n data functions for class TSF_Extension_Manager\Extensions.
- *
- * @since 1.0.0
- * @access private
- */
-trait Extensions_i18n {
-
-	/**
-	* Initializes i18n.
-	*
-	* @since 1.0.0
-	* @staticvar array $i18n
-	*
-	* @return array $i18n The internationalization data.
-	*/
-	private static function obtain_i18n() {
-
-		static $i18n = null;
-
-		if ( isset( $i18n ) )
-			return $i18n;
-
-		return $i18n = array(
-			'free'       => __( 'Free', 'the-seo-framework-extension-manager' ),
-			'premium'    => __( 'Premium', 'the-seo-framework-extension-manager' ),
-			'activate'   => __( 'Activate', 'the-seo-framework-extension-manager' ),
-			'deactivate' => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
-		);
-	}
-
-	/**
-	* Returns i18n value from key.
-	*
-	* @since 1.0.0
-	*
-	* @return string The i18n data.
-	*/
-	private static function get_i18n( $key = '' ) {
-
-		$i18n = static::obtain_i18n();
-
-		return isset( $i18n[ $key ] ) ? $i18n[ $key ] : '';
-	}
-}
-
-/**
  * Holds plugin data check functions for class TSF_Extension_Manager\Extensions.
  *
  * @since 1.0.0
@@ -120,6 +74,7 @@ trait Extensions_Properties {
 				'num_ratings' => '30',
 				'requires' => '4.5.2',
 				'active_installs' => '0',
+				'checksum' => '',
 			),
 			'test-plugin-free2' => array(
 				'slug' => 'test-plugin-free2',
@@ -145,6 +100,7 @@ trait Extensions_Properties {
 				'num_ratings' => '40',
 				'requires' => '4.5.6',
 				'active_installs' => '50',
+				'checksum' => '',
 			),
 			'test-plugin-premium' => array(
 				'slug' => 'test-plugin-premium',
@@ -170,6 +126,7 @@ trait Extensions_Properties {
 				'num_ratings' => '50',
 				'requires' => '4.5.0',
 				'active_installs' => '500',
+				'checksum' => '',
 			),
 			'test-plugin-premium2' => array(
 				'slug' => 'test-plugin-premium2',
@@ -195,6 +152,7 @@ trait Extensions_Properties {
 				'num_ratings' => '20',
 				'requires' => '4.4.8',
 				'active_installs' => '5000',
+				'checksum' => '',
 			),
 			'test-network' => array(
 				'slug' => 'test-network',
@@ -220,6 +178,7 @@ trait Extensions_Properties {
 				'num_ratings' => '80',
 				'requires' => '4.3.8',
 				'active_installs' => '4200',
+				'checksum' => '',
 			),
 		);
 	}
@@ -270,19 +229,44 @@ trait Extensions_Properties {
  * Holds extensions activation functions for class TSF_Extension_Manager\Extensions.
  *
  * @since 1.0.0
+ * @uses trait TSF_Extension_Manager\Extensions_Properties
  * @access private
  */
 trait Extensions_Actions {
 
-	private static function get_active_plugins() {
+	private static function do_plugin_checksum( $plugin, $instance, $bits ) {
+
+		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
 
 	}
 
-	private static function do_plugin_activation() {
+	private static function do_plugin_checksum_verification( $plugin, $instance, $bits ) {
+
+		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
 
 	}
 
-	private static function do_plugin_deactivation() {
+	private static function get_active_plugins( $placeholder = array(), $instance, $bits ) {
+
+		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+
+	}
+
+	private static function do_plugin_activation( $plugin, $instance, $bits ) {
+
+		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+
+		$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['activate-ext'] );
+		$nonce = wp_nonce_field( self::$nonce_action['activate-ext'], self::$nonce_name, true, false );
+
+	}
+
+	private static function do_plugin_deactivation( $plugin, $instance, $bits ) {
+
+		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+
+		$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['deactivate-ext'] );
+		$nonce = wp_nonce_field( self::$nonce_action['deactivate-ext'], self::$nonce_name, true, false );
 
 	}
 }

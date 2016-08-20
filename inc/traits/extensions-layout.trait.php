@@ -23,6 +23,54 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
+/**
+* Holds i18n data functions for class TSF_Extension_Manager\Extensions.
+*
+* @since 1.0.0
+* @access private
+*/
+trait Extensions_i18n {
+
+	/**
+	 * Initializes i18n.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $i18n
+	 *
+	 * @return array $i18n The internationalization data.
+	 */
+	private static function obtain_i18n() {
+
+		static $i18n = null;
+
+		if ( isset( $i18n ) )
+			return $i18n;
+
+		return $i18n = array(
+			'free'       => __( 'Free', 'the-seo-framework-extension-manager' ),
+			'premium'    => __( 'Premium', 'the-seo-framework-extension-manager' ),
+			'activate'   => __( 'Activate', 'the-seo-framework-extension-manager' ),
+			'deactivate' => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
+		);
+	}
+
+	/**
+	 * Returns i18n value from key.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The i18n data.
+	 */
+	private static function get_i18n( $key = '' ) {
+
+		$i18n = static::obtain_i18n();
+
+		return isset( $i18n[ $key ] ) ? $i18n[ $key ] : '';
+	}
+}
+
 /**
  * Holds Layout functions for class TSF_Extension_Manager\Extensions.
  *

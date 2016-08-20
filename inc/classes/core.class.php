@@ -157,21 +157,36 @@ class Core {
 				$this->set_error_notice( array( $code => '' ) );
 				break;
 
+			case $this->request_name['activate-ext'] :
+				$success = $this->activate_extension( $options );
+				$code = $success ? 704 : 705; // @todo var_dump() set errors.
+				$this->set_error_notice( array( $code => '' ) );
+				break;
+
+			case $this->request_name['deactivate-ext'] :
+				$success = $this->deactivate_extension( $options );
+				$code = $success ? 706 : 707; // @todo var_dump() set errors.
+				$this->set_error_notice( array( $code => '' ) );
+				break;
+
 			default:
-				$this->set_error_notice( array( 704 => '' ) );
+				$this->set_error_notice( array( 708 => '' ) );
 				break;
 		endswitch;
 
 		//* Adds action to the URI. It's only used to visualize what has happened.
-		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, array( 'did-' . $options['action'] => 'true' ) );
+		$args = WP_DEBUG ? array( 'did-' . $options['action'] => 'true' ) : array();
+		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
 
 	/**
-	 * Checks the Activation page nonce. Returns false if nonce can't be found or if user isn't allowed to perform nonce.
+	 * Checks the Activation page nonce. Returns false if nonce can't be found
+	 * or if user isn't allowed to perform nonce.
 	 * Performs wp_die() when nonce verification fails.
 	 *
-	 * Never run a sensitive function when it's returning false. This means no nonce can be verified.
+	 * Never run a sensitive function when it's returning false. This means no
+	 * nonce can or has been been verified.
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
@@ -199,7 +214,7 @@ class Core {
 			 * @since 1.0.0
 			 */
 			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
-				return $validated = false;
+				return $validated[ $key ] = false;
 		}
 
 		check_admin_referer( $this->nonce_action[ $key ], $this->nonce_name );
@@ -281,7 +296,7 @@ class Core {
 			case 103 :
 			case 104 :
 			case 701 :
-			case 704 :
+			case 708 :
 				$message = esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -354,6 +369,12 @@ class Core {
 			case 801 :
 				$message = esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
+				break;
+
+			case 7001 :
+			case 7002 :
+				$message = esc_html__( 'An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
 				break;
 
 			case 9001 :
@@ -709,9 +730,11 @@ class Core {
 	 *
 	 * @param string $option The option name.
 	 * @param mixed $value The option value.
+	 * @param string $type The option update type, accepts 'instance' and 'regular'.
+	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
-	protected function update_option( $option, $value ) {
+	protected function update_option( $option, $value, $type = 'instance', $kill = true ) {
 
 		if ( ! $option )
 			return false;
@@ -726,7 +749,14 @@ class Core {
 
 		$this->has_run_update_option();
 
-		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$this->initialize_option_update_instance( $type );
+
+		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+
+		if ( false === $this->verify_option_update_instance( $kill ) )
+			return false;
+
+		return $success;
 	}
 
 	/**
@@ -737,9 +767,11 @@ class Core {
 	 * @param array $options : {
 	 *		$option_name => $value,
 	 * }
+	 * @param string $type The option update type, accepts 'instance' and 'regular'.
+	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	protected function update_option_multi( array $options = array() ) {
+	protected function update_option_multi( array $options = array(), $type = 'instance', $kill = true ) {
 
 		static $run = false;
 
@@ -765,6 +797,167 @@ class Core {
 		$options = wp_parse_args( $options, $_options );
 		$run = true;
 
-		return update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$this->initialize_option_update_instance( $type );
+
+		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+
+		if ( false === $this->verify_option_update_instance( $kill ) )
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * Returns verification instance option.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The hashed option.
+	 */
+	protected function get_options_instance() {
+		return $this->get_option( $this->get_option( '_instance' ) );
+	}
+
+	/**
+	 * Binds options to an unique hash and saves it in a comparison option.
+	 * This prevents users from altering the options from outside this plugin.
+	 *
+	 * @since 1.0.0
+	 * @param array $options The options to hash.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function set_options_instance( $options ) {
+
+		if ( empty( $options['instance'] ) )
+			return false;
+
+		$_options = serialize( $options );
+		$hash = $this->make_hash( $_options, 'auth' );
+
+		if ( $hash ) {
+			$update = update_option( $options['instance'], $hash );
+
+			if ( false === $update ) {
+				$this->set_error_notice( array( 7001 => '' ) );
+				return false;
+			}
+			return true;
+		} else {
+			$this->set_error_notice( array( 7002 => '' ) );
+			return false;
+		}
+	}
+
+	/**
+	 * Deletes option instance on account deactivation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function delete_options_instance() {
+
+		$instance = $this->get_option( '_instance' );
+		delete_option( $instance );
+
+		return true;
+	}
+
+	/**
+	 * Returns hash key based on sha256 if available. Otherwise it will fall back
+	 * to md5 (wp_hash()). Hash will alter every 24 hours.
+	 *
+	 * @since 1.0.0
+	 * @see @link https://developer.wordpress.org/reference/functions/wp_hash/
+	 *
+	 * @param string $data The data to hash.
+	 * @return string The hash key.
+	 */
+	protected function make_hash( $data ) {
+
+		if ( in_array( 'sha256', hash_algos(), true ) ) {
+			$salt = wp_salt( 'auth' );
+			$hash = hash_hmac( 'sha256', $data, $salt );
+		} else {
+			$hash = wp_hash( $data, 'auth' );
+		}
+
+		return $hash;
+	}
+
+	/**
+	 * Verifies options hash
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $data The data to compare hash with.
+	 * @return bool True when hash passes, false on failure.
+	 */
+	public function verify_options( $data ) {
+		return hash_equals( $this->make_hash( $data ), $this->get_options_instance() );
+	}
+
+	/**
+	 * Initializes option update instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type What type of update this is, accepts 'instance' and 'regular'.
+	 */
+	protected function initialize_option_update_instance( $type = '' ) {
+
+		if ( 'instance' === $type ) {
+			$type = 'update_option_instance';
+		} elseif ( 'regular' === $type ) {
+			$type = 'update_option';
+		}
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		SecureOption::initialize( $type, $_instance, $bits );
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+		SecureOption::set_update_instance( $_instance, $bits );
+
+	}
+
+	/**
+	 * Verifies if update went as expected.
+	 * Deletes plugin options if data has been adjusted.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $kill Whether to kill plugin options.
+	 * @return bool True on success, false on failure.
+	 */
+	protected function verify_option_update_instance( $kill = true ) {
+
+		$verify = SecureOption::verified_option_update();
+
+		if ( false === $verify && $kill )
+			$this->kill_options();
+
+		SecureOption::reset();
+
+		return $verify;
+	}
+
+	/**
+	 * Deletes all plugin options when an options breach has been spotted.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function kill_options() {
+
+		$success = array();
+		$success[] = $this->delete_options_instance();
+		$success[] = delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+
+		return ! in_array( false, $success, true );
 	}
 }

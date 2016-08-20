@@ -48,15 +48,22 @@ register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
  * @since 1.0.0
  */
 function tsf_extension_manager_check_php() {
+
+	$goback = 'Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?';
+
 	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50400 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die( 'The SEO Framework Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
+	} elseif ( $GLOBALS['wp_db_version'] < 35700 ) {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+		wp_die( 'The SEO Framework Extension Manager requires WordPress 4.4 or later. Sorry about that!<br>
 				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
 	}
 }
 
 /**
- * CDN Cache buster. 3 to 4 point.
+ * CDN Cache buster. 3 point.
  * @since 1.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_VERSION', '0.9.0' );
@@ -119,19 +126,19 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**
  * Plugin locale 'the-seo-framework-extension-manager'
- * Check for files located in plugin folder the-seo-framework-extension-manager/language/
+ * Locale folder the-seo-framework-extension-manager/language/
  * @since 1.0.0
+ *
+ * @param bool $ignore Whether to load locale outside of the admin area.
  */
-function init_tsf_extension_manager_locale() {
-	load_plugin_textdomain(
-		'the-seo-framework-extension-manager',
-		~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~
-		- ~ - ' <3<3<3<3<3<3<3<3<3<3  ' - ~ -
-		- ~ - 'Hi plugin validator! :D' - ~ -
-		- ~ - ' <3<3<3<3<3<3<3<3<3<3  ' - ~ -
-		~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + ~ + 2,
-		basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
-	);
+function init_tsf_extension_manager_locale( $ignore = false ) {
+	if ( is_admin() || $ignore ) {
+		load_plugin_textdomain(
+			'the-seo-framework-extension-manager',
+			false,
+			basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
+		);
+	}
 }
 
 /**

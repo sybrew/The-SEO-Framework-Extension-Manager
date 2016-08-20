@@ -54,9 +54,9 @@ class Panes extends API {
 
 		$output = '';
 
-		//$feed_enabled = $this->get_option( '_enable_feed', false );
-		$feed_enabled = false;
-		$this->update_option( '_enable_feed', false );
+		$feed_enabled = $this->get_option( '_enable_feed', false );
+		//$feed_enabled = false;
+		//$this->update_option( '_enable_feed', false );
 
 		if ( $feed_enabled ) {
 			$output = $this->get_trends_output();
@@ -330,7 +330,7 @@ class Panes extends API {
 		Extensions::set_nonces( 'request_name', $this->request_name );
 		Extensions::set_nonces( 'nonce_action', $this->nonce_action );
 
-		Extensions::set_account( $this->get_subscription_status() );
+		Extensions::set_account( 'account', $this->get_subscription_status() );
 
 		$header = Extensions::get( 'header' );
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );

@@ -1,7 +1,7 @@
 <?php
 defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
 
-$type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
+//$type = $this->is_plugin_in_network_mode() ? __( 'network', 'the-seo-framework-extension-manager' ) : __( 'website', 'the-seo-framework-extension-manager' );
 
 ?>
 <div class="tsfem-connect-option tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-connect-highlighted">

@@ -48,6 +48,18 @@ function can_do_tsf_extension_manager_settings() {
 	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
 }
 
+/**
+ * Prevent option handling outside of the plugin's scope.
+ * Warning: When you remove these filters, the plugin will delete all its options on first sight.
+ *          This essentially means it will be reset to its initial state.
+ *
+ * @access private
+ * @since 1.0.0
+ */
+add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+if ( isset( TSF_EXTENSION_MANAGER_SITE_OPTIONS['_instance'] ) )
+	add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+
 add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**
  * Loads TSF_Extension_Manager_Load class when in admin.
@@ -117,9 +129,8 @@ function can_load_tsf_extension_manager() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( is_admin() )
-		if ( function_exists( 'the_seo_framework_version' ) && version_compare( the_seo_framework_version(), '2.7', '>=' ) )
-			return $can_load = (bool) apply_filters( 'tsf_extension_manager_enabled', true );
+	if ( function_exists( 'the_seo_framework_version' ) && version_compare( the_seo_framework_version(), '2.7', '>=' ) )
+		return $can_load = (bool) apply_filters( 'tsf_extension_manager_enabled', true );
 
 	return $can_load = false;
 }

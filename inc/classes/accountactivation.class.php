@@ -30,13 +30,13 @@ defined( 'ABSPATH' ) or die;
 tsf_extension_manager_load_trait( 'activation' );
 
 /**
- * Class TSF_Extension_Manager\Activation
+ * Class TSF_Extension_Manager\AccountActivation
  *
  * Holds plugin activation functions.
  *
  * @since 1.0.0
  */
-class Activation extends Panes {
+class AccountActivation extends Panes {
 	use Enclose, Construct_Sub, Activation_Data;
 
 	/**
@@ -245,17 +245,19 @@ class Activation extends Panes {
 	 */
 	protected function do_free_activation() {
 
-		$success = $this->update_option_multi( array(
+		$options = array(
 			'api_key'             => '',
 			'activation_email'    => '',
 			'_activation_level'   => 'Free',
 			'_activation_expires' => '',
 			'_activated'          => 'Activated',
-			'_instance'           => false,
+			'_instance'           => $this->get_activation_instance( false ),
 			'_data'               => array(),
-		) );
+		);
+		$success = $this->update_option_multi( $options );
 
 		if ( $success ) {
+			$this->set_options_instance( $options );
 			$this->set_error_notice( array( 601 => '' ) );
 			return true;
 		} else {
@@ -325,6 +327,7 @@ class Activation extends Panes {
 
 		$success = array();
 
+		$success[] = $this->delete_options_instance();
 		$success[] = $this->update_option( 'api_key', '' );
 		$success[] = $this->update_option( 'activation_email', '' );
 		$success[] = $this->update_option( '_activation_level', '' );
@@ -459,7 +462,7 @@ class Activation extends Panes {
 
 		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;
 
-		$success = $this->update_option( '_data', $data );
+		$success = $this->update_option( '_data', $data, 'instance', false );
 
 		return $success;
 	}

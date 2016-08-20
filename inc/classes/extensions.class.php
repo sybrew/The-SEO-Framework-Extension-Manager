@@ -36,8 +36,9 @@ tsf_extension_manager_load_trait( 'extensions' );
 if ( tsf_extension_manager()->is_tsf_extension_manager_page() ) {
 	tsf_extension_manager_load_trait( 'extensions-layout' );
 } else {
-	//* Empty dummy trait.
+	//* Empty dummy traits.
 	trait Extensions_Layout { }
+	trait Extensions_i18n { }
 }
 
 /**
@@ -58,7 +59,7 @@ final class Extensions extends Secure {
 	 *
 	 * @since 1.0.0
 	 */
-	private function set_up_variables() {
+	private static function set_up_variables() {
 
 		switch ( self::get_property( '_type' ) ) :
 			case 'overview' :
@@ -69,7 +70,6 @@ final class Extensions extends Secure {
 			case 'check' :
 				static::$plugins = static::get_plugins();
 				break;
-
 		endswitch;
 
 	}
@@ -81,7 +81,7 @@ final class Extensions extends Secure {
 	 *
 	 * @param string $type Required. The instance type.
 	 * @param string $instance Required. The instance key.
-	 * @param int $bit Required. The instance bit.
+	 * @param array $bits Required. The instance bits.
 	 */
 	public static function initialize( $type = '', $instance = '', $bits = null ) {
 
@@ -103,6 +103,12 @@ final class Extensions extends Secure {
 				case 'check' :
 					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', 'check' );
+					static::set_up_variables();
+					break;
+
+				case 'activation' :
+					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					self::set( '_type', 'activation' );
 					static::set_up_variables();
 					break;
 
@@ -144,7 +150,7 @@ final class Extensions extends Secure {
 				return static::get_layout_content();
 				break;
 
-			case 'check-active' :
+			case 'get-active' :
 				return static::get_active_plugins();
 				break;
 
