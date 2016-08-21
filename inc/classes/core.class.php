@@ -135,7 +135,7 @@ class Core {
 				break;
 
 			case $this->request_name['deactivate'] :
-				if ( false === $this->is_plugin_connected() ) {
+				if ( false === $this->is_plugin_activated() ) {
 					$this->set_error_notice( array( 701 => '' ) );
 					break;
 				} elseif ( false === $this->is_premium_user() ) {
@@ -734,12 +734,13 @@ class Core {
 	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
-	protected function update_option( $option, $value, $type = 'instance', $kill = true ) {
+	protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
 
 		if ( ! $option )
 			return false;
 
-		$options = $this->get_all_options();
+		$_options = $this->get_all_options();
+		$options = $_options;
 
 		//* If option is unchanged, return true.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
@@ -752,15 +753,22 @@ class Core {
 		$this->initialize_option_update_instance( $type );
 
 	 	if ( empty( $options['_instance'] ) && '_instance' !== $option )
-			wp_die( 'Supply instance key before updating other options.' );
+			wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 
 		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		$key = '_instance' === $option ? $value : $options['_instance'];
 		$this->set_options_instance( $options, $key );
 
-		if ( false === $this->verify_option_update_instance( $kill ) )
+		if ( false === $this->verify_option_update_instance( $kill ) ) {
+			$this->set_error_notice( array( 7001 => '' ) );
+
+			//* Revert option.
+			if ( false === $kill )
+				update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+
 			return false;
+		}
 
 		return $success;
 	}
@@ -777,7 +785,7 @@ class Core {
 	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	protected function update_option_multi( array $options = array(), $type = 'instance', $kill = true ) {
+	protected function update_option_multi( array $options = array(), $type = 'instance', $kill = false ) {
 
 		static $run = false;
 
@@ -806,14 +814,21 @@ class Core {
 		$this->initialize_option_update_instance( $type );
 
 	 	if ( empty( $options['_instance'] ) )
-			wp_die( 'Supply instance key before updating other options.' );
+			wp_die( 'Error 7009: Supply an instance key before updating other options.' );
 
 		$this->set_options_instance( $options, $options['_instance'] );
 
 		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
-		if ( false === $this->verify_option_update_instance( $kill ) )
+		if ( false === $this->verify_option_update_instance( $kill ) ) {
+			$this->set_error_notice( array( 7002 => '' ) );
+
+			//* Revert option.
+			if ( false === $kill )
+				update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+
 			return false;
+		}
 
 		return true;
 	}
@@ -893,7 +908,7 @@ class Core {
 
 	/**
 	 * Returns hash key based on sha256 if available. Otherwise it will fall back
-	 * to md5 (wp_hash()). Hash will alter every 24 hours.
+	 * to md5 (wp_hash()).
 	 *
 	 * @since 1.0.0
 	 * @see @link https://developer.wordpress.org/reference/functions/wp_hash/
@@ -960,7 +975,7 @@ class Core {
 	 * @param bool $kill Whether to kill plugin options.
 	 * @return bool True on success, false on failure.
 	 */
-	protected function verify_option_update_instance( $kill = true ) {
+	protected function verify_option_update_instance( $kill = false ) {
 
 		$verify = SecureOption::verified_option_update();
 

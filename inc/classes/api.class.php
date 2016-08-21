@@ -58,7 +58,7 @@ class API extends Core {
 
 		$instance = $this->get_option( '_instance' );
 
-		if ( false === $instance ) {
+		if ( empty( $instance ) ) {
 			$instance = trim( wp_generate_password( 32, false ) );
 
 			if ( $save_option )

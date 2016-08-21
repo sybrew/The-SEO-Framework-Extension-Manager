@@ -114,7 +114,10 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args
+	 * @param array $args : {
+	 *		'licence_key'      => string The license key.
+	 *		'activation_email' => string The activation email.
+ 	 * }
 	 * @return array Request Data option details.
 	 */
 	protected function handle_request( $type = 'status', $args = array() ) {
@@ -138,7 +141,8 @@ class AccountActivation extends Panes {
 				break;
 
 			case 'deactivation' :
-				if ( false === $this->is_plugin_connected() ) {
+				if ( false === $this->is_plugin_activated() ) {
+					$this->kill_options();
 					$this->set_error_notice( array( 103 => '' ) );
 					return false;
 				}
@@ -161,7 +165,7 @@ class AccountActivation extends Panes {
 		);
 
 		$response = $this->get_api_response( $request );
-		$response = $this->handle_response( $type, $response );
+		$response = $this->handle_response( $type, $response, WP_DEBUG );
 
 		return $response;
 	}
@@ -176,7 +180,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function handle_premium_activation( $results ) {
 
-		if ( isset( $results['activated'] ) && true === $results['activated'] && ! empty( $this->get_option( '_activated' ) ) ) {
+		if ( isset( $results['activated'] ) && true === $results['activated'] ) {
 
 			$args = array(
 				'api_key' => $this->activation_key,
@@ -184,7 +188,7 @@ class AccountActivation extends Panes {
 				'_activation_level' => 'Premium',
 			);
 
-			$success = $this->do_activation( $args );
+			$success = $this->do_premium_activation( $args );
 
 			if ( ! $success ) {
 				$this->do_deactivation();
@@ -221,9 +225,11 @@ class AccountActivation extends Panes {
 			//* If option has once been registered, deregister options and return activation status.
 			if ( $this->get_option( '_activated' ) ) {
 
-				$this->do_deactivation();
+				$success = $this->do_deactivation();
 
 				$message = esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . esc_html( $results['activations_remaining'] ) . '.';
+				$message .= $success ? '' : ' ' . esc_html__( 'Something went wrong with the deactivation.', 'the-seo-framework-extension-manager' );
+
 				$this->set_error_notice( array( 501 => $message ) );
 				return true;
 			}
@@ -254,6 +260,7 @@ class AccountActivation extends Panes {
 			'_instance'           => $this->get_activation_instance( false ),
 			'_data'               => array(),
 		);
+
 		$success = $this->update_option_multi( $options );
 
 		if ( $success ) {
@@ -294,7 +301,7 @@ class AccountActivation extends Panes {
 	 * @param array $args The activation arguments.
 	 * @return bool True on success. False on failure.
 	 */
-	protected function do_activation( $args ) {
+	protected function do_premium_activation( $args ) {
 
 		$success = array();
 
@@ -308,8 +315,7 @@ class AccountActivation extends Panes {
 		) );
 
 		//* Fetches and saves extra subscription status data. i.e. '_data'
-		//$success[] = $this->set_remote_subscription_status( true );
-		$success[] = $this->update_extra_subscription_data( true );
+		$success[] = $this->set_remote_subscription_status( true );
 
 		return ! in_array( false, $success, true );
 	}
@@ -323,19 +329,7 @@ class AccountActivation extends Panes {
 	 * @return bool True on success. False on failure.
 	 */
 	protected function do_deactivation() {
-
-		$success = array();
-
-		$success[] = $this->delete_options_instance();
-		$success[] = $this->update_option( 'api_key', '' );
-		$success[] = $this->update_option( 'activation_email', '' );
-		$success[] = $this->update_option( '_activation_level', '' );
-		$success[] = $this->update_option( '_activation_expires', '' );
-		$success[] = $this->update_option( '_activated', 'Deactivated' );
-		$success[] = $this->update_option( '_instance', false );
-		$success[] = $this->update_option( '_data', array() );
-
-		return ! in_array( false, $success, true );
+		return $this->kill_options();
 	}
 
 	/**
@@ -345,7 +339,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @return bool True if the plugin is activated.
 	 */
-	protected function is_plugin_connected() {
+	protected function is_plugin_activated() {
 		return 'Activated' === $this->get_option( '_activated' );
 	}
 

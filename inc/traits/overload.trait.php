@@ -80,7 +80,7 @@ trait Construct_Sub {
 
 /**
  * Holds public magic constructor method and forces a subsconstructor and parent constructor.
- * May only be called once.
+ * May only be called once. @TODO use __CLASS__ to build multiple caches.
  *
  * @since 1.0.0
  * @access private

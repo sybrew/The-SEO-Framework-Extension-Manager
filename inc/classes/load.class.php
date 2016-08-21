@@ -81,7 +81,7 @@ final class Load extends AdminPages {
 	 */
 	public function do_activation_notice() {
 
-		if ( $this->is_plugin_connected() || false === $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
+		if ( $this->is_plugin_activated() || false === $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
 		$text = __( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );

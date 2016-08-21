@@ -367,7 +367,7 @@ class AdminPages extends AccountActivation {
 		?>
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php
-			if ( $this->is_plugin_connected() ) {
+			if ( $this->is_plugin_activated() ) {
 				$this->output_extension_overview_wrapper();
 			} else {
 				$this->output_plugin_connect_wrapper();

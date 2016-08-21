@@ -7,7 +7,7 @@ $actions = '';
 
 if ( $options ) {
 
-	if ( $this->is_plugin_connected() && $this->is_premium_user() ) {
+	if ( $this->is_plugin_activated() && $this->is_premium_user() ) {
 
 		$status = $this->get_subscription_status();
 

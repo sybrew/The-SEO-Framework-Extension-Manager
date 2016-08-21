@@ -46,9 +46,7 @@ trait Extensions_Properties {
 	 * @since 1.0.0
 	 */
 	private static function get_plugins() {
-		//* EXAMPLE. @TODO FETCH LIST EXTERNALLY?
-		//* @TODO SET LINKS BEHIND FIREWALL LINK THROUGH WC API [account validation] (even if free?).
-		//* @TODO use transient cache (expire 1 hour + refresh cache button (with transient 5 minutes)?)
+		//* EXAMPLE. @TODO make real list.
 		return array(
 			'test-plugin-free' => array(
 				'slug' => 'test-plugin-free',
