@@ -51,7 +51,7 @@ if ( tsf_extension_manager()->is_tsf_extension_manager_page() ) {
  * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
  * @final Please don't extend this.
  */
-final class Extensions extends Secure {
+final class Extensions extends Secure_Abstract {
 	use Extensions_i18n, Extensions_Properties, Extensions_Actions, Extensions_Layout;
 
 	/**
@@ -64,11 +64,15 @@ final class Extensions extends Secure {
 		switch ( self::get_property( '_type' ) ) :
 			case 'overview' :
 				static::$header = array();
-				static::$plugins = static::get_plugins();
+				static::$extensions = static::get_extensions();
 				break;
 
 			case 'check' :
-				static::$plugins = static::get_plugins();
+			case 'activation' :
+				static::$extensions = static::get_extensions();
+				break;
+
+			default :
 				break;
 		endswitch;
 
@@ -95,20 +99,10 @@ final class Extensions extends Secure {
 
 			switch ( $type ) :
 				case 'overview' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
-					self::set( '_type', 'overview' );
-					static::set_up_variables();
-					break;
-
 				case 'check' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
-					self::set( '_type', 'check' );
-					static::set_up_variables();
-					break;
-
 				case 'activation' :
 					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
-					self::set( '_type', 'activation' );
+					self::set( '_type', $type );
 					static::set_up_variables();
 					break;
 
@@ -118,7 +112,7 @@ final class Extensions extends Secure {
 
 				default :
 					self::reset();
-					the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct initialization type.' );
+					self::invoke_invalid_type( __METHOD__ );
 					break;
 			endswitch;
 		}
@@ -150,16 +144,12 @@ final class Extensions extends Secure {
 				return static::get_layout_content();
 				break;
 
-			case 'get-active' :
-				return static::get_active_plugins();
+			case 'active-extensions' :
+				return static::get_active_extensions();
 				break;
 
-			case 'do-activation' :
-				return static::do_plugin_activation();
-				break;
-
-			case 'do-deactivation' :
-				return static::do_plugin_deactivation();
+			case 'extensions-checksum' :
+				return static::get_extensions_checksum();
 				break;
 
 			default :
@@ -171,28 +161,50 @@ final class Extensions extends Secure {
 	}
 
 	/**
-	 * Removes items from plugin list based on $what and website conditions.
+	 * Sets instance extension slug to handle.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $plugins The plugin list.
-	 * @param string|array $what What to filter out of the list.
-	 * @return array The leftover plugins.
+	 * @param string $slug The extension slug.
 	 */
-	private static function filter_plugins( array $plugins = array(), $what = 'maybe_network' ) {
+	public static function set_instance_extension_slug( $slug ) {
+
+		self::verify_instance() or die;
+
+		switch ( self::get_property( '_type' ) ) :
+			case 'check' :
+			case 'activation' :
+				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
+				break;
+
+			default :
+				break;
+		endswitch;
+	}
+
+	/**
+	 * Removes items from extension list based on $what and website conditions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $extensions The extension list.
+	 * @param string|array $what What to filter out of the list.
+	 * @return array The leftover extensions.
+	 */
+	private static function filter_extensions( array $extensions = array(), $what = 'maybe_network' ) {
 
 		if ( is_array( $what ) ) {
 			foreach ( $what as $filter )
-				$plugins = static::filter_plugins( $plugins, $filter );
+				$extensions = static::filter_extensions( $extensions, $filter );
 
-			return $plugins;
+			return $extensions;
 		}
 
 		if ( 'maybe_network' === $what ) {
 			$network_mode = tsf_extension_manager()->is_plugin_in_network_mode();
 
 			if ( $network_mode )
-				return $plugins;
+				return $extensions;
 
 			$filters = array( 'network' => '0' );
 		} elseif ( 'network' === $what ) {
@@ -201,6 +213,6 @@ final class Extensions extends Secure {
 			$filters = array( 'network' => '0' );
 		}
 
-		return wp_list_filter( $plugins, $filters, 'AND' );
+		return wp_list_filter( $extensions, $filters, 'AND' );
 	}
 }

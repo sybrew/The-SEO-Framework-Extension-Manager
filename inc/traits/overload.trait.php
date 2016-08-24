@@ -80,7 +80,7 @@ trait Construct_Sub {
 
 /**
  * Holds public magic constructor method and forces a subsconstructor and parent constructor.
- * May only be called once. @TODO use __CLASS__ to build multiple caches.
+ * The constructor may only be called once per class, otherwise the plugin will kill itself.
  *
  * @since 1.0.0
  * @access private
@@ -88,8 +88,13 @@ trait Construct_Sub {
 trait Construct_Master {
 
 	public function __construct() {
+
+		static $count = array();
+
 		//* Don't execute this instance twice.
-		static $count = 0; $count < 1 or die; $count++;
+		$count[ __CLASS__ ] = isset( $count[ __CLASS__ ] ) ? $count[ __CLASS__ ] : 0;
+		$count[ __CLASS__ ] < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
+		$count[ __CLASS__ ]++;
 
 		parent::__construct();
 

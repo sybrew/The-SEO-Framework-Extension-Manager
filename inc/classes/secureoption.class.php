@@ -33,8 +33,7 @@ defined( 'ABSPATH' ) or die;
  * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
  * @final Please don't extend this.
  */
-final class SecureOption extends Secure {
-
+final class SecureOption extends Secure_Abstract {
 
 	/**
 	 * The update action instances.
@@ -75,7 +74,7 @@ final class SecureOption extends Secure {
 
 				default :
 					self::reset();
-					the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct initialization type.' );
+					self::invoke_invalid_type( __METHOD__ );
 					break;
 			endswitch;
 		}

@@ -55,10 +55,12 @@ final class Load extends AdminPages {
 		if ( false === $this->is_tsf_extension_manager_page() || false === $this->can_do_settings() )
 			return;
 
-		if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && WP_HTTP_BLOCK_EXTERNAL === true ) {
-			//* Check if our API endpoint is in the allowed hosts
-			$host = parse_url( $this->get_api_url(), PHP_URL_HOST );
-			if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || stristr( WP_ACCESSIBLE_HOSTS, $host ) === false ) {
+		if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
+
+			$parsed_url = wp_parse_url( $this->get_activation_url() );
+			$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+
+			if ( false === defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
 
 				$warning = '<strong>' . esc_html__( 'Warning!', 'the-seo-framework-extension-manager' ) . '</strong>';
 				/* translators: %1$s: Warning!. %2$s Plugin API host URL. %3$s, WordPress PHP constant. */

@@ -33,7 +33,7 @@ if ( $options ) {
 		$account_text = __( 'Go Premium', 'the-seo-framework-extension-manager' );
 	}
 
-	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
+	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button-primary ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
 	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
 
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';

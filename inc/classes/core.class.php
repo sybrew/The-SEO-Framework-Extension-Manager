@@ -159,14 +159,10 @@ class Core {
 
 			case $this->request_name['activate-ext'] :
 				$success = $this->activate_extension( $options );
-				$code = $success ? 704 : 705; // @todo var_dump() set errors.
-				$this->set_error_notice( array( $code => '' ) );
 				break;
 
 			case $this->request_name['deactivate-ext'] :
 				$success = $this->deactivate_extension( $options );
-				$code = $success ? 706 : 707; // @todo var_dump() set errors.
-				$this->set_error_notice( array( $code => '' ) );
 				break;
 
 			default:
@@ -313,6 +309,7 @@ class Core {
 			case 403 :
 			case 404 :
 			case 503 :
+			case 10003 :
 				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -382,9 +379,35 @@ class Core {
 				$type = 'error';
 				break;
 
+			case 10001 :
+			case 10002 :
+				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 10006 :
+			case 10008 :
+				$message = esc_html__( 'Extension has been succesfully activated.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 10007 :
+				$message = esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 11001 :
+				$message = esc_html__( 'Extension has been succesfully deactivated.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
 			case 602 :
 			case 703 :
 			case 802 :
+			case 10004 :
+			case 10005 :
+			case 10009 :
+			case 11002 :
 			default :
 				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
@@ -453,7 +476,7 @@ class Core {
 			return $instance[ $bit ];
 		}
 
-		$hash = wp_hash( $_bit . '\\' . __METHOD__ . '\\' . $bit, 'tsf-view-nonce-' . $bit );
+		$hash = wp_hash( $_bit . '\\' . __METHOD__ . '\\' . $bit, 'tsfem-instance-' . $bit );
 
 		return $instance[ $bit ] = $instance[ $_bit ] = $hash;
 	}
@@ -479,7 +502,7 @@ class Core {
 			return array( $_bit, $bit );
 
 		if ( null === $bit ) {
-			$bit = $_bit = mt_rand( 0, 12034337 );
+			$bit = $_bit = mt_rand( 0, 1073741824 );
 			$_bit++;
 		}
 
@@ -493,7 +516,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The minimum required capability for SEO Settings.
+	 * @return string The minimum required capability for extensions Settings.
 	 */
 	public function can_do_settings() {
 		return can_do_tsf_extension_manager_settings();
@@ -641,14 +664,14 @@ class Core {
 			$title = __( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = __( 'Premium Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button tsfem-button-love tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
+			$class = $love ? 'tsfem-button-primary tsfem-button-love tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
 
 			$title = __( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
 			$text = __( 'Free Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button tsfem-button-love' : 'tsfem-button';
+			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
 
 		return $this->get_link( array(
@@ -658,6 +681,147 @@ class Core {
 			'title' => $title,
 			'content' => $text,
 		) );
+	}
+
+	/**
+	 * Activates extension based on form input.
+	 *
+	 * @since 1.0.0
+	 * @TODO bind error notices.
+	 *
+	 * @param array $options The form input options.
+	 * @return bool False on invalid input or on activation failure.
+	 */
+	protected function activate_extension( $options ) {
+
+		if ( empty( $options['extension'] ) )
+			return false;
+
+		$slug = $options['extension'];
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Extensions::initialize( 'activation', $_instance, $bits );
+		Extensions::set_account( $this->get_subscription_status() );
+		Extensions::set_instance_extension_slug( $slug );
+
+		$checksum = Extensions::get( 'extensions-checksum' );
+
+		if ( empty( $checksum['hash'] ) || empty( $checksum['matches'] ) || empty( $checksum['type'] ) ) {
+			$this->set_error_notice( array( 10001 => '' ) );
+			return false;
+		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
+			$this->set_error_notice( array( 10002 => '' ) );
+			return false;
+		}
+
+		$status = Extensions::validate_extension_activation();
+		Extensions::reset();
+
+		if ( $status['success'] ) :
+			if ( 2 === $status['case'] ) {
+				if ( false === $this->validate_remote_subscription_license() ) {
+					$this->set_error_notice( array( 10003 => '' ) );
+					return false;
+				}
+			}
+
+			$success = $this->enable_extension( $slug );
+
+			if ( false === $success ) {
+				$this->set_error_notice( array( 10004 => '' ) );
+				return false;
+			}
+		endif;
+
+		switch ( $status['case'] ) :
+			case 1 :
+				$code = 10005;
+				break;
+
+			case 2 :
+				$code = 10006;
+				break;
+
+			case 3 :
+				$code = 10007;
+				break;
+
+			case 4 :
+				$code = 10008;
+				break;
+
+			default :
+				$code = 10009;
+				break;
+		endswitch;
+
+		$this->set_error_notice( array( $code => '' ) );
+
+		return $status['success'];
+	}
+
+	/**
+	 * Deactivates extension based on form input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $options The form input options.
+	 * @return bool False on invalid input.
+	 */
+	protected function deactivate_extension( $options ) {
+
+		if ( empty( $options['extension'] ) )
+			return false;
+
+		$slug = $options['extension'];
+		$success = $this->disable_extension( $slug );
+
+		$code = $success ? 11001 : 11002;
+		$this->set_error_notice( array( $code => '' ) );
+
+		return $success;
+	}
+
+	/**
+	 * Enables extension through options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @return bool False if extension enabling fails.
+	 */
+	protected function enable_extension( $slug ) {
+		return $this->update_extension( $slug, true );
+	}
+
+	/**
+	 * Disables extension through options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @return bool False if extension disabling fails.
+	 */
+	protected function disable_extension( $slug ) {
+		return $this->update_extension( $slug, false );
+	}
+
+	/**
+	 * Disables or enables an extension through options.
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @param bool $enable Whether to enable or disable the extension.
+	 * @return bool False if extension enabling or disabling fails.
+	 */
+	protected function update_extension( $slug, $enable = false ) {
+
+		$extensions = $this->get_option( 'active_extensions', array() );
+		$extensions[ $slug ] = (bool) $enable;
+
+		return $this->update_option( 'active_extensions', $extensions );
 	}
 
 	/**
@@ -929,7 +1093,7 @@ class Core {
 	}
 
 	/**
-	 * Verifies options hash
+	 * Verifies options hash.
 	 *
 	 * @since 1.0.0
 	 *

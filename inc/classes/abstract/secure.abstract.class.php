@@ -66,7 +66,7 @@ interface Secure_Static_Abstracts {
  *      Implements static functions from Secure_Static_Abstracts to be passed down
  *      to the extending classes.
  */
-abstract class Secure implements Secure_Static_Abstracts {
+abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	use Enclose_Master, Force_Static_Master;
 
 	/**
@@ -209,7 +209,7 @@ abstract class Secure implements Secure_Static_Abstracts {
 	}
 
 	/**
-	 * Returns the account level.
+	 * Determines whether the account level is premium.
 	 *
 	 * @since 1.0.0
 	 *
@@ -237,6 +237,17 @@ abstract class Secure implements Secure_Static_Abstracts {
 	 */
 	final protected static function get_property( $name ) {
 		return self::$$name;
+	}
+
+	/**
+	 * Kills PHP when an invalid type has been input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $method Required. The invoked Method where the error occured.
+	 */
+	final protected static function invoke_invalid_type( $method ) {
+		die( esc_html( $method ) . '(): You must specify a correct initialization type.' );
 	}
 
 	/**

@@ -157,13 +157,14 @@ function autoload_tsf_extension_manager_classes( $class ) {
 	if ( isset( $loaded[ $class ] ) )
 		return true;
 
-	if ( 'TSF_Extension_Manager\\Secure' === $class ) {
+	if ( false !== strpos( $class, '_Abstract' ) ) {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
 	} else {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
 	}
 
 	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
+	$_class = str_replace( '_abstract', '.abstract', $_class );
 	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 }
 

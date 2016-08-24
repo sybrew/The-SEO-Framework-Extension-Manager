@@ -94,7 +94,7 @@ trait Extensions_Layout {
 	 * @since 1.0.0
 	 * @todo all of it
 	 * @todo add refresh AJAX button with transient 5 min.
-	 * @todo add filter tabs based on plugin tags
+	 * @todo add filter tabs based on extension tags
 	 *
 	 * @return string The extensions overview header.
 	 */
@@ -123,33 +123,33 @@ trait Extensions_Layout {
 		$output = '';
 
 		if ( 'overview' === self::get_property( '_type' ) ) {
-			$output = static::get_plugins_list();
+			$output = static::get_extensions_list();
 		}
 
 		return $output;
 	}
 
 	/**
-	 * Generates a list of the available plugins.
+	 * Generates a list of the available extensions.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The plugins list in HTML.
+	 * @return string The extensions list in HTML.
 	 */
-	private static function get_plugins_list() {
+	private static function get_extensions_list() {
 
-		$plugins = static::filter_plugins( static::$plugins, 'maybe_network' );
+		$extensions = static::filter_extensions( static::$extensions, 'maybe_network' );
 
 		$output = '';
 
-		foreach ( $plugins as $id => $plugin ) {
+		foreach ( $extensions as $id => $extension ) {
 
-			if ( ! ( isset( $plugin['slug'] ) && isset( $plugin['type'] ) && isset( $plugin['name'] ) ) )
+			if ( ! ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['title'] ) ) )
 				continue;
 
-			$wrap = '<div class="tsfem-plugin-icon-wrap tsfem-flex-nogrowshrink">' . static::make_plugin_list_icon( $plugin ) . '</div>';
-			$wrap .= '<div class="tsfem-plugin-about-wrap">' . static::make_plugin_list_about( $plugin ) . '</div>';
-			$wrap .= '<div class="tsfem-plugin-description-wrap">' . static::make_plugin_list_description( $plugin ) . '</div>';
+			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink">' . static::make_extension_list_icon( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-about-wrap">' . static::make_extension_list_about( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-description-wrap">' . static::make_extension_list_description( $extension ) . '</div>';
 
 			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-row" id="%s">%s</div>', esc_attr( $id ), $wrap );
 		}
@@ -158,27 +158,27 @@ trait Extensions_Layout {
 	}
 
 	/**
-	 * Builds plugin image icon tag. Images must be square.
+	 * Builds extension image icon tag. Images must be square.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $plugin The plugin to make icon from.
+	 * @param array $extension The extension to make icon from.
 	 * @param array $size The icon height and width.
 	 * @return string HTML image.
 	 */
-	private static function make_plugin_list_icon( $plugin, $size = '100' ) {
+	private static function make_extension_list_icon( $extension, $size = '120' ) {
 
 		//* @TODO set default image.
 		$fallback = array( 'svg' => '', '2x' => '', '1x' => '', 'default' => '' );
 		$items = null;
 
-		if ( ! empty( $plugin['icons'] ) ) {
-			$default = isset( $plugin['icons']['default'] ) ? $plugin['icons']['default'] : '';
+		if ( ! empty( $extension['icons'] ) ) {
+			$default = isset( $extension['icons']['default'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['default'] ) : '';
 
 			if ( $default ) {
-				$svg = isset( $plugin['icons']['svg'] ) ? $plugin['icons']['svg'] : '';
-				$one = isset( $plugin['icons']['1x'] ) ? $plugin['icons']['1x'] : '';
-				$two = isset( $plugin['icons']['2x'] ) ? $plugin['icons']['2x'] : '';
+				$svg = isset( $extension['icons']['svg'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['svg'] ) : '';
+				$one = isset( $extension['icons']['1x'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['1x'] ) : '';
+				$two = isset( $extension['icons']['2x'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['2x'] ) : '';
 
 				$items = array(
 					'svg' => $svg,
@@ -193,12 +193,12 @@ trait Extensions_Layout {
 		$size = esc_attr( $size );
 
 		if ( $items['svg'] ) {
-			$image = '<img src="' . esc_url( $items['svg'] ) . '" alt="plugin-icon" height="' . $size . '" width="' . $size . '">';
+			$image = '<img src="' . esc_url( $items['svg'] ) . '" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
 		} else {
 			if ( $items['2x'] ) {
-				$image = '<img src="' . esc_url( $items['default'] ) . '" srcset="' . esc_url( $items['1x'] ) . ' 1x, ' . esc_url( $items['2x'] ) . ' 2x" alt="plugin-icon" height="' . $size . '" width="' . $size . '">';
+				$image = '<img src="' . esc_url( $items['default'] ) . '" srcset="' . esc_url( $items['1x'] ) . ' 1x, ' . esc_url( $items['2x'] ) . ' 2x" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
 			} else {
-				$image = '<img src="' . esc_url( $items['default'] ) . '" alt="plugin-icon" height="' . $size . '" width="' . $size . '">';
+				$image = '<img src="' . esc_url( $items['default'] ) . '" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
 			}
 		}
 
@@ -206,59 +206,59 @@ trait Extensions_Layout {
 	}
 
 	/**
-	 * Builds plugin about section.
+	 * Builds extension about section.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $plugin The plugin to make section from.
-	 * @return string HTML plugin section with actions and nonce.
+	 * @param array $extension The extension to make section from.
+	 * @return string HTML extension section with actions and nonce.
 	 */
-	private static function make_plugin_list_about( $plugin ) {
+	private static function make_extension_list_about( $extension ) {
 
-		$header = static::make_plugin_header( $plugin );
-		$buttons = static::make_plugin_buttons( $plugin );
+		$header = static::make_extension_header( $extension );
+		$buttons = static::make_extension_buttons( $extension );
 
 		return $header . $buttons;
 	}
 
 	/**
-	 * Makes plugin header.
+	 * Makes extension header.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $plugin The plugin to make header from.
-	 * @return string HTML plugin header.
+	 * @param array $extension The extension to make header from.
+	 * @return string HTML extension header.
 	 */
-	private static function make_plugin_header( $plugin ) {
+	private static function make_extension_header( $extension ) {
 
-		$title = '<h4 class="tsfem-extension-title">' . esc_html( $plugin['name'] ) . '</h4>';
+		$title = '<h4 class="tsfem-extension-title">' . esc_html( $extension['title'] ) . '</h4>';
 
-		$type = 'free' === $plugin['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
+		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
 
 		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
 
 	/**
-	 * Builds plugin activation/update/deactivate buttons based on plugin and
+	 * Builds extension activation/update/deactivate buttons based on extension and
 	 * account type. Also initializes nonces for those buttons.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $plugin The plugin to make button from.
-	 * @return string HTML plugin button with nonce.
+	 * @param array $extension The extension to make button from.
+	 * @return string HTML extension button with nonce.
 	 */
-	private static function make_plugin_buttons( $plugin ) {
+	private static function make_extension_buttons( $extension ) {
 
 		$buttons = array();
 
-		if ( static::is_plugin_active( $plugin ) ) {
+		if ( static::is_extension_active( $extension ) ) {
 			$buttons[] = array(
 				'type' => 'deactivate',
 				'disabled' => false,
 			);
 		} else {
-			$disabled = self::is_premium_account() || ! static::is_plugin_premium( $plugin ) ? false : true;
+			$disabled = self::is_premium_account() || ! static::is_extension_premium( $extension ) ? false : true;
 			$buttons[] = array(
 				'type' => 'activate',
 				'disabled' => $disabled,
@@ -268,7 +268,7 @@ trait Extensions_Layout {
 		$output = '';
 
 		foreach ( $buttons as $button ) :
-			$output .= static::get_plugin_button_form( $plugin['slug'], $button['type'], $button['disabled'] );
+			$output .= static::get_extension_button_form( $extension['slug'], $button['type'], $button['disabled'] );
 		endforeach;
 
 		return sprintf( '<div class="tsfem-extension-actions-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $output );
@@ -279,12 +279,12 @@ trait Extensions_Layout {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $slug The plugin/extension slug.
+	 * @param string $slug The extension slug.
 	 * @param string $type The button type.
 	 * @param bool $disabled Whether the button is disabled and holds no action.
 	 * @return string The button form.
 	 */
-	private static function get_plugin_button_form( $slug = '', $type = '', $disabled = false ) {
+	private static function get_extension_button_form( $slug = '', $type = '', $disabled = false ) {
 
 		$key = '';
 
@@ -306,14 +306,16 @@ trait Extensions_Layout {
 		endswitch;
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary hide-if-no-js %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
+			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
 		} else {
 			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name[ $nonce_key ] );
 			$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
+			$extension = '<input type="hidden" name="' . esc_attr( tsf_extension_manager()->get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
 			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
-			$form = $nonce_action . $nonce . $submit;
+			$form = $nonce_action . $nonce . $extension . $submit;
 
-			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
+			//* NOTE: Was hide-if-js // var_dump() TESTING.
+			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-no-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
 			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_html( $text ) );
 
 			$button = $nojs . $js;
@@ -322,7 +324,7 @@ trait Extensions_Layout {
 		return sprintf( '<div class="tsfem-extension-action">%s</div>', $button );
 	}
 
-	private static function make_plugin_list_description( $plugin ) {
+	private static function make_extension_list_description( $extension ) {
 
 	}
 }

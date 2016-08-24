@@ -328,7 +328,7 @@ class Panes extends API {
 		Extensions::set_nonces( 'request_name', $this->request_name );
 		Extensions::set_nonces( 'nonce_action', $this->nonce_action );
 
-		Extensions::set_account( 'account', $this->get_subscription_status() );
+		Extensions::set_account( $this->get_subscription_status() );
 
 		$header = Extensions::get( 'header' );
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );

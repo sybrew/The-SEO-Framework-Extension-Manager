@@ -203,7 +203,7 @@ class AccountActivation extends Panes {
 			$this->set_error_notice( array( 403 => '' ) );
 			return false;
 		} elseif ( isset( $results['code'] ) ) {
-			//* Probably duplicated local activation request. Will be handled later in reponse.
+			//* Probably duplicated local activation request. Will be handled later in response.
 			return false;
 		}
 
@@ -322,7 +322,7 @@ class AccountActivation extends Panes {
 
 	/**
 	 * Handles premium deactivation.
-	 * Sets all options to empty or 'Deactivated'.
+	 * Sets all options to empty i.e. 'Deactivated'.
 	 *
 	 * @since 1.0.0
 	 *
@@ -379,13 +379,32 @@ class AccountActivation extends Panes {
 	}
 
 	/**
+	 * Validates local subscription status against remote through an API request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function validate_remote_subscription_license() {
+
+		$response = $this->get_remote_subscription_status();
+
+		if ( isset( $response['status_check'] ) && 'active' === $response['status_check'] )
+		if ( isset( $response['status_extra']['instance'] ) && $this->get_activation_instance() === $response['status_extra']['instance'] )
+		if ( isset( $response['status_extra']['activation_domain'] ) && $this->get_activation_site_domain() === $response['status_extra']['activation_domain'] )
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Sets remote subscription status cache.
 	 *
 	 * @since 1.0.0
 	 * @see $this->get_remote_subscription_status()
 	 *
 	 * @param bool $doing_activation Whether the activation process is running.
-	 * @return bool true on success, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
 	protected function set_remote_subscription_status( $doing_activation = false ) {
 		return false !== $this->get_remote_subscription_status( $doing_activation );
@@ -418,14 +437,31 @@ class AccountActivation extends Panes {
 				'licence_key' => $this->activation_key,
 				'activation_email' => $this->activation_email,
 			);
+
+			return $response = $this->handle_request( 'status', $args );
 		} else {
+			//* Updates every 2 hours.
+			$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
+
+			$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
+
+			//* Cache status for 2 hours.
+			if ( $timestamp === $status['timestamp'] ) {
+				return $status['status'];
+			}
+
 			$args = array(
 				'licence_key' => $this->get_option( 'api_key' ),
 				'activation_email' => $this->get_option( 'activation_email' ),
 			);
-		}
 
-		return $response = $this->handle_request( 'status', $args );
+			$response = $this->handle_request( 'status', $args );
+
+			if ( ! empty( $response ) )
+				$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response ) );
+
+			return $response;
+		}
 	}
 
 	/**
@@ -441,7 +477,7 @@ class AccountActivation extends Panes {
 
 		$response = $this->get_remote_subscription_status( $doing_activation );
 
-		if ( false === $reponse )
+		if ( false === $response )
 			return false;
 
 		if ( $doing_activation ) {

@@ -1,7 +1,7 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: the seo framework, extensions, api
+Tags: the seo framework, extensions, api, monitor, modules, schema, open graph
 Requires at least: 4.4.0
 Tested up to: 4.6.0
 Stable tag: 0.9.0
@@ -21,11 +21,11 @@ This plugin adds an extra dashboard menu item, in which you can activate the lat
 
 = About Premium =
 A premium subscription will allow you to activate all premium extensions for one single subscription price.
-More extensions are added over time and are fetched securely from our servers.
-As long as the subscription is active, you're allowed to use all old and new extensions.
+These premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will be deactivated.
 
 > <strong>Read carefully:</strong><br>
-> This plugin and all acquired extensions are open source. This means they can be easily altered and shared.<br>
+> This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
 > If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
 >
 > This also accounts for any other premium software acquired for free. Please, be careful.
@@ -35,7 +35,7 @@ As long as the subscription is active, you're allowed to use all old and new ext
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it will do nothing at all.
 
 = Privacy =
-* This plugin sends API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).
+* This plugin can send API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).
 
 == Installation ==
 
@@ -55,23 +55,32 @@ TODO
 TODO check again.
 
 = What is this? =
-This free extension is made because many themes are rendering the title wrong. This causes issues, which this plugin resolves.
+The extension manager for The SEO Framework allows more powerful and advanced SEO techniques.
 
 = What is The SEO Framework? =
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/)
+
+= Do I need to activate all extensions? =
+No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
+Each extension includes carefully crafted documentation and provides an indication whether it's suitable for your website.
 
 = Do I require an account? =
 Not at all! This extension manager provides up to date free extensions.
 
 = Are there advertisements? =
-Not thoughout the dashboard. This plugin only shows which extensions are available on the activation page. It will show both free and premium ones.
-The activation page will lead you through the site where you can purchase a license, but only if you choose to do so.
+Nope. This plugin only shows which extensions are available on the activation page. It will show both free and premium ones.
+The activation page will lead you to the site where you can purchase a license, but only if you choose to do so.
 
 = Which users can activate extensions? =
-Only users who can install and activate plugins are allowed to view and notice the presence of this plugin.
+Only users who can install, update or activate plugins are allowed to interact with this plugin.
+On multisite, this behavior is restricted to the activation of plugins only.
 
 = Where are the plugins acquired from? =
-The plugins are provided through a secure gateway to any authorized plugin user.
+No PHP files are downloaded. Both free and premium extensions are provided through WordPress.org.
+
+= Which extensions are translated through WordPress.org? =
+Only extensions that are free will have translations readily available.
+Premium extensions will have no translations available as of yet, unless they're compatible with the free extension translations.
 
 = Does the Extension Manager need to stay activated in order to run the plugins? =
 Yes. The Extension Manager supplies its own plugin activation management system apart from WordPress core.

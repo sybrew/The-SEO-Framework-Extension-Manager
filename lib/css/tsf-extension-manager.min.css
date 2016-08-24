@@ -241,28 +241,27 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
 }
 
-.tsfem-button-love,
-.tsfem-account-active,
-.tsfem-account-inactive,
-.tsfem-account-about-to-expire,
-.tsfem-button-negative {
+.tsfem-button-star,
+.tsfem-account-active {
+	color: #fff;
 	background: #0ebfe9;
 	-webkit-box-shadow: 0 3px 0 #057f9c;
 	box-shadow: 0 3px 0 #057f9c;
-	color: #fff;
 	text-shadow: 0 -1px 1px #057f9c,1px 0 1px #057f9c,0 1px 1px #057f9c,-1px 0 1px #057f9c;
 }
 
 .tsfem-button-love,
 .tsfem-account-inactive {
+	color: #fff;
 	background: #00cd98;
 	-webkit-box-shadow: 0 3px 0 #008964;
 	box-shadow: 0 3px 0 #008964;
 	text-shadow: 0 -1px 1px #008964,1px 0 1px #008964,0 1px 1px #008964,-1px 0 1px #008964;
 }
 
-.tsfem-account-about-to-expire,
-.tsfem-button-negative {
+.tsfem-button-warning,
+.tsfem-account-about-to-expire {
+	color: #fff;
 	background: #ff746a;
 	-webkit-box-shadow: 0 3px 0 #d14b44;
 	box-shadow: 0 3px 0 #d14b44;
@@ -271,7 +270,10 @@ body.tsfem .wrap {
 
 .tsfem-account-active:after,
 .tsfem-account-inactive:after,
+.tsfem-button-star:after,
+.tsfem-button-flag:after,
 .tsfem-button-love:after,
+.tsfem-button-warning:after,
 .tsfem-account-about-to-expire:after {
 	display: inline;
 	content: "\f155";
@@ -285,6 +287,11 @@ body.tsfem .wrap {
 	margin-left: 7px;
 }
 
+.tsfem-button-flag:after {
+	content: "\f227";
+}
+
+.tsfem-button-warning:after,
 .tsfem-account-about-to-expire:after {
 	content: "\f534";
 }
@@ -294,74 +301,30 @@ body.tsfem .wrap {
 	content: "\f487";
 }
 
-.tsfem-button:hover,
-.tsfem-button-primary:hover {
-	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
-	filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
-}
-
-.tsfem-button-primary:hover,
-.tsfem-account-active:hover,
-.tsfem-account-inactive:hover,
-.tsfem-button-love:hover,
-.tsfem-account-about-to-expire:hover {
-	/* Too lazy to figure out exact colors */
-	-webkit-filter: hue-rotate(5deg) saturate(1.2);
-	filter: hue-rotate(5deg) saturate(1.2);
-}
-
 .tsfem-button:active,
 .tsfem-button:focus,
 .tsfem-button-primary:active,
-.tsfem-button-primary:focus,
-.tsfem-account-active:active,
-.tsfem-account-active:focus,
-.tsfem-account-inactive:active,
-.tsfem-account-inactive:focus,
-.tsfem-button-love:active,
-.tsfem-button-love:focus,
-.tsfem-account-about-to-expire:active,
-.tsfem-account-about-to-expire:focus {
+.tsfem-button-primary:focus {
 	margin-top: 0;
 	margin-bottom: 0;
 	box-shadow: none;
 	outline: 0;
 }
 
+.tsfem-button:hover {
+	/* Too lazy to figure out exact colors */
+	color: #777;
+	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
+	filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
+}
+
 .tsfem-button-primary:hover,
 .tsfem-button-primary:active,
-.tsfem-button-primary:focus,
-.tsfem-account-active:hover,
-.tsfem-account-active:active,
-.tsfem-account-active:focus,
-.tsfem-account-inactive:hover,
-.tsfem-account-inactive:active,
-.tsfem-account-inactive:focus,
-.tsfem-button-love:hover,
-.tsfem-button-love:active,
-.tsfem-button-love:focus,
-.tsfem-account-about-to-expire:hover
-.tsfem-account-about-to-expire:active,
-.tsfem-account-about-to-expire:focus {
+.tsfem-button-primary:focus {
+	/* Too lazy to figure out exact colors */
 	color: #fff;
-}
-
-.tsfem-connect-option {
-	width: 100%;
-	max-width: 690px;
-	padding: 1.33em 40px;
-	margin-bottom: 20px;
-	border: 1px solid #e2e2e2;
-	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
-	box-shadow: 0 1px 1px rgba(0,0,0,.04);
-	background: #fff;
-	overflow: hidden;
-	border-radius: 3px;
-	align-items: center;
-}
-
-.tsfem-connect-option.tsfem-connect-highlighted {
-	border: 1px solid #057f9c;
+	-webkit-filter: hue-rotate(5deg) saturate(1.2);
+	filter: hue-rotate(5deg) saturate(1.2);
 }
 
 /* ## Switching/Rotating buttons.
@@ -397,7 +360,8 @@ body.tsfem .wrap {
 	justify-content: center;
 }
 
-.tsfem-switch-button-container input[type=checkbox] {
+.tsfem-switch-button-container input[type=checkbox],
+.tsfem-switch-button-container input[type=submit] {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -405,8 +369,7 @@ body.tsfem .wrap {
 	overflow: hidden;
 }
 
-.tsfem-switch-button-container label,
-.tsfem-switch-button-container input[type=submit] {
+.tsfem-switch-button-container label {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -415,7 +378,7 @@ body.tsfem .wrap {
 	z-index: 1;
 }
 
-.tsfem-switch-button-container label {
+.tsfem-switch-button-container input[type=checkbox] + label {
 	z-index: 2;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -425,13 +388,13 @@ body.tsfem .wrap {
 	user-select: none;
 }
 
-.tsfem-switch-button-container input[type=submit] {
+.tsfem-switch-button-container input[type=submit] + label {
 	-webkit-transform: rotateX(-100deg);
 	transform: rotateX(-100deg);
-	transform-origin: bottom center;
+	transform-origin: 0 100% 0;
 	opacity: 0;
-	-webkit-transition: -webkit-transform 1s, opacity .8s;
-	transition: transform 1s, opacity .8s;
+	-webkit-transition: -webkit-transform 1.2s, opacity .6s;
+	transition: transform 1.2s, opacity .6s;
 }
 
 .tsfem-switch-button-container input[type=checkbox]:checked + label {
@@ -441,11 +404,22 @@ body.tsfem .wrap {
 	z-index: 0;
 }
 
-.tsfem-switch-button-container input[type=checkbox]:checked + label + input {
-	-webkit-transform: rotateX(0);
-	transform: rotateX(0);
+.tsfem-switch-button-container input[type=checkbox]:checked ~ input[type=submit] + label {
+	-webkit-transform: rotateX(0deg);
+	transform: rotateX(0deg);
 	opacity: 1;
 	z-index: 2;
+}
+
+/* ## Disabled Buttons.
+/*--------------------------------------*/
+.tsfem-button-disabled,
+.tsfem-button-disabled:hover,
+.tsfem-button-disabled:active,
+.tsfem-button-disabled:focus {
+	-webkit-filter: grayscale(1);
+	filter: grayscale(1);
+	cursor: not-allowed;
 }
 
 /* # Start Activation/Connect.
@@ -481,6 +455,24 @@ body.tsfem .wrap {
 	margin-left: 7px;
 }
 
+.tsfem-connect-option {
+	width: 100%;
+	max-width: 690px;
+	padding: 1.33em 40px;
+	margin-bottom: 20px;
+	border: 1px solid #e2e2e2;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	background: #fff;
+	overflow: hidden;
+	border-radius: 3px;
+	align-items: center;
+}
+
+.tsfem-connect-option.tsfem-connect-highlighted {
+	border: 1px solid #057f9c;
+}
+
 /* # Start Panes.
 /*----------------------------------------------------------------------------*/
 
@@ -497,7 +489,7 @@ body.tsfem .wrap {
 	width: 100%;
 	margin: 0 0 20px;
 	padding: 0;
-	min-height: 200px;
+	min-height: 33vh;
 }
 
 .tsfem-extensions-panes-row:last-of-type {
@@ -603,7 +595,7 @@ body.tsfem .wrap {
 .tsfem-extensions-wrap {
 	padding: 20px;
 	height: auto;
-	max-height: 33vh;
+	max-height: 100%;
 	min-height: 150px;
 	width: 100%;
 	overflow: auto;
@@ -620,7 +612,7 @@ body.tsfem .wrap {
 	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
 	margin: 0 0 20px;
 	padding: 0;
-	height: 102px;
+	height: 122px;
 	border: 1px solid #ddd;
 	background: #fdfdfd;
 	width: 100%;
@@ -632,7 +624,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-extension-entry > * {
-	height: 100px;
+	height: 120px;
 	margin: 0;
 	padding: 0;
 	-webkit-box-sizing: border-box;
@@ -654,7 +646,7 @@ body.tsfem .wrap {
 	justify-content: flex-start;
 }
 
-.tsfem-plugin-about-wrap {
+.tsfem-extension-about-wrap {
 	min-width: 150px;
 	max-width: 250px;
 	-webkit-flex-direction: column;
@@ -830,6 +822,13 @@ h5.tsfem-extension-type {
 	}
 }
 
+/* # Start override.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-hidden {
+	display: none;
+}
+
 /* # Start Media Queries.
 /*----------------------------------------------------------------------------*/
 
@@ -857,6 +856,9 @@ h5.tsfem-extension-type {
 		max-width: 100%;
 	}
 
+	.tsfem-trends-wrap,
+	.tsfem-actions-wrap,
+	.tsfem-extensions-wrap,
 	.tsfem-extensions-panes-row {
 		min-height: initial;
 	}

@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) or die;
  * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
  * @final Please don't extend this.
  */
-final class Layout extends Secure {
+final class Layout extends Secure_Abstract {
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -67,7 +67,7 @@ final class Layout extends Secure {
 
 				default :
 					self::reset();
-					the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct initialization type.' );
+					self::invoke_invalid_type( __METHOD__ );
 					break;
 			endswitch;
 		}
@@ -129,18 +129,14 @@ final class Layout extends Secure {
 			$field_id = 'deactivation-switcher';
 			$deactivate_i18n = __( 'Deactivate', 'the-seo-framework-extension-manager' );
 			$ays_i18n = __( 'Are you sure?', 'the-seo-framework-extension-manager' );
+			$da_i18n = __( 'Deactivate account?', 'the-seo-framework-extension-manager' );
 
-			$button = '<input '
-						. 'type="submit" '
-						. 'id="' . $field_id . '-validator" '
-						. 'class="tsfem-button tsfem-switcher-button tsfem-button-negative" '
-						. 'value="' . esc_attr( $deactivate_i18n ) . '" '
-						. 'title="' . esc_attr( $ays_i18n ) . '" '
-					. '">';
+			$button = '<input type="submit" id="' . $field_id . '-validator">'
+					. '<label for="' . $field_id . '-validator" title="' . esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . esc_html( $deactivate_i18n ) . '</label>';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
-							. '<label for="' . $field_id . '-action" class="tsfem-button">' . esc_html( $deactivate_i18n ) . '</label>'
+							. '<label for="' . $field_id . '-action" title="' . esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . esc_html( $deactivate_i18n ) . '</label>'
 							. $button
 						. '</div></div>';
 
@@ -168,6 +164,7 @@ final class Layout extends Secure {
 			return tsf_extension_manager()->get_support_link( 'free' );
 		} elseif ( 'form' === self::get_property( 'type' ) ) {
 			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The free support will most likely never support forms.' );
+			return '';
 		}
 	}
 
@@ -184,6 +181,7 @@ final class Layout extends Secure {
 			return tsf_extension_manager()->get_support_link( 'premium' );
 		} elseif ( 'form' === self::get_property( 'type' ) ) {
 			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium support button does not yet support forms.' );
+			return '';
 		}
 	}
 }
