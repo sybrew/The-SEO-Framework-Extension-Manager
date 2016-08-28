@@ -56,6 +56,15 @@ class Core {
 	protected $error_notice_option;
 
 	/**
+	 * Returns an array of active extensions real path.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array List of active extensions real path.
+	 */
+	protected $active_extensions = array();
+
+	/**
 	 * Constructor, initializes actions and sets up variables.
 	 *
 	 * @since 1.0.0
@@ -97,6 +106,80 @@ class Core {
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
+
+		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
+
+		add_action( 'shutdown', array( $this, 'dump' ) );
+	}
+
+	/**
+	 * Handles extensions. On both the front end and back-end.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $loaded True if extensions are loaded, false otherwise.
+	 *
+	 * @return true If loaded, false otherwise.
+	 */
+	public function init_extensions() {
+
+		static $loaded = null;
+
+		if ( isset( $loaded ) )
+			return $loaded;
+
+		if ( wp_installing() || false === $this->is_plugin_activated() )
+			return $loaded = false;
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Extensions::initialize( 'list', $_instance, $bits );
+		Extensions::set_account( $this->get_subscription_status() );
+
+		$checksum = Extensions::get( 'extensions_checksum' );
+		$result = $this->validate_extensions_checksum( $checksum );
+
+		if ( true !== $result ) :
+			switch ( $result ) :
+				case -1 :
+					//* No extensions have ever been active...
+					;
+
+				case -2 :
+					//* Failed checksum.
+					$this->set_error_notice( array( 2001 => '' ) );
+
+				default :
+					Extensions::reset();
+					return $loaded = false;
+					break;
+			endswitch;
+		endif;
+
+		$extensions = Extensions::get( 'active_extensions_list' );
+
+		if ( empty( $extensions ) ) {
+			Extensions::reset();
+			return $loaded = false;
+		}
+
+		Extensions::reset();
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Extensions::initialize( 'load', $_instance, $bits );
+
+		foreach ( $extensions as $slug => $active ) {
+			$bits = $this->get_bits();
+			$_instance = $this->get_verification_instance( $bits[1] );
+
+			Extensions::load_extension( $slug, $_instance, $bits );
+		}
+
+		Extensions::reset();
+
+		return $loaded = true;
 	}
 
 	/**
@@ -219,7 +302,7 @@ class Core {
 	}
 
 	/**
-	 * Outputs activation notice. If any.
+	 * Outputs notices. If any, and only on the Extension manager page.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -242,33 +325,33 @@ class Core {
 	}
 
 	/**
-	 * Sets activation notice option.
+	 * Sets notices option.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $notice The activation notice.
+	 * @param array $notice The notice.
 	 */
 	protected function set_error_notice( $notice = array() ) {
 		update_option( $this->error_notice_option, $notice );
 	}
 
 	/**
-	 * Removes activation notice option.
+	 * Removes notices option.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $notice The activation notice.
+	 * @param array $notice The notice.
 	 */
 	protected function unset_error_notice() {
 		delete_option( $this->error_notice_option );
 	}
 
 	/**
-	 * Fetches activation notices by option and returns type.
+	 * Fetches notices by option and returns type.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array|string The escaped activation notice. Empty string when no array key is set.
+	 * @return array|string The escaped notice. Empty string when no array key is set.
 	 */
 	protected function get_error_notice( $option ) {
 
@@ -381,7 +464,8 @@ class Core {
 
 			case 10001 :
 			case 10002 :
-				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin.', 'the-seo-framework-extension-manager' );
+			case 2001 :
+				$message = esc_html__( 'Extension list has been tampered with. Please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -476,6 +560,7 @@ class Core {
 			return $instance[ $bit ];
 		}
 
+		//* This won't save to database, but does create a unique salt for each bit.
 		$hash = wp_hash( $_bit . '\\' . __METHOD__ . '\\' . $bit, 'tsfem-instance-' . $bit );
 
 		return $instance[ $bit ] = $instance[ $_bit ] = $hash;
@@ -684,6 +769,25 @@ class Core {
 	}
 
 	/**
+	 * Validates extensions option checksum.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $checksum The extensions checksum.
+	 * @return int|bool, Negative int on failure, true on success.
+	 */
+	protected function validate_extensions_checksum( $checksum ) {
+
+		if ( empty( $checksum['hash'] ) || empty( $checksum['matches'] ) || empty( $checksum['type'] ) ) {
+			return -1;
+		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
+			return -2;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Activates extension based on form input.
 	 *
 	 * @since 1.0.0
@@ -706,15 +810,25 @@ class Core {
 		Extensions::set_account( $this->get_subscription_status() );
 		Extensions::set_instance_extension_slug( $slug );
 
-		$checksum = Extensions::get( 'extensions-checksum' );
+		$checksum = Extensions::get( 'extensions_checksum' );
+		$result = $this->validate_extensions_checksum( $checksum );
 
-		if ( empty( $checksum['hash'] ) || empty( $checksum['matches'] ) || empty( $checksum['type'] ) ) {
-			$this->set_error_notice( array( 10001 => '' ) );
-			return false;
-		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
-			$this->set_error_notice( array( 10002 => '' ) );
-			return false;
-		}
+		if ( true !== $result ) :
+			switch ( $result ) :
+				case -1 :
+					$this->set_error_notice( array( 10001 => '' ) );
+					return false;
+					break;
+
+				case -2 :
+					$this->set_error_notice( array( 10002 => '' ) );
+					return false;
+					break;
+
+				default :
+					break;
+			endswitch;
+		endif;
 
 		$status = Extensions::validate_extension_activation();
 		Extensions::reset();
@@ -810,6 +924,7 @@ class Core {
 
 	/**
 	 * Disables or enables an extension through options.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug.
@@ -821,7 +936,10 @@ class Core {
 		$extensions = $this->get_option( 'active_extensions', array() );
 		$extensions[ $slug ] = (bool) $enable;
 
-		return $this->update_option( 'active_extensions', $extensions );
+		//* Kill options on failure when enabling.
+		$kill = $enable;
+
+		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
 	}
 
 	/**

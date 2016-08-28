@@ -55,7 +55,7 @@ final class Trends {
 	/**
 	 * Parses and returns Google Feed.
 	 * This is a prototype. It's planned to fetch from https://premium.theseoframework.com/
-	 * With a filtered list that's parsed remotely, which has a history and is loaded from more or personalized sources.
+	 * With a filtered list that's parsed remotely, which has a history and is loaded from more or rather personalized sources.
 	 * I still need to get started on writing content...
 	 *
 	 * @since 1.0.0
@@ -85,6 +85,7 @@ final class Trends {
 				return '';
 
 			$xml = wp_remote_retrieve_body( $request );
+			//* Add bitwise operators.
 			$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
 			$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 

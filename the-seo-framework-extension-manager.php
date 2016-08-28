@@ -111,6 +111,12 @@ define( 'TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT', TSF_EXTENSION_MANAGER_DIR_PATH .
 define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
 
 /**
+ * The plugin extensions base path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
+
+/**
  * The plugin options base name.
  * @since 1.0.0
  * Applies filters 'tsf_extension_manager_site_options' : string
@@ -118,10 +124,10 @@ define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PAT
 define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
 
 /**
- * The plugin extensions path.
+ * The plugin options.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
+define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS ) );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
 /**

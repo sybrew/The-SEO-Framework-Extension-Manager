@@ -158,7 +158,7 @@ final class SecureOption extends Secure_Abstract {
 					$verified = true;
 				} else {
 					self::reset();
-					wp_die( 'Options have been altered within the database. Please deactivate your account and try again.' );
+					wp_die( 'Options have been altered within the database. This is not allowed for security reasons. Please deactivate your account and try again.' );
 				}
 			}
 		}

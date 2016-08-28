@@ -68,7 +68,7 @@ trait Extensions_Properties {
 		 * to date! This is state of the art software, for everyone.
 		 * The extensions are open source, so feel free to use and learn from that
 		 * code :). Benefit from that personally; SEO is after all an active war
-		 * between websites (...sell it to your clients?; nevermind: GPLv3).
+		 * between websites (...sell it as a service to your clients?).
 		 *
 		 * This plugin provides a portal for people who do not have the time to code
 		 * everything (or don't have the know-how). The extensions are built with <3
@@ -76,7 +76,7 @@ trait Extensions_Properties {
 		 *
 		 * Coding is extremely difficult, as you might know (why else are you reading
 		 * this?), so build something positive from those skills! Become an awesome
-		 * part of this awesome WordPress.org community :).
+		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return array(
 			'title-fix' => array(
@@ -165,12 +165,32 @@ trait Extensions_Properties {
 			return '';
 
 		$path = static::get_extension_relative_path( $slug );
+		$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-		return $url = TSF_EXTENSION_MANAGER_DIR_URL . 'extensions/' . $path . 'assets/' . $file;
+		return $url = TSF_EXTENSION_MANAGER_DIR_URL . $path . 'assets/' . $file;
 	}
 
 	/**
-	 * Generates extension directory path relative to the plugin directory.
+	 * Generates trunk path for extensions. If they're found.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $cache The trunk paths cache.
+	 *
+	 * @param string $slug The extension slug.
+	 * @return string The extension trunk file path.
+	 */
+	private static function get_extension_trunk_path( $slug ) {
+
+		if ( empty( $slug ) )
+			return '';
+
+		$path = static::get_extension_relative_path( $slug );
+
+		return $path = TSF_EXTENSION_MANAGER_DIR_PATH . $path . 'trunk' . DIRECTORY_SEPARATOR;
+	}
+
+	/**
+	 * Generates extension directory path relative to the plugin home directory.
 	 *
 	 * @since 1.0.0
 	 *
@@ -194,79 +214,40 @@ trait Extensions_Properties {
 
 		$path[ $slug ] = '';
 
+		$path[ $slug ] .= 'extensions/';
 		$path[ $slug ] .= $network ? 'network/' : '';
 		$path[ $slug ] .= $premium ? 'premium/' : 'free/';
 		$path[ $slug ] .= $slug . '/';
+
+		$path[ $slug ] = str_replace( '/', DIRECTORY_SEPARATOR, $path[ $slug ] );
 
 		return $path[ $slug ];
 	}
 
 	/**
-	 * Returns extension header file location.
+	 * Returns extension header file location absolute path.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug.
-	 * @return string The extension header file location.
+	 * @return string The extension header file location absolute path.
 	 */
-	private static function get_extension_header_file_location( $slug ) {
+	private static function get_extension_header_file_path( $slug ) {
 
-		if ( $path = static::get_extension_relative_path( $slug ) )
-			return TSF_EXTENSION_MANAGER_DIR_URL . $path . $slug . '.php';
+		if ( $path = static::get_extension_trunk_path( $slug ) )
+			return $path . $slug . '.php';
 
 		return '';
-	}
-
-	/**
-	 * Determines whether the input extension is premium.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array|string $extension The extension to check.
-	 * @return bool Whether the extension is premium.
-	 */
-	private static function is_extension_premium( $extension ) {
-
-		if ( is_string( $extension ) )
-			$extension = static::get_extension( $extension );
-
-		return 'premium' === $extension['type'];
-	}
-
-	/**
-	 * Determines whether the input extension is a network extensions.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array|string $extension The extension to check.
-	 * @return bool Whether the extension is a network extension.
-	 */
-	private static function is_extension_network( $extension ) {
-
-		if ( is_string( $extension ) )
-			$extension = static::get_extension( $extension );
-
-		return '1' === $extension['network'];
-	}
-
-	/**
-	 * Determines whether the input extension is active.
-	 *
-	 * @since 1.0.0
-	 * @TODO
-	 *
-	 * @param array $extension The extension to check.
-	 * @return bool Whether the extension is active.
-	 */
-	private static function is_extension_active( $extension ) {
-		return false;
 	}
 }
 
 
 /**
  * Holds extensions activation functions for class TSF_Extension_Manager\Extensions.
- * This trait holds front-end PHP security risks when mistreated.
+ *
+ * Warning: This trait holds front-end PHP security risks when mistreated. Always use
+ * trait TSF_Extension_Manager\Enclose(_*) in pair with this trait.
+ * @see /inc/traits/overload.trait.php
  *
  * @since 1.0.0
  * @uses trait TSF_Extension_Manager\Extensions_Properties
@@ -343,7 +324,7 @@ trait Extensions_Actions {
 
 		$slug = static::$current_slug;
 
-		$file = static::get_extension_header_file_location( $slug );
+		$file = static::get_extension_header_file_path( $slug );
 
 		if ( in_array( 'sha256', hash_algos(), true ) ) {
 			$hash = hash_file( 'sha256', $file );
@@ -362,10 +343,27 @@ trait Extensions_Actions {
 		);
 	}
 
-	private static function get_active_extensions( $placeholder = array(), $instance, $bits ) {
+	/**
+	 * Returns a list of active extension slugs.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $cache
+	 *
+	 * @param array $placeholder Unused.
+	 * @return array : {
+	 * 		string The extension slug => bool True if active
+	 * }
+	 */
+	private static function get_active_extensions( $placeholder = array() ) {
 
-		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+		static $cache = false;
 
+		if ( false !== $cache )
+			return $cache;
+
+		$options = TSF_EXTENSION_MANAGER_CURRENT_OPTIONS;
+
+		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : array();
 	}
 
 	/**
@@ -402,5 +400,115 @@ trait Extensions_Actions {
 		} else {
 			return array( 'success' => true, 'case' => 4 );
 		}
+	}
+
+	/**
+	 * Determines whether the input extension is premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return bool Whether the extension is premium.
+	 */
+	private static function is_extension_premium( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		return 'premium' === $extension['type'];
+	}
+
+	/**
+	 * Determines whether the input extension is a network extensions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return bool Whether the extension is a network extension.
+	 */
+	private static function is_extension_network( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		return '1' === $extension['network'];
+	}
+
+	/**
+	 * Determines whether the input extension is active.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return bool Whether the extension is active.
+	 */
+	private static function is_extension_active( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		$active = static::get_active_extensions();
+
+		if ( isset( $active[ $extension['slug'] ] ) )
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * Loads extension from input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @return bool Whether the extension is loaded.
+	 */
+	public static function load_extension( $slug, $_instance, $bits ) {
+
+		self::verify_instance() or die;
+
+		if ( 'load' !== self::get_property( '_type' ) ) {
+			self::reset();
+			self::invoke_invalid_type( __METHOD__ );
+		}
+
+		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+			if ( static::validate_file( $file ) ) {
+				return static::include_extension( $file, $_instance, $bits );
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Includes extension from input.
+	 * Also registers that the extension has been loaded.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $file The extension file to include.
+	 * @param string $instance The verification instance.
+	 * @param array $bits The verification instance bits.
+	 * @return bool True on success, false on failure.
+	 */
+	private static function include_extension( $file, $_instance, $bits ) {
+		return (bool) include_once( $file );
+	}
+
+	/**
+	 * Validates extension file.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $file The extension file, already normalized.
+	 * @return bool True on success, false on failure.
+	 */
+	private static function validate_file( $file ) {
+
+		if ( 0 === validate_file( $file ) && '.php' === substr( $file, -4 ) && file_exists( $file ) )
+			return true;
+
+		return false;
 	}
 }

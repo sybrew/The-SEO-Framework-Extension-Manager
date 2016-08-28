@@ -126,7 +126,7 @@ body.tsfem .wrap {
 
 .tsfem-top-about > div {
 	display: inline-block;
-	text-align: right;
+	text-align: justify;
 	max-width: calc( 100% - 1.2em - 14px );
 	min-width: 170px;
 	color: #fff;
@@ -489,7 +489,12 @@ body.tsfem .wrap {
 	width: 100%;
 	margin: 0 0 20px;
 	padding: 0;
+	/* New: var_dump clean this comment */
+	min-height: 150px;
+	height: 33vh;
+	/* Was:
 	min-height: 33vh;
+	*/
 }
 
 .tsfem-extensions-panes-row:last-of-type {
@@ -832,24 +837,34 @@ h5.tsfem-extension-type {
 /* # Start Media Queries.
 /*----------------------------------------------------------------------------*/
 
+/* Huge and beyond screens. */
 @media screen and ( min-height: 800px ) {
 	.tsfem-extensions-wrap {
 		max-height: initial;
 	}
 }
 
-@media screen and ( max-height: 800px ), screen and ( max-width: 782px ) {
+/* Both conditions need to be true, tall screens, WordPress compat for footer. */
+@media only screen and ( min-height: 600px ) and ( max-width: 782px ) {
+	body.tsfem .wrap {
+		margin-bottom: 0;
+	}
+
+	body.tsfem #wpfooter {
+		margin: 0;
+	}
+}
+
+/* Either conditions need to be true, small screens/tablets. WordPress compat for footer. */
+@media screen and ( max-height: 800px ), ( max-width: 782px ) {
 	body.tsfem .wrap {
 		height: auto;
 		margin-bottom: 30px;
 	}
 }
 
-@media only screen and ( max-width: 782px ) {
-	body.tsfem .wrap {
-		margin-bottom: 0;
-	}
-
+/* Either conditions need to be true, very small screens/large phones */
+@media only screen and ( max-height: 600px ), ( max-width: 782px ) {
 	.tsfem-pane-half,
 	.tsfem-pane-full {
 		min-width: 100%;
@@ -861,6 +876,7 @@ h5.tsfem-extension-type {
 	.tsfem-extensions-wrap,
 	.tsfem-extensions-panes-row {
 		min-height: initial;
+		height: initial;
 	}
 
 	.tsfem-extensions-panes-row .tsfem-pane-half {
@@ -881,10 +897,10 @@ h5.tsfem-extension-type {
 
 	body.tsfem #wpfooter {
 		display: block;
-		margin: 0;
 	}
 }
 
+/* Small phones */
 @media only screen and ( max-width: 600px ) {
 	.tsfem-connect-option {
 		flex-direction: column;

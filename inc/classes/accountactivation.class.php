@@ -35,6 +35,8 @@ tsf_extension_manager_load_trait( 'activation' );
  * Holds plugin activation functions.
  *
  * @since 1.0.0
+ * @TODO Convert to instance? It's only required once...
+ *       Instancing does expand complexity massively as it handles options.
  */
 class AccountActivation extends Panes {
 	use Enclose, Construct_Sub, Activation_Data;
@@ -117,7 +119,7 @@ class AccountActivation extends Panes {
 	 * @param array $args : {
 	 *		'licence_key'      => string The license key.
 	 *		'activation_email' => string The activation email.
- 	 * }
+	 * }
 	 * @return array Request Data option details.
 	 */
 	protected function handle_request( $type = 'status', $args = array() ) {
@@ -429,7 +431,7 @@ class AccountActivation extends Panes {
 			return $response;
 
 		if ( $doing_activation ) {
-			//* Wait 0.0625 seconds as a second request is following up.
+			//* Wait 0.0625 seconds as a second request is following up (1~2x load time server).
 			usleep( 62500 );
 
 			//* Fetch data from POST variables. As the options are cached and tainted already at this point.
@@ -440,7 +442,7 @@ class AccountActivation extends Panes {
 
 			return $response = $this->handle_request( 'status', $args );
 		} else {
-			//* Updates every 2 hours.
+			//* Updates at most every 2 hours.
 			$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
 
 			$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );

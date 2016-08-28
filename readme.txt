@@ -101,6 +101,9 @@ You're able to choose. In network mode, only the super admin can download extens
 Only admin users of those sites can activate the plugins, and only when the Plugins menu is active, see [filters](https://wordpress.org/plugins/the-seo-framework-extension-manager/other_notes/) for expanded options.
 Please note that this plugin requires a network license in order to get any premium extension in network mode. In single site mode a single license is required.
 
+= What happens when I deactivate my account? =
+All plugin settings will be deleted. Each individual extension handles its own options (if any); this means those settings won't be lost upon re-activation of the extension at a later time.
+
 TODO:
 This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
 

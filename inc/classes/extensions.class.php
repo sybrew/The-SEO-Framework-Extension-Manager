@@ -32,8 +32,10 @@ tsf_extension_manager_load_trait( 'extensions' );
 /**
  * Require extensions layout traits depending on admin page type.
  * @since 1.0.0
+ * @NOTE The following check is insecure, but the included traits are only
+ *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
-if ( tsf_extension_manager()->is_tsf_extension_manager_page() ) {
+if ( is_admin() && the_seo_framework()->is_menu_page( tsf_extension_manager()->seo_extensions_menu_page_hook, tsf_extension_manager()->seo_extensions_page_slug ) ) {
 	tsf_extension_manager_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.
@@ -67,8 +69,9 @@ final class Extensions extends Secure_Abstract {
 				static::$extensions = static::get_extensions();
 				break;
 
-			case 'check' :
 			case 'activation' :
+			case 'list' :
+			case 'load' :
 				static::$extensions = static::get_extensions();
 				break;
 
@@ -99,8 +102,9 @@ final class Extensions extends Secure_Abstract {
 
 			switch ( $type ) :
 				case 'overview' :
-				case 'check' :
 				case 'activation' :
+				case 'list' :
+				case 'load' :
 					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					static::set_up_variables();
@@ -136,20 +140,24 @@ final class Extensions extends Secure_Abstract {
 		}
 
 		switch ( $type ) :
-			case 'header' :
+			case 'layout_header' :
 				return static::get_layout_header();
 				break;
 
-			case 'content' :
+			case 'layout_content' :
 				return static::get_layout_content();
 				break;
 
-			case 'active-extensions' :
-				return static::get_active_extensions();
+			case 'extensions_checksum' :
+				return static::get_extensions_checksum();
 				break;
 
-			case 'extensions-checksum' :
-				return static::get_extensions_checksum();
+			case 'extensions_list' :
+				return static::get_extensions();
+				break;
+
+			case 'active_extensions_list' :
+				return static::get_active_extensions();
 				break;
 
 			default :
@@ -172,7 +180,6 @@ final class Extensions extends Secure_Abstract {
 		self::verify_instance() or die;
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'check' :
 			case 'activation' :
 				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
 				break;

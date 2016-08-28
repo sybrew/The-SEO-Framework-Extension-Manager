@@ -23,8 +23,6 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 /**
 * Holds i18n data functions for class TSF_Extension_Manager\Extensions.
 *
@@ -151,7 +149,9 @@ trait Extensions_Layout {
 			$wrap .= '<div class="tsfem-extension-about-wrap">' . static::make_extension_list_about( $extension ) . '</div>';
 			$wrap .= '<div class="tsfem-extension-description-wrap">' . static::make_extension_list_description( $extension ) . '</div>';
 
-			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-row" id="%s">%s</div>', esc_attr( $id ), $wrap );
+			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
+
+			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
 		}
 
 		return $output;

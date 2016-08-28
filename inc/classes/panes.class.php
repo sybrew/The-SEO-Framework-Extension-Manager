@@ -330,10 +330,10 @@ class Panes extends API {
 
 		Extensions::set_account( $this->get_subscription_status() );
 
-		$header = Extensions::get( 'header' );
+		$header = Extensions::get( 'layout_header' );
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );
 
-		$content = Extensions::get( 'content' );
+		$content = Extensions::get( 'layout_content' );
 		$content = sprintf( '<div class="tsfem-extensions-overview-content">%s</div>', $content );
 
 		Extensions::reset();

@@ -37,7 +37,7 @@ trait Enclose {
 	private function __clone() { }
 
 	/**
-	 * Unserializing instances are forbidden.
+	 * Unserializing instances is forbidden.
 	 */
 	private function __wakeup() { }
 }
@@ -56,7 +56,7 @@ trait Enclose_Master {
 	final protected function __clone() { }
 
 	/**
-	 * Unserializing instances of this class is forbidden.
+	 * Unserializing instances is forbidden.
 	 */
 	final protected function __wakeup() { }
 }
@@ -82,6 +82,8 @@ trait Construct_Sub {
  * Holds public magic constructor method and forces a subsconstructor and parent constructor.
  * The constructor may only be called once per class, otherwise the plugin will kill itself.
  *
+ * Loads parent constructor.
+ *
  * @since 1.0.0
  * @access private
  */
@@ -91,12 +93,38 @@ trait Construct_Master {
 
 		static $count = array();
 
-		//* Don't execute this instance twice.
+		//* Don't execute this instance twice. For some reason conditional counting can't be done.
 		$count[ __CLASS__ ] = isset( $count[ __CLASS__ ] ) ? $count[ __CLASS__ ] : 0;
 		$count[ __CLASS__ ] < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
 		$count[ __CLASS__ ]++;
 
 		parent::__construct();
+
+		$this->construct();
+	}
+
+	abstract protected function construct();
+}
+
+/**
+ * Holds public magic constructor method and forces a subsconstructor and parent constructor.
+ * The constructor may only be called once per class, otherwise the plugin will kill itself.
+ *
+ * Does not load parent constructor.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+trait Construct_Solo_Master {
+
+	final public function __construct() {
+
+		static $count = array();
+
+		//* Don't execute this instance twice. For some reason conditional counting can't be done.
+		$count[ __CLASS__ ] = isset( $count[ __CLASS__ ] ) ? $count[ __CLASS__ ] : 0;
+		$count[ __CLASS__ ] < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
+		$count[ __CLASS__ ]++;
 
 		$this->construct();
 	}
