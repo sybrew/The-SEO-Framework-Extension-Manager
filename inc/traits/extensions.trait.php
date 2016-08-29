@@ -81,12 +81,10 @@ trait Extensions_Properties {
 		return array(
 			'title-fix' => array(
 				'slug' => 'title-fix',
-				'title' => __( 'Title Fix', 'the-seo-framework-extension-manager' ),
 				'network' => '0',
 				'type' => 'free',
-				'auth' => '0',
-				'short_description' => __( 'The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.', 'the-seo-framework-extension-manager' ),
-				'version' => '1.0.0',
+				'area' => 'general',
+				'version' => '1.0.2',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1454785229',
@@ -115,9 +113,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => 'e3182ba4c9c3f75a5d7b1206d41f99c0acdabce8a386e004079411ab5ec4ce03',
-			'sha1'   => 'a878530568a960759c20f24c4d41dfb5d89af582',
-			'md5'    => 'ab61f8c932a408f8b6880a08583dc13f',
+			'sha256' => '0c78c432da447ec7646f3836b87da33f8e46c252dc75851fdd94c6ea9959ca79',
+			'sha1'   => '093d53e226ffb48b4cdf0d8489549e9468b8b082',
+			'md5'    => 'f7f5aced9700d8b1c4d29811cedc6a59',
 		);
 	}
 
@@ -239,6 +237,43 @@ trait Extensions_Properties {
 
 		return '';
 	}
+
+	/**
+	 * Returns extension file headers.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $data The fetched header data.
+	 *
+	 * @param string $slug The extension slug.
+	 * @return array The extension header data.
+	 */
+	private static function get_extension_header( $slug ) {
+
+		static $data = array();
+
+		if ( isset( $data[ $slug ] ) )
+			return $data[ $slug ];
+
+		$default_headers = array(
+			'Name'         => 'Extension Name',
+			'ExtensionURI' => 'Extension URI',
+			'Version'      => 'Version',
+			'Description'  => 'Description',
+			'Author'       => 'Author',
+			'AuthorURI'    => 'Author URI',
+			'License'      => 'License',
+			'Network'      => 'Network',
+			'TextDomain'   => 'TextDomain',
+		);
+
+		$data[ $slug ] = false;
+
+		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+			$data[ $slug ] = get_file_data( $file, $default_headers, 'tsfem-extension' );
+		}
+
+		return $data[ $slug ];
+	}
 }
 
 
@@ -273,12 +308,6 @@ trait Extensions_Actions {
 			return $checksum;
 
 		$extensions = static::$extensions;
-
-		//* Unset i18n.
-		foreach ( $extensions as $slug => $values ) {
-			unset( $extensions[ $slug ]['title'] );
-			unset( $extensions[ $slug ]['short_description'] );
-		}
 
 		$extensions = serialize( $extensions );
 		$algos = hash_algos();

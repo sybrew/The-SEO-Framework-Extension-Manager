@@ -384,7 +384,7 @@ class Panes extends API {
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );
 
 		$content = Extensions::get( 'layout_content' );
-		$content = sprintf( '<div class="tsfem-extensions-overview-content">%s</div>', $content );
+		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row">%s</div>', $content );
 
 		Extensions::reset();
 

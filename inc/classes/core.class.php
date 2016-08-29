@@ -105,11 +105,8 @@ class Core {
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
-		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
 
 		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
-
-		add_action( 'shutdown', array( $this, 'dump' ) );
 	}
 
 	/**
@@ -332,7 +329,7 @@ class Core {
 	 * @param array $notice The notice.
 	 */
 	protected function set_error_notice( $notice = array() ) {
-		update_option( $this->error_notice_option, $notice );
+		is_admin() and update_option( $this->error_notice_option, $notice );
 	}
 
 	/**
@@ -507,7 +504,7 @@ class Core {
 			case 10001 :
 			case 10002 :
 			case 2001 :
-				$message = esc_html__( 'Extension list has been tampered with. Please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
+				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 

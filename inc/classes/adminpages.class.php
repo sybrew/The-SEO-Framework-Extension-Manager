@@ -169,6 +169,7 @@ class AdminPages extends AccountActivation {
 
 	/**
 	 * Hooks admin actions into the TSF Extension Manager pagehook.
+	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
 	 * @uses $this->seo_extensions_menu_page_hook variable.
@@ -197,6 +198,9 @@ class AdminPages extends AccountActivation {
 		//* Add body class.
 		add_filter( 'admin_body_class', array( $this, 'add_admin_body_class' ), 999, 1 );
 
+		//* Output notices.
+		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
+
 		return $run = true;
 	}
 
@@ -214,11 +218,6 @@ class AdminPages extends AccountActivation {
 			//* Set names.
 			$this->css_name = 'tsf-extension-manager';
 			$this->js_name = 'tsf-extension-manager';
-
-			$scheme = is_ssl() ? 'https' : 'http';
-			$font = esc_url_raw( 'http://fonts.googleapis.com/css?family=Titillium+Web:600,400', array( $scheme ) );
-
-			wp_enqueue_style( 'google-titillium-web-font', $font, false );
 
 			//* Enqueue styles
 			add_action( 'admin_print_styles-' . $this->seo_extensions_menu_page_hook, array( $this, 'enqueue_admin_css' ), 11 );
@@ -338,8 +337,8 @@ class AdminPages extends AccountActivation {
 		$strings = array(
 			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
 			'i18n' => array(
-				'Activate' => esc_js( 'Activate', 'the-seo-framework-extension-manager' ),
-				'Deactivate' => esc_js( 'Deactivate', 'the-seo-framework-extension-manager' ),
+				'Activate' => esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
+				'Deactivate' => esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 			),
 		);
 

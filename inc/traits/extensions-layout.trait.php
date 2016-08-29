@@ -47,10 +47,17 @@ trait Extensions_i18n {
 			return $i18n;
 
 		return $i18n = array(
-			'free'       => __( 'Free', 'the-seo-framework-extension-manager' ),
-			'premium'    => __( 'Premium', 'the-seo-framework-extension-manager' ),
-			'activate'   => __( 'Activate', 'the-seo-framework-extension-manager' ),
-			'deactivate' => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
+			'free'            => __( 'Free', 'the-seo-framework-extension-manager' ),
+			'premium'         => __( 'Premium', 'the-seo-framework-extension-manager' ),
+			'activate'        => __( 'Activate', 'the-seo-framework-extension-manager' ),
+			'deactivate'      => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
+			'version'         => __( 'Version', 'the-seo-framework-extension-manager' ),
+			'first-party'     => __( 'First party', 'the-seo-framework-extension-manager' ),
+			'third-party'     => __( 'Third party', 'the-seo-framework-extension-manager' ),
+		//	'view-details'    => __( 'View detais', 'the-seo-framework-extension-manager' ),
+			'visit-author'    => __( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
+			'visit-extension' => __( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
+			'extension-home'  => __( 'Extension home', 'the-seo-framework-extension-manager' ),
 		);
 	}
 
@@ -142,16 +149,16 @@ trait Extensions_Layout {
 
 		foreach ( $extensions as $id => $extension ) {
 
-			if ( ! ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['title'] ) ) )
+			if ( ! ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['area'] ) ) )
 				continue;
 
-			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink">' . static::make_extension_list_icon( $extension ) . '</div>';
-			$wrap .= '<div class="tsfem-extension-about-wrap">' . static::make_extension_list_about( $extension ) . '</div>';
-			$wrap .= '<div class="tsfem-extension-description-wrap">' . static::make_extension_list_description( $extension ) . '</div>';
+			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink tsfem-flex-wrap">' . static::make_extension_list_icon( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-about-wrap tsfem-flex tsfem-flex-noshrink">' . static::make_extension_list_about( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-description-wrap tsfem-flex">' . static::make_extension_list_description( $extension ) . '</div>';
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
-			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
+			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-nowrap tsfem-flex-row tsfem-flex-nogrow %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
 		}
 
 		return $output;
@@ -216,9 +223,10 @@ trait Extensions_Layout {
 	private static function make_extension_list_about( $extension ) {
 
 		$header = static::make_extension_header( $extension );
+		$subheader = static::make_extension_subheader( $extension );
 		$buttons = static::make_extension_buttons( $extension );
 
-		return $header . $buttons;
+		return $header . $subheader . $buttons;
 	}
 
 	/**
@@ -231,12 +239,35 @@ trait Extensions_Layout {
 	 */
 	private static function make_extension_header( $extension ) {
 
-		$title = '<h4 class="tsfem-extension-title">' . esc_html( $extension['title'] ) . '</h4>';
+		$data = static::get_extension_header( $extension['slug'] );
+
+		$title = '<h4 class="tsfem-extension-title">' . esc_html( $data['Name'] ) . '</h4>';
 
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
 
 		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $title . $type . '</div>';
+	}
+
+	/**
+	 * Makes extension subheader.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $extension The extension to make subheader from.
+	 * @return string HTML extension subheader.
+	 */
+	private static function make_extension_subheader( $extension ) {
+
+		$data = static::get_extension_header( $extension['slug'] );
+
+		$party_class = 'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon';
+		$party_title = 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' );
+
+		$party = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, esc_attr( $party_title ) );
+		$author = '<span class="tsfem-extension-author">' . esc_html( $data['Author'] ) . '</span>';
+
+		return  '<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $party . $author . '</div>';
 	}
 
 	/**
@@ -320,10 +351,35 @@ trait Extensions_Layout {
 			$button = $nojs . $js;
 		}
 
-		return sprintf( '<div class="tsfem-extension-action">%s</div>', $button );
+		return sprintf( '<div class="tsfem-extension-action tsfem-flex tsfem-flex-row">%s</div>', $button );
 	}
 
+	/**
+	 * Outputs the extension description wrap and content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $extension The extension to fetch the description wrap from.
+	 * @return string The extension description output wrap.
+	 */
 	private static function make_extension_list_description( $extension ) {
 
+		$data = static::get_extension_header( $extension['slug'] );
+
+		$description = $data['Description'];
+
+		$url = $data['ExtensionURI'];
+		$author = $data['Author'];
+		$author_url = $data['AuthorURI'];
+		$version = $data['Version'];
+
+		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
+		$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
+		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
+
+		$output = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
+		$output .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home ) ) );
+
+	 	return '<div class="tsfem-extension-description tsfem-flex">' . $output . '</div>';
 	}
 }
