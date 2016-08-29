@@ -193,7 +193,9 @@ body.tsfem .wrap {
 /* ## Buttons input.
 /*--------------------------------------*/
 .tsfem-button,
-.tsfem-button-primary {
+.tsfem-button-primary,
+.tsfem-button:disabled,
+.tsfem-button-primary:disabled {
 	display: inline-block;
 	padding: 7px 14px;
 	background: #eee;
@@ -217,7 +219,8 @@ body.tsfem .wrap {
 	user-select: none;
 }
 
-.tsfem-button-primary {
+.tsfem-button-primary,
+.tsfem-button-primary:disabled {
 	background: #05809e;
 	-webkit-box-shadow: 0 3px 0 #006a85;
 	box-shadow: 0 3px 0 #006a85;
@@ -251,7 +254,8 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-love,
-.tsfem-account-inactive {
+.tsfem-account-inactive,
+.tsfem-button-extension-activate {
 	color: #fff;
 	background: #00cd98;
 	-webkit-box-shadow: 0 3px 0 #008964;
@@ -260,7 +264,8 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-warning,
-.tsfem-account-about-to-expire {
+.tsfem-account-about-to-expire,
+.tsfem-button-extension-deactivate {
 	color: #fff;
 	background: #ff746a;
 	-webkit-box-shadow: 0 3px 0 #d14b44;
@@ -420,6 +425,12 @@ body.tsfem .wrap {
 	-webkit-filter: grayscale(1);
 	filter: grayscale(1);
 	cursor: not-allowed;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 /* # Start Activation/Connect.
@@ -576,9 +587,13 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-header .tsfem-ajax {
-	max-width: 1.1em;
+	max-width: initial;
 	font-size: 1.1em;
 	overflow: hidden;
+	word-break: break-word;
+	text-align: right;
+	flex: 0 1 auto;
+	margin-left: 7px;
 }
 
 .tsfem-pane-header h3 {
@@ -774,18 +789,19 @@ h5.tsfem-extension-type {
 /* # Start AJAX.
 /*----------------------------------------------------------------------------*/
 
-.tsfem-ajax:before {
+.tsfem-ajax:after {
 	display: inline-block;
 	line-height: 1;
 	font-family: dashicons;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 1.225em;
-	vertical-align: middle;
+	vertical-align: baseline;
 	content: "";
+	margin-left: 4px;
 }
 
-.tsfem-ajax.tsfem-loading:before {
+.tsfem-ajax.tsfem-loading:after {
 	content: "\f463";
 	color: #007bd2;
 	-webkit-animation: tsfem-spin 1.5s linear infinite;
@@ -794,17 +810,17 @@ h5.tsfem-extension-type {
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
-.tsfem-ajax.tsfem-error:before {
+.tsfem-ajax.tsfem-error:after {
 	content: "\f158";
 	color: #dd3811;
 }
 
-.tsfem-ajax.tsfem-success:before {
+.tsfem-ajax.tsfem-success:after {
 	content: "\f147";
 	color: #0cc34b;
 }
 
-.tsfem-ajax.tsfem-unknown:before {
+.tsfem-ajax.tsfem-unknown:after {
 	content: "\f223";
 	color: #007bd2;
 }

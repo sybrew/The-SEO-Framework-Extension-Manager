@@ -314,9 +314,8 @@ trait Extensions_Layout {
 			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
 			$form = $nonce_action . $nonce . $extension . $submit;
 
-			//* NOTE: Was hide-if-js // var_dump() TESTING.
-			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-no-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
-			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_html( $text ) );
+			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
+			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_attr( $slug ), esc_attr( $type ), esc_html( $text ) );
 
 			$button = $nojs . $js;
 		}

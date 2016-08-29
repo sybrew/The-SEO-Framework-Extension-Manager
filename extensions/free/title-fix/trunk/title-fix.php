@@ -6,8 +6,8 @@ namespace TSF_Extension_Manager_Extension;
 
 /**
  * Extension Name: Title Fix
- * Extension URI: https://wordpress.org/plugins/the-seo-framework-title-fix/
- * Description: The Title Fix extension for The SEO Framework makes sure your title output is as configured. Even if your theme is doing it wrong.
+ * Extension URI: https://premium.theseoframework.com/extensions/title-fix/
+ * Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
  * Version: 1.0.2
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
@@ -137,9 +137,10 @@ final class The_SEO_Framework_Title_Fix {
 				 * Applies filters 'the_seo_framework_force_title_fix'
 				 * @since 1.0.1
 				 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
+				 * @since 1.0.0 TSF Extension Manager : Defaults to false.
 				 * @param bool Whether to force the title fixing.
 				 */
-				$this->force_title_fix = (bool) apply_filters( 'the_seo_framework_force_title_fix', version_compare( the_seo_framework_version(), '2.6.99' , '<' ) );
+				$this->force_title_fix = (bool) apply_filters( 'the_seo_framework_force_title_fix', false );
 			}
 
 			/**

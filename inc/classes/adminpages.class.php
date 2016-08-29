@@ -337,6 +337,10 @@ class AdminPages extends AccountActivation {
 
 		$strings = array(
 			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
+			'i18n' => array(
+				'Activate' => esc_js( 'Activate', 'the-seo-framework-extension-manager' ),
+				'Deactivate' => esc_js( 'Deactivate', 'the-seo-framework-extension-manager' ),
+			),
 		);
 
 		wp_localize_script( $this->js_name, 'tsfemL10n', $strings );

@@ -41,6 +41,8 @@ class Panes extends API {
 	private function construct() {
 		//* Ajax listener for updating feed option.
 		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, 'wp_ajax_enable_feeds' ) );
+		//* Ajax listener for updating extension setting.
+		add_action( 'wp_ajax_tsfem_update_extension', array( $this, 'wp_ajax_tsfem_update_extension' ) );
 	}
 
 	/**
@@ -220,6 +222,54 @@ class Panes extends API {
 				}
 
 				echo json_encode( $results );
+
+				exit;
+			}
+		}
+	}
+
+	/**
+	 * Updates extension through AJAX and returns AJAX response.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	public function wp_ajax_tsfem_update_extension() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( $this->can_do_settings() ) {
+
+				$case = '';
+				$slug = '';
+
+				if ( check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+					$data = $_POST;
+
+					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
+					$slug = isset( $data['slug'] ) ? $this->s_ajax_string( $data['slug'] ) : '';
+					$case = isset( $data['case'] ) ? $this->s_ajax_string( $data['case'] ) : '';
+				}
+
+				if ( $case && $slug ) {
+					$options = array(
+						'extension' => $slug,
+					);
+
+					if ( 'activate' === $case )
+						$status = $this->activate_extension( $options, true );
+					elseif ( 'deactivate' === $case )
+						$status = $this->deactivate_extension( $options, true );
+				} else {
+					$status = array(
+						'success' => -1,
+						'notice' => esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
+					);
+				}
+
+				//* Send back input when WP_DEBUG is on.
+				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
+
+				echo json_encode( $response );
 
 				exit;
 			}

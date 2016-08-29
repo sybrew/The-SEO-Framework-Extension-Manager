@@ -351,6 +351,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param int|array $option The error notice key.
 	 * @return array|string The escaped notice. Empty string when no array key is set.
 	 */
 	protected function get_error_notice( $option ) {
@@ -360,6 +361,47 @@ class Core {
 
 		if ( empty( $key ) )
 			return '';
+
+		$notice = $this->get_error_notice_by_key( $key, true );
+
+		$message = $notice['message'];
+		$type = $notice['type'];
+
+		switch ( $type ) :
+			case 'error' :
+			case 'warning' :
+				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
+				break;
+
+			case 'updated' :
+			default :
+				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
+				break;
+		endswitch;
+
+		/* translators: 1: 'Error code:', 2: The error code */
+		$status = sprintf( esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
+		$additional_info = $option[ $key ];
+
+		/* translators: 1: Error code, 2: Error message, 3: Additional info */
+		$output = sprintf( esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status, $message, $additional_info );
+
+		return array(
+			'message' => $output,
+			'type' => $type,
+		);
+	}
+
+	/**
+	 * Fetches notices by option and returns type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $key The error key.
+	 * @param bool $get_type Whether to fetch the error type as well.
+	 * @return array|string The escaped notice. When $get_type is true, an array is returned.
+	 */
+	protected function get_error_notice_by_key( $key, $get_type = true ) {
 
 		switch ( $key ) :
 			case 101 :
@@ -498,29 +540,23 @@ class Core {
 				break;
 		endswitch;
 
-		switch ( $type ) :
-			case 'error' :
-			case 'warning' :
-				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
-				break;
+		return $get_type ? array( 'message' => $message, 'type' => $type ) : $message;
+	}
 
-			case 'updated' :
-			default :
-				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
-				break;
-		endswitch;
-
-		/* translators: 1: 'Error code:', 2: The error code */
-		$status = sprintf( esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
-		$additional_info = $option[ $key ];
-
-		/* translators: 1: Error code, 2: Error message, 3: Additional info */
-		$output = sprintf( esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status, $message, $additional_info );
-
-		return array(
-			'message' => $output,
-			'type' => $type,
-		);
+	/**
+	 * Returns Ajax notice from $code.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $success The success status, either boolean, int, or other.
+	 * @param int $code The error code.
+	 * @return array {
+	 *		'success' => mixed $success,
+	 *		'notice'  => string $notice,
+	 * }
+	 */
+	protected function get_ajax_notice( $success, $code ) {
+		return array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
 	}
 
 	/**
@@ -793,10 +829,11 @@ class Core {
 	 * @since 1.0.0
 	 * @TODO bind error notices.
 	 *
-	 * @param array $options The form input options.
+	 * @param array $options The form/request input options.
+	 * @param bool $ajax Whether this is an AJAX request.
 	 * @return bool False on invalid input or on activation failure.
 	 */
-	protected function activate_extension( $options ) {
+	protected function activate_extension( $options, $ajax = false ) {
 
 		if ( empty( $options['extension'] ) )
 			return false;
@@ -816,13 +853,15 @@ class Core {
 		if ( true !== $result ) :
 			switch ( $result ) :
 				case -1 :
-					$this->set_error_notice( array( 10001 => '' ) );
-					return false;
+					//* No checksum found.
+					$ajax or $this->set_error_notice( array( 10001 => '' ) );
+					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
 					break;
 
 				case -2 :
-					$this->set_error_notice( array( 10002 => '' ) );
-					return false;
+					//* Checksum mismatch.
+					$ajax or $this->set_error_notice( array( 10002 => '' ) );
+					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
 					break;
 
 				default :
@@ -836,16 +875,16 @@ class Core {
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
 				if ( false === $this->validate_remote_subscription_license() ) {
-					$this->set_error_notice( array( 10003 => '' ) );
-					return false;
+					$ajax or $this->set_error_notice( array( 10003 => '' ) );
+					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
 				}
 			}
 
 			$success = $this->enable_extension( $slug );
 
 			if ( false === $success ) {
-				$this->set_error_notice( array( 10004 => '' ) );
-				return false;
+				$ajax or $this->set_error_notice( array( 10004 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
 			}
 		endif;
 
@@ -871,9 +910,9 @@ class Core {
 				break;
 		endswitch;
 
-		$this->set_error_notice( array( $code => '' ) );
+		$ajax or $this->set_error_notice( array( $code => '' ) );
 
-		return $status['success'];
+		return $ajax ? $this->get_ajax_notice( $status['success'], $code ) : $status['success'];
 	}
 
 	/**
@@ -882,9 +921,10 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param array $options The form input options.
+	 * @param bool $ajax Whether this is an AJAX request.
 	 * @return bool False on invalid input.
 	 */
-	protected function deactivate_extension( $options ) {
+	protected function deactivate_extension( $options, $ajax = false ) {
 
 		if ( empty( $options['extension'] ) )
 			return false;
@@ -893,9 +933,9 @@ class Core {
 		$success = $this->disable_extension( $slug );
 
 		$code = $success ? 11001 : 11002;
-		$this->set_error_notice( array( $code => '' ) );
+		$ajax or $this->set_error_notice( array( $code => '' ) );
 
-		return $success;
+		return $ajax ? $this->get_ajax_notice( $success, $code ) : $success;
 	}
 
 	/**
@@ -920,6 +960,18 @@ class Core {
 	 */
 	protected function disable_extension( $slug ) {
 		return $this->update_extension( $slug, false );
+	}
+
+	/**
+	 * Sanitizes AJAX input string.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $input The AJAX input string.
+	 * @return string $output The cleaned AJAX input string.
+	 */
+	protected function s_ajax_string( $input ) {
+		return trim( esc_attr( wp_kses_normalize_entities( wp_kses_no_null( strVal( $input ) ) ) ), ' \\/' );
 	}
 
 	/**
@@ -950,7 +1002,7 @@ class Core {
 	 * @return array TSF Extension Manager options.
 	 */
 	protected function get_all_options() {
-		return get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+		return TSF_EXTENSION_MANAGER_CURRENT_OPTIONS;
 	}
 
 	/**
@@ -1081,12 +1133,12 @@ class Core {
 			return true;
 
 		if ( $run ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data deletion.' );
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
 			wp_die();
 		}
 
 		if ( $this->has_run_update_option() ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data deletion.' );
+			the_seo_framework()->_doing_it_wrong( __METHOD__, __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' );
 			wp_die();
 		}
 
