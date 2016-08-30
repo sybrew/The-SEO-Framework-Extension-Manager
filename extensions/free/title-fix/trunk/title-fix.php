@@ -23,7 +23,7 @@ use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
 use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
 
 /**
- * Title Fix extension plugin for The SEO Framework
+ * Title Fix extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//* Notify the existence of this plugin through a lovely definition.
+//* Notify the existence of this extension through a lovely definition.
 define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 
 //* Define version, for future things.
@@ -50,6 +50,8 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\the_seo_framework_title_fix_init
  * Initialize the plugin.
  *
  * @since 1.0.0
+ * @action 'plugins_loaded'
+ * @priority 11 : The WordPress.org version has priority 10, preventing collision.
  *
  * @return bool True if class is loaded
  */
@@ -61,23 +63,23 @@ function the_seo_framework_title_fix_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	//* Don't load if the WordPress.org version is active. Namespaces prevent collision.
+	//* Don't load if the WordPress.org version is active.
 	if ( class_exists( 'The_SEO_Framework_Title_Fix' ) )
 		return $loaded = false;
 
-	new The_SEO_Framework_Title_Fix();
+	new Title_Fix();
 
 	return $loaded = true;
 }
 
 /**
- * Class TSF_Extension_Manager_Extension\The_SEO_Framework_Title_Fix
+ * Class TSF_Extension_Manager_Extension\Title_Fix
  *
  * @since 1.0.0
  *
  * @final Please don't extend this extension.
  */
-final class The_SEO_Framework_Title_Fix {
+final class Title_Fix {
 	use Enclose_Master, Construct_Solo_Master;
 
 	/**

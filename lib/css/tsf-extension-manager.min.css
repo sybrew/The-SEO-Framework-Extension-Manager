@@ -345,14 +345,15 @@ body.tsfem .wrap {
 .tsfem-switch-button-container-wrap {
 	display: inline-block;
 	perspective: 800px;
-	perspective-origin: 50% 100px;
+	perspective-origin: 50% 120px;
 }
 
 .tsfem-switch-button-container {
 	position: relative;
-	transform-style: preserve-3d;
+	/* EDGE BUG: Causes subpixel font-rendering to fail. */
+/*	transform-style: preserve-3d; */
 	margin: 0 auto;
-	width: 100px;
+	width: 120px;
 	height: 27px;
 	padding: 0;
 	-webkit-box-sizing: border-box;
@@ -500,6 +501,7 @@ body.tsfem .wrap {
 	margin: 0;
 	padding: 0;
 	align-items: center;
+	min-height: 33vh;
 }
 
 .tsfem-extensions-panes-row {
@@ -507,7 +509,6 @@ body.tsfem .wrap {
 	margin: 0 0 20px;
 	padding: 0;
 	min-height: 150px;
-	height: 33vh;
 }
 
 .tsfem-extensions-panes-row:last-of-type {
@@ -525,6 +526,8 @@ body.tsfem .wrap {
 	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
 	margin: 0;
 	padding: 0;
+	max-height: 100%;
+	flex: 1 1 100%;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar,
@@ -554,6 +557,7 @@ body.tsfem .wrap {
 	padding: 0;
 	margin: 0;
 	overflow: visible;
+	max-height: 100%;
 }
 
 .tsfem-pane-header,
@@ -566,8 +570,11 @@ body.tsfem .wrap {
 
 .tsfem-pane-content {
 	padding: 0;
-	flex: 1 1 auto;
 	border-top: 0;
+	flex: 1 1 auto;
+	flex: 1 1 100%;
+	flex: 1 1 33vh;
+	max-height: 100%;
 }
 
 .tsfem-pane-header * {
@@ -590,7 +597,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-header .tsfem-ajax {
 	max-width: initial;
-	font-size: 1.1em;
+	font-size: 1em;
 	overflow: hidden;
 	word-break: break-word;
 	text-align: right;
@@ -707,7 +714,8 @@ h5.tsfem-extension-type {
 	font-size: 0.83em;
 }
 
-.tsfem-extension-action > * {
+.tsfem-extension-action > *,
+.tsfem-extension-action input {
 	width: 100%;
 	text-align: center;
 }
@@ -829,7 +837,7 @@ h5.tsfem-extension-type {
 /*----------------------------------------------------------------------------*/
 
 .tsfem-ajax:after {
-	display: inline-block;
+	display: inline;
 	line-height: 1;
 	font-family: dashicons;
 	font-style: normal;
@@ -940,6 +948,7 @@ h5.tsfem-extension-type {
 
 	.tsfem-pane-content {
 		max-height: 300px;
+		flex: 1 1 auto;
 	}
 
 	.tsfem-extensions-panes-row .tsfem-pane-half:last-of-type {
