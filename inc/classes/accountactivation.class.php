@@ -72,13 +72,14 @@ class AccountActivation extends Panes {
 		if ( false === $this->handle_update_nonce( $this->request_name['activate-external'] ) )
 			return;
 
-		$response = $this->get_remote_activation_listener_response();
+		return $response = $this->get_remote_activation_listener_response();
 	}
 
 	/**
 	 * Fetches external activation response, periodically.
 	 *
 	 * @since 1.0.0
+	 * @todo
 	 *
 	 * @return bool|array False if data has not yet been set. Array if data has been set.
 	 */
@@ -97,6 +98,7 @@ class AccountActivation extends Panes {
 	 * Sets external activation response.
 	 *
 	 * @since 1.0.0
+	 * @todo
 	 *
 	 * @param array $value The data that needs to be set.
 	 * @return bool True
@@ -200,16 +202,23 @@ class AccountActivation extends Panes {
 
 			$this->set_error_notice( array( 402 => '' ) );
 			return true;
-		} elseif ( ! $results && $this->get_option( '_activated' ) ) {
-			$this->do_deactivation();
-			$this->set_error_notice( array( 403 => '' ) );
+		} elseif ( ! $results ) {
+			if ( $this->get_option( '_activated' ) ) {
+				//* Upgrade request.
+				$this->set_error_notice( array( 403 => '' ) );
+			} else {
+				//* Activation request.
+				$this->do_deactivation();
+				$this->set_error_notice( array( 404 => '' ) );
+			}
+
 			return false;
 		} elseif ( isset( $results['code'] ) ) {
 			//* Probably duplicated local activation request. Will be handled later in response.
 			return false;
 		}
 
-		$this->set_error_notice( array( 404 => '' ) );
+		$this->set_error_notice( array( 405 => '' ) );
 		return null;
 	}
 
@@ -260,7 +269,6 @@ class AccountActivation extends Panes {
 			'_activation_expires' => '',
 			'_activated'          => 'Activated',
 			'_instance'           => $this->get_activation_instance( false ),
-			'_data'               => array(),
 		);
 
 		$success = $this->update_option_multi( $options );
@@ -307,16 +315,13 @@ class AccountActivation extends Panes {
 
 		$success = array();
 
-		$success[] = $this->update_option_multi( array(
-			'api_key'             => $args['api_key'],
-			'activation_email'    => $args['activation_email'],
-			'_activation_level'   => $args['_activation_level'],
-			'_activated'          => 'Activated',
-			'_instance'           => $this->get_activation_instance( false ),
-			'_data'               => array(),
-		) );
+		$success[] = $this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true );
+		$success[] = $this->update_option( 'api_key', $args['api_key'], 'instance', true );
+		$success[] = $this->update_option( 'activation_email', $args['activation_email'], 'instance', true );
+		$success[] = $this->update_option( '_activation_level', $args['_activation_level'], 'instance', true );
+		$success[] = $this->update_option( '_activated', 'Activated', 'instance', true );
 
-		//* Fetches and saves extra subscription status data. i.e. '_data'
+		//* Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
 		$success[] = $this->set_remote_subscription_status( true );
 
 		return ! in_array( false, $success, true );
@@ -376,7 +381,7 @@ class AccountActivation extends Panes {
 			'email'   => $this->get_option( 'activation_email' ),
 			'active'  => $this->get_option( '_activated' ),
 			'level'   => $this->get_option( '_activation_level' ),
-			'data'    => $this->get_option( '_data' ),
+			'data'    => $this->get_option( '_remote_subscription_status' ),
 		);
 	}
 
@@ -439,31 +444,28 @@ class AccountActivation extends Panes {
 				'licence_key' => $this->activation_key,
 				'activation_email' => $this->activation_email,
 			);
-
-			return $response = $this->handle_request( 'status', $args );
 		} else {
-			//* Updates at most every 2 hours.
-			$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
-
-			$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
-
-			//* Cache status for 2 hours.
-			if ( $timestamp === $status['timestamp'] ) {
-				return $status['status'];
-			}
-
 			$args = array(
 				'licence_key' => $this->get_option( 'api_key' ),
 				'activation_email' => $this->get_option( 'activation_email' ),
 			);
-
-			$response = $this->handle_request( 'status', $args );
-
-			if ( ! empty( $response ) )
-				$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response ) );
-
-			return $response;
 		}
+
+		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
+
+		//* Updates at most every 2 hours.
+		$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
+
+		//* Cache status for 2 hours.
+		if ( $timestamp === $status['timestamp'] )
+			return $status['status'];
+
+		$response = $this->handle_request( 'status', $args );
+
+		if ( ! empty( $response ) )
+			$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response ), 'regular', false );
+
+		return $response;
 	}
 
 	/**
@@ -485,7 +487,7 @@ class AccountActivation extends Panes {
 		if ( $doing_activation ) {
 			$data = array();
 		} else {
-			$data = $this->get_option( '_data', array() );
+			$data = $this->get_option( '_remote_subscription_status', array() );
 
 			if ( false === is_array( $data ) )
 				$data = array();
@@ -493,7 +495,7 @@ class AccountActivation extends Panes {
 
 		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;
 
-		$success = $this->update_option( '_data', $data, 'instance', false );
+		$success = $this->update_option( '_remote_subscription_status', $data, 'instance', false );
 
 		return $success;
 	}

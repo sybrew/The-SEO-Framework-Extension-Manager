@@ -67,7 +67,7 @@ interface Secure_Static_Abstracts {
  *      to the extending classes.
  */
 abstract class Secure_Abstract implements Secure_Static_Abstracts {
-	use Enclose_Master, Force_Static_Master;
+	use Enclose_Master, Force_Static_Master, Ignore_Properties;
 
 	/**
 	 * Holds the class instance type.
@@ -215,7 +215,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 *
 	 * @return bool Whether the current account is premium.
 	 */
-	final protected static function is_premium_account() {
+	final protected static function is_premium_user() {
 
 		static $is_premium = null;
 

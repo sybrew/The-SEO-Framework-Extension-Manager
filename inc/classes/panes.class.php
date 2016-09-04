@@ -76,11 +76,7 @@ class Panes extends API {
 	 */
 	protected function get_extensions_actions_overview() {
 
-		if ( $this->is_premium_user() ) {
-			$output = $this->get_premium_actions_output();
-		} else {
-			$output = $this->get_free_actions_output();
-		}
+		$output = $this->get_actions_output();
 
 		return sprintf( '<div class="tsfem-actions-wrap">%s</div>', $output );
 	}
@@ -277,37 +273,118 @@ class Panes extends API {
 	}
 
 	/**
-	 * Outputs actions for the premium user.
+	 * Renders and returns actions pane output content.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @TODO Deactivation button + Subscription time.
-	 * @return string The premium user actions.
+	 * @return string The actions pane output.
 	 */
-	protected function get_premium_actions_output() {
+	protected function get_actions_output() {
 
-		$output = '<h4>This is still under construction.</h4>';
-		$output .= $this->get_deactivation_button();
-		$output .= $this->get_support_buttons();
+		$left = $this->get_actions_left_output();
+		$right = $this->get_actions_right_output();
 
-		return $output;
+		return sprintf( '<div class="tsfem-actions tsfem-flex tsfem-flex-row">%s</div>', $left . $right );
 	}
 
 	/**
-	 * Outputs actions for the free user.
+	 * Wraps and outputs the left side of the Actions pane.
 	 *
 	 * @since 1.0.0
 	 *
-	 * TODO: Basically the activation page, but without free and with deactivation.
-	 * @return string The free user actions.
+	 * @return string The Actions pane left side output.
 	 */
-	protected function get_free_actions_output() {
+	protected function get_actions_left_output() {
 
-		$output = '<h4>This is still under construction.</h4>';
-		$output .= $this->get_deactivation_button();
+		$output = '';
+
 		$output .= $this->get_support_buttons();
+		$output .= $this->get_deactivation_button();
 
-		return $output;
+		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex">%s</div>', $output );
+	}
+
+	/**
+	 * Wraps and outputs the right side of the Actions pane.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Actions pane right side output.
+	 */
+	protected function get_actions_right_output() {
+
+		$output = '';
+
+		if ( $this->is_premium_user() ) {
+			$output .= $this->get_account_information();
+			$output .= $this->get_account_extend_form();
+		} else {
+			$output .= $this->get_account_upgrade_form();
+		}
+
+		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex">%s</div>', $output );
+	}
+
+	/**
+	 * Wraps and returns the account information.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The account information wrap.
+	 */
+	protected function get_account_information() {
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Layout::initialize( 'list', $_instance, $bits );
+
+		Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		Layout::set_nonces( 'request_name', $this->request_name );
+		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+
+		Layout::set_account( $this->get_subscription_status() );
+
+		$output = Layout::get( 'account-information' );
+
+		Layout::reset();
+
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
+
+		return sprintf( '<div class="tsfem-account-info tsfem-flex">%s%s</div>', $title, $output );
+	}
+
+
+	protected function get_account_extend_form() {
+	}
+
+	/**
+	 * Wraps and returns the account upgrade form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The account upgrade form wrap.
+	 */
+	protected function get_account_upgrade_form() {
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Layout::initialize( 'form', $_instance, $bits );
+
+		Layout::set_account( $this->get_subscription_status() );
+
+		Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		Layout::set_nonces( 'request_name', $this->request_name );
+		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+
+		$form = Layout::get( 'account-upgrade' );
+
+		Layout::reset();
+
+		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
+
+		return sprintf( '<div class="tsfem-account-upgrade tsfem-flex tsfem-flex-row">%s%s</div>', $title, $form );
 	}
 
 	/**
@@ -332,7 +409,20 @@ class Panes extends API {
 
 		Layout::reset();
 
-		return $button;
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
+		$content = esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
+
+		/**
+		 * @uses trait \Activation_Data
+		 */
+		$extra = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
+		$extra = $extra ? sprintf( $extra, $this->get_activation_site_domain() ) : '';
+
+		if ( $extra ) {
+			$extra = sprintf( '<div class="tsfem-account-deactivate-explanation tsfem-flex tsfem-flex-nowrap tsfem-flex-row">%s</div>', $extra );
+		}
+
+		return sprintf( '<div class="tsfem-account-deactivate">%s%s%s</div>', $title, $extra, $button );
 	}
 
 	/**

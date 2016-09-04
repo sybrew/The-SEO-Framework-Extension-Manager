@@ -182,42 +182,45 @@ class API extends Core {
 
 		$additional_info = '';
 
+		//* If the user's already using a free account, don't deactivate.
+		$free = $this->get_option( '_activated' ) && ! $this->is_premium_user();
+
 		if ( isset( $results['code'] ) ) {
 			switch ( $results['code'] ) :
 				case '100' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 302 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '101' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 303 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '102' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 304 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '103' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 305 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '104' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 306 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '105' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 307 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				case '106' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 308 => $additional_info ) );
-					$this->do_deactivation();
+					$free or $this->do_deactivation();
 					break;
 				default :
 					break;

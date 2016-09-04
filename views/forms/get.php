@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $
 $class_submit = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'tsfem-button tsfem-button-primary';
 $value_redirect = isset( $redirect ) ? $redirect : 'signup';
 
-//* @TODO nonce?
+//* @TODO nonce? nonce.
 
 ?>
 <form name="<?php echo esc_attr( $name ); ?>" action="<?php echo esc_url( $action ) ?>" method="POST" target="_blank">

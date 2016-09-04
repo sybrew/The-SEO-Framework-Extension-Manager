@@ -169,7 +169,7 @@ final class Trends {
 				//* No need for translations, it's English only.
 				$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', esc_url( $link ), $title );
 
-				$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
+				$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
 				$i++;
 			}
 

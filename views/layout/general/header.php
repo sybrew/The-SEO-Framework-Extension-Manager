@@ -16,8 +16,9 @@ if ( $options ) {
 		$account_text = __( 'My Account', 'the-seo-framework-extension-manager' );
 		$account_title = __( 'View account', 'the-seo-framework-extension-manager' );
 
-		if ( isset( $status['data']['expire'] ) ) {
-			$then = strtotime( $status['data']['expire'] );
+		if ( isset( $status['data']['end_date'] ) ) {
+			//* UTC.
+			$then = strtotime( $status['data']['end_date'] );
 			$in_two_weeks = strtotime( '+4 week' );
 			$about_to_expire = $then < $in_two_weeks;
 
@@ -43,7 +44,7 @@ if ( $options ) {
 }
 
 ?>
-<section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap">
+<section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
 	<?php echo $about . $actions; ?>
 	<div class="tsfem-title tsfem-flex tsfem-flex-row"><span class="tsfem-logo"></span><header><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></header></div>
 </section>

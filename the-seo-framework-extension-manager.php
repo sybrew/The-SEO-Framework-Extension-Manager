@@ -49,16 +49,23 @@ register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
  */
 function tsf_extension_manager_check_php() {
 
-	$goback = 'Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?';
+	//* Let's have some fun with teapots.
+	$error = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y', time() ) ) / DAY_IN_SECONDS ) ? 418 : 500;
 
 	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50400 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
+		wp_die( 'The SEO Framework - Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
+			'The SEO Framework - Extension Manager &laquo; Server Requirements',
+			array( 'response' => intval( $error ) )
+		);
 	} elseif ( $GLOBALS['wp_db_version'] < 35700 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework Extension Manager requires WordPress 4.4 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?' );
+		wp_die( 'The SEO Framework - Extension Manager requires WordPress 4.4 or later. Sorry about that!<br>
+				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
+			'The SEO Framework - Extension Manager &laquo; WordPress Requirements',
+			array( 'response' => intval( $error ) )
+		);
 	}
 }
 
@@ -129,7 +136,7 @@ define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_exten
  */
 define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS ) );
 
-add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 10 );
+add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 4 );
 /**
  * Plugin locale 'the-seo-framework-extension-manager'
  * Locale folder the-seo-framework-extension-manager/language/

@@ -161,3 +161,40 @@ trait Force_Static_Master {
 	 */
 	final protected function __construct() { }
 }
+
+/**
+ * Ignores invalid class properties, instead of initiating a fatal error.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+trait Ignore_Properties {
+
+	/**
+	 * Runs when an inexisting property is trying to be set.
+	 * Does not set invalid properties.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param $name The inexisting property name.
+	 * @param $value The propertie value that ought to be set.
+	 */
+	final protected function __set( $name = '', $val = null ) {
+		the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html( 'static::$' . $name . ' does not exist.' ) );
+	}
+
+	/**
+	 * Runs when a inexisting property is trying to be called.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param $name The inexisting property name.
+	 * @return null.
+	 */
+	final protected function __get( $name = '' ) {
+
+		the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html( 'static::$' . $name . ' does not exist.' ) );
+
+		return null;
+	}
+}

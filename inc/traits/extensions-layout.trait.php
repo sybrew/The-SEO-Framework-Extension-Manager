@@ -246,7 +246,7 @@ trait Extensions_Layout {
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
 
-		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $title . $type . '</div>';
+		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
 
 	/**
@@ -289,7 +289,7 @@ trait Extensions_Layout {
 				'disabled' => false,
 			);
 		} else {
-			$disabled = self::is_premium_account() || ! static::is_extension_premium( $extension ) ? false : true;
+			$disabled = self::is_premium_user() || ! static::is_extension_premium( $extension ) ? false : true;
 			$buttons[] = array(
 				'type' => 'activate',
 				'disabled' => $disabled,
@@ -380,6 +380,6 @@ trait Extensions_Layout {
 		$output = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
 		$output .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home ) ) );
 
-	 	return '<div class="tsfem-extension-description tsfem-flex">' . $output . '</div>';
+	 	return '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">' . $output . '</div>';
 	}
 }

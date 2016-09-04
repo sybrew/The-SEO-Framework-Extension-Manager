@@ -421,7 +421,7 @@ trait Extensions_Actions {
 			return array( 'success' => false, 'case' => 1 );
 
 		if ( static::is_extension_premium( $extension ) ) {
-			if ( self::is_premium_account() ) {
+			if ( self::is_premium_user() ) {
 				return array( 'success' => true, 'case' => 2 );
 			} else {
 				return array( 'success' => false, 'case' => 3 );
