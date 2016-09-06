@@ -105,7 +105,7 @@ final class Extensions extends Secure_Abstract {
 				case 'activation' :
 				case 'list' :
 				case 'load' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or tsf_extension_manager()->_maybe_die();
 					self::set( '_type', $type );
 					static::set_up_variables();
 					break;
@@ -169,7 +169,7 @@ final class Extensions extends Secure_Abstract {
 	}
 
 	/**
-	 * Sets instance extension slug to handle.
+	 * Sets instance's extension slug to handle.
 	 *
 	 * @since 1.0.0
 	 *

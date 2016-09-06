@@ -299,7 +299,6 @@ class Panes extends API {
 		$output = '';
 
 		$output .= $this->get_support_buttons();
-		$output .= $this->get_deactivation_button();
 
 		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex">%s</div>', $output );
 	}
@@ -321,6 +320,8 @@ class Panes extends API {
 		} else {
 			$output .= $this->get_account_upgrade_form();
 		}
+
+		$output .= $this->get_deactivation_button();
 
 		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex">%s</div>', $output );
 	}
@@ -412,17 +413,24 @@ class Panes extends API {
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
 		$content = esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
 
+		$extras = array();
+		$_extra = '';
+
+		$extras[] = esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
+		$extras[] = esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
 		/**
 		 * @uses trait \Activation_Data
 		 */
-		$extra = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
-		$extra = $extra ? sprintf( $extra, $this->get_activation_site_domain() ) : '';
+		$extras[] = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
 
-		if ( $extra ) {
-			$extra = sprintf( '<div class="tsfem-account-deactivate-explanation tsfem-flex tsfem-flex-nowrap tsfem-flex-row">%s</div>', $extra );
+		foreach ( $extras as $extra ) {
+			if ( $extra )
+				$_extra .= sprintf( '<div class="tsfem-description">%s</div>', $extra );
 		}
 
-		return sprintf( '<div class="tsfem-account-deactivate">%s%s%s</div>', $title, $extra, $button );
+		$extra = sprintf( '<div class="tsfem-flex tsfem-flex-nowrap">%s</div>', $_extra );
+
+		return sprintf( '<div class="tsfem-account-deactivate tsfem-flex">%s%s%s</div>', $title, $button, $extra );
 	}
 
 	/**
@@ -439,15 +447,28 @@ class Panes extends API {
 
 		Layout::initialize( 'link', $_instance, $bits );
 
-		$buttons = '';
+		$buttons = array();
+		$description = array();
 
-		$buttons = Layout::get( 'free-support-button' );
-		if ( $this->is_premium_user() )
-			$buttons .= Layout::get( 'premium-support-button' );
+		$buttons[1] = Layout::get( 'free-support-button' );
+		$description[1] = __( 'Questions about all free extensions can be asked through Free Support.', 'the-seo-framework-extension-manager' );
+
+		if ( $this->is_premium_user() ) {
+			$buttons[2] = Layout::get( 'premium-support-button' );
+			$description[2] = __( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
+		}
 
 		Layout::reset();
 
-		return $buttons;
+		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+
+		$content = '';
+		foreach ( $buttons as $key => $button ) {
+			$extra = sprintf( '<span class="tsfem-description">%s</span>', esc_html( $description[ $key ] ) );
+			$content .= sprintf( '<div class="tsfem-support-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
+		}
+
+		return sprintf( '<div class="tsfem-account-support">%s%s</div>', $title, $content );
 	}
 
 	/**

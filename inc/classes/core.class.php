@@ -33,7 +33,7 @@ tsf_extension_manager_load_trait( 'options' );
  * @since 1.0.0
  */
 class Core {
-	use Enclose, Construct_Final, Options;
+	use Enclose, Construct_Final, Destruct_Final, Options;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -560,6 +560,116 @@ class Core {
 	}
 
 	/**
+	 * Determines if the plugin instance has died or not.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $died Determines plugin alive state.
+	 *
+	 * @param bool $set Whether to set death.
+	 * @return false If the plugin has not died. True otherwise.
+	 */
+	final public function has_died( $set = false ) {
+
+		static $died = false;
+
+		if ( $set )
+			$died = true;
+
+		return $died;
+	}
+
+	/**
+	 * Performs wp_die on TSF Extension Manager Page.
+	 * Descructs class otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $message The error message.
+	 * @return bool false If no wp_die has been performed.
+	 */
+	final public function _maybe_die( $message ) {
+
+		if ( $this->is_tsf_extension_manager_page() ) {
+			//* wp_die() can be filtered. Remove filters JIT.
+			remove_all_filters( 'wp_die_ajax_handler' );
+			remove_all_filters( 'wp_die_xmlrpc_handler' );
+			remove_all_filters( 'wp_die_handler' );
+
+			wp_die( esc_html( $message ) );
+	 	}
+
+		//* Don't spam error log.
+		if ( false === $this->has_died() )
+			the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
+
+		$this->stop_class();
+		$this->has_died( true );
+
+		return false;
+	}
+
+	/**
+	 * Stops class from executing. A true destructor.
+	 * Removes all instance properties, and removes instance from global $wp_filter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool true
+	 */
+	final protected function stop_class() {
+
+		$class_vars = get_class_vars( __CLASS__ );
+		$other_vars = get_class_vars( get_called_class() );
+
+		$properties = array_merge( $class_vars, $other_vars );
+
+		foreach ( $properties as $property => $value ) :
+			if ( isset( $this->$property ) )
+				$this->$property = is_array( $this->$property ) ? array() : null;
+		endforeach;
+
+		array_walk( $GLOBALS['wp_filter'], array( $this, 'stop_class_filters' ) );
+		$this->__destruct();
+
+		return true;
+	}
+
+	/**
+	 * Forces wp_filter removal. It's quite heavy, used in "oh dear God" circumstances.
+	 *
+	 * Searches current filter, and if the namespace of this namespace is found,
+	 * it will destroy it from globals $wp_filter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $current_filter The filter to walk.
+	 * @param string $key The current array key.
+	 * @return bool true
+	 */
+	final protected function stop_class_filters( $current_filter, $key ) {
+
+		$_key = key( $current_filter );
+		$filter = reset( $current_filter[ $_key ] );
+
+		static $_this = null;
+
+		if ( null === $_this )
+			$_this = get_class( $this );
+
+		if ( isset( $filter['function'] ) ) {
+			if ( is_array( $filter['function'] ) ) :
+				foreach ( $filter['function'] as $k => $function ) :
+					if ( is_object( $function ) && get_class( $function ) === $_this )
+						unset( $GLOBALS['wp_filter'][ $key ][ $_key ] );
+				endforeach;
+			endif;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Verifies views instances.
 	 *
 	 * @since 1.0.0
@@ -568,7 +678,7 @@ class Core {
 	 * @param int $bit The instance bit.
 	 * @return bool True if verified.
 	 */
-	public function verify_instance( $instance, $bit ) {
+	final public function verify_instance( $instance, $bit ) {
 		return $instance === $this->get_verification_instance( $bit );
 	}
 
@@ -576,13 +686,16 @@ class Core {
 	 * Generates view instance through bittype and hash comparison.
 	 * It's a two-factor verification.
 	 *
+	 * Performs wp_die() on TSF Extension Manager's admin page. Otherwise it
+	 * will silently fail and destruct class.
+	 *
 	 * @since 1.0.0
 	 * @staticvar string $instance
 	 *
 	 * @param int|null $bit The instance bit.
 	 * @return string $instance The instance key.
 	 */
-	protected function get_verification_instance( $bit = null ) {
+	final protected function get_verification_instance( $bit = null ) {
 
 		static $instance = array();
 
@@ -590,8 +703,9 @@ class Core {
 		$_bit = $bits[0];
 
 		if ( isset( $instance[ $_bit ] ) ) {
+			//* Only crash on plugin page upon failure. Otherwise kill instance and all bindings.
 			if ( empty( $instance[ $bit ] ) || $instance[ $_bit ] !== $instance[ $bit ] )
-				wp_die( 'Instance verification failed.' );
+				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) or $instance = array();
 
 			return $instance[ $bit ];
 		}
@@ -614,7 +728,7 @@ class Core {
 	 * @param bool $previous Whether to fetch the previous set of bits.
 	 * @return array The verification bits.
 	 */
-	protected function get_bits( $previous = false ) {
+	final protected function get_bits( $previous = false ) {
 
 		static $_bit = null;
 		static $bit = null;
@@ -627,6 +741,7 @@ class Core {
 			$_bit++;
 		}
 
+		//* Prepare for empty and negative bits and count irregular.
 		$bit | $_bit && $bit++ ^ ~ $_bit-- && $bit ^ $_bit++ && $bit | $_bit++;
 
 		return array( $_bit, $bit );
@@ -785,7 +900,7 @@ class Core {
 			$title = __( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = __( 'Premium Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button-primary tsfem-button-love tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
+			$class = $love ? 'tsfem-button-primary tsfem-button-star tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
 

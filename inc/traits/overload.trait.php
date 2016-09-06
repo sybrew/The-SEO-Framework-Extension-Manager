@@ -149,6 +149,18 @@ trait Construct_Final {
 }
 
 /**
+ * Holds protected magic destructor method..
+ * To be used on final instance.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+trait Destruct_Final {
+
+	final protected function __destruct() { }
+}
+
+/**
  * Forces all classes and subclasses to be static.
  *
  * @since 1.0.0

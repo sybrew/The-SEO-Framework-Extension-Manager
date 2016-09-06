@@ -1,7 +1,7 @@
 /* # Start Normalize.
 /*----------------------------------------------------------------------------*/
 
-/* ## Notices
+/* ## Notices.
 /*--------------------------------------*/
 .wrap.tsfem .notice {
 	margin: 0 0 20px;
@@ -14,7 +14,8 @@
 
 /* ## Cursors
 /*--------------------------------------*/
-/* ### Disable cursor
+
+/* ### Disable cursor.
 /*--------------------------------------*/
 .tsfem-disable-cursor {
 	-webkit-touch-callout: none;
@@ -24,7 +25,8 @@
 	-ms-user-select: none;
 	user-select: none;
 }
-/* ### Question cursor
+
+/* ### Question cursor.
 /*--------------------------------------*/
 .tsfem-question-cursor {
 	cursor: help;
@@ -652,12 +654,19 @@ body.tsfem .wrap {
 .tsfem-actions > div {
 	margin-right: 20px;
 	margin-bottom: 20px;
-	/*max-width: calc( 50% - 40px );*/
 	flex-basis: calc( 50% - 20px );
 }
 
 .tsfem-actions > div:last-of-type {
 	margin-right: 0;
+	margin-bottom: 0;
+}
+
+.tsfem-actions > div > div {
+	margin-bottom: 20px;
+}
+
+.tsfem-actions > div > div:last-of-type {
 	margin-bottom: 0;
 }
 
@@ -671,12 +680,29 @@ body.tsfem .wrap {
 
 h4.tsfem-form-title,
 h4.tsfem-info-title,
-h4.tsfem-status-title {
+h4.tsfem-status-title,
+h4.tsfem-support-title {
 	padding: 0;
 	margin: 0 0 14px;
 	font-size: 1.33em;
 	font-weight: 400;
 	color: #057f9c;
+}
+
+.tsfem-support-buttons {
+	margin-bottom: 14px;
+	flex-basis: 50%;
+	max-width: 300px;
+}
+
+.tsfem-support-buttons:last-of-type {
+	margin-bottom: 0;
+}
+
+.tsfem-description {
+	font-size: 0.93em;
+	font-style: italic;
+	text-indent: .5em;
 }
 
 /* ### Extensions pane.
@@ -952,13 +978,6 @@ h5.tsfem-extension-type {
 	}
 }
 
-/* # Start override.
-/*----------------------------------------------------------------------------*/
-
-.tsfem-hidden {
-	display: none;
-}
-
 /* # Start Media Queries.
 /*----------------------------------------------------------------------------*/
 
@@ -1042,4 +1061,11 @@ h5.tsfem-extension-type {
 		-webkit-justify-content: flex-start;
 		justify-content: flex-start;
 	}
+}
+
+/* # Start override.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-hidden {
+	display: none;
 }

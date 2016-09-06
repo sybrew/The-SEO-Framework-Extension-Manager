@@ -266,7 +266,7 @@ final class Layout extends Secure_Abstract {
 				$date_until = isset( $date_until ) ? date_i18n( get_option( 'date_format' ), $date_until ) : '';
 				$expires_in = sprintf( '<time class="tsfem-question-cursor tsfem-dashicon %s" title="%s" datetime="%s">%s</time>', esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $expires_in ) );
 
-				$output .= static::wrap_title_content( esc_html__( 'Valid until:', 'the-seo-framework-extension-manager' ), $expires_in, false );
+				$output .= static::wrap_title_content( esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
 			}
 
 			return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );

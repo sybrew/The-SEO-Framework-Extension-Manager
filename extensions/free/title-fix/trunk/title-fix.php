@@ -14,7 +14,11 @@ namespace TSF_Extension_Manager_Extension;
  * License: GPLv3
  */
 
-defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
+if ( tsf_extension_manager()->has_died() )
+	return;
+
+if ( false === ( defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+	return;
 
 /**
  * @package TSF_Extension_Manager

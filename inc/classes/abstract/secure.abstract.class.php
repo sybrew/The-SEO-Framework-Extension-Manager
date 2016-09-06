@@ -131,8 +131,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		$properties = array_merge( $class_vars, $other_vars );
 
 		foreach ( $properties as $property => $value ) :
-			//* @TODO consider this statement. It's more secure if it's left out, but also more error prone.
-			//	if ( isset( self::$$property ) )
+			if ( isset( self::$$property ) )
 				self::$$property = is_array( self::$$property ) ? array() : null;
 		endforeach;
 

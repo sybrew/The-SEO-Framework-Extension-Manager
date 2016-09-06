@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $
 	);
 
 	$this->do_pane_wrap(
-		__( 'Actions', 'the-seo-framework-extension-manager' ),
+		__( 'Account and Actions', 'the-seo-framework-extension-manager' ),
 		$this->get_extensions_actions_overview(),
 		array(
 			'full' => false,
