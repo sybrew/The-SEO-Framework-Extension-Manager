@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
  * Require activation traits.
  * @since 1.0.0
  */
-tsf_extension_manager_load_trait( 'activation' );
+_tsf_extension_manager_load_trait( 'activation' );
 
 /**
  * Class TSF_Extension_Manager\AccountActivation
@@ -35,6 +35,7 @@ tsf_extension_manager_load_trait( 'activation' );
  * Holds plugin activation functions.
  *
  * @since 1.0.0
+ * @access private
  * @TODO Convert to instance? It's only required once...
  *       Instancing does expand complexity massively as it handles options.
  */

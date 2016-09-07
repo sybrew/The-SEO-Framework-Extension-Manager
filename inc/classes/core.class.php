@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-tsf_extension_manager_load_trait( 'options' );
+_tsf_extension_manager_load_trait( 'options' );
 
 /**
  * Class TSF_Extension_Manager\Core
@@ -31,6 +31,7 @@ tsf_extension_manager_load_trait( 'options' );
  * Holds plugin core functions.
  *
  * @since 1.0.0
+ * @access private
  */
 class Core {
 	use Enclose, Construct_Final, Destruct_Final, Options;
@@ -90,6 +91,7 @@ class Core {
 			'deactivate-ext'    => 'deactivate-ext',
 		);
 		$this->nonce_action = array(
+			//* Reference convenience.
 			'default'           => 'tsfem_nonce_action',
 
 			//* Account activation and more.
@@ -563,12 +565,13 @@ class Core {
 	 * Determines if the plugin instance has died or not.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 * @staticvar bool $died Determines plugin alive state.
 	 *
 	 * @param bool $set Whether to set death.
 	 * @return false If the plugin has not died. True otherwise.
 	 */
-	final public function has_died( $set = false ) {
+	final public function _has_died( $set = false ) {
 
 		static $died = false;
 
@@ -600,11 +603,11 @@ class Core {
 	 	}
 
 		//* Don't spam error log.
-		if ( false === $this->has_died() )
+		if ( false === $this->_has_died() )
 			the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
 
 		$this->stop_class();
-		$this->has_died( true );
+		$this->_has_died( true );
 
 		return false;
 	}
@@ -673,12 +676,13 @@ class Core {
 	 * Verifies views instances.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $instance The instance key.
 	 * @param int $bit The instance bit.
 	 * @return bool True if verified.
 	 */
-	final public function verify_instance( $instance, $bit ) {
+	final public function _verify_instance( $instance, $bit ) {
 		return $instance === $this->get_verification_instance( $bit );
 	}
 
@@ -910,6 +914,9 @@ class Core {
 			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
 
+		//* TODO: TEMPORARILY. REMOVE. var_dump().
+		$class .= ' tsfem-button-disabled';
+
 		return $this->get_link( array(
 			'url' => $url,
 			'target' => '_blank',
@@ -1054,6 +1061,8 @@ class Core {
 
 	/**
 	 * Enables extension through options.
+	 *
+	 * Kills options when activation fails.
 	 *
 	 * @since 1.0.0
 	 *

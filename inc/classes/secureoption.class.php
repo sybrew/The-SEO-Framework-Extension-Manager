@@ -64,7 +64,7 @@ final class SecureOption extends Secure_Abstract {
 			switch ( $type ) :
 				case 'update_option' :
 				case 'update_option_instance' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
@@ -139,7 +139,7 @@ final class SecureOption extends Secure_Abstract {
 		$instance = self::$_instance;
 
 		if ( isset( $instance[0] ) && isset( $instance[1][1] ) ) {
-			tsf_extension_manager()->verify_instance( $instance[0], $instance[1][1] );
+			tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
 			self::reset();
 			wp_die( 'Instance verification could not be done on option update.' );

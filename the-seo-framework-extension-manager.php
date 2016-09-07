@@ -45,6 +45,7 @@ register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
 /**
  * Checks whether the server can run this plugin on activation.
  * If not, it will deactivate this plugin.
+ *
  * @since 1.0.0
  */
 function tsf_extension_manager_check_php() {

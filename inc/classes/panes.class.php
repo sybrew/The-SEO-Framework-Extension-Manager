@@ -29,6 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Holds plugin extensions overview functions.
  *
  * @since 1.0.0
+ * @access private
  */
 class Panes extends API {
 	use Enclose, Construct_Sub;
@@ -118,7 +119,7 @@ class Panes extends API {
 			$output .= sprintf( '<div class="tsfem-feed-wrap">%s</div>', $feed );
 		}
 
-		return $output;
+		return sprintf( '<div class="tsfem-trends">%s</div>', $output );
 	}
 
 	/**
@@ -156,7 +157,7 @@ class Panes extends API {
 		$output .= '<p>' . esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-title-fix' ) . '</p>';
 		$output .= $this->get_feed_enabler_button();
 
-		return $title . $output;
+		return sprintf( '<div class="tsfem-trends-activation">%s</div>', $title . $output );
 	}
 
 	/**
@@ -419,7 +420,7 @@ class Panes extends API {
 		$extras[] = esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
 		$extras[] = esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
 		/**
-		 * @uses trait \Activation_Data
+		 * @uses trait TSF_Extension_Manager\Activation_Data
 		 */
 		$extras[] = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
 
@@ -495,7 +496,7 @@ class Panes extends API {
 		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );
 
 		$content = Extensions::get( 'layout_content' );
-		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row">%s</div>', $content );
+		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row tsfem-flex-space">%s</div>', $content );
 
 		Extensions::reset();
 

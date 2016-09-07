@@ -1,5 +1,5 @@
 <?php
-defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 if ( $this->is_plugin_activated() ) {
 	if ( $this->is_premium_user() ) {

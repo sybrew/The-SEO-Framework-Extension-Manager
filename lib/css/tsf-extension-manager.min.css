@@ -648,6 +648,12 @@ body.tsfem .wrap {
 	overflow: auto;
 }
 
+.tsfem-actions,
+.tsfem-trends {
+	max-width: 1600px;
+	min-height: 150px;
+}
+
 /* ### Actions pane.
 /*--------------------------------------*/
 
@@ -655,6 +661,7 @@ body.tsfem .wrap {
 	margin-right: 20px;
 	margin-bottom: 20px;
 	flex-basis: calc( 50% - 20px );
+	min-width: 200px;
 }
 
 .tsfem-actions > div:last-of-type {
@@ -710,33 +717,40 @@ h4.tsfem-support-title {
 .tsfem-extensions-wrap {
 	height: auto;
 	max-height: 750px;
-}
-
-.tsfem-extension-entry {
-	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
-	margin: 0 0 20px;
-	padding: 0;
-	height: 122px;
-	border: 1px solid #ddd;
-	background: #fdfdfd;
-	width: calc( 50% - 10px );
-	overflow: hidden;
-}
-
-.tsfem-extension-entry:nth-child(odd) {
-	margin-right: 20px;
-}
-
-.tsfem-extension-entry:nth-child(even) {
-	flex-direction: row-reverse;
-}
-
-.tsfem-extension-entry:last-of-type {
+	padding-right: 0;
 	margin: 0;
 }
 
+.tsfem-extension-entry-wrap {
+	padding: 0;
+	margin: 0 0 20px;
+	flex-basis: calc( 50% - 20px );
+	min-width: 350px;
+	margin-right: 20px;
+}
+
+/* Remove grow from first item if only one is displayed. */
+/* Remove grow from last item, only if 3 or more items are present in odd order. */
+.tsfem-extension-entry-wrap:first-of-type:last-of-type,
+.tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
+	flex-grow: 0;
+	flex-basis: 100%;
+}
+
+.tsfem-extension-entry {
+	margin: 0;
+	padding: 0;
+	min-height: 122px;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	border: 1px solid #ddd;
+	background: #fdfdfd;
+	overflow: hidden;
+	align-self: auto;
+}
+
 .tsfem-extension-entry > * {
-	height: 120px;
+	min-height: 100px;
+	max-height: 120px;
 	margin: 0;
 	padding: 0;
 	-webkit-box-sizing: border-box;
@@ -813,6 +827,11 @@ h5.tsfem-extension-type {
 
 .tsfem-extension-third-party-icon:before {
 	content: "\f307";
+}
+
+.tsfem-extension-description-wrap {
+	flex: 1 1 0;
+	min-width: 330px;
 }
 
 .tsfem-extension-description {
@@ -1028,7 +1047,7 @@ h5.tsfem-extension-type {
 	}
 
 	.tsfem-pane-content {
-		max-height: 300px;
+		max-height: 330px;
 		flex: 1 1 auto;
 	}
 

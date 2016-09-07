@@ -29,6 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Initializes plugin classes.
  *
  * @since 1.0.0
+ * @access private
  * @final Please don't extend this extension.
  */
 final class Load extends AdminPages {

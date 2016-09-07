@@ -54,7 +54,7 @@ trait Extensions_i18n {
 			'version'         => __( 'Version', 'the-seo-framework-extension-manager' ),
 			'first-party'     => __( 'First party', 'the-seo-framework-extension-manager' ),
 			'third-party'     => __( 'Third party', 'the-seo-framework-extension-manager' ),
-		//	'view-details'    => __( 'View detais', 'the-seo-framework-extension-manager' ),
+			'view-details'    => __( 'View detais', 'the-seo-framework-extension-manager' ),
 			'visit-author'    => __( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
 			'visit-extension' => __( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
 			'extension-home'  => __( 'Extension home', 'the-seo-framework-extension-manager' ),
@@ -149,16 +149,18 @@ trait Extensions_Layout {
 
 		foreach ( $extensions as $id => $extension ) {
 
-			if ( ! ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['area'] ) ) )
+			if ( false === ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['area'] ) ) )
 				continue;
 
 			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink tsfem-flex-wrap">' . static::make_extension_list_icon( $extension ) . '</div>';
 			$wrap .= '<div class="tsfem-extension-about-wrap tsfem-flex tsfem-flex-noshrink">' . static::make_extension_list_about( $extension ) . '</div>';
-			$wrap .= '<div class="tsfem-extension-description-wrap tsfem-flex">' . static::make_extension_list_description( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-description-wrap tsfem-flex tsfem-flex-space">' . static::make_extension_list_description( $extension ) . '</div>';
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
-			$output .= sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-nowrap tsfem-flex-row tsfem-flex-nogrow %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
+			$entry = sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
+
+			$output .= sprintf( '<div class="tsfem-extension-entry-wrap tsfem-flex tsfem-flex-space">%s</div>', $entry );
 		}
 
 		return $output;
@@ -309,6 +311,7 @@ trait Extensions_Layout {
 	 * Builds extension button form and builds nonce. Supports both JS and no-JS.
 	 *
 	 * @since 1.0.0
+	 * @uses trait TSF_Extension_Manager\Extensions_i18n
 	 *
 	 * @param string $slug The extension slug.
 	 * @param string $type The button type.
@@ -358,6 +361,7 @@ trait Extensions_Layout {
 	 * Outputs the extension description wrap and content.
 	 *
 	 * @since 1.0.0
+	 * @uses trait TSF_Extension_Manager\Extensions_i18n
 	 *
 	 * @param array $extension The extension to fetch the description wrap from.
 	 * @return string The extension description output wrap.
@@ -377,9 +381,17 @@ trait Extensions_Layout {
 		$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
 		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
 
-		$output = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
-		$output .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home ) ) );
+		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
+		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home ) ) );
 
-	 	return '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">' . $output . '</div>';
+	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
+
+/*		$id = $extension['slug'] . '-expand';
+		$label = '<label for="' . esc_attr( $id ) . '-action" title="' . esc_attr( static::get_i18n( 'view-details' ) ) . '" class="tsfem-extension-description-expand"></label>';
+		$flow = sprintf( '<input type="checkbox" id="%s-action" value="1" />%s</input>', esc_attr( $id ), $label );
+
+		$overflow = sprintf( '<div class="tsfem-extension-description-overflow">%s</div>', $flow );*/
+
+		return $output . $overflow;
 	}
 }

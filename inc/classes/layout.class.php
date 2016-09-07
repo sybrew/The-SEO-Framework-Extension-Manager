@@ -58,7 +58,7 @@ final class Layout extends Secure_Abstract {
 				case 'form' :
 				case 'link' :
 				case 'list' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 

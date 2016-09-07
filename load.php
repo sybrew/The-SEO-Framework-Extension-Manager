@@ -94,13 +94,13 @@ function init_tsf_extension_manager() {
 		/**
 		 * Load class overloading traits.
 		 */
-		tsf_extension_manager_load_trait( 'overload' );
+		_tsf_extension_manager_load_trait( 'overload' );
 
 		/**
 		 * Register class autoload here.
 		 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
 		 */
-		spl_autoload_register( 'autoload_tsf_extension_manager_classes' );
+		spl_autoload_register( '_autoload_tsf_extension_manager_classes' );
 
 		/**
 		 * @package TSF_Extension_Manager
@@ -147,7 +147,7 @@ function can_load_tsf_extension_manager() {
  *
  * @return bool False if file hasn't yet been included, otherwise true.
  */
-function autoload_tsf_extension_manager_classes( $class ) {
+function _autoload_tsf_extension_manager_classes( $class ) {
 
 	if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\', 0 ) )
 		return;
@@ -165,6 +165,7 @@ function autoload_tsf_extension_manager_classes( $class ) {
 
 	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
 	$_class = str_replace( '_abstract', '.abstract', $_class );
+
 	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 }
 
@@ -178,7 +179,7 @@ function autoload_tsf_extension_manager_classes( $class ) {
  *
  * @param string $file Where the trait is for.
  */
-function tsf_extension_manager_load_trait( $file ) {
+function _tsf_extension_manager_load_trait( $file ) {
 
 	static $loaded;
 

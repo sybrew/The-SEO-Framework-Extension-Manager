@@ -47,7 +47,7 @@ final class Trends {
 	 */
 	public static function get( $instance, $bits ) {
 
-		tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or die;
+		tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 
 		return self::prototype_trends();
 	}

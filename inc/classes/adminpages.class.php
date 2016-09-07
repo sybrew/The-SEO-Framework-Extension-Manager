@@ -29,6 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Holds plugin admin page functions.
  *
  * @since 1.0.0
+ * @access private
  */
 class AdminPages extends AccountActivation {
 	use Enclose, Construct_Sub;

@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
  * Require extensions traits.
  * @since 1.0.0
  */
-tsf_extension_manager_load_trait( 'extensions' );
+_tsf_extension_manager_load_trait( 'extensions' );
 
 /**
  * Require extensions layout traits depending on admin page type.
@@ -36,7 +36,7 @@ tsf_extension_manager_load_trait( 'extensions' );
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
 if ( is_admin() && the_seo_framework()->is_menu_page( tsf_extension_manager()->seo_extensions_menu_page_hook, tsf_extension_manager()->seo_extensions_page_slug ) ) {
-	tsf_extension_manager_load_trait( 'extensions-layout' );
+	_tsf_extension_manager_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.
 	trait Extensions_Layout { }
@@ -105,7 +105,7 @@ final class Extensions extends Secure_Abstract {
 				case 'activation' :
 				case 'list' :
 				case 'load' :
-					tsf_extension_manager()->verify_instance( $instance, $bits[1] ) or tsf_extension_manager()->_maybe_die();
+					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or tsf_extension_manager()->_maybe_die();
 					self::set( '_type', $type );
 					static::set_up_variables();
 					break;

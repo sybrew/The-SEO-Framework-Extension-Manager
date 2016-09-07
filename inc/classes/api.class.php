@@ -29,6 +29,7 @@ defined( 'ABSPATH' ) or die;
  * Holds plugin API functions.
  *
  * @since 1.0.0
+ * @access private
  */
 class API extends Core {
 	use Enclose, Construct_Sub;

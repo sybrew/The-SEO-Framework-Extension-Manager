@@ -1,5 +1,5 @@
 <?php
-defined( 'ABSPATH' ) and tsf_extension_manager()->verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 $class_submit = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'tsfem-button tsfem-button-primary';
 $value_redirect = isset( $redirect ) ? $redirect : 'signup';
