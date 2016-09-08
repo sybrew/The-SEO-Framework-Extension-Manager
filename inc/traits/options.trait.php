@@ -38,7 +38,7 @@ trait Options {
 	 *
 	 * @return array TSF Extension Manager options.
 	 */
-	protected function get_all_options() {
+	final protected function get_all_options() {
 		return TSF_EXTENSION_MANAGER_CURRENT_OPTIONS;
 	}
 
@@ -52,7 +52,7 @@ trait Options {
 	 * @param bool $use_cache Whether to store and use options from cache.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	protected function get_option( $option, $default = null, $use_cache = true ) {
+	final protected function get_option( $option, $default = null, $use_cache = true ) {
 
 		if ( ! $option )
 			return null;
@@ -82,7 +82,7 @@ trait Options {
 	 *
 	 * @return bool True if run, false otherwise.
 	 */
-	protected function has_run_update_option() {
+	final protected function has_run_update_option() {
 
 		static $run = false;
 
@@ -105,7 +105,7 @@ trait Options {
 	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
-	protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
+	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
 
 		if ( ! $option )
 			return false;
@@ -161,7 +161,7 @@ trait Options {
 	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	protected function update_option_multi( array $options = array(), $type = 'instance', $kill = false ) {
+	final protected function update_option_multi( array $options = array(), $type = 'instance', $kill = false ) {
 
 		static $run = false;
 
@@ -216,7 +216,7 @@ trait Options {
 	 *
 	 * @return string The hashed option.
 	 */
-	protected function get_options_instance() {
+	final protected function get_options_instance() {
 		return get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
 	}
 
@@ -229,7 +229,7 @@ trait Options {
 	 * @param string $key Optional. The options key. Must be supplied when activating account.
 	 * @return bool True on success, false on failure.
 	 */
-	protected function update_options_instance( $value, $key = '' ) {
+	final protected function update_options_instance( $value, $key = '' ) {
 
 		$key = $key ? $key : $this->get_option( '_instance' );
 
@@ -243,7 +243,7 @@ trait Options {
 	 *
 	 * @return bool
 	 */
-	protected function delete_options_instance() {
+	final protected function delete_options_instance() {
 
 		delete_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
 
@@ -260,7 +260,7 @@ trait Options {
 	 * @param string $key The instance key, needs to be supplied on plugin activation.
 	 * @return bool True on success, false on failure.
 	 */
-	protected function set_options_instance( $options, $key = '' ) {
+	final protected function set_options_instance( $options, $key = '' ) {
 
 		if ( empty( $options['_instance'] ) )
 			return false;
@@ -288,11 +288,12 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 * @see @link https://developer.wordpress.org/reference/functions/wp_hash/
+	 * @NOTE Warning: If the server tends to change the status of sha256, this will fail.
 	 *
 	 * @param string $data The data to hash.
 	 * @return string The hash key.
 	 */
-	protected function make_hash( $data ) {
+	final protected function make_hash( $data ) {
 
 		if ( in_array( 'sha256', hash_algos(), true ) ) {
 			$salt = wp_salt( 'auth' );
@@ -308,11 +309,12 @@ trait Options {
 	 * Verifies options hash.
 	 *
 	 * @since 1.0.0
+	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param string $data The data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
 	 */
-	public function verify_options_hash( $data ) {
+	final public function verify_options_hash( $data ) {
 		return hash_equals( $this->make_hash( $data ), $this->get_options_instance() );
 	}
 
@@ -325,7 +327,7 @@ trait Options {
 	 *
 	 * @param string $type What type of update this is, accepts 'instance' and 'regular'.
 	 */
-	protected function initialize_option_update_instance( $type = 'regular' ) {
+	final protected function initialize_option_update_instance( $type = 'regular' ) {
 
 		if ( 'instance' === $type ) {
 			$type = 'update_option_instance';
@@ -353,7 +355,7 @@ trait Options {
 	 * @param bool $kill Whether to kill plugin options.
 	 * @return bool True on success, false on failure.
 	 */
-	protected function verify_option_update_instance( $kill = false ) {
+	final protected function verify_option_update_instance( $kill = false ) {
 
 		$verify = SecureOption::verified_option_update();
 
@@ -372,7 +374,7 @@ trait Options {
 	 *
 	 * @return bool True on success, false on failure.
 	 */
-	protected function kill_options() {
+	final protected function kill_options() {
 
 		$success = array();
 		$success[] = $this->delete_options_instance();

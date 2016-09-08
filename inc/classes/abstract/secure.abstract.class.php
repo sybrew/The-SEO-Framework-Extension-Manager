@@ -246,7 +246,13 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * @param string $method Required. The invoked Method where the error occured.
 	 */
 	final protected static function invoke_invalid_type( $method ) {
-		die( esc_html( $method ) . '(): You must specify a correct initialization type.' );
+
+		//* wp_die() can be filtered. Remove filters JIT.
+		remove_all_filters( 'wp_die_ajax_handler' );
+		remove_all_filters( 'wp_die_xmlrpc_handler' );
+		remove_all_filters( 'wp_die_handler' );
+
+		wp_die( esc_html( $method ) . '(): You must specify a correct initialization type.' );
 	}
 
 	/**

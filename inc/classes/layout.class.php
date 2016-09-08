@@ -205,7 +205,7 @@ final class Layout extends Secure_Abstract {
 
 			$email = isset( $account['email'] ) ? $account['email'] : '';
 			$data = isset( $account['data'] ) ? $account['data'] : '';
-			$level = isset( $account['level'] ) ? $account['level'] : '';
+			$level = isset( $account['level'] ) ? $account['level'] : __( 'Unknown', 'the-seo-framework-extension-manager' );
 			$domain = '';
 			$end_date = '';
 

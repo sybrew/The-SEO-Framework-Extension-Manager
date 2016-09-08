@@ -380,17 +380,12 @@ trait Extensions_Layout {
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
 		$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
 		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
+		$compatible = sprintf( '<span class="tsfem-extension-description-version">%s %s - %s</span>', 'WordPress', esc_html( $extension['requires'] ), esc_html( $extension['tested'] ) );
 
 		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
-		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home ) ) );
+		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home, $compatible ) ) );
 
 	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
-
-/*		$id = $extension['slug'] . '-expand';
-		$label = '<label for="' . esc_attr( $id ) . '-action" title="' . esc_attr( static::get_i18n( 'view-details' ) ) . '" class="tsfem-extension-description-expand"></label>';
-		$flow = sprintf( '<input type="checkbox" id="%s-action" value="1" />%s</input>', esc_attr( $id ), $label );
-
-		$overflow = sprintf( '<div class="tsfem-extension-description-overflow">%s</div>', $flow );*/
 
 		return $output . $overflow;
 	}

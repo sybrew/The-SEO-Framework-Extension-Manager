@@ -148,7 +148,6 @@ final class SecureOption extends Secure_Abstract {
 		static $verified = false;
 
 		if ( false === $verified ) {
-
 			//* Always update instance before updating options when deactivating.
 			if ( 'update_option_instance' === $type ) {
 				$verified = true;

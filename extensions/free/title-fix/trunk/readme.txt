@@ -1,4 +1,4 @@
-=== The SEO Framework - Title Fix ===
+=== Title Fix ===
 Contributors: Cybr
 Donate link: http://theseoframework.com/
 Tags: seo, framework, rewrite, theme, doing it wrong, doing it right, multisite, automated, automatic, the seo framework, tsf
@@ -14,51 +14,35 @@ The Title Fix extension for The SEO Framework makes sure your title output is as
 
 ***The SEO Framework relies on the required Title Tag support within the theme files. This can cause issues because not all themes do it right.***
 
-This free extension plugin fixes those issues by replacing the title tag within the output buffer prior to outputting your website's content.
+This free extension fixes those issues by replacing the title tag within the output buffer prior to outputting your website's content.
 
 There are no options, only (super fast) detection. Activate and go!
 
-> This plugin uses The SEO Framework title detection features.
+> This extension uses The SEO Framework title detection features.
 >
-> If the title is detected to be output wrong, this plugin fixes it.
+> If the title is detected to be output wrong, this extension fixes it.
 > If you wish to have a more forceful override, then a filter is available. See Other Notes.
 >
-> This plugin is fundamentally built to perform fast and to keep its memory usage low.
+> This extension is fundamentally built to perform fast and to keep its memory usage low.
 
 = Compatibility =
 
-* This plugin requires **The SEO Framework 2.7.0 and up**.
-* This plugin works on multisite.
-
-**If The SEO Framework is not active:**
-
-* This plugin will do nothing much other than just checking to see if The SEO Framework is active.
+* This extension requires **The SEO Framework 2.7.0 and up**.
+* This extension works on multisite.
 
 **PHP:**
 
 * Uses PHP Output Buffering Control (which is in PHP Core).
-* If PCRE (Perl Compatible Regular Expressions) is installed with PHP (which is very likely), this plugin will use regular expresions to find the title.
+* If PCRE (Perl Compatible Regular Expressions) is installed with PHP (which is very likely), this extension will use regular expresions to find the title.
 * If not, it uses legacy PHP find and replace, which is also great!
 
 == Installation ==
-
-1. Install The SEO Framework either via the WordPress.org plugin directory, or by uploading the files to your server.
-1. Either Network Activate that plugin or activate it on a single site.
-1. Install this extension either via the WordPress.org plugin directory, or by uploading the files to your server.
-1. Either Network Activate this plugin or activate it on a single site.
-1. Now the title is fixed automatically when detected.
-
-***You can also use this plugin as a mu-plugin.***
 
 == Frequently Asked Questions ==
 
 = What is this? =
 
-This free extension is made because many themes are rendering the title wrong. This causes issues, which this plugin resolves.
-
-= What is The SEO Framework? =
-
-A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
+This free extension is made because many themes are rendering the title wrong. This causes issues, which this extension resolves.
 
 = How does this plugin work? =
 

@@ -89,7 +89,43 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1454785229',
 				'requires' => '3.9.0',
-				'tested' => '4.6.0',
+				'tested' => '4.6.1',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
+			'incognito' => array(
+				'slug' => 'incognito',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1473299919',
+				'requires' => '3.9.0',
+				'tested' => '4.6.1',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
+			'multilang' => array(
+				'slug' => 'multilang',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1473299919',
+				'requires' => '4.4.0',
+				'tested' => '4.6.1',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -113,9 +149,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '0c78c432da447ec7646f3836b87da33f8e46c252dc75851fdd94c6ea9959ca79',
-			'sha1'   => '093d53e226ffb48b4cdf0d8489549e9468b8b082',
-			'md5'    => 'f7f5aced9700d8b1c4d29811cedc6a59',
+			'sha256' => '4e9e99ac344b752cfb4898238e9f4f1bd8ecb133f0af492646d0ad2ec6566688',
+			'sha1'   => 'a867c78ef82408beea1e85cfc6b72dca6580f811',
+			'md5'    => '1a34f1051a82f7302390b2feac6a2fbd',
 		);
 	}
 

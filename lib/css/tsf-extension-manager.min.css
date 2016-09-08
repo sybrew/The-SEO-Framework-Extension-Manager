@@ -838,6 +838,10 @@ h5.tsfem-extension-type {
 	padding: 1.33em;
 }
 
+.tsfem-extension-description-footer > span {
+	white-space: pre;
+}
+
 /* ### Feed pane.
 /*--------------------------------------*/
 .tsfem-feed-wrap {
