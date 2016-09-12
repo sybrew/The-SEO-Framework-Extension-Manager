@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extensions
+ * @package TSF_Extension_Manager_Extension
  */
 namespace TSF_Extension_Manager_Extension;
 
@@ -48,17 +48,18 @@ define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 //* Define version, for future things.
 define( 'THE_SEO_FRAMEWORK_TITLE_FIX_VERSION', '1.0.2' );
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\the_seo_framework_title_fix_init', 11 );
+add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
 /**
  * Initialize the plugin.
  *
  * @since 1.0.0
  * @action 'plugins_loaded'
  * @priority 11 : The WordPress.org version has priority 10, preventing collision.
+ *                Also, the loader requires 11 or later.
  *
- * @return bool True if class is loaded
+ * @return bool True if class is loaded.
  */
-function the_seo_framework_title_fix_init() {
+function title_fix_init() {
 
 	static $loaded = null;
 

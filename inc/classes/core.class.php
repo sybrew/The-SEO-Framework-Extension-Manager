@@ -110,7 +110,7 @@ class Core {
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 
-		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
+		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 9 );
 	}
 
 	/**
@@ -159,12 +159,10 @@ class Core {
 
 		$extensions = Extensions::get( 'active_extensions_list' );
 
-		if ( empty( $extensions ) ) {
-			Extensions::reset();
-			return $loaded = false;
-		}
-
 		Extensions::reset();
+
+		if ( empty( $extensions ) )
+			return $loaded = false;
 
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
@@ -326,7 +324,7 @@ class Core {
 	}
 
 	/**
-	 * Sets notices option.
+	 * Sets notices option, only does so when in the admin area.
 	 *
 	 * @since 1.0.0
 	 *
@@ -924,6 +922,130 @@ class Core {
 			'title' => $title,
 			'content' => $text,
 		) );
+	}
+
+	/**
+	 * Registers autoloading classes for extensions and activates autoloader.
+	 * If the account isn't premium, it will not be loaded.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
+	 *
+	 * @param string $path The extension path to look for.
+	 * @param string $class_base Class base words.
+	 * @return bool True on success, false on failure.
+	 */
+	public function register_premium_extension_autoload_path( $path, $class_base ) {
+
+		if ( false === $this->is_premium_user() )
+			return false;
+
+		static $autoload_inactive = true;
+
+		if ( $autoload_inactive ) {
+			spl_autoload_register( array( $this, 'autoload_premium_extension_class' ) );
+			$autoload_inactive = false;
+		}
+
+		return $this->set_premium_extension_autoload_path( $path, $class_base );
+	}
+
+	/**
+	 * Registers autoloading classes for extensions.
+	 * Maintains a cache. So this can be fetched later.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $registered The registered classes.
+	 *
+	 * @param string|null $path The extension path to look for.
+	 * @param string|null $class_base Class base words.
+	 * @param string|null $class The classname to fetch from cache.
+	 * @return void|bool|array : {
+	 * 		void  : $class if not set. Default behavior.
+	 * 		false : $class isn't found in $locations.
+	 *		array : $class is found in locations.
+	 * }
+	 */
+	protected function set_premium_extension_autoload_path( $path, $class_base, $class = null ) {
+
+		static $locations = array();
+
+		if ( $class ) {
+			$class = str_replace( 'TSF_Extension_Manager_Extension\\', '', $class );
+
+			//* Singular class names. Recommended as its much faster.
+			if ( isset( $locations[ $class ] ) )
+				return $locations[ $class ];
+
+			//* Extended class names. Slower but feasible.
+			$class_bases = explode( '_', $class );
+
+			$_class_base = '';
+			foreach ( $class_bases as $_class_base_part ) :
+				$_class_base .= $_class_base ? '_' . $_class_base_part : $_class_base_part;
+
+				if ( isset( $locations[ $_class_base ] ) )
+					return $locations[ $_class_base ];
+
+				continue;
+			endforeach;
+
+			return false;
+		}
+
+		$locations[ $class_base ] = $path;
+
+		return;
+	}
+
+	/**
+	 * Returns the registered $class name base path.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $class The classname path to fetch.
+	 * @return string|bool The path if found. False otherwise.
+	 */
+	protected function get_premium_extension_autload_path( $class ) {
+		return $this->set_premium_extension_autoload_path( null, null, $class );
+	}
+
+	/**
+	 * Autoloads all class files. To be used when requiring access to all or any of
+	 * the plugin classes.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $loaded Whether $class has been loaded.
+	 *
+	 * @param string $class The extension classname.
+	 * @return bool False if file hasn't yet been included, otherwise true.
+	 */
+	protected function autoload_premium_extension_class( $class ) {
+
+		if ( 0 !== strpos( $class, 'TSF_Extension_Manager_Extension\\', 0 ) )
+			return;
+
+		static $loaded = array();
+
+		if ( isset( $loaded[ $class ] ) )
+			return $loaded[ $class ];
+
+		$path = $this->get_premium_extension_autload_path( $class );
+
+		if ( $path ) {
+			$_class = strtolower( str_replace( 'TSF_Extension_Manager_Extension\\', '', $class ) );
+			$_class = str_replace( '_', '-', $_class );
+
+			$bits = $this->get_bits();
+			$_instance = $this->get_verification_instance( $bits[1] );
+
+			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+		} else {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
+
+			//* Most likely a fatal error.
+			return $loaded[ $class ] = false;
+		}
 	}
 
 	/**

@@ -366,7 +366,7 @@ class AccountActivation extends Panes {
 	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $status.
+	 * @staticvar array $status
 	 *
 	 * @return array Current subscription status.
 	 */

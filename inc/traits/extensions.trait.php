@@ -133,6 +133,24 @@ trait Extensions_Properties {
 					'2x' => 'icon-200x200.jpg',
 				),
 			),
+			'google-analytics' => array(
+				'slug' => 'google-analytics',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1473664096',
+				'requires' => '4.4.0',
+				'tested' => '4.6.1',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
 		);
 	}
 
@@ -149,9 +167,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '4e9e99ac344b752cfb4898238e9f4f1bd8ecb133f0af492646d0ad2ec6566688',
-			'sha1'   => 'a867c78ef82408beea1e85cfc6b72dca6580f811',
-			'md5'    => '1a34f1051a82f7302390b2feac6a2fbd',
+			'sha256' => '4ea8466b3e892eeda0bbc595f756af6ad0753dad048d62239344919f54983868',
+			'sha1'   => 'c07e08a3f80fac629b1e6a75682b1384394b0df6',
+			'md5'    => 'a1e70889d172ccd86d359455578449da',
 		);
 	}
 

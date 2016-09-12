@@ -1,5 +1,9 @@
 <?php
+/**
+ * @package TSF_Extension_Manager
+ */
 use TSF_Extension_Manager\Load as Load;
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -143,7 +147,7 @@ function can_load_tsf_extension_manager() {
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.
- * @NOTE 'TSF_Extension_Manager_' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
+ * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
  *
  * @return bool False if file hasn't yet been included, otherwise true.
  */
