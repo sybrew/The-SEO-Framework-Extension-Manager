@@ -90,6 +90,8 @@ trait Extensions_Properties {
 				'last_updated' => '1454785229',
 				'requires' => '3.9.0',
 				'tested' => '4.6.1',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.7.1',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -108,6 +110,8 @@ trait Extensions_Properties {
 				'last_updated' => '1473299919',
 				'requires' => '3.9.0',
 				'tested' => '4.6.1',
+				'requires_tsf' => '2.2.0',
+				'tested_tsf' => '2.7.1',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -126,6 +130,8 @@ trait Extensions_Properties {
 				'last_updated' => '1473299919',
 				'requires' => '4.4.0',
 				'tested' => '4.6.1',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.7.1',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -144,6 +150,8 @@ trait Extensions_Properties {
 				'last_updated' => '1473664096',
 				'requires' => '4.4.0',
 				'tested' => '4.6.1',
+				'requires_tsf' => '2.7.1',
+				'tested_tsf' => '2.7.1',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -167,9 +175,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '4ea8466b3e892eeda0bbc595f756af6ad0753dad048d62239344919f54983868',
-			'sha1'   => 'c07e08a3f80fac629b1e6a75682b1384394b0df6',
-			'md5'    => 'a1e70889d172ccd86d359455578449da',
+			'sha256' => '2f7b92b38e8559aa730794e993de73489a434aa6334de67d5d3be77d35a3449c',
+			'sha1'   => 'e3e0be2ca9e2a6bd528cd1ff7055e952a5d9f701',
+			'md5'    => '1dab7aafd08ce325fc29fd6339c04526',
 		);
 	}
 
@@ -539,6 +547,145 @@ trait Extensions_Actions {
 	}
 
 	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return int Compatibility : {
+	 *		0 is compatible.
+	 *		1 is okay but might require update of either WP or TSF.
+	 *		2 is not compatible.
+	 */
+	private static function is_extension_compatible( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		static $cache = array();
+
+		if ( isset( $cache[ $extension['slug'] ] ) )
+			return $cache[ $extension['slug'] ];
+
+		$compatibility = static::determine_extension_compatibility( $extension );
+
+		$_compatibility = 0;
+
+		switch ( $compatibility ) :
+			case 0 :
+				$_compatibility = 0;
+				break;
+
+			case 1 :
+			case 4 :
+			case 5 :
+				$_compatibility = 1;
+				break;
+
+			default :
+				$_compatibility = 2;
+				break;
+		endswitch;
+
+		return $cache[ $extension['slug'] ] = $_compatibility;
+	}
+
+	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * The uneven bits (left to right) always need to be followed by an active bit.
+	 * So 1010 isn't possible. 0101 and 1101 are.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @param bool $get_bits Whether to get bits or int.
+	 * @return string|int Either 4 bits or an integer that determine compatibility : {
+	 *		0  | 0000 | good => Completely compatible.
+	 *		1  | 0001 | okay => TSF version is greater than tested against.
+	 *		3  | 0011 | bad  => TSF is not compatible.
+	 *		4  | 0100 | okay => TSF is compatible. WP Version is greater than tested against.
+	 *		5  | 0101 | okay => TSF and WP versions are both greater than tested against.
+	 *		7  | 0111 | bad  => TSF is not compatible. WP version is greater than tested against.
+	 *		12 | 1100 | bad  => WP is not compatible.
+	 *		13 | 1101 | bad  => WP is not compatible. TSF version is greater than testest against.
+	 *		15 | 1111 | bad  => Not compatible.
+	 * }
+	 */
+	private static function determine_extension_compatibility( $extension, $get_bits = false ) {
+
+		$compatibility = static::get_extension_compatibility( $extension );
+
+		//* bindec( '1111' )
+		$bit = 15;
+
+		//* Set first two bits ( 1100 );
+		$first_two_bit = ~ $bit >> $compatibility['wp'];
+		//* Set last two bits ( 0011 );
+		$last_two_bit = ~ $bit >> 2 ^ $bit << 2 - $compatibility['tsf'];
+
+		//* Add bits up and invert bits so 0 is best case scenario.
+		$bit = $first_two_bit | $last_two_bit;
+		$bit = ~ $bit;
+
+		//* Convert bits to string and extract last 4 bits.
+		$bit = substr( decbin( $bit ), -4 );
+
+		return $get_bits ? $bit : bindec( $bit );
+	}
+
+	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * @since 1.0.0
+	 * @global string $wp_version
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return array Whether the extension is compatible. : {
+	 *		'tsf' => int (0-2),
+	 *		'wp' => int Compatibility (0-2),
+	 * }
+	 */
+	private static function get_extension_compatibility( $extension ) {
+		global $wp_version;
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		/**
+		 * @param array $compatibility : {
+		 *		key => int : {
+		 *			0: Not compatible.
+		 *			1: Version exceeeds tested check. Possibly compatible.
+		 *			2: Compatible.
+		 *		}
+		 * }
+		 */
+		$compatibility = array(
+			'tsf' => 0,
+			'wp' => 0,
+		);
+
+		$tsf_version = the_seo_framework_version();
+		$_wp_version = $wp_version;
+
+		if ( version_compare( $tsf_version, $extension['tested_tsf'] ) > 0 )
+			$compatibility['tsf'] = 1;
+		elseif ( version_compare( $tsf_version, $extension['requires_tsf'] ) >= 0 )
+			$compatibility['tsf'] = 2;
+
+		if ( version_compare( $_wp_version, $extension['tested'] ) > 0 )
+			$compatibility['wp'] = 1;
+		elseif ( version_compare( $_wp_version, $extension['requires'] ) >= 0 )
+			$compatibility['wp'] = 2;
+
+		return $compatibility;
+	}
+
+	/**
 	 * Loads extension from input.
 	 *
 	 * @since 1.0.0
@@ -589,7 +736,7 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file ) {
 
-		if ( 0 === validate_file( $file ) && '.php' === substr( $file, -4 ) && file_exists( $file ) )
+		if ( '.php' === substr( $file, -4 ) && 0 === validate_file( $file ) && file_exists( $file ) )
 			return true;
 
 		return false;

@@ -218,6 +218,8 @@ class Panes extends API {
 					}
 				}
 
+				$this->clean_ajax_reponse_header();
+
 				echo json_encode( $results );
 
 				exit;
@@ -265,6 +267,8 @@ class Panes extends API {
 
 				//* Send back input when WP_DEBUG is on.
 				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
+
+				$this->clean_ajax_reponse_header();
 
 				echo json_encode( $response );
 

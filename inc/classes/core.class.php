@@ -110,7 +110,12 @@ class Core {
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 
-		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 9 );
+		/**
+		 * This somehow sets itself to priority 10 (or later - if defined), always.
+		 * This also requires an action, rather than a direct call. Otherwise the class is duplicated.
+		 * @todo figure out if this is a bug.
+		 */
+		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
 	}
 
 	/**
@@ -557,6 +562,23 @@ class Core {
 	 */
 	protected function get_ajax_notice( $success, $code ) {
 		return array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
+	}
+
+	/**
+	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on clear. Default false.
+	 */
+	protected function clean_ajax_reponse_header() {
+
+		if ( ob_get_level() && ob_get_contents() ) {
+			ob_clean();
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

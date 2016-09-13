@@ -58,6 +58,8 @@ trait Extensions_i18n {
 			'visit-author'    => __( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
 			'visit-extension' => __( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
 			'extension-home'  => __( 'Extension home', 'the-seo-framework-extension-manager' ),
+			'compatible'      => __( 'Compatible', 'the-seo-framework-extension-manager' ),
+			'incompatible'    => __( 'Incompatible', 'the-seo-framework-extension-manager' ),
 		);
 	}
 
@@ -153,7 +155,7 @@ trait Extensions_Layout {
 				continue;
 
 			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink tsfem-flex-wrap">' . static::make_extension_list_icon( $extension ) . '</div>';
-			$wrap .= '<div class="tsfem-extension-about-wrap tsfem-flex tsfem-flex-noshrink">' . static::make_extension_list_about( $extension ) . '</div>';
+			$wrap .= '<div class="tsfem-extension-about-wrap tsfem-flex tsfem-flex-grow">' . static::make_extension_list_about( $extension ) . '</div>';
 			$wrap .= '<div class="tsfem-extension-description-wrap tsfem-flex tsfem-flex-space">' . static::make_extension_list_description( $extension ) . '</div>';
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
@@ -277,6 +279,8 @@ trait Extensions_Layout {
 	 * account type. Also initializes nonces for those buttons.
 	 *
 	 * @since 1.0.0
+	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to make button from.
 	 * @return string HTML extension button with nonce.
@@ -291,7 +295,7 @@ trait Extensions_Layout {
 				'disabled' => false,
 			);
 		} else {
-			$disabled = self::is_premium_user() || ! static::is_extension_premium( $extension ) ? false : true;
+			$disabled = static::is_extension_compatible( $extension ) !== 2 && ( self::is_premium_user() || ! static::is_extension_premium( $extension ) ) ? false : true;
 			$buttons[] = array(
 				'type' => 'activate',
 				'disabled' => $disabled,
@@ -362,6 +366,7 @@ trait Extensions_Layout {
 	 *
 	 * @since 1.0.0
 	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to fetch the description wrap from.
 	 * @return string The extension description output wrap.
@@ -373,17 +378,42 @@ trait Extensions_Layout {
 		$description = $data['Description'];
 
 		$url = $data['ExtensionURI'];
-		$author = $data['Author'];
-		$author_url = $data['AuthorURI'];
+		//	$author = $data['Author'];
+		//	$author_url = $data['AuthorURI'];
 		$version = $data['Version'];
 
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
-		$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
 		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
-		$compatible = sprintf( '<span class="tsfem-extension-description-version">%s %s - %s</span>', 'WordPress', esc_html( $extension['requires'] ), esc_html( $extension['tested'] ) );
+
+		$is_compatible = static::is_extension_compatible( $extension );
+
+		switch ( $is_compatible ) :
+			case 0 :
+				$compat_class = 'tsfem-success';
+				$compat_notice = '';
+				$compat_name = static::get_i18n( 'compatible' );
+				break;
+
+			case 1 :
+				$compat_class = 'tsfem-unknown';
+				$compat_notice = __( 'You should run an update of The SEO Framework or WordPress', 'the-seo-framework-extension-manager' );
+				$compat_name = static::get_i18n( 'compatible' );
+				break;
+
+			default :
+				$compat_class = 'tsfem-error';
+				$compat_notice = __( 'You require to run an update of The SEO Framework or WordPress', 'the-seo-framework-extension-manager' );
+				$compat_name = static::get_i18n( 'incompatible' );
+				break;
+		endswitch;
+
+		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s" title="%s"></span>', $compat_class, esc_html( $compat_notice ) );
+
+		$compatible = sprintf( '<span class="tsfem-extension-description-compat">%s%s</span>', esc_html( $compat_name ), $compat_icon );
 
 		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
-		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $author, $home, $compatible ) ) );
+		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $compatible, $home ) ) );
 
 	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
 

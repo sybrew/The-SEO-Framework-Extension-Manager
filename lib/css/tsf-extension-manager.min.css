@@ -67,6 +67,10 @@
 	flex-wrap: nowrap;
 }
 
+.tsfem-flex-grow {
+	flex-grow: 1;
+}
+
 .tsfem-flex-nogrow {
 	flex: 0 1 auto;
 }
@@ -640,7 +644,7 @@ body.tsfem .wrap {
 .tsfem-trends-wrap,
 .tsfem-actions-wrap,
 .tsfem-extensions-wrap {
-	padding: 20px;
+	padding: 20px 20px 0;
 	height: auto;
 	max-height: 100%;
 	min-height: 150px;
@@ -671,10 +675,6 @@ body.tsfem .wrap {
 
 .tsfem-actions > div > div {
 	margin-bottom: 20px;
-}
-
-.tsfem-actions > div > div:last-of-type {
-	margin-bottom: 0;
 }
 
 .tsfem-flex-account-info-rows {
@@ -725,7 +725,7 @@ h4.tsfem-support-title {
 	padding: 0;
 	margin: 0 0 20px;
 	flex-basis: calc( 50% - 20px );
-	min-width: 350px;
+	min-width: 200px;
 	margin-right: 20px;
 }
 
@@ -750,7 +750,6 @@ h4.tsfem-support-title {
 
 .tsfem-extension-entry > * {
 	min-height: 100px;
-	max-height: 120px;
 	margin: 0;
 	padding: 0;
 	-webkit-box-sizing: border-box;
@@ -760,7 +759,6 @@ h4.tsfem-support-title {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
-	flex: 0 1 auto;
 	-webkit-flex-wrap: wrap;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
@@ -774,21 +772,28 @@ h4.tsfem-support-title {
 
 .tsfem-extension-icon-wrap {
 	min-width: 120px;
+	flex-grow: 0;
 }
 
 .tsfem-extension-about-wrap {
-	min-width: 175px;
-	width: 100%;
-	max-width: 225px;
+	min-width: 220px;
 	-webkit-flex-direction: column;
 	flex-direction: column;
 	-webkit-justify-content: space-around;
 	justify-content: space-around;
 	padding: 10px 15px;
+	flex-grow: 1;
+	flex-basis: 25%;
+}
+
+.tsfem-extension-description-wrap {
+	min-width: 280px;
+	flex-grow: 3;
+	flex-basis: calc( 75% - 220px );
 }
 
 h4.tsfem-extension-title {
-	width: 120px;
+	min-width: 120px;
 	font-size: 1.33em;
 	word-break: break-word;
 	font-weight: 600;
@@ -801,6 +806,10 @@ h5.tsfem-extension-type {
 	margin: 0;
 	padding: 0;
 	font-size: 0.83em;
+}
+
+.tsfem-extension-subheader {
+	padding: 0.667em 0;
 }
 
 .tsfem-extension-action > *,
@@ -829,13 +838,12 @@ h5.tsfem-extension-type {
 	content: "\f307";
 }
 
-.tsfem-extension-description-wrap {
-	flex: 1 1 0;
-	min-width: 330px;
-}
-
 .tsfem-extension-description {
 	padding: 1.33em;
+}
+
+.tsfem-extension-description-header {
+	padding-bottom: 1em;
 }
 
 .tsfem-extension-description-footer > span {

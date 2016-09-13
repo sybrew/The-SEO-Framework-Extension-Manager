@@ -47,16 +47,22 @@ namespace {
 namespace TSF_Extension_Manager {
 
 	/**
+	 * The extension file, absolute unix path.
+	 * @since 1.0.0
+	 */
+	define( 'TSFEM_E_GOOGLE_ANALYTICS_BASE_FILE', __FILE__ );
+
+	/**
 	 * The extension map URL. Used for calling browser files.
 	 * @since 1.0.0
 	 */
-	define( 'TSFEM_E_GOOGLE_ANALYTICS_DIR_URL', extension_dir_url( __FILE__ ) );
+	define( 'TSFEM_E_GOOGLE_ANALYTICS_DIR_URL', extension_dir_url( TSFEM_E_GOOGLE_ANALYTICS_BASE_FILE ) );
 
 	/**
 	 * The extension file relative to the plugins dir.
 	 * @since 1.0.0
 	 */
-	define( 'TSFEM_E_GOOGLE_ANALYTICS_DIR_PATH', extension_dir_path( __FILE__ ) );
+	define( 'TSFEM_E_GOOGLE_ANALYTICS_DIR_PATH', extension_dir_path( TSFEM_E_GOOGLE_ANALYTICS_BASE_FILE ) );
 
 	/**
 	 * The plugin class map absolute path.
@@ -64,11 +70,6 @@ namespace TSF_Extension_Manager {
 	 */
 	define( 'TSFEM_E_GOOGLE_ANALYTICS_PATH_CLASS', TSFEM_E_GOOGLE_ANALYTICS_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
-	/**
-	 * The extension file, absolute unix path.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_GOOGLE_ANALYTICS_BASE_FILE', __FILE__ );
 }
 
 /**

@@ -143,7 +143,7 @@ final class Title_Fix {
 				 * Applies filters 'the_seo_framework_force_title_fix'
 				 * @since 1.0.1
 				 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
-				 * @since 1.0.0 TSF Extension Manager : Defaults to false.
+				 * @since 1.0.2 / TSF Extension Manager 1.0.0 : Defaults to false.
 				 * @param bool Whether to force the title fixing.
 				 */
 				$this->force_title_fix = (bool) apply_filters( 'the_seo_framework_force_title_fix', false );
