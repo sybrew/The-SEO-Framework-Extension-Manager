@@ -569,7 +569,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool True on clear. Default false.
+	 * @return bool True on clear. False otherwise.
 	 */
 	protected function clean_ajax_reponse_header() {
 
@@ -579,26 +579,6 @@ class Core {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Determines if the plugin instance has died or not.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @staticvar bool $died Determines plugin alive state.
-	 *
-	 * @param bool $set Whether to set death.
-	 * @return false If the plugin has not died. True otherwise.
-	 */
-	final public function _has_died( $set = false ) {
-
-		static $died = false;
-
-		if ( $set )
-			$died = true;
-
-		return $died;
 	}
 
 	/**

@@ -417,6 +417,6 @@ trait Extensions_Layout {
 
 	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
 
-		return $output . $overflow;
+		return $output;
 	}
 }

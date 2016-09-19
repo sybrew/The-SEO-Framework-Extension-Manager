@@ -41,12 +41,14 @@
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	-webkit-flex-wrap: wrap;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 	-webkit-flex-direction: column;
 	flex-direction: column;
+	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 
@@ -68,18 +70,22 @@
 }
 
 .tsfem-flex-grow {
+	-webkit-flex-grow: 1;
 	flex-grow: 1;
 }
 
 .tsfem-flex-nogrow {
+	-webkit-flex: 0 1 auto;
 	flex: 0 1 auto;
 }
 
 .tsfem-flex-noshrink {
+	-webkit-flex: 1 0 auto;
 	flex: 1 0 auto;
 }
 
 .tsfem-flex-nogrowshrink {
+	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 }
 
@@ -114,6 +120,7 @@ body.tsfem .wrap {
 	padding: 1.33em 40px;
 	margin: 0 auto;
 	overflow: hidden;
+	-webkit-align-items: center;
 	align-items: center;
 	white-space: nowrap;
 }
@@ -130,6 +137,7 @@ body.tsfem .wrap {
 .tsfem-top-about,
 .tsfem-top-wrap .tsfem-title {
 	text-align: left;
+	-webkit-align-items: center;
 	align-items: center;
 }
 
@@ -242,6 +250,9 @@ body.tsfem .wrap {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 .tsfem-button-primary,
@@ -381,6 +392,7 @@ body.tsfem .wrap {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
@@ -507,6 +519,7 @@ body.tsfem .wrap {
 	background: #fff;
 	overflow: hidden;
 	border-radius: 3px;
+	-webkit-align-items: center;
 	align-items: center;
 }
 
@@ -523,6 +536,7 @@ body.tsfem .wrap {
 	width: 100%;
 	margin: 0;
 	padding: 0;
+	-webkit-align-items: center;
 	align-items: center;
 	min-height: 33vh;
 }
@@ -550,6 +564,7 @@ body.tsfem .wrap {
 	margin: 0;
 	padding: 0;
 	max-height: 100%;
+	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
 }
 
@@ -572,6 +587,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-full {
+	-webkit-flex-direction: row;
 	flex-direction: row;
 	max-width: 100%;
 }
@@ -594,8 +610,11 @@ body.tsfem .wrap {
 .tsfem-pane-content {
 	padding: 0;
 	border-top: 0;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
+	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
+	-webkit-flex: 1 1 33vh;
 	flex: 1 1 33vh;
 	max-height: 100%;
 }
@@ -608,11 +627,15 @@ body.tsfem .wrap {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	flex-direction: column;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
 	display: flex;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	-webkit-flex-direction: row;
 	flex-direction: row;
+	-webkit-align-items: center;
 	align-items: center;
 	-webkit-justify-content: flex-end;
 	justify-content: flex-end;
@@ -624,6 +647,7 @@ body.tsfem .wrap {
 	overflow: hidden;
 	word-break: break-word;
 	text-align: right;
+	-webkit-flex: 0 1 auto;
 	flex: 0 1 auto;
 	margin-left: 7px;
 }
@@ -632,6 +656,7 @@ body.tsfem .wrap {
 	font-size: 1.33em;
 	color: #057f9c;
 	font-weight: 400;
+	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 
@@ -664,7 +689,8 @@ body.tsfem .wrap {
 .tsfem-actions > div {
 	margin-right: 20px;
 	margin-bottom: 20px;
-	flex-basis: calc( 50% - 20px );
+	-webkit-flex-basis: 200px;
+	flex-basis: 200px;
 	min-width: 200px;
 }
 
@@ -696,10 +722,15 @@ h4.tsfem-support-title {
 	color: #057f9c;
 }
 
+.tsfem-account-upgrade,
+.tsfem-support-buttons {
+	max-width: 300px;
+}
+
 .tsfem-support-buttons {
 	margin-bottom: 14px;
+	-webkit-flex-basis: 50%;
 	flex-basis: 50%;
-	max-width: 300px;
 }
 
 .tsfem-support-buttons:last-of-type {
@@ -724,8 +755,9 @@ h4.tsfem-support-title {
 .tsfem-extension-entry-wrap {
 	padding: 0;
 	margin: 0 0 20px;
-	flex-basis: calc( 50% - 20px );
-	min-width: 200px;
+	-webkit-flex-basis: 270px;
+	flex-basis: 270px;
+	min-width: calc( 50% - 40px );
 	margin-right: 20px;
 }
 
@@ -733,7 +765,9 @@ h4.tsfem-support-title {
 /* Remove grow from last item, only if 3 or more items are present in odd order. */
 .tsfem-extension-entry-wrap:first-of-type:last-of-type,
 .tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
+	-webkit-flex-grow: 0;
 	flex-grow: 0;
+	-webkit-flex-basis: 100%;
 	flex-basis: 100%;
 }
 
@@ -772,6 +806,7 @@ h4.tsfem-support-title {
 
 .tsfem-extension-icon-wrap {
 	min-width: 120px;
+	-webkit-flex-grow: 0;
 	flex-grow: 0;
 }
 
@@ -782,14 +817,18 @@ h4.tsfem-support-title {
 	-webkit-justify-content: space-around;
 	justify-content: space-around;
 	padding: 10px 15px;
+	-webkit-flex-grow: 1;
 	flex-grow: 1;
+	-webkit-flex-basis: 25%;
 	flex-basis: 25%;
 }
 
 .tsfem-extension-description-wrap {
 	min-width: 280px;
+	-webkit-flex-grow: 3;
 	flex-grow: 3;
-	flex-basis: calc( 75% - 220px );
+	-webkit-flex-basis: 280px;
+	flex-basis: 280px;
 }
 
 h4.tsfem-extension-title {
@@ -873,6 +912,7 @@ h5.tsfem-extension-type {
 	word-wrap: break-word;
 	white-space: pre-wrap;
 	overflow-wrap: normal;
+	-webkit-align-items: baseline;
 	align-items: baseline;
 }
 
@@ -884,6 +924,8 @@ h5.tsfem-extension-type {
 
 .tsfem-feed-top time {
 	white-space: pre;
+	white-space: nowrap;
+	word-wrap: break-word;
 	word-spacing: -1px;
 	font-size: 0.9em;
 	margin: 0 7px;
@@ -1038,6 +1080,13 @@ h5.tsfem-extension-type {
 	}
 }
 
+/* WordPress compat for footer. When screen has large width. */
+@media screen and ( max-width: 782px ) {
+	body.tsfem .wrap {
+		margin-bottom: 0;
+	}
+}
+
 /* Either conditions need to be true, very small screens/large phones */
 @media only screen and ( max-height: 600px ), ( max-width: 782px ) {
 	.tsfem-pane-half,
@@ -1059,12 +1108,17 @@ h5.tsfem-extension-type {
 	}
 
 	.tsfem-pane-content {
-		max-height: 330px;
+		-webkit-flex: 1 1 auto;
 		flex: 1 1 auto;
 	}
 
 	.tsfem-extensions-panes-row .tsfem-pane-half:last-of-type {
 		margin-bottom: 0;
+	}
+
+	/* Make users be able to scroll through with 25vh margin */
+	.tsfem-pane-wrap {
+		max-height: 75vh;
 	}
 
 	.tsfem-pane-half:first-of-type {
@@ -1079,7 +1133,9 @@ h5.tsfem-extension-type {
 /* Small phones */
 @media only screen and ( max-width: 600px ) {
 	.tsfem-connect-option {
+		-webkit-flex-direction: column;
 		flex-direction: column;
+		-webkit-align-items: flex-start;
 		align-items: flex-start;
 		padding: 1em 20px 1.66em;
 	}

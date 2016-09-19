@@ -157,7 +157,29 @@ trait Construct_Final {
  */
 trait Destruct_Final {
 
-	final protected function __destruct() { }
+	final public function __destruct() {
+		$this->_has_died( true );
+	}
+
+	/**
+	 * Determines if the plugin instance has died or not.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @staticvar bool $died Determines plugin alive state.
+	 *
+	 * @param bool $set Whether to set death.
+	 * @return false If the plugin has not died. True otherwise.
+	 */
+	final public function _has_died( $set = false ) {
+
+		static $died = false;
+
+		if ( $set )
+			$died = true;
+
+		return $died;
+	}
 }
 
 /**
@@ -191,7 +213,7 @@ trait Ignore_Properties {
 	 * @param $name The inexisting property name.
 	 * @param $value The propertie value that ought to be set.
 	 */
-	final protected function __set( $name = '', $val = null ) {
+	final public function __set( $name = '', $val = null ) {
 		the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html( 'static::$' . $name . ' does not exist.' ) );
 	}
 
@@ -203,7 +225,7 @@ trait Ignore_Properties {
 	 * @param $name The inexisting property name.
 	 * @return null.
 	 */
-	final protected function __get( $name = '' ) {
+	final public function __get( $name = '' ) {
 
 		the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html( 'static::$' . $name . ' does not exist.' ) );
 

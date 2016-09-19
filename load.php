@@ -147,8 +147,10 @@ function can_load_tsf_extension_manager() {
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  * @staticvar array $loaded Whether $class has been loaded.
+ *
  * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
  *
+ * @param string $class The class name.
  * @return bool False if file hasn't yet been included, otherwise true.
  */
 function _autoload_tsf_extension_manager_classes( $class ) {
@@ -182,6 +184,7 @@ function _autoload_tsf_extension_manager_classes( $class ) {
  * @staticvar bool $loaded
  *
  * @param string $file Where the trait is for.
+ * @return void.
  */
 function _tsf_extension_manager_load_trait( $file ) {
 
@@ -194,4 +197,5 @@ function _tsf_extension_manager_load_trait( $file ) {
 
 	$loaded[ $file ] = true;
 
+	return;
 }
