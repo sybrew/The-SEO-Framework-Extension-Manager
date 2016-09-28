@@ -516,13 +516,18 @@ class Core {
 				$type = 'error';
 				break;
 
-			case 10006 :
-			case 10008 :
+			case 10004 :
+				$message = esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 10007 :
+			case 10009 :
 				$message = esc_html__( 'Extension has been succesfully activated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
-			case 10007 :
+			case 10008 :
 				$message = esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -535,9 +540,9 @@ class Core {
 			case 602 :
 			case 703 :
 			case 802 :
-			case 10004 :
 			case 10005 :
-			case 10009 :
+			case 10006 :
+			case 10010 :
 			case 11002 :
 			default :
 				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
@@ -1125,33 +1130,40 @@ class Core {
 				}
 			}
 
+			$test = $this->test_extension( $slug, $ajax );
+
+			if ( 4 !== $test ) {
+				$ajax or $this->set_error_notice( array( 10004 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+			}
+
 			$success = $this->enable_extension( $slug );
 
 			if ( false === $success ) {
-				$ajax or $this->set_error_notice( array( 10004 => '' ) );
-				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+				$ajax or $this->set_error_notice( array( 10005 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 		endif;
 
 		switch ( $status['case'] ) :
 			case 1 :
-				$code = 10005;
-				break;
-
-			case 2 :
 				$code = 10006;
 				break;
 
-			case 3 :
+			case 2 :
 				$code = 10007;
 				break;
 
-			case 4 :
+			case 3 :
 				$code = 10008;
 				break;
 
-			default :
+			case 4 :
 				$code = 10009;
+				break;
+
+			default :
+				$code = 10010;
 				break;
 		endswitch;
 
@@ -1181,6 +1193,38 @@ class Core {
 		$ajax or $this->set_error_notice( array( $code => '' ) );
 
 		return $ajax ? $this->get_ajax_notice( $success, $code ) : $success;
+	}
+
+	/**
+	 * Test drives extension to see if an error occurs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @param bool $ajax Whether this is an AJAX request.
+	 * @return int|void {
+	 * 		-1 => No check has been performed.
+	 * 		1 => No file header path can be created. (Invalid extension)
+	 * 		2 => Extension header file is invalid. (Invalid extension)
+	 * 		3 => Inclusion failed.
+	 *		4 => Success.
+	 *		void => Fatal error.
+	 * }
+	 */
+	protected function test_extension( $slug, $ajax = false ) {
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Extensions::initialize( 'load', $_instance, $bits );
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		$result = Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+		Extensions::reset();
+
+		return $result;
 	}
 
 	/**

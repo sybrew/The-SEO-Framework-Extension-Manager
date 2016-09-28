@@ -608,20 +608,22 @@ trait Extensions_Actions {
 	 * The uneven bits (left to right) always need to be followed by an active bit.
 	 * So 1010 isn't possible. 0101 and 1101 are.
 	 *
+	 * I could've used concatenation for bit additions, but shifting bit series is more difficult; ergo cooler.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @param array|string $extension The extension to check.
 	 * @param bool $get_bits Whether to get bits or int.
-	 * @return string|int Either 4 bits or an integer that determine compatibility : {
-	 *		0  | 0000 | good => Completely compatible.
-	 *		1  | 0001 | okay => TSF version is greater than tested against.
-	 *		3  | 0011 | bad  => TSF is not compatible.
-	 *		4  | 0100 | okay => TSF is compatible. WP Version is greater than tested against.
-	 *		5  | 0101 | okay => TSF and WP versions are both greater than tested against.
-	 *		7  | 0111 | bad  => TSF is not compatible. WP version is greater than tested against.
-	 *		12 | 1100 | bad  => WP is not compatible.
-	 *		13 | 1101 | bad  => WP is not compatible. TSF version is greater than testest against.
-	 *		15 | 1111 | bad  => Not compatible.
+	 * @return int|string Either 4 bits or an integer that determine compatibility : {
+	 *		0  | '0000' = good => Completely compatible.
+	 *		1  | '0001' = okay => TSF version is greater than tested against.
+	 *		3  | '0011' = bad  => TSF is not compatible.
+	 *		4  | '0100' = okay => TSF is compatible. WP Version is greater than tested against.
+	 *		5  | '0101' = okay => TSF and WP versions are both greater than tested against.
+	 *		7  | '0111' = bad  => TSF is not compatible. WP version is greater than tested against.
+	 *		12 | '1100' = bad  => WP is not compatible.
+	 *		13 | '1101' = bad  => WP is not compatible. TSF version is greater than testest against.
+	 *		15 | '1111' = bad  => Not compatible.
 	 * }
 	 */
 	private static function determine_extension_compatibility( $extension, $get_bits = false ) {
@@ -669,7 +671,7 @@ trait Extensions_Actions {
 		 * @param array $compatibility : {
 		 *		key => int : {
 		 *			0: Not compatible.
-		 *			1: Version exceeeds tested check. Possibly compatible.
+		 *			1: Version exceeeds tested check. Likely compatible.
 		 *			2: Compatible.
 		 *		}
 		 * }
@@ -696,11 +698,130 @@ trait Extensions_Actions {
 	}
 
 	/**
+	 * Test drives extension to see if an error occurs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @param bool $ajax Whether AJAX is active.
+	 * @param string $instance The verification instance. Propagates to inclusion file if possible.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file if possible.
+	 * @return int|void {
+	 * 		-1 => No check has been performed.
+	 * 		1 => No file header path can be created. (Invalid extension)
+	 * 		2 => Extension header file is invalid. (Invalid extension)
+	 * 		3 => Inclusion failed.
+	 *		4 => Success.
+	 *		void => Fatal error.
+	 * }
+	 */
+	public static function test_extension( $slug, $ajax, $_instance, $bits ) {
+
+		self::verify_instance() or die;
+
+		if ( 'load' !== self::get_property( '_type' ) ) {
+			self::reset();
+			self::invoke_invalid_type( __METHOD__ );
+		}
+
+		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+			if ( static::validate_file( $file ) ) {
+
+				define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
+
+				$_prev_error_reporting = error_reporting();
+				error_reporting( 0 );
+
+				register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
+
+				ob_start();
+				$success = static::include_extension( $file, $_instance, $bits );
+				ob_clean();
+
+				error_reporting( $_prev_error_reporting );
+
+				define( '_TSFEM_TEST_EXT_PASS', true );
+
+				return $success ? 4 : 3;
+			} else {
+				//* Tick the instance.
+				tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+				return 2;
+			}
+		} else {
+			//* Tick the instance.
+			tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			return 1;
+		}
+
+		//* Tick the instance.
+		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+		return -1;
+	}
+
+	/**
+	 * Handles fatal error on extension activation for both AJAX and form activation.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	public static function _shutdown_handle_test_extension_fatal_error() {
+
+		if ( defined( '_TSFEM_TEST_EXT_PASS' ) )
+			return;
+
+		if ( ob_get_level() )
+			ob_end_clean();
+
+		$error = error_get_last();
+		$error_type = '';
+
+		switch ( $error['type'] ) :
+			case 1 :
+			case 16 :
+			case 64 :
+			case 256 :
+				$error_type = 'Fatal error.';
+				break;
+
+			case 4 :
+				$error_type = 'Parse error.';
+				break;
+
+			default :
+				$error_type = 'Type ' . $error['type'] . ' error.';
+				break;
+		endswitch;
+
+		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', wp_strip_all_tags( $advanced_error_notice ), esc_attr( $advanced_error_notice ), $error_notice );
+
+			$status = array(
+				'success' => 10004,
+				'notice' => $notice,
+			);
+
+			$response = WP_DEBUG ? array( 'status' => $status, 'slug' => '', 'case' => 'activate' ) : array( 'status' => $status );
+
+			http_response_code( 200 );
+			echo json_encode( $response );
+			exit;
+		} else {
+			wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
+		}
+	}
+
+	/**
 	 * Loads extension from input.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug to load.
+	 * @param string $instance The verification instance. Propagates to inclusion file.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file.
 	 * @return bool Whether the extension is loaded.
 	 */
 	public static function load_extension( $slug, $_instance, $bits ) {
@@ -718,6 +839,9 @@ trait Extensions_Actions {
 			}
 		}
 
+		//* Tick the instance on failure.
+		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+
 		return false;
 	}
 
@@ -728,8 +852,8 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $file The extension file to include.
-	 * @param string $instance The verification instance.
-	 * @param array $bits The verification instance bits.
+	 * @param string $instance The verification instance. Propagates to inclusion file.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file.
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, $_instance, $bits ) {
