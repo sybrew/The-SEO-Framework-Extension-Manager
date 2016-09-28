@@ -295,7 +295,8 @@ trait Extensions_Layout {
 				'disabled' => false,
 			);
 		} else {
-			$disabled = static::is_extension_compatible( $extension ) !== 2 && ( self::is_premium_user() || ! static::is_extension_premium( $extension ) ) ? false : true;
+			//* Disable if: Extension is not compatible || User isn't premium and extension is.
+			$disabled = static::is_extension_compatible( $extension ) === -1 || ( ! self::is_premium_user() && static::is_extension_premium( $extension ) );
 			$buttons[] = array(
 				'type' => 'activate',
 				'disabled' => $disabled,
@@ -304,9 +305,9 @@ trait Extensions_Layout {
 
 		$output = '';
 
-		foreach ( $buttons as $button ) :
+		foreach ( $buttons as $button ) {
 			$output .= static::get_extension_button_form( $extension['slug'], $button['type'], $button['disabled'] );
-		endforeach;
+		}
 
 		return sprintf( '<div class="tsfem-extension-actions-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
@@ -377,15 +378,20 @@ trait Extensions_Layout {
 
 		$description = $data['Description'];
 
-		$url = $data['ExtensionURI'];
+		//* Make extension author element.
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		$version = $data['Version'];
-
-		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
 		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
+
+		//* Make extension version element.
+		$version = $data['Version'];
+		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
+
+		//* Make extension home element.
+		$url = $data['ExtensionURI'];
 		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
 
+		//* Make extension compatibility element.
 		$is_compatible = static::is_extension_compatible( $extension );
 
 		switch ( $is_compatible ) :
@@ -396,25 +402,38 @@ trait Extensions_Layout {
 				break;
 
 			case 1 :
+			case 2 :
+			case 3 :
 				$compat_class = 'tsfem-unknown';
-				$compat_notice = __( 'You should run an update of The SEO Framework or WordPress', 'the-seo-framework-extension-manager' );
 				$compat_name = static::get_i18n( 'compatible' );
+				switch ( $is_compatible ) :
+					case 1 :
+						$compat_notice = __( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
+						break;
+					case 2 :
+						$compat_notice = __( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
+						break;
+					case 3 :
+						$compat_notice = __( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
+						break;
+				endswitch;
 				break;
 
+			case -1 :
 			default :
 				$compat_class = 'tsfem-error';
-				$compat_notice = __( 'You require to run an update of The SEO Framework or WordPress', 'the-seo-framework-extension-manager' );
+				/* translators: 1: Version number, 2: Version number */
+				$compat_notice = sprintf( __( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ), $extension['requires'], $extension['requires_tsf'] );
 				$compat_name = static::get_i18n( 'incompatible' );
 				break;
 		endswitch;
 
-		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s" title="%s"></span>', $compat_class, esc_html( $compat_notice ) );
+		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
+		$compatible = sprintf( '<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>', esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon );
 
-		$compatible = sprintf( '<span class="tsfem-extension-description-compat">%s%s</span>', esc_html( $compat_name ), $compat_icon );
-
+		//* Put it all together.
 		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
 		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $compatible, $home ) ) );
-
 	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
 
 		return $output;

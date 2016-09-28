@@ -148,7 +148,8 @@ body.tsfem .wrap {
 }
 
 .tsfem-top-about {
-	max-width: 60%;
+	-webkit-flex-basis: 160px;
+	flex-basis: 160px;
 }
 
 .tsfem-top-actions > div {
@@ -159,8 +160,8 @@ body.tsfem .wrap {
 .tsfem-top-about > div {
 	display: inline-block;
 	text-align: justify;
+	min-width: 155px;
 	max-width: calc( 100% - 1.2em - 14px );
-	min-width: 170px;
 	color: #fff;
 	letter-spacing: .2px;
 	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
@@ -170,7 +171,7 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 
 .tsfem-top-wrap .tsfem-title header {
-	width: calc( 100% - 1.9em - 8px );
+	width: calc( 100% - 1em - 8px );
 }
 
 .tsfem-top-wrap .tsfem-title h1 {
@@ -183,14 +184,17 @@ body.tsfem .wrap {
 	padding: 0;
 }
 
-.tsfem-top-wrap .tsfem-title .tsfem-logo {
-	background: url('../images/tsflogo.svg') 50% 50%/1.9em 1.9em no-repeat transparent;
-	height: 1.9em;
-	width: 1.9em;
-	min-width: 1.9em;
-	max-width: 1.9em;
-	vertical-align: baseline;
+.tsfem-top-wrap .tsfem-title .tsfem-logo:before {
+	content: "";
+	display: inline-block;
+	white-space: pre-wrap;
+	background: url(../images/tsflogo.svg) 50% 50%/1em 1em no-repeat transparent;
+	height: 29px;
+	width: 1em;
+	vertical-align: top;
 	margin-right: 8px;
+	margin-left: .1em;
+	line-height: 29px;
 }
 
 /* # Start Buttons.
@@ -231,6 +235,7 @@ body.tsfem .wrap {
 	display: inline-block;
 	padding: 7px 14px;
 	background: #eee;
+	font-size: 13px;
 	border: 0;
 	border-radius: 3px;
 	-webkit-box-shadow: 0 3px 0 #cacaca;
@@ -954,6 +959,7 @@ h5.tsfem-extension-type {
 	margin-right: 0;
 	border-radius: 0;
 	width: 100%;
+	font-size: 13px;
 }
 
 .tsfem #input-activation .regular-text:nth-child(1n+2) {
@@ -1150,9 +1156,52 @@ h5.tsfem-extension-type {
 	}
 }
 
+/* # Start JavaScript.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-desc-balloon {
+	position: absolute;
+	min-width: 180px;
+	width: 100%;
+	max-width: 220px;
+	font-weight: 600;
+	background: #007bd2;
+	padding: 8px 12px;
+	color: #fdfdfd;
+	border-radius: 0px;
+	z-index: 900142;
+	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+	top: 0;
+	left: -32px;
+	text-align: left;
+	word-break: break-word;
+	white-space: normal;
+	display: block;
+}
+
+.tsfem-desc-balloon span {
+	text-decoration: underline;
+}
+
+.tsfem-desc-balloon > div {
+	width: 0;
+	height: 0;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid #007bd2;
+	position: absolute;
+	bottom: -8px;
+	z-index: 9999999;
+	left: 0;
+}
+
 /* # Start override.
 /*----------------------------------------------------------------------------*/
 
 .tsfem-hidden {
 	display: none;
+}
+
+.tsfem-has-hover-balloon {
+	position: relative;
 }

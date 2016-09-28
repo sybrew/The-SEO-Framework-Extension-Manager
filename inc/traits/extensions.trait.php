@@ -555,8 +555,12 @@ trait Extensions_Actions {
 	 * @param array|string $extension The extension to check.
 	 * @return int Compatibility : {
 	 *		0 is compatible.
-	 *		1 is okay but might require update of either WP or TSF.
-	 *		2 is not compatible.
+	 *		1, 2 and 3 is okay but might require update of either WP or TSF. {
+	 *			1 : TSF version is greater than tested against.
+	 * 			2 : TSF is compatible. WP Version is greater than tested against.
+	 * 			3 : TSF and WP versions are both greater than tested against.
+	 * 		}
+	 *		-1 is not compatible.
 	 */
 	private static function is_extension_compatible( $extension ) {
 
@@ -578,13 +582,19 @@ trait Extensions_Actions {
 				break;
 
 			case 1 :
-			case 4 :
-			case 5 :
 				$_compatibility = 1;
 				break;
 
-			default :
+			case 4 :
 				$_compatibility = 2;
+				break;
+
+			case 5 :
+				$_compatibility = 3;
+				break;
+
+			default :
+				$_compatibility = -1;
 				break;
 		endswitch;
 

@@ -46,6 +46,8 @@ if ( $options ) {
 ?>
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
 	<?php echo $about . $actions; ?>
-	<div class="tsfem-title tsfem-flex tsfem-flex-row"><span class="tsfem-logo"></span><header><h1><?php echo esc_html( get_admin_page_title() ); ?></h1></header></div>
+	<div class="tsfem-title tsfem-flex tsfem-flex-row">
+		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">' . esc_html__( 'SEO' ) . '</span>', esc_html__( 'Extensions' ) ); ?></h1></header>
+	</div>
 </section>
 <?php
