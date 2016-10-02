@@ -23,6 +23,10 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Require option trait.
+ * @since 1.0.0
+ */
 _tsf_extension_manager_load_trait( 'options' );
 
 /**

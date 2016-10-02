@@ -1,7 +1,6 @@
 <?php
 defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
-$title = esc_html( get_admin_page_title() );
 $about = '';
 $actions = '';
 
@@ -19,8 +18,8 @@ if ( $options ) {
 		if ( isset( $status['data']['end_date'] ) ) {
 			//* UTC.
 			$then = strtotime( $status['data']['end_date'] );
-			$in_two_weeks = strtotime( '+4 week' );
-			$about_to_expire = $then < $in_two_weeks;
+			$in_four_weeks = strtotime( '+4 week' );
+			$about_to_expire = $then < $in_four_weeks;
 
 			if ( $about_to_expire ) {
 				$account_button_class = 'tsfem-account-about-to-expire';
@@ -47,7 +46,7 @@ if ( $options ) {
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
 	<?php echo $about . $actions; ?>
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
-		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">' . esc_html__( 'SEO' ) . '</span>', esc_html__( 'Extensions' ) ); ?></h1></header>
+		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">SEO</span>', esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ) ); ?></h1></header>
 	</div>
 </section>
 <?php

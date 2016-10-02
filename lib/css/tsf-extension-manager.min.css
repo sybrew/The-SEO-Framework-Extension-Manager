@@ -285,7 +285,8 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-star,
-.tsfem-account-active {
+.tsfem-account-active,
+.tsfem-button-primary-bright {
 	color: #fff;
 	background: #0ebfe9;
 	-webkit-box-shadow: 0 3px 0 #057f9c;
@@ -780,7 +781,6 @@ h4.tsfem-support-title {
 	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
 	border: 1px solid #ddd;
 	background: #fdfdfd;
-	overflow: hidden;
 	align-self: auto;
 }
 
@@ -801,7 +801,6 @@ h4.tsfem-support-title {
 	-webkit-flex-direction: column;
 	flex-direction: column;
 	width: auto;
-	overflow: hidden;
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
@@ -1160,7 +1159,7 @@ h5.tsfem-extension-type {
 	position: absolute;
 	min-width: 180px;
 	width: 100%;
-	max-width: 220px;
+	max-width: calc( 100% - 42px );
 	font-weight: 500;
 	background: #05809e;
 	padding: 10px 12px;

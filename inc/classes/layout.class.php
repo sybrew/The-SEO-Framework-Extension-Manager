@@ -190,7 +190,6 @@ final class Layout extends Secure_Abstract {
 		}
 	}
 
-
 	/**
 	 * Outputs premium support button.
 	 *

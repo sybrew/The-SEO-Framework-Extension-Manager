@@ -100,11 +100,15 @@ function init_tsf_extension_manager() {
 		 */
 		_tsf_extension_manager_load_trait( 'overload' );
 
+		//* Prevent overriding of security classes.
+		! ( class_exists( 'TSF_Extension_Manager\Core' ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract' ) || class_exists( 'TSF_Extension_Manager\SecureOption' ) )
+			or wp_die( -1 );
+
 		/**
 		 * Register class autoload here.
 		 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
 		 */
-		spl_autoload_register( '_autoload_tsf_extension_manager_classes' );
+		spl_autoload_register( '_autoload_tsf_extension_manager_classes', true, true );
 
 		/**
 		 * @package TSF_Extension_Manager
@@ -146,9 +150,9 @@ function can_load_tsf_extension_manager() {
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
- * @staticvar array $loaded Whether $class has been loaded.
  *
- * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this plugin's scope will result in an error.
+ * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this
+ * 		plugin's scope could result in an error.
  *
  * @param string $class The class name.
  * @return bool False if file hasn't yet been included, otherwise true.
@@ -158,21 +162,16 @@ function _autoload_tsf_extension_manager_classes( $class ) {
 	if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\', 0 ) )
 		return;
 
-	static $loaded = array();
-
-	if ( isset( $loaded[ $class ] ) )
-		return true;
-
-	if ( false !== strpos( $class, '_Abstract' ) ) {
+	if ( strpos( $class, '_Abstract' ) ) {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
 	} else {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
 	}
 
-	$_class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
-	$_class = str_replace( '_abstract', '.abstract', $_class );
+	$class = strtolower( str_replace( 'TSF_Extension_Manager\\', '', $class ) );
+	$class = str_replace( '_abstract', '.abstract', $class );
 
-	return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+	require_once( $path . $class . '.class.php' );
 }
 
 /**

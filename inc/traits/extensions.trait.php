@@ -89,9 +89,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1454785229',
 				'requires' => '3.9.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.7.1',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -109,9 +109,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1473299919',
 				'requires' => '3.9.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '2.7.1',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -129,9 +129,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1473299919',
 				'requires' => '4.4.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.7.1',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -149,9 +149,29 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1473664096',
 				'requires' => '4.4.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.1',
-				'tested_tsf' => '2.7.1',
+				'tested_tsf' => '2.8.0',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
+			'monitor' => array(
+				'slug' => 'monitor',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1475047996',
+				'requires' => '4.4.0',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -175,9 +195,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '2f7b92b38e8559aa730794e993de73489a434aa6334de67d5d3be77d35a3449c',
-			'sha1'   => 'e3e0be2ca9e2a6bd528cd1ff7055e952a5d9f701',
-			'md5'    => '1dab7aafd08ce325fc29fd6339c04526',
+			'sha256' => 'e45346eb0464f401f67303ea1904834dbfb20e0ef47a6e1ae93373bf80962689',
+			'sha1'   => '6aee64ad1f2e1a1122aaea82a73247bcbbbebd81',
+			'md5'    => 'c23e266e7832784b59c313b04439b912',
 		);
 	}
 
@@ -292,7 +312,7 @@ trait Extensions_Properties {
 	 * @param string $slug The extension slug.
 	 * @return string The extension header file location absolute path.
 	 */
-	private static function get_extension_header_file_path( $slug ) {
+	private static function get_extension_header_file_location( $slug ) {
 
 		if ( $path = static::get_extension_trunk_path( $slug ) )
 			return $path . $slug . '.php';
@@ -330,7 +350,7 @@ trait Extensions_Properties {
 
 		$data[ $slug ] = false;
 
-		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
 			$data[ $slug ] = get_file_data( $file, $default_headers, 'tsfem-extension' );
 		}
 
@@ -415,7 +435,7 @@ trait Extensions_Actions {
 
 		$slug = static::$current_slug;
 
-		$file = static::get_extension_header_file_path( $slug );
+		$file = static::get_extension_header_file_location( $slug );
 
 		if ( in_array( 'sha256', hash_algos(), true ) ) {
 			$hash = hash_file( 'sha256', $file );
@@ -724,25 +744,52 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
 			if ( static::validate_file( $file ) ) {
 
+				define( '_TSFEM_TESTING_EXTENSION', true );
 				define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
+				//* We only want to catch a fatal/parse error.
 				$_prev_error_reporting = error_reporting();
 				error_reporting( 0 );
 
 				register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 
+				$success = array();
+
 				ob_start();
-				$success = static::include_extension( $file, $_instance, $bits );
+				$success[] = static::include_extension( $file, $_instance, $bits );
+
+				$base_path = static::get_extension_trunk_path( $slug );
+				$test_file = $base_path . 'test.json';
+
+				if ( 0 === validate_file( $test_file ) && file_exists( $test_file ) ) {
+					$json = json_decode( file_get_contents( $test_file ) );
+
+					if ( ! empty( $json ) ) {
+						$namespace = empty( $json->namespace ) ? '' : $json->namespace;
+						$tests = empty( $json->test ) ? array() : (array) $json->test;
+
+						foreach ( $tests as $_class => $_file ) {
+							if ( '_base' === $_class )
+								continue;
+
+							$success[] = (bool) include_once( $base_path . $_file );
+							if ( $_class ) {
+								$class = $namespace . '\\' . $_class;
+								$success[] = new $class;
+							}
+						}
+					}
+				}
 				ob_clean();
 
 				error_reporting( $_prev_error_reporting );
 
 				define( '_TSFEM_TEST_EXT_PASS', true );
 
-				return $success ? 4 : 3;
+				return in_array( false, $success, true ) ? 3 : 4;
 			} else {
 				//* Tick the instance.
 				tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
@@ -793,6 +840,10 @@ trait Extensions_Actions {
 				break;
 		endswitch;
 
+		//* Remove stack trace.
+		if ( false !== $stack_pos = stripos( $error['message'], 'Stack trace:' ) )
+			$error['message'] = substr( $error['message'], 0, $stack_pos );
+
 		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
 
@@ -810,6 +861,7 @@ trait Extensions_Actions {
 			echo json_encode( $response );
 			exit;
 		} else {
+			$error_notice .= '<br>' . esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 			wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
 		}
 	}
@@ -833,7 +885,7 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
 			if ( static::validate_file( $file ) ) {
 				return static::include_extension( $file, $_instance, $bits );
 			}

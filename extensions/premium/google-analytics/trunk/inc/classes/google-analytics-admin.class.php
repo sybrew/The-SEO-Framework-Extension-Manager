@@ -4,16 +4,6 @@
  */
 namespace TSF_Extension_Manager_Extension;
 
-/**
- * Extension Name: Google Analytics
- * Extension URI: https://premium.theseoframework.com/extensions/incognito/
- * Description: The Google Analytics extension allows you to set up and interact with Google Analytics right from your dashboard.
- * Version: 1.0.0
- * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
- * License: GPLv3
- */
-
 defined( 'ABSPATH' ) or die;
 
 if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )

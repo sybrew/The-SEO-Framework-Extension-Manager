@@ -1,0 +1,8 @@
+{
+	"slug": "monitor",
+	"namespace": "TSF_Extension_Manager_Extension",
+	"test": {
+		"_base"         : "monitor.php",
+		"Monitor_Admin" : "inc/classes/monitor-admin.class.php"
+	}
+}
