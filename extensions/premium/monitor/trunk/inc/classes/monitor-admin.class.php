@@ -15,12 +15,19 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
 use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
 use TSF_Extension_Manager\UI as UI;
+use TSF_Extension_Manager\Extension_Options as Extension_Options;
 
 /**
  * Require user interface trait.
  * @since 1.0.0
  */
 _tsf_extension_manager_load_trait( 'ui' );
+
+/**
+ * Require extension options trait.
+ * @since 1.0.0
+ */
+_tsf_extension_manager_load_trait( 'extension-options' );
 
 /**
  * Monitor extension for The SEO Framework
@@ -40,7 +47,20 @@ _tsf_extension_manager_load_trait( 'ui' );
  */
 
 final class Monitor_Admin {
-	use Enclose_Master, Construct_Solo_Master, UI;
+	use Enclose_Master, Construct_Solo_Master, UI, Extension_Options;
+
+	/**
+	 * The POST nonce validation name, action and name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce name.
+	 * @var string The validation request name.
+	 * @var string The validation nonce action.
+	 */
+	protected $nonce_name;
+	protected $request_name = array();
+	protected $nonce_action = array();
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -61,23 +81,35 @@ final class Monitor_Admin {
 	public $monitor_page_slug;
 
 	/**
-	 * The extensions settings field.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string TSF Extension Manager Settings Field.
-	 */
-	public $settings_field;
-
-	/**
 	 * Constructor, initializes WordPress actions.
 	 *
 	 * @since 1.0.0
 	 */
 	protected function construct() {
 
+		/**
+		 * Set options index.
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = 'monitor';
+
+		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
+		$this->request_name = array(
+			//* Reference convenience.
+			'default' => 'default',
+
+			//* Statistics fetch.
+			'update' => 'update',
+		);
+		$this->nonce_action = array(
+			//* Reference convenience.
+			'default' => 'tsfem_e_monitor_nonce_action',
+
+			//* Statistics fetch.
+			'update' => 'tsfem_e_nonce_action_monitor_update',
+		);
+
 		$this->monitor_page_slug = 'theseoframework-monitor';
-		$this->settings_field = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
 
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, 'init_menu' ) );
@@ -169,6 +201,10 @@ final class Monitor_Admin {
 
 		//* Add footer output.
 		add_action( 'in_admin_footer', array( $this, 'init_monitor_footer_wrap' ) );
+
+		//* Update POST listener.
+		//add_action( 'admin_init', array( $this, 'handle_update_data' ) );
+		//add_action( 'wp_ajax_tsfem_e_monitor_update', array( $this, 'handle_update_data' ) );
 
 		return $run = true;
 	}
@@ -309,6 +345,31 @@ final class Monitor_Admin {
 		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 
 		include( $file );
+	}
+
+	/**
+	 * Outputs update form.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function output_update_button() {
+
+		$class = 'tsfem-button-primary-bright tsfem-button-cloud tsfem-button-ajax';
+		$name = __( 'Update', 'the-seo-framework-extension-manager' );
+		$title = __( 'Get latest data', 'the-seo-framework-extension-manager' );
+
+		$nonce_action = '<input type="hidden" name="tsfem-e-monitor-update-action" value="' . esc_attr( $this->request_name['update'] ) . '">';
+		$nonce = wp_nonce_field( $this->nonce_action['update'], $this->nonce_name, true, false );
+		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" title="%s" value="%s">', esc_attr( $class ), esc_attr( $title ), esc_attr( $name ) );
+		$form = $nonce_action . $nonce . $submit;
+
+		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-e-monitor-update-form" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ), $form );
+		$js = sprintf( '<a id="tsfem-e-monitor-update-button" class="tsfem-button-primary hide-if-no-js %s" title="%s">%s</a>', esc_attr( $class ), esc_attr( $title ), esc_html( $name ) );
+
+		$button = $nojs . $js;
+
+		//* Already escaped.
+		echo $button;
 	}
 
 	protected function get_update_url() {

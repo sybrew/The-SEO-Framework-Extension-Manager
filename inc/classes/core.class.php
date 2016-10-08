@@ -158,6 +158,7 @@ class Core {
 				case -2 :
 					//* Failed checksum.
 					$this->set_error_notice( array( 2001 => '' ) );
+					;
 
 				default :
 					Extensions::reset();
@@ -279,7 +280,7 @@ class Core {
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
 	 * @param string $key The nonce action used for caching.
-	 * @param bool $check_post Whether to check for POST variables.
+	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
 	public function handle_update_nonce( $key = 'default', $check_post = true ) {
@@ -295,18 +296,22 @@ class Core {
 		if ( $check_post ) {
 			/**
 			 * If this page doesn't parse the site options,
-			 * There's no need to filter them on each request.
-			 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
-			 *
-			 * @since 1.0.0
+			 * there's no need to check them on each request.
 			 */
 			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
 				return $validated[ $key ] = false;
 		}
 
-		check_admin_referer( $this->nonce_action[ $key ], $this->nonce_name );
+		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] ) : false;
 
-		return $validated[ $key ] = true;
+		if ( false === $result ) {
+			//* Nonce failed. Set error notice and reload.
+			$this->set_error_notice( array( 9001 => '' ) );
+			the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+			exit;
+		}
+
+		return $validated[ $key ] = (bool) $result;
 	}
 
 	/**
@@ -508,14 +513,15 @@ class Core {
 				$type = 'error';
 				break;
 
+			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001 :
 				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
+			case 2001 :
 			case 10001 :
 			case 10002 :
-			case 2001 :
 				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -1054,7 +1060,7 @@ class Core {
 		} else {
 			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
 
-			//* Most likely a fatal error.
+			//* Most likely, a fatal error will now occur.
 			return $loaded[ $class ] = false;
 		}
 	}
@@ -1151,22 +1157,27 @@ class Core {
 
 		switch ( $status['case'] ) :
 			case 1 :
+				//* No slug set.
 				$code = 10006;
 				break;
 
 			case 2 :
+				//* Premium activated.
 				$code = 10007;
 				break;
 
 			case 3 :
+				//* Premium failed: User not premium.
 				$code = 10008;
 				break;
 
 			case 4 :
+				//* Free activated.
 				$code = 10009;
 				break;
 
 			default :
+				//* Unknown case.
 				$code = 10010;
 				break;
 		endswitch;

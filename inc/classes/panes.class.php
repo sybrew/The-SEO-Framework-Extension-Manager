@@ -360,9 +360,10 @@ class Panes extends API {
 		return sprintf( '<div class="tsfem-account-info tsfem-flex">%s%s</div>', $title, $output );
 	}
 
-
-	protected function get_account_extend_form() {
-	}
+	/**
+	 * @TODO
+	 */
+	protected function get_account_extend_form() { }
 
 	/**
 	 * Wraps and returns the account upgrade form.

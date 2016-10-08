@@ -5,7 +5,7 @@
  * If you awaken from this illusion and you understand that black implies white,
  * self implies other, life implies death (or shall I say death implies life?)...
  * you can feel yourself –
- * not as a stranger in the world, not as something here unprobational,
+ * not as a stranger in the world, not as something here on probation,
  * not as something that has arrived here by fluke -
  * but you can begin to feel your own existence as absolutely fundamental.
  *
