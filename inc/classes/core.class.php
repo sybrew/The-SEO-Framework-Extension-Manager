@@ -200,15 +200,15 @@ class Core {
 	 */
 	public function handle_update_post() {
 
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['action'] ) )
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
 
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
-		if ( false === $this->handle_update_nonce( $options['action'], false ) )
+		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
-		switch ( $options['action'] ) :
+		switch ( $options['nonce-action'] ) :
 			case $this->request_name['activate-key'] :
 				$args = array(
 					'licence_key' => trim( $options['key'] ),
@@ -263,7 +263,7 @@ class Core {
 		endswitch;
 
 		//* Adds action to the URI. It's only used to visualize what has happened.
-		$args = WP_DEBUG ? array( 'did-' . $options['action'] => 'true' ) : array();
+		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
@@ -1269,20 +1269,6 @@ class Core {
 	}
 
 	/**
-	 * Sanitizes AJAX input string.
-	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
-	 * Also prevents regex execution.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $input The AJAX input string.
-	 * @return string $output The cleaned AJAX input string.
-	 */
-	protected function s_ajax_string( $input ) {
-		return trim( esc_attr( wp_kses_normalize_entities( strval( wp_kses_no_null( $input ) ) ) ), ' \\/#' );
-	}
-
-	/**
 	 * Disables or enables an extension through options.
 	 *
 	 * @since 1.0.0
@@ -1300,5 +1286,49 @@ class Core {
 		$kill = $enable;
 
 		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
+	}
+
+	/**
+	 * Sanitizes AJAX input string.
+	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
+	 * Also prevents regex execution.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $input The AJAX input string.
+	 * @return string $output The cleaned AJAX input string.
+	 */
+	protected function s_ajax_string( $input ) {
+		return trim( esc_attr( wp_kses_normalize_entities( strval( wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+	}
+
+	/**
+	 * Returns font file location.
+	 * To be used for testing font-pixels.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $font The font name, should include .ttf.
+	 * @param bool $url Whether to return a path or URL.
+	 * @return string The font URL or path. Not escaped.
+	 */
+	public function get_font_file_location( $font = '', $url = false ) {
+		if ( $url ) {
+			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
+		}
+	}
+
+	/**
+	 * Converts pixels to points.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
+	 * @return int Points.
+	 */
+	public function pixel_to_points( $px = 0 ) {
+		return intval( $px ) * 0.75;
 	}
 }

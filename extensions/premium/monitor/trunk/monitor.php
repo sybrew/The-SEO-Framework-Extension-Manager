@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Monitor
  */
 
 /**
@@ -14,7 +14,7 @@
  */
 
 /**
- * @package TSF_Extension_Manager
+ * @package TSF_Extension_Manager\Extensions\Monitor
  */
 namespace {
 
@@ -42,7 +42,7 @@ namespace {
  */
 
 /**
- * @package TSF_Extension_Manager
+ * @package TSF_Extension_Manager\Extensions\Monitor
  */
 namespace TSF_Extension_Manager {
 
@@ -72,7 +72,7 @@ namespace TSF_Extension_Manager {
 }
 
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Monitor
  */
 namespace TSF_Extension_Manager_Extension {
 

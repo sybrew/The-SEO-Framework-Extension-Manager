@@ -42,11 +42,37 @@ if ( $options ) {
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . esc_html( $info ) . '</div></div>';
 }
 
+$extensions_i18n = __( 'Extensions', 'the-seo-framework-extension-manager' );
+
+/**
+ * Test for GD library functionality upon logo.
+ *
+ * This is the first step towards "true" Google pixel guidelines character count testing.
+ * Let's see how this works out :).
+ */
+if ( extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) {
+	//* Calculate text-width. 1.9em @ 13px body.
+	$tim = imageftbbox( $this->pixel_to_points( 1.9 * 13 ), 0, $this->get_font_file_location( 'verdana.ttf' ), $extensions_i18n );
+
+	$width_top = isset( $tim[2] ) ? $tim[2] : 0;
+	$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
+	//* Get largest offset.
+	$width = $width_top >= $width_bot ? $width_top : $width_bot;
+
+	//* 10px margin of error.
+	if ( $width )
+		$flex_basis = sprintf( '%spx', intval( $width + 10 ) );
+}
+
 ?>
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
-	<?php echo $about . $actions; ?>
+	<?php
+	echo $about . $actions;
+	if ( ! empty( $flex_basis ) )
+		printf( '<style>.tsfem-top-wrap .tsfem-title{-webkit-flex-basis:%1$s;flex-basis:%1$s}</style>', esc_html( $flex_basis ) );
+	?>
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
-		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">SEO</span>', esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ) ); ?></h1></header>
+		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">SEO</span>', esc_html( $extensions_i18n ) ); ?></h1></header>
 	</div>
 </section>
 <?php

@@ -397,7 +397,7 @@ trait Extensions_Layout {
 		switch ( $is_compatible ) :
 			case 0 :
 				$compat_class = 'tsfem-success';
-				$compat_notice = __( 'This plugin is compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
+				$compat_notice = __( 'Compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
 				$compat_name = static::get_i18n( 'compatible' );
 				break;
 

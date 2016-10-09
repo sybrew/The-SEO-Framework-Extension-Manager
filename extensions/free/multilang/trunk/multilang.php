@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Multilang
  */
 namespace TSF_Extension_Manager_Extension;
 

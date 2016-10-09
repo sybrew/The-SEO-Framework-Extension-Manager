@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Monitor\Admin
  */
 namespace TSF_Extension_Manager_Extension;
 
@@ -8,14 +8,6 @@ defined( 'ABSPATH' ) or die;
 
 if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
 	return;
-
-/**
- * @package TSF_Extension_Manager
- */
-use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
-use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
-use TSF_Extension_Manager\UI as UI;
-use TSF_Extension_Manager\Extension_Options as Extension_Options;
 
 /**
  * Require user interface trait.
@@ -28,6 +20,14 @@ _tsf_extension_manager_load_trait( 'ui' );
  * @since 1.0.0
  */
 _tsf_extension_manager_load_trait( 'extension-options' );
+
+/**
+ * @package TSF_Extension_Manager\Traits
+ */
+use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
+use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
+use TSF_Extension_Manager\UI as UI;
+use TSF_Extension_Manager\Extension_Options as Extension_Options;
 
 /**
  * Monitor extension for The SEO Framework

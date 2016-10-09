@@ -39,6 +39,7 @@ function tsf_extension_manager() {
  * Returns the minimum role required to adjust and access settings.
  *
  * @since 1.0.0
+ * @staticvar bool $cache
  *
  * @return string The minimum required capability for extension installation.
  */

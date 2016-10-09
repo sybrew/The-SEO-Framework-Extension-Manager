@@ -146,9 +146,14 @@ body.tsfem .wrap {
 	justify-content: flex-end;
 }
 
+.tsfem-top-wrap .tsfem-title {
+	-webkit-flex: 1 999 auto;
+	flex: 1 999 auto;
+}
+
 .tsfem-top-about {
-	-webkit-flex-basis: 160px;
-	flex-basis: 160px;
+	-webkit-flex: 1 1 160px;
+	flex: 1 1 160px;
 }
 
 .tsfem-top-actions > div {
@@ -159,7 +164,6 @@ body.tsfem .wrap {
 .tsfem-top-about > div {
 	display: inline-block;
 	text-align: justify;
-	min-width: 155px;
 	max-width: calc( 100% - 1.2em - 14px );
 	color: #fff;
 	letter-spacing: .2px;
@@ -170,17 +174,18 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 
 .tsfem-top-wrap .tsfem-title header {
-	width: calc( 100% - 1em - 8px );
+	width: calc( 100% - 7px );
 }
 
 .tsfem-top-wrap .tsfem-title h1 {
-	font-family: Verdana, Trebuchet MS, sans-serif;
+	font-family: Verdana, sans-serif;
 	word-break: break-word;
 	font-size: 1.9em;
 	font-weight: 400;
 	color: #0ebfe9;
 	margin: 0;
 	padding: 0;
+	display: inline;
 }
 
 .tsfem-top-wrap .tsfem-title .tsfem-logo:before {
@@ -681,7 +686,8 @@ body.tsfem .wrap {
 }
 
 .tsfem-actions,
-.tsfem-trends {
+.tsfem-trends,
+.tsfem-trends-activation {
 	max-width: 1600px;
 	min-height: 150px;
 }
@@ -894,6 +900,13 @@ h5.tsfem-extension-type {
 /*--------------------------------------*/
 .tsfem-feed-wrap {
 	overflow: hidden;
+}
+
+.tsfem-enable-feed-button {
+	margin-bottom: 14px;
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
+	max-width: 300px;
 }
 
 .tsfem-feed-entry,
@@ -1157,31 +1170,64 @@ h5.tsfem-extension-type {
 
 .tsfem-desc-balloon {
 	position: absolute;
-	min-width: 180px;
-	width: 100%;
-	max-width: calc( 100% - 42px );
-	font-weight: 500;
-	background: #05809e;
+	padding: 0;
+	margin: 0;
+	border-radius: 0px;
+	bottom: 0;
+	left: 0;
+	opacity: 1;
+	z-index: 9999999;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-desc-balloon > span {
+	position: relative;
+	left: 0;
+	top: 0;
+	margin: 0;
+	max-width: 200px;
 	padding: 10px 12px;
+	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+	background: #05809e;
+	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
 	font-size: 1em;
+	font-weight: 500;
 	line-height: 1.625em;
 	color: #fff;
 	border-radius: 0px;
-	z-index: 900142;
-	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
-	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
-	top: 0;
-	left: -32px;
-	opacity: 10;
-	text-align: left;
-	word-break: break-word;
-	white-space: normal;
-	display: block;
-	z-index: 9001;
-	z-index: 9999999;
+	word-wrap: normal;
+	white-space: pre-line;
+	word-break: normal;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 0 auto;
+	flex: 1 0 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
 }
 
-.tsfem-desc-balloon span {
+.tsfem-desc-balloon > span span {
 	text-decoration: underline;
 }
 

@@ -155,11 +155,18 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 4 );
  * Plugin locale 'the-seo-framework-extension-manager'
  * Locale folder the-seo-framework-extension-manager/language/
  * @since 1.0.0
+ * @staticvar $loaded Determines if the textdomain has already been loaded.
  *
  * @param bool $ignore Whether to load locale outside of the admin area.
+ * @return void Early if already loaded.
  */
 function init_tsf_extension_manager_locale( $ignore = false ) {
 	if ( is_admin() || $ignore ) {
+		static $loaded = false;
+
+		if ( $loaded = $loaded ? false : $loaded = true ? false : true )
+			return;
+
 		load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,

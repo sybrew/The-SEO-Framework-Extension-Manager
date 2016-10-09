@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Analytics
  */
 
 /**
@@ -42,7 +42,7 @@ namespace {
  */
 
 /**
- * @package TSF_Extension_Manager
+ * @package TSF_Extension_Manager\Extensions\Analytics
  */
 namespace TSF_Extension_Manager {
 
@@ -73,7 +73,7 @@ namespace TSF_Extension_Manager {
 }
 
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Analytics
  */
 namespace TSF_Extension_Manager_Extension {
 

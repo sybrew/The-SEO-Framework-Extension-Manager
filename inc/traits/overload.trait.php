@@ -91,12 +91,11 @@ trait Construct_Master {
 
 	public function __construct() {
 
-		static $count = array();
+		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count[ __CLASS__ ] = isset( $count[ __CLASS__ ] ) ? $count[ __CLASS__ ] : 0;
-		$count[ __CLASS__ ] < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
-		$count[ __CLASS__ ]++;
+		$count < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
+		$count++;
 
 		parent::__construct();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension
+ * @package TSF_Extension_Manager_Extension\Analytics\FrontEnd
  */
 namespace TSF_Extension_Manager_Extension;
 
@@ -10,7 +10,7 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager
+ * @package TSF_Extension_Manager\Traits
  */
 use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
 use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;

@@ -138,12 +138,12 @@ class AdminPages extends AccountActivation {
 	public function add_menu_link() {
 
 		$menu = array(
-			'parent_slug'	=> the_seo_framework_options_page_slug(),
-			'page_title'	=> esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
-			'menu_title'	=> esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
-			'capability'	=> 'install_plugins',
-			'menu_slug'		=> $this->seo_extensions_page_slug,
-			'callback'		=> array( $this, 'init_extension_manager_page' ),
+			'parent_slug' => the_seo_framework_options_page_slug(),
+			'page_title'  => esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
+			'menu_title'  => esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
+			'capability'  => 'install_plugins',
+			'menu_slug'   => $this->seo_extensions_page_slug,
+			'callback'    => array( $this, 'init_extension_manager_page' ),
 		);
 
 		$this->seo_extensions_menu_page_hook = add_submenu_page(
@@ -164,9 +164,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	public function load_tsfem_admin_actions() {
-
 		add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, 'do_tsfem_admin_actions' ) );
-
 	}
 
 	/**
@@ -444,6 +442,6 @@ class AdminPages extends AccountActivation {
 	 * @param string $key The action key.
 	 */
 	public function get_nonce_action_field( $key ) {
-		return '<input type="hidden" name="' . esc_attr( $this->get_field_name( 'action' ) ) . '" value="' . esc_attr( $key ) . '">';
+		return '<input type="hidden" name="' . esc_attr( $this->get_field_name( 'nonce-action' ) ) . '" value="' . esc_attr( $key ) . '">';
 	}
 }

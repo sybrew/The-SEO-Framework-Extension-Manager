@@ -772,6 +772,7 @@ trait Extensions_Actions {
 						$tests = empty( $json->test ) ? array() : (array) $json->test;
 
 						foreach ( $tests as $_class => $_file ) {
+							//* Base file is already loaded.
 							if ( '_base' === $_class )
 								continue;
 
@@ -787,8 +788,10 @@ trait Extensions_Actions {
 
 				error_reporting( $_prev_error_reporting );
 
+				//* No fatal error has occurred, pass.
 				define( '_TSFEM_TEST_EXT_PASS', true );
 
+				//* "False" is very unlikely at this point; but who knows.
 				return in_array( false, $success, true ) ? 3 : 4;
 			} else {
 				//* Tick the instance.
