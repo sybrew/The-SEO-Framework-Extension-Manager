@@ -89,7 +89,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1454785229',
 				'requires' => '3.9.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -107,7 +109,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1473299919',
 				'requires' => '3.9.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.2.0',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -125,7 +129,49 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1473299919',
 				'requires' => '4.4.0',
-				'tested' => '4.6.1',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.8.0',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
+			'google-analytics' => array(
+				'slug' => 'google-analytics',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1473664096',
+				'requires' => '4.4.0',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.7.1',
+				'tested_tsf' => '2.8.0',
+				'icons' => array(
+					'default' => 'icon-100x100.jpg',
+					'svg' => '',
+					'1x' => 'icon-100x100.jpg',
+					'2x' => 'icon-200x200.jpg',
+				),
+			),
+			'monitor' => array(
+				'slug' => 'monitor',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1475047996',
+				'requires' => '4.4.0',
+				'tested' => '4.7.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.8.0',
 				'icons' => array(
 					'default' => 'icon-100x100.jpg',
 					'svg' => '',
@@ -149,9 +195,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '4e9e99ac344b752cfb4898238e9f4f1bd8ecb133f0af492646d0ad2ec6566688',
-			'sha1'   => 'a867c78ef82408beea1e85cfc6b72dca6580f811',
-			'md5'    => '1a34f1051a82f7302390b2feac6a2fbd',
+			'sha256' => 'e45346eb0464f401f67303ea1904834dbfb20e0ef47a6e1ae93373bf80962689',
+			'sha1'   => '6aee64ad1f2e1a1122aaea82a73247bcbbbebd81',
+			'md5'    => 'c23e266e7832784b59c313b04439b912',
 		);
 	}
 
@@ -266,7 +312,7 @@ trait Extensions_Properties {
 	 * @param string $slug The extension slug.
 	 * @return string The extension header file location absolute path.
 	 */
-	private static function get_extension_header_file_path( $slug ) {
+	private static function get_extension_header_file_location( $slug ) {
 
 		if ( $path = static::get_extension_trunk_path( $slug ) )
 			return $path . $slug . '.php';
@@ -304,7 +350,7 @@ trait Extensions_Properties {
 
 		$data[ $slug ] = false;
 
-		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
 			$data[ $slug ] = get_file_data( $file, $default_headers, 'tsfem-extension' );
 		}
 
@@ -389,7 +435,7 @@ trait Extensions_Actions {
 
 		$slug = static::$current_slug;
 
-		$file = static::get_extension_header_file_path( $slug );
+		$file = static::get_extension_header_file_location( $slug );
 
 		if ( in_array( 'sha256', hash_algos(), true ) ) {
 			$hash = hash_file( 'sha256', $file );
@@ -521,11 +567,316 @@ trait Extensions_Actions {
 	}
 
 	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return int Compatibility : {
+	 *		0 is compatible.
+	 *		1, 2 and 3 is okay but might require update of either WP or TSF. {
+	 *			1 : TSF version is greater than tested against.
+	 * 			2 : TSF is compatible. WP Version is greater than tested against.
+	 * 			3 : TSF and WP versions are both greater than tested against.
+	 * 		}
+	 *		-1 is not compatible.
+	 */
+	private static function is_extension_compatible( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		static $cache = array();
+
+		if ( isset( $cache[ $extension['slug'] ] ) )
+			return $cache[ $extension['slug'] ];
+
+		$compatibility = static::determine_extension_compatibility( $extension );
+
+		$_compatibility = 0;
+
+		switch ( $compatibility ) :
+			case 0 :
+				$_compatibility = 0;
+				break;
+
+			case 1 :
+				$_compatibility = 1;
+				break;
+
+			case 4 :
+				$_compatibility = 2;
+				break;
+
+			case 5 :
+				$_compatibility = 3;
+				break;
+
+			default :
+				$_compatibility = -1;
+				break;
+		endswitch;
+
+		return $cache[ $extension['slug'] ] = $_compatibility;
+	}
+
+	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * The uneven bits (left to right) always need to be followed by an active bit.
+	 * So 1010 isn't possible. 0101 and 1101 are.
+	 *
+	 * I could've used concatenation for bit additions, but shifting bit series is more difficult; ergo cooler.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @param bool $get_bits Whether to get bits or int.
+	 * @return int|string Either 4 bits or an integer that determine compatibility : {
+	 *		0  | '0000' = good => Completely compatible.
+	 *		1  | '0001' = okay => TSF version is greater than tested against.
+	 *		3  | '0011' = bad  => TSF is not compatible.
+	 *		4  | '0100' = okay => TSF is compatible. WP Version is greater than tested against.
+	 *		5  | '0101' = okay => TSF and WP versions are both greater than tested against.
+	 *		7  | '0111' = bad  => TSF is not compatible. WP version is greater than tested against.
+	 *		12 | '1100' = bad  => WP is not compatible.
+	 *		13 | '1101' = bad  => WP is not compatible. TSF version is greater than testest against.
+	 *		15 | '1111' = bad  => Not compatible.
+	 * }
+	 */
+	private static function determine_extension_compatibility( $extension, $get_bits = false ) {
+
+		$compatibility = static::get_extension_compatibility( $extension );
+
+		//* bindec( '1111' )
+		$bit = 15;
+
+		//* Set first two bits ( 1100 );
+		$first_two_bit = ~ $bit >> $compatibility['wp'];
+		//* Set last two bits ( 0011 );
+		$last_two_bit = ~ $bit >> 2 ^ $bit << 2 - $compatibility['tsf'];
+
+		//* Add bits up and invert bits so 0 is best case scenario.
+		$bit = $first_two_bit | $last_two_bit;
+		$bit = ~ $bit;
+
+		//* Convert bits to string and extract last 4 bits.
+		$bit = substr( decbin( $bit ), -4 );
+
+		return $get_bits ? $bit : bindec( $bit );
+	}
+
+	/**
+	 * Determines whether the input extension is compatible with the current WordPress
+	 * and The SEO Framework version.
+	 *
+	 * @since 1.0.0
+	 * @global string $wp_version
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return array Whether the extension is compatible. : {
+	 *		'tsf' => int (0-2),
+	 *		'wp' => int Compatibility (0-2),
+	 * }
+	 */
+	private static function get_extension_compatibility( $extension ) {
+		global $wp_version;
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		/**
+		 * @param array $compatibility : {
+		 *		key => int : {
+		 *			0: Not compatible.
+		 *			1: Version exceeeds tested check. Likely compatible.
+		 *			2: Compatible.
+		 *		}
+		 * }
+		 */
+		$compatibility = array(
+			'tsf' => 0,
+			'wp' => 0,
+		);
+
+		$tsf_version = the_seo_framework_version();
+		$_wp_version = $wp_version;
+
+		if ( version_compare( $tsf_version, $extension['tested_tsf'] ) > 0 )
+			$compatibility['tsf'] = 1;
+		elseif ( version_compare( $tsf_version, $extension['requires_tsf'] ) >= 0 )
+			$compatibility['tsf'] = 2;
+
+		if ( version_compare( $_wp_version, $extension['tested'] ) > 0 )
+			$compatibility['wp'] = 1;
+		elseif ( version_compare( $_wp_version, $extension['requires'] ) >= 0 )
+			$compatibility['wp'] = 2;
+
+		return $compatibility;
+	}
+
+	/**
+	 * Test drives extension to see if an error occurs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @param bool $ajax Whether AJAX is active.
+	 * @param string $instance The verification instance. Propagates to inclusion file if possible.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file if possible.
+	 * @return int|void {
+	 * 		-1 => No check has been performed.
+	 * 		1 => No file header path can be created. (Invalid extension)
+	 * 		2 => Extension header file is invalid. (Invalid extension)
+	 * 		3 => Inclusion failed.
+	 *		4 => Success.
+	 *		void => Fatal error.
+	 * }
+	 */
+	public static function test_extension( $slug, $ajax, $_instance, $bits ) {
+
+		self::verify_instance() or die;
+
+		if ( 'load' !== self::get_property( '_type' ) ) {
+			self::reset();
+			self::invoke_invalid_type( __METHOD__ );
+		}
+
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
+			if ( static::validate_file( $file ) ) {
+
+				define( '_TSFEM_TESTING_EXTENSION', true );
+				define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
+
+				//* We only want to catch a fatal/parse error.
+				$_prev_error_reporting = error_reporting();
+				error_reporting( 0 );
+
+				register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
+
+				$success = array();
+
+				ob_start();
+				$success[] = static::include_extension( $file, $_instance, $bits );
+
+				$base_path = static::get_extension_trunk_path( $slug );
+				$test_file = $base_path . 'test.json';
+
+				if ( 0 === validate_file( $test_file ) && file_exists( $test_file ) ) {
+					$json = json_decode( file_get_contents( $test_file ) );
+
+					if ( ! empty( $json ) ) {
+						$namespace = empty( $json->namespace ) ? '' : $json->namespace;
+						$tests = empty( $json->test ) ? array() : (array) $json->test;
+
+						foreach ( $tests as $_class => $_file ) {
+							//* Base file is already loaded.
+							if ( '_base' === $_class )
+								continue;
+
+							$success[] = (bool) include_once( $base_path . $_file );
+							if ( $_class ) {
+								$class = $namespace . '\\' . $_class;
+								$success[] = new $class;
+							}
+						}
+					}
+				}
+				ob_clean();
+
+				error_reporting( $_prev_error_reporting );
+
+				//* No fatal error has occurred, pass.
+				define( '_TSFEM_TEST_EXT_PASS', true );
+
+				//* "False" is very unlikely at this point; but who knows.
+				return in_array( false, $success, true ) ? 3 : 4;
+			} else {
+				//* Tick the instance.
+				tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+				return 2;
+			}
+		} else {
+			//* Tick the instance.
+			tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			return 1;
+		}
+
+		//* Tick the instance.
+		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+		return -1;
+	}
+
+	/**
+	 * Handles fatal error on extension activation for both AJAX and form activation.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	public static function _shutdown_handle_test_extension_fatal_error() {
+
+		if ( defined( '_TSFEM_TEST_EXT_PASS' ) )
+			return;
+
+		if ( ob_get_level() )
+			ob_end_clean();
+
+		$error = error_get_last();
+		$error_type = '';
+
+		switch ( $error['type'] ) :
+			case 1 :
+			case 16 :
+			case 64 :
+			case 256 :
+				$error_type = 'Fatal error.';
+				break;
+
+			case 4 :
+				$error_type = 'Parse error.';
+				break;
+
+			default :
+				$error_type = 'Type ' . $error['type'] . ' error.';
+				break;
+		endswitch;
+
+		//* Remove stack trace.
+		if ( false !== $stack_pos = stripos( $error['message'], 'Stack trace:' ) )
+			$error['message'] = substr( $error['message'], 0, $stack_pos );
+
+		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', wp_strip_all_tags( $advanced_error_notice ), esc_attr( $advanced_error_notice ), $error_notice );
+
+			$status = array(
+				'success' => 10004,
+				'notice' => $notice,
+			);
+
+			$response = WP_DEBUG ? array( 'status' => $status, 'slug' => '', 'case' => 'activate' ) : array( 'status' => $status );
+
+			http_response_code( 200 );
+			echo json_encode( $response );
+			exit;
+		} else {
+			$error_notice .= '<br>' . esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
+			wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
+		}
+	}
+
+	/**
 	 * Loads extension from input.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug to load.
+	 * @param string $instance The verification instance. Propagates to inclusion file.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file.
 	 * @return bool Whether the extension is loaded.
 	 */
 	public static function load_extension( $slug, $_instance, $bits ) {
@@ -537,11 +888,14 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		if ( $file = static::get_extension_header_file_path( $slug ) ) {
+		if ( $file = static::get_extension_header_file_location( $slug ) ) {
 			if ( static::validate_file( $file ) ) {
 				return static::include_extension( $file, $_instance, $bits );
 			}
 		}
+
+		//* Tick the instance on failure.
+		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 
 		return false;
 	}
@@ -553,8 +907,8 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $file The extension file to include.
-	 * @param string $instance The verification instance.
-	 * @param array $bits The verification instance bits.
+	 * @param string $instance The verification instance. Propagates to inclusion file.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file.
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, $_instance, $bits ) {
@@ -571,7 +925,7 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file ) {
 
-		if ( 0 === validate_file( $file ) && '.php' === substr( $file, -4 ) && file_exists( $file ) )
+		if ( '.php' === substr( $file, -4 ) && 0 === validate_file( $file ) && file_exists( $file ) )
 			return true;
 
 		return false;

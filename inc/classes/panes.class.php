@@ -180,7 +180,7 @@ class Panes extends API {
 		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', esc_url( $this->get_admin_page_url() ), $form );
 		$js = '<a id="tsfem-enable-feeds" class="tsfem-button tsfem-button-primary hide-if-no-js">' . esc_html( $enable ) . '</a>';
 
-		return $js . $nojs;
+		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
 	}
 
 	/**
@@ -217,6 +217,8 @@ class Panes extends API {
 						);
 					}
 				}
+
+				$this->clean_ajax_reponse_header();
 
 				echo json_encode( $results );
 
@@ -265,6 +267,8 @@ class Panes extends API {
 
 				//* Send back input when WP_DEBUG is on.
 				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
+
+				$this->clean_ajax_reponse_header();
 
 				echo json_encode( $response );
 
@@ -356,9 +360,10 @@ class Panes extends API {
 		return sprintf( '<div class="tsfem-account-info tsfem-flex">%s%s</div>', $title, $output );
 	}
 
-
-	protected function get_account_extend_form() {
-	}
+	/**
+	 * @TODO
+	 */
+	protected function get_account_extend_form() { }
 
 	/**
 	 * Wraps and returns the account upgrade form.

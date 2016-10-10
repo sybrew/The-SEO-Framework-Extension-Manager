@@ -86,12 +86,7 @@ trait Options {
 
 		static $run = false;
 
-		if ( false === $run ) {
-			$run = true;
-			return false;
-		}
-
-		return true;
+		return $run ? false : $run = true ? false : true;
 	}
 
 	/**
@@ -214,7 +209,7 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The hashed option.
+	 * @return string|bool The hashed option. False if non-existent.
 	 */
 	final protected function get_options_instance() {
 		return get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );

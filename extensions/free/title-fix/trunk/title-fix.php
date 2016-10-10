@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extensions
+ * @package TSF_Extension_Manager_Extension\Title-Fix
  */
 namespace TSF_Extension_Manager_Extension;
 
@@ -20,7 +20,7 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager
+ * @package TSF_Extension_Manager\Traits
  */
 use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
 use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
@@ -48,17 +48,18 @@ define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 //* Define version, for future things.
 define( 'THE_SEO_FRAMEWORK_TITLE_FIX_VERSION', '1.0.2' );
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\the_seo_framework_title_fix_init', 11 );
+add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
 /**
  * Initialize the plugin.
  *
  * @since 1.0.0
  * @action 'plugins_loaded'
  * @priority 11 : The WordPress.org version has priority 10, preventing collision.
+ *                Also, the loader requires 11 or later.
  *
- * @return bool True if class is loaded
+ * @return bool True if class is loaded.
  */
-function the_seo_framework_title_fix_init() {
+function title_fix_init() {
 
 	static $loaded = null;
 
@@ -142,7 +143,7 @@ final class Title_Fix {
 				 * Applies filters 'the_seo_framework_force_title_fix'
 				 * @since 1.0.1
 				 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
-				 * @since 1.0.0 TSF Extension Manager : Defaults to false.
+				 * @since 1.0.2 / TSF Extension Manager 1.0.0 : Defaults to false.
 				 * @param bool Whether to force the title fixing.
 				 */
 				$this->force_title_fix = (bool) apply_filters( 'the_seo_framework_force_title_fix', false );

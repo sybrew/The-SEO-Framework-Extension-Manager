@@ -190,7 +190,6 @@ final class Layout extends Secure_Abstract {
 		}
 	}
 
-
 	/**
 	 * Outputs premium support button.
 	 *
@@ -263,8 +262,9 @@ final class Layout extends Secure_Abstract {
 				}
 
 				$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
+				$end_date_i18n = $end_date ? date_i18n( 'F j, Y', strtotime( $end_date ) ) : '';
 				$date_until = isset( $date_until ) ? date_i18n( get_option( 'date_format' ), $date_until ) : '';
-				$expires_in = sprintf( '<time class="tsfem-question-cursor tsfem-dashicon %s" title="%s" datetime="%s">%s</time>', esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $expires_in ) );
+				$expires_in = sprintf( '<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>', esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $end_date_i18n ), esc_html( $expires_in ) );
 
 				$output .= static::wrap_title_content( esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
 			}

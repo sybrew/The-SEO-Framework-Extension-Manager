@@ -23,6 +23,10 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Require option trait.
+ * @since 1.0.0
+ */
 _tsf_extension_manager_load_trait( 'options' );
 
 /**
@@ -110,6 +114,11 @@ class Core {
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 
+		/**
+		 * This somehow sets itself to priority 10 (or later - if defined), always.
+		 * This also requires an action, rather than a direct call. Otherwise the class is duplicated.
+		 * @todo figure out if this is a bug.
+		 */
 		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
 	}
 
@@ -149,6 +158,7 @@ class Core {
 				case -2 :
 					//* Failed checksum.
 					$this->set_error_notice( array( 2001 => '' ) );
+					;
 
 				default :
 					Extensions::reset();
@@ -159,12 +169,10 @@ class Core {
 
 		$extensions = Extensions::get( 'active_extensions_list' );
 
-		if ( empty( $extensions ) ) {
-			Extensions::reset();
-			return $loaded = false;
-		}
-
 		Extensions::reset();
+
+		if ( empty( $extensions ) )
+			return $loaded = false;
 
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
@@ -192,15 +200,15 @@ class Core {
 	 */
 	public function handle_update_post() {
 
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['action'] ) )
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
 
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
-		if ( false === $this->handle_update_nonce( $options['action'], false ) )
+		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
-		switch ( $options['action'] ) :
+		switch ( $options['nonce-action'] ) :
 			case $this->request_name['activate-key'] :
 				$args = array(
 					'licence_key' => trim( $options['key'] ),
@@ -255,7 +263,7 @@ class Core {
 		endswitch;
 
 		//* Adds action to the URI. It's only used to visualize what has happened.
-		$args = WP_DEBUG ? array( 'did-' . $options['action'] => 'true' ) : array();
+		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
 		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
@@ -272,7 +280,7 @@ class Core {
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
 	 * @param string $key The nonce action used for caching.
-	 * @param bool $check_post Whether to check for POST variables.
+	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
 	public function handle_update_nonce( $key = 'default', $check_post = true ) {
@@ -288,18 +296,22 @@ class Core {
 		if ( $check_post ) {
 			/**
 			 * If this page doesn't parse the site options,
-			 * There's no need to filter them on each request.
-			 * Nonce is handled elsewhere. This function merely injects filters to the $_POST data.
-			 *
-			 * @since 1.0.0
+			 * there's no need to check them on each request.
 			 */
 			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
 				return $validated[ $key ] = false;
 		}
 
-		check_admin_referer( $this->nonce_action[ $key ], $this->nonce_name );
+		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] ) : false;
 
-		return $validated[ $key ] = true;
+		if ( false === $result ) {
+			//* Nonce failed. Set error notice and reload.
+			$this->set_error_notice( array( 9001 => '' ) );
+			the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+			exit;
+		}
+
+		return $validated[ $key ] = (bool) $result;
 	}
 
 	/**
@@ -326,7 +338,7 @@ class Core {
 	}
 
 	/**
-	 * Sets notices option.
+	 * Sets notices option, only does so when in the admin area.
 	 *
 	 * @since 1.0.0
 	 *
@@ -501,25 +513,31 @@ class Core {
 				$type = 'error';
 				break;
 
+			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001 :
 				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
+			case 2001 :
 			case 10001 :
 			case 10002 :
-			case 2001 :
 				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
-			case 10006 :
-			case 10008 :
+			case 10004 :
+				$message = esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 10007 :
+			case 10009 :
 				$message = esc_html__( 'Extension has been succesfully activated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
-			case 10007 :
+			case 10008 :
 				$message = esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -532,9 +550,9 @@ class Core {
 			case 602 :
 			case 703 :
 			case 802 :
-			case 10004 :
 			case 10005 :
-			case 10009 :
+			case 10006 :
+			case 10010 :
 			case 11002 :
 			default :
 				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
@@ -562,23 +580,20 @@ class Core {
 	}
 
 	/**
-	 * Determines if the plugin instance has died or not.
+	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
 	 *
 	 * @since 1.0.0
-	 * @access private
-	 * @staticvar bool $died Determines plugin alive state.
 	 *
-	 * @param bool $set Whether to set death.
-	 * @return false If the plugin has not died. True otherwise.
+	 * @return bool True on clear. False otherwise.
 	 */
-	final public function _has_died( $set = false ) {
+	protected function clean_ajax_reponse_header() {
 
-		static $died = false;
+		if ( ob_get_level() && ob_get_contents() ) {
+			ob_clean();
+			return true;
+		}
 
-		if ( $set )
-			$died = true;
-
-		return $died;
+		return false;
 	}
 
 	/**
@@ -927,6 +942,130 @@ class Core {
 	}
 
 	/**
+	 * Registers autoloading classes for extensions and activates autoloader.
+	 * If the account isn't premium, it will not be loaded.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
+	 *
+	 * @param string $path The extension path to look for.
+	 * @param string $class_base Class base words.
+	 * @return bool True on success, false on failure.
+	 */
+	public function register_premium_extension_autoload_path( $path, $class_base ) {
+
+		if ( false === $this->is_premium_user() )
+			return false;
+
+		static $autoload_inactive = true;
+
+		if ( $autoload_inactive ) {
+			spl_autoload_register( array( $this, 'autoload_premium_extension_class' ) );
+			$autoload_inactive = false;
+		}
+
+		return $this->set_premium_extension_autoload_path( $path, $class_base );
+	}
+
+	/**
+	 * Registers autoloading classes for extensions.
+	 * Maintains a cache. So this can be fetched later.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $registered The registered classes.
+	 *
+	 * @param string|null $path The extension path to look for.
+	 * @param string|null $class_base Class base words.
+	 * @param string|null $class The classname to fetch from cache.
+	 * @return void|bool|array : {
+	 * 		void  : $class if not set. Default behavior.
+	 * 		false : $class isn't found in $locations.
+	 *		array : $class is found in locations.
+	 * }
+	 */
+	protected function set_premium_extension_autoload_path( $path, $class_base, $class = null ) {
+
+		static $locations = array();
+
+		if ( $class ) {
+			$class = str_replace( 'TSF_Extension_Manager_Extension\\', '', $class );
+
+			//* Singular class names. Recommended as its much faster.
+			if ( isset( $locations[ $class ] ) )
+				return $locations[ $class ];
+
+			//* Extended class names. Slower but feasible.
+			$class_bases = explode( '_', $class );
+
+			$_class_base = '';
+			foreach ( $class_bases as $_class_base_part ) :
+				$_class_base .= $_class_base ? '_' . $_class_base_part : $_class_base_part;
+
+				if ( isset( $locations[ $_class_base ] ) )
+					return $locations[ $_class_base ];
+
+				continue;
+			endforeach;
+
+			return false;
+		}
+
+		$locations[ $class_base ] = $path;
+
+		return;
+	}
+
+	/**
+	 * Returns the registered $class name base path.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $class The classname path to fetch.
+	 * @return string|bool The path if found. False otherwise.
+	 */
+	protected function get_premium_extension_autload_path( $class ) {
+		return $this->set_premium_extension_autoload_path( null, null, $class );
+	}
+
+	/**
+	 * Autoloads all class files. To be used when requiring access to all or any of
+	 * the plugin classes.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $loaded Whether $class has been loaded.
+	 *
+	 * @param string $class The extension classname.
+	 * @return bool False if file hasn't yet been included, otherwise true.
+	 */
+	protected function autoload_premium_extension_class( $class ) {
+
+		if ( 0 !== strpos( $class, 'TSF_Extension_Manager_Extension\\', 0 ) )
+			return;
+
+		static $loaded = array();
+
+		if ( isset( $loaded[ $class ] ) )
+			return $loaded[ $class ];
+
+		$path = $this->get_premium_extension_autload_path( $class );
+
+		if ( $path ) {
+			$_class = strtolower( str_replace( 'TSF_Extension_Manager_Extension\\', '', $class ) );
+			$_class = str_replace( '_', '-', $_class );
+
+			$bits = $this->get_bits();
+			$_instance = $this->get_verification_instance( $bits[1] );
+
+			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+		} else {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
+
+			//* Most likely, a fatal error will now occur.
+			return $loaded[ $class ] = false;
+		}
+	}
+
+	/**
 	 * Validates extensions option checksum.
 	 *
 	 * @since 1.0.0
@@ -1001,33 +1140,45 @@ class Core {
 				}
 			}
 
+			$test = $this->test_extension( $slug, $ajax );
+
+			if ( 4 !== $test ) {
+				$ajax or $this->set_error_notice( array( 10004 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+			}
+
 			$success = $this->enable_extension( $slug );
 
 			if ( false === $success ) {
-				$ajax or $this->set_error_notice( array( 10004 => '' ) );
-				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+				$ajax or $this->set_error_notice( array( 10005 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 		endif;
 
 		switch ( $status['case'] ) :
 			case 1 :
-				$code = 10005;
-				break;
-
-			case 2 :
+				//* No slug set.
 				$code = 10006;
 				break;
 
-			case 3 :
+			case 2 :
+				//* Premium activated.
 				$code = 10007;
 				break;
 
-			case 4 :
+			case 3 :
+				//* Premium failed: User not premium.
 				$code = 10008;
 				break;
 
-			default :
+			case 4 :
+				//* Free activated.
 				$code = 10009;
+				break;
+
+			default :
+				//* Unknown case.
+				$code = 10010;
 				break;
 		endswitch;
 
@@ -1060,6 +1211,38 @@ class Core {
 	}
 
 	/**
+	 * Test drives extension to see if an error occurs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @param bool $ajax Whether this is an AJAX request.
+	 * @return int|void {
+	 * 		-1 => No check has been performed.
+	 * 		1 => No file header path can be created. (Invalid extension)
+	 * 		2 => Extension header file is invalid. (Invalid extension)
+	 * 		3 => Inclusion failed.
+	 *		4 => Success.
+	 *		void => Fatal error.
+	 * }
+	 */
+	protected function test_extension( $slug, $ajax = false ) {
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		Extensions::initialize( 'load', $_instance, $bits );
+
+		$bits = $this->get_bits();
+		$_instance = $this->get_verification_instance( $bits[1] );
+
+		$result = Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+		Extensions::reset();
+
+		return $result;
+	}
+
+	/**
 	 * Enables extension through options.
 	 *
 	 * Kills options when activation fails.
@@ -1086,20 +1269,6 @@ class Core {
 	}
 
 	/**
-	 * Sanitizes AJAX input string.
-	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
-	 * Also prevents regex execution.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $input The AJAX input string.
-	 * @return string $output The cleaned AJAX input string.
-	 */
-	protected function s_ajax_string( $input ) {
-		return trim( esc_attr( wp_kses_normalize_entities( strval( wp_kses_no_null( $input ) ) ) ), ' \\/#' );
-	}
-
-	/**
 	 * Disables or enables an extension through options.
 	 *
 	 * @since 1.0.0
@@ -1117,5 +1286,49 @@ class Core {
 		$kill = $enable;
 
 		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
+	}
+
+	/**
+	 * Sanitizes AJAX input string.
+	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
+	 * Also prevents regex execution.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $input The AJAX input string.
+	 * @return string $output The cleaned AJAX input string.
+	 */
+	protected function s_ajax_string( $input ) {
+		return trim( esc_attr( wp_kses_normalize_entities( strval( wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+	}
+
+	/**
+	 * Returns font file location.
+	 * To be used for testing font-pixels.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $font The font name, should include .ttf.
+	 * @param bool $url Whether to return a path or URL.
+	 * @return string The font URL or path. Not escaped.
+	 */
+	public function get_font_file_location( $font = '', $url = false ) {
+		if ( $url ) {
+			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
+		}
+	}
+
+	/**
+	 * Converts pixels to points.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
+	 * @return int Points.
+	 */
+	public function pixels_to_points( $px = 0 ) {
+		return intval( $px ) * 0.75;
 	}
 }

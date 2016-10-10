@@ -135,18 +135,38 @@ define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_exten
  * The plugin options.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS ) );
+define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() ) );
+
+/**
+ * The extension options base name.
+ * @since 1.0.0
+ * Applies filters 'tsf_extension_manager_extension_options' : string
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', (string) apply_filters( 'tsf_extension_manager_extension_options', 'tsf-extension-manager-extension-settings' ) );
+
+/**
+ * The extension options.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS', (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() ) );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 4 );
 /**
  * Plugin locale 'the-seo-framework-extension-manager'
  * Locale folder the-seo-framework-extension-manager/language/
  * @since 1.0.0
+ * @staticvar $loaded Determines if the textdomain has already been loaded.
  *
  * @param bool $ignore Whether to load locale outside of the admin area.
+ * @return void Early if already loaded.
  */
 function init_tsf_extension_manager_locale( $ignore = false ) {
 	if ( is_admin() || $ignore ) {
+		static $loaded = false;
+
+		if ( $loaded = $loaded ? false : $loaded = true ? false : true )
+			return;
+
 		load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
@@ -161,3 +181,10 @@ function init_tsf_extension_manager_locale( $ignore = false ) {
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH
  */
 require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
+
+/**
+ * Load functions file.
+ * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
+ */
+require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );

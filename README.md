@@ -1,3 +1,7 @@
-# [The SEO Framework](https://theseoframework.com) #
+# [The SEO Framework Extension Manager](https://theseoframework.com) #
 
-> A free WordPress SEO plugin extension manager by Sybre Waaijer. [Get it from WordPress.org](https://wordpress.org/plugins/autodescription/).
+[Get The SEO Framework from WordPress.org](https://wordpress.org/plugins/autodescription/).
+
+## Screenshots
+
+![Dashboard Preview](https://theseoframework.com/share/other/preview-em.png)

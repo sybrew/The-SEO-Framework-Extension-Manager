@@ -1,0 +1,1261 @@
+/* # Start Normalize.
+/*----------------------------------------------------------------------------*/
+
+/* ## Notices.
+/*--------------------------------------*/
+.wrap.tsfem .notice {
+	margin: 0 0 20px;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+}
+
+.tsfem-top-wrap .notice:first-of-type {
+	margin-top: 18px;
+}
+
+/* ## Cursors
+/*--------------------------------------*/
+
+/* ### Disable cursor.
+/*--------------------------------------*/
+.tsfem-disable-cursor {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* ### Question cursor.
+/*--------------------------------------*/
+.tsfem-question-cursor {
+	cursor: help;
+}
+
+/* # Start Flex.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-flex {
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-flex-row {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+}
+
+.tsfem-flex-wrap {
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+
+.tsfem-flex-nowrap {
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+}
+
+.tsfem-flex-grow {
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+}
+
+.tsfem-flex-nogrow {
+	-webkit-flex: 0 1 auto;
+	flex: 0 1 auto;
+}
+
+.tsfem-flex-noshrink {
+	-webkit-flex: 1 0 auto;
+	flex: 1 0 auto;
+}
+
+.tsfem-flex-nogrowshrink {
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+
+.tsfem-flex-space {
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+}
+
+/* # Start Wraps.
+/*----------------------------------------------------------------------------*/
+
+body.tsfem .wrap {
+	height: calc( 100vh - 140px );
+	margin-top: 20px;
+	overflow: visible;
+	padding: 0;
+}
+
+.tsfem-top-wrap {
+	background-color: #333;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.2);
+	width: 100%;
+	margin: 0 0 20px;
+	padding: 20px;
+}
+
+.tsfem-footer-wrap {
+	width: 100%;
+	padding: 1.33em 40px;
+	margin: 0 auto;
+	overflow: hidden;
+	-webkit-align-items: center;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.tsfem.connect-wrap {
+	max-width: 690px;
+	min-width: 175px;
+}
+
+/* # Start Top/Header.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-top-actions,
+.tsfem-top-about,
+.tsfem-top-wrap .tsfem-title {
+	text-align: left;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.tsfem-top-actions,
+.tsfem-top-about {
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-top-wrap .tsfem-title {
+	-webkit-flex: 1 999 auto;
+	flex: 1 999 auto;
+}
+
+.tsfem-top-about {
+	-webkit-flex: 1 1 160px;
+	flex: 1 1 160px;
+}
+
+.tsfem-top-actions > div {
+	display: inline-block;
+	white-space: pre;
+}
+
+.tsfem-top-about > div {
+	display: inline-block;
+	text-align: justify;
+	max-width: calc( 100% - 1.2em - 14px );
+	color: #fff;
+	letter-spacing: .2px;
+	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+}
+
+/* ## Title.
+/*--------------------------------------*/
+
+.tsfem-top-wrap .tsfem-title header {
+	width: calc( 100% - 7px );
+}
+
+.tsfem-top-wrap .tsfem-title h1 {
+	font-family: Verdana, sans-serif;
+	word-break: break-word;
+	font-size: 1.9em;
+	font-weight: 400;
+	color: #0ebfe9;
+	margin: 0;
+	padding: 0;
+	display: inline;
+}
+
+.tsfem-top-wrap .tsfem-title .tsfem-logo:before {
+	content: "";
+	display: inline-block;
+	white-space: pre-wrap;
+	background: url(../images/tsflogo.svg) 50% 50%/1em 1em no-repeat transparent;
+	height: 29px;
+	width: 1em;
+	vertical-align: top;
+	margin-right: 8px;
+	margin-left: .1em;
+	line-height: 29px;
+}
+
+/* # Start Buttons.
+/*----------------------------------------------------------------------------*/
+
+/* ## Normalize input.
+/*--------------------------------------*/
+
+.tsfem input[type=text]:focus,
+.tsfem input[type=search]:focus,
+.tsfem input[type=radio]:focus,
+.tsfem input[type=tel]:focus,
+.tsfem input[type=time]:focus,
+.tsfem input[type=url]:focus,
+.tsfem input[type=week]:focus,
+.tsfem input[type=password]:focus,
+.tsfem input[type=checkbox]:focus,
+.tsfem input[type=color]:focus,
+.tsfem input[type=date]:focus,
+.tsfem input[type=datetime]:focus,
+.tsfem input[type=datetime-local]:focus,
+.tsfem input[type=email]:focus,
+.tsfem input[type=month]:focus,
+.tsfem input[type=number]:focus,
+.tsfem select:focus,
+.tsfem textarea:focus {
+	border-color: #057f9c;
+	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
+	box-shadow: 0 0 2px rgba(66,144,183,.8);
+}
+
+/* ## Buttons input.
+/*--------------------------------------*/
+.tsfem-button,
+.tsfem-button-primary,
+.tsfem-button:disabled,
+.tsfem-button-primary:disabled {
+	display: inline-block;
+	padding: 7px 14px;
+	background: #eee;
+	font-size: 13px;
+	border: 0;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 3px 0 #cacaca;
+	box-shadow: 0 3px 0 #cacaca;
+	color: #777;
+	text-shadow: 0 -1px 1px #efefef,1px 0 1px #efefef,0 1px 1px #efefef,-1px 0 1px #efefef;
+	font-size: 1em;
+	line-height: 1em;
+	text-decoration: none;
+	text-align: center;
+	margin-top: -3px;
+	margin-bottom: 3px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.tsfem-button-primary,
+.tsfem-button-primary:disabled {
+	background: #05809e;
+	-webkit-box-shadow: 0 3px 0 #006a85;
+	box-shadow: 0 3px 0 #006a85;
+	color: #fff;
+	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
+}
+
+.tsfem-about-activation:before {
+	display: inline-block;
+	color: #fff;
+	content: "\f112";
+	font-size: 1.2em;
+	line-height: 1.2em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	margin: 0 7px;
+	vertical-align: baseline;
+	white-space: pre-wrap;
+	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+}
+
+.tsfem-button-star,
+.tsfem-account-active,
+.tsfem-button-primary-bright {
+	color: #fff;
+	background: #0ebfe9;
+	-webkit-box-shadow: 0 3px 0 #057f9c;
+	box-shadow: 0 3px 0 #057f9c;
+	text-shadow: 0 -1px 1px #057f9c,1px 0 1px #057f9c,0 1px 1px #057f9c,-1px 0 1px #057f9c;
+}
+
+.tsfem-button-love,
+.tsfem-account-inactive,
+.tsfem-button-extension-activate {
+	color: #fff;
+	background: #00cd98;
+	-webkit-box-shadow: 0 3px 0 #008964;
+	box-shadow: 0 3px 0 #008964;
+	text-shadow: 0 -1px 1px #008964,1px 0 1px #008964,0 1px 1px #008964,-1px 0 1px #008964;
+}
+
+.tsfem-button-warning,
+.tsfem-account-about-to-expire,
+.tsfem-button-extension-deactivate {
+	color: #fff;
+	background: #ff746a;
+	-webkit-box-shadow: 0 3px 0 #d14b44;
+	box-shadow: 0 3px 0 #d14b44;
+	text-shadow: 0 -1px 1px #d14b44,1px 0 1px #d14b44,0 1px 1px #d14b44,-1px 0 1px #d14b44;
+}
+
+.tsfem-account-active:after,
+.tsfem-account-inactive:after,
+.tsfem-button-star:after,
+.tsfem-button-flag:after,
+.tsfem-button-love:after,
+.tsfem-button-warning:after,
+.tsfem-account-about-to-expire:after {
+	display: inline-block;
+	width: 1em;
+	content: "\f155";
+	font-size: 1em;
+	line-height: 1em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	vertical-align: top;
+	margin-left: 7px;
+}
+
+.tsfem-button-flag:after {
+	content: "\f227";
+}
+
+.tsfem-button-warning:after,
+.tsfem-account-about-to-expire:after {
+	content: "\f534";
+}
+
+.tsfem-button-love:after,
+.tsfem-account-inactive:after {
+	content: "\f487";
+}
+
+.tsfem-button:active,
+.tsfem-button:focus,
+.tsfem-button-primary:active,
+.tsfem-button-primary:focus {
+	margin-top: 0;
+	margin-bottom: 0;
+	box-shadow: none;
+	outline: 0;
+}
+
+.tsfem-button:hover {
+	/* Too lazy to figure out exact colors */
+	color: #777;
+	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
+	filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
+}
+
+.tsfem-button-primary:hover,
+.tsfem-button-primary:active,
+.tsfem-button-primary:focus {
+	/* Too lazy to figure out exact colors */
+	color: #fff;
+	-webkit-filter: hue-rotate(5deg) saturate(1.2);
+	filter: hue-rotate(5deg) saturate(1.2);
+}
+
+/* ## Switching/Rotating buttons.
+/*--------------------------------------*/
+
+.tsfem-switch-button-container-wrap {
+	display: inline-block;
+	perspective: 800px;
+	perspective-origin: 50% 120px;
+}
+
+.tsfem-switch-button-container {
+	position: relative;
+	/* EdgeHTML BUG: Causes subpixel font-rendering to fail. */
+	/*	transform-style: preserve-3d; */
+	margin: 0 auto;
+	width: 120px;
+	height: 27px;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.tsfem-switch-button-container input[type=checkbox],
+.tsfem-switch-button-container input[type=submit] {
+	width: 0;
+	height: 0;
+	position: absolute;
+	left: -9001px;
+	overflow: hidden;
+}
+
+.tsfem-switch-button-container label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	-webkit-transition: transform 1s, opacity .5s;
+	transition: transform 1s, opacity .5s;
+	z-index: 1;
+}
+
+.tsfem-switch-button-container input[type=checkbox] + label {
+	z-index: 2;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tsfem-switch-button-container input[type=submit] + label {
+	-webkit-transform: rotateX(-100deg);
+	transform: rotateX(-100deg);
+	transform-origin: 0 100% 0;
+	opacity: 0;
+	-webkit-transition: -webkit-transform 1.2s, opacity 0.6s;
+	transition: transform 1.2s, opacity 0.6s;
+}
+
+.tsfem-switch-button-container input[type=checkbox]:checked + label {
+	-webkit-transform: rotateX(90deg) translateY(-100%);
+	transform: rotateX(90deg) translateY(-100%);
+	opacity: 0;
+	z-index: 0;
+	-webkit-transition: -webkit-transform 1.2s, opacity 0.6s;
+	transition: transform 1.2s, opacity 0.6s;
+}
+
+.tsfem-switch-button-container input[type=checkbox]:checked ~ input[type=submit] + label {
+	-webkit-transform: rotateX(0deg);
+	transform: rotateX(0deg);
+	opacity: 1;
+	z-index: 2;
+	-webkit-transition: transform 1s, opacity .5s;
+	transition: transform 1s, opacity .5s;
+}
+
+/* ## Disabled Buttons.
+/*--------------------------------------*/
+.tsfem-button-disabled,
+.tsfem-button-disabled:hover,
+.tsfem-button-disabled:active,
+.tsfem-button-disabled:focus {
+	-webkit-filter: grayscale(1);
+	filter: grayscale(1);
+	cursor: not-allowed;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* # Start Activation/Connect.
+/*----------------------------------------------------------------------------*/
+.tsfem-connect-description,
+.tsfem-connect-action {
+	width: 100%;
+}
+
+.tsfem-connect-action {
+	text-align: right;
+}
+
+.tsfem-connect-action form {
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-connect-description h3 {
+	font-size: 1.66em;
+	color: #057f9c;
+	font-weight: 400;
+	margin: 14px 0;
+}
+
+.tsfem-connect-fields-row {
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-connect-fields-row > *:nth-child(1n+2) .tsfem-button {
+	margin-left: 7px;
+}
+
+.tsfem-connect-option {
+	width: 100%;
+	max-width: 690px;
+	padding: 1.33em 40px;
+	margin-bottom: 20px;
+	border: 1px solid #e2e2e2;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	background: #fff;
+	overflow: hidden;
+	border-radius: 3px;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.tsfem-connect-option.tsfem-connect-highlighted {
+	border: 1px solid #057f9c;
+}
+
+/* # Start Panes.
+/*----------------------------------------------------------------------------*/
+
+/* # Global panes wrap.
+/*--------------------------------------*/
+.tsfem-panes-wrap {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	-webkit-align-items: center;
+	align-items: center;
+	min-height: 33vh;
+}
+
+.tsfem-extensions-panes-row {
+	width: 100%;
+	margin: 0 0 20px;
+	padding: 0;
+	min-height: 150px;
+}
+
+.tsfem-extensions-panes-row:last-of-type {
+	margin: 0;
+}
+
+/* ## Singular panes layout.
+/*--------------------------------------*/
+.tsfem-pane-half,
+.tsfem-pane-full {
+	max-width: calc( 50% - 10px );
+	background: #fff;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	margin: 0;
+	padding: 0;
+	max-height: 100%;
+	-webkit-flex: 1 1 100%;
+	flex: 1 1 100%;
+}
+
+.tsfem-pane-half ::-webkit-scrollbar,
+.tsfem-pane-full ::-webkit-scrollbar {
+	width: 12px;
+	height: 6px;
+	background: #fafafa;
+}
+
+.tsfem-pane-half ::-webkit-scrollbar-thumb,
+.tsfem-pane-full ::-webkit-scrollbar-thumb {
+	background-color: #0ebfdd;
+	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
+	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
+}
+
+.tsfem-pane-half ::-webkit-scrollbar-thumb:active,
+.tsfem-pane-full ::-webkit-scrollbar-thumb:active {
+	background-color: #0cabc6;
+}
+
+.tsfem-pane-half:first-of-type {
+	margin-right: 20px;
+}
+
+.tsfem-pane-full {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	max-width: 100%;
+}
+
+.tsfem-pane-wrap {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	max-height: 100%;
+}
+
+.tsfem-pane-header,
+.tsfem-pane-content {
+	margin: 0;
+	padding: 14px 20px;
+	border: 1px solid #ddd;
+}
+
+.tsfem-pane-content {
+	padding: 0;
+	border-top: 0;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex: 1 1 100%;
+	flex: 1 1 100%;
+	-webkit-flex: 1 1 33vh;
+	flex: 1 1 33vh;
+	max-height: 100%;
+}
+
+.tsfem-pane-header > * {
+	font-size: 1em;
+	line-height: 1em;
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-pane-header .tsfem-ajax {
+	max-width: initial;
+	font-size: 1em;
+	word-break: break-word;
+	text-align: right;
+	-webkit-flex: 0 1 auto;
+	flex: 0 1 auto;
+	margin-left: 7px;
+}
+
+.tsfem-pane-header h3 {
+	font-size: 1.33em;
+	color: #057f9c;
+	font-weight: 400;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-pane-content h4.tsfem-status-title {
+	margin: 0;
+}
+
+/* ## Specific panes.
+/*--------------------------------------*/
+.tsfem-trends-wrap,
+.tsfem-actions-wrap,
+.tsfem-extensions-wrap {
+	padding: 20px 20px 0;
+	height: auto;
+	max-height: 100%;
+	min-height: 150px;
+	width: 100%;
+	overflow: auto;
+}
+
+.tsfem-actions,
+.tsfem-trends,
+.tsfem-trends-activation {
+	max-width: 1600px;
+	min-height: 150px;
+}
+
+/* ### Actions pane.
+/*--------------------------------------*/
+
+.tsfem-actions > div {
+	margin-right: 20px;
+	margin-bottom: 20px;
+	-webkit-flex-basis: 200px;
+	flex-basis: 200px;
+	min-width: 200px;
+}
+
+.tsfem-actions > div:last-of-type {
+	margin-right: 0;
+	margin-bottom: 0;
+}
+
+.tsfem-actions > div > div {
+	margin-bottom: 20px;
+}
+
+.tsfem-flex-account-info-rows {
+	line-height: 1.625em;
+}
+
+.tsfem-actions-account-info-title {
+	font-weight: 600;
+}
+
+h4.tsfem-form-title,
+h4.tsfem-info-title,
+h4.tsfem-status-title,
+h4.tsfem-support-title {
+	padding: 0;
+	margin: 0 0 14px;
+	font-size: 1.33em;
+	font-weight: 400;
+	color: #057f9c;
+}
+
+.tsfem-account-upgrade,
+.tsfem-support-buttons {
+	max-width: 300px;
+}
+
+.tsfem-support-buttons {
+	margin-bottom: 14px;
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
+}
+
+.tsfem-support-buttons:last-of-type {
+	margin-bottom: 0;
+}
+
+.tsfem-description {
+	font-size: 0.93em;
+	font-style: italic;
+	text-indent: .5em;
+}
+
+/* ### Extensions pane.
+/*--------------------------------------*/
+.tsfem-extensions-wrap {
+	height: auto;
+	max-height: 750px;
+	padding-right: 0;
+	margin: 0;
+}
+
+.tsfem-extension-entry-wrap {
+	padding: 0;
+	margin: 0 0 20px;
+	-webkit-flex-basis: 270px;
+	flex-basis: 270px;
+	min-width: calc( 50% - 40px );
+	margin-right: 20px;
+}
+
+/* Remove grow from first item if only one is displayed. */
+/* Remove grow from last item, only if 3 or more items are present in odd order. */
+.tsfem-extension-entry-wrap:first-of-type:last-of-type,
+.tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
+	-webkit-flex-grow: 0;
+	flex-grow: 0;
+	-webkit-flex-basis: 100%;
+	flex-basis: 100%;
+}
+
+.tsfem-extension-entry {
+	margin: 0;
+	padding: 0;
+	min-height: 122px;
+	box-shadow: 0 2px 1px 1px rgba(0,0,0,.04);
+	border: 1px solid #ddd;
+	background: #fdfdfd;
+	align-self: auto;
+}
+
+.tsfem-extension-entry > * {
+	min-height: 100px;
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	width: auto;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-extension-icon-wrap {
+	min-width: 120px;
+	-webkit-flex-grow: 0;
+	flex-grow: 0;
+}
+
+.tsfem-extension-about-wrap {
+	min-width: 220px;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: space-around;
+	justify-content: space-around;
+	padding: 10px 15px;
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+	-webkit-flex-basis: 25%;
+	flex-basis: 25%;
+}
+
+.tsfem-extension-description-wrap {
+	min-width: 280px;
+	-webkit-flex-grow: 3;
+	flex-grow: 3;
+	-webkit-flex-basis: 280px;
+	flex-basis: 280px;
+}
+
+h4.tsfem-extension-title {
+	min-width: 120px;
+	font-size: 1.33em;
+	word-break: break-word;
+	font-weight: 600;
+	color: #0ebfe9;
+	margin: 0;
+	padding: 0;
+}
+
+h5.tsfem-extension-type {
+	margin: 0;
+	padding: 0;
+	font-size: 0.83em;
+}
+
+.tsfem-extension-subheader {
+	padding: 0.667em 0;
+}
+
+.tsfem-extension-action > *,
+.tsfem-extension-action input {
+	width: 100%;
+	text-align: center;
+}
+
+.tsfem-extension-party:before {
+	display: inline-block;
+	width: 1em;
+	line-height: 1;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1.225em;
+	vertical-align: middle;
+	content: "";
+	margin-right: 4px;
+}
+
+.tsfem-extension-first-party-icon:before {
+	content: "\f338";
+}
+
+.tsfem-extension-third-party-icon:before {
+	content: "\f307";
+}
+
+.tsfem-extension-description {
+	padding: 1.33em;
+}
+
+.tsfem-extension-description-header {
+	padding-bottom: 1em;
+}
+
+.tsfem-extension-description-footer > span {
+	white-space: pre;
+}
+
+/* ### Feed pane.
+/*--------------------------------------*/
+.tsfem-feed-wrap {
+	overflow: hidden;
+}
+
+.tsfem-enable-feed-button {
+	margin-bottom: 14px;
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
+	max-width: 300px;
+}
+
+.tsfem-feed-entry,
+.tsfem-feed-top {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.tsfem-feed-top,
+.tsfem-feed-content {
+	margin-bottom: 14px;
+}
+
+.tsfem-feed-top {
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	overflow-wrap: normal;
+	-webkit-align-items: baseline;
+	align-items: baseline;
+}
+
+.tsfem-feed-top h4 {
+	white-space: pre-wrap;
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem-feed-top time {
+	white-space: pre;
+	white-space: nowrap;
+	word-wrap: break-word;
+	word-spacing: -1px;
+	font-size: 0.9em;
+	margin: 0 7px;
+	padding: 0;
+	font-style: oblique;
+}
+
+.tsfem-feed-entry {
+	margin-bottom: 14px;
+	box-shadow: 0px 2px 2px 0px rgba(204, 204, 204, 0.4);
+	display: inline-block;
+}
+
+/* # Start Activation Layout.
+/*----------------------------------------------------------------------------*/
+
+.tsfem #input-activation {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.tsfem #input-activation .regular-text,
+.tsfem #input-activation .tsfem-button {
+	margin-left: 0;
+	margin-right: 0;
+	border-radius: 0;
+	width: 100%;
+	font-size: 13px;
+}
+
+.tsfem #input-activation .regular-text:nth-child(1n+2) {
+	margin-top: 4px;
+	margin-bottom: 8px;
+}
+
+/* # Start footer.
+/*----------------------------------------------------------------------------*/
+
+#wpfooter .tsfem-footer-wrap .tsfem-footer-title,
+#wpfooter .tsfem-footer-wrap .tsfem-footer-motto {
+	font-size: 13px;
+	margin: 0;
+	color: #646d78;
+	font-weight: 300;
+	cursor: default;
+}
+
+#wpfooter .tsfem-footer-wrap .tsfem-footer-title {
+	font-weight: 400;
+	color: #555d66;
+}
+
+/* # Start AJAX.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-dashicon:after,
+.tsfem-ajax:after {
+	display: inline-block;
+	line-height: 1;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1.225em;
+	width: 1em;
+	vertical-align: baseline;
+	content: "";
+	margin-left: 4px;
+}
+
+.tsfem-dashicon:after {
+	font-size: 1.2em;
+	vertical-align: middle;
+	vertical-align: text-bottom;
+	margin-left: 2px;
+}
+
+.tsfem-ajax.tsfem-loading:after {
+	content: "\f463";
+	color: #007bd2;
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
+	-moz-animation: tsfem-spin 1.5s linear infinite;
+	-o-animation: tsfem-spin 1.5s linear infinite;
+	animation: tsfem-spin 1.5s linear infinite;
+}
+
+.tsfem-dashicon.tsfem-error:after,
+.tsfem-ajax.tsfem-error:after {
+	content: "\f158";
+	color: #dd3811;
+}
+
+.tsfem-dashicon.tsfem-success:after,
+.tsfem-ajax.tsfem-success:after {
+	content: "\f147";
+	color: #0cc34b;
+}
+
+.tsfem-dashicon.tsfem-unknown:after,
+.tsfem-ajax.tsfem-unknown:after {
+	content: "\f223";
+	color: #007bd2;
+}
+
+.tsfem-dashicon.tsfem-warning:after {
+	content: "\f227";
+	color: #ffa01b;
+}
+
+@-webkit-keyframes tsfem-spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes tsfem-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* # Start Media Queries.
+/*----------------------------------------------------------------------------*/
+
+/* Huge and beyond screens. */
+@media screen and ( min-height: 800px ) {
+	.tsfem-extensions-wrap {
+		max-height: initial;
+	}
+}
+
+/* Both conditions need to be true, tall screens, WordPress compat for footer. */
+@media only screen and ( min-height: 600px ) and ( max-width: 782px ) {
+	body.tsfem .wrap {
+		margin-bottom: 0;
+	}
+
+	body.tsfem #wpfooter {
+		margin: 0;
+	}
+}
+
+/* Either conditions need to be true, small screens/tablets. WordPress compat for footer. */
+@media screen and ( max-height: 800px ), ( max-width: 782px ) {
+	body.tsfem .wrap {
+		height: auto;
+		margin-bottom: 30px;
+	}
+}
+
+/* WordPress compat for footer. When screen has large width. */
+@media screen and ( max-width: 782px ) {
+	body.tsfem .wrap {
+		margin-bottom: 0;
+	}
+}
+
+/* Either conditions need to be true, very small screens/large phones */
+@media only screen and ( max-height: 600px ), ( max-width: 782px ) {
+	.tsfem-pane-half,
+	.tsfem-pane-full {
+		min-width: 100%;
+		max-width: 100%;
+	}
+
+	.tsfem-trends-wrap,
+	.tsfem-actions-wrap,
+	.tsfem-extensions-wrap,
+	.tsfem-extensions-panes-row {
+		min-height: initial;
+		height: initial;
+	}
+
+	.tsfem-extensions-panes-row .tsfem-pane-half {
+		margin-bottom: 20px;
+	}
+
+	.tsfem-pane-content {
+		-webkit-flex: 1 1 auto;
+		flex: 1 1 auto;
+	}
+
+	.tsfem-extensions-panes-row .tsfem-pane-half:last-of-type {
+		margin-bottom: 0;
+	}
+
+	/* Make users be able to scroll through with 25vh margin */
+	.tsfem-pane-wrap {
+		max-height: 75vh;
+	}
+
+	.tsfem-pane-half:first-of-type {
+		margin-right: 0;
+	}
+
+	body.tsfem #wpfooter {
+		display: block;
+	}
+}
+
+/* Small phones */
+@media only screen and ( max-width: 600px ) {
+	.tsfem-connect-option {
+		-webkit-flex-direction: column;
+		flex-direction: column;
+		-webkit-align-items: flex-start;
+		align-items: flex-start;
+		padding: 1em 20px 1.66em;
+	}
+
+	.tsfem-connect-action {
+		text-align: left;
+	}
+
+	.tsfem-connect-fields-row {
+		-webkit-justify-content: flex-start;
+		justify-content: flex-start;
+	}
+}
+
+/* # Start JavaScript.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-desc-balloon {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	border-radius: 0px;
+	bottom: 0;
+	left: 0;
+	opacity: 1;
+	z-index: 9999999;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-desc-balloon > span {
+	position: relative;
+	left: 0;
+	top: 0;
+	margin: 0;
+	max-width: 200px;
+	padding: 10px 12px;
+	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
+	background: #05809e;
+	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
+	font-size: 1em;
+	font-weight: 500;
+	line-height: 1.625em;
+	color: #fff;
+	border-radius: 0px;
+	word-wrap: normal;
+	white-space: pre-line;
+	word-break: normal;
+	box-sizing: border-box;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex: 1 0 auto;
+	flex: 1 0 auto;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-desc-balloon > span span {
+	text-decoration: underline;
+}
+
+.tsfem-desc-balloon > div {
+	width: 0;
+	height: 0;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid #05809e;
+	position: absolute;
+	bottom: -8px;
+	z-index: 9999998;
+	left: 0;
+}
+
+/* # Start override.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-hidden {
+	display: none;
+}
+
+.tsfem-has-hover-balloon {
+	position: relative;
+}

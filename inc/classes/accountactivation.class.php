@@ -123,7 +123,11 @@ class AccountActivation extends Panes {
 	 *		'licence_key'      => string The license key.
 	 *		'activation_email' => string The activation email.
 	 * }
-	 * @return array Request Data option details.
+	 * @return bool|array {
+	 *		Always: False on failure.
+	 *		Deactivation: True on succesful deactivation.
+	 *		Activation/Status: Reponse data.
+	 * }
 	 */
 	protected function handle_request( $type = 'status', $args = array() ) {
 
@@ -155,6 +159,7 @@ class AccountActivation extends Panes {
 				if ( false === $this->is_premium_user() ) {
 					return $this->do_free_deactivation();
 				}
+				//* Premium deactivation propagates through API, so nothing happens here.
 				break;
 
 			default :
@@ -366,7 +371,7 @@ class AccountActivation extends Panes {
 	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $status.
+	 * @staticvar array $status
 	 *
 	 * @return array Current subscription status.
 	 */
@@ -398,9 +403,9 @@ class AccountActivation extends Panes {
 		$response = $this->get_remote_subscription_status();
 
 		if ( isset( $response['status_check'] ) && 'active' === $response['status_check'] )
-		if ( isset( $response['status_extra']['instance'] ) && $this->get_activation_instance() === $response['status_extra']['instance'] )
-		if ( isset( $response['status_extra']['activation_domain'] ) && $this->get_activation_site_domain() === $response['status_extra']['activation_domain'] )
-			return true;
+			if ( isset( $response['status_extra']['instance'] ) && $this->get_activation_instance() === $response['status_extra']['instance'] )
+				if ( isset( $response['status_extra']['activation_domain'] ) && $this->get_activation_site_domain() === $response['status_extra']['activation_domain'] )
+					return true;
 
 		return false;
 	}
@@ -454,7 +459,7 @@ class AccountActivation extends Panes {
 
 		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
 
-		//* Updates at most every 2 hours.
+		//* Updates at most every 2 hours. In-house transient cache.
 		$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
 
 		//* Cache status for 2 hours.
