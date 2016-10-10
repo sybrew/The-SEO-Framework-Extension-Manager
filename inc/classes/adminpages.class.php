@@ -267,7 +267,7 @@ class AdminPages extends AccountActivation {
 	 */
 	protected function output_extension_overview_wrapper() {
 
-		$this->do_page_header_wrap( true );
+		$this->do_page_top_wrap( true );
 
 		?>
 		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
@@ -285,7 +285,7 @@ class AdminPages extends AccountActivation {
 	 */
 	protected function output_plugin_connect_wrapper() {
 
-		$this->do_page_header_wrap( false );
+		$this->do_page_top_wrap( false );
 
 		?>
 		<div class="tsfem-connect-wrap">
@@ -297,18 +297,18 @@ class AdminPages extends AccountActivation {
 	}
 
 	/**
-	 * Echos the page title wrap.
+	 * Echos the page top wrap.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param bool $options Whether to output the options.
 	 */
-	protected function do_page_header_wrap( $options = true ) {
+	protected function do_page_top_wrap( $options = true ) {
 		$this->get_view( 'layout/general/header', get_defined_vars() );
 	}
 
 	/**
-	 * Echos the page title wrap.
+	 * Echos the page footer wrap.
 	 *
 	 * @since 1.0.0
 	 */
@@ -338,6 +338,7 @@ class AdminPages extends AccountActivation {
 	 * Echos a pane wrap.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $title The pane title.
 	 * @param string $content The escaped pane content.
@@ -350,7 +351,7 @@ class AdminPages extends AccountActivation {
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	protected function do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
+	public function do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
 
 		$defaults = array(
 			'full' => true,

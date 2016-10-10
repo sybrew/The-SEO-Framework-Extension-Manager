@@ -137,6 +137,8 @@ trait Extension_Options {
 		if ( isset( TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ] ) ) {
 			return $options = TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ];
 		} else {
+			empty( $this->o_index ) and the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->$o_index.' );
+
 			return $options = array();
 		}
 	}

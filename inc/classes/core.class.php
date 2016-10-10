@@ -1328,7 +1328,7 @@ class Core {
 	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
 	 * @return int Points.
 	 */
-	public function pixel_to_points( $px = 0 ) {
+	public function pixels_to_points( $px = 0 ) {
 		return intval( $px ) * 0.75;
 	}
 }

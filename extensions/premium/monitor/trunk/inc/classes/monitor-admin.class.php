@@ -263,7 +263,7 @@ final class Monitor_Admin {
 	 */
 	protected function output_monitor_overview_wrapper() {
 
-		$this->do_page_header_wrap( true );
+		$this->do_page_top_wrap( true );
 
 		?>
 		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
@@ -275,12 +275,22 @@ final class Monitor_Admin {
 	}
 
 	/**
-	 * Echos the page title wrap.
+	 * Echos the page top wrap.
 	 *
 	 * @since 1.0.0
 	 */
-	protected function do_page_header_wrap() {
-		$this->get_view( 'layout/general/header' );
+	protected function do_page_top_wrap() {
+		$this->get_view( 'layout/general/top' );
+	}
+
+	/**
+	 * Outputs update form.
+	 *
+	 * @since 1.0.0
+	 * @todo
+	 */
+	protected function output_update_button() {
+		$this->get_view( 'forms/update' );
 	}
 
 	/**
@@ -309,7 +319,7 @@ final class Monitor_Admin {
 	}
 
 	/**
-	 * Echos the page title wrap.
+	 * Echos the page footer wrap.
 	 *
 	 * @since 1.0.0
 	 */
@@ -326,6 +336,12 @@ final class Monitor_Admin {
 	public function output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
 	}
+
+	protected function get_issues_overview() { }
+
+	protected function get_poi_overview() { }
+
+	protected function get_statistics_overview() { }
 
 	/**
 	 * Fetches files based on input to reduce memory overhead.
@@ -345,34 +361,5 @@ final class Monitor_Admin {
 		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 
 		include( $file );
-	}
-
-	/**
-	 * Outputs update form.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_update_button() {
-
-		$class = 'tsfem-button-primary-bright tsfem-button-cloud tsfem-button-ajax';
-		$name = __( 'Update', 'the-seo-framework-extension-manager' );
-		$title = __( 'Get latest data', 'the-seo-framework-extension-manager' );
-
-		$nonce_action = '<input type="hidden" name="tsfem-e-monitor-update-action" value="' . esc_attr( $this->request_name['update'] ) . '">';
-		$nonce = wp_nonce_field( $this->nonce_action['update'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" title="%s" value="%s">', esc_attr( $class ), esc_attr( $title ), esc_attr( $name ) );
-		$form = $nonce_action . $nonce . $submit;
-
-		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-e-monitor-update-form" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ), $form );
-		$js = sprintf( '<a id="tsfem-e-monitor-update-button" class="tsfem-button-primary hide-if-no-js %s" title="%s">%s</a>', esc_attr( $class ), esc_attr( $title ), esc_html( $name ) );
-
-		$button = $nojs . $js;
-
-		//* Already escaped.
-		echo $button;
-	}
-
-	protected function get_update_url() {
-		return 'http://example.com/';
 	}
 }
