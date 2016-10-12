@@ -139,8 +139,8 @@ trait Extensions_Properties {
 					'2x' => 'icon-200x200.jpg',
 				),
 			),
-			'google-analytics' => array(
-				'slug' => 'google-analytics',
+			'analytics' => array(
+				'slug' => 'analytics',
 				'network' => '0',
 				'type' => 'premium',
 				'area' => 'general',
@@ -195,9 +195,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => 'e45346eb0464f401f67303ea1904834dbfb20e0ef47a6e1ae93373bf80962689',
-			'sha1'   => '6aee64ad1f2e1a1122aaea82a73247bcbbbebd81',
-			'md5'    => 'c23e266e7832784b59c313b04439b912',
+			'sha256' => '8c0df51e31d76b7a8e5b91df433bb8eebc8000c82e2f55d772a9bea33ed13a33',
+			'sha1'   => 'd7a36ce0dd6bc2517795f11595647c8271c15e87',
+			'md5'    => '922c875ad356302ccd8523d06454879d',
 		);
 	}
 
@@ -827,14 +827,14 @@ trait Extensions_Actions {
 		$error_type = '';
 
 		switch ( $error['type'] ) :
-			case 1 :
-			case 16 :
-			case 64 :
-			case 256 :
+			case 2e0 :
+			case 2e4 :
+			case 2e6 :
+			case 2e8 :
 				$error_type = 'Fatal error.';
 				break;
 
-			case 4 :
+			case 2e2 :
 				$error_type = 'Parse error.';
 				break;
 

@@ -929,6 +929,7 @@ h5.tsfem-extension-type {
 
 .tsfem-feed-top {
 	word-wrap: break-word;
+	overflow-wrap: break-word;
 	white-space: pre-wrap;
 	overflow-wrap: normal;
 	-webkit-align-items: baseline;
@@ -945,6 +946,7 @@ h5.tsfem-extension-type {
 	white-space: pre;
 	white-space: nowrap;
 	word-wrap: break-word;
+	overflow-wrap: break-word;
 	word-spacing: -1px;
 	font-size: 0.9em;
 	margin: 0 7px;
@@ -1209,12 +1211,14 @@ h5.tsfem-extension-type {
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
 	background: #05809e;
 	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
+	text-align: left;
 	font-size: 1em;
 	font-weight: 500;
 	line-height: 1.625em;
 	color: #fff;
 	border-radius: 0px;
-	word-wrap: normal;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 	white-space: pre-line;
 	word-break: normal;
 	box-sizing: border-box;

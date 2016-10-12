@@ -114,7 +114,7 @@ final class Monitor_Admin {
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, 'init_menu' ) );
 
-		//* Initialize TSF Extension Manager page actions.
+		//* Initialize Monitor page actions.
 		add_action( 'admin_init', array( $this, 'load_monitor_admin_actions' ) );
 	}
 
@@ -168,9 +168,7 @@ final class Monitor_Admin {
 	 * @access private
 	 */
 	public function load_monitor_admin_actions() {
-
 		add_action( 'load-' . $this->monitor_menu_page_hook, array( $this, 'do_monitor_admin_actions' ) );
-
 	}
 
 	/**
