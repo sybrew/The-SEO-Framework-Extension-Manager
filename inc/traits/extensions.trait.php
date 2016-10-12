@@ -389,21 +389,8 @@ trait Extensions_Actions {
 		if ( isset( $checksum ) )
 			return $checksum;
 
-		$extensions = static::$extensions;
-
-		$extensions = serialize( $extensions );
-		$algos = hash_algos();
-
-		if ( in_array( 'sha256', $algos, true ) ) {
-			$hash = hash( 'sha256', $extensions );
-			$type = 'sha256';
-		} elseif ( in_array( 'sha1', $algos, true ) ) {
-			$hash = hash( 'sha1', $extensions );
-			$type = 'sha1';
-		} else {
-			$hash = hash( 'md5', $extensions );
-			$type = 'md5';
-		}
+		$type = tsf_extension_manager()->get_hash_type();
+		$hash = hash( $type, serialize( static::$extensions ) );
 
 		return $checksum = array(
 			'hash' => $hash,

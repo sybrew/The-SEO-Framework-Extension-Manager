@@ -730,7 +730,7 @@ class Core {
 		}
 
 		//* This won't save to database, but does create a unique salt for each bit.
-		$hash = wp_hash( $_bit . '\\' . __METHOD__ . '\\' . $bit, 'tsfem-instance-' . $bit );
+		$hash = $this->hash( $_bit . '\\' . mt_rand( 0, time() ) . '\\' . $bit, 'instance' );
 
 		return $instance[ $bit ] = $instance[ $_bit ] = $hash;
 	}
@@ -764,6 +764,112 @@ class Core {
 		$bit | $_bit && $bit++ ^ ~ $_bit-- && $bit ^ $_bit++ && $bit | $_bit++;
 
 		return array( $_bit, $bit );
+	}
+
+	/**
+	 * Hashes input $data with the best hash type available while also using hmac.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $data The data to hash.
+	 * @param string $scheme Authentication scheme ( 'instance', 'auth', 'secure_auth', 'nonce' ).
+	 *                       Default 'instance'.
+	 * @return string Hash of $data.
+	 */
+	final protected function hash( $data, $scheme = 'instance' ) {
+
+		$salt = $this->get_salt( $scheme );
+
+		return hash_hmac( $this->get_hash_type(), $data, $salt );
+	}
+
+	/**
+	 * Generates salt from WordPress defined variables.
+	 *
+	 * Taken from WordPress core function `wp_salt()` and adjusted.
+	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $cached_salts Contains cached salts based on $scheme input.
+	 * @staticvar string $instance_scheme Random scheme for instance verification. Determined at runtime.
+	 *
+	 * @param string $scheme Authentication scheme. ( 'instance', 'auth', 'secure_auth', 'nonce' ).
+	 *                       Default 'instance'.
+	 * @return string Salt value.
+	 */
+	final protected function get_salt( $scheme = 'instance' ) {
+
+		static $cached_salts = array();
+
+		if ( isset( $cached_salts[ $scheme ] ) )
+			return $cached_salts[ $scheme ];
+
+		$values = array(
+			'key'  => '',
+			'salt' => '',
+		);
+
+		$schemes = array( 'auth', 'secure_auth', 'logged_in', 'nonce' );
+
+		//* 'instance' picks a random key.
+		static $instance_scheme = null;
+		if ( null === $instance_scheme ) {
+			$_key = mt_rand( 0, count( $schemes ) - 1 );
+			$instance_scheme = $schemes[ $_key ];
+		}
+		$scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
+
+		if ( in_array( $scheme, $schemes, true ) ) {
+			foreach ( array( 'key', 'salt' ) as $type ) :
+				$const = strtoupper( "{$scheme}_{$type}" );
+				if ( defined( $const ) && constant( $const ) ) {
+					$values[ $type ] = constant( $const );
+				} elseif ( empty( $values[ $type ] ) ) {
+					$values[ $type ] = get_site_option( "{$scheme}_{$type}" );
+					if ( ! $values[ $type ] ) {
+						/**
+						 * Hash keys not defined in wp-config.php nor in database.
+						 * Let wp_salt() handle this. This should run at most once per site per scheme.
+						 */
+						$values[ $type ] = wp_salt( $scheme );
+					}
+				}
+			endforeach;
+		} else {
+			wp_die( 'Invalid scheme supplied for <code>' . __METHOD__ . '</code>.' );
+		}
+
+		$cached_salts[ $scheme ] = $values['key'] . $values['salt'];
+
+		return $cached_salts[ $scheme ];
+	}
+
+	/**
+	 * Returns working hash type.
+	 *
+	 * @since 1.0.0
+	 * @staticvar string $type
+	 *
+	 * @return string The working hash type to be used within hash() functions.
+	 */
+	final public function get_hash_type() {
+
+		static $type = null;
+
+		if ( isset( $type ) )
+			return $type;
+
+		$algos = hash_algos();
+
+		if ( in_array( 'sha256', $algos, true ) ) {
+			$type = 'sha256';
+		} elseif ( in_array( 'sha1', $algos, true ) ) {
+			$type = 'sha1';
+		} else {
+			$type = 'md5';
+		}
+
+		return $type;
 	}
 
 	/**
