@@ -346,52 +346,6 @@ class AccountActivation extends Panes {
 	}
 
 	/**
-	 * Determines whether the plugin's activated. Either free or premium.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True if the plugin is activated.
-	 */
-	protected function is_plugin_activated() {
-		return 'Activated' === $this->get_option( '_activated' );
-	}
-
-	/**
-	 * Determines whether the plugin's use is premium.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True if the plugin is connected to the API handler.
-	 */
-	protected function is_premium_user() {
-		return 'Premium' === $this->get_option( '_activation_level' );
-	}
-
-	/**
-	 * Returns subscription status from local options.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $status
-	 *
-	 * @return array Current subscription status.
-	 */
-	protected function get_subscription_status() {
-
-		static $status = null;
-
-		if ( null !== $status )
-			return $status;
-
-		return $status = array(
-			'key'     => $this->get_option( 'api_key' ),
-			'email'   => $this->get_option( 'activation_email' ),
-			'active'  => $this->get_option( '_activated' ),
-			'level'   => $this->get_option( '_activation_level' ),
-			'data'    => $this->get_option( '_remote_subscription_status' ),
-		);
-	}
-
-	/**
 	 * Validates local subscription status against remote through an API request.
 	 *
 	 * @since 1.0.0

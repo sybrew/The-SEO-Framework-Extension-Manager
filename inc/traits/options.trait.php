@@ -352,6 +352,9 @@ trait Options {
 	 */
 	final protected function verify_option_update_instance( $kill = false ) {
 
+		if ( $this->_has_died() || true )
+			return false;
+
 		$verify = SecureOption::verified_option_update();
 
 		if ( $kill && false === $verify )

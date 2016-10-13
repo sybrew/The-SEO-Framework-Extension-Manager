@@ -335,7 +335,87 @@ final class Monitor_Admin {
 		$this->get_view( 'layout/pages/meta' );
 	}
 
-	protected function get_issues_overview() { }
+	protected function api_get_remote_data() {
+	//	return tsf_extension_manager()->get_api_url();
+	}
+
+	protected function fetch_new_data( $ajax = false ) {
+
+		static $fetched = null;
+
+		if ( isset( $fetched ) )
+			return $fetched;
+
+		$data = $this->api_get_remote_data();
+
+		if ( is_array( $data ) ) {
+			foreach ( $data as $type => $values ) {
+				$this->store_session_data( $type, $values );
+				$this->update_option( $type, $values );
+			}
+			$fetched = true;
+		} else {
+			$fetched = false;
+		}
+
+		return $fetched;
+	}
+
+	protected function get_remote_data( $type = '', $ajax = false ) {
+
+		if ( ! $type )
+			return false;
+
+		$data = $this->get_option( $type, array() );
+
+		if ( empty( $data ) ) {
+			$this->fetch_new_data( $ajax );
+
+			$data = $this->get_session_data( $type );
+		}
+	}
+
+	protected function get_session_data( $type ) {
+		return $this->store_session_data( $type );
+	}
+
+	protected function store_session_data( $type = '', $data = null ) {
+
+		static $data_cache = array();
+
+		if ( isset( $data_cache[ $type ] ) )
+			return $data_cache[ $type ];
+
+		if ( isset( $data ) )
+			return $data_cache[ $type ] = $data;
+
+		return false;
+	}
+
+	protected function get_data( $type, $default = null ) {
+
+		$data = $this->get_remote_data( $type, false );
+
+		return empty( $data ) ? $default : $data;
+	}
+
+	/**
+	 * Creates issues overview for the issues pane.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function get_issues_overview() {
+
+		$issues = $this->get_data( 'issues', array() );
+
+		if ( empty( $issues ) ) {
+			//$this->store_new_data();
+
+		//	$issues = $this->get_option( 'issues', array() );
+
+			//* Still nothing? Go tell them.
+		}
+	}
 
 	protected function get_poi_overview() { }
 

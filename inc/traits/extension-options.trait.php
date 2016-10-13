@@ -34,6 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this.
  */
 final class Extensions_Options_Cache {
+	use Force_Static_Master, Enclose_Master;
 
 	/**
 	 * Holds the extension options.

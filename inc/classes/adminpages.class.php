@@ -304,7 +304,7 @@ class AdminPages extends AccountActivation {
 	 * @param bool $options Whether to output the options.
 	 */
 	protected function do_page_top_wrap( $options = true ) {
-		$this->get_view( 'layout/general/header', get_defined_vars() );
+		$this->get_view( 'layout/general/top', get_defined_vars() );
 	}
 
 	/**

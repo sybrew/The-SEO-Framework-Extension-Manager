@@ -2,7 +2,8 @@
 /**
  * @package TSF_Extension_Manager
  */
-use TSF_Extension_Manager\Load as Load;
+use TSF_Extension_Manager\LoadAdmin as LoadAdmin;
+use TSF_Extension_Manager\LoadFrontend as LoadFrontend;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -69,6 +70,9 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**
  * Loads TSF_Extension_Manager_Load class when in admin.
  *
+ * Also directly initializes extensions after the class constructors have run.
+ * This will allow all extensions to run exactly after The SEO Framework has initialized.
+ *
  * @action plugins_loaded
  * @priority 6 Use anything above 6, or any action later than plugins_loaded and
  * 		you can access the class and functions. Failing to do so will perform wp_die().
@@ -114,7 +118,14 @@ function init_tsf_extension_manager() {
 		/**
 		 * @package TSF_Extension_Manager
 		 */
-		$tsf_extension_manager = new Load;
+		if ( is_admin() ) {
+			$tsf_extension_manager = new LoadAdmin;
+		} else {
+			$tsf_extension_manager = new LoadFrontend;
+		}
+
+		//* Initialize extensions.
+		$tsf_extension_manager->init_extensions();
 	}
 
 	return $tsf_extension_manager;

@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Facade Class TSF_Extension_Manager\Load.
+ * Facade Class TSF_Extension_Manager\LoadAdmin.
  *
  * Initializes plugin classes.
  *
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) or die;
  * @access private
  * @final Please don't extend this extension.
  */
-final class Load extends AdminPages {
+final class LoadAdmin extends AdminPages {
 	use Construct_Master, Enclose;
 
 	/**
@@ -96,24 +96,5 @@ final class Load extends AdminPages {
 
 		//* Already escaped.
 		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
-	}
-
-	/**
-	 * Determines whether we're on the SEO extension manager settings page.
-	 *
-	 * @since 1.0.0
-	 * @staticvar bool $cache
-	 *
-	 * @return bool
-	 */
-	public function is_tsf_extension_manager_page() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		//* Don't load from $_GET request.
-		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 	}
 }

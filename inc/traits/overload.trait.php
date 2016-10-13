@@ -62,7 +62,10 @@ trait Enclose_Master {
 }
 
 /**
- * Holds protected magic constructor method and forces a subsconstructor and parent constructor.
+ * Holds protected magic constructor method and forces a subsconstructor and
+ * parent constructor.
+ *
+ * To be used in a Facade pattern.
  *
  * @since 1.0.0
  * @access private
@@ -94,7 +97,7 @@ trait Construct_Master {
 		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
+		$count < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . esc_html( __TRAIT__ ) . '</code>.' );
 		$count++;
 
 		parent::__construct();
@@ -118,12 +121,11 @@ trait Construct_Solo_Master {
 
 	final public function __construct() {
 
-		static $count = array();
+		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count[ __CLASS__ ] = isset( $count[ __CLASS__ ] ) ? $count[ __CLASS__ ] : 0;
-		$count[ __CLASS__ ] < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once.' );
-		$count[ __CLASS__ ]++;
+		$count < 1 or wp_die( '<code>' . esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . esc_html( __TRAIT__ ) . '</code>.' );
+		$count++;
 
 		$this->construct();
 	}
@@ -148,7 +150,7 @@ trait Construct_Final {
 }
 
 /**
- * Holds protected magic destructor method..
+ * Holds magic destructor method which invokes cache on method _has_died().
  * To be used on final instance.
  *
  * @since 1.0.0
@@ -182,7 +184,16 @@ trait Destruct_Final {
 }
 
 /**
- * Forces all classes and subclasses to be static.
+ * Forces all classes and subclasses to be treated as static. In essence, classes
+ * that use this trait can't be used with a 'new' keyword. Otherwise they can be
+ * safely called without interrupting flow.
+ *
+ * This is great together with Enclose_Master.
+ *
+ * This trait applies nicely with the following design patterns:
+ * - Singleton Pattern.
+ * - Prototype Pattern.
+ * - Decorator Pattern.
  *
  * @since 1.0.0
  * @access private

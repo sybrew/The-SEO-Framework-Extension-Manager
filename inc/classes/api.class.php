@@ -85,6 +85,7 @@ class API extends Core {
 	 * Generates software API URL to connect to the API manager.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
@@ -114,7 +115,7 @@ class API extends Core {
 			'product_id'       => $this->get_activation_product_title(),
 			'instance'         => $this->get_activation_instance( false ),
 			'platform'         => $this->get_activation_site_domain(),
-			'software_version' => '1.0.0', // Always 1.0.0, as it's not software, but a "placeholder" for the subscription.
+			'software_version' => '1.0.0',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -184,7 +185,7 @@ class API extends Core {
 		$additional_info = '';
 
 		//* If the user's already using a free account, don't deactivate.
-		$free = $this->get_option( '_activated' ) && ! $this->is_premium_user();
+		$free = $this->is_plugin_activated() && false === $this->is_premium_user();
 
 		if ( isset( $results['code'] ) ) {
 			switch ( $results['code'] ) :

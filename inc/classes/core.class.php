@@ -78,6 +78,10 @@ class Core {
 	 */
 	private function construct() {
 
+		//* Verify integrity.
+		$that = __NAMESPACE__ . ( is_admin() ? '\\LoadAdmin' : '\\LoadFrontend' );
+		$this instanceof $that or wp_die( -1 );
+
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
 		$this->request_name = array(
 			//* Reference convenience.
@@ -114,12 +118,6 @@ class Core {
 
 		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
 
-		/**
-		 * This somehow sets itself to priority 10 (or later - if defined), always.
-		 * This also requires an action, rather than a direct call. Otherwise the class is duplicated.
-		 * @todo figure out if this is a bug.
-		 */
-		add_action( 'plugins_loaded', array( $this, 'init_extensions' ), 10 );
 	}
 
 	/**
@@ -1436,5 +1434,70 @@ class Core {
 	 */
 	public function pixels_to_points( $px = 0 ) {
 		return intval( $px ) * 0.75;
+	}
+
+	/**
+	 * Determines whether we're on the SEO extension manager settings page.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	public function is_tsf_extension_manager_page() {
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		//* Don't load from $_GET request.
+		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+	}
+
+	/**
+	 * Determines whether the plugin's activated. Either free or premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if the plugin is activated.
+	 */
+	protected function is_plugin_activated() {
+		return 'Activated' === $this->get_option( '_activated' );
+	}
+
+	/**
+	 * Determines whether the plugin's use is premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if the plugin is connected to the API handler.
+	 */
+	protected function is_premium_user() {
+		return 'Premium' === $this->get_option( '_activation_level' );
+	}
+
+	/**
+	 * Returns subscription status from local options.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $status
+	 *
+	 * @return array Current subscription status.
+	 */
+	protected function get_subscription_status() {
+
+		static $status = null;
+
+		if ( null !== $status )
+			return $status;
+
+		return $status = array(
+			'key'     => $this->get_option( 'api_key' ),
+			'email'   => $this->get_option( 'activation_email' ),
+			'active'  => $this->get_option( '_activated' ),
+			'level'   => $this->get_option( '_activation_level' ),
+			'data'    => $this->get_option( '_remote_subscription_status' ),
+		);
 	}
 }
