@@ -107,6 +107,7 @@ function init_tsf_extension_manager() {
 
 		//* Prevent overriding of security classes.
 		! ( class_exists( 'TSF_Extension_Manager\Core' ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract' ) || class_exists( 'TSF_Extension_Manager\SecureOption' ) )
+		and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin' ) || class_exists( 'TSF_Extension_Manager\LoadFrontend' ) )
 			or wp_die( -1 );
 
 		/**
