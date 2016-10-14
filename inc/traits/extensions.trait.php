@@ -752,7 +752,8 @@ trait Extensions_Actions {
 				$test_file = $base_path . 'test.json';
 
 				if ( 0 === validate_file( $test_file ) && file_exists( $test_file ) ) {
-					$json = json_decode( file_get_contents( $test_file ) );
+					$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
+					$json = json_decode( file_get_contents( $test_file, false, $timeout ) );
 
 					if ( ! empty( $json ) ) {
 						$namespace = empty( $json->namespace ) ? '' : $json->namespace;
@@ -763,7 +764,15 @@ trait Extensions_Actions {
 							if ( '_base' === $_class )
 								continue;
 
-							$success[] = (bool) include_once( $base_path . $_file );
+							if ( is_array( $_file ) ) {
+								//* Facade.
+								foreach ( $_file as $f_file ) {
+									$success[] = (bool) include_once( $base_path . $f_file );
+								}
+							} else {
+								$success[] = (bool) include_once( $base_path . $_file );
+							}
+
 							if ( $_class ) {
 								$class = $namespace . '\\' . $_class;
 								$success[] = new $class;
@@ -814,14 +823,14 @@ trait Extensions_Actions {
 		$error_type = '';
 
 		switch ( $error['type'] ) :
-			case 2e0 :
-			case 2e4 :
-			case 2e6 :
-			case 2e8 :
+			case 1 :
+			case 16 :
+			case 64 :
+			case 256 :
 				$error_type = 'Fatal error.';
 				break;
 
-			case 2e2 :
+			case 4 :
 				$error_type = 'Parse error.';
 				break;
 
@@ -834,6 +843,21 @@ trait Extensions_Actions {
 		if ( false !== $stack_pos = stripos( $error['message'], 'Stack trace:' ) )
 			$error['message'] = substr( $error['message'], 0, $stack_pos );
 
+		//* Remove error location and line.
+		if ( $loc = stripos( $error['message'], ' in /' ) ) {
+			$additions = '.php:' . $error['line'];
+			$loc_line = stripos( $error['message'], $additions, $loc );
+			$offset = $loc_line - $loc + strlen( $additions );
+
+			if ( $loc_line && $rem = substr( $error['message'], $loc, $offset ) ) {
+				//* Continue only if there are no spaces.
+				$without_in = substr( $rem, 4 );
+				if ( false === strpos( $without_in, ' ' ) ) {
+					$error['message'] = trim( str_replace( $rem, '', $error['message'] ) );
+				}
+			}
+		}
+
 		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
 
@@ -845,6 +869,9 @@ trait Extensions_Actions {
 				'notice' => $notice,
 			);
 
+			/**
+			 * @TODO make notice copy-able by clicking.
+			 */
 			$response = WP_DEBUG ? array( 'status' => $status, 'slug' => '', 'case' => 'activate' ) : array( 'status' => $status );
 
 			http_response_code( 200 );

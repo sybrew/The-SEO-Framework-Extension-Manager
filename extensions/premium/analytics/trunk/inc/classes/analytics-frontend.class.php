@@ -12,8 +12,8 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 /**
  * @package TSF_Extension_Manager\Traits
  */
-use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
-use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
+use TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
+use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
 
 /**
  * Analytics extension for The SEO Framework
@@ -33,9 +33,9 @@ use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
  */
 
 final class Analytics_Frontend {
-	use Enclose_Master, Construct_Solo_Master;
+	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
-	protected function construct() {
+	private function construct() {
 		add_filter( 'the_seo_framework_after_output', array( $this, 'init_output' ), 10, 1 );
 	}
 

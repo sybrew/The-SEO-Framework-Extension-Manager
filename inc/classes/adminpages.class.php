@@ -38,7 +38,7 @@ _tsf_extension_manager_load_trait( 'ui' );
  * @access private
  */
 class AdminPages extends AccountActivation {
-	use Enclose, Construct_Sub, UI;
+	use Enclose_Stray_Private, Construct_Child_Interface, UI;
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -255,6 +255,7 @@ class AdminPages extends AccountActivation {
 	 * Does not always work. So many browser bugs... It's just fancy.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
 	public function output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
@@ -373,6 +374,7 @@ class AdminPages extends AccountActivation {
 	 * get_field_id() method, if the naming format needs to be different.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $name Field name base
 	 * @return string Full field name
@@ -385,6 +387,7 @@ class AdminPages extends AccountActivation {
 	 * Echo constructed name attributes in form fields.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 * @uses $this->get_field_name() Construct name attributes for use in form fields.
 	 *
 	 * @param string $name Field name base
@@ -397,6 +400,7 @@ class AdminPages extends AccountActivation {
 	 * Helper function that constructs id attributes for use in form fields.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $id Field id base
 	 * @return string Full field id
@@ -409,6 +413,7 @@ class AdminPages extends AccountActivation {
 	 * Echo constructed id attributes in form fields.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string $id Field id base
@@ -428,6 +433,7 @@ class AdminPages extends AccountActivation {
 	 * Outputs nonce action field.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $key The escaped action key.
 	 */
@@ -439,6 +445,7 @@ class AdminPages extends AccountActivation {
 	 * Returns nonce action field.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $key The action key.
 	 */

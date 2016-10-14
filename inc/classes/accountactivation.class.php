@@ -40,7 +40,7 @@ _tsf_extension_manager_load_trait( 'activation' );
  *       Instancing does expand complexity massively as it handles options.
  */
 class AccountActivation extends Panes {
-	use Enclose, Construct_Sub, Activation_Data;
+	use Enclose_Stray_Private, Construct_Child_Interface, Activation_Data;
 
 	/**
 	 * Holds activation input key and email.

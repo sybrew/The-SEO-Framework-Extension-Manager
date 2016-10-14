@@ -99,7 +99,7 @@ namespace TSF_Extension_Manager_Extension {
 		if ( is_admin() ) {
 			new Monitor_Admin();
 		} else {
-			new Monitor_Front_End();
+			new Monitor_Frontend();
 		}
 
 		return $loaded = true;

@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this.
  */
 final class Trends {
-	use Enclose_Master, Force_Static_Master;
+	use Enclose_Core_Final, Construct_Core_Static_Final;
 
 	/**
 	 * Returns the trend call.

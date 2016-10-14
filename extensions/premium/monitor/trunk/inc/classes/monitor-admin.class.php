@@ -16,18 +16,11 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 _tsf_extension_manager_load_trait( 'ui' );
 
 /**
- * Require extension options trait.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'extension-options' );
-
-/**
  * @package TSF_Extension_Manager\Traits
  */
-use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
-use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
+use TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
+use TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
 use TSF_Extension_Manager\UI as UI;
-use TSF_Extension_Manager\Extension_Options as Extension_Options;
 
 /**
  * Monitor extension for The SEO Framework
@@ -46,8 +39,8 @@ use TSF_Extension_Manager\Extension_Options as Extension_Options;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-final class Monitor_Admin {
-	use Enclose_Master, Construct_Solo_Master, UI, Extension_Options;
+final class Monitor_Admin extends Monitor_Data {
+	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -85,13 +78,7 @@ final class Monitor_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function construct() {
-
-		/**
-		 * Set options index.
-		 * @see trait TSF_Extension_Manager\Extension_Options
-		 */
-		$this->o_index = 'monitor';
+	private function construct() {
 
 		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
 		$this->request_name = array(
@@ -333,70 +320,6 @@ final class Monitor_Admin {
 	 */
 	public function output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
-	}
-
-	protected function api_get_remote_data() {
-	//	return tsf_extension_manager()->get_api_url();
-	}
-
-	protected function fetch_new_data( $ajax = false ) {
-
-		static $fetched = null;
-
-		if ( isset( $fetched ) )
-			return $fetched;
-
-		$data = $this->api_get_remote_data();
-
-		if ( is_array( $data ) ) {
-			foreach ( $data as $type => $values ) {
-				$this->store_session_data( $type, $values );
-				$this->update_option( $type, $values );
-			}
-			$fetched = true;
-		} else {
-			$fetched = false;
-		}
-
-		return $fetched;
-	}
-
-	protected function get_remote_data( $type = '', $ajax = false ) {
-
-		if ( ! $type )
-			return false;
-
-		$data = $this->get_option( $type, array() );
-
-		if ( empty( $data ) ) {
-			$this->fetch_new_data( $ajax );
-
-			$data = $this->get_session_data( $type );
-		}
-	}
-
-	protected function get_session_data( $type ) {
-		return $this->store_session_data( $type );
-	}
-
-	protected function store_session_data( $type = '', $data = null ) {
-
-		static $data_cache = array();
-
-		if ( isset( $data_cache[ $type ] ) )
-			return $data_cache[ $type ];
-
-		if ( isset( $data ) )
-			return $data_cache[ $type ] = $data;
-
-		return false;
-	}
-
-	protected function get_data( $type, $default = null ) {
-
-		$data = $this->get_remote_data( $type, false );
-
-		return empty( $data ) ? $default : $data;
 	}
 
 	/**

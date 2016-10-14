@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this extension.
  */
 final class LoadAdmin extends AdminPages {
-	use Construct_Master, Enclose;
+	use Construct_Master_Once_Interface, Enclose_Stray_Private;
 
 	/**
 	 * Constructor, initializes WordPress actions.

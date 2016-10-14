@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) or die;
  * @access private
  */
 class API extends Core {
-	use Enclose, Construct_Sub;
+	use Enclose_Stray_Private, Construct_Child_Interface;
 
 	/**
 	 * Constructor.

@@ -38,7 +38,7 @@ _tsf_extension_manager_load_trait( 'options' );
  * @access private
  */
 class Core {
-	use Enclose, Construct_Final, Destruct_Final, Options;
+	use Enclose_Stray_Private, Construct_Core_Interface, Destruct_Core_Public_Final, Options;
 
 	/**
 	 * The POST nonce validation name, action and name.

@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @final Please don't extend this.
  */
 final class Extensions_Options_Cache {
-	use Force_Static_Master, Enclose_Master;
+	use Construct_Core_Static_Final, Enclose_Core_Final;
 
 	/**
 	 * Holds the extension options.
@@ -119,7 +119,7 @@ trait Extension_Options {
 	 *
 	 * @param string $o_index The current extension settings base index field.
 	 */
-	private $o_index = '';
+	protected $o_index = '';
 
 	/**
 	 * Returns current extension options array.
@@ -138,7 +138,7 @@ trait Extension_Options {
 		if ( isset( TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ] ) ) {
 			return $options = TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ];
 		} else {
-			empty( $this->o_index ) and the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->$o_index.' );
+			empty( $this->o_index ) and the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->o_index.' );
 
 			return $options = array();
 		}

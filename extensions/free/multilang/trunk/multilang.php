@@ -19,8 +19,8 @@ defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, 
 /**
  * @package TSF_Extension_Manager
  */
-use TSF_Extension_Manager\Enclose_Master as Enclose_Master;
-use TSF_Extension_Manager\Construct_Solo_Master as Construct_Solo_Master;
+use TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
+use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
 
 /**
  * Multilang extension for The SEO Framework
@@ -74,7 +74,7 @@ function the_seo_framework_multilang_init() {
  * @final Please don't extend this extension.
  */
 final class Multilang {
-	use Enclose_Master, Construct_Solo_Master;
+	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	/**
 	 * The constructor, initialize plugin.

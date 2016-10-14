@@ -71,7 +71,7 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
  * Loads TSF_Extension_Manager_Load class when in admin.
  *
  * Also directly initializes extensions after the class constructors have run.
- * This will allow all extensions to run exactly after The SEO Framework has initialized.
+ * This will allow all extensions and functions to run exactly after The SEO Framework has been initialized.
  *
  * @action plugins_loaded
  * @priority 6 Use anything above 6, or any action later than plugins_loaded and
@@ -138,7 +138,7 @@ function init_tsf_extension_manager() {
  *
  * @since 1.0.0
  * @staticvar bool $can_load
- * @uses the_seo_framework_version() Returns null if inactive.
+ * @uses the_seo_framework_version() which returns null if plugin is inactive.
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */

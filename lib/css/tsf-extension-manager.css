@@ -450,6 +450,10 @@ body.tsfem .wrap {
 	transition: transform 1.2s, opacity 0.6s;
 }
 
+.tsfem-switch-button-container input[type=checkbox]:checked:before {
+	content: none;
+}
+
 .tsfem-switch-button-container input[type=checkbox]:checked + label {
 	-webkit-transform: rotateX(90deg) translateY(-100%);
 	transform: rotateX(90deg) translateY(-100%);
@@ -1220,7 +1224,7 @@ h5.tsfem-extension-type {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	white-space: pre-line;
-	word-break: normal;
+	word-break: break-word;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -1235,6 +1239,13 @@ h5.tsfem-extension-type {
 	flex-direction: row;
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
+}
+
+.tsfem-desc-balloon > span * {
+	white-space: pre;
+	overflow: auto;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
 
 .tsfem-desc-balloon > span span {
