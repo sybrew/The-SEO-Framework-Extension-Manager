@@ -379,7 +379,7 @@ trait Extensions_Actions {
 	 * @return array : {
 	 * 		'hash'    => string The generated hash,
 	 * 		'type'    => string The hash type used,
-	 *		'matches' => array The pre-calculated hash matches.
+	 * 		'matches' => array The pre-calculated hash matches.
 	 * }
 	 */
 	private static function get_extensions_checksum() {
@@ -424,16 +424,8 @@ trait Extensions_Actions {
 
 		$file = static::get_extension_header_file_location( $slug );
 
-		if ( in_array( 'sha256', hash_algos(), true ) ) {
-			$hash = hash_file( 'sha256', $file );
-			$type = 'sha256';
-		} elseif ( in_array( 'sha1', hash_algos(), true ) ) {
-			$hash = hash_file( 'sha1', $file );
-			$type = 'sha1';
-		} else {
-			$hash = hash_file( 'md5', $file );
-			$type = 'md5';
-		}
+		$type = tsf_extension_manager()->get_hash_type();
+		$hash = hash_file( $type, $file );
 
 		return $checksum = array(
 			'hash' => $hash,
@@ -839,24 +831,7 @@ trait Extensions_Actions {
 				break;
 		endswitch;
 
-		//* Remove stack trace.
-		if ( false !== $stack_pos = stripos( $error['message'], 'Stack trace:' ) )
-			$error['message'] = substr( $error['message'], 0, $stack_pos );
-
-		//* Remove error location and line.
-		if ( $loc = stripos( $error['message'], ' in /' ) ) {
-			$additions = '.php:' . $error['line'];
-			$loc_line = stripos( $error['message'], $additions, $loc );
-			$offset = $loc_line - $loc + strlen( $additions );
-
-			if ( $loc_line && $rem = substr( $error['message'], $loc, $offset ) ) {
-				//* Continue only if there are no spaces.
-				$without_in = substr( $rem, 4 );
-				if ( false === strpos( $without_in, ' ' ) ) {
-					$error['message'] = trim( str_replace( $rem, '', $error['message'] ) );
-				}
-			}
-		}
+		$error['message'] = static::clean_error_message( $error['message'], $error );
 
 		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
@@ -879,8 +854,44 @@ trait Extensions_Actions {
 			exit;
 		} else {
 			$error_notice .= '<br>' . esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
+
+			//* Already escaped.
 			wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
 		}
+	}
+
+	/**
+	 * Removes redundant data from $message.
+	 *
+	 * @since 1.0.0
+	 * @NOTE Output is not sanitized.
+	 *
+	 * @param string $message The current error message.
+	 * @param array $error The PHP triggered error.
+	 * @return string The cleaned error message.
+	 */
+	private static function clean_error_message( $message = '', $error = array() ) {
+
+		//* Remove stack trace.
+		if ( false !== $stack_pos = stripos( $message, 'Stack trace:' ) )
+			$message = substr( $message, 0, $stack_pos );
+
+		//* Remove error location and line from message.
+		if ( $loc = stripos( $message, ' in /' ) ) {
+			$additions = '.php:' . $error['line'];
+			$loc_line = stripos( $message, $additions, $loc );
+			$offset = $loc_line - $loc + strlen( $additions );
+
+			if ( $loc_line && $rem = substr( $message, $loc, $offset ) ) {
+				//* Continue only if there are no spaces.
+				$without_in = substr( $rem, 4 );
+				if ( false === strpos( $without_in, ' ' ) ) {
+					$message = trim( str_replace( $rem, '', $message ) );
+				}
+			}
+		}
+
+		return $message;
 	}
 
 	/**
@@ -930,7 +941,7 @@ trait Extensions_Actions {
 	}
 
 	/**
-	 * Validates extension file.
+	 * Validates extension PHP file.
 	 *
 	 * @since 1.0.0
 	 *

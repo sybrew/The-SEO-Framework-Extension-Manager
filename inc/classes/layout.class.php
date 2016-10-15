@@ -202,17 +202,23 @@ final class Layout extends Secure_Abstract {
 		if ( 'list' === self::get_property( '_type' ) ) {
 			$account = self::$account;
 
+			$unknown = __( 'Unknown', 'the-seo-framework-extension-manager' );
+			$decoupled = __( 'Decoupled', 'the-seo-framework-extension-manager' );
+
 			$email = isset( $account['email'] ) ? $account['email'] : '';
 			$data = isset( $account['data'] ) ? $account['data'] : '';
-			$level = isset( $account['level'] ) ? $account['level'] : __( 'Unknown', 'the-seo-framework-extension-manager' );
+			$level = isset( $account['level'] ) ? $account['level'] : $unknown;
 			$domain = '';
 			$end_date = '';
 
 			if ( $data ) {
-				//* UTC.
-				$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
-
-				$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
+				if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
+					$level = $decoupled;
+				} else {
+					//* UTC.
+					$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
+					$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
+				}
 			}
 
 			$output = '';
@@ -220,8 +226,16 @@ final class Layout extends Secure_Abstract {
 			if ( $email )
 				$output .= static::wrap_title_content( __( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
-			if ( $level )
-				$output .= static::wrap_title_content( __( 'Account level:', 'the-seo-framework-extension-manager' ), $level );
+			if ( $level ) {
+				/**
+				 * @TODO Handle decoupled accounts better, including upgrade form, better error explanation (local error code 302), etc.
+				 * @TODO Also ping back to sites that are decoupled? This could be dangerous as it can cause (D)DoS attacks.
+				 */
+				$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
+				$level = sprintf( '<span class="tsfem-dashicon %s">%s</time>', esc_attr( $class ), esc_html( $level ) );
+
+				$output .= static::wrap_title_content( esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
+			}
 
 			if ( $domain ) {
 				//* Check for domain mismatch. If they don't match no premium extensions can be activated.

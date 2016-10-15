@@ -127,9 +127,8 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH 
 /**
  * The plugin options base name.
  * @since 1.0.0
- * Applies filters 'tsf_extension_manager_site_options' : string
  */
-define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', (string) apply_filters( 'tsf_extension_manager_site_options', 'tsf-extension-manager-settings' ) );
+define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
 
 /**
  * The plugin options.
@@ -140,9 +139,8 @@ define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', (array) get_option( TSF_EXTENSI
 /**
  * The extension options base name.
  * @since 1.0.0
- * Applies filters 'tsf_extension_manager_extension_options' : string
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', (string) apply_filters( 'tsf_extension_manager_extension_options', 'tsf-extension-manager-extension-settings' ) );
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
 
 /**
  * The extension options.

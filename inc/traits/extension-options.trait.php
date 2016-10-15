@@ -204,15 +204,15 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
+		// $c_options = Extensions_Options_Cache::_get_options_cache();
 
-		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $c_options );
+		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
-		if ( $success ) {
-			//* Update options cache on success.
-			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
-		}
+		// if ( $success ) {
+		// 	//* Update options cache on success.
+		// 	Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+		// }
 
 		return $success;
 	}

@@ -89,14 +89,14 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
  */
 function init_tsf_extension_manager() {
 
-	//* Cache the class. Do not run everything more than once.
+	//* Cache the class object. Do not run everything more than once.
 	static $tsf_extension_manager = null;
 
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
 
 	if ( false === doing_action( 'plugins_loaded' ) )
-		wp_die( 'Use tsf_extension_manager() on action `plugins_loaded` priority 7 or later.' );
+		wp_die( 'Use tsf_extension_manager() after action `plugins_loaded` priority 7.' );
 
 	if ( can_load_tsf_extension_manager() ) {
 

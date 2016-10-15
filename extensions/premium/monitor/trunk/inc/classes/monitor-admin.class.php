@@ -39,6 +39,14 @@ use TSF_Extension_Manager\UI as UI;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Class TSF_Extension_Manager_Extension\Monitor_Admin
+ *
+ * Holds extension admin page functions.
+ *
+ * @since 1.0.0
+ * @access private
+ */
 final class Monitor_Admin extends Monitor_Data {
 	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI;
 
@@ -332,17 +340,33 @@ final class Monitor_Admin extends Monitor_Data {
 		$issues = $this->get_data( 'issues', array() );
 
 		if ( empty( $issues ) ) {
-			//$this->store_new_data();
-
-		//	$issues = $this->get_option( 'issues', array() );
-
-			//* Still nothing? Go tell them.
+			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+		} else {
+			return print_r( $issues, true );
 		}
 	}
 
-	protected function get_poi_overview() { }
+	protected function get_poi_overview() {
 
-	protected function get_statistics_overview() { }
+		$points = $this->get_data( 'poi', array() );
+
+		if ( empty( $points ) ) {
+			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+		} else {
+			return print_r( $points, true );
+		}
+	}
+
+	protected function get_statistics_overview() {
+
+		$stats = $this->get_data( 'poi', array() );
+
+		if ( empty( $points ) ) {
+			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+		} else {
+			return print_r( $stats, true );
+		}
+	}
 
 	/**
 	 * Fetches files based on input to reduce memory overhead.

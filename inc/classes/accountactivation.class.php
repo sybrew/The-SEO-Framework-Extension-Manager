@@ -245,7 +245,7 @@ class AccountActivation extends Panes {
 				$success = $this->do_deactivation();
 
 				$message = esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . esc_html( $results['activations_remaining'] ) . '.';
-				$message .= $success ? '' : ' ' . esc_html__( 'Something went wrong with the deactivation.', 'the-seo-framework-extension-manager' );
+				$message .= $success ? '' : ' ' . esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
 
 				$this->set_error_notice( array( 501 => $message ) );
 				return true;
@@ -416,7 +416,7 @@ class AccountActivation extends Panes {
 		//* Updates at most every 2 hours. In-house transient cache.
 		$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
 
-		//* Cache status for 2 hours.
+		//* Return cached status within 2 hours.
 		if ( $timestamp === $status['timestamp'] )
 			return $status['status'];
 

@@ -32,6 +32,14 @@ use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Mas
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Class TSF_Extension_Manager_Extension\Monitor_Frontend
+ *
+ * Holds extension front-end functions.
+ *
+ * @since 1.0.0
+ * @access private
+ */
 final class Monitor_Frontend {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 

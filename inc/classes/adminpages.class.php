@@ -68,24 +68,6 @@ class AdminPages extends AccountActivation {
 	public $settings_field;
 
 	/**
-	 * CSS script name identifier to be used with enqueuing.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string CSS name identifier.
-	 */
-	public $css_name;
-
-	/**
-	 * JavaScript name identifier to be used with enqueuing.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string JavaScript name identifier.
-	 */
-	public $js_name;
-
-	/**
 	 * Constructor, initializes WordPress actions and set up variables.
 	 *
 	 * @since 1.0.0
