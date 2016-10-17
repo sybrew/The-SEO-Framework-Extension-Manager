@@ -395,6 +395,23 @@ class AccountActivation extends Panes {
 		if ( isset( $response ) )
 			return $response;
 
+		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
+
+		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
+			//* Updates at most every 10 minutes.
+			$divider = HOUR_IN_SECONDS / 6;
+		} else {
+			//* Updates at most every two hours.
+			$divider = HOUR_IN_SECONDS * 2;
+		}
+
+		//* In-house transient cache.
+		$timestamp = ceil( time() / $divider );
+
+		//* Return cached status within 2 hours.
+		if ( ! $doing_activation && $timestamp === $status['timestamp'] )
+			return $response = $status['status'];
+
 		if ( $doing_activation ) {
 			//* Wait 0.0625 seconds as a second request is following up (1~2x load time server).
 			usleep( 62500 );
@@ -411,19 +428,10 @@ class AccountActivation extends Panes {
 			);
 		}
 
-		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
-
-		//* Updates at most every 2 hours. In-house transient cache.
-		$timestamp = ceil( time() / ( DAY_IN_SECONDS / 12 ) );
-
-		//* Return cached status within 2 hours.
-		if ( $timestamp === $status['timestamp'] )
-			return $status['status'];
-
 		$response = $this->handle_request( 'status', $args );
 
 		if ( ! empty( $response ) )
-			$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response ), 'regular', false );
+			$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ), 'regular', false );
 
 		return $response;
 	}
@@ -433,6 +441,7 @@ class AccountActivation extends Panes {
 	 * Should happen only run once after subscription has been updated to Premium.
 	 *
 	 * @since 1.0.0
+	 * @ignore
 	 *
 	 * @param bool $doing_activation Whether an activation process is active.
 	 * @return bool True on success, false on failure or when activation level isn't Premium.

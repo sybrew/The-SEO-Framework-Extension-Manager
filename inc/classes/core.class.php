@@ -441,13 +441,18 @@ class Core {
 			case 202 :
 			case 301 :
 			case 302 :
-			case 401 :
 			case 403 :
 			case 404 :
 			case 405 :
 			case 503 :
 			case 10003 :
 				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 401 :
+				/* translators: %s = My Account */
+				$message = sprintf( esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
 				$type = 'error';
 				break;
 
@@ -1421,6 +1426,23 @@ class Core {
 			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
 		} else {
 			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
+		}
+	}
+
+	/**
+	 * Returns image file location.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $image The image name, should include .jpg, .png, etc..
+	 * @param bool $url Whether to return a path or URL.
+	 * @return string The image URL or path. Not escaped.
+	 */
+	public function get_image_file_location( $image = '', $url = false ) {
+		if ( $url ) {
+			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/images/' . $image;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
 		}
 	}
 

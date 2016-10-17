@@ -227,13 +227,17 @@ final class Layout extends Secure_Abstract {
 				$output .= static::wrap_title_content( __( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
 			if ( $level ) {
-				/**
-				 * @TODO Handle decoupled accounts better, including upgrade form, better error explanation (local error code 302), etc.
-				 * @TODO Also ping back to sites that are decoupled? This could be dangerous as it can cause (D)DoS attacks.
-				 */
 				$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
-				$level = sprintf( '<span class="tsfem-dashicon %s">%s</time>', esc_attr( $class ), esc_html( $level ) );
 
+				if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
+					$class .= ' tsfem-has-hover-balloon';
+
+					$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
+					$level_desc = sprintf( __( 'Next check is in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
+				}
+
+				$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', esc_html( $level_desc ) ) : '';
+				$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', esc_attr( $class ), $level_desc, esc_html( $level ) );
 				$output .= static::wrap_title_content( esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 			}
 

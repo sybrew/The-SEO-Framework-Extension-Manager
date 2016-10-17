@@ -50,19 +50,23 @@ $extensions_i18n = __( 'Extensions', 'the-seo-framework-extension-manager' );
  * This is the first step towards "true" Google pixel guidelines character count testing.
  * Let's see how this works out :).
  */
-if ( extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) {
-	//* Calculate text-width. 1.9em @ 13px body.
-	$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 ), 0, $this->get_font_file_location( 'verdana.ttf' ), $extensions_i18n );
+if ( extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) :
+	$font = $this->get_font_file_location( 'verdana.ttf' );
+	if ( file_exists( $font ) ) :
+		//* Calculate text-width. 1.9em @ 13px body.
+		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 ), 0, $font, $extensions_i18n );
 
-	$width_top = isset( $tim[2] ) ? $tim[2] : 0;
-	$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
-	//* Get largest offset.
-	$width = $width_top >= $width_bot ? $width_top : $width_bot;
+		$width_top = isset( $tim[2] ) ? $tim[2] : 0;
+		$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
+		//* Get largest offset.
+		$width = $width_top >= $width_bot ? $width_top : $width_bot;
 
-	//* 10px margin of error.
-	if ( $width )
-		$flex_basis = sprintf( '%spx', intval( $width + 10 ) );
-}
+		//* 10px margin of error.
+		if ( $width ) {
+			$flex_basis = sprintf( '%spx', intval( $width + 10 ) );
+		}
+	endif;
+endif;
 
 ?>
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
@@ -71,7 +75,27 @@ if ( extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) {
 	isset( $flex_basis ) and printf( '<style>.tsfem-top-wrap .tsfem-title{-webkit-flex-basis:%1$s;flex-basis:%1$s}</style>', esc_html( $flex_basis ) );
 	?>
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
-		<header><h1><?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ), '<span class="tsfem-logo">SEO</span>', esc_html( $extensions_i18n ) ); ?></h1></header>
+		<header><h1>
+			<?php
+			$image = array(
+				'svg' => $this->get_image_file_location( 'tsflogo.svg', true ),
+				//	'2x' => $this->get_image_file_location( 'tsflogo-58x58px.png', true ),
+				'1x' => $this->get_image_file_location( 'tsflogo-29x29px.png', true ),
+			);
+			$size = '1em';
+
+			printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ),
+				sprintf( '<span class="tsfem-logo">%sSEO</span>',
+					sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>',
+						esc_attr( $size ),
+						sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+							esc_url( $image['svg'] ), esc_url( $image['1x'] ), esc_attr( $size )
+						)
+					)
+				), esc_html( $extensions_i18n )
+			);
+			?>
+		</h1></header>
 	</div>
 	<?php
 	//* Already escaped.

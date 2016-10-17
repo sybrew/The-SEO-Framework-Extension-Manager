@@ -179,38 +179,41 @@ trait Extensions_Layout {
 	 */
 	private static function make_extension_list_icon( $extension, $size = '120' ) {
 
-		//* @TODO set default image.
-		$fallback = array( 'svg' => '', '2x' => '', '1x' => '', 'default' => '' );
 		$items = null;
 
-		if ( ! empty( $extension['icons'] ) ) {
-			$default = isset( $extension['icons']['default'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['default'] ) : '';
+		if ( ! empty( $extension['slug'] ) ) {
+			$svg = static::get_extension_asset_location( $extension['slug'], 'icon.svg' );
+			$two = static::get_extension_asset_location( $extension['slug'], 'icon-240x240px.png' );
+			$one = static::get_extension_asset_location( $extension['slug'], 'icon-120x120px.png' );
 
-			if ( $default ) {
-				$svg = isset( $extension['icons']['svg'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['svg'] ) : '';
-				$one = isset( $extension['icons']['1x'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['1x'] ) : '';
-				$two = isset( $extension['icons']['2x'] ) ? static::get_extension_asset_url( $extension['slug'], $extension['icons']['2x'] ) : '';
+			$svg = file_exists( $svg ) ? static::get_extension_asset_location( $extension['slug'], 'icon.svg', true ) : '';
+			$two = file_exists( $two ) ? static::get_extension_asset_location( $extension['slug'], 'icon-240x240px.png', true ) : '';
+			$one = file_exists( $one ) ? static::get_extension_asset_location( $extension['slug'], 'icon-120x120px.png', true ) : '';
 
-				$items = array(
-					'svg' => $svg,
-					'2x' => $two,
-					'1x' => $one,
-					'default' => $default,
-				);
+			//* PHP 5.4 empty compat.
+			$has_file = $svg | $two | $one;
+			if ( empty( $has_file ) ) {
+				$svg = tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
+				$two = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
+				$one = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
 			}
+
+			$items = array(
+				'svg' => $svg,
+				'2x' => $two,
+				'1x' => $one,
+			);
 		}
 
 		$items = isset( $items ) ? $items : $fallback;
-		$size = esc_attr( $size );
 
 		if ( $items['svg'] ) {
-			$image = '<img src="' . esc_url( $items['svg'] ) . '" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
-		} else {
-			if ( $items['2x'] ) {
-				$image = '<img src="' . esc_url( $items['default'] ) . '" srcset="' . esc_url( $items['1x'] ) . ' 1x, ' . esc_url( $items['2x'] ) . ' 2x" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
-			} else {
-				$image = '<img src="' . esc_url( $items['default'] ) . '" alt="extension-icon" height="' . $size . '" width="' . $size . '">';
-			}
+			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', esc_url( $items['svg'] ), esc_url( $items['1x'] ), esc_attr( $size ) );
+			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', esc_attr( $size ), $image );
+		} elseif ( $items['2x'] ) {
+			$image = sprintf( '<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">', esc_url( $items['1x'] ), esc_url( $items['2x'] ), esc_attr( $size ) );
+		} elseif ( $items['1x'] ) {
+			$image = sprintf( '<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">', esc_url( $items['1x'] ), esc_attr( $size ) );
 		}
 
 		return $image;

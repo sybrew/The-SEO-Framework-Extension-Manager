@@ -186,17 +186,14 @@ body.tsfem .wrap {
 	display: inline;
 }
 
-.tsfem-top-wrap .tsfem-title .tsfem-logo:before {
-	content: "";
+.tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	display: inline-block;
 	white-space: pre-wrap;
-	background: url(../images/tsflogo.svg) 50% 50%/1em 1em no-repeat transparent;
-	height: 29px;
-	width: 1em;
-	vertical-align: top;
-	margin-right: 8px;
+	padding: 0;
+	margin-right: 7px;
 	margin-left: .1em;
 	line-height: 29px;
+	vertical-align: top;
 }
 
 /* # Start Buttons.

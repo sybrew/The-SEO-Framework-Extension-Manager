@@ -92,12 +92,6 @@ trait Extensions_Properties {
 				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.8.0',
-				'icons' => array(
-					'default' => 'icon-100x100.jpg',
-					'svg' => '',
-					'1x' => 'icon-100x100.jpg',
-					'2x' => 'icon-200x200.jpg',
-				),
 			),
 			'incognito' => array(
 				'slug' => 'incognito',
@@ -112,12 +106,6 @@ trait Extensions_Properties {
 				'tested' => '4.7.0',
 				'requires_tsf' => '2.2.0',
 				'tested_tsf' => '2.8.0',
-				'icons' => array(
-					'default' => 'icon-100x100.jpg',
-					'svg' => '',
-					'1x' => 'icon-100x100.jpg',
-					'2x' => 'icon-200x200.jpg',
-				),
 			),
 			'multilang' => array(
 				'slug' => 'multilang',
@@ -132,12 +120,6 @@ trait Extensions_Properties {
 				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.8.0',
-				'icons' => array(
-					'default' => 'icon-100x100.jpg',
-					'svg' => '',
-					'1x' => 'icon-100x100.jpg',
-					'2x' => 'icon-200x200.jpg',
-				),
 			),
 			'analytics' => array(
 				'slug' => 'analytics',
@@ -152,12 +134,6 @@ trait Extensions_Properties {
 				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.1',
 				'tested_tsf' => '2.8.0',
-				'icons' => array(
-					'default' => 'icon-100x100.jpg',
-					'svg' => '',
-					'1x' => 'icon-100x100.jpg',
-					'2x' => 'icon-200x200.jpg',
-				),
 			),
 			'monitor' => array(
 				'slug' => 'monitor',
@@ -172,12 +148,6 @@ trait Extensions_Properties {
 				'tested' => '4.7.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.8.0',
-				'icons' => array(
-					'default' => 'icon-100x100.jpg',
-					'svg' => '',
-					'1x' => 'icon-100x100.jpg',
-					'2x' => 'icon-200x200.jpg',
-				),
 			),
 		);
 	}
@@ -195,9 +165,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '8c0df51e31d76b7a8e5b91df433bb8eebc8000c82e2f55d772a9bea33ed13a33',
-			'sha1'   => 'd7a36ce0dd6bc2517795f11595647c8271c15e87',
-			'md5'    => '922c875ad356302ccd8523d06454879d',
+			'sha256' => 'afe66487b8b2393ee55959181195f1d0c104d5fdd9f5f48d457becd0aee5ab8f',
+			'sha1'   => '35f07dd9462221dbab9cd29cb422085fa57b8a16',
+			'md5'    => 'e6f0d3a0d7b3ddbbc1d78808cd68b45f',
 		);
 	}
 
@@ -231,23 +201,29 @@ trait Extensions_Properties {
 	}
 
 	/**
-	 * Generates asset URL for extensions. If they're found.
+	 * Generates asset URL or path for extensions.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug.
-	 * @param string $file The file to generate URL from.
-	 * @return string The extension asset URL.
+	 * @param string $file The file to generate URL or path from.
+	 * @param bool $url Whether to return an URL or path.
+	 * @return string The extension asset URL or path.
 	 */
-	private static function get_extension_asset_url( $slug, $file ) {
+	private static function get_extension_asset_location( $slug, $file, $url = false ) {
 
 		if ( empty( $slug ) || empty( $file ) )
 			return '';
 
 		$path = static::get_extension_relative_path( $slug );
-		$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-		return $url = TSF_EXTENSION_MANAGER_DIR_URL . $path . 'assets/' . $file;
+		if ( $url ) {
+			$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
+
+			return TSF_EXTENSION_MANAGER_DIR_URL . $path . 'assets/' . $file;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . $path . 'assets' . DIRECTORY_SEPARATOR . $file;
+		}
 	}
 
 	/**

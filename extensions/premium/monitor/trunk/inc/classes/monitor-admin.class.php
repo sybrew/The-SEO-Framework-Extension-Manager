@@ -359,9 +359,9 @@ final class Monitor_Admin extends Monitor_Data {
 
 	protected function get_statistics_overview() {
 
-		$stats = $this->get_data( 'poi', array() );
+		$stats = $this->get_data( 'stats', array() );
 
-		if ( empty( $points ) ) {
+		if ( empty( $stats ) ) {
 			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
 			return print_r( $stats, true );
