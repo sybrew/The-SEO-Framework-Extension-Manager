@@ -51,7 +51,7 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 */
 	private static function _init_options_cache() {
-		static::$options = TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS;
+		static::$options = (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
 	}
 
 	/**
@@ -135,8 +135,10 @@ trait Extension_Options {
 		if ( isset( $options ) )
 			return $options;
 
-		if ( isset( TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ] ) ) {
-			return $options = TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS[ $this->o_index ];
+		$_options = (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
+
+		if ( isset( $_options[ $this->o_index ] ) ) {
+			return $options = $_options[ $this->o_index ];
 		} else {
 			empty( $this->o_index ) and the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->o_index.' );
 

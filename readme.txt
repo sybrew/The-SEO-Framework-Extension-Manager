@@ -31,8 +31,8 @@ As long as the subscription is active, you're allowed to use all premium extensi
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
 = Requirements: =
-* This plugin requires **PHP 5.4 or later**, or it will deactivate itself.
-* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it will do nothing at all.
+* For security reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
+* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
 
 = Privacy =
 * This plugin can send API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).

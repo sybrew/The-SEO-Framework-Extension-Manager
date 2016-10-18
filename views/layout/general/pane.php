@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 //* This file can be called through public functions; destroy as much as possible.
-unset( $_instance, $bits, $file, $this, $key, $val );
+unset( $_instance, $bits, $file, $key, $val );
 
 if ( $args['ajax'] ) {
 	$a_id = $args['ajax_id'] ? ' id="' . esc_attr( $args['ajax_id'] ) . '"' : '';

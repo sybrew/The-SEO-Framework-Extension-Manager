@@ -54,17 +54,24 @@ function can_do_tsf_extension_manager_settings() {
 	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
 }
 
+add_action( 'plugins_loaded', 'tsf_extension_manager_protect_options', 6.0001 );
 /**
- * Prevent option handling outside of the plugin's scope.
- * Warning: When you remove these filters, the plugin will delete all its options on first sight.
+ * Prevents option handling outside of the plugin's scope.
+ * Warning: When you remove these filters or action, the plugin will delete all its options on first sight.
  *          This essentially means it will be reset to its initial state.
  *
  * @access private
  * @since 1.0.0
  */
-add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
-if ( isset( TSF_EXTENSION_MANAGER_CURRENT_OPTIONS['_instance'] ) )
-	add_filter( 'pre_update_option_tsfem_i_' . TSF_EXTENSION_MANAGER_CURRENT_OPTIONS['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+function tsf_extension_manager_protect_options() {
+
+	$current_options = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+
+	add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+	if ( isset( $current_options['_instance'] ) )
+		add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+
+}
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**

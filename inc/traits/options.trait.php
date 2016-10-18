@@ -39,7 +39,7 @@ trait Options {
 	 * @return array TSF Extension Manager options.
 	 */
 	final protected function get_all_options() {
-		return TSF_EXTENSION_MANAGER_CURRENT_OPTIONS;
+		return (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 	}
 
 	/**

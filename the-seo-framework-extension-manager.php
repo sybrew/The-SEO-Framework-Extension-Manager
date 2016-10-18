@@ -53,7 +53,7 @@ function tsf_extension_manager_check_php() {
 	//* Let's have some fun with teapots.
 	$error = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y', time() ) ) / DAY_IN_SECONDS ) ? 418 : 500;
 
-	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50400 ) {
+	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50500 ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 		wp_die( 'The SEO Framework - Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
 				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
@@ -131,22 +131,10 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH 
 define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
 
 /**
- * The plugin options.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_CURRENT_OPTIONS', (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() ) );
-
-/**
  * The extension options base name.
  * @since 1.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
-
-/**
- * The extension options.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_CURRENT_EXTENSION_OPTIONS', (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() ) );
 
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 4 );
 /**

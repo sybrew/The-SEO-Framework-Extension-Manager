@@ -56,7 +56,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @var string Page ID/Slug
 	 */
-	public $seo_extensions_page_slug;
+	public $seo_extensions_page_slug = 'theseoframework-extensions';
 
 	/**
 	 * The plugin settings field.
@@ -65,17 +65,14 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @var string TSF Extension Manager Settings Field.
 	 */
-	public $settings_field;
+	const SETTINGS_FIELD = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
 
 	/**
-	 * Constructor, initializes WordPress actions and set up variables.
+	 * Constructor, initializes WordPress actions.
 	 *
 	 * @since 1.0.0
 	 */
 	private function construct() {
-
-		$this->seo_extensions_page_slug = 'theseoframework-extensions';
-		$this->settings_field = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
 
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, 'init_menu' ) );
@@ -362,7 +359,7 @@ class AdminPages extends AccountActivation {
 	 * @return string Full field name
 	 */
 	public function get_field_name( $name ) {
-		return sprintf( '%s[%s]', $this->settings_field, $name );
+		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $name );
 	}
 
 	/**
@@ -388,7 +385,7 @@ class AdminPages extends AccountActivation {
 	 * @return string Full field id
 	 */
 	public function get_field_id( $id ) {
-		return sprintf( '%s[%s]', $this->settings_field, $id );
+		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $id );
 	}
 
 	/**

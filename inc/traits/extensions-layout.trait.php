@@ -110,9 +110,9 @@ trait Extensions_Layout {
 		$output = '';
 
 		if ( 'overview' === self::get_property( '_type' ) ) {
-			foreach ( static::$header as $id => $item ) {
-				$output .= '';
-			}
+			// foreach ( static::$header as $id => $item ) {
+			// 	$output .= '';
+			// }
 		}
 
 		return $output;

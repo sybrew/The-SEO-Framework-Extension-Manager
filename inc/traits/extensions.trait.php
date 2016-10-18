@@ -427,7 +427,7 @@ trait Extensions_Actions {
 		if ( false !== $cache )
 			return $cache;
 
-		$options = TSF_EXTENSION_MANAGER_CURRENT_OPTIONS;
+		$options = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 
 		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : array();
 	}
