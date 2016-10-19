@@ -779,7 +779,7 @@ class Core {
 
 		static $instance = array();
 
-		$bits = $this->get_bits( true );
+		$bits = $this->get_bits();
 		$_bit = $bits[0];
 
 		if ( isset( $instance[ ~ $_bit ] ) ) {
@@ -812,43 +812,46 @@ class Core {
 	 * @staticvar int $_bit : $bits[0]
 	 * @staticvar int $bit  : $bits[1]
 	 *
-	 * @param bool $previous Whether to fetch the previous set of bits.
 	 * @return array The verification bits.
 	 */
-	final protected function get_bits( $previous = false ) {
+	final protected function get_bits() {
 
 		static $_bit, $bit = null;
+
+		if ( isset( $bit ) )
+			goto generate;
 
 		/**
 		 * Create new bits on first run.
 		 * Prevents random abstract collision by filtering odd numbers.
-		 * Also prevents 0.
 		 */
 		set : {
 			    null === $bit
 			and $time = time()
 			and $bit = $_bit = mt_rand( - $time, $time )
 			and $bit % 2
-			and $bit = $_bit++
-			and 0 === $bit
-			and $bit = null;
+			and $bit = $_bit++;
 		}
 
-		if ( null === $bit )
+		if ( 0 === $bit ) {
+			$bit = null;
 			goto set;
+		}
 
-		/**
-		 * Count to create an irregular bit verification.
-		 * This can jump multiple sequences while maintaining the previous.
-		 * It traverses in three dimensions: up (positive), down (negative) and right (new sequence).
-		 */
-		    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
-		and $bit  = $bit++ & $_bit--
-		and $bit  = $bit < 0 ? $bit++ : $bit--
-		and $_bit = $_bit < 0 ? $_bit : ~$_bit
-		and $bit  = ~$_bit++
-		and $_bit = $_bit < 0 ? $_bit : ~$_bit
-		and $bit++;
+		generate : {
+			/**
+			 * Count to create an irregular bit verification.
+			 * This can jump multiple sequences while maintaining the previous.
+			 * It traverses in three dimensions: up (positive), down (negative) and right (new sequence).
+			 */
+			    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
+			and $bit  = $bit++ & $_bit--
+			and $bit  = $bit < 0 ? $bit++ : $bit--
+			and $_bit = $_bit < 0 ? $_bit : ~$_bit
+			and $bit  = ~$_bit++
+			and $_bit = $_bit < 0 ? $_bit : ~$_bit
+			and $bit++;
+		}
 
 		return array( $_bit, $bit );
 	}
@@ -1561,9 +1564,13 @@ class Core {
 		if ( false === is_admin() )
 			return $cache = false;
 
-		//* Don't load from $_GET request if secure. Otherwise, check for admin.
-		$slug = $secure ? '' : $this->seo_extensions_page_slug;
-		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $slug );
+		if ( $secure ) {
+			//* Don't load from $_GET request if secure.
+			return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+		} else {
+			//* Don't cache if insecure.
+			return the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+		}
 	}
 
 	/**
