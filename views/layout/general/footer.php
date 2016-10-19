@@ -15,7 +15,7 @@ if ( $this->is_plugin_activated() ) {
  * Because positivity.
  *
  * Translating this would mean that:
- * a) we might cause misinterpertations, and
+ * a) we might cause misinterpretations, and
  * b) the mottos need to be assigned as female/male l10n and with inflections.
  * c) we stray away from what the footer is about: recognition and branding.
  */

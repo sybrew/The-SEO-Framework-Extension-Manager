@@ -119,6 +119,7 @@ trait Options {
 
 		$options[ $option ] = $value;
 
+		//* Set option update tick to prevent collision.
 		$this->has_run_update_option();
 
 		$this->initialize_option_update_instance( $type );

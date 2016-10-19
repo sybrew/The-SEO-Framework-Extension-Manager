@@ -679,7 +679,7 @@ trait Extensions_Actions {
 	 *
 	 * @param string $slug The extension slug to load.
 	 * @param bool $ajax Whether AJAX is active.
-	 * @param string $instance The verification instance. Propagates to inclusion file if possible.
+	 * @param string $_instance The verification instance. Propagates to inclusion file if possible.
 	 * @param array $bits The verification instance bits. Propagates to inclusion file if possible.
 	 * @return int|void {
 	 * 		-1 => No check has been performed.
@@ -705,16 +705,39 @@ trait Extensions_Actions {
 				define( '_TSFEM_TESTING_EXTENSION', true );
 				define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
-				//* We only want to catch a fatal/parse error.
+				/**
+				 * Cache error reporting.
+				 */
 				$_prev_error_reporting = error_reporting();
+
+				//* We only want to catch a fatal/parse error.
 				error_reporting( 0 );
+				add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
+				add_filter( 'deprecated_function_trigger_error', '__return_false' );
+				add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
 
 				register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 
+				ob_start();
+
 				$success = array();
 
-				ob_start();
-				$success[] = static::include_extension( $file, $_instance, $bits );
+				$yield_count = 0;
+				//* Get follow-up verification instance.
+				foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+
+					$bits = $verification['bits'];
+					$_instance = $verification['instance'];
+
+					switch ( $yield_count ) :
+						case 0 :
+							$success[] = static::include_extension( $file, $_instance, $bits );
+
+						default :
+							$yield_count++;
+							break;
+					endswitch;
+				endforeach;
 
 				$base_path = static::get_extension_trunk_path( $slug );
 				$test_file = $base_path . 'test.json';
@@ -723,30 +746,76 @@ trait Extensions_Actions {
 					$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
 					$json = json_decode( file_get_contents( $test_file, false, $timeout ) );
 
-					if ( ! empty( $json ) ) {
+					if ( ! empty( $json ) ) :
 						$namespace = empty( $json->namespace ) ? '' : $json->namespace;
 						$tests = empty( $json->test ) ? array() : (array) $json->test;
 
-						foreach ( $tests as $_class => $_file ) {
-							//* Base file is already loaded.
-							if ( '_base' === $_class )
-								continue;
+						$yield_count = 0;
+						//* Get follow-up verification instance.
+						foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
-							if ( is_array( $_file ) ) {
-								//* Facade.
-								foreach ( $_file as $f_file ) {
-									$success[] = (bool) include_once( $base_path . $f_file );
-								}
-							} else {
-								$success[] = (bool) include_once( $base_path . $_file );
-							}
+							$bits = $verification['bits'];
+							$_instance = $verification['instance'];
 
-							if ( $_class ) {
-								$class = $namespace . '\\' . $_class;
-								$success[] = new $class;
-							}
-						}
-					}
+							switch ( $yield_count ) :
+								case 0 :
+									foreach ( $tests as $_class => $_file ) {
+										//* Base file is already loaded.
+										if ( '_base' === $_class )
+											continue;
+
+										if ( is_array( $_file ) ) {
+											//* Facade.
+											foreach ( $_file as $f_file ) :
+												$_yield_count = 0;
+												//* Get follow-up verification instance.
+												foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+													$bits = $verification['bits'];
+													$_instance = $verification['instance'];
+
+													switch ( $_yield_count ) :
+														case 0 :
+															$success[] = (bool) include_once( $base_path . $f_file );
+
+														default :
+															$_yield_count++;
+															break;
+													endswitch;
+												endforeach;
+											endforeach;
+										} else {
+											$_yield_count = 0;
+											//* Get follow-up verification instance.
+											foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+												$bits = $verification['bits'];
+												$_instance = $verification['instance'];
+
+												switch ( $_yield_count ) :
+													case 0 :
+														$success[] = (bool) include_once( $base_path . $_file );
+
+													default :
+														$_yield_count++;
+														break;
+												endswitch;
+											endforeach;
+										}
+
+										if ( $_class ) {
+											$class = $namespace . '\\' . $_class;
+											$success[] = new $class;
+										}
+									}
+
+								default :
+									$yield_count++;
+									break;
+							endswitch;
+						endforeach;
+					endif;
+				} else {
+					//* Tick the instance.
+					tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 				}
 				ob_clean();
 

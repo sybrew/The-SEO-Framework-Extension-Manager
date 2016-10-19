@@ -597,7 +597,13 @@ class Core {
 	 * }
 	 */
 	protected function get_ajax_notice( $success, $code ) {
-		return array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
+
+		$notice = array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
+
+		if ( WP_DEBUG )
+			$notice = array_merge( $notice, array( 'code' => intval( $code ) ) );
+
+		return $notice;
 	}
 
 	/**
@@ -627,9 +633,9 @@ class Core {
 	 * @param string $message The error message.
 	 * @return bool false If no wp_die has been performed.
 	 */
-	final public function _maybe_die( $message ) {
+	final public function _maybe_die( $message = '' ) {
 
-		if ( $this->is_tsf_extension_manager_page() ) {
+		if ( $this->is_tsf_extension_manager_page( false ) ) {
 			//* wp_die() can be filtered. Remove filters JIT.
 			remove_all_filters( 'wp_die_ajax_handler' );
 			remove_all_filters( 'wp_die_xmlrpc_handler' );
@@ -639,8 +645,13 @@ class Core {
 	 	}
 
 		//* Don't spam error log.
-		if ( false === $this->_has_died() )
-			the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
+		if ( false === $this->_has_died() ) {
+			if ( $message ) {
+				the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
+			} else {
+				the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
+			}
+		}
 
 		$this->stop_class();
 		$this->_has_died( true );
@@ -689,7 +700,7 @@ class Core {
 	final protected function stop_class_filters( $current_filter, $key ) {
 
 		$_key = key( $current_filter );
-		$filter = reset( $current_filter[ $_key ] );
+		$filter = isset( $current_filter[ $_key ] ) and reset( $current_filter[ $_key ] );
 
 		static $_this = null;
 
@@ -714,12 +725,41 @@ class Core {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param string $instance The instance key.
-	 * @param int $bit The instance bit.
+	 * @param string $instance The verification instance key.
+	 * @param int $bit The verification instance bit.
 	 * @return bool True if verified.
 	 */
 	final public function _verify_instance( $instance, $bit ) {
 		return $instance === $this->get_verification_instance( $bit );
+	}
+
+	/**
+	 * Loops through instance verification in order to fetch multiple instance keys.
+	 *
+	 * Must be used within a foreach loop. Instance must be verified within each loop iteration.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param int $count The amount of instances to loop for.
+	 * @param string $instance The verification instance key.
+	 * @param array $bits The verification instance bits.
+	 * @yield array Generator : {
+	 *		$instance string The verification instance key
+	 *		$bits array The verification instance bits
+	 * }
+	 */
+	final public function _yield_verification_instance( $count, $instance, $bits ) {
+
+		if ( $this->_verify_instance( $instance, $bits[1] ) ) :
+			for ( $i = 0; $i < $count; $i++ ) :
+				yield array(
+					'bits'     => $bits = $this->get_bits(),
+					'instance' => $this->get_verification_instance( $bits[1] ),
+				);
+			endfor;
+		endif;
+
 	}
 
 	/**
@@ -742,24 +782,31 @@ class Core {
 		$bits = $this->get_bits( true );
 		$_bit = $bits[0];
 
-		if ( isset( $instance[ $_bit ] ) ) {
-			//* Only crash on plugin page upon failure. Otherwise kill instance and all bindings.
-			if ( empty( $instance[ $bit ] ) || $instance[ $_bit ] !== $instance[ $bit ] )
-				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) or $instance = array();
+		if ( isset( $instance[ ~ $_bit ] ) ) {
+			if ( empty( $instance[ $bit ] ) || $instance[ ~ $_bit ] !== $instance[ $bit ] ) {
+				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
+				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) xor $instance = array();
+				return '';
+			}
 
-			return $instance[ $bit ];
+			//* Prevent another way of timing attacks.
+			$val = $instance[ $bit ] and $instance = array();
+
+			return $val;
 		}
 
 		//* This won't save to database, but does create a unique salt for each bit.
 		$hash = $this->hash( $_bit . '\\' . mt_rand( 0, time() ) . '\\' . $bit, 'instance' );
 
-		return $instance[ $bit ] = $instance[ $_bit ] = $hash;
+		return $instance[ $bit ] = $instance[ ~ $_bit ] = $hash;
 	}
 
 	/**
 	 * Generates verification bits based on time.
-	 * It's crack-able, but you'll need to know exactly when to intercept. You'll
-	 * also need to know the random number. One bit mistake and the plugin stops :).
+	 *
+	 * The bit generation is 4 dimensional, this makes it time-attack secure.
+	 * It other words: Previous bits can't be re-used as the match will be
+	 * subequal in the upcoming check.
 	 *
 	 * @since 1.0.0
 	 * @staticvar int $_bit : $bits[0]
@@ -770,19 +817,38 @@ class Core {
 	 */
 	final protected function get_bits( $previous = false ) {
 
-		static $_bit = null;
-		static $bit = null;
+		static $_bit, $bit = null;
 
-		if ( $previous )
-			return array( $_bit, $bit );
-
-		if ( null === $bit ) {
-			$bit = $_bit = mt_rand( 0, time() );
-			$_bit++;
+		/**
+		 * Create new bits on first run.
+		 * Prevents random abstract collision by filtering odd numbers.
+		 * Also prevents 0.
+		 */
+		set : {
+			    null === $bit
+			and $time = time()
+			and $bit = $_bit = mt_rand( - $time, $time )
+			and $bit % 2
+			and $bit = $_bit++
+			and 0 === $bit
+			and $bit = null;
 		}
 
-		//* Prepare for empty and negative bits and count irregular.
-		$bit | $_bit && $bit++ ^ ~ $_bit-- && $bit ^ $_bit++ && $bit | $_bit++;
+		if ( null === $bit )
+			goto set;
+
+		/**
+		 * Count to create an irregular bit verification.
+		 * This can jump multiple sequences while maintaining the previous.
+		 * It traverses in three dimensions: up (positive), down (negative) and right (new sequence).
+		 */
+		    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
+		and $bit  = $bit++ & $_bit--
+		and $bit  = $bit < 0 ? $bit++ : $bit--
+		and $_bit = $_bit < 0 ? $_bit : ~$_bit
+		and $bit  = ~$_bit++
+		and $_bit = $_bit < 0 ? $_bit : ~$_bit
+		and $bit++;
 
 		return array( $_bit, $bit );
 	}
@@ -805,9 +871,9 @@ class Core {
 	}
 
 	/**
-	 * Generates salt from WordPress defined variables.
+	 * Generates salt from WordPress defined constants.
 	 *
-	 * Taken from WordPress core function `wp_salt()` and adjusted.
+	 * Taken from WordPress core function `wp_salt()` and adjusted accordingly.
 	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 *
 	 * @since 1.0.0
@@ -1269,7 +1335,7 @@ class Core {
 
 			$test = $this->test_extension( $slug, $ajax );
 
-			if ( 4 !== $test ) {
+			if ( 4 !== $test || $this->_has_died() ) {
 				$ajax or $this->set_error_notice( array( 10004 => '' ) );
 				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
 			}
@@ -1482,17 +1548,22 @@ class Core {
 	 * @since 1.0.0
 	 * @staticvar bool $cache
 	 *
+	 * @param bool $secure Whether to prevent insecure checks.
 	 * @return bool
 	 */
-	public function is_tsf_extension_manager_page() {
+	public function is_tsf_extension_manager_page( $secure = true ) {
 
 		static $cache = null;
 
 		if ( isset( $cache ) )
 			return $cache;
 
-		//* Don't load from $_GET request.
-		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+		if ( false === is_admin() )
+			return $cache = false;
+
+		//* Don't load from $_GET request if secure. Otherwise, check for admin.
+		$slug = $secure ? '' : $this->seo_extensions_page_slug;
+		return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $slug );
 	}
 
 	/**

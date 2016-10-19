@@ -179,7 +179,7 @@ trait Extensions_Layout {
 	 */
 	private static function make_extension_list_icon( $extension, $size = '120' ) {
 
-		$items = null;
+		$one = $two = $svg = null;
 
 		if ( ! empty( $extension['slug'] ) ) {
 			$svg = static::get_extension_asset_location( $extension['slug'], 'icon.svg' );
@@ -189,23 +189,19 @@ trait Extensions_Layout {
 			$svg = file_exists( $svg ) ? static::get_extension_asset_location( $extension['slug'], 'icon.svg', true ) : '';
 			$two = file_exists( $two ) ? static::get_extension_asset_location( $extension['slug'], 'icon-240x240px.png', true ) : '';
 			$one = file_exists( $one ) ? static::get_extension_asset_location( $extension['slug'], 'icon-120x120px.png', true ) : '';
-
-			//* PHP 5.4 empty compat.
-			$has_file = $svg | $two | $one;
-			if ( empty( $has_file ) ) {
-				$svg = tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
-				$two = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
-				$one = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
-			}
-
-			$items = array(
-				'svg' => $svg,
-				'2x' => $two,
-				'1x' => $one,
-			);
 		}
 
-		$items = isset( $items ) ? $items : $fallback;
+		if ( empty( $svg | $two | $one ) ) {
+			$svg = tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
+			$two = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
+			$one = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
+		}
+
+		$items = array(
+			'svg' => $svg,
+			'2x' => $two,
+			'1x' => $one,
+		);
 
 		if ( $items['svg'] ) {
 			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', esc_url( $items['svg'] ), esc_url( $items['1x'] ), esc_attr( $size ) );

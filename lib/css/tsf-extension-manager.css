@@ -681,7 +681,8 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 .tsfem-trends-wrap,
 .tsfem-actions-wrap,
-.tsfem-extensions-wrap {
+.tsfem-extensions-wrap,
+.tsfem-pane-inner-wrap {
 	padding: 20px 20px 0;
 	height: auto;
 	max-height: 100%;

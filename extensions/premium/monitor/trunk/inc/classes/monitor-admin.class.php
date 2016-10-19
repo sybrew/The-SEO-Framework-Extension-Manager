@@ -331,6 +331,21 @@ final class Monitor_Admin extends Monitor_Data {
 	}
 
 	/**
+	 * Wraps pane data into HTML objects. Iterates over data.
+	 *
+	 * @since 1.0.0
+	 * @uses TSF_Extension_Manager_Extension\Monitor_Data->interpret_data_input()
+	 * @generator
+	 */
+	protected function output_pane_data( $data, $type = '' ) {
+		echo '<div class="tsfem-pane-inner-wrap">';
+		foreach ( $data as $key => $val ) {
+			yield $this->interpret_data_input( $key, $val, $type );
+		}
+		echo '</div>';
+	}
+
+	/**
 	 * Creates issues overview for the issues pane.
 	 *
 	 * @since 1.0.0
@@ -342,10 +357,18 @@ final class Monitor_Admin extends Monitor_Data {
 		if ( empty( $issues ) ) {
 			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			return print_r( $issues, true );
+	/*		foreach ( $this->output_pane_data( $issues, 'issues' ) as $output ) :
+				//* Already escaped.
+				echo $output;
+			endforeach;*/
 		}
 	}
 
+	/**
+	 * Creates points of interest overview for the poi pane.
+	 *
+	 * @since 1.0.0
+	 */
 	protected function get_poi_overview() {
 
 		$points = $this->get_data( 'poi', array() );
@@ -357,6 +380,11 @@ final class Monitor_Admin extends Monitor_Data {
 		}
 	}
 
+	/**
+	 * Creates statistics overview for the statistics pane.
+	 *
+	 * @since 1.0.0
+	 */
 	protected function get_statistics_overview() {
 
 		$stats = $this->get_data( 'stats', array() );

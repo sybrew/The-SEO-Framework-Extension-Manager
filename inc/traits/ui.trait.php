@@ -208,6 +208,7 @@ trait UI {
 
 		$strings = array(
 			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
+			'debug' => (bool) WP_DEBUG,
 			'i18n' => array(
 				'Activate' => esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 				'Deactivate' => esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),

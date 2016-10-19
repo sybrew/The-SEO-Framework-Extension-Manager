@@ -380,7 +380,7 @@ class Monitor_Data {
 				),
 			),
 			'stats' => array(
-				// Check for uptime. Interperted in graph?
+				// Check for uptime. Interpreted in graph?
 				// 5 minute check, timeout @ 10 seconds. 30 days are held per site.
 				'uptime' => array(
 					array(
