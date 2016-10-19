@@ -4,6 +4,7 @@
  */
 use TSF_Extension_Manager\LoadAdmin as LoadAdmin;
 use TSF_Extension_Manager\LoadFrontend as LoadFrontend;
+use TSF_Extension_Manager\SecureOption as SecureOption;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -33,7 +34,7 @@ use TSF_Extension_Manager\LoadFrontend as LoadFrontend;
  * @return null|object The plugin class object.
  */
 function tsf_extension_manager() {
-	return init_tsf_extension_manager();
+	return _init_tsf_extension_manager();
 }
 
 /**
@@ -54,28 +55,55 @@ function can_do_tsf_extension_manager_settings() {
 	return $cache = current_user_can( 'install_plugins' ) || current_user_can( 'update_plugins' );
 }
 
-add_action( 'plugins_loaded', 'tsf_extension_manager_protect_options', 6.0001 );
+_tsf_extension_manager_protect_options();
 /**
  * Prevents option handling outside of the plugin's scope.
  * Warning: When you remove these filters or action, the plugin will delete all its options on first sight.
  *          This essentially means it will be reset to its initial state.
  *
- * @access private
+ * Also Triggers fatal error when The SEO Framework extension manager has not been initialized yet.
+ * This is because the required traits files aren't loaded yet. The autoloader treats traits
+ * as classes.
+ *
  * @since 1.0.0
+ * @access private
+ * @uses PHP_INT_MIN, available from PHP 7.0
  */
-function tsf_extension_manager_protect_options() {
+function _tsf_extension_manager_protect_options() {
+
+	false === defined( 'PHP_INT_MIN' ) and define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
 
 	$current_options = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 
-	add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
+	add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, '_pre_execute_extension_manager_protect_option', PHP_INT_MIN, 3 );
 	if ( isset( $current_options['_instance'] ) )
-		add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], array( 'TSF_Extension_Manager\SecureOption', 'verify_option_instance' ), PHP_INT_MIN, 3 );
-
+		add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], '_pre_execute_extension_manager_protect_option', PHP_INT_MIN, 3 );
 }
 
-add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
 /**
- * Loads TSF_Extension_Manager_Load class when in admin.
+ * Determines if option protection can be loaded, if not, wp_die is performed.
+ *
+ * @since 1.0.0
+ * @access private
+ * @uses SecureOption::verify_option_instance()
+ *
+ * @param mixed $value The new, unserialized option value.
+ * @param mixed $old_value The old option value.
+ * @param string $option The option name.
+ * @return mixed $value on success.
+ */
+function _pre_execute_extension_manager_protect_option( $new_value, $old_value, $option ) {
+
+	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption' ) )
+		wp_die( '<code>' . esc_html( $option ) . '</code> is a protected option.' );
+
+	return SecureOption::verify_option_instance( $new_value, $old_value, $option );
+}
+
+add_action( 'plugins_loaded', '_init_tsf_extension_manager', 6 );
+/**
+ * Loads TSF_Extension_Manager\LoadAdmin class when in admin.
+ * Loads TSF_Extension_Manager\LoadFrontend class on the front-end.
  *
  * Also directly initializes extensions after the class constructors have run.
  * This will allow all extensions and functions to run exactly after The SEO Framework has been initialized.
@@ -94,7 +122,7 @@ add_action( 'plugins_loaded', 'init_tsf_extension_manager', 6 );
  *
  * @return null|object TSF Extension Manager class object.
  */
-function init_tsf_extension_manager() {
+function _init_tsf_extension_manager() {
 
 	//* Cache the class object. Do not run everything more than once.
 	static $tsf_extension_manager = null;
@@ -112,17 +140,6 @@ function init_tsf_extension_manager() {
 		 */
 		_tsf_extension_manager_load_trait( 'overload' );
 
-		//* Prevent overriding of security classes.
-		! ( class_exists( 'TSF_Extension_Manager\Core' ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract' ) || class_exists( 'TSF_Extension_Manager\SecureOption' ) )
-		and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin' ) || class_exists( 'TSF_Extension_Manager\LoadFrontend' ) )
-			or wp_die( -1 );
-
-		/**
-		 * Register class autoload here.
-		 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
-		 */
-		spl_autoload_register( '_autoload_tsf_extension_manager_classes', true, true );
-
 		/**
 		 * @package TSF_Extension_Manager
 		 */
@@ -134,9 +151,32 @@ function init_tsf_extension_manager() {
 
 		//* Initialize extensions.
 		$tsf_extension_manager->init_extensions();
+
 	}
 
 	return $tsf_extension_manager;
+}
+
+_register_tsf_extension_manager();
+/**
+ * Registers The SEO Framework extension manager's autoloader.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+function _register_tsf_extension_manager() {
+
+	//* Prevent overriding of security classes.
+	! ( class_exists( 'TSF_Extension_Manager\Core' ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract' ) || class_exists( 'TSF_Extension_Manager\SecureOption' ) )
+	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin' ) || class_exists( 'TSF_Extension_Manager\LoadFrontend' ) )
+		or wp_die( -1 );
+
+	/**
+	 * Register class autoload here.
+	 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
+	 */
+	spl_autoload_register( '_autoload_tsf_extension_manager_classes', true, true );
+
 }
 
 /**
@@ -200,14 +240,14 @@ function _autoload_tsf_extension_manager_classes( $class ) {
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT
  * @access private
- * @staticvar bool $loaded
+ * @staticvar array $loaded
  *
  * @param string $file Where the trait is for.
  * @return void.
  */
 function _tsf_extension_manager_load_trait( $file ) {
 
-	static $loaded;
+	static $loaded = array();
 
 	if ( isset( $loaded[ $file ] ) )
 		return;

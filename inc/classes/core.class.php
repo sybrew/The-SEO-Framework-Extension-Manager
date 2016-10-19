@@ -138,6 +138,12 @@ class Core {
 		if ( wp_installing() || false === $this->is_plugin_activated() )
 			return $loaded = false;
 
+		if ( false === $this->are_options_valid() ) {
+			//* Failed options instance checksum.
+			$this->set_error_notice( array( 2001 => '' ) );
+			return $loaded = false;
+		}
+
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
@@ -155,7 +161,7 @@ class Core {
 
 				case -2 :
 					//* Failed checksum.
-					$this->set_error_notice( array( 2001 => '' ) );
+					$this->set_error_notice( array( 2002 => '' ) );
 					;
 
 				default :
@@ -187,6 +193,17 @@ class Core {
 		Extensions::reset();
 
 		return $loaded = true;
+	}
+
+	/**
+	 * Verifies integrity of the options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if options are valid, false if not.
+	 */
+	protected function are_options_valid() {
+		return $this->verify_options_hash( serialize( $this->get_all_options() ) );
 	}
 
 	/**
@@ -228,7 +245,7 @@ class Core {
 				if ( false === $this->is_plugin_activated() ) {
 					$this->set_error_notice( array( 701 => '' ) );
 					break;
-				} elseif ( false === $this->is_premium_user() ) {
+				} elseif ( false === $this->is_premium_user() || false === $this->are_options_valid() ) {
 					$this->do_free_deactivation();
 					break;
 				}
@@ -510,6 +527,7 @@ class Core {
 				$type = 'updated';
 				break;
 
+			case 2001 :
 			case 7001 :
 			case 7002 :
 				$message = esc_html__( 'An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
@@ -522,7 +540,7 @@ class Core {
 				$type = 'error';
 				break;
 
-			case 2001 :
+			case 2002 :
 			case 10001 :
 			case 10002 :
 				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );

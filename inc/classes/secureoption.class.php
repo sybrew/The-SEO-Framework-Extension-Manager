@@ -119,13 +119,14 @@ final class SecureOption extends Secure_Abstract {
 
 	/**
 	 * Verifies verification instance and updates option if verified.
+	 * Performs wp_die() on failure.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param mixed $value The new, unserialized option value.
 	 * @param mixed $old_value The old option value.
 	 * @param string $option The option name.
-	 * @return mixed wp_die on failure, $value on success.
+	 * @return mixed $value on success.
 	 */
 	public static function verify_option_instance( $value, $old_value, $option ) {
 
@@ -157,7 +158,15 @@ final class SecureOption extends Secure_Abstract {
 					$verified = true;
 				} else {
 					self::reset();
-					wp_die( 'Options have been altered within the database. This is not allowed for security reasons. Please deactivate your account and try again.' );
+
+					$notice = "Options have been altered outside of this plugin's scope. This is not allowed for security reasons. Please deactivate your account and try again.";
+
+					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+						echo json_encode( array( 'status' => array( 'success' => false, 'notice' => esc_html( $notice ) ) ) );
+						wp_die();
+					} else {
+						wp_die( esc_html( $notice ) );
+					}
 				}
 			}
 		}
