@@ -697,149 +697,232 @@ trait Extensions_Actions {
 		if ( 'load' !== self::get_property( '_type' ) ) {
 			self::reset();
 			self::invoke_invalid_type( __METHOD__ );
+
+			$val = -1;
+			goto tick;
 		}
 
-		if ( $file = static::get_extension_header_file_location( $slug ) ) {
-			if ( static::validate_file( $file ) ) {
+		$file = static::get_extension_header_file_location( $slug );
 
-				define( '_TSFEM_TESTING_EXTENSION', true );
-				define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
+		if ( empty( $file ) ) {
+			$val = 1;
+			goto tick;
+		}
 
-				/**
-				 * Cache error reporting.
-				 */
-				$_prev_error_reporting = error_reporting();
+		if ( ! static::validate_file( $file ) ) {
+			$val = 2;
+			goto tick;
+		}
 
-				//* We only want to catch a fatal/parse error.
-				error_reporting( 0 );
-				add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
-				add_filter( 'deprecated_function_trigger_error', '__return_false' );
-				add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
+		//* Goto tick is now forbidden. Use goto clean.
+		unclean : {
+			ob_start();
 
-				register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
+			define( '_TSFEM_TESTING_EXTENSION', true );
+			define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
-				ob_start();
+			//* We only want to catch a fatal/parse error.
+			static::set_error_reporting( 0 );
 
-				$success = array();
+			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
+		}
 
-				$yield_count = 0;
-				//* Get follow-up verification instance.
-				foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+		basetest : {
+			//* Test base file.
+			$results = static::persist_include_extension( $file, $_instance, $bits );
 
-					$bits = $verification['bits'];
-					$_instance = $verification['instance'];
+			$success = $results['success'];
+			$_instance = $results['_instance'];
+			$bits = $results['bits'];
+		}
 
-					switch ( $yield_count ) :
-						case 0 :
-							$success[] = static::include_extension( $file, $_instance, $bits );
+		if ( $success ) {
+			jsontest : {
+				//* Test json file and contents.
+				$results = static::perform_extension_json_tests( $slug, $_instance, $bits );
 
-						default :
-							$yield_count++;
-							break;
-					endswitch;
-				endforeach;
-
-				$base_path = static::get_extension_trunk_path( $slug );
-				$test_file = $base_path . 'test.json';
-
-				if ( 0 === validate_file( $test_file ) && file_exists( $test_file ) ) {
-					$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
-					$json = json_decode( file_get_contents( $test_file, false, $timeout ) );
-
-					if ( ! empty( $json ) ) :
-						$namespace = empty( $json->namespace ) ? '' : $json->namespace;
-						$tests = empty( $json->test ) ? array() : (array) $json->test;
-
-						$yield_count = 0;
-						//* Get follow-up verification instance.
-						foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-
-							$bits = $verification['bits'];
-							$_instance = $verification['instance'];
-
-							switch ( $yield_count ) :
-								case 0 :
-									foreach ( $tests as $_class => $_file ) {
-										//* Base file is already loaded.
-										if ( '_base' === $_class )
-											continue;
-
-										if ( is_array( $_file ) ) {
-											//* Facade.
-											foreach ( $_file as $f_file ) :
-												$_yield_count = 0;
-												//* Get follow-up verification instance.
-												foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-													$bits = $verification['bits'];
-													$_instance = $verification['instance'];
-
-													switch ( $_yield_count ) :
-														case 0 :
-															$success[] = (bool) include_once( $base_path . $f_file );
-
-														default :
-															$_yield_count++;
-															break;
-													endswitch;
-												endforeach;
-											endforeach;
-										} else {
-											$_yield_count = 0;
-											//* Get follow-up verification instance.
-											foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-												$bits = $verification['bits'];
-												$_instance = $verification['instance'];
-
-												switch ( $_yield_count ) :
-													case 0 :
-														$success[] = (bool) include_once( $base_path . $_file );
-
-													default :
-														$_yield_count++;
-														break;
-												endswitch;
-											endforeach;
-										}
-
-										if ( $_class ) {
-											$class = $namespace . '\\' . $_class;
-											$success[] = new $class;
-										}
-									}
-
-								default :
-									$yield_count++;
-									break;
-							endswitch;
-						endforeach;
-					endif;
-				} else {
-					//* Tick the instance.
-					tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
-				}
-				ob_clean();
-
-				error_reporting( $_prev_error_reporting );
-
-				//* No fatal error has occurred, pass.
-				define( '_TSFEM_TEST_EXT_PASS', true );
-
-				//* "False" is very unlikely at this point; but who knows.
-				return in_array( false, $success, true ) ? 3 : 4;
-			} else {
-				//* Tick the instance.
-				tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
-				return 2;
+				$success = $results['success'];
+				$_instance = $results['_instance'];
+				$bits = $results['bits'];
 			}
-		} else {
+		}
+
+		$val = $success ? 4 : 3;
+
+		clean : {
+			ob_clean();
+
+			static::reset_error_reporting();
+
+			//* No fatal error has occurred, pass and therefore nullify shutdown function.
+			define( '_TSFEM_TEST_EXT_PASS', true );
+		}
+
+		tick : {
 			//* Tick the instance.
 			tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
-			return 1;
 		}
 
-		//* Tick the instance.
-		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
-		return -1;
+		end : {
+			return $val;
+		}
+	}
+
+	/**
+	 * Performs extension file tests based on json file input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @param string $_instance The verification instance.
+	 * @param array $bits The verification instance bits.
+	 * @return true on success, false on failure.
+	 */
+	private static function perform_extension_json_tests( $slug, $_instance, $bits ) {
+
+		$base_path = static::get_extension_trunk_path( $slug );
+		$json_file = $base_path . 'test.json';
+
+		$success = array();
+
+		if ( 0 !== validate_file( $json_file ) || ! file_exists( $json_file ) )
+			goto end;
+
+		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
+		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
+
+		$namespace = empty( $json->namespace ) ? '' : $json->namespace;
+		$tests = empty( $json->test ) ? array() : (array) $json->test;
+
+		foreach ( $tests as $_class => $_file ) {
+			//* Base file is already tested.
+			if ( '_base' === $_class )
+				continue;
+
+			if ( is_array( $_file ) ) {
+				//* Facade.
+				foreach ( $_file as $f_file ) :
+					$results = static::persist_include_extension( $base_path . $f_file, $_instance, $bits );
+
+					$success[] = $results['success'];
+					$_instance = $results['_instance'];
+					$bits = $results['bits'];
+				endforeach;
+			} else {
+				$results = static::persist_include_extension( $base_path . $_file, $_instance, $bits );
+
+				$success[] = $results['success'];
+				$_instance = $results['_instance'];
+				$bits = $results['bits'];
+			}
+
+			if ( $_class ) {
+				$class = $namespace . '\\' . $_class;
+				$success[] = new $class;
+			}
+		}
+
+		end : {
+			//* Pass back verification.
+			return array(
+				'success'   => ! in_array( false, $success, true ),
+				'_instance' => $_instance,
+				'bits'      => $bits,
+			);
+		}
+	}
+
+	/**
+	 * Includes extension file and returns persisting instance and bits.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $file The file to test.
+	 * @param string $_instance The verification instance. Propagates to inclusion file.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file.
+	 * @return array : {
+	 *		'success'   => bool Whether the file inclusion(s) succeeded,
+	 *		'_instance' => string The new verification instance,
+	 *		'bits'      => array The new verification instance bits,
+	 * }
+	 */
+	private static function persist_include_extension( $file, $_instance, $bits ) {
+
+		$yield_count = 0;
+		$success = array();
+
+		//* Get follow-up verification instance.
+		foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+
+			$bits = $verification['bits'];
+			$_instance = $verification['instance'];
+
+			switch ( $yield_count ) :
+				case 0 :
+					$success[] = static::include_extension( $file, $_instance, $bits );
+
+				default :
+					$yield_count++;
+					break;
+			endswitch;
+		endforeach;
+
+		return array(
+			'success'   => ! in_array( false, $success, true ),
+			'_instance' => $_instance,
+			'bits'      => $bits,
+		);
+	}
+
+	/**
+	 * Resets error reporting to initial value.
+	 *
+	 * @see set_error_reporting();
+	 * @since 1.0.0
+	 */
+	private static function reset_error_reporting() {
+		static::set_error_reporting();
+	}
+
+	/**
+	 * Sets error reporting to input $val.
+	 * Also disables commong WP_DEBUG functionality that are prone to interfere.
+	 *
+	 * The WP_DEBUG functionality can not be re-enabled, currently.
+	 *
+	 * @see http://php.net/manual/en/function.error-reporting.php
+	 * @since 1.0.0
+	 * @staticvar int $_prev_error_reporting
+	 * @todo Reset WP_DEBUG functionality? i.e. by caching the filters current input.
+	 *
+	 * @param null|int $val The error reporting level. If null, it will reset
+	 *			error_reporting to its previous value.
+	 * @return void Early if $val is null.
+	 */
+	private static function set_error_reporting( $val = null ) {
+
+		static $_prev_error_reporting = null;
+
+		if ( null === $val ) {
+			//* Reset error reporting, if set.
+			if ( isset( $_prev_error_reporting ) )
+				error_reporting( $_prev_error_reporting );
+
+			return;
+		}
+
+		//* Cache error reporting.
+		$_prev_error_reporting = error_reporting();
+
+		if ( isset( $val ) )
+			error_reporting( $val );
+
+		if ( 0 === $val ) {
+			//* Also disable WP_DEBUG functions used by The SEO Framework.
+			add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
+			add_filter( 'deprecated_function_trigger_error', '__return_false' );
+			add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
+		}
 	}
 
 	/**

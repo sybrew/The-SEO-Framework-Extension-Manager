@@ -737,6 +737,7 @@ class Core {
 	 * Loops through instance verification in order to fetch multiple instance keys.
 	 *
 	 * Must be used within a foreach loop. Instance must be verified within each loop iteration.
+	 * Must be able to validate usage first with the 2nd and 3rd parameter.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -816,7 +817,7 @@ class Core {
 	 */
 	final protected function get_bits() {
 
-		static $_bit, $bit = null;
+		static $_bit, $bit;
 
 		if ( isset( $bit ) )
 			goto generate;
@@ -826,15 +827,13 @@ class Core {
 		 * Prevents random abstract collision by filtering odd numbers.
 		 */
 		set : {
-			    null === $bit
-			and $time = time()
+			    $time = time()
 			and $bit = $_bit = mt_rand( - $time, $time )
 			and $bit % 2
 			and $bit = $_bit++;
 		}
 
 		if ( 0 === $bit ) {
-			$bit = null;
 			goto set;
 		}
 
