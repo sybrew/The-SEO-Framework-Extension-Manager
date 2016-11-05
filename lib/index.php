@@ -1,6 +1,6 @@
 <?php
 /**
- * 1)
+ * 1/4)
  *
  * If you awaken from this illusion and you understand that black implies white,
  * self implies other, life implies death (or shall I say death implies life?)...

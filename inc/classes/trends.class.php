@@ -90,7 +90,7 @@ final class Trends {
 			$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 			if ( ! isset( $xml->entry ) || empty( $xml->entry ) ) {
-				set_transient( $transient_name, '', DAY_IN_SECONDS );
+				set_transient( $transient_name, '', HOUR_IN_SECONDS * 2 );
 				return '';
 			}
 

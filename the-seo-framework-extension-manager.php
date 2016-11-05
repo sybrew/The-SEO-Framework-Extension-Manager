@@ -21,7 +21,7 @@
  *
  * Not all states are the same for each site at all times, making it a vibrant plugin.
  * Use isset/function_exists/method_exists as much as possible if you wish to apply alterations.
- * Alternatively, look at The SEO Framework's can_i_use() function.
+ * Alternatively, look at The SEO Framework's can_i_use() method.
  */
 
 /**
@@ -40,35 +40,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-register_activation_hook( __FILE__, 'tsf_extension_manager_check_php' );
-/**
- * Checks whether the server can run this plugin on activation.
- * If not, it will deactivate this plugin.
- *
- * @since 1.0.0
- */
-function tsf_extension_manager_check_php() {
-
-	//* Let's have some fun with teapots.
-	$error = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y', time() ) ) / DAY_IN_SECONDS ) ? 418 : 500;
-
-	if ( ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < 50500 ) {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework - Extension Manager requires PHP 5.4 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
-			'The SEO Framework - Extension Manager &laquo; Server Requirements',
-			array( 'response' => intval( $error ) )
-		);
-	} elseif ( $GLOBALS['wp_db_version'] < 35700 ) {
-		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( 'The SEO Framework - Extension Manager requires WordPress 4.4 or later. Sorry about that!<br>
-				Do you want to <a onclick="window.history.back()" href="/wp-admin/plugins.php">go back</a>?',
-			'The SEO Framework - Extension Manager &laquo; WordPress Requirements',
-			array( 'response' => intval( $error ) )
-		);
-	}
-}
 
 /**
  * CDN Cache buster. 3 point.
@@ -136,10 +107,84 @@ define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' )
  */
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
 
+add_action( 'activate_' . TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, '_tsf_extension_manager_test_server' );
+/**
+ * Checks whether the server can run this plugin on activation.
+ * If not, it will deactivate this plugin.
+ *
+ * This function will create a parse error on PHP < 5.3 (use of goto wrappers).
+ * Which makes a knowledge database entry easier to make as it won't change anytime soon.
+ * Otherwise, it will crash in the first called file because of the "use" keyword.
+ *
+ * @since 1.0.0
+ * @see register_activation_hook()
+ * @link https://developer.wordpress.org/reference/functions/register_activation_hook/
+ *
+ * @param bool $network_wide Whether the plugin is activated on a multisite network.
+ * @return void Early if tests pass.
+ */
+function _tsf_extension_manager_test_server( $network_wide = false ) {
+
+	evaluate : {
+		   PHP_VERSION_ID < 50521 and $test = 1
+		or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < 50605 and $test = 2
+		or $GLOBALS['wp_db_version'] < 35700 and $test = 3
+		or $test = true;
+	}
+
+	//* All good.
+	if ( true === $test )
+		return;
+
+	deactivate : {
+		//* Not good. Deactivate plugin.
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+	}
+
+	//* Let's have some fun with teapots.
+	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
+
+	switch ( $test ) :
+		case 1 :
+		case 2 :
+			//* PHP requirements not met, always count up to encourage best standards.
+			$requirement = 1 === $test ? 'PHP 5.5.21 or later' : 'PHP 5.6.5 or later';
+			$issue = 'PHP version';
+			$version = phpversion();
+			$subtitle = 'Server Requirements';
+			break;
+
+		case 3 :
+			//* WordPress requirements not met.
+			$requirement = 'WordPress 4.4 or later';
+			$issue = 'WordPress version';
+			$version = $GLOBALS['wp_version'];
+			$subtitle = 'WordPress Requirements';
+			break;
+
+		default :
+			return;
+	endswitch;
+
+	$network = $network_wide ? 'network/' : '';
+	$pluginspage = admin_url( $network . 'plugins.php' );
+
+	wp_die(
+		sprintf(
+			'<p><strong>The SEO Framework - Extension Manager</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
+			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
+			esc_html( $requirement ), esc_html( $issue ), esc_html( $version ), esc_url( $pluginspage )
+		),
+		sprintf( 'The SEO Framework - Extension Manager &laquo; %s', esc_attr( $subtitle ) ),
+		array( 'response' => intval( $response ) )
+	);
+}
+
 add_action( 'plugins_loaded', 'init_tsf_extension_manager_locale', 4 );
 /**
- * Plugin locale 'the-seo-framework-extension-manager'
- * Locale folder the-seo-framework-extension-manager/language/
+ * Loads plugin locale: 'the-seo-framework-extension-manager'
+ * Locale folder: the-seo-framework-extension-manager/language/
+ *
  * @since 1.0.0
  * @staticvar $loaded Determines if the textdomain has already been loaded.
  *

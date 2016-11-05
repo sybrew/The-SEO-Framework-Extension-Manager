@@ -232,8 +232,17 @@ final class Layout extends Secure_Abstract {
 				if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
 					$class .= ' tsfem-has-hover-balloon';
 
+					/**
+					 * @TODO bugfix/make consistent?
+					 * It only refreshes when a premium extension is being activated.
+					 * Otherwise, it will continue to count into negatives.
+					 *
+					 * This might prevent rechecking "decoupled" websites... which in that case is a bug.
+					 */
 					$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
-					$level_desc = sprintf( __( 'Next check is in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
+
+					if ( $next_check_min > 0 )
+						$level_desc = sprintf( __( 'Next check is scheduled in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
 				}
 
 				$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', esc_html( $level_desc ) ) : '';

@@ -199,11 +199,18 @@ class Core {
 	 * Verifies integrity of the options.
 	 *
 	 * @since 1.0.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool True if options are valid, false if not.
 	 */
 	protected function are_options_valid() {
-		return $this->verify_options_hash( serialize( $this->get_all_options() ) );
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = $this->verify_options_hash( serialize( $this->get_all_options() ) );
 	}
 
 	/**
@@ -841,7 +848,8 @@ class Core {
 			/**
 			 * Count to create an irregular bit verification.
 			 * This can jump multiple sequences while maintaining the previous.
-			 * It traverses in three dimensions: up (positive), down (negative) and right (new sequence).
+			 * It traverses in three (actually two, but get_verification_instance makes it
+			 * three) dimensions: up (positive), down (negative) and right (new sequence).
 			 */
 			    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
 			and $bit  = $bit++ & $_bit--
@@ -1141,15 +1149,16 @@ class Core {
 	 * If the account isn't premium, it will not be loaded.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
 	 *
 	 * @param string $path The extension path to look for.
 	 * @param string $class_base Class base words.
 	 * @return bool True on success, false on failure.
 	 */
-	public function register_premium_extension_autoload_path( $path, $class_base ) {
+	public function _register_premium_extension_autoload_path( $path, $class_base ) {
 
-		if ( false === $this->is_premium_user() )
+		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
 			return false;
 
 		static $autoload_inactive = true;
@@ -1576,22 +1585,36 @@ class Core {
 	 * Determines whether the plugin's activated. Either free or premium.
 	 *
 	 * @since 1.0.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool True if the plugin is activated.
 	 */
 	protected function is_plugin_activated() {
-		return 'Activated' === $this->get_option( '_activated' );
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = 'Activated' === $this->get_option( '_activated' );
 	}
 
 	/**
 	 * Determines whether the plugin's use is premium.
 	 *
 	 * @since 1.0.0
+	 * @staticvar bool $cache
 	 *
 	 * @return bool True if the plugin is connected to the API handler.
 	 */
 	protected function is_premium_user() {
-		return 'Premium' === $this->get_option( '_activation_level' );
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = 'Premium' === $this->get_option( '_activation_level' );
 	}
 
 	/**

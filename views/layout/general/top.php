@@ -47,10 +47,12 @@ $extensions_i18n = __( 'Extensions', 'the-seo-framework-extension-manager' );
 /**
  * Test for GD library functionality upon logo.
  *
+ * Only runs on activation page.
+ *
  * This is the first step towards "true" Google pixel guidelines character count testing.
  * Let's see how this works out :).
  */
-if ( extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) :
+if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) :
 	$font = $this->get_font_file_location( 'verdana.ttf' );
 	if ( file_exists( $font ) ) :
 		//* Calculate text-width. 1.9em @ 13px body.

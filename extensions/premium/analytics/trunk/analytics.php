@@ -95,7 +95,7 @@ namespace TSF_Extension_Manager_Extension {
 		if ( isset( $loaded ) )
 			return $loaded;
 
-		tsf_extension_manager()->register_premium_extension_autoload_path( TSFEM_E_ANALYTICS_PATH_CLASS, 'Analytics' );
+		tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_ANALYTICS_PATH_CLASS, 'Analytics' );
 
 		if ( is_admin() ) {
 			new Analytics_Admin();

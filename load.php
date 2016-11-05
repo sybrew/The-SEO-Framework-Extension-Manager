@@ -71,7 +71,7 @@ _tsf_extension_manager_protect_options();
  */
 function _tsf_extension_manager_protect_options() {
 
-	false === defined( 'PHP_INT_MIN' ) and define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
+	defined( 'PHP_INT_MIN' ) or define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
 
 	$current_options = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 
@@ -96,6 +96,11 @@ function _pre_execute_extension_manager_protect_option( $new_value, $old_value, 
 
 	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption' ) )
 		wp_die( '<code>' . esc_html( $option ) . '</code> is a protected option.' );
+
+	/**
+	 * Load class overloading traits.
+	 */
+	_tsf_extension_manager_load_trait( 'overload' );
 
 	return SecureOption::verify_option_instance( $new_value, $old_value, $option );
 }
@@ -243,7 +248,7 @@ function _autoload_tsf_extension_manager_classes( $class ) {
  * @staticvar array $loaded
  *
  * @param string $file Where the trait is for.
- * @return void.
+ * @return void; Early if file is already loaded.
  */
 function _tsf_extension_manager_load_trait( $file ) {
 

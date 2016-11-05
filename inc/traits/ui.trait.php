@@ -88,7 +88,13 @@ trait UI {
 
 		if ( $this->ui_hook === $hook ) {
 
-			//* Set names.
+			/**
+			 * Set JS and CSS names.
+			 *
+			 * Currently, it works best with Default and Midnight. And a little
+			 * with Blue, Ectoplasm, Ocean.
+			 * @TODO consider visually appealing versions for other Admin Color Schemes.
+			 */
 			$this->css_name = 'tsf-extension-manager';
 			$this->js_name = 'tsf-extension-manager';
 

@@ -111,85 +111,157 @@ class Monitor_Data {
 		return $fetched;
 	}
 
+	/**
+	 * Fetches remote monitor data to later be evaluated.
+	 *
+	 * @TODO make notes of:
+	 * The data set is as follows : {
+	 *		'type' => array : {            // issues, poi, statistics
+	 *			'key' => array : {         // The issue instance key, like title, description, etc.
+	 *				'test' => array : {    // The test that has followed.
+	 * 					'type' : string    // The type of test, i.e. "manual, equals, etc."
+	 *					                   // A manual test would require local implementation to parse the data.
+	 *				}
+	 *			}
+	 *		}
+	 * }
+	 *
+	 * @return array The remote monitor data.
+	 */
 	protected function api_get_remote_data() {
 
 		//* This dummy data does NOT represent the final outcome. It's still in very much dev-environment.
 		//* Please, don't expect anything from what you see here. It's a mind-map.
 		$planned_dummy_data = array(
 			'issues' => array(
-				// Are titles outputted as it should? Take 3 samples and test them.
+				/* @NOTE might not be secure... and is overkill of data.
+				// Are titles outputted as it should? Take 2 samples and test them.
 				'title' => array(
-					'home' => array(
-						array(
-							'id' => 0,
-							'value' => 'My WordPress Site &mdash; Just another WordPress site',
-						),
-					),
-					'category' => array(
-						array(
-							'id' => 1,
-							'value' => 'Category: Uncategorized &mdash; My WordPress Site',
-						),
-					),
-					'post' => array(
-						array(
-							'id' => 1,
-							'value' => 'Hello world! &mdash; My WordPress Site',
+					'test' => array(
+						'type' => 'equals',
+						'requires_tsf' => '2.7.0',
+						'func' => array( 'the_seo_framework', 'title' ), // VAR_DUMP() warning: is this secure???
+						'iterations' => array(
+							array(
+								'value' => 'My WordPress Site &mdash; Just another WordPress site',
+								'args' => array(
+									'title' => '',
+									'sep' => '',
+									'seplocation' => '',
+									'args' => array(
+										'term_id' => 0,
+										'taxonomy' => '',
+										'meta' => array( 'boolean', true ),
+										'page_on_front' => array( 'boolean', true ),
+									),
+								),
+							),
+							array(
+								'value' => 'Hello world! &mdash; My WordPress Site',
+								'args' => array(
+									'title' => '',
+									'sep' => '',
+									'seplocation' => '',
+									'args' => array(
+										'term_id' => 1,
+										'taxonomy' => '',
+										'meta' => array( 'boolean', true ),
+										'page_on_front' => array( 'boolean', false ),
+									),
+								),
+							),
 						),
 					),
 				),
-				// Are descriptions outputted as it should? Take 3 samples and test them.
+				// Are descriptions outputted as it should? Take 2 samples and test them.
 				'description' => array(
-					'home' => array(
-						array(
-							'id' => 0,
-							'value' => 'Just another WordPress site on My WordPress Site',
-						),
-					),
-					'category' => array(
-						array(
-							'id' => 1,
-							'value' => 'Uncategorized on My WordPress Site',
-						),
-					),
-					'post' => array(
-						array(
-							'id' => 1,
-							'value' => 'Hello world! on My WordPress Site | Welcome to WordPress. This is your first post. Edit or delete it, then start writing!',
+					'test' => array(
+						'type' => 'equals',
+						'requires_tsf' => '2.7.0',
+						'func' => array( 'the_seo_framework', 'generate_description' ),
+						'iterations' => array(
+							array(
+								'value' => 'Just another WordPress site on My WordPress Site',
+								'args' => array(
+									'description' => '',
+									'args' => array(
+										'id' => 0,
+										'taxonomy' => '',
+										'get_custom_field' => array( 'boolean', true ),
+										'is_home' => array( 'boolean', true ),
+										'social' => array( 'boolean', true ),
+									),
+								),
+							),
+							array(
+								'value' => 'Hello world! on My WordPress Site | Welcome to WordPress. This is your first post. Edit or delete it, then start writing!',
+								'args' => array(
+									'description' => '',
+									'args' => array(
+										'id' => 1,
+										'taxonomy' => '',
+										'get_custom_field' => array( 'boolean', true ),
+										'is_home' => array( 'boolean', false ),
+										'social' => array( 'boolean', false ),
+									),
+								),
+							),
 						),
 					),
 				),
 				// Is canonical URL equal to page, and if not - are settings applied?
 				'canonical' => array(
-					'home' => array(
-						array(
-							'id' => 0,
-							'value' => 'Just another WordPress site on My WordPress Site',
-						),
-					),
-					'category' => array(
-						array(
-							'id' => 1,
-							'value' => 'Uncategorized on My WordPress Site',
-						),
-					),
-					'post' => array(
-						array(
-							'id' => 1,
-							'value' => 'Hello world! on My WordPress Site | Welcome to WordPress. This is your first post. Edit or delete it, then start writing!',
+					'test' => array(
+						'type' => 'equals',
+						'requires_tsf' => '2.7.0',
+						'func' => array( 'the_seo_framework', 'the_url' ),
+						'iterations' => array(
+							array(
+								'value' => 'http://testmijnphp7.nl/',
+								'args' => array(
+									'url' => '',
+									'args' => array(
+										'id' => 0,
+										'taxonomy' => '',
+										'get_custom_field' => array( 'boolean', true ),
+										'paged' => array( 'boolean', false ),
+										'paged_plural' => array( 'boolean', false ),
+										'home' => array( 'boolean', true ),
+										'external' => array( 'boolean', true ),
+									),
+								),
+							),
+							array(
+								'value' => 'http://testmijnphp7.nl/hello-world/',
+								'args' => array(
+									'url' => '',
+									'args' => array(
+										'id' => 1,
+										'taxonomy' => '',
+										'get_custom_field' => array( 'boolean', true ),
+										'paged' => array( 'boolean', false ),
+										'paged_plural' => array( 'boolean', false ),
+										'home' => array( 'boolean', false ),
+										'external' => array( 'boolean', true ),
+									),
+								),
+							),
 						),
 					),
 				),
-				// Is favicon set up? If not, mark if not static in public_html/www folder.
+				*/
+				// Is favicon set up? If not, mark if not static in public_html or www folder.
 				'favicon' => array(
-					// Test for <link rel="icon" href="http://..../cropped-icon-512x512-32x32.jpg" sizes="32x32" /> on the homepage.
-					'meta' => true,
-					// Test for http://example.com/favicon.ico
-					'static' => false,
+					'requires' => '1.0.0',
+					'data' => array(
+						// Test for <link rel="icon" href="http://..../cropped-icon-512x512-32x32.jpg" sizes="32x32" /> on the homepage.
+						'meta' => true,
+						// Test for http://example.com/favicon.ico
+						'static' => false,
+					),
 				),
-				// Are there any duplicated pages? If so -> open submenu?? TODO.
-				'duplicated' => array(),
 				// Is theme mobile? If so, does it overflow? : 2 settings: ipad & iphone.
+				/* @TODO
 				'mobile' => array(
 					'home' => array(
 						array(
@@ -220,33 +292,44 @@ class Monitor_Data {
 				'html' => array(
 					// Is this even feasible?
 				),
+				*/
 				// Is there a html closing tag, at all?
 				'php' => array(
-					'home' => array(
+					'requires' => '1.0.0',
+					'data' => array(
 						array(
-							'id' => 0,
-							'closed' => 1, // Good.
+							'home' => true,
+							'post_id' => 0,
+							'value' => true,
 						),
-					),
-					'category' => array(
 						array(
-							'id' => 1,
-							'closed' => 0, // Bad.
-						),
-					),
-					'post' => array(
-						array(
-							'id' => 1,
-							'closed' => 1, // Good.
+							'home' => false,
+							'post_id' => 1,
+							'value' => false,
 						),
 					),
 				),
+				/* @TODO
 				// Are images valid, and do they support mobile? Are they also optimized for performance? TODO
 				'img' => array(
 					// Is this even feasible?
 				),
 				// Is robots static or dynamic? If static, tell them. If dynamic, tell if it works.
 				'robots' => array(
+					'test' => array(
+						'type' => 'exists',
+						'notify_key' => array( 'link', 'post_id' ),
+						'values' => array(
+							array(
+								'post_id' => 1,
+								'value' => true,
+							),
+							array(
+								'post_id' => 1,
+								'value' => true,
+							),
+						),
+					),
 					'located' => true,
 					'value' => "User-agent: * \nDisallow: /", // This is expected with indexing disabled. Test with internal robots.txt, or from TSF?
 				),
@@ -291,6 +374,7 @@ class Monitor_Data {
 				'external' => array(
 					'', // Is this even feasible?
 				),
+				*/
 			),
 			'poi' => array(
 				// Is the website too big in size? If so, is the issue HTMl, JS, CSS, img, etc.

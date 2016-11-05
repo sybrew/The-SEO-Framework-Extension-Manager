@@ -65,7 +65,7 @@ class Panes extends API {
 			$output = $this->get_trends_activation_output();
 		}
 
-		return sprintf( '<div class="tsfem-trends-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-trends-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Panes extends API {
 
 		$output = $this->get_actions_output();
 
-		return sprintf( '<div class="tsfem-actions-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-actions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Panes extends API {
 
 		$output = $this->get_extensions_output();
 
-		return sprintf( '<div class="tsfem-extensions-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-extensions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -116,10 +116,10 @@ class Panes extends API {
 			$feed_error = esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
 			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
 		} else {
-			$output .= sprintf( '<div class="tsfem-feed-wrap">%s</div>', $feed );
+			$output .= sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
 		}
 
-		return sprintf( '<div class="tsfem-trends">%s</div>', $output );
+		return sprintf( '<div class="tsfem-trends tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -305,7 +305,7 @@ class Panes extends API {
 
 		$output .= $this->get_support_buttons();
 
-		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex">%s</div>', $output );
+		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
 	}
 
 	/**
@@ -319,7 +319,7 @@ class Panes extends API {
 
 		$output = '';
 
-		if ( $this->is_premium_user() ) {
+		if ( $this->is_premium_user() && $this->are_options_valid() ) {
 			$output .= $this->get_account_information();
 			$output .= $this->get_account_extend_form();
 		} else {
@@ -328,7 +328,7 @@ class Panes extends API {
 
 		$output .= $this->get_deactivation_button();
 
-		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex">%s</div>', $output );
+		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
 	}
 
 	/**
@@ -357,7 +357,7 @@ class Panes extends API {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-info tsfem-flex">%s%s</div>', $title, $output );
+		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Panes extends API {
 
 		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-upgrade tsfem-flex tsfem-flex-row">%s%s</div>', $title, $form );
+		return sprintf( '<div class="tsfem-account-upgrade">%s%s</div>', $title, $form );
 	}
 
 	/**
@@ -436,7 +436,7 @@ class Panes extends API {
 
 		$extra = sprintf( '<div class="tsfem-flex tsfem-flex-nowrap">%s</div>', $_extra );
 
-		return sprintf( '<div class="tsfem-account-deactivate tsfem-flex">%s%s%s</div>', $title, $button, $extra );
+		return sprintf( '<div class="tsfem-account-deactivate">%s%s%s</div>', $title, $button, $extra );
 	}
 
 	/**

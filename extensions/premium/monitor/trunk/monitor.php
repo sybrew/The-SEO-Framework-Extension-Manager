@@ -6,7 +6,7 @@
 /**
  * Extension Name: Monitor
  * Extension URI: https://premium.theseoframework.com/extensions/monitor/
- * Description: The Monitor extension keeps track of your website's SEO, social optimization, and SERP positioning.
+ * Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
  * Version: 1.0.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
@@ -45,6 +45,12 @@ namespace {
  * @package TSF_Extension_Manager\Extensions\Monitor
  */
 namespace TSF_Extension_Manager {
+
+	/**
+	 * The extension version.
+	 * @since 1.0.0
+	 */
+	define( 'TSFEM_E_MONITOR_VERSION', '1.0.0' );
 
 	/**
 	 * The extension file, absolute unix path.
@@ -94,7 +100,7 @@ namespace TSF_Extension_Manager_Extension {
 		if ( isset( $loaded ) )
 			return $loaded;
 
-		tsf_extension_manager()->register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
+		tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
 
 		if ( is_admin() ) {
 			new Monitor_Admin();
