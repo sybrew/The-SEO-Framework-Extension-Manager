@@ -35,7 +35,7 @@ _tsf_extension_manager_load_trait( 'extensions' );
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
-if ( is_admin() && the_seo_framework()->is_menu_page( tsf_extension_manager()->seo_extensions_menu_page_hook, tsf_extension_manager()->seo_extensions_page_slug ) ) {
+if ( is_admin() && tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 	_tsf_extension_manager_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.

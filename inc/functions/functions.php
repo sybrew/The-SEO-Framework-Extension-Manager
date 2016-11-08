@@ -32,7 +32,17 @@ defined( 'ABSPATH' ) or die;
  * @return string The normalized extension basename.
  */
 function extension_basename( $file ) {
-	return trim( wp_normalize_path( $file ), '/' );
+
+	$file = wp_normalize_path( $file );
+
+	$file = trim( $file, '/' );
+	$extension_dir = wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
+	$extension_dir = trim( $extension_dir, '/' );
+
+	$file = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#' ,'' , $file );
+	$file = trim( $file, '/' );
+
+	return $file;
 }
 
 /**
@@ -52,18 +62,15 @@ function extension_dir_path( $file ) {
  *
  * @since 1.0.0
  *
- * @param string $path The extension file path.
+ * @param string $file The extension file path.
  * @return The extension URL path.
  */
-function extension_dir_url( $path ) {
+function extension_dir_url( $file ) {
 
-	$path = wp_normalize_path( $path );
-	$url = get_option( 'siteurl' );
+	$path = dirname( extension_basename( $file ) );
+	$url = TSF_EXTENSION_MANAGER_DIR_URL;
 
-	$scheme = is_ssl() ? 'https' : 'http';
-	$url = set_url_scheme( $url, $scheme );
-
-	$url .= '/' . trim( extension_dir_path( $path ), '/ ' ) . '/';
+	$url .= trim( $path, '/ ' ) . '/';
 
 	return $url;
 }

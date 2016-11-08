@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  * @access private
- * @final Please don't extend this extension.
+ * @final Please don't extend this plugin.
  */
 final class LoadFrontend extends Core {
 	use Construct_Master_Once_Interface, Enclose_Stray_Private;

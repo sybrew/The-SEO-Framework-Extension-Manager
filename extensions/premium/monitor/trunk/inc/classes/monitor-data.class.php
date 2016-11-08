@@ -253,6 +253,7 @@ class Monitor_Data {
 				// Is favicon set up? If not, mark if not static in public_html or www folder.
 				'favicon' => array(
 					'requires' => '1.0.0',
+					'tested' => '1.0.0',
 					'data' => array(
 						// Test for <link rel="icon" href="http://..../cropped-icon-512x512-32x32.jpg" sizes="32x32" /> on the homepage.
 						'meta' => true,
@@ -296,6 +297,7 @@ class Monitor_Data {
 				// Is there a html closing tag, at all?
 				'php' => array(
 					'requires' => '1.0.0',
+					'tested' => '1.0.0',
 					'data' => array(
 						array(
 							'home' => true,

@@ -6,7 +6,7 @@
 /**
  * Extension Name: Analytics
  * Extension URI: https://premium.theseoframework.com/extensions/incognito/
- * Description: The Analytics extension allows you to set up and interact with Analytics right from your dashboard.
+ * Description: **This extension doesn't work yet.** The Analytics extension allows you to set up and interact with Analytics right from your dashboard.
  * Version: 1.0.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/

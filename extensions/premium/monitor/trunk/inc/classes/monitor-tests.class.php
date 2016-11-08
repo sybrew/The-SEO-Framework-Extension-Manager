@@ -99,35 +99,65 @@ final class Monitor_Tests {
 		return static::$instance;
 	}
 
+	/**
+	 * Determines if the Favicon is output.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The input data.
+	 * @return string The evaluated data.
+	 */
 	public function favicon( $data ) {
 
 		$content = '';
+		$state = 'unknown';
 
 		if ( isset( $data['meta'] ) || isset( $data['static'] ) ) {
 			if ( empty( $data['meta'] ) ) {
+
+				$state = 'good';
+
 				if ( empty( $data['static'] ) ) {
 					$content .= $this->wrap_info( esc_html__( 'No favicon has been found.', 'the-seo-framework-extension-manager' ) );
+					$state = 'bad';
 				}
+
 				$content .= $this->wrap_info( esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
 			} else {
+				$state = 'good';
 				$content .= $this->wrap_info( esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
 			}
 		} else {
+			$state = 'unknown';
 			$content = $this->no_data_found();
 		}
 
-		return $content;
+		end : {
+			return array(
+				'content' => $content,
+				'state' => $state,
+			);
+		}
 	}
 
+	/**
+	 * Determines if there are PHP errors detected.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The input data.
+	 * @return string The evaluated data.
+	 */
 	public function php( $data ) {
 
 		$content = '';
+		$state = 'unknown';
+
 		$links = array();
 
 		if ( is_array( $data ) ) {
 			foreach ( $data as $value ) :
 				if ( isset( $value['value'] ) && false === $value['value'] ) {
-
 					$id = isset( $value['post_id'] ) ? $value['post_id'] : false;
 
 					if ( false !== $id ) {
@@ -140,12 +170,16 @@ final class Monitor_Tests {
 				}
 			endforeach;
 		} else {
-			return $this->no_data_found();
+			$state = 'unknown';
+			$content = $this->no_data_found();
+			goto end;
 		}
 
 		if ( empty( $links ) ) {
+			$state = 'good';
 			$content = $this->no_issue_found();
 		} else {
+			$state = 'bad';
 			$content = $this->wrap_info( esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
 			$content .= sprintf( '<h4>%s</h4>', esc_html( _n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
 			$content .= '<ul class="tsfem-ul-disc">';
@@ -157,7 +191,12 @@ final class Monitor_Tests {
 
 		$content .= $this->small_sample_disclaimer();
 
-		return $content;
+		end : {
+			return array(
+				'content' => $content,
+				'state' => $state,
+			);
+		}
 	}
 
 	protected function wrap_info( $text ) {

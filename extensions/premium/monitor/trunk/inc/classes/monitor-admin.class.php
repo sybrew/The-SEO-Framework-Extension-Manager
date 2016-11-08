@@ -203,13 +203,21 @@ final class Monitor_Admin extends Monitor_Data {
 	}
 
 	/**
-	 * Initializes user interface.
+	 * Initializes user interface styles, scripts and footer.
 	 *
 	 * @since 1.0.0
 	 */
 	protected function init_tsfem_ui() {
 
 		$this->ui_hook = $this->monitor_menu_page_hook;
+
+		$this->additional_css = array(
+			array(
+				'name' => 'tsfem-monitor',
+				'base' => TSFEM_E_MONITOR_DIR_URL,
+				'ver' => TSFEM_E_MONITOR_VERSION,
+			),
+		);
 
 		$this->init_ui();
 	}
@@ -334,6 +342,8 @@ final class Monitor_Admin extends Monitor_Data {
 	 * Creates issues overview for the issues pane.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return string The parsed issues overview HTML data.
 	 */
 	protected function get_issues_overview() {
 
@@ -343,18 +353,19 @@ final class Monitor_Admin extends Monitor_Data {
 		if ( empty( $issues ) ) {
 			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			foreach ( $this->render_pane_slab_data( $issues, 'issues' ) as $slab )
-				$output .= $slab;
-
+			$instance = Monitor_Output::get_instance();
+			$output = $instance->generate_pane_slab_data( $issues, 'issues' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
 	}
 
 	/**
 	 * Creates points of interest overview for the poi pane.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @return string The parsed Points of Interest overview HTML data.
 	 */
 	protected function get_poi_overview() {
 
@@ -363,7 +374,7 @@ final class Monitor_Admin extends Monitor_Data {
 		if ( empty( $points ) ) {
 			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			return print_r( $points, true );
+			//return print_r( $points, true );
 		}
 	}
 
@@ -379,94 +390,8 @@ final class Monitor_Admin extends Monitor_Data {
 		if ( empty( $stats ) ) {
 			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			return print_r( $stats, true );
+			//return print_r( $stats, true );
 		}
-	}
-
-	/**
-	 * Iterates over pane slab data.
-	 *
-	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Admin->setup_slab_title_prefix()
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Admin->make_slab_nav_entry()
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Admin->make_slab_info_entry()
-	 * @generator
-	 *
-	 * @param array $data The fetched data.
-	 * @param string $type The pane-date type.
-	 * @yields Interpreted data from array in two slabs (js) or beneath eachother (no-js).
-	 */
-	protected function render_pane_slab_data( $data = array(), $type = '' ) {
-
-		foreach ( $data as $key => $value ) :
-			//* @TODO var_dump()
-			//$this->setup_slab_title_prefix( $key, $value, $type );
-
-			yield $this->make_slab_nav_entry( $key, $type, -1 );
-			yield $this->make_slab_info_entry( $key, $value, $type );
-		endforeach;
-
-	}
-
-	/**
-	 * Makes slab entry title from input $key and $type for when no JS is present.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
-	 * @return string The HTML formed data.
-	 */
-	protected function make_slab_nav_entry( $key, $type ) {
-
-		$title = $this->get_slab_entry_title( $key, $type );
-		$prefix = $this->get_slab_nav_entry_state_sign( $key, $type );
-
-		return sprintf( '<h2 id="tsfem-e-monitor-%s-nav-entry" class="tsfem-e-monitor-nav-entry">%s%s</h2>', esc_attr( $key ), $prefix, esc_html( $title ) );
-	}
-
-	/**
-	 * Interprets data input and finds an appropriate content function for it.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key The array key.
-	 * @param mixed $value The array value attached to $key.
-	 * @param string $type The pane-data type.
-	 * @return string The HTML formed data.
-	 */
-	protected function make_slab_info_entry( $key, $value, $type ) {
-
-		$output = Monitor_Output::parse_content( $key, $value, $type );
-
-		return sprintf( '<div id="tsfem-e-monitor-%s-nav-output" class="tsfem-e-monitor-nav-output">%s</div>', esc_attr( $key ), $output );
-	}
-
-	protected function get_slab_nav_entry_state_sign( $key, $type ) {
-		// TODO: set "good/okay/warning/bad/unknown" signs.
-		return '_X_';
-	}
-
-	/**
-	 * Returns slab entry title based on $key and $type.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $cache Maintains the titles cache.
-	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
-	 * @return string The escaped $type $key title.
-	 */
-	protected function get_slab_entry_title( $key, $type ) {
-
-		static $cache = array();
-
-		if ( isset( $cache[ $type ][ $key ] ) )
-			return $cache[ $type ][ $key ];
-
-		$title = Monitor_Output::parse_title( $key, $type );
-
-		return $cache[ $type ][ $key ] = esc_html( $title );
 	}
 
 	/**

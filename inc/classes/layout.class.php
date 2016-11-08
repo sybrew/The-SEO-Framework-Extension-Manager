@@ -230,8 +230,6 @@ final class Layout extends Secure_Abstract {
 				$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
 
 				if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
-					$class .= ' tsfem-has-hover-balloon';
-
 					/**
 					 * @TODO bugfix/make consistent?
 					 * It only refreshes when a premium extension is being activated.
@@ -241,8 +239,10 @@ final class Layout extends Secure_Abstract {
 					 */
 					$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
 
-					if ( $next_check_min > 0 )
+					if ( $next_check_min > 0 ) {
 						$level_desc = sprintf( __( 'Next check is scheduled in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
+						$class .= ' tsfem-has-hover-balloon';
+					}
 				}
 
 				$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', esc_html( $level_desc ) ) : '';

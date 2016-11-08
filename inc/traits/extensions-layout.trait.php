@@ -376,6 +376,7 @@ trait Extensions_Layout {
 		$data = static::get_extension_header( $extension['slug'] );
 
 		$description = $data['Description'];
+		$description = static::convert_markdown( esc_html( $description ), array( 'strong', 'em', 'a' ) );
 
 		//* Make extension author element.
 		//	$author = $data['Author'];
@@ -431,10 +432,98 @@ trait Extensions_Layout {
 		$compatible = sprintf( '<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>', esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon );
 
 		//* Put it all together.
-		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', esc_html( $description ) );
+		$content = sprintf( '<div class="tsfem-extension-description-header">%s</div>', $description );
 		$content .= sprintf( '<div class="tsfem-extension-description-footer">%s</div>', implode( ' | ', array( $version, $compatible, $home ) ) );
 	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
 
 		return $output;
+	}
+
+	/**
+	 * Converts markdown text into HMTL.
+	 *
+	 * Does not support list or block elements. Only inline statements.
+	 *
+	 * @since 1.0.0
+	 * @link https://wordpress.org/plugins/about/readme.txt
+	 *
+	 * @param string $text The text that might contain markdown. Expected to be escaped.
+	 * @param array $convert The markdown style types wished to be converted.
+	 * 				If left empty, it will convert all.
+	 * @return string The markdown converted text.
+	 */
+	private static function convert_markdown( $text, $convert = array() ) {
+
+		preprocess : {
+			$text = str_replace( "\r\n", "\n", $text );
+			$text = str_replace( "\t", ' ', $text );
+		}
+
+		if ( '' === $text )
+			return '';
+
+		/**
+		 * The conversion list's keys are per reference only.
+		 */
+		$conversions = array(
+			'**'   => 'strong',
+			'*'    => 'em',
+			'`'    => 'code',
+			'[]()' => 'a',
+			'======'  => 'h6',
+			'====='  => 'h5',
+			'===='  => 'h4',
+			'==='  => 'h3',
+			'=='   => 'h2',
+			'='    => 'h1',
+		);
+
+		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
+
+		foreach ( $md_types as $type ) :
+			switch ( $type ) :
+				case 'strong' :
+					$text = preg_replace( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', '<strong>${1}</strong>', $text );
+					break;
+
+				case 'em' :
+					$text = preg_replace( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', '<em>${1}</em>', $text );
+					break;
+
+				case 'code' :
+					$text = preg_replace( '/(?:`{1})([^`{1}]+)(?:`{1})/', '<code>${1}</code>', $text );
+					break;
+
+				case 'h6' :
+				case 'h5' :
+				case 'h4' :
+				case 'h3' :
+				case 'h2' :
+				case 'h1' :
+					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
+					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
+					$replacement = "<{$type}>${1}</{$type}>";
+					$text = preg_replace( $expression, $replacement, $text );
+					break;
+
+				case 'a' :
+					getmatches : {
+						$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+					}
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<a href="%s" rel="nofollow">%s</a>', esc_url( $matches[2][ $i ] ), esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				default :
+					break;
+			endswitch;
+		endforeach;
+
+		return $text;
 	}
 }

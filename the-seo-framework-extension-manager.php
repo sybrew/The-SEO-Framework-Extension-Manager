@@ -93,7 +93,7 @@ define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PAT
  * The plugin extensions base path.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_BASE', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
+define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_PATH', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin options base name.
@@ -141,9 +141,6 @@ function _tsf_extension_manager_test_server( $network_wide = false ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
 	}
 
-	//* Let's have some fun with teapots.
-	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
-
 	switch ( $test ) :
 		case 1 :
 		case 2 :
@@ -168,6 +165,9 @@ function _tsf_extension_manager_test_server( $network_wide = false ) {
 
 	$network = $network_wide ? 'network/' : '';
 	$pluginspage = admin_url( $network . 'plugins.php' );
+
+	//* Let's have some fun with teapots.
+	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
 
 	wp_die(
 		sprintf(

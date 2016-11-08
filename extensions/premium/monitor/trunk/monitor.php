@@ -6,7 +6,7 @@
 /**
  * Extension Name: Monitor
  * Extension URI: https://premium.theseoframework.com/extensions/monitor/
- * Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
+ * Description: **This extension is still under construction.** The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
  * Version: 1.0.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/

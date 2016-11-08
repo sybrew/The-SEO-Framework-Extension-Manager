@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Title-Fix
+ * @package TSF_Extension_Manager_Extension\Title_Fix
  */
 namespace TSF_Extension_Manager_Extension;
 
@@ -71,7 +71,7 @@ function title_fix_init() {
 	if ( class_exists( 'The_SEO_Framework_Title_Fix' ) )
 		return $loaded = false;
 
-	new Title_Fix();
+	new Title_Fix;
 
 	return $loaded = true;
 }
@@ -278,7 +278,7 @@ final class Title_Fix {
 		if ( _wp_can_use_pcre_u() ) {
 
 			//* Let's use regex.
-			if ( 1 === preg_match( '/<title.*?<\/title>/is', $content, $matches ) ) {
+			if ( 1 === preg_match( '/<title.*?<\/title>/ius', $content, $matches ) ) {
 				$title_tag = isset( $matches[0] ) ? $matches[0] : null;
 
 				if ( isset( $title_tag ) ) {
