@@ -39,7 +39,9 @@ defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, 
 		<p><?php esc_html_e( 'Rather go for a test-drive? You can always upgrade later.', 'the-seo-framework-extension-manager' ); ?></p>
 	</div>
 	<div class="tsfem-connect-action tsfem-flex">
-		<?php $this->get_view( 'forms/free', array( 'name' => $this->request_name['activate-free'], 'id' => 'activate-free', 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
+		<div class="tsfem-connect-fields-row tsfem-flex tsfem-flex-row">
+			<?php $this->get_view( 'forms/free', array( 'name' => $this->request_name['activate-free'], 'id' => 'activate-free', 'text' => __( 'Save a few bucks', 'the-seo-framework-extension-manager' ) ) ); ?>
+		</div>
 	</div>
 </div>
 <?php

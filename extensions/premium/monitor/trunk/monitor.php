@@ -11,6 +11,7 @@
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3
+ * Menu Slug: theseoframework-monitor
  */
 
 /**

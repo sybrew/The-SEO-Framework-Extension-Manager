@@ -67,7 +67,7 @@ _tsf_extension_manager_protect_options();
  *
  * @since 1.0.0
  * @access private
- * @uses PHP_INT_MIN, available from PHP 7.0
+ * @uses constant PHP_INT_MIN, available from PHP 7.0
  */
 function _tsf_extension_manager_protect_options() {
 
@@ -85,7 +85,7 @@ function _tsf_extension_manager_protect_options() {
  *
  * @since 1.0.0
  * @access private
- * @uses SecureOption::verify_option_instance()
+ * @uses TSF_Extension_Manager\SecureOption::verify_option_instance()
  *
  * @param mixed $value The new, unserialized option value.
  * @param mixed $old_value The old option value.
@@ -257,9 +257,7 @@ function _tsf_extension_manager_load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return;
 
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
-
-	$loaded[ $file ] = true;
+	$loaded[ $file ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
 
 	return;
 }

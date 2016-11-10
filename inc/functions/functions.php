@@ -28,21 +28,27 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  *
- * @param string $file The extension file.
+ * @param string $path The extension path.
  * @return string The normalized extension basename.
  */
-function extension_basename( $file ) {
+function extension_basename( $path ) {
 
-	$file = wp_normalize_path( $file );
-
-	$file = trim( $file, '/' );
+	$path = wp_normalize_path( $path );
 	$extension_dir = wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
+
+	$path = trim( $path, '/' );
 	$extension_dir = trim( $extension_dir, '/' );
 
-	$file = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#' ,'' , $file );
-	$file = trim( $file, '/' );
+	/**
+	 * @TODO figure out why preg_replace is used in WP Core.
+	 * Isn't str_replace much more ideal, as we're simply replacing a known part?
+	 * ...
+	 */
+	//$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
+	$path = str_replace( $extension_dir, '', $path );
+	$path = trim( $path, '/' );
 
-	return $file;
+	return $path;
 }
 
 /**
@@ -58,7 +64,7 @@ function extension_dir_path( $file ) {
 }
 
 /**
- * Extracts the directory URL of an extension from its file locaiton.
+ * Extracts the directory URL of an extension from its file location.
  *
  * @since 1.0.0
  *

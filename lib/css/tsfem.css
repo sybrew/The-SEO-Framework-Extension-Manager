@@ -54,6 +54,11 @@
 	justify-content: flex-start;
 }
 
+.tsfem-flex-rtl {
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
 .tsfem-flex-row {
 	-webkit-flex-direction: row;
 	flex-direction: row;
@@ -498,10 +503,6 @@ body.tsfem .wrap {
 	width: 100%;
 }
 
-.tsfem-connect-action {
-	text-align: right;
-}
-
 .tsfem-connect-action form {
 	margin: 0;
 	padding: 0;
@@ -686,15 +687,12 @@ body.tsfem .wrap {
 	justify-content: flex-start;
 }
 
-.tsfem-pane-content h4.tsfem-status-title {
+.tsfem-pane-content h4.tsfem-status-title,
+.tsfem-pane-content h5.tsfem-status-title,
+.tsfem-pane-content h6.tsfem-status-title {
 	margin: 0;
 }
 
-/* ## Specific panes.
-/*--------------------------------------*/
-.tsfem-trends-wrap,
-.tsfem-actions-wrap,
-.tsfem-extensions-wrap,
 .tsfem-pane-inner-wrap {
 	padding: 20px;
 	height: auto;
@@ -703,6 +701,9 @@ body.tsfem .wrap {
 	width: 100%;
 	overflow: auto;
 }
+
+/* ## Specific panes.
+/*--------------------------------------*/
 
 .tsfem-actions,
 .tsfem-trends,
@@ -810,6 +811,7 @@ h4.tsfem-support-title {
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	background: #fefefe;
+	-webkit-align-self: auto;
 	align-self: auto;
 }
 
@@ -859,6 +861,12 @@ h4.tsfem-support-title {
 	flex-grow: 3;
 	-webkit-flex-basis: 280px;
 	flex-basis: 280px;
+}
+
+.tsfem-extension-description-footer {
+	-webkit-align-items: flex-end;
+	align-items: flex-end;
+	white-space: pre;
 }
 
 h4.tsfem-extension-title {
@@ -1137,9 +1145,7 @@ h5.tsfem-extension-type {
 		max-width: 100%;
 	}
 
-	.tsfem-trends-wrap,
-	.tsfem-actions-wrap,
-	.tsfem-extensions-wrap,
+	.tsfem-pane-inner-wrap,
 	.tsfem-panes-row {
 		min-height: initial;
 		height: initial;
@@ -1180,10 +1186,6 @@ h5.tsfem-extension-type {
 		-webkit-align-items: flex-start;
 		align-items: flex-start;
 		padding: 1em 20px 1.66em;
-	}
-
-	.tsfem-connect-action {
-		text-align: left;
 	}
 
 	.tsfem-connect-fields-row {
@@ -1290,4 +1292,8 @@ h5.tsfem-extension-type {
 .tsfem-has-hover-balloon {
 	position: relative;
 	cursor: help;
+}
+
+.tsfem-ltr {
+	direction: ltr;
 }

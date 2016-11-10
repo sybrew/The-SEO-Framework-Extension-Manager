@@ -7,8 +7,8 @@ namespace TSF_Extension_Manager_Extension;
 /**
  * Extension Name: MultiLang
  * Extension URI: https://premium.theseoframework.com/extensions/multilang/
- * Description: The MultiLang extension allows you to tell Search Engines where your macrolinguistic websites are located.
- * Version: 1.0.2
+ * Description: **This extension doesn't do anything, yet.** The MultiLang extension allows you to tell Search Engines where your macrolinguistic websites are located.
+ * Version: 1.0.0
  * Author: Sybre Waaijer
  * Author URI: https://cyberwire.nl/
  * License: GPLv3

@@ -134,122 +134,6 @@ class Monitor_Data {
 		//* Please, don't expect anything from what you see here. It's a mind-map.
 		$planned_dummy_data = array(
 			'issues' => array(
-				/* @NOTE might not be secure... and is overkill of data.
-				// Are titles outputted as it should? Take 2 samples and test them.
-				'title' => array(
-					'test' => array(
-						'type' => 'equals',
-						'requires_tsf' => '2.7.0',
-						'func' => array( 'the_seo_framework', 'title' ), // VAR_DUMP() warning: is this secure???
-						'iterations' => array(
-							array(
-								'value' => 'My WordPress Site &mdash; Just another WordPress site',
-								'args' => array(
-									'title' => '',
-									'sep' => '',
-									'seplocation' => '',
-									'args' => array(
-										'term_id' => 0,
-										'taxonomy' => '',
-										'meta' => array( 'boolean', true ),
-										'page_on_front' => array( 'boolean', true ),
-									),
-								),
-							),
-							array(
-								'value' => 'Hello world! &mdash; My WordPress Site',
-								'args' => array(
-									'title' => '',
-									'sep' => '',
-									'seplocation' => '',
-									'args' => array(
-										'term_id' => 1,
-										'taxonomy' => '',
-										'meta' => array( 'boolean', true ),
-										'page_on_front' => array( 'boolean', false ),
-									),
-								),
-							),
-						),
-					),
-				),
-				// Are descriptions outputted as it should? Take 2 samples and test them.
-				'description' => array(
-					'test' => array(
-						'type' => 'equals',
-						'requires_tsf' => '2.7.0',
-						'func' => array( 'the_seo_framework', 'generate_description' ),
-						'iterations' => array(
-							array(
-								'value' => 'Just another WordPress site on My WordPress Site',
-								'args' => array(
-									'description' => '',
-									'args' => array(
-										'id' => 0,
-										'taxonomy' => '',
-										'get_custom_field' => array( 'boolean', true ),
-										'is_home' => array( 'boolean', true ),
-										'social' => array( 'boolean', true ),
-									),
-								),
-							),
-							array(
-								'value' => 'Hello world! on My WordPress Site | Welcome to WordPress. This is your first post. Edit or delete it, then start writing!',
-								'args' => array(
-									'description' => '',
-									'args' => array(
-										'id' => 1,
-										'taxonomy' => '',
-										'get_custom_field' => array( 'boolean', true ),
-										'is_home' => array( 'boolean', false ),
-										'social' => array( 'boolean', false ),
-									),
-								),
-							),
-						),
-					),
-				),
-				// Is canonical URL equal to page, and if not - are settings applied?
-				'canonical' => array(
-					'test' => array(
-						'type' => 'equals',
-						'requires_tsf' => '2.7.0',
-						'func' => array( 'the_seo_framework', 'the_url' ),
-						'iterations' => array(
-							array(
-								'value' => 'http://testmijnphp7.nl/',
-								'args' => array(
-									'url' => '',
-									'args' => array(
-										'id' => 0,
-										'taxonomy' => '',
-										'get_custom_field' => array( 'boolean', true ),
-										'paged' => array( 'boolean', false ),
-										'paged_plural' => array( 'boolean', false ),
-										'home' => array( 'boolean', true ),
-										'external' => array( 'boolean', true ),
-									),
-								),
-							),
-							array(
-								'value' => 'http://testmijnphp7.nl/hello-world/',
-								'args' => array(
-									'url' => '',
-									'args' => array(
-										'id' => 1,
-										'taxonomy' => '',
-										'get_custom_field' => array( 'boolean', true ),
-										'paged' => array( 'boolean', false ),
-										'paged_plural' => array( 'boolean', false ),
-										'home' => array( 'boolean', false ),
-										'external' => array( 'boolean', true ),
-									),
-								),
-							),
-						),
-					),
-				),
-				*/
 				// Is favicon set up? If not, mark if not static in public_html or www folder.
 				'favicon' => array(
 					'requires' => '1.0.0',
@@ -315,33 +199,28 @@ class Monitor_Data {
 				// Are images valid, and do they support mobile? Are they also optimized for performance? TODO
 				'img' => array(
 					// Is this even feasible?
-				),
+				),*/
 				// Is robots static or dynamic? If static, tell them. If dynamic, tell if it works.
 				'robots' => array(
-					'test' => array(
-						'type' => 'exists',
-						'notify_key' => array( 'link', 'post_id' ),
-						'values' => array(
-							array(
-								'post_id' => 1,
-								'value' => true,
-							),
-							array(
-								'post_id' => 1,
-								'value' => true,
-							),
-						),
+					'requires' => '1.0.0',
+					'tested' => '1.0.0',
+					'data' => array(
+						'located' => true,
+						'value' => "User-agent: * \nDisallow: /",
 					),
-					'located' => true,
-					'value' => "User-agent: * \nDisallow: /", // This is expected with indexing disabled. Test with internal robots.txt, or from TSF?
 				),
 				// Does the sitemap work? Is the sitemap valid? Is it too big?
 				'sitemap' => array(
-					'located' => true,
-					'size' => '48234', // 48kB ish
-					'index' => false, // Is it a web of sitemaps?
-					'valid' => true, // Determined by XML parser (no spaces before..)
+					'requires' => '1.0.0',
+					'tested' => '1.0.0',
+					'data' => array(
+						'located' => true,
+						'size' => 48234, // 48kB ish
+						'index' => false, // Is it a web of sitemaps?
+						'valid' => true, // Determined by XML parser (no spaces before..)
+					),
 				),
+				/*
 				// Can the site load within a few seconds? Set margins/regions to test performance with a delta.
 				'performance' => array(
 					'site_loc' => array(

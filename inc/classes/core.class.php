@@ -1329,6 +1329,7 @@ class Core {
 					break;
 
 				default :
+					//* @TODO consider return unknown error.
 					break;
 			endswitch;
 		endif;
@@ -1426,8 +1427,8 @@ class Core {
 	 * 		1 => No file header path can be created. (Invalid extension)
 	 * 		2 => Extension header file is invalid. (Invalid extension)
 	 * 		3 => Inclusion failed.
-	 *		4 => Success.
-	 *		void => Fatal error.
+	 * 		4 => Success.
+	 * 		void => Fatal error.
 	 * }
 	 */
 	protected function test_extension( $slug, $ajax = false ) {
@@ -1639,5 +1640,96 @@ class Core {
 			'level'   => $this->get_option( '_activation_level' ),
 			'data'    => $this->get_option( '_remote_subscription_status' ),
 		);
+	}
+
+
+	/**
+	 * Converts markdown text into HMTL.
+	 *
+	 * Does not support list or block elements. Only inline statements.
+	 *
+	 * @since 1.0.0
+	 * @link https://wordpress.org/plugins/about/readme.txt
+	 *
+	 * @param string $text The text that might contain markdown. Expected to be escaped.
+	 * @param array $convert The markdown style types wished to be converted.
+	 * 				If left empty, it will convert all.
+	 * @return string The markdown converted text.
+	 */
+	public function convert_markdown( $text, $convert = array() ) {
+
+		preprocess : {
+			$text = str_replace( "\r\n", "\n", $text );
+			$text = str_replace( "\t", ' ', $text );
+		}
+
+		if ( '' === $text )
+			return '';
+
+		/**
+		 * The conversion list's keys are per reference only.
+		 */
+		$conversions = array(
+			'**'   => 'strong',
+			'*'    => 'em',
+			'`'    => 'code',
+			'[]()' => 'a',
+			'======'  => 'h6',
+			'====='  => 'h5',
+			'===='  => 'h4',
+			'==='  => 'h3',
+			'=='   => 'h2',
+			'='    => 'h1',
+		);
+
+		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
+
+		foreach ( $md_types as $type ) :
+			switch ( $type ) :
+				case 'strong' :
+					//* Considers word boundary. @TODO consider removing this?
+					$text = preg_replace( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', '<strong>${1}</strong>', $text );
+					break;
+
+				case 'em' :
+					$text = preg_replace( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', '<em>${1}</em>', $text );
+					break;
+
+				case 'code' :
+					$text = preg_replace( '/(?:`{1})([^`{1}]+)(?:`{1})/', '<code>${1}</code>', $text );
+					break;
+
+				case 'h6' :
+				case 'h5' :
+				case 'h4' :
+				case 'h3' :
+				case 'h2' :
+				case 'h1' :
+					//* Considers word non-boundary. @TODO consider removing this?
+					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
+					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
+					$replacement = "<{$type}>${1}</{$type}>";
+					$text = preg_replace( $expression, $replacement, $text );
+					break;
+
+				case 'a' :
+					getmatches : {
+						$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+					}
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<a href="%s" rel="nofollow">%s</a>', esc_url( $matches[2][ $i ] ), esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
+					break;
+
+				default :
+					break;
+			endswitch;
+		endforeach;
+
+		return $text;
 	}
 }

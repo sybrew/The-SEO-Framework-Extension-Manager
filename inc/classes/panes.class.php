@@ -65,7 +65,7 @@ class Panes extends API {
 			$output = $this->get_trends_activation_output();
 		}
 
-		return sprintf( '<div class="tsfem-trends-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-trends-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Panes extends API {
 
 		$output = $this->get_actions_output();
 
-		return sprintf( '<div class="tsfem-actions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-actions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Panes extends API {
 
 		$output = $this->get_extensions_output();
 
-		return sprintf( '<div class="tsfem-extensions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-extensions-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Panes extends API {
 			$output .= sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
 		}
 
-		return sprintf( '<div class="tsfem-trends tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**

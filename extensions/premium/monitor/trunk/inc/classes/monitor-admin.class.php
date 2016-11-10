@@ -70,7 +70,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @var string Page hook.
 	 */
-	public $monitor_menu_page_hook;
+	protected $monitor_menu_page_hook;
 
 	/**
 	 * The extension page ID/slug.
@@ -79,7 +79,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @var string Page ID/Slug
 	 */
-	public $monitor_page_slug;
+	protected $monitor_page_slug;
 
 	/**
 	 * Constructor, initializes WordPress actions.
@@ -137,12 +137,12 @@ final class Monitor_Admin extends Monitor_Data {
 	public function add_menu_link() {
 
 		$menu = array(
-			'parent_slug'	=> the_seo_framework_options_page_slug(),
-			'page_title'	=> esc_html__( 'SEO Monitor', 'the-seo-framework-extension-manager' ),
-			'menu_title'	=> esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
-			'capability'	=> 'install_plugins',
-			'menu_slug'		=> $this->monitor_page_slug,
-			'callback'		=> array( $this, 'init_monitor_page' ),
+			'parent_slug' => the_seo_framework_options_page_slug(),
+			'page_title'  => esc_html__( 'SEO Monitor', 'the-seo-framework-extension-manager' ),
+			'menu_title'  => esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
+			'capability'  => 'install_plugins',
+			'menu_slug'   => $this->monitor_page_slug,
+			'callback'    => array( $this, 'init_monitor_page' ),
 		);
 
 		$this->monitor_menu_page_hook = add_submenu_page(
@@ -357,7 +357,7 @@ final class Monitor_Admin extends Monitor_Data {
 			$output = $instance->generate_pane_slab_data( $issues, 'issues' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-issues-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -369,13 +369,17 @@ final class Monitor_Admin extends Monitor_Data {
 	 */
 	protected function get_poi_overview() {
 
-		$points = $this->get_data( 'poi', array() );
+		$output = '';
+		$poi = $this->get_data( 'poi', array() );
 
-		if ( empty( $points ) ) {
-			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+		if ( empty( $poi ) ) {
+			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			//return print_r( $points, true );
+			$instance = Monitor_Output::get_instance();
+			$output = $instance->generate_pane_slab_data( $poi, 'poi' );
 		}
+
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -383,15 +387,19 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function get_statistics_overview() {
+	protected function get_stats_overview() {
 
+		$output = '';
 		$stats = $this->get_data( 'stats', array() );
 
 		if ( empty( $stats ) ) {
-			return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
-			//return print_r( $stats, true );
+			$instance = Monitor_Output::get_instance();
+			$output = $instance->generate_pane_graph_data( $stats, 'stats' );
 		}
+
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**

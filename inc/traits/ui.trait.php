@@ -269,6 +269,7 @@ trait UI {
 				'Activate' => esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 				'Deactivate' => esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 			),
+			'rtl' => (bool) is_rtl(),
 		);
 
 		wp_localize_script( $this->js_name, 'tsfemL10n', $strings );

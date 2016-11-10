@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 			'collapse' => true,
 			'move' => false,
 			'ajax' => true,
-			'ajax_id' => 'tsfem-feed-ajax',
+			'ajax_id' => 'tsfem-monitor-issues-ajax',
 		)
 	);
 	tsf_extension_manager()->do_pane_wrap(
@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 			'collapse' => true,
 			'move' => false,
 			'ajax' => true,
-			'ajax_id' => 'tsfem-actions-ajax',
+			'ajax_id' => 'tsfem-monitor-poi-ajax',
 		)
 	);
 ?>
@@ -37,13 +37,13 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 <?php
 	tsf_extension_manager()->do_pane_wrap(
 		__( 'Statistics', 'the-seo-framework-extension-manager' ),
-		$this->get_statistics_overview(),
+		$this->get_stats_overview(),
 		array(
 			'full' => true,
 			'collapse' => true,
 			'move' => false,
 			'ajax' => true,
-			'ajax_id' => 'tsfem-extensions-ajax',
+			'ajax_id' => 'tsfem-monitor-stats-ajax',
 		)
 	);
 ?>

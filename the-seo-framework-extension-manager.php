@@ -117,7 +117,7 @@ add_action( 'activate_' . TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, '_tsf_extension
  * Otherwise, it will crash in the first called file because of the "use" keyword.
  *
  * @since 1.0.0
- * @see register_activation_hook()
+ * @see register_activation_hook():
  * @link https://developer.wordpress.org/reference/functions/register_activation_hook/
  *
  * @param bool $network_wide Whether the plugin is activated on a multisite network.
