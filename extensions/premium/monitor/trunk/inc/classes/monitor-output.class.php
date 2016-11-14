@@ -88,111 +88,36 @@ final class Monitor_Output {
 	}
 
 	/**
-	 * Generates pane graph overview.
+	 * Returns HTML pane overview based on $data input and $type.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 *
 	 * @param array $data The pane data to parse.
 	 * @param string $type The pane data type.
-	 * @return string The pane graph overview.
+	 * @return string The HTML pane overview.
 	 */
-	public function generate_pane_graph_data( $data, $type ) {
-		return $this->generate_pane_graph_info_data( $data, $type );
+	public function _get_data( $data, $type ) {
+		return $this->get_pane_data( $data, $type );
 	}
 
-	protected function generate_pane_graph_info_data( $data, $type ) {
+	/**
+	 * Generates information pane data based on $data input and $type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The pane data to parse.
+	 * @param string $type The pane data type.
+	 * @return string The HTML pane overview.
+	 */
+	protected function get_pane_data( $data, $type ) {
 
 		$info = '';
 
-		foreach ( $this->render_pane_slab_graph_data( $data, $type ) as $info_entry )
+		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
 			$info .= $info_entry;
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
-	}
-
-	protected function render_pane_slab_graph_data( $data, $type ) {
-
-		foreach ( $data as $key => $value ) :
-			yield $this->make_slab_graph_entry( $key, $value, $type );
-		endforeach;
-
-	}
-
-	protected function make_slab_graph_entry( $key, $value, $type ) {
-
-		$output = $this->parse_content( $key, $value, $type );
-
-		if ( $output ) {
-			$this->slab_nav_key_has_content( $key, $type, true );
-
-			$title = $this->get_entry_title( $key, $type );
-			$prefix = $this->get_entry_state_sign( $key, $type );
-
-			$title = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
-			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
-
-			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', esc_attr( $key ), $title, $output );
-		}
-
-		return '';
-	}
-
-	/**
-	 * Generates pane slab overview. With navigation on the side when JS is available.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @param array $data The pane data to parse.
-	 * @param string $type The pane data type.
-	 * @param string $navpos Determines the navigation position. Accepts 'left' and 'right'.
-	 * @return string The pane slab overview.
-	 */
-	public function generate_pane_slab_data( $data, $type, $navpos = 'left' ) {
-
-		$info = $this->generate_pane_slab_info_data( $data, $type );
-		$nav = $this->generate_pane_slab_nav_data( $data, $type );
-
-		return 'left' === $navpos ? $nav . $info : $info . $nav;
-	}
-
-	/**
-	 * Generates information pane slab.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $data The pane data to parse.
-	 * @param string $type The pane data type.
-	 * @return string The information pane slab.
-	 */
-	protected function generate_pane_slab_info_data( $data, $type ) {
-
-		$info = '';
-
-		foreach ( $this->render_pane_slab_info_data( $data, $type ) as $info_entry )
-			$info .= $info_entry;
-
-		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
-	}
-
-	/**
-	 * Generates navigation pane slab.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $data The pane data to parse.
-	 * @param string $type The pane data type.
-	 * @return string The navigation pane slab.
-	 */
-	protected function generate_pane_slab_nav_data( $data, $type ) {
-
-		$nav = '';
-
-		foreach ( $this->render_pane_slab_nav_data( $data, $type ) as $nav_entry )
-			$nav .= $nav_entry;
-
-		return sprintf( '<div class="tsfem-flex">%s</div>', $nav );
 	}
 
 	/**
@@ -206,51 +131,10 @@ final class Monitor_Output {
 	 * @param string $type The pane-date type.
 	 * @yields Interpreted data from array for the information slab.
 	 */
-	protected function render_pane_slab_info_data( $data = array(), $type = '' ) {
-
+	protected function generate_pane_info_list( $data = array(), $type = '' ) {
 		foreach ( $data as $key => $value ) :
 			yield $this->make_slab_info_entry( $key, $value, $type );
 		endforeach;
-
-	}
-
-	/**
-	 * Iterates over pane slab data to generate navigation.
-	 *
-	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Output->make_slab_nav_entry()
-	 * @generator
-	 *
-	 * @param array $data The fetched data.
-	 * @param string $type The pane-date type.
-	 * @yields Interpreted data from array for the navigation slab (js only).
-	 */
-	protected function render_pane_slab_nav_data( $data = array(), $type = '' ) {
-
-		foreach ( $data as $key => $value ) :
-			yield $this->make_slab_nav_entry( $key, $type );
-		endforeach;
-
-	}
-
-	/**
-	 * Activates and determines if slab nav key is active.
-	 *
-	 * To be used for navigation, where is determined if the key has content.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $cache Maintains cache for data.
-	 *
-	 * @param string $key The entry key.
-	 * @param string $type The pane-data type.
-	 * @param bool $set Whether to activate the key or determine its existence.
-	 * @return bool True when set, false otherwise.
-	 */
-	protected function slab_nav_key_has_content( $key, $type, $set = false ) {
-
-		static $cache = array();
-
-		return $set ? $cache[ $type ][ $key ] = true : isset( $cache[ $type ][ $key ] );
 	}
 
 	/**
@@ -265,55 +149,126 @@ final class Monitor_Output {
 	 */
 	protected function make_slab_info_entry( $key, $value, $type ) {
 
-		$output = $this->parse_content( $key, $value, $type );
+		$content = $this->parse_content( $key, $value, $type );
 
-		if ( $output ) {
-			$this->slab_nav_key_has_content( $key, $type, true );
+		if ( $content ) {
+			switch ( $type ) :
+				case 'issues' :
+				case 'poi' :
+					//$this->slab_nav_key_has_content( $key, $type, true );
+					$title = $this->get_entry_title( $key, $type );
+					$prefix = $this->get_entry_state_icon( $key, $type );
 
-			$title = $this->get_entry_title( $key, $type );
-			$prefix = $this->get_entry_state_sign( $key, $type );
+					$title = $prefix . $title;
 
-			$title = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
-			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
+					return $this->build_collapsable_entry( $title, $content, $key, $this->get_entry_state( $key, $type ) );
+					break;
 
-			return sprintf( '<div id="tsfem-e-monitor-%s-nav-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', esc_attr( $key ), $title, $output );
+				case 'stats' :
+				default :
+					return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
+					break;
+			endswitch;
 		}
 
 		return '';
 	}
 
 	/**
-	 * Makes slab entry title from input $key and $type for when no JS is present.
+	 * Creates a collapsable entry from title and content.
+	 * Also known as an accordion. Without the requirement for JS.
 	 *
 	 * @since 1.0.0
+	 * @staticvar int $count Couples label and checkbox IDs.
 	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
-	 * @return string The HTML formed data.
+	 * @param string $title The entry title. Must be escaped.
+	 * @param string $content The entry content. Must be escaped.
+	 * @param string $id The entry ID. Optional.
+	 * @param string $icon_state The icon state color. Leave empty for 'unknown' (blue).
+	 * @return string The HTML formed collapsable entry.
 	 */
-	protected function make_slab_nav_entry( $key, $type ) {
+	protected function build_collapsable_entry( $title, $content, $id = '', $icon_state = '' ) {
 
-		if ( $this->slab_nav_key_has_content( $key, $type ) )
-			return $this->get_slab_nav_entry( $key, $type );
+		static $count = 0;
+		$count++;
 
-		return '';
+		$id = $id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', esc_attr( $id ) ) : '';
+		$icon_state = $this->parse_defined_icon_state( $icon_state );
+
+		$checkbox_id = sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
+		$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
+
+		$title = sprintf( '<h3 class="tsfem-e-monitor-collapse-title">%s</h3>', $title );
+		$icon = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-monitor-icon-%s"></span>', $icon_state );
+
+		$header = sprintf( '<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>', $checkbox_id, $title, $icon );
+		$content = sprintf( '<div class="tsfem-e-monitor-collapse-content">%s</div>', $content );
+
+		return sprintf( '<div class="tsfem-e-monitor-collapse tsfem-flex"%s>%s%s%s</div>', $id, $checkbox, $header, $content );
 	}
 
 	/**
-	 * Returns slab nav entry title from input $key and $type.
+	 * Returns pane graph overview.
 	 *
 	 * @since 1.0.0
+	 * @access private
+	 * @TODO unused?
 	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
-	 * @return string The HTML formed data.
+	 * @param array $data The pane data to parse.
+	 * @param string $type The pane data type.
+	 * @return string The pane graph overview.
 	 */
-	protected function get_slab_nav_entry( $key, $type ) {
+	public function get_pane_graph_data( $data, $type ) {
 
-		$title = $this->get_entry_title( $key, $type );
-		$prefix = $this->get_entry_state_sign( $key, $type );
+		$info = '';
 
-		return sprintf( '<h3 id="tsfem-e-monitor-%s-nav-entry" class="tsfem-e-monitor-nav-entry">%s%s</h3>', esc_attr( $key ), $prefix, $title );
+		foreach ( $this->generate_pane_graph_data( $data, $type ) as $info_entry )
+			$info .= $info_entry;
+
+		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
+	}
+
+	/**
+	 * Iterates over graph data to generate information.
+	 *
+	 * @since 1.0.0
+	 * @uses TSF_Extension_Manager_Extension\Monitor_Output->make_slab_graph_entry()
+	 * @generator
+	 * @TODO unused?
+	 *
+	 * @param array $data The fetched data.
+	 * @param string $type The data type.
+	 * @yields Interpreted data from array for the information slab.
+	 */
+	protected function generate_pane_graph_data( $data, $type ) {
+
+		foreach ( $data as $key => $value ) :
+			yield $this->make_slab_graph_entry( $key, $value, $type );
+		endforeach;
+
+	}
+
+	/**
+	 * @TODO document
+	 * @TODO unused?
+	 */
+	protected function make_slab_graph_entry( $key, $value, $type ) {
+
+		$output = $this->parse_content( $key, $value, $type );
+
+		if ( $output ) {
+			//$this->slab_nav_key_has_content( $key, $type, true );
+
+			$title = $this->get_entry_title( $key, $type );
+			$prefix = $this->get_entry_state_icon( $key, $type );
+
+			$title = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
+			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
+
+			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', esc_attr( $key ), $title, $output );
+		}
+
+		return '';
 	}
 
 	/**
@@ -338,44 +293,113 @@ final class Monitor_Output {
 		return $cache[ $type ][ $key ] = esc_html( $title );
 	}
 
-	public function set_entry_state_sign( $key, $type, $state ) {
+	/**
+	 * Sets entry $state for $key and $type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The array key.
+	 * @param string $type The pane-data type.
+	 * @param string $state The pane-data entry state.
+	 * @return string The entry $state if set; Empty string otherwise.
+	 */
+	protected function set_entry_state( $key, $type, $state ) {
 
 		if ( $state )
-			return $this->get_entry_state_sign( $key, $type, $state );
+			return $this->get_entry_state( $key, $type, $state );
 
 		return '';
 	}
 
-	protected function get_entry_state_sign( $key, $type, $set = null ) {
+	/**
+	 * Returns entry $state for $key and $type.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $cache Maintains state strings for $key and $type.
+	 *
+	 * @param string $key The array key.
+	 * @param string $type The pane-data type.
+	 * @param string|null $set The pane-data entry state.
+	 * @return string The entry $state if set; Null otherwise.
+	 */
+	protected function get_entry_state( $key, $type, $set = null ) {
 
 		static $cache = array();
 
 		if ( isset( $cache[ $type ][ $key ] ) )
-			return $this->parse_state_sign( $cache[ $type ][ $key ] );
+			return $cache[ $type ][ $key ];
 
 		if ( isset( $set ) )
 			return $cache[ $type ][ $key ] = $set;
 
-		return $this->parse_state_sign();
+		return '';
 	}
 
-	protected function parse_state_sign( $type = '' ) {
+	/**
+	 * Returns entry state icon for $key and $type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The array key.
+	 * @param string $type The pane-data type.
+	 * @return string The HTML formed entry state icon.
+	 */
+	protected function get_entry_state_icon( $key, $type ) {
+		return $this->parse_state_icon( $this->get_entry_state( $key, $type ) );
+	}
 
-		switch ( $type ) :
+	/**
+	 * Parses entry state HTMl icon.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $state The icon state.
+	 * @return string The HTML formed entry state icon.
+	 */
+	protected function parse_state_icon( $state = '' ) {
+
+		$state = $this->parse_defined_icon_state( $state );
+
+		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', esc_attr( $state ) );
+	}
+
+	/**
+	 * Returns known CSS icon state name for $key and $type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The array key.
+	 * @param string $type The pane-data type.
+	 * @return string The known entry state name.
+	 */
+	protected function get_defined_icon_state( $key, $type ) {
+		return $this->parse_defined_icon_state( $this->get_entry_state( $key, $type ) );
+	}
+
+	/**
+	 * Parses known CSS icon states.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $state The could-be unknown state.
+	 * @return string The known state.
+	 */
+	protected function parse_defined_icon_state( $state = '' ) {
+
+		switch ( $state ) :
 			case 'good' :
 			case 'okay' :
 			case 'warning' :
 			case 'bad' :
 			case 'error' :
-				$icon = $type;
 				break;
 
 			default :
-				$icon = 'unknown';
+				$state = 'unknown';
 				break;
 		endswitch;
 
-		return sprintf( '<span class="tsfem-title-icon tsfem-title-icon-%s">_X_</span>', $icon );
+		return $state;
 	}
 
 	/**
@@ -472,6 +496,8 @@ final class Monitor_Output {
 				$content = $this->parse_issues_content( $key, $value );
 				break;
 
+			//* @TODO poi
+
 			case 'stats' :
 				$content = $this->parse_stats_content( $key, $value );
 				break;
@@ -483,6 +509,9 @@ final class Monitor_Output {
 		return $content;
 	}
 
+	/**
+	 * @TODO document
+	 */
 	protected function parse_issues_content( $key, $value ) {
 
 		static $tests = null;
@@ -497,7 +526,7 @@ final class Monitor_Output {
 				$output = isset( $value['data'] ) ? $tests->{"issue_$key"}( $value['data'] ) : '';
 				if ( '' !== $output ) {
 					$content = $output['content'];
-					$this->set_entry_state_sign( $key, $type, $output['state'] );
+					$this->set_entry_state( $key, 'issues', $output['state'] );
 				}
 			}
 		} else {
@@ -507,6 +536,9 @@ final class Monitor_Output {
 		return $content;
 	}
 
+	/**
+	 * @TODO document
+	 */
 	protected function parse_stats_content( $key, $value ) {
 
 		static $graph = null;

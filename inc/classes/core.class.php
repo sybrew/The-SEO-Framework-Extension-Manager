@@ -767,7 +767,6 @@ class Core {
 				);
 			endfor;
 		endif;
-
 	}
 
 	/**

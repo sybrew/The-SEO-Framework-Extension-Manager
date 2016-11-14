@@ -107,34 +107,6 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.2.0',
 				'tested_tsf' => '2.8.0',
 			),
-			'multilang' => array(
-				'slug' => 'multilang',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'general',
-				'version' => '1.0.0',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1473299919',
-				'requires' => '4.4.0',
-				'tested' => '4.7.0',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.8.0',
-			),
-			'analytics' => array(
-				'slug' => 'analytics',
-				'network' => '0',
-				'type' => 'premium',
-				'area' => 'general',
-				'version' => '1.0.0',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1473664096',
-				'requires' => '4.4.0',
-				'tested' => '4.7.0',
-				'requires_tsf' => '2.7.1',
-				'tested_tsf' => '2.8.0',
-			),
 			'monitor' => array(
 				'slug' => 'monitor',
 				'network' => '0',
@@ -165,9 +137,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => 'afe66487b8b2393ee55959181195f1d0c104d5fdd9f5f48d457becd0aee5ab8f',
-			'sha1'   => '35f07dd9462221dbab9cd29cb422085fa57b8a16',
-			'md5'    => 'e6f0d3a0d7b3ddbbc1d78808cd68b45f',
+			'sha256' => 'e7cd84b971710cd3873071d3f930aa5db2f1d6fc562361f9fbcb06a77128763c',
+			'sha1'   => '4bba2636226436de0f619858416400f2d1969645',
+			'md5'    => '4f1409996cc63d9f01eb30e0ceec97e0',
 		);
 	}
 
@@ -659,14 +631,14 @@ trait Extensions_Actions {
 		$tsf_version = the_seo_framework_version();
 		$_wp_version = $wp_version;
 
-		if ( version_compare( $tsf_version, $extension['tested_tsf'] ) > 0 )
+		if ( version_compare( $tsf_version, $extension['tested_tsf'], '>' ) )
 			$compatibility['tsf'] = 1;
-		elseif ( version_compare( $tsf_version, $extension['requires_tsf'] ) >= 0 )
+		elseif ( version_compare( $tsf_version, $extension['requires_tsf'], '>=' ) )
 			$compatibility['tsf'] = 2;
 
-		if ( version_compare( $_wp_version, $extension['tested'] ) > 0 )
+		if ( version_compare( $_wp_version, $extension['tested'], '>' ) )
 			$compatibility['wp'] = 1;
-		elseif ( version_compare( $_wp_version, $extension['requires'] ) >= 0 )
+		elseif ( version_compare( $_wp_version, $extension['requires'], '>=' ) )
 			$compatibility['wp'] = 2;
 
 		return $compatibility;

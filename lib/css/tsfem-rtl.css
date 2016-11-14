@@ -589,7 +589,7 @@ body.tsfem .wrap {
 .tsfem-pane-full ::-webkit-scrollbar {
 	width: 12px;
 	height: 6px;
-	background: #fafafa;
+	background: #f1f1f1;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb,
@@ -597,6 +597,7 @@ body.tsfem .wrap {
 	background-color: #0ebfdd;
 	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
 	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
+	border-radius: 0 0 3px;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb:active,

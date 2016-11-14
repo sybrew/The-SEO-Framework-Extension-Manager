@@ -1,9 +1,9 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: the seo framework, extensions, api, monitor, modules, schema, open graph
+Tags: the seo framework, extensions, api, monitor, modules, title
 Requires at least: 4.4.0
-Tested up to: 4.6.0
+Tested up to: 4.7.0
 Stable tag: 0.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -11,8 +11,6 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard. No sign-up required.
 
 == Description ==
-
-= 87.5% lifetime premium discount if you order a license in 2016! =
 
 This plugin adds an extra dashboard menu item, in which you can activate the latest free and premium extensions.
 
@@ -22,9 +20,9 @@ This plugin adds an extra dashboard menu item, in which you can activate the lat
 = About Premium =
 A premium subscription will allow you to activate all premium extensions for one single subscription price.
 These premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
-As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will be deactivated.
+As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will be deactivated. TODO make this true.
 
-> <strong>Read carefully:</strong><br>
+> <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
 > If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
 >
@@ -33,17 +31,18 @@ As long as the subscription is active, you're allowed to use all premium extensi
 = Requirements: =
 * For security reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
+* This plugin currently does not fully support MultiSite networks. This is planned, stay tuned!
 
 = Privacy =
 * This plugin can send API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).
 
 == Installation ==
 
-1. Install [The SEO Framework](https://wordpress.org/plugins/autodescription/) either via the WordPress.org plugin directory, or by uploading the files to your server.
+1. Install [The SEO Framework](https://wordpress.org/plugins/autodescription/) either via the plugin installer, or by uploading the files to your server.
 1. Follow [those installation instructions](https://wordpress.org/plugins/autodescription/installation/).
-1. Install The SEO Framework extension manager via the WordPress.org plugin directory, or by uploading the files to your server.
+1. Install The SEO Framework extension manager either via the plugin installer, or by uploading the files to your server.
 1. Either Network Activate this plugin or activate it on a single site.
-1. Follow the activation steps.
+1. Follow the activation steps provided on your website.
 1. You're good to go! Enjoy!
 
 == Screenshots ==
@@ -96,15 +95,20 @@ They're planned!
 Of course! However, please note that the plugin checks for file changes and compares a hash against the activation server for premium extensions.
 This check happens on a regular basis for any active plugin. This can't be done otherwise because this plugin has to adhere to the [plugin guidelines (especially #8)](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/).
 
-= If I'm using a MultiSite network, do I need to activate the plugins site by site? =
-You're able to choose. In network mode, only the super admin can download extensions. Only the downloaded extensions will be shown within the sub-site activation page.
+= If I'm using a MultiSite network, do I need to activate the plugins site by site? TODO make this happen: =
+You're able to choose whether you activate this plugin network wide, or per site.
+
+In network mode, you're able to allow or disallow extensions from within the Network Admin.
+In single side mode, each site takes full control of the extensions.
+
+Please note that this plugin requires a network license in order to get any premium extension in network mode. In single site mode a unique single license is required per site.
+
 Only admin users of those sites can activate the plugins, and only when the Plugins menu is active, see [filters](https://wordpress.org/plugins/the-seo-framework-extension-manager/other_notes/) for expanded options.
-Please note that this plugin requires a network license in order to get any premium extension in network mode. In single site mode a single license is required.
 
 = What happens when I deactivate my account? =
 All plugin settings will be deleted. Each individual extension handles its own options (if any); this means those settings won't be lost upon re-activation of the extension at a later time.
 
-TODO:
+TODO make this happen:
 This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
 
 = Does my website support this plugin? =
@@ -146,9 +150,9 @@ If you have any questions, before blindly implementing or circumvate security, f
 
 = Reluctance towards plugin modifications and backwards compatibility =
 This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
-You are allowed to edit this plugin and use filters for this plugin (as per GPLv3), but any modification can stop working on any update without prior notice.
-This is to enhance the plugin security and overall performance. Please note that most functions, classes, methods and files are shielded.
-No backwards compatibility will be programmed in, unless required for WordPress Core or PHP.
+You are allowed to edit this plugin and use filters for this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
+This is to enhance the plugin security, stability and overall performance. Please note that most functions, classes, methods and files are shielded against direct calls.
+No backwards compatibility will be programmed within this plugin, unless required for WordPress Core or PHP.
 
 = General Filter Reference =
 

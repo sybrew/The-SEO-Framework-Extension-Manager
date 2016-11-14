@@ -56,7 +56,7 @@ if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && funct
 	$font = $this->get_font_file_location( 'verdana.ttf' );
 	if ( file_exists( $font ) ) :
 		//* Calculate text-width. 1.9em @ 13px body.
-		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 ), 0, $font, $extensions_i18n );
+		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 ), 0, $font, $extensions_i18n . ' beta' );
 
 		$width_top = isset( $tim[2] ) ? $tim[2] : 0;
 		$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
@@ -94,7 +94,7 @@ endif;
 							esc_url( $image['svg'] ), esc_url( $image['1x'] ), esc_attr( $size )
 						)
 					)
-				), esc_html( $extensions_i18n )
+				), esc_html( $extensions_i18n ) . ' <em>beta</em>'
 			);
 			?>
 		</h1></header>

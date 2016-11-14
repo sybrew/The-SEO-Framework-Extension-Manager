@@ -348,8 +348,15 @@ class Monitor_Data {
 				// Check for uptime. Interpreted in graph?
 				// 5 minute check, timeout @ 10 seconds. 30 days are held per site.
 				'uptime' => array(
-					array(
+					'requires' => '1.0.0',
+					'tested' => '1.0.0',
+					'data' => array(
+						/*
+						'gap' => 300,
+						'overflow' => array( 2, 43200 ), // Overflow before and after for 12 hours
+						*/
 						//* UNIX time start of date. + every 5 minutes a 1 or 0. (288 checks a day total). Compressed to sequences.
+						'1473897600' => '144x1', // 12 hours overflow
 						'1473984000' => '288x1',
 						'1474070400' => '120x1,2x0,106x1',
 						'1474156800' => '288x1',
@@ -381,6 +388,7 @@ class Monitor_Data {
 						'1476403200' => '288x1',
 						'1476489600' => '288x1',
 						'1476576000' => '288x1',
+						'1476662400' => '144x1', // 12 hours overflow
 					),
 				),
 				// home page + all links (once!) check??? TODO really?... weekly. Timeout @ 10 seconds. Take avg?

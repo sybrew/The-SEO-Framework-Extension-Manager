@@ -337,7 +337,7 @@ final class Monitor_Tests {
 	 * @return string The HTML wrapped information text.
 	 */
 	protected function wrap_info( $text ) {
-		return sprintf( '<div class="tsfem-monitor-info">%s</div>', $text );
+		return sprintf( '<div class="tsfem-e-monitor-info">%s</div>', $text );
 	}
 
 	/**

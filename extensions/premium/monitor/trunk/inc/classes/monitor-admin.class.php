@@ -354,10 +354,10 @@ final class Monitor_Admin extends Monitor_Data {
 			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
 			$instance = Monitor_Output::get_instance();
-			$output = $instance->generate_pane_slab_data( $issues, 'issues' );
+			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-issues-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -376,10 +376,10 @@ final class Monitor_Admin extends Monitor_Data {
 			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
 			$instance = Monitor_Output::get_instance();
-			$output = $instance->generate_pane_slab_data( $poi, 'poi' );
+			$output = $instance->_get_data( $poi, 'poi' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**
@@ -396,10 +396,10 @@ final class Monitor_Admin extends Monitor_Data {
 			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 		} else {
 			$instance = Monitor_Output::get_instance();
-			$output = $instance->generate_pane_graph_data( $stats, 'stats' );
+			$output = $instance->_get_data( $stats, 'stats' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
 
 	/**

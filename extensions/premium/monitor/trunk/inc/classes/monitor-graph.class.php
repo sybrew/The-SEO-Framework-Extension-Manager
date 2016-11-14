@@ -99,8 +99,24 @@ final class Monitor_Graph {
 		return static::$instance;
 	}
 
-	public function stats_uptime() {
+	public function stats_uptime( $data ) {
 
+		$chartdata = '';
+		$id = 'uptime';
+
+		foreach ( $this->generate_chart_points( $data, array( 'x' => 'unixtimestamp', 'y' => 'stackline', 'gap' => 300 ) ) as $points ) {
+			$chartdata .= sprintf( '{x=%s,y=%s}', json_encode( $points['x'] ), json_encode( $points['y'] ) );
+		}
+
+		if ( $chartdata ) {
+			$this->store_graph_js_data( $chartdata, $id, 'stackline' );
+		} else {
+			// TODO
+		}
+
+		return array(
+			'content' => $this->render_graph_canvas( $id ),
+		);
 	}
 
 	public function stats_perfomance() {
@@ -109,5 +125,172 @@ final class Monitor_Graph {
 
 	public function stats_traffic() {
 
+	}
+
+	protected function generate_chart_points( $data, $args = array() ) {
+
+		$defaults = array(
+			'x' => 'unixtimestamp',
+			'y' => 'line',
+			'gap' => 300, //5 min
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		//* TODO: shift data?
+		// the_seo_framework()->set_timezone();
+
+		switch ( $args['y'] ) :
+			case 'line' :
+			case 'stackline' :
+
+				$first_key = key( $data );
+				/* TODO: shift data?
+				$difference = $this->get_timezone_difference( $first_key );
+				if ( 0 !== $difference ) {
+					$data = $this->shift_data_stack( $data, $difference, $args['gap'] );
+				}
+				*/
+
+				//* Remove overflowing data from the first hours of the "day before".
+				unset( $data[ $first_key ] );
+
+				end( $data );
+				//* Remove overflowing data from the first hours of the "day after".
+				$last_key = key( $data );
+				unset( $data[ $last_key ] );
+
+				//* Reset array pointer
+				reset( $data );
+
+				foreach ( $data as $x => $y ) {
+					$x = the_seo_framework()->gmt2date( 'Y-m-d H:i', date( 'Y-m-d', $x ) ) . ' GMT';
+					yield array( 'x' => $x, 'y' => $y );
+				}
+				break;
+
+			default :
+				yield array( 'x' => '', 'y' => '' );
+				break;
+		endswitch;
+
+		//* TODO: shift data?
+		// the_seo_framework()->reset_timezone();
+	}
+
+	protected function store_graph_js_data( $data, $id, $type = 'line' ) {
+
+		$var = 'tsfemGraph_' . $id;
+
+		$jsdata = sprintf( 'var %s={"data":[%s],"type":%s};', esc_js( $var ), wp_json_encode( $data ), wp_json_encode( $type ) );
+
+		$this->set_js_data_cache( $jsdata, $id );
+	}
+
+	protected function set_js_data_cache( $data = '', $id = '', $get = false ) {
+
+		if ( empty( $id ) )
+			return '';
+
+		static $cache = array();
+
+		if ( empty( $cache[ $id ] ) )
+			$cache[ $id ] = '';
+
+		$cache[ $id ] .= is_string( $data ) && $data ? $data : '';
+
+		if ( $get )
+			return false === empty( $cache[ $id ] ) ? $cache[ $id ] : '';
+	}
+
+	protected function get_js_data_cache( $id = '' ) {
+		return $this->set_js_data_cache( '', $id, true );
+	}
+
+	/**
+	 * Calculates timezone difference based on input timestamp.
+	 * Expects to be run between the_seo_framework() methods 'set_timezone' and 'reset_timezone'.
+	 *
+	 * @since 1.0.0
+	 * @staticvar int $difference
+	 *
+	 * @param int $timestamp The external timestamp.
+	 * @return int The local timezone difference from the external one.
+	 */
+	protected function get_timezone_difference( $timestamp ) {
+
+		if ( empty( $timestamp ) )
+			return '';
+
+		static $difference = null;
+
+		if ( is_null( $difference ) )
+			$difference = strtotime( 'midnight', $timestamp ) - $timestamp;
+
+		return $difference;
+	}
+
+	protected function shift_data_stack( $data, $difference, $gap ) {
+		//* TODO.
+		return $data;
+
+		$_data = array();
+
+		$shift = $difference / $gap;
+
+		if ( $difference < 0 ) {
+			$previous = array( 0, 0 );
+			foreach ( $data as $timestamp => $value ) {
+				$timestamp = $timestamp - $difference;
+
+				foreach ( explode( ',', $value ) as $t => $v ) {
+					$v = explode( 'x', $v );
+					$_shift = 0;
+					foreach ( $v as $count => $type ) {
+						if ( $count > $shift ) {
+							//* Nothing to worry about.
+							// TODO
+							break 2;
+						} else {
+							//* Get from cache and move on?
+							// TODO
+							break 1;
+						}
+					}
+				}
+
+				$_data = array( $timestamp, $value );
+				$previous = array( $dif_key, $dif_value );
+			}
+		} elseif ( $difference > 0 ) {
+
+		}
+
+		return $_data;
+	}
+
+	protected function get_start_of_day( $timestamp = '' ) {
+
+		$date = strtotime( 'gmt', $timestamp );
+
+		return $timestamp;
+	}
+
+	protected function render_graph_canvas( $id = '' ) {
+
+		if ( empty( $id ) )
+			return '';
+
+		$nosupport = __( "Your browser doesn't support HTML5 canvas.", 'the-seo-framework-extension-manager' );
+		$nojs = __( 'This element requires JavaScript.', 'the-seo-framework-extension-manager' );
+
+		$cdata = sprintf( '<script type="text/javascript">/*<![CDATA[*/%s/*]]>*/</script>', $this->get_js_data_cache( $id ) );
+		//* @TODO set class.
+		$canvas = sprintf(
+			'<canvas id="tsfem-graph-%s" style="border:1px solid #d3d3d3;">%s%s</canvas>',
+			esc_attr( $id ), sprintf( '<p>%s</p>', esc_html( $nosupport ) ), sprintf( '<noscript><p>%s</p></noscript>', esc_html( $nojs ) )
+		);
+
+		return $cdata . $canvas;
 	}
 }

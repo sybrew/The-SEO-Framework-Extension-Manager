@@ -261,3 +261,39 @@ function _tsf_extension_manager_load_trait( $file ) {
 
 	return;
 }
+
+/**
+ * Requires WordPress compat files once.
+ *
+ * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT
+ * @access private
+ * @staticvar array $loaded
+ * @global string $wp_version
+ *
+ * @param string $version The version where the WordPress compatibility is required for.
+ * @return void; Early if file is already loaded or when compatibility has already been determined.
+ */
+function _tsf_extension_manager_load_wp_compat( $version = '' ) {
+
+	static $loaded = array();
+
+	if ( isset( $loaded[ $version ] ) )
+		return;
+
+	if ( empty( $version ) || strlen( $version ) > 3 ) {
+		the_seo_framework()->_doing_it_wrong( __FUNCTION__, 'You must tell the two-point required WordPress version.' );
+		return $loaded[ $version ] = false;
+	}
+
+	global $wp_version;
+
+	$_wp_version = $wp_version;
+
+	if ( version_compare( $_wp_version, $version, '>=' ) )
+		return $loaded[ $version ] = true;
+
+	$loaded[ $version ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
+
+	return;
+}
