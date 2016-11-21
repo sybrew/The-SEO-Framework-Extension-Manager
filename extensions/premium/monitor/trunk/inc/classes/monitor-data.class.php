@@ -256,6 +256,14 @@ class Monitor_Data {
 					'', // Is this even feasible?
 				),
 				*/
+				// More coming soon notification.
+				'moresoon' => array(
+					'requires' => '1.0.0',
+					'tested' => '1.0.0',
+					'data' => array(
+						'coming_soon' => 1,
+					),
+				),
 			),
 			'poi' => array(
 				// Is the website too big in size? If so, is the issue HTMl, JS, CSS, img, etc.

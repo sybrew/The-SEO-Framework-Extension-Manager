@@ -368,6 +368,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @return string The parsed Points of Interest overview HTML data.
 	 */
 	protected function get_poi_overview() {
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_string_coming_soon() );
 
 		$output = '';
 		$poi = $this->get_data( 'poi', array() );
@@ -386,8 +387,12 @@ final class Monitor_Admin extends Monitor_Data {
 	 * Creates statistics overview for the statistics pane.
 	 *
 	 * @since 1.0.0
+	 * @todo Soon.
+	 *
+	 * @return string The HTMl parsed statistics data.
 	 */
 	protected function get_stats_overview() {
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_string_coming_soon() );
 
 		$output = '';
 		$stats = $this->get_data( 'stats', array() );
@@ -400,6 +405,18 @@ final class Monitor_Admin extends Monitor_Data {
 		}
 
 		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+	}
+
+	/**
+	 * Returns coming soon string.
+	 *
+	 * @since 1.0.0
+	 * @todo Replace this with actual data.
+	 *
+	 * @return string Translatable coming soon string.
+	 */
+	protected function get_string_coming_soon() {
+		return esc_html__( 'Coming soon!', 'the-seo-framework-extension-manager' );
 	}
 
 	/**

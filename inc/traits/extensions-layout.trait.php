@@ -243,8 +243,7 @@ trait Extensions_Layout {
 	private static function make_extension_header( $extension ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
-
-		$title = '<h4 class="tsfem-extension-title">' . esc_html( $data['Name'] ) . '</h4>';
+		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', tsf_extension_manager()->convert_markdown( esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
 
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';

@@ -467,6 +467,7 @@ class Panes extends API {
 		Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+		$title .= sprintf( '<p class="tsfem-description">%s</p>', 'These buttons will become active on release.' );
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {

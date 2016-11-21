@@ -132,7 +132,7 @@
 	position: absolute;
 	width: 6px;
 	height: 0px;
-	border: 2px solid;
+	border: 1px solid;
 	border-radius: 3px;
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;

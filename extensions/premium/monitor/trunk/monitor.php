@@ -4,7 +4,7 @@
  */
 
 /**
- * Extension Name: Monitor
+ * Extension Name: Monitor *alpha*
  * Extension URI: https://premium.theseoframework.com/extensions/monitor/
  * Description: **This extension is still under construction.** The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
  * Version: 1.0.0

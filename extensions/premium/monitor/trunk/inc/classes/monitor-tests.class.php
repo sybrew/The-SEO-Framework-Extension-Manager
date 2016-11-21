@@ -329,6 +329,23 @@ final class Monitor_Tests {
 	}
 
 	/**
+	 * Returns more coming soon information with unknown state.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The input data.
+	 * @return string The information string in HTML.
+	 */
+	public function issue_moresoon( $data ) {
+		end : {
+			return array(
+				'content' => $this->wrap_info( esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
+				'state' => 'unknown',
+			);
+		}
+	}
+
+	/**
 	 * Wraps text into an HTML info wrapper.
 	 *
 	 * @since 1.0.0

@@ -464,6 +464,10 @@ final class Monitor_Output {
 						$title = __( 'External links', 'the-seo-framework-extension-manager' );
 						break 2;
 
+					case 'moresoon' :
+						$title = __( 'More coming soon!', 'the-seo-framework-extension-manager' );
+						break 2;
+
 					default :
 						break 1;
 				endswitch;
@@ -574,6 +578,6 @@ final class Monitor_Output {
 
 		static $cache = null;
 
-	 	return isset( $cache ) ? $cache : $cache = esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
+		return isset( $cache ) ? $cache : $cache = esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
 	}
 }
