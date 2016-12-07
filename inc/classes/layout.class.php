@@ -291,7 +291,10 @@ final class Layout extends Secure_Abstract {
 				$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
 				$end_date_i18n = $end_date ? date_i18n( 'F j, Y', strtotime( $end_date ) ) : '';
 				$date_until = isset( $date_until ) ? date_i18n( get_option( 'date_format' ), $date_until ) : '';
-				$expires_in = sprintf( '<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>', esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $end_date_i18n ), esc_html( $expires_in ) );
+				$expires_in = sprintf(
+					'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
+					esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $end_date_i18n ), esc_html( $expires_in )
+				);
 
 				$output .= static::wrap_title_content( esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
 			}
@@ -336,17 +339,29 @@ final class Layout extends Secure_Abstract {
 	private static function get_account_upgrade_form() {
 
 		if ( 'form' === self::get_property( '_type' ) ) {
-			$input = sprintf( '<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">', tsf_extension_manager()->get_field_id( 'key' ), tsf_extension_manager()->get_field_name( 'key' ), esc_attr( 'License key', 'the-seo-framework-extension-manager' ) );
-			$input .= sprintf( '<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">', tsf_extension_manager()->get_field_id( 'email' ), tsf_extension_manager()->get_field_name( 'email' ), esc_attr( 'License email', 'the-seo-framework-extension-manager' ) );
+			$input = sprintf(
+				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
+				tsf_extension_manager()->get_field_id( 'key' ), tsf_extension_manager()->get_field_name( 'key' ), esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
+			);
+			$input .= sprintf(
+				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
+				tsf_extension_manager()->get_field_id( 'email' ), tsf_extension_manager()->get_field_name( 'email' ), esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
+			);
 
 			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['activate-key'] );
 			$nonce = wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
-			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">', esc_attr( 'Use this key', 'the-seo-framework-extension-manager' ) );
+			$submit = sprintf(
+				'<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">',
+				esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
+			);
 
 			$form = $input . $nonce_action . $nonce . $submit;
 
-			return sprintf( '<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>', esc_attr( self::$request_name['activate-key'] ), esc_url( tsf_extension_manager()->get_admin_page_url() ), 'input-activation', '', $form );
+			return sprintf(
+				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>', esc_attr( self::$request_name['activate-key'] ),
+				esc_url( tsf_extension_manager()->get_admin_page_url() ), 'input-activation', '', $form
+			);
 		} else {
 			the_seo_framework()->_doing_it_wrong( __METHOD__, 'The upgrade form only supports the form type.' );
 			return '';

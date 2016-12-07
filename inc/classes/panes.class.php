@@ -254,10 +254,11 @@ class Panes extends API {
 						'extension' => $slug,
 					);
 
-					if ( 'activate' === $case )
+					if ( 'activate' === $case ) {
 						$status = $this->activate_extension( $options, true );
-					elseif ( 'deactivate' === $case )
+					} elseif ( 'deactivate' === $case ) {
 						$status = $this->deactivate_extension( $options, true );
+					}
 				} else {
 					$status = array(
 						'success' => -1,

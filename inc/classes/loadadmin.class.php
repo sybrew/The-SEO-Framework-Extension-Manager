@@ -67,17 +67,17 @@ final class LoadAdmin extends AdminPages {
 				/* translators: %1$s: Warning!. %2$s Plugin API host URL. %3$s, WordPress PHP constant. */
 				$notice = sprintf(
 					esc_html__( '%1$s Your website is blocking external requests. This means you will not be able to download software. Please add %2$s to %3$s', 'the-seo-framework-extension-manager' ),
-					$warning, $host, '<code>WP_ACCESSIBLE_HOSTS</code>'
+					$warning, esc_html( $host ), '<code>WP_ACCESSIBLE_HOSTS</code>'
 				);
 
 				//* Already escaped.
-				?><div class="error"><p><?php echo $notice; ?></p></div><?php
+				the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
 			}
 		}
 	}
 
 	/**
-	 * Adds dashboard notice for when the user still needs to choose a license.
+	 * Adds dashboard notice for when the user still needs to choose a license type.
 	 * The goal is to eliminate confusion, although slightly annoying.
 	 *
 	 * @since 1.0.0
@@ -94,7 +94,7 @@ final class LoadAdmin extends AdminPages {
 		$notice_link = '<a href="' . esc_url( $url ) . '" title="' . esc_attr( $title ) . '" target="_self">' . esc_html( $title ) . '</a>';
 		$notice = esc_html( $text ) . ' &mdash; ' . $notice_link;
 
-		//* Already escaped.
+		//* No a11y icon. Already escaped.
 		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
 	}
 }

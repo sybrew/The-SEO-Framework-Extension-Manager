@@ -75,6 +75,7 @@ final class Extensions extends Secure_Abstract {
 				static::$extensions = static::get_extensions();
 				break;
 
+			case 'ajax' :
 			default :
 				break;
 		endswitch;
@@ -102,6 +103,7 @@ final class Extensions extends Secure_Abstract {
 
 			switch ( $type ) :
 				case 'overview' :
+				case 'ajax' :
 				case 'activation' :
 				case 'list' :
 				case 'load' :
@@ -181,6 +183,7 @@ final class Extensions extends Secure_Abstract {
 
 		switch ( self::get_property( '_type' ) ) :
 			case 'activation' :
+			case 'ajax' :
 				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
 				break;
 

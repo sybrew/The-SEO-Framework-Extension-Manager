@@ -53,10 +53,10 @@ $extensions_i18n = __( 'Extensions', 'the-seo-framework-extension-manager' );
  * Let's see how this works out :).
  */
 if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) :
-	$font = $this->get_font_file_location( 'verdana.ttf' );
+	$font = $this->get_font_file_location( 'LiberationSans-Regular.ttf' );
 	if ( file_exists( $font ) ) :
-		//* Calculate text-width. 1.9em @ 13px body.
-		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 ), 0, $font, $extensions_i18n . ' beta' );
+		//* Calculate text-width. 1.9em @ 13px body. Verdana is 1.0884x Arial (LiberationSans) size.
+		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 * 1.0884 ), 0, $font, $extensions_i18n . ' beta' );
 
 		$width_top = isset( $tim[2] ) ? $tim[2] : 0;
 		$width_bot = isset( $tim[4] ) ? $tim[4] : 0;

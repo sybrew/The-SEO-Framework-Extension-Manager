@@ -279,7 +279,7 @@ class Core {
 				$success = $this->deactivate_extension( $options );
 				break;
 
-			default:
+			default :
 				$this->set_error_notice( array( 708 => '' ) );
 				break;
 		endswitch;
@@ -1016,7 +1016,7 @@ class Core {
 
 		$page = $page ? $page : $this->seo_extensions_page_slug;
 
-		$url = add_query_arg( $args, menu_page_url( $page, 0 ) );
+		$url = add_query_arg( $args, menu_page_url( $page, false ) );
 
 		return $url;
 	}
@@ -1422,12 +1422,12 @@ class Core {
 	 * @param string $slug The extension slug to load.
 	 * @param bool $ajax Whether this is an AJAX request.
 	 * @return int|void {
-	 * 		-1 => No check has been performed.
-	 * 		1 => No file header path can be created. (Invalid extension)
-	 * 		2 => Extension header file is invalid. (Invalid extension)
-	 * 		3 => Inclusion failed.
-	 * 		4 => Success.
-	 * 		void => Fatal error.
+	 * 		-1 : No check has been performed.
+	 * 		1  : No file header path can be created. (Invalid extension)
+	 * 		2  : Extension header file is invalid. (Invalid extension)
+	 * 		3  : Inclusion failed.
+	 * 		4  : Success.
+	 * 		void : Fatal error.
 	 * }
 	 */
 	protected function test_extension( $slug, $ajax = false ) {

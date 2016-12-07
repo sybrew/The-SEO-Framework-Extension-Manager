@@ -294,6 +294,7 @@ trait Extensions_Properties {
 			'License'      => 'License',
 			'Network'      => 'Network',
 			'TextDomain'   => 'TextDomain',
+			'MenuSlug'     => 'Menu Slug',
 		);
 
 		$data[ $slug ] = false;

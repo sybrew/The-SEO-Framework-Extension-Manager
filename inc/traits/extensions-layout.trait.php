@@ -60,6 +60,8 @@ trait Extensions_i18n {
 			'extension-home'  => __( 'Extension home', 'the-seo-framework-extension-manager' ),
 			'compatible'      => __( 'Compatible', 'the-seo-framework-extension-manager' ),
 			'incompatible'    => __( 'Incompatible', 'the-seo-framework-extension-manager' ),
+			'menupage'        => __( 'Menu Page', 'the-seo-framework-extension-manager' ),
+			'visit-menupage'  => __( 'Visit the extension menu page', 'the-seo-framework-extension-manager' ),
 		);
 	}
 
@@ -160,7 +162,7 @@ trait Extensions_Layout {
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
-			$entry = sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id ), $wrap );
+			$entry = sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id . '-extension-entry' ), $wrap );
 
 			$output .= sprintf( '<div class="tsfem-extension-entry-wrap tsfem-flex tsfem-flex-space">%s</div>', $entry );
 		}
@@ -377,6 +379,32 @@ trait Extensions_Layout {
 		$description = $data['Description'];
 		$description = tsf_extension_manager()->convert_markdown( esc_html( $description ), array( 'strong', 'em', 'a' ) );
 
+		$footer = static::get_extension_description_footer( $extension );
+
+		//* Put it all together.
+		$content = sprintf( '<div class="tsfem-extension-description-header tsfem-flex tsfem-flex-row">%s</div>', $description );
+		$content .= $footer;
+
+		$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
+
+		return $output;
+	}
+
+	/**
+	 * Builds extension footer description based on extension and
+	 * account type.
+	 *
+	 * @since 1.0.0
+	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_Actions
+	 *
+	 * @param array $extension The extension to make description footer from.
+	 * @return string HTML footer description.
+	 */
+	private static function get_extension_description_footer( $extension ) {
+
+		$data = static::get_extension_header( $extension['slug'] );
+
 		//* Make extension author element.
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
@@ -387,8 +415,12 @@ trait Extensions_Layout {
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
 
 		//* Make extension home element.
-		$url = $data['ExtensionURI'];
-		$home = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>', esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) ) );
+		if ( ! empty( $data['ExtensionURI'] ) ) {
+			$home = sprintf(
+				'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
+				esc_url( $data['ExtensionURI'] ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) )
+			);
+		}
 
 		//* Make extension compatibility element.
 		$is_compatible = static::is_extension_compatible( $extension );
@@ -422,19 +454,29 @@ trait Extensions_Layout {
 			default :
 				$compat_class = 'tsfem-error';
 				/* translators: 1: Version number, 2: Version number */
-				$compat_notice = sprintf( __( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ), $extension['requires'], $extension['requires_tsf'] );
+				$compat_notice = sprintf(
+					__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
+					$extension['requires'], $extension['requires_tsf']
+				);
 				$compat_name = static::get_i18n( 'incompatible' );
 				break;
 		endswitch;
 
 		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
-		$compatible = sprintf( '<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>', esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon );
+		$compatible = sprintf(
+			'<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>',
+			esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon
+		);
 
-		//* Put it all together.
-		$content = sprintf( '<div class="tsfem-extension-description-header tsfem-flex tsfem-flex-row">%s</div>', $description );
-		$content .= sprintf( '<div class="tsfem-extension-description-footer tsfem-flex tsfem-flex-row">%s</div>', implode( ' | ', array( $version, $compatible, $home ) ) );
-	 	$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
+		if ( ! empty( $data['MenuSlug'] ) && static::is_extension_active( $extension ) ) {
+			$menu = sprintf(
+				'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
+				esc_url( tsf_extension_manager()->get_admin_page_url( $data['MenuSlug'] ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
+			);
+		}
 
-		return $output;
+		$footer = sprintf( '<div class="tsfem-extension-description-footer tsfem-flex tsfem-flex-row">%s</div>', implode( ' | ', compact( 'version', 'compatible', 'home', 'menu' ) ) );
+
+		return $footer;
 	}
 }
