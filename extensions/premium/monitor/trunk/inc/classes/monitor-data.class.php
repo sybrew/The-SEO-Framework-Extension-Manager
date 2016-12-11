@@ -63,6 +63,10 @@ class Monitor_Data {
 		$this->o_index = 'monitor';
 	}
 
+	protected function is_api_connected() {
+		return 'yes' === $this->get_option( 'connected' );
+	}
+
 	protected function get_data( $type, $default = null ) {
 
 		$data = $this->get_remote_data( $type, false );

@@ -75,10 +75,10 @@ class AdminPages extends AccountActivation {
 	private function construct() {
 
 		//* Initialize menu links
-		add_action( 'admin_menu', array( $this, 'init_menu' ) );
+		add_action( 'admin_menu', array( $this, '_init_menu' ) );
 
 		//* Initialize TSF Extension Manager page actions.
-		add_action( 'admin_init', array( $this, 'load_tsfem_admin_actions' ) );
+		add_action( 'admin_init', array( $this, '_load_tsfem_admin_actions' ) );
 
 	}
 
@@ -87,10 +87,11 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 * @uses the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
+	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
 	 */
-	public function init_menu() {
+	public function _init_menu() {
 
 		if ( ! $this->can_do_settings() )
 			return;
@@ -102,7 +103,7 @@ class AdminPages extends AccountActivation {
 			//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
 			if ( the_seo_framework()->load_options )
-				add_action( 'admin_menu', array( $this, 'add_menu_link' ), 11 );
+				add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
 		}
 	}
 
@@ -114,7 +115,7 @@ class AdminPages extends AccountActivation {
 	 * @uses the_seo_framework()->page_id variable.
 	 * @access private
 	 */
-	public function add_menu_link() {
+	public function _add_menu_link() {
 
 		$menu = array(
 			'parent_slug' => the_seo_framework_options_page_slug(),
@@ -122,7 +123,7 @@ class AdminPages extends AccountActivation {
 			'menu_title'  => esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'install_plugins',
 			'menu_slug'   => $this->seo_extensions_page_slug,
-			'callback'    => array( $this, 'init_extension_manager_page' ),
+			'callback'    => array( $this, '_init_extension_manager_page' ),
 		);
 
 		$this->seo_extensions_menu_page_hook = add_submenu_page(
@@ -142,8 +143,8 @@ class AdminPages extends AccountActivation {
 	 * @uses $this->seo_extensions_menu_page_hook variable.
 	 * @access private
 	 */
-	public function load_tsfem_admin_actions() {
-		add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, 'do_tsfem_admin_actions' ) );
+	public function _load_tsfem_admin_actions() {
+		add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, '_do_tsfem_admin_actions' ) );
 	}
 
 	/**
@@ -156,7 +157,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @return bool True on actions loaded, false on second load.
 	 */
-	public function do_tsfem_admin_actions() {
+	public function _do_tsfem_admin_actions() {
 
 		if ( false === $this->is_tsf_extension_manager_page() )
 			return;
@@ -170,10 +171,10 @@ class AdminPages extends AccountActivation {
 		$this->init_tsfem_ui();
 
 		//* Add something special for Vivaldi
-		add_action( 'admin_head', array( $this, 'output_theme_color_meta' ), 0 );
+		add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
 
 		//* Add footer output.
-		add_action( 'in_admin_footer', array( $this, 'init_footer_wrap' ) );
+		add_action( 'in_admin_footer', array( $this, '_init_footer_wrap' ) );
 
 		//* Output notices.
 		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
@@ -199,7 +200,7 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function init_extension_manager_page() {
+	public function _init_extension_manager_page() {
 		?>
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php
@@ -219,7 +220,7 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function init_footer_wrap() {
+	public function _init_footer_wrap() {
 		?>
 		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
 			<?php
@@ -236,7 +237,7 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function output_theme_color_meta() {
+	public function _output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
 	}
 
@@ -331,7 +332,7 @@ class AdminPages extends AccountActivation {
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	public function do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
+	public function _do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
 
 		$defaults = array(
 			'full' => true,
@@ -350,7 +351,7 @@ class AdminPages extends AccountActivation {
 	 * Helper function that constructs name attributes for use in form fields.
 	 *
 	 * Other page implementation classes may wish to construct and use a
-	 * get_field_id() method, if the naming format needs to be different.
+	 * _get_field_id() method, if the naming format needs to be different.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -358,7 +359,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $name Field name base
 	 * @return string Full field name
 	 */
-	public function get_field_name( $name ) {
+	public function _get_field_name( $name ) {
 		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $name );
 	}
 
@@ -367,12 +368,12 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @uses $this->get_field_name() Construct name attributes for use in form fields.
+	 * @uses $this->_get_field_name() Construct name attributes for use in form fields.
 	 *
 	 * @param string $name Field name base
 	 */
-	public function field_name( $name ) {
-		echo esc_attr( $this->get_field_name( $name ) );
+	public function _field_name( $name ) {
+		echo esc_attr( $this->_get_field_name( $name ) );
 	}
 
 	/**
@@ -384,7 +385,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $id Field id base
 	 * @return string Full field id
 	 */
-	public function get_field_id( $id ) {
+	public function _get_field_id( $id ) {
 		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $id );
 	}
 
@@ -393,18 +394,18 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @uses $this->get_field_id() Constructs id attributes for use in form fields.
+	 * @uses $this->_get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string $id Field id base
 	 * @param boolean $echo echo or return
 	 * @return string Full field id
 	 */
-	public function field_id( $id, $echo = true ) {
+	public function _field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
-			echo esc_attr( $this->get_field_id( $id ) );
+			echo esc_attr( $this->_get_field_id( $id ) );
 		} else {
-			return $this->get_field_id( $id );
+			return $this->_get_field_id( $id );
 		}
 	}
 
@@ -416,8 +417,8 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @param string $key The escaped action key.
 	 */
-	public function nonce_action_field( $key ) {
-		echo $this->get_nonce_action_field( $key );
+	public function _nonce_action_field( $key ) {
+		echo $this->_get_nonce_action_field( $key );
 	}
 
 	/**
@@ -428,7 +429,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @param string $key The action key.
 	 */
-	public function get_nonce_action_field( $key ) {
-		return '<input type="hidden" name="' . esc_attr( $this->get_field_name( 'nonce-action' ) ) . '" value="' . esc_attr( $key ) . '">';
+	public function _get_nonce_action_field( $key ) {
+		return '<input type="hidden" name="' . esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . esc_attr( $key ) . '">';
 	}
 }

@@ -128,7 +128,7 @@ final class Layout extends Secure_Abstract {
 		$output = '';
 
 		if ( 'form' === self::get_property( '_type' ) ) {
-			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['deactivate'] );
+			$nonce_action = tsf_extension_manager()->_get_nonce_action_field( self::$request_name['deactivate'] );
 			$nonce = wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
 			$field_id = 'deactivation-switcher';
@@ -341,14 +341,14 @@ final class Layout extends Secure_Abstract {
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$input = sprintf(
 				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				tsf_extension_manager()->get_field_id( 'key' ), tsf_extension_manager()->get_field_name( 'key' ), esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
+				tsf_extension_manager()->_get_field_id( 'key' ), tsf_extension_manager()->_get_field_name( 'key' ), esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 			$input .= sprintf(
 				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				tsf_extension_manager()->get_field_id( 'email' ), tsf_extension_manager()->get_field_name( 'email' ), esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
+				tsf_extension_manager()->_get_field_id( 'email' ), tsf_extension_manager()->_get_field_name( 'email' ), esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
-			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name['activate-key'] );
+			$nonce_action = tsf_extension_manager()->_get_nonce_action_field( self::$request_name['activate-key'] );
 			$nonce = wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(

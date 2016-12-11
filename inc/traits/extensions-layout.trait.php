@@ -347,9 +347,9 @@ trait Extensions_Layout {
 		if ( $disabled ) {
 			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
 		} else {
-			$nonce_action = tsf_extension_manager()->get_nonce_action_field( self::$request_name[ $nonce_key ] );
+			$nonce_action = tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 			$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-			$extension = '<input type="hidden" name="' . esc_attr( tsf_extension_manager()->get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
+			$extension = '<input type="hidden" name="' . esc_attr( tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
 			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
 			$form = $nonce_action . $nonce . $extension . $submit;
 

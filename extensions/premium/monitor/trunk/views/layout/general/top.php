@@ -6,6 +6,20 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class or die;
 
+$about = '';
+$actions = '';
+
+if ( $options ) {
+	//* TODO
+	//	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button-primary ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
+	//	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
+
+	//	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
+} else {
+	$info = __( 'Let Monitor do the heavy lifting of monitoring your website. Your privacy is respected, read how below.', 'the-seo-framework-extension-manager' );
+	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . esc_html( $info ) . '</div></div>';
+}
+
 ?>
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
@@ -14,6 +28,14 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 			<?php echo '<em>alpha</em>'; ?>
 		</h1></header>
 	</div>
-	<?php $this->output_update_button(); ?>
+	<?php
+	if ( $options ) {
+		//* TODO move this into $actions.
+		$this->output_update_button();
+	} else {
+		//* Already escaped.
+		echo $about, $actions;
+	}
+	?>
 </section>
 <?php

@@ -93,12 +93,18 @@ final class Monitor_Admin extends Monitor_Data {
 			//* Reference convenience.
 			'default' => 'default',
 
+			//* Connect site to API
+			'connect' => 'connect-api',
+
 			//* Statistics fetch.
 			'update' => 'update',
 		);
 		$this->nonce_action = array(
 			//* Reference convenience.
 			'default' => 'tsfem_e_monitor_nonce_action',
+
+			//* Connect site to API
+			'connect' => 'tsfem_e_nonce_action_connect_site',
 
 			//* Statistics fetch.
 			'update' => 'tsfem_e_nonce_action_monitor_update',
@@ -107,10 +113,10 @@ final class Monitor_Admin extends Monitor_Data {
 		$this->monitor_page_slug = 'theseoframework-monitor';
 
 		//* Initialize menu links
-		add_action( 'admin_menu', array( $this, 'init_menu' ) );
+		add_action( 'admin_menu', array( $this, '_init_menu' ) );
 
 		//* Initialize Monitor page actions.
-		add_action( 'admin_init', array( $this, 'load_monitor_admin_actions' ) );
+		add_action( 'admin_init', array( $this, '_load_monitor_admin_actions' ) );
 	}
 
 	/**
@@ -118,12 +124,13 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @since 1.0.0
 	 * @uses the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
-	 * @uses tsf_extension_manager()->can_do_settings().
+	 * @uses tsf_extension_manager()->can_do_settings()
+	 * @access private
 	 */
-	public function init_menu() {
+	public function _init_menu() {
 
 		if ( tsf_extension_manager()->can_do_settings() && the_seo_framework()->load_options )
-			add_action( 'admin_menu', array( $this, 'add_menu_link' ), 11 );
+			add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
 	}
 
 	/**
@@ -134,7 +141,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @uses the_seo_framework()->page_id variable.
 	 * @access private
 	 */
-	public function add_menu_link() {
+	public function _add_menu_link() {
 
 		$menu = array(
 			'parent_slug' => the_seo_framework_options_page_slug(),
@@ -142,7 +149,7 @@ final class Monitor_Admin extends Monitor_Data {
 			'menu_title'  => esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'install_plugins',
 			'menu_slug'   => $this->monitor_page_slug,
-			'callback'    => array( $this, 'init_monitor_page' ),
+			'callback'    => array( $this, '_init_monitor_page' ),
 		);
 
 		$this->monitor_menu_page_hook = add_submenu_page(
@@ -162,8 +169,8 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @uses $this->monitor_menu_page_hook variable.
 	 * @access private
 	 */
-	public function load_monitor_admin_actions() {
-		add_action( 'load-' . $this->monitor_menu_page_hook, array( $this, 'do_monitor_admin_actions' ) );
+	public function _load_monitor_admin_actions() {
+		add_action( 'load-' . $this->monitor_menu_page_hook, array( $this, '_do_monitor_admin_actions' ) );
 	}
 
 	/**
@@ -176,7 +183,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @return bool True on actions loaded, false on second load.
 	 */
-	public function do_monitor_admin_actions() {
+	public function _do_monitor_admin_actions() {
 
 		if ( false === $this->is_monitor_page() )
 			return;
@@ -190,10 +197,10 @@ final class Monitor_Admin extends Monitor_Data {
 		$this->init_tsfem_ui();
 
 		//* Add something special for Vivaldi
-		add_action( 'admin_head', array( $this, 'output_theme_color_meta' ), 0 );
+		add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
 
 		//* Add footer output.
-		add_action( 'in_admin_footer', array( $this, 'init_monitor_footer_wrap' ) );
+		add_action( 'in_admin_footer', array( $this, '_init_monitor_footer_wrap' ) );
 
 		//* Update POST listener.
 		//add_action( 'admin_init', array( $this, 'handle_update_data' ) );
@@ -216,6 +223,22 @@ final class Monitor_Admin extends Monitor_Data {
 				'name' => 'tsfem-monitor',
 				'base' => TSFEM_E_MONITOR_DIR_URL,
 				'ver' => TSFEM_E_MONITOR_VERSION,
+			),
+		);
+
+		$this->additional_js = array(
+			array(
+				'name' => 'tsfem-monitor',
+				'base' => TSFEM_E_MONITOR_DIR_URL,
+				'ver' => TSFEM_E_MONITOR_VERSION,
+			),
+		);
+
+		$this->additional_l10n = array(
+			array(
+				'dependency' => 'tsfem-monitor',
+				'name' => 'tsfem_e_monitorL10n',
+				'strings' => array(),
 			),
 		);
 
@@ -247,11 +270,16 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function init_monitor_page() {
+	public function _init_monitor_page() {
 		?>
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php
-			$this->output_monitor_overview_wrapper();
+
+			if ( $this->is_api_connected() ) {
+				$this->output_monitor_overview_wrapper();
+			} else {
+				$this->output_monitor_connect_wrapper();
+			}
 			?>
 		</div>
 		<?php
@@ -276,12 +304,30 @@ final class Monitor_Admin extends Monitor_Data {
 	}
 
 	/**
+	 * Echos main page connect wrapper for monitor.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function output_monitor_connect_wrapper() {
+
+		$this->do_page_top_wrap( false );
+
+		?>
+		<div class="tsfem-connect-wrap">
+			<?php
+			$this->do_connect_overview();
+			?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Echos the page top wrap.
 	 *
 	 * @since 1.0.0
 	 */
-	protected function do_page_top_wrap() {
-		$this->get_view( 'layout/general/top' );
+	protected function do_page_top_wrap( $options = false ) {
+		$this->get_view( 'layout/general/top', get_defined_vars() );
 	}
 
 	/**
@@ -292,6 +338,15 @@ final class Monitor_Admin extends Monitor_Data {
 	 */
 	protected function output_update_button() {
 		$this->get_view( 'forms/update' );
+	}
+
+	/**
+	 * Echos the monitor connection overview.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function do_connect_overview() {
+		$this->get_view( 'layout/pages/connect' );
 	}
 
 	/**
@@ -309,7 +364,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function init_monitor_footer_wrap() {
+	public function _init_monitor_footer_wrap() {
 		?>
 		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
 			<?php
@@ -334,7 +389,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 *
 	 * @since 1.0.0
 	 */
-	public function output_theme_color_meta() {
+	public function _output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
 	}
 

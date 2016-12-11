@@ -77,6 +77,15 @@ trait UI {
 	private $additional_js = array();
 
 	/**
+	 * Additional l10n strings to be loaded.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array Additional l10n strings containing name, dependency and strings.
+	 */
+	private $additional_l10n = array();
+
+	/**
 	 * Initializes the UI traits.
 	 *
 	 * @since 1.0.0
@@ -120,7 +129,7 @@ trait UI {
 			add_action( 'admin_print_styles-' . $this->ui_hook, array( $this, 'enqueue_admin_css' ), 11 );
 			//* Enqueue scripts
 			add_action( 'admin_print_scripts-' . $this->ui_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
-			add_action( 'admin_footer', array( $this, 'localize_admin_javascript' ) );
+			add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
 		}
 	}
 
@@ -169,7 +178,6 @@ trait UI {
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
-	 * @access private
 	 */
 	protected function register_admin_css() {
 
@@ -211,7 +219,6 @@ trait UI {
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
-	 * @access private
 	 */
 	protected function register_admin_javascript() {
 
@@ -234,7 +241,7 @@ trait UI {
 			foreach ( $this->additional_js as $script ) {
 				wp_register_script(
 					$script['name'],
-					$script['base'] . "lib/css/{$script['name']}{$suffix}.css",
+					$script['base'] . "lib/js/{$script['name']}{$suffix}.js",
 					array( $this->js_name ),
 					$script['ver'],
 					'all'
@@ -252,9 +259,10 @@ trait UI {
 	 * @since 1.0.0
 	 * @staticvar bool $l7d : Prevents relocalizing of the scripts.
 	 * @access private
+	 *
 	 * @return void early If run twice or more.
 	 */
-	final public function localize_admin_javascript() {
+	final public function _localize_admin_javascript() {
 
 		//* Localized.
 		static $l7d = null;
@@ -273,6 +281,12 @@ trait UI {
 		);
 
 		wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
+
+		if ( ! empty( $this->additional_l10n ) ) :
+			foreach ( $this->additional_l10n as $l10n ) {
+				wp_localize_script( $l10n['dependency'], $l10n['name'], $l10n['strings'] );
+			}
+		endif;
 
 		$l7d = true;
 
