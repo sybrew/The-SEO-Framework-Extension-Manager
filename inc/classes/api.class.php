@@ -82,28 +82,48 @@ class API extends Core {
 	}
 
 	/**
-	 * Generates software API URL to connect to the API manager.
+	 * Generates software API URL to connect to the WooCommerce API manager.
 	 *
 	 * @since 1.0.0
-	 * @access private
 	 *
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
 	 */
 	protected function get_api_url( $args = array() ) {
 
-		$api_url = add_query_arg( 'wc-api', 'am-software-api', $this->get_activation_url() );
+		$api_url = add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
 		return esc_url_raw( $api_url . '&' . http_build_query( $args ) );
 	}
 
 	/**
-	 * Connects to the main plugin activation.
+	 * Connects to the main plugin API handler.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @see $this->get_api_response();
+	 *
+	 * @param array $args The API query parameters.
+	 * @param string $instance The verification instance key.
+	 * @param int $bit The verification instance bit.
+	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
+	 */
+	public function _get_api_response( $args = array(), $_instance, $bits ) {
+
+		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
+			return $this->get_api_response( $args );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Connects to the main plugin API handler.
 	 *
 	 * @since 1.0.0
 	 * @see $this->handle_request() The request validation wrapper.
 	 *
-	 * @param array $args
+	 * @param array $args The API query parameters.
 	 * @return string Response body. Empty string if no body or incorrect parameter given.
 	 */
 	protected function get_api_response( $args ) {

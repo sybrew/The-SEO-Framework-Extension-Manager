@@ -351,7 +351,7 @@ final class Monitor_Admin extends Monitor_Data {
 		$issues = $this->get_data( 'issues', array() );
 
 		if ( empty( $issues ) ) {
-			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
 			$instance = Monitor_Output::get_instance();
 			$output = $instance->_get_data( $issues, 'issues' );
@@ -368,13 +368,13 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @return string The parsed Points of Interest overview HTML data.
 	 */
 	protected function get_poi_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_string_coming_soon() );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_coming_soon() );
 
 		$output = '';
 		$poi = $this->get_data( 'poi', array() );
 
 		if ( empty( $poi ) ) {
-			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+			$output .= $this->get_string_no_data_found();
 		} else {
 			$instance = Monitor_Output::get_instance();
 			$output = $instance->_get_data( $poi, 'poi' );
@@ -392,19 +392,30 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @return string The HTMl parsed statistics data.
 	 */
 	protected function get_stats_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_string_coming_soon() );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_coming_soon() );
 
 		$output = '';
 		$stats = $this->get_data( 'stats', array() );
 
 		if ( empty( $stats ) ) {
-			$output .= esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+			$output .= $this->get_string_no_data_found();
 		} else {
 			$instance = Monitor_Output::get_instance();
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 
 		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+	}
+
+	/**
+	 * Returns no data found string.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string Translatable no data found string.
+	 */
+	protected function get_string_no_data_found() {
+		return esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
 	}
 
 	/**

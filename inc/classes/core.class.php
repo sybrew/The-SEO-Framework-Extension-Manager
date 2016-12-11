@@ -1131,7 +1131,7 @@ class Core {
 			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
 
-		//* TODO: TEMPORARILY. REMOVE. var_dump().
+		//* TODO: TEMPORARILY. REMOVE ON RELEASE. var_dump().
 		$class .= ' tsfem-button-disabled';
 
 		return $this->get_link( array(
@@ -1141,6 +1141,34 @@ class Core {
 			'title' => $title,
 			'content' => $text,
 		) );
+	}
+
+	/**
+	 * Grants a class access to the verification instance and bits of this object.
+	 * by returning the $_instance and $bits parameters.
+	 * Once.
+	 *
+	 * @NOTE Expensive operation.
+	 * @see $this->_yield_verification_instance() for faster looping instances.
+	 * @access private
+	 *
+	 * @param object $instance The class object. Passed by reference.
+	 * @param string $_instance The verification instance. Passed by reference.
+	 * @param array $bits The verification bits. Passed by reference.
+	 */
+	public function _request_premium_extension_verification_instance( &$instance, &$_instance, &$bits ) {
+
+		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
+			return false;
+
+		$allowed_classes = array(
+			'TSF_Extension_Manager_Extension\\Monitor_Admin',
+		);
+
+		if ( in_array( get_class( $instance ), $allowed_classes, true ) ) {
+			$bits = $this->get_bits();
+			$_instance = $this->get_verification_instance( $bits[1] );
+		}
 	}
 
 	/**
@@ -1615,6 +1643,26 @@ class Core {
 			return $cache;
 
 		return $cache = 'Premium' === $this->get_option( '_activation_level' );
+	}
+
+
+	/**
+	 * Returns subscription status from local options.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $_instance The verification instance key.
+	 * @param int $bit The verification instance bit.
+	 * @return array|boolean Current subscription status. False on failed instance verification.
+	 */
+	public function _get_subscription_status( $_instance, $bits ) {
+
+		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
+			return $this->get_subscription_status();
+		}
+
+		return false;
 	}
 
 	/**

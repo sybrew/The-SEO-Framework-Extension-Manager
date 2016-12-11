@@ -35,11 +35,22 @@ trait Options {
 	 * Returns TSF Extension Manager options array.
 	 *
 	 * @since 1.0.0
+	 * @staticvar array $cache The cached options.
 	 *
 	 * @return array TSF Extension Manager options.
 	 */
 	final protected function get_all_options() {
-		return (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+
+		static $cache = null;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		remove_all_filters( 'pre_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+
+		return $cache = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 	}
 
 	/**

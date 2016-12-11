@@ -6,6 +6,10 @@
 	align-items: flex-start;
 }
 
+.tsfem-e-monitor-issues-wrap-line {
+	padding: 20px;
+}
+
 .tsfem-e-monitor-collapse {
 	position: relative;
 	min-width: 100%;
