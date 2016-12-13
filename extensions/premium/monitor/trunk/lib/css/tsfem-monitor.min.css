@@ -1,8 +1,14 @@
 /* # Start Connect.
 /*----------------------------------------------------------------------------*/
-.tsfem-e-monitor-connect-description,
-.tsfem-e-monitor-connect-action {
+.tsfem-e-monitor-connect-description {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 14px;
+}
+
+.tsfem-e-monitor-connect-action-wrap {
 	width: 100%;
+	-webkit-align-items: center;
+	align-items: center;
 }
 
 .tsfem-e-monitor-connect-description h3,

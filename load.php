@@ -155,7 +155,7 @@ function _init_tsf_extension_manager() {
 		}
 
 		//* Initialize extensions.
-		$tsf_extension_manager->init_extensions();
+		$tsf_extension_manager->_init_extensions();
 
 	}
 

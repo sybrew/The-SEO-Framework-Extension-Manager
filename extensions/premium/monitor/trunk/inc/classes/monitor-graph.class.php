@@ -1,4 +1,6 @@
 <?php
+//* THIS FILE ISN'T LOADED (YET). Creating interactive (zooming) graphs is very difficult and requires a lot of time :(.
+
 /**
  * @package TSF_Extension_Manager_Extension\Monitor\Tests
  */

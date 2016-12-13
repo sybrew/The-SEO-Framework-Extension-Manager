@@ -170,14 +170,14 @@ class AdminPages extends AccountActivation {
 		//* Initialize user interface.
 		$this->init_tsfem_ui();
 
+		//* Initialize error interface.
+		$this->init_errors();
+
 		//* Add something special for Vivaldi
 		add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
 
 		//* Add footer output.
 		add_action( 'in_admin_footer', array( $this, '_init_footer_wrap' ) );
-
-		//* Output notices.
-		add_action( 'admin_notices', array( $this, 'do_error_notices' ) );
 
 		return $run = true;
 	}
@@ -415,9 +415,10 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param string $key The escaped action key.
+	 * @param string $key The action key.
 	 */
 	public function _nonce_action_field( $key ) {
+		//* Already escaped.
 		echo $this->_get_nonce_action_field( $key );
 	}
 

@@ -16,11 +16,25 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 _tsf_extension_manager_load_trait( 'ui' );
 
 /**
+ * Require extension forms trait.
+ * @since 1.0.0
+ */
+_tsf_extension_manager_load_trait( 'extension-forms' );
+
+/**
+ * Require error trait.
+ * @since 1.0.0
+ */
+_tsf_extension_manager_load_trait( 'error' );
+
+/**
  * @package TSF_Extension_Manager\Traits
  */
 use TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
 use TSF_Extension_Manager\UI as UI;
+use TSF_Extension_Manager\Extension_Forms as Extension_Forms;
+use TSF_Extension_Manager\Error as Error;
 
 /**
  * Monitor extension for The SEO Framework
@@ -46,9 +60,10 @@ use TSF_Extension_Manager\UI as UI;
  *
  * @since 1.0.0
  * @access private
+ * @errorval 101xxxx
  */
 final class Monitor_Admin extends Monitor_Data {
-	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI;
+	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI, Extension_Forms, Error;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -94,7 +109,7 @@ final class Monitor_Admin extends Monitor_Data {
 			'default' => 'default',
 
 			//* Connect site to API
-			'connect' => 'connect-api',
+			'connect' => 'connect',
 
 			//* Statistics fetch.
 			'update' => 'update',
@@ -104,19 +119,24 @@ final class Monitor_Admin extends Monitor_Data {
 			'default' => 'tsfem_e_monitor_nonce_action',
 
 			//* Connect site to API
-			'connect' => 'tsfem_e_nonce_action_connect_site',
+			'connect' => 'tsfem_e_monitor_nonce_action_connect_site',
 
 			//* Statistics fetch.
-			'update' => 'tsfem_e_nonce_action_monitor_update',
+			'update' => 'tsfem_e_monitor_nonce_action_monitor_update',
 		);
 
 		$this->monitor_page_slug = 'theseoframework-monitor';
+
+		$this->error_notice_option = 'tsfem_e_monitor_error_notice_option';
 
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, '_init_menu' ) );
 
 		//* Initialize Monitor page actions.
 		add_action( 'admin_init', array( $this, '_load_monitor_admin_actions' ) );
+
+		//* Update POST listener.
+		add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 	}
 
 	/**
@@ -196,6 +216,9 @@ final class Monitor_Admin extends Monitor_Data {
 		//* Initialize user interface.
 		$this->init_tsfem_ui();
 
+		//* Initialize error interface.
+		$this->init_errors();
+
 		//* Add something special for Vivaldi
 		add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
 
@@ -203,10 +226,111 @@ final class Monitor_Admin extends Monitor_Data {
 		add_action( 'in_admin_footer', array( $this, '_init_monitor_footer_wrap' ) );
 
 		//* Update POST listener.
-		//add_action( 'admin_init', array( $this, 'handle_update_data' ) );
-		//add_action( 'wp_ajax_tsfem_e_monitor_update', array( $this, 'handle_update_data' ) );
+		add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		// add_action( 'wp_ajax_tsfem_e_monitor_update', array( $this, 'handle_post_data' ) );
 
 		return $run = true;
+	}
+
+	public function _handle_update_post() {
+
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) )
+			return;
+
+		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+
+		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
+			return;
+
+		switch ( $options['nonce-action'] ) :
+			case $this->request_name['connect'] :
+				$this->register_site();
+				break;
+
+			case $this->request_name['update'] :
+				break;
+
+			default :
+				$this->set_error_notice( array( 1010101 => '' ) );
+				break;
+		endswitch;
+
+		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
+		the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
+		exit;
+	}
+
+	/**
+	 * Checks the Extension's page nonce. Returns false if nonce can't be found
+	 * or if user isn't allowed to perform nonce.
+	 * Performs wp_die() when nonce verification fails.
+	 *
+	 * Never run a sensitive function when it's returning false. This means no
+	 * nonce can or has been been verified.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $validated Determines whether the nonce has already been verified.
+	 *
+	 * @param string $key The nonce action used for caching.
+	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
+	 * @return bool True if verified and matches. False if can't verify.
+	 */
+	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
+
+		static $validated = array();
+
+		if ( isset( $validated[ $key ] ) )
+			return $validated[ $key ];
+
+		if ( false === $this->is_monitor_page() && false === tsf_extension_manager()->can_do_settings() )
+			return $validated[ $key ] = false;
+
+		if ( $check_post ) {
+			/**
+			 * If this page doesn't parse the site options,
+			 * there's no need to check them on each request.
+			 */
+			if ( empty( $_POST )
+			  || ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			  || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			   )
+				return $validated[ $key ] = false;
+		}
+
+		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] ) : false;
+
+		if ( false === $result ) {
+			//* Nonce failed. Set error notice and reload.
+			$this->set_error_notice( array( 1019001 => '' ) );
+			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			exit;
+		}
+
+		return $validated[ $key ] = (bool) $result;
+	}
+
+	protected function register_site() {
+
+		$response = $this->get_monitor_api_response( 'register_site' );
+
+		if ( 'failure' === $response['status'] ) {
+			$this->set_error_notice( array( 1010301 => '' ) );
+			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			exit;
+		}
+
+		//* Todo set status updates regarding site instance key...?
+		$success = $this->update_option( 'connected', 'yes' );
+
+		if ( false === $success ) {
+			// TODO, really, todo! weak link.
+			// $this->get_monitor_api_response( 'remove_site' );
+			$this->set_error_notice( array( 1010302 => '' ) );
+		}
+
+		$this->set_error_notice( array( 1010303 => '' ) );
+		the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+		exit;
 	}
 
 	/**

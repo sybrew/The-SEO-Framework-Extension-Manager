@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) or die;
 /**
  * Class TSF_Extension_Manager\Extensions_Options_Cache.
  *
- * Caches the extension options. Used for when updating options.
+ * Caches the extension options. Used for when updating and managing options.
  *
  * @since 1.0.0
  * @access private
@@ -50,7 +50,7 @@ final class Extensions_Options_Cache {
 	 *
 	 * @since 1.0.0
 	 */
-	private static function _init_options_cache() {
+	private static function init_options_cache() {
 		static::$options = (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
 	}
 
@@ -68,7 +68,7 @@ final class Extensions_Options_Cache {
 	public static function _get_options_cache() {
 
 		if ( is_null( static::$options ) )
-			static::_init_options_cache();
+			static::init_options_cache();
 
 		return static::$options;
 	}
@@ -91,7 +91,7 @@ final class Extensions_Options_Cache {
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
 
 		if ( is_null( static::$options ) )
-			static::_init_options_cache();
+			static::init_options_cache();
 
 		if ( isset( $new_options ) && $index ) {
 			static::$options[ $index ] = $new_options;

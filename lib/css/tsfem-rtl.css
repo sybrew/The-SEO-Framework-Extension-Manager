@@ -984,7 +984,7 @@ h5.tsfem-extension-type {
 .tsfem-feed-entry {
 	margin-bottom: 14px;
 	border-bottom: 2px solid #dedede;
-	display: inline-block;
+	/* display: inline-block; /* TODO var_dump() check this... it should be flex */
 }
 
 /* # Start Activation Layout.
@@ -1012,6 +1012,10 @@ h5.tsfem-extension-type {
 
 /* # Start footer.
 /*----------------------------------------------------------------------------*/
+
+#wpfooter {
+	z-index: -1;
+}
 
 #wpfooter .tsfem-footer-wrap .tsfem-footer-title,
 #wpfooter .tsfem-footer-wrap .tsfem-footer-motto {

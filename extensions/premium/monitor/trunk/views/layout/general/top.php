@@ -16,7 +16,7 @@ if ( $options ) {
 
 	//	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
 } else {
-	$info = __( 'Let Monitor do the heavy lifting of monitoring your website. Your privacy is respected, read how below.', 'the-seo-framework-extension-manager' );
+	$info = __( 'Let SEO Monitor help you improve your website. Your privacy is respected, read how below.', 'the-seo-framework-extension-manager' );
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . esc_html( $info ) . '</div></div>';
 }
 

@@ -1,3 +1,56 @@
+/* # Start Connect.
+/*----------------------------------------------------------------------------*/
+.tsfem-e-monitor-connect-description {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 14px;
+}
+
+.tsfem-e-monitor-connect-action-wrap {
+	width: 100%;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.tsfem-e-monitor-connect-description h3,
+.tsfem-e-monitor-connect-action h3 {
+	font-size: 1.66em;
+	color: #057f9c;
+	font-weight: 400;
+	margin: 14px 0;
+}
+
+.tsfem-e-monitor-connect-description p {
+	margin-top: .1em;
+}
+
+.tsfem-e-monitor-connect-description p:last-of-type {
+	margin-bottom: .1em;
+}
+
+.tsfem-e-monitor-connect-description p:first-of-type {
+	margin-bottom: 1em;
+}
+
+.tsfem-e-monitor-connect-description h4 + p:first-of-type {
+	margin-top: 0;
+}
+
+.tsfem-e-monitor-connect-description ul {
+	margin-top: .1em;
+	margin-bottom: .1em;
+}
+
+.tsfem-e-monitor-connect-description ul,
+.tsfem-e-monitor-connect-description ul li {
+	list-style: disc;
+	margin-right: 1em;
+}
+
+.tsfem-e-monitor-readmore {
+	cursor: pointer;
+	text-decoration: none;
+}
+
 /* # Start Issues.
 /*----------------------------------------------------------------------------*/
 .tsfem-e-monitor-issues-wrap {

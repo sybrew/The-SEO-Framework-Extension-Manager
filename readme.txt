@@ -34,7 +34,7 @@ As long as the subscription is active, you're allowed to use all premium extensi
 * This plugin currently does not fully support MultiSite networks. This is planned, stay tuned!
 
 = Privacy =
-* This plugin can send API requests to "https://premium.theseoframework.com/". Read our [privacy policy](https://premium.theseoframework.com/privacy/).
+* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites. Read our [privacy policy](https://premium.theseoframework.com/privacy/).
 
 == Installation ==
 
@@ -116,6 +116,7 @@ If it doesn't, it will tell you why. Otherwise, you're good to go! All known iss
 If you were to get an activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable version.
 
 = The layout of the extensions page just doesn't look right, why? =
+This plugin has been tested against many browsers with the help of [BrowserStack](https://www.browserstack.com/).
 Because the extensions page has been completely written in [state-of-the-art experimental CSS](https://drafts.csswg.org/css-flexbox/), it's possible not all browsers act alike.
 Although everything should always fit perfectly; if you do find any issue, please state your browser and operating system and tell me where the issue resides. Thanks!
 
@@ -138,21 +139,21 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 == Other Notes ==
 
 = Are you a developer? =
-And do you wish to add your own extension to the extension manager? Please contact me on Slack about your idea.
+And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
 A full code review will take place prior to releasing it. The code has to pass at least the WordPress.org plugin standards and all code must be licensed under GPLv2 or later.
 Feedback and points for improvement will be always given. No monetized extensions are being accepted as of yet.
 
 = For developers: Security =
 Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
 In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
-Many more security techniques, some even newly developed specifically, have been implemented into this plugin.
-If you have any questions, before blindly implementing or circumvate security, feel free to contact me (the plugin author) on Slack.
+Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
+If you have any questions, before blindly implementing or circumvate security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
 
 = Reluctance towards plugin modifications and backwards compatibility =
 This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
-You are allowed to edit this plugin and use filters for this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
-This is to enhance the plugin security, stability and overall performance. Please note that most functions, classes, methods and files are shielded against direct calls.
-No backwards compatibility will be programmed within this plugin, unless required for WordPress Core or PHP.
+You are allowed to edit this plugin and use hooks on this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
+This is to enhance the plugin security, stability and overall performance. Please note that most core functions, classes, methods and files are shielded against direct calls.
+No backwards compatibility will be programmed into this plugin, unless required for WordPress Core or PHP.
 
 = General Filter Reference =
 

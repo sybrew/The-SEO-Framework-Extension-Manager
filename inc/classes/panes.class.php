@@ -35,7 +35,7 @@ class Panes extends API {
 	use Enclose_Stray_Private, Construct_Child_Interface;
 
 	/**
-	 * Constructor, initializes WordPress actions.
+	 * Constructor, initializes WordPress Admin actions.
 	 *
 	 * @since 1.0.0
 	 */

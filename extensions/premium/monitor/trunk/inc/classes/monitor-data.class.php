@@ -125,36 +125,34 @@ class Monitor_Data {
 
 	/**
 	 * Fetches remote monitor data to later be evaluated.
+	 * Prevents API spam by setting 3 minute time limit.
 	 *
 	 * @since 1.0.0
+	 * @global int $blog_id
 	 *
 	 * @return array The remote monitor data.
 	 */
 	protected function api_get_remote_data() {
+		global $blog_id;
 
-		$transient = 'monitor_data';
+		$transient = 'tsfem_e_monitor_remote_data_' . $blog_id;
 
 		$data = get_transient( $transient );
 
 		if ( false !== $data )
-			return json_decode( $data );
+			return $data;
 
 		$response = $this->get_monitor_api_response( 'get_data' );
 
-		$data = '';
-
-		// TODO
-		// var_dump( $response );
-
 		if ( isset( $response ) ) {
+			//* Remove 5 seconds server time as buffer.
+			$expiration = ( MINUTE_IN_SECONDS * 3 ) - 5;
+			set_transient( $transient, $response, $expiration );
 
+			return $response;
 		}
 
-		//* Remove 5 seconds server time as buffer.
-		// $expiration = ( MINUTE_IN_SECONDS * 3 ) - 5;
-		// set_transient( $transient, $data, $expiration );
-
-		return json_decode( $data );
+		return false;
 	}
 
 	protected function get_session_data( $type ) {
@@ -174,10 +172,21 @@ class Monitor_Data {
 		return false;
 	}
 
+	/**
+	 * Retrieves API response for SEO Monitor data collection.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type The request type.
+	 * @return array The response body.
+	 */
 	protected function get_monitor_api_response( $type = '' ) {
 
-		if ( empty( $type ) )
-			return null;
+		if ( empty( $type ) ) {
+			$this->set_error_notice( array( 1010201 => '' ) );
+			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			exit;
+		}
 
 		/**
 		 * Request verification instances, variables are passed by reference :
@@ -205,7 +214,10 @@ class Monitor_Data {
 						);
 						$response = tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
 					} else {
+						$this->set_error_notice( array( 1010202 => '' ) );
 						tsf_extension_manager()->_verify_instance( $instance, $bits );
+						the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+						exit;
 					}
 					break;
 
@@ -216,6 +228,20 @@ class Monitor_Data {
 			$count++;
 		endforeach;
 
-		return isset( $response ) ? $response : null;
+		$response = json_decode( $response );
+
+		if ( ! isset( $response->success ) ) {
+			$this->set_error_notice( array( 1010203 => '' ) );
+			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			exit;
+		}
+
+		if ( ! isset( $response->data ) ) {
+			$this->set_error_notice( array( 1010204 => '' ) );
+			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			exit;
+		}
+
+		return stripslashes_deep( json_decode( $response->data, true ) );
 	}
 }

@@ -30,6 +30,12 @@ defined( 'ABSPATH' ) or die;
 _tsf_extension_manager_load_trait( 'options' );
 
 /**
+ * Require error trait.
+ * @since 1.0.0
+ */
+_tsf_extension_manager_load_trait( 'error' );
+
+/**
  * Class TSF_Extension_Manager\Core
  *
  * Holds plugin core functions.
@@ -38,7 +44,7 @@ _tsf_extension_manager_load_trait( 'options' );
  * @access private
  */
 class Core {
-	use Enclose_Stray_Private, Construct_Core_Interface, Destruct_Core_Public_Final, Options;
+	use Enclose_Stray_Private, Construct_Core_Interface, Destruct_Core_Public_Final, Options, Error;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -116,7 +122,7 @@ class Core {
 
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
-		add_action( 'admin_init', array( $this, 'handle_update_post' ) );
+		add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
 	}
 
@@ -125,10 +131,11 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $loaded True if extensions are loaded, false otherwise.
+	 * @access private
 	 *
 	 * @return true If loaded, false otherwise.
 	 */
-	public function init_extensions() {
+	final public function _init_extensions() {
 
 		static $loaded = null;
 
@@ -217,10 +224,11 @@ class Core {
 	 * Handles plugin POST requests.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @return bool False if nonce failed.
 	 */
-	public function handle_update_post() {
+	final public function _handle_update_post() {
 
 		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
@@ -291,7 +299,7 @@ class Core {
 	}
 
 	/**
-	 * Checks the Activation page nonce. Returns false if nonce can't be found
+	 * Checks the Extension Manager page's nonce. Returns false if nonce can't be found
 	 * or if user isn't allowed to perform nonce.
 	 * Performs wp_die() when nonce verification fails.
 	 *
@@ -305,7 +313,7 @@ class Core {
 	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
-	public function handle_update_nonce( $key = 'default', $check_post = true ) {
+	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
 
 		static $validated = array();
 
@@ -337,283 +345,6 @@ class Core {
 	}
 
 	/**
-	 * Outputs notices. If any, and only on the Extension manager page.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function do_error_notices() {
-
-		if ( $option = get_option( $this->error_notice_option, false ) ) {
-
-			$notice = $this->get_error_notice( $option );
-
-			if ( empty( $notice ) ) {
-				$this->unset_error_notice();
-				return;
-			}
-
-			//* Already escaped.
-			the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
-			$this->unset_error_notice();
-		}
-	}
-
-	/**
-	 * Sets notices option, only does so when in the admin area.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $notice The notice.
-	 */
-	protected function set_error_notice( $notice = array() ) {
-		is_admin() and update_option( $this->error_notice_option, $notice );
-	}
-
-	/**
-	 * Removes notices option.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $notice The notice.
-	 */
-	protected function unset_error_notice() {
-		delete_option( $this->error_notice_option );
-	}
-
-	/**
-	 * Fetches notices by option and returns type.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int|array $option The error notice key.
-	 * @return array|string The escaped notice. Empty string when no array key is set.
-	 */
-	protected function get_error_notice( $option ) {
-
-		if ( is_array( $option ) )
-			$key = key( $option );
-
-		if ( empty( $key ) )
-			return '';
-
-		$notice = $this->get_error_notice_by_key( $key, true );
-
-		$message = $notice['message'];
-		$type = $notice['type'];
-
-		switch ( $type ) :
-			case 'error' :
-			case 'warning' :
-				$status_i18n = esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
-				break;
-
-			case 'updated' :
-			default :
-				$status_i18n = esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
-				break;
-		endswitch;
-
-		/* translators: 1: 'Error code:', 2: The error code */
-		$status = sprintf( esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
-		$additional_info = $option[ $key ];
-
-		/* translators: 1: Error code, 2: Error message, 3: Additional info */
-		$output = sprintf( esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status, $message, $additional_info );
-
-		return array(
-			'message' => $output,
-			'type' => $type,
-		);
-	}
-
-	/**
-	 * Fetches notices by option and returns type.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $key The error key.
-	 * @param bool $get_type Whether to fetch the error type as well.
-	 * @return array|string The escaped notice. When $get_type is true, an array is returned.
-	 */
-	protected function get_error_notice_by_key( $key, $get_type = true ) {
-
-		switch ( $key ) :
-			case 101 :
-				$message = esc_html__( 'No valid license key was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 102 :
-				$message = esc_html__( 'No valid license email was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 103 :
-			case 104 :
-			case 701 :
-			case 708 :
-				$message = esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 201 :
-				$message = esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 202 :
-			case 301 :
-			case 302 :
-			case 403 :
-			case 404 :
-			case 405 :
-			case 503 :
-			case 10003 :
-				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 401 :
-				/* translators: %s = My Account */
-				$message = sprintf( esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
-				$type = 'error';
-				break;
-
-			case 303 :
-			case 307 :
-				/* translators: %s = My Account */
-				$message = sprintf( esc_html__( 'Invalid API License Key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
-				$type = 'error';
-				break;
-
-			case 304 :
-				$message = esc_html__( 'Remote Software API error.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 305 :
-				/* translators: %s = My Account */
-				$message = sprintf( esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
-				$type = 'error';
-				break;
-
-			case 306 :
-				$message = esc_html__( 'Invalid Instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 308 :
-				$message = esc_html__( 'Subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
-				break;
-
-			case 402 :
-				$message = esc_html__( 'Your account has been successfully authorized to be used on this website.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 501 :
-			case 502 :
-				$message = esc_html__( 'Your account has been successfully deauthorized from this website.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 601 :
-				$message = esc_html__( 'Enjoy your free extensions!', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 702 :
-				$message = esc_html__( 'The feed has been enabled.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 801 :
-				$message = esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 2001 :
-			case 7001 :
-			case 7002 :
-				$message = esc_html__( 'An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
-			case 9001 :
-				$message = esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 2002 :
-			case 10001 :
-			case 10002 :
-				$message = esc_html__( 'Extension list has been tampered with. Please reinstall this plugin and try again.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 10004 :
-				$message = esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 10007 :
-			case 10009 :
-				$message = esc_html__( 'Extension has been succesfully activated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 10008 :
-				$message = esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-
-			case 11001 :
-				$message = esc_html__( 'Extension has been succesfully deactivated.', 'the-seo-framework-extension-manager' );
-				$type = 'updated';
-				break;
-
-			case 602 :
-			case 703 :
-			case 802 :
-			case 10005 :
-			case 10006 :
-			case 10010 :
-			case 11002 :
-			default :
-				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
-				$type = 'error';
-				break;
-		endswitch;
-
-		return $get_type ? array( 'message' => $message, 'type' => $type ) : $message;
-	}
-
-	/**
-	 * Returns Ajax notice from $code.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param mixed $success The success status, either boolean, int, or other.
-	 * @param int $code The error code.
-	 * @return array {
-	 *		'success' => mixed $success,
-	 *		'notice'  => string $notice,
-	 * }
-	 */
-	protected function get_ajax_notice( $success, $code ) {
-
-		$notice = array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
-
-		if ( WP_DEBUG )
-			$notice = array_merge( $notice, array( 'code' => intval( $code ) ) );
-
-		return $notice;
-	}
-
-	/**
 	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
 	 *
 	 * @since 1.0.0
@@ -632,7 +363,7 @@ class Core {
 
 	/**
 	 * Performs wp_die on TSF Extension Manager Page.
-	 * Descructs class otherwise.
+	 * Destructs class otherwise.
 	 *
 	 * @since 1.0.0
 	 * @access private
