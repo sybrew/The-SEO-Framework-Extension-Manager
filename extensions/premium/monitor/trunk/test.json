@@ -5,6 +5,7 @@
 		"_base"         : "monitor.php",
 		"Monitor_Admin" : [
 			"inc/classes/monitor-data.class.php",
+			"inc/classes/monitor-api.class.php",
 			"inc/classes/monitor-admin.class.php"
 		]
 	}

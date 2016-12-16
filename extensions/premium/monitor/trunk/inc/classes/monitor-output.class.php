@@ -154,7 +154,6 @@ final class Monitor_Output {
 		if ( $content ) {
 			switch ( $type ) :
 				case 'issues' :
-				case 'poi' :
 					//$this->slab_nav_key_has_content( $key, $type, true );
 					$title = $this->get_entry_title( $key, $type );
 					$prefix = $this->get_entry_state_icon( $key, $type );
@@ -500,8 +499,6 @@ final class Monitor_Output {
 				$content = $this->parse_issues_content( $key, $value );
 				break;
 
-			//* @TODO poi
-
 			case 'stats' :
 				$content = $this->parse_stats_content( $key, $value );
 				break;
@@ -514,7 +511,13 @@ final class Monitor_Output {
 	}
 
 	/**
-	 * @TODO document
+	 * Parses issue $key content's $value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The array key.
+	 * @param mixed $value The array value attached to $key.
+	 * @return string The issue data content.
 	 */
 	protected function parse_issues_content( $key, $value ) {
 
@@ -541,7 +544,13 @@ final class Monitor_Output {
 	}
 
 	/**
-	 * @TODO document
+	 * Parses statistics $key content's $value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The array key.
+	 * @param mixed $value The array value attached to $key.
+	 * @return string The statistics data content.
 	 */
 	protected function parse_stats_content( $key, $value ) {
 

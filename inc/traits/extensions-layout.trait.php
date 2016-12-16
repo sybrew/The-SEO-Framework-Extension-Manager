@@ -89,38 +89,6 @@ trait Extensions_i18n {
 trait Extensions_Layout {
 
 	/**
-	 * Holds the class header contents.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var array $header
-	 */
-	private static $header = array();
-
-	/**
-	 * Outputs extensions overview header.
-	 *
-	 * @since 1.0.0
-	 * @todo all of it
-	 * @todo add refresh AJAX button with transient 5 min.
-	 * @todo add filter tabs based on extension tags
-	 *
-	 * @return string The extensions overview header.
-	 */
-	private static function get_layout_header() {
-
-		$output = '';
-
-		if ( 'overview' === self::get_property( '_type' ) ) {
-			// foreach ( static::$header as $id => $item ) {
-			// 	$output .= '';
-			// }
-		}
-
-		return $output;
-	}
-
-	/**
 	 * Outputs extensions overview content.
 	 *
 	 * @since 1.0.0

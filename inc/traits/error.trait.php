@@ -55,6 +55,9 @@ trait Error {
 	 * @since 1.0.0
 	 */
 	final protected function init_errors() {
+
+		$this->error_notice_option or the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
+
 		add_action( 'admin_notices', array( $this, '_do_error_notices' ) );
 	}
 
@@ -89,7 +92,7 @@ trait Error {
 	 * @param array $notice The notice.
 	 */
 	final protected function set_error_notice( $notice = array() ) {
-		is_admin() and update_option( $this->error_notice_option, $notice );
+		is_admin() and $this->error_notice_option and update_option( $this->error_notice_option, $notice );
 	}
 
 	/**
@@ -100,7 +103,7 @@ trait Error {
 	 * @param array $notice The notice.
 	 */
 	final protected function unset_error_notice() {
-		delete_option( $this->error_notice_option );
+		$this->error_notice_option and delete_option( $this->error_notice_option );
 	}
 
 	/**
@@ -192,7 +195,7 @@ trait Error {
 			case 404 :
 			case 405 :
 			case 503 :
-			case 10003 :
+			case 10004 :
 			case 1010101 :
 				$message = esc_html__( 'An error occurred while contacting the API server. Please try again later.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
@@ -218,6 +221,12 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 1010301 :
+			case 1010401 :
+				$message = esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			case 305 :
 				/* translators: %s = My Account */
 				$message = sprintf( esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
@@ -231,7 +240,8 @@ trait Error {
 
 			case 308 :
 			case 1010202 :
-				$message = esc_html__( 'Subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
+			case 1010402 :
+				$message = esc_html__( 'Your subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
 
@@ -282,18 +292,18 @@ trait Error {
 				$type = 'error';
 				break;
 
-			case 10004 :
+			case 10005 :
 				$message = esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
-			case 10007 :
-			case 10009 :
+			case 10008 :
+			case 10010 :
 				$message = esc_html__( 'Extension has been successfully activated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
-			case 10008 :
+			case 10009 :
 				$message = esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -303,19 +313,38 @@ trait Error {
 				$type = 'updated';
 				break;
 
-			case 1010303 :
-				$message = esc_html__( 'Your website has been successfully connected to the remote API server.', 'the-seo-framework-extension-manager' );
+			case 1010304 :
+				$message = esc_html__( 'Your website has been successfully connected to the Monitor API server.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
+			case 1010403 :
+				$message = esc_html__( 'Your website has been marked as inactive by the Monitor API server.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010405 :
+				$message = esc_html__( 'Crawl has been requested succesfully. This can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 1010503 :
+				$message = esc_html__( 'Your site has been succesfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
 			case 602 :
 			case 703 :
 			case 802 :
-			case 10005 :
+			case 10003 :
 			case 10006 :
-			case 10010 :
+			case 10007 :
+			case 10011 :
 			case 11002 :
 			case 1010302 :
+			case 1010303 :
+			case 1010404 :
 			default :
 				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';

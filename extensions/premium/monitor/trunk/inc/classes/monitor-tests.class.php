@@ -164,12 +164,12 @@ final class Monitor_Tests {
 
 		foreach ( $data as $value ) :
 			if ( isset( $value['value'] ) && false === $value['value'] ) :
-				$id = isset( $value['post_id'] ) ? $value['post_id'] : false;
+				$id = isset( $value['post_id'] ) ? (int) $value['post_id'] : false;
 
 				if ( false !== $id ) {
 					$home = isset( $value['home'] ) && $value['home'];
 					$url = the_seo_framework()->the_url( '', array( 'home' => $home, 'external' => true, 'id' => $id ) );
-					$title = the_seo_framework()->title( '', '', '', array( 'notagline' => true, 'term_id' => $id, 'is_front_page' => $home, 'escape' => true ) );
+					$title = the_seo_framework()->title( '', '', '', array( 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ) );
 
 					$links[] = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $title );
 				}
@@ -337,12 +337,10 @@ final class Monitor_Tests {
 	 * @return string The information string in HTML.
 	 */
 	public function issue_moresoon( $data ) {
-		end : {
-			return array(
-				'content' => $this->wrap_info( esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
-				'state' => 'unknown',
-			);
-		}
+		return array(
+			'content' => $this->wrap_info( esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
+			'state' => 'unknown',
+		);
 	}
 
 	/**

@@ -74,7 +74,7 @@ class AdminPages extends AccountActivation {
 	 */
 	private function construct() {
 
-		//* Initialize menu links
+		//* Initialize menu links. TODO add network menu.
 		add_action( 'admin_menu', array( $this, '_init_menu' ) );
 
 		//* Initialize TSF Extension Manager page actions.
@@ -99,7 +99,7 @@ class AdminPages extends AccountActivation {
 		$network_mode = $this->is_plugin_in_network_mode();
 
 		if ( $network_mode ) {
-			//* TODO. var_dump()
+			//* TODO.
 			//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
 			if ( the_seo_framework()->load_options )
@@ -327,6 +327,7 @@ class AdminPages extends AccountActivation {
 	 *		'full' bool : Whether to output a half or full pane.
 	 *		'collapse' bool : Whether able to collapse the pane.
 	 *		'move' bool : Whether to be able to move the pane.
+	 *		'pane_id' string : The pane div ID.
 	 *		'ajax' bool : Whether to use ajax.
 	 *		'ajax_id' string : The AJAX div ID.
 	 * }
@@ -338,6 +339,7 @@ class AdminPages extends AccountActivation {
 			'full' => true,
 			'collapse' => true,
 			'move' => false,
+			'pane_id' => '',
 			'ajax' => false,
 			'ajax_id' => '',
 		);

@@ -177,6 +177,22 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
 }
 
+.tsfem-about-activation:before {
+	display: inline-block;
+	color: #fff;
+	content: "\f112";
+	font-size: 1.2em;
+	line-height: 1.2em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	margin: 0 7px;
+	vertical-align: baseline;
+	white-space: pre-wrap;
+	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+}
+
 /* ## Title.
 /*--------------------------------------*/
 
@@ -277,22 +293,6 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
 }
 
-.tsfem-about-activation:before {
-	display: inline-block;
-	color: #fff;
-	content: "\f112";
-	font-size: 1.2em;
-	line-height: 1.2em;
-	font-family: dashicons;
-	text-decoration: inherit;
-	font-weight: 400;
-	font-style: normal;
-	margin: 0 7px;
-	vertical-align: baseline;
-	white-space: pre-wrap;
-	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
-}
-
 .tsfem-button-star,
 .tsfem-account-active,
 .tsfem-button-primary-bright {
@@ -303,6 +303,7 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #057f9c,1px 0 1px #057f9c,0 1px 1px #057f9c,-1px 0 1px #057f9c;
 }
 
+.tsfem-button-green,
 .tsfem-button-love,
 .tsfem-account-inactive,
 .tsfem-button-extension-activate {
@@ -313,6 +314,7 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #008964,1px 0 1px #008964,0 1px 1px #008964,-1px 0 1px #008964;
 }
 
+.tsfem-button-red,
 .tsfem-button-warning,
 .tsfem-account-about-to-expire,
 .tsfem-button-extension-deactivate {
@@ -329,7 +331,11 @@ body.tsfem .wrap {
 .tsfem-button-flag:after,
 .tsfem-button-love:after,
 .tsfem-button-warning:after,
-.tsfem-account-about-to-expire:after {
+.tsfem-account-about-to-expire:after,
+.tsfem-button-download:after,
+.tsfem-button-index:after,
+.tsfem-button-cloud:after,
+.tsfem-button-loading:after {
 	display: inline-block;
 	width: 1em;
 	content: "\f155";
@@ -355,6 +361,26 @@ body.tsfem .wrap {
 .tsfem-button-love:after,
 .tsfem-account-inactive:after {
 	content: "\f487";
+}
+
+.tsfem-button-download:after {
+	content: "\f316";
+}
+
+.tsfem-button-index:after {
+	content: "\f510";
+}
+
+.tsfem-button-cloud:after {
+	content: "\f176";
+}
+
+.tsfem-button-loading:after {
+	content: "\f463";
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
+	-moz-animation: tsfem-spin 1.5s linear infinite;
+	-o-animation: tsfem-spin 1.5s linear infinite;
+	animation: tsfem-spin 1.5s linear infinite;
 }
 
 .tsfem-button:active,
@@ -582,7 +608,6 @@ body.tsfem .wrap {
 	max-height: 100%;
 	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
-	overflow: hidden;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar,
@@ -706,6 +731,7 @@ body.tsfem .wrap {
 /* ## Specific panes.
 /*--------------------------------------*/
 
+.tsfem-pane-split,
 .tsfem-actions,
 .tsfem-trends,
 .tsfem-trends-activation {
@@ -716,6 +742,7 @@ body.tsfem .wrap {
 /* ### Actions pane.
 /*--------------------------------------*/
 
+.tsfem-pane-split > div,
 .tsfem-actions > div {
 	margin-left: 20px;
 	margin-bottom: 20px;
@@ -724,11 +751,13 @@ body.tsfem .wrap {
 	min-width: 200px;
 }
 
+.tsfem-pane-split > div:last-of-type,
 .tsfem-actions > div:last-of-type {
 	margin-left: 0;
 	margin-bottom: 0;
 }
 
+.tsfem-pane-split > div > div,
 .tsfem-actions > div > div {
 	margin-bottom: 20px;
 }
@@ -744,7 +773,8 @@ body.tsfem .wrap {
 h4.tsfem-form-title,
 h4.tsfem-info-title,
 h4.tsfem-status-title,
-h4.tsfem-support-title {
+h4.tsfem-support-title,
+h4.tsfem-cp-title {
 	padding: 0;
 	margin: 0 0 14px;
 	font-size: 1.33em;
@@ -753,17 +783,20 @@ h4.tsfem-support-title {
 }
 
 .tsfem-account-upgrade,
-.tsfem-support-buttons {
+.tsfem-support-buttons,
+.tsfem-cp-buttons {
 	max-width: 300px;
 }
 
-.tsfem-support-buttons {
+.tsfem-support-buttons,
+.tsfem-cp-buttons {
 	margin-bottom: 14px;
 	-webkit-flex-basis: 50%;
 	flex-basis: 50%;
 }
 
-.tsfem-support-buttons:last-of-type {
+.tsfem-support-buttons:last-of-type,
+.tsfem-cp-buttons:last-of-type {
 	margin-bottom: 0;
 }
 
@@ -812,6 +845,7 @@ h4.tsfem-support-title {
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	background: #fefefe;
+	-webkit-align-self: auto;
 	align-self: auto;
 }
 
@@ -984,7 +1018,6 @@ h5.tsfem-extension-type {
 .tsfem-feed-entry {
 	margin-bottom: 14px;
 	border-bottom: 2px solid #dedede;
-	/* display: inline-block; /* TODO var_dump() check this... it should be flex */
 }
 
 /* # Start Activation Layout.

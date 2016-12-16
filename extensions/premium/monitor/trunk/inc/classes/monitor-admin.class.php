@@ -16,6 +16,12 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 _tsf_extension_manager_load_trait( 'ui' );
 
 /**
+ * Require extension options trait.
+ * @since 1.0.0
+ */
+_tsf_extension_manager_load_trait( 'extension-options' );
+
+/**
  * Require extension forms trait.
  * @since 1.0.0
  */
@@ -33,6 +39,7 @@ _tsf_extension_manager_load_trait( 'error' );
 use TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
 use TSF_Extension_Manager\UI as UI;
+use TSF_Extension_Manager\Extension_Options as Extension_Options;
 use TSF_Extension_Manager\Extension_Forms as Extension_Forms;
 use TSF_Extension_Manager\Error as Error;
 
@@ -62,8 +69,8 @@ use TSF_Extension_Manager\Error as Error;
  * @access private
  * @errorval 101xxxx
  */
-final class Monitor_Admin extends Monitor_Data {
-	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI, Extension_Forms, Error;
+final class Monitor_Admin extends Monitor_Api {
+	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI, Extension_Options, Extension_Forms, Error;
 
 	/**
 	 * The POST nonce validation name, action and name.
@@ -111,8 +118,17 @@ final class Monitor_Admin extends Monitor_Data {
 			//* Connect site to API
 			'connect' => 'connect',
 
+			//* Disconnect site from API
+			'disconnect' => 'disconnect',
+
 			//* Statistics fetch.
 			'update' => 'update',
+
+			//* Request crawl.
+			'crawl' => 'crawl',
+
+			//* Fix instance.
+			'fix' => 'fix',
 		);
 		$this->nonce_action = array(
 			//* Reference convenience.
@@ -121,13 +137,32 @@ final class Monitor_Admin extends Monitor_Data {
 			//* Connect site to API
 			'connect' => 'tsfem_e_monitor_nonce_action_connect_site',
 
+			//* Disconnect site from API
+			'disconnect' => 'tsfem_e_monitor_nonce_action_disconnect_site',
+
 			//* Statistics fetch.
 			'update' => 'tsfem_e_monitor_nonce_action_monitor_update',
+
+			//* Request crawl.
+			'crawl' => 'tsfem_e_monitor_nonce_action_monitor_crawl',
+
+			//* Fix instance.
+			'fix' => 'tsfem_e_monitor_nonce_action_monitor_fix',
 		);
 
 		$this->monitor_page_slug = 'theseoframework-monitor';
 
+		/**
+		 * Set error notice option.
+		 * @see trait TSF_Extension_Manager\Error
+		 */
 		$this->error_notice_option = 'tsfem_e_monitor_error_notice_option';
+
+		/**
+		 * Set options index.
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = 'monitor';
 
 		//* Initialize menu links
 		add_action( 'admin_menu', array( $this, '_init_menu' ) );
@@ -158,7 +193,7 @@ final class Monitor_Admin extends Monitor_Data {
 	 * SEO Framework SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework()->page_id variable.
+	 * @uses the_seo_framework_options_page_slug().
 	 * @access private
 	 */
 	public function _add_menu_link() {
@@ -213,10 +248,16 @@ final class Monitor_Admin extends Monitor_Data {
 		if ( $run )
 			return false;
 
-		//* Initialize user interface.
+		/**
+		 * Initialize user interface.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
 		$this->init_tsfem_ui();
 
-		//* Initialize error interface.
+		/**
+		 * Initialize error interface.
+		 * @see trait TSF_Extension_Manager\Error
+		 */
 		$this->init_errors();
 
 		//* Add something special for Vivaldi
@@ -244,10 +285,23 @@ final class Monitor_Admin extends Monitor_Data {
 
 		switch ( $options['nonce-action'] ) :
 			case $this->request_name['connect'] :
-				$this->register_site();
+				$this->api_register_site();
+				break;
+
+			case $this->request_name['fix'] :
+				$this->api_register_site( false );
+				break;
+
+			case $this->request_name['disconnect'] :
+				$this->api_disconnect_site();
+				break;
+
+			case $this->request_name['crawl'] :
+				$this->api_request_crawl();
 				break;
 
 			case $this->request_name['update'] :
+				$this->api_request_data();
 				break;
 
 			default :
@@ -309,30 +363,6 @@ final class Monitor_Admin extends Monitor_Data {
 		return $validated[ $key ] = (bool) $result;
 	}
 
-	protected function register_site() {
-
-		$response = $this->get_monitor_api_response( 'register_site' );
-
-		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010301 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		//* Todo set status updates regarding site instance key...?
-		$success = $this->update_option( 'connected', 'yes' );
-
-		if ( false === $success ) {
-			// TODO, really, todo! weak link.
-			// $this->get_monitor_api_response( 'remove_site' );
-			$this->set_error_notice( array( 1010302 => '' ) );
-		}
-
-		$this->set_error_notice( array( 1010303 => '' ) );
-		the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-		exit;
-	}
-
 	/**
 	 * Initializes user interface styles, scripts and footer.
 	 *
@@ -340,6 +370,10 @@ final class Monitor_Admin extends Monitor_Data {
 	 */
 	protected function init_tsfem_ui() {
 
+		/**
+		 * Set UI hook.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
 		$this->additional_css = array(
@@ -362,7 +396,9 @@ final class Monitor_Admin extends Monitor_Data {
 			array(
 				'dependency' => 'tsfem-monitor',
 				'name' => 'tsfem_e_monitorL10n',
-				'strings' => array(),
+				'strings' => array(
+					'nonce' => wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
+				),
 			),
 		);
 
@@ -455,16 +491,6 @@ final class Monitor_Admin extends Monitor_Data {
 	}
 
 	/**
-	 * Outputs update form.
-	 *
-	 * @since 1.0.0
-	 * @todo
-	 */
-	protected function output_update_button() {
-		$this->get_view( 'forms/update' );
-	}
-
-	/**
 	 * Echos the monitor connection overview.
 	 *
 	 * @since 1.0.0
@@ -540,26 +566,197 @@ final class Monitor_Admin extends Monitor_Data {
 	}
 
 	/**
-	 * Creates points of interest overview for the poi pane.
+	 * Creates Control Panel overview for the cp pane.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The parsed Points of Interest overview HTML data.
+	 * @return string The parsed Control Panel overview HTML data.
 	 */
-	protected function get_poi_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_coming_soon() );
+	protected function get_cp_overview() {
 
-		$output = '';
-		$poi = $this->get_data( 'poi', array() );
+		$output = $this->get_cp_output();
 
-		if ( empty( $poi ) ) {
-			$output .= $this->get_string_no_data_found();
-		} else {
-			$instance = Monitor_Output::get_instance();
-			$output = $instance->_get_data( $poi, 'poi' );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+	}
+
+	/**
+	 * Renders and returns Control Panel pane output content.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Control Panel pane output.
+	 */
+	protected function get_cp_output() {
+
+		$left = $this->get_cp_left_output();
+		$right = $this->get_cp_right_output();
+
+		return sprintf( '<div class="tsfem-e-monitor-cp tsfem-pane-split tsfem-flex tsfem-flex-row">%s</div>', $left . $right );
+	}
+
+	/**
+	 * Wraps the left side of the Control Panel pane.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Control Panel pane left side output.
+	 */
+	protected function get_cp_left_output() {
+
+		$output = $this->get_site_actions();
+
+		return sprintf( '<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+	}
+
+	/**
+	 * Wraps Monitor site action buttons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Monitor site action buttons.
+	 */
+	protected function get_site_actions() {
+
+		$buttons = array();
+		$description = array();
+
+		$buttons[1] = $this->get_update_button();
+		$description[1] = __( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
+
+		$buttons[2] = $this->get_crawl_button();
+		$description[2] = __( 'If your website has recently been updated, ask us to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
+
+		$title = sprintf( '<h4 class="tsfem-cp-title">%s</h4>', esc_html__( 'Actions', 'the-seo-framework-extension-manager' ) );
+
+		$content = '';
+		foreach ( $buttons as $key => $button ) {
+			$extra = sprintf( '<span class="tsfem-description">%s</span>', esc_html( $description[ $key ] ) );
+			$content .= sprintf( '<div class="tsfem-cp-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-poi-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-e-monitor-cp-actions">%s%s</div>', $title, $content );
+	}
+
+	/**
+	 * Wraps and outputs the left side of the Control Panel pane.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Control Panel pane left side output.
+	 */
+	protected function get_cp_right_output() {
+
+		$output = '';
+		$output .= $this->get_account_information();
+		$output .= $this->get_disconnect_button();
+
+		return sprintf( '<div class="tsfem-e-monitor-cp-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+	}
+
+	/**
+	 * Renders and returns update button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The update button.
+	 */
+	protected function get_update_button() {
+
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud tsfem-button-ajax';
+		$name = __( 'Update Data', 'the-seo-framework-extension-manager' );
+		$title = __( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
+
+		$nonce_action = $this->_get_nonce_action_field( 'update' );
+		$nonce = $this->_get_nonce_field( 'update' );
+		$submit = $this->_get_submit_button( $name, $title, $class );
+
+		$args = array(
+			'id'         => 'tsfem-e-monitor-update-form',
+			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
+			'ajax'       => true,
+			'ajax-id'    => 'tsfem-e-monitor-update-button',
+			'ajax-class' => $class,
+			'ajax-name'  => $name,
+			'ajax-title' => $title,
+		);
+
+		return $this->_get_action_form( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+	}
+	/**
+	 * Renders and returns crawl button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The crawl button.
+	 */
+	protected function get_crawl_button() {
+
+		$class = 'tsfem-button tsfem-button-cloud tsfem-button-ajax';
+		$name = __( 'Request Crawl', 'the-seo-framework-extension-manager' );
+		$title = __( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
+
+		$nonce_action = $this->_get_nonce_action_field( 'crawl' );
+		$nonce = $this->_get_nonce_field( 'crawl' );
+		$submit = $this->_get_submit_button( $name, $title, $class );
+
+		$args = array(
+			'id'         => 'tsfem-e-monitor-crawl-form',
+			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
+			'ajax'       => true,
+			'ajax-id'    => 'tsfem-e-monitor-crawl-button',
+			'ajax-class' => $class,
+			'ajax-name'  => $name,
+			'ajax-title' => $title,
+		);
+
+		return $this->_get_action_form( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+	}
+
+	/**
+	 * Wraps and returns the Monitor account information.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Monitor account information wrap.
+	 */
+	protected function get_account_information() {
+
+	}
+
+	/**
+	 * Renders and returns Monitor disconnect button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The disconnect button.
+	 */
+	protected function get_disconnect_button() {
+
+		$nonce_action = $this->_get_nonce_action_field( 'disconnect' );
+		$nonce = $this->_get_nonce_field( 'disconnect' );
+		$field_id = 'disconnect-switcher';
+		$disconnect_i18n = __( 'Disconnect', 'the-seo-framework-extension-manager' );
+		$ays_i18n = __( 'Are you sure?', 'the-seo-framework-extension-manager' );
+		$da_i18n = __( 'Disconnect site?', 'the-seo-framework-extension-manager' );
+
+		$button = '<input type="submit" id="' . $field_id . '-validator">'
+				. '<label for="' . $field_id . '-validator" title="' . esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . esc_html( $disconnect_i18n ) . '</label>';
+
+		$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
+						. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
+						. '<label for="' . $field_id . '-action" title="' . esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . esc_html( $disconnect_i18n ) . '</label>'
+						. $button
+					. '</div></div>';
+
+		$button = sprintf(
+			'<form name="deactivate" action="%s" method="post" id="tsfem-e-monitor-disconnect-form">%s</form>',
+			esc_url( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ),
+			$nonce_action . $nonce . $switcher
+		);
+
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
+
+		return sprintf( '<div class="tsfem-account-deactivate">%s%s</div>', $title, $button );
 	}
 
 	/**
@@ -571,7 +768,10 @@ final class Monitor_Admin extends Monitor_Data {
 	 * @return string The HTMl parsed statistics data.
 	 */
 	protected function get_stats_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_coming_soon() );
+		return sprintf(
+			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex"><h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p></div>',
+			$this->get_string_coming_soon(), esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
+		);
 
 		$output = '';
 		$stats = $this->get_data( 'stats', array() );

@@ -16,19 +16,21 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 			'full' => false,
 			'collapse' => true,
 			'move' => false,
+			'pane_id' => 'tsfem-e-monitor-issues-pane',
 			'ajax' => true,
 			'ajax_id' => 'tsfem-e-monitor-issues-ajax',
 		)
 	);
 	tsf_extension_manager()->_do_pane_wrap(
-		__( 'Points of Interest', 'the-seo-framework-extension-manager' ),
-		$this->get_poi_overview(),
+		__( 'Control Panel', 'the-seo-framework-extension-manager' ),
+		$this->get_cp_overview(),
 		array(
 			'full' => false,
 			'collapse' => true,
 			'move' => false,
+			'pane_id' => 'tsfem-e-monitor-cp-pane',
 			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-poi-ajax',
+			'ajax_id' => 'tsfem-e-monitor-cp-ajax',
 		)
 	);
 ?>
@@ -42,6 +44,7 @@ defined( 'ABSPATH' ) and $_class = monitor_class() and $this instanceof $_class 
 			'full' => true,
 			'collapse' => true,
 			'move' => false,
+			'pane_id' => 'tsfem-e-monitor-stats-pane',
 			'ajax' => true,
 			'ajax_id' => 'tsfem-e-monitor-stats-ajax',
 		)

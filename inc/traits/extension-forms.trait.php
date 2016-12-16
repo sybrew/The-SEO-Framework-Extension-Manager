@@ -190,4 +190,101 @@ trait Extension_Forms {
 
 		return sprintf( '<input type="submit" name="submit" id="submit" value="%s"%s%s>', $name, $class, $title );
 	}
+
+	/**
+	 * Outputs a form action button from input.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $url The admin page action URL.
+	 * @param array $items The form items : {
+	 *    'title'   => string The form button title.
+	 *    'class'   => string The form class.
+	 *    'id'      => string The form ID.
+	 *    'ajax'    => bool Whether to support AJAX.
+	 *    'ajax-id' => string The AJAX <a> button ID.
+	 *    'input'   => array The form input entry items.
+	 * }
+	 * @return string The input submit button.
+	 */
+	public function _action_form( $url = '', array $items = array() ) {
+		//* Should already be escaped before input.
+		echo $this->_get_action_form( $url, $items );
+	}
+
+	/**
+	 * Outputs a form action button from input.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $url The admin page action URL.
+	 * @param array $items The form items : {
+	 *    'class'      => string The form class.
+	 *    'id'         => string The form ID.
+	 *    'input'      => array The form input entry items.
+	 *    'ajax'       => bool Whether to support AJAX.
+	 *    'ajax-id'    => string The AJAX <a> button ID.
+	 *    'ajax-class' => string The AJAX <a> button class.
+	 *    'ajax-name'  => string The AJAX <a> button name.
+	 *    'ajax-title' => string The AJAX <a> button on-hover title.
+	 * }
+	 * @return string The input submit button.
+	 */
+	public function _get_action_form( $url = '', array $items = array() ) {
+
+		if ( empty( $url ) ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
+			return '';
+		}
+
+		if ( empty( $items['input'] ) || ! is_array( $items['input'] ) ) {
+			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Form items must be in an array. Supply at least a submit button.' );
+			return '';
+		}
+
+		$defaults = array(
+			'class'      => '',
+			'id'         => '',
+			'input'      => array(),
+			'ajax'       => false,
+			'ajax-id'    => '',
+			'ajax-class' => '',
+			'ajax-name'  => '',
+			'ajax-title' => '',
+		);
+
+		$items = wp_parse_args( $items, $defaults );
+
+		$form = '';
+		foreach ( $items['input'] as $item ) {
+			$form .= $item;
+		}
+
+		$output = '';
+		if ( $items['ajax'] ) {
+			if ( '' === $items['ajax-id'] ) {
+				the_seo_framework()->_doing_it_wrong( __METHOD__, 'No AJAX ID supplied.' );
+				return '';
+			}
+
+			$output .= sprintf(
+				'<form action="%s" method="post" id="%s" class="hide-if-js %s">%s</form>',
+				esc_url( $url ), esc_attr( $items['id'] ), esc_attr( $items['class'] ), $form
+			);
+
+			$output .= sprintf(
+				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
+				esc_attr( $items['ajax-id'] ), esc_attr( $items['ajax-class'] ), esc_attr( $items['ajax-title'] ), esc_html( $items['ajax-name'] )
+			);
+		} else {
+			$output .= sprintf(
+				'<form action="%s" method="post" id="%s" class="%s">%s</form>',
+				esc_url( $url ), esc_attr( $items['id'] ), esc_attr( $items['class'] ), $form
+			);
+		}
+
+		return $output;
+	}
 }

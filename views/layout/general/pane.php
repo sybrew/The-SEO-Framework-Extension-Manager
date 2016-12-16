@@ -11,12 +11,14 @@ if ( $args['ajax'] ) {
 	$ajax = '';
 }
 
+$pane_id = $args['pane_id'];
+
 $pane_class = $args['full'] ? 'tsfem-pane-full' : 'tsfem-pane-half';
 $pane_class .= $args['move'] ? ' tsfem-pane-move' : '';
 $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 
 ?>
-<section class="<?php echo esc_attr( $pane_class ); ?> tsfem-flex">
+<section class="<?php echo esc_attr( $pane_class ); ?> tsfem-flex" id="<?php echo esc_attr( $pane_id ); ?>">
 	<div class="tsfem-pane-wrap tsfem-flex tsfem-flex-nowrap">
 		<?php
 		//* $ajax is already escaped.

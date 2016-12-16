@@ -123,11 +123,12 @@ class Panes extends API {
 	}
 
 	/**
-	 * Returns Google Feed.
+	 * Returns Google Webmaster's blog Feed.
 	 *
 	 * @since 1.0.0
 	 * @uses TSF_Extension_Manager\Trends::get()
-	 * @todo Consider loading via AJAX if transient has expired (register_shutdown_function + hide-if-js (reload...)?).
+	 * @todo Consider loading via AJAX if transient has expired (set transient ->
+	 * auto-load through ajax (calculate difference) & delete transient -> if failed run anyway).
 	 *
 	 * @return string The sanitized Google Webmasters feed output.
 	 */
@@ -143,7 +144,7 @@ class Panes extends API {
 	 * Returns trends activation introduction.
 	 *
 	 * @since 1.0.0
-	 * @todo convert to secure instance.
+	 * @todo convert to secure Trends instance? Trends isn't "super-secure" (no bit verification).
 	 *
 	 * @return string Trends activation buttons.
 	 */
@@ -164,7 +165,7 @@ class Panes extends API {
 	 * Returns a button that implements an AJAX request for Feed enabling.
 	 *
 	 * @since 1.0.0
-	 * @todo convert to secure instance.
+	 * @todo @see $this->get_trends_activation_output().
 	 *
 	 * @return string.
 	 */
@@ -322,7 +323,8 @@ class Panes extends API {
 
 		if ( $this->is_premium_user() && $this->are_options_valid() ) {
 			$output .= $this->get_account_information();
-			$output .= $this->get_account_extend_form();
+			//* TODO make this happen (on request/modal?).
+			//	$output .= $this->get_account_extend_form();
 		} else {
 			$output .= $this->get_account_upgrade_form();
 		}
@@ -362,7 +364,7 @@ class Panes extends API {
 	}
 
 	/**
-	 * @TODO
+	 * @TODO make this happen.
 	 */
 	protected function get_account_extend_form() { }
 
@@ -499,14 +501,11 @@ class Panes extends API {
 
 		Extensions::set_account( $this->get_subscription_status() );
 
-		$header = Extensions::get( 'layout_header' );
-		$header = sprintf( '<div class="tsfem-extensions-overview-header">%s</div>', $header );
-
 		$content = Extensions::get( 'layout_content' );
 		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row tsfem-flex-space">%s</div>', $content );
 
 		Extensions::reset();
 
-		return $header . $content;
+		return $content;
 	}
 }

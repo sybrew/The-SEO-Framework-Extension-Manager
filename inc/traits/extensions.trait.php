@@ -702,21 +702,13 @@ trait Extensions_Actions {
 
 		basetest : {
 			//* Test base file.
-			$results = static::persist_include_extension( $file, $_instance, $bits );
-
-			$success = $results['success'];
-			$_instance = $results['_instance'];
-			$bits = $results['bits'];
+			$success = static::persist_include_extension( $file, $_instance, $bits );
 		}
 
 		if ( $success ) {
 			jsontest : {
 				//* Test json file and contents.
-				$results = static::perform_extension_json_tests( $slug, $_instance, $bits );
-
-				$success = $results['success'];
-				$_instance = $results['_instance'];
-				$bits = $results['bits'];
+				$success = static::perform_extension_json_tests( $slug, $_instance, $bits );
 			}
 		}
 
@@ -747,11 +739,11 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug.
-	 * @param string $_instance The verification instance.
-	 * @param array $bits The verification instance bits.
+	 * @param string $_instance The verification instance. Passed by reference.
+	 * @param array $bits The verification instance bits. Passed by reference.
 	 * @return true on success, false on failure.
 	 */
-	private static function perform_extension_json_tests( $slug, $_instance, $bits ) {
+	private static function perform_extension_json_tests( $slug, &$_instance, &$bits ) {
 
 		$base_path = static::get_extension_trunk_path( $slug );
 		$json_file = $base_path . 'test.json';
@@ -775,18 +767,10 @@ trait Extensions_Actions {
 			if ( is_array( $_file ) ) {
 				//* Facade.
 				foreach ( $_file as $f_file ) :
-					$results = static::persist_include_extension( $base_path . $f_file, $_instance, $bits );
-
-					$success[] = $results['success'];
-					$_instance = $results['_instance'];
-					$bits = $results['bits'];
+					$success[] = static::persist_include_extension( $base_path . $f_file, $_instance, $bits );
 				endforeach;
 			} else {
-				$results = static::persist_include_extension( $base_path . $_file, $_instance, $bits );
-
-				$success[] = $results['success'];
-				$_instance = $results['_instance'];
-				$bits = $results['bits'];
+				$success[] = static::persist_include_extension( $base_path . $_file, $_instance, $bits );
 			}
 
 			if ( $_class ) {
@@ -796,12 +780,7 @@ trait Extensions_Actions {
 		}
 
 		end : {
-			//* Pass back verification.
-			return array(
-				'success'   => ! in_array( false, $success, true ),
-				'_instance' => $_instance,
-				'bits'      => $bits,
-			);
+			return ! in_array( false, $success, true );
 		}
 	}
 
@@ -811,15 +790,11 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $file The file to test.
-	 * @param string $_instance The verification instance. Propagates to inclusion file.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file.
-	 * @return array : {
-	 *		'success'   => bool Whether the file inclusion(s) succeeded,
-	 *		'_instance' => string The new verification instance,
-	 *		'bits'      => array The new verification instance bits,
-	 * }
+	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
+	 * @return bool Whether the file inclusion(s) succeeded.
 	 */
-	private static function persist_include_extension( $file, $_instance, $bits ) {
+	private static function persist_include_extension( $file, &$_instance, &$bits ) {
 
 		$yield_count = 0;
 		$success = array();
@@ -840,11 +815,7 @@ trait Extensions_Actions {
 			endswitch;
 		endforeach;
 
-		return array(
-			'success'   => ! in_array( false, $success, true ),
-			'_instance' => $_instance,
-			'bits'      => $bits,
-		);
+		return ! in_array( false, $success, true );
 	}
 
 	/**
@@ -941,7 +912,7 @@ trait Extensions_Actions {
 			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', wp_strip_all_tags( $advanced_error_notice ), esc_attr( $advanced_error_notice ), $error_notice );
 
 			$status = array(
-				'success' => 10004,
+				'success' => 10005,
 				'notice' => $notice,
 			);
 

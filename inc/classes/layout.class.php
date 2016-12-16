@@ -231,7 +231,7 @@ final class Layout extends Secure_Abstract {
 
 				if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
 					/**
-					 * @TODO bugfix/make consistent?
+					 * @TODO bugfix/make consistent/put in function/put in action?
 					 * It only refreshes when a premium extension is being activated.
 					 * Otherwise, it will continue to count into negatives.
 					 *

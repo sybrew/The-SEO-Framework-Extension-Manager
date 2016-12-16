@@ -65,10 +65,6 @@ final class Extensions extends Secure_Abstract {
 
 		switch ( self::get_property( '_type' ) ) :
 			case 'overview' :
-				static::$header = array();
-				static::$extensions = static::get_extensions();
-				break;
-
 			case 'activation' :
 			case 'list' :
 			case 'load' :
@@ -142,10 +138,6 @@ final class Extensions extends Secure_Abstract {
 		}
 
 		switch ( $type ) :
-			case 'layout_header' :
-				return static::get_layout_header();
-				break;
-
 			case 'layout_content' :
 				return static::get_layout_content();
 				break;
@@ -196,6 +188,7 @@ final class Extensions extends Secure_Abstract {
 	 * Removes items from extension list based on $what and website conditions.
 	 *
 	 * @since 1.0.0
+	 * @todo clean this up and test again. It works for now.
 	 *
 	 * @param array $extensions The extension list.
 	 * @param string|array $what What to filter out of the list.

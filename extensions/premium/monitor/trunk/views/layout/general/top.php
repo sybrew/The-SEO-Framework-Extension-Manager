@@ -11,10 +11,6 @@ $actions = '';
 
 if ( $options ) {
 	//* TODO
-	//	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button-primary ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
-	//	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
-
-	//	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
 } else {
 	$info = __( 'Let SEO Monitor help you improve your website. Your privacy is respected, read how below.', 'the-seo-framework-extension-manager' );
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . esc_html( $info ) . '</div></div>';
@@ -29,13 +25,8 @@ if ( $options ) {
 		</h1></header>
 	</div>
 	<?php
-	if ( $options ) {
-		//* TODO move this into $actions.
-		$this->output_update_button();
-	} else {
-		//* Already escaped.
-		echo $about, $actions;
-	}
+	//* Already escaped.
+	echo $about, $actions;
 	?>
 </section>
 <?php

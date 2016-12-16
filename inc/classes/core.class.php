@@ -719,6 +719,8 @@ class Core {
 	 * @return bool Whether the plugin is active in network mode.
 	 */
 	public function is_plugin_in_network_mode() {
+		//* TODO remove this! It now renders network mode as singular installations per site. This is NOT what I promised.
+		return false;
 
 		static $network_mode = null;
 
@@ -1087,7 +1089,9 @@ class Core {
 					break;
 
 				default :
-					//* @TODO consider return unknown error.
+					//* Method mismatch error. Unknown error.
+					$ajax or $this->set_error_notice( array( 10003 => '' ) );
+					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
 					break;
 			endswitch;
 		endif;
@@ -1098,50 +1102,50 @@ class Core {
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
 				if ( false === $this->validate_remote_subscription_license() ) {
-					$ajax or $this->set_error_notice( array( 10003 => '' ) );
-					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
+					$ajax or $this->set_error_notice( array( 10004 => '' ) );
+					return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
 				}
 			}
 
 			$test = $this->test_extension( $slug, $ajax );
 
 			if ( 4 !== $test || $this->_has_died() ) {
-				$ajax or $this->set_error_notice( array( 10004 => '' ) );
-				return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+				$ajax or $this->set_error_notice( array( 10005 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 
 			$success = $this->enable_extension( $slug );
 
 			if ( false === $success ) {
-				$ajax or $this->set_error_notice( array( 10005 => '' ) );
-				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
+				$ajax or $this->set_error_notice( array( 10006 => '' ) );
+				return $ajax ? $this->get_ajax_notice( false, 10006 ) : false;
 			}
 		endif;
 
 		switch ( $status['case'] ) :
 			case 1 :
 				//* No slug set.
-				$code = 10006;
+				$code = 10007;
 				break;
 
 			case 2 :
 				//* Premium activated.
-				$code = 10007;
+				$code = 10008;
 				break;
 
 			case 3 :
 				//* Premium failed: User not premium.
-				$code = 10008;
+				$code = 10009;
 				break;
 
 			case 4 :
 				//* Free activated.
-				$code = 10009;
+				$code = 10010;
 				break;
 
 			default :
 				//* Unknown case.
-				$code = 10010;
+				$code = 10011;
 				break;
 		endswitch;
 

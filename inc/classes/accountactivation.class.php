@@ -66,7 +66,7 @@ class AccountActivation extends Panes {
 	 * Validation is done two-fold (local and activation server).
 	 *
 	 * @since 1.0.0
-	 * @todo
+	 * @todo use this
 	 */
 	protected function get_remote_activation_listener() {
 
@@ -80,7 +80,7 @@ class AccountActivation extends Panes {
 	 * Fetches external activation response, periodically.
 	 *
 	 * @since 1.0.0
-	 * @todo
+	 * @todo everything.
 	 *
 	 * @return bool|array False if data has not yet been set. Array if data has been set.
 	 */
@@ -99,7 +99,7 @@ class AccountActivation extends Panes {
 	 * Sets external activation response.
 	 *
 	 * @since 1.0.0
-	 * @todo
+	 * @todo use this
 	 *
 	 * @param array $value The data that needs to be set.
 	 * @return bool True
