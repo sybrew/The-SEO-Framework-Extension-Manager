@@ -226,7 +226,7 @@ class Core {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @return bool False if nonce failed.
+	 * @return void If nonce failed.
 	 */
 	final public function _handle_update_post() {
 
@@ -348,10 +348,11 @@ class Core {
 	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
-	protected function clean_ajax_reponse_header() {
+	public function _clean_ajax_reponse_header() {
 
 		if ( ob_get_level() && ob_get_contents() ) {
 			ob_clean();
@@ -1055,7 +1056,8 @@ class Core {
 	 *
 	 * @param array $options The form/request input options.
 	 * @param bool $ajax Whether this is an AJAX request.
-	 * @return bool False on invalid input or on activation failure.
+	 * @return bool|string False on invalid input or on activation failure.
+	 *         String on success or AJAX.
 	 */
 	protected function activate_extension( $options, $ajax = false ) {
 

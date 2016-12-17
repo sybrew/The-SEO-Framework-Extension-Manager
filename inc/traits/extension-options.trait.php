@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) or die;
 /**
  * Class TSF_Extension_Manager\Extensions_Options_Cache.
  *
- * Caches the extension options. Used for when updating and managing options.
+ * Caches the extension options. Used for updating and managing options.
  *
  * @since 1.0.0
  * @access private

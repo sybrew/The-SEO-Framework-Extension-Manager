@@ -56,7 +56,7 @@ trait Activation_Data {
 	 * @return string Domain Host.
 	 */
 	protected function get_activation_site_domain() {
-		return str_ireplace( array( 'http://', 'https://' ), '', home_url() );
+		return str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) );
 	}
 
 	/**

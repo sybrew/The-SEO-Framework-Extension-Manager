@@ -136,8 +136,7 @@ final class Layout extends Secure_Abstract {
 			$ays_i18n = __( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n = __( 'Deactivate account?', 'the-seo-framework-extension-manager' );
 
-			$button = '<input type="submit" id="' . $field_id . '-validator">'
-					. '<label for="' . $field_id . '-validator" title="' . esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . esc_html( $deactivate_i18n ) . '</label>';
+			$button = '<button type="submit" title="' . esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . esc_html( $deactivate_i18n ) . '</button>';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
@@ -252,7 +251,7 @@ final class Layout extends Secure_Abstract {
 
 			if ( $domain ) {
 				//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-				$_domain = str_ireplace( array( 'http://', 'https://' ), '', home_url() );
+				$_domain = str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) );
 				$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 
 				$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', esc_attr( $class ), esc_html( $_domain ) );
@@ -317,7 +316,7 @@ final class Layout extends Secure_Abstract {
 	 * @param bool $escape Whether to escape the output.
 	 * @return string The Title/Content wrap.
 	 */
-	private static function wrap_title_content( $title, $content, $escape = true ) {
+	public static function wrap_title_content( $title, $content, $escape = true ) {
 
 		if ( $escape ) {
 			$title = esc_html( $title );

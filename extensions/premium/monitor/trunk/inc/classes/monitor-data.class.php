@@ -58,32 +58,6 @@ class Monitor_Data {
 	}
 
 	/**
-	 * Determines if the site is connected.
-	 * This does not inheritly tell if the connection is valid.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return boolean True if connected, false otherwise.
-	 */
-	protected function is_api_connected() {
-		return 'yes' === $this->get_option( 'connected' );
-	}
-
-	/**
-	 * Determines when the next crawl is scheduled for the website.
-	 * Remote server cron runs every minute, with a 63 second delay.
-	 *
-	 * @since 1.0.0
-	 * @todo Fine-tune this, maybe get remote response on next cron?
-	 * @todo The remote server can't run multiple cron-jobs at the same time. It locks for 30 seconds.
-	 *
-	 * @return string Unix timestring for next crawl.
-	 */
-	protected function next_crawl() {
-		return $next = $this->get_option( 'crawl_requested', 0 ) > time() ? $next + 63 : false;
-	}
-
-	/**
 	 * Returns Monitor Data.
 	 *
 	 * @since 1.0.0
@@ -102,8 +76,13 @@ class Monitor_Data {
 			$this->set_installing_site( false );
 			return null;
 		}
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$data = $this->get_option( $type, array() );
 
-		$data = $this->get_remote_data( $type, false );
+		if ( empty( $data ) )
+			$data = $this->get_remote_data( $type );
 
 		return empty( $data ) ? $default : $data;
 	}
@@ -115,94 +94,19 @@ class Monitor_Data {
 	 * @since 1.0.0
 	 *
 	 * @param string $type The monitor data type. Accepts 'issue' and 'stats'.
-	 * @param bool $ajax Whether the call is made through AJAX.
-	 * @return array|mixed The found data.
+	 * @return array|boolean The found data. False on failure.
 	 */
-	protected function get_remote_data( $type = '', $ajax = false ) {
+	protected function get_remote_data( $type = '' ) {
 
 		if ( ! $type )
 			return false;
 
+		$this->is_remote_data_expired() and $this->api_get_remote_data();
+
 		/**
+		 * Option cache should be updated.
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
-		$data = $this->get_option( $type, array() );
-
-		if ( empty( $data ) ) {
-			$this->fetch_new_data( $ajax );
-			/**
-			 * Option cache should be updated.
-			 * @see trait TSF_Extension_Manager\Extension_Options
-			 */
-			$data = $this->get_option( $type, array() );
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Returns Monitor Data fetched externally from the API server.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $type The monitor data type. Accepts 'issue' and 'stats'.
-	 * @param bool $ajax Whether the call is made through AJAX.
-	 * @return array|mixed The found data.
-	 */
-	protected function fetch_new_data( $ajax = false ) {
-
-		static $fetched = null;
-
-		if ( isset( $fetched ) )
-			return $fetched;
-
-		$data = $this->api_get_remote_data();
-
-		if ( is_array( $data ) ) {
-			foreach ( $data as $type => $values ) {
-				/**
-				 * Option cache should be updated as well.
-				 * @see trait TSF_Extension_Manager\Extension_Options
-				 */
-				$this->update_option( $type, $values );
-			}
-			$fetched = true;
-		} else {
-			$fetched = false;
-		}
-
-		return $fetched;
-	}
-
-	/**
-	 * Fetches remote monitor data to later be evaluated.
-	 * Prevents API spam by setting 2 minute time limit.
-	 *
-	 * @since 1.0.0
-	 * @global int $blog_id
-	 *
-	 * @return array The remote monitor data.
-	 */
-	protected function api_get_remote_data() {
-		global $blog_id;
-
-		$transient = 'tsfem_e_monitor_remote_data_' . $blog_id;
-
-		$data = get_transient( $transient );
-
-		if ( false !== $data )
-			return $data;
-
-		$response = $this->get_monitor_api_response( 'get_data' );
-
-		if ( isset( $response ) ) {
-			//* Remove 5 seconds server time as local to remote buffer.
-			$expiration = ( MINUTE_IN_SECONDS * 2 ) - 5;
-			set_transient( $transient, $response, $expiration );
-
-			return $response;
-		}
-
-		return false;
+		return $this->get_option( $type, array() );
 	}
 }

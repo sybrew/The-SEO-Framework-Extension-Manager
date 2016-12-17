@@ -41,9 +41,9 @@ class Panes extends API {
 	 */
 	private function construct() {
 		//* Ajax listener for updating feed option.
-		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, 'wp_ajax_enable_feeds' ) );
+		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
 		//* Ajax listener for updating extension setting.
-		add_action( 'wp_ajax_tsfem_update_extension', array( $this, 'wp_ajax_tsfem_update_extension' ) );
+		add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
 	}
 
 	/**
@@ -190,7 +190,7 @@ class Panes extends API {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function wp_ajax_enable_feeds() {
+	public function _wp_ajax_enable_feeds() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			if ( $this->can_do_settings() ) {
@@ -219,13 +219,13 @@ class Panes extends API {
 					}
 				}
 
-				$this->clean_ajax_reponse_header();
+				$this->_clean_ajax_reponse_header();
 
 				echo json_encode( $results );
-
-				exit;
 			}
 		}
+
+		exit;
 	}
 
 	/**
@@ -234,7 +234,7 @@ class Panes extends API {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function wp_ajax_tsfem_update_extension() {
+	public function _wp_ajax_tsfem_update_extension() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			if ( $this->can_do_settings() ) {
@@ -270,13 +270,13 @@ class Panes extends API {
 				//* Send back input when WP_DEBUG is on.
 				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
 
-				$this->clean_ajax_reponse_header();
+				$this->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
-
-				exit;
 			}
 		}
+
+		exit;
 	}
 
 	/**

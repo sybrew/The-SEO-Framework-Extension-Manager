@@ -223,6 +223,8 @@ trait Error {
 
 			case 1010301 :
 			case 1010401 :
+			case 1010501 :
+			case 1010601 :
 				$message = esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -240,7 +242,6 @@ trait Error {
 
 			case 308 :
 			case 1010202 :
-			case 1010402 :
 				$message = esc_html__( 'Your subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
@@ -319,17 +320,34 @@ trait Error {
 				break;
 
 			case 1010403 :
+				$message = esc_html__( 'Your site has been succesfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
+			case 1010502 :
+			case 1010602 :
+				$message = esc_html__( 'The Monitor API server does not recognize your instance. Request a fix.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010503 :
+			case 1010603 :
 				$message = esc_html__( 'Your website has been marked as inactive by the Monitor API server.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
 
-			case 1010405 :
+			case 1010504 :
+				$message = esc_html__( 'Crawl request is still in queue. Please try again later.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010506 :
 				$message = esc_html__( 'Crawl has been requested succesfully. This can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
-			case 1010503 :
-				$message = esc_html__( 'Your site has been succesfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
+			case 1010606 :
+				$message = esc_html__( 'The latest Monitor data has been recieved.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
@@ -344,7 +362,10 @@ trait Error {
 			case 11002 :
 			case 1010302 :
 			case 1010303 :
-			case 1010404 :
+			case 1010402 :
+			case 1010505 :
+			case 1010604 :
+			case 1010605 :
 			default :
 				$message = esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
@@ -364,15 +385,14 @@ trait Error {
 	 * @return array {
 	 *		'success' => mixed $success,
 	 *		'notice'  => string $notice,
+	 *		'code'    => int $code,
 	 * }
 	 */
 	protected function get_ajax_notice( $success, $code ) {
-
-		$notice = array( 'success' => $success, 'notice' => $this->get_error_notice_by_key( $code, false ) );
-
-		if ( WP_DEBUG )
-			$notice = array_merge( $notice, array( 'code' => intval( $code ) ) );
-
-		return $notice;
+		return array(
+			'success' => $success,
+			'notice' => $this->get_error_notice_by_key( $code, false ),
+			'code' => intval( $code ),
+		);
 	}
 }

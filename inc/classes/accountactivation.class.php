@@ -406,7 +406,7 @@ class AccountActivation extends Panes {
 		}
 
 		//* In-house transient cache.
-		$timestamp = ceil( time() / $divider );
+		$timestamp = (int) ceil( time() / $divider );
 
 		//* Return cached status within 2 hours.
 		if ( ! $doing_activation && $timestamp === $status['timestamp'] )

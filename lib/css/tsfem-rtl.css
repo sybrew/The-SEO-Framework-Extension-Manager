@@ -445,8 +445,7 @@ body.tsfem .wrap {
 	justify-content: center;
 }
 
-.tsfem-switch-button-container input[type=checkbox],
-.tsfem-switch-button-container input[type=submit] {
+.tsfem-switch-button-container input[type=checkbox] {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -454,7 +453,8 @@ body.tsfem .wrap {
 	overflow: hidden;
 }
 
-.tsfem-switch-button-container label {
+.tsfem-switch-button-container label
+.tsfem-switch-button-container button {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -474,7 +474,7 @@ body.tsfem .wrap {
 	user-select: none;
 }
 
-.tsfem-switch-button-container input[type=submit] + label {
+.tsfem-switch-button-container button {
 	-webkit-transform: rotateX(-100deg);
 	transform: rotateX(-100deg);
 	transform-origin: 0 100% 0;
@@ -496,7 +496,7 @@ body.tsfem .wrap {
 	transition: transform 1.2s, opacity 0.6s;
 }
 
-.tsfem-switch-button-container input[type=checkbox]:checked ~ input[type=submit] + label {
+.tsfem-switch-button-container input[type=checkbox]:checked ~ button {
 	-webkit-transform: rotateX(0deg);
 	transform: rotateX(0deg);
 	opacity: 1;
@@ -793,6 +793,11 @@ h4.tsfem-cp-title {
 	margin-bottom: 14px;
 	-webkit-flex-basis: 50%;
 	flex-basis: 50%;
+}
+
+.tsfem-support-buttons form button,
+.tsfem-cp-buttons form button {
+	width: 100%;
 }
 
 .tsfem-support-buttons:last-of-type,

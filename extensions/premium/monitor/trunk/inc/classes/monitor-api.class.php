@@ -61,16 +61,17 @@ class Monitor_Api extends Monitor_Data {
 	 * Retrieves API response for SEO Monitor data collection.
 	 *
 	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Error
 	 *
 	 * @param string $type The request type.
-	 * @return array The response body.
+	 * @param bool $ajax Whether the request call is from AJAX.
+	 * @return array The response body. Or error notice on AJAX.
 	 */
-	protected function get_monitor_api_response( $type = '' ) {
+	protected function get_monitor_api_response( $type = '', $ajax = false ) {
 
 		if ( empty( $type ) ) {
-			$this->set_error_notice( array( 1010201 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
+			$ajax or $this->set_error_notice( array( 1010201 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010201 ) : false;
 		}
 
 		/**
@@ -99,10 +100,9 @@ class Monitor_Api extends Monitor_Data {
 						);
 						$response = tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
 					} else {
-						$this->set_error_notice( array( 1010202 => '' ) );
 						tsf_extension_manager()->_verify_instance( $instance, $bits );
-						the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-						exit;
+						$ajax or $this->set_error_notice( array( 1010202 => '' ) );
+						return $ajax ? $this->get_ajax_notice( false, 1010202 ) : false;
 					}
 					break;
 
@@ -116,22 +116,249 @@ class Monitor_Api extends Monitor_Data {
 		$response = json_decode( $response );
 
 		if ( ! isset( $response->success ) ) {
-			$this->set_error_notice( array( 1010203 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
+			$ajax or $this->set_error_notice( array( 1010203 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010203 ) : false;
 		}
 
 		if ( ! isset( $response->data ) ) {
-			$this->set_error_notice( array( 1010204 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
+			$ajax or $this->set_error_notice( array( 1010204 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010204 ) : false;
 		}
 
-		return stripslashes_deep( json_decode( $response->data, true ) );
+		return array(
+			'success' => true,
+			'data' => stripslashes_deep( json_decode( $response->data, true ) ),
+		);
 	}
 
 	/**
-	 * Registers setup transient.
+	 * Requests Monitor to register or fix the site's instance.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Error
+	 *
+	 * @param bool $delete Whether to remove the site from the server on failure.
+	 * @return bool False on invalid input or on deactivation failure. True otherwise.
+	 */
+	protected function api_register_site( $delete = true ) {
+
+		$this->set_installing_site();
+
+		$response = $this->get_monitor_api_response( 'register_site' );
+
+		if ( empty( $response['success'] ) ) {
+			//* Notice has already been set. No AJAX conformation here.
+			return false;
+		}
+
+		$response = $response['data'];
+
+		if ( 'failure' === $response['status'] ) {
+			$this->set_error_notice( array( 1010301 => '' ) );
+			return false;
+		}
+
+		$success = array();
+		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) ) );
+		$success[] = $this->update_option( 'connected', 'yes' );
+
+		if ( in_array( false, $success, true ) ) {
+			$delete and $this->get_monitor_api_response( 'remove_site' );
+			$this->set_error_notice( array( 1010302 => '' ) );
+			return false;
+		}
+
+		$success = array();
+		$success[] = $this->set_remote_crawl_timeout();
+		$success[] = $this->update_option( 'site_requires_fix', false );
+		$success[] = $this->update_option( 'site_marked_inactive', false );
+
+		if ( in_array( false, $success, true ) ) {
+			$this->set_error_notice( array( 1010303 => '' ) );
+			return false;
+		}
+
+		$this->set_error_notice( array( 1010304 => '' ) );
+		return true;
+	}
+
+	/**
+	 * Requests Monitor to remove the site.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Error
+	 *
+	 * @return bool False on invalid input or on deactivation failure. True otherwise.
+	 */
+	protected function api_disconnect_site() {
+
+		$response = $this->get_monitor_api_response( 'remove_site' );
+
+		if ( empty( $response['success'] ) ) {
+			//* Notice has already been set. No AJAX conformation here.
+			return false;
+		}
+
+		$response = $response['data'];
+
+		if ( 'failure' === $response['status'] ) {
+			$this->set_error_notice( array( 1010401 => '' ) );
+			return false;
+		}
+
+		$success = $this->delete_option_index();
+
+		if ( false === $success ) {
+			$this->set_error_notice( array( 1010402 => '' ) );
+			return false;
+		}
+
+		$this->set_error_notice( array( 1010403 => '' ) );
+		return true;
+	}
+
+	/**
+	 * Requests Monitor to crawl the website.
+	 * Prevents API spam by setting monitor_crawl_requested option.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Error
+	 *
+	 * @param bool $ajax Whether to request is done through AJAX.
+	 * @return bool|array False on invalid input or on activation failure. True otherwise.
+	 *         Array The status notice on AJAX.
+	 */
+	protected function api_request_crawl( $ajax = false ) {
+
+		$response = $this->get_monitor_api_response( 'request_crawl', $ajax );
+
+		if ( empty( $response['success'] ) ) {
+			//* Notice have already been set.
+			return $ajax ? $response : false;
+		}
+
+		$response = $response['data'];
+
+		if ( 'failure' === $response['status'] ) {
+			$ajax or $this->set_error_notice( array( 1010501 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
+		}
+
+		if ( 'site expired' === $response['status'] ) {
+			$this->update_option( 'site_requires_fix', true );
+			$ajax or $this->set_error_notice( array( 1010502 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010502 ) : false;
+		}
+
+		if ( 'site inactive' === $response['status'] ) {
+			$this->update_option( 'site_marked_inactive', true );
+			$ajax or $this->set_error_notice( array( 1010503 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010503 ) : false;
+		}
+
+		if ( 'queued' === $response['status'] ) {
+			$this->set_remote_crawl_timeout();
+			$ajax or $this->set_error_notice( array( 1010504 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010504 ) : false;
+		}
+
+		$success = $this->set_remote_crawl_timeout();
+
+		if ( false === $success ) {
+			$ajax or $this->set_error_notice( array( 1010505 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010505 ) : false;
+		}
+
+		//* Success.
+		$ajax or $this->set_error_notice( array( 1010506 => '' ) );
+		return $ajax ? $this->get_ajax_notice( true, 1010506 ) : true;
+	}
+
+	/**
+	 * Fetches remote monitor data to later be evaluated.
+	 * Prevents API spam by setting monitor_data_requested option with two minute delay.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Error
+	 *
+	 * @param bool $ajax Whether this request is done through AJAX.
+	 * @return bool|array False on invalid input or on activation failure. True otherwise.
+	 *         Array The status notice on AJAX.
+	 */
+	protected function api_get_remote_data( $ajax = false ) {
+
+		$response = $this->get_monitor_api_response( 'get_data', $ajax );
+
+		if ( empty( $response['success'] ) ) {
+			//* Notice has already been set.
+			return $ajax ? $response : false;
+		}
+
+		$response = $response['data'];
+
+		if ( 'failure' === $response['status'] ) {
+			$ajax or $this->set_error_notice( array( 1010601 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010601 ) : false;
+		}
+
+		if ( 'site expired' === $response['status'] ) {
+			$this->update_option( 'site_requires_fix', true );
+			$ajax or $this->set_error_notice( array( 1010602 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010602 ) : false;
+		}
+
+		if ( 'site inactive' === $response['status'] ) {
+			$this->update_option( 'site_marked_inactive', true );
+			$ajax or $this->set_error_notice( array( 1010603 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010603 ) : false;
+		}
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$success = $this->set_remote_data_timeout();
+
+		if ( false === $success ) {
+			$ajax or $this->set_error_notice( array( 1010604 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010604 ) : false;
+		}
+
+		$success = array();
+
+		foreach ( $response as $type => $values ) {
+			if ( in_array( $type, array( 'issues', 'stats' ), true ) ) {
+				/**
+				 * @see trait TSF_Extension_Manager\Extension_Options
+				 */
+				$success[] = $this->update_option( $type, $values );
+			}
+		}
+
+		if ( in_array( false, $success, true ) ) {
+			$ajax or $this->set_error_notice( array( 1010605 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1010605 ) : false;
+		}
+
+		$ajax or $this->set_error_notice( array( 1010606 => '' ) );
+		return $ajax ? $this->get_ajax_notice( true, 1010606 ) : true;
+	}
+
+	/**
+	 * Determines if the site is connected.
+	 * This does not inheritly tell if the connection is valid.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 *
+	 * @return boolean True if connected, false otherwise.
+	 */
+	protected function is_api_connected() {
+		return 'yes' === $this->get_option( 'connected' );
+	}
+
+	/**
+	 * Registers Monitor setup option in order to prevent propagation of requests
+	 * that would most likely yield empty results.
 	 *
 	 * @since 1.0.0
 	 * @see trait TSF_Extension_Manager\Extension_Options
@@ -142,95 +369,118 @@ class Monitor_Api extends Monitor_Data {
 		$this->update_option( 'monitor_installing', (bool) $val );
 	}
 
-	protected function api_register_site( $delete = true ) {
-
-		$this->set_installing_site();
-
-		$response = $this->get_monitor_api_response( 'register_site' );
-
-		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010301 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$success = $this->update_option( 'connected', 'yes' );
-
-		if ( false === $success ) {
-			$delete and $this->get_monitor_api_response( 'remove_site' );
-			$this->set_error_notice( array( 1010302 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$success = $this->update_option( 'crawl_requested', time() );
-
-		if ( false === $success ) {
-			$this->set_error_notice( array( 1010303 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$this->set_error_notice( array( 1010304 => '' ) );
-		the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-		exit;
+	/**
+	 * Determines if the remote data is expired.
+	 * Currently yields two minutes timeout.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if expired, false otherwise.
+	 */
+	protected function is_remote_data_expired() {
+		return ( $this->get_remote_data_timeout() + $this->get_remote_data_buffer() ) < time();
 	}
 
-	protected function api_disconnect_site() {
-
-		$response = $this->get_monitor_api_response( 'remove_site' );
-
-		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010501 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$success = $this->delete_option( 'connected' );
-
-		if ( false === $success ) {
-			$this->set_error_notice( array( 1010502 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$this->set_error_notice( array( 1010503 => '' ) );
-		the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-		exit;
+	/**
+	 * Returns the remote data fetch timeout buffer.
+	 * Currently yields 93 seconds timeout.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int The timeout buffer.
+	 */
+	protected function get_remote_data_buffer() {
+		return 93;
 	}
 
-	protected function api_request_crawl( $ajax = false ) {
+	/**
+	 * Updates the timeout of Monitor remote data fetching.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function set_remote_data_timeout() {
+		return $this->update_option( 'monitor_data_requested', time() );
+	}
 
-		$response = $this->get_monitor_api_response( 'request_crawl' );
+	/**
+	 * Returns the timeout of remote data fetching.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 *
+	 * @return int The remote data fetching timeout in UNIX time.
+	 *             Can be 0 if timeout is non-existent.
+	 */
+	protected function get_remote_data_timeout() {
+		return (int) $this->get_option( 'monitor_data_requested' );
+	}
 
-		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010401 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
+	/**
+	 * Determines if the remote crawl timeout request is expired.
+	 * Currently yields 63 seconds timeout.
+	 *
+	 * @since 1.0.0
+	 * @todo Fine-tune this, maybe get remote response on next cron?
+	 * @todo The remote server can't run multiple cron-jobs at the same time. It locks for 30 seconds.
+	 *
+	 * @return bool True if crawl can be requested, false otherwise.
+	 */
+	protected function can_request_next_crawl() {
+		return ( $this->get_remote_crawl_timeout() + $this->get_request_next_crawl_buffer() ) < time();
+	}
 
-		if ( 'site expired' === $response['status'] ) {
-			$this->set_error_notice( array( 1010402 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
+	/**
+	 * Returns the remote data crawl timeout buffer.
+	 * Currently yields 63 seconds timeout.
+	 *
+	 * @since 1.0.0
+	 * @todo Fine-tune this, maybe get remote response on next cron?
+	 * @todo The remote server can't run multiple cron-jobs at the same time. It locks for 30 seconds.
+	 *
+	 * @return int The timeout buffer.
+	 */
+	protected function get_request_next_crawl_buffer() {
+		return 63;
+	}
 
-		if ( 'site inactive' === $response['status'] ) {
-			$this->set_error_notice( array( 1010403 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
+	/**
+	 * Updates the timeout of Monitor remote crawl requests.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function set_remote_crawl_timeout() {
+		return $this->update_option( 'monitor_crawl_requested', time() );
+	}
 
-		$success = $this->update_option( 'crawl_requested', time() );
+	/**
+	 * Determines the last crawl of the website.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 * @todo Fine-tune this, maybe get remote response on next cron?
+	 * @todo The remote server can't run multiple cron-jobs at the same time. It locks for 30 seconds.
+	 *
+	 * @return int The remote data request timeout in UNIX time.
+	 *             Can be 0 if timeout is non-existent.
+	 */
+	protected function get_remote_crawl_timeout() {
+		return (int) $this->get_option( 'monitor_crawl_requested' );
+	}
 
-		if ( false === $success ) {
-			$this->set_error_notice( array( 1010404 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-			exit;
-		}
-
-		$this->set_error_notice( array( 1010405 => '' ) );
-		the_seo_framework()->admin_redirect( $this->monitor_page_slug );
-		exit;
+	/**
+	 * Returns the expected Monitor connection domain.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The expected matching domain.
+	 */
+	protected function get_expected_domain() {
+		return $this->get_option( 'monitor_expected_domain' );
 	}
 }

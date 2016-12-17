@@ -121,6 +121,35 @@ final class Monitor_Output {
 	}
 
 	/**
+	 * Generates information pane data based on $data input and $type.
+	 * For ajax.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param array $data The pane data to parse.
+	 * @param string $type The pane data type.
+	 * @return array : {
+	 *     'info' => array The HTML pane overview items,
+	 *     'wrap' => string The HTML items wrap,
+	 * }
+	 */
+	public function _ajax_get_pane_data( $data, $type ) {
+
+		$info = array();
+
+		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
+			$info[] = $info_entry;
+
+		$wrap = '<div class="tsfem-flex tsfem-flex-row"></div>';
+
+		return array(
+			'info' => $info,
+			'wrap' => $wrap,
+		);
+	}
+
+	/**
 	 * Iterates over pane slab data to generate information.
 	 *
 	 * @since 1.0.0
@@ -461,6 +490,10 @@ final class Monitor_Output {
 
 					case 'external' :
 						$title = __( 'External links', 'the-seo-framework-extension-manager' );
+						break 2;
+
+					case 'security' :
+						$title = __( 'Security', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'moresoon' :
