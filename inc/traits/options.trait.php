@@ -26,6 +26,8 @@ defined( 'ABSPATH' ) or die;
 /**
  * Holds option functions for class TSF_Extension_Manager\Core.
  *
+ * All options are irreversibly cached per request. Only to be changed upon POST.
+ *
  * @since 1.0.0
  * @access private
  */
@@ -60,19 +62,12 @@ trait Options {
 	 *
 	 * @param string $option The Option name.
 	 * @param mixed $default The fallback value if the option doesn't exist.
-	 * @param bool $use_cache Whether to store and use options from cache.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	final protected function get_option( $option, $default = null, $use_cache = true ) {
+	final protected function get_option( $option, $default = null ) {
 
 		if ( ! $option )
 			return null;
-
-		if ( false === $use_cache ) {
-			$options = $this->get_all_options();
-
-			return isset( $options[ $option ] ) ? $options[ $option ] : $default;
-		}
 
 		static $options_cache = array();
 

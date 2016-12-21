@@ -255,6 +255,7 @@ class AccountActivation extends Panes {
 			return false;
 		}
 
+		//* API server down... TODO consider still handling deactivation?
 		$this->set_error_notice( array( 503 => '' ) );
 		return null;
 	}

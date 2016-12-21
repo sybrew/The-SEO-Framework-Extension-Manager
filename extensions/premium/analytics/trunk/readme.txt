@@ -23,7 +23,7 @@ The Google Analytics extension allows you to set up and interact with Google Ana
 
 == Changelog ==
 
-= 1.0.0 - The Hide =
+= 1.0.0 - Implemented Overview =
 
 **For everyone:**
 

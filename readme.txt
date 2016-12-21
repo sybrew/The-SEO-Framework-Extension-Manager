@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api, monitor, modules, title
 Requires at least: 4.4.0
 Tested up to: 4.7.0
-Stable tag: 0.9.0
+Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

@@ -1,0 +1,890 @@
+# Copyright (C) 2016 The SEO Framework - Extension Manager
+# This file is distributed under the same license as the The SEO Framework - Extension Manager package.
+msgid ""
+msgstr ""
+"Project-Id-Version: The SEO Framework - Extension Manager 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework-extension-manager\n"
+"POT-Creation-Date: 2016-12-20 08:56:10+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:218
+msgid "SEO Monitor"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:219
+#: extensions/premium/monitor/trunk/views/layout/general/top.php:23
+msgid "Monitor"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:443
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:529
+msgid "Try again in %s second."
+msgid_plural "Try again in %s seconds."
+msgstr[0] ""
+msgstr[1] ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:453
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:538
+#: inc/classes/panes.class.php:274
+msgid "Something went wrong. Please reload the page."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:880
+msgid "Get the latest data of your website from Monitor."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:883
+msgid "If your website has recently been updated, ask us to re-crawl your site. This can take up to three minutes."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:885
+msgid "Actions"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:922
+msgid "Update Data"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:923
+msgid "Request Monitor to send you the latest data"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:951
+msgid "Request Crawl"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:952
+msgid "Request Monitor to re-crawl this website"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:997
+#: inc/classes/panes.class.php:369
+msgid "Account information"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1004
+msgid "Account site:"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1026
+msgid "Reconnect site"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1027
+msgid "Your website has been marked inactive."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1029
+msgid "Fix site"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1030
+msgid "The instance ID of your site does not match the remote server."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1055
+msgid "Request Reactivation"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1056
+msgid "Request Monitor to reconnect your website"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1083
+msgid "Disconnect"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1084
+#: inc/classes/layout.class.php:136
+msgid "Are you sure?"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1085
+msgid "Disconnect site?"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1101
+msgid "Disconnect site"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1117
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1144
+msgid "Statistics will show you website uptime, performance and visitor count."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1156
+msgid "No data has been found as of yet."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-admin.class.php:1168
+msgid "Coming soon!"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-graph.class.php:286
+msgid "Your browser doesn't support HTML5 canvas."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-graph.class.php:287
+msgid "This element requires JavaScript."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:448
+msgid "Titles"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:452
+msgid "Descriptions"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:456
+msgid "Canonical URLs"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:460
+msgid "Favicon output"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:464
+msgid "Duplicated content"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:468
+msgid "Mobile friendliness"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:472
+msgid "HTML output"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:476
+msgid "PHP errors"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:480
+msgid "Image sizes"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:484
+msgid "Robots.txt output"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:488
+msgid "Sitemap output"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:492
+msgid "External links"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:496
+msgid "Security"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:500
+msgid "More coming soon!"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-output.class.php:623
+msgid "The Extension Manager needs to be updated in order to interpret this data."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:125
+msgid "A dynamic favicon has been found, this increases support for mobile devices."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:130
+msgid "No favicon has been found."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:133
+msgid "You should add a site icon through the customizer."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:185
+msgid "Something is causing a PHP error on your website. This prevents correctly closing of HTML tags."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:186
+msgid "Affected page:"
+msgid_plural "Affected pages:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: Backticks are markdown for <code>Text</code>. Keep the
+#. backticks.
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:226
+msgid "No `robots.txt` file has been found. Please check your server configuration."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:234
+msgid "This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website."
+msgstr ""
+
+#. translators: Backticks are markdown for <code>Text</code>. Keep the
+#. backticks.
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:255
+msgid "The `robots.txt` file handled correctly by The SEO Framework."
+msgstr ""
+
+#. translators: Backticks are markdown for <code>Text</code>. Keep the
+#. backticks.
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:266
+msgid "The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:298
+msgid "No sitemap file has been found. Please check your server configuration."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:307
+msgid "The sitemap file is bigger than 10MB, you should make it smaller."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:316
+msgid "The sitemap file is invalid. This could have multiple causes."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:341
+msgid "More issue tests are coming soon!"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:373
+msgid "No issues have been found."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:391
+msgid "No data has been found on this issue."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/inc/classes/monitor-tests.class.php:409
+msgid "This has been evaluated with a small sample size."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/forms/connect.php:10
+msgid "Register"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/forms/connect.php:11
+msgid "Connect this website to SEO Monitor"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/general/top.php:15
+msgid "Let SEO Monitor help you improve your website. Your privacy is respected, read how below."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/general/top.php:23
+msgctxt "1: SEO, 2: Monitor"
+msgid "%1$s %2$s"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:12
+msgid "Privacy"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:13
+msgid "The SEO Monitor periodically crawls your website to scan for common issues from an external server. In order to do so, it first has to register your website."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:14
+msgid "Read more..."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:17
+msgctxt "%s = Privacy Policy"
+msgid "This is a small introductorial excerpt of our privacy policy. For full details, visit our %s."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:18
+msgid "Privacy Policy"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:21
+msgid "Data collection"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:22
+msgid "The crawler will act as a regular logged-out visitor and will ignore robots exclusion protocol details."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:23
+msgid "When structural non-public information is required (for example, which plugins are active) then you will be informed and prompted about it first."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:24
+msgid "Distribution"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:25
+msgid "Potentially personally-identifying information will only be granted to you on the SEO Monitor admin pages through secure authentication. Potentially personally-identifying information will never be disclosed to third parties, for any reason whatsoever."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:30
+msgid "Connect"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:31
+msgid "Register your website"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:32
+msgid "Get detailed information about your website. Automatically."
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:13
+msgid "Issues"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:25
+msgid "Control Panel"
+msgstr ""
+
+#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:41
+msgid "Statistics"
+msgstr ""
+
+#: inc/classes/accountactivation.class.php:247
+msgid "API Key deactivated."
+msgstr ""
+
+#: inc/classes/accountactivation.class.php:248
+msgid "However, something went wrong with the deactivation on this website."
+msgstr ""
+
+#: inc/classes/adminpages.class.php:122
+msgid "SEO Extensions"
+msgstr ""
+
+#: inc/classes/adminpages.class.php:123 views/layout/general/top.php:45
+#: views/layout/pages/extensions.php:37
+msgid "Extensions"
+msgstr ""
+
+#: inc/classes/core.class.php:812
+msgid "No valid URL was supplied."
+msgstr ""
+
+#: inc/classes/core.class.php:836
+msgid "Go to My Account"
+msgstr ""
+
+#: inc/classes/core.class.php:837 views/layout/general/top.php:15
+msgid "My Account"
+msgstr ""
+
+#: inc/classes/core.class.php:855
+msgid "Get support for premium extensions"
+msgstr ""
+
+#: inc/classes/core.class.php:856
+msgid "Premium Support"
+msgstr ""
+
+#: inc/classes/core.class.php:862
+msgid "Get support for free extensions"
+msgstr ""
+
+#: inc/classes/core.class.php:863
+msgid "Free Support"
+msgstr ""
+
+#: inc/classes/layout.class.php:135 inc/traits/extensions-layout.trait.php:53
+#: inc/traits/ui.trait.php:278
+msgid "Deactivate"
+msgstr ""
+
+#: inc/classes/layout.class.php:137
+msgid "Deactivate account?"
+msgstr ""
+
+#: inc/classes/layout.class.php:204
+msgid "Unknown"
+msgstr ""
+
+#: inc/classes/layout.class.php:205
+msgid "Decoupled"
+msgstr ""
+
+#: inc/classes/layout.class.php:226
+msgid "Account email:"
+msgstr ""
+
+#: inc/classes/layout.class.php:242
+msgid "Next check is scheduled in %s minutes."
+msgstr ""
+
+#: inc/classes/layout.class.php:249
+msgid "Account level:"
+msgstr ""
+
+#: inc/classes/layout.class.php:259
+msgid "Valid for:"
+msgstr ""
+
+#: inc/classes/layout.class.php:272
+msgid "Account expired"
+msgstr ""
+
+#: inc/classes/layout.class.php:275
+msgid "Less than a week"
+msgstr ""
+
+#: inc/classes/layout.class.php:278
+msgid "Less than two weeks"
+msgstr ""
+
+#: inc/classes/layout.class.php:281
+msgid "Less than three weeks"
+msgstr ""
+
+#: inc/classes/layout.class.php:283
+msgid "Less than a month"
+msgstr ""
+
+#: inc/classes/layout.class.php:285
+msgid "Less than two months"
+msgstr ""
+
+#: inc/classes/layout.class.php:287
+msgid "About %d months"
+msgstr ""
+
+#: inc/classes/layout.class.php:298
+msgid "Expires in:"
+msgstr ""
+
+#: inc/classes/layout.class.php:343 views/forms/key.php:9
+msgid "License key"
+msgstr ""
+
+#: inc/classes/layout.class.php:347 views/forms/key.php:10
+msgid "License email"
+msgstr ""
+
+#: inc/classes/loadadmin.class.php:66
+msgid "Warning!"
+msgstr ""
+
+#. translators: %1$s: Warning!. %2$s Plugin API host URL. %3$s, WordPress PHP
+#. constant.
+
+#: inc/classes/loadadmin.class.php:69
+msgid "%1$s Your website is blocking external requests. This means you will not be able to download software. Please add %2$s to %3$s"
+msgstr ""
+
+#: inc/classes/loadadmin.class.php:90
+msgid "Your extensions are only three clicks away"
+msgstr ""
+
+#: inc/classes/loadadmin.class.php:92
+msgid "Activate the SEO Extension Manager"
+msgstr ""
+
+#: inc/classes/panes.class.php:113
+msgid "Unfortunately, your server can't process this request as of yet."
+msgstr ""
+
+#: inc/classes/panes.class.php:116
+msgid "There are no trends and updates to report yet."
+msgstr ""
+
+#: inc/classes/panes.class.php:157
+msgid "The feed is acquired from %s."
+msgstr ""
+
+#. translators: %s = "Google's Privacy Policy"
+
+#: inc/classes/panes.class.php:160
+msgid "Read %s."
+msgstr ""
+
+#: inc/classes/panes.class.php:163
+msgid "The feed has been disabled to protect your privacy."
+msgstr ""
+
+#: inc/classes/panes.class.php:165
+msgid "You may choose to enable the feed. Once enabled, it can not be disabled."
+msgstr ""
+
+#: inc/classes/panes.class.php:182
+msgid "Enable feed?"
+msgstr ""
+
+#: inc/classes/panes.class.php:403
+msgid "Upgrade your account"
+msgstr ""
+
+#: inc/classes/panes.class.php:430
+msgid "Deactivate account"
+msgstr ""
+
+#: inc/classes/panes.class.php:431
+msgid "This also deactivates all extensions."
+msgstr ""
+
+#: inc/classes/panes.class.php:436
+msgid "This will deactivate all extensions."
+msgstr ""
+
+#: inc/classes/panes.class.php:437
+msgid "All extension options are held intact."
+msgstr ""
+
+#: inc/classes/panes.class.php:441
+msgid "Your key can be used on another website after deactivation."
+msgstr ""
+
+#: inc/classes/panes.class.php:471
+msgid "Questions about all free extensions and using the Extension Manager can be asked through Free Support."
+msgstr ""
+
+#: inc/classes/panes.class.php:474
+msgid "Any question about a premium extensions or your account should be asked through Premium Support."
+msgstr ""
+
+#: inc/classes/panes.class.php:478
+msgid "Get support"
+msgstr ""
+
+#: inc/traits/error.trait.php:133
+msgid "Error code:"
+msgstr ""
+
+#: inc/traits/error.trait.php:138
+msgid "Status code:"
+msgstr ""
+
+#. translators: 1: 'Error code:', 2: The error code
+
+#: inc/traits/error.trait.php:143
+msgid "%1$s %2$s"
+msgstr ""
+
+#. translators: 1: Error code, 2: Error message, 3: Additional info
+
+#: inc/traits/error.trait.php:147
+msgid "%1$s &mdash; %2$s %3$s"
+msgstr ""
+
+#: inc/traits/error.trait.php:168
+msgid "No valid license key was supplied."
+msgstr ""
+
+#: inc/traits/error.trait.php:173
+msgid "No valid license email was supplied."
+msgstr ""
+
+#: inc/traits/error.trait.php:181
+msgid "Invalid API request type."
+msgstr ""
+
+#: inc/traits/error.trait.php:187
+msgid "An empty API request was supplied."
+msgstr ""
+
+#: inc/traits/error.trait.php:200
+msgid "An error occurred while contacting the API server. Please try again later."
+msgstr ""
+
+#. translators: %s = My Account
+
+#: inc/traits/error.trait.php:206
+msgid "An error occured while validating settings. Login to the %s page to manage your keys and try again."
+msgstr ""
+
+#. translators: %s = My Account
+
+#: inc/traits/error.trait.php:213
+msgid "Invalid API License Key. Login to the %s page to find a valid API License Key."
+msgstr ""
+
+#: inc/traits/error.trait.php:220
+msgid "Remote Software API error."
+msgstr ""
+
+#: inc/traits/error.trait.php:228
+msgid "Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back."
+msgstr ""
+
+#. translators: %s = My Account
+
+#: inc/traits/error.trait.php:234
+msgid "Exceeded maximum number of activations. Login to the %s page to manage your sites."
+msgstr ""
+
+#: inc/traits/error.trait.php:239
+msgid "Invalid Instance ID. Please try again. Contact the plugin author if this error keeps coming back."
+msgstr ""
+
+#: inc/traits/error.trait.php:245
+msgid "Your subscription is not active or has expired."
+msgstr ""
+
+#: inc/traits/error.trait.php:250
+msgid "Your account has been successfully authorized to be used on this website."
+msgstr ""
+
+#: inc/traits/error.trait.php:256
+msgid "Your account has been successfully deauthorized from this website."
+msgstr ""
+
+#: inc/traits/error.trait.php:261
+msgid "Enjoy your free extensions!"
+msgstr ""
+
+#: inc/traits/error.trait.php:266
+msgid "The feed has been enabled."
+msgstr ""
+
+#: inc/traits/error.trait.php:271
+msgid "Successfully deactivated."
+msgstr ""
+
+#: inc/traits/error.trait.php:278
+msgid "An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again."
+msgstr ""
+
+#: inc/traits/error.trait.php:285
+msgid "Nonce verification failed. Please try again."
+msgstr ""
+
+#: inc/traits/error.trait.php:292
+msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
+msgstr ""
+
+#: inc/traits/error.trait.php:297 inc/traits/extensions.trait.php:909
+msgid "Extension is not compatible with your server configuration."
+msgstr ""
+
+#: inc/traits/error.trait.php:303
+msgid "Extension has been successfully activated."
+msgstr ""
+
+#: inc/traits/error.trait.php:308
+msgid "Extension is not valid."
+msgstr ""
+
+#: inc/traits/error.trait.php:313
+msgid "Extension has been successfully deactivated."
+msgstr ""
+
+#: inc/traits/error.trait.php:318
+msgid "Your website has been successfully connected to the Monitor API server."
+msgstr ""
+
+#: inc/traits/error.trait.php:323
+msgid "Your site has been succesfully disconnected from the Monitor API server."
+msgstr ""
+
+#: inc/traits/error.trait.php:329
+msgid "The Monitor API server does not recognize your instance. Request a fix."
+msgstr ""
+
+#: inc/traits/error.trait.php:335
+msgid "Your website has been marked as inactive by the Monitor API server."
+msgstr ""
+
+#: inc/traits/error.trait.php:340
+msgid "Crawl request is still in queue. Please try again later."
+msgstr ""
+
+#: inc/traits/error.trait.php:345
+msgid "Crawl has been requested succesfully. This can take up to three minutes to be processed."
+msgstr ""
+
+#: inc/traits/error.trait.php:350
+msgid "The latest Monitor data has been recieved."
+msgstr ""
+
+#: inc/traits/error.trait.php:370
+msgid "An unknown error occurred. Contact the plugin author if this error keeps coming back."
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:50
+msgid "Free"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:51
+msgid "Premium"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:52 inc/traits/ui.trait.php:277
+msgid "Activate"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:54
+msgid "Version"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:55
+msgid "First party"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:56
+msgid "Third party"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:57
+msgid "View detais"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:58
+msgid "Go to the author homepage"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:59
+msgid "Go to the extension homepage"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:60
+msgid "Extension home"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:61
+msgid "Compatible"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:62
+msgid "Incompatible"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:63
+msgid "Menu Page"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:64
+msgid "Visit the extension menu page"
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:399
+msgid "Compatible with the current versions of WordPress and The SEO Framework."
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:410
+msgid "The SEO Framework version is higher than tested against."
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:413
+msgid "WordPress version is higher than tested against."
+msgstr ""
+
+#: inc/traits/extensions-layout.trait.php:416
+msgid "WordPress and The SEO Framework versions are higher than tested against."
+msgstr ""
+
+#. translators: 1: Version number, 2: Version number
+
+#: inc/traits/extensions-layout.trait.php:426
+msgid "WordPress %1$s and The SEO Framework %2$s are required."
+msgstr ""
+
+#: inc/traits/extensions.trait.php:930
+msgid "Extension has not been activated."
+msgstr ""
+
+#: views/layout/general/top.php:16
+msgid "View account"
+msgstr ""
+
+#: views/layout/general/top.php:26
+msgid "Extend license"
+msgstr ""
+
+#: views/layout/general/top.php:32
+msgid "Get license"
+msgstr ""
+
+#: views/layout/general/top.php:33
+msgid "Go Premium"
+msgstr ""
+
+#: views/layout/general/top.php:41
+msgid "Add more powerful SEO features to your website. To get started, use one of the options below."
+msgstr ""
+
+#: views/layout/general/top.php:89
+msgctxt "1: SEO, 2: Extensions"
+msgid "%1$s %2$s"
+msgstr ""
+
+#: views/layout/pages/activation.php:10
+msgid "Get your key"
+msgstr ""
+
+#: views/layout/pages/activation.php:11
+msgid "Log in or sign up now"
+msgstr ""
+
+#: views/layout/pages/activation.php:12
+msgid "Get your key. Easy and secure."
+msgstr ""
+
+#: views/layout/pages/activation.php:23
+msgid "Get your API key"
+msgstr ""
+
+#: views/layout/pages/activation.php:31
+msgid "Use your key"
+msgstr ""
+
+#: views/layout/pages/activation.php:32
+msgid "Manually enter an API key"
+msgstr ""
+
+#: views/layout/pages/activation.php:33
+msgid "Already have your key? Enter it here."
+msgstr ""
+
+#: views/layout/pages/activation.php:36
+msgid "Use this key"
+msgstr ""
+
+#: views/layout/pages/activation.php:42
+msgid "Go free"
+msgstr ""
+
+#: views/layout/pages/activation.php:43
+msgid "Unlimited free access"
+msgstr ""
+
+#: views/layout/pages/activation.php:44
+msgid "Rather go for a test-drive? You can always upgrade later."
+msgstr ""
+
+#: views/layout/pages/activation.php:48
+msgid "Save a few bucks"
+msgstr ""
+
+#: views/layout/pages/extensions.php:8
+msgid "SEO Trends and Updates"
+msgstr ""
+
+#: views/layout/pages/extensions.php:21
+msgid "Account and Actions"
+msgstr ""
+#. Plugin Name of the plugin/theme
+msgid "The SEO Framework - Extension Manager"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Sybre Waaijer"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://cyberwire.nl/"
+msgstr ""

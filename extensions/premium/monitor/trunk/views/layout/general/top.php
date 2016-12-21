@@ -21,7 +21,7 @@ if ( $options ) {
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
 		<header><h1>
 			<?php printf( esc_html_x( '%1$s %2$s', '1: SEO, 2: Monitor', 'the-seo-framework-extension-manager' ), '<span class="tsfem-e-monitor-logo">SEO</span>', esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ) ); ?>
-			<?php echo '<em>alpha</em>'; ?>
+			<?php echo '<em>beta</em>'; ?>
 		</h1></header>
 	</div>
 	<?php

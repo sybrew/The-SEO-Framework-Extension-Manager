@@ -145,6 +145,7 @@ class Panes extends API {
 	 *
 	 * @since 1.0.0
 	 * @todo convert to secure Trends instance? Trends isn't "super-secure" (no bit verification).
+	 *       Do so when converting to own blog entries (auto-enabled?). Relucatance towards backwards compat.
 	 *
 	 * @return string Trends activation buttons.
 	 */
@@ -152,10 +153,17 @@ class Panes extends API {
 
 		$output = '';
 
+		$googleblog = sprintf( '<a href="%s" target="_blank">Google Webmaster Central Blog</a>', esc_url( 'https://webmasters.googleblog.com/' ) );
+		$acquiredfrom = sprintf( esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
+		$googleprivacy = sprintf( '<a href="%s" target="_blank">Google\'s Privacy Policy</a>', esc_url( 'https://www.google.com/policies/privacy/' ) );
+		/* translators: %s = "Google's Privacy Policy" */
+		$privacystatement = sprintf( esc_html__( 'Read %s.', 'the-seo-framework-extension-manager' ), $googleprivacy );
+
 		//* The feed is totally optional until it pulls from The SEO Framework premium. I.e. privacy.
 		$title = esc_html__( 'The feed has been disabled to protect your privacy.', 'the-seo-framework-extension-manager' );
 		$title = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $title );
-		$output .= '<p>' . esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-title-fix' ) . '</p>';
+		$output .= '<p>' . esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-extension-manager' ) . '</p>';
+		$output .= '<p>' . $acquiredfrom . ' ' . $privacystatement . '</p>';
 		$output .= $this->get_feed_enabler_button();
 
 		return sprintf( '<div class="tsfem-trends-activation">%s</div>', $title . $output );
@@ -460,12 +468,10 @@ class Panes extends API {
 		$description = array();
 
 		$buttons[1] = Layout::get( 'free-support-button' );
-		$description[1] = __( 'Questions about all free extensions can be asked through Free Support.', 'the-seo-framework-extension-manager' );
+		$description[1] = __( 'Questions about all free extensions and using the Extension Manager can be asked through Free Support.', 'the-seo-framework-extension-manager' );
 
-		if ( $this->is_premium_user() ) {
-			$buttons[2] = Layout::get( 'premium-support-button' );
-			$description[2] = __( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
-		}
+		$buttons[2] = Layout::get( 'premium-support-button' );
+		$description[2] = __( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
 
 		Layout::reset();
 

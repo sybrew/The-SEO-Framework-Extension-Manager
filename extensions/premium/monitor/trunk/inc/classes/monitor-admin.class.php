@@ -373,7 +373,7 @@ final class Monitor_Admin extends Monitor_Api {
 				return $validated[ $key ] = false;
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -570,7 +570,8 @@ final class Monitor_Admin extends Monitor_Api {
 			if ( tsf_extension_manager()->can_do_settings() ) {
 
 				if ( check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					//* Initialize menu hook.
+					//* Initialize menu hooks.
+					the_seo_framework()->add_menu_link();
 					$this->_add_menu_link();
 
 					$html = $this->get_site_fix_fields();
@@ -1041,6 +1042,13 @@ final class Monitor_Admin extends Monitor_Api {
 		return '';
 	}
 
+	/**
+	 * Renders and returns Monitor fix button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The fix button.
+	 */
 	protected function get_fix_button() {
 
 		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-cloud';

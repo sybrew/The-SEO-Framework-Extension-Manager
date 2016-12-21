@@ -233,8 +233,10 @@ class Core {
 		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
 
+		//* Post is taken and will be validated directly below.
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
+		//* Options exist. There's no need to check again them.
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
@@ -332,7 +334,7 @@ class Core {
 				return $validated[ $key ] = false;
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -830,7 +832,7 @@ class Core {
 	 */
 	protected function get_my_account_link() {
 		return $this->get_link( array(
-			'url' => $this->get_activation_url( 'my-account/' ),
+			'url' => $this->get_activation_url(),
 			'target' => '_blank',
 			'class' => '',
 			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
@@ -1350,18 +1352,11 @@ class Core {
 	 * Determines whether the plugin's activated. Either free or premium.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True if the plugin is activated.
 	 */
 	protected function is_plugin_activated() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = 'Activated' === $this->get_option( '_activated' );
+		return 'Activated' === $this->get_option( '_activated' );
 	}
 
 	/**

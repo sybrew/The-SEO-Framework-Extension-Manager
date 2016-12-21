@@ -201,7 +201,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-top-wrap .tsfem-title h1 {
-	font-family: Verdana, sans-serif;
+	font-family: Verdana, Geneva, sans-serif;
 	word-break: break-word;
 	font-size: 1.9em;
 	font-weight: 400;
@@ -421,7 +421,7 @@ body.tsfem .wrap {
 
 .tsfem-switch-button-container {
 	position: relative;
-	/* EdgeHTML BUG: Causes subpixel font-rendering to fail. */
+	/* EdgeHTML BUG. Causes subpixel font-rendering to fail. */
 	/*	transform-style: preserve-3d; */
 	margin: 0 auto;
 	width: 120px;
@@ -453,13 +453,13 @@ body.tsfem .wrap {
 	overflow: hidden;
 }
 
-.tsfem-switch-button-container label
+.tsfem-switch-button-container label,
 .tsfem-switch-button-container button {
 	position: absolute;
 	top: 0;
 	right: 0;
 	text-align: center;
-	-webkit-transition: transform 1s, opacity .5s;
+	-webkit-transition: -webkit-transform 1s, opacity .5s;
 	transition: transform 1s, opacity .5s;
 	z-index: 1;
 }
@@ -477,6 +477,7 @@ body.tsfem .wrap {
 .tsfem-switch-button-container button {
 	-webkit-transform: rotateX(-100deg);
 	transform: rotateX(-100deg);
+	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;
 	-webkit-transition: -webkit-transform 1.2s, opacity 0.6s;
@@ -501,7 +502,7 @@ body.tsfem .wrap {
 	transform: rotateX(0deg);
 	opacity: 1;
 	z-index: 2;
-	-webkit-transition: transform 1s, opacity .5s;
+	-webkit-transition: -webkit-transform 1s, opacity .5s;
 	transition: transform 1s, opacity .5s;
 }
 
@@ -580,7 +581,8 @@ body.tsfem .wrap {
 	padding: 0;
 	-webkit-align-items: center;
 	align-items: center;
-	min-height: 33vh;
+	/* Gecko bugfix. */
+	min-height: 0;
 }
 
 .tsfem-panes-row {
@@ -599,15 +601,17 @@ body.tsfem .wrap {
 .tsfem-pane-half,
 .tsfem-pane-full {
 	max-width: calc( 50% - 10px );
+	-webkit-flex-basis: calc( 50% - 10px );
+	flex-basis: calc( 50% - 10px );
 	background: #fff;
 	border-radius: 3px;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	margin: 0;
 	padding: 0;
+	min-height: 250px;
+	/* EdgeHTML bugfix */
 	max-height: 100%;
-	-webkit-flex: 1 1 100%;
-	flex: 1 1 100%;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar,
@@ -645,6 +649,8 @@ body.tsfem .wrap {
 	margin: 0;
 	overflow: visible;
 	max-height: 100%;
+	-webkit-flex-basis: 33vh;
+	flex-basis: 33vh;
 }
 
 .tsfem-pane-header {
@@ -662,14 +668,10 @@ body.tsfem .wrap {
 .tsfem-pane-content {
 	padding: 0;
 	border-top: 0;
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
-	-webkit-flex: 1 1 100%;
-	flex: 1 1 100%;
 	-webkit-flex: 1 1 33vh;
 	flex: 1 1 33vh;
 	max-height: 100%;
-	/* EdgeHTML bugfix: */
+	/* EdgeHTML bugfix */
 	overflow: hidden;
 }
 
@@ -726,6 +728,8 @@ body.tsfem .wrap {
 	min-height: 150px;
 	width: 100%;
 	overflow: auto;
+	/* IE bugfix */
+	overflow-x: hidden;
 }
 
 /* ## Specific panes.
@@ -737,6 +741,9 @@ body.tsfem .wrap {
 .tsfem-trends-activation {
 	max-width: 1600px;
 	min-height: 150px;
+	/* ie fix + blink expand lag fix */
+	-webkit-flex-basis: 100%;
+	flex-basis: 100%;
 }
 
 /* ### Actions pane.
@@ -821,6 +828,7 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-extensions-overview-content {
+	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
 }
 
@@ -876,13 +884,13 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-extension-icon-wrap {
-	min-width: 120px;
 	-webkit-flex-grow: 0;
 	flex-grow: 0;
+	-webkit-flex-basis: 120px;
+	flex-basis: 120px;
 }
 
 .tsfem-extension-about-wrap {
-	min-width: 220px;
 	-webkit-flex-direction: column;
 	flex-direction: column;
 	-webkit-justify-content: space-around;
@@ -890,8 +898,8 @@ h4.tsfem-cp-title {
 	padding: 10px 15px;
 	-webkit-flex-grow: 1;
 	flex-grow: 1;
-	-webkit-flex-basis: 25%;
-	flex-basis: 25%;
+	-webkit-flex-basis: 180px;
+	flex-basis: 180px;
 }
 
 .tsfem-extension-description-wrap {
@@ -1025,6 +1033,10 @@ h5.tsfem-extension-type {
 	border-bottom: 2px solid #dedede;
 }
 
+.tsfem-feed-entry:last-of-type {
+	border-bottom: none;
+}
+
 /* # Start Activation Layout.
 /*----------------------------------------------------------------------------*/
 
@@ -1036,8 +1048,8 @@ h5.tsfem-extension-type {
 
 .tsfem #input-activation .regular-text,
 .tsfem #input-activation .tsfem-button {
-	margin-right: 0;
 	margin-left: 0;
+	margin-right: 0;
 	border-radius: 3px;
 	width: 100%;
 	font-size: 13px;
@@ -1185,18 +1197,16 @@ h5.tsfem-extension-type {
 	.tsfem-pane-full {
 		min-width: 100%;
 		max-width: 100%;
-	}
-
-	.tsfem-pane-inner-wrap,
-	.tsfem-panes-row {
-		min-height: initial;
-		height: initial;
+		min-height: 250px;
+		-webkit-flex-basis: 100%;
+		flex-basis: 100%;
 	}
 
 	.tsfem-panes-row .tsfem-pane-half {
 		margin-bottom: 20px;
 	}
 
+	.tsfem-trends-activation,
 	.tsfem-pane-content {
 		-webkit-flex: 1 1 auto;
 		flex: 1 1 auto;
@@ -1206,9 +1216,11 @@ h5.tsfem-extension-type {
 		margin-bottom: 0;
 	}
 
-	/* Make users be able to scroll through with 25vh margin */
+	/* Make users be able to scroll through with 33vh margin */
 	.tsfem-pane-wrap {
-		max-height: 75vh;
+		flex: 1 1 100%;
+		-webkit-flex: 1 1 100%;
+		max-height: 67vh;
 	}
 
 	.tsfem-pane-half:first-of-type {
@@ -1315,8 +1327,8 @@ h5.tsfem-extension-type {
 .tsfem-desc-balloon > div {
 	width: 0;
 	height: 0;
-	border-right: 12px solid transparent;
 	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
 	border-top: 12px solid #05809e;
 	position: absolute;
 	bottom: -8px;

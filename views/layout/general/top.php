@@ -10,7 +10,7 @@ if ( $options ) {
 
 		$status = $this->get_subscription_status();
 
-		$account_url = $this->get_activation_url( 'my-account/' );
+		$account_url = $this->get_activation_url();
 		$account_button_class = 'tsfem-account-active';
 		$account_text = __( 'My Account', 'the-seo-framework-extension-manager' );
 		$account_title = __( 'View account', 'the-seo-framework-extension-manager' );
@@ -27,7 +27,7 @@ if ( $options ) {
 			}
 		}
 	} else {
-		$account_url = $this->get_activation_url( 'get/' );
+		$account_url = $this->get_activation_url( 'shop/premium-subscription/' );
 		$account_button_class = 'tsfem-account-inactive';
 		$account_title = __( 'Get license', 'the-seo-framework-extension-manager' );
 		$account_text = __( 'Go Premium', 'the-seo-framework-extension-manager' );
@@ -56,7 +56,7 @@ if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && funct
 	$font = $this->get_font_file_location( 'LiberationSans-Regular.ttf' );
 	if ( file_exists( $font ) ) :
 		//* Calculate text-width. 1.9em @ 13px body. Verdana is 1.0884x Arial (LiberationSans) size.
-		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 * 1.0884 ), 0, $font, $extensions_i18n . ' beta' );
+		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 * 1.0884 ), 0, $font, $extensions_i18n );
 
 		$width_top = isset( $tim[2] ) ? $tim[2] : 0;
 		$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
@@ -94,7 +94,7 @@ endif;
 							esc_url( $image['svg'] ), esc_url( $image['1x'] ), esc_attr( $size )
 						)
 					)
-				), esc_html( $extensions_i18n ) . ' <em>beta</em>'
+				), esc_html( $extensions_i18n )
 			);
 			?>
 		</h1></header>

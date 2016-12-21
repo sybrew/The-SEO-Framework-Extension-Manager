@@ -65,7 +65,7 @@
 
 .tsfem-e-monitor-collapse {
 	position: relative;
-	min-width: 100%;
+	width: 100%;
 }
 
 .tsfem-e-monitor-collapse > input[type="checkbox"] {
@@ -112,7 +112,7 @@
 	line-height: 1.15em;
 	font-size: 1.15em;
 	padding: 0;
-	margin: 0 14px 0;
+	margin: 0 14px 0 0;
 	vertical-align: middle;
 }
 
@@ -177,8 +177,6 @@
 
 .tsfem-e-monitor-collapse-icon {
 	position: relative;
-	-webkit-transform: translate( 28px, 0 );
-	transform: translate( 28px, 0 );
 	max-width: 18px;
 	max-height: 3px;
 }
@@ -188,11 +186,14 @@
 	content: "";
 	position: absolute;
 	width: 6px;
-	height: 0px;
+	left: 20px;
+	top: 0;
+	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
+	background: currentColor;
 }
 
 .tsfem-e-monitor-collapse-icon:before {

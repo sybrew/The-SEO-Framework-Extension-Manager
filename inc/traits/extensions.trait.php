@@ -830,9 +830,10 @@ trait Extensions_Actions {
 
 	/**
 	 * Sets error reporting to input $val.
-	 * Also disables commong WP_DEBUG functionality that are prone to interfere.
 	 *
+	 * Also disables commong WP_DEBUG functionality that are prone to interfere.
 	 * The WP_DEBUG functionality can not be re-enabled, currently.
+	 * Nevertheless, this is handled on POST as one of its final action.
 	 *
 	 * @see http://php.net/manual/en/function.error-reporting.php
 	 * @since 1.0.0
@@ -855,8 +856,9 @@ trait Extensions_Actions {
 			return;
 		}
 
-		//* Cache error reporting.
-		$_prev_error_reporting = error_reporting();
+		//* Cache previous error reporting.
+		if ( null === $_prev_error_reporting )
+			$_prev_error_reporting = error_reporting();
 
 		if ( isset( $val ) )
 			error_reporting( $val );
@@ -918,6 +920,7 @@ trait Extensions_Actions {
 
 			/**
 			 * @TODO make notice copy-able by clicking.
+			 * @TODO set slug.
 			 */
 			$response = WP_DEBUG ? array( 'status' => $status, 'slug' => '', 'case' => 'activate' ) : array( 'status' => $status );
 
