@@ -42,6 +42,23 @@ class API extends Core {
 	private function construct() { }
 
 	/**
+	 * Returns domain host of plugin holder.
+	 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
+	 * so only the host portion of the URL can be sent. For example the host portion might be
+	 * www.example.com or example.com. http://www.example.com includes the scheme http,
+	 * and the host www.example.com.
+	 * Sending only the host also eliminates issues when a client site changes from http to https,
+	 * but their activation still uses the original scheme.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string Domain Host.
+	 */
+	protected function get_activation_site_domain() {
+		return str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) );
+	}
+
+	/**
 	 * Returns website's instance key from option. Generates one if non-existent.
 	 *
 	 * @since 1.0.0
@@ -132,10 +149,8 @@ class API extends Core {
 			'request'          => '',
 			'email'            => '',
 			'licence_key'      => '',
-			'product_id'       => $this->get_activation_product_title(),
 			'instance'         => $this->get_activation_instance( false ),
 			'platform'         => $this->get_activation_site_domain(),
-			'software_version' => '1.0.0',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

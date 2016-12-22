@@ -12,7 +12,7 @@ Add more powerful SEO features to The SEO Framework right from your WordPress Da
 
 == Description ==
 
-This plugin adds an extra dashboard menu item, in which you can activate the latest free and premium extensions.
+This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
 
 **This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active in order to display menus.**
 *If The SEO Framework isn't found to be active, this plugin won't do much at all.*
@@ -30,9 +30,9 @@ As long as the subscription is active, you're allowed to use all premium extensi
 
 = Requirements: =
 
-* For security reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
+* For security and structural reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
-* This plugin currently does not fully support MultiSite networks. This is planned, especially since we wish to use this plugin as well. Stay tuned!
+* This plugin currently does not fully support MultiSite networks. This is planned, especially since we wish to use this plugin as well on our own networks. Stay tuned!
 
 = Privacy =
 
@@ -49,84 +49,74 @@ As long as the subscription is active, you're allowed to use all premium extensi
 
 == Screenshots ==
 
-TODO
+Coming soon!
 
 == Frequently Asked Questions ==
 
-TODO check again.
-
 = What is this? =
-The extension manager for The SEO Framework allows more powerful and advanced SEO techniques.
+The Extension Manager for The SEO Framework allows you to enable various extensions to enhance your experience and improve your SEO.
 
 = What is The SEO Framework? =
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
+= What is an Extensions? =
+An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions are included in this plugin package.
+
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
-Each extension includes carefully crafted documentation and provides an indication whether it's suitable for your website.
+Each extension will include carefully crafted documentation in the near future.
 
 = Do I require an account? =
-Not at all! This extension manager provides up to date free extensions.
+Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
 
 = Are there advertisements? =
 Nope. This plugin only shows which extensions are available on the activation page. It will show both free and premium ones.
-The activation page will lead you to the site where you can purchase a license, but only if you choose to do so.
+The extension activation page will lead you to the site where you can purchase a license, but only if you choose to do so.
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
-No X.y updates are planned as of now (2.0, 3.0, etc.). We expect to release a new extension every (other) month.
+No X.y updates are planned as of now (2.0, 3.0, etc.). We plan to release a new extension every (other) month.
 
 = I've recieved error <code>, what now? =
-Follow the steps within the error code. If the error keeps coming back, let us know through on the support forums.
-Note that Premium Extensions aren't supported in the WordPress.org support forums; you'll have to contact us directly.
+Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
+Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
 = Which users can activate extensions? =
 Only users who can install, update or activate plugins are allowed to interact with this plugin.
-On multisite, this behavior is restricted to the activation of plugins only. TODO make this happen.
+On multisite, it is planned that this behavior is restricted to the activation of plugins only.
 
 = Where are the extensions acquired from? =
 Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
 
-= Which extensions are translated through WordPress.org? =
-Only extensions that are free will have translations readily available.
-TODO ? Premium extensions will have no translations available as of yet, unless they're compatible with the free extension translations.
-
 = Does the Extension Manager need to stay activated in order to run the plugins? =
 Yes. The Extension Manager supplies its own plugin activation management system apart from WordPress'.
+Deactivating the Extension Manager will also deactivate all extensions.
 
 = When my subscription expires, what happens? =
 When your premium subscription expires, the premium extensions will automatically deactivate.
 A margin of error is allowed, so you don't have to worry for if the activation server is down.
 
-= Are there WordPress MultiSite network SEO plugins? =
-They're planned!
-
 = I want to modify an extension, is this allowed? =
 Of course! This plugin is licensed with GPLv3, after all. However, please note that the plugin checks for file changes and compares hashes to prevent rogue software penetration.
+After all, this plugin connects with our API server and we don't want third party plugins to interfere in any way.
 
-= If I'm using a MultiSite network, do I need to activate the plugins site by site? TODO make this happen: =
-You're able to choose whether you activate this plugin network wide, or per site.
+= Does this plugin work on MultiSite Networks? =
+This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
 
-In network mode, you're able to allow or disallow extensions from within the Network Admin.
-In single side mode, each site takes full control of the extensions.
-
-Please note that this plugin requires a network license in order to get any premium extension in network mode. In single site mode a unique single license is required per site.
-
-Only admin users of those sites can activate the plugins, and only when the Plugins menu is active, see [filters](https://wordpress.org/plugins/the-seo-framework-extension-manager/other_notes/) for expanded options.
+= Are there WordPress MultiSite network specific SEO extensions? =
+They're planned!
 
 = What happens when I deactivate my account? =
-All plugin settings will be deleted. Each individual extension handles its own options (if any); this means those settings won't be lost upon re-activation of the extension at a later time.
-
-TODO make this happen:
-This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
+All plugin settings will be deleted, this includes which extensions were enabled.
+Each extension handles its own options (if any); those settings won't be lost, not even upon re-activation of the extension at a later time.
 
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
-If you were to get an activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable version.
+If you were to get an activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable and secure version.
 
 = The layout of the plugin pages just doesn't look right, why? =
-This plugin has been tested against many browsers with the help of [BrowserStack](https://www.browserstack.com/), we support the latest and most popular cross-platform browsers.
-However, because the plugin pages have been completely written in [state-of-the-art experimental CSS](https://drafts.csswg.org/css-flexbox/), it's possible not all browsers act alike.
+This plugin has been tested against many browsers with the help of [BrowserStack](https://www.browserstack.com/), we support the latest and most popular browsers, even Internet Explorer!
+However, because the plugin pages have been completely written in [state-of-the-art experimental flexbox CSS](https://drafts.csswg.org/css-flexbox/), it's possible not all browsers act alike.
 Although everything should always fit perfectly; if you do find any issue, please state your browser and operating system and tell us where the issue resides. Thanks!
 
 == Changelog ==
@@ -135,22 +125,14 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 * Initial public release.
 
-= 0.9.0 - Developed SEO =
-
-* Unregistered initial beta release.
-
 == Upgrade Notice ==
-
-= 1.0.0 =
-
-* What are you still doing in beta?
 
 == Other Notes ==
 
 = Are you a developer? =
 And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
 A full code review will take place prior to releasing it. The code has to pass at least all of the WordPress.org plugin standards and all code must be licensed under GPLv3.
-Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted as of yet.
+Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted as of yet. API connections aren't allowed either.
 
 = For developers: Security =
 Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
@@ -166,8 +148,8 @@ No backwards compatibility will be programmed into this plugin, unless required 
 
 = General Filter Reference =
 
-TODO
+Available soon.
 
 = Network Filter Reference =
 
-TODO
+Available soon.

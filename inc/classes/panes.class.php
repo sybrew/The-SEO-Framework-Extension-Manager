@@ -435,9 +435,6 @@ class Panes extends API {
 
 		$extras[] = esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
 		$extras[] = esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
-		/**
-		 * @uses trait TSF_Extension_Manager\Activation_Data
-		 */
 		$extras[] = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
 
 		foreach ( $extras as $extra ) {

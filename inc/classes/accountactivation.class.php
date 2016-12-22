@@ -24,12 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Require activation traits.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'activation' );
-
-/**
  * Class TSF_Extension_Manager\AccountActivation
  *
  * Holds plugin activation functions.
@@ -40,7 +34,7 @@ _tsf_extension_manager_load_trait( 'activation' );
  *       Instancing does expand complexity massively as it handles options.
  */
 class AccountActivation extends Panes {
-	use Enclose_Stray_Private, Construct_Child_Interface, Activation_Data;
+	use Enclose_Stray_Private, Construct_Child_Interface;
 
 	/**
 	 * Holds activation input key and email.

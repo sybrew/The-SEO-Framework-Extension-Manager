@@ -888,6 +888,8 @@ h4.tsfem-cp-title {
 	flex-grow: 0;
 	-webkit-flex-basis: 120px;
 	flex-basis: 120px;
+	-webkit-align-self: center;
+	align-self: center;
 }
 
 .tsfem-extension-about-wrap {
