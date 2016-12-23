@@ -1,4 +1,7 @@
 <?php
+
+defined( 'TSF_EXTENSION_MANAGER_DIR_PATH' ) or die;
+
 /**
  * @package TSF_Extension_Manager
  */

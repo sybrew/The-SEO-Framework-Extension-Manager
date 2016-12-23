@@ -44,6 +44,8 @@ class Panes extends API {
 		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
 		//* Ajax listener for updating extension setting.
 		add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
+
+		add_action( 'wp_ajax_tsfem_update_extension_desc_footer', array( $this, '_wp_ajax_tsfem_update_extension_desc_footer' ) );
 	}
 
 	/**
@@ -277,6 +279,84 @@ class Panes extends API {
 
 				//* Send back input when WP_DEBUG is on.
 				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
+
+				$this->_clean_ajax_reponse_header();
+
+				echo json_encode( $response );
+			}
+		}
+
+		exit;
+	}
+
+	/**
+	 * Returns updated footer fields for the activated extension.
+	 *
+	 * Generates a rogue menu entry item.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	final public function _wp_ajax_tsfem_update_extension_desc_footer() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( $this->can_do_settings() ) {
+
+				$slug = '';
+				$case = '';
+
+				if ( check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+					$data = $_POST;
+
+					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
+					$slug = isset( $data['slug'] ) ? $this->s_ajax_string( $data['slug'] ) : '';
+					$case = isset( $data['case'] ) ? $this->s_ajax_string( $data['case'] ) : '';
+				}
+
+				if ( $slug && $case ) {
+					//* Tell the plugin we're on the correct page.
+					$this->ajax_is_tsf_extension_manager_page( true );
+
+					$bits = $this->get_bits();
+					$_instance = $this->get_verification_instance( $bits[1] );
+
+					Extensions::initialize( 'ajax_layout', $_instance, $bits );
+
+					if ( 'activate' === $case ) {
+						//* Check for menu slug in order to add it.
+						$header = Extensions::get( 'ajax_get_extension_header', $slug );
+
+						if ( ! empty( $header['MenuSlug'] ) ) {
+							//* Set parent slug.
+							the_seo_framework()->add_menu_link();
+
+							//* Add arbitrary menu contents to known menu slug.
+							$menu = array(
+								'parent_slug' => the_seo_framework_options_page_slug(),
+								'page_title'  => '1',
+								'menu_title'  => '1',
+								'capability'  => 'install_plugins',
+								'menu_slug'   => $header['MenuSlug'],
+								'callback'    => '__return_empty_string',
+							);
+
+							add_submenu_page(
+								$menu['parent_slug'],
+								$menu['page_title'],
+								$menu['menu_title'],
+								$menu['capability'],
+								$menu['menu_slug'],
+								$menu['callback']
+							);
+						}
+					}
+
+					$html = Extensions::get( 'ajax_get_extension_desc_footer', $slug );
+
+					Extensions::reset();
+				}
+
+				$response = compact( 'html' );
 
 				$this->_clean_ajax_reponse_header();
 

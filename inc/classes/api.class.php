@@ -227,7 +227,7 @@ class API extends Core {
 				case '100' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 302 => $additional_info ) );
-					$free or $this->do_deactivation();
+					$free or $this->do_deactivation( true );
 					break;
 				case '101' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
@@ -257,7 +257,7 @@ class API extends Core {
 				case '106' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 308 => $additional_info ) );
-					$free or $this->do_deactivation();
+					$free or $this->do_deactivation( true );
 					break;
 				default :
 					break;

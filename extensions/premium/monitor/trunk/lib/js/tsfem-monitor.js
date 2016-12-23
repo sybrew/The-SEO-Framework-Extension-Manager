@@ -152,7 +152,7 @@ window[ 'tsfem_e_monitor' ] = {
 					}
 				}
 			},
-			error: function() {
+			error: function( xhr, ajaxOptions, thrownError ) {
 				if ( tsfem.debug ) {
 					console.log( xhr.responseText );
 					console.log( thrownError );
@@ -322,7 +322,7 @@ window[ 'tsfem_e_monitor' ] = {
 				if ( 'undefined' !== typeof response.html && response.html )
 					jQuery( response.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 			},
-			error: function() {
+			error: function( xhr, ajaxOptions, thrownError ) {
 				if ( tsfem.debug ) {
 					console.log( xhr.responseText );
 					console.log( thrownError );

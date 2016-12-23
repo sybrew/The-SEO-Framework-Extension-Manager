@@ -41,10 +41,10 @@ final class Layout extends Secure_Abstract {
 	 * @since 1.0.0
 	 *
 	 * @param string $type Required. The instance type.
-	 * @param string $instance Required. The instance key.
-	 * @param int $bit Required. The instance bit.
+	 * @param string $instance Required. The instance key. Passed by reference.
+	 * @param int $bit Required. The instance bit. Passed by reference.
 	 */
-	public static function initialize( $type = '', $instance = '', $bits = null ) {
+	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
 		self::reset();
 

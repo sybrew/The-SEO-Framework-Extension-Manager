@@ -41,11 +41,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+defined( 'ABSPATH' ) or die;
+
 /**
  * CDN Cache buster. 3 point.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '0.9.0' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '1.0.0' );
 
 /**
  * The plugin map URL. Used for calling browser files.

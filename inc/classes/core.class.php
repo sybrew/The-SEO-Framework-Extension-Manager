@@ -154,6 +154,12 @@ class Core {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
+		//* Some AJAX functions require Extension layout traits to be loaded.
+		if ( is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false )
+				and $this->ajax_is_tsf_extension_manager_page( true );
+		}
+
 		Extensions::initialize( 'list', $_instance, $bits );
 		Extensions::set_account( $this->get_subscription_status() );
 
@@ -461,17 +467,17 @@ class Core {
 	}
 
 	/**
-	 * Verifies views instances.
+	 * Verifies views instances. Clears the input through reference.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param string $instance The verification instance key.
-	 * @param int $bit The verification instance bit.
+	 * @param string $instance The verification instance key. Passed by reference.
+	 * @param int $bit The verification instance bit. Passed by reference.
 	 * @return bool True if verified.
 	 */
-	final public function _verify_instance( $instance, $bit ) {
-		return $instance === $this->get_verification_instance( $bit );
+	final public function _verify_instance( &$instance, &$bit ) {
+		return (bool) ( $instance === $this->get_verification_instance( $bit ) | $instance = $bit = null );
 	}
 
 	/**
@@ -484,20 +490,20 @@ class Core {
 	 * @access private
 	 *
 	 * @param int $count The amount of instances to loop for.
-	 * @param string $instance The verification instance key.
-	 * @param array $bits The verification instance bits.
+	 * @param string $instance The verification instance key. Passed by reference.
+	 * @param array $bits The verification instance bits. Passed by reference.
 	 * @yield array Generator : {
 	 *		$instance string The verification instance key
 	 *		$bits array The verification instance bits
 	 * }
 	 */
-	final public function _yield_verification_instance( $count, $instance, $bits ) {
+	final public function _yield_verification_instance( $count, &$instance, &$bits ) {
 
 		if ( $this->_verify_instance( $instance, $bits[1] ) ) :
 			for ( $i = 0; $i < $count; $i++ ) :
 				yield array(
-					'bits'     => $bits = $this->get_bits(),
-					'instance' => $this->get_verification_instance( $bits[1] ),
+					'bits'     => $_bits = $this->get_bits(),
+					'instance' => $this->get_verification_instance( $_bits[1] ),
 				);
 			endfor;
 		endif;
@@ -832,7 +838,7 @@ class Core {
 	 */
 	protected function get_my_account_link() {
 		return $this->get_link( array(
-			'url' => $this->get_activation_url(),
+			'url' => $this->get_activation_url( 'my-account/' ),
 			'target' => '_blank',
 			'class' => '',
 			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
@@ -852,7 +858,7 @@ class Core {
 	public function get_support_link( $type = 'free', $love = true ) {
 
 		if ( 'premium' === $type ) {
-			$url = $this->get_activation_url( 'get-support' );
+			$url = $this->get_activation_url( 'support/' );
 
 			$title = __( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = __( 'Premium Support', 'the-seo-framework-extension-manager' );
@@ -1344,8 +1350,29 @@ class Core {
 			return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 		} else {
 			//* Don't cache if insecure.
-			return the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				return $this->ajax_is_tsf_extension_manager_page();
+			} else {
+				return the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+			}
 		}
+	}
+
+	/**
+	 * Determines if TSFEM AJAX has determined the correct page.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $cache
+	 * @NOTE Warning: Only set after valid nonce verification pass.
+	 *
+	 * @param bool $set If true, it registers the AJAX page.
+	 * @return bool True if set, false otherwise.
+	 */
+	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
+
+		static $cache = false;
+
+		return $set ? $cache = true : $cache;
 	}
 
 	/**

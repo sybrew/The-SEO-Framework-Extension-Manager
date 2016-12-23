@@ -329,14 +329,25 @@ class AccountActivation extends Panes {
 	}
 
 	/**
-	 * Handles premium deactivation.
+	 * Handles account deactivation.
 	 * Sets all options to empty i.e. 'Deactivated'.
 	 *
 	 * @since 1.0.0
+	 * @TODO lower margin of error if server maintains stable.
 	 *
+	 * @param bool $moe Whether to allow a margin of error.
+	 *             May happen once every 60 days for 3 days.
 	 * @return bool True on success. False on failure.
 	 */
-	protected function do_deactivation() {
+	protected function do_deactivation( $moe = false ) {
+
+		if ( $moe ) {
+			$expire = $this->get_option( 'moe', $nt = ( time() + DAY_IN_SECONDS * 3 ) );
+			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 60 ) ) {
+				$this->update_option( 'moe', $nt );
+				return false;
+			}
+		}
 		return $this->kill_options();
 	}
 

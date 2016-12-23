@@ -369,7 +369,7 @@ trait Extensions_Layout {
 	 * @param array $extension The extension to make description footer from.
 	 * @return string HTML footer description.
 	 */
-	private static function get_extension_description_footer( $extension ) {
+	private static function get_extension_description_footer( $extension, $wrap = true ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
 
@@ -384,13 +384,52 @@ trait Extensions_Layout {
 
 		//* Make extension home element.
 		if ( ! empty( $data['ExtensionURI'] ) ) {
-			$home = sprintf(
-				'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
-				esc_url( $data['ExtensionURI'] ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) )
-			);
+			$home = static::get_extension_desc_home_item( $data['ExtensionURI'] );
 		}
 
 		//* Make extension compatibility element.
+		$compatible = static::get_extension_desc_compat_item( $extension );
+
+		if ( ! empty( $data['MenuSlug'] ) && static::is_extension_active( $extension ) ) {
+			$menu = static::get_extension_desc_menu_item( $data['MenuSlug'] );
+		}
+
+		$items = implode( ' | ', compact( 'version', 'compatible', 'home', 'menu' ) );
+
+		if ( $wrap ) {
+			$footer = sprintf( '<div class="tsfem-extension-description-footer tsfem-flex tsfem-flex-row">%s</div>', $items );
+		} else {
+			$footer = $items;
+		}
+
+		return $footer;
+	}
+
+	/**
+	 * Returns description footer home item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url The extension home URL.
+	 * @return string The escaped extension Home URL item.
+	 */
+	private static function get_extension_desc_home_item( $url ) {
+		return sprintf(
+			'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
+			esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) )
+		);
+	}
+
+	/**
+	 * Returns description footer compatibility item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $extension The extension entry.
+	 * @return string The escaped extension compatibility item.
+	 */
+	private static function get_extension_desc_compat_item( $extension ) {
+
 		$is_compatible = static::is_extension_compatible( $extension );
 
 		switch ( $is_compatible ) :
@@ -431,20 +470,24 @@ trait Extensions_Layout {
 		endswitch;
 
 		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
-		$compatible = sprintf(
+		return sprintf(
 			'<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>',
 			esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon
 		);
+	}
 
-		if ( ! empty( $data['MenuSlug'] ) && static::is_extension_active( $extension ) ) {
-			$menu = sprintf(
-				'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
-				esc_url( tsf_extension_manager()->get_admin_page_url( $data['MenuSlug'] ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
-			);
-		}
-
-		$footer = sprintf( '<div class="tsfem-extension-description-footer tsfem-flex tsfem-flex-row">%s</div>', implode( ' | ', compact( 'version', 'compatible', 'home', 'menu' ) ) );
-
-		return $footer;
+	/**
+	 * Returns description footer menu location item.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $extension The extension entry.
+	 * @return string The escaped extension compatibility item.
+	 */
+	private static function get_extension_desc_menu_item( $slug ) {
+		return sprintf(
+			'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
+			esc_url( tsf_extension_manager()->get_admin_page_url( $slug ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
+		);
 	}
 }

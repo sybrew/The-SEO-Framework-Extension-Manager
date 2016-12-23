@@ -49,11 +49,11 @@ final class SecureOption extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type.
-	 * @param string $instance Required. The instance key.
+	 * @param string $type Required. The instance type. Passed by reference.
+	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array $bits Required. The instance bits.
 	 */
-	public static function initialize( $type = '', $instance = '', $bits = null ) {
+	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
 		self::reset();
 

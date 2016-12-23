@@ -35,7 +35,7 @@ _tsf_extension_manager_load_trait( 'extensions' );
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
-if ( is_admin() && tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
+if ( tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 	_tsf_extension_manager_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.
@@ -68,10 +68,10 @@ final class Extensions extends Secure_Abstract {
 			case 'activation' :
 			case 'list' :
 			case 'load' :
+			case 'ajax_layout' :
 				static::$extensions = static::get_extensions();
 				break;
 
-			case 'ajax' :
 			default :
 				break;
 		endswitch;
@@ -83,11 +83,11 @@ final class Extensions extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type.
-	 * @param string $instance Required. The instance key.
+	 * @param string $type Required. The instance type. Passed by reference.
+	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array $bits Required. The instance bits.
 	 */
-	public static function initialize( $type = '', $instance = '', $bits = null ) {
+	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
 		self::reset();
 
@@ -99,10 +99,10 @@ final class Extensions extends Secure_Abstract {
 
 			switch ( $type ) :
 				case 'overview' :
-				case 'ajax' :
 				case 'activation' :
 				case 'list' :
 				case 'load' :
+				case 'ajax_layout' :
 					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or tsf_extension_manager()->_maybe_die();
 					self::set( '_type', $type );
 					static::set_up_variables();
@@ -126,9 +126,10 @@ final class Extensions extends Secure_Abstract {
 	 * @since 1.0.0
 	 *
 	 * @param string $type Determines what to get.
+	 * @param string $slug The extension slug. Required with AJAX.
 	 * @return string
 	 */
-	public static function get( $type = '' ) {
+	public static function get( $type = '', $slug = '' ) {
 
 		self::verify_instance() or die;
 
@@ -152,6 +153,14 @@ final class Extensions extends Secure_Abstract {
 
 			case 'active_extensions_list' :
 				return static::get_active_extensions();
+				break;
+
+			case 'ajax_get_extension_header' :
+				return static::get_extension_header( $slug );
+				break;
+
+			case 'ajax_get_extension_desc_footer' :
+				return static::get_extension_description_footer( static::get_extension( $slug ), false );
 				break;
 
 			default :

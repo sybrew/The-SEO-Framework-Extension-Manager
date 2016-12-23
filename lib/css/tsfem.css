@@ -1338,6 +1338,31 @@ h5.tsfem-extension-type {
 	left: 0;
 }
 
+.tsfem-flip-hide-down,
+.tsfem-flip-hide-up {
+	-webkit-transform: rotateX(90deg) translateY(0.5em);
+	transform: rotateX(90deg) translateY(0.5em);
+	-webkit-transform-origin: 0 100% 0;
+	transform-origin: 0 100% 0;
+	opacity: 0;
+	-webkit-transition: -webkit-transform .25s, opacity 0.25s;
+	transition: transform .25s, opacity 0.25s;
+}
+
+.tsfem-flip-hide-down {
+	-webkit-transform: rotateX(-90deg) translateY(-2em);
+	transform: rotateX(-90deg) translateY(-2em);
+}
+
+.tsfem-flip-show-down,
+.tsfem-flip-show-up {
+	-webkit-transform: rotateX(0deg) translateY(0em);
+	transform: rotateX(0deg) translateY(0em);
+	opacity: 1;
+	-webkit-transition: -webkit-transform .25s, opacity 0.125s;
+	transition: transform .25s, opacity 0.125s;
+}
+
 /* # Start override.
 /*----------------------------------------------------------------------------*/
 
