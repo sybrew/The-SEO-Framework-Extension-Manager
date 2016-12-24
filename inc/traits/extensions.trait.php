@@ -287,14 +287,14 @@ trait Extensions_Properties {
 		$default_headers = array(
 			'Name'         => 'Extension Name',
 			'ExtensionURI' => 'Extension URI',
-			'Version'      => 'Version',
-			'Description'  => 'Description',
-			'Author'       => 'Author',
-			'AuthorURI'    => 'Author URI',
-			'License'      => 'License',
-			'Network'      => 'Network',
-			'TextDomain'   => 'TextDomain',
-			'MenuSlug'     => 'Menu Slug',
+			'Version'      => 'Extension Version',
+			'Description'  => 'Extension Description',
+			'Author'       => 'Extension Author',
+			'AuthorURI'    => 'Extension Author URI',
+			'License'      => 'Extension License',
+			'Network'      => 'Extension Network',
+			'TextDomain'   => 'Extension TextDomain',
+			'MenuSlug'     => 'Extension Menu Slug',
 		);
 
 		$data[ $slug ] = false;

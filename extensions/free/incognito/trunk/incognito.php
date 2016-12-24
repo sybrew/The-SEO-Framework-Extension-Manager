@@ -7,11 +7,11 @@ namespace TSF_Extension_Manager_Extension;
 /**
  * Extension Name: Incognito
  * Extension URI: https://premium.theseoframework.com/extensions/incognito/
- * Description: The Incognito extension removes all front-end branding from The SEO Framework.
- * Version: 1.0.0
- * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
- * License: GPLv3
+ * Extension Description: The Incognito extension removes all front-end branding from The SEO Framework.
+ * Extension Version: 1.0.0
+ * Extension Author: Sybre Waaijer
+ * Extension Author URI: https://cyberwire.nl/
+ * Extension License: GPLv3
  */
 
 defined( 'ABSPATH' ) or die;

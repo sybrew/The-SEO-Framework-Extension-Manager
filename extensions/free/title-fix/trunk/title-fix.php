@@ -7,11 +7,11 @@ namespace TSF_Extension_Manager_Extension;
 /**
  * Extension Name: Title Fix
  * Extension URI: https://premium.theseoframework.com/extensions/title-fix/
- * Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
- * Version: 1.0.2
- * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
- * License: GPLv3
+ * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
+ * Extension Version: 1.0.2
+ * Extension Author: Sybre Waaijer
+ * Extension Author URI: https://cyberwire.nl/
+ * Extension License: GPLv3
  */
 
 defined( 'ABSPATH' ) or die;

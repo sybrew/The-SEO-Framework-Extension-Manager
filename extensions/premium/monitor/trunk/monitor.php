@@ -6,12 +6,12 @@
 /**
  * Extension Name: Monitor *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/monitor/
- * Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
- * Version: 1.0.0
- * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
- * License: GPLv3
- * Menu Slug: theseoframework-monitor
+ * Extension Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
+ * Extension Version: 1.0.0
+ * Extension Author: Sybre Waaijer
+ * Extension Author URI: https://cyberwire.nl/
+ * Extension License: GPLv3
+ * Extension Menu Slug: theseoframework-monitor
  */
 
 /**
