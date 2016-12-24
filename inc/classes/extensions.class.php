@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
  * Require extensions traits.
  * @since 1.0.0
  */
-_tsf_extension_manager_load_trait( 'extensions' );
+\TSF_Extension_Manager\_load_trait( 'extensions' );
 
 /**
  * Require extensions layout traits depending on admin page type.
@@ -36,12 +36,17 @@ _tsf_extension_manager_load_trait( 'extensions' );
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
 if ( tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
-	_tsf_extension_manager_load_trait( 'extensions-layout' );
+	\TSF_Extension_Manager\_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.
 	trait Extensions_Layout { }
 	trait Extensions_i18n { }
 }
+
+/**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\Secure_Abstract as Secure_Abstract;
 
 /**
  * Class TSF_Extension_Manager\Extensions.

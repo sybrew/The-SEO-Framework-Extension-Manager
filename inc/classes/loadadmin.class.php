@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\AdminPages as AdminPages;
+
+/**
  * Facade Class TSF_Extension_Manager\LoadAdmin.
  *
  * Initializes plugin classes.

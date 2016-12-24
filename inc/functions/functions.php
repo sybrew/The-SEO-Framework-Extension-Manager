@@ -73,7 +73,7 @@ function extension_dir_path( $file ) {
  */
 function extension_dir_url( $file ) {
 
-	$path = dirname( extension_basename( $file ) );
+	$path = dirname( \TSF_Extension_Manager\extension_basename( $file ) );
 	$url = TSF_EXTENSION_MANAGER_DIR_URL;
 
 	$url .= trim( $path, '/ ' ) . '/';

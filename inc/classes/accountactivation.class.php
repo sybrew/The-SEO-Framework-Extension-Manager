@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\Panes as Panes;
+
+/**
  * Class TSF_Extension_Manager\AccountActivation
  *
  * Holds plugin activation functions.

@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\API as API;
+
+/**
  * Class TSF_Extension_Manager\Panes
  *
  * Holds plugin extensions overview functions.
@@ -139,7 +144,7 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		return Trends::get( $_instance, $bits );
+		return \TSF_Extension_Manager\Trends::get( $_instance, $bits );
 	}
 
 	/**
@@ -320,11 +325,11 @@ class Panes extends API {
 					$bits = $this->get_bits();
 					$_instance = $this->get_verification_instance( $bits[1] );
 
-					Extensions::initialize( 'ajax_layout', $_instance, $bits );
+					\TSF_Extension_Manager\Extensions::initialize( 'ajax_layout', $_instance, $bits );
 
 					if ( 'activate' === $case ) {
 						//* Check for menu slug in order to add it.
-						$header = Extensions::get( 'ajax_get_extension_header', $slug );
+						$header = \TSF_Extension_Manager\Extensions::get( 'ajax_get_extension_header', $slug );
 
 						if ( ! empty( $header['MenuSlug'] ) ) {
 							//* Set parent slug.
@@ -351,9 +356,9 @@ class Panes extends API {
 						}
 					}
 
-					$html = Extensions::get( 'ajax_get_extension_desc_footer', $slug );
+					$html = \TSF_Extension_Manager\Extensions::get( 'ajax_get_extension_desc_footer', $slug );
 
-					Extensions::reset();
+					\TSF_Extension_Manager\Extensions::reset();
 				}
 
 				$response = compact( 'html' );
@@ -434,17 +439,17 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Layout::initialize( 'list', $_instance, $bits );
+		\TSF_Extension_Manager\Layout::initialize( 'list', $_instance, $bits );
 
-		Layout::set_nonces( 'nonce_name', $this->nonce_name );
-		Layout::set_nonces( 'request_name', $this->request_name );
-		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'request_name', $this->request_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_action', $this->nonce_action );
 
-		Layout::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Layout::set_account( $this->get_subscription_status() );
 
-		$output = Layout::get( 'account-information' );
+		$output = \TSF_Extension_Manager\Layout::get( 'account-information' );
 
-		Layout::reset();
+		\TSF_Extension_Manager\Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
@@ -468,17 +473,17 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Layout::initialize( 'form', $_instance, $bits );
+		\TSF_Extension_Manager\Layout::initialize( 'form', $_instance, $bits );
 
-		Layout::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Layout::set_account( $this->get_subscription_status() );
 
-		Layout::set_nonces( 'nonce_name', $this->nonce_name );
-		Layout::set_nonces( 'request_name', $this->request_name );
-		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'request_name', $this->request_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_action', $this->nonce_action );
 
-		$form = Layout::get( 'account-upgrade' );
+		$form = \TSF_Extension_Manager\Layout::get( 'account-upgrade' );
 
-		Layout::reset();
+		\TSF_Extension_Manager\Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
@@ -497,15 +502,15 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Layout::initialize( 'form', $_instance, $bits );
+		\TSF_Extension_Manager\Layout::initialize( 'form', $_instance, $bits );
 
-		Layout::set_nonces( 'nonce_name', $this->nonce_name );
-		Layout::set_nonces( 'request_name', $this->request_name );
-		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'request_name', $this->request_name );
+		\TSF_Extension_Manager\Layout::set_nonces( 'nonce_action', $this->nonce_action );
 
-		$button = Layout::get( 'deactivation-button' );
+		$button = \TSF_Extension_Manager\Layout::get( 'deactivation-button' );
 
-		Layout::reset();
+		\TSF_Extension_Manager\Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
 		$content = esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
@@ -539,21 +544,20 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Layout::initialize( 'link', $_instance, $bits );
+		\TSF_Extension_Manager\Layout::initialize( 'link', $_instance, $bits );
 
 		$buttons = array();
 		$description = array();
 
-		$buttons[1] = Layout::get( 'free-support-button' );
+		$buttons[1] = \TSF_Extension_Manager\Layout::get( 'free-support-button' );
 		$description[1] = __( 'Questions about all free extensions and using the Extension Manager can be asked through Free Support.', 'the-seo-framework-extension-manager' );
 
-		$buttons[2] = Layout::get( 'premium-support-button' );
+		$buttons[2] = \TSF_Extension_Manager\Layout::get( 'premium-support-button' );
 		$description[2] = __( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
 
-		Layout::reset();
+		\TSF_Extension_Manager\Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
-		$title .= sprintf( '<p class="tsfem-description">%s</p>', 'These buttons will become active on release.' );
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
@@ -576,18 +580,18 @@ class Panes extends API {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Extensions::initialize( 'overview', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::initialize( 'overview', $_instance, $bits );
 
-		Extensions::set_nonces( 'nonce_name', $this->nonce_name );
-		Extensions::set_nonces( 'request_name', $this->request_name );
-		Extensions::set_nonces( 'nonce_action', $this->nonce_action );
+		\TSF_Extension_Manager\Extensions::set_nonces( 'nonce_name', $this->nonce_name );
+		\TSF_Extension_Manager\Extensions::set_nonces( 'request_name', $this->request_name );
+		\TSF_Extension_Manager\Extensions::set_nonces( 'nonce_action', $this->nonce_action );
 
-		Extensions::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
 
-		$content = Extensions::get( 'layout_content' );
+		$content = \TSF_Extension_Manager\Extensions::get( 'layout_content' );
 		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row tsfem-flex-space">%s</div>', $content );
 
-		Extensions::reset();
+		\TSF_Extension_Manager\Extensions::reset();
 
 		return $content;
 	}

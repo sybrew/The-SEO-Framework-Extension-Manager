@@ -20,12 +20,6 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
-/**
  * Title Fix extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -42,11 +36,17 @@ use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Mas
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @package TSF_Extension_Manager\Traits
+ */
+use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
+use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
+
 //* Notify the existence of this extension through a lovely definition.
-define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
+define( 'TSFEM_E_TITLE_FIX', true );
 
 //* Define version, for future things.
-define( 'THE_SEO_FRAMEWORK_TITLE_FIX_VERSION', '1.0.2' );
+define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.2' );
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
 /**
@@ -71,7 +71,7 @@ function title_fix_init() {
 	if ( class_exists( 'The_SEO_Framework_Title_Fix' ) )
 		return $loaded = false;
 
-	new Title_Fix;
+	new \TSF_Extension_Manager_Extension\Title_Fix;
 
 	return $loaded = true;
 }

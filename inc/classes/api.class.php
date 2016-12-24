@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\Core as Core;
+
+/**
  * Class TSF_Extension_Manager\API
  *
  * Holds plugin API functions.

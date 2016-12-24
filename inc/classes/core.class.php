@@ -27,13 +27,13 @@ defined( 'ABSPATH' ) or die;
  * Require option trait.
  * @since 1.0.0
  */
-_tsf_extension_manager_load_trait( 'options' );
+\TSF_Extension_Manager\_load_trait( 'options' );
 
 /**
  * Require error trait.
  * @since 1.0.0
  */
-_tsf_extension_manager_load_trait( 'error' );
+\TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
  * Class TSF_Extension_Manager\Core
@@ -160,10 +160,10 @@ class Core {
 				and $this->ajax_is_tsf_extension_manager_page( true );
 		}
 
-		Extensions::initialize( 'list', $_instance, $bits );
-		Extensions::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Extensions::initialize( 'list', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
 
-		$checksum = Extensions::get( 'extensions_checksum' );
+		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
 		$result = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
@@ -178,15 +178,15 @@ class Core {
 					;
 
 				default :
-					Extensions::reset();
+					\TSF_Extension_Manager\Extensions::reset();
 					return $loaded = false;
 					break;
 			endswitch;
 		endif;
 
-		$extensions = Extensions::get( 'active_extensions_list' );
+		$extensions = \TSF_Extension_Manager\Extensions::get( 'active_extensions_list' );
 
-		Extensions::reset();
+		\TSF_Extension_Manager\Extensions::reset();
 
 		if ( empty( $extensions ) )
 			return $loaded = false;
@@ -194,16 +194,16 @@ class Core {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Extensions::initialize( 'load', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
 
 		foreach ( $extensions as $slug => $active ) {
 			$bits = $this->get_bits();
 			$_instance = $this->get_verification_instance( $bits[1] );
 
-			Extensions::load_extension( $slug, $_instance, $bits );
+			\TSF_Extension_Manager\Extensions::load_extension( $slug, $_instance, $bits );
 		}
 
-		Extensions::reset();
+		\TSF_Extension_Manager\Extensions::reset();
 
 		return $loaded = true;
 	}
@@ -716,7 +716,7 @@ class Core {
 	 * @return string The minimum required capability for extensions Settings.
 	 */
 	public function can_do_settings() {
-		return can_do_tsf_extension_manager_settings();
+		return \TSF_Extension_Manager\can_do_settings();
 	}
 
 	/**
@@ -872,9 +872,6 @@ class Core {
 
 			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
-
-		//* TODO: TEMPORARILY. REMOVE ON RELEASE. var_dump().
-		$class .= ' tsfem-button-disabled';
 
 		return $this->get_link( array(
 			'url' => $url,
@@ -1077,11 +1074,11 @@ class Core {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Extensions::initialize( 'activation', $_instance, $bits );
-		Extensions::set_account( $this->get_subscription_status() );
-		Extensions::set_instance_extension_slug( $slug );
+		\TSF_Extension_Manager\Extensions::initialize( 'activation', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Extensions::set_instance_extension_slug( $slug );
 
-		$checksum = Extensions::get( 'extensions_checksum' );
+		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
 		$result = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
@@ -1106,8 +1103,8 @@ class Core {
 			endswitch;
 		endif;
 
-		$status = Extensions::validate_extension_activation();
-		Extensions::reset();
+		$status = \TSF_Extension_Manager\Extensions::validate_extension_activation();
+		\TSF_Extension_Manager\Extensions::reset();
 
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
@@ -1208,13 +1205,13 @@ class Core {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		Extensions::initialize( 'load', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
 
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		$result = Extensions::test_extension( $slug, $ajax, $_instance, $bits );
-		Extensions::reset();
+		$result = \TSF_Extension_Manager\Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::reset();
 
 		return $result;
 	}

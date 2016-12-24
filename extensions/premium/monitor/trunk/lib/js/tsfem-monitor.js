@@ -4,7 +4,6 @@
  *
  * @author Sybre Waaijer https://cyberwire.nl/
  * @pluginURI https://wordpress.org/plugins/the-seo-framework-extension-manager/
- * @todo exchange testmijnphp7 urls with github/theseoframework.com (version archive/dev) urls.
  */
 
 /**

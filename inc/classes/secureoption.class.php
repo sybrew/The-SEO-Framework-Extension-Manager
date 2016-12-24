@@ -24,6 +24,11 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\Secure_Abstract as Secure_Abstract;
+
+/**
  * Class TSF_Extension_Manager\SecureOption.
  *
  * Verifies options update handling.

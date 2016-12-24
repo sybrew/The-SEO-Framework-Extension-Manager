@@ -10,45 +10,6 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager
- */
-use TSF_Extension_Manager;
-
-/**
- * Require user interface trait.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'ui' );
-
-/**
- * Require extension options trait.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'extension-options' );
-
-/**
- * Require extension forms trait.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'extension-forms' );
-
-/**
- * Require error trait.
- * @since 1.0.0
- */
-_tsf_extension_manager_load_trait( 'error' );
-
-/**
- * @package TSF_Extension_Manager\Traits
- */
-use TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
-use TSF_Extension_Manager\UI as UI;
-use TSF_Extension_Manager\Extension_Options as Extension_Options;
-use TSF_Extension_Manager\Extension_Forms as Extension_Forms;
-use TSF_Extension_Manager\Error as Error;
-
-/**
  * Monitor extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -64,6 +25,45 @@ use TSF_Extension_Manager\Error as Error;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * Require user interface trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'ui' );
+
+/**
+ * Require extension options trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'extension-options' );
+
+/**
+ * Require extension forms trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+
+/**
+ * Require error trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'error' );
+
+/**
+ * @package TSF_Extension_Manager\Traits
+ */
+use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
+use \TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
+use \TSF_Extension_Manager\UI as UI;
+use \TSF_Extension_Manager\Extension_Options as Extension_Options;
+use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
+use \TSF_Extension_Manager\Error as Error;
+
+/**
+ * @package TSF_Extension_Manager_Extension\Classes
+ */
+use \TSF_Extension_Manager_Extension\Monitor_Api as Monitor_Api;
 
 /**
  * Class TSF_Extension_Manager_Extension\Monitor_Admin
@@ -785,7 +785,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $issues ) ) {
 			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
-			$instance = Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
 			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
@@ -811,7 +811,7 @@ final class Monitor_Admin extends Monitor_Api {
 			$data = sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
 			$found = true;
-			$instance = Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
 			$data = $instance->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
@@ -1001,7 +1001,7 @@ final class Monitor_Admin extends Monitor_Api {
 		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', esc_attr( $class ), esc_html( $_domain ) );
 
-		$output = TSF_Extension_Manager\Layout::wrap_title_content( esc_html__( 'Account site:', 'the-seo-framework-extension-manager' ), $domain, false );
+		$output = \TSF_Extension_Manager\Layout::wrap_title_content( esc_html__( 'Account site:', 'the-seo-framework-extension-manager' ), $domain, false );
 
 		$output = sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 
@@ -1123,7 +1123,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $stats ) ) {
 			$output .= $this->get_string_no_data_found();
 		} else {
-			$instance = Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 

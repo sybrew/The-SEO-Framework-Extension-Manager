@@ -10,12 +10,6 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
-
-/**
  * Monitor extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -31,6 +25,12 @@ use TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_F
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @package TSF_Extension_Manager\Traits
+ */
+use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
+use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
 
 /**
  * Class TSF_Extension_Manager_Extension\Monitor_Tests

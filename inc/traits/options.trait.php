@@ -340,11 +340,11 @@ trait Options {
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
 
-		SecureOption::initialize( $type, $_instance, $bits );
+		\TSF_Extension_Manager\SecureOption::initialize( $type, $_instance, $bits );
 
 		$bits = $this->get_bits();
 		$_instance = $this->get_verification_instance( $bits[1] );
-		SecureOption::set_update_instance( $_instance, $bits );
+		\TSF_Extension_Manager\SecureOption::set_update_instance( $_instance, $bits );
 
 	}
 
@@ -362,12 +362,12 @@ trait Options {
 		if ( $this->_has_died() )
 			return false;
 
-		$verify = SecureOption::verified_option_update();
+		$verify = \TSF_Extension_Manager\SecureOption::verified_option_update();
 
 		if ( $kill && false === $verify )
 			$this->kill_options();
 
-		SecureOption::reset();
+		\TSF_Extension_Manager\SecureOption::reset();
 
 		return $verify;
 	}

@@ -1,9 +1,0 @@
-{
-	"slug" : "analytics",
-	"namespace" : "TSF_Extension_Manager_Extension",
-	"test" : {
-		"_base"              : "analytics.php",
-		"Analytics_Admin"    : "inc/classes/analytics-admin.class.php",
-		"Analytics_Frontend" : "inc/classes/analytics-frontend.class.php"
-	}
-}

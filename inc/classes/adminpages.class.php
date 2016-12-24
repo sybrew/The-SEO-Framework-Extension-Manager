@@ -27,7 +27,12 @@ defined( 'ABSPATH' ) or die;
  * Require user interface trait.
  * @since 1.0.0
  */
-_tsf_extension_manager_load_trait( 'ui' );
+\TSF_Extension_Manager\_load_trait( 'ui' );
+
+/**
+ * @package TSF_Extension_Manager\Classes
+ */
+use \TSF_Extension_Manager\AccountActivation as AccountActivation;
 
 /**
  * Class TSF_Extension_Manager\AdminPages

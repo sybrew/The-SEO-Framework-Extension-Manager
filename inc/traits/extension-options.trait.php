@@ -133,7 +133,7 @@ trait Extension_Options {
 	 */
 	final protected function get_all_options() {
 
-		$options = Extensions_Options_Cache::_get_options_cache();
+		$options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
@@ -186,14 +186,14 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
+		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
-			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -221,14 +221,14 @@ trait Extension_Options {
 		unset( $options[ $option ] );
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
+		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
-			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -247,7 +247,7 @@ trait Extension_Options {
 			return false;
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
+		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 
 		//* If index is non existent, return true.
 		if ( ! isset( $c_options[ $this->o_index ] ) )
@@ -259,7 +259,7 @@ trait Extension_Options {
 
 		if ( $success ) {
 			//* Update options cache on success.
-			Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
+			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 
 		return $success;

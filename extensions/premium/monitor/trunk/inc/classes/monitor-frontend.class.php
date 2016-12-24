@@ -10,12 +10,6 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
-/**
  * Monitor extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -33,6 +27,12 @@ use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Mas
  */
 
 /**
+ * @package TSF_Extension_Manager\Traits
+ */
+use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
+use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
+
+/**
  * Class TSF_Extension_Manager_Extension\Monitor_Frontend
  *
  * Holds extension front-end functions.
@@ -43,7 +43,5 @@ use TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Mas
 final class Monitor_Frontend {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
-	private function construct() {
-
-	}
+	private function construct() { }
 }

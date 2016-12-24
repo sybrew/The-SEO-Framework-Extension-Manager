@@ -56,6 +56,11 @@ interface Secure_Static_Abstracts {
 }
 
 /**
+ * @package TSF_Extension_Manager\Interfaces
+ */
+use \TSF_Extension_Manager\Secure_Static_Abstracts as Secure_Static_Abstracts;
+
+/**
  * This class allows handling of secure nonces and interfaces through a singleton pattern.
  *
  * @since 1.0.0

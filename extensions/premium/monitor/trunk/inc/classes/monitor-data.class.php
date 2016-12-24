@@ -10,12 +10,6 @@ if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()
 	return;
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_Interface;
-
-/**
  * Monitor extension for The SEO Framework
  * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
@@ -31,6 +25,12 @@ use TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_I
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @package TSF_Extension_Manager\Traits
+ */
+use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
+use \TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_Interface;
 
 /**
  * Class TSF_Extension_Manager_Extension\Monitor_Data

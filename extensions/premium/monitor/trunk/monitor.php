@@ -63,13 +63,13 @@ namespace TSF_Extension_Manager {
 	 * The extension map URL. Used for calling browser files.
 	 * @since 1.0.0
 	 */
-	define( 'TSFEM_E_MONITOR_DIR_URL', extension_dir_url( TSFEM_E_MONITOR_BASE_FILE ) );
+	define( 'TSFEM_E_MONITOR_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_MONITOR_BASE_FILE ) );
 
 	/**
 	 * The extension file relative to the plugins dir.
 	 * @since 1.0.0
 	 */
-	define( 'TSFEM_E_MONITOR_DIR_PATH', extension_dir_path( TSFEM_E_MONITOR_BASE_FILE ) );
+	define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_MONITOR_BASE_FILE ) );
 
 	/**
 	 * The plugin class map absolute path.
@@ -104,7 +104,7 @@ namespace TSF_Extension_Manager_Extension {
 		tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
 
 		if ( is_admin() ) {
-			new Monitor_Admin();
+			new \TSF_Extension_Manager_Extension\Monitor_Admin();
 		} else {
 			//* Statistical data. TODO.
 			//	new Monitor_Frontend();
