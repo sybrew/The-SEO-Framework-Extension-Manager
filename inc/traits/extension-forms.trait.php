@@ -235,12 +235,12 @@ trait Extension_Forms {
 	public function _get_action_form( $url = '', array $items = array() ) {
 
 		if ( empty( $url ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
 			return '';
 		}
 
 		if ( empty( $items['input'] ) || ! is_array( $items['input'] ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Form items must be in an array. Supply at least a submit button.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Form items must be in an array. Supply at least a submit button.' );
 			return '';
 		}
 
@@ -265,7 +265,7 @@ trait Extension_Forms {
 		$output = '';
 		if ( $items['ajax'] ) {
 			if ( '' === $items['ajax-id'] ) {
-				the_seo_framework()->_doing_it_wrong( __METHOD__, 'No AJAX ID supplied.' );
+				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'No AJAX ID supplied.' );
 				return '';
 			}
 

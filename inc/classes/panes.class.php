@@ -24,11 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\API as API;
-
-/**
  * Class TSF_Extension_Manager\Panes
  *
  * Holds plugin extensions overview functions.
@@ -333,7 +328,7 @@ class Panes extends API {
 
 						if ( ! empty( $header['MenuSlug'] ) ) {
 							//* Set parent slug.
-							the_seo_framework()->add_menu_link();
+							\the_seo_framework()->add_menu_link();
 
 							//* Add arbitrary menu contents to known menu slug.
 							$menu = array(

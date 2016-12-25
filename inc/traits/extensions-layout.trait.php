@@ -162,9 +162,9 @@ trait Extensions_Layout {
 		}
 
 		if ( empty( $svg | $two | $one ) ) {
-			$svg = tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
-			$two = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
-			$one = tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
+			$svg = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
+			$two = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
+			$one = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
 		}
 
 		$items = array(
@@ -213,7 +213,7 @@ trait Extensions_Layout {
 	private static function make_extension_header( $extension ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
-		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', tsf_extension_manager()->convert_markdown( esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
+		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
 
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
@@ -315,13 +315,13 @@ trait Extensions_Layout {
 		if ( $disabled ) {
 			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
 		} else {
-			$nonce_action = tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
+			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 			$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-			$extension = '<input type="hidden" name="' . esc_attr( tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
+			$extension = '<input type="hidden" name="' . esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
 			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
 			$form = $nonce_action . $nonce . $extension . $submit;
 
-			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
+			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( \tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
 			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_attr( $slug ), esc_attr( $type ), esc_html( $text ) );
 
 			$button = $nojs . $js;
@@ -345,7 +345,7 @@ trait Extensions_Layout {
 		$data = static::get_extension_header( $extension['slug'] );
 
 		$description = $data['Description'];
-		$description = tsf_extension_manager()->convert_markdown( esc_html( $description ), array( 'strong', 'em', 'a' ) );
+		$description = \tsf_extension_manager()->convert_markdown( esc_html( $description ), array( 'strong', 'em', 'a' ) );
 
 		$footer = static::get_extension_description_footer( $extension );
 
@@ -487,7 +487,7 @@ trait Extensions_Layout {
 	private static function get_extension_desc_menu_item( $slug ) {
 		return sprintf(
 			'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
-			esc_url( tsf_extension_manager()->get_admin_page_url( $slug ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
+			esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
 		);
 	}
 }

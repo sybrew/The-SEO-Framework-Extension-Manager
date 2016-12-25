@@ -163,11 +163,11 @@ trait Extensions_Properties {
 			if ( isset( $extensions[ $slug ] ) ) {
 				return $extensions[ $slug ];
 			} else {
-				the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify an existing extension slug.' );
+				\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify an existing extension slug.' );
 				return array();
 			}
 		} else {
-			the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify a slug.' );
+			\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify a slug.' );
 			return array();
 		}
 	}
@@ -338,7 +338,7 @@ trait Extensions_Actions {
 		if ( isset( $checksum ) )
 			return $checksum;
 
-		$type = tsf_extension_manager()->get_hash_type();
+		$type = \tsf_extension_manager()->get_hash_type();
 		$hash = hash( $type, serialize( static::$extensions ) );
 
 		return $checksum = array(
@@ -373,7 +373,7 @@ trait Extensions_Actions {
 
 		$file = static::get_extension_header_file_location( $slug );
 
-		$type = tsf_extension_manager()->get_hash_type();
+		$type = \tsf_extension_manager()->get_hash_type();
 		$hash = hash_file( $type, $file );
 
 		return $checksum = array(
@@ -632,15 +632,17 @@ trait Extensions_Actions {
 		$tsf_version = the_seo_framework_version();
 		$_wp_version = $wp_version;
 
-		if ( version_compare( $tsf_version, $extension['tested_tsf'], '>' ) )
+		if ( version_compare( $tsf_version, $extension['tested_tsf'], '>' ) ) {
 			$compatibility['tsf'] = 1;
-		elseif ( version_compare( $tsf_version, $extension['requires_tsf'], '>=' ) )
+		} elseif ( version_compare( $tsf_version, $extension['requires_tsf'], '>=' ) ) {
 			$compatibility['tsf'] = 2;
+		}
 
-		if ( version_compare( $_wp_version, $extension['tested'], '>' ) )
+		if ( version_compare( $_wp_version, $extension['tested'], '>' ) ) {
 			$compatibility['wp'] = 1;
-		elseif ( version_compare( $_wp_version, $extension['requires'], '>=' ) )
+		} elseif ( version_compare( $_wp_version, $extension['requires'], '>=' ) ) {
 			$compatibility['wp'] = 2;
+		}
 
 		return $compatibility;
 	}
@@ -725,7 +727,7 @@ trait Extensions_Actions {
 
 		tick : {
 			//* Tick the instance.
-			tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 		}
 
 		end : {
@@ -800,7 +802,7 @@ trait Extensions_Actions {
 		$success = array();
 
 		//* Get follow-up verification instance.
-		foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
 			$bits = $verification['bits'];
 			$_instance = $verification['instance'];
@@ -995,7 +997,7 @@ trait Extensions_Actions {
 		}
 
 		//* Tick the instance on failure.
-		tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+		\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 
 		return false;
 	}

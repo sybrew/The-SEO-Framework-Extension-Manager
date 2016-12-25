@@ -47,7 +47,7 @@ final class Trends {
 	 */
 	public static function get( $instance, $bits ) {
 
-		tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
+		\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 
 		return self::prototype_trends();
 	}
@@ -155,7 +155,7 @@ final class Trends {
 				$date = $date ? '<time>' . date_i18n( get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
 				$title = isset( $object->title ) ? $object->title->__toString() : '';
-				$title = $title ? the_seo_framework()->escape_title( $title ) : '';
+				$title = $title ? \the_seo_framework()->escape_title( $title ) : '';
 
 				$content = isset( $object->content ) ? $object->content->__toString() : '';
 				$content = $content ? wp_strip_all_tags( $content ) : '';
@@ -163,8 +163,8 @@ final class Trends {
 
 				$length = 250;
 				//* Do not care for the current length. Always trim.
-				$content = the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
-				$content = the_seo_framework()->escape_description( $content );
+				$content = \the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
+				$content = \the_seo_framework()->escape_description( $content );
 
 				//* No need for translations, it's English only.
 				$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', esc_url( $link ), $title );

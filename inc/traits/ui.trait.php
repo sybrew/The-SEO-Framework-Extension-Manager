@@ -188,7 +188,7 @@ trait UI {
 
 		$rtl = is_rtl() ? '-rtl' : '';
 
-		$suffix = the_seo_framework()->script_debug ? '' : '.min';
+		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
 
 		wp_register_style(
 			$this->css_name,
@@ -227,7 +227,7 @@ trait UI {
 		if ( isset( $registered ) )
 			return;
 
-		$suffix = the_seo_framework()->script_debug ? '' : '.min';
+		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
 
 		wp_register_script(
 			$this->js_name,

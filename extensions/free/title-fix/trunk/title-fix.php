@@ -16,7 +16,7 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) or die;
 
-if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
 
 /**
@@ -153,7 +153,7 @@ final class Title_Fix {
 			 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
 			 * Requires initial load after theme switch.
 			 */
-			if ( $this->force_title_fix || false === the_seo_framework()->theme_title_doing_it_right() ) {
+			if ( $this->force_title_fix || false === \the_seo_framework()->theme_title_doing_it_right() ) {
 
 				/**
 				 * First run.
@@ -323,7 +323,7 @@ final class Title_Fix {
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
 
-		$new_title = '<title>' . the_seo_framework()->title_from_cache( '', '' , '', true ) . '</title>' . $this->indicator();
+		$new_title = '<title>' . \the_seo_framework()->title_from_cache( '', '' , '', true ) . '</title>' . $this->indicator();
 		$count = 1;
 
 		//* Replace the title tag within the header.

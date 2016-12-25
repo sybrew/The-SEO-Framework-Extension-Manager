@@ -24,11 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\Core as Core;
-
-/**
  * Facade Class TSF_Extension_Manager\LoadFrontend.
  *
  * Initializes plugin classes.

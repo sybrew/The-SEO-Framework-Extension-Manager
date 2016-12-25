@@ -302,7 +302,7 @@ class Core {
 
 		//* Adds action to the URI. It's only used to visualize what has happened.
 		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
-		the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
+		\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
 
@@ -345,7 +345,7 @@ class Core {
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
 			$this->set_error_notice( array( 9001 => '' ) );
-			the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+			\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
 			exit;
 		}
 
@@ -394,9 +394,9 @@ class Core {
 		//* Don't spam error log.
 		if ( false === $this->_has_died() ) {
 			if ( $message ) {
-				the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
+				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
 			} else {
-				the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
+				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
 			}
 		}
 
@@ -817,7 +817,7 @@ class Core {
 		$url = $args['url'] ? esc_url( $args['url'] ) : '';
 
 		if ( empty( $url ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
 			return '';
 		}
 
@@ -1028,7 +1028,7 @@ class Core {
 
 			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 		} else {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
 
 			//* Most likely, a fatal error will now occur.
 			return $loaded[ $class ] = false;
@@ -1344,13 +1344,13 @@ class Core {
 
 		if ( $secure ) {
 			//* Don't load from $_GET request if secure.
-			return $cache = the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+			return $cache = \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 		} else {
 			//* Don't cache if insecure.
 			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
-				return the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+				return \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
 			}
 		}
 	}

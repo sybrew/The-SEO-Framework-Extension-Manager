@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) or die;
 
-if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
 
 /**
@@ -168,8 +168,8 @@ final class Monitor_Tests {
 
 				if ( false !== $id ) {
 					$home = isset( $value['home'] ) && $value['home'];
-					$url = the_seo_framework()->the_url( '', array( 'home' => $home, 'external' => true, 'id' => $id ) );
-					$title = the_seo_framework()->title( '', '', '', array( 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ) );
+					$url = \the_seo_framework()->the_url( '', array( 'home' => $home, 'external' => true, 'id' => $id ) );
+					$title = \the_seo_framework()->title( '', '', '', array( 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ) );
 
 					$links[] = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $title );
 				}
@@ -221,7 +221,7 @@ final class Monitor_Tests {
 		if ( ! $data['located'] ) {
 			$state = 'error';
 			$content = $this->wrap_info(
-				tsf_extension_manager()->convert_markdown(
+				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' )
 				)
@@ -241,7 +241,7 @@ final class Monitor_Tests {
 			goto end;
 		}
 
-		$sample_tsf = the_seo_framework()->robots_txt();
+		$sample_tsf = \the_seo_framework()->robots_txt();
 
 		//* Normalize.
 		$sample_tsf = esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $sample_tsf ) ) );
@@ -250,7 +250,7 @@ final class Monitor_Tests {
 		if ( $sample_tsf === $data['value'] ) {
 			$state = 'good';
 			$content = $this->wrap_info(
-				tsf_extension_manager()->convert_markdown(
+				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' )
 				)
@@ -261,7 +261,7 @@ final class Monitor_Tests {
 		not_equal : {
 			$state = 'okay';
 			$content = $this->wrap_info(
-				tsf_extension_manager()->convert_markdown(
+				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' )
 				)

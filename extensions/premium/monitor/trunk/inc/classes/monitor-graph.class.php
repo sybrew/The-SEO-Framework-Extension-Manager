@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) or die;
 
-if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
 
 /**
@@ -140,7 +140,7 @@ final class Monitor_Graph {
 		$args = wp_parse_args( $args, $defaults );
 
 		//* TODO: shift data?
-		// the_seo_framework()->set_timezone();
+		// \the_seo_framework()->set_timezone();
 
 		switch ( $args['y'] ) :
 			case 'line' :
@@ -166,7 +166,7 @@ final class Monitor_Graph {
 				reset( $data );
 
 				foreach ( $data as $x => $y ) {
-					$x = the_seo_framework()->gmt2date( 'Y-m-d H:i', date( 'Y-m-d', $x ) ) . ' GMT';
+					$x = \the_seo_framework()->gmt2date( 'Y-m-d H:i', date( 'Y-m-d', $x ) ) . ' GMT';
 					yield array( 'x' => $x, 'y' => $y );
 				}
 				break;
@@ -177,7 +177,7 @@ final class Monitor_Graph {
 		endswitch;
 
 		//* TODO: shift data?
-		// the_seo_framework()->reset_timezone();
+		// \the_seo_framework()->reset_timezone();
 	}
 
 	protected function store_graph_js_data( $data, $id, $type = 'line' ) {

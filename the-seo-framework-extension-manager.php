@@ -11,9 +11,7 @@
  * Domain Path: /language
  */
 
-namespace {
-	defined( 'ABSPATH' ) or die;
-}
+defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -32,200 +30,102 @@ namespace {
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace {
-
-	/**
-	 * CDN Cache buster. 3 point.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_VERSION', '1.0.0' );
-
-	/**
-	 * The plugin map URL. Used for calling browser files.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_URL', plugin_dir_url( __FILE__ ) );
-
-	/**
-	 * The plugin map absolute path. Used for calling php files.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_PATH', plugin_dir_path( __FILE__ ) );
-
-	/**
-	 * The plugin file relative to the plugins dir.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-
-	/**
-	 * The plugin file, absolute unix path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
-
-	/**
-	 * The plugin class map absolute path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
-
-	/**
-	 * The plugin class map absolute path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
-
-	/**
-	 * The plugin function map absolute path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
-
-	/**
-	 * The plugin function map absolute path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'compat' . DIRECTORY_SEPARATOR );
-
-	/**
-	 * The plugin extensions base path.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_PATH', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
-
-	/**
-	 * The plugin options base name.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
-
-	/**
-	 * The extension options base name.
-	 * @since 1.0.0
-	 */
-	define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
-}
+/**
+ * The plugin version. Always 3 point.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_VERSION', '1.0.0' );
 
 /**
- * @package TSF_Extension_Manager
+ * The plugin map URL. Used for calling browser files.
+ * @since 1.0.0
  */
-namespace TSF_Extension_Manager {
+define( 'TSF_EXTENSION_MANAGER_DIR_URL', plugin_dir_url( __FILE__ ) );
 
-	add_action( 'activate_' . TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, __NAMESPACE__ . '\\_test_sever' );
-	/**
-	 * Checks whether the server can run this plugin on activation.
-	 * If not, it will deactivate this plugin.
-	 *
-	 * This function will create a parse error on PHP < 5.3 (use of goto wrappers).
-	 * Which makes a knowledge database entry easier to make as it won't change anytime soon.
-	 * Otherwise, it will crash in the first called file because of the "use" keyword.
-	 *
-	 * @since 1.0.0
-	 * @see register_activation_hook():
-	 * @link https://developer.wordpress.org/reference/functions/register_activation_hook/
-	 * @access private
-	 *
-	 * @param bool $network_wide Whether the plugin is activated on a multisite network.
-	 * @return void Early if tests pass.
-	 */
-	function _test_sever( $network_wide = false ) {
+/**
+ * The plugin map absolute path. Used for calling php files.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
-		evaluate : {
-			   PHP_VERSION_ID < 50521 and $test = 1
-			or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < 50605 and $test = 2
-			or $GLOBALS['wp_db_version'] < 35700 and $test = 3
-			or $test = true;
-		}
+/**
+ * The plugin file relative to the plugins dir.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
-		//* All good.
-		if ( true === $test )
-			return;
+/**
+ * The plugin file, absolute unix path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
 
-		deactivate : {
-			//* Not good. Deactivate plugin.
-			deactivate_plugins( plugin_basename( __FILE__ ) );
-		}
+/**
+ * The plugin class map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
-		switch ( $test ) :
-			case 1 :
-			case 2 :
-				//* PHP requirements not met, always count up to encourage best standards.
-				$requirement = 1 === $test ? 'PHP 5.5.21 or later' : 'PHP 5.6.5 or later';
-				$issue = 'PHP version';
-				$version = phpversion();
-				$subtitle = 'Server Requirements';
-				break;
+/**
+ * The plugin class map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
 
-			case 3 :
-				//* WordPress requirements not met.
-				$requirement = 'WordPress 4.4 or later';
-				$issue = 'WordPress version';
-				$version = $GLOBALS['wp_version'];
-				$subtitle = 'WordPress Requirements';
-				break;
+/**
+ * The plugin function map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
 
-			default :
-				return;
-		endswitch;
+/**
+ * The plugin function map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'compat' . DIRECTORY_SEPARATOR );
 
-		$network = $network_wide ? 'network/' : '';
-		$pluginspage = admin_url( $network . 'plugins.php' );
+/**
+ * The plugin extensions base path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_PATH', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
 
-		//* Let's have some fun with teapots.
-		$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
+/**
+ * The plugin options base name.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
 
-		wp_die(
-			sprintf(
-				'<p><strong>The SEO Framework - Extension Manager</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
-				<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
-				esc_html( $requirement ), esc_html( $issue ), esc_html( $version ), esc_url( $pluginspage )
-			),
-			sprintf( 'The SEO Framework - Extension Manager &laquo; %s', esc_attr( $subtitle ) ),
-			array( 'response' => intval( $response ) )
-		);
-	}
+/**
+ * The extension options base name.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
 
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
-	/**
-	 * Loads plugin locale: 'the-seo-framework-extension-manager'
-	 * Locale folder: the-seo-framework-extension-manager/language/
-	 *
-	 * @since 1.0.0
-	 * @staticvar $loaded Determines if the textdomain has already been loaded.
-	 * @access private
-	 *
-	 * @param bool $ignore Whether to load locale outside of the admin area.
-	 * @return void Early if already loaded.
-	 */
-	function _init_locale( $ignore = false ) {
-		if ( is_admin() || $ignore ) {
-			static $loaded = false;
+/**
+ * Load plugin files.
+ * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH
+ */
+require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
 
-			if ( $loaded = $loaded ? false : $loaded = true ? false : true )
-				return;
+/**
+ * Load functions file.
+ * @since 1.0.0
+ * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
+ */
+require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
 
-			load_plugin_textdomain(
-				'the-seo-framework-extension-manager',
-				false,
-				basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
-			);
-		}
-	}
-}
-
-namespace {
-	/**
-	 * Load plugin files.
-	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH
-	 */
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
-
-	/**
-	 * Load functions file.
-	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
-	 */
-	require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
+/**
+* Loads the class from cache.
+* This is the recommended way of calling the class, if needed.
+* Call this after action 'init' priority 0 otherwise it will kill the plugin,
+* or even other plugins.
+*
+* @since 1.0.0
+*
+* @return null|object The plugin class object.
+*/
+function tsf_extension_manager() {
+	return TSF_Extension_Manager\_init_tsf_extension_manager();
 }

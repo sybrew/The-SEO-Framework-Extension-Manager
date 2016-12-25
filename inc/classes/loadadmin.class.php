@@ -24,11 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\AdminPages as AdminPages;
-
-/**
  * Facade Class TSF_Extension_Manager\LoadAdmin.
  *
  * Initializes plugin classes.
@@ -76,7 +71,7 @@ final class LoadAdmin extends AdminPages {
 				);
 
 				//* Already escaped.
-				the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
+				\the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
 			}
 		}
 	}
@@ -100,6 +95,6 @@ final class LoadAdmin extends AdminPages {
 		$notice = esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		//* No a11y icon. Already escaped.
-		the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
+		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
 	}
 }

@@ -35,18 +35,13 @@ defined( 'ABSPATH' ) or die;
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  */
-if ( tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
+if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 	\TSF_Extension_Manager\_load_trait( 'extensions-layout' );
 } else {
 	//* Empty dummy traits.
 	trait Extensions_Layout { }
 	trait Extensions_i18n { }
 }
-
-/**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\Secure_Abstract as Secure_Abstract;
 
 /**
  * Class TSF_Extension_Manager\Extensions.
@@ -97,7 +92,7 @@ final class Extensions extends Secure_Abstract {
 		self::reset();
 
 		if ( empty( $type ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 
 			self::set( '_wpaction' );
@@ -108,7 +103,7 @@ final class Extensions extends Secure_Abstract {
 				case 'list' :
 				case 'load' :
 				case 'ajax_layout' :
-					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or tsf_extension_manager()->_maybe_die();
+					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die();
 					self::set( '_type', $type );
 					static::set_up_variables();
 					break;
@@ -139,7 +134,7 @@ final class Extensions extends Secure_Abstract {
 		self::verify_instance() or die;
 
 		if ( empty( $type ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
 			return false;
 		}
 
@@ -169,7 +164,7 @@ final class Extensions extends Secure_Abstract {
 				break;
 
 			default :
-				the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
+				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
 		endswitch;
 
@@ -218,7 +213,7 @@ final class Extensions extends Secure_Abstract {
 		}
 
 		if ( 'maybe_network' === $what ) {
-			$network_mode = tsf_extension_manager()->is_plugin_in_network_mode();
+			$network_mode = \tsf_extension_manager()->is_plugin_in_network_mode();
 
 			if ( $network_mode )
 				return $extensions;

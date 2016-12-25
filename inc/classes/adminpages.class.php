@@ -30,11 +30,6 @@ defined( 'ABSPATH' ) or die;
 \TSF_Extension_Manager\_load_trait( 'ui' );
 
 /**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\AccountActivation as AccountActivation;
-
-/**
  * Class TSF_Extension_Manager\AdminPages
  *
  * Holds plugin admin page functions.
@@ -91,7 +86,7 @@ class AdminPages extends AccountActivation {
 	 * Initializes extension manager menu.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
+	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
 	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
@@ -107,7 +102,7 @@ class AdminPages extends AccountActivation {
 			//* TODO.
 			//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
-			if ( the_seo_framework()->load_options )
+			if ( \the_seo_framework()->load_options )
 				add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
 		}
 	}
@@ -117,7 +112,7 @@ class AdminPages extends AccountActivation {
 	 * SEO Framework SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework()->page_id variable.
+	 * @uses \the_seo_framework()->page_id variable.
 	 * @access private
 	 */
 	public function _add_menu_link() {

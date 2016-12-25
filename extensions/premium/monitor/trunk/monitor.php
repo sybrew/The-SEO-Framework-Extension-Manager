@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager_Extension\Monitor
  */
+namespace TSF_Extension_Manager_Extension;
 
 /**
  * Extension Name: Monitor *beta*
@@ -14,16 +15,10 @@
  * Extension Menu Slug: theseoframework-monitor
  */
 
-/**
- * @package TSF_Extension_Manager\Extensions\Monitor
- */
-namespace {
+defined( 'ABSPATH' ) or die;
 
-	defined( 'ABSPATH' ) or die;
-
-	if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
-		return;
-}
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+	return;
 
 /**
  * Monitor extension for The SEO Framework
@@ -43,88 +38,76 @@ namespace {
  */
 
 /**
- * @package TSF_Extension_Manager\Extensions\Monitor
+ * The extension version.
+ * @since 1.0.0
  */
-namespace TSF_Extension_Manager {
+define( 'TSFEM_E_MONITOR_VERSION', '1.0.0' );
 
-	/**
-	 * The extension version.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_MONITOR_VERSION', '1.0.0' );
+/**
+ * The extension file, absolute unix path.
+ * @since 1.0.0
+ */
+define( 'TSFEM_E_MONITOR_BASE_FILE', __FILE__ );
 
-	/**
-	 * The extension file, absolute unix path.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_MONITOR_BASE_FILE', __FILE__ );
+/**
+ * The extension map URL. Used for calling browser files.
+ * @since 1.0.0
+ */
+define( 'TSFEM_E_MONITOR_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_MONITOR_BASE_FILE ) );
 
-	/**
-	 * The extension map URL. Used for calling browser files.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_MONITOR_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_MONITOR_BASE_FILE ) );
+/**
+ * The extension file relative to the plugins dir.
+ * @since 1.0.0
+ */
+define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_MONITOR_BASE_FILE ) );
 
-	/**
-	 * The extension file relative to the plugins dir.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_MONITOR_BASE_FILE ) );
+/**
+ * The plugin class map absolute path.
+ * @since 1.0.0
+ */
+define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
-	/**
-	 * The plugin class map absolute path.
-	 * @since 1.0.0
-	 */
-	define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\monitor_init', 11 );
+/**
+ * Initialize the extension.
+ *
+ * @since 1.0.0
+ * @action 'plugins_loaded'
+ * @priority 11
+ *
+ * @return bool True if class is loaded.
+ */
+function monitor_init() {
+
+	static $loaded = null;
+
+	//* Don't init the class twice.
+	if ( isset( $loaded ) )
+		return $loaded;
+
+	\tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
+
+	if ( is_admin() ) {
+		new \TSF_Extension_Manager_Extension\Monitor_Admin();
+	} else {
+		//* Statistical data. TODO.
+		// new Monitor_Frontend();
+	}
+
+	return $loaded = true;
 }
 
 /**
- * @package TSF_Extension_Manager_Extension\Monitor
+ * Returns the active monitor base class.
+ *
+ * @since 1.0.0
+ *
+ * @return string The active monitor class name.
  */
-namespace TSF_Extension_Manager_Extension {
-
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\monitor_init', 11 );
-	/**
-	 * Initialize the extension.
-	 *
-	 * @since 1.0.0
-	 * @action 'plugins_loaded'
-	 * @priority 11
-	 *
-	 * @return bool True if class is loaded.
-	 */
-	function monitor_init() {
-
-		static $loaded = null;
-
-		//* Don't init the class twice.
-		if ( isset( $loaded ) )
-			return $loaded;
-
-		tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
-
-		if ( is_admin() ) {
-			new \TSF_Extension_Manager_Extension\Monitor_Admin();
-		} else {
-			//* Statistical data. TODO.
-			//	new Monitor_Frontend();
-		}
-
-		return $loaded = true;
-	}
-
-	/**
-	 * Returns the active monitor base class.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The active monitor class name.
-	 */
-	function monitor_class() {
-		if ( is_admin() ) {
-			return __NAMESPACE__ . '\\Monitor_Admin';
-		} else {
-			return __NAMESPACE__ . '\\Monitor_Front_End';
-		}
+function monitor_class() {
+	if ( \is_admin() ) {
+		return __NAMESPACE__ . '\\Monitor_Admin';
+	} else {
+		return __NAMESPACE__ . '\\Monitor_Front_End';
 	}
 }

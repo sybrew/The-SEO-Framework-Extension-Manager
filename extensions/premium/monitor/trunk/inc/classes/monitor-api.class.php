@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) or die;
 
-if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
 
 /**
@@ -85,15 +85,15 @@ class Monitor_Api extends Monitor_Data {
 		 * 1. Yield first loop, get options.
 		 * 2. Yield second loop. Use options to build API link.
 		 */
-		tsf_extension_manager()->_request_premium_extension_verification_instance( $this, $_instance, $bits );
+		\tsf_extension_manager()->_request_premium_extension_verification_instance( $this, $_instance, $bits );
 		$count = 1;
-		foreach ( tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 			$bits = $verification['bits'];
 			$_instance = $verification['instance'];
 
 			switch ( $count ) :
 				case 1 :
-					$subscription = tsf_extension_manager()->_get_subscription_status( $_instance, $bits );
+					$subscription = \tsf_extension_manager()->_get_subscription_status( $_instance, $bits );
 					break;
 
 				case 2 :
@@ -103,16 +103,16 @@ class Monitor_Api extends Monitor_Data {
 							'email'       => $subscription['email'],
 							'licence_key' => $subscription['key'],
 						);
-						$response = tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
+						$response = \tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
 					} else {
-						tsf_extension_manager()->_verify_instance( $instance, $bits );
+						\tsf_extension_manager()->_verify_instance( $instance, $bits );
 						$ajax or $this->set_error_notice( array( 1010202 => '' ) );
 						return $ajax ? $this->get_ajax_notice( false, 1010202 ) : false;
 					}
 					break;
 
 				default :
-					tsf_extension_manager()->_verify_instance( $instance, $bits );
+					\tsf_extension_manager()->_verify_instance( $instance, $bits );
 					break;
 			endswitch;
 			$count++;

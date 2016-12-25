@@ -1,5 +1,5 @@
 <?php
-defined( 'ABSPATH' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 // Todo do something with network mode here. Remove backslashes (preventing POT generation).
 //$type = $this->is_plugin_in_network_mode() ? _\_( 'network', 'the-seo-framework-extension-manager' ) : _\_( 'website', 'the-seo-framework-extension-manager' );

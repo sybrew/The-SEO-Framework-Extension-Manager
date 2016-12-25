@@ -24,11 +24,6 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\Secure_Abstract as Secure_Abstract;
-
-/**
  * Class TSF_Extension_Manager\SecureOption.
  *
  * Verifies options update handling.
@@ -63,13 +58,13 @@ final class SecureOption extends Secure_Abstract {
 		self::reset();
 
 		if ( empty( $type ) ) {
-			the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 
 			switch ( $type ) :
 				case 'update_option' :
 				case 'update_option_instance' :
-					tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
+					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
@@ -115,7 +110,7 @@ final class SecureOption extends Secure_Abstract {
 
 			default :
 				self::reset();
-				the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
+				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
 				break;
 		endswitch;
 
@@ -145,7 +140,7 @@ final class SecureOption extends Secure_Abstract {
 		$instance = self::$_instance;
 
 		if ( isset( $instance[0] ) && isset( $instance[1][1] ) ) {
-			tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
+			\tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
 			self::reset();
 			wp_die( 'Instance verification could not be done on option update.' );
@@ -159,7 +154,7 @@ final class SecureOption extends Secure_Abstract {
 				$verified = true;
 			} elseif ( 'update_option' === $type ) {
 				$options = get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-				if ( tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
+				if ( \tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
 					$verified = true;
 				} else {
 					self::reset();

@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager_Extension;
 
 defined( 'ABSPATH' ) or die;
 
-if ( tsf_extension_manager()->_has_died() or false === ( tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or tsf_extension_manager()->_maybe_die() ) )
+if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
 
 /**
@@ -193,13 +193,13 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Initializes extension menu.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
-	 * @uses tsf_extension_manager()->can_do_settings()
+	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
+	 * @uses \tsf_extension_manager()->can_do_settings()
 	 * @access private
 	 */
 	public function _init_menu() {
 
-		if ( tsf_extension_manager()->can_do_settings() && the_seo_framework()->load_options )
+		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
 			add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
 	}
 
@@ -332,7 +332,7 @@ final class Monitor_Admin extends Monitor_Api {
 		endswitch;
 
 		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
-		the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
+		\the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
 		exit;
 	}
 
@@ -358,7 +358,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( false === $this->is_monitor_page() && false === tsf_extension_manager()->can_do_settings() )
+		if ( false === $this->is_monitor_page() && false === \tsf_extension_manager()->can_do_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
@@ -378,7 +378,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
 			$this->set_error_notice( array( 1019001 => '' ) );
-			the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
 			exit;
 		}
 
@@ -394,7 +394,7 @@ final class Monitor_Admin extends Monitor_Api {
 	final public function _wp_ajax_update_data() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( tsf_extension_manager()->can_do_settings() ) {
+			if ( \tsf_extension_manager()->can_do_settings() ) {
 
 				$timeout = null;
 
@@ -464,7 +464,7 @@ final class Monitor_Admin extends Monitor_Api {
 					array( 'status' => $status );
 				}
 
-				tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
 			}
@@ -482,7 +482,7 @@ final class Monitor_Admin extends Monitor_Api {
 	final public function _wp_ajax_request_crawl() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( tsf_extension_manager()->can_do_settings() ) {
+			if ( \tsf_extension_manager()->can_do_settings() ) {
 
 				$timeout = null;
 
@@ -549,7 +549,7 @@ final class Monitor_Admin extends Monitor_Api {
 					array( 'status' => $status );
 				}
 
-				tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
 			}
@@ -567,11 +567,11 @@ final class Monitor_Admin extends Monitor_Api {
 	final public function _wp_ajax_get_requires_fix() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( tsf_extension_manager()->can_do_settings() ) {
+			if ( \tsf_extension_manager()->can_do_settings() ) {
 
 				if ( check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					//* Initialize menu hooks.
-					the_seo_framework()->add_menu_link();
+					\the_seo_framework()->add_menu_link();
 					$this->_add_menu_link();
 
 					$html = $this->get_site_fix_fields();
@@ -579,7 +579,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 				$response = compact( 'html' );
 
-				tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
 			}
@@ -648,7 +648,7 @@ final class Monitor_Admin extends Monitor_Api {
 			return $cache;
 
 		//* Don't load from $_GET request.
-		return $cache = the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
+		return $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
 	}
 
 	/**
@@ -936,7 +936,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'ajax-title' => $title,
 		);
 
-		return $this->_get_action_form( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 	/**
 	 * Renders and returns crawl button.
@@ -965,7 +965,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'ajax-title' => $title,
 		);
 
-		return $this->_get_action_form( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 
 	/**
@@ -1065,7 +1065,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'ajax'  => false,
 		);
 
-		return $this->_get_action_form( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 
 	/**
@@ -1094,7 +1094,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 		$button = sprintf(
 			'<form name="deactivate" action="%s" method="post" id="tsfem-e-monitor-disconnect-form">%s</form>',
-			esc_url( tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ),
+			esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ),
 			$nonce_action . $nonce . $switcher
 		);
 

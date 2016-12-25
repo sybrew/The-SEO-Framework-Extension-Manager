@@ -56,7 +56,7 @@ trait Error {
 	 */
 	final protected function init_errors() {
 
-		$this->error_notice_option or the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
+		$this->error_notice_option or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
 		add_action( 'admin_notices', array( $this, '_do_error_notices' ) );
 	}
@@ -79,7 +79,7 @@ trait Error {
 			}
 
 			//* Already escaped.
-			the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
+			\the_seo_framework()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
 			$this->unset_error_notice();
 		}
 	}
