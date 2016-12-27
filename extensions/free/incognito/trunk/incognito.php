@@ -41,4 +41,11 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  *
  * @since 1.0.0
  */
-add_filter( 'the_seo_framework_indicator', '__return_false' );
+\add_filter( 'the_seo_framework_indicator', '__return_false' );
+
+/**
+ * Removes "Fixed" indicator from the Title Fix extension.
+ *
+ * @since 1.0.0
+ */
+\add_filter( 'the_seo_framework_title_fixed_indicator', '__return_false' );

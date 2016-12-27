@@ -55,7 +55,7 @@ class API extends Core {
 	 * @return string Domain Host.
 	 */
 	protected function get_activation_site_domain() {
-		return str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) );
+		return str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
 	}
 
 	/**
@@ -77,7 +77,7 @@ class API extends Core {
 		$instance = $this->get_option( '_instance' );
 
 		if ( empty( $instance ) ) {
-			$instance = trim( wp_generate_password( 32, false ) );
+			$instance = trim( \wp_generate_password( 32, false ) );
 
 			if ( $save_option )
 				$this->update_option( '_instance', $instance );
@@ -108,9 +108,9 @@ class API extends Core {
 	 */
 	protected function get_api_url( $args = array() ) {
 
-		$api_url = add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
+		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
-		return esc_url_raw( $api_url . '&' . http_build_query( $args ) );
+		return \esc_url_raw( $api_url . '&' . http_build_query( $args ) );
 	}
 
 	/**
@@ -153,7 +153,7 @@ class API extends Core {
 			'platform'         => $this->get_activation_site_domain(),
 		);
 
-		$args = wp_parse_args( $args, $defaults );
+		$args = \wp_parse_args( $args, $defaults );
 
 		if ( empty( $args['request'] ) ) {
 			$this->set_error_notice( array( 201 => '' ) );
@@ -170,18 +170,18 @@ class API extends Core {
 		 *		1.1 is used for improved performance. Default is '1.0'
 		 */
 		$http_args = array(
-			'timeout' => apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
-			'httpversion' => apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
+			'timeout' => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
+			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
 		);
 
-		$request = wp_safe_remote_get( $target_url, $http_args );
+		$request = \wp_safe_remote_get( $target_url, $http_args );
 
-		if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) ) {
+		if ( 200 !== (int) \wp_remote_retrieve_response_code( $request ) ) {
 			$this->set_error_notice( array( 202 => '' ) );
 			return false;
 		}
 
-		$response = wp_remote_retrieve_body( $request );
+		$response = \wp_remote_retrieve_body( $request );
 
 		return $response;
 	}
@@ -222,47 +222,47 @@ class API extends Core {
 		//* If the user's already using a free account, don't deactivate.
 		$free = $this->is_plugin_activated() && false === $this->is_premium_user();
 
-		if ( isset( $results['code'] ) ) {
+		if ( isset( $results['code'] ) ) :
 			switch ( $results['code'] ) :
 				case '100' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 302 => $additional_info ) );
 					$free or $this->do_deactivation( true );
 					break;
 				case '101' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 303 => $additional_info ) );
 					$free or $this->do_deactivation();
 					break;
 				case '102' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 304 => $additional_info ) );
 					$free or $this->do_deactivation();
 					break;
 				case '103' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 305 => $additional_info ) );
 					$free or $this->do_deactivation();
 					break;
 				case '104' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 306 => $additional_info ) );
 					$free or $this->do_deactivation();
 					break;
 				case '105' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 307 => $additional_info ) );
 					$free or $this->do_deactivation();
 					break;
 				case '106' :
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? esc_attr( $results['additional info'] ) : '';
+					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( array( 308 => $additional_info ) );
 					$free or $this->do_deactivation( true );
 					break;
 				default :
 					break;
 			endswitch;
-		}
+		endif;
 
 		return $_response;
 	}

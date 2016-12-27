@@ -159,9 +159,9 @@ function _protect_options() {
 
 	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 
-	\add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+	\add_action( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 	if ( isset( $current_options['_instance'] ) )
-		\add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+		\add_action( 'pre_update_option_tsfem_i_' . $current_options['_instance'], __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 }
 
 /**
@@ -179,7 +179,7 @@ function _protect_options() {
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 
 	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption' ) )
-		\wp_die( '<code>' . esc_html( $option ) . '</code> is a protected option.' );
+		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 
 	/**
 	 * Load class overloading traits.

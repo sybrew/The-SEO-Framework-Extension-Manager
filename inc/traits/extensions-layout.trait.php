@@ -47,21 +47,21 @@ trait Extensions_i18n {
 			return $i18n;
 
 		return $i18n = array(
-			'free'            => __( 'Free', 'the-seo-framework-extension-manager' ),
-			'premium'         => __( 'Premium', 'the-seo-framework-extension-manager' ),
-			'activate'        => __( 'Activate', 'the-seo-framework-extension-manager' ),
-			'deactivate'      => __( 'Deactivate', 'the-seo-framework-extension-manager' ),
-			'version'         => __( 'Version', 'the-seo-framework-extension-manager' ),
-			'first-party'     => __( 'First party', 'the-seo-framework-extension-manager' ),
-			'third-party'     => __( 'Third party', 'the-seo-framework-extension-manager' ),
-			'view-details'    => __( 'View detais', 'the-seo-framework-extension-manager' ),
-			'visit-author'    => __( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
-			'visit-extension' => __( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
-			'extension-home'  => __( 'Extension home', 'the-seo-framework-extension-manager' ),
-			'compatible'      => __( 'Compatible', 'the-seo-framework-extension-manager' ),
-			'incompatible'    => __( 'Incompatible', 'the-seo-framework-extension-manager' ),
-			'menupage'        => __( 'Menu Page', 'the-seo-framework-extension-manager' ),
-			'visit-menupage'  => __( 'Visit the extension menu page', 'the-seo-framework-extension-manager' ),
+			'free'            => \__( 'Free', 'the-seo-framework-extension-manager' ),
+			'premium'         => \__( 'Premium', 'the-seo-framework-extension-manager' ),
+			'activate'        => \__( 'Activate', 'the-seo-framework-extension-manager' ),
+			'deactivate'      => \__( 'Deactivate', 'the-seo-framework-extension-manager' ),
+			'version'         => \__( 'Version', 'the-seo-framework-extension-manager' ),
+			'first-party'     => \__( 'First party', 'the-seo-framework-extension-manager' ),
+			'third-party'     => \__( 'Third party', 'the-seo-framework-extension-manager' ),
+			'view-details'    => \__( 'View detais', 'the-seo-framework-extension-manager' ),
+			'visit-author'    => \__( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
+			'visit-extension' => \__( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
+			'extension-home'  => \__( 'Extension home', 'the-seo-framework-extension-manager' ),
+			'compatible'      => \__( 'Compatible', 'the-seo-framework-extension-manager' ),
+			'incompatible'    => \__( 'Incompatible', 'the-seo-framework-extension-manager' ),
+			'menupage'        => \__( 'Menu Page', 'the-seo-framework-extension-manager' ),
+			'visit-menupage'  => \__( 'Visit the extension menu page', 'the-seo-framework-extension-manager' ),
 		);
 	}
 
@@ -130,7 +130,7 @@ trait Extensions_Layout {
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
-			$entry = sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div>', $class, esc_attr( $id . '-extension-entry' ), $wrap );
+			$entry = sprintf( '<div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div>', $class, \esc_attr( $id . '-extension-entry' ), $wrap );
 
 			$output .= sprintf( '<div class="tsfem-extension-entry-wrap tsfem-flex tsfem-flex-space">%s</div>', $entry );
 		}
@@ -174,12 +174,12 @@ trait Extensions_Layout {
 		);
 
 		if ( $items['svg'] ) {
-			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', esc_url( $items['svg'] ), esc_url( $items['1x'] ), esc_attr( $size ) );
-			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', esc_attr( $size ), $image );
+			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', \esc_url( $items['svg'] ), \esc_url( $items['1x'] ), \esc_attr( $size ) );
+			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', \esc_attr( $size ), $image );
 		} elseif ( $items['2x'] ) {
-			$image = sprintf( '<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">', esc_url( $items['1x'] ), esc_url( $items['2x'] ), esc_attr( $size ) );
+			$image = sprintf( '<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">', \esc_url( $items['1x'] ), \esc_url( $items['2x'] ), \esc_attr( $size ) );
 		} elseif ( $items['1x'] ) {
-			$image = sprintf( '<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">', esc_url( $items['1x'] ), esc_attr( $size ) );
+			$image = sprintf( '<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">', \esc_url( $items['1x'] ), \esc_attr( $size ) );
 		}
 
 		return $image;
@@ -213,10 +213,10 @@ trait Extensions_Layout {
 	private static function make_extension_header( $extension ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
-		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
+		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( \esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
 
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
-		$type = '<h5 class="tsfem-extension-type">' . esc_html( $type ) . '</h5>';
+		$type = '<h5 class="tsfem-extension-type">' . \esc_html( $type ) . '</h5>';
 
 		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
@@ -236,8 +236,8 @@ trait Extensions_Layout {
 		$party_class = 'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon';
 		$party_title = 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' );
 
-		$party = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, esc_attr( $party_title ) );
-		$author = '<span class="tsfem-extension-author">' . esc_html( $data['Author'] ) . '</span>';
+		$party = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, \esc_attr( $party_title ) );
+		$author = '<span class="tsfem-extension-author">' . \esc_html( $data['Author'] ) . '</span>';
 
 		return  '<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $party . $author . '</div>';
 	}
@@ -313,16 +313,16 @@ trait Extensions_Layout {
 		endswitch;
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', esc_attr( $class ), esc_html( $text ) );
+			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', \esc_attr( $class ), \esc_html( $text ) );
 		} else {
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
-			$nonce = wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-			$extension = '<input type="hidden" name="' . esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . esc_attr( $slug ) . '">';
-			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', esc_attr( $class ), esc_attr( $text ) );
+			$nonce = \wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
+			$extension = '<input type="hidden" name="' . \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . \esc_attr( $slug ) . '">';
+			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', \esc_attr( $class ), \esc_attr( $text ) );
 			$form = $nonce_action . $nonce . $extension . $submit;
 
-			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', esc_url( \tsf_extension_manager()->get_admin_page_url() ), esc_attr( $slug ), $form );
-			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>', esc_attr( $slug ), esc_attr( $class ), esc_attr( $slug ), esc_attr( $type ), esc_html( $text ) );
+			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', \esc_url( \tsf_extension_manager()->get_admin_page_url() ), \esc_attr( $slug ), $form );
+			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>', \esc_attr( $slug ), \esc_attr( $class ), \esc_attr( $slug ), \esc_attr( $type ), \esc_html( $text ) );
 
 			$button = $nojs . $js;
 		}
@@ -345,7 +345,7 @@ trait Extensions_Layout {
 		$data = static::get_extension_header( $extension['slug'] );
 
 		$description = $data['Description'];
-		$description = \tsf_extension_manager()->convert_markdown( esc_html( $description ), array( 'strong', 'em', 'a' ) );
+		$description = \tsf_extension_manager()->convert_markdown( \esc_html( $description ), array( 'strong', 'em', 'a' ) );
 
 		$footer = static::get_extension_description_footer( $extension );
 
@@ -376,11 +376,11 @@ trait Extensions_Layout {
 		//* Make extension author element.
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', esc_url( $author_url ), esc_attr( static::get_i18n( 'visit-author' ) ), esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
 		//* Make extension version element.
 		$version = $data['Version'];
-		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', esc_html( static::get_i18n( 'version' ) ), esc_html( $version ) );
+		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', \esc_html( static::get_i18n( 'version' ) ), \esc_html( $version ) );
 
 		//* Make extension home element.
 		if ( ! empty( $data['ExtensionURI'] ) ) {
@@ -416,7 +416,7 @@ trait Extensions_Layout {
 	private static function get_extension_desc_home_item( $url ) {
 		return sprintf(
 			'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
-			esc_url( $url ), esc_attr( static::get_i18n( 'visit-extension' ) ), esc_html( static::get_i18n( 'extension-home' ) )
+			\esc_url( $url ), \esc_attr( static::get_i18n( 'visit-extension' ) ), \esc_html( static::get_i18n( 'extension-home' ) )
 		);
 	}
 
@@ -435,7 +435,7 @@ trait Extensions_Layout {
 		switch ( $is_compatible ) :
 			case 0 :
 				$compat_class = 'tsfem-success';
-				$compat_notice = __( 'Compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
+				$compat_notice = \__( 'Compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
 				$compat_name = static::get_i18n( 'compatible' );
 				break;
 
@@ -446,13 +446,13 @@ trait Extensions_Layout {
 				$compat_name = static::get_i18n( 'compatible' );
 				switch ( $is_compatible ) :
 					case 1 :
-						$compat_notice = __( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
+						$compat_notice = \__( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
 						break;
 					case 2 :
-						$compat_notice = __( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
+						$compat_notice = \__( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
 						break;
 					case 3 :
-						$compat_notice = __( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
+						$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
 						break;
 				endswitch;
 				break;
@@ -462,7 +462,7 @@ trait Extensions_Layout {
 				$compat_class = 'tsfem-error';
 				/* translators: 1: Version number, 2: Version number */
 				$compat_notice = sprintf(
-					__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
+					\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
 					$extension['requires'], $extension['requires_tsf']
 				);
 				$compat_name = static::get_i18n( 'incompatible' );
@@ -472,7 +472,7 @@ trait Extensions_Layout {
 		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
 		return sprintf(
 			'<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>',
-			esc_attr( $compat_notice ), esc_html( $compat_notice ), esc_html( $compat_name ), $compat_icon
+			\esc_attr( $compat_notice ), \esc_html( $compat_notice ), \esc_html( $compat_name ), $compat_icon
 		);
 	}
 
@@ -487,7 +487,7 @@ trait Extensions_Layout {
 	private static function get_extension_desc_menu_item( $slug ) {
 		return sprintf(
 			'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
-			esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ) ), esc_attr( static::get_i18n( 'visit-menupage' ) ), esc_html( static::get_i18n( 'menupage' ) )
+			\esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ) ), \esc_attr( static::get_i18n( 'visit-menupage' ) ), \esc_html( static::get_i18n( 'menupage' ) )
 		);
 	}
 }

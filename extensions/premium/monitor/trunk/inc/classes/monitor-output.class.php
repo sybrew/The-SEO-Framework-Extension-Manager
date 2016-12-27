@@ -183,7 +183,6 @@ final class Monitor_Output {
 		if ( $content ) {
 			switch ( $type ) :
 				case 'issues' :
-					//$this->slab_nav_key_has_content( $key, $type, true );
 					$title = $this->get_entry_title( $key, $type );
 					$prefix = $this->get_entry_state_icon( $key, $type );
 
@@ -220,7 +219,7 @@ final class Monitor_Output {
 		static $count = 0;
 		$count++;
 
-		$id = $id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', esc_attr( $id ) ) : '';
+		$id = $id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', \esc_attr( $id ) ) : '';
 		$icon_state = $this->parse_defined_icon_state( $icon_state );
 
 		$checkbox_id = sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
@@ -269,11 +268,9 @@ final class Monitor_Output {
 	 * @yields Interpreted data from array for the information slab.
 	 */
 	protected function generate_pane_graph_data( $data, $type ) {
-
 		foreach ( $data as $key => $value ) :
 			yield $this->make_slab_graph_entry( $key, $value, $type );
 		endforeach;
-
 	}
 
 	/**
@@ -285,15 +282,13 @@ final class Monitor_Output {
 		$output = $this->parse_content( $key, $value, $type );
 
 		if ( $output ) {
-			//$this->slab_nav_key_has_content( $key, $type, true );
-
 			$title = $this->get_entry_title( $key, $type );
 			$prefix = $this->get_entry_state_icon( $key, $type );
 
 			$title = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
 			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
 
-			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', esc_attr( $key ), $title, $output );
+			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', \esc_attr( $key ), $title, $output );
 		}
 
 		return '';
@@ -318,7 +313,7 @@ final class Monitor_Output {
 
 		$title = $this->parse_title( $key, $type );
 
-		return $cache[ $type ][ $key ] = esc_html( $title );
+		return $cache[ $type ][ $key ] = \esc_html( $title );
 	}
 
 	/**
@@ -388,7 +383,7 @@ final class Monitor_Output {
 
 		$state = $this->parse_defined_icon_state( $state );
 
-		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', esc_attr( $state ) );
+		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', \esc_attr( $state ) );
 	}
 
 	/**
@@ -445,59 +440,59 @@ final class Monitor_Output {
 			case 'issues' :
 				switch ( $key ) :
 					case 'title' :
-						$title = __( 'Titles', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'description' :
-						$title = __( 'Descriptions', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Descriptions', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'canonical' :
-						$title = __( 'Canonical URLs', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Canonical URLs', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'favicon' :
-						$title = __( 'Favicon output', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Favicon output', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'duplicated' :
-						$title = __( 'Duplicated content', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Duplicated content', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'mobile' :
-						$title = __( 'Mobile friendliness', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Mobile friendliness', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'html' :
-						$title = __( 'HTML output', 'the-seo-framework-extension-manager' );
+						$title = \__( 'HTML output', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'php' :
-						$title = __( 'PHP errors', 'the-seo-framework-extension-manager' );
+						$title = \__( 'PHP errors', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'img' :
-						$title = __( 'Image sizes', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Image sizes', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'robots' :
-						$title = __( 'Robots.txt output', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Robots.txt output', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'sitemap' :
-						$title = __( 'Sitemap output', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Sitemap output', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'external' :
-						$title = __( 'External links', 'the-seo-framework-extension-manager' );
+						$title = \__( 'External links', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'security' :
-						$title = __( 'Security', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Security', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'moresoon' :
-						$title = __( 'More coming soon!', 'the-seo-framework-extension-manager' );
+						$title = \__( 'More coming soon!', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					default :
@@ -620,6 +615,6 @@ final class Monitor_Output {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
+		return isset( $cache ) ? $cache : $cache = \esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
 	}
 }

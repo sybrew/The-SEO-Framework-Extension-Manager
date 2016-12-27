@@ -134,7 +134,7 @@ final class SecureOption extends Secure_Abstract {
 
 		if ( empty( self::$_instance ) || empty( $type ) ) {
 			self::reset();
-			wp_die( '<code>' . esc_html( $option ) . '</code> is a protected option.' );
+			\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 		}
 
 		$instance = self::$_instance;
@@ -143,7 +143,7 @@ final class SecureOption extends Secure_Abstract {
 			\tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
 			self::reset();
-			wp_die( 'Instance verification could not be done on option update.' );
+			\wp_die( 'Instance verification could not be done on option update.' );
 		}
 
 		static $verified = false;
@@ -153,7 +153,7 @@ final class SecureOption extends Secure_Abstract {
 			if ( 'update_option_instance' === $type ) {
 				$verified = true;
 			} elseif ( 'update_option' === $type ) {
-				$options = get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+				$options = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 				if ( \tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
 					$verified = true;
 				} else {
@@ -162,10 +162,10 @@ final class SecureOption extends Secure_Abstract {
 					$notice = "Options have been altered outside of this plugin's scope. This is not allowed for security reasons. Please deactivate your account and try again.";
 
 					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-						echo json_encode( array( 'status' => array( 'success' => false, 'notice' => esc_html( $notice ) ) ) );
-						wp_die();
+						echo json_encode( array( 'status' => array( 'success' => false, 'notice' => \esc_html( $notice ) ) ) );
+						\wp_die();
 					} else {
-						wp_die( esc_html( $notice ) );
+						\wp_die( \esc_html( $notice ) );
 					}
 				}
 			}

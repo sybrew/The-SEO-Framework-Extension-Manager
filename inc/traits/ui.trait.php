@@ -93,14 +93,14 @@ trait UI {
 	final protected function init_ui() {
 
 		//* Remove WordPress footer strings.
-		add_filter( 'admin_footer_text', '__return_empty_string' );
-		add_filter( 'update_footer', '__return_empty_string' );
+		\add_action( 'admin_footer_text', '__return_empty_string' );
+		\add_action( 'update_footer', '__return_empty_string' );
 
 		//* Add body class.
-		add_filter( 'admin_body_class', array( $this, 'add_admin_body_class' ), 999, 1 );
+		\add_action( 'admin_body_class', array( $this, 'add_admin_body_class' ), 999, 1 );
 
 		//* Enqueue admin scripts.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
+		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
 
 	}
 
@@ -126,10 +126,10 @@ trait UI {
 			$this->js_name = 'tsfem';
 
 			//* Enqueue styles
-			add_action( 'admin_print_styles-' . $this->ui_hook, array( $this, 'enqueue_admin_css' ), 11 );
+			\add_action( 'admin_print_styles-' . $this->ui_hook, array( $this, 'enqueue_admin_css' ), 11 );
 			//* Enqueue scripts
-			add_action( 'admin_print_scripts-' . $this->ui_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
-			add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
+			\add_action( 'admin_print_scripts-' . $this->ui_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
+			\add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
 		}
 	}
 
@@ -145,11 +145,11 @@ trait UI {
 		//* Register the script.
 		$this->register_admin_css();
 
-		wp_enqueue_style( $this->css_name );
+		\wp_enqueue_style( $this->css_name );
 
 		if ( ! empty( $this->additional_css ) ) {
 			foreach ( $this->additional_css as $script )
-				wp_enqueue_style( $script['name'] );
+				\wp_enqueue_style( $script['name'] );
 		}
 	}
 
@@ -165,11 +165,11 @@ trait UI {
 		//* Register the script.
 		$this->register_admin_javascript();
 
-		wp_enqueue_script( $this->js_name );
+		\wp_enqueue_script( $this->js_name );
 
 		if ( ! empty( $this->additional_js ) ) {
 			foreach ( $this->additional_js as $script )
-				wp_enqueue_script( $script['name'] );
+				\wp_enqueue_script( $script['name'] );
 		}
 	}
 
@@ -190,7 +190,7 @@ trait UI {
 
 		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
 
-		wp_register_style(
+		\wp_register_style(
 			$this->css_name,
 			TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css",
 			array( 'dashicons' ),
@@ -200,7 +200,7 @@ trait UI {
 
 		if ( ! empty( $this->additional_css ) ) :
 			foreach ( $this->additional_css as $script ) {
-				wp_register_style(
+				\wp_register_style(
 					$script['name'],
 					$script['base'] . "lib/css/{$script['name']}{$rtl}{$suffix}.css",
 					array( $this->css_name ),
@@ -229,7 +229,7 @@ trait UI {
 
 		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
 
-		wp_register_script(
+		\wp_register_script(
 			$this->js_name,
 			TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js",
 			array( 'jquery' ),
@@ -239,7 +239,7 @@ trait UI {
 
 		if ( ! empty( $this->additional_js ) ) :
 			foreach ( $this->additional_js as $script ) {
-				wp_register_script(
+				\wp_register_script(
 					$script['name'],
 					$script['base'] . "lib/js/{$script['name']}{$suffix}.js",
 					array( $this->js_name ),
@@ -274,17 +274,17 @@ trait UI {
 			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
 			'debug' => (bool) WP_DEBUG,
 			'i18n' => array(
-				'Activate' => esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
-				'Deactivate' => esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
+				'Activate' => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
+				'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 			),
 			'rtl' => (bool) is_rtl(),
 		);
 
-		wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
+		\wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
 
 		if ( ! empty( $this->additional_l10n ) ) :
 			foreach ( $this->additional_l10n as $l10n ) {
-				wp_localize_script( $l10n['dependency'], $l10n['name'], $l10n['strings'] );
+				\wp_localize_script( $l10n['dependency'], $l10n['name'], $l10n['strings'] );
 			}
 		endif;
 

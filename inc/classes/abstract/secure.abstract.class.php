@@ -153,7 +153,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		switch ( $type ) :
 			case '_wpaction' :
-				self::$_wpaction = current_action();
+				self::$_wpaction = \current_action();
 				break;
 
 			case '_type' :
@@ -166,7 +166,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
-				wp_die();
+				\wp_die();
 				break;
 		endswitch;
 
@@ -192,7 +192,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
-				wp_die();
+				\wp_die();
 				break;
 		endswitch;
 
@@ -253,11 +253,11 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	final protected static function invoke_invalid_type( $method ) {
 
 		//* wp_die() can be filtered. Remove filters JIT.
-		remove_all_filters( 'wp_die_ajax_handler' );
-		remove_all_filters( 'wp_die_xmlrpc_handler' );
-		remove_all_filters( 'wp_die_handler' );
+		\remove_all_filters( 'wp_die_ajax_handler' );
+		\remove_all_filters( 'wp_die_xmlrpc_handler' );
+		\remove_all_filters( 'wp_die_handler' );
 
-		wp_die( esc_html( $method ) . '(): You must specify a correct initialization type.' );
+		\wp_die( \esc_html( $method ) . '(): You must specify a correct initialization type.' );
 	}
 
 	/**
@@ -271,7 +271,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$verified = false;
 
-		if ( current_action() !== self::$_wpaction ) {
+		if ( \current_action() !== self::$_wpaction ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The instance may not be left active between WordPress action hooks. Reset or initialize this instance first.' );
 		} elseif ( empty( self::$_type ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must first use initialize class and set property <code>$_type</code>.' );

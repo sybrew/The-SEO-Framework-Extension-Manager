@@ -58,7 +58,7 @@ class Monitor_Api extends Monitor_Data {
 
 		//* Verify integrity.
 		$that = __NAMESPACE__ . '\\Monitor_Admin';
-		$this instanceof $that or wp_die( -1 );
+		$this instanceof $that or \wp_die( -1 );
 
 	}
 
@@ -132,7 +132,7 @@ class Monitor_Api extends Monitor_Data {
 
 		return array(
 			'success' => true,
-			'data' => stripslashes_deep( json_decode( $response->data, true ) ),
+			'data' => \stripslashes_deep( json_decode( $response->data, true ) ),
 		);
 	}
 
@@ -164,7 +164,7 @@ class Monitor_Api extends Monitor_Data {
 		}
 
 		$success = array();
-		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) ) );
+		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
 		if ( in_array( false, $success, true ) ) {

@@ -51,7 +51,7 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 */
 	private static function init_options_cache() {
-		static::$options = (array) get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
+		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
 	}
 
 	/**
@@ -189,7 +189,7 @@ trait Extension_Options {
 		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
@@ -224,7 +224,7 @@ trait Extension_Options {
 		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
@@ -255,7 +255,7 @@ trait Extension_Options {
 
 		unset( $c_options[ $this->o_index ] );
 
-		$success = update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.

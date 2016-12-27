@@ -129,23 +129,23 @@ final class Layout extends Secure_Abstract {
 
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['deactivate'] );
-			$nonce = wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
+			$nonce = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
 			$field_id = 'deactivation-switcher';
-			$deactivate_i18n = __( 'Deactivate', 'the-seo-framework-extension-manager' );
-			$ays_i18n = __( 'Are you sure?', 'the-seo-framework-extension-manager' );
-			$da_i18n = __( 'Deactivate account?', 'the-seo-framework-extension-manager' );
+			$deactivate_i18n = \__( 'Deactivate', 'the-seo-framework-extension-manager' );
+			$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
+			$da_i18n = \__( 'Deactivate account?', 'the-seo-framework-extension-manager' );
 
-			$button = '<button type="submit" title="' . esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . esc_html( $deactivate_i18n ) . '</button>';
+			$button = '<button type="submit" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . \esc_html( $deactivate_i18n ) . '</button>';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
-							. '<label for="' . $field_id . '-action" title="' . esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . esc_html( $deactivate_i18n ) . '</label>'
+							. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . \esc_html( $deactivate_i18n ) . '</label>'
 							. $button
 						. '</div></div>';
 
 			$output = sprintf( '<form name="deactivate" action="%s" method="post" id="tsfem-deactivation-form">%s</form>',
-				esc_url( \tsf_extension_manager()->get_admin_page_url() ),
+				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
 				$nonce_action . $nonce . $switcher
 			);
 		} else {
@@ -198,111 +198,110 @@ final class Layout extends Secure_Abstract {
 	 */
 	private static function get_account_info() {
 
-		if ( 'list' === self::get_property( '_type' ) ) {
-			$account = self::$account;
-
-			$unknown = __( 'Unknown', 'the-seo-framework-extension-manager' );
-			$decoupled = __( 'Decoupled', 'the-seo-framework-extension-manager' );
-
-			$email = isset( $account['email'] ) ? $account['email'] : '';
-			$data = isset( $account['data'] ) ? $account['data'] : '';
-			$level = isset( $account['level'] ) ? $account['level'] : $unknown;
-			$domain = '';
-			$end_date = '';
-
-			if ( $data ) {
-				if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
-					$level = $decoupled;
-				} else {
-					//* UTC.
-					$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
-					$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
-				}
-			}
-
-			$output = '';
-
-			if ( $email )
-				$output .= static::wrap_title_content( __( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
-
-			if ( $level ) {
-				$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
-
-				if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
-					/**
-					 * @TODO bugfix/make consistent/put in function/put in action?
-					 * It only refreshes when a premium extension is being activated.
-					 * Otherwise, it will continue to count into negatives.
-					 *
-					 * This might prevent rechecking "decoupled" websites... which in that case is a bug.
-					 */
-					$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
-
-					if ( $next_check_min > 0 ) {
-						$level_desc = sprintf( __( 'Next check is scheduled in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
-						$class .= ' tsfem-has-hover-balloon';
-					}
-				}
-
-				$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', esc_html( $level_desc ) ) : '';
-				$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', esc_attr( $class ), $level_desc, esc_html( $level ) );
-				$output .= static::wrap_title_content( esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
-			}
-
-			if ( $domain ) {
-				//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-				$_domain = str_ireplace( array( 'http://', 'https://' ), '', esc_url( home_url() ) );
-				$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
-
-				$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', esc_attr( $class ), esc_html( $_domain ) );
-
-				$output .= static::wrap_title_content( esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $domain, false );
-			}
-
-			if ( $end_date ) {
-				$date_until = strtotime( $end_date );
-				$now = time();
-
-				$difference = $date_until - $now;
-				$class = 'tsfem-success';
-				$expires_in = '';
-
-				if ( $difference < 0 ) {
-					//* Expired.
-					$expires_in = __( 'Account expired', 'the-seo-framework-extension-manager' );
-					$class = 'tsfem-error';
-				} elseif ( $difference < WEEK_IN_SECONDS ) {
-					$expires_in = __( 'Less than a week', 'the-seo-framework-extension-manager' );
-					$class = 'tsfem-warning';
-				} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
-					$expires_in = __( 'Less than two weeks', 'the-seo-framework-extension-manager' );
-					$class = 'tsfem-warning';
-				} elseif ( $difference < WEEK_IN_SECONDS * 3 ) {
-					$expires_in = __( 'Less than three weeks', 'the-seo-framework-extension-manager' );
-				} elseif ( $difference < MONTH_IN_SECONDS ) {
-					$expires_in = __( 'Less than a month', 'the-seo-framework-extension-manager' );
-				} elseif ( $difference < MONTH_IN_SECONDS * 2 ) {
-					$expires_in = __( 'Less than two months', 'the-seo-framework-extension-manager' );
-				} else {
-					$expires_in = sprintf( __( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
-				}
-
-				$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
-				$end_date_i18n = $end_date ? date_i18n( 'F j, Y', strtotime( $end_date ) ) : '';
-				$date_until = isset( $date_until ) ? date_i18n( get_option( 'date_format' ), $date_until ) : '';
-				$expires_in = sprintf(
-					'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
-					esc_attr( $class ), esc_attr( $date_until ), esc_attr( $end_date ), esc_html( $end_date_i18n ), esc_html( $expires_in )
-				);
-
-				$output .= static::wrap_title_content( esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
-			}
-
-			return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
-		} else {
+		if ( 'list' !== self::get_property( '_type' ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium account information output only supports list type.' );
 			return '';
 		}
+		$account = self::$account;
+
+		$unknown = \__( 'Unknown', 'the-seo-framework-extension-manager' );
+		$decoupled = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
+
+		$email = isset( $account['email'] ) ? $account['email'] : '';
+		$data = isset( $account['data'] ) ? $account['data'] : '';
+		$level = isset( $account['level'] ) ? $account['level'] : $unknown;
+		$domain = '';
+		$end_date = '';
+
+		if ( $data ) {
+			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
+				$level = $decoupled;
+			} else {
+				//* UTC.
+				$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
+				$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
+			}
+		}
+
+		$output = '';
+
+		if ( $email )
+			$output .= static::wrap_title_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
+
+		if ( $level ) {
+			$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
+
+			if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
+				/**
+				 * @TODO bugfix/make consistent/put in function/put in action?
+				 * It only refreshes when a premium extension is being activated.
+				 * Otherwise, it will continue to count into negatives.
+				 *
+				 * This might prevent rechecking "decoupled" websites... which in that case is a bug.
+				 */
+				$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
+
+				if ( $next_check_min > 0 ) {
+					$level_desc = sprintf( \__( 'Next check is scheduled in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
+					$class .= ' tsfem-has-hover-balloon';
+				}
+			}
+
+			$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
+			$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $level_desc, \esc_html( $level ) );
+			$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
+		}
+
+		if ( $domain ) {
+			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
+			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
+			$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
+
+			$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );
+
+			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $domain, false );
+		}
+
+		if ( $end_date ) :
+			$date_until = strtotime( $end_date );
+			$now = time();
+
+			$difference = $date_until - $now;
+			$class = 'tsfem-success';
+			$expires_in = '';
+
+			if ( $difference < 0 ) {
+				//* Expired.
+				$expires_in = \__( 'Account expired', 'the-seo-framework-extension-manager' );
+				$class = 'tsfem-error';
+			} elseif ( $difference < WEEK_IN_SECONDS ) {
+				$expires_in = \__( 'Less than a week', 'the-seo-framework-extension-manager' );
+				$class = 'tsfem-warning';
+			} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
+				$expires_in = \__( 'Less than two weeks', 'the-seo-framework-extension-manager' );
+				$class = 'tsfem-warning';
+			} elseif ( $difference < WEEK_IN_SECONDS * 3 ) {
+				$expires_in = \__( 'Less than three weeks', 'the-seo-framework-extension-manager' );
+			} elseif ( $difference < MONTH_IN_SECONDS ) {
+				$expires_in = \__( 'Less than a month', 'the-seo-framework-extension-manager' );
+			} elseif ( $difference < MONTH_IN_SECONDS * 2 ) {
+				$expires_in = \__( 'Less than two months', 'the-seo-framework-extension-manager' );
+			} else {
+				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
+			}
+
+			$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
+			$end_date_i18n = $end_date ? \date_i18n( 'F j, Y', strtotime( $end_date ) ) : '';
+			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
+			$expires_in = sprintf(
+				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
+				\esc_attr( $class ), \esc_attr( $date_until ), \esc_attr( $end_date ), \esc_html( $end_date_i18n ), \esc_html( $expires_in )
+			);
+
+			$output .= static::wrap_title_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
+		endif;
+
+		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
 
 	/**
@@ -319,8 +318,8 @@ final class Layout extends Secure_Abstract {
 	public static function wrap_title_content( $title, $content, $escape = true ) {
 
 		if ( $escape ) {
-			$title = esc_html( $title );
-			$content = esc_html( $content );
+			$title = \esc_html( $title );
+			$content = \esc_html( $content );
 		}
 
 		$output = sprintf( '<div class="tsfem-actions-account-info-title">%s</div><div class="tsfem-actions-account-info-content">%s</div>', $title, $content );
@@ -340,26 +339,26 @@ final class Layout extends Secure_Abstract {
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$input = sprintf(
 				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'key' ), \tsf_extension_manager()->_get_field_name( 'key' ), esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
+				\tsf_extension_manager()->_get_field_id( 'key' ), \tsf_extension_manager()->_get_field_name( 'key' ), \esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 			$input .= sprintf(
 				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'email' ), \tsf_extension_manager()->_get_field_name( 'email' ), esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
+				\tsf_extension_manager()->_get_field_id( 'email' ), \tsf_extension_manager()->_get_field_name( 'email' ), \esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['activate-key'] );
-			$nonce = wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
+			$nonce = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
 				'<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">',
-				esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
+				\esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 
 			$form = $input . $nonce_action . $nonce . $submit;
 
 			return sprintf(
-				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>', esc_attr( self::$request_name['activate-key'] ),
-				esc_url( \tsf_extension_manager()->get_admin_page_url() ), 'input-activation', '', $form
+				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>', \esc_attr( self::$request_name['activate-key'] ),
+				\esc_url( \tsf_extension_manager()->get_admin_page_url() ), 'input-activation', '', $form
 			);
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The upgrade form only supports the form type.' );

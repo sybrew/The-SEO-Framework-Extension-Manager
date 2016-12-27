@@ -48,9 +48,9 @@ trait Options {
 		if ( isset( $cache ) )
 			return $cache;
 
-		remove_all_filters( 'pre_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-		remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-		remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'pre_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
 		return $cache = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 	}
@@ -131,9 +131,9 @@ trait Options {
 		$this->initialize_option_update_instance( $type );
 
 		if ( empty( $options['_instance'] ) && '_instance' !== $option )
-			wp_die( 'Error 7008: Supply an instance key before updating other options.' );
+			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 
-		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		$key = '_instance' === $option ? $value : $options['_instance'];
 		$this->set_options_instance( $options, $key );
@@ -143,7 +143,7 @@ trait Options {
 
 			//* Revert option.
 			if ( false === $kill )
-				update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
 
 			return false;
 		}
@@ -178,12 +178,12 @@ trait Options {
 
 		if ( $run ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
-			wp_die();
+			\wp_die();
 		}
 
 		if ( $this->has_run_update_option() ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' );
-			wp_die();
+			\wp_die();
 		}
 
 		$options = wp_parse_args( $options, $_options );
@@ -192,18 +192,18 @@ trait Options {
 		$this->initialize_option_update_instance( $type );
 
 		if ( empty( $options['_instance'] ) )
-			wp_die( 'Error 7009: Supply an instance key before updating other options.' );
+			\wp_die( 'Error 7009: Supply an instance key before updating other options.' );
 
 		$this->set_options_instance( $options, $options['_instance'] );
 
-		$success = update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
 			$this->set_error_notice( array( 7002 => '' ) );
 
 			//* Revert option.
 			if ( false === $kill )
-				update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
 
 			return false;
 		}
@@ -219,7 +219,7 @@ trait Options {
 	 * @return string|bool The hashed option. False if non-existent.
 	 */
 	final protected function get_options_instance() {
-		return get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
+		return \get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
 	}
 
 	/**
@@ -235,7 +235,7 @@ trait Options {
 
 		$key = $key ? $key : $this->get_option( '_instance' );
 
-		return update_option( 'tsfem_i_' . $key, $value );
+		return \update_option( 'tsfem_i_' . $key, $value );
 	}
 
 	/**
@@ -247,7 +247,7 @@ trait Options {
 	 */
 	final protected function delete_options_instance() {
 
-		delete_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
+		\delete_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
 
 		return true;
 	}
@@ -298,10 +298,10 @@ trait Options {
 	final protected function make_hash( $data ) {
 
 		if ( in_array( 'sha256', hash_algos(), true ) ) {
-			$salt = wp_salt( 'auth' );
+			$salt = \wp_salt( 'auth' );
 			$hash = hash_hmac( 'sha256', $data, $salt );
 		} else {
-			$hash = wp_hash( $data, 'auth' );
+			$hash = \wp_hash( $data, 'auth' );
 		}
 
 		return $hash;
@@ -383,7 +383,7 @@ trait Options {
 
 		$success = array();
 		$success[] = $this->delete_options_instance();
-		$success[] = delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		$success[] = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
 		return ! in_array( false, $success, true );
 	}

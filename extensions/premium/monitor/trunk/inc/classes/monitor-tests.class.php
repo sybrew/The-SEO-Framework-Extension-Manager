@@ -122,15 +122,15 @@ final class Monitor_Tests {
 		$state = 'good';
 
 		if ( isset( $data['meta'] ) && $data['meta'] ) {
-			$content = $this->wrap_info( esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
 			goto end;
 		}
 
 		if ( empty( $data['static'] ) ) {
-			$content = $this->wrap_info( esc_html__( 'No favicon has been found.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info( \esc_html__( 'No favicon has been found.', 'the-seo-framework-extension-manager' ) );
 			$state = 'bad';
 		}
-		$content .= $this->wrap_info( esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
+		$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
 
 		end : {
 			return array(
@@ -182,8 +182,8 @@ final class Monitor_Tests {
 			$content = $this->no_issue_found();
 		} else {
 			$state = 'bad';
-			$content = $this->wrap_info( esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
-			$content .= sprintf( '<h4>%s</h4>', esc_html( _n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
+			$content = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
+			$content .= sprintf( '<h4>%s</h4>', \esc_html( _n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
 
 			$content .= '<ul class="tsfem-ul-disc">';
 			foreach ( $links as $link ) {
@@ -223,15 +223,15 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' )
 				)
 			);
 			goto end;
 		}
 
-		if ( ! get_option( 'blog_public' ) ) {
+		if ( ! \get_option( 'blog_public' ) ) {
 			$state = 'bad';
-			$content = $this->wrap_info( esc_html__( 'This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info( \esc_html__( 'This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website.', 'the-seo-framework-extension-manager' ) );
 			goto end;
 		}
 
@@ -244,15 +244,15 @@ final class Monitor_Tests {
 		$sample_tsf = \the_seo_framework()->robots_txt();
 
 		//* Normalize.
-		$sample_tsf = esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $sample_tsf ) ) );
-		$data['value'] = esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $data['value'] ) ) );
+		$sample_tsf = \esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $sample_tsf ) ) );
+		$data['value'] = \esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $data['value'] ) ) );
 
 		if ( $sample_tsf === $data['value'] ) {
 			$state = 'good';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' )
 				)
 			);
 			goto end;
@@ -263,7 +263,7 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' )
 				)
 			);
 			goto end;
@@ -295,7 +295,7 @@ final class Monitor_Tests {
 
 		if ( ! $data['located'] ) {
 			$state = 'error';
-			$content = $this->wrap_info( esc_html__( 'No sitemap file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info( \esc_html__( 'No sitemap file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ) );
 			goto end;
 		}
 
@@ -304,7 +304,7 @@ final class Monitor_Tests {
 		//* 10 MB, not 10 MiB
 		if ( isset( $data['size'] ) && $data['size'] > 10000000 ) {
 			$state = 'bad';
-			$content .= $this->wrap_info( esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
+			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
 		}
 
 		if ( isset( $data['index'] ) && $data['index'] ) {
@@ -313,7 +313,7 @@ final class Monitor_Tests {
 
 		if ( isset( $data['valid'] ) && ! $data['valid'] ) {
 			$state = 'bad';
-			$content .= $this->wrap_info( esc_html__( 'The sitemap file is invalid. This could have multiple causes.', 'the-seo-framework-extension-manager' ) );
+			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is invalid. This could have multiple causes.', 'the-seo-framework-extension-manager' ) );
 		}
 
 		if ( empty( $content ) ) {
@@ -338,7 +338,7 @@ final class Monitor_Tests {
 	 */
 	public function issue_moresoon( $data ) {
 		return array(
-			'content' => $this->wrap_info( esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
+			'content' => $this->wrap_info( \esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
 			'state' => 'unknown',
 		);
 	}
@@ -370,7 +370,7 @@ final class Monitor_Tests {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' ) );
+		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' ) );
 	}
 
 	/**
@@ -388,7 +388,7 @@ final class Monitor_Tests {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' ) );
+		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' ) );
 	}
 
 	/**
@@ -406,6 +406,6 @@ final class Monitor_Tests {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' ) );
+		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' ) );
 	}
 }

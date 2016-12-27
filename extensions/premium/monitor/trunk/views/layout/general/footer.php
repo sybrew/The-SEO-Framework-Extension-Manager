@@ -24,6 +24,6 @@ $motto = 'A ' . $mottos[ $motto_key ] . ' Solution';
 	The SEO Framework Monitor
 </p>
 <p class="tsfem-footer-motto">
-	<?php echo esc_html( $motto ); ?>
+	<?php echo \esc_html( $motto ); ?>
 </p>
 <?php

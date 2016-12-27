@@ -100,7 +100,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function set_remote_activation_listener_response( $value = array() ) {
 
-		if ( empty( $value ) || is_wp_error( $value ) )
+		if ( empty( $value ) || \is_wp_error( $value ) )
 			return false;
 
 		$this->get_remote_activation_listener_response( $value );
@@ -136,7 +136,7 @@ class AccountActivation extends Panes {
 		}
 
 		$this->activation_key = trim( $args['licence_key'] );
-		$this->activation_email = sanitize_email( $args['activation_email'] );
+		$this->activation_email = \sanitize_email( $args['activation_email'] );
 
 		switch ( $type ) :
 			case 'status' :
@@ -238,8 +238,8 @@ class AccountActivation extends Panes {
 
 				$success = $this->do_deactivation();
 
-				$message = esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . esc_html( $results['activations_remaining'] ) . '.';
-				$message .= $success ? '' : ' ' . esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . \esc_html( $results['activations_remaining'] ) . '.';
+				$message .= $success ? '' : ' ' . \esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
 
 				$this->set_error_notice( array( 501 => $message ) );
 				return true;
@@ -348,6 +348,7 @@ class AccountActivation extends Panes {
 				return false;
 			}
 		}
+
 		return $this->kill_options();
 	}
 

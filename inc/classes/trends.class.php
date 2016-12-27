@@ -68,113 +68,114 @@ final class Trends {
 			return -1;
 
 		$transient_name = 'tsfem_latest_seo_feed';
-		$output = get_transient( $transient_name );
+		$output = \get_transient( $transient_name );
 
-		if ( false === $output ) {
-			//* Google Webmasters official blog feed.
-			$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
+		if ( false !== $output )
+			return $output;
 
-			$http_args = array(
-				'timeout' => 5,
-				'httpversion' => apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
-			);
+		//* Google Webmasters official blog feed.
+		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
-			$request = wp_safe_remote_get( $feed_url, $http_args );
+		$http_args = array(
+			'timeout' => 5,
+			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
+		);
 
-			if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) )
-				return '';
+		$request = \wp_safe_remote_get( $feed_url, $http_args );
 
-			$xml = wp_remote_retrieve_body( $request );
-			//* Add bitwise operators.
-			$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
-			$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
+		if ( 200 !== (int) \wp_remote_retrieve_response_code( $request ) )
+			return '';
 
-			if ( ! isset( $xml->entry ) || empty( $xml->entry ) ) {
-				set_transient( $transient_name, '', HOUR_IN_SECONDS * 2 );
-				return '';
-			}
+		$xml = \wp_remote_retrieve_body( $request );
+		//* Add bitwise operators.
+		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
+		$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
-			$entry = $xml->entry;
-			unset( $xml );
+		if ( ! isset( $xml->entry ) || empty( $xml->entry ) ) {
+			set_transient( $transient_name, '', HOUR_IN_SECONDS * 2 );
+			return '';
+		}
 
-			$output = '';
+		$entry = $xml->entry;
+		unset( $xml );
 
-			$max = 15;
-			$i = 0;
-			foreach ( $entry as $object ) {
+		$output = '';
 
-				if ( $i >= $max )
+		$max = 15;
+		$i = 0;
+		foreach ( $entry as $object ) :
+
+			if ( $i >= $max )
+				break;
+
+			if ( ! isset( $object->category ) || ! is_object( $object->category ) )
+				continue;
+
+			$found = false;
+			//* Filter terms.
+			foreach ( $object->category as $category ) :
+				//* PHP7+ must convert to array...
+				$term = (array) $category;
+
+				$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
+				if ( $term && in_array( $term, array( 'search results', 'crawling and indexing', 'general tips' ), true ) ) {
+					$found = true;
 					break;
+				}
+				continue;
+			endforeach;
+			unset( $category );
+			if ( false === $found )
+				continue;
 
-				if ( ! isset( $object->category ) || ! is_object( $object->category ) )
-					continue;
+			$link = '';
+			//* Fetch link.
+			foreach ( $object->link as $link_object ) :
+				//* PHP7+ must convert to array...
+				$link_object = (array) $link_object;
 
-				$found = false;
-				//* Filter terms.
-				foreach ( $object->category as $category ) :
-					//* PHP7+ must convert to array...
-					$term = (array) $category;
+				$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
+				if ( 'text/html' === $type ) {
 
-					$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
-					if ( $term && in_array( $term, array( 'search results', 'crawling and indexing', 'general tips' ), true ) ) {
-						$found = true;
+					$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
+					if ( 'replies' === $rel ) {
+
+						$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
+						if ( $link )
+							$link = strtok( $link, '#' );
+
 						break;
 					}
-					continue;
-				endforeach;
-				unset( $category );
-				if ( false === $found )
-					continue;
+				}
+			endforeach;
+			unset( $link_object );
+			if ( empty( $link ) )
+				continue;
 
-				$link = '';
-				//* Fetch link.
-				foreach ( $object->link as $link_object ) :
-					//* PHP7+ must convert to array...
-					$link_object = (array) $link_object;
+			//* @note: $object->updated also exists.
+			$date = isset( $object->published ) ? $object->published->__toString() : '';
+			$date = $date ? '<time>' . \date_i18n( \get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
-					$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
-					if ( 'text/html' === $type ) {
+			$title = isset( $object->title ) ? $object->title->__toString() : '';
+			$title = $title ? \the_seo_framework()->escape_title( $title ) : '';
 
-						$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
-						if ( 'replies' === $rel ) {
+			$content = isset( $object->content ) ? $object->content->__toString() : '';
+			$content = $content ? \wp_strip_all_tags( $content ) : '';
+			unset( $object );
 
-							$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
-							if ( $link )
-								$link = strtok( $link, '#' );
+			$length = 250;
+			//* Do not care for the current length. Always trim.
+			$content = \the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
+			$content = \the_seo_framework()->escape_description( $content );
 
-							break;
-						}
-					}
-				endforeach;
-				unset( $link_object );
-				if ( empty( $link ) )
-					continue;
+			//* No need for translations, it's English only.
+			$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', \esc_url( $link ), $title );
 
-				//* @note: $object->updated also exists.
-				$date = isset( $object->published ) ? $object->published->__toString() : '';
-				$date = $date ? '<time>' . date_i18n( get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
+			$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
+			$i++;
+		endforeach;
 
-				$title = isset( $object->title ) ? $object->title->__toString() : '';
-				$title = $title ? \the_seo_framework()->escape_title( $title ) : '';
-
-				$content = isset( $object->content ) ? $object->content->__toString() : '';
-				$content = $content ? wp_strip_all_tags( $content ) : '';
-				unset( $object );
-
-				$length = 250;
-				//* Do not care for the current length. Always trim.
-				$content = \the_seo_framework()->trim_excerpt( $content, $length + 1, $length );
-				$content = \the_seo_framework()->escape_description( $content );
-
-				//* No need for translations, it's English only.
-				$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', esc_url( $link ), $title );
-
-				$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
-				$i++;
-			}
-
-			set_transient( $transient_name, $output, DAY_IN_SECONDS );
-		}
+		\set_transient( $transient_name, $output, DAY_IN_SECONDS );
 
 		return $output;
 	}

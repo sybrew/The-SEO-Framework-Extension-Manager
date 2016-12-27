@@ -62,7 +62,7 @@ trait Extension_Forms {
 	 * @param string $name Field name base
 	 */
 	public function _field_name( $name ) {
-		echo esc_attr( $this->_get_field_name( $name ) );
+		echo \esc_attr( $this->_get_field_name( $name ) );
 	}
 
 	/**
@@ -95,7 +95,7 @@ trait Extension_Forms {
 	public function _field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
-			echo esc_attr( $this->_get_field_id( $id ) );
+			echo \esc_attr( $this->_get_field_id( $id ) );
 		} else {
 			return $this->_get_field_id( $id );
 		}
@@ -127,7 +127,7 @@ trait Extension_Forms {
 	 * @return string Escaped WordPress nonce fields for $action_name.
 	 */
 	public function _get_nonce_field( $action_name ) {
-		return wp_nonce_field( $this->nonce_action[ $action_name ], $this->nonce_name, true, false );
+		return \wp_nonce_field( $this->nonce_action[ $action_name ], $this->nonce_name, true, false );
 	}
 
 	/**
@@ -154,7 +154,7 @@ trait Extension_Forms {
 	 * @return string Hidden form action input.
 	 */
 	public function _get_nonce_action_field( $request_name ) {
-		return '<input type="hidden" name="' . $this->_get_field_name( 'nonce-action' ) . '" value="' . esc_attr( $this->request_name[ $request_name ] ) . '">';
+		return '<input type="hidden" name="' . $this->_get_field_name( 'nonce-action' ) . '" value="' . \esc_attr( $this->request_name[ $request_name ] ) . '">';
 	}
 
 	/**
@@ -185,10 +185,10 @@ trait Extension_Forms {
 	 */
 	public function _get_submit_button( $name, $title = '', $class = '' ) {
 
-		$title = $title ? sprintf( ' title="%s" ', esc_attr( $title ) ) : '';
-		$class = $class ? sprintf( ' class="%s"', esc_attr( $class ) ) : ' class="tsfem-button-primary"';
+		$title = $title ? sprintf( ' title="%s" ', \esc_attr( $title ) ) : '';
+		$class = $class ? sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class="tsfem-button-primary"';
 
-		return sprintf( '<button type="submit" name="submit" id="submit" %s%s>%s</button>', $class, $title, esc_html( $name ) );
+		return sprintf( '<button type="submit" name="submit" id="submit" %s%s>%s</button>', $class, $title, \esc_html( $name ) );
 	}
 
 	/**
@@ -271,17 +271,17 @@ trait Extension_Forms {
 
 			$output .= sprintf(
 				'<form action="%s" method="post" id="%s" class="hide-if-js %s">%s</form>',
-				esc_url( $url ), esc_attr( $items['id'] ), esc_attr( $items['class'] ), $form
+				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
 			);
 
 			$output .= sprintf(
 				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
-				esc_attr( $items['ajax-id'] ), esc_attr( $items['ajax-class'] ), esc_attr( $items['ajax-title'] ), esc_html( $items['ajax-name'] )
+				\esc_attr( $items['ajax-id'] ), \esc_attr( $items['ajax-class'] ), \esc_attr( $items['ajax-title'] ), \esc_html( $items['ajax-name'] )
 			);
 		} else {
 			$output .= sprintf(
 				'<form action="%s" method="post" id="%s" class="%s">%s</form>',
-				esc_url( $url ), esc_attr( $items['id'] ), esc_attr( $items['class'] ), $form
+				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
 			);
 		}
 

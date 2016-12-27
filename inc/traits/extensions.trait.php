@@ -400,7 +400,7 @@ trait Extensions_Actions {
 		if ( false !== $cache )
 			return $cache;
 
-		$options = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+		$options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 
 		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : array();
 	}
@@ -629,7 +629,7 @@ trait Extensions_Actions {
 			'wp' => 0,
 		);
 
-		$tsf_version = the_seo_framework_version();
+		$tsf_version = \the_seo_framework_version();
 		$_wp_version = $wp_version;
 
 		if ( version_compare( $tsf_version, $extension['tested_tsf'], '>' ) ) {
@@ -752,7 +752,7 @@ trait Extensions_Actions {
 
 		$success = array();
 
-		if ( 0 !== validate_file( $json_file ) || ! file_exists( $json_file ) )
+		if ( 0 !== \validate_file( $json_file ) || ! file_exists( $json_file ) )
 			goto end;
 
 		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
@@ -867,9 +867,9 @@ trait Extensions_Actions {
 
 		if ( 0 === $val ) {
 			//* Also disable WP_DEBUG functions used by The SEO Framework.
-			add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
-			add_filter( 'deprecated_function_trigger_error', '__return_false' );
-			add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
+			\add_action( 'doing_it_wrong_trigger_error', '__return_false' );
+			\add_action( 'deprecated_function_trigger_error', '__return_false' );
+			\add_action( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
 		}
 	}
 
@@ -909,11 +909,11 @@ trait Extensions_Actions {
 
 		$error['message'] = static::clean_error_message( $error['message'], $error );
 
-		$error_notice = $error_type . ' ' . esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
-		$advanced_error_notice = '<strong>Error message:</strong> <br>' . esc_html( $error['message'] ) . ' in file <strong>' . esc_html( $error['file'] ) . '</strong> on line <strong>' . esc_html( $error['line'] ) . '</strong>.';
+		$error_notice = $error_type . ' ' . \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+		$advanced_error_notice = '<strong>Error message:</strong> <br>' . \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
 		if ( defined( 'DOING_AJAX' ) ) {
-			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', wp_strip_all_tags( $advanced_error_notice ), esc_attr( $advanced_error_notice ), $error_notice );
+			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', \wp_strip_all_tags( $advanced_error_notice ), \esc_attr( $advanced_error_notice ), $error_notice );
 
 			$status = array(
 				'success' => 10005,
@@ -930,10 +930,10 @@ trait Extensions_Actions {
 			echo json_encode( $response );
 			exit;
 		} else {
-			$error_notice .= '<br>' . esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
+			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 
 			//* Already escaped.
-			wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
+			\wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
 		}
 	}
 
@@ -1027,7 +1027,7 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file ) {
 
-		if ( '.php' === substr( $file, -4 ) && 0 === validate_file( $file ) && file_exists( $file ) )
+		if ( '.php' === substr( $file, -4 ) && 0 === \validate_file( $file ) && file_exists( $file ) )
 			return true;
 
 		return false;

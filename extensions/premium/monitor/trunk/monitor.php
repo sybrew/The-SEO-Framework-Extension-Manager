@@ -85,9 +85,9 @@ function monitor_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	\tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
+	\tsf_extension_manager()->_register_premium_extension_autoload_path( \TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
 
-	if ( is_admin() ) {
+	if ( \is_admin() ) {
 		new \TSF_Extension_Manager_Extension\Monitor_Admin();
 	} else {
 		//* Statistical data. TODO.

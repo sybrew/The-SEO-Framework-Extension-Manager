@@ -225,6 +225,6 @@ final class Extensions extends Secure_Abstract {
 			$filters = array( 'network' => '0' );
 		}
 
-		return wp_list_filter( $extensions, $filters, 'AND' );
+		return \wp_list_filter( $extensions, $filters, 'AND' );
 	}
 }

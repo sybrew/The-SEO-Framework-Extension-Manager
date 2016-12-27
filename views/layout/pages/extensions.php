@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	$this->_do_pane_wrap(
-		__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
+		\__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
 		$this->get_seo_trends_and_updates_overview(),
 		array(
 			'full' => false,
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 	);
 
 	$this->_do_pane_wrap(
-		__( 'Account and Actions', 'the-seo-framework-extension-manager' ),
+		\__( 'Account and Actions', 'the-seo-framework-extension-manager' ),
 		$this->get_extensions_actions_overview(),
 		array(
 			'full' => false,
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	$this->_do_pane_wrap(
-		__( 'Extensions', 'the-seo-framework-extension-manager' ),
+		\__( 'Extensions', 'the-seo-framework-extension-manager' ),
 		$this->get_extension_overview(),
 		array(
 			'full' => true,

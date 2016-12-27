@@ -33,8 +33,8 @@ defined( 'ABSPATH' ) or die;
  */
 function extension_basename( $path ) {
 
-	$path = wp_normalize_path( $path );
-	$extension_dir = wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
+	$path = \wp_normalize_path( $path );
+	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
 
 	$path = trim( $path, '/' );
 	$extension_dir = trim( $extension_dir, '/' );
@@ -60,7 +60,7 @@ function extension_basename( $path ) {
  * @return string The extension directory path.
  */
 function extension_dir_path( $file ) {
-	return trailingslashit( dirname( $file ) );
+	return \trailingslashit( dirname( $file ) );
 }
 
 /**

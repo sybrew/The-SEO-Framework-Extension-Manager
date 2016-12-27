@@ -75,10 +75,10 @@ class AdminPages extends AccountActivation {
 	private function construct() {
 
 		//* Initialize menu links. TODO add network menu.
-		add_action( 'admin_menu', array( $this, '_init_menu' ) );
+		\add_action( 'admin_menu', array( $this, '_init_menu' ) );
 
 		//* Initialize TSF Extension Manager page actions.
-		add_action( 'admin_init', array( $this, '_load_tsfem_admin_actions' ) );
+		\add_action( 'admin_init', array( $this, '_load_tsfem_admin_actions' ) );
 
 	}
 
@@ -100,10 +100,10 @@ class AdminPages extends AccountActivation {
 
 		if ( $network_mode ) {
 			//* TODO.
-			//	add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
+			//	\add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
 		} else {
 			if ( \the_seo_framework()->load_options )
-				add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
+				\add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
 		}
 	}
 
@@ -119,14 +119,14 @@ class AdminPages extends AccountActivation {
 
 		$menu = array(
 			'parent_slug' => the_seo_framework_options_page_slug(),
-			'page_title'  => esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
-			'menu_title'  => esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
+			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
+			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'install_plugins',
 			'menu_slug'   => $this->seo_extensions_page_slug,
 			'callback'    => array( $this, '_init_extension_manager_page' ),
 		);
 
-		$this->seo_extensions_menu_page_hook = add_submenu_page(
+		$this->seo_extensions_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
 			$menu['page_title'],
 			$menu['menu_title'],
@@ -144,7 +144,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	public function _load_tsfem_admin_actions() {
-		add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, '_do_tsfem_admin_actions' ) );
+		\add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, '_do_tsfem_admin_actions' ) );
 	}
 
 	/**
@@ -174,10 +174,10 @@ class AdminPages extends AccountActivation {
 		$this->init_errors();
 
 		//* Add something special for Vivaldi
-		add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
+		\add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
 
 		//* Add footer output.
-		add_action( 'in_admin_footer', array( $this, '_init_footer_wrap' ) );
+		\add_action( 'in_admin_footer', array( $this, '_init_footer_wrap' ) );
 
 		return $run = true;
 	}
@@ -343,7 +343,7 @@ class AdminPages extends AccountActivation {
 			'ajax' => false,
 			'ajax_id' => '',
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args = \wp_parse_args( $args, $defaults );
 		unset( $defaults );
 
 		$this->get_view( 'layout/general/pane', get_defined_vars() );
@@ -375,7 +375,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $name Field name base
 	 */
 	public function _field_name( $name ) {
-		echo esc_attr( $this->_get_field_name( $name ) );
+		echo \esc_attr( $this->_get_field_name( $name ) );
 	}
 
 	/**
@@ -405,7 +405,7 @@ class AdminPages extends AccountActivation {
 	public function _field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
-			echo esc_attr( $this->_get_field_id( $id ) );
+			echo \esc_attr( $this->_get_field_id( $id ) );
 		} else {
 			return $this->_get_field_id( $id );
 		}
@@ -433,6 +433,6 @@ class AdminPages extends AccountActivation {
 	 * @param string $key The action key.
 	 */
 	public function _get_nonce_action_field( $key ) {
-		return '<input type="hidden" name="' . esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . esc_attr( $key ) . '">';
+		return '<input type="hidden" name="' . \esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . \esc_attr( $key ) . '">';
 	}
 }

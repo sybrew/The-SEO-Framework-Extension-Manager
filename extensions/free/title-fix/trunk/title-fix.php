@@ -48,7 +48,7 @@ define( 'TSFEM_E_TITLE_FIX', true );
 //* Define version, for future things.
 define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.2' );
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
 /**
  * Initialize the plugin.
  *
@@ -121,7 +121,7 @@ final class Title_Fix {
 	private function construct() {
 
 		//* Start the plugin at header, where theme support has just been initialized.
-		add_action( 'get_header', array( $this, 'start_plugin' ), -1 );
+		\add_action( 'get_header', array( $this, 'start_plugin' ), -1 );
 
 	}
 
@@ -136,61 +136,60 @@ final class Title_Fix {
 		 * Don't fix the title in admin.
 		 * get_header doesn't run in admin, but another plugin might init it.
 		 */
-		if ( false === is_admin() ) {
+		if ( \is_admin() )
+			return;
 
-			if ( false === $this->current_theme_supports_title_tag() ) {
-				/**
-				 * Applies filters 'the_seo_framework_force_title_fix'
-				 * @since 1.0.1
-				 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
-				 * @since 1.0.2 / TSF Extension Manager 1.0.0 : Defaults to false.
-				 * @param bool Whether to force the title fixing.
-				 */
-				$this->force_title_fix = (bool) apply_filters( 'the_seo_framework_force_title_fix', false );
-			}
+		if ( false === $this->current_theme_supports_title_tag() ) {
+			/**
+			 * Applies filters 'the_seo_framework_force_title_fix'
+			 * @since 1.0.1
+			 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
+			 * @since 1.0.2 / TSF Extension Manager 1.0.0 : Defaults to false.
+			 * @param bool Whether to force the title fixing.
+			 */
+			$this->force_title_fix = (bool) \apply_filters( 'the_seo_framework_force_title_fix', false );
+		}
+
+		/**
+		 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
+		 * Requires initial load after theme switch.
+		 */
+		if ( $this->force_title_fix || false === \the_seo_framework()->theme_title_doing_it_right() ) :
+			/**
+			 * First run.
+			 * Start at HTTP header.
+			 * Stop right at where wp_head is run.
+			 */
+			\add_action( 'get_header', array( $this, 'start_ob' ), 0 );
+			\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 0 );
+			\add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 0 );
 
 			/**
-			 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
-			 * Requires initial load after theme switch.
+			 * Second run. Capture WP head.
+			 * 		{\add_action( 'wp_head', 'wp_title' );.. who knows?}
+			 * Start at where wp_head is run (last run left off).
+			 * Stop right at the end of wp_head.
 			 */
-			if ( $this->force_title_fix || false === \the_seo_framework()->theme_title_doing_it_right() ) {
+			\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 0 );
+			\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 9999 );
+			\add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 9999 );
 
-				/**
-				 * First run.
-				 * Start at HTTP header.
-				 * Stop right at where wp_head is run.
-				 */
-				add_action( 'get_header', array( $this, 'start_ob' ), 0 );
-				add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 0 );
-				add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 0 );
+			/**
+			 * Third run. Capture the page.
+			 * Start at where wp_head has ended (last run left off),
+			 *		or at wp_head start (first run left off).
+			 * Stop at the footer.
+			 */
+			\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 9999 );
+			\add_action( 'get_footer', array( $this, 'maybe_rewrite_title' ), -1 );
+			\add_action( 'get_footer', array( $this, 'maybe_stop_ob' ), -1 );
 
-				/**
-				 * Second run. Capture WP head.
-				 * 		{add_action( 'wp_head', 'wp_title' );.. who knows?}
-				 * Start at where wp_head is run (last run left off).
-				 * Stop right at the end of wp_head.
-				 */
-				add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 0 );
-				add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 9999 );
-				add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 9999 );
-
-				/**
-				 * Third run. Capture the page.
-				 * Start at where wp_head has ended (last run left off),
-				 *		or at wp_head start (first run left off).
-				 * Stop at the footer.
-				 */
-				add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 9999 );
-				add_action( 'get_footer', array( $this, 'maybe_rewrite_title' ), -1 );
-				add_action( 'get_footer', array( $this, 'maybe_stop_ob' ), -1 );
-
-				/**
-				 * Stop OB if it's still running at shutdown.
-				 * Might prevent AJAX issues, if any.
-				 */
-				add_action( 'shutdown', array( $this, 'stop_ob' ), 0 );
-			}
-		}
+			/**
+			 * Stop OB if it's still running at shutdown.
+			 * Might prevent AJAX issues, if any.
+			 */
+			\add_action( 'shutdown', array( $this, 'stop_ob' ), 0 );
+		endif;
 	}
 
 	/**
@@ -275,7 +274,7 @@ final class Title_Fix {
 	public function find_title_tag( $content ) {
 
 		//* Check if we can use preg_match.
-		if ( _wp_can_use_pcre_u() ) {
+		if ( \_wp_can_use_pcre_u() ) {
 
 			//* Let's use regex.
 			if ( 1 === preg_match( '/<title.*?<\/title>/ius', $content, $matches ) ) {
@@ -372,7 +371,7 @@ final class Title_Fix {
 		 * @since 1.0.1
 		 * @param bool Whether to output an indicator or not.
 		 */
-		$indicator = (bool) apply_filters( 'the_seo_framework_title_fixed_indicator', true );
+		$indicator = (bool) \apply_filters( 'the_seo_framework_title_fixed_indicator', true );
 
 		if ( $indicator )
 			return '<!-- fixed -->';

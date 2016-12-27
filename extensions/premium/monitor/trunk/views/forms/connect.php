@@ -7,8 +7,8 @@ namespace TSF_Extension_Manager_Extension;
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager_Extension\monitor_class() and $this instanceof $_class or die;
 
 $class = 'tsfem-button-primary tsfem-button-cloud tsfem-button-ajax';
-$name = __( 'Register', 'the-seo-framework-extension-manager' );
-$title = __( 'Connect this website to SEO Monitor', 'the-seo-framework-extension-manager' );
+$name = \__( 'Register', 'the-seo-framework-extension-manager' );
+$title = \__( 'Connect this website to SEO Monitor', 'the-seo-framework-extension-manager' );
 
 $nonce_action = $this->_get_nonce_action_field( 'connect' );
 $nonce = $this->_get_nonce_field( 'connect' );

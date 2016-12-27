@@ -52,8 +52,8 @@ class Monitor_Data {
 	private function construct() {
 
 		//* Verify integrity.
-		$that = __NAMESPACE__ . ( is_admin() ? '\\Monitor_Admin' : '\\Monitor_Frontend' );
-		$this instanceof $that or wp_die( -1 );
+		$that = __NAMESPACE__ . ( \is_admin() ? '\\Monitor_Admin' : '\\Monitor_Frontend' );
+		$this instanceof $that or \wp_die( -1 );
 
 	}
 

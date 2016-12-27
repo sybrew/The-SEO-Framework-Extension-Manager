@@ -127,5 +127,5 @@ require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
 * @return null|object The plugin class object.
 */
 function tsf_extension_manager() {
-	return TSF_Extension_Manager\_init_tsf_extension_manager();
+	return \TSF_Extension_Manager\_init_tsf_extension_manager();
 }

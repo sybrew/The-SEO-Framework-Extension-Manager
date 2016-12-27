@@ -41,11 +41,11 @@ class Panes extends API {
 	 */
 	private function construct() {
 		//* Ajax listener for updating feed option.
-		add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
+		\add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
 		//* Ajax listener for updating extension setting.
-		add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
+		\add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
 
-		add_action( 'wp_ajax_tsfem_update_extension_desc_footer', array( $this, '_wp_ajax_tsfem_update_extension_desc_footer' ) );
+		\add_action( 'wp_ajax_tsfem_update_extension_desc_footer', array( $this, '_wp_ajax_tsfem_update_extension_desc_footer' ) );
 	}
 
 	/**
@@ -112,10 +112,10 @@ class Panes extends API {
 		$output = '';
 
 		if ( -1 === $feed ) {
-			$feed_error = esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
+			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
 			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
 		} elseif ( empty( $feed ) ) {
-			$feed_error = esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
+			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
 			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
 		} else {
 			$output .= sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
@@ -155,16 +155,16 @@ class Panes extends API {
 
 		$output = '';
 
-		$googleblog = sprintf( '<a href="%s" target="_blank">Google Webmaster Central Blog</a>', esc_url( 'https://webmasters.googleblog.com/' ) );
-		$acquiredfrom = sprintf( esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
-		$googleprivacy = sprintf( '<a href="%s" target="_blank">Google\'s Privacy Policy</a>', esc_url( 'https://www.google.com/policies/privacy/' ) );
+		$googleblog = sprintf( '<a href="%s" target="_blank">Google Webmaster Central Blog</a>', \esc_url( 'https://webmasters.googleblog.com/' ) );
+		$acquiredfrom = sprintf( \esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
+		$googleprivacy = sprintf( '<a href="%s" target="_blank">Google\'s Privacy Policy</a>', \esc_url( 'https://www.google.com/policies/privacy/' ) );
 		/* translators: %s = "Google's Privacy Policy" */
-		$privacystatement = sprintf( esc_html__( 'Read %s.', 'the-seo-framework-extension-manager' ), $googleprivacy );
+		$privacystatement = sprintf( \esc_html__( 'Read %s.', 'the-seo-framework-extension-manager' ), $googleprivacy );
 
 		//* The feed is totally optional until it pulls from The SEO Framework premium. I.e. privacy.
-		$title = esc_html__( 'The feed has been disabled to protect your privacy.', 'the-seo-framework-extension-manager' );
+		$title = \esc_html__( 'The feed has been disabled to protect your privacy.', 'the-seo-framework-extension-manager' );
 		$title = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $title );
-		$output .= '<p>' . esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-extension-manager' ) . '</p>';
+		$output .= '<p>' . \esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-extension-manager' ) . '</p>';
 		$output .= '<p>' . $acquiredfrom . ' ' . $privacystatement . '</p>';
 		$output .= $this->get_feed_enabler_button();
 
@@ -181,15 +181,15 @@ class Panes extends API {
 	 */
 	protected function get_feed_enabler_button() {
 
-		$enable = __( 'Enable feed?', 'the-seo-framework-extension-manager' );
+		$enable = \__( 'Enable feed?', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( $this->request_name['enable-feed'] );
-		$nonce = wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">', esc_attr( $enable ) );
+		$nonce = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
+		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">', \esc_attr( $enable ) );
 		$form = $nonce_action . $nonce . $submit;
 
-		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', esc_url( $this->get_admin_page_url() ), $form );
-		$js = '<a id="tsfem-enable-feeds" class="tsfem-button tsfem-button-primary hide-if-no-js">' . esc_html( $enable ) . '</a>';
+		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', \esc_url( $this->get_admin_page_url() ), $form );
+		$js = '<a id="tsfem-enable-feeds" class="tsfem-button tsfem-button-primary hide-if-no-js">' . \esc_html( $enable ) . '</a>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
 	}
@@ -202,10 +202,10 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_enable_feeds() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( $this->can_do_settings() ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
 
-				check_ajax_referer( 'tsfem-ajax-nonce', 'nonce' );
+				\check_ajax_referer( 'tsfem-ajax-nonce', 'nonce' );
 
 				if ( $this->get_option( '_enable_feed' ) ) {
 					//* Another admin has initialized this after the last page load.
@@ -232,8 +232,8 @@ class Panes extends API {
 				$this->_clean_ajax_reponse_header();
 
 				echo json_encode( $results );
-			}
-		}
+			endif;
+		endif;
 
 		exit;
 	}
@@ -246,13 +246,13 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_tsfem_update_extension() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( $this->can_do_settings() ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
 
 				$case = '';
 				$slug = '';
 
-				if ( check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
 					$data = $_POST;
 
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
@@ -273,7 +273,7 @@ class Panes extends API {
 				} else {
 					$status = array(
 						'success' => -1,
-						'notice' => esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
+						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 					);
 				}
 
@@ -283,8 +283,8 @@ class Panes extends API {
 				$this->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
-			}
-		}
+			endif;
+		endif;
 
 		exit;
 	}
@@ -299,8 +299,8 @@ class Panes extends API {
 	 */
 	final public function _wp_ajax_tsfem_update_extension_desc_footer() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( $this->can_do_settings() ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
 
 				$slug = '';
 				$case = '';
@@ -313,7 +313,7 @@ class Panes extends API {
 					$case = isset( $data['case'] ) ? $this->s_ajax_string( $data['case'] ) : '';
 				}
 
-				if ( $slug && $case ) {
+				if ( $slug && $case ) :
 					//* Tell the plugin we're on the correct page.
 					$this->ajax_is_tsf_extension_manager_page( true );
 
@@ -322,7 +322,7 @@ class Panes extends API {
 
 					\TSF_Extension_Manager\Extensions::initialize( 'ajax_layout', $_instance, $bits );
 
-					if ( 'activate' === $case ) {
+					if ( 'activate' === $case ) :
 						//* Check for menu slug in order to add it.
 						$header = \TSF_Extension_Manager\Extensions::get( 'ajax_get_extension_header', $slug );
 
@@ -349,20 +349,20 @@ class Panes extends API {
 								$menu['callback']
 							);
 						}
-					}
+					endif;
 
 					$html = \TSF_Extension_Manager\Extensions::get( 'ajax_get_extension_desc_footer', $slug );
 
 					\TSF_Extension_Manager\Extensions::reset();
-				}
+				endif;
 
 				$response = compact( 'html' );
 
 				$this->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
-			}
-		}
+			endif;
+		endif;
 
 		exit;
 	}
@@ -446,7 +446,7 @@ class Panes extends API {
 
 		\TSF_Extension_Manager\Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
 		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );
 	}
@@ -480,7 +480,7 @@ class Panes extends API {
 
 		\TSF_Extension_Manager\Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
 		return sprintf( '<div class="tsfem-account-upgrade">%s%s</div>', $title, $form );
 	}
@@ -507,15 +507,15 @@ class Panes extends API {
 
 		\TSF_Extension_Manager\Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
-		$content = esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
+		$content = \esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
 
 		$extras = array();
 		$_extra = '';
 
-		$extras[] = esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
-		$extras[] = esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
-		$extras[] = $this->is_premium_user() ? esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
+		$extras[] = \esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
+		$extras[] = \esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
+		$extras[] = $this->is_premium_user() ? \esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
 
 		foreach ( $extras as $extra ) {
 			if ( $extra )
@@ -545,18 +545,18 @@ class Panes extends API {
 		$description = array();
 
 		$buttons[1] = \TSF_Extension_Manager\Layout::get( 'free-support-button' );
-		$description[1] = __( 'Questions about all free extensions and using the Extension Manager can be asked through Free Support.', 'the-seo-framework-extension-manager' );
+		$description[1] = \__( 'Questions about all free extensions and using the Extension Manager can be asked through Free Support.', 'the-seo-framework-extension-manager' );
 
 		$buttons[2] = \TSF_Extension_Manager\Layout::get( 'premium-support-button' );
-		$description[2] = __( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
+		$description[2] = \__( 'Any question about a premium extensions or your account should be asked through Premium Support.', 'the-seo-framework-extension-manager' );
 
 		\TSF_Extension_Manager\Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
-			$extra = sprintf( '<span class="tsfem-description">%s</span>', esc_html( $description[ $key ] ) );
+			$extra = sprintf( '<span class="tsfem-description">%s</span>', \esc_html( $description[ $key ] ) );
 			$content .= sprintf( '<div class="tsfem-support-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
 		}
 

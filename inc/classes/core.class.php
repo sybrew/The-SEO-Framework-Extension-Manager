@@ -85,7 +85,7 @@ class Core {
 	private function construct() {
 
 		//* Verify integrity.
-		$that = __NAMESPACE__ . ( is_admin() ? '\\LoadAdmin' : '\\LoadFrontend' );
+		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFrontend' );
 		$this instanceof $that or wp_die( -1 );
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
@@ -122,7 +122,7 @@ class Core {
 
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
-		add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
 	}
 
@@ -142,7 +142,7 @@ class Core {
 		if ( isset( $loaded ) )
 			return $loaded;
 
-		if ( wp_installing() || false === $this->is_plugin_activated() )
+		if ( \wp_installing() || false === $this->is_plugin_activated() )
 			return $loaded = false;
 
 		if ( false === $this->are_options_valid() ) {
@@ -155,9 +155,9 @@ class Core {
 		$_instance = $this->get_verification_instance( $bits[1] );
 
 		//* Some AJAX functions require Extension layout traits to be loaded.
-		if ( is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false )
-				and $this->ajax_is_tsf_extension_manager_page( true );
+		if ( \is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
+				$this->ajax_is_tsf_extension_manager_page( true );
 		}
 
 		\TSF_Extension_Manager\Extensions::initialize( 'list', $_instance, $bits );
@@ -340,7 +340,7 @@ class Core {
 				return $validated[ $key ] = false;
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? wp_verify_nonce( wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -384,17 +384,17 @@ class Core {
 
 		if ( $this->is_tsf_extension_manager_page( false ) ) {
 			//* wp_die() can be filtered. Remove filters JIT.
-			remove_all_filters( 'wp_die_ajax_handler' );
-			remove_all_filters( 'wp_die_xmlrpc_handler' );
-			remove_all_filters( 'wp_die_handler' );
+			\remove_all_filters( 'wp_die_ajax_handler' );
+			\remove_all_filters( 'wp_die_xmlrpc_handler' );
+			\remove_all_filters( 'wp_die_handler' );
 
-			wp_die( esc_html( $message ) );
+			\wp_die( \esc_html( $message ) );
 	 	}
 
 		//* Don't spam error log.
 		if ( false === $this->_has_died() ) {
 			if ( $message ) {
-				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . esc_html( $message ) . '</strong>' );
+				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
 			}
@@ -661,18 +661,18 @@ class Core {
 				if ( defined( $const ) && constant( $const ) ) {
 					$values[ $type ] = constant( $const );
 				} elseif ( empty( $values[ $type ] ) ) {
-					$values[ $type ] = get_site_option( "{$scheme}_{$type}" );
+					$values[ $type ] = \get_site_option( "{$scheme}_{$type}" );
 					if ( ! $values[ $type ] ) {
 						/**
 						 * Hash keys not defined in wp-config.php nor in database.
 						 * Let wp_salt() handle this. This should run at most once per site per scheme.
 						 */
-						$values[ $type ] = wp_salt( $scheme );
+						$values[ $type ] = \wp_salt( $scheme );
 					}
 				}
 			endforeach;
 		} else {
-			wp_die( 'Invalid scheme supplied for <code>' . __METHOD__ . '</code>.' );
+			\wp_die( 'Invalid scheme supplied for <code>' . __METHOD__ . '</code>.' );
 		}
 
 		$cached_salts[ $scheme ] = $values['key'] . $values['salt'];
@@ -736,10 +736,10 @@ class Core {
 		if ( isset( $network_mode ) )
 			return $network_mode;
 
-		if ( ! is_multisite() )
+		if ( ! \is_multisite() )
 			return $network_mode = false;
 
-		$plugins = get_site_option( 'active_sitewide_plugins' );
+		$plugins = \get_site_option( 'active_sitewide_plugins' );
 
 		return $network_mode = isset( $plugins[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 	}
@@ -758,7 +758,7 @@ class Core {
 
 		$page = $page ? $page : $this->seo_extensions_page_slug;
 
-		$url = add_query_arg( $args, menu_page_url( $page, false ) );
+		$url = \add_query_arg( $args, \menu_page_url( $page, false ) );
 
 		return $url;
 	}
@@ -812,21 +812,21 @@ class Core {
 			'title'   => '',
 			'content' => '',
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args = \wp_parse_args( $args, $defaults );
 
-		$url = $args['url'] ? esc_url( $args['url'] ) : '';
+		$url = $args['url'] ? \esc_url( $args['url'] ) : '';
 
 		if ( empty( $url ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
 			return '';
 		}
 
 		$url = ' href="' . $url . '"';
-		$class = $args['class'] ? ' class="' . esc_attr( $args['class'] ) . '"' : '';
-		$target = ' target="' . esc_attr( $args['target'] ) . '"';
-		$title = $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
+		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
+		$target = ' target="' . \esc_attr( $args['target'] ) . '"';
+		$title = $args['title'] ? ' title="' . \esc_attr( $args['title'] ) . '"' : '';
 
-		return '<a' . $url . $class . $target . $title . '>' . esc_html( $args['content'] ) . '</a>';
+		return '<a' . $url . $class . $target . $title . '>' . \esc_html( $args['content'] ) . '</a>';
 	}
 
 	/**
@@ -841,8 +841,8 @@ class Core {
 			'url' => $this->get_activation_url( 'my-account/' ),
 			'target' => '_blank',
 			'class' => '',
-			'title' => esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
-			'content' => esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
+			'title' => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+			'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
 		) );
 	}
 
@@ -860,15 +860,15 @@ class Core {
 		if ( 'premium' === $type ) {
 			$url = $this->get_activation_url( 'support/' );
 
-			$title = __( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
-			$text = __( 'Premium Support', 'the-seo-framework-extension-manager' );
+			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
+			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
 
 			$class = $love ? 'tsfem-button-primary tsfem-button-star tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
 
-			$title = __( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
-			$text = __( 'Free Support', 'the-seo-framework-extension-manager' );
+			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
+			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
 
 			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
@@ -1028,7 +1028,7 @@ class Core {
 
 			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . esc_html( $class ) . '</code> could not be registered.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> could not be registered.' );
 
 			//* Most likely, a fatal error will now occur.
 			return $loaded[ $class ] = false;
@@ -1273,7 +1273,7 @@ class Core {
 	 * @return string $output The cleaned AJAX input string.
 	 */
 	protected function s_ajax_string( $input ) {
-		return trim( esc_attr( wp_kses_normalize_entities( strval( wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
 
 	/**
@@ -1339,7 +1339,7 @@ class Core {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( false === is_admin() )
+		if ( false === \is_admin() )
 			return $cache = false;
 
 		if ( $secure ) {
@@ -1464,6 +1464,7 @@ class Core {
 		preprocess : {
 			$text = str_replace( "\r\n", "\n", $text );
 			$text = str_replace( "\t", ' ', $text );
+			$text = trim( $text );
 		}
 
 		if ( '' === $text )
@@ -1491,15 +1492,15 @@ class Core {
 			switch ( $type ) :
 				case 'strong' :
 					//* Considers word boundary. @TODO consider removing this?
-					$text = preg_replace( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', '<strong>${1}</strong>', $text );
+					$text = preg_replace( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', '<strong>${1}</strong>', \esc_html( $text ) );
 					break;
 
 				case 'em' :
-					$text = preg_replace( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', '<em>${1}</em>', $text );
+					$text = preg_replace( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', '<em>${1}</em>', \esc_html( $text ) );
 					break;
 
 				case 'code' :
-					$text = preg_replace( '/(?:`{1})([^`{1}]+)(?:`{1})/', '<code>${1}</code>', $text );
+					$text = preg_replace( '/(?:`{1})([^`{1}]+)(?:`{1})/', '<code>${1}</code>', \esc_html( $text ) );
 					break;
 
 				case 'h6' :
@@ -1522,7 +1523,7 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( '<a href="%s" rel="nofollow">%s</a>', esc_url( $matches[2][ $i ] ), esc_html( $matches[1][ $i ] ) ),
+							sprintf( '<a href="%s" rel="nofollow">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}

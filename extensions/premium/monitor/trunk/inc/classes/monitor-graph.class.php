@@ -184,7 +184,7 @@ final class Monitor_Graph {
 
 		$var = 'tsfemGraph_' . $id;
 
-		$jsdata = sprintf( 'var %s={"data":[%s],"type":%s};', esc_js( $var ), wp_json_encode( $data ), wp_json_encode( $type ) );
+		$jsdata = sprintf( 'var %s={"data":[%s],"type":%s};', \esc_js( $var ), \wp_json_encode( $data ), \wp_json_encode( $type ) );
 
 		$this->set_js_data_cache( $jsdata, $id );
 	}
@@ -283,14 +283,14 @@ final class Monitor_Graph {
 		if ( empty( $id ) )
 			return '';
 
-		$nosupport = __( "Your browser doesn't support HTML5 canvas.", 'the-seo-framework-extension-manager' );
-		$nojs = __( 'This element requires JavaScript.', 'the-seo-framework-extension-manager' );
+		$nosupport = \__( "Your browser doesn't support HTML5 canvas.", 'the-seo-framework-extension-manager' );
+		$nojs = \__( 'This element requires JavaScript.', 'the-seo-framework-extension-manager' );
 
 		$cdata = sprintf( '<script type="text/javascript">/*<![CDATA[*/%s/*]]>*/</script>', $this->get_js_data_cache( $id ) );
 		//* @TODO set class.
 		$canvas = sprintf(
 			'<canvas id="tsfem-graph-%s" style="border:1px solid #d3d3d3;">%s%s</canvas>',
-			esc_attr( $id ), sprintf( '<p>%s</p>', esc_html( $nosupport ) ), sprintf( '<noscript><p>%s</p></noscript>', esc_html( $nojs ) )
+			\esc_attr( $id ), sprintf( '<p>%s</p>', \esc_html( $nosupport ) ), sprintf( '<noscript><p>%s</p></noscript>', \esc_html( $nojs ) )
 		);
 
 		return $cdata . $canvas;

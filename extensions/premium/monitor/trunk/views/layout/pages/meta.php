@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager_Extension\monitor_clas
 $color = $this->is_api_connected() ? '#00cd98' : '#0ebfe9';
 
 ?>
-<meta name="theme-color" content="<?php echo esc_attr( $color ); ?>" />
-<meta name="msapplication-navbutton-color" content="<?php echo esc_attr( $color ); ?>" />
-<meta name="apple-mobile-web-app-status-bar-style" content="<?php echo esc_attr( $color ); ?>" />
+<meta name="theme-color" content="<?php echo \esc_attr( $color ); ?>" />
+<meta name="msapplication-navbutton-color" content="<?php echo \esc_attr( $color ); ?>" />
+<meta name="apple-mobile-web-app-status-bar-style" content="<?php echo \esc_attr( $color ); ?>" />
 <?php
