@@ -1201,6 +1201,8 @@ h5.tsfem-extension-type {
 		min-width: 100%;
 		max-width: 100%;
 		min-height: 250px;
+		-webkit-flex-direction: row;
+		flex-direction: row;
 		-webkit-flex-basis: 100%;
 		flex-basis: 100%;
 	}
@@ -1221,8 +1223,8 @@ h5.tsfem-extension-type {
 
 	/* Make users be able to scroll through with 33vh margin */
 	.tsfem-pane-wrap {
-		flex: 1 1 100%;
 		-webkit-flex: 1 1 100%;
+		flex: 1 1 100%;
 		max-height: 67vh;
 	}
 

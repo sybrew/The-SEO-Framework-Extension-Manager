@@ -255,10 +255,19 @@ final class Layout extends Secure_Abstract {
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
 			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
-			$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 
-			$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );
+			if ( $_domain === $domain ) {
+				$class = 'tsfem-success';
+			} else {
+				$domain_desc = tsf_extension_manager()->convert_markdown(
+					sprintf( \esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate account and try again.', 'the-seo-framework-extension-manager' ), $_domain ),
+					array( 'code' )
+				);
+				$class = 'tsfem-error tsfem-has-hover-balloon';
+			}
 
+			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
+			$domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $domain_desc, \esc_html( $domain ) );
 			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $domain, false );
 		}
 
