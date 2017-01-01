@@ -14,13 +14,15 @@ Add more powerful SEO features to The SEO Framework right from your WordPress Da
 
 This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
 
-**This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active in order to display menus.**
+**This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active.**
+
 *If The SEO Framework isn't found to be active, this plugin won't do much at all.*
 
-= About Premium =
-A premium subscription will allow you to activate all premium extensions for one single subscription price.
-These premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
-As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will be deactivated automatically. TODO make this true.
+= Requirements: =
+
+* For security and structural reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
+* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
+* This plugin currently does not fully support MultiSite networks. This is planned, especially since we wish to use this plugin as well on our own networks. Stay tuned!
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -28,11 +30,10 @@ As long as the subscription is active, you're allowed to use all premium extensi
 >
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
-= Requirements: =
-
-* For security and structural reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
-* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
-* This plugin currently does not fully support MultiSite networks. This is planned, especially since we wish to use this plugin as well on our own networks. Stay tuned!
+= About Premium =
+A premium subscription will allow you to activate all premium extensions for one single subscription price.
+These premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
 = Privacy =
 
@@ -77,7 +78,7 @@ The extension activation page will lead you to the site where you can purchase a
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
 No X.y updates are planned as of now (2.0, 3.0, etc.). We plan to release a new extension every (other) month.
 
-= I've recieved error <code>, what now? =
+= I've received error <code>, what now? =
 Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
 Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
@@ -123,6 +124,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 = 1.0.0 - Amplified SEO =
 
+* **Release date:** 01/01/2017
+
+**Changelog:**
+
 * Initial public release.
 
 == Upgrade Notice ==
@@ -138,18 +143,10 @@ Feedback and points for improvement will be always given. No monetized nor premi
 Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
 In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
 Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
-If you have any questions, before blindly implementing or circumvate security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
+If you have any questions, before blindly implementing or circumvent security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
 
 = Reluctance towards plugin modifications and backwards compatibility =
 This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
 You are allowed to edit this plugin and use hooks on this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
 This is to enhance the plugin security, stability and overall performance. Please note that most core functions, classes, methods and files are shielded against both direct and indirect calls.
 No backwards compatibility will be programmed into this plugin, unless required for WordPress Core or PHP.
-
-= General Filter Reference =
-
-Available soon.
-
-= Network Filter Reference =
-
-Available soon.
