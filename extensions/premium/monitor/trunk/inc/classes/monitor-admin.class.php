@@ -393,8 +393,8 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	final public function _wp_ajax_update_data() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			if ( \tsf_extension_manager()->can_do_settings() ) {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( \tsf_extension_manager()->can_do_settings() ) :
 
 				$timeout = null;
 
@@ -406,8 +406,8 @@ final class Monitor_Admin extends Monitor_Api {
 
 				$current_timeout = $this->get_remote_data_timeout();
 
-				if ( isset( $timeout ) ) {
-					if ( $this->is_remote_data_expired() || ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout ) {
+				if ( isset( $timeout ) ) :
+					if ( $this->is_remote_data_expired() || ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout ) :
 						//* There's possibly new data found. This should certainly be true with statistics.
 						$response = $this->api_get_remote_data( true );
 
@@ -433,7 +433,7 @@ final class Monitor_Admin extends Monitor_Api {
 							//* Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_data_timeout(),
 						);
-					} else {
+					else :
 						//* No new data has been found.
 						$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
 						$status = array(
@@ -445,14 +445,14 @@ final class Monitor_Admin extends Monitor_Api {
 							),
 							'timeout' => $current_timeout,
 						);
-					}
-				} else {
+					endif;
+				else :
 					$status = array(
 						'content' => null,
 						'type' => 'unknown',
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 					);
-				}
+				endif;
 
 				if ( WP_DEBUG ) {
 					$response = array(
@@ -467,8 +467,8 @@ final class Monitor_Admin extends Monitor_Api {
 				\tsf_extension_manager()->_clean_ajax_reponse_header();
 
 				echo json_encode( $response );
-			}
-		}
+			endif;
+		endif;
 
 		exit;
 	}
@@ -494,8 +494,8 @@ final class Monitor_Admin extends Monitor_Api {
 
 				$current_timeout = $this->get_remote_crawl_timeout();
 
-				if ( isset( $timeout ) ) {
-					if ( $this->can_request_next_crawl() || ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout ) {
+				if ( isset( $timeout ) ) :
+					if ( $this->can_request_next_crawl() || ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout ) :
 						//* Crawl can be requested.
 						$response = $this->api_request_crawl( true );
 
@@ -520,7 +520,7 @@ final class Monitor_Admin extends Monitor_Api {
 							//* Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_crawl_timeout(),
 						);
-					} else {
+					else :
 						//* Crawl has already been requested recently.
 						$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
 						$status = array(
@@ -531,13 +531,13 @@ final class Monitor_Admin extends Monitor_Api {
 							),
 							'timeout' => $current_timeout,
 						);
-					}
-				} else {
+					endif;
+				else :
 					$status = array(
 						'type' => 'unknown',
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 					);
-				}
+				endif;
 
 				if ( WP_DEBUG ) {
 					$response = array(

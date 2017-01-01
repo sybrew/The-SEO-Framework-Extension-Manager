@@ -186,7 +186,8 @@ trait Options {
 			\wp_die();
 		}
 
-		$options = wp_parse_args( $options, $_options );
+		//* This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
+		$options = \wp_parse_args( $options, $_options );
 		$run = true;
 
 		$this->initialize_option_update_instance( $type );
@@ -337,13 +338,10 @@ trait Options {
 			$type = 'update_option';
 		}
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
-
+		$this->get_verification_codes( $_instance, $bits );
 		\TSF_Extension_Manager\SecureOption::initialize( $type, $_instance, $bits );
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 		\TSF_Extension_Manager\SecureOption::set_update_instance( $_instance, $bits );
 
 	}

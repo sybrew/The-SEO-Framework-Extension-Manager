@@ -80,8 +80,8 @@ function _test_sever( $network_wide = false ) {
 			return;
 	endswitch;
 
-	$network = $network_wide ? 'network/' : '';
-	$pluginspage = \admin_url( $network . 'plugins.php' );
+	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.
+	$pluginspage = $network_wide ? \network_admin_url( 'plugins.php' ) : \admin_url( $network . 'plugins.php' );
 
 	//* Let's have some fun with teapots.
 	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
@@ -142,7 +142,7 @@ function can_do_settings() {
 \TSF_Extension_Manager\_protect_options();
 /**
  * Prevents option handling outside of the plugin's scope.
- * Warning: When you remove these filters or action, the plugin will delete all its options on first sight.
+ * Warning: When you remove these filters or actions, the plugin will delete all its options on first sight.
  *          This essentially means it will be reset to its initial state.
  *
  * Also Triggers fatal error when The SEO Framework extension manager has not been initialized yet.

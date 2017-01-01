@@ -128,7 +128,7 @@ window[ 'tsfem_e_monitor' ] = {
 
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' !== typeof response.status['timeout'] )
+				if ( 'undefined' !== typeof response.status && 'undefined' !== typeof response.status['timeout'] )
 					tsfem_e_monitor.rCrawlTimeout = response.status['timeout'];
 
 				if ( 'undefined' === typeof response.status || 'undefined' === typeof response.status['type'] ) {
@@ -212,7 +212,7 @@ window[ 'tsfem_e_monitor' ] = {
 
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' !== typeof response.status['timeout'] )
+				if ( 'undefined' !== typeof response.status && 'undefined' !== typeof response.status['timeout'] )
 					tsfem_e_monitor.rDataTimeout = response.status['timeout'];
 
 				if ( 'undefined' === typeof response.status || 'undefined' === typeof response.status['type'] || 'undefined' === typeof response.status['content'] ) {
@@ -273,7 +273,7 @@ window[ 'tsfem_e_monitor' ] = {
 					}
 				}
 			},
-			error: function() {
+			error: function( xhr, ajaxOptions, thrownError ) {
 				if ( tsfem.debug ) {
 					console.log( xhr.responseText );
 					console.log( thrownError );

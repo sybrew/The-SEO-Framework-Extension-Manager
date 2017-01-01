@@ -383,9 +383,9 @@ trait Extensions_Layout {
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', \esc_html( static::get_i18n( 'version' ) ), \esc_html( $version ) );
 
 		//* Make extension home element.
-		if ( ! empty( $data['ExtensionURI'] ) ) {
-			$home = static::get_extension_desc_home_item( $data['ExtensionURI'] );
-		}
+		// if ( ! empty( $data['ExtensionURI'] ) ) {
+		//	$home = static::get_extension_desc_home_item( $data['ExtensionURI'] );
+		// }
 
 		//* Make extension compatibility element.
 		$compatible = static::get_extension_desc_compat_item( $extension );

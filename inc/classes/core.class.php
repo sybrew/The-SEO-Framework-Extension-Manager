@@ -60,15 +60,6 @@ class Core {
 	protected $nonce_action = array();
 
 	/**
-	 * The POST request status code option name.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string The POST request status code option name.
-	 */
-	protected $error_notice_option;
-
-	/**
 	 * Returns an array of active extensions real path.
 	 *
 	 * @since 1.0.0
@@ -86,7 +77,7 @@ class Core {
 
 		//* Verify integrity.
 		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFrontend' );
-		$this instanceof $that or wp_die( -1 );
+		$this instanceof $that or \wp_die( -1 );
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
 		$this->request_name = array(
@@ -120,6 +111,10 @@ class Core {
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		);
 
+		/**
+		 * Set error notice option.
+		 * @see trait TSF_Extension_Manager\Error
+		 */
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
 		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
@@ -151,8 +146,7 @@ class Core {
 			return $loaded = false;
 		}
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		//* Some AJAX functions require Extension layout traits to be loaded.
 		if ( \is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
@@ -191,14 +185,12 @@ class Core {
 		if ( empty( $extensions ) )
 			return $loaded = false;
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
 
 		foreach ( $extensions as $slug => $active ) {
-			$bits = $this->get_bits();
-			$_instance = $this->get_verification_instance( $bits[1] );
+			$this->get_verification_codes( $_instance, $bits );
 
 			\TSF_Extension_Manager\Extensions::load_extension( $slug, $_instance, $bits );
 		}
@@ -510,6 +502,21 @@ class Core {
 	}
 
 	/**
+	 * Returns the verification instance codes by reference.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $instance The verification instance. Passed by reference.
+	 * @param array $bits The verification bits. Passed by reference.
+	 */
+	final protected function get_verification_codes( &$instance = null, &$bits = null ) {
+
+		$bits = $this->get_bits();
+		$instance = $this->get_verification_instance( $bits[1] );
+
+	}
+
+	/**
 	 * Generates view instance through bittype and hash comparison.
 	 * It's a two-factor verification.
 	 *
@@ -778,8 +785,7 @@ class Core {
 		foreach ( $args as $key => $val )
 			$$key = $val;
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 
@@ -891,11 +897,11 @@ class Core {
 	 * @see $this->_yield_verification_instance() for faster looping instances.
 	 * @access private
 	 *
-	 * @param object $instance The class object. Passed by reference.
+	 * @param object $object The class object. Passed by reference.
 	 * @param string $_instance The verification instance. Passed by reference.
 	 * @param array $bits The verification bits. Passed by reference.
 	 */
-	public function _request_premium_extension_verification_instance( &$instance, &$_instance, &$bits ) {
+	public function _request_premium_extension_verification_instance( &$object, &$_instance, &$bits ) {
 
 		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
 			return false;
@@ -904,9 +910,8 @@ class Core {
 			'TSF_Extension_Manager_Extension\\Monitor_Admin',
 		);
 
-		if ( in_array( get_class( $instance ), $allowed_classes, true ) ) {
-			$bits = $this->get_bits();
-			$_instance = $this->get_verification_instance( $bits[1] );
+		if ( in_array( get_class( $object ), $allowed_classes, true ) ) {
+			$this->get_verification_codes( $_instance, $bits );
 		}
 	}
 
@@ -1023,8 +1028,7 @@ class Core {
 			$_class = strtolower( str_replace( 'TSF_Extension_Manager_Extension\\', '', $class ) );
 			$_class = str_replace( '_', '-', $_class );
 
-			$bits = $this->get_bits();
-			$_instance = $this->get_verification_instance( $bits[1] );
+			$this->get_verification_codes( $_instance, $bits );
 
 			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
 		} else {
@@ -1071,8 +1075,7 @@ class Core {
 
 		$slug = $options['extension'];
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Extensions::initialize( 'activation', $_instance, $bits );
 		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
@@ -1104,6 +1107,7 @@ class Core {
 		endif;
 
 		$status = \TSF_Extension_Manager\Extensions::validate_extension_activation();
+
 		\TSF_Extension_Manager\Extensions::reset();
 
 		if ( $status['success'] ) :
@@ -1202,15 +1206,12 @@ class Core {
 	 */
 	protected function test_extension( $slug, $ajax = false ) {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
-
+		$this->get_verification_codes( $_instance, $bits );
 		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
-
+		$this->get_verification_codes( $_instance, $bits );
 		$result = \TSF_Extension_Manager\Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+
 		\TSF_Extension_Manager\Extensions::reset();
 
 		return $result;
@@ -1492,15 +1493,39 @@ class Core {
 			switch ( $type ) :
 				case 'strong' :
 					//* Considers word boundary. @TODO consider removing this?
-					$text = preg_replace( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', '<strong>${1}</strong>', \esc_html( $text ) );
+					$count = preg_match_all( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
 					break;
 
 				case 'em' :
-					$text = preg_replace( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', '<em>${1}</em>', \esc_html( $text ) );
+					$count = preg_match_all( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
 					break;
 
 				case 'code' :
-					$text = preg_replace( '/(?:`{1})([^`{1}]+)(?:`{1})/', '<code>${1}</code>', \esc_html( $text ) );
+					$count = preg_match_all( '/(?:`{1})([^`{1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
 					break;
 
 				case 'h6' :
@@ -1509,17 +1534,23 @@ class Core {
 				case 'h3' :
 				case 'h2' :
 				case 'h1' :
-					//* Considers word non-boundary. @TODO consider removing this?
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
+					//* Considers word non-boundary. @TODO consider removing this?
 					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
-					$replacement = "<{$type}>${1}</{$type}>";
-					$text = preg_replace( $expression, $replacement, $text );
+					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
+
+					for ( $i = 0; $i < $count; $i++ ) {
+						$text = str_replace(
+							$matches[0][ $i ],
+							sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
+							$text
+						);
+					}
 					break;
 
 				case 'a' :
-					getmatches : {
-						$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
-					}
+					$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
+
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],

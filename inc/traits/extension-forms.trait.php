@@ -255,7 +255,7 @@ trait Extension_Forms {
 			'ajax-title' => '',
 		);
 
-		$items = wp_parse_args( $items, $defaults );
+		$items = \wp_parse_args( $items, $defaults );
 
 		$form = '';
 		foreach ( $items['input'] as $item ) {

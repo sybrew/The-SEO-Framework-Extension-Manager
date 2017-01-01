@@ -405,11 +405,11 @@ class AccountActivation extends Panes {
 		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
 
 		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
-			//* Updates at most every 10 minutes.
-			$divider = HOUR_IN_SECONDS / 6;
+			//* Updates at most every 1 minute.
+			$divider = MINUTE_IN_SECONDS;
 		} else {
-			//* Updates at most every two hours.
-			$divider = HOUR_IN_SECONDS * 2;
+			//* Updates at most every 5 minutes.
+			$divider = MINUTE_IN_SECONDS * 5;
 		}
 
 		//* In-house transient cache.

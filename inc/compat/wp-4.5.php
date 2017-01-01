@@ -23,4 +23,6 @@ defined( 'ABSPATH' ) or die;
  * All functions within this file are exact copies from WordPress Core 4.5.
  * @link https://wordpress.org/
  * @license GPLv2+
+ *
+ * @TODO fill this in. For now, this plugin and its extensions work with WordPress 4.4+
  */

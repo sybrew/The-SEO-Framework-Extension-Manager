@@ -125,21 +125,59 @@ class Panes extends API {
 	}
 
 	/**
+	 * Returns wrapped Google Feed with status notices.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool @ajax Whether the return value is queried through AJAX.
+	 * @return array {
+	 *    'data' => array The feed items.
+	 *    'wrap' => string The feed items wrap.
+	 *    'error_output' => string If feed has an error, this is sent too.
+	 * }
+	 */
+	protected function ajax_get_trends_output() {
+
+		$data = $this->get_trends_feed( true );
+
+		if ( -1 === $data ) {
+			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
+			$output = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$error_output = sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output );
+			$status = 'parse_error';
+		} elseif ( empty( $data ) ) {
+			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
+			$output = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$error_output = sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output );
+			$status = 'unknown_error';
+		} else {
+			$status = 'success';
+			$wrap = '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row"><div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row"></div></div>';
+		}
+
+		return compact( 'status', 'error_output', 'data', 'wrap' );
+	}
+
+	/**
 	 * Returns Google Webmaster's blog Feed.
 	 *
 	 * @since 1.0.0
 	 * @uses TSF_Extension_Manager\Trends::get()
 	 * @todo Consider loading via AJAX if transient has expired (set transient ->
-	 * auto-load through ajax (calculate difference) & delete transient -> if failed run anyway).
+	 * auto-load through ajax (calculate difference with local UNIX time -> might error?) & delete transient -> if failed run anyway).
 	 *
+	 * @param bool $ajax Whether the trends are fetched through AJAX.
 	 * @return string The sanitized Google Webmasters feed output.
 	 */
-	protected function get_trends_feed() {
+	protected function get_trends_feed( $ajax = false ) {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
-		return \TSF_Extension_Manager\Trends::get( $_instance, $bits );
+		if ( $ajax ) {
+			return \TSF_Extension_Manager\Trends::get( 'ajax_feed', $_instance, $bits );
+		}
+
+		return \TSF_Extension_Manager\Trends::get( 'feed', $_instance, $bits );
 	}
 
 	/**
@@ -210,15 +248,15 @@ class Panes extends API {
 				if ( $this->get_option( '_enable_feed' ) ) {
 					//* Another admin has initialized this after the last page load.
 					$results = array(
-						'content' => $this->get_trends_output(),
-						'type' => 'unknown',
+						'content' => $this->ajax_get_trends_output(),
+						'type' => 'success',
 					);
 				} else {
 					$type = $this->update_option( '_enable_feed', true, 'regular', false ) ? 'success' : 'error';
 
 					if ( 'success' === $type ) {
 						$results = array(
-							'content' => $this->get_trends_output(),
+							'content' => $this->ajax_get_trends_output(),
 							'type' => $type,
 						);
 					} else {
@@ -317,8 +355,7 @@ class Panes extends API {
 					//* Tell the plugin we're on the correct page.
 					$this->ajax_is_tsf_extension_manager_page( true );
 
-					$bits = $this->get_bits();
-					$_instance = $this->get_verification_instance( $bits[1] );
+					$this->get_verification_codes( $_instance, $bits );
 
 					\TSF_Extension_Manager\Extensions::initialize( 'ajax_layout', $_instance, $bits );
 
@@ -431,8 +468,7 @@ class Panes extends API {
 	 */
 	protected function get_account_information() {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Layout::initialize( 'list', $_instance, $bits );
 
@@ -465,8 +501,7 @@ class Panes extends API {
 	 */
 	protected function get_account_upgrade_form() {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Layout::initialize( 'form', $_instance, $bits );
 
@@ -494,8 +529,7 @@ class Panes extends API {
 	 */
 	protected function get_deactivation_button() {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Layout::initialize( 'form', $_instance, $bits );
 
@@ -536,8 +570,7 @@ class Panes extends API {
 	 */
 	protected function get_support_buttons() {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Layout::initialize( 'link', $_instance, $bits );
 
@@ -572,8 +605,7 @@ class Panes extends API {
 	 */
 	protected function get_extensions_output() {
 
-		$bits = $this->get_bits();
-		$_instance = $this->get_verification_instance( $bits[1] );
+		$this->get_verification_codes( $_instance, $bits );
 
 		\TSF_Extension_Manager\Extensions::initialize( 'overview', $_instance, $bits );
 

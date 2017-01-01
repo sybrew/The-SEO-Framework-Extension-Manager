@@ -55,7 +55,7 @@ class API extends Core {
 	 * @return string Domain Host.
 	 */
 	protected function get_activation_site_domain() {
-		return str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
+		return str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
 	}
 
 	/**
@@ -125,7 +125,7 @@ class API extends Core {
 	 * @param int $bit The verification instance bit.
 	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
 	 */
-	public function _get_api_response( $args = array(), $_instance, $bits ) {
+	public function _get_api_response( array $args = array(), $_instance, $bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
 			return $this->get_api_response( $args );
@@ -143,14 +143,14 @@ class API extends Core {
 	 * @param array $args The API query parameters.
 	 * @return string Response body. Empty string if no body or incorrect parameter given.
 	 */
-	protected function get_api_response( $args ) {
+	protected function get_api_response( array $args ) {
 
 		$defaults = array(
-			'request'          => '',
-			'email'            => '',
-			'licence_key'      => '',
-			'instance'         => $this->get_activation_instance( false ),
-			'platform'         => $this->get_activation_site_domain(),
+			'request'     => '',
+			'email'       => '',
+			'licence_key' => '',
+			'instance'    => $this->get_activation_instance( false ),
+			'platform'    => $this->get_activation_site_domain(),
 		);
 
 		$args = \wp_parse_args( $args, $defaults );

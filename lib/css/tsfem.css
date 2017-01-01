@@ -979,9 +979,10 @@ h5.tsfem-extension-type {
 
 /* ### Feed pane.
 /*--------------------------------------*/
-/*.tsfem-feed-wrap {
-	overflow: hidden;
-}*/
+.tsfem-feed-wrap {
+	-webkit-align-self: flex-start;
+	align-self: flex-start;
+}
 
 .tsfem-enable-feed-button {
 	margin-bottom: 14px;

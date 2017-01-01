@@ -41,15 +41,29 @@ final class Trends {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $type Determines what to get.
 	 * @param string $instance Required. The instance key.
 	 * @param int $bits Required. The instance bits.
-	 * @return string The trends output.
+	 * @return mixed The trends output.
 	 */
-	public static function get( $instance, $bits ) {
+	public static function get( $type, $instance, $bits ) {
 
 		\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 
-		return self::prototype_trends();
+		switch ( $type ) :
+			case 'feed' :
+				return static::prototype_trends();
+				break;
+
+			case 'ajax_feed' :
+				return static::prototype_trends( true );
+				break;
+
+			default :
+				break;
+		endswitch;
+
+		return '';
 	}
 
 	/**
@@ -60,9 +74,13 @@ final class Trends {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string The filtered Google Webmasters feed output.
+	 * @param bool $ajax Whether to get the AJAX feed.
+	 * @return string|array|int : {
+	 *       string : The filtered Google Webmasters feed output. Empty on failure.
+	 *       array  : The filtered Google Webmasters feed output on AJAX.
+	 *       int    : On missing PHP functionality.
 	 */
-	private static function prototype_trends() {
+	private static function prototype_trends( $ajax = false ) {
 
 		if ( ! function_exists( 'simplexml_load_string' ) )
 			return -1;
@@ -70,14 +88,15 @@ final class Trends {
 		$transient_name = 'tsfem_latest_seo_feed';
 		$output = \get_transient( $transient_name );
 
-		if ( false !== $output )
+		//* Bypass cache on AJAX as multi-admin can interfere.
+		if ( false === $ajax && false !== $output )
 			return $output;
 
 		//* Google Webmasters official blog feed.
 		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
 		$http_args = array(
-			'timeout' => 5,
+			'timeout' => 7,
 			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
 		);
 
@@ -92,7 +111,8 @@ final class Trends {
 		$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 		if ( ! isset( $xml->entry ) || empty( $xml->entry ) ) {
-			set_transient( $transient_name, '', HOUR_IN_SECONDS * 2 );
+			//* Retry in half an hour when server is down.
+			\set_transient( $transient_name, '', HOUR_IN_SECONDS / 2 );
 			return '';
 		}
 
@@ -100,6 +120,7 @@ final class Trends {
 		unset( $xml );
 
 		$output = '';
+		$a_output = array();
 
 		$max = 15;
 		$i = 0;
@@ -171,12 +192,19 @@ final class Trends {
 			//* No need for translations, it's English only.
 			$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', \esc_url( $link ), $title );
 
-			$output .= sprintf( '<div class="tsfem-feed-entry tsfem-flex"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
+			$_output = sprintf( '<div class="tsfem-feed-entry tsfem-flex tsfem-flex-nowrap"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
+
+			//* Maintain full list for transient / non-AJAX.
+			$output .= $_output;
+			//* Maintain list of output for AJAX.
+			$ajax and $a_output[] = $_output;
+
+			unset( $_output );
 			$i++;
 		endforeach;
 
 		\set_transient( $transient_name, $output, DAY_IN_SECONDS );
 
-		return $output;
+		return $ajax ? $a_output : $output;
 	}
 }

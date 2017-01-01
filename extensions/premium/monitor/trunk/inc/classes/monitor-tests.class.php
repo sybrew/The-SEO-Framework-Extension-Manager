@@ -223,7 +223,8 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ),
+					array( 'code' )
 				)
 			);
 			goto end;
@@ -252,7 +253,8 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					\esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
+					array( 'code' )
 				)
 			);
 			goto end;
@@ -263,7 +265,8 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' ),
+					array( 'code' )
 				)
 			);
 			goto end;
