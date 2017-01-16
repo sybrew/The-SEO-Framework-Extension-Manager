@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard. No sign-up required.
+Add more powerful SEO features to The SEO Framework right from your WordPress dashboard. No sign-up required.
 
 == Description ==
 
@@ -43,9 +43,9 @@ As long as the subscription is active, you're allowed to use all premium extensi
 
 1. Install [The SEO Framework](https://wordpress.org/plugins/autodescription/) either via the plugin installer, or by uploading the files to your server.
 1. Follow [those installation instructions](https://wordpress.org/plugins/autodescription/installation/).
-1. Install The SEO Framework extension manager either via the plugin installer, or by uploading the files to your server.
+1. Install The SEO Framework - Extension Manager either via the plugin installer, or by uploading the files to your server.
 1. Either Network Activate this plugin or activate it on a single site.
-1. Follow the activation steps provided on your website.
+1. Follow the activation steps provided on your screen.
 1. You're good to go! Enjoy!
 
 == Screenshots ==
@@ -61,7 +61,7 @@ The Extension Manager for The SEO Framework allows you to enable various extensi
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
 = What is an Extensions? =
-An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions are included in this plugin package.
+An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions are included and are available to be seen by anyone in this plugin package.
 
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
@@ -78,7 +78,7 @@ The extension activation page will lead you to the site where you can purchase a
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
 No X.y updates are planned as of now (2.0, 3.0, etc.). We plan to release a new extension every (other) month.
 
-= I've received error <code>, what now? =
+= I've received an error code, what now? =
 Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
 Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
@@ -89,8 +89,8 @@ On multisite, it is planned that this behavior is restricted to the activation o
 = Where are the extensions acquired from? =
 Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
 
-= Does the Extension Manager need to stay activated in order to run the plugins? =
-Yes. The Extension Manager supplies its own plugin activation management system apart from WordPress'.
+= Does the Extension Manager need to stay activated in order to run the extensions? =
+Yes. The Extension Manager supplies its own extension activation management system apart from WordPress'.
 Deactivating the Extension Manager will also deactivate all extensions.
 
 = When my subscription expires, what happens? =
@@ -99,7 +99,7 @@ A margin of error is allowed, so you don't have to worry for if the activation s
 
 = I want to modify an extension, is this allowed? =
 Of course! This plugin is licensed with GPLv3, after all. However, please note that the plugin checks for file changes and compares hashes to prevent rogue software penetration.
-After all, this plugin connects with our API server and we don't want third party plugins to interfere in any way.
+After all, this plugin can connect with our API server and we don't want third party plugins to interfere in any way.
 
 = Does this plugin work on MultiSite Networks? =
 This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
@@ -117,14 +117,29 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = The layout of the plugin pages just doesn't look right, why? =
 This plugin has been tested against many browsers with the help of [BrowserStack](https://www.browserstack.com/), we support the latest and most popular browsers, even Internet Explorer!
-However, because the plugin pages have been completely written in [state-of-the-art experimental flexbox CSS](https://drafts.csswg.org/css-flexbox/), it's possible not all browsers act alike.
+However, because the plugin pages have been completely written in [state-of-the-art experimental CSS flexbox](https://www.w3.org/TR/css-flexbox-1/), it's possible not all browsers act alike.
 Although everything should always fit perfectly; if you do find any issue, please state your browser and operating system and tell us where the issue resides. Thanks!
 
 == Changelog ==
 
+= 1.1.0 - ??? =
+
+* **Release date:**
+	* ???
+
+**Plugin Improvements**
+
+* None yet.
+
+** Extension Improvements **
+
+* **Incognito:**
+	* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
+
 = 1.0.0 - Amplified SEO =
 
-* **Release date:** 01/01/2017
+* **Release date:**
+	* January 1st, 2017
 
 **Changelog:**
 

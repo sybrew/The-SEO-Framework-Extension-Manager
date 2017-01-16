@@ -30,7 +30,7 @@ defined( 'TSF_EXTENSION_MANAGER_DIR_PATH' ) or die;
  *
  * This function will create a parse error on PHP < 5.3 (use of goto wrappers).
  * Which makes a knowledge database entry easier to make as it won't change anytime soon.
- * Otherwise, it will crash in the first called file because of the "use" keyword.
+ * Otherwise, it will crash in the next called file because of the "use" keyword.
  *
  * @since 1.0.0
  * @see register_activation_hook():
@@ -55,7 +55,7 @@ function _test_sever( $network_wide = false ) {
 
 	deactivate : {
 		//* Not good. Deactivate plugin.
-		\deactivate_plugins( plugin_basename( __FILE__ ) );
+		\deactivate_plugins( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, false, $network_wide );
 	}
 
 	switch ( $test ) :
@@ -77,11 +77,11 @@ function _test_sever( $network_wide = false ) {
 			break;
 
 		default :
-			return;
+			\wp_die();
 	endswitch;
 
 	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.
-	$pluginspage = $network_wide ? \network_admin_url( 'plugins.php' ) : \admin_url( $network . 'plugins.php' );
+	$pluginspage = $network_wide ? \network_admin_url( 'plugins.php' ) : \admin_url( 'plugins.php' );
 
 	//* Let's have some fun with teapots.
 	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
@@ -373,5 +373,5 @@ function _load_wp_compat( $version = '' ) {
 	if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
 		return $loaded[ $version ] = true;
 
-	return $loaded[ $version ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
+	return $loaded[ $version ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
 }

@@ -300,7 +300,7 @@ trait Extensions_Properties {
 		$data[ $slug ] = false;
 
 		if ( $file = static::get_extension_header_file_location( $slug ) ) {
-			$data[ $slug ] = get_file_data( $file, $default_headers, 'tsfem-extension' );
+			$data[ $slug ] = \get_file_data( $file, $default_headers, 'tsfem-extension' );
 		}
 
 		return $data[ $slug ];
@@ -411,7 +411,7 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @return array : {
-	 * 		'success' => bool Whether the activation can proceed.
+	 *		'success' => bool Whether the activation can proceed.
 	 *		'case'    => int The status key.
 	 * }
 	 */

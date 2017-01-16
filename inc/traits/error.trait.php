@@ -92,7 +92,7 @@ trait Error {
 	 * @param array $notice The notice.
 	 */
 	final protected function set_error_notice( $notice = array() ) {
-		is_admin() and $this->error_notice_option and update_option( $this->error_notice_option, $notice );
+		\is_admin() and $this->error_notice_option and \update_option( $this->error_notice_option, $notice );
 	}
 
 	/**
@@ -103,7 +103,7 @@ trait Error {
 	 * @param array $notice The notice.
 	 */
 	final protected function unset_error_notice() {
-		$this->error_notice_option and delete_option( $this->error_notice_option );
+		$this->error_notice_option and \delete_option( $this->error_notice_option );
 	}
 
 	/**

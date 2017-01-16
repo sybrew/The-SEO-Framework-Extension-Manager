@@ -1446,7 +1446,6 @@ class Core {
 		);
 	}
 
-
 	/**
 	 * Converts markdown text into HMTL.
 	 *
