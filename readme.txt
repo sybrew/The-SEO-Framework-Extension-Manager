@@ -129,12 +129,34 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **Plugin Improvements**
 
-* None yet.
+* Improved plugin performance by eliminating duplicated autoloader checks.
 
 ** Extension Improvements **
 
 * **Incognito:**
-	* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
+	* Version:
+		* 1.0.1
+	* Improved:
+		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
+
+* **Title Fix:**
+	* Version:
+		* 1.0.3
+	* Improved:
+		* Removed redundant UTF-8 check.
+		* It now enqueues fewer actions when the title is fixed early.
+		* It also enqueues fewer WordPress actions overall. Which reduces memory usage marginally.
+
+* **Monitor:**
+	* Version:
+		/
+		* TODO
+	* Internal:
+		/
+		* TODO
+	* API:
+		/
+		* TODO It can now correctly detect The SEO Framework 2.8.0 sitemap, among others.
 
 = 1.0.0 - Amplified SEO =
 

@@ -178,7 +178,7 @@ function _protect_options() {
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 
-	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption' ) )
+	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) )
 		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 
 	/**
@@ -254,9 +254,9 @@ function _init_tsf_extension_manager() {
  */
 function _register_autoloader() {
 
-	//* Prevent overriding of security classes.
-	! ( class_exists( 'TSF_Extension_Manager\Core' ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract' ) || class_exists( 'TSF_Extension_Manager\SecureOption' ) )
-	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin' ) || class_exists( 'TSF_Extension_Manager\LoadFrontend' ) )
+	//* Prevent overriding of security classes by checking their existence.
+	! ( class_exists( 'TSF_Extension_Manager\Core', false ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract', false ) || class_exists( 'TSF_Extension_Manager\SecureOption', false ) )
+	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin', false ) || class_exists( 'TSF_Extension_Manager\LoadFrontend', false ) )
 		or \wp_die( -1 );
 
 	/**

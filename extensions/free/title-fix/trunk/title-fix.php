@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager_Extension;
  * Extension Name: Title Fix
  * Extension URI: https://premium.theseoframework.com/extensions/title-fix/
  * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
- * Extension Version: 1.0.2
+ * Extension Version: 1.0.3
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -46,7 +46,7 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
 define( 'TSFEM_E_TITLE_FIX', true );
 
 //* Define version, for future things.
-define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.2' );
+define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.4' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
 /**
@@ -68,7 +68,7 @@ function title_fix_init() {
 		return $loaded;
 
 	//* Don't load if the WordPress.org version is active.
-	if ( class_exists( 'The_SEO_Framework_Title_Fix' ) )
+	if ( class_exists( 'The_SEO_Framework_Title_Fix', false ) )
 		return $loaded = false;
 
 	new \TSF_Extension_Manager_Extension\Title_Fix;
@@ -91,7 +91,7 @@ final class Title_Fix {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var bool Whether the fix should be forced or not.
+	 * @var bool $force_title_fix
 	 */
 	protected $force_title_fix = false;
 
@@ -100,7 +100,7 @@ final class Title_Fix {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var bool Whether title has been found and replaced already.
+	 * @var bool $title_found_and_flushed
 	 */
 	protected $title_found_and_flushed = false;
 
@@ -111,9 +111,18 @@ final class Title_Fix {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var bool Whether ob has started.
+	 * @var bool $ob_started
 	 */
 	protected $ob_started = false;
+
+	/**
+	 * Determines if the title has been fixed yet.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @var bool $is_fixed
+	 */
+	protected $is_fixed = false;
 
 	/**
 	 * The constructor, initialize plugin.
@@ -139,7 +148,7 @@ final class Title_Fix {
 		if ( \is_admin() )
 			return;
 
-		if ( false === $this->current_theme_supports_title_tag() ) {
+		if ( false === $this->current_theme_supports_title_tag() ) :
 			/**
 			 * Applies filters 'the_seo_framework_force_title_fix'
 			 * @since 1.0.1
@@ -148,41 +157,15 @@ final class Title_Fix {
 			 * @param bool Whether to force the title fixing.
 			 */
 			$this->force_title_fix = (bool) \apply_filters( 'the_seo_framework_force_title_fix', false );
-		}
+		endif;
 
 		/**
 		 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
 		 * Requires initial load after theme switch.
 		 */
 		if ( $this->force_title_fix || false === \the_seo_framework()->theme_title_doing_it_right() ) :
-			/**
-			 * First run.
-			 * Start at HTTP header.
-			 * Stop right at where wp_head is run.
-			 */
-			\add_action( 'get_header', array( $this, 'start_ob' ), 0 );
-			\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 0 );
-			\add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 0 );
-
-			/**
-			 * Second run. Capture WP head.
-			 * 		{\add_action( 'wp_head', 'wp_title' );.. who knows?}
-			 * Start at where wp_head is run (last run left off).
-			 * Stop right at the end of wp_head.
-			 */
-			\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 0 );
-			\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 9999 );
-			\add_action( 'wp_head', array( $this, 'maybe_stop_ob' ), 9999 );
-
-			/**
-			 * Third run. Capture the page.
-			 * Start at where wp_head has ended (last run left off),
-			 *		or at wp_head start (first run left off).
-			 * Stop at the footer.
-			 */
-			\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 9999 );
-			\add_action( 'get_footer', array( $this, 'maybe_rewrite_title' ), -1 );
-			\add_action( 'get_footer', array( $this, 'maybe_stop_ob' ), -1 );
+			//* Start loader.
+			$this->loader();
 
 			/**
 			 * Stop OB if it's still running at shutdown.
@@ -190,6 +173,61 @@ final class Title_Fix {
 			 */
 			\add_action( 'shutdown', array( $this, 'stop_ob' ), 0 );
 		endif;
+	}
+
+	/**
+	 * Loads plugin actions.
+	 *
+	 * @since 1.0.3
+	 * @staticvar int $sequence Itterates sequences for switch.
+	 *
+	 * @return null Early if title is fixed.
+	 */
+	public function loader() {
+
+		static $sequence = 0;
+
+		$sequence++;
+
+		if ( $this->is_fixed )
+			return;
+
+		switch ( $sequence ) :
+			case 1 :
+				/**
+				 * First run.
+				 * Start at HTTP header.
+				 * Stop right at where wp_head is run.
+				 */
+				\add_action( 'get_header', array( $this, 'start_ob' ), 0 );
+				\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 0 );
+				break;
+
+			case 2 :
+				/**
+				 * Second run. Capture WP head.
+				 * 		{\add_action( 'wp_head', 'wp_title' );.. who knows?}
+				 * Start at where wp_head is run (last run left off).
+				 * Stop right at the end of wp_head.
+				 */
+				\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 0 );
+				\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 9999 );
+				break;
+
+			case 3 :
+				/**
+				 * Third run. Capture the page.
+				 * Start at where wp_head has ended (last run left off),
+				 *		or at wp_head start (first run left off).
+				 * Stop at the footer.
+				 */
+				\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 9999 );
+				\add_action( 'get_footer', array( $this, 'maybe_rewrite_title' ), -1 );
+				break;
+
+			default :
+				break;
+		endswitch;
 	}
 
 	/**
@@ -248,6 +286,7 @@ final class Title_Fix {
 	 * Maybe rewrite the title, if not rewritten yet.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.3 : Now initiates loader loop.
 	 */
 	public function maybe_rewrite_title() {
 
@@ -257,6 +296,9 @@ final class Title_Fix {
 
 			$this->find_title_tag( $content );
 		}
+
+		$this->maybe_stop_ob();
+		$this->loader();
 	}
 
 	/**
@@ -273,36 +315,14 @@ final class Title_Fix {
 	 */
 	public function find_title_tag( $content ) {
 
-		//* Check if we can use preg_match.
-		if ( \_wp_can_use_pcre_u() ) {
+		//* Let's use regex.
+		if ( 1 === preg_match( '/<title.*?<\/title>/ius', $content, $matches ) ) {
+			$title_tag = isset( $matches[0] ) ? $matches[0] : null;
 
-			//* Let's use regex.
-			if ( 1 === preg_match( '/<title.*?<\/title>/ius', $content, $matches ) ) {
-				$title_tag = isset( $matches[0] ) ? $matches[0] : null;
-
-				if ( isset( $title_tag ) ) {
-					$this->replace_title_tag( $title_tag, $content );
-					$this->title_found_and_flushed = true;
-					return;
-				}
-			}
-		} else {
-			//* Let's count. 0.0003s faster, but less reliable.
-			$start = stripos( $content, '<title' );
-
-			if ( false !== $start ) {
-				$end = stripos( $content, '</title>', $start );
-
-				if ( false !== $end ) {
-					//* +8 is "</title>" length
-					$title_tag = substr( $content, $start, $end - $start + 8 );
-
-					if ( false !== $title_tag ) {
-						$this->replace_title_tag( $title_tag, $content );
-						$this->title_found_and_flushed = true;
-						return;
-					}
-				}
+			if ( isset( $title_tag ) ) {
+				$this->replace_title_tag( $title_tag, $content );
+				$this->title_found_and_flushed = true;
+				return;
 			}
 		}
 
