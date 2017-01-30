@@ -34,6 +34,15 @@ defined( 'ABSPATH' ) or die;
 trait Options {
 
 	/**
+	 * Determines whether the options have been killed.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @var bool $killed_options
+	 */
+	private $killed_options = false;
+
+	/**
 	 * Returns TSF Extension Manager options array.
 	 *
 	 * @since 1.0.0
@@ -42,6 +51,9 @@ trait Options {
 	 * @return array TSF Extension Manager options.
 	 */
 	final protected function get_all_options() {
+
+		if ( $this->killed_options )
+			return array();
 
 		static $cache = null;
 
@@ -68,6 +80,9 @@ trait Options {
 
 		if ( ! $option )
 			return null;
+
+		if ( $this->killed_options )
+			return array();
 
 		static $options_cache = array();
 
@@ -109,6 +124,9 @@ trait Options {
 	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
 
 		if ( ! $option )
+			return false;
+
+		if ( $this->killed_options )
 			return false;
 
 		$_options = $this->get_all_options();
@@ -168,6 +186,9 @@ trait Options {
 		static $run = false;
 
 		if ( empty( $options ) )
+			return false;
+
+		if ( $this->killed_options )
 			return false;
 
 		$_options = $this->get_all_options();
@@ -360,20 +381,21 @@ trait Options {
 		if ( $this->_has_died() )
 			return false;
 
-		$verify = \TSF_Extension_Manager\SecureOption::verified_option_update();
+		$verified = \TSF_Extension_Manager\SecureOption::verified_option_update();
 
-		if ( $kill && false === $verify )
+		if ( $kill && false === $verified )
 			$this->kill_options();
 
 		\TSF_Extension_Manager\SecureOption::reset();
 
-		return $verify;
+		return $verified;
 	}
 
 	/**
 	 * Deletes all plugin options when an options breach has been spotted.
 	 *
 	 * @since 1.0.0
+	 * @uses $this->killed_options
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -383,6 +405,8 @@ trait Options {
 		$success[] = $this->delete_options_instance();
 		$success[] = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
-		return ! in_array( false, $success, true );
+		$this->killed_options = ! in_array( false, $success, true );
+
+		return $this->killed_options;
 	}
 }

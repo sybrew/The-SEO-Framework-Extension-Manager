@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Title_Fix
+ * @package TSF_Extension_Manager\Extension\Title_Fix
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 /**
  * Extension Name: Title Fix
@@ -46,9 +46,9 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
 define( 'TSFEM_E_TITLE_FIX', true );
 
 //* Define version, for future things.
-define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.4' );
+define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.3' );
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\title_fix_init', 11 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\title_fix_init', 11 );
 /**
  * Initialize the plugin.
  *
@@ -71,13 +71,16 @@ function title_fix_init() {
 	if ( class_exists( 'The_SEO_Framework_Title_Fix', false ) )
 		return $loaded = false;
 
-	new \TSF_Extension_Manager_Extension\Title_Fix;
+	//* Backwards compatibility
+	define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
+
+	new \TSF_Extension_Manager\Extension\Title_Fix;
 
 	return $loaded = true;
 }
 
 /**
- * Class TSF_Extension_Manager_Extension\Title_Fix
+ * Class TSF_Extension_Manager\Extension\Title_Fix
  *
  * @since 1.0.0
  *

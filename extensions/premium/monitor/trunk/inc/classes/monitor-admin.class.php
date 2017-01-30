@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Admin
+ * @package TSF_Extension_Manager\Extension\Monitor\Admin
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -61,12 +61,7 @@ use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
 use \TSF_Extension_Manager\Error as Error;
 
 /**
- * @package TSF_Extension_Manager_Extension\Classes
- */
-use \TSF_Extension_Manager_Extension\Monitor_Api as Monitor_Api;
-
-/**
- * Class TSF_Extension_Manager_Extension\Monitor_Admin
+ * Class TSF_Extension_Manager\Extension\Monitor_Admin
  *
  * Holds extension admin page functions.
  *
@@ -367,10 +362,11 @@ final class Monitor_Admin extends Monitor_Api {
 			 * there's no need to check them on each request.
 			 */
 			if ( empty( $_POST )
-			  || ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
-			  || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
-			   )
+			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			) {
 				return $validated[ $key ] = false;
+			}
 		}
 
 		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
@@ -440,7 +436,7 @@ final class Monitor_Admin extends Monitor_Api {
 							'content' => null,
 							'type' => 'yield_unchanged',
 							'notice' => sprintf(
-								\esc_html( _n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
+								\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
 								(int) $seconds
 							),
 							'timeout' => $current_timeout,
@@ -785,7 +781,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $issues ) ) {
 			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
-			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
 			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
@@ -811,7 +807,7 @@ final class Monitor_Admin extends Monitor_Api {
 			$data = sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
 			$found = true;
-			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
 			$data = $instance->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
@@ -1123,7 +1119,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $stats ) ) {
 			$output .= $this->get_string_no_data_found();
 		} else {
-			$instance = \TSF_Extension_Manager_Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 

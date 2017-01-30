@@ -350,7 +350,7 @@ trait Extensions_Layout {
 		$footer = static::get_extension_description_footer( $extension );
 
 		//* Put it all together.
-		$content = sprintf( '<div class="tsfem-extension-description-header tsfem-flex tsfem-flex-row">%s</div>', $description );
+		$content = sprintf( '<div class="tsfem-extension-description-header tsfem-flex tsfem-flex-row"><span>%s</span></div>', $description );
 		$content .= $footer;
 
 		$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
@@ -380,7 +380,10 @@ trait Extensions_Layout {
 
 		//* Make extension version element.
 		$version = $data['Version'];
-		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>', \esc_html( static::get_i18n( 'version' ) ), \esc_html( $version ) );
+		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
+			\esc_html( static::get_i18n( 'version' ) ),
+			\tsf_extension_manager()->convert_markdown( $version, array( 'strong', 'em' ) )
+		);
 
 		//* Make extension home element.
 		// if ( ! empty( $data['ExtensionURI'] ) ) {

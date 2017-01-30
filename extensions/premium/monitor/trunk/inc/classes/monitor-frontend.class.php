@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\FrontEnd
+ * @package TSF_Extension_Manager\Extension\Monitor\FrontEnd
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,7 +33,7 @@ use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
 use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
 
 /**
- * Class TSF_Extension_Manager_Extension\Monitor_Frontend
+ * Class TSF_Extension_Manager\Extension\Monitor_Frontend
  *
  * Holds extension front-end functions.
  *

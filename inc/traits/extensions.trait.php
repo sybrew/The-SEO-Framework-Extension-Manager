@@ -87,11 +87,11 @@ trait Extensions_Properties {
 				'version' => '1.0.2',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1454785229',
+				'last_updated' => '1484979324',
 				'requires' => '3.9.0',
-				'tested' => '4.7.0',
+				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.8.0',
+				'tested_tsf' => '2.9.0',
 			),
 			'incognito' => array(
 				'slug' => 'incognito',
@@ -101,11 +101,11 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1473299919',
+				'last_updated' => '1484977702',
 				'requires' => '3.9.0',
-				'tested' => '4.7.0',
+				'tested' => '4.8.0',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '2.8.0',
+				'tested_tsf' => '2.9.0',
 			),
 			'monitor' => array(
 				'slug' => 'monitor',
@@ -115,11 +115,25 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1475047996',
+				'last_updated' => '1485584144',
 				'requires' => '4.4.0',
-				'tested' => '4.7.0',
+				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.8.0',
+				'tested_tsf' => '2.9.0',
+			),
+			'articles' => array(
+				'slug' => 'articles',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'news',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1485597487',
+				'requires' => '4.4.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.8.2',
+				'tested_tsf' => '2.9.0',
 			),
 		);
 	}
@@ -137,9 +151,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => 'e7cd84b971710cd3873071d3f930aa5db2f1d6fc562361f9fbcb06a77128763c',
-			'sha1'   => '4bba2636226436de0f619858416400f2d1969645',
-			'md5'    => '4f1409996cc63d9f01eb30e0ceec97e0',
+			'sha256' => '147b73c0d2ebc66c48e66768e5b8f5a3912368c2a7283314326dea48f932c8a1',
+			'sha1'   => '2fd0bc8ac85c204206faa80db6b3ee428439ea94',
+			'md5'    => '41506ec6eb51d3546e6e4ddc791fbf85',
 		);
 	}
 

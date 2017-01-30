@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api, monitor, modules, title
 Requires at least: 4.4.0
-Tested up to: 4.7.0
+Tested up to: 4.8.0
 Stable tag: 1.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -127,36 +127,83 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Release date:**
 	* ???
 
-**Plugin Improvements**
+**New Extensions:**
 
-* Improved plugin performance by eliminating duplicated autoloader checks.
+1. Articles: This automatically adds the [Structured Data for Articles](https://developers.google.com/search/docs/data-types/articles) to your website.
+	* **Experimental module**: Google will tell its output is erroneous.
+		* This is wrongfully determined, based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
+2. TODO AMP Dashboard: This will show you an overview for AMP and can interact with the Articles extension, when activated.
+	* **Alpha:** This dashboard will allow you to upload AMP required data.
+	* This dashboard automatically connects The SEO Framework to [Automattic's AMP plugin](https://wordpress.org/plugins/amp/).
+3. TODO Honeypot: This will effectively stop comment spam.
+	* **Beta:** This extension might not work with every theme yet. Try to post a comment whilst being logged out to test its effectiveness.
+	* The effectiveness of this algoritm has been tested and currently has a 100% catch rate.
+	* If you still recieve lots of spam, a more advanced solution is required, like [Akismet](https://wordpress.org/plugins/akismet/).
+
+**Detailed log:**
+
+**Plugin Improvements:**
+
+* **Internal:**
+	* Improved plugin performance by eliminating duplicated autoloader checks.
+	* Namespace `TSF_Extension_Manager_Extension` now is `TSF_Extension_Manager\Extension`
+	* Plugin is tested on WordPress 4.8 (alpha).
+	* When options have deleted through an internal API request consummation, they can't be rewritten by cache again.
+
+* **API:**
+	* **Note:** These API changes affect only this plugin version.
+		* Deactivation on decoupled sites now work again.
+	* **Note:** These API changes affect all plugin versions.
 
 ** Extension Improvements **
 
-* **Incognito:**
-	* Version:
-		* 1.0.1
-	* Improved:
-		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
-
-* **Title Fix:**
-	* Version:
+* **Free - Title Fix:**
+	* **Version:**
 		* 1.0.3
-	* Improved:
+	* **Improved:**
 		* Removed redundant UTF-8 check.
 		* It now enqueues fewer actions when the title is fixed early.
 		* It also enqueues fewer WordPress actions overall. Which reduces memory usage marginally.
+	* **Fixed:**
+		* The SEO Framework can now recognize this extension, therefore re-enabling otherwise disabled features.
 
-* **Monitor:**
-	* Version:
+* **Free - Incognito:**
+	* **Version:**
+		* 1.0.1
+	* **Improved:**
+		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
+
+* **Free - Articles:**
+	* **Version:**
 		/
-		* TODO
-	* Internal:
+		* 1.0.0-alpha
+	* **This is a new extension**.
+
+* **Premium - Monitor:**
+	* **Version:**
 		/
-		* TODO
-	* API:
+		* 1.0.0-beta2
+	* **Internal:**
 		/
-		* TODO It can now correctly detect The SEO Framework 2.8.0 sitemap, among others.
+		* **Added:**
+			/
+			* TODO Website's uptime can now be viewed.
+		* **Fixed:**
+			/
+			* TODO The robots.txt file got marked as static whilst being dynamic.
+	* **API:**
+		* **Note:** These API changes affect only this plugin version.
+			* Fixed a PHP warning when making the first connection.
+			* Deactivation on decoupled sites now work again.
+			* When the site has been decoupled from the API server, the notices are now more in-line with events.
+			* When the site has been decoupled from the API server, the remote data will be removed from view.
+		* **Note:** These API changes affect all plugin versions.
+			/
+			* TODO The API server has been moved to a dedicated instance.
+			* TODO The API server now logs uptime in 1 minute intervals.
+				/
+				* TODO Every 5 minutes a more advanced check is performed, which tests server status code headers next to ping.
+			* TODO Fixed sitemap detection when more advanced sitemaps are found.
 
 = 1.0.0 - Amplified SEO =
 

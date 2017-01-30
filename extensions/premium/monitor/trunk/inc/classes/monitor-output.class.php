@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Output
+ * @package TSF_Extension_Manager\Extension\Monitor\Output
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,7 +33,7 @@ use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
 use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
 
 /**
- * Class TSF_Extension_Manager_Extension\Monitor_Output
+ * Class TSF_Extension_Manager\Extension\Monitor_Output
  *
  * Parses and evaluates input data.
  *
@@ -153,7 +153,7 @@ final class Monitor_Output {
 	 * Iterates over pane slab data to generate information.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Output->make_slab_info_entry()
+	 * @uses TSF_Extension_Manager\Extension\Monitor_Output->make_slab_info_entry()
 	 * @generator
 	 *
 	 * @param array $data The fetched data.
@@ -259,7 +259,7 @@ final class Monitor_Output {
 	 * Iterates over graph data to generate information.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager_Extension\Monitor_Output->make_slab_graph_entry()
+	 * @uses TSF_Extension_Manager\Extension\Monitor_Output->make_slab_graph_entry()
 	 * @generator
 	 * @TODO unused?
 	 *
@@ -552,7 +552,7 @@ final class Monitor_Output {
 		static $tests = null;
 
 		if ( is_null( $tests ) )
-			$tests = \TSF_Extension_Manager_Extension\Monitor_Tests::get_instance();
+			$tests = \TSF_Extension_Manager\Extension\Monitor_Tests::get_instance();
 
 		$content = '';
 
@@ -585,7 +585,7 @@ final class Monitor_Output {
 		static $graph = null;
 
 		if ( is_null( $graph ) )
-			$graph = \TSF_Extension_Manager_Extension\Monitor_Graph::get_instance();
+			$graph = \TSF_Extension_Manager\Extension\Monitor_Graph::get_instance();
 
 		$content = '';
 

@@ -207,20 +207,20 @@ class API extends Core {
 		$results = json_decode( $response, true );
 
 		$_response = '';
-
-		if ( 'status' !== $type ) {
-			if ( 'activation' === $type )
-				$_response = $this->handle_premium_activation( $results );
-			elseif ( 'deactivation' === $type )
-				$_response = $this->handle_premium_deactivation( $results );
-		} else {
-			$_response = $results;
-		}
-
 		$additional_info = '';
 
 		//* If the user's already using a free account, don't deactivate.
 		$free = $this->is_plugin_activated() && false === $this->is_premium_user();
+
+		if ( 'status' !== $type ) {
+			if ( 'activation' === $type ) :
+				$_response = $this->handle_premium_activation( $results );
+			elseif ( 'deactivation' === $type ) :
+				$_response = $this->handle_premium_deactivation( $results );
+			endif;
+		} else {
+			$_response = $results;
+		}
 
 		if ( isset( $results['code'] ) ) :
 			switch ( $results['code'] ) :

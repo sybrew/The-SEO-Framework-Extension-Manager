@@ -2,9 +2,9 @@
 //* THIS FILE ISN'T LOADED (YET). Creating interactive (zooming) graphs is very difficult and requires a lot of time :(.
 
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Tests
+ * @package TSF_Extension_Manager\Extension\Monitor\Tests
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -35,7 +35,7 @@ use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
 use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
 
 /**
- * Class TSF_Extension_Manager_Extension\Monitor_Graph
+ * Class TSF_Extension_Manager\Extension\Monitor_Graph
  *
  * Renders Monitor Data input to generate graphs.
  *

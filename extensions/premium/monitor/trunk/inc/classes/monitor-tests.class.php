@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Tests
+ * @package TSF_Extension_Manager\Extension\Monitor\Tests
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,7 +33,7 @@ use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
 use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
 
 /**
- * Class TSF_Extension_Manager_Extension\Monitor_Tests
+ * Class TSF_Extension_Manager\Extension\Monitor_Tests
  *
  * Tests Monitor Data input. With an overuse of goto statements.
  *

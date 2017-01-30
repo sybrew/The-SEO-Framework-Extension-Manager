@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Incognito
+ * @package TSF_Extension_Manager\Extension\Incognito
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 /**
  * Extension Name: Incognito

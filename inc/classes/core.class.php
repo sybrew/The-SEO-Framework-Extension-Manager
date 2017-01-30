@@ -907,7 +907,7 @@ class Core {
 			return false;
 
 		$allowed_classes = array(
-			'TSF_Extension_Manager_Extension\\Monitor_Admin',
+			'TSF_Extension_Manager\\Extension\\Monitor_Admin',
 		);
 
 		if ( in_array( get_class( $object ), $allowed_classes, true ) ) {
@@ -935,7 +935,7 @@ class Core {
 		static $autoload_inactive = true;
 
 		if ( $autoload_inactive ) {
-			spl_autoload_register( array( $this, 'autoload_premium_extension_class' ) );
+			spl_autoload_register( array( $this, 'autoload_premium_extension_class' ), true, true );
 			$autoload_inactive = false;
 		}
 
@@ -963,7 +963,7 @@ class Core {
 		static $locations = array();
 
 		if ( $class ) {
-			$class = str_replace( 'TSF_Extension_Manager_Extension\\', '', $class );
+			$class = str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class );
 
 			//* Singular class names. Recommended as its much faster.
 			if ( isset( $locations[ $class ] ) )
@@ -1014,7 +1014,7 @@ class Core {
 	 */
 	protected function autoload_premium_extension_class( $class ) {
 
-		if ( 0 !== strpos( $class, 'TSF_Extension_Manager_Extension\\', 0 ) )
+		if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\Extension\\', 0 ) )
 			return;
 
 		static $loaded = array();
@@ -1025,7 +1025,7 @@ class Core {
 		$path = $this->get_premium_extension_autload_path( $class );
 
 		if ( $path ) {
-			$_class = strtolower( str_replace( 'TSF_Extension_Manager_Extension\\', '', $class ) );
+			$_class = strtolower( str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class ) );
 			$_class = str_replace( '_', '-', $_class );
 
 			$this->get_verification_codes( $_instance, $bits );
@@ -1450,13 +1450,15 @@ class Core {
 	 * Converts markdown text into HMTL.
 	 *
 	 * Does not support list or block elements. Only inline statements.
+	 * Expects input to be escaped: For added security, the converted strings are escaped once more.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Can now convert stacked strong/em correctly.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
 	 * @param array $convert The markdown style types wished to be converted.
-	 * 				If left empty, it will convert all.
+	 *              If left empty, it will convert all.
 	 * @return string The markdown converted text.
 	 */
 	public function convert_markdown( $text, $convert = array() ) {
@@ -1487,6 +1489,19 @@ class Core {
 		);
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
+
+		if ( 2 === count( array_intersect( $md_types, array( 'em', 'strong' ) ) ) ) :
+			//* Considers word boundary. @TODO consider removing this?
+			$count = preg_match_all( '/(?:\*{3})\b([^\*{3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+
+			for ( $i = 0; $i < $count; $i++ ) {
+				$text = str_replace(
+					$matches[0][ $i ],
+					sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
+					$text
+				);
+			}
+		endif;
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Api
+ * @package TSF_Extension_Manager\Extension\Monitor\Api
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,12 +33,7 @@ use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use \TSF_Extension_Manager\Construct_Sub_Once_Interface as Construct_Sub_Once_Interface;
 
 /**
- * @package TSF_Extension_Manager_Extension\Classes
- */
-use \TSF_Extension_Manager_Extension\Monitor_Api as Monitor_Api;
-
-/**
- * Class TSF_Extension_Manager_Extension\Monitor_Api
+ * Class TSF_Extension_Manager\Extension\Monitor_Api
  *
  * Holds extension api functionality.
  *
@@ -120,6 +115,11 @@ class Monitor_Api extends Monitor_Data {
 
 		$response = json_decode( $response );
 
+		if ( isset( $response->status_check ) && 'inactive' === $response->status_check ) {
+			$this->update_option( 'site_marked_inactive', true );
+			$this->delete_data();
+		}
+
 		if ( ! isset( $response->success ) ) {
 			$ajax or $this->set_error_notice( array( 1010203 => '' ) );
 			return $ajax ? $this->get_ajax_notice( false, 1010203 ) : false;
@@ -130,9 +130,11 @@ class Monitor_Api extends Monitor_Data {
 			return $ajax ? $this->get_ajax_notice( false, 1010204 ) : false;
 		}
 
+		$data = is_string( $response->data ) ? json_decode( $response->data, true ) : (array) $response->data;
+
 		return array(
 			'success' => true,
-			'data' => \stripslashes_deep( json_decode( $response->data, true ) ),
+			'data' => \stripslashes_deep( $data ),
 		);
 	}
 
@@ -291,6 +293,15 @@ class Monitor_Api extends Monitor_Data {
 	 *         Array The status notice on AJAX.
 	 */
 	protected function api_get_remote_data( $ajax = false ) {
+
+		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
+			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			if ( $this->get_option( 'site_requires_fix' ) ) {
+				return $ajax ? $this->get_ajax_notice( false, 1010602 ) : false;
+			} else {
+				return $ajax ? $this->get_ajax_notice( false, 1010603 ) : false;
+			}
+		}
 
 		$response = $this->get_monitor_api_response( 'get_data', $ajax );
 

@@ -226,20 +226,24 @@ class AccountActivation extends Panes {
 	 * Handles deactivation and returns status.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 : Can now also deactivate decoupled websites.
 	 *
 	 * @param array $results The deactivation response.
 	 * @return bool|null True on success, false on failure. Null on invalid request.
 	 */
 	protected function handle_premium_deactivation( $results ) {
 
-		if ( ! empty( $results['deactivated'] ) ) {
+		if ( isset( $results['deactivated'] ) ) {
 			//* If option has once been registered, deregister options and return activation status.
-			if ( $this->get_option( '_activated' ) ) {
-
+			if ( $this->get_option( '_activated' )
+			&& ( $results['deactivated'] || ( isset( $results['activated'] ) && 'inactive' === $results['activated'] ) )
+			) {
 				$success = $this->do_deactivation();
 
-				$message = \esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . ' ' . \esc_html( $results['activations_remaining'] ) . '.';
-				$message .= $success ? '' : ' ' . \esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
+				$remaining = isset( $results['activations_remaining'] ) ? ' ' . \esc_html( $results['activations_remaining'] ) . '.' : '';
+				$message = \esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . $remaining;
+				if ( ! $success )
+					$message .= \esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
 
 				$this->set_error_notice( array( 501 => $message ) );
 				return true;

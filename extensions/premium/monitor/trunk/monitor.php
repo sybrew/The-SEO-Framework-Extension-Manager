@@ -1,14 +1,14 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor
+ * @package TSF_Extension_Manager\Extension\Monitor
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 /**
- * Extension Name: Monitor *beta*
+ * Extension Name: Monitor - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/monitor/
  * Extension Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
- * Extension Version: 1.0.0
+ * Extension Version: 1.0.0-***beta2***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -67,7 +67,7 @@ define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( T
  */
 define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\monitor_init', 11 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\monitor_init', 11 );
 /**
  * Initialize the extension.
  *
@@ -88,7 +88,7 @@ function monitor_init() {
 	\tsf_extension_manager()->_register_premium_extension_autoload_path( \TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
 
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager_Extension\Monitor_Admin();
+		new \TSF_Extension_Manager\Extension\Monitor_Admin();
 	} else {
 		//* Statistical data. TODO.
 		// new Monitor_Frontend();

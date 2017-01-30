@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager_Extension\Monitor\Monitor_Data
+ * @package TSF_Extension_Manager\Extension\Monitor\Monitor_Data
  */
-namespace TSF_Extension_Manager_Extension;
+namespace TSF_Extension_Manager\Extension;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,7 +33,7 @@ use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use \TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_Interface;
 
 /**
- * Class TSF_Extension_Manager_Extension\Monitor_Data
+ * Class TSF_Extension_Manager\Extension\Monitor_Data
  *
  * Holds extension data functions.
  *
@@ -108,5 +108,15 @@ class Monitor_Data {
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		return $this->get_option( $type, array() );
+	}
+
+	/**
+	 * Deletes data fetched remotely.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function delete_data() {
+		$this->delete_option( 'issues' );
+		$this->delete_option( 'stats' );
 	}
 }
