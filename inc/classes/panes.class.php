@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -547,8 +547,7 @@ class Panes extends API {
 		$extras = array();
 		$_extra = '';
 
-		$extras[] = \esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
-		$extras[] = \esc_html__( 'All extension options are held intact.', 'the-seo-framework-extension-manager' );
+		$extras[] = \esc_html__( 'This will deactivate all extensions. All extension options are held intact.', 'the-seo-framework-extension-manager' );
 		$extras[] = $this->is_premium_user() ? \esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
 
 		foreach ( $extras as $extra ) {

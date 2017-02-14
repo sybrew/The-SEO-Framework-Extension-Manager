@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -79,16 +79,44 @@ trait Extensions_Properties {
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return array(
-			'title-fix' => array(
-				'slug' => 'title-fix',
+			'amp' => array(
+				'slug' => 'amp',
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'general',
-				'version' => '1.0.2',
+				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1484979324',
-				'requires' => '3.9.0',
+				'last_updated' => '1487063732',
+				'requires' => '4.4.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.8.2',
+				'tested_tsf' => '2.9.0',
+			),
+			'articles' => array(
+				'slug' => 'articles',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'news',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1485597487',
+				'requires' => '4.4.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.8.2',
+				'tested_tsf' => '2.9.0',
+			),
+			'monitor' => array(
+				'slug' => 'monitor',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'general',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1485584144',
+				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.0',
@@ -107,32 +135,18 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.2.0',
 				'tested_tsf' => '2.9.0',
 			),
-			'monitor' => array(
-				'slug' => 'monitor',
-				'network' => '0',
-				'type' => 'premium',
-				'area' => 'general',
-				'version' => '1.0.0',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1485584144',
-				'requires' => '4.4.0',
-				'tested' => '4.8.0',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.0',
-			),
-			'articles' => array(
-				'slug' => 'articles',
+			'title-fix' => array(
+				'slug' => 'title-fix',
 				'network' => '0',
 				'type' => 'free',
-				'area' => 'news',
-				'version' => '1.0.0',
+				'area' => 'general',
+				'version' => '1.0.2',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1485597487',
-				'requires' => '4.4.0',
+				'last_updated' => '1484979324',
+				'requires' => '3.9.0',
 				'tested' => '4.8.0',
-				'requires_tsf' => '2.8.2',
+				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.0',
 			),
 		);
@@ -151,9 +165,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '147b73c0d2ebc66c48e66768e5b8f5a3912368c2a7283314326dea48f932c8a1',
-			'sha1'   => '2fd0bc8ac85c204206faa80db6b3ee428439ea94',
-			'md5'    => '41506ec6eb51d3546e6e4ddc791fbf85',
+			'sha256' => '52966b09ae673c192631d6eab86ae8e5be5d491855311484768c3a68a99563e6',
+			'sha1'   => '924c39380c97c5ba688130f42c7c3d452e0c487b',
+			'md5'    => '699e1ab64cc2a05353d46e48e78cf7b1',
 		);
 	}
 
@@ -313,9 +327,10 @@ trait Extensions_Properties {
 
 		$data[ $slug ] = false;
 
-		if ( $file = static::get_extension_header_file_location( $slug ) ) {
+		$file = static::get_extension_header_file_location( $slug );
+
+		if ( file_exists( $file ) )
 			$data[ $slug ] = \get_file_data( $file, $default_headers, 'tsfem-extension' );
-		}
 
 		return $data[ $slug ];
 	}

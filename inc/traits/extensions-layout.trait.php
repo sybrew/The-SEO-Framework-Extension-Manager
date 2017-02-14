@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -110,6 +110,7 @@ trait Extensions_Layout {
 	 * Generates a list of the available extensions.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Now doesn't list empty or broken extentions anymore.
 	 *
 	 * @return string The extensions list in HTML.
 	 */
@@ -122,6 +123,9 @@ trait Extensions_Layout {
 		foreach ( $extensions as $id => $extension ) {
 
 			if ( false === ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['area'] ) ) )
+				continue;
+
+			if ( false === static::get_extension_header( $extension['slug'] ) )
 				continue;
 
 			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink tsfem-flex-wrap">' . static::make_extension_list_icon( $extension ) . '</div>';

@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -260,15 +260,19 @@ final class Layout extends Secure_Abstract {
 				$class = 'tsfem-success';
 			} else {
 				$domain_desc = tsf_extension_manager()->convert_markdown(
-					sprintf( \esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate account and try again.', 'the-seo-framework-extension-manager' ), $_domain ),
+					sprintf(
+						/* translators: `%s` = domain in markdown wrapper */
+						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate account and try again.', 'the-seo-framework-extension-manager' ),
+						$_domain
+					),
 					array( 'code' )
 				);
 				$class = 'tsfem-error tsfem-has-hover-balloon';
 			}
 
 			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
-			$domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $domain_desc, \esc_html( $domain ) );
-			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $domain, false );
+			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $domain_desc, \esc_html( $domain ) );
+			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 
 		if ( $end_date ) :

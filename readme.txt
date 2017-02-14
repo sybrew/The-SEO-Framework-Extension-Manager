@@ -169,15 +169,16 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 * **Free - Incognito:**
 	* **Version:**
-		* 1.0.1
-	* **Improved:**
+		* 1.1.0
+	* **Added:**
 		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
 
 * **Free - Articles:**
 	* **Version:**
 		/
-		* 1.0.0-alpha
+		* 1.0.0-gamma
 	* **This is a new extension**.
+	* **Premium only until gamma-testing is completed.**
 
 * **Premium - Monitor:**
 	* **Version:**

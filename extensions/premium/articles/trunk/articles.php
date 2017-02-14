@@ -5,10 +5,10 @@
 namespace TSF_Extension_Manager\Extension;
 
 /**
- * Extension Name: Articles - *experimental*
+ * Extension Name: Articles - *gamma*
  * Extension URI: https://premium.theseoframework.com/extensions/articles/
- * Extension Description: The Articles extension adds [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles) automatically to your published posts.
- * Extension Version: 1.0.0-***alpha***
+ * Extension Description: The Articles extension adds [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles) automatically to your published posts. Premium until γ-test is done.
+ * Extension Version: 1.0.0-***γ***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -18,6 +18,23 @@ defined( 'ABSPATH' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
+
+/**
+ * Articles extension for The SEO Framework
+ * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * @package TSF_Extension_Manager\Traits
@@ -31,13 +48,21 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
  */
 define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-alpha' );
 
+/**
+ * Removes AMP articles if AMP extension is active.
+ * @since 1.0.0
+ */
+\add_filter( 'the_seo_framework_remove_amp_articles', '\\__return_true' );
+
 \add_action( 'the_seo_framework_do_before_output', __NAMESPACE__ . '\\_articles_init', 10 );
+\add_action( 'the_seo_framework_do_before_amp_output', __NAMESPACE__ . '\\_articles_init', 10 );
 /**
  * Initialize the extension.
  *
  * @since 1.0.0
  * @action 'the_seo_framework_do_before_output'
  * @priority 10
+ * @access private
  *
  * @return bool True if class is loaded.
  */
@@ -45,14 +70,17 @@ function _articles_init() {
 
 	static $loaded = null;
 
-	//* Don't init the class twice.
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	if ( \the_seo_framework()->is_single() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) )
-		new \TSF_Extension_Manager\Extension\Articles;
+	$loaded = false;
 
-	return $loaded = true;
+	if ( \the_seo_framework()->is_single() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
+		new \TSF_Extension_Manager\Extension\Articles;
+		$loaded = true;
+	}
+
+	return $loaded;
 }
 
 /**
@@ -68,7 +96,7 @@ final class Articles {
 	 * If the output is invalidated, the output should be cancelled.
 	 *
 	 * @since 1.0.0
-	 * @var bool $is_json_valid
+	 * @var array $is_json_valid : { key => bool }
 	 */
 	private $is_json_valid = array();
 
@@ -94,8 +122,6 @@ final class Articles {
 	 * @return bool True if AMP is enabled.
 	 */
 	public function is_amp() {
-		//* TODO remove this.
-		return false;
 
 		static $cache = null;
 
@@ -181,10 +207,23 @@ final class Articles {
 	 * @since 1.0.0
 	 */
 	private function init() {
-		//* Initialize output in The SEO Framework's front-end meta object.
-		\add_filter( 'the_seo_framework_after_output', array( $this, '_articles_hook_output' ) );
+		if ( $this->is_amp() ) {
+			//* Initialize output in The SEO Framework's front-end AMP meta object.
+			\add_action( 'the_seo_framework_do_after_amp_output', array( $this, '_articles_hook_amp_output' ) );
+		} else {
+			//* Initialize output in The SEO Framework's front-end meta object.
+			\add_filter( 'the_seo_framework_after_output', array( $this, '_articles_hook_output' ) );
+		}
+	}
 
-		//* @TODO create TSF AMP hook. ONLY if tsf option ( knowledge_type === Organization ).
+	/**
+	 * Outputs the AMP Articles script.
+	 *
+	 * @since 1.0.0
+	 */
+	public function _articles_hook_amp_output() {
+		//* Already escaped.
+		echo $this->_get_articles_json_output();
 	}
 
 	/**
@@ -192,6 +231,7 @@ final class Articles {
 	 * This allows output object caching.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param array $functions The hooked functions.
 	 * @return array The hooked functions.
@@ -237,8 +277,8 @@ final class Articles {
 		if ( ! $this->is_json_valid() )
 			return '';
 
-		$data = array_filter( $data );
-		$data = array_filter( $data, array( $this, 'build_article_data' ) );
+		//* Build data, and fetch it.
+		array_filter( array_filter( $data ), array( $this, 'build_article_data' ) );
 		$data = $this->get_article_data();
 
 		if ( ! empty( $data ) )
@@ -333,7 +373,7 @@ final class Articles {
 	/**
 	 * Returns the Article Headline.
 	 *
-	 * @NOTE If the title is above 110 chars or is empty: {
+	 * @NOTE If the title is above 110 chars or is empty : {
 	 *   'amp'    => Will invalidate output.
 	 *   'nonamp' => Will return empty.
 	 * }
@@ -348,8 +388,8 @@ final class Articles {
 			return array();
 
 		$id = $this->get_current_id();
-		$title = \the_seo_framework()->title_from_custom_field( '', false, $id ) ?: \the_seo_framework()->post_title_from_ID( $id );
-		$title = \the_seo_framework()->s_title_raw( $title );
+		$title = \the_seo_framework()->post_title_from_ID( $id ) ?: \the_seo_framework()->title_from_custom_field( '', false, $id );
+		$title = trim( \the_seo_framework()->s_title_raw( $title ) );
 
 		if ( ! $title || mb_strlen( $title ) > 110 ) {
 			$this->invalidate( 'amp' );
@@ -357,7 +397,7 @@ final class Articles {
 		}
 
 		return array(
-			'headline' => \esc_attr( $title ),
+			'headline' => \the_seo_framework()->escape_title( $title ),
 		);
 	}
 
@@ -532,14 +572,21 @@ final class Articles {
 			return array();
 
 		$name = \the_seo_framework()->get_option( 'knowledge_name' ) ?: \the_seo_framework()->get_blogname();
-		$_img_id = \the_seo_framework()->get_option( 'knowledge_amp_id' );
+		$_default_id = \get_option( 'site_icon' );
+		$_img_id = \the_seo_framework()->get_option( 'knowledge_amp_id' ) ?: $_default_id; // var_dump first option doesnt exist
 
 		if ( ! $_img_id ) {
 			$this->invalidate( 'both' );
 			return array();
 		}
 
-		$_src = \wp_get_attachment_image_src( $_img_id, 'full' );
+		if ( $_default_id === $_img_id ) {
+			$size = array( 60, 60 );
+		} else {
+			$size = 'full';
+		}
+
+		$_src = \wp_get_attachment_image_src( $_img_id, $size );
 
 		if ( count( $_src ) >= 3 ) {
 			$url = $_src[0];
@@ -581,7 +628,7 @@ final class Articles {
 		$id = $this->get_current_id();
 
 		//* 400 length is an arbitrary guess, because there's no documentation on this.
-		$description = \the_seo_framework()->get_custom_singular_description( $id ) ?: \the_seo_framework()->generate_excerpt( $id, '', 400 );
+		$description = \the_seo_framework()->description_from_custom_field( array( 'id' => $id ) ) ?: \the_seo_framework()->generate_excerpt( $id, '', 400 );
 
 		return array(
 			'description' => \esc_attr( $description ),

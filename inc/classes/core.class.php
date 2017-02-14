@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -1491,8 +1491,7 @@ class Core {
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
 		if ( 2 === count( array_intersect( $md_types, array( 'em', 'strong' ) ) ) ) :
-			//* Considers word boundary. @TODO consider removing this?
-			$count = preg_match_all( '/(?:\*{3})\b([^\*{3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+			$count = preg_match_all( '/(?:\*{3})([^\*{3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
 
 			for ( $i = 0; $i < $count; $i++ ) {
 				$text = str_replace(
