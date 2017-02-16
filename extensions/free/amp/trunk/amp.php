@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension;
 /**
  * Extension Name: AMP
  * Extension URI: https://premium.theseoframework.com/extensions/amp/
- * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported posts.
+ * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
  * Extension Version: 1.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
@@ -94,6 +94,10 @@ final class AMP {
 
 		\add_action( 'amp_post_template_head', array( $this, 'do_output_hook' ), 11 );
 
+		/**
+		 * Applies filters 'the_seo_framework_remove_amp_articles' : bool
+		 * @since 1.0.0
+		 */
 		if ( \apply_filters( 'the_seo_framework_remove_amp_articles', false ) )
 			$this->remove_amp_articles();
 
@@ -123,7 +127,7 @@ final class AMP {
 	 * @since 1.0.0
 	 */
 	protected function remove_amp_articles() {
-		\add_filter( 'amp_post_template_metadata', '\\__return_empty_array' );
+		\add_filter( 'amp_post_template_metadata', '\\__return_empty_array', 10 );
 	}
 
 	/**

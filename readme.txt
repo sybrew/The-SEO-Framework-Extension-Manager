@@ -122,41 +122,75 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
-= 1.1.0 - ??? =
+= 1.1.0 - Articulated SEO =
 
 * **Release date:**
 	* ???
 
 **New Extensions:**
 
-1. Articles: This automatically adds the [Structured Data for Articles](https://developers.google.com/search/docs/data-types/articles) to your website.
+1. **Articles**: This automatically adds the [Structured Data for Articles](https://developers.google.com/search/docs/data-types/articles) to your website.
 	* **Experimental module**: Google will tell its output is erroneous.
+		* They will tell it's erroneous only in their [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool).
+		* They will tell it's good in your website's [Structured Data Overview](https://www.google.com/webmasters/tools/structured-data?hl=en).
 		* This is wrongfully determined, based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
-2. TODO AMP Dashboard: This will show you an overview for AMP and can interact with the Articles extension, when activated.
-	* **Alpha:** This dashboard will allow you to upload AMP required data.
-	* This dashboard automatically connects The SEO Framework to [Automattic's AMP plugin](https://wordpress.org/plugins/amp/).
-3. TODO Honeypot: This will effectively stop comment spam.
-	* **Beta:** This extension might not work with every theme yet. Try to post a comment whilst being logged out to test its effectiveness.
-	* The effectiveness of this algoritm has been tested and currently has a 100% catch rate.
-	* If you still recieve lots of spam, a more advanced solution is required, like [Akismet](https://wordpress.org/plugins/akismet/).
+2. **AMP**: This improves SEO for AMP pages.
+	* This extension connects The SEO Framework to [Automattic's AMP plugin](https://wordpress.org/plugins/amp/).
+	* This extension interacts with Articles, when activated.
 
 **Detailed log:**
 
 **Plugin Improvements:**
 
-* **Internal:**
-	* Improved plugin performance by eliminating duplicated autoloader checks.
-	* Namespace `TSF_Extension_Manager_Extension` now is `TSF_Extension_Manager\Extension`
-	* Plugin is tested on WordPress 4.8 (alpha).
-	* When options have deleted through an internal API request consummation, they can't be rewritten by cache again.
-
+* **Local:**
+	* Performance: Improved plugin performance by eliminating duplicated autoloader checks.
+	* Improvement: Plugin is tested and working on WordPress 4.8 (alpha).
+	* Improvement: Extension list has been reordered.
+	* Improvement: Extensions' compatibility has been verified and updated.
+	* Improvement: When options have been deleted through an internal API request completion which failed externally, they can't be rewritten by cache again.
+	* Development: Namespace `TSF_Extension_Manager_Extension` now is `TSF_Extension_Manager\Extension`
 * **API:**
-	* **Note:** These API changes affect only this plugin version.
+	* **Internal:**.
 		* Deactivation on decoupled sites now work again.
-	* **Note:** These API changes affect all plugin versions.
+	* **External:**.
+		* No notable API changes have been made.
 
-** Extension Improvements **
+**Extension Improvements:**
 
+* **Free - AMP:**
+	* **Version:**
+		* 1.0.0
+	* **This is a new extension**.
+	* It binds The SEO Framework social and general output to the [AMP plugin](https://wordpress.org/plugins/amp/).
+	* Use this extension in combination with the Articles extension to further enhance output.
+* **Premium - Articles:**
+	* **Version:**
+		* 1.0.0-gamma
+	* **This is a new extension**.
+	* **Premium only until gamma-testing is completed.**
+	* It outputs Article Schema.org output for both AMP (AMP extension required) and non-AMP pages.
+	* Note: Google's Structured Data Tester renders output data invalid, even though it's valid and output according to their set requirements.
+* **Premium - Monitor:**
+	* **Version:**
+		* 1.0.0-beta-2
+	* **Internal:**
+		* **Fixed:**
+			* The robots.txt file got marked as static whilst being dynamic.
+	* **API:**
+		* **Note:** These API changes affect only this plugin version.
+			* Fixed a PHP warning when making the first connection.
+			* Deactivation on decoupled sites now work again.
+			* When the site has been decoupled from the API server, the notices are now more in-line with events.
+			* When the site has been decoupled from the API server, the remote data will be removed from view.
+		* **Note:** These API changes affect all plugin versions.
+			* The API server has been moved to a dedicated server instance. This allows more accurate measurements for upcoming features.
+			/
+			* TODO Fixed sitemap detection when more advanced sitemaps are found.
+* **Free - Incognito:**
+	* **Version:**
+		* 1.1.0
+	* **Added:**
+		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
 * **Free - Title Fix:**
 	* **Version:**
 		* 1.0.3
@@ -166,45 +200,6 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* It also enqueues fewer WordPress actions overall. Which reduces memory usage marginally.
 	* **Fixed:**
 		* The SEO Framework can now recognize this extension, therefore re-enabling otherwise disabled features.
-
-* **Free - Incognito:**
-	* **Version:**
-		* 1.1.0
-	* **Added:**
-		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
-
-* **Free - Articles:**
-	* **Version:**
-		/
-		* 1.0.0-gamma
-	* **This is a new extension**.
-	* **Premium only until gamma-testing is completed.**
-
-* **Premium - Monitor:**
-	* **Version:**
-		/
-		* 1.0.0-beta2
-	* **Internal:**
-		/
-		* **Added:**
-			/
-			* TODO Website's uptime can now be viewed.
-		* **Fixed:**
-			/
-			* TODO The robots.txt file got marked as static whilst being dynamic.
-	* **API:**
-		* **Note:** These API changes affect only this plugin version.
-			* Fixed a PHP warning when making the first connection.
-			* Deactivation on decoupled sites now work again.
-			* When the site has been decoupled from the API server, the notices are now more in-line with events.
-			* When the site has been decoupled from the API server, the remote data will be removed from view.
-		* **Note:** These API changes affect all plugin versions.
-			/
-			* TODO The API server has been moved to a dedicated instance.
-			* TODO The API server now logs uptime in 1 minute intervals.
-				/
-				* TODO Every 5 minutes a more advanced check is performed, which tests server status code headers next to ping.
-			* TODO Fixed sitemap detection when more advanced sitemaps are found.
 
 = 1.0.0 - Amplified SEO =
 

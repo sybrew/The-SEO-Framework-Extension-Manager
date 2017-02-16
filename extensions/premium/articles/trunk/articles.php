@@ -60,7 +60,9 @@ define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-alpha' );
  * Initialize the extension.
  *
  * @since 1.0.0
+ * @staticvar bool $loaded True when loaded.
  * @action 'the_seo_framework_do_before_output'
+ * @action 'the_seo_framework_do_before_amp_output'
  * @priority 10
  * @access private
  *
@@ -128,11 +130,7 @@ final class Articles {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$is_amp = false;
-
-		defined( 'AMP_QUERY_VAR' ) and $is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
-
-		return $cache = $is_amp;
+		return $cache = defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
 	}
 
 	/**
@@ -152,7 +150,7 @@ final class Articles {
 	 * @since 1.0.0
 	 * @see $this->is_json_valid
 	 *
-	 * @param bool $what;
+	 * @param string $what
 	 */
 	private function invalidate( $what = 'both' ) {
 
@@ -560,7 +558,7 @@ final class Articles {
 	}
 
 	/**
-	 * Returns the Article Publisher.
+	 * Returns the Article Publisher and logo.
 	 *
 	 * @requiredSchema AMP (docs)
 	 * @ignoredSchema nonAMP (docs)
@@ -571,16 +569,26 @@ final class Articles {
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
 			return array();
 
-		$name = \the_seo_framework()->get_option( 'knowledge_name' ) ?: \the_seo_framework()->get_blogname();
-		$_default_id = \get_option( 'site_icon' );
-		$_img_id = \the_seo_framework()->get_option( 'knowledge_amp_id' ) ?: $_default_id; // var_dump first option doesnt exist
+		/**
+		 * Applies filters the_seo_framework_articles_name : string
+		 * @since 1.0.0
+		 */
+		$name = (string) \apply_filters( 'the_seo_framework_articles_name', \the_seo_framework()->get_option( 'knowledge_name' ) ) ?: \the_seo_framework()->get_blogname();
+
+		$_default_img_id = (int) \get_option( 'site_icon' );
+		/**
+		 * Applies filters the_seo_framework_articles_logo_id : int
+		 * @since 1.0.0
+		 * @todo make option.
+		 */
+		$_img_id = (int) \apply_filters( 'the_seo_framework_articles_logo_id', 0 ) ?: $_default_img_id;
 
 		if ( ! $_img_id ) {
 			$this->invalidate( 'both' );
 			return array();
 		}
 
-		if ( $_default_id === $_img_id ) {
+		if ( $_default_img_id === $_img_id ) {
 			$size = array( 60, 60 );
 		} else {
 			$size = 'full';
