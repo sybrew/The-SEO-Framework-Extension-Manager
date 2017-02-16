@@ -174,18 +174,25 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		* 1.0.0-beta-2
 	* **Internal:**
+		* **Improved:**
+			* The "invalid sitemap" notification now suggest to contact premium support, rather than stating the inconvinient obvious.
 		* **Fixed:**
-			* The robots.txt file got marked as static whilst being dynamic.
+			* The robots.txt file got marked as static whilst being dynamic when another plugin or theme affects the output.
+			* Requesting a crawl through AJAX now works correctly when debugging is enabled.
+			* Updating data through AJAX now works correctly when debugging is enabled.
 	* **API:**
 		* **Note:** These API changes affect only this plugin version.
-			* Fixed a PHP warning when making the first connection.
-			* Deactivation on decoupled sites now work again.
-			* When the site has been decoupled from the API server, the notices are now more in-line with events.
-			* When the site has been decoupled from the API server, the remote data will be removed from view.
+			* **Fixed:**
+				* A PHP warning was output when making the first connection.
+				* Disconnection on decoupled sites now works.
+				* When the site has been decoupled from the API server, the notices are now more in-line with events.
+				* When the site has been decoupled from the API server, the remote data will be removed from view.
 		* **Note:** These API changes affect all plugin versions.
-			* The API server has been moved to a dedicated server instance. This allows more accurate measurements for upcoming features.
-			/
-			* TODO Fixed sitemap detection when more advanced sitemaps are found.
+			* **Improved:**
+				* The API server has been moved to a dedicated server instance. This allows for more accurate measurements in upcoming features.
+				* The API server now parses crawl requests automatically.
+			* **Fixed:**
+				* Sitemap detection when more advanced sitemaps are found now works.
 * **Free - Incognito:**
 	* **Version:**
 		* 1.1.0

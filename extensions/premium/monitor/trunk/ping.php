@@ -1,5 +1,5 @@
 <?php
-
+/*
 defined( 'ABSPATH' ) or die;
 
 //* Remove WebEngine headers.
@@ -19,3 +19,4 @@ echo "\n";
 
 //* Done.
 exit;
+*/

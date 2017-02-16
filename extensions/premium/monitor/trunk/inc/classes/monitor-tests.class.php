@@ -253,7 +253,19 @@ final class Monitor_Tests {
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-					\esc_html__( 'The `robots.txt` file handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
+					\esc_html__( 'The `robots.txt` file is handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
+					array( 'code' )
+				)
+			);
+			goto end;
+		}
+
+		if ( ! file_exists( \get_home_path() . 'robots.txt' ) ) {
+			$state = 'unknown';
+			$content = $this->wrap_info(
+				\tsf_extension_manager()->convert_markdown(
+					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+					\esc_html__( 'The `robots.txt` file is not handled by The SEO Framework.', 'the-seo-framework-extension-manager' ),
 					array( 'code' )
 				)
 			);
@@ -316,7 +328,7 @@ final class Monitor_Tests {
 
 		if ( isset( $data['valid'] ) && ! $data['valid'] ) {
 			$state = 'bad';
-			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is invalid. This could have multiple causes.', 'the-seo-framework-extension-manager' ) );
+			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this.', 'the-seo-framework-extension-manager' ) );
 		}
 
 		if ( empty( $content ) ) {

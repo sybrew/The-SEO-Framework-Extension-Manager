@@ -457,7 +457,7 @@ final class Monitor_Admin extends Monitor_Api {
 						'response' => compact( 'response' ),
 					);
 				} else {
-					array( 'status' => $status );
+					$response = array( 'status' => $status );
 				}
 
 				\tsf_extension_manager()->_clean_ajax_reponse_header();
@@ -542,7 +542,7 @@ final class Monitor_Admin extends Monitor_Api {
 						'response' => compact( 'response' ),
 					);
 				} else {
-					array( 'status' => $status );
+					$response = array( 'status' => $status );
 				}
 
 				\tsf_extension_manager()->_clean_ajax_reponse_header();
