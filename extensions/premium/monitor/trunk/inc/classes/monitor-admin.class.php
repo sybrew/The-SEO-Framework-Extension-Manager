@@ -992,7 +992,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
-		$domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
+		$domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
 		$_domain = $this->get_expected_domain();
 		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );

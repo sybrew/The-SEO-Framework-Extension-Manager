@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension;
 /**
  * Extension Name: Articles - *gamma*
  * Extension URI: https://premium.theseoframework.com/extensions/articles/
- * Extension Description: The Articles extension adds [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles) automatically to your published posts. Premium until γ-test is done.
+ * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles). Premium until γ-test is done.
  * Extension Version: 1.0.0-***γ***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
@@ -50,6 +50,7 @@ define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-alpha' );
 
 /**
  * Removes AMP articles if AMP extension is active.
+ * The output is erroneous on non-posts. Pages shouldn't do AMP.
  * @since 1.0.0
  */
 \add_filter( 'the_seo_framework_remove_amp_articles', '\\__return_true' );

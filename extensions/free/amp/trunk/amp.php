@@ -51,7 +51,7 @@ define( 'TSFEM_E_AMP_VERSION', '1.0.0' );
 
 \add_action( 'wp', __NAMESPACE__ . '\\_amp_init', 11 );
 /**
- * Initialize the extension.
+ * Initialize the extension. Runs after AMP plugin action 'amp_init'.
  *
  * @since 1.0.0
  * @action 'wp'
@@ -63,18 +63,20 @@ define( 'TSFEM_E_AMP_VERSION', '1.0.0' );
 function _amp_init() {
 
 	if ( false === defined( 'AMP_QUERY_VAR' ) )
-		return;
+		return false;
 
 	if ( \is_admin() ) {
 		//* Bail on admin. No admin dashboard yet.
-		return;
+		return false;
 	} else {
 		$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
 
 		if ( $is_amp ) {
 			new \TSF_Extension_Manager\Extension\AMP;
+			return true;
 		}
 	}
+	return false;
 }
 
 /**

@@ -183,7 +183,7 @@ final class Monitor_Tests {
 		} else {
 			$state = 'bad';
 			$content = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
-			$content .= sprintf( '<h4>%s</h4>', \esc_html( _n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
+			$content .= sprintf( '<h4>%s</h4>', \esc_html( \_n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
 
 			$content .= '<ul class="tsfem-ul-disc">';
 			foreach ( $links as $link ) {
@@ -310,7 +310,7 @@ final class Monitor_Tests {
 
 		if ( ! $data['located'] ) {
 			$state = 'error';
-			$content = $this->wrap_info( \esc_html__( 'No sitemap file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info( \esc_html__( 'No sitemap file could be found. Enable the sitemap or check your server configuration.', 'the-seo-framework-extension-manager' ) );
 			goto end;
 		}
 

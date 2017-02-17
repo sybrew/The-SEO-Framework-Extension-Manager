@@ -254,7 +254,7 @@ final class Layout extends Secure_Abstract {
 
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( home_url() ) );
+			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
 
 			if ( $_domain === $domain ) {
 				$class = 'tsfem-success';

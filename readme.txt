@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api, monitor, modules, title
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,17 +12,14 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 
 == Description ==
 
+**This plugin extends [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
+
 This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
-
-**This plugin requires [The SEO Framework](https://wordpress.org/plugins/autodescription/) to be active.**
-
-*If The SEO Framework isn't found to be active, this plugin won't do much at all.*
 
 = Requirements: =
 
-* For security and structural reasons, this plugin requires **PHP 5.5 or later**, or it will deactivate itself.
+* For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
-* This plugin currently does not fully support MultiSite networks. This is planned, especially since we wish to use this plugin as well on our own networks. Stay tuned!
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -31,8 +28,11 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
 = About Premium =
+
 A premium subscription will allow you to activate all premium extensions for one single subscription price.
-These premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+
+Some premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+
 As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
 = Privacy =
@@ -50,7 +50,8 @@ As long as the subscription is active, you're allowed to use all premium extensi
 
 == Screenshots ==
 
-Coming soon!
+1. The activation page. You can choose both premium and free subscriptions.
+2. The SEO Extensions overview page, running on a multisite.
 
 == Frequently Asked Questions ==
 
@@ -129,11 +130,11 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **New Extensions:**
 
-1. **Articles**: This automatically adds the [Structured Data for Articles](https://developers.google.com/search/docs/data-types/articles) to your website.
+1. **Articles**: This automatically adds the [Structured Data for Articles](https://developers.google.com/search/docs/data-types/articles) to your posts and AMP posts.
 	* **Experimental module**: Google will tell its output is erroneous.
 		* They will tell it's erroneous only in their [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool).
-		* They will tell it's good in your website's [Structured Data Overview](https://www.google.com/webmasters/tools/structured-data?hl=en).
-		* This is wrongfully determined, based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
+		* They will tell it's good on your website's [Structured Data Overview](https://www.google.com/webmasters/tools/structured-data?hl=en) page.
+		* The former is wrongfully determined, the output is based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
 2. **AMP**: This improves SEO for AMP pages.
 	* This extension connects The SEO Framework to [Automattic's AMP plugin](https://wordpress.org/plugins/amp/).
 	* This extension interacts with Articles, when activated.
@@ -192,7 +193,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 				* The API server has been moved to a dedicated server instance. This allows for more accurate measurements in upcoming features.
 				* The API server now parses crawl requests automatically.
 			* **Fixed:**
-				* Sitemap detection when more advanced sitemaps are found now works.
+				* The sitemap detection for more advanced sitemaps now works.
+				* When a HTTP error is generated when fetching the sitemap, this is now correctly handled.
 * **Free - Incognito:**
 	* **Version:**
 		* 1.1.0

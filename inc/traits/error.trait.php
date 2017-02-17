@@ -342,7 +342,7 @@ trait Error {
 				break;
 
 			case 1010506 :
-				$message = \esc_html__( 'Crawl has been requested succesfully. This can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Crawl has been requested succesfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
