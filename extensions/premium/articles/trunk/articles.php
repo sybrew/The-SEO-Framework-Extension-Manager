@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension;
  * Extension Name: Articles - *gamma*
  * Extension URI: https://premium.theseoframework.com/extensions/articles/
  * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles). Premium until γ-test is done.
- * Extension Version: 1.0.0-***γ***
+ * Extension Version: 1.0.0-***γ-2***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -447,7 +447,12 @@ final class Articles {
 		$w = $h = 0;
 
 		if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
-			if ( ! empty( $d = \the_seo_framework()->image_dimensions[ $id ] ) ) {
+
+			//* TSF 2.9+
+			$dimensions = \the_seo_framework()->image_dimensions;
+
+			$d = ! empty( $dimensions[ $id ] ) ? $dimensions[ $id ] : false;
+			if ( $d ) {
 				$w = $d['width'];
 				$h = $d['height'];
 			}

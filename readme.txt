@@ -123,10 +123,69 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
-= 1.1.0 - Articulated SEO =
+= 1.2.0 - ??? =
 
 * **Release date:**
 	* ???
+
+**New Extensions:**
+
+1. **Local SEO**: -- TODO
+2. **Transfer:** -- TODO (settings exporter/importer)
+
+**Detailed log:**
+
+**Plugin Improvements:**
+
+* **Local:**
+	/
+	* Performance: TODO Instance verification key options (local DRM) are now correctly deleted upon account deactivation.
+	* Performance: TODO Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
+	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
+	* Change: TODO The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
+* **API:**
+	* **Internal:**
+		* TODO
+	* **External:**
+		* TODO
+
+**Extension Improvements:**
+
+* **Free - AMP:**
+	* **Version:**
+		/
+		* TODO
+* **Premium - Articles:**
+	* **Version:**
+		* 1.0.0-gamma-2
+	* **Premium only until gamma-testing is completed.**
+	* **Fixed:**
+		* No more PHP notice should be output when fetching image from SEO settings.
+		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
+			* Otherwise the Featured Image is used, if any.
+* **Premium - Monitor:**
+	* **Version:**
+		/
+		* TODO
+	* **Internal:**
+		/
+		* TODO
+	* **API:**
+		/
+		* TODO
+* **Free - Incognito:**
+	* **Version:**
+		/
+		* TODO
+* **Free - Title Fix:**
+	* **Version:**
+		/
+		* TODO
+
+= 1.1.0 - Articulated SEO =
+
+* **Release date:**
+	* February 17th, 2017
 
 **New Extensions:**
 
@@ -151,9 +210,9 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Improvement: When options have been deleted through an internal API request completion which failed externally, they can't be rewritten by cache again.
 	* Development: Namespace `TSF_Extension_Manager_Extension` now is `TSF_Extension_Manager\Extension`
 * **API:**
-	* **Internal:**.
-		* Deactivation on decoupled sites now work again.
-	* **External:**.
+	* **Internal:**
+		* Deactivation on decoupled sites now works again.
+	* **External:**
 		* No notable API changes have been made.
 
 **Extension Improvements:**
@@ -179,8 +238,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 			* The "invalid sitemap" notification now suggest to contact premium support, rather than stating the inconvinient obvious.
 		* **Fixed:**
 			* The robots.txt file got marked as static whilst being dynamic when another plugin or theme affects the output.
-			* Requesting a crawl through AJAX now works correctly when debugging is enabled.
-			* Updating data through AJAX now works correctly when debugging is enabled.
+			* Requesting a crawl through AJAX now works correctly when debugging is disabled.
+			* Updating data through AJAX now works correctly when debugging is disabled.
 	* **API:**
 		* **Note:** These API changes affect only this plugin version.
 			* **Fixed:**
