@@ -121,7 +121,7 @@ class AdminPages extends AccountActivation {
 			'parent_slug' => the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
-			'capability'  => 'install_plugins',
+			'capability'  => 'manage_options',
 			'menu_slug'   => $this->seo_extensions_page_slug,
 			'callback'    => array( $this, '_init_extension_manager_page' ),
 		);

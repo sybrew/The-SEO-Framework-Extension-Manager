@@ -142,7 +142,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Performance: TODO Instance verification key options (local DRM) are now correctly deleted upon account deactivation.
 	* Performance: TODO Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
 	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
-	* Change: TODO The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
+	* Change: The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
 * **API:**
 	* **Internal:**
 		* TODO
@@ -165,9 +165,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 			* Otherwise the Featured Image is used, if any.
 * **Premium - Monitor:**
 	* **Version:**
-		/
-		* TODO
+		* 1.0.0-beta-3
 	* **Internal:**
+		* **Changed:**
+			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
 		/
 		* TODO
 	* **API:**

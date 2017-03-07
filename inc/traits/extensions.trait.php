@@ -165,9 +165,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '85b6e97f262f301c893139e772bb0a2d4c159f9c6b286c6a830a8cb20463ecc6',
-			'sha1'   => '04407b95c92f48015d22e6e829d8bbe0165fa0e6',
-			'md5'    => 'a0494b152f2f5f73ece5e34f9ca0eaec',
+			'sha256' => '52966b09ae673c192631d6eab86ae8e5be5d491855311484768c3a68a99563e6',
+			'sha1'   => '924c39380c97c5ba688130f42c7c3d452e0c487b',
+			'md5'    => '699e1ab64cc2a05353d46e48e78cf7b1',
 		);
 	}
 

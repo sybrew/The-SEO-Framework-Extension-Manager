@@ -212,7 +212,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Monitor', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
-			'capability'  => 'install_plugins',
+			'capability'  => 'manage_options',
 			'menu_slug'   => $this->monitor_page_slug,
 			'callback'    => array( $this, '_init_monitor_page' ),
 		);

@@ -136,7 +136,7 @@ function can_do_settings() {
 
 	static $cache = null;
 
-	return isset( $cache ) ? $cache : $cache = \current_user_can( 'install_plugins' ) || \current_user_can( 'update_plugins' );
+	return isset( $cache ) ? $cache : $cache = \current_user_can( 'manage_options' );
 }
 
 \TSF_Extension_Manager\_protect_options();

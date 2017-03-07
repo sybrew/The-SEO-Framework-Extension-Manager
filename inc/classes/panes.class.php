@@ -343,7 +343,7 @@ class Panes extends API {
 				$slug = '';
 				$case = '';
 
-				if ( check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
 					$data = $_POST;
 
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
@@ -369,15 +369,15 @@ class Panes extends API {
 
 							//* Add arbitrary menu contents to known menu slug.
 							$menu = array(
-								'parent_slug' => the_seo_framework_options_page_slug(),
+								'parent_slug' => \the_seo_framework_options_page_slug(),
 								'page_title'  => '1',
 								'menu_title'  => '1',
-								'capability'  => 'install_plugins',
-								'menu_slug'   => $header['MenuSlug'],
+								'capability'  => 'manage_options',
+								'menu_slug'   => \esc_html( $header['MenuSlug'] ),
 								'callback'    => '__return_empty_string',
 							);
 
-							add_submenu_page(
+							\add_submenu_page(
 								$menu['parent_slug'],
 								$menu['page_title'],
 								$menu['menu_title'],
