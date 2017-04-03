@@ -366,6 +366,7 @@ trait Error {
 			case 1010505 :
 			case 1010604 :
 			case 1010605 :
+			case 1060101 :
 			default :
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';

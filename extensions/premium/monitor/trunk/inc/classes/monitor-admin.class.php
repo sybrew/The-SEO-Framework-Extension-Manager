@@ -115,10 +115,10 @@ final class Monitor_Admin extends Monitor_Api {
 			//* Reference convenience.
 			'default' => 'default',
 
-			//* Connect site to API
+			//* Connect site to API.
 			'connect' => 'connect',
 
-			//* Disconnect site from API
+			//* Disconnect site from API.
 			'disconnect' => 'disconnect',
 
 			//* Statistics fetch.
@@ -134,10 +134,10 @@ final class Monitor_Admin extends Monitor_Api {
 			//* Reference convenience.
 			'default' => 'tsfem_e_monitor_nonce_action',
 
-			//* Connect site to API
+			//* Connect site to API.
 			'connect' => 'tsfem_e_monitor_nonce_action_connect_site',
 
-			//* Disconnect site from API
+			//* Disconnect site from API.
 			'disconnect' => 'tsfem_e_monitor_nonce_action_disconnect_site',
 
 			//* Statistics fetch.
@@ -199,8 +199,8 @@ final class Monitor_Admin extends Monitor_Api {
 	}
 
 	/**
-	 * Adds menu link for extension manager, when possible, underneath The
-	 * SEO Framework SEO settings.
+	 * Adds menu link for monitor, when possible, underneath The SEO Framework
+	 * SEO settings.
 	 *
 	 * @since 1.0.0
 	 * @uses the_seo_framework_options_page_slug().
@@ -565,7 +565,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			if ( \tsf_extension_manager()->can_do_settings() ) {
 
-				if ( check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					//* Initialize menu hooks.
 					\the_seo_framework()->add_menu_link();
 					$this->_add_menu_link();
@@ -708,6 +708,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Echos the page top wrap.
 	 *
 	 * @since 1.0.0
+	 * @param bool $options Whether to show options.
 	 */
 	protected function do_page_top_wrap( $options = false ) {
 		$this->get_view( 'layout/general/top', get_defined_vars() );
@@ -761,6 +762,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Does not always work. So many browser bugs... It's just fancy.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
 	public function _output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
@@ -825,10 +827,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * @return string The parsed Control Panel overview HTML data.
 	 */
 	protected function get_cp_overview() {
-
-		$output = $this->get_cp_output();
-
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_cp_output() );
 	}
 
 	/**
@@ -854,10 +853,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * @return string The Control Panel pane left side output.
 	 */
 	protected function get_cp_left_output() {
-
-		$output = $this->get_site_actions();
-
-		return sprintf( '<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_site_actions() );
 	}
 
 	/**
@@ -909,6 +905,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Renders and returns update button.
 	 *
 	 * @since 1.0.0
+	 * @uses trait \TSF_Extension_Manager\Extension_Forms
 	 *
 	 * @return string The update button.
 	 */
@@ -938,6 +935,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Renders and returns crawl button.
 	 *
 	 * @since 1.0.0
+	 * @uses trait \TSF_Extension_Manager\Extension_Forms
 	 *
 	 * @return string The crawl button.
 	 */
@@ -1042,6 +1040,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Renders and returns Monitor fix button.
 	 *
 	 * @since 1.0.0
+	 * @uses trait \TSF_Extension_Manager\Extension_Forms
 	 *
 	 * @return string The fix button.
 	 */

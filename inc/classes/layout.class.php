@@ -259,7 +259,7 @@ final class Layout extends Secure_Abstract {
 			if ( $_domain === $domain ) {
 				$class = 'tsfem-success';
 			} else {
-				$domain_desc = tsf_extension_manager()->convert_markdown(
+				$domain_desc = \tsf_extension_manager()->convert_markdown(
 					sprintf(
 						/* translators: `%s` = domain in markdown wrapper */
 						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate account and try again.', 'the-seo-framework-extension-manager' ),

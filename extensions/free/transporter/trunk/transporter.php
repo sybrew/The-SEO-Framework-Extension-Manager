@@ -1,18 +1,18 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Monitor
+ * @package TSF_Extension_Manager\Extension\Transporter
  */
 namespace TSF_Extension_Manager\Extension;
 
 /**
- * Extension Name: Monitor - *beta*
- * Extension URI: https://premium.theseoframework.com/extensions/monitor/
- * Extension Description: The Monitor extension keeps track of your website's SEO, optimization, uptime and statistics.
- * Extension Version: 1.0.0-***β-3***
+ * Extension Name: Transporter
+ * Extension URI: https://premium.theseoframework.com/extensions/transporter/
+ * Extension Description: The Transporter extensions allows you to export and import your SEO settings from site to site.
+ * Extension Version: 1.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
- * Extension Menu Slug: theseoframework-monitor
+ * Extension Menu Slug: theseoframework-transporter
  */
 
 defined( 'ABSPATH' ) or die;
@@ -21,8 +21,8 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Transporter extension for The SEO Framework
+ * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -41,33 +41,33 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_VERSION', '1.0.0' );
+define( 'TSFEM_E_TRANSPORTER_VERSION', '1.0.0' );
 
 /**
  * The extension file, absolute unix path.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_BASE_FILE', __FILE__ );
+define( 'TSFEM_E_TRANSPORTER_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_MONITOR_BASE_FILE ) );
+define( 'TSFEM_E_TRANSPORTER_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_TRANSPORTER_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_MONITOR_BASE_FILE ) );
+define( 'TSFEM_E_TRANSPORTER_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_TRANSPORTER_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+define( 'TSFEM_E_TRANSPORTER_PATH_CLASS', TSFEM_E_TRANSPORTER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\monitor_init', 11 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\transporter_init', 11 );
 /**
  * Initialize the extension.
  *
@@ -77,7 +77,7 @@ define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTO
  *
  * @return bool True if class is loaded.
  */
-function monitor_init() {
+function transporter_init() {
 
 	static $loaded = null;
 
@@ -85,13 +85,11 @@ function monitor_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	\tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
+	\tsf_extension_manager()->_register_free_extension_autoload_path( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter' );
 
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager\Extension\Monitor_Admin;
+		new \TSF_Extension_Manager\Extension\Transporter_Admin;
 	} else {
-		//* Statistical data. TODO.
-		// new Monitor_Frontend();
 		return $loaded = false;
 	}
 
@@ -99,16 +97,16 @@ function monitor_init() {
 }
 
 /**
- * Returns the active monitor base class.
+ * Returns the active transporter base class.
  *
  * @since 1.0.0
  *
- * @return string The active monitor class name.
+ * @return string The active transporter class name.
  */
-function monitor_class() {
+function transporter_class() {
 	if ( \is_admin() ) {
-		return __NAMESPACE__ . '\\Monitor_Admin';
+		return __NAMESPACE__ . '\\Transporter_Admin';
 	} else {
-		return __NAMESPACE__ . '\\Monitor_Front_End';
+		return '';
 	}
 }

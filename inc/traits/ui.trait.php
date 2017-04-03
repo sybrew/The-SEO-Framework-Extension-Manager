@@ -186,7 +186,7 @@ trait UI {
 		if ( isset( $registered ) )
 			return;
 
-		$rtl = is_rtl() ? '-rtl' : '';
+		$rtl = \is_rtl() ? '-rtl' : '';
 
 		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
 
@@ -271,13 +271,13 @@ trait UI {
 			return;
 
 		$strings = array(
-			'nonce' => wp_create_nonce( 'tsfem-ajax-nonce' ),
+			'nonce' => \wp_create_nonce( 'tsfem-ajax-nonce' ),
 			'debug' => (bool) WP_DEBUG,
 			'i18n' => array(
 				'Activate' => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 				'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 			),
-			'rtl' => (bool) is_rtl(),
+			'rtl' => (bool) \is_rtl(),
 		);
 
 		\wp_localize_script( $this->js_name, 'tsfemL10n', $strings );

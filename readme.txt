@@ -37,7 +37,9 @@ As long as the subscription is active, you're allowed to use all premium extensi
 
 = Privacy =
 
-* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites. Read our [privacy policy](https://theseoframework.com/privacy/).
+* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
+* Read our [privacy policy](https://theseoframework.com/privacy/).
+* Questions about privacy? Feel free to (contact us)[https://theseoframework.com/contact/].
 
 == Installation ==
 
@@ -62,7 +64,7 @@ The Extension Manager for The SEO Framework allows you to enable various extensi
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
 = What is an Extensions? =
-An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions are included and are available to be seen by anyone in this plugin package.
+An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions, both free and premium, are included in this plugin package.
 
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
@@ -73,7 +75,10 @@ Not at all! This extension manager provides up to date free extensions, without 
 
 = Are there advertisements? =
 Nope. This plugin only shows which extensions are available on the activation page. It will show both free and premium ones.
-The extension activation page will lead you to the site where you can purchase a license, but only if you choose to do so.
+Some buttons, like on the extension activation page, can lead you to the site where you can purchase a license, but only if you choose to do so.
+
+= Does this plugin track my usage? =
+Absolutely not! This plugin does not include any user tracking software. We completely rely on your feedback.
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
@@ -84,8 +89,7 @@ Follow the steps provided next to the error code, if any. If the error keeps com
 Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
 = Which users can activate extensions? =
-Only users who can install, update or activate plugins are allowed to interact with this plugin.
-On multisite, it is planned that this behavior is restricted to the activation of plugins only.
+Only users who can manage options are allowed to interact with this plugin.
 
 = Where are the extensions acquired from? =
 Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
@@ -103,10 +107,11 @@ Of course! This plugin is licensed with GPLv3, after all. However, please note t
 After all, this plugin can connect with our API server and we don't want third party plugins to interfere in any way.
 
 = Does this plugin work on MultiSite Networks? =
-This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
+Yes. This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
+Alternatively, this plugin can be activated per site while The SEO Framework is network activated. Any other combination is possible too.
 
 = Are there WordPress MultiSite network specific SEO extensions? =
-They're planned!
+They're planned! Unfortunately, there's still a lot to be done before this is even possible.
 
 = What happens when I deactivate my account? =
 All plugin settings will be deleted, this includes which extensions were enabled.
@@ -143,6 +148,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Performance: TODO Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
 	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
 	* Change: The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
+	* Fixed: TODO The extension list now also renders correctly on Safari 6 to 9.
+	* Fixed: TODO Huge tooltips are now faced downwards.
+	* Fixed: Extension activation tester now tests JSON test file for errors too.
+	* Change: TODO The tooltip is now a shade of black, rather than an off-color ocean blue.
 * **API:**
 	* **Internal:**
 		* TODO
@@ -159,6 +168,12 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		* 1.0.0-gamma-2
 	* **Premium only until gamma-testing is completed.**
+	* **Changed:**
+		/
+		* The automated description is now set to 155 characters, rather than 400.
+		* TODO CONFIRM IF HELPFUL: The automated description is now also outputted on the front-end.
+			* This is because the articles markup removed regular description output.
+			* This is not according to spec, but it's a bug within Google's indexing.
 	* **Fixed:**
 		* No more PHP notice should be output when fetching image from SEO settings.
 		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
@@ -169,11 +184,18 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Internal:**
 		* **Changed:**
 			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
+		* **Fixed:**
+			* More agressive buffer cleaning has been put in place to prevent failing AJAX requests.
+			* The SEO Framework's internal debugging methods can no longer interfere with the output.
 		/
 		* TODO
 	* **API:**
-		/
-		* TODO
+		* **Note:** These API changes affect only this plugin version.
+			/ TODO
+		* **Note:** These API changes affect all plugin versions.
+			* **Fixed:**
+				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
+				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
 * **Free - Incognito:**
 	* **Version:**
 		/

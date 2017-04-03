@@ -332,6 +332,7 @@ body.tsfem .wrap {
 .tsfem-button-love:after,
 .tsfem-button-warning:after,
 .tsfem-account-about-to-expire:after,
+.tsfem-button-upload:after,
 .tsfem-button-download:after,
 .tsfem-button-index:after,
 .tsfem-button-cloud:after,
@@ -361,6 +362,10 @@ body.tsfem .wrap {
 .tsfem-button-love:after,
 .tsfem-account-inactive:after {
 	content: "\f487";
+}
+
+.tsfem-button-upload:after {
+	content: "\f317";
 }
 
 .tsfem-button-download:after {
@@ -781,6 +786,7 @@ h4.tsfem-form-title,
 h4.tsfem-info-title,
 h4.tsfem-status-title,
 h4.tsfem-support-title,
+h4.tsfem-action-title,
 h4.tsfem-cp-title {
 	padding: 0;
 	margin: 0 0 14px;

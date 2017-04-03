@@ -91,7 +91,7 @@ trait Extensions_Properties {
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.0',
+				'tested_tsf' => '2.9.2',
 			),
 			'articles' => array(
 				'slug' => 'articles',
@@ -105,7 +105,7 @@ trait Extensions_Properties {
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.0',
+				'tested_tsf' => '2.9.2',
 			),
 			'monitor' => array(
 				'slug' => 'monitor',
@@ -119,7 +119,7 @@ trait Extensions_Properties {
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.0',
+				'tested_tsf' => '2.9.2',
 			),
 			'incognito' => array(
 				'slug' => 'incognito',
@@ -133,7 +133,7 @@ trait Extensions_Properties {
 				'requires' => '3.9.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '2.9.0',
+				'tested_tsf' => '2.9.2',
 			),
 			'title-fix' => array(
 				'slug' => 'title-fix',
@@ -147,7 +147,21 @@ trait Extensions_Properties {
 				'requires' => '3.9.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.0',
+				'tested_tsf' => '2.9.2',
+			),
+			'transporter' => array(
+				'slug' => 'transporter',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'settings',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1490950250',
+				'requires' => '4.4.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.9.2',
 			),
 		);
 	}
@@ -165,9 +179,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return array(
-			'sha256' => '52966b09ae673c192631d6eab86ae8e5be5d491855311484768c3a68a99563e6',
-			'sha1'   => '924c39380c97c5ba688130f42c7c3d452e0c487b',
-			'md5'    => '699e1ab64cc2a05353d46e48e78cf7b1',
+			'sha256' => '48627616fd256f5097fc7c88cc4e5d9e8c01b9186aefab837c5a5f101fffa8b1',
+			'sha1'   => 'bd6591a30e0c935f75847d8c7ffdc785c38dbeea',
+			'md5'    => 'e6c31f1ea32dd0e48052c0de6c881132',
 		);
 	}
 
@@ -787,6 +801,13 @@ trait Extensions_Actions {
 		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
+		if ( empty( $json ) ) {
+			//* json file contents are invalid.
+			$success[] = false;
+			throw new \Exception( 'Extension test file is invalid.' );
+			goto end;
+		}
+
 		$namespace = empty( $json->namespace ) ? '' : $json->namespace;
 		$tests = empty( $json->test ) ? array() : (array) $json->test;
 
@@ -907,14 +928,20 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 *
+	 * @return void Early when all tests have passed.
 	 */
 	public static function _shutdown_handle_test_extension_fatal_error() {
 
 		if ( defined( '_TSFEM_TEST_EXT_PASS' ) )
 			return;
 
-		if ( ob_get_level() )
-			ob_end_clean();
+		if ( $level = ob_get_level() ) {
+			while ( $level ) {
+				ob_end_clean();
+				$level--;
+			}
+		}
 
 		$error = error_get_last();
 		$error_type = '';
@@ -1043,6 +1070,7 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, $_instance, $bits ) {
+		error_log( $file );
 		return (bool) include_once( $file );
 	}
 

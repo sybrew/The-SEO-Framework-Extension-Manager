@@ -137,7 +137,7 @@ final class Monitor_Graph {
 			'gap' => 300, //5 min
 		);
 
-		$args = wp_parse_args( $args, $defaults );
+		$args = \wp_parse_args( $args, $defaults );
 
 		//* TODO: shift data?
 		// \the_seo_framework()->set_timezone();

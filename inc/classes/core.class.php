@@ -348,14 +348,18 @@ class Core {
 	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 : Now clears all levels, rather than only one.
 	 * @access private
 	 *
 	 * @return bool True on clear. False otherwise.
 	 */
 	public function _clean_ajax_reponse_header() {
 
-		if ( ob_get_level() && ob_get_contents() ) {
-			ob_clean();
+		if ( $level = ob_get_level() ) {
+			while ( $level ) {
+				ob_end_clean();
+				$level--;
+			}
 			return true;
 		}
 
@@ -921,7 +925,6 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
 	 *
 	 * @param string $path The extension path to look for.
 	 * @param string $class_base Class base words.
@@ -932,35 +935,68 @@ class Core {
 		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
 			return false;
 
+		$this->register_extension_autoloader();
+
+		return $this->set_extension_autoload_path( $path, $class_base );
+	}
+
+	/**
+	 * Registers autoloading classes for extensions and activates autoloader.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $path The extension path to look for.
+	 * @param string $class_base Class base words.
+	 * @return bool True on success, false on failure.
+	 */
+	public function _register_free_extension_autoload_path( $path, $class_base ) {
+
+		if ( false === $this->are_options_valid() )
+			return false;
+
+		$this->register_extension_autoloader();
+
+		return $this->set_extension_autoload_path( $path, $class_base );
+	}
+
+	/**
+	 * Registers and activated autoloader for extensions.
+	 *
+	 * @since 1.2.0
+	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
+	 */
+	protected function register_extension_autoloader() {
+
 		static $autoload_inactive = true;
 
 		if ( $autoload_inactive ) {
-			spl_autoload_register( array( $this, 'autoload_premium_extension_class' ), true, true );
+			spl_autoload_register( array( $this, 'autoload_extension_class' ), true, true );
 			$autoload_inactive = false;
 		}
-
-		return $this->set_premium_extension_autoload_path( $path, $class_base );
 	}
 
 	/**
 	 * Registers autoloading classes for extensions.
 	 * Maintains a cache. So this can be fetched later.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 * @staticvar array $registered The registered classes.
 	 *
 	 * @param string|null $path The extension path to look for.
 	 * @param string|null $class_base Class base words.
 	 * @param string|null $class The classname to fetch from cache.
 	 * @return void|bool|array : {
-	 * 		void  : $class if not set. Default behavior.
-	 * 		false : $class isn't found in $locations.
-	 *		array : $class is found in locations.
+	 *    void  : $class if not set. Default behavior.
+	 *    false : $class isn't found in $locations.
+	 *    array : $class is found in locations.
 	 * }
 	 */
-	protected function set_premium_extension_autoload_path( $path, $class_base, $class = null ) {
+	protected function set_extension_autoload_path( $path, $class_base, $class = null ) {
 
 		static $locations = array();
+
+		$class = ltrim( $class, '\\' );
 
 		if ( $class ) {
 			$class = str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class );
@@ -993,26 +1029,28 @@ class Core {
 	/**
 	 * Returns the registered $class name base path.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 *
 	 * @param string $class The classname path to fetch.
 	 * @return string|bool The path if found. False otherwise.
 	 */
-	protected function get_premium_extension_autload_path( $class ) {
-		return $this->set_premium_extension_autoload_path( null, null, $class );
+	protected function get_extension_autload_path( $class ) {
+		return $this->set_extension_autoload_path( null, null, $class );
 	}
 
 	/**
 	 * Autoloads all class files. To be used when requiring access to all or any of
 	 * the plugin classes.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 * @staticvar array $loaded Whether $class has been loaded.
 	 *
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
 	 */
-	protected function autoload_premium_extension_class( $class ) {
+	protected function autoload_extension_class( $class ) {
+
+		$class = ltrim( $class, '\\' );
 
 		if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\Extension\\', 0 ) )
 			return;
@@ -1022,7 +1060,7 @@ class Core {
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
 
-		$path = $this->get_premium_extension_autload_path( $class );
+		$path = $this->get_extension_autload_path( $class );
 
 		if ( $path ) {
 			$_class = strtolower( str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class ) );
@@ -1043,6 +1081,7 @@ class Core {
 	 * Validates extensions option checksum.
 	 *
 	 * @since 1.0.0
+	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param array $checksum The extensions checksum.
 	 * @return int|bool, Negative int on failure, true on success.
@@ -1196,12 +1235,12 @@ class Core {
 	 * @param string $slug The extension slug to load.
 	 * @param bool $ajax Whether this is an AJAX request.
 	 * @return int|void {
-	 * 		-1 : No check has been performed.
-	 * 		1  : No file header path can be created. (Invalid extension)
-	 * 		2  : Extension header file is invalid. (Invalid extension)
-	 * 		3  : Inclusion failed.
-	 * 		4  : Success.
-	 * 		void : Fatal error.
+	 *    -1 : No check has been performed.
+	 *    1  : No file header path can be created. (Invalid extension)
+	 *    2  : Extension header file is invalid. (Invalid extension)
+	 *    3  : Inclusion failed.
+	 *    4  : Success.
+	 *    void : Fatal error.
 	 * }
 	 */
 	protected function test_extension( $slug, $ajax = false ) {
@@ -1454,6 +1493,9 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.1.0 Can now convert stacked strong/em correctly.
+	 * @since 1.2.0 : 1. Removed word boundary requirement for strong.
+	 *                2. Now accepts regex count their numeric values in string.
+	 *                3. Fixed header 1~6 calculation.
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
@@ -1491,7 +1533,7 @@ class Core {
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
 		if ( 2 === count( array_intersect( $md_types, array( 'em', 'strong' ) ) ) ) :
-			$count = preg_match_all( '/(?:\*{3})([^\*{3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
+			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
 
 			for ( $i = 0; $i < $count; $i++ ) {
 				$text = str_replace(
@@ -1505,8 +1547,7 @@ class Core {
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :
 				case 'strong' :
-					//* Considers word boundary. @TODO consider removing this?
-					$count = preg_match_all( '/(?:\*{2})\b([^\*{2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -1518,7 +1559,7 @@ class Core {
 					break;
 
 				case 'em' :
-					$count = preg_match_all( '/(?:\*{1})([^\*{1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -1530,7 +1571,7 @@ class Core {
 					break;
 
 				case 'code' :
-					$count = preg_match_all( '/(?:`{1})([^`{1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
+					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
@@ -1549,7 +1590,7 @@ class Core {
 				case 'h1' :
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
-					$expression = "/(?:={{$amount}})\B([^={{$amount}}]+?)\B(?:={{$amount}})/";
+					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
 					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {

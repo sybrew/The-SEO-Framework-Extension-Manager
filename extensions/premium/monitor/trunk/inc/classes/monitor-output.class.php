@@ -556,6 +556,8 @@ final class Monitor_Output {
 
 		$content = '';
 
+		$this->disable_tsf_debugging();
+
 		if ( isset( $value['requires'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['requires'], '>=' ) ) {
 			if ( isset( $value['tested'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['tested'], '<=' ) ) {
 				$output = isset( $value['data'] ) ? $tests->{"issue_$key"}( $value['data'] ) : '';
@@ -567,6 +569,8 @@ final class Monitor_Output {
 		} else {
 			$content = $this->get_em_requires_update_notification();
 		}
+
+		$this->reset_tsf_debugging();
 
 		return $content;
 	}
@@ -616,5 +620,52 @@ final class Monitor_Output {
 		static $cache = null;
 
 		return isset( $cache ) ? $cache : $cache = \esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
+	}
+
+	/**
+	 * Disables The SEO Framework debugging when activated.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function disable_tsf_debugging() {
+
+		$debug = $this->get_tsf_debug_states();
+
+		$debug[1] and \the_seo_framework()->the_seo_framework_debug = false;
+		$debug[2] and \the_seo_framework()->the_seo_framework_debug_hidden = false;
+	}
+
+	/**
+	 * Fetches The SEO Framework debugging properties.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $debug
+	 *
+	 * @return array The debug values.
+	 */
+	protected function get_tsf_debug_states() {
+
+		static $debug = null;
+
+		if ( null === $debug ) {
+			$debug = array();
+			$debug[1] = \the_seo_framework()->the_seo_framework_debug;
+			$debug[2] = \the_seo_framework()->the_seo_framework_debug_hidden;
+		}
+
+		return $debug;
+	}
+
+	/**
+	 * Resets The SEO Framework debugging properties to previous values.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function reset_tsf_debugging() {
+
+		$debug = $this->get_tsf_debug_states();
+
+		$debug[1] and \the_seo_framework()->the_seo_framework_debug = $debug[1];
+		$debug[2] and \the_seo_framework()->the_seo_framework_debug_hidden = $debug[2];
 	}
 }

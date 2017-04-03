@@ -118,7 +118,7 @@ class AdminPages extends AccountActivation {
 	public function _add_menu_link() {
 
 		$menu = array(
-			'parent_slug' => the_seo_framework_options_page_slug(),
+			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',

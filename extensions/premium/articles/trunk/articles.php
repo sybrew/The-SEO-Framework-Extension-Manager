@@ -46,7 +46,7 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-alpha' );
+define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-gamma-2' );
 
 /**
  * Removes AMP articles if AMP extension is active.
@@ -408,7 +408,7 @@ final class Articles {
 	 *   'nonamp' => Will return empty.
 	 * }
 	 *
-	 * @requiredSchema AMP (docs)
+	 * @requiredSchema AMP
 	 * @ignoredSchema Never
 	 * @return array The Article's Image
 	 */
@@ -492,8 +492,10 @@ final class Articles {
 	/**
 	 * Returns the Article Published Date.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @requiredSchema AMP (docs)
-	 * @ignoredSchema nonAMP (docs)
+	 * @ignoredSchema nonAMP
 	 * @return array The Article's Published Date
 	 */
 	private function get_article_published_date() {
@@ -516,8 +518,10 @@ final class Articles {
 	/**
 	 * Returns the Article Modified Date.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @requiredSchema Never
-	 * @ignoredSchema nonAMP (docs)
+	 * @ignoredSchema nonAMP
 	 * @return array The Article's Published Date
 	 */
 	private function get_article_modified_date() {
@@ -538,7 +542,9 @@ final class Articles {
 	/**
 	 * Returns the Article Author.
 	 *
-	 * @requiredSchema AMP (docs)
+	 * @since 1.0.0
+	 *
+	 * @requiredSchema AMP
 	 * @ignoredSchema nonAMP
 	 * @return array The Article's Author
 	 */
@@ -566,8 +572,10 @@ final class Articles {
 	/**
 	 * Returns the Article Publisher and logo.
 	 *
-	 * @requiredSchema AMP (docs)
-	 * @ignoredSchema nonAMP (docs)
+	 * @since 1.0.0
+	 *
+	 * @requiredSchema AMP
+	 * @ignoredSchema nonAMP
 	 * @return array The Article's Publisher
 	 */
 	private function get_article_publisher() {
@@ -630,6 +638,9 @@ final class Articles {
 	/**
 	 * Returns the Article Description.
 	 *
+	 * @since 1.0.0
+	 * @since 1.0.0-gamma-2: Changed excerpt length to 155, from 400.
+	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
 	 * @return array The Article's Description
@@ -641,8 +652,8 @@ final class Articles {
 
 		$id = $this->get_current_id();
 
-		//* 400 length is an arbitrary guess, because there's no documentation on this.
-		$description = \the_seo_framework()->description_from_custom_field( array( 'id' => $id ) ) ?: \the_seo_framework()->generate_excerpt( $id, '', 400 );
+		//* 155 length is an arbitrary guess, because there's no documentation on this.
+		$description = \the_seo_framework()->description_from_custom_field( array( 'id' => $id ) ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 );
 
 		return array(
 			'description' => \esc_attr( $description ),

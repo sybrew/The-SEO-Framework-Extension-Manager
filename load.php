@@ -299,15 +299,28 @@ function can_load_class() {
  * @access private
  *
  * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this
- * 		plugin's scope could result in an error.
+ *       plugin's scope could result in an error.
  *
  * @param string $class The class name.
- * @return bool False if file hasn't yet been included, otherwise true.
+ * @return void Early if the class is not within the current namespace.
  */
 function _autoload_classes( $class ) {
 
 	if ( 0 !== strpos( $class, __NAMESPACE__ . '\\', 0 ) )
 		return;
+
+	if ( WP_DEBUG ) {
+		/**
+		 * Prevent loading sub-namespaces.
+		 *
+		 * Only on a fatal error within autoloaded files, this function will run.
+		 * Prevent this function to then show an unrelated fatal error because
+		 * it's not meant load that file. Then it will propagate the error
+		 * towards the actual error within the previously and already loaded file.
+		 */
+		if ( substr_count( $class, '\\', 2 ) >= 2 )
+			return;
+	}
 
 	if ( strpos( $class, '_Abstract' ) ) {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
@@ -339,7 +352,7 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return;
 
-	$loaded[ $file ] = require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
+	$loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
 
 	return;
 }

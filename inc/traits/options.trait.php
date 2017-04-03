@@ -64,7 +64,7 @@ trait Options {
 		\remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		\remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
-		return $cache = (array) get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+		return $cache = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
 	}
 
 	/**
