@@ -740,7 +740,7 @@ trait Extensions_Actions {
 			define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
 			//* We only want to catch a fatal/parse error.
-			static::set_error_reporting( 0 );
+			static::set_error_reporting( E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR );
 
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
@@ -782,6 +782,8 @@ trait Extensions_Actions {
 	 * Performs extension file tests based on json file input.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 : 1. Now tests extension file validity.
+	 *                2. Increased extension file timeout to 3 seconds, from 2.
 	 *
 	 * @param string $slug The extension slug.
 	 * @param string $_instance The verification instance. Passed by reference.
@@ -798,13 +800,13 @@ trait Extensions_Actions {
 		if ( 0 !== \validate_file( $json_file ) || ! file_exists( $json_file ) )
 			goto end;
 
-		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 2 ) ) );
+		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 3 ) ) );
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
 		if ( empty( $json ) ) {
 			//* json file contents are invalid.
+			throw new \Exception( 'Extension test file is invalid.', E_USER_ERROR );
 			$success[] = false;
-			throw new \Exception( 'Extension test file is invalid.' );
 			goto end;
 		}
 
@@ -947,14 +949,14 @@ trait Extensions_Actions {
 		$error_type = '';
 
 		switch ( $error['type'] ) :
-			case 1 :
-			case 16 :
-			case 64 :
-			case 256 :
+			case E_ERROR :
+			case E_CORE_ERROR :
+			case E_COMPILE_ERROR :
+			case E_USER_ERROR :
 				$error_type = 'Fatal error.';
 				break;
 
-			case 4 :
+			case E_PARSE :
 				$error_type = 'Parse error.';
 				break;
 
@@ -1070,7 +1072,6 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, $_instance, $bits ) {
-		error_log( $file );
 		return (bool) include_once( $file );
 	}
 

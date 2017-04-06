@@ -799,7 +799,11 @@ class Core {
 	/**
 	 * Creates a link and returns it.
 	 *
+	 * If URL is '#', then it no href will be set.
+	 * If URL is empty, a doing it wrong notice will be output.
+	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 : Added download, filename and data.
 	 *
 	 * @param array $args The link arguments : {
 	 *		'url'     => string The URL. Required.
@@ -807,6 +811,9 @@ class Core {
 	 *		'class'   => string The link class. Default ''.
 	 *		'title'   => string The link title. Default ''.
 	 *		'content' => string The link content. Default ''.
+	 *		'download' => bool Whether to download. Default false.
+	 *		'filename' => string The optional download filename. Default ''.
+	 *		'data'    => array Array of data-$keys and $values.
 	 * }
 	 * @return string escaped link.
 	 */
@@ -821,6 +828,9 @@ class Core {
 			'class'   => '',
 			'title'   => '',
 			'content' => '',
+			'download' => false,
+			'filename' => '',
+			'data' => array(),
 		);
 		$args = \wp_parse_args( $args, $defaults );
 
@@ -831,12 +841,19 @@ class Core {
 			return '';
 		}
 
-		$url = ' href="' . $url . '"';
+		$url = '#' === $url ? '' : ' href="' . $url . '"';
 		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
 		$target = ' target="' . \esc_attr( $args['target'] ) . '"';
 		$title = $args['title'] ? ' title="' . \esc_attr( $args['title'] ) . '"' : '';
+		$download = $args['download'] ? ( $args['filename'] ? ' download="' . \esc_attr( $args['filename'] ) . '"' : ' download' ) : '';
+		$data = '';
+		if ( ! empty( $args['data'] ) ) {
+			foreach ( $args['data'] as $k => $v ) {
+				$data .= sprintf( ' data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
+			}
+		}
 
-		return '<a' . $url . $class . $target . $title . '>' . \esc_html( $args['content'] ) . '</a>';
+		return '<a' . $url . $class . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
 	}
 
 	/**

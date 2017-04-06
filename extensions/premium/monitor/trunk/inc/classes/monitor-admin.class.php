@@ -397,7 +397,7 @@ final class Monitor_Admin extends Monitor_Api {
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					$data = $_POST;
 
-					$timeout = isset( $data['remote_data_timeout'] ) ? absint( $data['remote_data_timeout'] ) : 0;
+					$timeout = isset( $data['remote_data_timeout'] ) ? \absint( $data['remote_data_timeout'] ) : 0;
 				}
 
 				$current_timeout = $this->get_remote_data_timeout();

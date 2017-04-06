@@ -76,7 +76,7 @@ window[ 'tsfem_e_monitor' ] = {
 	showReadMore: function( event ) {
 		'use strict';
 
-		var $parent = jQuery( '#' + event.target.id + '-wrap' ),
+		let $parent = jQuery( '#' + event.target.id + '-wrap' ),
 			$content = jQuery( '#' + event.target.id + '-content' );
 
 		$parent.remove();
@@ -89,7 +89,8 @@ window[ 'tsfem_e_monitor' ] = {
 	 * @since 1.0.0
 	 *
 	 * @function
-	 * @param {jQuery.event} event
+	 * @param {!jQuery.event} event
+	 * @return {(undefined|null)}
 	 */
 	requestCrawl: function( event ) {
 		'use strict';
@@ -111,7 +112,7 @@ window[ 'tsfem_e_monitor' ] = {
 		tsfem.setAjaxLoader( loader );
 
 		//* Setup external update.
-		var settings = {
+		let settings = {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
@@ -124,7 +125,7 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				var response = jQuery.parseJSON( response );
+				response = jQuery.parseJSON( response );
 
 				if ( tsfem.debug ) console.log( response );
 
@@ -136,7 +137,7 @@ window[ 'tsfem_e_monitor' ] = {
 					tsfem.updatedResponse( loader, 0, '', 0 );
 				} else {
 
-					var status = response.status['type'],
+					let status = response.status['type'],
 						notice = response.status['notice'];
 
 					if ( 'success' === status ) {
@@ -195,7 +196,7 @@ window[ 'tsfem_e_monitor' ] = {
 		tsfem.setAjaxLoader( loader );
 
 		//* Setup external update.
-		var settings = {
+		let settings = {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
@@ -208,7 +209,7 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				var response = jQuery.parseJSON( response );
+				response = jQuery.parseJSON( response );
 
 				if ( tsfem.debug ) console.log( response );
 
@@ -220,7 +221,7 @@ window[ 'tsfem_e_monitor' ] = {
 					tsfem.updatedResponse( loader, 0, '', 0 );
 				} else {
 
-					var status = response.status['type'],
+					let status = response.status['type'],
 						content = response.status['content'],
 						notice = response.status['notice'];
 
@@ -248,7 +249,7 @@ window[ 'tsfem_e_monitor' ] = {
 							} );
 						} else {
 
-							var issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">' + issues.data + '</div>';
+							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">' + issues.data + '</div>';
 
 							jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
 								{ 'opacity' : 1 },
@@ -304,7 +305,7 @@ window[ 'tsfem_e_monitor' ] = {
 		if ( jQuery( '.tsfem-account-fix' ).length > 0 || jQuery( '.tsfem-account-info' ).length < 1 )
 			return;
 
-		var settings = {
+		let settings = {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
@@ -316,7 +317,7 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				var response = jQuery.parseJSON( response );
+				response = jQuery.parseJSON( response );
 
 				if ( 'undefined' !== typeof response.html && response.html )
 					jQuery( response.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );

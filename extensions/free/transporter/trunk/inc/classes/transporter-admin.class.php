@@ -115,6 +115,12 @@ final class Transporter_Admin {
 			//* Reference convenience.
 			'default' => 'default',
 
+			//* Export init settings data.
+			'export' => 'export',
+
+			//* Export init settings data.
+			'import' => 'import',
+
 			//* Upload settings data.
 			'upload' => 'upload',
 
@@ -127,6 +133,12 @@ final class Transporter_Admin {
 		$this->nonce_action = array(
 			//* Reference convenience.
 			'default' => 'tsfem_e_transporter_nonce_action',
+
+			//* Export init settings data.
+			'export' => 'tsfem_e_transporter_nonce_action_export',
+
+			//* Export init settings data.
+			'import' => 'tsfem_e_transporter_nonce_action_import',
 
 			//* Upload settings data.
 			'upload' => 'tsfem_e_transporter_nonce_action_upload_data',
@@ -161,14 +173,8 @@ final class Transporter_Admin {
 		//* Update POST listener.
 		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
-		//* AJAX update listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_upload', array( $this, '_wp_ajax_upload_data' ) );
-
-		//* AJAX crawl listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_download', array( $this, '_wp_ajax_download_data' ) );
-
-		//* AJAX get required fix listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_confirm_upload', array( $this, '_wp_ajax_confirm_upload_data' ) );
+		//* AJAX export request listener.
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_export', array( $this, '_wp_ajax_request_export' ) );
 
 	}
 
@@ -289,24 +295,9 @@ final class Transporter_Admin {
 			return;
 
 		switch ( $options['nonce-action'] ) :
-			case $this->request_name['connect'] :
-				$this->api_register_site();
-				break;
-
-			case $this->request_name['fix'] :
-				$this->api_register_site( false );
-				break;
-
-			case $this->request_name['disconnect'] :
-				$this->api_disconnect_site();
-				break;
-
-			case $this->request_name['crawl'] :
-				$this->api_request_crawl();
-				break;
-
-			case $this->request_name['update'] :
-				$this->api_get_remote_data();
+			case $this->request_name['export'] :
+				// TODO
+				// $this->api_register_site();
 				break;
 
 			default :
@@ -317,6 +308,117 @@ final class Transporter_Admin {
 		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
 		\the_seo_framework()->admin_redirect( $this->transporter_page_slug, $args );
 		exit;
+	}
+
+	/**
+	 * Checks the Extension's page nonce. Returns false if nonce can't be found
+	 * or if user isn't allowed to perform nonce.
+	 * Performs wp_die() when nonce verification fails.
+	 *
+	 * Never run a sensitive function when it's returning false. This means no
+	 * nonce can or has been been verified.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $validated Determines whether the nonce has already been verified.
+	 *
+	 * @param string $key The nonce action used for caching.
+	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
+	 * @return bool True if verified and matches. False if can't verify.
+	 */
+	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
+
+		static $validated = array();
+
+		if ( isset( $validated[ $key ] ) )
+			return $validated[ $key ];
+
+		if ( false === $this->is_transporter_page() && false === \tsf_extension_manager()->can_do_settings() )
+			return $validated[ $key ] = false;
+
+		if ( $check_post ) {
+			/**
+			 * If this page doesn't parse the site options,
+			 * there's no need to check them on each request.
+			 */
+			if ( empty( $_POST )
+			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			) {
+				return $validated[ $key ] = false;
+			}
+		}
+
+		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+
+		if ( false === $result ) {
+			//* Nonce failed. Set error notice and reload.
+			$this->set_error_notice( array( 1019001 => '' ) );
+			\the_seo_framework()->admin_redirect( $this->transporter_page_slug );
+			exit;
+		}
+
+		return $validated[ $key ] = (bool) $result;
+	}
+
+	/**
+	 * Fetches and returns export data in JSON encoded form.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	final public function _wp_ajax_request_export() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( \tsf_extension_manager()->can_do_settings() ) :
+
+				if ( \check_ajax_referer( 'tsfem-e-transporter-ajax-nonce', 'nonce', false ) ) {
+
+					$export_data = $this->get_the_seo_framework_options_export_data();
+
+					if ( empty( $export_data ) ) {
+						$type = 'failure';
+						$notice = \esc_html__( 'No export data is found.', 'the-seo-framework-extension-manager' );
+					} else {
+						$type = 'success';
+						$notice = '';
+					}
+
+					//* Initialize menu hooks.
+					\the_seo_framework()->add_menu_link();
+					$this->_add_menu_link();
+
+					$textarea = sprintf( '<textarea rows="5" class="tsfem-e-transporter-transport-data-text" id="tsfem-e-transporter-transport-data-text" readonly="readonly">%s</textarea>', json_encode( $export_data ) );
+					$clipboard_button = $this->get_seo_settings_clipboard_button_output( 'tsfem-e-transporter-transport-data-text' );
+					$download_button = $this->get_seo_settings_download_button_output();
+					$html = sprintf( '<div class="tsfem-e-transporter-transport-data tsfem-flex tsfem-flex-nogrowshrink">%s<div>', $download_button . $clipboard_button . $textarea );
+				}
+
+				$response = compact( 'html', 'type', 'notice' );
+
+				\tsf_extension_manager()->_clean_ajax_reponse_header();
+
+				echo json_encode( $response );
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Returns TSF Site SEO Options export data.
+	 *
+	 * On TSF 2.9.2 and later it will also clear its options cache.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $encode Whether to encode the data.
+	 * @return array The SEO Framework options.
+	 */
+	protected function get_the_seo_framework_options_export_data( $encode = false ) {
+
+		$options = \the_seo_framework()->get_all_options( null, true );
+
+		return $encode ? json_encode( $options ) : $options;
 	}
 
 	/**
@@ -446,10 +548,12 @@ final class Transporter_Admin {
 		$left = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_export_option_output() );
 		$right = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_import_option_output() );
 
-		//* Don't wrap: Flex requires scrolling when required.
-		$start = $left . $right;
+		$start = sprintf( '<div class="tsfem-e-transporter-start tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $left . $right );
 
-		$output = $start;
+		//* Steps, pre-rendered for non-ajax. @TODO prerender
+		$steps = sprintf( '<div class="tsfem-e-transporter-steps tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', '' );
+
+		$output = $start . $steps;
 
 		return sprintf( '<div class="tsfem-e-transporter-transport tsfem-flex tsfem-flex-row">%s</div>', $output );
 	}
@@ -460,7 +564,7 @@ final class Transporter_Admin {
 
 		$button = $this->get_export_button();
 
-		return sprintf( '<div class="tsfem-e-transporert-export-option">%s</div>', $title . $button );
+		return sprintf( '<div class="tsfem-e-transporter-export-option">%s</div>', $title . $button );
 	}
 
 	protected function get_export_button() {
@@ -486,13 +590,93 @@ final class Transporter_Admin {
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
 
+	protected function get_seo_settings_clipboard_button_output( $textarea_id = '' ) {
+
+		$title = sprintf( '<h4 class="tsfem-action-title">%s</h4>', \esc_html__( 'Copy SEO Settings', 'the-seo-framework-extension-manager' ) );
+
+		$button = $this->get_seo_settings_clipboard_button( $textarea_id );
+
+		return sprintf( '<div class="tsfem-e-transporter-clipboard-option">%s</div>', $title . $button );
+	}
+
+	protected function get_seo_settings_clipboard_button( $textarea_id ) {
+
+		$class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-clipboard';
+		$name = \__( 'Copy SEO Settings', 'the-seo-framework-extension-manager' );
+		$title = \__( 'Copy the SEO Settings to clipboard', 'the-seo-framework-extension-manager' );
+
+		$args = array(
+			'url'   => '#',
+			'class' => $class,
+			'title' => $title,
+			'content' => $name,
+			'id'    => $textarea_id . '-clipboard-button',
+			'input' => $filename,
+			'data'  => array(
+				'clipboardid' => $textarea_id,
+			),
+		);
+
+		return \tsf_extension_manager()->get_link( $args );
+	}
+
+	protected function get_seo_settings_download_button_output() {
+
+		$title = sprintf( '<h4 class="tsfem-action-title">%s</h4>', \esc_html__( 'Download SEO Settings', 'the-seo-framework-extension-manager' ) );
+
+		$button = $this->get_seo_settings_download_button();
+
+		return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $button );
+	}
+
+	protected function get_seo_settings_download_button() {
+
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-download';
+		$name = \__( 'Download SEO Settings', 'the-seo-framework-extension-manager' );
+		$title = \__( 'Download the SEO Settings file', 'the-seo-framework-extension-manager' );
+
+		$url_args = array(
+			'action' => $this->nonce_action['download'],
+			$this->nonce_name => \wp_create_nonce( $this->request_name['download'] ),
+		);
+		$location = \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug, $url_args );
+
+		$filename = sprintf( 'SEO-Settings-%s.json.txt', str_replace( array( ' ', '_', "\r\n", "\r", '\\', "\n" ), '-', trim( \get_bloginfo( 'name', 'raw' ) ) ) );
+
+		$args = array(
+			'url'   => $location,
+			'class' => $class,
+			'title' => $title,
+			'content' => $name,
+			'id'    => 'tsfem-e-transporter-download-form',
+			'input' => $filename,
+		);
+
+		return $this->get_download_link( $args );
+	}
+
+	protected function get_download_link( array $args = array() ) {
+
+		$defaults = array(
+			'url'     => '',
+			'target'  => '_self',
+			'class'   => '',
+			'title'   => '',
+			'content' => '',
+			'download' => true,
+			'filename' => '',
+		);
+
+		return \tsf_extension_manager()->get_link( \wp_parse_args( $args, $defaults ) );
+	}
+
 	protected function get_import_option_output() {
 
 		$title = sprintf( '<h4 class="tsfem-action-title">%s</h4>', \esc_html__( 'Import SEO Settings', 'the-seo-framework-extension-manager' ) );
 
 		$button = $this->get_import_button();
 
-		return sprintf( '<div class="tsfem-e-transporert-import-option">%s</div>', $title . $button );
+		return sprintf( '<div class="tsfem-e-transporter-import-option">%s</div>', $title . $button );
 	}
 
 	protected function get_import_button() {

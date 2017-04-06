@@ -1,0 +1,15 @@
+.tsfem-e-transporter-transport-wrap {
+	-webkit-align-items: flex-start;
+	align-items: flex-start;
+}
+
+.tsfem-e-transporter-start,
+.tsfem-e-transporter-steps {
+	-webkit-flex-basis: 100%;
+	flex-basis: 100%;
+	margin-bottom: 20px;
+}
+
+.tsfem-e-transporter-transport-data-text {
+	width: 100%;
+}

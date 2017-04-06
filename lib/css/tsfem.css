@@ -334,6 +334,7 @@ body.tsfem .wrap {
 .tsfem-account-about-to-expire:after,
 .tsfem-button-upload:after,
 .tsfem-button-download:after,
+.tsfem-button-clipboard:after,
 .tsfem-button-index:after,
 .tsfem-button-cloud:after,
 .tsfem-button-loading:after {
@@ -370,6 +371,10 @@ body.tsfem .wrap {
 
 .tsfem-button-download:after {
 	content: "\f316";
+}
+
+.tsfem-button-clipboard:after {
+	content: "\f481";
 }
 
 .tsfem-button-index:after {
