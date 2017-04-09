@@ -101,7 +101,7 @@ window[ 'tsfem_e_transporter' ] = {
 					if ( 'success' === status ) {
 						if ( html ) {
 							//* Expected to be inputting a single div.
-							jQuery( '.tsfem-e-transporter-steps' ).empty().css( 'opacity', 0 ).append( html ).animate(
+							jQuery( '.tsfem-e-transporter-step-2' ).empty().css( 'opacity', 0 ).append( html ).animate(
 								{ 'opacity' : 1 },
 								{ queue: true, duration: 250 },
 								'swing'

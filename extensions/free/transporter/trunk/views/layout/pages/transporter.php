@@ -10,27 +10,27 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\transporter_
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	\tsf_extension_manager()->_do_pane_wrap(
-		\__( 'Transport', 'the-seo-framework-extension-manager' ),
-		$this->get_transport_overview(),
+		\__( 'Transport SEO Settings', 'the-seo-framework-extension-manager' ),
+		$this->get_transport_settings_overview(),
 		array(
 			'full' => false,
 			'collapse' => true,
 			'move' => false,
-			'pane_id' => 'tsfem-e-transporter-transport-pane',
+			'pane_id' => 'tsfem-e-transporter-settings-pane',
 			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-transport-ajax',
+			'ajax_id' => 'tsfem-e-transporter-settings-ajax',
 		)
 	);
 	\tsf_extension_manager()->_do_pane_wrap(
-		\__( 'Validate', 'the-seo-framework-extension-manager' ),
-		$this->get_validate_overview(),
+		\__( 'Transport SEO Meta', 'the-seo-framework-extension-manager' ),
+		$this->get_transport_meta_overview(),
 		array(
 			'full' => false,
 			'collapse' => true,
 			'move' => false,
-			'pane_id' => 'tsfem-e-monitor-validate-pane',
+			'pane_id' => 'tsfem-e-transporter-meta-pane',
 			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-validate-ajax',
+			'ajax_id' => 'tsfem-e-transporter-meta-ajax',
 		)
 	);
 ?>
