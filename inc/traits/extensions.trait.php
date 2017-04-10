@@ -565,8 +565,6 @@ trait Extensions_Actions {
 
 		$compatibility = static::determine_extension_compatibility( $extension );
 
-		$_compatibility = 0;
-
 		switch ( $compatibility ) :
 			case 0 :
 				$_compatibility = 0;

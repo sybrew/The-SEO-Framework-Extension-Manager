@@ -1194,6 +1194,7 @@ h5.tsfem-extension-type {
 @media screen and ( max-height: 800px ), ( max-width: 782px ) {
 	body.tsfem .wrap {
 		height: auto;
+		min-height: calc( 100vh - 147px );
 		margin-bottom: 30px;
 	}
 }

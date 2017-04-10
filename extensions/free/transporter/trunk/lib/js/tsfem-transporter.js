@@ -58,7 +58,7 @@ window[ 'tsfem_e_transporter' ] = {
 
 		var loading = 'tsfem-button-disabled tsfem-button-loading',
 			$button = jQuery( event.target ),
-			loader = '#tsfem-e-transporter-transport-pane .tsfem-pane-header .tsfem-ajax';
+			loader = '#tsfem-e-transporter-settings-pane .tsfem-pane-header .tsfem-ajax';
 
 		if ( $button.prop( 'disabled' ) )
 			return;
@@ -103,11 +103,11 @@ window[ 'tsfem_e_transporter' ] = {
 							//* Expected to be inputting a single div.
 							jQuery( '.tsfem-e-transporter-step-2' ).empty().css( 'opacity', 0 ).append( html ).animate(
 								{ 'opacity' : 1 },
-								{ queue: true, duration: 250 },
+								{ queue: true, duration: 1000 },
 								'swing'
 							);
 						} else {
-							/*
+							/* TODO error handling?
 							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">' + issues.data + '</div>';
 
 							jQuery( '.tsfem-e-transporter-steps' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
@@ -117,7 +117,7 @@ window[ 'tsfem_e_transporter' ] = {
 							);*/
 						}
 
-						setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 250 );
+						setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 					} else {
 						tsfem.updatedResponse( loader, 0, notice, 0 );
 					}
@@ -140,6 +140,33 @@ window[ 'tsfem_e_transporter' ] = {
 	},
 
 	/**
+	 *
+	 * For future draft:
+	 * @see https://www.w3.org/TR/clipboard-apis/#dfn-datatransfer
+	 *
+	 */
+	storeClipboard: function( event ) {
+
+		let $button = jQuery( event.target ),
+			targetText = $button.data( 'clipboardid' ),
+			$targetText = jQuery( '#' + targetText );
+
+		let val = $targetText.length ? $targetText.val() || '' : '';
+
+		if ( val ) {
+			$targetText.select();
+			document.execCommand( 'copy' );
+			document.getSelection().removeAllRanges();
+		/** Future:
+		let type = $button.data( 'clipboardtype' ) || 'text/plain';
+		document.addEventListener( 'copy', function( e ) {
+			e.clipboardData.setData( type, val );
+		} );
+		*/
+		}
+	},
+
+	/**
 	 * Initialises all aspects of the scripts.
 	 *
 	 * Generally ordered with stuff that inserts new elements into the DOM first,
@@ -157,6 +184,8 @@ window[ 'tsfem_e_transporter' ] = {
 
 		// AJAX request export data.
 		jQ( 'a#tsfem-e-transporter-export-button' ).on( 'click', tsfem_e_transporter.requestExport );
+
+		jQ( 'a#tsfem-e-transporter-transport-data-text-clipboard-button' ).on( 'click', tsfem_e_transporter.storeClipboard );
 
 	}
 };

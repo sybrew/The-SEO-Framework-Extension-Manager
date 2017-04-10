@@ -27,22 +27,16 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * Require user interface trait.
+ * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'ui' );
-
-/**
- * Require extension options trait.
- * @since 1.0.0
- */
-\TSF_Extension_Manager\_load_trait( 'extension-options' );
+\TSF_Extension_Manager\_load_trait( 'extension-forms' );
 
 /**
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+\TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
  * @package TSF_Extension_Manager\Traits
@@ -78,6 +72,7 @@ final class Transporter_Steps {
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 * @static
 	 */
 	public static function set_instance() {
 
@@ -91,6 +86,7 @@ final class Transporter_Steps {
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 * @static
 	 *
 	 * @return object The current instance.
 	 */
@@ -209,40 +205,30 @@ final class Transporter_Steps {
 		return $this->coalesce_var( $output );
 	}
 
+	/**
+	 * @TODO use $ajax?
+	 */
 	private function get_seo_settings_export_actions( $ajax = false ) {
 
 		$export_data = \TSF_Extension_Manager\Extension\Transporter_Admin::get_the_seo_framework_options_export_data( false );
+		$transport_id = 'tsfem-e-transporter-transport-data-text';
 
-		if ( $ajax ) {
-			$clipboard_button = $this->get_seo_settings_clipboard_button_output( 'tsfem-e-transporter-transport-data-text' );
-			$download_button = $this->get_seo_settings_download_button_output();
+		$download_button = $this->get_seo_settings_download_button_output();
+		$download_button_wrap = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $download_button );
+		$clipboard_button = $this->get_seo_settings_clipboard_button_output( $transport_id );
+		$clipboard_button_wrap = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $clipboard_button );
+		$buttons_wrap = sprintf(
+			'<div class="tsfem-e-transporter-steps-split tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>',
+			$download_button_wrap . $clipboard_button_wrap
+		);
 
-			$download_button_wrap = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $download_button );
-			$clipboard_button_wrap = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $clipboard_button );
+		$textarea = sprintf(
+			'<textarea rows="5" class="%1$s" id="%1$s" readonly="readonly">%2$s</textarea>',
+			$transport_id,
+			json_encode( $export_data )
+		);
 
-			$buttons_wrap = sprintf(
-				'<div class="tsfem-e-transporter-steps-split tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>',
-				$download_button_wrap . $clipboard_button_wrap
-			);
-
-			$textarea = sprintf( '<textarea rows="5" class="tsfem-e-transporter-transport-data-text" id="tsfem-e-transporter-transport-data-text" readonly="readonly">%s</textarea>', json_encode( $export_data ) );
-			$output = sprintf( '<div class="tsfem-e-transporter-transport-data tsfem-flex tsfem-flex-nogrowshrink">%s<div>', $buttons_wrap . $textarea );
-		} else {
-			$clipboard_button = $this->get_seo_settings_clipboard_button_output( 'tsfem-e-transporter-transport-data-text' );
-			$download_button = $this->get_seo_settings_download_button_output();
-
-			$download_button_wrap = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $download_button );
-			$clipboard_button_wrap = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $clipboard_button );
-
-			$buttons_wrap = sprintf(
-				'<div class="tsfem-e-transporter-steps-split tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>',
-				$download_button_wrap . $clipboard_button_wrap
-			);
-
-			$textarea = sprintf( '<textarea rows="5" class="tsfem-e-transporter-transport-data-text" id="tsfem-e-transporter-transport-data-text" readonly="readonly">%s</textarea>', json_encode( $export_data ) );
-			$output = sprintf( '<div class="tsfem-e-transporter-transport-data tsfem-flex tsfem-flex-nogrowshrink">%s<div>', $buttons_wrap . $textarea );
-			$output = sprintf( '<div class="tsfem-e-transporter-step-2 tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $output );
-		}
+		$output = sprintf( '<div class="tsfem-e-transporter-transport-data tsfem-flex tsfem-flex-nogrowshrink">%s<div>', $buttons_wrap . $textarea );
 
 		return $this->coalesce_var( $output );
 	}
@@ -316,6 +302,7 @@ final class Transporter_Steps {
 			'id'    => $textarea_id . '-clipboard-button',
 			'data'  => array(
 				'clipboardid' => $textarea_id,
+				'clipboardtype' => 'application/json',
 			),
 		);
 

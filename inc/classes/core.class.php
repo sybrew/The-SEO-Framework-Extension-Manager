@@ -803,12 +803,13 @@ class Core {
 	 * If URL is empty, a doing it wrong notice will be output.
 	 *
 	 * @since 1.0.0
-	 * @since 1.2.0 : Added download, filename and data.
+	 * @since 1.2.0 : Added download, filename, id and data.
 	 *
 	 * @param array $args The link arguments : {
 	 *		'url'     => string The URL. Required.
 	 *		'target'  => string The target. Default '_self'.
 	 *		'class'   => string The link class. Default ''.
+	 *		'id'      => string The link id. Default ''.
 	 *		'title'   => string The link title. Default ''.
 	 *		'content' => string The link content. Default ''.
 	 *		'download' => bool Whether to download. Default false.
@@ -826,6 +827,7 @@ class Core {
 			'url'     => '',
 			'target'  => '_self',
 			'class'   => '',
+			'id'      => '',
 			'title'   => '',
 			'content' => '',
 			'download' => false,
@@ -843,6 +845,7 @@ class Core {
 
 		$url = '#' === $url ? '' : ' href="' . $url . '"';
 		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
+		$id = $args['id'] ? ' id="' . \esc_attr( $args['id'] ) . '"' : '';
 		$target = ' target="' . \esc_attr( $args['target'] ) . '"';
 		$title = $args['title'] ? ' title="' . \esc_attr( $args['title'] ) . '"' : '';
 		$download = $args['download'] ? ( $args['filename'] ? ' download="' . \esc_attr( $args['filename'] ) . '"' : ' download' ) : '';
@@ -853,7 +856,7 @@ class Core {
 			}
 		}
 
-		return '<a' . $url . $class . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
+		return '<a' . $url . $class . $id . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
 	}
 
 	/**
