@@ -351,9 +351,7 @@ trait Destruct_Core_Public_Final {
 
 		static $died = false;
 
-		$set and $died = true;
-
-		return $died;
+		return $died || $set && $died = true;
 	}
 }
 

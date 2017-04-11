@@ -282,6 +282,7 @@ trait Error {
 			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001 :
 			case 1019001 :
+			case 1069001 :
 				$message = \esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -349,6 +350,16 @@ trait Error {
 			case 1010606 :
 				$message = \esc_html__( 'The latest Monitor data has been recieved.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
+				break;
+
+			case 1060301 :
+				$message = \esc_html__( "The SEO Settings couldn't be converted to file.", 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 1060302 :
+				$message = \esc_html__( 'An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
 				break;
 
 			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.

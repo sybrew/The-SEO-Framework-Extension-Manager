@@ -295,9 +295,8 @@ final class Transporter_Admin {
 			return;
 
 		switch ( $options['nonce-action'] ) :
-			case $this->request_name['export'] :
-				// TODO
-				// $this->api_register_site();
+			case $this->request_name['download'] :
+				$this->download_seo_settings_file();
 				break;
 
 			default :
@@ -352,7 +351,7 @@ final class Transporter_Admin {
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( array( 1019001 => '' ) );
+			$this->set_error_notice( array( 1069001 => '' ) );
 			\the_seo_framework()->admin_redirect( $this->transporter_page_slug );
 			exit;
 		}
@@ -401,12 +400,82 @@ final class Transporter_Admin {
 
 				$response = compact( 'html', 'type', 'notice' );
 
-				\tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_reponse_header();
 
 				echo json_encode( $response );
 			endif;
 		endif;
 
+		exit;
+	}
+
+	/**
+	 * Creates a stream for the Settings file and closes PHP.
+	 *
+	 * This function is data sensitive. Always confirm user authority before
+	 * calling this.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $ajax Whether the request is through AJAX.
+	 * @return array|bool|void The error code on AJAX. Bool false on form call.
+	 *         Void on success.
+	 */
+	protected function download_seo_settings_file( $ajax = false ) {
+
+		$filename_raw = sprintf(
+			'TSF-SEO-Settings-%s.json',
+			str_replace(
+				array( ' ', '_', "\r\n", "\r", '\\', "\n" ),
+				'-',
+				trim( \get_bloginfo( 'name', 'raw' ) )
+			)
+		);
+		$filename = \sanitize_file_name( $filename_raw );
+
+		/**
+		 * If this is NULL, then it will return an empty file. This is fine.
+		 * However, we want to inform the cause to the user.
+		 */
+		$content = static::get_the_seo_framework_options_export_data( true );
+		$filesize = \tsf_extension_manager()->get_filesize( $content );
+
+		if ( 0 === $filesize ) {
+			$ajax or $this->set_error_notice( array( 1060301 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1060301 ) : false;
+		}
+
+		\tsf_extension_manager()->_clean_reponse_header();
+
+		if ( headers_sent() ) {
+			$ajax or $this->set_error_notice( array( 1060302 => '' ) );
+			return $ajax ? $this->get_ajax_notice( false, 1060302 ) : false;
+		}
+
+		$this->stream_content( $content, $filesize, $filename );
+	}
+
+	/**
+	 * Streams content based on input and closes PHP.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $content The file's content. Required.
+	 * @param int $filesize The filesize in bytes. Required.
+	 * @param string $filename The file name. Required.
+	 */
+	protected function stream_content( $content, $filesize, $filename ) {
+
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Type: application/octet-stream' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Expires: 0' );
+		header( 'Cache-Control: must-revalidate' );
+		header( 'Pragma: public' );
+		header( 'Content-Length: ' . $filesize );
+
+		//* Should've already been escaped.
+		print( $content );
 		exit;
 	}
 
@@ -425,7 +494,7 @@ final class Transporter_Admin {
 
 		$options = \the_seo_framework()->get_all_options( null, true );
 
-		return $encode ? json_encode( $options ) : $options;
+		return $encode ? \wp_json_encode( $options ) : $options;
 	}
 
 	/**
@@ -550,6 +619,15 @@ final class Transporter_Admin {
 		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-transport-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_transport_settings_output() );
 	}
 
+	/**
+	 * Returns the transport SEO settings output pane contents.
+	 *
+	 * Used to initialize pane for non-JS, JS takes over in the browser.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The pane contents.
+	 */
 	protected function get_transport_settings_output() {
 
 		$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();

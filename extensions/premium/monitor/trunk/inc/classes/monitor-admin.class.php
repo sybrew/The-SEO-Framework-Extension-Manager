@@ -460,7 +460,7 @@ final class Monitor_Admin extends Monitor_Api {
 					$response = array( 'status' => $status );
 				}
 
-				\tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_reponse_header();
 
 				echo json_encode( $response );
 			endif;
@@ -545,7 +545,7 @@ final class Monitor_Admin extends Monitor_Api {
 					$response = array( 'status' => $status );
 				}
 
-				\tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_reponse_header();
 
 				echo json_encode( $response );
 			endif;
@@ -575,7 +575,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 				$response = compact( 'html' );
 
-				\tsf_extension_manager()->_clean_ajax_reponse_header();
+				\tsf_extension_manager()->_clean_reponse_header();
 
 				echo json_encode( $response );
 			}

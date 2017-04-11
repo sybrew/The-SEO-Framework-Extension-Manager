@@ -184,7 +184,7 @@ window[ 'tsfem_e_transporter' ] = {
 
 		// AJAX request export data.
 		jQ( 'a#tsfem-e-transporter-export-button' ).on( 'click', tsfem_e_transporter.requestExport );
-
+		// This requires a RESET on ajax call.... see ^^^^
 		jQ( 'a#tsfem-e-transporter-transport-data-text-clipboard-button' ).on( 'click', tsfem_e_transporter.storeClipboard );
 
 	}

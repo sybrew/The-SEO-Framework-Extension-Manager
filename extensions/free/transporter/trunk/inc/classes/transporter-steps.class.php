@@ -103,6 +103,7 @@ final class Transporter_Steps {
 	 * The POST nonce validation name, action and name.
 	 *
 	 * @since 1.0.0
+	 * @TODO really use this shadow??
 	 *
 	 * @var string The validation nonce name.
 	 * @var string The validation request name.
@@ -116,6 +117,7 @@ final class Transporter_Steps {
 	 * The extension page ID/slug.
 	 *
 	 * @since 1.0.0
+	 * @TODO really use this shadow??
 	 *
 	 * @var string Page ID/Slug
 	 */
@@ -125,6 +127,7 @@ final class Transporter_Steps {
 	 * Current Extension index field. Likely equal to extension slug.
 	 *
 	 * @since 1.0.0
+	 * @TODO really use this shadow??
 	 *
 	 * @param string $o_index The current extension settings base index field.
 	 */
@@ -132,6 +135,10 @@ final class Transporter_Steps {
 
 	/**
 	 * Sets instance properties.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @TODO really use this shadow??
 	 *
 	 * @param array $vars : Required : {
 	 *    'nonce_name'            => string,
@@ -143,25 +150,53 @@ final class Transporter_Steps {
 	 */
 	public function _set_instance_properties( $vars = array() ) {
 
+		$property_names = array(
+			'nonce_name',
+			'request_name',
+			'nonce_action',
+			'transporter_page_slug',
+			'o_index',
+		);
+
 		foreach ( $vars as $property => $value ) {
-			$this->$property = $value;
+			if ( in_array( $property, $property_names, true ) ) :
+				$this->$property = $value;
+			else :
+				\the_seo_framework()->_doing_it_wrong( __METHOD__, sprintf( 'Property %s does not exist.', \esc_html( $property ) ) );
+				\wp_die();
+			endif;
 		}
 	}
 
 	/**
-	 * Checks whether the variable is set and sets it.
+	 * Checks whether the variable is set and passes it back.
+	 * If the value isn't set, it will set it to the fallback variable.
+	 *
+	 * It will also return the value so it can be used in a return statement.
 	 *
 	 * PHP < 7 wrapper for null coalescing.
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
 	 * @since 1.0.0
 	 *
 	 * @param string $v The variable that's maybe set. Passed by reference.
+	 * @param mixed $f The fallback variable. Default empty string.
 	 * @return string
 	 */
-	private function coalesce_var( &$v = null ) {
-		return isset( $v ) ? $v : $v = '';
+	private function coalesce_var( &$v = null, $f = '' ) {
+		return isset( $v ) ? $v : $v = $f;
 	}
 
+	/**
+	 * Returns the step output.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param int $which The step number.
+	 * @param string $what The step type.
+	 * @param bool $ajax Whether the step is fetched through AJAX.
+	 * @return string The step output.
+	 */
 	public function _get_step( $which = 0, $what = '', $ajax = false ) {
 
 		switch ( $what ) :
@@ -309,16 +344,33 @@ final class Transporter_Steps {
 		return \tsf_extension_manager()->get_link( $args );
 	}
 
+	/**
+	 * Returns SEO settings download button and header.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The button output and header.
+	 */
 	private function get_seo_settings_download_button_output() {
 
 		$title = sprintf( '<h4 class="tsfem-action-title">%s</h4>', \esc_html__( 'Download SEO Settings', 'the-seo-framework-extension-manager' ) );
 
-		$button = $this->get_seo_settings_download_button();
+		//* TODO clean this
+		$button = $this->get_seo_settings_download_button_a();
+		$form = $this->get_seo_settings_download_button_form();
 
-		return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $button );
+	//	return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $button );
+		return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $form );
 	}
 
-	private function get_seo_settings_download_button() {
+	/**
+	 * Returns SEO settings download a href button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The a href download button output.
+	 */
+	private function get_seo_settings_download_button_a() {
 
 		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-download';
 		$name = \__( 'Download SEO Settings', 'the-seo-framework-extension-manager' );
@@ -344,6 +396,37 @@ final class Transporter_Steps {
 		return $this->get_download_link( $args );
 	}
 
+	private function get_seo_settings_download_button_form() {
+
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-download';
+		$name = \__( 'Download SEO Settings', 'the-seo-framework-extension-manager' );
+		$title = \__( 'Download the SEO Settings file', 'the-seo-framework-extension-manager' );
+
+		$nonce_action = $this->_get_nonce_action_field( 'download' );
+		$nonce = $this->_get_nonce_field( 'download' );
+		$submit = $this->_get_submit_button( $name, $title, $class );
+
+		$args = array(
+			'id'    => 'tsfem-e-transporter-download-form',
+			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
+			'ajax'  => true,
+			'ajax-id'    => 'tsfem-e-transporter-download-button',
+			'ajax-class' => $class,
+			'ajax-name'  => $name,
+			'ajax-title' => $title,
+		);
+
+		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
+	}
+
+	/**
+	 * Creates a download button link from input arguments.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args The button arguments.
+	 * @return string The download button.
+	 */
 	private function get_download_link( array $args = array() ) {
 
 		$defaults = array(

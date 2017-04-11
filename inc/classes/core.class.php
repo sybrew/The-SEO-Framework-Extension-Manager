@@ -345,25 +345,45 @@ class Core {
 	}
 
 	/**
-	 * Destroys output buffer, if any. To be used with AJAX to clear any PHP errors or dumps.
+	 * Destroys output buffer, if any.
+	 *
+	 * To be used with AJAX to clear any PHP errors or dumps.
+	 * This works best when php.ini directive "output_buffering" is set to "1".
 	 *
 	 * @since 1.0.0
-	 * @since 1.2.0 : Now clears all levels, rather than only one.
+	 * @since 1.2.0 : 0. Renamed from _clean_ajax_response_header().
+	 *                1. Now clears all levels, rather than only one.
+	 *                2. Now removes all headers previously set.
+	 *                3. Now returns a numeric value. From 0 to 3.
 	 * @access private
 	 *
-	 * @return bool True on clear. False otherwise.
+	 * @return bitwise integer : {
+	 *    0 = 0000 : Did nothing.
+	 *    1 = 0001 : Cleared PHP output buffer.
+	 *    2 = 0010 : Cleared HTTP headers.
+	 *    3 = 0011 : Did 1 and 2.
+	 * }
 	 */
-	public function _clean_ajax_reponse_header() {
+	public function _clean_reponse_header() {
+
+		$retval = 0;
 
 		if ( $level = ob_get_level() ) {
 			while ( $level ) {
 				ob_end_clean();
 				$level--;
 			}
-			return true;
+			$retval = $retval | 1;
 		}
 
-		return false;
+		if ( ! empty( headers_list() ) ) {
+			if ( ! headers_sent() ) {
+				header_remove();
+				$retval = $retval | 2;
+			}
+		}
+
+		return $retval;
 	}
 
 	/**
@@ -389,6 +409,9 @@ class Core {
 
 		//* Don't spam error log.
 		if ( false === $this->_has_died() ) {
+
+			$this->_has_died( true );
+
 			if ( $message ) {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
@@ -1640,5 +1663,23 @@ class Core {
 		endforeach;
 
 		return $text;
+	}
+
+	/**
+	 * Determines filesize in bytes from intput.
+	 *
+	 * Accepts multibyte.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string The content to calculate size from.
+	 * @return int The filesize in bytes/octets.
+	 */
+	public function get_filesize( $content = '' ) {
+
+		if ( '' === $content )
+			return 0;
+
+		return (int) strlen( $content );
 	}
 }
