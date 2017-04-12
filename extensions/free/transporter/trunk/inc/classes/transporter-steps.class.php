@@ -169,24 +169,6 @@ final class Transporter_Steps {
 	}
 
 	/**
-	 * Checks whether the variable is set and passes it back.
-	 * If the value isn't set, it will set it to the fallback variable.
-	 *
-	 * It will also return the value so it can be used in a return statement.
-	 *
-	 * PHP < 7 wrapper for null coalescing.
-	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
-	 * @since 1.0.0
-	 *
-	 * @param string $v The variable that's maybe set. Passed by reference.
-	 * @param mixed $f The fallback variable. Default empty string.
-	 * @return string
-	 */
-	private function coalesce_var( &$v = null, $f = '' ) {
-		return isset( $v ) ? $v : $v = $f;
-	}
-
-	/**
 	 * Returns the step output.
 	 *
 	 * @since 1.0.0
@@ -223,21 +205,20 @@ final class Transporter_Steps {
 				break;
 		endswitch;
 
-		return $this->coalesce_var( $output );
+		return \tsf_extension_manager()->coalesce_var( $output );
 	}
 
+	/**
+	 * @TODO use $ajax?
+	 */
 	private function get_seo_settings_export_selection( $ajax = false ) {
 
-		if ( $ajax ) {
-			// TODO?
-		} else {
-			$left = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_export_option_output() );
-			$right = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_import_option_output() );
+		$left = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_export_option_output() );
+		$right = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_import_option_output() );
 
-			$output = sprintf( '<div class="tsfem-e-transporter-step-1 tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $left . $right );
-		}
+		$output = sprintf( '<div class="tsfem-e-transporter-step-1 tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $left . $right );
 
-		return $this->coalesce_var( $output );
+		return $output;
 	}
 
 	/**
@@ -260,26 +241,12 @@ final class Transporter_Steps {
 		$textarea = sprintf(
 			'<textarea rows="5" class="%1$s" id="%1$s" readonly="readonly">%2$s</textarea>',
 			$transport_id,
-			json_encode( $export_data )
+			json_encode( $export_data, JSON_PRETTY_PRINT )
 		);
 
 		$output = sprintf( '<div class="tsfem-e-transporter-transport-data tsfem-flex tsfem-flex-nogrowshrink">%s<div>', $buttons_wrap . $textarea );
 
-		return $this->coalesce_var( $output );
-	}
-
-	private function get_seo_settings_export_output( $ajax = false ) {
-
-		if ( $ajax ) {
-			$left = sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_export_option_output() );
-			$right = sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_import_option_output() );
-
-			$output = sprintf( '<div class="tsfem-e-transporter-step-1 tsfem-pane-split tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>', $left . $right );
-		} else {
-			// TODO?
-		}
-
-		return $this->coalesce_var( $output );
+		return $output;
 	}
 
 	private function get_export_option_output() {

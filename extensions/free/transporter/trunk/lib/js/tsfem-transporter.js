@@ -139,6 +139,199 @@ window[ 'tsfem_e_transporter' ] = {
 		jQuery.ajax( settings );
 	},
 
+
+	requestDownload: function( event ) {
+		'use strict';
+
+		var loading = 'tsfem-button-disabled tsfem-button-loading',
+			$button = jQuery( event.target ),
+			loader = '#tsfem-e-transporter-settings-pane .tsfem-pane-header .tsfem-ajax';
+
+		if ( $button.prop( 'disabled' ) )
+			return;
+
+		$button.addClass( loading );
+		$button.prop( 'disabled', true );
+
+		//* Reset ajax loader
+		tsfem.resetAjaxLoader( loader );
+
+		//* Set ajax loader.
+		tsfem.setAjaxLoader( loader );
+
+		//* Get external data.
+		let settings = {
+			method: 'POST',
+			url: ajaxurl,
+			datatype: 'json',
+			data: {
+				'action' : 'tsfem_e_transporter_request_download',
+				'nonce' : tsfem_e_transporter.nonce,
+			},
+			timeout: 10000,
+			async: true,
+			success: function( response ) {
+				// Because datatype is json, and we set json headers, this is no longer required:
+				// response = jQuery.parseJSON( response );
+
+				if ( tsfem.debug ) console.log( response );
+
+				if ( 'undefined' === typeof response || 'undefined' === typeof response.type || 'undefined' === typeof response.data ) {
+					//* Erroneous output.
+					tsfem.updatedResponse( loader, 0, '', 0 );
+					settings.error();
+				} else {
+
+					let type = response.type,
+						data = response.data,
+						results = data.results,
+						code = results.code,
+						notice = results.notice,
+						success = results.success;
+
+					if ( success ) {
+						tsfem.updatedResponse( loader, 1, notice, 0 );
+
+						let frameTarget = 'iframe-' + event.target.id,
+							targetForm = 'iform-' + event.target.id;
+
+						jQuery( '#' + frameTarget ).remove();
+						jQuery( '#' + targetForm ).remove();
+
+						var form = document.createElement( 'form' );
+						form.setAttribute( 'method', data.post['method'] );
+						form.setAttribute( 'action', data.post['url'] );
+						form.setAttribute( 'target', frameTarget );
+						form.setAttribute( 'id', targetForm );
+						form.style.display = 'none';
+						form.style.visibility = 'hidden';
+
+						var postData = data.post['data'];
+
+						for ( let key in postData ) {
+							if ( postData.hasOwnProperty( key ) ) {
+								let item = {};
+								item[ key ] = postData[ key ];
+
+								//* Convert ma to sa for POST-data forms.
+								let _item = tsfem_e_transporter.matosa( item );
+
+								for ( let _key in _item ) {
+									let input = document.createElement( 'input' );
+									input.setAttribute( 'type', 'hidden');
+									input.setAttribute( 'name', _key );
+									input.setAttribute( 'value', _item[ _key ] );
+
+									form.appendChild( input );
+								}
+							}
+						}
+
+						var targetFrame = document.createElement( 'iframe' );
+
+						//* Prepare on-load trigger.
+						jQuery( targetFrame ).on( frameTarget + '-onload', function() {
+							// @TODO error handling? i.e. @ nonce fail?
+							// 750 is chosen by Chrome animation.
+							setTimeout( function() {
+								settings._complete();
+							}, 750 );
+						} );
+
+						targetFrame.style.display = 'none';
+						targetFrame.style.visibility = 'hidden';
+						targetFrame.setAttribute( 'name', frameTarget );
+						targetFrame.setAttribute( 'id', frameTarget );
+						targetFrame.setAttribute( 'onload', "jQuery(this).trigger( '" + frameTarget + "-onload' );" );
+
+						document.body.appendChild( targetFrame );
+						document.body.appendChild( form );
+
+						setTimeout( function() {
+							form.submit();
+						}, 250 );
+					} else {
+						tsfem.updatedResponse( loader, 0, notice, 0 );
+					}
+				}
+			},
+			error: function( xhr, ajaxOptions, thrownError ) {
+				if ( tsfem.debug ) {
+					console.log( xhr.responseText );
+					console.log( thrownError );
+				}
+				tsfem.updatedResponse( loader, 0, '', 0 );
+				settings._complete();
+			},
+			_complete: function() {
+				$button.removeClass( loading );
+				$button.prop( 'disabled', false );
+			},
+		}
+
+		jQuery.ajax( settings );
+	},
+
+	/**
+	 * Converts multidimensional arrays to single array with key wrappers.
+	 * All first array keys become the new key. The final value becomes its value.
+	 *
+	 * Great for creating form array keys.
+	 * matosa: "Multidimensional Array TO Single Array"
+	 *
+	 * The latest value must be scalar.
+	 *
+	 * Example: a = [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
+	 * Becomes: '1[2][3]' => 'value';
+	 *
+	 * @since 1.2.0 (TSF extension manager) / 1.0.0 (Transporter)
+	 * @TODO move this to TSFEM object.
+	 *
+	 * @param {(string|array)} value The array or string to loop.
+	 * @param {string} start The start wrapper.
+	 * @param {string} end The end wrapper.
+	 * @return {(object|false)} The iterated array to string. False if input isn't array.
+	 */
+	matosa: function( value, start, end ) {
+
+		start = start || '[';
+		end = end || ']';
+
+		var last = null,
+			output = '';
+
+		(function _matosa( _value, _i ) {
+			_i++;
+			if ( typeof _value === 'object' ) {
+				let _index, _item;
+				for ( _index in _value ) {
+					_item = _value[ _index ];
+				}
+
+				last = _item;
+
+				if ( 1 === _i ) {
+					output += _index + _matosa( _item, _i );
+				} else {
+					output += start + _index + end + _matosa( _item, _i );
+				}
+			} else if ( 1 === _i ) {
+				last = null;
+				return output = false;
+			}
+
+			return output;
+		})( value, 0 );
+
+		if ( false === output )
+			return false;
+
+		let retval = {};
+		retval[ output ] = last;
+
+		return retval;
+	},
+
 	/**
 	 *
 	 * For future draft:
@@ -184,8 +377,10 @@ window[ 'tsfem_e_transporter' ] = {
 
 		// AJAX request export data.
 		jQ( 'a#tsfem-e-transporter-export-button' ).on( 'click', tsfem_e_transporter.requestExport );
-		// This requires a RESET on ajax call.... see ^^^^
+		// This requires a RESET on ajax call.... see ^^
 		jQ( 'a#tsfem-e-transporter-transport-data-text-clipboard-button' ).on( 'click', tsfem_e_transporter.storeClipboard );
+		// This requires a RESET on ajax call.... see ^^^^
+		jQ( 'a#tsfem-e-transporter-download-button' ).on( 'click', tsfem_e_transporter.requestDownload );
 
 	}
 };

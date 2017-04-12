@@ -362,6 +362,11 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 1060401 :
+				$message = \esc_html__( 'Download will start shortly.', 'the-seo-framework-extension-manager' );
+				$type = 'success';
+				break;
+
 			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
 			case 602 :
 			case 703 :
@@ -378,6 +383,7 @@ trait Error {
 			case 1010604 :
 			case 1010605 :
 			case 1060101 :
+			case 1060402 :
 			default :
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';

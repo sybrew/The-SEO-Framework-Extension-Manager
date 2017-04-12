@@ -367,23 +367,222 @@ class Core {
 	public function _clean_reponse_header() {
 
 		$retval = 0;
+		// PHP 5.6+ //= $i = 0;
 
 		if ( $level = ob_get_level() ) {
 			while ( $level ) {
 				ob_end_clean();
 				$level--;
 			}
-			$retval = $retval | 1;
+			$retval = $retval | 1; //= 2 ** $i
 		}
 
-		if ( ! empty( headers_list() ) ) {
-			if ( ! headers_sent() ) {
-				header_remove();
-				$retval = $retval | 2;
+		// PHP 5.6+ //= $i++;
+
+		//* wp_ajax sets required headers early.
+		// Experimental: patch this ASAP if users report admin POST/redirect errors.
+		if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			if ( ! empty( headers_list() ) ) {
+				if ( ! headers_sent() ) {
+					header_remove();
+					$retval = $retval | 2; //= 2 ** $i
+				}
 			}
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Sends out JSON data for AJAX.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param mixed $data The data that needs to be send.
+	 * @param string $type The status type.
+	 */
+	public function send_json( $data, $type = 'success' ) {
+
+		$r = $this->_clean_reponse_header();
+		if ( $r ^ 2 )
+			$this->set_status_header( 200, 'json' );
+
+		echo \wp_json_encode( compact( 'data', 'type' ) );
+
+		die;
+	}
+
+	/**
+	 * Sets status header.
+	 *
+	 * @since 1.2.0
+	 * @uses status_header(): https://developer.wordpress.org/reference/functions/status_header/
+	 *
+	 * @param string $type The header type.
+	 * @param bool $code The status code.
+	 */
+	public function set_status_header( $code = 200, $type = '' ) {
+
+		switch ( $type ) :
+			case 'json' :
+				header( 'Content-Type: application/json; charset=' . \get_option( 'blog_charset' ) );
+				break;
+
+			default :
+				header( 'Content-Type: text/html; charset=' . \get_option( 'blog_charset' ) );
+				break;
+		endswitch;
+
+		if ( $code )
+			\status_header( $code );
+	}
+
+	/**
+	 * Generates AJAX POST object for looping AJAX callbacks.
+	 *
+	 * Example usage includes downloading files over AJAX, which is otherwise not
+	 * possible.
+	 *
+	 * Includes enforced security.
+	 * Note that the URL can't be generated if the menu pages aren't set.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 *
+	 * @param array $args - Required : {
+	 *    'options_key'   => string The extension options key,
+	 *    'options_index' => string The extension options index,
+	 *    'menu_slug'     => string The extension options menu slug,
+	 *    'nonce_name'    => string The extension POST actions nonce name,
+	 *    'request_name'  => string The extension desired POST action request index key name,
+	 *    'nonce_action'  => string The extesnion desired POST action request full name,
+	 * }
+	 * @return array|bool False on failure; array containing the jQuery.post object.
+	 */
+	public function _get_ajax_post_object( array $args ) {
+
+		$required = array(
+			'options_key' => '',
+			'options_index' => '',
+			'menu_slug' => '',
+			'nonce_name' => '',
+			'request_name' => '',
+			'nonce_action' => '',
+		);
+
+		//* If the required keys aren't found, bail.
+		if ( ! $this->has_required_array_keys( $args, $required ) )
+			return false;
+
+		$url = $this->get_admin_page_url( $args['menu_slug'] );
+
+		if ( ! $url )
+			return false;
+
+		$args['options_key'] = \sanitize_key( $args['options_key'] );
+		$args['options_index'] = \sanitize_key( $args['options_index'] );
+		$args['nonce_name'] = \sanitize_key( $args['nonce_name'] );
+
+		$post = array(
+			'url' => $url,
+			'method' => 'post',
+			'data' => array(
+				$args['options_key'] => array(
+					$args['options_index'] => array(
+						'nonce-action' => $args['request_name'],
+					),
+				),
+				$args['nonce_name'] => \wp_create_nonce( $args['nonce_action'] ),
+				'_wp_http_referer' => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ),
+			),
+		);
+
+		return \map_deep( $post, '\\esc_js' );
+	}
+
+	/**
+	 * Converts multidimensional arrays to single array with key wrappers.
+	 * All first array keys become the new key. The final value becomes its value.
+	 *
+	 * Great for creating form array keys.
+	 * matosa: "Multidimensional Array TO Single Array"
+	 *
+	 * The latest value must be scalar.
+	 *
+	 * Example: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
+	 * Becomes: '1[2][3]' => 'value';
+	 *
+	 * @since 1.2.0
+	 * @staticvar string $last The last value;
+	 *
+	 * @param string|array $value The array or string to loop.
+	 * @param string $start The start wrapper.
+	 * @param string $end The end wrapper.
+	 * @param int $i The iteration count. This shouldn't be filled in.
+	 * @param bool $get Whether to return the value. This shouldn't be filled in.
+	 * @return array|false The iterated array to string. False if input isn't array.
+	 */
+	public function matosa( $value, $start = '[', $end = ']', $i = 0, $get = true ) {
+
+		$output = '';
+		$i++;
+
+		static $last = null;
+
+		if ( is_array( $value ) ) {
+
+			$index = key( $value );
+			$last = $item = $value[ $index ];
+
+			if ( is_array( $item ) ) {
+				if ( 1 === $i ) {
+					$output .= $index . $this->matosa( $item, $start, $end, $i, false );
+				} else {
+					$output .= $start . $index . $end . $this->matosa( $item, $start, $end, $i, false );
+				}
+			}
+		} elseif ( 1 === $i ) {
+			//* Input is scalar or object.
+			$last = null;
+			return false;
+		}
+
+		if ( $get ) {
+			return array( $output => $last );
+		} else {
+			return $output;
+		}
+	}
+
+	/**
+	 * Determines if all required keys are set in $input.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $input The input keys.
+	 * @param array $compare The keys to compare it to.
+	 * @return bool True on success, false if keys are missing.
+	 */
+	public function has_required_array_keys( array $input, array $compare ) {
+		return empty( array_diff_key( $required, $args ) );
+	}
+
+	/**
+	 * Checks whether the variable is set and passes it back.
+	 * If the value isn't set, it will set it to the fallback variable.
+	 *
+	 * It will also return the value so it can be used in a return statement.
+	 *
+	 * PHP < 7 wrapper for null coalescing.
+	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
+	 * @since 1.0.0
+	 *
+	 * @param string $v The variable that's maybe set. Passed by reference.
+	 * @param mixed $f The fallback variable. Default empty string.
+	 * @return string
+	 */
+	public function coalesce_var( &$v = null, $f = '' ) {
+		return isset( $v ) ? $v : $v = $f;
 	}
 
 	/**

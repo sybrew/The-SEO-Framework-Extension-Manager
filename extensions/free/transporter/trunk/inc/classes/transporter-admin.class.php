@@ -176,6 +176,9 @@ final class Transporter_Admin {
 		//* AJAX export request listener.
 		\add_action( 'wp_ajax_tsfem_e_transporter_request_export', array( $this, '_wp_ajax_request_export' ) );
 
+		//* AJAX download request listener.
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_download', array( $this, '_wp_ajax_request_download' ) );
+
 	}
 
 	/**
@@ -409,6 +412,47 @@ final class Transporter_Admin {
 		exit;
 	}
 
+	final public function _wp_ajax_request_download() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( \tsf_extension_manager()->can_do_settings() ) :
+
+				if ( \check_ajax_referer( 'tsfem-e-transporter-ajax-nonce', 'nonce', false ) ) {
+					$results = $this->wp_ajax_test_seo_settings_file();
+
+					if ( true === $results ) {
+						//* Initialize menu hooks.
+						\the_seo_framework()->add_menu_link();
+						$this->_add_menu_link();
+
+						$post = \tsf_extension_manager()->_get_ajax_post_object(
+							array(
+								'options_key' => TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS,
+								'options_index' => $this->o_index,
+								'menu_slug' => $this->transporter_page_slug,
+								'nonce_name' => $this->nonce_name,
+								'request_name' => $this->request_name['download'],
+								'nonce_action' => $this->nonce_action['download'],
+							)
+						);
+
+						if ( $post ) {
+							$results = $this->get_ajax_notice( true, 1060401 );
+							$type = 'success';
+						} else {
+							$results = $this->get_ajax_notice( false, 1060402 );
+							$type = 'failure';
+						}
+					}
+				}
+
+				\tsf_extension_manager()->send_json( compact( 'results', 'post' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+			endif;
+		endif;
+
+		exit;
+	}
+
 	/**
 	 * Creates a stream for the Settings file and closes PHP.
 	 *
@@ -417,11 +461,45 @@ final class Transporter_Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool $ajax Whether the request is through AJAX.
 	 * @return array|bool|void The error code on AJAX. Bool false on form call.
 	 *         Void on success.
 	 */
-	protected function download_seo_settings_file( $ajax = false ) {
+	protected function download_seo_settings_file() {
+
+		$results = $this->pre_seo_settings_file_stream( $content, $filesize, $filename );
+
+		if ( true !== $results )
+			return $results;
+
+		$this->stream_content( $content, $filesize, $filename, 'json' );
+	}
+
+	/**
+	 * Tests settings file for ajax.
+	 *
+	 * @return mixed The error message contents on failure. True on success.
+	 */
+	protected function wp_ajax_test_seo_settings_file() {
+		return $this->pre_seo_settings_file_stream( $a, $b, $c, true );
+	}
+
+	/**
+	 * Tests and renders SEO settings file stream.
+	 * Passes stream contents and requirements back through reference.
+	 *
+	 * Also returns test results.
+	 *
+	 * @NOTE: Tries to clean up headers. Will fail if headers_sent().
+	 * @since 1.0.0
+	 *
+	 * @param string $content The file's content. Passed by reference.
+	 * @param int $filesize The filesize in bytes. Passed by reference.
+	 * @param string $filename The file name. Passed by reference.
+	 * @param bool $ajax. Whether the call is for AJAX.
+	 * @return mixed : bool true on success, bool false on failure.
+	 *               : On AJAX, it will return the error message on failure.
+	 */
+	protected function pre_seo_settings_file_stream( &$content = '', &$filesize = 0, &$filename = '', $ajax = false ) {
 
 		$filename_raw = sprintf(
 			'TSF-SEO-Settings-%s.json',
@@ -445,6 +523,7 @@ final class Transporter_Admin {
 			return $ajax ? $this->get_ajax_notice( false, 1060301 ) : false;
 		}
 
+		//* Arbitrary header cleanup test.
 		\tsf_extension_manager()->_clean_reponse_header();
 
 		if ( headers_sent() ) {
@@ -452,22 +531,31 @@ final class Transporter_Admin {
 			return $ajax ? $this->get_ajax_notice( false, 1060302 ) : false;
 		}
 
-		$this->stream_content( $content, $filesize, $filename );
+		return true;
 	}
 
 	/**
-	 * Streams content based on input and closes PHP.
+	 * Streams file's content based on input and closes PHP.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $content The file's content. Required.
 	 * @param int $filesize The filesize in bytes. Required.
 	 * @param string $filename The file name. Required.
+	 * @param string $type The expected file type. Leave empty for generic text/html.
 	 */
-	protected function stream_content( $content, $filesize, $filename ) {
+	protected function stream_content( $content, $filesize, $filename, $type = '' ) {
+
+		/**
+		 * This will output an error in Chrome. It's a bug.
+		 * https://bugs.chromium.org/p/chromium/issues/detail?id=9891
+		 *
+		 * The fix would be to remove the type. But that would enable gzip for
+		 * an octet stream. We do not want that to prevent failure in transfer.
+		 */
+		\tsf_extension_manager()->set_status_header( 200, $type );
 
 		header( 'Content-Description: File Transfer' );
-		header( 'Content-Type: application/octet-stream' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
 		header( 'Expires: 0' );
 		header( 'Cache-Control: must-revalidate' );
