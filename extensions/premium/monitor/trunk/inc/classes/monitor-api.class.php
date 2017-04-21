@@ -237,6 +237,15 @@ class Monitor_Api extends Monitor_Data {
 	 */
 	protected function api_request_crawl( $ajax = false ) {
 
+		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
+			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			if ( $this->get_option( 'site_requires_fix' ) ) {
+				return $ajax ? $this->get_ajax_notice( false, 1010502 ) : false;
+			} else {
+				return $ajax ? $this->get_ajax_notice( false, 1010503 ) : false;
+			}
+		}
+
 		$response = $this->get_monitor_api_response( 'request_crawl', $ajax );
 
 		if ( empty( $response['success'] ) ) {

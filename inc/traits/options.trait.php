@@ -107,7 +107,7 @@ trait Options {
 
 		static $run = false;
 
-		return $run ? false : $run = true ? false : true;
+		return \TSF_Extension_Manager\is_done( $run );
 	}
 
 	/**
@@ -279,6 +279,7 @@ trait Options {
 	 * This prevents users from altering the options from outside this plugin.
 	 *
 	 * @since 1.0.0
+	 * @TODO var_dump() Add since 1.2.0 note for hashing change. Add FAQ entry, move hash() to callable class, trait or function.
 	 *
 	 * @param array $options The options to hash.
 	 * @param string $key The instance key, needs to be supplied on plugin activation.
@@ -290,7 +291,7 @@ trait Options {
 			return false;
 
 		$_options = serialize( $options );
-		$hash = $this->make_hash( $_options );
+		$hash = $this->hash( $_options, 'auth' );
 
 		if ( $hash ) {
 			$update = $this->update_options_instance( $hash, $key );
@@ -307,39 +308,17 @@ trait Options {
 	}
 
 	/**
-	 * Returns hash key based on sha256 if available. Otherwise it will fall back
-	 * to md5 (wp_hash()).
-	 *
-	 * @since 1.0.0
-	 * @see @link https://developer.wordpress.org/reference/functions/wp_hash/
-	 * @NOTE Warning: If the server tends to change the status of sha256, this will fail.
-	 *
-	 * @param string $data The data to hash.
-	 * @return string The hash key.
-	 */
-	final protected function make_hash( $data ) {
-
-		if ( in_array( 'sha256', hash_algos(), true ) ) {
-			$salt = \wp_salt( 'auth' );
-			$hash = hash_hmac( 'sha256', $data, $salt );
-		} else {
-			$hash = \wp_hash( $data, 'auth' );
-		}
-
-		return $hash;
-	}
-
-	/**
 	 * Verifies options hash.
 	 *
 	 * @since 1.0.0
+	 * @TODO var_dump() Add since 1.2.0 note for hashing change. Add FAQ entry, move hash() to callable class, trait or function.
 	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param string $data The data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
 	 */
 	final public function verify_options_hash( $data ) {
-		return hash_equals( $this->make_hash( $data ), $this->get_options_instance() );
+		return hash_equals( $this->hash( $data, 'auth' ), $this->get_options_instance() );
 	}
 
 	/**

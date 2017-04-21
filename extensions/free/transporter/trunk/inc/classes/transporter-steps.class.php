@@ -205,7 +205,7 @@ final class Transporter_Steps {
 				break;
 		endswitch;
 
-		return \tsf_extension_manager()->coalesce_var( $output );
+		return \tsf_extension_manager()->coalesce_var( $output, '' );
 	}
 
 	/**
@@ -322,45 +322,9 @@ final class Transporter_Steps {
 
 		$title = sprintf( '<h4 class="tsfem-action-title">%s</h4>', \esc_html__( 'Download SEO Settings', 'the-seo-framework-extension-manager' ) );
 
-		//* TODO clean this
-		$button = $this->get_seo_settings_download_button_a();
 		$form = $this->get_seo_settings_download_button_form();
 
-	//	return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $button );
 		return sprintf( '<div class="tsfem-e-transporter-download-option">%s</div>', $title . $form );
-	}
-
-	/**
-	 * Returns SEO settings download a href button.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The a href download button output.
-	 */
-	private function get_seo_settings_download_button_a() {
-
-		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-download';
-		$name = \__( 'Download SEO Settings', 'the-seo-framework-extension-manager' );
-		$title = \__( 'Download the SEO Settings file', 'the-seo-framework-extension-manager' );
-
-		$url_args = array(
-			'action' => $this->nonce_action['download'],
-			$this->nonce_name => \wp_create_nonce( $this->request_name['download'] ),
-		);
-		$location = \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug, $url_args );
-
-		$filename = sprintf( 'SEO-Settings-%s.json.txt', str_replace( array( ' ', '_', "\r\n", "\r", '\\', "\n" ), '-', trim( \get_bloginfo( 'name', 'raw' ) ) ) );
-
-		$args = array(
-			'url'   => $location,
-			'class' => $class,
-			'title' => $title,
-			'content' => $name,
-			'id'    => 'tsfem-e-transporter-download-form',
-			'input' => $filename,
-		);
-
-		return $this->get_download_link( $args );
 	}
 
 	private function get_seo_settings_download_button_form() {
@@ -384,29 +348,6 @@ final class Transporter_Steps {
 		);
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
-	}
-
-	/**
-	 * Creates a download button link from input arguments.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args The button arguments.
-	 * @return string The download button.
-	 */
-	private function get_download_link( array $args = array() ) {
-
-		$defaults = array(
-			'url'     => '',
-			'target'  => '_self',
-			'class'   => '',
-			'title'   => '',
-			'content' => '',
-			'download' => true,
-			'filename' => '',
-		);
-
-		return \tsf_extension_manager()->get_link( \wp_parse_args( $args, $defaults ) );
 	}
 
 	private function get_import_option_output() {

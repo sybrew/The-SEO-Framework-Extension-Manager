@@ -72,6 +72,7 @@ define( 'TSFEM_E_TRANSPORTER_PATH_CLASS', TSFEM_E_TRANSPORTER_DIR_PATH . 'inc' .
  * Initialize the extension.
  *
  * @since 1.0.0
+ * @staticvar bool $loaded
  * @action 'plugins_loaded'
  * @priority 11
  *
@@ -79,7 +80,7 @@ define( 'TSFEM_E_TRANSPORTER_PATH_CLASS', TSFEM_E_TRANSPORTER_DIR_PATH . 'inc' .
  */
 function transporter_init() {
 
-	static $loaded = null;
+	static $loaded;
 
 	//* Don't init the class twice.
 	if ( isset( $loaded ) )

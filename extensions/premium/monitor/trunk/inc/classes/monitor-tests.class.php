@@ -382,10 +382,10 @@ final class Monitor_Tests {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' ) );
+		return $cache ?: $cache = sprintf(
+			'<div class="tsfem-description">%s</div>',
+			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
+		);
 	}
 
 	/**
@@ -400,10 +400,10 @@ final class Monitor_Tests {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' ) );
+		return $cache ?: $cache = sprintf(
+			'<div class="tsfem-description">%s</div>',
+			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
+		);
 	}
 
 	/**
@@ -418,9 +418,9 @@ final class Monitor_Tests {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = sprintf( '<div class="tsfem-description">%s</div>', \esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' ) );
+		return $cache ?: $cache = sprintf(
+			'<div class="tsfem-description">%s</div>',
+			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )
+		);
 	}
 }

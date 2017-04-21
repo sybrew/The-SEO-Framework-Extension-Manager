@@ -381,14 +381,14 @@ class Core {
 
 		//* wp_ajax sets required headers early.
 		// Experimental: patch this ASAP if users report admin POST/redirect errors.
-		if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-			if ( ! empty( headers_list() ) ) {
+		// if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		// 	if ( ! empty( headers_list() ) ) {
 				if ( ! headers_sent() ) {
 					header_remove();
 					$retval = $retval | 2; //= 2 ** $i
 				}
-			}
-		}
+		// 	}
+		// }
 
 		return $retval;
 	}
@@ -404,7 +404,8 @@ class Core {
 	public function send_json( $data, $type = 'success' ) {
 
 		$r = $this->_clean_reponse_header();
-		if ( $r ^ 2 )
+		// Only set status header if headers aren't sent.
+		if ( $r & 2 )
 			$this->set_status_header( 200, 'json' );
 
 		echo \wp_json_encode( compact( 'data', 'type' ) );
@@ -564,7 +565,7 @@ class Core {
 	 * @return bool True on success, false if keys are missing.
 	 */
 	public function has_required_array_keys( array $input, array $compare ) {
-		return empty( array_diff_key( $required, $args ) );
+		return empty( array_diff_key( $compare, $input ) );
 	}
 
 	/**
@@ -575,13 +576,13 @@ class Core {
 	 *
 	 * PHP < 7 wrapper for null coalescing.
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 *
-	 * @param string $v The variable that's maybe set. Passed by reference.
-	 * @param mixed $f The fallback variable. Default empty string.
-	 * @return string
+	 * @param mixed $v The variable that's maybe set. Passed by reference.
+	 * @param mixed $f The fallback variable. Default null.
+	 * @return mixed
 	 */
-	public function coalesce_var( &$v = null, $f = '' ) {
+	public function coalesce_var( &$v = null, $f = null ) {
 		return isset( $v ) ? $v : $v = $f;
 	}
 
@@ -657,6 +658,7 @@ class Core {
 	 * it will destroy it from globals $wp_filter.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Now uses instanceof comparison
 	 *
 	 * @param array $current_filter The filter to walk.
 	 * @param string $key The current array key.
@@ -675,7 +677,7 @@ class Core {
 		if ( isset( $filter['function'] ) ) {
 			if ( is_array( $filter['function'] ) ) :
 				foreach ( $filter['function'] as $k => $function ) :
-					if ( is_object( $function ) && get_class( $function ) === $_this )
+					if ( is_object( $function ) && $function instanceof $_this )
 						unset( $GLOBALS['wp_filter'][ $key ][ $_key ] );
 				endforeach;
 			endif;
@@ -736,10 +738,8 @@ class Core {
 	 * @param array $bits The verification bits. Passed by reference.
 	 */
 	final protected function get_verification_codes( &$instance = null, &$bits = null ) {
-
 		$bits = $this->get_bits();
 		$instance = $this->get_verification_instance( $bits[1] );
-
 	}
 
 	/**
@@ -750,7 +750,9 @@ class Core {
 	 * will silently fail and destruct class.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
 	 * @staticvar string $instance
+	 * @staticvar int $timer
 	 *
 	 * @param int|null $bit The instance bit.
 	 * @return string $instance The instance key.
@@ -775,10 +777,32 @@ class Core {
 			return $val;
 		}
 
+		static $timer = null;
+
+		//* It's over ninethousand! And also a prime.
+		$_prime = 9001;
+
+		if ( null === $timer ) {
+			$timer = $this->is_64() ? time() * $_prime : PHP_INT_MAX / $_prime;
+		} else {
+			$timer += $_prime;
+		}
+
 		//* This won't save to database, but does create a unique salt for each bit.
-		$hash = $this->hash( $_bit . '\\' . mt_rand( 0, time() ) . '\\' . $bit, 'instance' );
+		$hash = $this->hash( $_bit . '\\' . mt_rand( ~ $timer, $timer ) . '\\' . $bit, 'instance' );
 
 		return $instance[ $bit ] = $instance[ ~ $_bit ] = $hash;
+	}
+
+	/**
+	 * Determines if the PHP handler can handle 64 bit integers.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return bool True if handler supports 64 bits, false otherwise (63 or lower).
+	 */
+	final protected function is_64() {
+		return is_int( 9223372036854775807 );
 	}
 
 	/**
@@ -789,6 +813,8 @@ class Core {
 	 * subequal in the upcoming check.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
+	 * @link http://theprime.site/
 	 * @staticvar int $_bit : $bits[0]
 	 * @staticvar int $bit  : $bits[1]
 	 *
@@ -804,15 +830,31 @@ class Core {
 		/**
 		 * Create new bits on first run.
 		 * Prevents random abstract collision by filtering odd numbers.
+		 *
+		 * Uses various primes to prevent overflow (which is heavy and can loop) on x86 architecture.
+		 * Time can never be 0, because it will then loop.
 		 */
 		set : {
-			    $time = time()
-			and $bit = $_bit = mt_rand( - $time, $time )
+			$bit = $_bit = 0;
+
+			$this->coalesce_var( $_prime, 317539 );
+			$_boundary = 10000;
+
+			$_i = $this->is_64() ? time() : ( PHP_INT_MAX - $_boundary ) / $_prime;
+			$_i > 0 or $_i = ~$_i;
+			$_i = (int) $_i;
+
+			    $_i = $_i * $_prime
+			and is_int( $_i )
+			and ( $_i + $_boundary ) < PHP_INT_MAX
+			and $bit = $_bit = mt_rand( ~ $_i, $_i )
 			and $bit % 2
 			and $bit = $_bit++;
 		}
 
-		if ( 0 === $bit ) {
+		//* Hit 0 or is overflown on x86. Retry.
+		if ( 0 === $bit || is_double( $bit ) ) {
+			$_prime = array_rand( array_flip( [ 317539, 58171, 16417, 6997, 379, 109, 17 ] ), 1 );
 			goto set;
 		}
 
@@ -1079,6 +1121,30 @@ class Core {
 		}
 
 		return '<a' . $url . $class . $id . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
+	}
+
+	/**
+	 * Creates a download button link from input arguments.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args The button arguments.
+	 * @return string The download button.
+	 */
+	public function get_download_link( array $args = array() ) {
+
+		$defaults = array(
+			'url'     => '',
+			'target'  => '_self',
+			'class'   => '',
+			'title'   => '',
+			'content' => '',
+			'download' => true,
+			'filename' => '',
+			'data' => array(),
+		);
+
+		return $this->get_link( \wp_parse_args( $args, $defaults ) );
 	}
 
 	/**
@@ -1674,27 +1740,21 @@ class Core {
 	 * @return bool True if the plugin is connected to the API handler.
 	 */
 	protected function is_premium_user() {
-
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = 'Premium' === $this->get_option( '_activation_level' );
+		return 'Premium' === $this->get_option( '_activation_level' );
 	}
-
 
 	/**
 	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 The parameters are now passed by reference.
 	 * @access private
 	 *
-	 * @param string $_instance The verification instance key.
-	 * @param int $bit The verification instance bit.
+	 * @param string $_instance The verification instance key. Passed by reference.
+	 * @param int $bit The verification instance bit. Passed by reference.
 	 * @return array|boolean Current subscription status. False on failed instance verification.
 	 */
-	public function _get_subscription_status( $_instance, $bits ) {
+	public function _get_subscription_status( &$_instance, &$bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
 			return $this->get_subscription_status();
@@ -1880,5 +1940,59 @@ class Core {
 			return 0;
 
 		return (int) strlen( $content );
+	}
+
+	/**
+	 * Sets admin menu links so the pages can be safely used within AJAX.
+	 *
+	 * Does not forge a callback function, instead, the callback returns an empty string.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @staticvar bool $parent_set
+	 * @staticvar array $slug_set
+	 *
+	 * @param string $slug The menu slug. Required.
+	 * @param string $capability The menu's required access capability.
+	 * @return bool True on success, false on failure.
+	 */
+	public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
+
+		if ( ( ! $slug = \sanitize_key( $slug ) )
+		|| ( ! $capability = \sanitize_key( $capability ) )
+		|| ! \current_user_can( $capability )
+		) {
+			return false;
+		}
+
+		static $parent_set = false;
+		static $set = array();
+
+		if ( false === $parent_set && ( $parent_set = true ) ) {
+			//* Set parent slug.
+			\the_seo_framework()->add_menu_link();
+		}
+
+		if ( isset( $set[ $slug ] ) )
+			return $set[ $slug ];
+
+		//* Add arbitrary menu contents to known menu slug.
+		$menu = array(
+			'parent_slug' => \the_seo_framework_options_page_slug(),
+			'page_title'  => '1',
+			'menu_title'  => '1',
+			'capability'  => $capability,
+			'menu_slug'   => $slug,
+			'callback'    => '\\__return_empty_string',
+		);
+
+		return $set[ $slug ] = (bool) \add_submenu_page(
+			$menu['parent_slug'],
+			$menu['page_title'],
+			$menu['menu_title'],
+			$menu['capability'],
+			$menu['menu_slug'],
+			$menu['callback']
+		);
 	}
 }

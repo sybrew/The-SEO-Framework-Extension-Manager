@@ -117,19 +117,19 @@ class API extends Core {
 	 * Connects to the main plugin API handler.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 The security parameters are now passed by reference.
 	 * @access private
 	 * @see $this->get_api_response();
 	 *
 	 * @param array $args The API query parameters.
-	 * @param string $instance The verification instance key.
-	 * @param int $bit The verification instance bit.
+	 * @param string $instance The verification instance key. Passed by reference.
+	 * @param int $bit The verification instance bit. Passed by reference.
 	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
 	 */
-	public function _get_api_response( array $args = array(), $_instance, $bits ) {
+	public function _get_api_response( array $args, &$_instance, &$bits ) {
 
-		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
+		if ( $this->_verify_instance( $_instance, $bits[1] ) )
 			return $this->get_api_response( $args );
-		}
 
 		return false;
 	}

@@ -20,6 +20,7 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 
 * For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
+* For improved performance, your PHP handler should use a 64 bits architecture, because we use large primes for security.
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -145,13 +146,22 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Local:**
 	/
 	* Performance: TODO Instance verification key options (local DRM) are now correctly deleted upon account deactivation.
-	* Performance: TODO Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
+	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
+	* Performance: Error notice option is now no longer autoloaded when unset.
+	* Performance: TODO When deactivating your account, the plugin unloads its extension options from autoloading.
 	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
 	* Change: The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
 	* Fixed: TODO The extension list now also renders correctly on Safari 6 to 9.
-	* Fixed: TODO Huge tooltips are now faced downwards.
+	* Fixed: TODO Huge tooltips within metabox content are now faced downwards.
 	* Fixed: Extension activation tester now tests JSON test file for errors too.
+	* Fixed: In a very unlikely event, a fatal error could be produced on either the front-end or back-end (once every 2,984,876,523 requests as of Unix Timestamp 1492438262).
+	* Fixed: This plugin will now work in 2038 on 32 bits PHP handlers.
+	* Fixed: Browser memory leak through tooltips on (de)activation of extensions.
 	* Change: TODO The tooltip is now a shade of black, rather than an off-color ocean blue.
+	* Change: The internal hashing algorithm has been expanded.
+		* If your server supports sha1, but not sha256, you might get error 2001.
+		* To resolve error 2001, take note of your active extensions, deactivate your account and set up the plugin again.
+			* No data is lost in this process. But so far, no data was held either.
 * **API:**
 	* **Internal:**
 		* TODO

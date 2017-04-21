@@ -179,7 +179,7 @@ window[ 'tsfem_e_transporter' ] = {
 				if ( 'undefined' === typeof response || 'undefined' === typeof response.type || 'undefined' === typeof response.data ) {
 					//* Erroneous output.
 					tsfem.updatedResponse( loader, 0, '', 0 );
-					settings.error();
+					settings._complete();
 				} else {
 
 					let type = response.type,
@@ -213,8 +213,8 @@ window[ 'tsfem_e_transporter' ] = {
 								let item = {};
 								item[ key ] = postData[ key ];
 
-								//* Convert ma to sa for POST-data forms.
-								let _item = tsfem_e_transporter.matosa( item );
+								//* Convert multi-dimension array to single array for POST-data forms.
+								let _item = tsfem.matosa( item );
 
 								for ( let _key in _item ) {
 									let input = document.createElement( 'input' );
@@ -229,6 +229,12 @@ window[ 'tsfem_e_transporter' ] = {
 
 						var targetFrame = document.createElement( 'iframe' );
 
+						targetFrame.style.display = 'none';
+						targetFrame.style.visibility = 'hidden';
+						targetFrame.setAttribute( 'name', frameTarget );
+						targetFrame.setAttribute( 'id', frameTarget );
+						targetFrame.setAttribute( 'onload', "jQuery(this).trigger( '" + frameTarget + "-onload' );" );
+
 						//* Prepare on-load trigger.
 						jQuery( targetFrame ).on( frameTarget + '-onload', function() {
 							// @TODO error handling? i.e. @ nonce fail?
@@ -237,12 +243,6 @@ window[ 'tsfem_e_transporter' ] = {
 								settings._complete();
 							}, 750 );
 						} );
-
-						targetFrame.style.display = 'none';
-						targetFrame.style.visibility = 'hidden';
-						targetFrame.setAttribute( 'name', frameTarget );
-						targetFrame.setAttribute( 'id', frameTarget );
-						targetFrame.setAttribute( 'onload', "jQuery(this).trigger( '" + frameTarget + "-onload' );" );
 
 						document.body.appendChild( targetFrame );
 						document.body.appendChild( form );
@@ -270,66 +270,6 @@ window[ 'tsfem_e_transporter' ] = {
 		}
 
 		jQuery.ajax( settings );
-	},
-
-	/**
-	 * Converts multidimensional arrays to single array with key wrappers.
-	 * All first array keys become the new key. The final value becomes its value.
-	 *
-	 * Great for creating form array keys.
-	 * matosa: "Multidimensional Array TO Single Array"
-	 *
-	 * The latest value must be scalar.
-	 *
-	 * Example: a = [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
-	 * Becomes: '1[2][3]' => 'value';
-	 *
-	 * @since 1.2.0 (TSF extension manager) / 1.0.0 (Transporter)
-	 * @TODO move this to TSFEM object.
-	 *
-	 * @param {(string|array)} value The array or string to loop.
-	 * @param {string} start The start wrapper.
-	 * @param {string} end The end wrapper.
-	 * @return {(object|false)} The iterated array to string. False if input isn't array.
-	 */
-	matosa: function( value, start, end ) {
-
-		start = start || '[';
-		end = end || ']';
-
-		var last = null,
-			output = '';
-
-		(function _matosa( _value, _i ) {
-			_i++;
-			if ( typeof _value === 'object' ) {
-				let _index, _item;
-				for ( _index in _value ) {
-					_item = _value[ _index ];
-				}
-
-				last = _item;
-
-				if ( 1 === _i ) {
-					output += _index + _matosa( _item, _i );
-				} else {
-					output += start + _index + end + _matosa( _item, _i );
-				}
-			} else if ( 1 === _i ) {
-				last = null;
-				return output = false;
-			}
-
-			return output;
-		})( value, 0 );
-
-		if ( false === output )
-			return false;
-
-		let retval = {};
-		retval[ output ] = last;
-
-		return retval;
 	},
 
 	/**

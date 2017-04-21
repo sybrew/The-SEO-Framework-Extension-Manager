@@ -71,16 +71,17 @@ define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-gamma-2' );
  */
 function _articles_init() {
 
-	static $loaded = null;
+	static $loaded;
 
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	$loaded = false;
-
+	// @TODO check if Organization is still required.
 	if ( \the_seo_framework()->is_single() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
 		new \TSF_Extension_Manager\Extension\Articles;
 		$loaded = true;
+	} else {
+		$loaded = false;
 	}
 
 	return $loaded;
@@ -126,7 +127,7 @@ final class Articles {
 	 */
 	public function is_amp() {
 
-		static $cache = null;
+		static $cache;
 
 		if ( isset( $cache ) )
 			return $cache;
@@ -180,7 +181,7 @@ final class Articles {
 	 */
 	private function get_current_post() {
 
-		static $post = null;
+		static $post;
 
 		return isset( $post ) ? $post : $post = \get_post( $this->get_current_id() );
 	}
@@ -503,7 +504,7 @@ final class Articles {
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
 			return array();
 
-		if ( ! $post = $this->get_current_post() ) {
+		if ( ! ( $post = $this->get_current_post() ) ) {
 			$this->invalidate( 'both' );
 			return array();
 		}
@@ -529,7 +530,7 @@ final class Articles {
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
 			return array();
 
-		if ( ! $post = $this->get_current_post() )
+		if ( ! ( $post = $this->get_current_post() ) )
 			return array();
 
 		$i = strtotime( $post->post_modified );

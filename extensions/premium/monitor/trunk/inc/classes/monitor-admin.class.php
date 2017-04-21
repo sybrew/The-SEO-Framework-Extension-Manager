@@ -243,7 +243,6 @@ final class Monitor_Admin extends Monitor_Api {
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $run
 	 * @access private
 	 *
 	 * @return bool True on actions loaded, false on second load.
@@ -251,11 +250,9 @@ final class Monitor_Admin extends Monitor_Api {
 	public function _do_monitor_admin_actions() {
 
 		if ( false === $this->is_monitor_page() )
-			return;
+			return false;
 
-		static $run = false;
-
-		if ( $run )
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
 		/**
@@ -279,7 +276,7 @@ final class Monitor_Admin extends Monitor_Api {
 		//* Update POST listener.
 		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
-		return $run = true;
+		return true;
 	}
 
 	/**
@@ -460,9 +457,7 @@ final class Monitor_Admin extends Monitor_Api {
 					$response = array( 'status' => $status );
 				}
 
-				\tsf_extension_manager()->_clean_reponse_header();
-
-				echo json_encode( $response );
+				\tsf_extension_manager()->send_json( $response, null );
 			endif;
 		endif;
 
@@ -545,9 +540,7 @@ final class Monitor_Admin extends Monitor_Api {
 					$response = array( 'status' => $status );
 				}
 
-				\tsf_extension_manager()->_clean_reponse_header();
-
-				echo json_encode( $response );
+				\tsf_extension_manager()->send_json( $response, null );
 			endif;
 		endif;
 
@@ -575,9 +568,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 				$response = compact( 'html' );
 
-				\tsf_extension_manager()->_clean_reponse_header();
-
-				echo json_encode( $response );
+				\tsf_extension_manager()->send_json( $response, null );
 			}
 		}
 
@@ -638,13 +629,10 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	public function is_monitor_page() {
 
-		static $cache = null;
-
-		if ( isset( $cache ) )
-			return $cache;
+		static $cache;
 
 		//* Don't load from $_GET request.
-		return $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
+		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
 	}
 
 	/**

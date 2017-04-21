@@ -72,6 +72,7 @@ define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTO
  * Initialize the extension.
  *
  * @since 1.0.0
+ * @staticvar bool $loaded
  * @action 'plugins_loaded'
  * @priority 11
  *

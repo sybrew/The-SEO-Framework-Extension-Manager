@@ -1006,16 +1006,16 @@ trait Extensions_Actions {
 	private static function clean_error_message( $message = '', $error = array() ) {
 
 		//* Remove stack trace.
-		if ( false !== $stack_pos = stripos( $message, 'Stack trace:' ) )
+		if ( false !== ( $stack_pos = stripos( $message, 'Stack trace:' ) ) )
 			$message = substr( $message, 0, $stack_pos );
 
 		//* Remove error location and line from message.
-		if ( $loc = stripos( $message, ' in /' ) ) {
+		if ( ( $loc = stripos( $message, ' in /' ) ) ) {
 			$additions = '.php:' . $error['line'];
 			$loc_line = stripos( $message, $additions, $loc );
 			$offset = $loc_line - $loc + strlen( $additions );
 
-			if ( $loc_line && $rem = substr( $message, $loc, $offset ) ) {
+			if ( $loc_line && ( $rem = substr( $message, $loc, $offset ) ) ) {
 				//* Continue only if there are no spaces.
 				$without_in = substr( $rem, 4 );
 				if ( false === strpos( $without_in, ' ' ) ) {
@@ -1046,7 +1046,7 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		if ( $file = static::get_extension_header_file_location( $slug ) ) {
+		if ( ( $file = static::get_extension_header_file_location( $slug ) ) ) {
 			if ( static::validate_file( $file ) ) {
 				return static::include_extension( $file, $_instance, $bits );
 			}

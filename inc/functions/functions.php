@@ -80,3 +80,32 @@ function extension_dir_url( $file ) {
 
 	return $url;
 }
+
+/**
+ * Converts input variable to true if it's false.
+ * Returns false if input variable is false.
+ *
+ * @since 1.2.0
+ *
+ * @param bool $bool The variable to convert. Passed by reference.
+ * @return bool True if input is true, false otherwise.
+ */
+function is_done( &$bool ) {
+	return (bool) $bool ?: ( ( $bool = true ) && false );
+}
+
+/**
+ * Determines if the method or function has already run.
+ *
+ * @since 1.2.0
+ * @staticvar array $cache
+ *
+ * @param string $caller The method or function that calls this.
+ * @return bool True if already called, false otherwise.
+ */
+function has_run( $caller ) {
+
+	static $cache = array();
+
+	return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
+}

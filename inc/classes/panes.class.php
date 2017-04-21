@@ -40,11 +40,14 @@ class Panes extends API {
 	 * @since 1.0.0
 	 */
 	private function construct() {
+
 		//* Ajax listener for updating feed option.
 		\add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
+
 		//* Ajax listener for updating extension setting.
 		\add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
 
+		//* Ajax listener for after updating the extension setting.
 		\add_action( 'wp_ajax_tsfem_update_extension_desc_footer', array( $this, '_wp_ajax_tsfem_update_extension_desc_footer' ) );
 	}
 
@@ -245,31 +248,33 @@ class Panes extends API {
 
 				\check_ajax_referer( 'tsfem-ajax-nonce', 'nonce' );
 
+				$data = '';
+				$type = 'unknown';
+
 				if ( $this->get_option( '_enable_feed' ) ) {
 					//* Another admin has initialized this after the last page load.
-					$results = array(
+					$type = 'success';
+					$data = array(
 						'content' => $this->ajax_get_trends_output(),
-						'type' => 'success',
+						'type' => $type,
 					);
 				} else {
 					$type = $this->update_option( '_enable_feed', true, 'regular', false ) ? 'success' : 'error';
 
 					if ( 'success' === $type ) {
-						$results = array(
+						$data = array(
 							'content' => $this->ajax_get_trends_output(),
 							'type' => $type,
 						);
 					} else {
-						$results = array(
+						$data = array(
 							'content' => '',
 							'type' => $type,
 						);
 					}
 				}
 
-				$this->_clean_reponse_header();
-
-				echo json_encode( $results );
+				$this->send_json( $data, $type );
 			endif;
 		endif;
 
@@ -315,12 +320,12 @@ class Panes extends API {
 					);
 				}
 
+				$type = ! empty( $status['success'] ) ? 'success' : 'error';
+
 				//* Send back input when WP_DEBUG is on.
 				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
 
-				$this->_clean_reponse_header();
-
-				echo json_encode( $response );
+				$this->send_json( $response, $type );
 			endif;
 		endif;
 
@@ -364,27 +369,7 @@ class Panes extends API {
 						$header = \TSF_Extension_Manager\Extensions::get( 'ajax_get_extension_header', $slug );
 
 						if ( ! empty( $header['MenuSlug'] ) ) {
-							//* Set parent slug.
-							\the_seo_framework()->add_menu_link();
-
-							//* Add arbitrary menu contents to known menu slug.
-							$menu = array(
-								'parent_slug' => \the_seo_framework_options_page_slug(),
-								'page_title'  => '1',
-								'menu_title'  => '1',
-								'capability'  => 'manage_options',
-								'menu_slug'   => \esc_html( $header['MenuSlug'] ),
-								'callback'    => '__return_empty_string',
-							);
-
-							\add_submenu_page(
-								$menu['parent_slug'],
-								$menu['page_title'],
-								$menu['menu_title'],
-								$menu['capability'],
-								$menu['menu_slug'],
-								$menu['callback']
-							);
+							$this->_set_ajax_menu_link( $header['MenuSlug'] );
 						}
 					endif;
 
@@ -393,11 +378,15 @@ class Panes extends API {
 					\TSF_Extension_Manager\Extensions::reset();
 				endif;
 
-				$response = compact( 'html' );
+				if ( isset( $html ) ) {
+					$data = $html;
+					$type = 'success';
+				} else {
+					$data = '';
+					$type = 'error';
+				}
 
-				$this->_clean_reponse_header();
-
-				echo json_encode( $response );
+				$this->send_json( $data, $type );
 			endif;
 		endif;
 

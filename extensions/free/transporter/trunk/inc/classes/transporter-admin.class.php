@@ -240,7 +240,6 @@ final class Transporter_Admin {
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $run
 	 * @access private
 	 *
 	 * @return bool True on actions loaded, false on second load.
@@ -248,11 +247,9 @@ final class Transporter_Admin {
 	public function _do_transporter_admin_actions() {
 
 		if ( false === $this->is_transporter_page() )
-			return;
+			return false;
 
-		static $run = false;
-
-		if ( $run )
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
 		/**
@@ -276,7 +273,7 @@ final class Transporter_Admin {
 		//* Update POST listener.
 		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
-		return $run = true;
+		return true;
 	}
 
 	/**
@@ -386,8 +383,7 @@ final class Transporter_Admin {
 					}
 
 					//* Initialize menu hooks.
-					\the_seo_framework()->add_menu_link();
-					$this->_add_menu_link();
+					\tsf_extension_manager()->_set_ajax_menu_link( $this->transporter_page_slug, 'manage_options' );
 
 					$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
 					$steps_instance->_set_instance_properties( array(
@@ -422,8 +418,7 @@ final class Transporter_Admin {
 
 					if ( true === $results ) {
 						//* Initialize menu hooks.
-						\the_seo_framework()->add_menu_link();
-						$this->_add_menu_link();
+						\tsf_extension_manager()->_set_ajax_menu_link( $this->transporter_page_slug, 'manage_options' );
 
 						$post = \tsf_extension_manager()->_get_ajax_post_object(
 							array(
@@ -504,7 +499,7 @@ final class Transporter_Admin {
 		$filename_raw = sprintf(
 			'TSF-SEO-Settings-%s.json',
 			str_replace(
-				array( ' ', '_', "\r\n", "\r", '\\', "\n" ),
+				array( ' ', '_', "\r\n", "\r", "\n", '\\' ),
 				'-',
 				trim( \get_bloginfo( 'name', 'raw' ) )
 			)
@@ -639,11 +634,8 @@ final class Transporter_Admin {
 
 		static $cache = null;
 
-		if ( isset( $cache ) )
-			return $cache;
-
 		//* Don't load from $_GET request.
-		return $cache = \the_seo_framework()->is_menu_page( $this->transporter_menu_page_hook );
+		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->transporter_menu_page_hook );
 	}
 
 	/**

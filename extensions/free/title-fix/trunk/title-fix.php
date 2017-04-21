@@ -53,6 +53,7 @@ define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.3' );
  * Initialize the plugin.
  *
  * @since 1.0.0
+ * @staticvar bool $loaded
  * @action 'plugins_loaded'
  * @priority 11 : The WordPress.org version has priority 10, preventing collision.
  *                Also, the loader requires 11 or later.
@@ -182,20 +183,20 @@ final class Title_Fix {
 	 * Loads plugin actions.
 	 *
 	 * @since 1.0.3
-	 * @staticvar int $sequence Itterates sequences for switch.
+	 * @staticvar int $_sequence Iterates sequences for switch.
 	 *
 	 * @return null Early if title is fixed.
 	 */
 	public function loader() {
 
-		static $sequence = 0;
-
-		$sequence++;
-
 		if ( $this->is_fixed )
 			return;
 
-		switch ( $sequence ) :
+		static $_sequence = 0;
+
+		$_sequence++;
+
+		switch ( $_sequence ) :
 			case 1 :
 				/**
 				 * First run.
@@ -361,23 +362,23 @@ final class Title_Fix {
 	 *
 	 * @since 1.0.0
 	 * @global array $_wp_theme_features
-	 * @staticvar bool $supports
+	 * @staticvar bool $_supports
 	 *
 	 * @return bool True if the theme supports the title tag, false otherwise.
 	 */
 	public function current_theme_supports_title_tag() {
 
-		static $supports = null;
+		static $_supports = null;
 
-		if ( isset( $supports ) )
-			return $supports;
+		if ( isset( $_supports ) )
+			return $_supports;
 
 		global $_wp_theme_features;
 
 		if ( false === empty( $_wp_theme_features['title-tag'] ) )
-			return $supports = true;
+			return $_supports = true;
 
-		return $supports = false;
+		return $_supports = false;
 	}
 
 	/**

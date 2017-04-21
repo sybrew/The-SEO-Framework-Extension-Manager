@@ -103,17 +103,16 @@ function _test_sever( $network_wide = false ) {
  * Locale folder: the-seo-framework-extension-manager/language/
  *
  * @since 1.0.0
- * @staticvar $loaded Determines if the textdomain has already been loaded.
  * @access private
  *
  * @param bool $ignore Whether to load locale outside of the admin area.
  * @return void Early if already loaded.
  */
 function _init_locale( $ignore = false ) {
-	if ( \is_admin() || $ignore ) {
-		static $loaded = false;
 
-		if ( $loaded = $loaded ? false : $loaded = true ? false : true )
+	if ( \is_admin() || $ignore ) {
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return;
 
 		\load_plugin_textdomain(
@@ -338,23 +337,22 @@ function _autoload_classes( $class ) {
  * Requires trait files once.
  *
  * @since 1.0.0
+ * @since 1.2.0 Now returns state in boolean rather than void.
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT
  * @access private
  * @staticvar array $loaded
  *
  * @param string $file Where the trait is for.
- * @return void; Early if file is already loaded.
+ * @return bool True if loaded, false otherwise.
  */
 function _load_trait( $file ) {
 
 	static $loaded = array();
 
 	if ( isset( $loaded[ $file ] ) )
-		return;
+		return $loaded[ $file ];
 
-	$loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
-
-	return;
+	return $loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
 }
 
 /**
@@ -375,7 +373,7 @@ function _load_wp_compat( $version = '' ) {
 	if ( isset( $loaded[ $version ] ) )
 		return $loaded[ $version ];
 
-	if ( empty( $version ) || strlen( $version ) > 3 ) {
+	if ( empty( $version ) || 3 !== strlen( $version ) ) {
 		\the_seo_framework()->_doing_it_wrong( __FUNCTION__, 'You must tell the two-point required WordPress version.' );
 		return $loaded[ $version ] = false;
 	}

@@ -125,27 +125,28 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				response = jQuery.parseJSON( response );
-
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' !== typeof response.status && 'undefined' !== typeof response.status['timeout'] )
-					tsfem_e_monitor.rCrawlTimeout = response.status['timeout'];
+				let data = response.data || undefined,
+					type = response.type || undefined;
 
-				if ( 'undefined' === typeof response.status || 'undefined' === typeof response.status['type'] ) {
+				if ( 'undefined' !== typeof data.status && 'undefined' !== typeof data.status['timeout'] )
+					tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
+
+				if ( 'undefined' === typeof data.status || 'undefined' === typeof data.status['type'] ) {
 					//* Erroneous input.
 					tsfem.updatedResponse( loader, 0, '', 0 );
 				} else {
 
-					let status = response.status['type'],
-						notice = response.status['notice'];
+					let status = data.status['type'],
+						notice = data.status['notice'];
 
 					if ( 'success' === status ) {
 						tsfem.updatedResponse( loader, 1, notice, 0 );
 					} else if ( 'yield_unchanged' === status ) {
 						tsfem.updatedResponse( loader, 2, notice, 0 );
 					} else if ( 'requires_fix' === status ) {
-						tsfem_e_monitor.add_requires_fix( response.status['requires_fix'] );
+						tsfem_e_monitor.add_requires_fix( data.status['requires_fix'] );
 						tsfem.updatedResponse( loader, 0, notice, 0 );
 					} else {
 						tsfem.updatedResponse( loader, 0, notice, 0 );
@@ -209,21 +210,22 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				response = jQuery.parseJSON( response );
-
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' !== typeof response.status && 'undefined' !== typeof response.status['timeout'] )
-					tsfem_e_monitor.rDataTimeout = response.status['timeout'];
+				let data = response.data || undefined,
+					type = response.type || undefined;
 
-				if ( 'undefined' === typeof response.status || 'undefined' === typeof response.status['type'] || 'undefined' === typeof response.status['content'] ) {
+				if ( 'undefined' !== typeof data.status && 'undefined' !== typeof data.status['timeout'] )
+					tsfem_e_monitor.rDataTimeout = data.status['timeout'];
+
+				if ( 'undefined' === typeof data.status || 'undefined' === typeof data.status['type'] || 'undefined' === typeof data.status['content'] ) {
 					//* Erroneous input.
 					tsfem.updatedResponse( loader, 0, '', 0 );
 				} else {
 
-					let status = response.status['type'],
-						content = response.status['content'],
-						notice = response.status['notice'];
+					let status = data.status['type'],
+						content = data.status['content'],
+						notice = data.status['notice'];
 
 					if ( 'success' === status ) {
 						var issues = content['issues'],
@@ -317,10 +319,13 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
-				response = jQuery.parseJSON( response );
+				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' !== typeof response.html && response.html )
-					jQuery( response.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
+				let data = response.data || undefined,
+					type = response.type || undefined;
+
+				if ( data.html )
+					jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 			},
 			error: function( xhr, ajaxOptions, thrownError ) {
 				if ( tsfem.debug ) {

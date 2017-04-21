@@ -619,7 +619,7 @@ final class Monitor_Output {
 
 		static $cache = null;
 
-		return isset( $cache ) ? $cache : $cache = \esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
+		return $cache ?: $cache = \esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
 	}
 
 	/**
