@@ -16,11 +16,26 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 
 This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
 
+= Current Extensions =
+
+* **AMP:** It binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
+* **Articles:** It enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles).
+* **Monitor:** It keeps track of your website's SEO, optimization, uptime and statistics. It's still an experimental extension, but a lot is planned for it.
+* **Incognito:** It removes all front-end branding from The SEO Framework, like HTML comments.
+* **Title Fix:** It makes sure your title output is as configured. Even if your theme is doing it wrong.
+* **Transporter:** It allows you to export and import your SEO settings from site to site.
+
+= Upcoming Extension =
+
+This following extension is planned for the next major version.
+
+* **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
+
 = Requirements: =
 
 * For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
-* For improved performance, your PHP handler should use a 64 bits architecture, because we use large primes for security.
+* For improved performance, your PHP handler should use a 64 bits architecture, because it uses large primes for security.
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -70,6 +85,9 @@ An Extension is like a plugin, and can be activated and deactivated on demand. A
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
 Each extension will include carefully crafted documentation in the near future.
+
+= What are the requirements to run this software? =
+TODO
 
 = Do I require an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.

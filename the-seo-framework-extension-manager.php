@@ -117,15 +117,16 @@ require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
 require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
 
 /**
-* Loads the class from cache.
-* This is the recommended way of calling the class, if needed.
-* Call this after action 'init' priority 0 otherwise it will kill the plugin,
-* or even other plugins.
-*
-* @since 1.0.0
-*
-* @return null|object The plugin class object.
-*/
+ * Loads the class from cache.
+ *
+ * This is the recommended way of calling the class, if needed.
+ * Call this after action 'init' priority 0 otherwise it will kill the plugin,
+ * or even other plugins.
+ *
+ * @since 1.0.0
+ *
+ * @return null|object The plugin class object.
+ */
 function tsf_extension_manager() {
 	return \TSF_Extension_Manager\_init_tsf_extension_manager();
 }

@@ -345,7 +345,7 @@ class Core {
 	}
 
 	/**
-	 * Destroys output buffer, if any.
+	 * Destroys output buffer and headers, if any.
 	 *
 	 * To be used with AJAX to clear any PHP errors or dumps.
 	 * This works best when php.ini directive "output_buffering" is set to "1".
@@ -396,6 +396,9 @@ class Core {
 	/**
 	 * Sends out JSON data for AJAX.
 	 *
+	 * Sends JSON object as integer. When it's -1, it's uncertain if the response
+	 * is actually JSON encoded. When it's 1, we can safely assume it's JSON.
+	 *
 	 * @since 1.2.0
 	 *
 	 * @param mixed $data The data that needs to be send.
@@ -404,11 +407,16 @@ class Core {
 	public function send_json( $data, $type = 'success' ) {
 
 		$r = $this->_clean_reponse_header();
-		// Only set status header if headers aren't sent.
-		if ( $r & 2 )
-			$this->set_status_header( 200, 'json' );
+		$json = -1;
 
-		echo \wp_json_encode( compact( 'data', 'type' ) );
+		if ( $r & 2 ) {
+			$this->set_status_header( 200, 'json' );
+			$json = 1;
+		} else {
+			$this->set_status_header( null, 'json' );
+		}
+
+		echo \wp_json_encode( compact( 'data', 'type', 'json' ) );
 
 		die;
 	}
@@ -1929,7 +1937,7 @@ class Core {
 	 *
 	 * Accepts multibyte.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 *
 	 * @param string The content to calculate size from.
 	 * @return int The filesize in bytes/octets.

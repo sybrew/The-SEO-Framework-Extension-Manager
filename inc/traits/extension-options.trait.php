@@ -83,9 +83,10 @@ final class Extensions_Options_Cache {
 	 * @access private
 	 *
 	 * @param string|int $index The option index that has to be changed.
-	 *        When int -1, it will override all options.
 	 * @param null|array $new_options The new options to set.
 	 *        Should not have changed options from outside the current extension's scope.
+	 * @param bool $delete If $new_options aren't set, but this is true, then
+	 *        it will delete the current options $index from cache.
 	 * @return array The current extension options.
 	 */
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {

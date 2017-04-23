@@ -383,10 +383,9 @@ trait Extensions_Layout {
 		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
 		//* Make extension version element.
-		$version = $data['Version'];
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
-			\tsf_extension_manager()->convert_markdown( $version, array( 'strong', 'em' ) )
+			\tsf_extension_manager()->convert_markdown( $data['Version'], array( 'strong', 'em' ) )
 		);
 
 		//* Make extension home element.

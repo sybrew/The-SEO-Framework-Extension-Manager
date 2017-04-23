@@ -397,11 +397,7 @@ final class Transporter_Admin {
 					$html = $steps_instance->_get_step( 2, 'settings', true );
 				}
 
-				$response = compact( 'html', 'type', 'notice' );
-
-				\tsf_extension_manager()->_clean_reponse_header();
-
-				echo json_encode( $response );
+				\tsf_extension_manager()->send_json( compact( 'html', 'type', 'notice' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
 			endif;
 		endif;
 

@@ -262,7 +262,7 @@ final class Layout extends Secure_Abstract {
 				$domain_desc = \tsf_extension_manager()->convert_markdown(
 					sprintf(
 						/* translators: `%s` = domain in markdown wrapper */
-						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate account and try again.', 'the-seo-framework-extension-manager' ),
+						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again.', 'the-seo-framework-extension-manager' ),
 						$_domain
 					),
 					array( 'code' )

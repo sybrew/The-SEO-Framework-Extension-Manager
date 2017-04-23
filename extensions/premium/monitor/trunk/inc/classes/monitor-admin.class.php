@@ -566,9 +566,7 @@ final class Monitor_Admin extends Monitor_Api {
 					$html = $this->get_site_fix_fields();
 				}
 
-				$response = compact( 'html' );
-
-				\tsf_extension_manager()->send_json( $response, null );
+				\tsf_extension_manager()->send_json( compact( 'html' ), null );
 			}
 		}
 

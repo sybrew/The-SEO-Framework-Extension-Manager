@@ -85,18 +85,21 @@ window[ 'tsfem_e_transporter' ] = {
 			async: true,
 			success: function( response ) {
 
-				response = jQuery.parseJSON( response );
+				response = tsfem.convertJSONResponse( response );
 
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' === typeof response || 'undefined' === typeof response.type || 'undefined' === typeof response.html ) {
-					//* Erroneous input.
-					tsfem.updatedResponse( loader, 0, '', 0 );
+				let data = response && response.data || undefined,
+					type = response && response.type || undefined;
+
+				if ( ! data || ! type ) {
+					//* Erroneous output.
+					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
 				} else {
 
-					let status = response.type,
-						html = response.html,
-						notice = response.notice;
+					let status = data.type,
+						html = data.html,
+						notice = data.notice;
 
 					if ( 'success' === status ) {
 						if ( html ) {
@@ -171,20 +174,21 @@ window[ 'tsfem_e_transporter' ] = {
 			timeout: 10000,
 			async: true,
 			success: function( response ) {
-				// Because datatype is json, and we set json headers, this is no longer required:
-				// response = jQuery.parseJSON( response );
+
+				response = tsfem.convertJSONResponse( response );
 
 				if ( tsfem.debug ) console.log( response );
 
-				if ( 'undefined' === typeof response || 'undefined' === typeof response.type || 'undefined' === typeof response.data ) {
+				let data = response && response.data || undefined,
+					type = response && response.type || undefined;
+
+				if ( ! data || ! type ) {
 					//* Erroneous output.
-					tsfem.updatedResponse( loader, 0, '', 0 );
+					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
 					settings._complete();
 				} else {
 
-					let type = response.type,
-						data = response.data,
-						results = data.results,
+					let results = data.results,
 						code = results.code,
 						notice = results.notice,
 						success = results.success;

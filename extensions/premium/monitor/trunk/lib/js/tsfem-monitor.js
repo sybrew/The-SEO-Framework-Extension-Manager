@@ -125,18 +125,19 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
+				response = tsfem.convertJSONResponse( response );
+
 				if ( tsfem.debug ) console.log( response );
 
-				let data = response.data || undefined,
-					type = response.type || undefined;
+				let data = response && response.data || undefined,
+					type = response && response.type || undefined;
 
-				if ( 'undefined' !== typeof data.status && 'undefined' !== typeof data.status['timeout'] )
-					tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
-
-				if ( 'undefined' === typeof data.status || 'undefined' === typeof data.status['type'] ) {
-					//* Erroneous input.
-					tsfem.updatedResponse( loader, 0, '', 0 );
+				if ( ! data ) {
+					//* Erroneous output.
+					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
 				} else {
+					if ( 'undefined' !== typeof data.status['timeout'] )
+						tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
 
 					let status = data.status['type'],
 						notice = data.status['notice'];
@@ -210,18 +211,19 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
+				response = tsfem.convertJSONResponse( response );
+
 				if ( tsfem.debug ) console.log( response );
 
-				let data = response.data || undefined,
-					type = response.type || undefined;
+				let data = response && response.data || undefined,
+					type = response && response.type || undefined;
 
-				if ( 'undefined' !== typeof data.status && 'undefined' !== typeof data.status['timeout'] )
-					tsfem_e_monitor.rDataTimeout = data.status['timeout'];
-
-				if ( 'undefined' === typeof data.status || 'undefined' === typeof data.status['type'] || 'undefined' === typeof data.status['content'] ) {
-					//* Erroneous input.
-					tsfem.updatedResponse( loader, 0, '', 0 );
+				if ( ! data || ! data.status ) {
+					//* Erroneous output.
+					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
 				} else {
+					if ( 'undefined' !== typeof data.status['timeout'] )
+						tsfem_e_monitor.rDataTimeout = data.status['timeout'];
 
 					let status = data.status['type'],
 						content = data.status['content'],
@@ -319,12 +321,15 @@ window[ 'tsfem_e_monitor' ] = {
 			async: true,
 			success: function( response ) {
 
+				response = tsfem.convertJSONResponse( response );
+
 				if ( tsfem.debug ) console.log( response );
 
-				let data = response.data || undefined,
-					type = response.type || undefined;
+				let data = response && response.data || undefined,
+					type = response && response.type || undefined;
 
-				if ( data.html )
+				//* No error handling, as this is invoked automatically.
+				if ( data && data.html )
 					jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 			},
 			error: function( xhr, ajaxOptions, thrownError ) {
