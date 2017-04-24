@@ -190,7 +190,7 @@ final class Trends {
 			$content = \the_seo_framework()->escape_description( $content );
 
 			//* No need for translations, it's English only.
-			$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow" title="Read more...">%s</a></h4>', \esc_url( $link ), $title );
+			$title = sprintf( '<h4><a href="%s" target="_blank" rel="external nofollow noopener noreferrer" title="Read more...">%s</a></h4>', \esc_url( $link ), $title );
 
 			$_output = sprintf( '<div class="tsfem-feed-entry tsfem-flex tsfem-flex-nowrap"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class="tsfem-feed-content">%s</div></div>', $title, $date, $content );
 

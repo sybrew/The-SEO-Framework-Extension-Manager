@@ -154,12 +154,9 @@ window[ 'tsfem_e_monitor' ] = {
 					}
 				}
 			},
-			error: function( xhr, ajaxOptions, thrownError ) {
-				if ( tsfem.debug ) {
-					console.log( xhr.responseText );
-					console.log( thrownError );
-				}
-				tsfem.updatedResponse( loader, status, '', 0 );
+			error: function( jqXHR, textStatus, errorThrown ) {
+				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+				tsfem.updatedResponse( loader, 0, _error, 0 );
 			},
 			complete: function() {
 				$button.removeClass( loading );
@@ -278,12 +275,9 @@ window[ 'tsfem_e_monitor' ] = {
 					}
 				}
 			},
-			error: function( xhr, ajaxOptions, thrownError ) {
-				if ( tsfem.debug ) {
-					console.log( xhr.responseText );
-					console.log( thrownError );
-				}
-				tsfem.updatedResponse( loader, status, '', 0 );
+			error: function( jqXHR, textStatus, errorThrown ) {
+				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+				tsfem.updatedResponse( loader, 0, _error, 0 );
 			},
 			complete: function() {
 				$button.removeClass( loading );
@@ -332,10 +326,11 @@ window[ 'tsfem_e_monitor' ] = {
 				if ( data && data.html )
 					jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 			},
-			error: function( xhr, ajaxOptions, thrownError ) {
+			error: function( jqXHR, textStatus, errorThrown ) {
+				//* No elaborate handling, as this function is invoked automatically.
 				if ( tsfem.debug ) {
-					console.log( xhr.responseText );
-					console.log( thrownError );
+					console.log( jqXHR.responseText );
+					console.log( errorThrown );
 				}
 			},
 			complete: function() { },

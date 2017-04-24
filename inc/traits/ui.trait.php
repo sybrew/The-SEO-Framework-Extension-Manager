@@ -277,6 +277,10 @@ trait UI {
 				'Activate' => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 				'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 				'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
+				'UnknownError' => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
+				'TimeoutError' => \esc_html__( 'Timeout: Server took too long to respond. Reload the page.', 'the-seo-framework-extension-manager' ),
+				'FatalError' => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
+				'ParseError' => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
 			),
 			'rtl' => (bool) \is_rtl(),
 		);

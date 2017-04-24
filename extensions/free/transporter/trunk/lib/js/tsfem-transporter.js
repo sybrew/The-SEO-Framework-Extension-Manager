@@ -126,12 +126,9 @@ window[ 'tsfem_e_transporter' ] = {
 					}
 				}
 			},
-			error: function( xhr, ajaxOptions, thrownError ) {
-				if ( tsfem.debug ) {
-					console.log( xhr.responseText );
-					console.log( thrownError );
-				}
-				tsfem.updatedResponse( loader, 0, '', 0 );
+			error: function( jqXHR, textStatus, errorThrown ) {
+				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+				tsfem.updatedResponse( loader, 0, _error, 0 );
 			},
 			complete: function() {
 				$button.removeClass( loading );
@@ -259,12 +256,9 @@ window[ 'tsfem_e_transporter' ] = {
 					}
 				}
 			},
-			error: function( xhr, ajaxOptions, thrownError ) {
-				if ( tsfem.debug ) {
-					console.log( xhr.responseText );
-					console.log( thrownError );
-				}
-				tsfem.updatedResponse( loader, 0, '', 0 );
+			error: function( jqXHR, textStatus, errorThrown ) {
+				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+				tsfem.updatedResponse( loader, 0, _error, 0 );
 				settings._complete();
 			},
 			_complete: function() {

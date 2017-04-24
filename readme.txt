@@ -32,7 +32,7 @@ This following extension is planned for the next major version.
 * **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
 
 = Requirements: =
-
+TODO move this to Installation (see https://wordpress.org/plugins/woocommerce/#installation for a great example).
 * For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
 * For improved performance, your PHP handler should use a 64 bits architecture, because it uses large primes for security.
@@ -85,9 +85,6 @@ An Extension is like a plugin, and can be activated and deactivated on demand. A
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
 Each extension will include carefully crafted documentation in the near future.
-
-= What are the requirements to run this software? =
-TODO
 
 = Do I require an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
@@ -155,10 +152,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 **New Extensions:**
 
 1. **Local SEO**: -- TODO
-2. **Transfer:** -- TODO (settings exporter/importer)
+2. **Transfer (transporter?):** -- TODO (settings exporter/importer)
 
 **Detailed log:**
-
+TODO update extension versions and requirements list.
 **Plugin Improvements:**
 
 * **Local:**
@@ -167,13 +164,15 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
 	* Performance: Error notice option is now no longer autoloaded when unset.
 	* Performance: TODO When deactivating your account, the plugin unloads its extension options from autoloading.
+	* Performance: Trends Feed's links no longer bind to your browser's used threads when followed. [Learn more](https://developers.google.com/web/tools/lighthouse/audits/noopener).
 	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
+	* Improvement: Added useful AJAX error reporting, like for when timeouts happen.
 	* Change: The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
 	* Fixed: TODO The extension list now also renders correctly on Safari 6 to 9.
-	* Fixed: TODO Huge tooltips within metabox content are now faced downwards.
+	* Fixed: TODO Huge tooltips within metabox content are now faced downwards when they'd otherwise overflow upwards.
 	* Fixed: Extension activation tester now tests JSON test file for errors too.
-	* Fixed: In a very unlikely event, a fatal error could be produced on either the front-end or back-end (once every 2,984,876,523 requests as of Unix Timestamp 1492438262).
-	* Fixed: This plugin will now work in 2038 on 32 bits PHP handlers.
+	* Fixed: In a very unlikely event, a fatal error could be produced on either the front-end or back-end (on average once every 2,984,876,523 requests as of Unix Timestamp 1492438262).
+	* Fixed: Theoretically, this plugin will now work after December 31st, 2037 on 32 bits PHP handlers.
 	* Fixed: Browser memory leak through tooltips on (de)activation of extensions.
 	* Change: TODO The tooltip is now a shade of black, rather than an off-color ocean blue.
 	* Change: The internal hashing algorithm has been expanded.
@@ -192,9 +191,11 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		/
 		* TODO
+		* Requires TSF: 2.8.2
 * **Premium - Articles:**
 	* **Version:**
 		* 1.0.0-gamma-2
+		* Requires TSF: 2.8.2
 	* **Premium only until gamma-testing is completed.**
 	* **Changed:**
 		/
@@ -209,14 +210,15 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
+		* Requires TSF: 2.7.0
 	* **Internal:**
 		* **Changed:**
 			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
 		* **Fixed:**
 			* More agressive buffer cleaning has been put in place to prevent failing AJAX requests.
 			* The SEO Framework's internal debugging methods can no longer interfere with the output.
-		/
-		* TODO
+			* Server and Browser AJAX errors can now resolve when requesting updates.
+			* Server and Browser AJAX errors can now resolve when requesting crawl.
 	* **API:**
 		* **Note:** These API changes affect only this plugin version.
 			/ TODO
@@ -228,10 +230,17 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		/
 		* TODO
+		* Requires TSF: 2.7.0
 * **Free - Title Fix:**
 	* **Version:**
 		/
 		* TODO
+		* Requires TSF: 2.7.0
+* **Free - Transporter:**
+	* **Version:**
+		/
+		* TODO
+		* Requires TSF: 2.7.0
 
 = 1.1.0 - Articulated SEO =
 
