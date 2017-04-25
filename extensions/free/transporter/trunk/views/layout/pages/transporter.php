@@ -14,25 +14,27 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\transporter_
 		$this->get_transport_settings_overview(),
 		array(
 			'full' => false,
-			'collapse' => true,
+			'collapse' => false,
 			'move' => false,
 			'pane_id' => 'tsfem-e-transporter-settings-pane',
 			'ajax' => true,
 			'ajax_id' => 'tsfem-e-transporter-settings-ajax',
 		)
 	);
+	/*
 	\tsf_extension_manager()->_do_pane_wrap(
 		\__( 'Transport SEO Meta', 'the-seo-framework-extension-manager' ),
 		$this->get_transport_meta_overview(),
 		array(
 			'full' => false,
-			'collapse' => true,
+			'collapse' => false,
 			'move' => false,
 			'pane_id' => 'tsfem-e-transporter-meta-pane',
 			'ajax' => true,
 			'ajax_id' => 'tsfem-e-transporter-meta-ajax',
 		)
 	);
+	*/
 ?>
 </div>
 <?php

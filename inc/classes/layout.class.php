@@ -149,7 +149,7 @@ final class Layout extends Secure_Abstract {
 				$nonce_action . $nonce . $switcher
 			);
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The deactivation button only supports the form instance.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The deactivation button only supports the form type.' );
 		}
 
 		return $output;
@@ -202,6 +202,7 @@ final class Layout extends Secure_Abstract {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium account information output only supports list type.' );
 			return '';
 		}
+
 		$account = self::$account;
 
 		$unknown = \__( 'Unknown', 'the-seo-framework-extension-manager' );
@@ -229,7 +230,7 @@ final class Layout extends Secure_Abstract {
 			$output .= static::wrap_title_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
 		if ( $level ) {
-			$class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
+			$_class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
 
 			if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
 				/**
@@ -242,13 +243,16 @@ final class Layout extends Secure_Abstract {
 				$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
 
 				if ( $next_check_min > 0 ) {
-					$level_desc = sprintf( \__( 'Next check is scheduled in %s minutes.', 'the-seo-framework-extension-manager' ), $next_check_min );
-					$class .= ' tsfem-has-hover-balloon';
+					$level_desc = sprintf(
+						\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
+						$next_check_min
+					);
+					$_class .= ' tsfem-has-hover-balloon';
 				}
 			}
 
 			$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
-			$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $level_desc, \esc_html( $level ) );
+			$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
 			$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 		}
 
@@ -257,7 +261,7 @@ final class Layout extends Secure_Abstract {
 			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
 
 			if ( $_domain === $domain ) {
-				$class = 'tsfem-success';
+				$_class = 'tsfem-success';
 			} else {
 				$domain_desc = \tsf_extension_manager()->convert_markdown(
 					sprintf(
@@ -267,11 +271,11 @@ final class Layout extends Secure_Abstract {
 					),
 					array( 'code' )
 				);
-				$class = 'tsfem-error tsfem-has-hover-balloon';
+				$_class = 'tsfem-error tsfem-has-hover-balloon';
 			}
 
 			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
-			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $class ), $domain_desc, \esc_html( $domain ) );
+			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $domain_desc, \esc_html( $domain ) );
 			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 
@@ -280,19 +284,19 @@ final class Layout extends Secure_Abstract {
 			$now = time();
 
 			$difference = $date_until - $now;
-			$class = 'tsfem-success';
+			$_class = 'tsfem-success';
 			$expires_in = '';
 
 			if ( $difference < 0 ) {
 				//* Expired.
 				$expires_in = \__( 'Account expired', 'the-seo-framework-extension-manager' );
-				$class = 'tsfem-error';
+				$_class = 'tsfem-error';
 			} elseif ( $difference < WEEK_IN_SECONDS ) {
 				$expires_in = \__( 'Less than a week', 'the-seo-framework-extension-manager' );
-				$class = 'tsfem-warning';
+				$_class = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
 				$expires_in = \__( 'Less than two weeks', 'the-seo-framework-extension-manager' );
-				$class = 'tsfem-warning';
+				$_class = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS * 3 ) {
 				$expires_in = \__( 'Less than three weeks', 'the-seo-framework-extension-manager' );
 			} elseif ( $difference < MONTH_IN_SECONDS ) {
@@ -308,7 +312,7 @@ final class Layout extends Secure_Abstract {
 			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
 			$expires_in = sprintf(
 				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
-				\esc_attr( $class ), \esc_attr( $date_until ), \esc_attr( $end_date ), \esc_html( $end_date_i18n ), \esc_html( $expires_in )
+				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $end_date ), \esc_html( $end_date_i18n ), \esc_html( $expires_in )
 			);
 
 			$output .= static::wrap_title_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );

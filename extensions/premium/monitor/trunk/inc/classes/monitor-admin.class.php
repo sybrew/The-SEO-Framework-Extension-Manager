@@ -392,12 +392,10 @@ final class Monitor_Admin extends Monitor_Api {
 				$timeout = null;
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$data = $_POST;
+					$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0;
 
-					$timeout = isset( $data['remote_data_timeout'] ) ? \absint( $data['remote_data_timeout'] ) : 0;
+					$current_timeout = $this->get_remote_data_timeout();
 				}
-
-				$current_timeout = $this->get_remote_data_timeout();
 
 				if ( isset( $timeout ) ) :
 					if ( $this->is_remote_data_expired() || ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout ) :
@@ -478,12 +476,10 @@ final class Monitor_Admin extends Monitor_Api {
 				$timeout = null;
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$data = $_POST;
+					$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0;
 
-					$timeout = isset( $data['remote_crawl_timeout'] ) ? \absint( $data['remote_crawl_timeout'] ) : 0;
+					$current_timeout = $this->get_remote_crawl_timeout();
 				}
-
-				$current_timeout = $this->get_remote_crawl_timeout();
 
 				if ( isset( $timeout ) ) :
 					if ( $this->can_request_next_crawl() || ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout ) :
@@ -1161,8 +1157,9 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	protected function get_view( $view, array $args = array() ) {
 
-		foreach ( $args as $key => $val )
+		foreach ( $args as $key => $val ) {
 			$$key = $val;
+		}
 
 		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 

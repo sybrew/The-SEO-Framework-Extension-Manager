@@ -174,10 +174,10 @@ final class Transporter_Admin {
 		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
 
 		//* AJAX export request listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_request_export', array( $this, '_wp_ajax_request_export' ) );
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_export', array( $this, '_wp_ajax_request_settings_export' ) );
 
 		//* AJAX download request listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_request_download', array( $this, '_wp_ajax_request_download' ) );
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_download', array( $this, '_wp_ajax_request_settings_download' ) );
 
 	}
 
@@ -360,12 +360,33 @@ final class Transporter_Admin {
 	}
 
 	/**
+	 * Sets up and returns Transporter_Steps.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return object \TSF_Extension_Manager\Extension\Transporter_Steps
+	 */
+	protected function get_transporter_steps_instance() {
+
+		$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
+		$steps_instance->_set_instance_properties( array(
+			'nonce_name' => $this->nonce_name,
+			'request_name' => $this->request_name,
+			'nonce_action' => $this->nonce_action,
+			'transporter_page_slug' => $this->transporter_page_slug,
+			'o_index' => $this->o_index,
+		) );
+
+		return $steps_instance;
+	}
+
+	/**
 	 * Fetches and returns export data in JSON encoded form.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 */
-	final public function _wp_ajax_request_export() {
+	final public function _wp_ajax_request_settings_export() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
@@ -385,16 +406,9 @@ final class Transporter_Admin {
 					//* Initialize menu hooks.
 					\tsf_extension_manager()->_set_ajax_menu_link( $this->transporter_page_slug, 'manage_options' );
 
-					$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
-					$steps_instance->_set_instance_properties( array(
-						'nonce_name' => $this->nonce_name,
-						'request_name' => $this->request_name,
-						'nonce_action' => $this->nonce_action,
-						'transporter_page_slug' => $this->transporter_page_slug,
-						'o_index' => $this->o_index,
-					) );
+					$steps_instance = $this->get_transporter_steps_instance();
 
-					$html = $steps_instance->_get_step( 2, 'settings', true );
+					$html = $steps_instance->_get_step( 2, 'settings-export', true );
 				}
 
 				\tsf_extension_manager()->send_json( compact( 'html', 'type', 'notice' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
@@ -404,7 +418,7 @@ final class Transporter_Admin {
 		exit;
 	}
 
-	final public function _wp_ajax_request_download() {
+	final public function _wp_ajax_request_settings_download() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
@@ -706,28 +720,40 @@ final class Transporter_Admin {
 	 */
 	protected function get_transport_settings_output() {
 
-		$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
-		$steps_instance->_set_instance_properties( array(
-			'nonce_name' => $this->nonce_name,
-			'request_name' => $this->request_name,
-			'nonce_action' => $this->nonce_action,
-			'transporter_page_slug' => $this->transporter_page_slug,
-			'o_index' => $this->o_index,
-		) );
+		$steps_instance = $this->get_transporter_steps_instance();
+
+		$js_steps = $this->get_transport_settings_js_steps( $steps_instance );
+		$nojs_steps = $this->get_transport_settings_nojs_steps( $steps_instance );
+
+		return $js_steps . $nojs_steps;
+	}
+
+	protected function get_transport_settings_js_steps( Transporter_Steps $steps_instance ) {
 
 		$step_1 = $steps_instance->_get_step( 1, 'settings', false );
-		$step_2 = $steps_instance->_get_step( 2, 'settings', false );
-		$step_3 = $steps_instance->_get_step( 3, 'settings', false );
 
-		//* Steps, pre-rendered for non-ajax. @TODO prerender
+		// Step 2 and 3 are loaded through AJAX.
 		$step_1 = sprintf( '<div class="tsfem-e-transporter-step-1 tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', $step_1 );
-		$step_2 = sprintf( '<div class="tsfem-e-transporter-step-2 tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', $step_2 );
-		$step_3 = sprintf( '<div class="tsfem-e-transporter-step-3 tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', $step_3 );
+		$step_2 = sprintf( '<div class="tsfem-e-transporter-step-2 tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', '' );
+		$step_3 = sprintf( '<div class="tsfem-e-transporter-step-3 tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', '' );
 
 		$output = $step_1 . $step_2 . $step_3;
 
 		//* It's a row because we need vertical scrolling. Steps are stacked caused by 100% width. #flexlife
-		return sprintf( '<div class="tsfem-e-transporter-transport tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-e-transporter-transport tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s</div>', $output );
+	}
+
+	protected function get_transport_settings_nojs_steps( Transporter_Steps $steps_instance ) {
+
+		$exporter = $steps_instance->_get_step( 2, 'settings-export', false );
+		$importer = $steps_instance->_get_step( 2, 'settings-import', false );
+
+		$exporter = sprintf( '<div class="tsfem-e-transporter-step tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', $exporter );
+		$importer = sprintf( '<div class="tsfem-e-transporter-step tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">%s</div>', $importer );
+
+		$output = $exporter . $importer;
+
+		return sprintf( '<div class="tsfem-e-transporter-transport tsfem-flex tsfem-flex-row tsfem-flex-hide-if-js">%s</div>', $output );
 	}
 
 	/**
@@ -739,6 +765,13 @@ final class Transporter_Admin {
 		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-validate-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_transport_meta_output() );
 	}
 
+	/**
+	 * Returns the transport meta settings output pane contents.
+	 *
+	 * @since @TODO
+	 *
+	 * @return string The meta transporter pane contents.
+	 */
 	protected function get_transport_meta_output() {
 
 		$output = 'To be continued...';
@@ -794,8 +827,9 @@ final class Transporter_Admin {
 	 */
 	protected function get_view( $view, array $args = array() ) {
 
-		foreach ( $args as $key => $val )
+		foreach ( $args as $key => $val ) {
 			$$key = $val;
+		}
 
 		$file = TSFEM_E_TRANSPORTER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 

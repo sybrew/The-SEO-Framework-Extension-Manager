@@ -53,7 +53,7 @@ window[ 'tsfem_e_transporter' ] = {
 	 */
 	i18n : tsfem_e_transporterL10n.i18n,
 
-	requestExport: function( event ) {
+	requestSettingsExport: function( event ) {
 		'use strict';
 
 		var loading = 'tsfem-button-disabled tsfem-button-loading',
@@ -78,7 +78,7 @@ window[ 'tsfem_e_transporter' ] = {
 			url: ajaxurl,
 			datatype: 'json',
 			data: {
-				'action' : 'tsfem_e_transporter_request_export',
+				'action' : 'tsfem_e_transporter_request_settings_export',
 				'nonce' : tsfem_e_transporter.nonce,
 			},
 			timeout: 10000,
@@ -94,6 +94,7 @@ window[ 'tsfem_e_transporter' ] = {
 
 				if ( ! data || ! type ) {
 					//* Erroneous output.
+					settings._complete();
 					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
 				} else {
 
@@ -109,6 +110,7 @@ window[ 'tsfem_e_transporter' ] = {
 								{ queue: true, duration: 1000 },
 								'swing'
 							);
+							tsfem_e_transporter.setupListenersStep( 2, 'settings-export' );
 						} else {
 							/* TODO error handling?
 							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">' + issues.data + '</div>';
@@ -120,27 +122,33 @@ window[ 'tsfem_e_transporter' ] = {
 							);*/
 						}
 
-						setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
+						setTimeout( function() {
+							settings._complete();
+							tsfem.updatedResponse( loader, 1, notice, 0 );
+						}, 1000 );
 					} else {
+						//* TODO error handling?
+						settings._complete();
 						tsfem.updatedResponse( loader, 0, notice, 0 );
 					}
 				}
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
+				settings._complete();
 				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 				tsfem.updatedResponse( loader, 0, _error, 0 );
 			},
-			complete: function() {
+			_complete: function() {
 				$button.removeClass( loading );
 				$button.prop( 'disabled', false );
 			},
+			complete: function() { },
 		}
 
 		jQuery.ajax( settings );
 	},
 
-
-	requestDownload: function( event ) {
+	requestSettingsDownload: function( event ) {
 		'use strict';
 
 		var loading = 'tsfem-button-disabled tsfem-button-loading',
@@ -165,7 +173,7 @@ window[ 'tsfem_e_transporter' ] = {
 			url: ajaxurl,
 			datatype: 'json',
 			data: {
-				'action' : 'tsfem_e_transporter_request_download',
+				'action' : 'tsfem_e_transporter_request_settings_download',
 				'nonce' : tsfem_e_transporter.nonce,
 			},
 			timeout: 10000,
@@ -265,6 +273,7 @@ window[ 'tsfem_e_transporter' ] = {
 				$button.removeClass( loading );
 				$button.prop( 'disabled', false );
 			},
+			complete: function() { },
 		}
 
 		jQuery.ajax( settings );
@@ -272,11 +281,11 @@ window[ 'tsfem_e_transporter' ] = {
 
 	/**
 	 *
-	 * For future draft:
-	 * @see https://www.w3.org/TR/clipboard-apis/#dfn-datatransfer
+	 * @see For future draft: https://www.w3.org/TR/clipboard-apis/#dfn-datatransfer
 	 *
 	 */
 	storeClipboard: function( event ) {
+		'use strict';
 
 		let $button = jQuery( event.target ),
 			targetText = $button.data( 'clipboardid' ),
@@ -288,12 +297,41 @@ window[ 'tsfem_e_transporter' ] = {
 			$targetText.select();
 			document.execCommand( 'copy' );
 			document.getSelection().removeAllRanges();
-		/** Future:
-		let type = $button.data( 'clipboardtype' ) || 'text/plain';
-		document.addEventListener( 'copy', function( e ) {
-			e.clipboardData.setData( type, val );
-		} );
-		*/
+		}
+	},
+
+	setupListenersStep( which, what ) {
+		'use strict';
+
+		if ( 'settings-export' === what ) {
+			switch ( which ) {
+				case 2 :
+					let callers = [
+						[
+							'a#tsfem-e-transporter-download-settings-button',
+							tsfem_e_transporter.requestSettingsDownload
+						], [
+							'a.tsfem-button-clipboard',
+							tsfem_e_transporter.storeClipboard
+						]
+					];
+
+					for ( let key in callers ) {
+						jQuery( callers[ key ][0] ).off( 'click', callers[ key ][1] );
+						jQuery( callers[ key ][0] ).on ( 'click', callers[ key ][1] );
+					}
+					break;
+
+				case 3 :
+					;
+					break;
+
+				default :
+					;
+					break;
+			}
+		} else {
+
 		}
 	},
 
@@ -314,11 +352,7 @@ window[ 'tsfem_e_transporter' ] = {
 		'use strict';
 
 		// AJAX request export data.
-		jQ( 'a#tsfem-e-transporter-export-button' ).on( 'click', tsfem_e_transporter.requestExport );
-		// This requires a RESET on ajax call.... see ^^
-		jQ( 'a#tsfem-e-transporter-transport-data-text-clipboard-button' ).on( 'click', tsfem_e_transporter.storeClipboard );
-		// This requires a RESET on ajax call.... see ^^^^
-		jQ( 'a#tsfem-e-transporter-download-button' ).on( 'click', tsfem_e_transporter.requestDownload );
+		jQ( 'a#tsfem-e-transporter-export-button' ).on( 'click', tsfem_e_transporter.requestSettingsExport );
 
 	}
 };

@@ -1058,8 +1058,9 @@ class Core {
 	 */
 	protected function get_view( $view, array $args = array() ) {
 
-		foreach ( $args as $key => $val )
+		foreach ( $args as $key => $val ) {
 			$$key = $val;
+		}
 
 		$this->get_verification_codes( $_instance, $bits );
 

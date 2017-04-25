@@ -341,6 +341,7 @@ TODO update extension versions and requirements list.
 == Upgrade Notice ==
 
 == Other Notes ==
+TODO move this to development/installation?
 
 = Are you a developer? =
 And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.

@@ -136,6 +136,21 @@ body.tsfem .wrap {
 	min-width: 175px;
 }
 
+.tsfem-flex-textarea-wrap {
+	/* This block fixes an overflow lag. */
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	min-width: 100%;
+	width: 100%;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+
+.tsfem-flex-textarea-wrap textarea {
+	display: block;
+	min-width: 100%;
+}
+
 /* # Start Top/Header.
 /*----------------------------------------------------------------------------*/
 
@@ -622,6 +637,12 @@ body.tsfem .wrap {
 	min-height: 250px;
 	/* EdgeHTML bugfix */
 	max-height: 100%;
+}
+
+.tsfem-pane-half:first-of-type:last-of-type {
+	max-width: 50%;
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
 }
 
 .tsfem-pane-half ::-webkit-scrollbar,
@@ -1300,15 +1321,15 @@ h5.tsfem-extension-type {
 	margin: 0;
 	max-width: 200px;
 	padding: 10px 12px;
+	background: #424242;
 	-webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
-	background: #05809e;
-	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
+	text-shadow: 0 -1px 1px #333,1px 0 1px #333,0 1px 1px #333,-1px 0 1px #333;
 	text-align: left;
 	font-size: 1em;
 	font-weight: 500;
 	line-height: 1.625em;
-	color: #fff;
+	color: #fbf7fd;
 	border-radius: 3px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
@@ -1346,7 +1367,7 @@ h5.tsfem-extension-type {
 	height: 0;
 	border-left: 12px solid transparent;
 	border-right: 12px solid transparent;
-	border-top: 12px solid #05809e;
+	border-top: 12px solid #424242;
 	position: absolute;
 	bottom: -8px;
 	z-index: 9999998;
@@ -1392,4 +1413,16 @@ h5.tsfem-extension-type {
 
 .tsfem-ltr {
 	direction: ltr;
+}
+
+body.js .tsfem-flex-hide-if-js,
+.tsfem-flex-hide-if-no-js {
+	display: none;
+}
+
+body.js .tsfem-flex-hide-if-no-js {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
 }
