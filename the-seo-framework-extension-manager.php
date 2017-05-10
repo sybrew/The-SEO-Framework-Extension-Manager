@@ -5,7 +5,7 @@
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
  * Version: 1.2.0-dev2017.04.25.0
  * Author: Sybre Waaijer
- * Author URI: https://cyberwire.nl/
+ * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: the-seo-framework-extension-manager
  * Domain Path: /language

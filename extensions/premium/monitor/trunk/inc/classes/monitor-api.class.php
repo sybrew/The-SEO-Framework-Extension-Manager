@@ -70,7 +70,7 @@ class Monitor_Api extends Monitor_Data {
 	protected function get_monitor_api_response( $type = '', $ajax = false ) {
 
 		if ( empty( $type ) ) {
-			$ajax or $this->set_error_notice( array( 1010201 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010201 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010201 ) : false;
 		}
 
@@ -93,15 +93,15 @@ class Monitor_Api extends Monitor_Data {
 
 				case 2 :
 					if ( is_array( $subscription ) ) {
-						$args = array(
+						$args = [
 							'request'     => 'extension/monitor/' . $type,
 							'email'       => $subscription['email'],
 							'licence_key' => $subscription['key'],
-						);
+						];
 						$response = \tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
 					} else {
 						\tsf_extension_manager()->_verify_instance( $instance, $bits );
-						$ajax or $this->set_error_notice( array( 1010202 => '' ) );
+						$ajax or $this->set_error_notice( [ 1010202 => '' ] );
 						return $ajax ? $this->get_ajax_notice( false, 1010202 ) : false;
 					}
 					break;
@@ -121,21 +121,21 @@ class Monitor_Api extends Monitor_Data {
 		}
 
 		if ( ! isset( $response->success ) ) {
-			$ajax or $this->set_error_notice( array( 1010203 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010203 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010203 ) : false;
 		}
 
 		if ( ! isset( $response->data ) ) {
-			$ajax or $this->set_error_notice( array( 1010204 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010204 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010204 ) : false;
 		}
 
 		$data = is_string( $response->data ) ? json_decode( $response->data, true ) : (array) $response->data;
 
-		return array(
+		return [
 			'success' => true,
 			'data' => \stripslashes_deep( $data ),
-		);
+		];
 	}
 
 	/**
@@ -161,31 +161,31 @@ class Monitor_Api extends Monitor_Data {
 		$response = $response['data'];
 
 		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010301 => '' ) );
+			$this->set_error_notice( [ 1010301 => '' ] );
 			return false;
 		}
 
-		$success = array();
-		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) ) );
+		$success = [];
+		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \home_url() ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
 		if ( in_array( false, $success, true ) ) {
 			$delete and $this->get_monitor_api_response( 'remove_site' );
-			$this->set_error_notice( array( 1010302 => '' ) );
+			$this->set_error_notice( [ 1010302 => '' ] );
 			return false;
 		}
 
-		$success = array();
+		$success = [];
 		$success[] = $this->set_remote_crawl_timeout();
 		$success[] = $this->update_option( 'site_requires_fix', false );
 		$success[] = $this->update_option( 'site_marked_inactive', false );
 
 		if ( in_array( false, $success, true ) ) {
-			$this->set_error_notice( array( 1010303 => '' ) );
+			$this->set_error_notice( [ 1010303 => '' ] );
 			return false;
 		}
 
-		$this->set_error_notice( array( 1010304 => '' ) );
+		$this->set_error_notice( [ 1010304 => '' ] );
 		return true;
 	}
 
@@ -209,18 +209,18 @@ class Monitor_Api extends Monitor_Data {
 		$response = $response['data'];
 
 		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( array( 1010401 => '' ) );
+			$this->set_error_notice( [ 1010401 => '' ] );
 			return false;
 		}
 
 		$success = $this->delete_option_index();
 
 		if ( false === $success ) {
-			$this->set_error_notice( array( 1010402 => '' ) );
+			$this->set_error_notice( [ 1010402 => '' ] );
 			return false;
 		}
 
-		$this->set_error_notice( array( 1010403 => '' ) );
+		$this->set_error_notice( [ 1010403 => '' ] );
 		return true;
 	}
 
@@ -256,37 +256,37 @@ class Monitor_Api extends Monitor_Data {
 		$response = $response['data'];
 
 		if ( 'failure' === $response['status'] ) {
-			$ajax or $this->set_error_notice( array( 1010501 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010501 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
 		}
 
 		if ( 'site expired' === $response['status'] ) {
 			$this->update_option( 'site_requires_fix', true );
-			$ajax or $this->set_error_notice( array( 1010502 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010502 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010502 ) : false;
 		}
 
 		if ( 'site inactive' === $response['status'] ) {
 			$this->update_option( 'site_marked_inactive', true );
-			$ajax or $this->set_error_notice( array( 1010503 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010503 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010503 ) : false;
 		}
 
 		if ( 'queued' === $response['status'] ) {
 			$this->set_remote_crawl_timeout();
-			$ajax or $this->set_error_notice( array( 1010504 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010504 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010504 ) : false;
 		}
 
 		$success = $this->set_remote_crawl_timeout();
 
 		if ( false === $success ) {
-			$ajax or $this->set_error_notice( array( 1010505 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010505 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010505 ) : false;
 		}
 
 		//* Success.
-		$ajax or $this->set_error_notice( array( 1010506 => '' ) );
+		$ajax or $this->set_error_notice( [ 1010506 => '' ] );
 		return $ajax ? $this->get_ajax_notice( true, 1010506 ) : true;
 	}
 
@@ -322,19 +322,19 @@ class Monitor_Api extends Monitor_Data {
 		$response = $response['data'];
 
 		if ( 'failure' === $response['status'] ) {
-			$ajax or $this->set_error_notice( array( 1010601 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010601 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010601 ) : false;
 		}
 
 		if ( 'site expired' === $response['status'] ) {
 			$this->update_option( 'site_requires_fix', true );
-			$ajax or $this->set_error_notice( array( 1010602 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010602 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010602 ) : false;
 		}
 
 		if ( 'site inactive' === $response['status'] ) {
 			$this->update_option( 'site_marked_inactive', true );
-			$ajax or $this->set_error_notice( array( 1010603 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010603 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010603 ) : false;
 		}
 
@@ -344,14 +344,14 @@ class Monitor_Api extends Monitor_Data {
 		$success = $this->set_remote_data_timeout();
 
 		if ( false === $success ) {
-			$ajax or $this->set_error_notice( array( 1010604 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010604 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010604 ) : false;
 		}
 
-		$success = array();
+		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, array( 'issues', 'stats' ), true ) ) {
+			if ( in_array( $type, [ 'issues', 'stats' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -360,11 +360,11 @@ class Monitor_Api extends Monitor_Data {
 		}
 
 		if ( in_array( false, $success, true ) ) {
-			$ajax or $this->set_error_notice( array( 1010605 => '' ) );
+			$ajax or $this->set_error_notice( [ 1010605 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010605 ) : false;
 		}
 
-		$ajax or $this->set_error_notice( array( 1010606 => '' ) );
+		$ajax or $this->set_error_notice( [ 1010606 => '' ] );
 		return $ajax ? $this->get_ajax_notice( true, 1010606 ) : true;
 	}
 

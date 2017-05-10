@@ -230,7 +230,7 @@ final class Layout extends Secure_Abstract {
 			$output .= static::wrap_title_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
 		if ( $level ) {
-			$_class = in_array( $level, array( $unknown, $decoupled ), true ) ? 'tsfem-error' : 'tsfem-success';
+			$_class = in_array( $level, [ $unknown, $decoupled ], true ) ? 'tsfem-error' : 'tsfem-success';
 
 			if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
 				/**
@@ -258,7 +258,7 @@ final class Layout extends Secure_Abstract {
 
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-			$_domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
+			$_domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \home_url() ) );
 
 			if ( $_domain === $domain ) {
 				$_class = 'tsfem-success';
@@ -269,7 +269,7 @@ final class Layout extends Secure_Abstract {
 						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again.', 'the-seo-framework-extension-manager' ),
 						$_domain
 					),
-					array( 'code' )
+					[ 'code' ]
 				);
 				$_class = 'tsfem-error tsfem-has-hover-balloon';
 			}

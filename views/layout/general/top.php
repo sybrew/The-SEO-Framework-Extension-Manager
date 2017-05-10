@@ -33,7 +33,13 @@ if ( $options ) {
 		$account_text = \__( 'Go Premium', 'the-seo-framework-extension-manager' );
 	}
 
-	$account_link = $this->get_link( array( 'url' => $account_url, 'target' => '_blank', 'class' => 'tsfem-button-primary ' . $account_button_class, 'title' => $account_title, 'content' => $account_text ) );
+	$account_link = $this->get_link( [
+		'url' => $account_url,
+		'target' => '_blank',
+		'class' => 'tsfem-button-primary ' . $account_button_class,
+		'title' => $account_title,
+		'content' => $account_text,
+	] );
 	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
 
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
@@ -79,11 +85,11 @@ endif;
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
 		<header><h1>
 			<?php
-			$image = array(
+			$image = [
 				'svg' => $this->get_image_file_location( 'tsflogo.svg', true ),
 				//	'2x' => $this->get_image_file_location( 'tsflogo-58x58px.png', true ),
 				'1x' => $this->get_image_file_location( 'tsflogo-29x29px.png', true ),
-			);
+			];
 			$size = '1em';
 
 			printf( \esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ),

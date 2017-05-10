@@ -58,7 +58,7 @@ define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-gamma-2' );
 \add_action( 'the_seo_framework_do_before_output', __NAMESPACE__ . '\\_articles_init', 10 );
 \add_action( 'the_seo_framework_do_before_amp_output', __NAMESPACE__ . '\\_articles_init', 10 );
 /**
- * Initialize the extension.
+ * Initializes the extension.
  *
  * @since 1.0.0
  * @staticvar bool $loaded True when loaded.
@@ -102,17 +102,17 @@ final class Articles {
 	 * @since 1.0.0
 	 * @var array $is_json_valid : { key => bool }
 	 */
-	private $is_json_valid = array();
+	private $is_json_valid = [];
 
 	/**
 	 * The constructor, initialize plugin.
 	 */
 	private function construct() {
 
-		$this->is_json_valid = array(
+		$this->is_json_valid = [
 			'amp' => true,
 			'nonamp' => true,
-		);
+		];
 
 		$this->init();
 	}
@@ -209,10 +209,10 @@ final class Articles {
 	private function init() {
 		if ( $this->is_amp() ) {
 			//* Initialize output in The SEO Framework's front-end AMP meta object.
-			\add_action( 'the_seo_framework_do_after_amp_output', array( $this, '_articles_hook_amp_output' ) );
+			\add_action( 'the_seo_framework_do_after_amp_output', [ $this, '_articles_hook_amp_output' ] );
 		} else {
 			//* Initialize output in The SEO Framework's front-end meta object.
-			\add_filter( 'the_seo_framework_after_output', array( $this, '_articles_hook_output' ) );
+			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
 		}
 	}
 
@@ -236,12 +236,12 @@ final class Articles {
 	 * @param array $functions The hooked functions.
 	 * @return array The hooked functions.
 	 */
-	public function _articles_hook_output( $functions = array() ) {
+	public function _articles_hook_output( $functions = [] ) {
 
-		$functions[] = array(
-			'callback' => array( $this, '_get_articles_json_output' ),
-			'args' => array(),
-		);
+		$functions[] = [
+			'callback' => [ $this, '_get_articles_json_output' ],
+			'args' => [],
+		];
 
 		return $functions;
 	}
@@ -259,7 +259,7 @@ final class Articles {
 
 		\the_seo_framework()->set_timezone();
 
-		$data = array(
+		$data = [
 			$this->get_article_context(),
 			$this->get_article_type(),
 			$this->get_article_main_entity(),
@@ -270,7 +270,7 @@ final class Articles {
 			$this->get_article_author(),
 			$this->get_article_publisher(),
 			$this->get_article_description(),
-		);
+		];
 
 		\the_seo_framework()->reset_timezone();
 
@@ -278,7 +278,7 @@ final class Articles {
 			return '';
 
 		//* Build data, and fetch it.
-		array_filter( array_filter( $data ), array( $this, 'build_article_data' ) );
+		array_filter( array_filter( $data ), [ $this, 'build_article_data' ] );
 		$data = $this->get_article_data();
 
 		if ( ! empty( $data ) )
@@ -310,16 +310,16 @@ final class Articles {
 	 * @param array $array The input element
 	 * @return array The article data.
 	 */
-	private function get_article_data( $get = true, array $entry = array() ) {
+	private function get_article_data( $get = true, array $entry = [] ) {
 
-		static $data = array();
+		static $data = [];
 
 		if ( $get )
 			return $data;
 
 		$data[ key( $entry ) ] = reset( $entry );
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -330,7 +330,7 @@ final class Articles {
 	 * @return array The Article context.
 	 */
 	private function get_article_context() {
-		return array( '@context' => 'http://schema.org' );
+		return [ '@context' => 'http://schema.org' ];
 	}
 
 	/**
@@ -347,7 +347,7 @@ final class Articles {
 	 * @return array The Article type.
 	 */
 	private function get_article_type() {
-		return array( '@type' => 'Article' );
+		return [ '@type' => 'Article' ];
 	}
 
 	/**
@@ -360,14 +360,14 @@ final class Articles {
 	private function get_article_main_entity() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
-		return array(
-			'mainEntityOfPage' => array(
+		return [
+			'mainEntityOfPage' => [
 				'@type' => 'WebPage',
 				'@id' => \the_seo_framework()->the_url_from_cache(),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -385,7 +385,7 @@ final class Articles {
 	private function get_article_headline() {
 
 		if ( ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		$id = $this->get_current_id();
 		$title = \the_seo_framework()->post_title_from_ID( $id ) ?: \the_seo_framework()->title_from_custom_field( '', false, $id );
@@ -393,12 +393,12 @@ final class Articles {
 
 		if ( ! $title || mb_strlen( $title ) > 110 ) {
 			$this->invalidate( 'amp' );
-			return array();
+			return [];
 		}
 
-		return array(
+		return [
 			'headline' => \the_seo_framework()->escape_title( $title ),
-		);
+		];
 	}
 
 	/**
@@ -416,23 +416,23 @@ final class Articles {
 	private function get_article_image() {
 
 		if ( ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		$image = $this->get_article_image_params();
 
 		if ( empty( $image['url'] ) ) {
 			$this->invalidate( 'amp' );
-			return array();
+			return [];
 		}
 
-		return array(
-			'image' => array(
+		return [
+			'image' => [
 				'@type' => 'ImageObject',
 				'url' => \esc_url( $image['url'] ),
 				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
 				'width' => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -479,15 +479,15 @@ final class Articles {
 
 		retempty :;
 
-		return array();
+		return [];
 
 		retvals :;
 
-		return array(
+		return [
 			'url' => $url,
 			'width' => $w,
 			'height' => $h,
-		);
+		];
 	}
 
 	/**
@@ -502,18 +502,18 @@ final class Articles {
 	private function get_article_published_date() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		if ( ! ( $post = $this->get_current_post() ) ) {
 			$this->invalidate( 'both' );
-			return array();
+			return [];
 		}
 
 		$i = strtotime( $post->post_date );
 
-		return array(
+		return [
 			'datePublished' => \esc_attr( date( 'c', $i ) ),
-		);
+		];
 	}
 
 	/**
@@ -528,16 +528,16 @@ final class Articles {
 	private function get_article_modified_date() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		if ( ! ( $post = $this->get_current_post() ) )
-			return array();
+			return [];
 
 		$i = strtotime( $post->post_modified );
 
-		return array(
+		return [
 			'dateModified' => \esc_attr( date( 'c', $i ) ),
-		);
+		];
 	}
 
 	/**
@@ -552,22 +552,22 @@ final class Articles {
 	private function get_article_author() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		if ( ! $post = $this->get_current_post() ) {
 			$this->invalidate( 'both' );
-			return array();
+			return [];
 		}
 
 		$author = \get_userdata( $post->post_author );
 		$name = $author->display_name;
 
-		return array(
-			'author' => array(
+		return [
+			'author' => [
 				'@type' => 'Person',
 				'name' => \esc_attr( $name ),
-			),
-		);
+			],
+		];
 	}
 
 	/**
@@ -582,7 +582,7 @@ final class Articles {
 	private function get_article_publisher() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		/**
 		 * Applies filters the_seo_framework_articles_name : string
@@ -600,11 +600,11 @@ final class Articles {
 
 		if ( ! $_img_id ) {
 			$this->invalidate( 'both' );
-			return array();
+			return [];
 		}
 
 		if ( $_default_img_id === $_img_id ) {
-			$size = array( 60, 60 );
+			$size = [ 60, 60 ];
 		} else {
 			$size = 'full';
 		}
@@ -619,21 +619,21 @@ final class Articles {
 
 		if ( empty( $url ) ) {
 			$this->invalidate( 'both' );
-			return array();
+			return [];
 		}
 
-		return array(
-			'publisher' => array(
+		return [
+			'publisher' => [
 				'@type' => 'Organization',
 				'name' => \esc_attr( $name ),
-				'logo' => array(
+				'logo' => [
 					'@type' => 'ImageObject',
 					'url' => \esc_url( $url ),
 					'width' => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
 					'height' => abs( filter_var( $h, FILTER_SANITIZE_NUMBER_INT ) ),
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 	/**
@@ -649,15 +649,15 @@ final class Articles {
 	private function get_article_description() {
 
 		if ( ! $this->is_amp() || ! $this->is_json_valid() )
-			return array();
+			return [];
 
 		$id = $this->get_current_id();
 
 		//* 155 length is an arbitrary guess, because there's no documentation on this.
-		$description = \the_seo_framework()->description_from_custom_field( array( 'id' => $id ) ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 );
+		$description = \the_seo_framework()->description_from_custom_field( [ 'id' => $id ] ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 );
 
-		return array(
+		return [
 			'description' => \esc_attr( $description ),
-		);
+		];
 	}
 }

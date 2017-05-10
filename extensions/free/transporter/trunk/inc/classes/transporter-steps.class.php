@@ -110,8 +110,8 @@ final class Transporter_Steps {
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
-	protected $request_name = array();
-	protected $nonce_action = array();
+	protected $request_name = [];
+	protected $nonce_action = [];
 
 	/**
 	 * The extension page ID/slug.
@@ -148,15 +148,15 @@ final class Transporter_Steps {
 	 *    'o_index'               => string
 	 * }
 	 */
-	public function _set_instance_properties( $vars = array() ) {
+	public function _set_instance_properties( $vars = [] ) {
 
-		$property_names = array(
+		$property_names = [
 			'nonce_name',
 			'request_name',
 			'nonce_action',
 			'transporter_page_slug',
 			'o_index',
-		);
+		];
 
 		foreach ( $vars as $property => $value ) {
 			if ( in_array( $property, $property_names, true ) ) :
@@ -335,7 +335,7 @@ final class Transporter_Steps {
 		$nonce = $this->_get_nonce_field( 'export' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'    => 'tsfem-e-transporter-export-form',
 			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'  => true,
@@ -343,7 +343,7 @@ final class Transporter_Steps {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
@@ -395,18 +395,18 @@ final class Transporter_Steps {
 		$class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-clipboard';
 		$textarea_id = \esc_js( $textarea_id );
 
-		$args = array(
+		$args = [
 			'url'   => '#',
 			'class' => $class,
 			'title' => $title,
 			'content' => $name,
 			'id'    => $textarea_id . '-clipboard-button',
-			'data'  => array(
+			'data'  => [
 				'clipboardid' => $textarea_id,
 				'clipboardtype' => 'application/json',
 				'clipboardaction' => $clipboard_action,
-			),
-		);
+			],
+		];
 
 		return \tsf_extension_manager()->get_link( $args );
 	}
@@ -437,7 +437,7 @@ final class Transporter_Steps {
 		$nonce = $this->_get_nonce_field( 'download' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'    => 'tsfem-e-transporter-download-form',
 			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'  => true,
@@ -445,7 +445,7 @@ final class Transporter_Steps {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
@@ -469,7 +469,7 @@ final class Transporter_Steps {
 		$nonce = $this->_get_nonce_field( 'import' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'    => 'tsfem-e-transporter-import-form',
 			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'  => true,
@@ -477,7 +477,7 @@ final class Transporter_Steps {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
@@ -508,7 +508,7 @@ final class Transporter_Steps {
 		$nonce = $this->_get_nonce_field( 'upload' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'    => 'tsfem-e-transporter-upload-form',
 			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'  => true,
@@ -516,7 +516,7 @@ final class Transporter_Steps {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}

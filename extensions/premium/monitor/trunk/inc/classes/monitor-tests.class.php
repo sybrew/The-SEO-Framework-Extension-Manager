@@ -133,10 +133,10 @@ final class Monitor_Tests {
 		$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
 
 		end : {
-			return array(
+			return [
 				'content' => $content,
 				'state' => $state,
-			);
+			];
 		}
 	}
 
@@ -160,7 +160,7 @@ final class Monitor_Tests {
 			goto end;
 		}
 
-		$links = array();
+		$links = [];
 
 		foreach ( $data as $value ) :
 			if ( isset( $value['value'] ) && false === $value['value'] ) :
@@ -168,8 +168,8 @@ final class Monitor_Tests {
 
 				if ( false !== $id ) {
 					$home = isset( $value['home'] ) && $value['home'];
-					$url = \the_seo_framework()->the_url( '', array( 'home' => $home, 'external' => true, 'id' => $id ) );
-					$title = \the_seo_framework()->title( '', '', '', array( 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ) );
+					$url = \the_seo_framework()->the_url( '', [ 'home' => $home, 'external' => true, 'id' => $id ] );
+					$title = \the_seo_framework()->title( '', '', '', [ 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ] );
 
 					$links[] = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $title );
 				}
@@ -195,10 +195,10 @@ final class Monitor_Tests {
 		$content .= $this->small_sample_disclaimer();
 
 		end : {
-			return array(
+			return [
 				'content' => $content,
 				'state' => $state,
-			);
+			];
 		}
 	}
 
@@ -224,7 +224,7 @@ final class Monitor_Tests {
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ),
-					array( 'code' )
+					[ 'code' ]
 				)
 			);
 			goto end;
@@ -245,8 +245,8 @@ final class Monitor_Tests {
 		$sample_tsf = \the_seo_framework()->robots_txt();
 
 		//* Normalize.
-		$sample_tsf = \esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $sample_tsf ) ) );
-		$data['value'] = \esc_html( str_replace( array( "\r\n", "\r", "\n" ), '', trim( $data['value'] ) ) );
+		$sample_tsf = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $sample_tsf ) ) );
+		$data['value'] = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $data['value'] ) ) );
 
 		if ( $sample_tsf === $data['value'] ) {
 			$state = 'good';
@@ -254,7 +254,7 @@ final class Monitor_Tests {
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
-					array( 'code' )
+					[ 'code' ]
 				)
 			);
 			goto end;
@@ -266,7 +266,7 @@ final class Monitor_Tests {
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is not handled by The SEO Framework.', 'the-seo-framework-extension-manager' ),
-					array( 'code' )
+					[ 'code' ]
 				)
 			);
 			goto end;
@@ -278,18 +278,18 @@ final class Monitor_Tests {
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' ),
-					array( 'code' )
+					[ 'code' ]
 				)
 			);
 			goto end;
 		}
 
-		end : {
-			return array(
-				'content' => $content,
-				'state' => $state,
-			);
-		}
+		end :;
+
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
 	}
 
 	/**
@@ -335,12 +335,11 @@ final class Monitor_Tests {
 			$content = $this->wrap_info( $this->no_issue_found() );
 		}
 
-		end : {
-			return array(
-				'content' => $content,
-				'state' => $state,
-			);
-		}
+		end :;
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
 	}
 
 	/**
@@ -352,10 +351,10 @@ final class Monitor_Tests {
 	 * @return string The information string in HTML.
 	 */
 	public function issue_moresoon( $data ) {
-		return array(
+		return [
 			'content' => $this->wrap_info( \esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
 			'state' => 'unknown',
-		);
+		];
 	}
 
 	/**

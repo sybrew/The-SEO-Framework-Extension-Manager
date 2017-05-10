@@ -82,8 +82,8 @@ final class Monitor_Admin extends Monitor_Api {
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
-	protected $request_name = array();
-	protected $nonce_action = array();
+	protected $request_name = [];
+	protected $nonce_action = [];
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -111,7 +111,7 @@ final class Monitor_Admin extends Monitor_Api {
 	private function construct() {
 
 		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
-		$this->request_name = array(
+		$this->request_name = [
 			//* Reference convenience.
 			'default' => 'default',
 
@@ -129,8 +129,8 @@ final class Monitor_Admin extends Monitor_Api {
 
 			//* Fix instance.
 			'fix' => 'fix',
-		);
-		$this->nonce_action = array(
+		];
+		$this->nonce_action = [
 			//* Reference convenience.
 			'default' => 'tsfem_e_monitor_nonce_action',
 
@@ -148,7 +148,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 			//* Fix instance.
 			'fix' => 'tsfem_e_monitor_nonce_action_monitor_fix',
-		);
+		];
 
 		$this->monitor_page_slug = 'theseoframework-monitor';
 
@@ -165,22 +165,22 @@ final class Monitor_Admin extends Monitor_Api {
 		$this->o_index = 'monitor';
 
 		//* Initialize menu links
-		\add_action( 'admin_menu', array( $this, '_init_menu' ) );
+		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
 		//* Initialize Monitor page actions.
-		\add_action( 'admin_init', array( $this, '_load_monitor_admin_actions' ) );
+		\add_action( 'admin_init', [ $this, '_load_monitor_admin_actions' ] );
 
 		//* Update POST listener.
-		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		//* AJAX update listener.
-		\add_action( 'wp_ajax_tsfem_e_monitor_update', array( $this, '_wp_ajax_update_data' ) );
+		\add_action( 'wp_ajax_tsfem_e_monitor_update', [ $this, '_wp_ajax_update_data' ] );
 
 		//* AJAX crawl listener.
-		\add_action( 'wp_ajax_tsfem_e_monitor_crawl', array( $this, '_wp_ajax_request_crawl' ) );
+		\add_action( 'wp_ajax_tsfem_e_monitor_crawl', [ $this, '_wp_ajax_request_crawl' ] );
 
 		//* AJAX get required fix listener.
-		\add_action( 'wp_ajax_tsfem_e_monitor_get_requires_fix', array( $this, '_wp_ajax_get_requires_fix' ) );
+		\add_action( 'wp_ajax_tsfem_e_monitor_get_requires_fix', [ $this, '_wp_ajax_get_requires_fix' ] );
 
 	}
 
@@ -195,7 +195,7 @@ final class Monitor_Admin extends Monitor_Api {
 	public function _init_menu() {
 
 		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
-			\add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
 	}
 
 	/**
@@ -208,14 +208,14 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	public function _add_menu_link() {
 
-		$menu = array(
+		$menu = [
 			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Monitor', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->monitor_page_slug,
-			'callback'    => array( $this, '_init_monitor_page' ),
-		);
+			'callback'    => [ $this, '_init_monitor_page' ],
+		];
 
 		$this->monitor_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
@@ -235,7 +235,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * @access private
 	 */
 	public function _load_monitor_admin_actions() {
-		\add_action( 'load-' . $this->monitor_menu_page_hook, array( $this, '_do_monitor_admin_actions' ) );
+		\add_action( 'load-' . $this->monitor_menu_page_hook, [ $this, '_do_monitor_admin_actions' ] );
 	}
 
 	/**
@@ -268,13 +268,13 @@ final class Monitor_Admin extends Monitor_Api {
 		$this->init_errors();
 
 		//* Add something special for Vivaldi
-		\add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
+		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		//* Add footer output.
-		\add_action( 'in_admin_footer', array( $this, '_init_monitor_footer_wrap' ) );
+		\add_action( 'in_admin_footer', [ $this, '_init_monitor_footer_wrap' ] );
 
 		//* Update POST listener.
-		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		return true;
 	}
@@ -319,11 +319,11 @@ final class Monitor_Admin extends Monitor_Api {
 				break;
 
 			default :
-				$this->set_error_notice( array( 1010101 => '' ) );
+				$this->set_error_notice( [ 1010101 => '' ] );
 				break;
 		endswitch;
 
-		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
+		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
 		exit;
 	}
@@ -345,7 +345,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
 
-		static $validated = array();
+		static $validated = [];
 
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
@@ -370,7 +370,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( array( 1019001 => '' ) );
+			$this->set_error_notice( [ 1019001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
 			exit;
 		}
@@ -414,20 +414,20 @@ final class Monitor_Admin extends Monitor_Api {
 						endswitch;
 
 						//* @TODO make stats an specific beautfied AJAX fetcher.
-						$status = array(
-							'content' => array(
+						$status = [
+							'content' => [
 								'issues' => $this->ajax_get_issues_data(),
 								'stats' => $this->ajax_get_stats_data(),
-							),
+							],
 							'type' => $type,
 							'notice' => $response['notice'],
 							//* Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_data_timeout(),
-						);
+						];
 					else :
 						//* No new data has been found.
 						$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
-						$status = array(
+						$status = [
 							'content' => null,
 							'type' => 'yield_unchanged',
 							'notice' => sprintf(
@@ -435,24 +435,24 @@ final class Monitor_Admin extends Monitor_Api {
 								(int) $seconds
 							),
 							'timeout' => $current_timeout,
-						);
+						];
 					endif;
 				else :
-					$status = array(
+					$status = [
 						'content' => null,
 						'type' => 'unknown',
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					);
+					];
 				endif;
 
 				if ( WP_DEBUG ) {
-					$response = array(
+					$response = [
 						'status' => $status,
-						'timeout' => array( 'old' => $timeout, 'new' => $current_timeout ),
+						'timeout' => [ 'old' => $timeout, 'new' => $current_timeout ],
 						'response' => compact( 'response' ),
-					);
+					];
 				} else {
-					$response = array( 'status' => $status );
+					$response = [ 'status' => $status ];
 				}
 
 				\tsf_extension_manager()->send_json( $response, null );
@@ -501,39 +501,39 @@ final class Monitor_Admin extends Monitor_Api {
 								break;
 						endswitch;
 
-						$status = array(
+						$status = [
 							'type' => $type,
 							'notice' => $response['notice'],
 							//* Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_crawl_timeout(),
-						);
+						];
 					else :
 						//* Crawl has already been requested recently.
 						$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
-						$status = array(
+						$status = [
 							'type' => 'yield_unchanged',
 							'notice' => sprintf(
-								\esc_html( _n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
+								\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
 								(int) $seconds
 							),
 							'timeout' => $current_timeout,
-						);
+						];
 					endif;
 				else :
-					$status = array(
+					$status = [
 						'type' => 'unknown',
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					);
+					];
 				endif;
 
 				if ( WP_DEBUG ) {
-					$response = array(
+					$response = [
 						'status' => $status,
-						'timeout' => array( 'old' => $timeout, 'new' => $current_timeout ),
+						'timeout' => [ 'old' => $timeout, 'new' => $current_timeout ],
 						'response' => compact( 'response' ),
-					);
+					];
 				} else {
-					$response = array( 'status' => $status );
+					$response = [ 'status' => $status ];
 				}
 
 				\tsf_extension_manager()->send_json( $response, null );
@@ -582,33 +582,33 @@ final class Monitor_Admin extends Monitor_Api {
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
-		$this->additional_css = array(
-			array(
+		$this->additional_css = [
+			[
 				'name' => 'tsfem-monitor',
 				'base' => TSFEM_E_MONITOR_DIR_URL,
 				'ver' => TSFEM_E_MONITOR_VERSION,
-			),
-		);
+			],
+		];
 
-		$this->additional_js = array(
-			array(
+		$this->additional_js = [
+			[
 				'name' => 'tsfem-monitor',
 				'base' => TSFEM_E_MONITOR_DIR_URL,
 				'ver' => TSFEM_E_MONITOR_VERSION,
-			),
-		);
+			],
+		];
 
-		$this->additional_l10n = array(
-			array(
+		$this->additional_l10n = [
+			[
 				'dependency' => 'tsfem-monitor',
 				'name' => 'tsfem_e_monitorL10n',
-				'strings' => array(
+				'strings' => [
 					'nonce' => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
 					'remote_data_timeout' => $this->get_remote_data_timeout(),
 					'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$this->init_ui();
 	}
@@ -760,7 +760,7 @@ final class Monitor_Admin extends Monitor_Api {
 	protected function get_issues_overview() {
 
 		$output = '';
-		$issues = $this->get_data( 'issues', array() );
+		$issues = $this->get_data( 'issues', [] );
 
 		if ( empty( $issues ) ) {
 			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
@@ -784,7 +784,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	protected function ajax_get_issues_data() {
 
-		$issues = $this->get_data( 'issues', array() );
+		$issues = $this->get_data( 'issues', [] );
 
 		if ( empty( $issues ) ) {
 			$found = false;
@@ -795,10 +795,10 @@ final class Monitor_Admin extends Monitor_Api {
 			$data = $instance->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
-		return array(
+		return [
 			'found' => $found,
 			'data' => $data,
-		);
+		];
 	}
 
 	/**
@@ -847,8 +847,8 @@ final class Monitor_Admin extends Monitor_Api {
 	 */
 	protected function get_site_actions() {
 
-		$buttons = array();
-		$description = array();
+		$buttons = [];
+		$description = [];
 
 		$buttons[1] = $this->get_update_button();
 		$description[1] = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
@@ -901,7 +901,7 @@ final class Monitor_Admin extends Monitor_Api {
 		$nonce = $this->_get_nonce_field( 'update' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'         => 'tsfem-e-monitor-update-form',
 			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'       => true,
@@ -909,7 +909,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
@@ -931,7 +931,7 @@ final class Monitor_Admin extends Monitor_Api {
 		$nonce = $this->_get_nonce_field( 'crawl' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'         => 'tsfem-e-monitor-crawl-form',
 			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'       => true,
@@ -939,7 +939,7 @@ final class Monitor_Admin extends Monitor_Api {
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
@@ -972,7 +972,7 @@ final class Monitor_Admin extends Monitor_Api {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
-		$domain = str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
+		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \home_url() ) );
 		$_domain = $this->get_expected_domain();
 		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );
@@ -1036,11 +1036,11 @@ final class Monitor_Admin extends Monitor_Api {
 		$nonce = $this->_get_nonce_field( 'fix' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
-		$args = array(
+		$args = [
 			'id'    => 'tsfem-e-monitor-fix-form',
 			'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'  => false,
-		);
+		];
 
 		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
@@ -1095,7 +1095,7 @@ final class Monitor_Admin extends Monitor_Api {
 		);
 
 		$output = '';
-		$stats = $this->get_data( 'stats', array() );
+		$stats = $this->get_data( 'stats', [] );
 
 		if ( empty( $stats ) ) {
 			$output .= $this->get_string_no_data_found();
@@ -1155,7 +1155,7 @@ final class Monitor_Admin extends Monitor_Api {
 	 * @param array $args The arguments to be supplied within the file name.
 	 *        Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = array() ) {
+	protected function get_view( $view, array $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;

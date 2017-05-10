@@ -9,12 +9,12 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\transporter_
 /**
  * Because positivity.
  */
-$mottos = array(
+$mottos = [
 	'elementary',
 	'evolutionary',
 	'advancing',
 	'adaptive',
-);
+];
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto = 'An ' . $mottos[ $motto_key ] . ' Movement';
 

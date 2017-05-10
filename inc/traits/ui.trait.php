@@ -65,7 +65,7 @@ trait UI {
 	 *
 	 * @var array Additional CSS scripts containing name and location.
 	 */
-	private $additional_css = array();
+	private $additional_css = [];
 
 	/**
 	 * Additional JS scripts to be loaded.
@@ -74,7 +74,7 @@ trait UI {
 	 *
 	 * @var array Additional JS scripts containing name and location.
 	 */
-	private $additional_js = array();
+	private $additional_js = [];
 
 	/**
 	 * Additional l10n strings to be loaded.
@@ -83,7 +83,7 @@ trait UI {
 	 *
 	 * @var array Additional l10n strings containing name, dependency and strings.
 	 */
-	private $additional_l10n = array();
+	private $additional_l10n = [];
 
 	/**
 	 * Initializes the UI traits.
@@ -97,10 +97,10 @@ trait UI {
 		\add_action( 'update_footer', '__return_empty_string' );
 
 		//* Add body class.
-		\add_action( 'admin_body_class', array( $this, 'add_admin_body_class' ), 999, 1 );
+		\add_action( 'admin_body_class', [ $this, 'add_admin_body_class' ], 999, 1 );
 
 		//* Enqueue admin scripts.
-		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ), 0, 1 );
+		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ], 0, 1 );
 
 	}
 
@@ -126,10 +126,10 @@ trait UI {
 			$this->js_name = 'tsfem';
 
 			//* Enqueue styles
-			\add_action( 'admin_print_styles-' . $this->ui_hook, array( $this, 'enqueue_admin_css' ), 11 );
+			\add_action( 'admin_print_styles-' . $this->ui_hook, [ $this, 'enqueue_admin_css' ], 11 );
 			//* Enqueue scripts
-			\add_action( 'admin_print_scripts-' . $this->ui_hook, array( $this, 'enqueue_admin_javascript' ), 11 );
-			\add_action( 'admin_footer', array( $this, '_localize_admin_javascript' ) );
+			\add_action( 'admin_print_scripts-' . $this->ui_hook, [ $this, 'enqueue_admin_javascript' ], 11 );
+			\add_action( 'admin_footer', [ $this, '_localize_admin_javascript' ] );
 		}
 	}
 
@@ -193,7 +193,7 @@ trait UI {
 		\wp_register_style(
 			$this->css_name,
 			TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css",
-			array( 'dashicons' ),
+			[ 'dashicons' ],
 			TSF_EXTENSION_MANAGER_VERSION,
 			'all'
 		);
@@ -203,7 +203,7 @@ trait UI {
 				\wp_register_style(
 					$script['name'],
 					$script['base'] . "lib/css/{$script['name']}{$rtl}{$suffix}.css",
-					array( $this->css_name ),
+					[ $this->css_name ],
 					$script['ver'],
 					'all'
 				);
@@ -232,7 +232,7 @@ trait UI {
 		\wp_register_script(
 			$this->js_name,
 			TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js",
-			array( 'jquery' ),
+			[ 'jquery' ],
 			TSF_EXTENSION_MANAGER_VERSION,
 			true
 		);
@@ -242,7 +242,7 @@ trait UI {
 				\wp_register_script(
 					$script['name'],
 					$script['base'] . "lib/js/{$script['name']}{$suffix}.js",
-					array( $this->js_name ),
+					[ $this->js_name ],
 					$script['ver'],
 					'all'
 				);
@@ -270,10 +270,10 @@ trait UI {
 		if ( isset( $l7d ) )
 			return;
 
-		$strings = array(
+		$strings = [
 			'nonce' => \wp_create_nonce( 'tsfem-ajax-nonce' ),
 			'debug' => (bool) WP_DEBUG,
-			'i18n' => array(
+			'i18n' => [
 				'Activate' => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 				'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 				'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
@@ -281,9 +281,9 @@ trait UI {
 				'TimeoutError' => \esc_html__( 'Timeout: Server took too long to respond. Reload the page.', 'the-seo-framework-extension-manager' ),
 				'FatalError' => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
 				'ParseError' => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
-			),
+			],
 			'rtl' => (bool) \is_rtl(),
-		);
+		];
 
 		\wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
 

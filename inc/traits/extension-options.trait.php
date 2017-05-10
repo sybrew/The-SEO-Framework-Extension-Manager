@@ -51,7 +51,7 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 */
 	private static function init_options_cache() {
-		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, array() );
+		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, [] );
 	}
 
 	/**
@@ -132,7 +132,7 @@ trait Extension_Options {
 	 *
 	 * @return array Current extension options.
 	 */
-	final protected function get_all_options() {
+	final protected function get_extension_options() {
 
 		$options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
 
@@ -142,7 +142,7 @@ trait Extension_Options {
 			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->o_index.' );
 		}
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -159,7 +159,7 @@ trait Extension_Options {
 		if ( ! $option )
 			return null;
 
-		$options = $this->get_all_options();
+		$options = $this->get_extension_options();
 
 		return isset( $options[ $option ] ) ? $options[ $option ] : $default;
 	}
@@ -178,7 +178,7 @@ trait Extension_Options {
 		if ( ! $option || ! $this->o_index )
 			return false;
 
-		$options = $this->get_all_options();
+		$options = $this->get_extension_options();
 
 		//* If option is unchanged, return true.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
@@ -213,7 +213,7 @@ trait Extension_Options {
 		if ( ! $option || ! $this->o_index )
 			return false;
 
-		$options = $this->get_all_options();
+		$options = $this->get_extension_options();
 
 		//* If option is non existent, return true.
 		if ( ! isset( $options[ $option ] ) )

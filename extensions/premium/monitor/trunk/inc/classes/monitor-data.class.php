@@ -79,7 +79,7 @@ class Monitor_Data {
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
-		$data = $this->get_option( $type, array() );
+		$data = $this->get_option( $type, [] );
 
 		if ( empty( $data ) )
 			$data = $this->get_remote_data( $type );
@@ -107,7 +107,7 @@ class Monitor_Data {
 		 * Option cache should be updated.
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
-		return $this->get_option( $type, array() );
+		return $this->get_option( $type, [] );
 	}
 
 	/**

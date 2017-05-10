@@ -55,7 +55,7 @@ class API extends Core {
 	 * @return string Domain Host.
 	 */
 	protected function get_activation_site_domain() {
-		return str_ireplace( array( 'http://', 'https://' ), '', \esc_url( \home_url() ) );
+		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \home_url() ) );
 	}
 
 	/**
@@ -106,7 +106,7 @@ class API extends Core {
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
 	 */
-	protected function get_api_url( $args = array() ) {
+	protected function get_api_url( $args = [] ) {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
@@ -145,18 +145,18 @@ class API extends Core {
 	 */
 	protected function get_api_response( array $args ) {
 
-		$defaults = array(
+		$defaults = [
 			'request'     => '',
 			'email'       => '',
 			'licence_key' => '',
 			'instance'    => $this->get_activation_instance( false ),
 			'platform'    => $this->get_activation_site_domain(),
-		);
+		];
 
 		$args = \wp_parse_args( $args, $defaults );
 
 		if ( empty( $args['request'] ) ) {
-			$this->set_error_notice( array( 201 => '' ) );
+			$this->set_error_notice( [ 201 => '' ] );
 			return false;
 		}
 
@@ -169,15 +169,15 @@ class API extends Core {
 		 * Applies filters 'tsf_extension_manager_http_request_version' : string
 		 *		1.1 is used for improved performance. Default is '1.0'
 		 */
-		$http_args = array(
+		$http_args = [
 			'timeout' => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
 			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
-		);
+		];
 
 		$request = \wp_safe_remote_get( $target_url, $http_args );
 
 		if ( 200 !== (int) \wp_remote_retrieve_response_code( $request ) ) {
-			$this->set_error_notice( array( 202 => '' ) );
+			$this->set_error_notice( [ 202 => '' ] );
 			return false;
 		}
 
@@ -200,7 +200,7 @@ class API extends Core {
 	protected function handle_response( $type = 'status', $response = '', $explain = false ) {
 
 		if ( empty( $response ) ) {
-			$this->set_error_notice( array( 301 => '' ) );
+			$this->set_error_notice( [ 301 => '' ] );
 			return false;
 		}
 
@@ -226,37 +226,37 @@ class API extends Core {
 			switch ( $results['code'] ) :
 				case '100' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 302 => $additional_info ) );
+					$this->set_error_notice( [ 302 => $additional_info ] );
 					$free or $this->do_deactivation( true );
 					break;
 				case '101' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 303 => $additional_info ) );
+					$this->set_error_notice( [ 303 => $additional_info ] );
 					$free or $this->do_deactivation();
 					break;
 				case '102' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 304 => $additional_info ) );
+					$this->set_error_notice( [ 304 => $additional_info ] );
 					$free or $this->do_deactivation();
 					break;
 				case '103' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 305 => $additional_info ) );
+					$this->set_error_notice( [ 305 => $additional_info ] );
 					$free or $this->do_deactivation();
 					break;
 				case '104' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 306 => $additional_info ) );
+					$this->set_error_notice( [ 306 => $additional_info ] );
 					$free or $this->do_deactivation();
 					break;
 				case '105' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 307 => $additional_info ) );
+					$this->set_error_notice( [ 307 => $additional_info ] );
 					$free or $this->do_deactivation();
 					break;
 				case '106' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-					$this->set_error_notice( array( 308 => $additional_info ) );
+					$this->set_error_notice( [ 308 => $additional_info ] );
 					$free or $this->do_deactivation( true );
 					break;
 				default :

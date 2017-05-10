@@ -46,7 +46,7 @@ trait Extensions_i18n {
 		if ( isset( $i18n ) )
 			return $i18n;
 
-		return $i18n = array(
+		return $i18n = [
 			'free'            => \__( 'Free', 'the-seo-framework-extension-manager' ),
 			'premium'         => \__( 'Premium', 'the-seo-framework-extension-manager' ),
 			'activate'        => \__( 'Activate', 'the-seo-framework-extension-manager' ),
@@ -62,7 +62,7 @@ trait Extensions_i18n {
 			'incompatible'    => \__( 'Incompatible', 'the-seo-framework-extension-manager' ),
 			'menupage'        => \__( 'Menu Page', 'the-seo-framework-extension-manager' ),
 			'visit-menupage'  => \__( 'Visit the extension menu page', 'the-seo-framework-extension-manager' ),
-		);
+		];
 	}
 
 	/**
@@ -171,11 +171,11 @@ trait Extensions_Layout {
 			$one = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
 		}
 
-		$items = array(
+		$items = [
 			'svg' => $svg,
 			'2x' => $two,
 			'1x' => $one,
-		);
+		];
 
 		if ( $items['svg'] ) {
 			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', \esc_url( $items['svg'] ), \esc_url( $items['1x'] ), \esc_attr( $size ) );
@@ -217,7 +217,7 @@ trait Extensions_Layout {
 	private static function make_extension_header( $extension ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
-		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( \esc_html( $data['Name'] ), array( 'strong', 'em' ) ) );
+		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( \esc_html( $data['Name'] ), [ 'strong', 'em' ] ) );
 
 		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
 		$type = '<h5 class="tsfem-extension-type">' . \esc_html( $type ) . '</h5>';
@@ -259,20 +259,20 @@ trait Extensions_Layout {
 	 */
 	private static function make_extension_buttons( $extension ) {
 
-		$buttons = array();
+		$buttons = [];
 
 		if ( static::is_extension_active( $extension ) ) {
-			$buttons[] = array(
+			$buttons[] = [
 				'type' => 'deactivate',
 				'disabled' => false,
-			);
+			];
 		} else {
 			//* Disable if: Extension is not compatible || User isn't premium and extension is.
 			$disabled = static::is_extension_compatible( $extension ) === -1 || ( ! self::is_premium_user() && static::is_extension_premium( $extension ) );
-			$buttons[] = array(
+			$buttons[] = [
 				'type' => 'activate',
 				'disabled' => $disabled,
-			);
+			];
 		}
 
 		$output = '';
@@ -349,7 +349,7 @@ trait Extensions_Layout {
 		$data = static::get_extension_header( $extension['slug'] );
 
 		$description = $data['Description'];
-		$description = \tsf_extension_manager()->convert_markdown( \esc_html( $description ), array( 'strong', 'em', 'a' ) );
+		$description = \tsf_extension_manager()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
 
 		$footer = static::get_extension_description_footer( $extension );
 
@@ -385,7 +385,7 @@ trait Extensions_Layout {
 		//* Make extension version element.
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
-			\tsf_extension_manager()->convert_markdown( $data['Version'], array( 'strong', 'em' ) )
+			\tsf_extension_manager()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
 
 		//* Make extension home element.

@@ -42,7 +42,7 @@ final class SecureOption extends Secure_Abstract {
 	 *
 	 * @var array The instance array.
 	 */
-	private static $_instance = array();
+	private static $_instance = [];
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -104,7 +104,7 @@ final class SecureOption extends Secure_Abstract {
 		switch ( self::get_property( '_type' ) ) :
 			case 'update_option' :
 			case 'update_option_instance' :
-				static::$_instance = array( $instance, $bits );
+				static::$_instance = [ $instance, $bits ];
 				return true;
 				break;
 
@@ -162,7 +162,7 @@ final class SecureOption extends Secure_Abstract {
 					$notice = "Options have been altered outside of this plugin's scope. This is not allowed for security reasons. Please deactivate your account and try again.";
 
 					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-						echo json_encode( array( 'status' => array( 'success' => false, 'notice' => \esc_html( $notice ) ) ) );
+						echo json_encode( [ 'status' => [ 'success' => false, 'notice' => \esc_html( $notice ) ] ] );
 						\wp_die();
 					} else {
 						\wp_die( \esc_html( $notice ) );

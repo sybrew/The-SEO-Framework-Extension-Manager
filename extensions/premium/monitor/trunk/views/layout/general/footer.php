@@ -9,13 +9,13 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\monitor_clas
 /**
  * Because positivity.
  */
-$mottos = array(
+$mottos = [
 	'simple',
 	'prospective',
 	'thorough',
 	'prolonged',
 	'magnified',
-);
+];
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto = 'A ' . $mottos[ $motto_key ] . ' Solution';
 

@@ -14,9 +14,9 @@ $nonce_action = $this->_get_nonce_action_field( 'connect' );
 $nonce = $this->_get_nonce_field( 'connect' );
 $submit = $this->_get_submit_button( $name, $title, $class );
 
-$args = array(
+$args = [
 	'id' => 'tsfem-e-monitor-connect-form',
 	'input' => compact( 'nonce_action', 'nonce', 'submit' ),
-);
+];
 
 $this->_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );

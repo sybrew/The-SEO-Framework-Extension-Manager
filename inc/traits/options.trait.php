@@ -53,7 +53,7 @@ trait Options {
 	final protected function get_all_options() {
 
 		if ( $this->killed_options )
-			return array();
+			return [];
 
 		static $cache = null;
 
@@ -64,7 +64,7 @@ trait Options {
 		\remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		\remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
-		return $cache = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+		return $cache = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 	}
 
 	/**
@@ -82,9 +82,9 @@ trait Options {
 			return null;
 
 		if ( $this->killed_options )
-			return array();
+			return [];
 
-		static $options_cache = array();
+		static $options_cache = [];
 
 		if ( isset( $options_cache[ $option ] ) )
 			return $options_cache[ $option ];
@@ -132,7 +132,7 @@ trait Options {
 		$_options = $this->get_all_options();
 
 		//* Cache current options from loop. This is used for activation where _instance needs to be used.
-		static $options = array();
+		static $options = [];
 
 		if ( empty( $options ) )
 			$options = $_options;
@@ -157,7 +157,7 @@ trait Options {
 		$this->set_options_instance( $options, $key );
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( array( 7001 => '' ) );
+			$this->set_error_notice( [ 7001 => '' ] );
 
 			//* Revert option.
 			if ( false === $kill )
@@ -181,7 +181,7 @@ trait Options {
 	 * @param bool $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	final protected function update_option_multi( array $options = array(), $type = 'instance', $kill = false ) {
+	final protected function update_option_multi( array $options = [], $type = 'instance', $kill = false ) {
 
 		static $run = false;
 
@@ -221,7 +221,7 @@ trait Options {
 		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( array( 7002 => '' ) );
+			$this->set_error_notice( [ 7002 => '' ] );
 
 			//* Revert option.
 			if ( false === $kill )
@@ -297,12 +297,12 @@ trait Options {
 			$update = $this->update_options_instance( $hash, $key );
 
 			if ( false === $update ) {
-				$this->set_error_notice( array( 7001 => '' ) );
+				$this->set_error_notice( [ 7001 => '' ] );
 				return false;
 			}
 			return true;
 		} else {
-			$this->set_error_notice( array( 7002 => '' ) );
+			$this->set_error_notice( [ 7002 => '' ] );
 			return false;
 		}
 	}
@@ -380,7 +380,7 @@ trait Options {
 	 */
 	final protected function kill_options() {
 
-		$success = array();
+		$success = [];
 		$success[] = $this->delete_options_instance();
 		$success[] = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 

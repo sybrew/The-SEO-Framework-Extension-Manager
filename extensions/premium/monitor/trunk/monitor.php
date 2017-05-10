@@ -69,7 +69,7 @@ define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTO
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\monitor_init', 11 );
 /**
- * Initialize the extension.
+ * Initializes the extension.
  *
  * @since 1.0.0
  * @staticvar bool $loaded

@@ -41,8 +41,8 @@ final class LoadAdmin extends AdminPages {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-		\add_action( 'admin_notices', array( $this, 'check_external_blocking' ) );
-		\add_action( 'admin_notices', array( $this, 'do_activation_notice' ) );
+		\add_action( 'admin_notices', [ $this, 'check_external_blocking' ] );
+		\add_action( 'admin_notices', [ $this, 'do_activation_notice' ] );
 	}
 
 	/**
@@ -62,14 +62,14 @@ final class LoadAdmin extends AdminPages {
 			$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
 			if ( false === defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
-
-				$warning = '<strong>' . \esc_html__( 'Warning!', 'the-seo-framework-extension-manager' ) . '</strong>';
-				/* translators: %1$s: Warning!. %2$s Plugin API host URL. %3$s, WordPress PHP constant. */
-				$notice = sprintf(
-					\esc_html__( '%1$s Your website is blocking external requests. This means you will not be able to download software. Please add %2$s to %3$s', 'the-seo-framework-extension-manager' ),
-					$warning, \esc_html( $host ), '<code>WP_ACCESSIBLE_HOSTS</code>'
+				/* translators: Markdown. %s = API URL */
+				$notice = $this->convert_markdown(
+					sprintf(
+						\esc_html__( 'Your website is blocking external requests. This means you will not be able to connect to the API services. Please add %s to `WP_ACCESSIBLE_HOSTS`.', 'the-seo-framework-extension-manager' ),
+						\esc_html( $host )
+					),
+					[ 'code' ]
 				);
-
 				//* Already escaped.
 				\the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
 			}

@@ -38,7 +38,7 @@ trait Extensions_Properties {
 	 *
 	 * @var array $extensions
 	 */
-	private static $extensions = array();
+	private static $extensions = [];
 
 	/**
 	 * Holds the instance extension slug to handle.
@@ -47,7 +47,7 @@ trait Extensions_Properties {
 	 *
 	 * @var string $current_slug
 	 */
-	private static $current_slug = array();
+	private static $current_slug = [];
 
 	/**
 	 * Fetches all extensions.
@@ -78,8 +78,8 @@ trait Extensions_Properties {
 		 * this?), so build something positive from those skills! Become an awesome
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
-		return array(
-			'amp' => array(
+		return [
+			'amp' => [
 				'slug' => 'amp',
 				'network' => '0',
 				'type' => 'free',
@@ -87,13 +87,13 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1487063732',
+				'last_updated' => '1494391221',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.8.2',
 				'tested_tsf' => '2.9.2',
-			),
-			'articles' => array(
+			],
+			'articles' => [
 				'slug' => 'articles',
 				'network' => '0',
 				'type' => 'premium',
@@ -101,13 +101,13 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1485597487',
+				'last_updated' => '1494391221',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.8.2',
 				'tested_tsf' => '2.9.2',
-			),
-			'monitor' => array(
+			],
+			'monitor' => [
 				'slug' => 'monitor',
 				'network' => '0',
 				'type' => 'premium',
@@ -115,13 +115,13 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1485584144',
+				'last_updated' => '1494391221',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.2',
-			),
-			'incognito' => array(
+			],
+			'incognito' => [
 				'slug' => 'incognito',
 				'network' => '0',
 				'type' => 'free',
@@ -129,13 +129,13 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1484977702',
+				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.2.0',
 				'tested_tsf' => '2.9.2',
-			),
-			'title-fix' => array(
+			],
+			'title-fix' => [
 				'slug' => 'title-fix',
 				'network' => '0',
 				'type' => 'free',
@@ -143,13 +143,13 @@ trait Extensions_Properties {
 				'version' => '1.0.2',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1484979324',
+				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.2',
-			),
-			'transporter' => array(
+			],
+			'transporter' => [
 				'slug' => 'transporter',
 				'network' => '0',
 				'type' => 'free',
@@ -157,13 +157,27 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1490950250',
+				'last_updated' => '1494391221',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.2',
-			),
-		);
+			],
+			'honeypot' => [
+				'slug' => 'honeypot',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'spam',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1494391221',
+				'requires' => '4.4.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '2.9.2',
+			],
+		];
 	}
 
 	/**
@@ -178,11 +192,11 @@ trait Extensions_Properties {
 	 * }
 	 */
 	private static function get_external_extensions_checksum() {
-		return array(
-			'sha256' => '48627616fd256f5097fc7c88cc4e5d9e8c01b9186aefab837c5a5f101fffa8b1',
-			'sha1'   => 'bd6591a30e0c935f75847d8c7ffdc785c38dbeea',
-			'md5'    => 'e6c31f1ea32dd0e48052c0de6c881132',
-		);
+		return [
+			'sha256' => '44f4dfd9f861ed9fb84ae4e981dc9c617c543828a65eb2e94fd24c2a178fd9ad',
+			'sha1'   => '079bc18ed16c95cfba2cf7df8e9ef73b763230b0',
+			'md5'    => '20b2edf5bbf422606640f9d28d315602',
+		];
 	}
 
 	/**
@@ -206,11 +220,11 @@ trait Extensions_Properties {
 				return $extensions[ $slug ];
 			} else {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify an existing extension slug.' );
-				return array();
+				return [];
 			}
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify a slug.' );
-			return array();
+			return [];
 		}
 	}
 
@@ -269,7 +283,7 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_relative_path( $slug ) {
 
-		static $path = array();
+		static $path = [];
 
 		if ( isset( $path[ $slug ] ) )
 			return $path[ $slug ];
@@ -321,12 +335,12 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_header( $slug ) {
 
-		static $data = array();
+		static $data = [];
 
 		if ( isset( $data[ $slug ] ) )
 			return $data[ $slug ];
 
-		$default_headers = array(
+		$default_headers = [
 			'Name'         => 'Extension Name',
 			'ExtensionURI' => 'Extension URI',
 			'Version'      => 'Extension Version',
@@ -337,7 +351,7 @@ trait Extensions_Properties {
 			'Network'      => 'Extension Network',
 			'TextDomain'   => 'Extension TextDomain',
 			'MenuSlug'     => 'Extension Menu Slug',
-		);
+		];
 
 		$data[ $slug ] = false;
 
@@ -384,11 +398,11 @@ trait Extensions_Actions {
 		$type = \tsf_extension_manager()->get_hash_type();
 		$hash = hash( $type, serialize( static::$extensions ) );
 
-		return $checksum = array(
+		return $checksum = [
 			'hash' => $hash,
 			'type' => $type,
 			'matches' => static::get_external_extensions_checksum(),
-		);
+		];
 	}
 
 	/**
@@ -419,10 +433,10 @@ trait Extensions_Actions {
 		$type = \tsf_extension_manager()->get_hash_type();
 		$hash = hash_file( $type, $file );
 
-		return $checksum = array(
+		return $checksum = [
 			'hash' => $hash,
 			'type' => $type,
-		);
+		];
 	}
 
 	/**
@@ -436,16 +450,16 @@ trait Extensions_Actions {
 	 * 		string The extension slug => bool True if active
 	 * }
 	 */
-	private static function get_active_extensions( $placeholder = array() ) {
+	private static function get_active_extensions( $placeholder = [] ) {
 
 		static $cache = false;
 
 		if ( false !== $cache )
 			return $cache;
 
-		$options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+		$options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
-		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : array();
+		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : [];
 	}
 
 	/**
@@ -471,16 +485,16 @@ trait Extensions_Actions {
 		$extension = static::get_extension( $slug );
 
 		if ( empty( $extension ) )
-			return array( 'success' => false, 'case' => 1 );
+			return [ 'success' => false, 'case' => 1 ];
 
 		if ( static::is_extension_premium( $extension ) ) {
 			if ( self::is_premium_user() ) {
-				return array( 'success' => true, 'case' => 2 );
+				return [ 'success' => true, 'case' => 2 ];
 			} else {
-				return array( 'success' => false, 'case' => 3 );
+				return [ 'success' => false, 'case' => 3 ];
 			}
 		} else {
-			return array( 'success' => true, 'case' => 4 );
+			return [ 'success' => true, 'case' => 4 ];
 		}
 	}
 
@@ -558,7 +572,7 @@ trait Extensions_Actions {
 		if ( is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $extension['slug'] ] ) )
 			return $cache[ $extension['slug'] ];
@@ -665,10 +679,10 @@ trait Extensions_Actions {
 		 *		}
 		 * }
 		 */
-		$compatibility = array(
+		$compatibility = [
 			'tsf' => 0,
 			'wp' => 0,
-		);
+		];
 
 		$tsf_version = \the_seo_framework_version();
 		$_wp_version = $wp_version;
@@ -793,12 +807,12 @@ trait Extensions_Actions {
 		$base_path = static::get_extension_trunk_path( $slug );
 		$json_file = $base_path . 'test.json';
 
-		$success = array();
+		$success = [];
 
 		if ( 0 !== \validate_file( $json_file ) || ! file_exists( $json_file ) )
 			goto end;
 
-		$timeout = stream_context_create( array( 'http' => array( 'timeout' => 3 ) ) );
+		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
 		if ( empty( $json ) ) {
@@ -809,7 +823,7 @@ trait Extensions_Actions {
 		}
 
 		$namespace = empty( $json->namespace ) ? '' : $json->namespace;
-		$tests = empty( $json->test ) ? array() : (array) $json->test;
+		$tests = empty( $json->test ) ? [] : (array) $json->test;
 
 		foreach ( $tests as $_class => $_file ) {
 			//* Base file is already tested.
@@ -849,7 +863,7 @@ trait Extensions_Actions {
 	private static function persist_include_extension( $file, &$_instance, &$bits ) {
 
 		$yield_count = 0;
-		$success = array();
+		$success = [];
 
 		//* Get follow-up verification instance.
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
@@ -971,25 +985,23 @@ trait Extensions_Actions {
 		if ( defined( 'DOING_AJAX' ) ) {
 			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', \wp_strip_all_tags( $advanced_error_notice ), \esc_attr( $advanced_error_notice ), $error_notice );
 
-			$status = array(
+			$status = [
 				'success' => 10005,
 				'notice' => $notice,
-			);
+			];
 
 			/**
 			 * @TODO make notice copy-able by clicking.
 			 * @TODO set slug.
 			 */
-			$response = WP_DEBUG ? array( 'status' => $status, 'slug' => '', 'case' => 'activate' ) : array( 'status' => $status );
-
-			http_response_code( 200 );
-			echo json_encode( $response );
+			$response = WP_DEBUG ? [ 'status' => $status, 'slug' => '', 'case' => 'activate' ] : [ 'status' => $status ];
+			\tsf_extension_manager()->send_json( $response, 'failure' );
 			exit;
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 
 			//* Already escaped.
-			\wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', array( 'back_link' => true, 'text_direction' => 'ltr' ) );
+			\wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] );
 		}
 	}
 
@@ -1003,7 +1015,7 @@ trait Extensions_Actions {
 	 * @param array $error The PHP triggered error.
 	 * @return string The cleaned error message.
 	 */
-	private static function clean_error_message( $message = '', $error = array() ) {
+	private static function clean_error_message( $message = '', $error = [] ) {
 
 		//* Remove stack trace.
 		if ( false !== ( $stack_pos = stripos( $message, 'Stack trace:' ) ) )

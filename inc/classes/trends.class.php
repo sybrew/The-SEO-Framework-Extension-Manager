@@ -95,10 +95,10 @@ final class Trends {
 		//* Google Webmasters official blog feed.
 		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
-		$http_args = array(
+		$http_args = [
 			'timeout' => 7,
 			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
-		);
+		];
 
 		$request = \wp_safe_remote_get( $feed_url, $http_args );
 
@@ -120,7 +120,7 @@ final class Trends {
 		unset( $xml );
 
 		$output = '';
-		$a_output = array();
+		$a_output = [];
 
 		$max = 15;
 		$i = 0;
@@ -139,7 +139,7 @@ final class Trends {
 				$term = (array) $category;
 
 				$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
-				if ( $term && in_array( $term, array( 'search results', 'crawling and indexing', 'general tips' ), true ) ) {
+				if ( $term && in_array( $term, [ 'search results', 'crawling and indexing', 'general tips' ], true ) ) {
 					$found = true;
 					break;
 				}

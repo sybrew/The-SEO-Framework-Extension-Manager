@@ -3,12 +3,12 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 
 if ( $this->is_plugin_activated() ) {
 	if ( $this->is_premium_user() ) {
-		$more_mottos = array( 'premium' );
+		$more_mottos = [ 'premium' ];
 	} else {
-		$more_mottos = array( 'free' );
+		$more_mottos = [ 'free' ];
 	}
 } else {
-	$more_mottos = array( 'free', 'premium' );
+	$more_mottos = [ 'free', 'premium' ];
 }
 
 /**
@@ -19,7 +19,7 @@ if ( $this->is_plugin_activated() ) {
  * b) the mottos need to be assigned as female/male l10n and with inflections.
  * c) we stray away from what the footer is about: recognition and branding.
  */
-$mottos = array(
+$mottos = [
 	'better',
 	'fair',
 	'supreme',
@@ -33,7 +33,7 @@ $mottos = array(
 	'fast',
 	'secure',
 	'logical',
-);
+];
 $mottos = array_merge( $mottos, $more_mottos );
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto = 'A ' . $mottos[ $motto_key ] . ' Initiative';

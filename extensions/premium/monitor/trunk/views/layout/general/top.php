@@ -21,11 +21,11 @@ if ( $options ) {
 	<div class="tsfem-title tsfem-flex tsfem-flex-row">
 		<header><h1>
 			<?php
-			$image = array(
-				'svg' => TSFEM_E_MONITOR_DIR_URL . '/lib/images/monitorlogo.svg',
-				//'2x' => TSFEM_E_MONITOR_DIR_URL . '/lib/images/monitorlogo-58x58.png',
-				'1x' => TSFEM_E_MONITOR_DIR_URL . '/lib/images/monitorlogo-29x29px.png',
-			);
+			$image = [
+				'svg' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/monitorlogo.svg',
+				//'2x' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/monitorlogo-58x58.png',
+				'1x' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/monitorlogo-29x29px.png',
+			];
 			$size = '1em';
 
 			printf( \esc_html_x( '%1$s %2$s', '1: SEO, 2: Monitor', 'the-seo-framework-extension-manager' ),

@@ -75,10 +75,10 @@ class AdminPages extends AccountActivation {
 	private function construct() {
 
 		//* Initialize menu links. TODO add network menu.
-		\add_action( 'admin_menu', array( $this, '_init_menu' ) );
+		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
 		//* Initialize TSF Extension Manager page actions.
-		\add_action( 'admin_init', array( $this, '_load_tsfem_admin_actions' ) );
+		\add_action( 'admin_init', [ $this, '_load_tsfem_admin_actions' ] );
 
 	}
 
@@ -100,10 +100,10 @@ class AdminPages extends AccountActivation {
 
 		if ( $network_mode ) {
 			//* TODO.
-			//	\add_action( 'network_admin_menu', array( $this, 'add_network_menu_link' ), 11 );
+			//	\add_action( 'network_admin_menu', [ $this, 'add_network_menu_link' ], 11 );
 		} else {
 			if ( \the_seo_framework()->load_options )
-				\add_action( 'admin_menu', array( $this, '_add_menu_link' ), 11 );
+				\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
 		}
 	}
 
@@ -117,14 +117,14 @@ class AdminPages extends AccountActivation {
 	 */
 	public function _add_menu_link() {
 
-		$menu = array(
+		$menu = [
 			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->seo_extensions_page_slug,
-			'callback'    => array( $this, '_init_extension_manager_page' ),
-		);
+			'callback'    => [ $this, '_init_extension_manager_page' ],
+		];
 
 		$this->seo_extensions_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
@@ -144,7 +144,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	public function _load_tsfem_admin_actions() {
-		\add_action( 'load-' . $this->seo_extensions_menu_page_hook, array( $this, '_do_tsfem_admin_actions' ) );
+		\add_action( 'load-' . $this->seo_extensions_menu_page_hook, [ $this, '_do_tsfem_admin_actions' ] );
 	}
 
 	/**
@@ -174,10 +174,10 @@ class AdminPages extends AccountActivation {
 		$this->init_errors();
 
 		//* Add something special for Vivaldi
-		\add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
+		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		//* Add footer output.
-		\add_action( 'in_admin_footer', array( $this, '_init_footer_wrap' ) );
+		\add_action( 'in_admin_footer', [ $this, '_init_footer_wrap' ] );
 
 		return $run = true;
 	}
@@ -333,16 +333,16 @@ class AdminPages extends AccountActivation {
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	public function _do_pane_wrap( $title = '', $content = '', $args = array(), $extra = '' ) {
+	public function _do_pane_wrap( $title = '', $content = '', $args = [], $extra = '' ) {
 
-		$defaults = array(
+		$defaults = [
 			'full' => true,
 			'collapse' => true,
 			'move' => false,
 			'pane_id' => '',
 			'ajax' => false,
 			'ajax_id' => '',
-		);
+		];
 		$args = \wp_parse_args( $args, $defaults );
 		unset( $defaults );
 

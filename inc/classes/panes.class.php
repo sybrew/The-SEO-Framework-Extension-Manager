@@ -42,13 +42,13 @@ class Panes extends API {
 	private function construct() {
 
 		//* Ajax listener for updating feed option.
-		\add_action( 'wp_ajax_tsfem_enable_feeds', array( $this, '_wp_ajax_enable_feeds' ) );
+		\add_action( 'wp_ajax_tsfem_enable_feeds', [ $this, '_wp_ajax_enable_feeds' ] );
 
 		//* Ajax listener for updating extension setting.
-		\add_action( 'wp_ajax_tsfem_update_extension', array( $this, '_wp_ajax_tsfem_update_extension' ) );
+		\add_action( 'wp_ajax_tsfem_update_extension', [ $this, '_wp_ajax_tsfem_update_extension' ] );
 
 		//* Ajax listener for after updating the extension setting.
-		\add_action( 'wp_ajax_tsfem_update_extension_desc_footer', array( $this, '_wp_ajax_tsfem_update_extension_desc_footer' ) );
+		\add_action( 'wp_ajax_tsfem_update_extension_desc_footer', [ $this, '_wp_ajax_tsfem_update_extension_desc_footer' ] );
 	}
 
 	/**
@@ -254,23 +254,23 @@ class Panes extends API {
 				if ( $this->get_option( '_enable_feed' ) ) {
 					//* Another admin has initialized this after the last page load.
 					$type = 'success';
-					$data = array(
+					$data = [
 						'content' => $this->ajax_get_trends_output(),
 						'type' => $type,
-					);
+					];
 				} else {
 					$type = $this->update_option( '_enable_feed', true, 'regular', false ) ? 'success' : 'error';
 
 					if ( 'success' === $type ) {
-						$data = array(
+						$data = [
 							'content' => $this->ajax_get_trends_output(),
 							'type' => $type,
-						);
+						];
 					} else {
-						$data = array(
+						$data = [
 							'content' => '',
 							'type' => $type,
-						);
+						];
 					}
 				}
 
@@ -304,9 +304,9 @@ class Panes extends API {
 				}
 
 				if ( $case && $slug ) {
-					$options = array(
+					$options = [
 						'extension' => $slug,
-					);
+					];
 
 					if ( 'activate' === $case ) {
 						$status = $this->activate_extension( $options, true );
@@ -314,16 +314,16 @@ class Panes extends API {
 						$status = $this->deactivate_extension( $options, true );
 					}
 				} else {
-					$status = array(
+					$status = [
 						'success' => -1,
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					);
+					];
 				}
 
 				$type = ! empty( $status['success'] ) ? 'success' : 'error';
 
 				//* Send back input when WP_DEBUG is on.
-				$response = WP_DEBUG ? array( 'status' => $status, 'slug' => $slug, 'case' => $case ) : array( 'status' => $status );
+				$response = WP_DEBUG ? [ 'status' => $status, 'slug' => $slug, 'case' => $case ] : [ 'status' => $status ];
 
 				$this->send_json( $response, $type );
 			endif;
@@ -533,7 +533,7 @@ class Panes extends API {
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
 		$content = \esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
 
-		$extras = array();
+		$extras = [];
 		$_extra = '';
 
 		$extras[] = \esc_html__( 'This will deactivate all extensions. All extension options are held intact.', 'the-seo-framework-extension-manager' );
@@ -562,8 +562,8 @@ class Panes extends API {
 
 		\TSF_Extension_Manager\Layout::initialize( 'link', $_instance, $bits );
 
-		$buttons = array();
-		$description = array();
+		$buttons = [];
+		$description = [];
 
 		$buttons[1] = \TSF_Extension_Manager\Layout::get( 'free-support-button' );
 		$description[1] = \__( 'Questions about all free extensions and using the Extension Manager can be asked through Free Support.', 'the-seo-framework-extension-manager' );

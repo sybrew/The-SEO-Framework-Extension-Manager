@@ -106,7 +106,7 @@ final class Monitor_Graph {
 		$chartdata = '';
 		$id = 'uptime';
 
-		foreach ( $this->generate_chart_points( $data, array( 'x' => 'unixtimestamp', 'y' => 'stackline', 'gap' => 300 ) ) as $points ) {
+		foreach ( $this->generate_chart_points( $data, [ 'x' => 'unixtimestamp', 'y' => 'stackline', 'gap' => 300 ] ) as $points ) {
 			$chartdata .= sprintf( '{x=%s,y=%s}', json_encode( $points['x'] ), json_encode( $points['y'] ) );
 		}
 
@@ -116,9 +116,9 @@ final class Monitor_Graph {
 			// TODO
 		}
 
-		return array(
+		return [
 			'content' => $this->render_graph_canvas( $id ),
-		);
+		];
 	}
 
 	public function stats_perfomance() {
@@ -129,13 +129,13 @@ final class Monitor_Graph {
 
 	}
 
-	protected function generate_chart_points( $data, $args = array() ) {
+	protected function generate_chart_points( $data, $args = [] ) {
 
-		$defaults = array(
+		$defaults = [
 			'x' => 'unixtimestamp',
 			'y' => 'line',
 			'gap' => 300, //5 min
-		);
+		];
 
 		$args = \wp_parse_args( $args, $defaults );
 
@@ -167,12 +167,12 @@ final class Monitor_Graph {
 
 				foreach ( $data as $x => $y ) {
 					$x = \the_seo_framework()->gmt2date( 'Y-m-d H:i', date( 'Y-m-d', $x ) ) . ' GMT';
-					yield array( 'x' => $x, 'y' => $y );
+					yield [ 'x' => $x, 'y' => $y ];
 				}
 				break;
 
 			default :
-				yield array( 'x' => '', 'y' => '' );
+				yield [ 'x' => '', 'y' => '' ];
 				break;
 		endswitch;
 
@@ -194,7 +194,7 @@ final class Monitor_Graph {
 		if ( empty( $id ) )
 			return '';
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( empty( $cache[ $id ] ) )
 			$cache[ $id ] = '';
@@ -236,12 +236,12 @@ final class Monitor_Graph {
 		//* TODO.
 		return $data;
 
-		$_data = array();
+		$_data = [];
 
 		$shift = $difference / $gap;
 
 		if ( $difference < 0 ) {
-			$previous = array( 0, 0 );
+			$previous = [ 0, 0 ];
 			foreach ( $data as $timestamp => $value ) {
 				$timestamp = $timestamp - $difference;
 
@@ -261,8 +261,8 @@ final class Monitor_Graph {
 					}
 				}
 
-				$_data = array( $timestamp, $value );
-				$previous = array( $dif_key, $dif_value );
+				$_data = [ $timestamp, $value ];
+				$previous = [ $dif_key, $dif_value ];
 			}
 		} elseif ( $difference > 0 ) {
 

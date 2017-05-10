@@ -203,7 +203,7 @@ final class Extensions extends Secure_Abstract {
 	 * @param string|array $what What to filter out of the list.
 	 * @return array The leftover extensions.
 	 */
-	private static function filter_extensions( array $extensions = array(), $what = 'maybe_network' ) {
+	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
 
 		if ( is_array( $what ) ) {
 			foreach ( $what as $filter )
@@ -218,11 +218,11 @@ final class Extensions extends Secure_Abstract {
 			if ( $network_mode )
 				return $extensions;
 
-			$filters = array( 'network' => '0' );
+			$filters = [ 'network' => '0' ];
 		} elseif ( 'network' === $what ) {
-			$filters = array( 'network' => '1' );
+			$filters = [ 'network' => '1' ];
 		} elseif ( 'single' === $what ) {
-			$filters = array( 'network' => '0' );
+			$filters = [ 'network' => '0' ];
 		}
 
 		return \wp_list_filter( $extensions, $filters, 'AND' );

@@ -82,8 +82,8 @@ final class Transporter_Admin {
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
-	protected $request_name = array();
-	protected $nonce_action = array();
+	protected $request_name = [];
+	protected $nonce_action = [];
 
 	/**
 	 * Name of the page hook when the menu is registered.
@@ -111,7 +111,7 @@ final class Transporter_Admin {
 	private function construct() {
 
 		$this->nonce_name = 'tsfem_e_transporter_nonce_name';
-		$this->request_name = array(
+		$this->request_name = [
 			//* Reference convenience.
 			'default' => 'default',
 
@@ -129,8 +129,8 @@ final class Transporter_Admin {
 
 			//* Confirm settings data.
 			'confirm_upload' => 'confirm_upload',
-		);
-		$this->nonce_action = array(
+		];
+		$this->nonce_action = [
 			//* Reference convenience.
 			'default' => 'tsfem_e_transporter_nonce_action',
 
@@ -148,7 +148,7 @@ final class Transporter_Admin {
 
 			//* Confirm settings data.
 			'confirm_upload' => 'tsfem_e_transporter_nonce_action_confirm_data',
-		);
+		];
 
 		$this->transporter_page_slug = 'theseoframework-transporter';
 
@@ -165,19 +165,19 @@ final class Transporter_Admin {
 		$this->o_index = 'transporter';
 
 		//* Initialize menu links
-		\add_action( 'admin_menu', array( $this, '_init_menu' ) );
+		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
 		//* Initialize Transporter page actions.
-		\add_action( 'admin_init', array( $this, '_load_transporter_admin_actions' ) );
+		\add_action( 'admin_init', [ $this, '_load_transporter_admin_actions' ] );
 
 		//* Update POST listener.
-		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		//* AJAX export request listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_export', array( $this, '_wp_ajax_request_settings_export' ) );
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_export', [ $this, '_wp_ajax_request_settings_export' ] );
 
 		//* AJAX download request listener.
-		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_download', array( $this, '_wp_ajax_request_settings_download' ) );
+		\add_action( 'wp_ajax_tsfem_e_transporter_request_settings_download', [ $this, '_wp_ajax_request_settings_download' ] );
 
 	}
 
@@ -192,7 +192,7 @@ final class Transporter_Admin {
 	public function _init_menu() {
 
 		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
-			\add_action( 'admin_menu', array( $this, '_add_menu_link' ), 9001 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 9001 );
 	}
 
 	/**
@@ -205,14 +205,14 @@ final class Transporter_Admin {
 	 */
 	public function _add_menu_link() {
 
-		$menu = array(
+		$menu = [
 			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => \esc_html__( 'SEO Transporter', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Transporter', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->transporter_page_slug,
-			'callback'    => array( $this, '_init_transporter_page' ),
-		);
+			'callback'    => [ $this, '_init_transporter_page' ],
+		];
 
 		$this->transporter_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
@@ -232,7 +232,7 @@ final class Transporter_Admin {
 	 * @access private
 	 */
 	public function _load_transporter_admin_actions() {
-		\add_action( 'load-' . $this->transporter_menu_page_hook, array( $this, '_do_transporter_admin_actions' ) );
+		\add_action( 'load-' . $this->transporter_menu_page_hook, [ $this, '_do_transporter_admin_actions' ] );
 	}
 
 	/**
@@ -265,13 +265,13 @@ final class Transporter_Admin {
 		$this->init_errors();
 
 		//* Add something special for Vivaldi
-		\add_action( 'admin_head', array( $this, '_output_theme_color_meta' ), 0 );
+		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		//* Add footer output.
-		\add_action( 'in_admin_footer', array( $this, '_init_transporter_footer_wrap' ) );
+		\add_action( 'in_admin_footer', [ $this, '_init_transporter_footer_wrap' ] );
 
 		//* Update POST listener.
-		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		return true;
 	}
@@ -300,11 +300,11 @@ final class Transporter_Admin {
 				break;
 
 			default :
-				$this->set_error_notice( array( 1060101 => '' ) );
+				$this->set_error_notice( [ 1060101 => '' ] );
 				break;
 		endswitch;
 
-		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
+		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\the_seo_framework()->admin_redirect( $this->transporter_page_slug, $args );
 		exit;
 	}
@@ -326,7 +326,7 @@ final class Transporter_Admin {
 	 */
 	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
 
-		static $validated = array();
+		static $validated = [];
 
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
@@ -351,7 +351,7 @@ final class Transporter_Admin {
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( array( 1069001 => '' ) );
+			$this->set_error_notice( [ 1069001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->transporter_page_slug );
 			exit;
 		}
@@ -369,13 +369,13 @@ final class Transporter_Admin {
 	protected function get_transporter_steps_instance() {
 
 		$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
-		$steps_instance->_set_instance_properties( array(
+		$steps_instance->_set_instance_properties( [
 			'nonce_name' => $this->nonce_name,
 			'request_name' => $this->request_name,
 			'nonce_action' => $this->nonce_action,
 			'transporter_page_slug' => $this->transporter_page_slug,
 			'o_index' => $this->o_index,
-		) );
+		] );
 
 		return $steps_instance;
 	}
@@ -430,16 +430,14 @@ final class Transporter_Admin {
 						//* Initialize menu hooks.
 						\tsf_extension_manager()->_set_ajax_menu_link( $this->transporter_page_slug, 'manage_options' );
 
-						$post = \tsf_extension_manager()->_get_ajax_post_object(
-							array(
-								'options_key' => TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS,
-								'options_index' => $this->o_index,
-								'menu_slug' => $this->transporter_page_slug,
-								'nonce_name' => $this->nonce_name,
-								'request_name' => $this->request_name['download'],
-								'nonce_action' => $this->nonce_action['download'],
-							)
-						);
+						$post = \tsf_extension_manager()->_get_ajax_post_object( [
+							'options_key' => TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS,
+							'options_index' => $this->o_index,
+							'menu_slug' => $this->transporter_page_slug,
+							'nonce_name' => $this->nonce_name,
+							'request_name' => $this->request_name['download'],
+							'nonce_action' => $this->nonce_action['download'],
+						] );
 
 						if ( $post ) {
 							$results = $this->get_ajax_notice( true, 1060401 );
@@ -509,7 +507,7 @@ final class Transporter_Admin {
 		$filename_raw = sprintf(
 			'TSF-SEO-Settings-%s.json',
 			str_replace(
-				array( ' ', '_', "\r\n", "\r", "\n", '\\' ),
+				[ ' ', '_', "\r\n", "\r", "\n", '\\' ],
 				'-',
 				trim( \get_bloginfo( 'name', 'raw' ) )
 			)
@@ -524,7 +522,7 @@ final class Transporter_Admin {
 		$filesize = \tsf_extension_manager()->get_filesize( $content );
 
 		if ( 0 === $filesize ) {
-			$ajax or $this->set_error_notice( array( 1060301 => '' ) );
+			$ajax or $this->set_error_notice( [ 1060301 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1060301 ) : false;
 		}
 
@@ -532,7 +530,7 @@ final class Transporter_Admin {
 		\tsf_extension_manager()->_clean_reponse_header();
 
 		if ( headers_sent() ) {
-			$ajax or $this->set_error_notice( array( 1060302 => '' ) );
+			$ajax or $this->set_error_notice( [ 1060302 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1060302 ) : false;
 		}
 
@@ -603,31 +601,31 @@ final class Transporter_Admin {
 		 */
 		$this->ui_hook = $this->transporter_menu_page_hook;
 
-		$this->additional_css = array(
-			array(
+		$this->additional_css = [
+			[
 				'name' => 'tsfem-transporter',
 				'base' => TSFEM_E_TRANSPORTER_DIR_URL,
 				'ver' => TSFEM_E_TRANSPORTER_VERSION,
-			),
-		);
+			],
+		];
 
-		$this->additional_js = array(
-			array(
+		$this->additional_js = [
+			[
 				'name' => 'tsfem-transporter',
 				'base' => TSFEM_E_TRANSPORTER_DIR_URL,
 				'ver' => TSFEM_E_TRANSPORTER_VERSION,
-			),
-		);
+			],
+		];
 
-		$this->additional_l10n = array(
-			array(
+		$this->additional_l10n = [
+			[
 				'dependency' => 'tsfem-transporter',
 				'name' => 'tsfem_e_transporterL10n',
-				'strings' => array(
+				'strings' => [
 					'nonce' => \wp_create_nonce( 'tsfem-e-transporter-ajax-nonce' ),
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$this->init_ui();
 	}
@@ -825,7 +823,7 @@ final class Transporter_Admin {
 	 * @param array $args The arguments to be supplied within the file name.
 	 *        Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = array() ) {
+	protected function get_view( $view, array $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;

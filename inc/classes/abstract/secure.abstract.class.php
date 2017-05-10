@@ -102,8 +102,8 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * @var array The validation nonce action.
 	 */
 	protected static $nonce_name;
-	protected static $request_name = array();
-	protected static $nonce_action = array();
+	protected static $request_name = [];
+	protected static $nonce_action = [];
 
 	/**
 	 * The user's account information.
@@ -112,7 +112,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 *
 	 * @var array $account The account information.
 	 */
-	protected static $account = array();
+	protected static $account = [];
 
 	/**
 	 * Resets current instance.
@@ -137,7 +137,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		foreach ( $properties as $property => $value ) :
 			if ( isset( self::$$property ) )
-				self::$$property = is_array( self::$$property ) ? array() : null;
+				self::$$property = is_array( self::$$property ) ? [] : null;
 		endforeach;
 
 	}

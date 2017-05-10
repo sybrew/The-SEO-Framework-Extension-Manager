@@ -56,8 +56,8 @@ class Core {
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
-	protected $request_name = array();
-	protected $nonce_action = array();
+	protected $request_name = [];
+	protected $nonce_action = [];
 
 	/**
 	 * Returns an array of active extensions real path.
@@ -66,7 +66,7 @@ class Core {
 	 *
 	 * @var array List of active extensions real path.
 	 */
-	protected $active_extensions = array();
+	protected $active_extensions = [];
 
 	/**
 	 * Constructor, initializes actions and sets up variables.
@@ -80,7 +80,7 @@ class Core {
 		$this instanceof $that or \wp_die( -1 );
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
-		$this->request_name = array(
+		$this->request_name = [
 			//* Reference convenience.
 			'default'           => 'default',
 
@@ -94,8 +94,8 @@ class Core {
 			//* Extensions.
 			'activate-ext'      => 'activate-ext',
 			'deactivate-ext'    => 'deactivate-ext',
-		);
-		$this->nonce_action = array(
+		];
+		$this->nonce_action = [
 			//* Reference convenience.
 			'default'           => 'tsfem_nonce_action',
 
@@ -109,7 +109,7 @@ class Core {
 			//* Extensions.
 			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
-		);
+		];
 
 		/**
 		 * Set error notice option.
@@ -117,7 +117,7 @@ class Core {
 		 */
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
-		\add_action( 'admin_init', array( $this, '_handle_update_post' ) );
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 	}
 
@@ -142,7 +142,7 @@ class Core {
 
 		if ( false === $this->are_options_valid() ) {
 			//* Failed options instance checksum.
-			$this->set_error_notice( array( 2001 => '' ) );
+			$this->set_error_notice( [ 2001 => '' ] );
 			return $loaded = false;
 		}
 
@@ -168,7 +168,7 @@ class Core {
 
 				case -2 :
 					//* Failed checksum.
-					$this->set_error_notice( array( 2002 => '' ) );
+					$this->set_error_notice( [ 2002 => '' ] );
 					;
 
 				default :
@@ -208,7 +208,7 @@ class Core {
 	 *
 	 * @return bool True if options are valid, false if not.
 	 */
-	protected function are_options_valid() {
+	final protected function are_options_valid() {
 
 		static $cache = null;
 
@@ -240,10 +240,10 @@ class Core {
 
 		switch ( $options['nonce-action'] ) :
 			case $this->request_name['activate-key'] :
-				$args = array(
+				$args = [
 					'licence_key' => trim( $options['key'] ),
-					'activation_email' => sanitize_email( $options['email'] ),
-				);
+					'activation_email' => \sanitize_email( $options['email'] ),
+				];
 
 				$this->handle_request( 'activation', $args );
 				break;
@@ -258,17 +258,17 @@ class Core {
 
 			case $this->request_name['deactivate'] :
 				if ( false === $this->is_plugin_activated() ) {
-					$this->set_error_notice( array( 701 => '' ) );
+					$this->set_error_notice( [ 701 => '' ] );
 					break;
 				} elseif ( false === $this->is_premium_user() || false === $this->are_options_valid() ) {
 					$this->do_free_deactivation();
 					break;
 				}
 
-				$args = array(
+				$args = [
 					'licence_key' => trim( $this->get_option( 'api_key' ) ),
 					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
-				);
+				];
 
 				$this->handle_request( 'deactivation', $args );
 				break;
@@ -276,7 +276,7 @@ class Core {
 			case $this->request_name['enable-feed'] :
 				$success = $this->update_option( '_enable_feed', true, 'regular', false );
 				$code = $success ? 702 : 703;
-				$this->set_error_notice( array( $code => '' ) );
+				$this->set_error_notice( [ $code => '' ] );
 				break;
 
 			case $this->request_name['activate-ext'] :
@@ -288,12 +288,12 @@ class Core {
 				break;
 
 			default :
-				$this->set_error_notice( array( 708 => '' ) );
+				$this->set_error_notice( [ 708 => '' ] );
 				break;
 		endswitch;
 
 		//* Adds action to the URI. It's only used to visualize what has happened.
-		$args = WP_DEBUG ? array( 'did-' . $options['nonce-action'] => 'true' ) : array();
+		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
@@ -315,7 +315,7 @@ class Core {
 	 */
 	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
 
-		static $validated = array();
+		static $validated = [];
 
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
@@ -336,7 +336,7 @@ class Core {
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( array( 9001 => '' ) );
+			$this->set_error_notice( [ 9001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
 			exit;
 		}
@@ -364,7 +364,7 @@ class Core {
 	 *    3 = 0011 : Did 1 and 2.
 	 * }
 	 */
-	public function _clean_reponse_header() {
+	final public function _clean_reponse_header() {
 
 		$retval = 0;
 		// PHP 5.6+ //= $i = 0;
@@ -404,7 +404,7 @@ class Core {
 	 * @param mixed $data The data that needs to be send.
 	 * @param string $type The status type.
 	 */
-	public function send_json( $data, $type = 'success' ) {
+	final public function send_json( $data, $type = 'success' ) {
 
 		$r = $this->_clean_reponse_header();
 		$json = -1;
@@ -430,7 +430,7 @@ class Core {
 	 * @param string $type The header type.
 	 * @param bool $code The status code.
 	 */
-	public function set_status_header( $code = 200, $type = '' ) {
+	final public function set_status_header( $code = 200, $type = '' ) {
 
 		switch ( $type ) :
 			case 'json' :
@@ -468,16 +468,16 @@ class Core {
 	 * }
 	 * @return array|bool False on failure; array containing the jQuery.post object.
 	 */
-	public function _get_ajax_post_object( array $args ) {
+	final public function _get_ajax_post_object( array $args ) {
 
-		$required = array(
+		$required = [
 			'options_key' => '',
 			'options_index' => '',
 			'menu_slug' => '',
 			'nonce_name' => '',
 			'request_name' => '',
 			'nonce_action' => '',
-		);
+		];
 
 		//* If the required keys aren't found, bail.
 		if ( ! $this->has_required_array_keys( $args, $required ) )
@@ -492,19 +492,19 @@ class Core {
 		$args['options_index'] = \sanitize_key( $args['options_index'] );
 		$args['nonce_name'] = \sanitize_key( $args['nonce_name'] );
 
-		$post = array(
+		$post = [
 			'url' => $url,
 			'method' => 'post',
-			'data' => array(
-				$args['options_key'] => array(
-					$args['options_index'] => array(
+			'data' => [
+				$args['options_key'] => [
+					$args['options_index'] => [
 						'nonce-action' => $args['request_name'],
-					),
-				),
+					],
+				],
 				$args['nonce_name'] => \wp_create_nonce( $args['nonce_action'] ),
 				'_wp_http_referer' => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ),
-			),
-		);
+			],
+		];
 
 		return \map_deep( $post, '\\esc_js' );
 	}
@@ -531,7 +531,7 @@ class Core {
 	 * @param bool $get Whether to return the value. This shouldn't be filled in.
 	 * @return array|false The iterated array to string. False if input isn't array.
 	 */
-	public function matosa( $value, $start = '[', $end = ']', $i = 0, $get = true ) {
+	final public function matosa( $value, $start = '[', $end = ']', $i = 0, $get = true ) {
 
 		$output = '';
 		$i++;
@@ -557,7 +557,7 @@ class Core {
 		}
 
 		if ( $get ) {
-			return array( $output => $last );
+			return [ $output => $last ];
 		} else {
 			return $output;
 		}
@@ -572,7 +572,7 @@ class Core {
 	 * @param array $compare The keys to compare it to.
 	 * @return bool True on success, false if keys are missing.
 	 */
-	public function has_required_array_keys( array $input, array $compare ) {
+	final public function has_required_array_keys( array $input, array $compare ) {
 		return empty( array_diff_key( $compare, $input ) );
 	}
 
@@ -590,7 +590,7 @@ class Core {
 	 * @param mixed $f The fallback variable. Default null.
 	 * @return mixed
 	 */
-	public function coalesce_var( &$v = null, $f = null ) {
+	final public function coalesce_var( &$v = null, $f = null ) {
 		return isset( $v ) ? $v : $v = $f;
 	}
 
@@ -650,10 +650,10 @@ class Core {
 
 		foreach ( $properties as $property => $value ) :
 			if ( isset( $this->$property ) )
-				$this->$property = is_array( $this->$property ) ? array() : null;
+				$this->$property = is_array( $this->$property ) ? [] : null;
 		endforeach;
 
-		array_walk( $GLOBALS['wp_filter'], array( $this, 'stop_class_filters' ) );
+		array_walk( $GLOBALS['wp_filter'], [ $this, 'stop_class_filters' ] );
 		$this->__destruct();
 
 		return true;
@@ -729,10 +729,10 @@ class Core {
 
 		if ( $this->_verify_instance( $instance, $bits[1] ) ) :
 			for ( $i = 0; $i < $count; $i++ ) :
-				yield array(
+				yield [
 					'bits'     => $_bits = $this->get_bits(),
 					'instance' => $this->get_verification_instance( $_bits[1] ),
-				);
+				];
 			endfor;
 		endif;
 	}
@@ -767,7 +767,7 @@ class Core {
 	 */
 	final protected function get_verification_instance( $bit = null ) {
 
-		static $instance = array();
+		static $instance = [];
 
 		$bits = $this->get_bits();
 		$_bit = $bits[0];
@@ -775,12 +775,12 @@ class Core {
 		if ( isset( $instance[ ~ $_bit ] ) ) {
 			if ( empty( $instance[ $bit ] ) || $instance[ ~ $_bit ] !== $instance[ $bit ] ) {
 				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
-				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) xor $instance = array();
+				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) xor $instance = [];
 				return '';
 			}
 
 			//* Prevent another way of timing attacks.
-			$val = $instance[ $bit ] and $instance = array();
+			$val = $instance[ $bit ] and $instance = [];
 
 			return $val;
 		}
@@ -882,7 +882,7 @@ class Core {
 			and $bit++;
 		}
 
-		return array( $_bit, $bit );
+		return [ $_bit, $bit ];
 	}
 
 	/**
@@ -903,6 +903,34 @@ class Core {
 	}
 
 	/**
+	 * Generates timed hash based on $uid.
+	 *
+	 * Caution: This function does not generate cryptographically secure values
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $uid   The unique ID for the hash. A good choice would be the method name.
+	 * @param int    $scale The time scale in seconds.
+	 * @param int    $end   UNIX timestamp where the hash invalidates. Defaults to now.
+	 * @return string The timed hash that will always return the same.
+	 */
+	final public function get_timed_hash( $uid, $length = 3600, $end = 0 ) {
+
+		if ( empty( $uid ) || empty( $length ) )
+			return '';
+
+		$_time = time();
+		$_end = $end ?: $_time;
+		$_delta = $_end > $_time ? $_end - $_time : $_time - $_end;
+
+		$now_x = floor( ( $_time - $_delta ) / $length );
+
+		$string = $uid . '\\' . $now_x . '\\' . $uid;
+
+		return $this->hash( $string, 'auth' );
+	}
+
+	/**
 	 * Generates salt from WordPress defined constants.
 	 *
 	 * Taken from WordPress core function `wp_salt()` and adjusted accordingly.
@@ -918,17 +946,17 @@ class Core {
 	 */
 	final protected function get_salt( $scheme = 'instance' ) {
 
-		static $cached_salts = array();
+		static $cached_salts = [];
 
 		if ( isset( $cached_salts[ $scheme ] ) )
 			return $cached_salts[ $scheme ];
 
-		$values = array(
+		$values = [
 			'key'  => '',
 			'salt' => '',
-		);
+		];
 
-		$schemes = array( 'auth', 'secure_auth', 'logged_in', 'nonce' );
+		$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
 
 		//* 'instance' picks a random key.
 		static $instance_scheme = null;
@@ -939,7 +967,7 @@ class Core {
 		$scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
 
 		if ( in_array( $scheme, $schemes, true ) ) {
-			foreach ( array( 'key', 'salt' ) as $type ) :
+			foreach ( [ 'key', 'salt' ] as $type ) :
 				$const = strtoupper( "{$scheme}_{$type}" );
 				if ( defined( $const ) && constant( $const ) ) {
 					$values[ $type ] = constant( $const );
@@ -998,7 +1026,7 @@ class Core {
 	 *
 	 * @return string The minimum required capability for extensions Settings.
 	 */
-	public function can_do_settings() {
+	final public function can_do_settings() {
 		return \TSF_Extension_Manager\can_do_settings();
 	}
 
@@ -1010,7 +1038,7 @@ class Core {
 	 *
 	 * @return bool Whether the plugin is active in network mode.
 	 */
-	public function is_plugin_in_network_mode() {
+	final public function is_plugin_in_network_mode() {
 		//* TODO remove this! It now renders network mode as singular installations per site. This is NOT what I promised.
 		return false;
 
@@ -1037,7 +1065,7 @@ class Core {
 	 * @param array $args Other query arguments.
 	 * @return string Admin Page URL.
 	 */
-	public function get_admin_page_url( $page = '', $args = array() ) {
+	final public function get_admin_page_url( $page = '', $args = [] ) {
 
 		$page = $page ? $page : $this->seo_extensions_page_slug;
 
@@ -1056,7 +1084,7 @@ class Core {
 	 * @param array $args The arguments to be supplied within the file name.
 	 *        Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = array() ) {
+	final protected function get_view( $view, array $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;
@@ -1091,12 +1119,12 @@ class Core {
 	 * }
 	 * @return string escaped link.
 	 */
-	public function get_link( array $args = array() ) {
+	final public function get_link( array $args = [] ) {
 
 		if ( empty( $args ) )
 			return '';
 
-		$defaults = array(
+		$defaults = [
 			'url'     => '',
 			'target'  => '_self',
 			'class'   => '',
@@ -1105,8 +1133,8 @@ class Core {
 			'content' => '',
 			'download' => false,
 			'filename' => '',
-			'data' => array(),
-		);
+			'data' => [],
+		];
 		$args = \wp_parse_args( $args, $defaults );
 
 		$url = $args['url'] ? \esc_url( $args['url'] ) : '';
@@ -1140,9 +1168,9 @@ class Core {
 	 * @param array $args The button arguments.
 	 * @return string The download button.
 	 */
-	public function get_download_link( array $args = array() ) {
+	final public function get_download_link( array $args = [] ) {
 
-		$defaults = array(
+		$defaults = [
 			'url'     => '',
 			'target'  => '_self',
 			'class'   => '',
@@ -1150,8 +1178,8 @@ class Core {
 			'content' => '',
 			'download' => true,
 			'filename' => '',
-			'data' => array(),
-		);
+			'data' => [],
+		];
 
 		return $this->get_link( \wp_parse_args( $args, $defaults ) );
 	}
@@ -1163,14 +1191,14 @@ class Core {
 	 *
 	 * @return string The My Account API URL.
 	 */
-	protected function get_my_account_link() {
-		return $this->get_link( array(
+	final protected function get_my_account_link() {
+		return $this->get_link( [
 			'url' => $this->get_activation_url( 'my-account/' ),
 			'target' => '_blank',
 			'class' => '',
 			'title' => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
 			'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
-		) );
+		] );
 	}
 
 	/**
@@ -1182,7 +1210,7 @@ class Core {
 	 * @param bool $love Whether to show a heart after the button text.
 	 * @return string The Support Link.
 	 */
-	public function get_support_link( $type = 'free', $love = true ) {
+	final public function get_support_link( $type = 'free', $love = true ) {
 
 		if ( 'premium' === $type ) {
 			$url = $this->get_activation_url( 'support/' );
@@ -1200,13 +1228,13 @@ class Core {
 			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
 		}
 
-		return $this->get_link( array(
+		return $this->get_link( [
 			'url' => $url,
 			'target' => '_blank',
 			'class' => $class,
 			'title' => $title,
 			'content' => $text,
-		) );
+		] );
 	}
 
 	/**
@@ -1214,6 +1242,7 @@ class Core {
 	 * by returning the $_instance and $bits parameters.
 	 * Once.
 	 *
+	 * @since 1.0.0
 	 * @NOTE Expensive operation.
 	 * @see $this->_yield_verification_instance() for faster looping instances.
 	 * @access private
@@ -1221,19 +1250,26 @@ class Core {
 	 * @param object $object The class object. Passed by reference.
 	 * @param string $_instance The verification instance. Passed by reference.
 	 * @param array $bits The verification bits. Passed by reference.
+	 * @return bool True on success, false on failure.
 	 */
-	public function _request_premium_extension_verification_instance( &$object, &$_instance, &$bits ) {
+	final public function _request_premium_extension_verification_instance( &$object, &$_instance, &$bits ) {
 
 		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
-			return false;
+			goto failure;
 
-		$allowed_classes = array(
+		$allowed_classes = [
 			'TSF_Extension_Manager\\Extension\\Monitor_Admin',
-		);
+		];
 
 		if ( in_array( get_class( $object ), $allowed_classes, true ) ) {
 			$this->get_verification_codes( $_instance, $bits );
+			return true;
 		}
+
+		failure:;
+
+		$this->_verify_instance( $_instance, $bits );
+		return false;
 	}
 
 	/**
@@ -1247,9 +1283,12 @@ class Core {
 	 * @param string $class_base Class base words.
 	 * @return bool True on success, false on failure.
 	 */
-	public function _register_premium_extension_autoload_path( $path, $class_base ) {
+	final public function _register_premium_extension_autoload_path( $path, $class_base ) {
 
 		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
+			return false;
+
+		if ( preg_match( '/(\/extensions\/free\/)(.*?)(?=.*\/trunk\/)/i', $path ) )
 			return false;
 
 		$this->register_extension_autoloader();
@@ -1260,16 +1299,19 @@ class Core {
 	/**
 	 * Registers autoloading classes for extensions and activates autoloader.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 * @access private
 	 *
 	 * @param string $path The extension path to look for.
 	 * @param string $class_base Class base words.
 	 * @return bool True on success, false on failure.
 	 */
-	public function _register_free_extension_autoload_path( $path, $class_base ) {
+	final public function _register_free_extension_autoload_path( $path, $class_base ) {
 
 		if ( false === $this->are_options_valid() )
+			return false;
+
+		if ( preg_match( '/(\/extensions\/premium\/)(.*?)(?=.*\/trunk\/)/i', $path ) )
 			return false;
 
 		$this->register_extension_autoloader();
@@ -1283,12 +1325,12 @@ class Core {
 	 * @since 1.2.0
 	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
 	 */
-	protected function register_extension_autoloader() {
+	final protected function register_extension_autoloader() {
 
 		static $autoload_inactive = true;
 
 		if ( $autoload_inactive ) {
-			spl_autoload_register( array( $this, 'autoload_extension_class' ), true, true );
+			spl_autoload_register( [ $this, 'autoload_extension_class' ], true, true );
 			$autoload_inactive = false;
 		}
 	}
@@ -1309,9 +1351,9 @@ class Core {
 	 *    array : $class is found in locations.
 	 * }
 	 */
-	protected function set_extension_autoload_path( $path, $class_base, $class = null ) {
+	final protected function set_extension_autoload_path( $path, $class_base, $class = null ) {
 
-		static $locations = array();
+		static $locations = [];
 
 		$class = ltrim( $class, '\\' );
 
@@ -1351,7 +1393,7 @@ class Core {
 	 * @param string $class The classname path to fetch.
 	 * @return string|bool The path if found. False otherwise.
 	 */
-	protected function get_extension_autload_path( $class ) {
+	final protected function get_extension_autload_path( $class ) {
 		return $this->set_extension_autoload_path( null, null, $class );
 	}
 
@@ -1365,14 +1407,14 @@ class Core {
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
 	 */
-	protected function autoload_extension_class( $class ) {
+	final protected function autoload_extension_class( $class ) {
 
 		$class = ltrim( $class, '\\' );
 
 		if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\Extension\\', 0 ) )
 			return;
 
-		static $loaded = array();
+		static $loaded = [];
 
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
@@ -1403,7 +1445,7 @@ class Core {
 	 * @param array $checksum The extensions checksum.
 	 * @return int|bool, Negative int on failure, true on success.
 	 */
-	protected function validate_extensions_checksum( $checksum ) {
+	final protected function validate_extensions_checksum( $checksum ) {
 
 		if ( empty( $checksum['hash'] ) || empty( $checksum['matches'] ) || empty( $checksum['type'] ) ) {
 			return -1;
@@ -1424,7 +1466,7 @@ class Core {
 	 * @return bool|string False on invalid input or on activation failure.
 	 *         String on success or AJAX.
 	 */
-	protected function activate_extension( $options, $ajax = false ) {
+	final protected function activate_extension( $options, $ajax = false ) {
 
 		if ( empty( $options['extension'] ) )
 			return false;
@@ -1444,19 +1486,19 @@ class Core {
 			switch ( $result ) :
 				case -1 :
 					//* No checksum found.
-					$ajax or $this->set_error_notice( array( 10001 => '' ) );
+					$ajax or $this->set_error_notice( [ 10001 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
 					break;
 
 				case -2 :
 					//* Checksum mismatch.
-					$ajax or $this->set_error_notice( array( 10002 => '' ) );
+					$ajax or $this->set_error_notice( [ 10002 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
 					break;
 
 				default :
 					//* Method mismatch error. Unknown error.
-					$ajax or $this->set_error_notice( array( 10003 => '' ) );
+					$ajax or $this->set_error_notice( [ 10003 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
 					break;
 			endswitch;
@@ -1469,7 +1511,7 @@ class Core {
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
 				if ( false === $this->validate_remote_subscription_license() ) {
-					$ajax or $this->set_error_notice( array( 10004 => '' ) );
+					$ajax or $this->set_error_notice( [ 10004 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
 				}
 			}
@@ -1477,14 +1519,14 @@ class Core {
 			$test = $this->test_extension( $slug, $ajax );
 
 			if ( 4 !== $test || $this->_has_died() ) {
-				$ajax or $this->set_error_notice( array( 10005 => '' ) );
+				$ajax or $this->set_error_notice( [ 10005 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 
 			$success = $this->enable_extension( $slug );
 
 			if ( false === $success ) {
-				$ajax or $this->set_error_notice( array( 10006 => '' ) );
+				$ajax or $this->set_error_notice( [ 10006 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 10006 ) : false;
 			}
 		endif;
@@ -1516,7 +1558,7 @@ class Core {
 				break;
 		endswitch;
 
-		$ajax or $this->set_error_notice( array( $code => '' ) );
+		$ajax or $this->set_error_notice( [ $code => '' ] );
 
 		return $ajax ? $this->get_ajax_notice( $status['success'], $code ) : $status['success'];
 	}
@@ -1530,7 +1572,7 @@ class Core {
 	 * @param bool $ajax Whether this is an AJAX request.
 	 * @return bool False on invalid input.
 	 */
-	protected function deactivate_extension( $options, $ajax = false ) {
+	final protected function deactivate_extension( $options, $ajax = false ) {
 
 		if ( empty( $options['extension'] ) )
 			return false;
@@ -1539,7 +1581,7 @@ class Core {
 		$success = $this->disable_extension( $slug );
 
 		$code = $success ? 11001 : 11002;
-		$ajax or $this->set_error_notice( array( $code => '' ) );
+		$ajax or $this->set_error_notice( [ $code => '' ] );
 
 		return $ajax ? $this->get_ajax_notice( $success, $code ) : $success;
 	}
@@ -1560,7 +1602,7 @@ class Core {
 	 *    void : Fatal error.
 	 * }
 	 */
-	protected function test_extension( $slug, $ajax = false ) {
+	final protected function test_extension( $slug, $ajax = false ) {
 
 		$this->get_verification_codes( $_instance, $bits );
 		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
@@ -1583,7 +1625,7 @@ class Core {
 	 * @param string $slug The extension slug.
 	 * @return bool False if extension enabling fails.
 	 */
-	protected function enable_extension( $slug ) {
+	final protected function enable_extension( $slug ) {
 		return $this->update_extension( $slug, true );
 	}
 
@@ -1595,7 +1637,7 @@ class Core {
 	 * @param string $slug The extension slug.
 	 * @return bool False if extension disabling fails.
 	 */
-	protected function disable_extension( $slug ) {
+	final protected function disable_extension( $slug ) {
 		return $this->update_extension( $slug, false );
 	}
 
@@ -1608,9 +1650,9 @@ class Core {
 	 * @param bool $enable Whether to enable or disable the extension.
 	 * @return bool False if extension enabling or disabling fails.
 	 */
-	protected function update_extension( $slug, $enable = false ) {
+	final protected function update_extension( $slug, $enable = false ) {
 
-		$extensions = $this->get_option( 'active_extensions', array() );
+		$extensions = $this->get_option( 'active_extensions', [] );
 		$extensions[ $slug ] = (bool) $enable;
 
 		//* Kill options on failure when enabling.
@@ -1629,7 +1671,7 @@ class Core {
 	 * @param string $input The AJAX input string.
 	 * @return string $output The cleaned AJAX input string.
 	 */
-	protected function s_ajax_string( $input ) {
+	final protected function s_ajax_string( $input ) {
 		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
 
@@ -1643,7 +1685,7 @@ class Core {
 	 * @param bool $url Whether to return a path or URL.
 	 * @return string The font URL or path. Not escaped.
 	 */
-	public function get_font_file_location( $font = '', $url = false ) {
+	final public function get_font_file_location( $font = '', $url = false ) {
 		if ( $url ) {
 			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
 		} else {
@@ -1660,7 +1702,7 @@ class Core {
 	 * @param bool $url Whether to return a path or URL.
 	 * @return string The image URL or path. Not escaped.
 	 */
-	public function get_image_file_location( $image = '', $url = false ) {
+	final public function get_image_file_location( $image = '', $url = false ) {
 		if ( $url ) {
 			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/images/' . $image;
 		} else {
@@ -1676,7 +1718,7 @@ class Core {
 	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
 	 * @return int Points.
 	 */
-	public function pixels_to_points( $px = 0 ) {
+	final public function pixels_to_points( $px = 0 ) {
 		return intval( $px ) * 0.75;
 	}
 
@@ -1689,7 +1731,7 @@ class Core {
 	 * @param bool $secure Whether to prevent insecure checks.
 	 * @return bool
 	 */
-	public function is_tsf_extension_manager_page( $secure = true ) {
+	final public function is_tsf_extension_manager_page( $secure = true ) {
 
 		static $cache = null;
 
@@ -1722,7 +1764,7 @@ class Core {
 	 * @param bool $set If true, it registers the AJAX page.
 	 * @return bool True if set, false otherwise.
 	 */
-	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
+	final protected function ajax_is_tsf_extension_manager_page( $set = false ) {
 
 		static $cache = false;
 
@@ -1736,7 +1778,7 @@ class Core {
 	 *
 	 * @return bool True if the plugin is activated.
 	 */
-	protected function is_plugin_activated() {
+	final protected function is_plugin_activated() {
 		return 'Activated' === $this->get_option( '_activated' );
 	}
 
@@ -1748,7 +1790,7 @@ class Core {
 	 *
 	 * @return bool True if the plugin is connected to the API handler.
 	 */
-	protected function is_premium_user() {
+	final protected function is_premium_user() {
 		return 'Premium' === $this->get_option( '_activation_level' );
 	}
 
@@ -1763,7 +1805,7 @@ class Core {
 	 * @param int $bit The verification instance bit. Passed by reference.
 	 * @return array|boolean Current subscription status. False on failed instance verification.
 	 */
-	public function _get_subscription_status( &$_instance, &$bits ) {
+	final public function _get_subscription_status( &$_instance, &$bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
 			return $this->get_subscription_status();
@@ -1780,20 +1822,20 @@ class Core {
 	 *
 	 * @return array Current subscription status.
 	 */
-	protected function get_subscription_status() {
+	final protected function get_subscription_status() {
 
 		static $status = null;
 
 		if ( null !== $status )
 			return $status;
 
-		return $status = array(
+		return $status = [
 			'key'     => $this->get_option( 'api_key' ),
 			'email'   => $this->get_option( 'activation_email' ),
 			'active'  => $this->get_option( '_activated' ),
 			'level'   => $this->get_option( '_activation_level' ),
 			'data'    => $this->get_option( '_remote_subscription_status' ),
-		);
+		];
 	}
 
 	/**
@@ -1814,7 +1856,7 @@ class Core {
 	 *              If left empty, it will convert all.
 	 * @return string The markdown converted text.
 	 */
-	public function convert_markdown( $text, $convert = array() ) {
+	final public function convert_markdown( $text, $convert = [] ) {
 
 		preprocess : {
 			$text = str_replace( "\r\n", "\n", $text );
@@ -1828,7 +1870,7 @@ class Core {
 		/**
 		 * The conversion list's keys are per reference only.
 		 */
-		$conversions = array(
+		$conversions = [
 			'**'   => 'strong',
 			'*'    => 'em',
 			'`'    => 'code',
@@ -1839,11 +1881,11 @@ class Core {
 			'==='  => 'h3',
 			'=='   => 'h2',
 			'='    => 'h1',
-		);
+		];
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
 
-		if ( 2 === count( array_intersect( $md_types, array( 'em', 'strong' ) ) ) ) :
+		if ( 2 === count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
 			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
 
 			for ( $i = 0; $i < $count; $i++ ) {
@@ -1943,7 +1985,7 @@ class Core {
 	 * @param string The content to calculate size from.
 	 * @return int The filesize in bytes/octets.
 	 */
-	public function get_filesize( $content = '' ) {
+	final public function get_filesize( $content = '' ) {
 
 		if ( '' === $content )
 			return 0;
@@ -1965,7 +2007,7 @@ class Core {
 	 * @param string $capability The menu's required access capability.
 	 * @return bool True on success, false on failure.
 	 */
-	public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
+	final public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
 
 		if ( ( ! $slug = \sanitize_key( $slug ) )
 		|| ( ! $capability = \sanitize_key( $capability ) )
@@ -1975,7 +2017,7 @@ class Core {
 		}
 
 		static $parent_set = false;
-		static $set = array();
+		static $set = [];
 
 		if ( false === $parent_set && ( $parent_set = true ) ) {
 			//* Set parent slug.
@@ -1986,14 +2028,14 @@ class Core {
 			return $set[ $slug ];
 
 		//* Add arbitrary menu contents to known menu slug.
-		$menu = array(
+		$menu = [
 			'parent_slug' => \the_seo_framework_options_page_slug(),
 			'page_title'  => '1',
 			'menu_title'  => '1',
 			'capability'  => $capability,
 			'menu_slug'   => $slug,
 			'callback'    => '\\__return_empty_string',
-		);
+		];
 
 		return $set[ $slug ] = (bool) \add_submenu_page(
 			$menu['parent_slug'],

@@ -69,7 +69,7 @@ define( 'TSFEM_E_TRANSPORTER_PATH_CLASS', TSFEM_E_TRANSPORTER_DIR_PATH . 'inc' .
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\transporter_init', 11 );
 /**
- * Initialize the extension.
+ * Initializes the extension.
  *
  * @since 1.0.0
  * @staticvar bool $loaded

@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\monitor_clas
 		<p class="hide-if-no-js" id="tsfem-e-monitor-privacy-readmore-wrap"><a class="tsfem-e-monitor-readmore" id="tsfem-e-monitor-privacy-readmore"><?php \esc_html_e( 'Read more...', 'the-seo-framework-extension-manager' ); ?></a></p>
 		<div class="hide-if-js" id="tsfem-e-monitor-privacy-readmore-content">
 			<p><?php
-				printf( \esc_html_x( 'This is a small introductorial excerpt of our privacy policy. For full details, visit our %s.', '%s = Privacy Policy', 'the-seo-framework-extension-manager' ),
+				printf( \esc_html_x( 'This is a small introductory excerpt of our privacy policy. For full details, visit our %s.', '%s = Privacy Policy', 'the-seo-framework-extension-manager' ),
 					sprintf( '<a href="%s" rel="external nofollow">%s</a>', \esc_url( 'https://theseoframework.com/privacy/' ), \esc_html__( 'Privacy Policy' ) )
 				);
 			?></p>

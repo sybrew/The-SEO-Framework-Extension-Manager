@@ -51,7 +51,7 @@ define( 'TSFEM_E_AMP_VERSION', '1.0.0' );
 
 \add_action( 'wp', __NAMESPACE__ . '\\_amp_init', 11 );
 /**
- * Initialize the extension. Runs after AMP plugin action 'amp_init'.
+ * Initializes the extension. Runs after AMP plugin action 'amp_init'.
  *
  * @since 1.0.0
  * @action 'wp'
@@ -94,7 +94,7 @@ final class AMP {
 	 */
 	private function construct() {
 
-		\add_action( 'amp_post_template_head', array( $this, 'do_output_hook' ), 11 );
+		\add_action( 'amp_post_template_head', [ $this, 'do_output_hook' ], 11 );
 
 		/**
 		 * Applies filters 'the_seo_framework_remove_amp_articles' : bool

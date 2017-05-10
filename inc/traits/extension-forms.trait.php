@@ -208,7 +208,7 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _action_form( $url = '', array $items = array() ) {
+	public function _action_form( $url = '', array $items = [] ) {
 		//* Should already be escaped before input.
 		echo $this->_get_action_form( $url, $items );
 	}
@@ -232,7 +232,7 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _get_action_form( $url = '', array $items = array() ) {
+	public function _get_action_form( $url = '', array $items = [] ) {
 
 		if ( empty( $url ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
@@ -244,16 +244,16 @@ trait Extension_Forms {
 			return '';
 		}
 
-		$defaults = array(
+		$defaults = [
 			'class'      => '',
 			'id'         => '',
-			'input'      => array(),
+			'input'      => [],
 			'ajax'       => false,
 			'ajax-id'    => '',
 			'ajax-class' => '',
 			'ajax-name'  => '',
 			'ajax-title' => '',
-		);
+		];
 
 		$items = \wp_parse_args( $items, $defaults );
 

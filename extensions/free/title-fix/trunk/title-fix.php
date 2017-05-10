@@ -50,7 +50,7 @@ define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.3' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\title_fix_init', 11 );
 /**
- * Initialize the plugin.
+ * Initializes the extension.
  *
  * @since 1.0.0
  * @staticvar bool $loaded
@@ -134,7 +134,7 @@ final class Title_Fix {
 	private function construct() {
 
 		//* Start the plugin at header, where theme support has just been initialized.
-		\add_action( 'get_header', array( $this, 'start_plugin' ), -1 );
+		\add_action( 'get_header', [ $this, 'start_plugin' ], -1 );
 
 	}
 
@@ -175,7 +175,7 @@ final class Title_Fix {
 			 * Stop OB if it's still running at shutdown.
 			 * Might prevent AJAX issues, if any.
 			 */
-			\add_action( 'shutdown', array( $this, 'stop_ob' ), 0 );
+			\add_action( 'shutdown', [ $this, 'stop_ob' ], 0 );
 		endif;
 	}
 
@@ -203,8 +203,8 @@ final class Title_Fix {
 				 * Start at HTTP header.
 				 * Stop right at where wp_head is run.
 				 */
-				\add_action( 'get_header', array( $this, 'start_ob' ), 0 );
-				\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 0 );
+				\add_action( 'get_header', [ $this, 'start_ob' ], 0 );
+				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 0 );
 				break;
 
 			case 2 :
@@ -214,8 +214,8 @@ final class Title_Fix {
 				 * Start at where wp_head is run (last run left off).
 				 * Stop right at the end of wp_head.
 				 */
-				\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 0 );
-				\add_action( 'wp_head', array( $this, 'maybe_rewrite_title' ), 9999 );
+				\add_action( 'wp_head', [ $this, 'maybe_start_ob' ], 0 );
+				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 9999 );
 				break;
 
 			case 3 :
@@ -225,8 +225,8 @@ final class Title_Fix {
 				 *		or at wp_head start (first run left off).
 				 * Stop at the footer.
 				 */
-				\add_action( 'wp_head', array( $this, 'maybe_start_ob' ), 9999 );
-				\add_action( 'get_footer', array( $this, 'maybe_rewrite_title' ), -1 );
+				\add_action( 'wp_head', [ $this, 'maybe_start_ob' ], 9999 );
+				\add_action( 'get_footer', [ $this, 'maybe_rewrite_title' ], -1 );
 				break;
 
 			default :

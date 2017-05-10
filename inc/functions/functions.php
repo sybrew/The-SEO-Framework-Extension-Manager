@@ -105,7 +105,7 @@ function is_done( &$bool ) {
  */
 function has_run( $caller ) {
 
-	static $cache = array();
+	static $cache = [];
 
 	return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
 }

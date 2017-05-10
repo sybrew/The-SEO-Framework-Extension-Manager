@@ -58,7 +58,7 @@ trait Error {
 
 		$this->error_notice_option or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
-		\add_action( 'admin_notices', array( $this, '_do_error_notices' ) );
+		\add_action( 'admin_notices', [ $this, '_do_error_notices' ] );
 	}
 
 	/**
@@ -91,7 +91,7 @@ trait Error {
 	 *
 	 * @param array $notice The notice.
 	 */
-	final protected function set_error_notice( $notice = array() ) {
+	final protected function set_error_notice( $notice = [] ) {
 		\is_admin() and $this->error_notice_option and \update_option( $this->error_notice_option, $notice, 'yes' );
 	}
 
@@ -148,10 +148,10 @@ trait Error {
 		/* translators: 1: Error code, 2: Error message, 3: Additional info */
 		$output = sprintf( \esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ), $status, $message, $additional_info );
 
-		return array(
+		return [
 			'message' => $output,
 			'type' => $type,
-		);
+		];
 	}
 
 	/**
@@ -392,7 +392,7 @@ trait Error {
 				break;
 		endswitch;
 
-		return $get_type ? array( 'message' => $message, 'type' => $type ) : $message;
+		return $get_type ? [ 'message' => $message, 'type' => $type ] : $message;
 	}
 
 	/**
@@ -409,10 +409,10 @@ trait Error {
 	 * }
 	 */
 	protected function get_ajax_notice( $success, $code ) {
-		return array(
+		return [
 			'success' => $success,
 			'notice' => $this->get_error_notice_by_key( $code, false ),
 			'code' => intval( $code ),
-		);
+		];
 	}
 }

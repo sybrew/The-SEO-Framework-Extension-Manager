@@ -300,7 +300,7 @@ window[ 'tsfem_e_transporter' ] = {
 		}
 	},
 
-	setupListenersStep( which, what ) {
+	setupListenersStep: function( which, what ) {
 		'use strict';
 
 		if ( 'settings-export' === what ) {

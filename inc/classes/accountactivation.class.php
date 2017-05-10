@@ -98,7 +98,7 @@ class AccountActivation extends Panes {
 	 * @param array $value The data that needs to be set.
 	 * @return bool True
 	 */
-	protected function set_remote_activation_listener_response( $value = array() ) {
+	protected function set_remote_activation_listener_response( $value = [] ) {
 
 		if ( empty( $value ) || \is_wp_error( $value ) )
 			return false;
@@ -123,15 +123,15 @@ class AccountActivation extends Panes {
 	 *		Activation/Status: Reponse data.
 	 * }
 	 */
-	protected function handle_request( $type = 'status', $args = array() ) {
+	protected function handle_request( $type = 'status', $args = [] ) {
 
 		if ( empty( $args['licence_key'] ) ) {
-			$this->set_error_notice( array( 101 => '' ) );
+			$this->set_error_notice( [ 101 => '' ] );
 			return false;
 		}
 
 		if ( empty( $args['activation_email'] ) ) {
-			$this->set_error_notice( array( 102 => '' ) );
+			$this->set_error_notice( [ 102 => '' ] );
 			return false;
 		}
 
@@ -146,7 +146,7 @@ class AccountActivation extends Panes {
 			case 'deactivation' :
 				if ( false === $this->is_plugin_activated() ) {
 					$this->kill_options();
-					$this->set_error_notice( array( 103 => '' ) );
+					$this->set_error_notice( [ 103 => '' ] );
 					return false;
 				}
 
@@ -157,16 +157,16 @@ class AccountActivation extends Panes {
 				break;
 
 			default :
-				$this->set_error_notice( array( 104 => '' ) );
+				$this->set_error_notice( [ 104 => '' ] );
 				return false;
 				break;
 		endswitch;
 
-		$request = array(
+		$request = [
 			'request'     => $type,
 			'licence_key' => $this->activation_key,
 			'email'       => $this->activation_email,
-		);
+		];
 
 		$response = $this->get_api_response( $request );
 		$response = $this->handle_response( $type, $response, WP_DEBUG );
@@ -186,30 +186,30 @@ class AccountActivation extends Panes {
 
 		if ( isset( $results['activated'] ) && true === $results['activated'] ) {
 
-			$args = array(
+			$args = [
 				'api_key' => $this->activation_key,
 				'activation_email' => $this->activation_email,
 				'_activation_level' => 'Premium',
-			);
+			];
 
 			$success = $this->do_premium_activation( $args );
 
 			if ( ! $success ) {
 				$this->do_deactivation();
-				$this->set_error_notice( array( 401 => '' ) );
+				$this->set_error_notice( [ 401 => '' ] );
 				return false;
 			}
 
-			$this->set_error_notice( array( 402 => '' ) );
+			$this->set_error_notice( [ 402 => '' ] );
 			return true;
 		} elseif ( ! $results ) {
 			if ( $this->get_option( '_activated' ) ) {
 				//* Upgrade request.
-				$this->set_error_notice( array( 403 => '' ) );
+				$this->set_error_notice( [ 403 => '' ] );
 			} else {
 				//* Activation request.
 				$this->do_deactivation();
-				$this->set_error_notice( array( 404 => '' ) );
+				$this->set_error_notice( [ 404 => '' ] );
 			}
 
 			return false;
@@ -218,7 +218,7 @@ class AccountActivation extends Panes {
 			return false;
 		}
 
-		$this->set_error_notice( array( 405 => '' ) );
+		$this->set_error_notice( [ 405 => '' ] );
 		return null;
 	}
 
@@ -245,16 +245,16 @@ class AccountActivation extends Panes {
 				if ( ! $success )
 					$message .= \esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
 
-				$this->set_error_notice( array( 501 => $message ) );
+				$this->set_error_notice( [ 501 => $message ] );
 				return true;
 			}
 
-			$this->set_error_notice( array( 502 => '' ) );
+			$this->set_error_notice( [ 502 => '' ] );
 			return false;
 		}
 
 		//* API server down... TODO consider still handling deactivation?
-		$this->set_error_notice( array( 503 => '' ) );
+		$this->set_error_notice( [ 503 => '' ] );
 		return null;
 	}
 
@@ -267,22 +267,22 @@ class AccountActivation extends Panes {
 	 */
 	protected function do_free_activation() {
 
-		$options = array(
+		$options = [
 			'api_key'             => '',
 			'activation_email'    => '',
 			'_activation_level'   => 'Free',
 			'_activation_expires' => '',
 			'_activated'          => 'Activated',
 			'_instance'           => $this->get_activation_instance( false ),
-		);
+		];
 
 		$success = $this->update_option_multi( $options );
 
 		if ( $success ) {
-			$this->set_error_notice( array( 601 => '' ) );
+			$this->set_error_notice( [ 601 => '' ] );
 			return true;
 		} else {
-			$this->set_error_notice( array( 602 => '' ) );
+			$this->set_error_notice( [ 602 => '' ] );
 			$this->do_deactivation();
 			return false;
 		}
@@ -300,10 +300,10 @@ class AccountActivation extends Panes {
 		$success = $this->do_deactivation();
 
 		if ( $success ) {
-			$this->set_error_notice( array( 801 => '' ) );
+			$this->set_error_notice( [ 801 => '' ] );
 			return true;
 		} else {
-			$this->set_error_notice( array( 802 => '' ) );
+			$this->set_error_notice( [ 802 => '' ] );
 			return false;
 		}
 	}
@@ -318,7 +318,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function do_premium_activation( $args ) {
 
-		$success = array();
+		$success = [];
 
 		$success[] = $this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true );
 		$success[] = $this->update_option( 'api_key', $args['api_key'], 'instance', true );
@@ -406,7 +406,7 @@ class AccountActivation extends Panes {
 		if ( isset( $response ) )
 			return $response;
 
-		$status = $this->get_option( '_remote_subscription_status', array( 'timestamp' => 0, 'status' => array() ) );
+		$status = $this->get_option( '_remote_subscription_status', [ 'timestamp' => 0, 'status' => [] ] );
 
 		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
 			//* Updates at most every 1 minute.
@@ -428,21 +428,21 @@ class AccountActivation extends Panes {
 			usleep( 62500 );
 
 			//* Fetch data from POST variables. As the options are cached and tainted already at this point.
-			$args = array(
+			$args = [
 				'licence_key' => $this->activation_key,
 				'activation_email' => $this->activation_email,
-			);
+			];
 		} else {
-			$args = array(
+			$args = [
 				'licence_key' => $this->get_option( 'api_key' ),
 				'activation_email' => $this->get_option( 'activation_email' ),
-			);
+			];
 		}
 
 		$response = $this->handle_request( 'status', $args );
 
 		if ( ! empty( $response ) )
-			$this->update_option( '_remote_subscription_status', array( 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ), 'regular', false );
+			$this->update_option( '_remote_subscription_status', [ 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ], 'regular', false );
 
 		return $response;
 	}
@@ -465,12 +465,12 @@ class AccountActivation extends Panes {
 			return false;
 
 		if ( $doing_activation ) {
-			$data = array();
+			$data = [];
 		} else {
-			$data = $this->get_option( '_remote_subscription_status', array() );
+			$data = $this->get_option( '_remote_subscription_status', [] );
 
 			if ( false === is_array( $data ) )
-				$data = array();
+				$data = [];
 		}
 
 		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;

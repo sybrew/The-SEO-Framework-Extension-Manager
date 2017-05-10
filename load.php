@@ -93,7 +93,7 @@ function _test_sever( $network_wide = false ) {
 			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage )
 		),
 		sprintf( 'The SEO Framework - Extension Manager &laquo; %s', \esc_attr( $subtitle ) ),
-		array( 'response' => intval( $response ) )
+		[ 'response' => intval( $response ) ]
 	);
 }
 
@@ -148,6 +148,8 @@ function can_do_settings() {
  * This is because the required traits files aren't loaded yet. The autoloader treats traits
  * as classes.
  *
+ * Also defines PHP_INT_MIN when not defined. This is used further internally.
+ *
  * @since 1.0.0
  * @access private
  * @uses constant PHP_INT_MIN, available from PHP 7.0
@@ -156,7 +158,7 @@ function _protect_options() {
 
 	defined( 'PHP_INT_MIN' ) or define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
 
-	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, array() );
+	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
 	\add_action( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 	if ( isset( $current_options['_instance'] ) )
@@ -347,7 +349,7 @@ function _autoload_classes( $class ) {
  */
 function _load_trait( $file ) {
 
-	static $loaded = array();
+	static $loaded = [];
 
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
@@ -368,7 +370,7 @@ function _load_trait( $file ) {
  */
 function _load_wp_compat( $version = '' ) {
 
-	static $loaded = array();
+	static $loaded = [];
 
 	if ( isset( $loaded[ $version ] ) )
 		return $loaded[ $version ];

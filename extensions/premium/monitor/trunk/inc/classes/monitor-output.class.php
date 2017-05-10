@@ -136,17 +136,17 @@ final class Monitor_Output {
 	 */
 	public function _ajax_get_pane_data( $data, $type ) {
 
-		$info = array();
+		$info = [];
 
 		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
 			$info[] = $info_entry;
 
 		$wrap = '<div class="tsfem-flex tsfem-flex-row"></div>';
 
-		return array(
+		return [
 			'info' => $info,
 			'wrap' => $wrap,
-		);
+		];
 	}
 
 	/**
@@ -160,7 +160,7 @@ final class Monitor_Output {
 	 * @param string $type The pane-date type.
 	 * @yields Interpreted data from array for the information slab.
 	 */
-	protected function generate_pane_info_list( $data = array(), $type = '' ) {
+	protected function generate_pane_info_list( $data = [], $type = '' ) {
 		foreach ( $data as $key => $value ) :
 			yield $this->make_slab_info_entry( $key, $value, $type );
 		endforeach;
@@ -306,7 +306,7 @@ final class Monitor_Output {
 	 */
 	protected function get_entry_title( $key, $type ) {
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $type ][ $key ] ) )
 			return $cache[ $type ][ $key ];
@@ -347,7 +347,7 @@ final class Monitor_Output {
 	 */
 	protected function get_entry_state( $key, $type, $set = null ) {
 
-		static $cache = array();
+		static $cache = [];
 
 		if ( isset( $cache[ $type ][ $key ] ) )
 			return $cache[ $type ][ $key ];
@@ -500,7 +500,7 @@ final class Monitor_Output {
 				endswitch;
 
 			default :
-				$title = ucwords( str_replace( array( '-', '_' ), ' ', $key ) );
+				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );
 				break 1;
 		endswitch;
 
@@ -648,7 +648,7 @@ final class Monitor_Output {
 		static $debug = null;
 
 		if ( null === $debug ) {
-			$debug = array();
+			$debug = [];
 			$debug[1] = \the_seo_framework()->the_seo_framework_debug;
 			$debug[2] = \the_seo_framework()->the_seo_framework_debug_hidden;
 		}

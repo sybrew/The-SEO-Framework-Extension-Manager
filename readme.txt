@@ -144,7 +144,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
-= 1.2.0 - ??? =
+= 1.2.0 - Aptitudinal SEO =
 
 * **Release date:**
 	* ???
@@ -200,13 +200,15 @@ TODO update extension versions and requirements list.
 	* **Changed:**
 		/
 		* The automated description is now set to 155 characters, rather than 400.
-		* TODO CONFIRM IF HELPFUL: The automated description is now also outputted on the front-end.
+		* TODO CONFIRM IF HELPFUL (it's not): The automated description is now also outputted on the front-end.
 			* This is because the articles markup removed regular description output.
 			* This is not according to spec, but it's a bug within Google's indexing.
 	* **Fixed:**
 		* No more PHP notice should be output when fetching image from SEO settings.
 		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
 			* Otherwise the Featured Image is used, if any.
+		/
+		* TODO This is output on WooCommerce 3.0.x posts, which is invalid and annoyingly misplaced... <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article"}</script>
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
@@ -223,6 +225,12 @@ TODO update extension versions and requirements list.
 		* **Note:** These API changes affect only this plugin version.
 			/ TODO
 		* **Note:** These API changes affect all plugin versions.
+			* **Added:**
+				/
+				* May 7th, 2017: Only the root file is now checked, rather than subdirectories.
+				* TODO May ??, 2017: The sitemap through queries can now be detected.
+				* TODO May ??, 2017: It now confirms if your website is accessible on HTTPS.
+				* TODO May ??, 2017: It now checks canonical URLs.
 			* **Fixed:**
 				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
 				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
