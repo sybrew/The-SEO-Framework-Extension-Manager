@@ -7,8 +7,8 @@ namespace TSF_Extension_Manager\Extension;
 /**
  * Extension Name: Honeypot - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches robot spammers in a lightweight way. By adding a hidden input field that only real browsers can clear, it has a near 100% catch-rate. Because of a Murphy's Law countermeasure, it currently does not support page caching.
- * Extension Version: 1.0.0-***β***
+ * Extension Description: The Honeypot extension catches robot spammers in a lightweight way. By adding a hidden input field that only real browsers can clear, it has a near 100% catch-rate.
+ * Extension Version: 1.0.0-***β-2***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -86,9 +86,32 @@ function honeypot_init() {
 final class Honeypot {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
+	/**
+	 * Determines whether the class has been constructed.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var bool $setup
+	 */
 	private $setup = false;
+
+	/**
+	 * Maintains array of properties, like fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array $honeypot_properties
+	 */
 	private $honeypot_properties = [];
-	private $hardcore = true;
+
+	/**
+	 * Determines whether the spam check is hardcore.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var bool $hardcore
+	 */
+	private $hardcore = false;
 
 	/**
 	 * Class constructor.
@@ -146,19 +169,35 @@ final class Honeypot {
 	private function setup_hash_properties() {
 
 		if ( $this->setup ) {
-			$this->hardcore = \apply_filters( 'the_seo_framework_honeypot_hardcore', $this->hardcore );
+			/**
+			 * Applies filters 'the_seo_framework_honeypot_hardcore'
+			 *
+			 * Determines whether the hashing is randomized, or otherwise static.
+			 * Set this to true if you don't use caching and still get spam through.
+			 *
+			 * @todo make option.
+			 * @param bool $hardcore
+			 */
+			$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', $this->hardcore );
 
-			$this->honeypot_properties = $this->honeypot_properties + [
-				'honeypot_post_field' => $this->get_hashed_field_name( 32, false ),
-				'honeypot_post_field_last' => $this->get_hashed_field_name( 32, false, true ),
-			];
+			if ( $this->hardcore ) {
+				$this->honeypot_properties = $this->honeypot_properties + [
+					'honeypot_post_field' => $this->get_hashed_field_name( 32, false ),
+					'honeypot_post_field_previous' => $this->get_hashed_field_name( 32, false, true ),
+				];
+			} else {
+				$this->honeypot_properties = $this->honeypot_properties + [
+					'honeypot_post_field' => 'tsfem-e-hp-comment',
+					'honeypot_post_field_previous' => 'tsfem-e-hp-placeholder', // Won't ever run.
+				];
+			}
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Checks honeypot text inserted in the last 4 hours.
+	 * Checks honeypot text generated in the past two time scales (default 2*2 minutes).
 	 *
 	 * @since 1.0.0
 	 *
@@ -171,13 +210,12 @@ final class Honeypot {
 
 		$_fields = [
 			$this->honeypot_properties['honeypot_post_field'],
-			$this->honeypot_properties['honeypot_post_field_last'],
+			$this->honeypot_properties['honeypot_post_field_previous'],
 		];
 
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
 		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
 
-		// Nonce check isn't done on the frontend.
 		if ( $field ) {
 			$approved = 'spam';
 			unset( $_POST[ $_fields[ $k ] ] );
@@ -288,13 +326,16 @@ final class Honeypot {
 			 * Applies filters 'the_seo_framework_honeypot_scale'
 			 *
 			 * Set this lower if you are a prominent spam target.
+			 * Lower than 150 seconds (total 300 i.e. 5 minutes) is not recommended,
+			 * as some bots purposely wait.
 			 * If you're using page caching, set this higher.
 			 *
 			 * @since 1.0.0
 			 *
 			 * @param int $scale The time in seconds on how fast the check works.
+			 *            Note that this value is doubled for the fallback check.
 			 */
-			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_scale', MINUTE_IN_SECONDS );
+			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_scale', 5 * MINUTE_IN_SECONDS );
 
 			$_hashes = [
 				'current'  => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale ),
