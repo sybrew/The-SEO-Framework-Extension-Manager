@@ -136,6 +136,21 @@ body.tsfem .wrap {
 	min-width: 175px;
 }
 
+.tsfem-flex-textarea-wrap {
+	/* This block fixes an overflow lag. */
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	min-width: 100%;
+	width: 100%;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+
+.tsfem-flex-textarea-wrap textarea {
+	display: block;
+	min-width: 100%;
+}
+
 /* # Start Top/Header.
 /*----------------------------------------------------------------------------*/
 
@@ -1314,7 +1329,7 @@ h5.tsfem-extension-type {
 	font-size: 1em;
 	font-weight: 500;
 	line-height: 1.625em;
-	color: #fff;
+	color: #fbf7fd;
 	border-radius: 3px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
