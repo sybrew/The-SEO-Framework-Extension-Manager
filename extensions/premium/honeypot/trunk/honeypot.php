@@ -7,8 +7,8 @@ namespace TSF_Extension_Manager\Extension;
 /**
  * Extension Name: Honeypot - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches robot spammers in a lightweight way. By adding a hidden input field that only real browsers can clear, it has a near 100% catch-rate.
- * Extension Version: 1.0.0-***β-2***
+ * Extension Description: The Honeypot extension catches comment spammers in three lightweight yet powerful ways. By adding hashed input fields that only real browsers can clear, it has a near 100% catch-rate.
+ * Extension Version: 1.0.0-***β***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -67,7 +67,7 @@ function honeypot_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	//* Don't run on the admin side. This extension is front-end only.
+	//* Don't run on the admin side. This extension is front-end only. For now.
 	if ( \is_admin() )
 		return $loaded = false;
 
@@ -96,6 +96,15 @@ final class Honeypot {
 	private $setup = false;
 
 	/**
+	 * Determines whether the spam validation is extremely vibrant and dynamic.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var bool $hardcore
+	 */
+	private $hardcore = false;
+
+	/**
 	 * Maintains array of properties, like fields.
 	 *
 	 * @since 1.0.0
@@ -105,13 +114,13 @@ final class Honeypot {
 	private $honeypot_properties = [];
 
 	/**
-	 * Determines whether the spam check is hardcore.
+	 * Holds the name of the nonce input field that's sent through POST.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var bool $hardcore
+	 * @var string $nonce_name
 	 */
-	private $hardcore = false;
+	private $nonce_name = 'tsfem-e-hp-nonce';
 
 	/**
 	 * Class constructor.
@@ -122,15 +131,18 @@ final class Honeypot {
 
 		$this->setup = true;
 
-		//* Checks honeypot existence before setting approval of a comment.
-		\add_filter( 'pre_comment_approved', [ $this, '_check_honeypot' ], 0 );
-
 		//* Adds honeypot to comment fields.
 		\add_action( 'comment_form_before_fields', [ $this, '_add_honeypot' ] );
+
+		//* Checks honeypot existence before setting approval of a comment.
+		\add_filter( 'pre_comment_approved', [ $this, '_check_honeypot' ], 0, 2 );
 	}
 
 	/**
 	 * Sets class display properties.
+	 *
+	 * This method is not cache sensitive as it's for display only, so hashing
+	 * can be used generously.
 	 *
 	 * @since 1.0.0
 	 * @see $this->honeypot_properties
@@ -141,11 +153,11 @@ final class Honeypot {
 
 		if ( $this->setup ) {
 			$this->honeypot_properties = $this->honeypot_properties + [
-				'honeypot_wrapper_id' => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 8, 16 ), (bool) rand( 0, 1 ) ),
-				'honeypot_text_label' => $this->get_text( 'label' ),
-				'honeypot_text_id' => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 17, 32 ), (bool) rand( 0, 1 ) ),
-				'honeypot_text_placeholder' => $this->get_text( 'placeholder' ),
-				'honeypot_text_default_input' => $this->get_text( 'input' ),
+				'wrapper_id'         => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 13, 20 ), (bool) rand( 0, 1 ) ),
+				'text_label'         => $this->get_text( 'label' ),
+				'text_id'            => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 21, 32 ), (bool) rand( 0, 1 ) ),
+				'text_placeholder'   => $this->get_text( 'placeholder' ),
+				'text_default_input' => $this->get_text( 'input' ),
 			];
 			return true;
 		}
@@ -155,11 +167,9 @@ final class Honeypot {
 	/**
 	 * Sets class hashing properties.
 	 *
-	 * The IDs are currently weakly ciphered and will check two versions.
-	 * This is because we don't maintain a out-of-source cache for generated hashes.
-	 * Rather, it's time-based, and depending on filters, it will check:
-	 * - Every minute.
-	 * - Filter set time.
+	 * The IDs are currently weakly ciphered and will check four versions.
+	 * There are two input ID names. Valid over 10 (2*5) minutes.
+	 * There are two nonce values.   Valid over 24 (2*12) hours.
 	 *
 	 * @since 1.0.0
 	 * @see $this->honeypot_properties
@@ -175,20 +185,26 @@ final class Honeypot {
 			 * Determines whether the hashing is randomized, or otherwise static.
 			 * Set this to true if you don't use caching and still get spam through.
 			 *
+			 * @uses @const WP_CACHE If WP_CACHE is true, hardcore is false.
+			 *
 			 * @todo make option.
 			 * @param bool $hardcore
 			 */
-			$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', $this->hardcore );
+			$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', ! WP_CACHE );
 
 			if ( $this->hardcore ) {
 				$this->honeypot_properties = $this->honeypot_properties + [
-					'honeypot_post_field' => $this->get_hashed_field_name( 32, false ),
-					'honeypot_post_field_previous' => $this->get_hashed_field_name( 32, false, true ),
+					'empty_name'           => $this->get_hashed_field_name( 8, false ),
+					'empty_name_previous'  => $this->get_hashed_field_name( 8, false, true ),
+					'nonce_value'          => $this->get_hashed_nonce_value( 14, true ),
+					'nonce_value_previous' => $this->get_hashed_nonce_value( 14, true, true ),
 				];
 			} else {
 				$this->honeypot_properties = $this->honeypot_properties + [
-					'honeypot_post_field' => 'tsfem-e-hp-comment',
-					'honeypot_post_field_previous' => 'tsfem-e-hp-placeholder', // Won't ever run.
+					'empty_name'           => 'tsfem-e-hp-comment', // Set this to weak hash based on blogname??
+					'empty_name_previous'  => 'tsfem-e-hp-placeholder', // Won't ever run.
+					'nonce_value'          => 'tsfem-e-hp-val', // Set this to weak hash based on blogname??
+					'nonce_value_previous' => 'tsfem-e-hp-val-placeholder', // Won't ever run.
 				];
 			}
 			return true;
@@ -201,27 +217,95 @@ final class Honeypot {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $approved The current approval state.
-	 * @return string The new approval state.
+	 * @param string|int $approved    The current approval state.
+	 * @param array      $commentdata Comment data.
+	 * @return string|int The new approval state.
 	 */
-	public function _check_honeypot( $approved = '' ) {
+	public function _check_honeypot( $approved = '', $commentdata = [] ) {
+
+		if ( ! $this->setup )
+			return $approved;
+
+		//* These checks only work if user is not logged in.
+		if ( \is_user_logged_in() )
+			return $approved;
+
+		// No need to check further.
+		if ( 'spam' === $approved )
+			return $approved;
 
 		$this->setup_hash_properties();
 
-		$_fields = [
-			$this->honeypot_properties['honeypot_post_field'],
-			$this->honeypot_properties['honeypot_post_field_previous'],
-		];
+		$this->check_honeypot_fields( $approved );
+		$this->check_nonce_fields( $approved );
+
+		return $approved;
+	}
+
+	/**
+	 * Checks the input fields that ought to be empty.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 */
+	private function check_honeypot_fields( &$approved ) {
+
+		//* Perform same sanitation as displayed.
+		$_fields = \map_deep( [
+			$this->honeypot_properties['empty_name'],
+			$this->honeypot_properties['empty_name_previous'],
+		], '\\esc_attr' );
+
+		$_submission = \wp_unslash( $_POST );
 
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
-		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
+		$field = ( empty( $_submission[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_submission[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
 
 		if ( $field ) {
+			// Empty check failed.
 			$approved = 'spam';
 			unset( $_POST[ $_fields[ $k ] ] );
 		}
+	}
 
-		return $approved;
+	/**
+	 * Checks the input fields that ought to be set.
+	 * This prevents POST hijack spam.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 * @return void Early if field not POSTed, therefore spam.
+	 */
+	private function check_nonce_fields( &$approved ) {
+
+		if ( empty( $_POST[ $this->nonce_name ] ) ) {
+			$approved = 'spam';
+			return;
+		}
+
+		$_submission = \wp_unslash( $_POST );
+
+		//* Perform same sanitation as displayed.
+		$_nonces = \map_deep( [
+			$this->honeypot_properties['nonce_value'],
+			$this->honeypot_properties['nonce_value_previous'],
+		], '\\esc_attr' );
+
+		$_tick = 0;
+		$_input = $_submission[ $this->nonce_name ];
+
+		if ( hash_equals( $_nonces[0], $_input ) ) :
+			$_tick = 1;
+		elseif ( hash_equals( $_nonces[1], $_input ) ) :
+			$_tick = 2;
+		endif;
+
+		if ( $_tick < 1 ) {
+			$approved = 'spam';
+			unset( $_POST[ $this->nonce_name ] );
+		}
 	}
 
 	/**
@@ -236,17 +320,20 @@ final class Honeypot {
 		if ( ! $setup )
 			return;
 
-		printf( '<p id="%1$s">'
-				. '<label for="%4$s">%3$s</label>'
-				. '<textarea type="text" name="%2$s" id="%4$s" placeholder="%5$s">%6$s</textarea>'
-			. '</p>'
+		// Chaos, but quick... @TODO clean up?
+		vprintf( '<p id="%1$s"><label for="%4$s">%3$s</label><textarea type="text" name="%2$s" id="%4$s" placeholder="%5$s">%6$s</textarea></p>'
+			. '<input type="hidden" name="%7$s" value="%8$s">'
 			. '<script type="text/javascript">document.getElementById("%4$s").value="";document.getElementById("%1$s").style.display="none";</script>',
-			\sanitize_key( $this->honeypot_properties['honeypot_wrapper_id'] ),
-			\esc_attr( $this->honeypot_properties['honeypot_post_field'] ),
-			\esc_attr( $this->honeypot_properties['honeypot_text_label'] ),
-			\sanitize_key( $this->honeypot_properties['honeypot_text_id'] ),
-			\esc_attr( \ent2ncr( $this->honeypot_properties['honeypot_text_placeholder'] ) ),
-			\esc_html( \ent2ncr( $this->honeypot_properties['honeypot_text_default_input'] ) )
+			[
+				\sanitize_key( $this->honeypot_properties['wrapper_id'] ),
+				\esc_attr( $this->honeypot_properties['empty_name'] ),
+				\esc_attr( $this->honeypot_properties['text_label'] ),
+				\sanitize_key( $this->honeypot_properties['text_id'] ),
+				\esc_attr( \ent2ncr( $this->honeypot_properties['text_placeholder'] ) ),
+				\esc_html( \ent2ncr( $this->honeypot_properties['text_default_input'] ) ),
+				\esc_attr( $this->nonce_name ),
+				\esc_attr( $this->honeypot_properties['nonce_value'] ),
+			]
 		);
 	}
 
@@ -303,8 +390,8 @@ final class Honeypot {
 	}
 
 	/**
-	 * Generates an ID hash so bots can't automatically exclude this field.
-	 * Each key is valid for 1 hour.
+	 * Generates a hashed field name so bots can't automatically exclude this field.
+	 * Each key is valid for 5 minutes. For a total of 10 minutes wait time.
 	 *
 	 * This shouldn't affect users who stay on a comment section for longer,
 	 * the hash just never passes through the spam check. Which is fine.
@@ -323,7 +410,7 @@ final class Honeypot {
 
 		if ( empty( $_hashes ) ) {
 			/**
-			 * Applies filters 'the_seo_framework_honeypot_scale'
+			 * Applies filters 'the_seo_framework_honeypot_field_scale'
 			 *
 			 * Set this lower if you are a prominent spam target.
 			 * Lower than 150 seconds (total 300 i.e. 5 minutes) is not recommended,
@@ -335,7 +422,57 @@ final class Honeypot {
 			 * @param int $scale The time in seconds on how fast the check works.
 			 *            Note that this value is doubled for the fallback check.
 			 */
-			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_scale', 5 * MINUTE_IN_SECONDS );
+			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 5 * MINUTE_IN_SECONDS );
+
+			$_hashes = [
+				'current'  => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale ),
+				'previous' => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale, time() - $scale ),
+			];
+		}
+
+		if ( $previous ) {
+			$hash = (string) substr( $_hashes['previous'], 0, $length );
+			return $flip ? strrev( $hash ) : $hash;
+		} else {
+			$hash = (string) substr( $_hashes['current'], 0, $length );
+			return $flip ? strrev( $hash ) : $hash;
+		}
+	}
+
+	/**
+	 * Generates a hashed nonce so bots can't use PHP files to spam comments.
+	 * Each key is valid for 12 hour. For a total of 24 hours comment time.
+	 *
+	 * This will affect users who stay on a comment section for longer,
+	 * the hash will then fail the spam check. 24 hours is very generous, however.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $_hashes
+	 *
+	 * @param int  $length   The length of the hash to get.
+	 * @param bool $flip     Whether to flip the hash key prior to returning it.
+	 * @param bool $previous Whether to get the previous hash.
+	 * @return string The $_POST form nonce value hash.
+	 */
+	private function get_hashed_nonce_value( $length = 32, $flip = false, $previous = false ) {
+
+		static $_hashes = [];
+
+		if ( empty( $_hashes ) ) {
+			/**
+			 * Applies filters 'the_seo_framework_honeypot_nonce_scale'
+			 *
+			 * Set this lower if you are a prominent spam target.
+			 * Lower than 3600 seconds (total 7200 i.e. 2 hours) is not recommended,
+			 * as some users generously wait to comment (closing laptop and such).
+			 * If you're using page caching, set this higher.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param int $scale The time in seconds on how fast the check works.
+			 *            Note that this value is doubled for the fallback check.
+			 */
+			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', 12 * HOUR_IN_SECONDS );
 
 			$_hashes = [
 				'current'  => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale ),
