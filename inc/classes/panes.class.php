@@ -531,7 +531,6 @@ class Panes extends API {
 		\TSF_Extension_Manager\Layout::reset();
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
-		$content = \esc_html__( 'This also deactivates all extensions.', 'the-seo-framework-extension-manager' );
 
 		$extras = [];
 		$_extra = '';

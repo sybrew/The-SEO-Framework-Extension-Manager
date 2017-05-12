@@ -297,8 +297,6 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_button_form( $slug = '', $type = '', $disabled = false ) {
 
-		$key = '';
-
 		//* This pattern can't be unseen. Let's just keep it this way until further notice.
 		switch ( $type ) :
 			case 'activate' :

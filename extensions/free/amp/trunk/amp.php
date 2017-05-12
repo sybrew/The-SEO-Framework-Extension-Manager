@@ -116,8 +116,21 @@ final class AMP {
 
 		\do_action( 'the_seo_framework_do_before_amp_output' );
 
-		$this->output_general_metadata();
-		$this->output_social_metadata();
+		$output_start = microtime( true );
+
+		$output = '';
+
+		$output .= $this->get_general_metadata();
+		$output .= $this->get_social_metadata();
+
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '2.9.2', '>=' ) ) {
+			$output = \the_seo_framework()->get_plugin_indicator( 'before' )
+					. $output
+					. \the_seo_framework()->get_plugin_indicator( 'after', $output_start );
+		}
+
+		//* Already escaped.
+		echo $output;
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 
@@ -133,28 +146,26 @@ final class AMP {
 	}
 
 	/**
-	 * Outputs general metadata in the AMP HTML head.
+	 * Returns general metadata in the AMP HTML head.
 	 * Data is taken from The SEO Framework.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
+	 *
+	 * @return string The general metadata.
 	 */
-	protected function output_general_metadata() {
-
-		$tsf = \the_seo_framework();
-
-		$output = $tsf->the_description();
-
-		//* Already escaped.
-		echo $output;
+	protected function get_general_metadata() {
+		return \the_seo_framework()->the_description();
 	}
 
 	/**
 	 * Outputs social metadata in the AMP HTML head.
 	 * Data is taken from The SEO Framework.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
+	 *
+	 * @return string The social metadata.
 	 */
-	protected function output_social_metadata() {
+	protected function get_social_metadata() {
 
 		$tsf = \the_seo_framework();
 
@@ -177,7 +188,6 @@ final class AMP {
 				. $tsf->twitter_description()
 				. $tsf->twitter_image();
 
-		//* Already escaped.
-		echo $output;
+		return $output;
 	}
 }

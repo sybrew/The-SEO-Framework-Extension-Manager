@@ -19,10 +19,11 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 = Current Extensions =
 
 * **AMP:** It binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
-* **Articles:** It enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles).
+* **Articles:** It enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles), which makes your posts legible for various Search Engine usages.
 * **Monitor:** It keeps track of your website's SEO, optimization, uptime and statistics. It's still an experimental extension, but a lot is planned for it.
 * **Incognito:** It removes all front-end branding from The SEO Framework, like HTML comments.
 * **Title Fix:** It makes sure your title output is as configured. Even if your theme is doing it wrong.
+* **Honeypot:** It effectively stops comment spam from robots through four different anti-spam techniques.
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
 
 = Upcoming Extension =
@@ -86,7 +87,7 @@ An Extension is like a plugin, and can be activated and deactivated on demand. A
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
 Each extension will include carefully crafted documentation in the near future.
 
-= Do I require an account? =
+= Do I need to register an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
 
 = Are there advertisements? =
@@ -94,11 +95,11 @@ Nope. This plugin only shows which extensions are available on the activation pa
 Some buttons, like on the extension activation page, can lead you to the site where you can purchase a license, but only if you choose to do so.
 
 = Does this plugin track my usage? =
-Absolutely not! This plugin does not include any user tracking software. We completely rely on your feedback.
+Absolutely not! This plugin does not include any user tracking software. We completely rely on your feedback to know what you require.
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
-No X.y updates are planned as of now (2.0, 3.0, etc.). We plan to release a new extension every (other) month.
+No X.y updates (2.0, 3.0, etc.) are planned as of now. We plan to release a new extension every (other) month.
 
 = I've received an error code, what now? =
 Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
@@ -234,6 +235,11 @@ TODO update extension versions and requirements list.
 			* **Fixed:**
 				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
 				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
+* **Premium - Honeypot:**
+	* **Version:**
+		/
+		* TODO
+		* Requires TSF: 2.7.0
 * **Free - Incognito:**
 	* **Version:**
 		/

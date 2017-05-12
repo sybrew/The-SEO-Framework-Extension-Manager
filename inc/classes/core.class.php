@@ -903,9 +903,37 @@ class Core {
 	}
 
 	/**
+	 * Generates static hash based on $uid.
+	 *
+	 * Caution: This function does not generate cryptographically secure values.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $uid The unique ID for the hash.
+	 *                    A good choice would be the page ID + concatentated blog name.
+	 * @return string The timed hash that will always return the same.
+	 */
+	final public function get_uid_hash( $uid ) {
+
+		if ( empty( $uid ) )
+			return '';
+
+		$a = (string) $uid;
+		$b = strrev( $a );
+		$len = strlen( $a );
+		$r = 0;
+
+		for ( $i = 0; $i < $len; $i++ ) {
+			$r += ord( $a[ $i ] ) + ord( $b[ $i ] );
+		}
+
+		return $this->hash( $r, 'auth' );
+	}
+
+	/**
 	 * Generates timed hash based on $uid.
 	 *
-	 * Caution: This function does not generate cryptographically secure values
+	 * Caution: This function does not generate cryptographically secure values.
 	 *
 	 * @since 1.2.0
 	 *

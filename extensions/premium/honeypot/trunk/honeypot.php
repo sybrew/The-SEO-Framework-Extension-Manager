@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension;
 /**
  * Extension Name: Honeypot - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches comment spammers in three lightweight yet powerful ways. By adding hashed input fields that only real browsers can clear, it has a near 100% catch-rate.
+ * Extension Description: The Honeypot extension catches comment spammers in four lightweight yet powerful ways. By adding hashed input fields that only real browsers can clear, it has a near 100% catch-rate.
  * Extension Version: 1.0.0-***β***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
@@ -109,18 +109,9 @@ final class Honeypot {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var array $honeypot_properties
+	 * @var array $hp_properties
 	 */
-	private $honeypot_properties = [];
-
-	/**
-	 * Holds the name of the nonce input field that's sent through POST.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string $nonce_name
-	 */
-	private $nonce_name = 'tsfem-e-hp-nonce';
+	private $hp_properties = [];
 
 	/**
 	 * Class constructor.
@@ -139,81 +130,26 @@ final class Honeypot {
 	}
 
 	/**
-	 * Sets class display properties.
-	 *
-	 * This method is not cache sensitive as it's for display only, so hashing
-	 * can be used generously.
+	 * Generates and outputs honeypot comment field within the comment forms.
 	 *
 	 * @since 1.0.0
-	 * @see $this->honeypot_properties
-	 *
-	 * @return bool True on success, false when class isn't constructed.
 	 */
-	private function setup_display_properties() {
+	public function _add_honeypot() {
 
-		if ( $this->setup ) {
-			$this->honeypot_properties = $this->honeypot_properties + [
-				'wrapper_id'         => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 13, 20 ), (bool) rand( 0, 1 ) ),
-				'text_label'         => $this->get_text( 'label' ),
-				'text_id'            => 'comment-form-' . $this->get_hashed_field_name( mt_rand( 21, 32 ), (bool) rand( 0, 1 ) ),
-				'text_placeholder'   => $this->get_text( 'placeholder' ),
-				'text_default_input' => $this->get_text( 'input' ),
-			];
-			return true;
-		}
-		return false;
+		$this->set_hardcore();
+		$setup = $this->setup_display_properties() && $this->setup_post_check_properties();
+
+		if ( ! $setup )
+			return;
+
+		$this->output_css_honeypot();
+		$this->output_css_rotation_honeypot();
+		$this->output_js_honeypot();
+		$this->output_nonce_honeypot();
 	}
 
 	/**
-	 * Sets class hashing properties.
-	 *
-	 * The IDs are currently weakly ciphered and will check four versions.
-	 * There are two input ID names. Valid over 10 (2*5) minutes.
-	 * There are two nonce values.   Valid over 24 (2*12) hours.
-	 *
-	 * @since 1.0.0
-	 * @see $this->honeypot_properties
-	 *
-	 * @return bool True on success, false when class isn't constructed.
-	 */
-	private function setup_hash_properties() {
-
-		if ( $this->setup ) {
-			/**
-			 * Applies filters 'the_seo_framework_honeypot_hardcore'
-			 *
-			 * Determines whether the hashing is randomized, or otherwise static.
-			 * Set this to true if you don't use caching and still get spam through.
-			 *
-			 * @uses @const WP_CACHE If WP_CACHE is true, hardcore is false.
-			 *
-			 * @todo make option.
-			 * @param bool $hardcore
-			 */
-			$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', ! WP_CACHE );
-
-			if ( $this->hardcore ) {
-				$this->honeypot_properties = $this->honeypot_properties + [
-					'empty_name'           => $this->get_hashed_field_name( 8, false ),
-					'empty_name_previous'  => $this->get_hashed_field_name( 8, false, true ),
-					'nonce_value'          => $this->get_hashed_nonce_value( 14, true ),
-					'nonce_value_previous' => $this->get_hashed_nonce_value( 14, true, true ),
-				];
-			} else {
-				$this->honeypot_properties = $this->honeypot_properties + [
-					'empty_name'           => 'tsfem-e-hp-comment', // Set this to weak hash based on blogname??
-					'empty_name_previous'  => 'tsfem-e-hp-placeholder', // Won't ever run.
-					'nonce_value'          => 'tsfem-e-hp-val', // Set this to weak hash based on blogname??
-					'nonce_value_previous' => 'tsfem-e-hp-val-placeholder', // Won't ever run.
-				];
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Checks honeypot text generated in the past two time scales (default 2*2 minutes).
+	 * Checks generated honeypot fields, if any.
 	 *
 	 * @since 1.0.0
 	 *
@@ -226,46 +162,209 @@ final class Honeypot {
 		if ( ! $this->setup )
 			return $approved;
 
+		// No need to check further.
+		if ( 'spam' === $approved || 'trash' === $approved )
+			return $approved;
+
 		//* These checks only work if user is not logged in.
 		if ( \is_user_logged_in() )
 			return $approved;
 
-		// No need to check further.
-		if ( 'spam' === $approved )
-			return $approved;
+		$this->set_hardcore();
+		$this->set_id( $commentdata );
 
-		$this->setup_hash_properties();
+		$this->setup_post_check_properties();
 
-		$this->check_honeypot_fields( $approved );
-		$this->check_nonce_fields( $approved );
+		if ( true ) {
+			error_log(
+				var_export(
+					[
+						'fields' => $this->hp_properties,
+						'post' => $_POST,
+						'commentdata' => $commentdata,
+						'id' => $this->get_id(),
+						'blog_id' => $GLOBALS['blog_id'],
+					]
+				, true )
+			);
+		}
+
+		$i = 0;
+		do {
+			switch ( $i ) :
+				case 0 :
+					$this->check_css_field( $approved );
+					break;
+
+				case 1 :
+					$this->check_css_rotation_fields( $approved );
+					break;
+
+				case 2 :
+					$this->check_js_field( $approved );
+					break;
+
+				case 3 :
+					$this->check_nonce_rotation_field( $approved );
+					break;
+
+				default :
+					break 2;
+			endswitch;
+			$i++;
+		} while ( 'spam' !== $approved );
 
 		return $approved;
 	}
 
 	/**
-	 * Checks the input fields that ought to be empty.
+	 * Outputs CSS honeypot.
+	 *
+	 * This input field is shown and can be filled in when CSS is disabled.
+	 *
+	 * @since 1.0.0
+	 * @todo Set CSS external rather than inline when http/2 using HTML5 spec?
+	 */
+	private function output_css_honeypot() {
+		printf(
+			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>',
+			\esc_attr( $this->hp_properties['css_input_name'] )
+		);
+	}
+
+	/**
+	 * Outputs CSS Rotation honeypot.
+	 *
+	 * This input field is shown and can be filled in when CSS is disabled.
+	 * This input field uses a 2 hour valid name, rotated by half of that time.
+	 *
+	 * If filled in but when name is expired, it can't be checked against.
+	 *
+	 * When not hardcore, the name is valid indefinitely, differentiating per post.
+	 *
+	 * @since 1.0.0
+	 * @todo Set CSS external rather than inline when http/2 using HTML5 spec?
+	 */
+	private function output_css_rotation_honeypot() {
+		printf(
+			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>',
+			\esc_attr( $this->hp_properties['css_rotate_input_name'] )
+		);
+	}
+
+	/**
+	 * Outputs JS honeypot.
+	 *
+	 * This textarea is shown and must be manually emptied when JS is disabled.
+	 * Because real users without JS can see this, i18n friendly text is displayed.
+	 *
+	 * The IDs are rotated, they're only effective on the browser.
+	 * The field name is static, and is unique per post.
+	 *
+	 * @since 1.0.0
+	 */
+	private function output_js_honeypot() {
+		vprintf(
+			'<p id="%1$s">
+				<label for="%2$s">%3$s</label>
+				<textarea type="text" name="%2$s" id="%4$s" placeholder="%5$s">%6$s</textarea>
+			</p>
+			<script type="text/javascript">document.getElementById("%4$s").value="";document.getElementById("%1$s").style.display="none";</script>',
+			[
+				\sanitize_key( $this->hp_properties['js_rotate_wrapper_id'] ),
+				\sanitize_key( $this->hp_properties['js_input_name'] ),
+				\esc_html( $this->hp_properties['js_input_label_i18n'] ),
+				\sanitize_key( $this->hp_properties['js_rotate_input_id'] ),
+				\esc_attr( $this->hp_properties['js_input_placeholder_i18n'] ),
+				\esc_textarea( $this->hp_properties['js_input_value_i18n'] ),
+			]
+		);
+	}
+
+	/**
+	 * Outputs nonce honeypot.
+	 *
+	 * This input field outputs a 24 hour valid nonce, rotated by half of that time.
+	 * When not hardcore, the nonce is valid for 10 days, rotated by half of that time.
+	 *
+	 * @since 1.0.0
+	 */
+	private function output_nonce_honeypot() {
+		vprintf(
+			'<input type="hidden" name="%1$s" value="%2$s">',
+			[
+				\sanitize_key( $this->hp_properties['nonce_input_name'] ),
+				\esc_attr( $this->hp_properties['nonce_rotated_input_value'] ),
+			]
+		);
+	}
+
+	/**
+	 * Checks the static CSS input field that ought to be empty.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string|int $approved The current approval state. Passed by reference.
 	 */
-	private function check_honeypot_fields( &$approved ) {
+	private function check_css_field( &$approved ) {
+
+		//* Perform same sanitation as displayed.
+		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
+
+		//* Check if input is set.
+		$set = ! empty( $_POST[ $_field ] ) ?: false;
+
+		if ( $set ) {
+			// Empty check failed.
+			$approved = 'spam';
+			unset( $_POST[ $_field ] );
+		}
+	}
+
+	/**
+	 * Checks the CSS input fields that ought to be empty, based on rotation.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 */
+	private function check_css_rotation_fields( &$approved ) {
 
 		//* Perform same sanitation as displayed.
 		$_fields = \map_deep( [
-			$this->honeypot_properties['empty_name'],
-			$this->honeypot_properties['empty_name_previous'],
+			$this->hp_properties['css_rotate_input_name'],
+			$this->hp_properties['css_rotate_input_name_previous'],
 		], '\\esc_attr' );
 
-		$_submission = \wp_unslash( $_POST );
-
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
-		$field = ( empty( $_submission[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_submission[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
+		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
 
 		if ( $field ) {
 			// Empty check failed.
 			$approved = 'spam';
 			unset( $_POST[ $_fields[ $k ] ] );
+		}
+	}
+
+	/**
+	 * Checks the static JS input field that ought to be empty.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 */
+	private function check_js_field( &$approved ) {
+
+		//* Perform same sanitation as displayed.
+		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
+
+		//* Check if input is set.
+		$set = ! empty( $_POST[ $_field ] ) ?: false;
+
+		if ( $set ) {
+			// Empty check failed.
+			$approved = 'spam';
+			unset( $_POST[ $_field ] );
 		}
 	}
 
@@ -278,9 +377,11 @@ final class Honeypot {
 	 * @param string|int $approved The current approval state. Passed by reference.
 	 * @return void Early if field not POSTed, therefore spam.
 	 */
-	private function check_nonce_fields( &$approved ) {
+	private function check_nonce_rotation_field( &$approved ) {
 
-		if ( empty( $_POST[ $this->nonce_name ] ) ) {
+		$_field = $this->hp_properties['nonce_input_name'];
+
+		if ( empty( $_POST[ $_field ] ) ) {
 			$approved = 'spam';
 			return;
 		}
@@ -289,12 +390,12 @@ final class Honeypot {
 
 		//* Perform same sanitation as displayed.
 		$_nonces = \map_deep( [
-			$this->honeypot_properties['nonce_value'],
-			$this->honeypot_properties['nonce_value_previous'],
+			$this->hp_properties['nonce_rotated_input_value'],
+			$this->hp_properties['nonce_rotated_input_value_previous'],
 		], '\\esc_attr' );
 
 		$_tick = 0;
-		$_input = $_submission[ $this->nonce_name ];
+		$_input = $_submission[ $_field ];
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
@@ -304,37 +405,126 @@ final class Honeypot {
 
 		if ( $_tick < 1 ) {
 			$approved = 'spam';
-			unset( $_POST[ $this->nonce_name ] );
+			unset( $_POST[ $_field ] );
 		}
 	}
 
 	/**
-	 * Generates and outputs honeypot comment field within the comment forms.
+	 * Sets the current ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $commentdata Required. The commentdata on POST.
+	 */
+	private function set_id( array $commentdata ) {
+		$this->get_id( $commentdata );
+	}
+
+	/**
+	 * Returns the current ID.
+	 *
+	 * If on POST, use $this->set_id() beforehand.
+	 *
+	 * @since 1.0.0
+	 * @staticvar int $id
+	 *
+	 * @param array $commentdata Optional. The commentdata on POST.
+	 * @return int The post ID.
+	 */
+	private function get_id( array $commentdata = [] ) {
+
+		static $id = null;
+
+		return $id ?: $id = (int) ( isset( $commentdata['comment_post_ID'] ) ? $commentdata['comment_post_ID'] : \get_the_ID() );
+	}
+
+	/**
+	 * Enables or disables hardcore mode based on caching and filters.
 	 *
 	 * @since 1.0.0
 	 */
-	public function _add_honeypot() {
+	private function set_hardcore() {
+		/**
+		 * Applies filters 'the_seo_framework_honeypot_hardcore'
+		 *
+		 * Determines whether the hashing is randomized, or otherwise static.
+		 * Set this to true if you don't use caching and still get spam through.
+		 *
+		 * @uses @const WP_CACHE If WP_CACHE is true, hardcore is false.
+		 *
+		 * @todo make option.
+		 * @param bool $hardcore
+		 */
+		$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', ! WP_CACHE );
+	}
 
-		$setup = $this->setup_display_properties() && $this->setup_hash_properties();
+	/**
+	 * Sets class field properties.
+	 *
+	 * Front-& back-end.
+	 *
+	 * @since 1.0.0
+	 * @see $this->hp_properties
+	 *
+	 * @return bool True on success, false when class isn't constructed.
+	 */
+	private function setup_post_check_properties() {
 
-		if ( ! $setup )
-			return;
+		if ( $this->setup ) {
+			$this->hp_properties += [
+				/**
+				 * Preventing CSS-disabled bots.
+				 * Value must be empty.
+				 */
+				'css_input_name'                 => $this->get_static_hashed_field_name( 24 ),
+				'css_rotate_input_name'          => $this->get_rotated_hashed_field_name( 24, false ),
+				'css_rotate_input_name_previous' => $this->get_rotated_hashed_field_name( 24, false, true ),
 
-		// Chaos, but quick... @TODO clean up?
-		vprintf( '<p id="%1$s"><label for="%4$s">%3$s</label><textarea type="text" name="%2$s" id="%4$s" placeholder="%5$s">%6$s</textarea></p>'
-			. '<input type="hidden" name="%7$s" value="%8$s">'
-			. '<script type="text/javascript">document.getElementById("%4$s").value="";document.getElementById("%1$s").style.display="none";</script>',
-			[
-				\sanitize_key( $this->honeypot_properties['wrapper_id'] ),
-				\esc_attr( $this->honeypot_properties['empty_name'] ),
-				\esc_attr( $this->honeypot_properties['text_label'] ),
-				\sanitize_key( $this->honeypot_properties['text_id'] ),
-				\esc_attr( \ent2ncr( $this->honeypot_properties['text_placeholder'] ) ),
-				\esc_html( \ent2ncr( $this->honeypot_properties['text_default_input'] ) ),
-				\esc_attr( $this->nonce_name ),
-				\esc_attr( $this->honeypot_properties['nonce_value'] ),
-			]
-		);
+				/**
+				 * Preventing JS-disabled bots and weak GET injection.
+				 * Value must be empty.
+				 */
+				'js_input_name' => 'tsfem-e-hp-js',
+
+				/**
+				 * Preventing /wp-comments-post.php and other POST injection.
+				 * Value must be filled in.
+				 */
+				'nonce_input_name'                   => 'tsfem-e-hp-nonce',
+				'nonce_rotated_input_value'          => $this->get_rotated_hashed_nonce_value( 24, false ),
+				'nonce_rotated_input_value_previous' => $this->get_rotated_hashed_nonce_value( 24, false, true ),
+			];
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Sets class display properties.
+	 *
+	 * Front-end only.
+	 *
+	 * This method is not cache sensitive as it's for display only, so hashing
+	 * can be used generously.
+	 *
+	 * @since 1.0.0
+	 * @see $this->hp_properties
+	 *
+	 * @return bool True on success, false when class isn't constructed.
+	 */
+	private function setup_display_properties() {
+
+		if ( $this->setup ) {
+			$this->hp_properties += [
+				'js_rotate_wrapper_id'      => 'comment-form-' . $this->get_rotated_hashed_field_name( mt_rand( 13, 23 ), (bool) mt_rand( 0, 1 ) ),
+				'js_input_label_i18n'       => $this->get_text( 'js_label' ),
+				'js_rotate_input_id'        => 'comment-form-' . $this->get_rotated_hashed_field_name( mt_rand( 25, 32 ), (bool) mt_rand( 0, 1 ) ),
+				'js_input_placeholder_i18n' => $this->get_text( 'js_placeholder' ),
+				'js_input_value_i18n'       => $this->get_text( 'js_input' ),
+			];
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -348,7 +538,7 @@ final class Honeypot {
 	private function get_text( $what = '' ) {
 
 		switch ( $what ) :
-			case 'placeholder' :
+			case 'js_placeholder' :
 				/**
 				 * Applies filters 'the_seo_framework_honeypot_placeholder'
 				 *
@@ -359,7 +549,7 @@ final class Honeypot {
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_placeholder', \__( 'You are human!', 'the-seo-framework-extension-manager' ) );
 				break;
 
-			case 'input' :
+			case 'js_input' :
 				/**
 				 * Applies filters 'the_seo_framework_honeypot_input'
 				 *
@@ -367,10 +557,10 @@ final class Honeypot {
 				 *
 				 * @param string $text The input field text that needs to be removed shown to non-JS users.
 				 */
-				$text = (string) \apply_filters( 'the_seo_framework_honeypot_input', \__( "Please remove this text to prove you're human.", 'the-seo-framework-extension-manager' ) );
+				$text = (string) \apply_filters( 'the_seo_framework_honeypot_input', \__( "Please remove this comment to prove you're human.", 'the-seo-framework-extension-manager' ) );
 				break;
 
-			case 'label' :
+			case 'js_label' :
 				/**
 				 * Applies filters 'the_seo_framework_honeypot_label'
 				 *
@@ -391,10 +581,9 @@ final class Honeypot {
 
 	/**
 	 * Generates a hashed field name so bots can't automatically exclude this field.
-	 * Each key is valid for 5 minutes. For a total of 10 minutes wait time.
 	 *
-	 * This shouldn't affect users who stay on a comment section for longer,
-	 * the hash just never passes through the spam check. Which is fine.
+	 * If hardcore, each key is valid for 60 minutes per post ID. Totalling to 120 minutes.
+	 * Otherwise, each key is unique per post ID.
 	 *
 	 * @since 1.0.0
 	 * @staticvar array $_hashes
@@ -404,44 +593,77 @@ final class Honeypot {
 	 * @param bool $previous Whether to get the previous hash.
 	 * @return string The $_POST form field hash.
 	 */
-	private function get_hashed_field_name( $length = 32, $flip = false, $previous = false ) {
+	private function get_rotated_hashed_field_name( $length = 32, $flip = false, $previous = false ) {
 
 		static $_hashes = [];
 
 		if ( empty( $_hashes ) ) {
-			/**
-			 * Applies filters 'the_seo_framework_honeypot_field_scale'
-			 *
-			 * Set this lower if you are a prominent spam target.
-			 * Lower than 150 seconds (total 300 i.e. 5 minutes) is not recommended,
-			 * as some bots purposely wait.
-			 * If you're using page caching, set this higher.
-			 *
-			 * @since 1.0.0
-			 *
-			 * @param int $scale The time in seconds on how fast the check works.
-			 *            Note that this value is doubled for the fallback check.
-			 */
-			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 5 * MINUTE_IN_SECONDS );
 
-			$_hashes = [
-				'current'  => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale ),
-				'previous' => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale, time() - $scale ),
-			];
+			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+
+			if ( $this->hardcore ) {
+				/**
+				 * Applies filters 'the_seo_framework_honeypot_field_scale'
+				 *
+				 * Set this lower if you are a prominent spam target.
+				 * Lower than 300 seconds (total 600 i.e. 10 minutes) is not recommended,
+				 * as some bots purposely wait.
+				 * If you're using page caching whilst in hardcore mode, set this higher.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param int $scale The time in seconds on how fast the check works.
+				 *            Note that this value is doubled for the fallback check.
+				 */
+				$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 60 * MINUTE_IN_SECONDS );
+
+				$_hashes = [
+					'current'  => \tsf_extension_manager()->get_timed_hash( $uid, $scale ),
+					'previous' => \tsf_extension_manager()->get_timed_hash( $uid, $scale, time() - $scale ),
+				];
+			} else {
+				$_hash = \tsf_extension_manager()->get_uid_hash( $uid );
+				$_hashes = [
+					'current'  => $_hash,
+					'previous' => $_hash,
+				];
+			}
 		}
 
-		if ( $previous ) {
-			$hash = (string) substr( $_hashes['previous'], 0, $length );
-			return $flip ? strrev( $hash ) : $hash;
-		} else {
-			$hash = (string) substr( $_hashes['current'], 0, $length );
-			return $flip ? strrev( $hash ) : $hash;
+		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
+		$hash = $flip ? strrev( $hash ) : $hash;
+		return (string) substr( $hash, 0, $length );
+	}
+
+	/**
+	 * Generates a hashed field name so bots can't automatically exclude this field.
+	 * Each key is different per Post ID minutes.
+	 *
+	 * @since 1.0.0
+	 * @staticvar string $_hash
+	 *
+	 * @param int  $length   The length of the hash to get.
+	 * @param bool $flip     Whether to flip the hash key prior to returning it.
+	 * @return string The $_POST form field hash.
+	 */
+	private function get_static_hashed_field_name( $length = 32, $flip = false ) {
+
+		static $_hash = [];
+
+		if ( empty( $_hash ) ) {
+			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+			$_hash = \tsf_extension_manager()->get_uid_hash( $uid );
 		}
+
+		$hash = (string) substr( $_hash, 0, $length );
+		return $flip ? strrev( $hash ) : $hash;
 	}
 
 	/**
 	 * Generates a hashed nonce so bots can't use PHP files to spam comments.
-	 * Each key is valid for 12 hour. For a total of 24 hours comment time.
+	 *
+	 * If hardcore, each key is valid for 12 hours. For a total of 24 hours comment time.
+	 * Otherwise, each key is valid for 5 days. For a total of 10 days comment time.
 	 *
 	 * This will affect users who stay on a comment section for longer,
 	 * the hash will then fail the spam check. 24 hours is very generous, however.
@@ -454,11 +676,16 @@ final class Honeypot {
 	 * @param bool $previous Whether to get the previous hash.
 	 * @return string The $_POST form nonce value hash.
 	 */
-	private function get_hashed_nonce_value( $length = 32, $flip = false, $previous = false ) {
+	private function get_rotated_hashed_nonce_value( $length = 32, $flip = false, $previous = false ) {
 
 		static $_hashes = [];
 
 		if ( empty( $_hashes ) ) {
+
+			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+
+			$time = $this->hardcore ? 12 * HOUR_IN_SECONDS : 5 * DAY_IN_SECONDS;
+
 			/**
 			 * Applies filters 'the_seo_framework_honeypot_nonce_scale'
 			 *
@@ -472,20 +699,16 @@ final class Honeypot {
 			 * @param int $scale The time in seconds on how fast the check works.
 			 *            Note that this value is doubled for the fallback check.
 			 */
-			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', 12 * HOUR_IN_SECONDS );
+			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', $time );
 
 			$_hashes = [
-				'current'  => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale ),
-				'previous' => \tsf_extension_manager()->get_timed_hash( __METHOD__, $scale, time() - $scale ),
+				'current'  => \tsf_extension_manager()->get_timed_hash( $uid, $scale ),
+				'previous' => \tsf_extension_manager()->get_timed_hash( $uid, $scale, time() - $scale ),
 			];
 		}
 
-		if ( $previous ) {
-			$hash = (string) substr( $_hashes['previous'], 0, $length );
-			return $flip ? strrev( $hash ) : $hash;
-		} else {
-			$hash = (string) substr( $_hashes['current'], 0, $length );
-			return $flip ? strrev( $hash ) : $hash;
-		}
+		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
+		$hash = $flip ? strrev( $hash ) : $hash;
+		return (string) substr( $hash, 0, $length );
 	}
 }

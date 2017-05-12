@@ -230,7 +230,7 @@ trait Options {
 			return false;
 		}
 
-		return true;
+		return $success;
 	}
 
 	/**
