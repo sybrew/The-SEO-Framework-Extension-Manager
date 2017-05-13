@@ -1,3 +1,6 @@
+/* ##
+/* NOTE: Default wp-wrap/body offsets are 12+10+12 (wrap-right-margin, wrap-left-padding, scroll-bar width)
+/* NOTE: Default inner-paddings are 20px on either side.
 /* # Start Normalize.
 /*----------------------------------------------------------------------------*/
 
@@ -302,10 +305,10 @@ body.tsfem .wrap {
 .tsfem-button-primary,
 .tsfem-button-primary:disabled {
 	background: #05809e;
-	-webkit-box-shadow: 0 3px 0 #006a85;
-	box-shadow: 0 3px 0 #006a85;
+	-webkit-box-shadow: 0 3px 0 #005c7a;
+	box-shadow: 0 3px 0 #005c7a;
 	color: #fff;
-	text-shadow: 0 -1px 1px #006a85,1px 0 1px #006a85,0 1px 1px #006a85,-1px 0 1px #006a85;
+	text-shadow: 0 -1px 1px #005c7a,1px 0 1px #005c7a,0 1px 1px #005c7a,-1px 0 1px #005c7a;
 }
 
 .tsfem-button-star,
@@ -315,7 +318,7 @@ body.tsfem .wrap {
 	background: #0ebfe9;
 	-webkit-box-shadow: 0 3px 0 #057f9c;
 	box-shadow: 0 3px 0 #057f9c;
-	text-shadow: 0 -1px 1px #057f9c,1px 0 1px #057f9c,0 1px 1px #057f9c,-1px 0 1px #057f9c;
+	text-shadow: 0 -1px 1px #0078a2,1px 0 1px #0078a2,0 1px 1px #0078a2,-1px 0 1px #0078a2;
 }
 
 .tsfem-button-green,
@@ -326,7 +329,7 @@ body.tsfem .wrap {
 	background: #00cd98;
 	-webkit-box-shadow: 0 3px 0 #008964;
 	box-shadow: 0 3px 0 #008964;
-	text-shadow: 0 -1px 1px #008964,1px 0 1px #008964,0 1px 1px #008964,-1px 0 1px #008964;
+	text-shadow: 0 -1px 1px #008651,1px 0 1px #008651,0 1px 1px #008651,-1px 0 1px #008651;
 }
 
 .tsfem-button-red,
@@ -866,11 +869,13 @@ h4.tsfem-cp-title {
 
 .tsfem-extension-entry-wrap {
 	padding: 0;
-	margin: 0 0 20px;
-	-webkit-flex-basis: 270px;
-	flex-basis: 270px;
-	min-width: calc( 50% - 40px );
-	margin-right: 20px;
+	margin: 0;
+	/* https://bugs.webkit.org/show_bug.cgi?id=136041 */
+	/* If flex-basis is lower than min-width, it will fail. Not vice-versa. */
+	/* So, workaround by switching values: */
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
+	min-width: 280px;
 }
 
 /* Remove grow from first item if only one is displayed. */
@@ -881,6 +886,11 @@ h4.tsfem-cp-title {
 	flex-grow: 0;
 	-webkit-flex-basis: 100%;
 	flex-basis: 100%;
+}
+
+/* Safari 9 ~ 9.1 flow fix */
+.tsfem-extension-entry-inner {
+	margin: 0 20px 20px 0;
 }
 
 .tsfem-extension-entry {
@@ -932,12 +942,11 @@ h4.tsfem-cp-title {
 	padding: 10px 15px;
 	-webkit-flex-grow: 1;
 	flex-grow: 1;
-	-webkit-flex-basis: 180px;
-	flex-basis: 180px;
+	-webkit-flex-basis: 170px;
+	flex-basis: 170px;
 }
 
 .tsfem-extension-description-wrap {
-	min-width: 280px;
 	-webkit-flex-grow: 3;
 	flex-grow: 3;
 	-webkit-flex-basis: 280px;

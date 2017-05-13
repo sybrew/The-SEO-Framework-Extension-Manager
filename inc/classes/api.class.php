@@ -257,7 +257,7 @@ class API extends Core {
 				case '106' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 308 => $additional_info ] );
-					$free or $this->do_deactivation( true );
+					$free or $this->do_deactivation();
 					break;
 				default :
 					break;

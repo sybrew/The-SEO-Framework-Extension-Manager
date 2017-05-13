@@ -175,20 +175,6 @@ final class Honeypot {
 
 		$this->setup_post_check_properties();
 
-		if ( true ) {
-			error_log(
-				var_export(
-					[
-						'fields' => $this->hp_properties,
-						'post' => $_POST,
-						'commentdata' => $commentdata,
-						'id' => $this->get_id(),
-						'blog_id' => $GLOBALS['blog_id'],
-					]
-				, true )
-			);
-		}
-
 		$i = 0;
 		do {
 			switch ( $i ) :
@@ -370,7 +356,7 @@ final class Honeypot {
 
 	/**
 	 * Checks the input fields that ought to be set.
-	 * This prevents POST hijack spam.
+	 * This prevents POST hijack spam and is timing attack safe.
 	 *
 	 * @since 1.0.0
 	 *
@@ -518,7 +504,7 @@ final class Honeypot {
 			$this->hp_properties += [
 				'js_rotate_wrapper_id'      => 'comment-form-' . $this->get_rotated_hashed_field_name( mt_rand( 13, 23 ), (bool) mt_rand( 0, 1 ) ),
 				'js_input_label_i18n'       => $this->get_text( 'js_label' ),
-				'js_rotate_input_id'        => 'comment-form-' . $this->get_rotated_hashed_field_name( mt_rand( 25, 32 ), (bool) mt_rand( 0, 1 ) ),
+				'js_rotate_input_id'        => 'comment-form-' . $this->get_rotated_hashed_field_name( mt_rand( 13, 23 ), (bool) mt_rand( 0, 1 ) ),
 				'js_input_placeholder_i18n' => $this->get_text( 'js_placeholder' ),
 				'js_input_value_i18n'       => $this->get_text( 'js_input' ),
 			];
@@ -593,7 +579,7 @@ final class Honeypot {
 	 * @param bool $previous Whether to get the previous hash.
 	 * @return string The $_POST form field hash.
 	 */
-	private function get_rotated_hashed_field_name( $length = 32, $flip = false, $previous = false ) {
+	private function get_rotated_hashed_field_name( $length = 24, $flip = false, $previous = false ) {
 
 		static $_hashes = [];
 
@@ -618,11 +604,11 @@ final class Honeypot {
 				$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 60 * MINUTE_IN_SECONDS );
 
 				$_hashes = [
-					'current'  => \tsf_extension_manager()->get_timed_hash( $uid, $scale ),
-					'previous' => \tsf_extension_manager()->get_timed_hash( $uid, $scale, time() - $scale ),
+					'current'  => \tsf_extension_manager()->_get_timed_hash( $uid, $scale ),
+					'previous' => \tsf_extension_manager()->_get_timed_hash( $uid, $scale, time() - $scale ),
 				];
 			} else {
-				$_hash = \tsf_extension_manager()->get_uid_hash( $uid );
+				$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
 				$_hashes = [
 					'current'  => $_hash,
 					'previous' => $_hash,
@@ -646,17 +632,17 @@ final class Honeypot {
 	 * @param bool $flip     Whether to flip the hash key prior to returning it.
 	 * @return string The $_POST form field hash.
 	 */
-	private function get_static_hashed_field_name( $length = 32, $flip = false ) {
+	private function get_static_hashed_field_name( $length = 24, $flip = false ) {
 
 		static $_hash = [];
 
 		if ( empty( $_hash ) ) {
 			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
-			$_hash = \tsf_extension_manager()->get_uid_hash( $uid );
+			$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
 		}
 
-		$hash = (string) substr( $_hash, 0, $length );
-		return $flip ? strrev( $hash ) : $hash;
+		$hash = $flip ? strrev( $hash ) : $hash;
+		return (string) substr( $_hash, 0, $length );
 	}
 
 	/**
@@ -676,7 +662,7 @@ final class Honeypot {
 	 * @param bool $previous Whether to get the previous hash.
 	 * @return string The $_POST form nonce value hash.
 	 */
-	private function get_rotated_hashed_nonce_value( $length = 32, $flip = false, $previous = false ) {
+	private function get_rotated_hashed_nonce_value( $length = 24, $flip = false, $previous = false ) {
 
 		static $_hashes = [];
 
@@ -702,8 +688,8 @@ final class Honeypot {
 			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', $time );
 
 			$_hashes = [
-				'current'  => \tsf_extension_manager()->get_timed_hash( $uid, $scale ),
-				'previous' => \tsf_extension_manager()->get_timed_hash( $uid, $scale, time() - $scale ),
+				'current'  => \tsf_extension_manager()->_get_timed_hash( $uid, $scale ),
+				'previous' => \tsf_extension_manager()->_get_timed_hash( $uid, $scale, time() - $scale ),
 			];
 		}
 

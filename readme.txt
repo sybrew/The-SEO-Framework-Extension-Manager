@@ -23,13 +23,13 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 * **Monitor:** It keeps track of your website's SEO, optimization, uptime and statistics. It's still an experimental extension, but a lot is planned for it.
 * **Incognito:** It removes all front-end branding from The SEO Framework, like HTML comments.
 * **Title Fix:** It makes sure your title output is as configured. Even if your theme is doing it wrong.
-* **Honeypot:** It effectively stops comment spam from robots through four different anti-spam techniques.
-* **Transporter:** It allows you to export and import your SEO settings from site to site.
+* **Honeypot:** It catches comment spammers in four lightweight yet powerful ways.
 
 = Upcoming Extension =
 
-This following extension is planned for the next major version.
+This following extension is planned for the next major versions.
 
+* **Transporter:** It allows you to export and import your SEO settings from site to site.
 * **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
 
 = Requirements: =
@@ -37,6 +37,7 @@ TODO move this to Installation (see https://wordpress.org/plugins/woocommerce/#i
 * For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
 * This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
 * For improved performance, your PHP handler should use a 64 bits architecture, because it uses large primes for security.
+* Internet Explorer 11 or later. For best experience use a Webkit, EdgeHTML, Gecko or Blink based browser.
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -53,7 +54,7 @@ Some premium extensions can communicate with The SEO Framework's API server to p
 As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
 = Privacy =
-
+TODO move this to Installation
 * This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
 * Read our [privacy policy](https://theseoframework.com/privacy/).
 * Questions about privacy? Feel free to (contact us)[https://theseoframework.com/contact/].
@@ -150,10 +151,13 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Release date:**
 	* ???
 
-**New Extensions:**
+**New Extension:**
 
-1. **Local SEO**: -- TODO
-2. **Transfer (transporter?):** -- TODO (settings exporter/importer)
+1. **Honeypot**: This catches comment spammers in four lightweight yet powerful ways.
+	* **Experimental module**: Google will tell its output is erroneous.
+		* They will tell it's erroneous only in their [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool).
+		* They will tell it's good on your website's [Structured Data Overview](https://www.google.com/webmasters/tools/structured-data?hl=en) page.
+		* The former is wrongfully determined, the output is based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
 
 **Detailed log:**
 TODO update extension versions and requirements list.
@@ -161,30 +165,33 @@ TODO update extension versions and requirements list.
 
 * **Local:**
 	/
-	* Performance: TODO Instance verification key options (local DRM) are now correctly deleted upon account deactivation.
+	* Performance: Instance verification key options are now correctly deleted upon account deactivation.
 	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
 	* Performance: Error notice option is now no longer autoloaded when unset.
-	* Performance: TODO When deactivating your account, the plugin unloads its extension options from autoloading.
 	* Performance: Trends Feed's links no longer bind to your browser's used threads when followed. [Learn more](https://developers.google.com/web/tools/lighthouse/audits/noopener).
-	* Improvement: TODO Each extension now shows an external link on the SEO Extensions page for more information.
 	* Improvement: Added useful AJAX error reporting, like for when timeouts happen.
+	* Improvement: Buttons' texts are now more readable across different browsers.
 	* Change: The SEO Extensions menu item now is visible for users with the `manage_options` capability, rather than either of `install_plugins` or `activate_plugins`.
-	* Fixed: TODO The extension list now also renders correctly on Safari 6 to 9.
-	* Fixed: TODO Huge tooltips within metabox content are now faced downwards when they'd otherwise overflow upwards.
+	* Fixed: The extension list now also renders correctly on Safari 9 (next fix is unrelated, but had exactly the same impact).
+	* Fixed: Safari 6, 7 and 8 now show all extension; which is more than [two-thirds](https://bugs.webkit.org/show_bug.cgi?id=136041).
 	* Fixed: Extension activation tester now tests JSON test file for errors too.
 	* Fixed: In a very unlikely event, a fatal error could be produced on either the front-end or back-end (on average once every 2,984,876,523 requests as of Unix Timestamp 1492438262).
 	* Fixed: Theoretically, this plugin will now work after December 31st, 2037 on 32 bits PHP handlers.
 	* Fixed: Browser memory leak through tooltips on (de)activation of extensions.
-	* Change: TODO The tooltip is now a shade of black, rather than an off-color ocean blue.
+	* Change: The tooltip is now a shade of black, rather than an off-color of ocean blue.
 	* Change: The internal hashing algorithm has been expanded.
+		* Unless a server administrator has destructively modified PHP's source files, this shouldn't have any effect.
 		* If your server supports sha1, but not sha256, you might get error 2001.
 		* To resolve error 2001, take note of your active extensions, deactivate your account and set up the plugin again.
-			* No data is lost in this process. But so far, no data was held either.
+			* No useful data is lost in this process. But so far, no useful data is held either; only renewable caches.
+
 * **API:**
 	* **Internal:**
-		* TODO
+		/
+		* When trying to activate an expired subcription, it will now tell the correct error.
+			* From 7009 to 308, because it tried to allow a margin of error incorrectly.
 	* **External:**
-		* TODO
+		* May 9th, 2017: Cancelled subscriptions now pass the end-date too.
 
 **Extension Improvements:**
 

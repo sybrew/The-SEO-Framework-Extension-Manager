@@ -697,6 +697,9 @@ class Core {
 	/**
 	 * Verifies views instances. Clears the input through reference.
 	 *
+	 * Is seems vulnerable to timing attacks, but that's mitigated further for
+	 * improved performance.
+	 *
 	 * @since 1.0.0
 	 * @access private
 	 *
@@ -772,17 +775,21 @@ class Core {
 		$bits = $this->get_bits();
 		$_bit = $bits[0];
 
+		//* Timing-attack safe.
 		if ( isset( $instance[ ~ $_bit ] ) ) {
+			//= Timing attack mitigated.
+
+			//* Don't use hash_equals(). This is already safe.
 			if ( empty( $instance[ $bit ] ) || $instance[ ~ $_bit ] !== $instance[ $bit ] ) {
 				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
 				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) xor $instance = [];
 				return '';
 			}
 
-			//* Prevent another way of timing attacks.
-			$val = $instance[ $bit ] and $instance = [];
+			//* Set retval and empty to prevent recursive timing attacks.
+			$_retval = $instance[ $bit ] and $instance = [];
 
-			return $val;
+			return $_retval;
 		}
 
 		static $timer = null;
@@ -796,7 +803,7 @@ class Core {
 			$timer += $_prime;
 		}
 
-		//* This won't save to database, but does create a unique salt for each bit.
+		//* This creates a unique salt for each bit.
 		$hash = $this->hash( $_bit . '\\' . mt_rand( ~ $timer, $timer ) . '\\' . $bit, 'instance' );
 
 		return $instance[ $bit ] = $instance[ ~ $_bit ] = $hash;
@@ -816,7 +823,8 @@ class Core {
 	/**
 	 * Generates verification bits based on time.
 	 *
-	 * The bit generation is 4 dimensional, this makes it time-attack secure.
+	 * The bit generation is 4 dimensional and calculates a random starting integer.
+	 * This makes it reverse-enginering secure, it's also time-attack secure.
 	 * It other words: Previous bits can't be re-used as the match will be
 	 * subequal in the upcoming check.
 	 *
@@ -848,7 +856,9 @@ class Core {
 			$this->coalesce_var( $_prime, 317539 );
 			$_boundary = 10000;
 
-			$_i = $this->is_64() ? time() : ( PHP_INT_MAX - $_boundary ) / $_prime;
+			$_time = time();
+
+			$_i = $this->is_64() && $_time > $_boundary ? $_time : ( PHP_INT_MAX - $_boundary ) / $_prime;
 			$_i > 0 or $_i = ~$_i;
 			$_i = (int) $_i;
 
@@ -872,6 +882,8 @@ class Core {
 			 * This can jump multiple sequences while maintaining the previous.
 			 * It traverses in three (actually two, but get_verification_instance makes it
 			 * three) dimensions: up (positive), down (negative) and right (new sequence).
+			 *
+			 * Because it either goes up or down based on integer, it's timing attack secure.
 			 */
 			    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
 			and $bit  = $bit++ & $_bit--
@@ -906,14 +918,16 @@ class Core {
 	 * Generates static hash based on $uid.
 	 *
 	 * Caution: This function does not generate cryptographically secure values.
+	 *          It is vulnerable to timing attacks.
 	 *
 	 * @since 1.2.0
+	 * @access private
 	 *
 	 * @param string $uid The unique ID for the hash.
 	 *                    A good choice would be the page ID + concatentated blog name.
 	 * @return string The timed hash that will always return the same.
 	 */
-	final public function get_uid_hash( $uid ) {
+	final public function _get_uid_hash( $uid ) {
 
 		if ( empty( $uid ) )
 			return '';
@@ -921,10 +935,10 @@ class Core {
 		$a = (string) $uid;
 		$b = strrev( $a );
 		$len = strlen( $a );
-		$r = 0;
+		$r = '';
 
 		for ( $i = 0; $i < $len; $i++ ) {
-			$r += ord( $a[ $i ] ) + ord( $b[ $i ] );
+			$r += ord( $a[ $i ] ) + $b[ $i ];
 		}
 
 		return $this->hash( $r, 'auth' );
@@ -933,16 +947,19 @@ class Core {
 	/**
 	 * Generates timed hash based on $uid.
 	 *
-	 * Caution: This function does not generate cryptographically secure values.
+	 * Caution: It is timing attack secure. However because of $length, the value
+	 * can be easily reproduced in $length seconds if caller is known; therefore
+	 * rendering this method insecure for cryptographical purposes.
 	 *
 	 * @since 1.2.0
+	 * @access private
 	 *
 	 * @param string $uid   The unique ID for the hash. A good choice would be the method name.
 	 * @param int    $scale The time scale in seconds.
 	 * @param int    $end   UNIX timestamp where the hash invalidates. Defaults to now.
 	 * @return string The timed hash that will always return the same.
 	 */
-	final public function get_timed_hash( $uid, $length = 3600, $end = 0 ) {
+	final public function _get_timed_hash( $uid, $length = 3600, $end = 0 ) {
 
 		if ( empty( $uid ) || empty( $length ) )
 			return '';

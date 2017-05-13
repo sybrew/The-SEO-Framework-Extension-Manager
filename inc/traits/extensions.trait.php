@@ -149,20 +149,6 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '2.9.2',
 			],
-			'transporter' => [
-				'slug' => 'transporter',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'settings',
-				'version' => '1.0.0',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1494391221',
-				'requires' => '4.4.0',
-				'tested' => '4.8.0',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.2',
-			],
 			'honeypot' => [
 				'slug' => 'honeypot',
 				'network' => '0',
@@ -171,7 +157,7 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1494391221',
+				'last_updated' => '1494567223',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
@@ -193,9 +179,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '44f4dfd9f861ed9fb84ae4e981dc9c617c543828a65eb2e94fd24c2a178fd9ad',
-			'sha1'   => '079bc18ed16c95cfba2cf7df8e9ef73b763230b0',
-			'md5'    => '20b2edf5bbf422606640f9d28d315602',
+			'sha256' => '347be7eb842ad3596e108108388e0d3a4f084e7efd2d5ebdbee1704f026f7226',
+			'sha1'   => 'f88708cdfc79e980cf931f89143e61b4f4a17076',
+			'md5'    => '7219ecebe327a439f25a7e0c118ee744',
 		];
 	}
 
@@ -785,9 +771,9 @@ trait Extensions_Actions {
 			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 		}
 
-		end : {
-			return $val;
-		}
+		end :;
+
+		return $val;
 	}
 
 	/**

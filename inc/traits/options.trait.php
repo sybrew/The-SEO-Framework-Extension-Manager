@@ -203,7 +203,7 @@ trait Options {
 		}
 
 		if ( $this->has_run_update_option() ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' ) );
 			\wp_die();
 		}
 
@@ -279,7 +279,7 @@ trait Options {
 	 * This prevents users from altering the options from outside this plugin.
 	 *
 	 * @since 1.0.0
-	 * @TODO var_dump() Add since 1.2.0 note for hashing change. Add FAQ entry, move hash() to callable class, trait or function.
+	 * @since 1.2.0 Improved hashing algorithm.
 	 *
 	 * @param array $options The options to hash.
 	 * @param string $key The instance key, needs to be supplied on plugin activation.
@@ -290,8 +290,7 @@ trait Options {
 		if ( empty( $options['_instance'] ) )
 			return false;
 
-		$_options = serialize( $options );
-		$hash = $this->hash( $_options, 'auth' );
+		$hash = $this->hash( serialize( $options ), 'auth' );
 
 		if ( $hash ) {
 			$update = $this->update_options_instance( $hash, $key );
@@ -307,11 +306,12 @@ trait Options {
 		}
 	}
 
+
 	/**
 	 * Verifies options hash.
 	 *
 	 * @since 1.0.0
-	 * @TODO var_dump() Add since 1.2.0 note for hashing change. Add FAQ entry, move hash() to callable class, trait or function.
+	 * @since 1.2.0 Expanded hashing algorithm.
 	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param string $data The data to compare hash with.

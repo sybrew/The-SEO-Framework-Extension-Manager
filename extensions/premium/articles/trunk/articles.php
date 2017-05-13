@@ -653,7 +653,11 @@ final class Articles {
 
 		$id = $this->get_current_id();
 
-		//* 155 length is an arbitrary guess, because there's no documentation on this.
+		/**
+		 * 155 length is a tested guess.
+		 * There's no documentation on this.
+		 * However, it uses the same pixel length calculations.
+		 */
 		$description = \the_seo_framework()->description_from_custom_field( [ 'id' => $id ] ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 );
 
 		return [
