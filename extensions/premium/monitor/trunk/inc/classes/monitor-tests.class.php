@@ -132,12 +132,11 @@ final class Monitor_Tests {
 		}
 		$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
 
-		end : {
-			return [
-				'content' => $content,
-				'state' => $state,
-			];
-		}
+		end :;
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
 	}
 
 	/**
@@ -194,12 +193,11 @@ final class Monitor_Tests {
 
 		$content .= $this->small_sample_disclaimer();
 
-		end : {
-			return [
-				'content' => $content,
-				'state' => $state,
-			];
-		}
+		end :;
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
 	}
 
 	/**
@@ -330,6 +328,136 @@ final class Monitor_Tests {
 			$state = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this.', 'the-seo-framework-extension-manager' ) );
 		}
+
+		if ( empty( $content ) ) {
+			$content = $this->wrap_info( $this->no_issue_found() );
+		}
+
+		end :;
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
+	}
+
+	/**
+	 * Determines if the site is accessible on HTTPS and if the canonical URLs are set.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data The input data.
+	 * @return string The evaluated data in HTML.
+	 */
+	public function issue_https( $data ) {
+
+		$content = '';
+		$state = 'unknown';
+		$_test_alt = false;
+
+		if ( ! isset( $data['https_type'] ) || $data['https_type'] < 0 || $data['https_type'] > 3 ) {
+			$content = $this->no_data_found();
+			goto end;
+		}
+
+		switch ( $data['https_type'] ) :
+			case 1 :
+				// Forced HTTPS
+				$content .= $this->wrap_info(
+					\esc_html__( 'Your website forces HTTPS through the server configuration. That is great!', 'the-seo-framework-extension-manager' )
+				);
+				$state = 'good';
+				$_expected_scheme = 'https';
+				break;
+
+			case 2 :
+				// Could do HTTPS
+				$content .= $this->wrap_info(
+					\esc_html__( 'Your website is accessible on both HTTPS as HTTP.', 'the-seo-framework-extension-manager' )
+				);
+				$state = 'good';
+				$_test_alt = true;
+				$_expected_scheme = 'https';
+				break;
+
+			case 3 :
+			case 0 :
+			default :
+				// Forced HTTP or error on HTTPS.
+				$content .= $this->wrap_info(
+					\esc_html__( 'Your website is only accessible on HTTP.', 'the-seo-framework-extension-manager' )
+				);
+				$state = 'okay';
+				$_expected_scheme = 'http';
+				break;
+		endswitch;
+
+		if ( empty( $data['canonical_url'] ) ) :
+			$state = 'warning';
+			$content .= $this->wrap_info(
+				\esc_html__( 'No canonical URL is found.', 'the-seo-framework-extension-manager' )
+			);
+		elseif ( ! empty( $data['canonical_url_scheme'] ) ) :
+			if ( $_test_alt ) :
+				if ( ! empty( $data['canonical_url_scheme_alt'] ) ) :
+					if ( $data['canonical_url_scheme'] === $data['canonical_url_scheme_alt'] ) :
+						if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
+							$state = 'good';
+							$content .= $this->wrap_info(
+								\esc_html__( 'Both versions of your site point to the secure version. Great!', 'the-seo-framework-extension-manager' )
+							);
+						} else {
+							$state = 'warning';
+							$content .= $this->wrap_info(
+								\esc_html__( 'Both versions of your site point to the insecure version. Is this intended?', 'the-seo-framework-extension-manager' )
+							);
+						}
+					else :
+						$state = 'bad';
+						defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+						$content .= $this->wrap_info(
+							\tsf_extension_manager()->convert_markdown(
+								/* tranlators: URLs are in markdown. %s = SEO Settings page admin URL. */
+								sprintf(
+									\esc_html__( 'The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
+									\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ) )
+								),
+								[ 'a' ]
+							)
+						);
+					endif;
+				else :
+					$state = 'bad';
+					$content .= $this->wrap_info(
+						\esc_html__( 'No canonical URL is found on the HTTPS version of your site.', 'the-seo-framework-extension-manager' )
+					);
+				endif;
+			else :
+				if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
+					//= Don't change state.
+					$content .= $this->wrap_info(
+						\esc_html__( 'The canonical URL scheme matches the expected scheme.', 'the-seo-framework-extension-manager' )
+					);
+				} else {
+					$state = 'bad';
+					defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+					$content .= $this->wrap_info(
+						\tsf_extension_manager()->convert_markdown(
+							/* tranlators: URLs are in markdown. %s = SEO Settings page admin URL. */
+							sprintf(
+								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
+								\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ) )
+							),
+							[ 'a' ]
+						)
+					);
+				}
+			endif;
+		else :
+			$state = 'warning';
+			$content .= $this->wrap_info(
+				\esc_html__( 'The canonical URL does not seem to have a set scheme. The active theme, another plugin or an external service might be interfering.', 'the-seo-framework-extension-manager' )
+			);
+		endif;
 
 		if ( empty( $content ) ) {
 			$content = $this->wrap_info( $this->no_issue_found() );

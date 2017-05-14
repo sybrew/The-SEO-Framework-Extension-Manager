@@ -2006,7 +2006,7 @@ class Core {
 					for ( $i = 0; $i < $count; $i++ ) {
 						$text = str_replace(
 							$matches[0][ $i ],
-							sprintf( '<a href="%s" rel="nofollow">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
+							sprintf( '<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>', \esc_url( $matches[2][ $i ] ), \esc_html( $matches[1][ $i ] ) ),
 							$text
 						);
 					}

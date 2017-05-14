@@ -114,8 +114,9 @@ final class Monitor_Output {
 
 		$info = '';
 
-		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
+		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry ) {
 			$info .= $info_entry;
+		}
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
 	}
@@ -138,8 +139,9 @@ final class Monitor_Output {
 
 		$info = [];
 
-		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
+		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry ) {
 			$info[] = $info_entry;
+		}
 
 		$wrap = '<div class="tsfem-flex tsfem-flex-row"></div>';
 
@@ -249,8 +251,9 @@ final class Monitor_Output {
 
 		$info = '';
 
-		foreach ( $this->generate_pane_graph_data( $data, $type ) as $info_entry )
+		foreach ( $this->generate_pane_graph_data( $data, $type ) as $info_entry ) {
 			$info .= $info_entry;
+		}
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
 	}
@@ -439,40 +442,12 @@ final class Monitor_Output {
 		switch ( $type ) :
 			case 'issues' :
 				switch ( $key ) :
-					case 'title' :
-						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'description' :
-						$title = \__( 'Descriptions', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'canonical' :
-						$title = \__( 'Canonical URLs', 'the-seo-framework-extension-manager' );
-						break 2;
-
 					case 'favicon' :
 						$title = \__( 'Favicon output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'duplicated' :
-						$title = \__( 'Duplicated content', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'mobile' :
-						$title = \__( 'Mobile friendliness', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'html' :
-						$title = \__( 'HTML output', 'the-seo-framework-extension-manager' );
-						break 2;
-
 					case 'php' :
 						$title = \__( 'PHP errors', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'img' :
-						$title = \__( 'Image sizes', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'robots' :
@@ -483,12 +458,8 @@ final class Monitor_Output {
 						$title = \__( 'Sitemap output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'external' :
-						$title = \__( 'External links', 'the-seo-framework-extension-manager' );
-						break 2;
-
-					case 'security' :
-						$title = \__( 'Security', 'the-seo-framework-extension-manager' );
+					case 'https' :
+						$title = \__( 'Scheme', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'moresoon' :

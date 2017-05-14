@@ -208,9 +208,6 @@ TODO update extension versions and requirements list.
 	* **Changed:**
 		/
 		* The automated description is now set to 155 characters, rather than 400.
-		* TODO CONFIRM IF HELPFUL (it's not): The automated description is now also outputted on the front-end.
-			* This is because the articles markup removed regular description output.
-			* This is not according to spec, but it's a bug within Google's indexing.
 	* **Fixed:**
 		* No more PHP notice should be output when fetching image from SEO settings.
 		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
@@ -231,17 +228,23 @@ TODO update extension versions and requirements list.
 			* Server and Browser AJAX errors can now resolve when requesting crawl.
 	* **API:**
 		* **Note:** These API changes affect only this plugin version.
-			/ TODO
+			* **Added:**
+				* The crawler now tests for Scheme settings. It checks for HTTPS headers and the related canonical URL output.
+					* Also vice versa, so if your site isn't accessible on HTTPS, but your canonical URL states it is, it will warn you.
 		* **Note:** These API changes affect all plugin versions.
 			* **Added:**
 				/
 				* May 7th, 2017: Only the root file is now checked, rather than subdirectories.
-				* TODO May ??, 2017: The sitemap through queries can now be detected.
-				* TODO May ??, 2017: It now confirms if your website is accessible on HTTPS.
-				* TODO May ??, 2017: It now checks canonical URLs.
+				* May 14th, 2017: It now confirms if your website is accessible on HTTPS.
+				* May 14th, 2017: It now checks canonical URLs for scheme issues.
 			* **Fixed:**
+				/
 				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
 				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
+				* **A better foundation:**
+					* May 14th, 2017: Alternative output of the metadata favicon tag's closing tag can now be detected too.
+					* May 14th, 2017: Compressed pages can now also be correctly tested for favicons.
+					* May 14th, 2017: Single quotes' favicons metadata can now also be detected.
 * **Premium - Honeypot:**
 	* **Version:**
 		/
