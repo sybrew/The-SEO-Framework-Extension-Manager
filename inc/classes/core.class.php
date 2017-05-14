@@ -938,7 +938,7 @@ class Core {
 		$r = '';
 
 		for ( $i = 0; $i < $len; $i++ ) {
-			$r += ord( $a[ $i ] ) + $b[ $i ];
+			$r .= ord( $a[ $i ] ) . $b[ $i ];
 		}
 
 		return $this->hash( $r, 'auth' );

@@ -4,6 +4,8 @@
  */
 namespace TSF_Extension_Manager\Extension;
 
+// This extension is still under construction.. hold on tight!
+
 /**
  * Extension Name: Transporter
  * Extension URI: https://premium.theseoframework.com/extensions/transporter/
@@ -90,11 +92,12 @@ function transporter_init() {
 
 	if ( \is_admin() ) {
 		new \TSF_Extension_Manager\Extension\Transporter_Admin;
+		$loaded = true;
 	} else {
-		return $loaded = false;
+		$loaded = false;
 	}
 
-	return $loaded = true;
+	return $loaded;
 }
 
 /**

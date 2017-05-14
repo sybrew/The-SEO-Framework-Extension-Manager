@@ -133,6 +133,9 @@ final class Honeypot {
 	 * Generates and outputs honeypot comment field within the comment forms.
 	 *
 	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @return void Early if not setup (i.e. statically called).
 	 */
 	public function _add_honeypot() {
 
@@ -152,6 +155,7 @@ final class Honeypot {
 	 * Checks generated honeypot fields, if any.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string|int $approved    The current approval state.
 	 * @param array      $commentdata Comment data.
@@ -372,8 +376,6 @@ final class Honeypot {
 			return;
 		}
 
-		$_submission = \wp_unslash( $_POST );
-
 		//* Perform same sanitation as displayed.
 		$_nonces = \map_deep( [
 			$this->hp_properties['nonce_rotated_input_value'],
@@ -381,7 +383,7 @@ final class Honeypot {
 		], '\\esc_attr' );
 
 		$_tick = 0;
-		$_input = $_submission[ $_field ];
+		$_input = stripslashes( $_POST[ $_field ] );
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
@@ -641,8 +643,8 @@ final class Honeypot {
 			$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
 		}
 
-		$hash = $flip ? strrev( $hash ) : $hash;
-		return (string) substr( $_hash, 0, $length );
+		$hash = $flip ? strrev( $_hash ) : $_hash;
+		return (string) substr( $hash, 0, $length );
 	}
 
 	/**

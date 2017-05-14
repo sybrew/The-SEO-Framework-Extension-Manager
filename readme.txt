@@ -1,10 +1,10 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: the seo framework, extensions, api, monitor, modules, title
+Tags: the seo framework, extensions, api, monitor, modules, title, seo, schema
 Requires at least: 4.4.0
 Tested up to: 4.8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
