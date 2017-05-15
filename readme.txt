@@ -12,25 +12,38 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 
 == Description ==
 
-**This plugin extends [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
+**Advanced and powerful SEO.**
+**Delivered through extension for [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
+
+This plugin provides an easy to use dashboard to activate the latest free and premium extensions.
+
+= Included Extensions =
 
 This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
 
-= Current Extensions =
+**The following extensions are included:**
 
-* **AMP:** It binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
-* **Articles:** It enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles), which makes your posts legible for various Search Engine usages.
-* **Monitor:** It keeps track of your website's SEO, optimization, uptime and statistics. It's still an experimental extension, but a lot is planned for it.
-* **Incognito:** It removes all front-end branding from The SEO Framework, like HTML comments.
-* **Title Fix:** It makes sure your title output is as configured. Even if your theme is doing it wrong.
-* **Honeypot:** It catches comment spammers in four lightweight yet powerful ways.
+* **AMP:** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
+* **Incognito:** The Incognito extension removes all front-end branding from The SEO Framework.
+* **Monitor:** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
+* **Title Fix:** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
+* **Articles:** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
+* **Honeypot:** The Honeypot extension catches comment spammers in four lightweight yet powerful ways.
 
-= Upcoming Extension =
+= Upcoming Extensions =
 
-This following extension is planned for the next major versions.
+This following extensions are planned for the next major versions.
 
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
 * **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
+
+= How it works =
+
+This plugin offers a lightweight dashboard wherein you can activate and deactivate extensions. 
+Only the activated extensions are loaded. Other extensions are dormant and the files of those aren't even touched.
+
+Some of the extensions are completely free to use, others are premium.
+Because we want to see how our new state-of-the-art extensions perform before releasing it to everyone, all beta-staged extensions are temporarily premium.
 
 = Requirements: =
 TODO move this to Installation (see https://wordpress.org/plugins/woocommerce/#installation for a great example).
@@ -69,9 +82,10 @@ TODO move this to Installation
 1. You're good to go! Enjoy!
 
 == Screenshots ==
-
+/
 1. The activation page. You can choose both premium and free subscriptions.
 2. The SEO Extensions overview page, running on a multisite.
+3. TODO Monitor interface
 
 == Frequently Asked Questions ==
 
