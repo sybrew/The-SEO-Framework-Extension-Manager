@@ -15,7 +15,7 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 **Advanced and powerful SEO.**
 **Delivered through extension for [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
 
-This plugin provides an easy to use dashboard to activate the latest free and premium extensions.
+This plugin provides an advanced dashboard where you can activate the latest free and premium extensions.
 
 = Included Extensions =
 
@@ -32,31 +32,18 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 
 = Upcoming Extensions =
 
-This following extensions are planned for the next major versions.
+**These following extensions are planned soon:**
 
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
 * **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
 
 = How it works =
 
-This plugin offers a lightweight dashboard wherein you can activate and deactivate extensions. 
+This plugin offers a lightweight dashboard wherein you can activate and deactivate extensions.
 Only the activated extensions are loaded. Other extensions are dormant and the files of those aren't even touched.
 
 Some of the extensions are completely free to use, others are premium.
 Because we want to see how our new state-of-the-art extensions perform before releasing it to everyone, all beta-staged extensions are temporarily premium.
-
-= Requirements: =
-TODO move this to Installation (see https://wordpress.org/plugins/woocommerce/#installation for a great example).
-* For security and structural reasons, this plugin requires **PHP 5.5 or later** and **WordPress 4.4 or later**, or it will deactivate itself.
-* This plugin requires **The SEO Framework 2.7.0 or later** to be active, or it won't do anything at all.
-* For improved performance, your PHP handler should use a 64 bits architecture, because it uses large primes for security.
-* Internet Explorer 11 or later. For best experience use a Webkit, EdgeHTML, Gecko or Blink based browser.
-
-> <strong>The premium software is Open Source:</strong><br>
-> This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
-> If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
->
-> This also accounts for any other premium software acquired for free. Please, be careful.
 
 = About Premium =
 
@@ -66,26 +53,62 @@ Some premium extensions can communicate with The SEO Framework's API server to p
 
 As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
-= Privacy =
-TODO move this to Installation
-* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
-* Read our [privacy policy](https://theseoframework.com/privacy/).
-* Questions about privacy? Feel free to (contact us)[https://theseoframework.com/contact/].
-
 == Installation ==
 
-1. Install [The SEO Framework](https://wordpress.org/plugins/autodescription/) either via the plugin installer, or by uploading the files to your server.
-1. Follow [those installation instructions](https://wordpress.org/plugins/autodescription/installation/).
-1. Install The SEO Framework - Extension Manager either via the plugin installer, or by uploading the files to your server.
+= This plugin requires: =
+
+* PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
+* WordPress 4.4 or later. For improved AJAX and meta support.
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.7 or later. Or it will stay dormant.
+* Internet Explorer 11 or later for the best admin experience.
+* For improved performance, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
+
+= Installation instructions: =
+
+1. Install "The SEO Framework - Extension Manager" either via the WordPress.org plugin directory or by uploading the files to your server.
 1. Either Network Activate this plugin or activate it on a single site.
-1. Follow the activation steps provided on your screen.
-1. You're good to go! Enjoy!
+1. That's it!
+
+= This plugin will then guide you through an activation process: =
+
+1. Follow the link provided or go to the Extensions submenu of SEO.
+2. Choose your subscription.
+3. That's it! Feel free to activate any extension available.
+
+The extensions test themselves upon activation. So, if any extension doesn't work on your site it will let you know why.
+
+= Privacy =
+
+* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
+* Read our [privacy policy](https://theseoframework.com/privacy/), it states that we respect your privacy.
+* Questions about privacy? Feel free to (contact us)[https://theseoframework.com/contact/].
+
+> <strong>The premium software is Open Source:</strong><br>
+> This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
+> If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
+>
+> This also accounts for any other premium software acquired for free. Please, be careful.
+
+= Are you a developer? =
+And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
+A full code review will take place prior to releasing it. The code has to pass at least all of the WordPress.org plugin standards and all code must be licensed under GPLv3.
+Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted as of yet. API connections aren't allowed either.
+
+= For developers: Security =
+Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
+In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
+Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
+If you have any questions, before blindly implementing or circumvent security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
+
+= For developers: Reluctance towards plugin modifications =
+This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
+You are allowed to edit this plugin and use hooks on this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
+This is to enhance the plugin security, stability, and overall performance. Please note that most core functions, classes, methods, and files are shielded against both direct and indirect calls.
 
 == Screenshots ==
-/
+
 1. The activation page. You can choose both premium and free subscriptions.
 2. The SEO Extensions overview page, running on a multisite.
-3. TODO Monitor interface
 
 == Frequently Asked Questions ==
 
@@ -95,8 +118,8 @@ The Extension Manager for The SEO Framework allows you to enable various extensi
 = What is The SEO Framework? =
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
-= What is an Extensions? =
-An Extension is like a plugin, and can be activated and deactivated on demand. All available extensions, both free and premium, are included in this plugin package.
+= What is an extension? =
+An extension is like a plugin, and can be activated and deactivated on demand. All available extensions, both free and premium, are included in this plugin package.
 
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
@@ -134,12 +157,8 @@ Deactivating the Extension Manager will also deactivate all extensions.
 When your premium subscription expires, the premium extensions will automatically deactivate.
 A margin of error is allowed, so you don't have to worry for if the activation server is down.
 
-= I want to modify an extension, is this allowed? =
-Of course! This plugin is licensed with GPLv3, after all. However, please note that the plugin checks for file changes and compares hashes to prevent rogue software penetration.
-After all, this plugin can connect with our API server and we don't want third party plugins to interfere in any way.
-
 = Does this plugin work on MultiSite Networks? =
-Yes. This plugin can be network activated while The SEO Framework base plugin is activated site by site without issues.
+Absolutely. This plugin can be network activated while The SEO Framework base plugin is activated site-by-site without issues.
 Alternatively, this plugin can be activated per site while The SEO Framework is network activated. Any other combination is possible too.
 
 = Are there WordPress MultiSite network specific SEO extensions? =
@@ -175,7 +194,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 * **Local:**
 	* Performance: Instance verification key options are now correctly deleted upon account deactivation.
-	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
+	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID pollution.
 	* Performance: Error notice option is now no longer autoloaded when unset.
 	* Performance: Trends Feed's links no longer bind to your browser's used threads when followed. [Learn more](https://developers.google.com/web/tools/lighthouse/audits/noopener).
 	* Improvement: Added useful AJAX error reporting, like for when timeouts happen.
@@ -196,8 +215,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 * **API:**
 	* **Internal:**
-		* When trying to activate an expired subcription, it will now tell the correct error.
-			* The error code has been changed from 7009 to 308, because it tried to allow a margin of error incorrectly.
+		* When trying to activate an expired subscription, it will now tell the correct error.
+			* The error code has been changed from 7009 to 308 because it tried to allow a margin of error incorrectly.
 	* **External:**
 		* May 9th, 2017: Cancelled subscriptions now pass the end-date too.
 
@@ -216,7 +235,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* The automated description is now set to 155 characters, rather than 400.
 			* Evidently, it uses the same restrictions as regular search results.
 	* **Fixed:**
-		* No more PHP notice should be output when fetching image from SEO settings.
+		* No more PHP notices should be output when fetching an image from the SEO settings.
 		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
 			* Otherwise the Featured Image is used, if any.
 		* It no longer outputs Schema.org metadata on WooCommerce products or other single custom post types.
@@ -228,7 +247,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* **Changed:**
 			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
 		* **Fixed:**
-			* More agressive buffer cleaning has been put in place to prevent failing AJAX requests.
+			* More aggressive buffer cleaning has been put in place to prevent failing AJAX requests.
 			* The SEO Framework's internal debugging methods can no longer interfere with the output.
 			* Server and Browser AJAX errors can now resolve when requesting updates.
 			* Server and Browser AJAX errors can now resolve when requesting crawl.
@@ -263,7 +282,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 			* This requires the spammer to enable styling.
 			* A new key is generated every hour and for every post.
 			* After two hours of waiting, this field has no positive or negative effect.
-			* It acts as the first method when using cache.
+			* It acts as the first method when using caching.
 		1. A rotating by time input field that must be emptied, hidden and automatically emptied through rotating JavaScript.
 			* This field must become empty.
 			* This requires the spammer to enable scripts.
@@ -280,7 +299,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* It works by using expected hashing algorithms. So it doesn't make use of the database. Therefore, it's extremely lightweight.
 	* It works wherever WordPress' comments are used, also on WooCommerce reviews.
 	* It works only when users are logged out. Users who are logged in aren't checked.
-	* It works with caching, then being less agressive.
+	* It works with caching, then being less aggressive.
 * **Free - Transporter:**
 	* **Version:**
 		* 1.0.0-dev2017-05-15
@@ -300,7 +319,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* The former is wrongfully determined, the output is based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
 2. **AMP**: This improves SEO for AMP pages.
 	* This extension connects The SEO Framework to [Automattic's AMP plugin](https://wordpress.org/plugins/amp/).
-	* This extension interacts with Articles, when activated.
+	* This extension interacts with Articles when both are activated.
 
 **Detailed log:**
 
@@ -339,7 +358,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* 1.0.0-beta-2
 	* **Internal:**
 		* **Improved:**
-			* The "invalid sitemap" notification now suggest to contact premium support, rather than stating the inconvinient obvious.
+			* The "invalid sitemap" notification now suggest you contacting premium support, rather than stating the inconvinient obvious.
 		* **Fixed:**
 			* The robots.txt file got marked as static whilst being dynamic when another plugin or theme affects the output.
 			* Requesting a crawl through AJAX now works correctly when debugging is disabled.
@@ -357,7 +376,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 				* The API server now parses crawl requests automatically.
 			* **Fixed:**
 				* The sitemap detection for more advanced sitemaps now works.
-				* When a HTTP error is generated when fetching the sitemap, this is now correctly handled.
+				* When an HTTP error is generated when fetching the sitemap, this is now correctly handled.
 * **Free - Incognito:**
 	* **Version:**
 		* 1.1.0
@@ -385,21 +404,3 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 == Upgrade Notice ==
 
 == Other Notes ==
-TODO move this to development/installation?
-
-= Are you a developer? =
-And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
-A full code review will take place prior to releasing it. The code has to pass at least all of the WordPress.org plugin standards and all code must be licensed under GPLv3.
-Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted as of yet. API connections aren't allowed either.
-
-= For developers: Security =
-Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
-In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
-Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
-If you have any questions, before blindly implementing or circumvent security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
-
-= Reluctance towards plugin modifications and backwards compatibility =
-This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
-You are allowed to edit this plugin and use hooks on this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
-This is to enhance the plugin security, stability and overall performance. Please note that most core functions, classes, methods and files are shielded against both direct and indirect calls.
-No backwards compatibility will be programmed into this plugin, unless required for WordPress Core or PHP.
