@@ -41,7 +41,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_VERSION', '1.0.0' );
+define( 'TSFEM_E_MONITOR_VERSION', '1.0.0-beta-3' );
 
 /**
  * The extension file, absolute unix path.

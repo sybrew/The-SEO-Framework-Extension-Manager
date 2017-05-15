@@ -149,22 +149,17 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 = 1.2.0 - Aptitudinal SEO =
 
 * **Release date:**
-	* ???
+	* May 15th, 2017
 
 **New Extension:**
 
-1. **Honeypot**: This catches comment spammers in four lightweight yet powerful ways.
-	* **Experimental module**: Google will tell its output is erroneous.
-		* They will tell it's erroneous only in their [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool).
-		* They will tell it's good on your website's [Structured Data Overview](https://www.google.com/webmasters/tools/structured-data?hl=en) page.
-		* The former is wrongfully determined, the output is based on [their documentation](https://developers.google.com/search/docs/data-types/articles#article_types).
+* **Honeypot**: This catches comment spammers in four lightweight yet powerful ways.
 
 **Detailed log:**
-TODO update extension versions and requirements list.
+
 **Plugin Improvements:**
 
 * **Local:**
-	/
 	* Performance: Instance verification key options are now correctly deleted upon account deactivation.
 	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID polution.
 	* Performance: Error notice option is now no longer autoloaded when unset.
@@ -187,9 +182,8 @@ TODO update extension versions and requirements list.
 
 * **API:**
 	* **Internal:**
-		/
 		* When trying to activate an expired subcription, it will now tell the correct error.
-			* From 7009 to 308, because it tried to allow a margin of error incorrectly.
+			* The error code has been changed from 7009 to 308, because it tried to allow a margin of error incorrectly.
 	* **External:**
 		* May 9th, 2017: Cancelled subscriptions now pass the end-date too.
 
@@ -197,27 +191,25 @@ TODO update extension versions and requirements list.
 
 * **Free - AMP:**
 	* **Version:**
-		/
-		* TODO
-		* Requires TSF: 2.8.2
+		* 1.0.1
+	* **Added:**
+		* Indicators of where TSF output starts and ends when using TSF 2.9.2 or later.
 * **Premium - Articles:**
 	* **Version:**
 		* 1.0.0-gamma-2
-		* Requires TSF: 2.8.2
 	* **Premium only until gamma-testing is completed.**
 	* **Changed:**
-		/
 		* The automated description is now set to 155 characters, rather than 400.
+			* Evidently, it uses the same restrictions as regular search results.
 	* **Fixed:**
 		* No more PHP notice should be output when fetching image from SEO settings.
 		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
 			* Otherwise the Featured Image is used, if any.
-		/
-		* TODO This is output on WooCommerce 3.0.x posts, which is invalid and annoyingly misplaced... <script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"Article"}</script>
+		* It no longer outputs Schema.org metadata on WooCommerce products or other single custom post types.
+			* Instead, it only outputs on WordPress' Posts.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
-		* Requires TSF: 2.7.0
 	* **Internal:**
 		* **Changed:**
 			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
@@ -233,12 +225,10 @@ TODO update extension versions and requirements list.
 					* Also vice versa, so if your site isn't accessible on HTTPS, but your canonical URL states it is, it will warn you.
 		* **Note:** These API changes affect all plugin versions.
 			* **Added:**
-				/
 				* May 7th, 2017: Only the root file is now checked, rather than subdirectories.
 				* May 14th, 2017: It now confirms if your website is accessible on HTTPS.
 				* May 14th, 2017: It now checks canonical URLs for scheme issues.
 			* **Fixed:**
-				/
 				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
 				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
 				* **A better foundation:**
@@ -247,24 +237,40 @@ TODO update extension versions and requirements list.
 					* May 14th, 2017: Single quotes' favicons metadata can now also be detected.
 * **Premium - Honeypot:**
 	* **Version:**
-		/
-		* TODO
-		* Requires TSF: 2.7.0
-* **Free - Incognito:**
-	* **Version:**
-		/
-		* TODO
-		* Requires TSF: 2.7.0
-* **Free - Title Fix:**
-	* **Version:**
-		/
-		* TODO
-		* Requires TSF: 2.7.0
+		* 1.0.0-beta
+	* **This is a new extension**.
+	* It uses four powerful and lightweight techniques to stop comment spamming:
+		1. A rotating by ID input field, hidden through rotating CSS.
+			* This field must stay empty.
+			* This requires the spammer to enable styling.
+			* This field is rotated per post.
+		1. A rotating by time input field, hidden through rotating CSS.
+			* This field must stay empty.
+			* This requires the spammer to enable styling.
+			* A new key is generated every hour and for every post.
+			* After two hours of waiting, this field has no positive or negative effect.
+			* It acts as the first method when using cache.
+		1. A rotating by time input field that must be emptied, hidden and automatically emptied through rotating JavaScript.
+			* This field must become empty.
+			* This requires the spammer to enable scripts.
+			* If scripts are disabled, the user needs to manually clear the field.
+				* A helpful message is displayed that clearly indicates it's an anti-spam technique.
+				* That message is translatable; in the future options will be added so you can manually adjust these fields.
+			* This always works with caching and is proven to be the most effective method with 99,99% catch rate over 1500 comments in 1 month.
+		1. A rotating by time nonce field, that must be identical to the expected value.
+			* This field must have an expected value.
+			* This prevents spammers using PHP files to comment; instead, the must view and render your comment forms.
+			* The nonce key is different for each post and is time-attack secure.
+			* The nonce key changes every 12 hours. Each key is valid for 24 hours.
+				* When using caching, the nonce key changes every 5 days. Each key is valid for 10 days.
+	* It works by using expected hashing algorithms. So it doesn't make use of the database. Therefore, it's extremely lightweight.
+	* It works wherever WordPress' comments are used, also on WooCommerce reviews.
+	* It works only when users are logged out. Users who are logged in aren't checked.
+	* It works with caching, then being less agressive.
 * **Free - Transporter:**
 	* **Version:**
-		/
-		* TODO
-		* Requires TSF: 2.7.0
+		* 1.0.0-dev2017-05-15
+	* **This extension is not accessible at the moment, because it's still in development.**
 
 = 1.1.0 - Articulated SEO =
 

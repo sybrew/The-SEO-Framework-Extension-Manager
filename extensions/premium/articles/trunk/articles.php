@@ -76,8 +76,7 @@ function _articles_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	// @TODO check if Organization is still required.
-	if ( \the_seo_framework()->is_single() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
+	if ( \the_seo_framework()->is_single() && 'post' === get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
 		new \TSF_Extension_Manager\Extension\Articles;
 		$loaded = true;
 	} else {

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension;
  * Extension Name: AMP
  * Extension URI: https://premium.theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.0.0
+ * Extension Version: 1.0.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
