@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Transporter
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Transporter;
 
 // This extension is still under construction.. hold on tight!
 
@@ -91,7 +91,7 @@ function transporter_init() {
 	\tsf_extension_manager()->_register_free_extension_autoload_path( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter' );
 
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager\Extension\Transporter_Admin;
+		new \TSF_Extension_Manager\Extension\Transporter\Admin;
 		$loaded = true;
 	} else {
 		$loaded = false;
@@ -107,9 +107,9 @@ function transporter_init() {
  *
  * @return string The active transporter class name.
  */
-function transporter_class() {
+function get_active_class() {
 	if ( \is_admin() ) {
-		return __NAMESPACE__ . '\\Transporter_Admin';
+		return __NAMESPACE__ . '\\Admin';
 	} else {
 		return '';
 	}

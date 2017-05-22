@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Articles
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Articles;
 
 /**
  * Extension Name: Articles - *gamma*
@@ -77,7 +77,7 @@ function _articles_init() {
 		return $loaded;
 
 	if ( \the_seo_framework()->is_single() && 'post' === get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
-		new \TSF_Extension_Manager\Extension\Articles;
+		new \TSF_Extension_Manager\Extension\Articles\Core;
 		$loaded = true;
 	} else {
 		$loaded = false;
@@ -87,11 +87,11 @@ function _articles_init() {
 }
 
 /**
- * Class TSF_Extension_Manager\Extension\Articles
+ * Class TSF_Extension_Manager\Extension\Articles\Core
  *
  * @final Please don't extend extensions.
  */
-final class Articles {
+final class Core {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	/**

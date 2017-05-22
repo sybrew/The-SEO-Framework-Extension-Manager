@@ -2,9 +2,8 @@
 /**
  * @package TSF_Extension_Manager\Extension\Transporter\Admin\Views
  */
-namespace TSF_Extension_Manager\Extension;
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\transporter_class() and $this instanceof $_class or die;
+defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Transporter\get_active_class() and $this instanceof $_class or die;
 
 ?>
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">

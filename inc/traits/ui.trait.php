@@ -38,7 +38,7 @@ trait UI {
 	 *
 	 * @var string The UI loader hook.
 	 */
-	private $ui_hook = '';
+	private $ui_hook;
 
 	/**
 	 * CSS script name identifier to be used with enqueuing.
@@ -91,6 +91,8 @@ trait UI {
 	 * @since 1.0.0
 	 */
 	final protected function init_ui() {
+
+		$this->ui_hook or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
 		//* Remove WordPress footer strings.
 		\add_action( 'admin_footer_text', '__return_empty_string' );

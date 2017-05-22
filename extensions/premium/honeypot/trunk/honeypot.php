@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Honeypot
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Honeypot;
 
 /**
  * Extension Name: Honeypot - *beta*
@@ -71,19 +71,19 @@ function honeypot_init() {
 	if ( \is_admin() )
 		return $loaded = false;
 
-	new \TSF_Extension_Manager\Extension\Honeypot;
+	new \TSF_Extension_Manager\Extension\Honeypot\Core;
 
 	return $loaded = true;
 }
 
 /**
- * Class TSF_Extension_Manager\Extension\Honeypot
+ * Class TSF_Extension_Manager\Extension\Honeypot\Core
  *
  * @since 1.0.0
  *
  * @final Please don't extend this extension.
  */
-final class Honeypot {
+final class Core {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	/**

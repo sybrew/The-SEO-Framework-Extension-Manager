@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Transporter\Steps
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Transporter;
 
 defined( 'ABSPATH' ) or die;
 
@@ -47,7 +47,7 @@ use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
 use \TSF_Extension_Manager\Error as Error;
 
 /**
- * Class TSF_Extension_Manager\Extension\Transporter_Steps
+ * Class TSF_Extension_Manager\Extension\Transporter\Steps
  *
  * Holds extension UI steps.
  *
@@ -55,7 +55,7 @@ use \TSF_Extension_Manager\Error as Error;
  * @access private
  * @errorval 106xxxx
  */
-final class Transporter_Steps {
+final class Steps {
 	use Enclose_Stray_Private, Construct_Core_Static_Final, Extension_Forms, Error;
 
 	/**

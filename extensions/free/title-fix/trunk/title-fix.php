@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Title_Fix
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Title_Fix;
 
 /**
  * Extension Name: Title Fix
@@ -75,19 +75,19 @@ function title_fix_init() {
 	//* Backwards compatibility
 	define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 
-	new \TSF_Extension_Manager\Extension\Title_Fix;
+	new \TSF_Extension_Manager\Extension\Title_Fix\Core;
 
 	return $loaded = true;
 }
 
 /**
- * Class TSF_Extension_Manager\Extension\Title_Fix
+ * Class TSF_Extension_Manager\Extension\Title_Fix\Core
  *
  * @since 1.0.0
  *
  * @final Please don't extend this extension.
  */
-final class Title_Fix {
+final class Core {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	/**
@@ -347,10 +347,10 @@ final class Title_Fix {
 	public function replace_title_tag( $title_tag, $content ) {
 
 		$new_title = '<title>' . \the_seo_framework()->title_from_cache( '', '' , '', true ) . '</title>' . $this->indicator();
-		$count = 1;
 
 		//* Replace the title tag within the header.
-		$content = str_replace( $title_tag, $new_title, $content, $count );
+		//* TODO substr_replace to prevent multiple replacements?
+		$content = str_replace( $title_tag, $new_title, $content );
 
 		//* Can't be escaped, as content is unknown.
 		echo $content;

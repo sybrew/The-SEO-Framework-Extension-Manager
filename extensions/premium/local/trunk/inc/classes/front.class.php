@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Monitor\FrontEnd
+ * @package TSF_Extension_Manager\Extension\Local\Front
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
 
@@ -10,8 +10,8 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Local extension for The SEO Framework
+ * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -33,15 +33,24 @@ use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
 use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Frontend
+ * Class TSF_Extension_Manager\Extension\Front
  *
- * Holds extension front-end functions.
+ * Holds extension front-end methods.
  *
  * @since 1.0.0
  * @access private
  */
-final class Monitor_Frontend {
+final class Front {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	private function construct() { }
+
+	/**
+	 * Placeholder... PHP7+
+	 */
+/*	private function generator( iterable $data, int $i ) : string {
+		yield [ ( $a = key( $data ) ) => $data[ $a ] ];
+		return '';
+	}
+*/
 }

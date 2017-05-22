@@ -324,12 +324,12 @@ class AdminPages extends AccountActivation {
 	 * @param string $title The pane title.
 	 * @param string $content The escaped pane content.
 	 * @param array $args The output arguments : {
-	 *		'full' bool : Whether to output a half or full pane.
-	 *		'collapse' bool : Whether able to collapse the pane.
-	 *		'move' bool : Whether to be able to move the pane.
-	 *		'pane_id' string : The pane div ID.
-	 *		'ajax' bool : Whether to use ajax.
-	 *		'ajax_id' string : The AJAX div ID.
+	 *   'full'     bool   : Whether to output a half or full pane.
+	 *   'collapse' bool   : Whether able to collapse the pane.
+	 *   'move'     bool   : Whether to be able to move the pane.
+	 *   'pane_id'  string : The pane div ID.
+	 *   'ajax'     bool   : Whether to use ajax.
+	 *   'ajax_id'  string : The AJAX div ID.
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
@@ -342,6 +342,42 @@ class AdminPages extends AccountActivation {
 			'pane_id' => '',
 			'ajax' => false,
 			'ajax_id' => '',
+		];
+		$args = \wp_parse_args( $args, $defaults );
+		unset( $defaults );
+
+		$this->get_view( 'layout/general/pane', get_defined_vars() );
+	}
+
+	/**
+	 * Echos a pane wrap with callable function, rather than passing content.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 *
+	 * @param string $title The pane title.
+	 * @param string $callable The callable function or method that echos content.
+	 * @param array $args The output arguments : {
+	 *   'full'       bool   : Whether to output a half or full pane.
+	 *   'collapse'   bool   : Whether able to collapse the pane.
+	 *   'move'       bool   : Whether to be able to move the pane.
+	 *   'pane_id'    string : The pane div ID.
+	 *   'ajax'       bool   : Whether to use ajax.
+	 *   'ajax_id'    string : The AJAX div ID.
+	 *   'secure_obj' bool   : Whether to pass the class object for integrity checks.
+	 * }
+	 * @param string $extra Extra header output placed between the title and ajax loader.
+	 */
+	public function _do_pane_wrap_callable( $title = '', $callable = '', $args = [], $extra = '' ) {
+
+		$defaults = [
+			'full' => true,
+			'collapse' => true,
+			'move' => false,
+			'pane_id' => '',
+			'ajax' => false,
+			'ajax_id' => '',
+			'secure_obj' => false,
 		];
 		$args = \wp_parse_args( $args, $defaults );
 		unset( $defaults );

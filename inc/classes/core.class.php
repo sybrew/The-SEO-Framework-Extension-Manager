@@ -76,7 +76,7 @@ class Core {
 	private function construct() {
 
 		//* Verify integrity.
-		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFrontend' );
+		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFront' );
 		$this instanceof $that or \wp_die( -1 );
 
 		$this->nonce_name = 'tsf_extension_manager_nonce_name';
@@ -872,7 +872,7 @@ class Core {
 
 		//* Hit 0 or is overflown on x86. Retry.
 		if ( 0 === $bit || is_double( $bit ) ) {
-			$_prime = array_rand( array_flip( [ 317539, 58171, 16417, 6997, 379, 109, 17 ] ), 1 );
+			$_prime = array_rand( array_flip( [ 317539, 58171, 16417, 6997, 379, 109, 17 ] ) );
 			goto set;
 		}
 
@@ -1152,15 +1152,15 @@ class Core {
 	 * @since 1.2.0 : Added download, filename, id and data.
 	 *
 	 * @param array $args The link arguments : {
-	 *		'url'     => string The URL. Required.
-	 *		'target'  => string The target. Default '_self'.
-	 *		'class'   => string The link class. Default ''.
-	 *		'id'      => string The link id. Default ''.
-	 *		'title'   => string The link title. Default ''.
-	 *		'content' => string The link content. Default ''.
-	 *		'download' => bool Whether to download. Default false.
-	 *		'filename' => string The optional download filename. Default ''.
-	 *		'data'    => array Array of data-$keys and $values.
+	 *  'url'      => string The URL. Required.
+	 *  'target'   => string The target. Default '_self'.
+	 *  'class'    => string The link class. Default ''.
+	 *  'id'       => string The link id. Default ''.
+	 *  'title'    => string The link title. Default ''.
+	 *  'content'  => string The link content. Default ''.
+	 *  'download' => bool Whether to download. Default false.
+	 *  'filename' => string The optional download filename. Default ''.
+	 *  'data'     => array Array of data-$keys and $values.
 	 * }
 	 * @return string escaped link.
 	 */
@@ -1303,7 +1303,7 @@ class Core {
 			goto failure;
 
 		$allowed_classes = [
-			'TSF_Extension_Manager\\Extension\\Monitor_Admin',
+			'TSF_Extension_Manager\\Extension\\Monitor\\Admin',
 		];
 
 		if ( in_array( get_class( $object ), $allowed_classes, true ) ) {
@@ -1318,50 +1318,50 @@ class Core {
 	}
 
 	/**
-	 * Registers autoloading classes for extensions and activates autoloader.
-	 * If the account isn't premium, it will not be loaded.
+	 * Initializes class autoloader and verifies integrity.
 	 *
-	 * @since 1.0.0
-	 * @access private
+	 * @since 1.3.0
 	 *
-	 * @param string $path The extension path to look for.
-	 * @param string $class_base Class base words.
-	 * @return bool True on success, false on failure.
+	 * @param string $path      The extension path to look for.
+	 * @param string $namespace The namespace.
+	 * @param string $_instance The verification instance.
+	 * @param array  $bits      The verification instance bits.
+	 * @return bool False on failure, true on success.
 	 */
-	final public function _register_premium_extension_autoload_path( $path, $class_base ) {
+	final public function _init_early_extension_autoloader( $path, $namespace, &$_instance = null, &$bits = null ) {
 
-		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
+		if ( $this->_has_died() )
 			return false;
 
-		if ( preg_match( '/(\/extensions\/free\/)(.*?)(?=.*\/trunk\/)/i', $path ) )
+		if ( false === ( $this->_verify_instance( $_instance, $bits[1] ) or $this->_maybe_die() ) )
 			return false;
 
-		$this->register_extension_autoloader();
-
-		return $this->set_extension_autoload_path( $path, $class_base );
+		$this->_register_premium_extension_autoload_path( $path, $namespace );
+		return true;
 	}
 
 	/**
 	 * Registers autoloading classes for extensions and activates autoloader.
+	 * If the account isn't premium, it will not be loaded.
 	 *
-	 * @since 1.2.0
+	 * @since 1.0.0
+	 * @since 1.3.0 : 1. Now handles namespaces instead of class bases.
+	 *                2. Removed some checks as it's not protected.
+	 *                2. Now is protected.
 	 * @access private
 	 *
-	 * @param string $path The extension path to look for.
-	 * @param string $class_base Class base words.
+	 * @param string $path      The extension path to look for.
+	 * @param string $namespace The namespace.
 	 * @return bool True on success, false on failure.
 	 */
-	final public function _register_free_extension_autoload_path( $path, $class_base ) {
+	final protected function _register_premium_extension_autoload_path( $path, $namespace ) {
 
-		if ( false === $this->are_options_valid() )
-			return false;
-
-		if ( preg_match( '/(\/extensions\/premium\/)(.*?)(?=.*\/trunk\/)/i', $path ) )
+		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
 			return false;
 
 		$this->register_extension_autoloader();
 
-		return $this->set_extension_autoload_path( $path, $class_base );
+		return $this->set_extension_autoload_path( $path, $namespace );
 	}
 
 	/**
@@ -1385,61 +1385,48 @@ class Core {
 	 * Maintains a cache. So this can be fetched later.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.0 : Now handles namespaces instead of class bases.
 	 * @staticvar array $registered The registered classes.
 	 *
-	 * @param string|null $path The extension path to look for.
-	 * @param string|null $class_base Class base words.
-	 * @param string|null $class The classname to fetch from cache.
+	 * @param string|null $path      The extension path to look for.
+	 * @param string|null $class     The $class name including namespace.
+	 * @param string|null $get       The namespace path to get from cache.
 	 * @return void|bool|array : {
-	 *    void  : $class if not set. Default behavior.
-	 *    false : $class isn't found in $locations.
-	 *    array : $class is found in locations.
+	 *    false  : The extension namespace wasn't set.
+	 *    true   : The extension namespace is set.
+	 *    void   : The extension namespace isn't set.
+	 *    string : The extension namespace location.
 	 * }
 	 */
-	final protected function set_extension_autoload_path( $path, $class_base, $class = null ) {
+	final protected function set_extension_autoload_path( $path, $namespace, $get = null ) {
 
 		static $locations = [];
 
-		$class = ltrim( $class, '\\' );
-
-		if ( $class ) {
-			$class = str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class );
-
-			//* Singular class names. Recommended as its much faster.
-			if ( isset( $locations[ $class ] ) )
-				return $locations[ $class ];
-
-			//* Extended class names. Slower but feasible.
-			$class_bases = explode( '_', $class );
-
-			$_class_base = '';
-			foreach ( $class_bases as $_class_base_part ) :
-				$_class_base .= $_class_base ? '_' . $_class_base_part : $_class_base_part;
-
-				if ( isset( $locations[ $_class_base ] ) )
-					return $locations[ $_class_base ];
-
-				continue;
-			endforeach;
+		if ( $get ) {
+			if ( isset( $locations[ $get ] ) )
+				return $locations[ $get ];
 
 			return false;
+		} else {
+			if ( $namespace ) {
+				$locations[ $namespace ] = $path;
+				return true;
+			}
 		}
-
-		$locations[ $class_base ] = $path;
 
 		return;
 	}
 
 	/**
-	 * Returns the registered $class name base path.
+	 * Returns the registered $namespace base path.
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string $class The classname path to fetch.
+	 * @param string $namespace The namespace path to fetch.
 	 * @return string|bool The path if found. False otherwise.
 	 */
-	final protected function get_extension_autload_path( $class ) {
-		return $this->set_extension_autoload_path( null, null, $class );
+	final protected function get_extension_autload_path( $namespace ) {
+		return $this->set_extension_autoload_path( null, null, $namespace );
 	}
 
 	/**
@@ -1447,6 +1434,7 @@ class Core {
 	 * the plugin classes.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.0 : Now handles namespaces instead of class bases.
 	 * @staticvar array $loaded Whether $class has been loaded.
 	 *
 	 * @param string $class The extension classname.
@@ -1464,17 +1452,19 @@ class Core {
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
 
-		$path = $this->get_extension_autload_path( $class );
+		$_class = str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class );
+		$_ns = substr( $_class, 0, strpos( $_class, '\\' ) );
 
-		if ( $path ) {
-			$_class = strtolower( str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class ) );
-			$_class = str_replace( '_', '-', $_class );
+		$_path = $this->get_extension_autload_path( $_ns );
+
+		if ( $_path ) {
+			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
 
 			$this->get_verification_codes( $_instance, $bits );
 
-			return $loaded[ $class ] = require_once( $path . $_class . '.class.php' );
+			return $loaded[ $class ] = require_once( $_path . $_file . '.class.php' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> could not be registered.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
 
 			//* Most likely, a fatal error will now occur.
 			return $loaded[ $class ] = false;
@@ -1492,7 +1482,14 @@ class Core {
 	 */
 	final protected function validate_extensions_checksum( $checksum ) {
 
-		if ( empty( $checksum['hash'] ) || empty( $checksum['matches'] ) || empty( $checksum['type'] ) ) {
+		$required = [
+			'hash' => '',
+			'matches' => '',
+			'type' => '',
+		];
+
+		//* If the required keys aren't found, bail.
+		if ( ! $this->has_required_array_keys( $checksum, $required ) ) {
 			return -1;
 		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
 			return -2;

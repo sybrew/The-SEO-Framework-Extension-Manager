@@ -79,12 +79,26 @@ trait Extensions_Properties {
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return [
+			'local' => [
+				'slug' => 'local',
+				'network' => '0',
+				'type' => 'premium',
+				'area' => 'business',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1494959290',
+				'requires' => '4.7.0',
+				'tested' => '4.8.0',
+				'requires_tsf' => '2.8.2',
+				'tested_tsf' => '2.9.3',
+			],
 			'amp' => [
 				'slug' => 'amp',
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'general',
-				'version' => '1.0.0',
+				'version' => '1.0.1',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1494391221',
@@ -126,7 +140,7 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'general',
-				'version' => '1.0.0',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1494391221',
@@ -140,7 +154,7 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'general',
-				'version' => '1.0.2',
+				'version' => '1.0.3',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1494391221',
@@ -179,9 +193,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '347be7eb842ad3596e108108388e0d3a4f084e7efd2d5ebdbee1704f026f7226',
-			'sha1'   => 'f88708cdfc79e980cf931f89143e61b4f4a17076',
-			'md5'    => '7219ecebe327a439f25a7e0c118ee744',
+			'sha256' => 'a3ed733a06d7b429ba1a5310d30249c4e2dcf49f964dceca92d291458d22932f',
+			'sha1'   => '80d8b113765054f498ceebf23e9917ab60e79052',
+			'md5'    => '070318838645030eda2861fe82045229',
 		];
 	}
 
@@ -698,12 +712,12 @@ trait Extensions_Actions {
 	 * @param string $_instance The verification instance. Propagates to inclusion file if possible.
 	 * @param array $bits The verification instance bits. Propagates to inclusion file if possible.
 	 * @return int|void {
-	 * 		-1 => No check has been performed.
-	 * 		1 => No file header path can be created. (Invalid extension)
-	 * 		2 => Extension header file is invalid. (Invalid extension)
-	 * 		3 => Inclusion failed.
-	 *		4 => Success.
-	 *		void => Fatal error.
+	 *   -1 => No check has been performed.
+	 *    1 => No file header path can be created. (Invalid extension)
+	 *    2 => Extension header file is invalid. (Invalid extension)
+	 *    3 => Inclusion failed.
+	 *    4 => Success.
+	 *    void => Fatal error.
 	 * }
 	 */
 	public static function test_extension( $slug, $ajax, $_instance, $bits ) {
@@ -1031,11 +1045,11 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $slug The extension slug to load.
-	 * @param string $instance The verification instance. Propagates to inclusion file.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file.
+	 * @param string $instance The verification instance. Propagates to inclusion file. Passed by reference.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool Whether the extension is loaded.
 	 */
-	public static function load_extension( $slug, $_instance, $bits ) {
+	public static function load_extension( $slug, &$_instance, &$bits ) {
 
 		self::verify_instance() or die;
 
@@ -1063,11 +1077,11 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $file The extension file to include.
-	 * @param string $instance The verification instance. Propagates to inclusion file.
-	 * @param array $bits The verification instance bits. Propagates to inclusion file.
+	 * @param string $instance The verification instance. Propagates to inclusion file. Passed by reference.
+	 * @param array $bits The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool True on success, false on failure.
 	 */
-	private static function include_extension( $file, $_instance, $bits ) {
+	private static function include_extension( $file, &$_instance, &$bits ) {
 		return (bool) include_once( $file );
 	}
 

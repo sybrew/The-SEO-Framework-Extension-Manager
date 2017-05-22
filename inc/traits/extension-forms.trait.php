@@ -240,7 +240,7 @@ trait Extension_Forms {
 		}
 
 		if ( empty( $items['input'] ) || ! is_array( $items['input'] ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Form items must be in an array. Supply at least a submit button.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Form input items must be in an array. Supply at least a submit button.' );
 			return '';
 		}
 

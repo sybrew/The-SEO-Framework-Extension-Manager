@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\AMP
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\AMP;
 
 /**
  * Extension Name: AMP
@@ -72,7 +72,7 @@ function _amp_init() {
 		$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
 
 		if ( $is_amp ) {
-			new \TSF_Extension_Manager\Extension\AMP;
+			new \TSF_Extension_Manager\Extension\AMP\Front;
 			return true;
 		}
 	}
@@ -80,13 +80,13 @@ function _amp_init() {
 }
 
 /**
- * Class TSF_Extension_Manager\Extension\AMP_Frontend
+ * Class TSF_Extension_Manager\Extension\AMP\Front
  *
  * @since 1.0.0
  *
  * @final Please don't extend this extension.
  */
-final class AMP {
+final class Front {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	/**

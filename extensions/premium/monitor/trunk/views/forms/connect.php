@@ -2,9 +2,8 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Admin\Views
  */
-namespace TSF_Extension_Manager\Extension;
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\monitor_class() and $this instanceof $_class or die;
+defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_active_class() and $this instanceof $_class or die;
 
 $class = 'tsfem-button-primary tsfem-button-cloud tsfem-button-ajax';
 $name = \__( 'Register', 'the-seo-framework-extension-manager' );

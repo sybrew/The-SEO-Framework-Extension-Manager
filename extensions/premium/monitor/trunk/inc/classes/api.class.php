@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Api
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,15 +33,15 @@ use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use \TSF_Extension_Manager\Construct_Sub_Once_Interface as Construct_Sub_Once_Interface;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Api
+ * Class TSF_Extension_Manager\Extension\Monitor\Api
  *
- * Holds extension api functionality.
+ * Holds extension api methods.
  *
  * @since 1.0.0
  * @access private
  * @errorval 101xxxx
  */
-class Monitor_Api extends Monitor_Data {
+class Api extends Data {
 	use Enclose_Stray_Private, Construct_Sub_Once_Interface;
 
 	/**
@@ -52,7 +52,7 @@ class Monitor_Api extends Monitor_Data {
 	private function construct() {
 
 		//* Verify integrity.
-		$that = __NAMESPACE__ . '\\Monitor_Admin';
+		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
 
 	}

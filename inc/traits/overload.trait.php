@@ -292,8 +292,8 @@ trait Construct_Core_Interface {
 
 /**
  * Forces all classes and subclasses to be treated as static. In essence, classes
- * that use this trait can't be used with a 'new' keyword. Otherwise they can be
- * safely called without interrupting flow.
+ * that use this trait can't be used with a 'new' keyword. They can be safely
+ * called without interrupting flow.
  *
  * This is great together with Enclose_Core_Final.
  * Does not load parent.
@@ -309,6 +309,68 @@ trait Construct_Core_Interface {
 trait Construct_Core_Static_Final {
 
 	final protected function __construct() { }
+}
+
+/**
+ * Forces the classes to be treated as a single static. In essence, classes that
+ * use this trait can't be used with a 'new' keyword. They can be safely called without
+ * interrupting flow.
+ *
+ * This is great together with Enclose_Core_Final.
+ * Does not load parent.
+ * Does load instance methods and properties.
+ *
+ * This trait applies nicely with the following design patterns:
+ * - Singleton Pattern.
+ * - Prototype Pattern.
+ *
+ * @since 1.0.0
+ * @access private
+ */
+trait Construct_Core_Static_Final_Instance {
+
+	final protected function __construct() { }
+
+	/**
+	 * The object instance.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var object|null This object instance.
+	 */
+	private static $instance = null;
+
+	/**
+	 * Sets the class instance.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @static
+	 */
+	final public static function set_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::$instance = new static();
+		}
+	}
+
+	/**
+	 * Gets the class instance. It's set when it's null.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @static
+	 *
+	 * @return object The current instance.
+	 */
+	final public static function get_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::set_instance();
+		}
+
+		return static::$instance;
+	}
 }
 
 /**

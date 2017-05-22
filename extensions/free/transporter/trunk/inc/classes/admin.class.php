@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Transporter\Admin
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Transporter;
 
 defined( 'ABSPATH' ) or die;
 
@@ -61,15 +61,15 @@ use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
 use \TSF_Extension_Manager\Error as Error;
 
 /**
- * Class TSF_Extension_Manager\Extension\Transporter_Admin
+ * Class TSF_Extension_Manager\Extension\Transporter\Admin
  *
- * Holds extension admin page functions.
+ * Holds extension admin page methods.
  *
  * @since 1.0.0
  * @access private
  * @errorval 106xxxx
  */
-final class Transporter_Admin {
+final class Admin {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface, UI, Extension_Options, Extension_Forms, Error;
 
 	/**

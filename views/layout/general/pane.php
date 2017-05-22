@@ -23,8 +23,26 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 		<?php
 		//* $ajax is already escaped.
 		printf( '<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>', \esc_html( $title ), $ajax );
-		//* $content should already have been escaped.
-		printf( '<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">%s</div>', $content );
+
+		if ( isset( $callable ) ) {
+			?>
+			<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">
+			<?php
+
+			//* If secure, pass object.
+			if ( $args['secure_obj'] ) {
+				call_user_func( $callable, $callable[0] );
+			} else {
+				call_user_func( $callable );
+			}
+
+			?>
+			</div>
+			<?php
+		} elseif ( isset( $content ) ) {
+			//* $content should already have been escaped.
+			printf( '<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">%s</div>', $content );
+		}
 		?>
 	</div>
 </section>

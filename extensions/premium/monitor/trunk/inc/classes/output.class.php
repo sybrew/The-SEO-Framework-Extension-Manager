@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Output
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
 
@@ -30,62 +30,18 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @package TSF_Extension_Manager\Traits
  */
 use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
+use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance as Construct_Core_Static_Final_Instance;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Output
+ * Class TSF_Extension_Manager\Extension\Monitor\Output
  *
  * Parses and evaluates input data.
  *
  * @since 1.0.0
  * @access private
  */
-final class Monitor_Output {
-	use Enclose_Core_Final, Construct_Core_Static_Final;
-
-	/**
-	 * The object instance.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var object|null This object instance.
-	 */
-	private static $instance = null;
-
-	/**
-	 * The constructor. Does nothing.
-	 */
-	private function construct() { }
-
-	/**
-	 * Sets the class instance.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public static function set_instance() {
-
-		if ( is_null( static::$instance ) ) {
-			static::$instance = new static();
-		}
-	}
-
-	/**
-	 * Gets the class instance. It's set when it's null.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @return object The current instance.
-	 */
-	public static function get_instance() {
-
-		if ( is_null( static::$instance ) ) {
-			static::set_instance();
-		}
-
-		return static::$instance;
-	}
+final class Output {
+	use Enclose_Core_Final, Construct_Core_Static_Final_Instance;
 
 	/**
 	 * Returns HTML pane overview based on $data input and $type.
@@ -155,7 +111,7 @@ final class Monitor_Output {
 	 * Iterates over pane slab data to generate information.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager\Extension\Monitor_Output->make_slab_info_entry()
+	 * @uses TSF_Extension_Manager\Extension\Monitor\Output->make_slab_info_entry()
 	 * @generator
 	 *
 	 * @param array $data The fetched data.
@@ -262,7 +218,7 @@ final class Monitor_Output {
 	 * Iterates over graph data to generate information.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager\Extension\Monitor_Output->make_slab_graph_entry()
+	 * @uses TSF_Extension_Manager\Extension\Monitor\Output->make_slab_graph_entry()
 	 * @generator
 	 * @TODO unused?
 	 *
@@ -482,7 +438,6 @@ final class Monitor_Output {
 	 * Returns slab data content.
 	 *
 	 * @since 1.0.0
-	 * @staticvar object $tests The Monitor_Tests class isntance.
 	 *
 	 * @param string $key The array key.
 	 * @param mixed $value The array value attached to $key.
@@ -523,7 +478,7 @@ final class Monitor_Output {
 		static $tests = null;
 
 		if ( is_null( $tests ) )
-			$tests = \TSF_Extension_Manager\Extension\Monitor_Tests::get_instance();
+			$tests = \TSF_Extension_Manager\Extension\Monitor\Tests::get_instance();
 
 		$content = '';
 
@@ -560,7 +515,7 @@ final class Monitor_Output {
 		static $graph = null;
 
 		if ( is_null( $graph ) )
-			$graph = \TSF_Extension_Manager\Extension\Monitor_Graph::get_instance();
+			$graph = \TSF_Extension_Manager\Extension\Monitor\Graph::get_instance();
 
 		$content = '';
 
@@ -590,7 +545,7 @@ final class Monitor_Output {
 
 		static $cache = null;
 
-		return $cache ?: $cache = \esc_html__( 'The Extension Manager needs to be updated in order to interpret this data.', 'the-seo-framework-extension-manager' );
+		return $cache ?: $cache = \esc_html__( 'The Extension Manager needs to be updated to interpret this data.', 'the-seo-framework-extension-manager' );
 	}
 
 	/**

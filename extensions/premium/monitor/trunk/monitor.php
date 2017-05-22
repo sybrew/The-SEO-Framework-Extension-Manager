@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 /**
  * Extension Name: Monitor - *beta*
@@ -16,9 +16,6 @@ namespace TSF_Extension_Manager\Extension;
  */
 
 defined( 'ABSPATH' ) or die;
-
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
-	return;
 
 /**
  * Monitor extension for The SEO Framework
@@ -67,6 +64,13 @@ define( 'TSFEM_E_MONITOR_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( T
  */
 define( 'TSFEM_E_MONITOR_PATH_CLASS', TSFEM_E_MONITOR_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
+/**
+ * Verify integrity and set up autoloader.
+ * @since 1.0.0
+ */
+if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor', $_instance, $bits ) )
+	return;
+
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\monitor_init', 11 );
 /**
  * Initializes the extension.
@@ -86,13 +90,11 @@ function monitor_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	\tsf_extension_manager()->_register_premium_extension_autoload_path( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor' );
-
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager\Extension\Monitor_Admin;
+		new \TSF_Extension_Manager\Extension\Monitor\Admin;
 	} else {
 		//* Statistical data. TODO.
-		// new Monitor_Frontend();
+		// new \TSF_Extension_Manager\Extension\Monitor\Front;
 		return $loaded = false;
 	}
 
@@ -100,16 +102,16 @@ function monitor_init() {
 }
 
 /**
- * Returns the active monitor base class.
+ * Returns the active base class.
  *
  * @since 1.0.0
  *
- * @return string The active monitor class name.
+ * @return string The active class name.
  */
-function monitor_class() {
+function get_active_class() {
 	if ( \is_admin() ) {
-		return __NAMESPACE__ . '\\Monitor_Admin';
+		return __NAMESPACE__ . '\\Admin';
 	} else {
-		return __NAMESPACE__ . '\\Monitor_Front_End';
+		return __NAMESPACE__ . '\\Front';
 	}
 }

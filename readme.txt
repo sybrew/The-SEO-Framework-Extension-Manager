@@ -32,7 +32,7 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 
 = Upcoming Extensions =
 
-**These following extensions are planned soon:**
+**These extensions are being worked on:**
 
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
 * **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
@@ -179,6 +179,74 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
+= 1.3.0 - TODO =
+
+* **Release date:**
+	/
+	* TODO Month dayth, 2017
+
+**New Extension:**
+/
+* **Local SEO**: TODO
+
+**Detailed log:**
+
+TODO View the [changeset on GitHub](https://example.com/#1).
+
+**Plugin Improvements:**
+
+* **Local:**
+	* **Improvement:** The extension autoloaded now uses namespaces rather than classnames.
+		* This changes all extensions' base structure.
+		* This speeds up autoloading twofold.
+
+* **API:**
+	* **Internal:**
+	* **External:**
+
+**Extension Improvements:**
+
+* **Premium - Local:**
+	* **Version:**
+		* 1.0.0
+* **Free - AMP:**
+	* **Version:**
+		* 1.0.1
+	* **Added:**
+* **Premium - Articles:**
+	* **Version:**
+		* 1.0.0-gamma-2
+	* **Premium only until gamma-testing is completed.**
+	* **Changed:**
+	* **Fixed:**
+* **Premium - Monitor:**
+	* **Version:**
+		* 1.0.0-beta-3
+		* **This is a new extension**.
+	* **Internal:**
+		* **Changed:**
+			/
+			* TODO The plugin interface is now only loaded in cache when on the Monitor page. Saving a lot of resources.
+				* See Local implementation.
+		* **Fixed:**
+			* Manual updates are no longer handled registered twice.
+	* **API:**
+		* **Internal**
+			* **Added:**
+		* **External**
+			* **Added:**
+			* **Fixed:**
+				* May 16th, 2017: The return data now officially supports 1.0.0-beta-3 and later, rather than 1.0.0 and later.
+					* This outputted a notice on all testing fields and therefore showed no useful information.
+* **Premium - Honeypot:**
+	* **Version:**
+		* 1.0.0-beta
+* **Free - Transporter:**
+	* **Version:**
+		* 1.0.0-dev2017-05-15
+	* **This extension is not accessible at the moment, because it's still in development.**
+		* Will probably rewrite this plugin, as the approach was changed drastically.
+
 = 1.2.0 - Aptitudinal SEO =
 
 * **Release date:**
@@ -189,6 +257,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Honeypot**: This catches comment spammers in four lightweight yet powerful ways.
 
 **Detailed log:**
+
+View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/compare/7e58299cfc771315c2ed4d7940bf0981b64dc903...988fa6211c57074303388b1fbc1a86ea186a58e0).
 
 **Plugin Improvements:**
 

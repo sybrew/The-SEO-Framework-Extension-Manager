@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Monitor\Monitor_Data
+ * @package TSF_Extension_Manager\Extension\Monitor\Monitor\Data
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
 
@@ -33,15 +33,15 @@ use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
 use \TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_Interface;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Data
+ * Class TSF_Extension_Manager\Extension\Monitor\Data
  *
- * Holds extension data functions.
+ * Holds extension data methods.
  *
  * @since 1.0.0
  * @access private
  * @errorval 101xxxx
  */
-class Monitor_Data {
+class Data {
 	use Enclose_Stray_Private, Construct_Core_Once_Interface;
 
 	/**
@@ -52,7 +52,7 @@ class Monitor_Data {
 	private function construct() {
 
 		//* Verify integrity.
-		$that = __NAMESPACE__ . ( \is_admin() ? '\\Monitor_Admin' : '\\Monitor_Frontend' );
+		$that = __NAMESPACE__ . ( \is_admin() ? '\\Admin' : '\\Front' );
 		$this instanceof $that or \wp_die( -1 );
 
 	}

@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Admin
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
 
@@ -45,12 +45,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'extension-forms' );
 
 /**
- * Require error trait.
- * @since 1.0.0
- */
-\TSF_Extension_Manager\_load_trait( 'error' );
-
-/**
  * @package TSF_Extension_Manager\Traits
  */
 use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
@@ -61,15 +55,15 @@ use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
 use \TSF_Extension_Manager\Error as Error;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Admin
+ * Class TSF_Extension_Manager\Extension\Monitor\Admin
  *
- * Holds extension admin page functions.
+ * Holds extension admin page methods.
  *
  * @since 1.0.0
  * @access private
  * @errorval 101xxxx
  */
-final class Monitor_Admin extends Monitor_Api {
+final class Admin extends Api {
 	use Enclose_Stray_Private, Construct_Master_Once_Interface, UI, Extension_Options, Extension_Forms, Error;
 
 	/**
@@ -181,7 +175,6 @@ final class Monitor_Admin extends Monitor_Api {
 
 		//* AJAX get required fix listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_get_requires_fix', [ $this, '_wp_ajax_get_requires_fix' ] );
-
 	}
 
 	/**
@@ -272,9 +265,6 @@ final class Monitor_Admin extends Monitor_Api {
 
 		//* Add footer output.
 		\add_action( 'in_admin_footer', [ $this, '_init_monitor_footer_wrap' ] );
-
-		//* Update POST listener.
-		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		return true;
 	}
@@ -765,7 +755,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $issues ) ) {
 			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
-			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
 			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
@@ -791,7 +781,7 @@ final class Monitor_Admin extends Monitor_Api {
 			$data = sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
 			$found = true;
-			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
 			$data = $instance->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
@@ -1100,7 +1090,7 @@ final class Monitor_Admin extends Monitor_Api {
 		if ( empty( $stats ) ) {
 			$output .= $this->get_string_no_data_found();
 		} else {
-			$instance = \TSF_Extension_Manager\Extension\Monitor_Output::get_instance();
+			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 

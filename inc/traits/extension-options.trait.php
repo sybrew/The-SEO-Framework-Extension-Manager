@@ -125,6 +125,17 @@ trait Extension_Options {
 	protected $o_index = '';
 
 	/**
+	 * Current Extension default options.
+	 *
+	 * If option key's value is not null, it will fall back to set option when
+	 * $this->get_option()'s second parameter is not null either.
+	 * @since 1.3.0
+	 *
+	 * @param array $o_defaults The default options.
+	 */
+	protected $o_defaults = [];
+
+	/**
 	 * Returns current extension options array based upon $o_index;
 	 *
 	 * @since 1.0.0
@@ -149,9 +160,10 @@ trait Extension_Options {
 	 * Fetches current extension options.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 : Now listens to $this->o_defaults.
 	 *
 	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist.
+	 * @param mixed $default The fallback value if the option doesn't exist. Defaults to $this->$o_defaults[ $option ].
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_option( $option, $default = null ) {
@@ -161,7 +173,16 @@ trait Extension_Options {
 
 		$options = $this->get_extension_options();
 
-		return isset( $options[ $option ] ) ? $options[ $option ] : $default;
+		if ( isset( $options[ $option ] ) )
+			return $options[ $option ];
+
+		if ( isset( $default ) )
+			return $default;
+
+		if ( isset( $this->o_defaults[ $option ] ) )
+			return $this->o_defaults[ $option ];
+
+		return null;
 	}
 
 	/**

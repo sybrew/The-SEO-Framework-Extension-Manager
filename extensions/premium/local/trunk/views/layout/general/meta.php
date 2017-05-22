@@ -1,9 +1,9 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Transporter\Admin\Views
+ * @package TSF_Extension_Manager\Extension\Local\Admin\Views
  */
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Transporter\get_active_class() and $this instanceof $_class or die;
+defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
 //* So fancy.
 ?>

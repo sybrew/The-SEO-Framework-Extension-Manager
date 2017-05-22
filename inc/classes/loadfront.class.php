@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Facade Class TSF_Extension_Manager\LoadFrontend.
+ * Facade Class TSF_Extension_Manager\LoadFront.
  *
  * Initializes plugin classes.
  *
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) or die;
  * @access private
  * @final Please don't extend this plugin.
  */
-final class LoadFrontend extends Core {
+final class LoadFront extends Core {
 	use Construct_Master_Once_Interface, Enclose_Stray_Private;
 
 	/**

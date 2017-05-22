@@ -193,7 +193,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf_extension_manager', 6 );
 /**
  * Loads TSF_Extension_Manager\LoadAdmin class when in admin.
- * Loads TSF_Extension_Manager\LoadFrontend class on the front-end.
+ * Loads TSF_Extension_Manager\LoadFront class on the front-end.
  *
  * Also directly initializes extensions after the class constructors have run.
  * This will allow all extensions and functions to run exactly after The SEO Framework has been initialized.
@@ -236,7 +236,7 @@ function _init_tsf_extension_manager() {
 		if ( \is_admin() ) {
 			$tsf_extension_manager = new \TSF_Extension_Manager\LoadAdmin;
 		} else {
-			$tsf_extension_manager = new \TSF_Extension_Manager\LoadFrontend;
+			$tsf_extension_manager = new \TSF_Extension_Manager\LoadFront;
 		}
 
 		//* Initialize extensions.
@@ -257,7 +257,7 @@ function _register_autoloader() {
 
 	//* Prevent overriding of security classes by checking their existence.
 	! ( class_exists( 'TSF_Extension_Manager\Core', false ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract', false ) || class_exists( 'TSF_Extension_Manager\SecureOption', false ) )
-	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin', false ) || class_exists( 'TSF_Extension_Manager\LoadFrontend', false ) )
+	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin', false ) || class_exists( 'TSF_Extension_Manager\LoadFront', false ) )
 		or \wp_die( -1 );
 
 	/**

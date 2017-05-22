@@ -2,9 +2,9 @@
 //* THIS FILE ISN'T LOADED (YET). Creating interactive (zooming) graphs is very difficult and requires a lot of time :(.
 
 /**
- * @package TSF_Extension_Manager\Extension\Monitor\Tests
+ * @package TSF_Extension_Manager\Extension\Monitor\Graph
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
 
@@ -32,32 +32,18 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @package TSF_Extension_Manager\Traits
  */
 use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
+use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance as Construct_Core_Static_Final_Instance;
 
 /**
- * Class TSF_Extension_Manager\Extension\Monitor_Graph
+ * Class TSF_Extension_Manager\Extension\Monitor\Graph
  *
  * Renders Monitor Data input to generate graphs.
  *
  * @since 1.0.0
  * @access private
  */
-final class Monitor_Graph {
-	use Enclose_Core_Final, Construct_Core_Static_Final;
-
-	/**
-	 * The object instance.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var object|null This object instance.
-	 */
-	private static $instance = null;
-
-	/**
-	 * The constructor. Does nothing.
-	 */
-	private function construct() { }
+final class Graph {
+	use Enclose_Core_Final, Construct_Core_Static_Final_Instance;
 
 	/**
 	 * Handles unapproachable invoked methods.
@@ -69,36 +55,6 @@ final class Monitor_Graph {
 	 */
 	public function __call( $name, $arguments ) {
 		return '';
-	}
-
-	/**
-	 * Sets the class instance.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public static function set_instance() {
-
-		if ( is_null( static::$instance ) ) {
-			static::$instance = new static();
-		}
-	}
-
-	/**
-	 * Gets the class instance. It's set when it's null.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @return object The current instance.
-	 */
-	public static function get_instance() {
-
-		if ( is_null( static::$instance ) ) {
-			static::set_instance();
-		}
-
-		return static::$instance;
 	}
 
 	public function stats_uptime( $data ) {

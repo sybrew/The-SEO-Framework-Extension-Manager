@@ -2,7 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Incognito
  */
-namespace TSF_Extension_Manager\Extension;
+namespace TSF_Extension_Manager\Extension\Incognito;
 
 /**
  * Extension Name: Incognito
