@@ -77,12 +77,6 @@ define( 'TSFEM_E_LOCAL_PATH_TRAIT', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_S
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
 	return;
 
-/**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\_local_init', 11 );
 /**
  * Initializes the extension.

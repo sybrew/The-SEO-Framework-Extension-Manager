@@ -72,12 +72,6 @@ final class Admin extends Api {
 		//* Sets local page slug.
 		$this->local_page_slug = 'theseoframework-local';
 
-		/**
-		 * Set options index.
-		 * @see trait TSF_Extension_Manager\Extension_Options
-		 */
-		$this->o_index = 'local';
-
 		//* Load admin actions.
 		$this->load_admin_actions();
 	}

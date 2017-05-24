@@ -329,7 +329,7 @@ trait Construct_Core_Static_Final {
  */
 trait Construct_Core_Static_Final_Instance {
 
-	final protected function __construct() { }
+	final private function __construct() {}
 
 	/**
 	 * The object instance.

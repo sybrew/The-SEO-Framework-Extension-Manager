@@ -37,11 +37,11 @@ interface Secure_Static_Abstracts {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type.
+	 * @param string $type     Required. The instance type.
 	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param int $bit Required. The instance bit. Passed by reference.
+	 * @param int    $bit      Required. The instance bit. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = null );
+	public static function initialize( $type = '', &$instance = null, &$bits = null );
 
 	/**
 	 * Returns the current call values based on initialization set in self::$_type.
@@ -54,11 +54,6 @@ interface Secure_Static_Abstracts {
 	 */
 	public static function get( $type = '' );
 }
-
-/**
- * @package TSF_Extension_Manager\Interfaces
- */
-use \TSF_Extension_Manager\Secure_Static_Abstracts as Secure_Static_Abstracts;
 
 /**
  * This class allows handling of secure nonces and interfaces through a singleton pattern.

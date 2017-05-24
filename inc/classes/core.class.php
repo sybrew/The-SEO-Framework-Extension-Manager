@@ -110,7 +110,6 @@ class Core {
 			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		];
-
 		/**
 		 * Set error notice option.
 		 * @see trait TSF_Extension_Manager\Error
@@ -452,7 +451,8 @@ class Core {
 	 * Example usage includes downloading files over AJAX, which is otherwise not
 	 * possible.
 	 *
-	 * Includes enforced security.
+	 * Includes enforced nonce security. However, the user capability allowance
+	 * MUST be determined beforehand.
 	 * Note that the URL can't be generated if the menu pages aren't set.
 	 *
 	 * @since 1.2.0

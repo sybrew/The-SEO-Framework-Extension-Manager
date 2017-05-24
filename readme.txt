@@ -199,6 +199,8 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 	* **Improvement:** The extension autoloaded now uses namespaces rather than classnames.
 		* This changes all extensions' base structure.
 		* This speeds up autoloading twofold.
+	/
+	* TODO **Improvement:** This plugin has now been tested against xDebug to eliminate common errors, performance culprits, and resource hogs.
 
 * **API:**
 	* **Internal:**
@@ -224,6 +226,9 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* 1.0.0-beta-3
 		* **This is a new extension**.
 	* **Internal:**
+		* **Improved:**
+			/
+			* TODO The privacy policy link on the registration page now opens in a new window.
 		* **Changed:**
 			/
 			* TODO The plugin interface is now only loaded in cache when on the Monitor page. Saving a lot of resources.

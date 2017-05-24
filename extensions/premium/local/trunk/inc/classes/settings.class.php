@@ -39,13 +39,10 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'extension-forms' );
 
 /**
- * @package TSF_Extension_Manager\Traits
+ * Require error trait.
+ * @since 1.0.0
  */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance as Construct_Core_Static_Final_Instance;
-use \TSF_Extension_Manager\UI as UI;
-use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
-use \TSF_Extension_Manager\Error as Error;
+\TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
  * Require Local security trait.
@@ -54,15 +51,28 @@ use \TSF_Extension_Manager\Error as Error;
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
 
 /**
+ * Require Local security trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\Extension\Local\_load_trait( 'options-template' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Local\Settings
  *
  * Holds extension settings methods.
  *
  * @since 1.0.0
  * @access private
+ * @errorval 107xxxx
  */
 final class Settings {
-	use Enclose_Core_Final, Construct_Core_Static_Final_Instance, UI, Extension_Forms, Error, Secure_Post;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
+		\TSF_Extension_Manager\UI,
+		\TSF_Extension_Manager\Extension_Forms,
+		\TSF_Extension_Manager\Extension_Options,
+		\TSF_Extension_Manager\Error,
+		Secure_Post;
 
 	/**
 	 * Initializes and outputs Settings page.
@@ -74,6 +84,12 @@ final class Settings {
 	 * @param string $hook The menu hook.
 	 */
 	public function _init( Core $_core, $hook ) {
+
+		/**
+		 * Set options index.
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = 'local';
 
 		/**
 		 * Set error notice option.
@@ -89,9 +105,15 @@ final class Settings {
 
 		/**
 		 * Sets nonces.
-		 * @see trait TSF_Extension_Manager\Extension\Local\Security
+		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
 		 */
 		$this->set_nonces();
+
+		/**
+		 * Initialize POST data checks.
+		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
+		 */
+		$this->init_post_checks();
 
 		/**
 		 * Set UI hook.
@@ -101,24 +123,9 @@ final class Settings {
 
 		/**
 		 * Initialize user interface.
+		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
-
-		//* Update POST listener.
-		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
-
-		//* Add something special for Vivaldi
-		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
-
-		//* Add footer output.
-		\add_action( 'in_admin_footer', [ $this, '_init_local_footer_wrap' ] );
-
-		//* AJAX update listener.
-		\add_action( 'wp_ajax_tsfem_e_local_update', [ $this, '_wp_ajax_update_data' ] );
-
-		//* AJAX API listener.
-		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
-
 	}
 
 	/**
@@ -178,6 +185,12 @@ final class Settings {
 				],
 			],
 		];
+
+		//* Add something special for Vivaldi
+		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
+
+		//* Add footer output.
+		\add_action( 'in_admin_footer', [ $this, '_init_local_footer_wrap' ] );
 
 		/**
 		 * Initialize UI calls.

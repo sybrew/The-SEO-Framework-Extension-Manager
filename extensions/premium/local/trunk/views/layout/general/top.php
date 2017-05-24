@@ -11,9 +11,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		<header><h1>
 			<?php
 			$image = [
-				'svg' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/locallogo.svg',
-				//'2x' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/locallogo-58x58.png',
-				'1x' => TSFEM_E_MONITOR_DIR_URL . 'lib/images/locallogo-29x29px.png',
+				'svg' => TSFEM_E_LOCAL_DIR_URL . 'lib/images/locallogo.svg',
+				//'2x' => TSFEM_E_LOCAL_DIR_URL . 'lib/images/locallogo-58x58.png',
+				'1x' => TSFEM_E_LOCAL_DIR_URL . 'lib/images/locallogo-29x29px.png',
 			];
 			$size = '1em';
 

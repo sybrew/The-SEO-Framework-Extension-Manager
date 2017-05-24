@@ -26,8 +26,13 @@ defined( 'ABSPATH' ) or die;
 /**
  * Holds secure POST functions for package TSF_Extension_Manager\Extension\Local.
  *
+ * Note: This trait has dependencies!
+ *
  * @since 1.0.0
+ * @uses trait \TSF_Extension_Manager\Extension_Options
+ * @uses trait \TSF_Extension_Manager\Error
  * @access private
+ * @errorval 107xxxx
  */
 trait Secure_Post {
 
@@ -71,6 +76,23 @@ trait Secure_Post {
 	}
 
 	/**
+	 * Checks POST for data through admin actions.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function init_post_checks() {
+
+		//* Update POST listener.
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
+
+		//* AJAX update listener.
+		\add_action( 'wp_ajax_tsfem_e_local_update', [ $this, '_wp_ajax_update_data' ] );
+
+		//* AJAX API listener.
+		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
+	}
+
+	/**
 	 * Handles Monitor POST requests.
 	 *
 	 * @since 1.0.0
@@ -90,7 +112,7 @@ trait Secure_Post {
 
 		switch ( $options['nonce-action'] ) :
 			default :
-				$this->set_error_notice( [ 1010101 => '' ] );
+				$this->set_error_notice( [ 1070101 => '' ] );
 				break;
 		endswitch;
 
@@ -141,7 +163,7 @@ trait Secure_Post {
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( [ 1019001 => '' ] );
+			$this->set_error_notice( [ 1079001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
 			exit;
 		}
