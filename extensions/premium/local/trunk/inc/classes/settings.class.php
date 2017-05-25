@@ -51,10 +51,16 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
 
 /**
- * Require Local security trait.
+ * Require Local options template trait.
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'options-template' );
+
+/**
+ * Require Local settings generator trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\Extension\Local\_load_trait( 'settings-generator' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Local\Settings
@@ -72,7 +78,9 @@ final class Settings {
 		\TSF_Extension_Manager\Extension_Forms,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
-		Secure_Post;
+		Secure_Post,
+		Options_Template,
+		Settings_Generator;
 
 	/**
 	 * Initializes and outputs Settings page.
@@ -281,6 +289,10 @@ final class Settings {
 	 */
 	public function _output_theme_color_meta() {
 		$this->get_view( 'layout/general/meta' );
+	}
+
+	protected function output_options() {
+		$this->output_fields( $this->get_global_department_fields() );
 	}
 
 	/**

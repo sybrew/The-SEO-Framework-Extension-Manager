@@ -23,6 +23,8 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// TODO @see https://angular.io/docs/ts/latest/cookbook/form-validation.html
+
 /**
  * Holds options template for package TSF_Extension_Manager\Extension\Local.
  *
@@ -88,7 +90,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'object' => [ 'dropdown', 'object' => [ 'dropdown' ] ] ],
+				'_type' => 'select',
 				'_desc' => [
 					\__( 'Select supported department type', '' ),
 					\__( 'Select a department type that exactly describes the practiced business.', '' ),
@@ -101,7 +103,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Name of the department', '' ),
 					\__( 'Fill in the name of the department accurately.', '' ),
@@ -112,13 +114,14 @@ trait Options_Template {
 				'_edit' => false,
 				'_ret' => 'string',
 				'_req' => true,
+				'_type' => 'input',
 			],
 			'address' => [
 				'_default' => null,
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => true,
-				'_type' => [ 'address', 'object' => [ 'text' ] ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Department address', '' ),
 					\__( 'Fill in the exact address of the department.', '' ),
@@ -128,9 +131,9 @@ trait Options_Template {
 			'url' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 'url',
 				'_req' => false,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Department URL', '' ),
 					\__( 'The fully-qualified URL of the specific department location.', '' ),
@@ -142,7 +145,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
-				'_type' => [ 'object' => [ 'text' ] ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Geographic coordinates of the department.', '' ),
 				],
@@ -153,7 +156,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Telephone number', '' ),
 					\__( 'A business phone number meant to be the primary contact method for customers.', '' ),
@@ -165,30 +168,30 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
-				'_type' => [ 'object' => [ 'text', 'object' => [ 'text' ] ] ],
+				'_type' => '', // TODO,
 				'_desc' => [
 					\__( 'Geographic coordinates of the department', '' ),
 				],
-				'_fields' => $this->get_potential_action_fields(), // TODO
+			//	'_fields' => $this->get_potential_action_fields(), // TODO
 			],
 			'openingHoursSpecification' => [
 				'_default' => null,
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
-				'_type' => [ 'object' => [ 'text', 'object' => [ 'dropdown', 'object' => [ 'dropdown', 'dropdown' ] ] ] ],
+				'_type' => '', // TODO,
 				'_desc' => [
 					\__( 'Department opening hours', '' ),
 				],
-				'_fields' => $this->get_opening_hours_fields(), // TODO
+			//	'_fields' => $this->get_opening_hours_fields(), // TODO
 			],
 			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'menu' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 'url',
 				'_req' => false,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Menu URL', '' ),
 					\__( 'Department menu URL, if any.', '' ),
@@ -199,19 +202,19 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'integer', // Actually, a boolean...
 				'_req' => false,
-				'_type' => [ 'dropdown' ],
+				'_type' => 'select',
 				'_desc' => [
 					\__( 'Accept reservations', '' ),
 					\__( 'If you accept reservations, set this options. If you explicitly don\'t accept reservations as a food establishment, also set this option.', '' ),
 				],
-				'_dd' => $this->get_reservation_fields(), // 0, 1, 2... 0 = not specified, 1 = nope, 2 = yup TODO
+			//	'_dd' => $this->get_reservation_fields(), // 0, 1, 2... 0 = not specified, 1 = nope, 2 = yup TODO
 			],
 			'image' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 'url',
 				'_req' => false, // Must be true if RESTAURANT.
-				'_type' => [ 'image' ],
+				'_type' => 'image',
 				'_desc' => [
 					\__( 'Image', '' ),
 					\__( 'An image of the business.', '' ),
@@ -222,12 +225,12 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false, // Must be true if RESTAURANT.
-				'_type' => [ 'dropdown' ],
+				'_type' => 'select',
 				'_desc' => [
 					\__( 'Cuisine', '' ),
 					\__( 'Provide the type of cuisine the department serves.', '' ),
 				],
-				'_dd' => $this->get_cuisine_fields(), // TODO make list of cuisine types... there's no default list yet??
+			//	'_dd' => $this->get_cuisine_fields(), // TODO make list of cuisine types... there's no default list yet??
 			],
 		];
 	}
@@ -239,7 +242,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Street address', '' ),
 					'',
@@ -251,7 +254,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'City, town, village', '' ),
 				],
@@ -261,7 +264,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'State or province', '' ),
 				],
@@ -271,7 +274,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => [ 'text' ],
+				'_type' => 'input',
 				'_desc' => [
 					\__( 'Postal or zip code', '' ),
 				],
@@ -281,7 +284,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => [ 'dropdown' ],
+				'_type' => 'select',
 				'_desc' => [
 					\__( 'State or province', '' ),
 				],

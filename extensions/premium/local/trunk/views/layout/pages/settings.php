@@ -8,5 +8,6 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 ?>
 <div class="tsfem-pane-inner-wrap tsfem-e-local-settings-wrap tsfem-flex tsfem-flex-row">
 	<h4>Hello World!</h4>
+	<?php $this->output_options(); ?>
 </div>
 <?php
