@@ -154,7 +154,7 @@ trait Extension_Forms {
 	 * @return string Hidden form action input.
 	 */
 	public function _get_nonce_action_field( $request_name ) {
-		return '<input type="hidden" name="' . $this->_get_field_name( 'nonce-action' ) . '" value="' . \esc_attr( $this->request_name[ $request_name ] ) . '">';
+		return '<input type=hidden name="' . $this->_get_field_name( 'nonce-action' ) . '" value="' . \esc_attr( $this->request_name[ $request_name ] ) . '">';
 	}
 
 	/**
@@ -270,7 +270,7 @@ trait Extension_Forms {
 			}
 
 			$output .= sprintf(
-				'<form action="%s" method="post" id="%s" class="hide-if-js %s">%s</form>',
+				'<form action="%s" method=post id="%s" class="hide-if-js %s">%s</form>',
 				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
 			);
 
@@ -280,7 +280,7 @@ trait Extension_Forms {
 			);
 		} else {
 			$output .= sprintf(
-				'<form action="%s" method="post" id="%s" class="%s">%s</form>',
+				'<form action="%s" method=post id="%s" class="%s">%s</form>',
 				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
 			);
 		}

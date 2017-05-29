@@ -24,6 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 // TODO @see https://angular.io/docs/ts/latest/cookbook/form-validation.html
+// TODO @see https://developers.google.com/maps/documentation/geocoding/intro (note STATUS result.. we require an API key bound to an account)
 
 /**
  * Holds options template for package TSF_Extension_Manager\Extension\Local.
@@ -59,7 +60,68 @@ trait Options_Template {
 	 *                       1 : string Description,
 	 *                       2 : string Additional description,
 	 *                    },
+	 *       '_range'   : array Range fields : {
+	 *                       0 : int|float Min value,
+	 *                       1 : int|float Max value,
+	 *                       2 : int|float Step iteration,
+	 *                    },
+	 *    }
+	 * }
+	 */
+	function get_departments_head_fields() {
+		return [
+			'depAmount' => [
+				'_default' => 1,
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'number',
+				'_desc' => [
+					\__( 'Set number of departments', '' ),
+					\__( 'Each department must have its own publicly recognizable name and type.', '' ),
+					\__( 'For example, if you have a small shop inside your restaurant, then set two departments.', '' ),
+				],
+				'_range' => [
+					0,
+					'',
+					1,
+				],
+				'_dd' => $this->get_department_fields( false ),
+			],
+		];
+	}
+
+	/**
+	 *
+	 * @link https://developers.google.com/search/docs/data-types/local-businesses
+	 *
+	 * @return array : {
+	 *    string Option name => array Option attributes : {
+	 *       '_default' : mixed  Default value. Null if there's no default.
+	 *       '_edit'    : bool   Whether field is editable,
+	 *       '_ret'     : string Field return type,
+	 *       '_req'     : bool   Whether field is required,
+	 *       '_type'    : string Fields output type,
+	 *       '_desc'    : array Description fields : {
+	 *                       0 : string Title,
+	 *                       1 : string Description,
+	 *                       2 : string Additional description,
+	 *                    },
 	 *       '_dd'      : array Dropdown fields : {
+	 *                       0 : mixed  Option return value,
+	 *                       1 : string Option description,
+	 *                       2 : mixed  Option subtypes, if '_type' is `[ dropdown, double ]`, : {
+	 *                          0 : mixed  Option return value,
+	 *                          1 : string Option description,
+	 *                          2 : string Option additional description,
+	 *                       },
+	 *                    },
+	 *       '_range'   : array Range fields : {
+	 *                       0 : int|float Min value,
+	 *                       1 : int|float Max value,
+	 *                       2 : int|float Step iteration,
+	 *                    },
+	 *       '_select'  : array Select fields : {
 	 *                       0 : mixed  Option return value,
 	 *                       1 : string Option description,
 	 *                       2 : mixed  Option subtypes, if '_type' is `[ dropdown, double ]`, : {
@@ -94,7 +156,7 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Select supported department type', '' ),
 					\__( 'Select a department type that exactly describes the practiced business.', '' ),
-					\__( 'Leave it empty if your department is not listed.', '' ),
+					\__( 'Leave empty if your department type is not listed.', '' ),
 				],
 				'_dd' => $this->get_department_fields( false ),
 			],
@@ -103,7 +165,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'Name of the department', '' ),
 					\__( 'Fill in the name of the department accurately.', '' ),
@@ -114,14 +176,14 @@ trait Options_Template {
 				'_edit' => false,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => 'input',
+				'_type' => 'text',
 			],
 			'address' => [
 				'_default' => null,
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => true,
-				'_type' => 'input',
+				'_type' => 'address',
 				'_desc' => [
 					\__( 'Department address', '' ),
 					\__( 'Fill in the exact address of the department.', '' ),
@@ -133,7 +195,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'url',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'url',
 				'_desc' => [
 					\__( 'Department URL', '' ),
 					\__( 'The fully-qualified URL of the specific department location.', '' ),
@@ -145,7 +207,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'Geographic coordinates of the department.', '' ),
 				],
@@ -156,7 +218,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'tel',
 				'_desc' => [
 					\__( 'Telephone number', '' ),
 					\__( 'A business phone number meant to be the primary contact method for customers.', '' ),
@@ -191,7 +253,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'url',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'url',
 				'_desc' => [
 					\__( 'Menu URL', '' ),
 					\__( 'Department menu URL, if any.', '' ),
@@ -242,7 +304,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'Street address', '' ),
 					'',
@@ -254,7 +316,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'City, town, village', '' ),
 				],
@@ -264,7 +326,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'State or province', '' ),
 				],
@@ -274,7 +336,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
-				'_type' => 'input',
+				'_type' => 'text',
 				'_desc' => [
 					\__( 'Postal or zip code', '' ),
 				],
@@ -288,7 +350,7 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'State or province', '' ),
 				],
-				'_fields' => $this->get_country_fields(),
+				'_select' => $this->get_country_fields(),
 			],
 		];
 	}
@@ -300,7 +362,7 @@ trait Options_Template {
 	function get_country_fields() {
 		return [
 			[
-				0,
+				'',
 				'&mdash; ' . \__( 'No country selected', '' ) . ' &mdash;',
 			],
 			[
@@ -1309,7 +1371,12 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'float' ],
+				'_type' => 'number',
+				'_range' => [
+					-90,
+					90,
+					1e-7,
+				],
 				'_desc' => [
 					\__( 'Latitude', '' ),
 					'',
@@ -1321,7 +1388,12 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => false,
-				'_type' => [ 'float' ],
+				'_type' => 'number',
+				'_range' => [
+					-180,
+					180,
+					1e-7,
+				],
 				'_desc' => [
 					\__( 'Longitude', '' ),
 					'',

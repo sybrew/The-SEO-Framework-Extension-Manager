@@ -766,6 +766,21 @@ body.tsfem .wrap {
 	overflow-x: hidden;
 }
 
+.tsfem-pane-inner-collapsable-settings-wrap {
+	padding: 0;
+	height: auto;
+	max-height: 100%;
+	min-height: 150px;
+	width: 100%;
+	overflow: auto;
+	/* IE bugfix */
+	overflow-x: hidden;
+}
+
+.tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad {
+	padding: 20px;
+}
+
 /* ## Specific panes.
 /*--------------------------------------*/
 

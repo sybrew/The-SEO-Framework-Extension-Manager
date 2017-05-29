@@ -28,138 +28,335 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  * @access private
+ * @uses trait TSF_Extension_Manager\Extension_Options
+ * @see TSF_Extension_Manager\Traits\Extension_Options
  */
 trait Settings_Generator {
+	// Load Instance type..
 
-	protected function output_fields( array $fields ) {
+	private $o_key;
+	private $has_o_key;
+
+	/**
+	 * @param string $o_key The key given to the option. For when you want to prevent option collision.
+	 */
+	public function _fields( array $fields, $type = 'echo', $o_key = '' ) {
+
+		$this->o_key = \sanitize_key( $o_key );
+		$this->has_o_key = (bool) $this->o_key;
+		// $this->o_index = $o_index;
+
+		if ( 'get' === $type )
+			return $this->get_fields( $fields );
+
+		$this->output_fields( $fields );
+	}
+
+	/**
+	 *
+	 * @param array $fields. Passed by reference for performance.
+	 */
+	private function get_fields( array &$fields ) {
+
+		$_fields = '';
+
+		foreach ( $this->generate_fields( $fields ) as $field ) {
+			//* Already escaped.
+			$_fields .= $field . PHP_EOL;
+		}
+
+		return $_fields;
+	}
+
+	/**
+	 *
+	 * @param array $fields. Passed by reference for performance.
+	 */
+	private function output_fields( array &$fields ) {
 		foreach ( $this->generate_fields( $fields ) as $field ) {
 			//* Already escaped.
 			echo $field . PHP_EOL;
 		}
 	}
 
-	protected function generate_fields( array $fields ) {
+	private function generate_fields( array $fields ) {
 		foreach ( $fields as $option => $args ) {
 			yield $this->create_field( $option, $args );
 		}
 	}
 
-	protected function create_field( $option, array $args ) {
+	private function create_field( $option, array $args ) {
 
-		$option = \sanitize_key( $option );
-		$this->clean_list_variables( $args );
-
-		if ( ! $args['_edit'] && 'hidden' !== $args['_type'] ) :
+		if ( empty( $args['_edit'] ) )
 			return '';
-		else :
-			switch ( $args['_type'] ) :
-				case 'input' :
-					return $this->create_input_field( $option, $args );
-					break;
 
-				case 'textarea' :
-					return $this->create_text_field( $option, $args );
-					break;
+		$this->clean_list_index( $args );
 
-				case 'select' :
-					return $this->create_select_field( $option, $args );
-					break;
+		if ( $args['_fields'] )
+			return $this->generate_fields_multi( $option, $args );
 
-				case 'checkbox' :
-					return $this->create_checkbox_field( $option, $args );
-					break;
+		$this->clean_desc_index( $args['_desc'] );
 
-				case 'radio' :
-					return $this->create_radio_field( $option, $args );
-					break;
+		switch ( $args['_type'] ) :
+			case 'text' :
+			case 'password' :
+			case 'tel' :
+			case 'url' :
+			case 'search' :
+			case 'time' :
+			case 'week' :
+			case 'month' :
+			case 'datetime-local' :
+			case 'date' :
+			case 'number' :
+			case 'range' :
+			case 'color' :
+				return $this->create_input_field_by_type( $option, $args );
+				break;
 
-				case 'address' :
-					return $this->create_address_field( $option, $args );
-					break;
+			case 'textarea' :
+				return $this->create_textarea_field( $option, $args );
+				break;
 
-				case 'image' :
-					return $this->create_image_field( $option, $args );
-					break;
+			case 'select' :
+				return $this->create_select_field( $option, $args );
+				break;
 
-				case 'hidden' :
-					return $this->create_hidden_field( $option, $args );
-					break;
+			case 'checkbox' :
+				return $this->create_checkbox_field( $option, $args );
+				break;
 
-				default :
-					break;
-			endswitch;
-		endif;
+			case 'radio' :
+				return $this->create_radio_field( $option, $args );
+				break;
+
+			case 'address' :
+				return $this->create_address_field( $option, $args );
+				break;
+
+			case 'image' :
+				return $this->create_image_field( $option, $args );
+				break;
+
+			case 'number' :
+				return $this->create_number_field( $option, $args );
+				break;
+
+			case 'hidden' :
+				return $this->create_hidden_field( $option, $args );
+				break;
+
+			default :
+				break;
+		endswitch;
+
+		return '';
 	}
 
-	protected function clean_list_variables( array &$args ) {
+	/**
+	 * @see $this->create_field()
+	 */
+	private function generate_fields_multi( $option, array $args ) {
+
+		$this->clean_desc_index( $args['_desc'] );
+		$title = $args['_desc'][0];
+		$desc  = $args['_desc'][1];
+
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		$_fields = '';
+		foreach ( $this->generate_fields( $args['_fields'] ) as $field ) {
+			//* Already escaped.
+			$_fields .= $field . PHP_EOL;
+		}
+
+		return vsprintf(
+			'<div class="tsfem-flex tsfem-fields-multi-wrap" id="%s">%s%s</div>',
+			[
+				$this->create_field_id( $option ),
+				vsprintf(
+					'<h4>%s</h4>%s%s',
+					[
+						\esc_html( $title ),
+						$s_more,
+						$s_desc,
+					]
+				),
+				sprintf(
+					'<div class="tsfem-flex tsfem-fields-wrap">%s</div>',
+					$_fields
+				),
+			]
+		);
+	}
+
+	/**
+	 * Creates a JS and no-JS compatible description mark.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $description The description.
+	 * @return string The escaped inline HTML description output.
+	 */
+	private function create_fields_sub_description( $description ) {
+		return vsprintf(
+			'<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s</span></span>',
+			[
+				\esc_attr( $description ),
+				\esc_html( $description ),
+				'<span class="tsfem-extension-description-icon tsfem-dashicon tsfem-unknown"></span>',
+			]
+		);
+	}
+
+	/**
+	 * Creates a description block.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $description The description.
+	 * @return string The escaped flex HTML description output.
+	 */
+	private function create_fields_description( $description ) {
+		return sprintf( '<div class="tsfem-flex tsfem-flex-row"><span class="tsfem-option-description">%s</span></div>',
+			\esc_html( $description )
+		);
+	}
+
+	/**
+	 * Returns field name and ID attributes for form fields.
+	 *
+	 * @since 1.0.0
+	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses $this->o_index
+	 * @see TSF_Extension_Manager\Traits\Extension_Options
+	 * @uses $this->o_key
+	 * @access private
+	 *
+	 * @param string $option The option the field is for.
+	 * @return string Full field ID/name attribute.
+	 */
+	private function create_field_id( $option ) {
+
+		$option = \sanitize_key( $option );
+
+		if ( $this->has_o_key ) {
+			return sprintf( '%s[%s][%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key, $option );
+		}
+
+		return sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $option );
+	}
+
+	//* TEMP. Simply put, all args need to be filled in correctly prior to running this to improve performance.
+	private function clean_list_index( array &$args ) {
+		$args['_type']    = isset( $args['_type'] )    ? (string) $args['_type']    : '';
 		$args['_default'] = isset( $args['_default'] ) ? (string) $args['_default'] : '';
 		$args['_ph']      = isset( $args['_ph'] )      ? (string) $args['_ph']      : '';
 		$args['_ret']     = isset( $args['_ret'] )     ? (string) $args['_ret']     : '';
 		$args['_req']     = isset( $args['_req'] )     ? (bool) $args['_req']       : false;
+		$args['_edit']    = isset( $args['_edit'] )    ? (bool) $args['_edit']      : false;
 		$args['_desc']    = isset( $args['_desc'] )    ? (array) $args['_desc']     : [];
+		$args['_range']   = isset( $args['_range'] )   ? (array) $args['_range']    : [];
 		$args['_fields']  = isset( $args['_fields'] )  ? (array) $args['_fields']   : [];
 		$args['_dd']      = isset( $args['_dd'] )      ? (array) $args['_dd']       : [];
 	}
 
-	protected function clean_desc_variables( array &$desc ) {
+	private function clean_desc_index( array &$desc ) {
 		$desc[0] = isset( $desc[0] ) ? (string) $desc[0] : '';
 		$desc[1] = isset( $desc[1] ) ? (string) $desc[1] : '';
 		$desc[2] = isset( $desc[2] ) ? (string) $desc[2] : '';
 	}
 
-	protected function create_input_field( $option, array $args ) {
+	//* Cleans range, including steps @ 1e-10
+	private function clean_range_index( array &$range ) {
+		$range[0] = isset( $range[0] ) ? (string) $range[0] : '';
+		$range[1] = isset( $range[1] ) ? (string) $range[1] : '';
+		$range[2] = isset( $range[2] ) ? (string) rtrim( sprintf( '%.10F', $range[2] ), '.0' ) : '';
+	}
 
-		$this->clean_desc_variables( $args['_desc'] );
+	/**
+	 * Accepted types... TODO
+	 */
+	private function create_input_field_by_type( $option, array $args ) {
 
+		switch ( $args['_type'] ) :
+			case 'text' :
+			case 'password' :
+			case 'tel' :
+			case 'url' :
+			case 'search' :
+			case 'time' :
+			case 'week' :
+			case 'month' :
+			case 'datetime-local' :
+				// Nothing to-do here... (TODO remove these checks when set?)
+				break;
+
+			case 'date' :
+			case 'number' :
+			case 'range' :
+				$this->clean_range_index( $args['_range'] );
+
+				$s_range = '';
+				$s_range .= '' !== $args['_range'][0] ? sprintf( 'min=%s', $args['_range'][0] ) : '';
+				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
+				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
+				break;
+
+			case 'color' :
+				// TODO
+				break;
+		endswitch;
+
+		//* Not escaped.
 		$title = $args['_desc'][0];
-		$desc  = $args['_desc'][1];
-		$more  = $args['_desc'][2];
-		$s_name = \esc_attr( $this->_get_field_name( $option ) );
-		$s_id   = \esc_attr( $this->_get_field_id( $option ) );
-		$s_ph   = \esc_attr( $args['_ph'] );
 
-		if ( $more ) {
-			$s_more = vsprintf(
-				'<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s</span></span>',
-				[
-					\esc_attr( $more ),
-					\esc_html( $more ),
-					'<span class="tsfem-extension-description-icon tsfem-dashicon tsfem-unknown"></span>',
-				]
-			);
-		} else {
-			$s_more = '';
-		}
+		// Escaped.
+		$s_type = \esc_attr( $args['_type'] );
+		$s_name = $s_id = $this->create_field_id( $option );
+		$s_ph   = $args['_ph'] ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
-		return vsprintf( '<div class="tsfem-flex tsfem-flex-noshrink">%s%s%s</div>',
+		//* Sigh.. PHP7+ TODO fix.
+		$s_range = $s_range ?? '';
+
+		return vsprintf( '<div class="tsfem-flex tsfem-flex-noshrink">%s%s</div>',
 			[
-				vsprintf( '<label for="%s">%s</label>',
+				vsprintf( '<div class="%s-field-wrapper">%s%s</div>',
 					[
-					$s_id,
-					\esc_html( $title ),
+						$s_type,
+						vsprintf( '<label for="%s">%s%s</label>',
+							[
+								$s_id,
+								\esc_html( $title ),
+								$s_more,
+							]
+						),
+						vsprintf( '<input type=%s id="%s" name=%s value="%s" %s %s class="regular-text tsfem-flex tsfem-flex-row">',
+							[
+								$s_type,
+								$s_id,
+								$s_name,
+								\esc_attr( $args['_default'] ),
+								$s_range,
+								$s_ph,
+							]
+						),
 					]
 				),
-				vsprintf( '<input id="%s" name="%s" type="text" size="40" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-					[
-					$s_id,
-					$s_name,
-					$s_ph,
-					]
-				),
-				vsprintf( '<div class="tsfem-flex tsfem-flex-row"><span>%s %s</span></div>',
-					[
-					\esc_html( $desc ),
-					$s_more,
-					]
-				),
+				$s_desc,
 			]
 		);
 	}
-	protected function create_text_field( $field ) {}
-	protected function create_select_field( $field ) {}
-	protected function create_checkbox_field( $field ) {}
-	protected function create_radio_field( $field ) {}
-	protected function create_address_field( $field ) {}
-	protected function create_image_field( $field ) {}
-	protected function create_hidden_field( $field ) {}
+
+	private function create_textarea_field( $option, array $args ) {}
+	private function create_select_field( $option, array $args ) {}
+	private function create_checkbox_field( $option, array $args ) {}
+	private function create_radio_field( $option, array $args ) {}
+	private function create_address_field( $option, array $args ) {}
+	private function create_image_field( $option, array $args ) {}
+	private function create_number_field( $option, array $args ) {}
+	private function create_hidden_field( $option, array $args ) {}
 }

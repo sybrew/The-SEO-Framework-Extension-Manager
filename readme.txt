@@ -234,7 +234,9 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 			* TODO The plugin interface is now only loaded in cache when on the Monitor page. Saving a lot of resources.
 				* See Local implementation.
 		* **Fixed:**
+			/
 			* Manual updates are no longer handled registered twice.
+			* TODO When debugging, the Update Data button no longer fails AJAX call on first try (can_cache_query too early...).
 	* **API:**
 		* **Internal**
 			* **Added:**

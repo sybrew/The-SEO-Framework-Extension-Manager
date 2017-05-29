@@ -291,8 +291,77 @@ final class Settings {
 		$this->get_view( 'layout/general/meta' );
 	}
 
-	protected function output_options() {
-		$this->output_fields( $this->get_global_department_fields() );
+	protected function get_collapse_wrap( $what, $it = 0, $title = '', $id = '' ) {
+
+		if ( 'start' === $what ) {
+			$id = $id ? sprintf( 'id="tsfem-e-local-collapse[%s]"', \esc_attr( $id ) ) : '';
+
+			$checkbox_id = sprintf( 'tsfem-e-local-collapse-checkbox-%s', $it );
+			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
+
+			//* Requires JS to edit. Always start with warning.
+			$state = 'warning';
+			$title = $this->get_state_icon( $state ) . \esc_html( $title );
+
+			$title = sprintf( '<h3 class="tsfem-e-local-collapse-title">%s</h3>', $title );
+			$icon = sprintf( '<span class="tsfem-e-local-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-e-local-icon-%s"></span>', $state );
+
+			$header = vsprintf( '<label class="tsfem-e-local-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
+				[
+					$checkbox_id,
+					$title,
+					$icon,
+				]
+			);
+
+			$content_start = '<div class="tsfem-e-local-collapse-content">';
+
+			//* Already escaped.
+			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex" %s>%s%s%s', $id, $checkbox, $header, $content_start );
+		} elseif ( 'end' === $what ) {
+			//* ok.
+			return '</div></div>';
+		}
+
+		return '';
+	}
+
+	/**
+	 * Parses entry state HTMl icon.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $state The icon state.
+	 * @return string The HTML formed entry state icon.
+	 */
+	protected function get_state_icon( $state = '' ) {
+		return sprintf( '<span class="tsfem-e-local-title-icon tsfem-e-local-icon-%1$s tsfem-e-local-title-icon-%1$s"></span>', \esc_attr( $state ) );
+	}
+
+	/**
+	 * Parses known CSS icon states.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $state The could-be unknown state.
+	 * @return string The known state.
+	 */
+	protected function parse_defined_icon_state( $state = '' ) {
+
+		switch ( $state ) :
+			case 'good' :
+			case 'okay' :
+			case 'warning' :
+			case 'bad' :
+			case 'error' :
+				break;
+
+			default :
+				$state = 'unknown';
+				break;
+		endswitch;
+
+		return $state;
 	}
 
 	/**

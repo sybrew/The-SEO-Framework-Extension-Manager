@@ -524,7 +524,7 @@ class Core {
 	 * @since 1.2.0
 	 * @staticvar string $last The last value;
 	 *
-	 * @param string|array $value The array or string to loop.
+	 * @param string|array $value The array or string to loop. First call must be array.
 	 * @param string $start The start wrapper.
 	 * @param string $end The end wrapper.
 	 * @param int $i The iteration count. This shouldn't be filled in.

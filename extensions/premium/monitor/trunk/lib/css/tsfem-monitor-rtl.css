@@ -129,25 +129,25 @@
 	margin-left: 2px;
 }
 
-.tsfem-monitor-icon-good {
+.tsfem-e-monitor-icon-good {
 	color: #0cc34b;
 }
 
-.tsfem-monitor-icon-okay,
-.tsfem-monitor-icon-warning {
+.tsfem-e-monitor-icon-okay,
+.tsfem-e-monitor-icon-warning {
 	color: #ffa01b;
 }
 
-.tsfem-monitor-icon-warning {
+.tsfem-e-monitor-icon-warning {
 	color: #ffa01b;
 }
 
-.tsfem-monitor-icon-bad,
-.tsfem-monitor-icon-error {
+.tsfem-e-monitor-icon-bad,
+.tsfem-e-monitor-icon-error {
 	color: #dd3811;
 }
 
-.tsfem-monitor-icon-unknown {
+.tsfem-e-monitor-icon-unknown {
 	color: #057f9c;
 }
 

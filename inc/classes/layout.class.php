@@ -355,11 +355,11 @@ final class Layout extends Secure_Abstract {
 
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$input = sprintf(
-				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
+				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
 				\tsf_extension_manager()->_get_field_id( 'key' ), \tsf_extension_manager()->_get_field_name( 'key' ), \esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 			$input .= sprintf(
-				'<input id="%s" name="%s" type="text" size="15" value="" class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
+				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
 				\tsf_extension_manager()->_get_field_id( 'email' ), \tsf_extension_manager()->_get_field_name( 'email' ), \esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
@@ -367,7 +367,7 @@ final class Layout extends Secure_Abstract {
 			$nonce = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
-				'<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">',
+				'<input type=submit name=submit id=submit class="tsfem-button tsfem-button-primary" value="%s">',
 				\esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 

@@ -184,7 +184,7 @@ final class Output {
 		$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
 
 		$title = sprintf( '<h3 class="tsfem-e-monitor-collapse-title">%s</h3>', $title );
-		$icon = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-monitor-icon-%s"></span>', $icon_state );
+		$icon = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-e-monitor-icon-%s"></span>', $icon_state );
 
 		$header = sprintf( '<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>', $checkbox_id, $title, $icon );
 		$content = sprintf( '<div class="tsfem-e-monitor-collapse-content">%s</div>', $content );
@@ -342,7 +342,7 @@ final class Output {
 
 		$state = $this->parse_defined_icon_state( $state );
 
-		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', \esc_attr( $state ) );
+		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-e-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', \esc_attr( $state ) );
 	}
 
 	/**
