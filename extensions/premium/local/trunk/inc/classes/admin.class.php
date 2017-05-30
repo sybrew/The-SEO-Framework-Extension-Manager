@@ -116,8 +116,8 @@ final class Admin extends Api {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework_options_page_slug(),
-			'page_title'  => \esc_html__( 'Local', 'the-seo-framework-extension-manager' ),
-			'menu_title'  => \esc_html__( 'Local SEO', 'the-seo-framework-extension-manager' ),
+			'page_title'  => \esc_html__( 'Local SEO', 'the-seo-framework-extension-manager' ),
+			'menu_title'  => \esc_html__( 'Local', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->local_page_slug,
 			'callback'    => [ $this, '_output_local_settings_page' ],

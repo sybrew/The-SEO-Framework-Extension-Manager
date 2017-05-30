@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		\__( 'Local SEO Settings', 'the-seo-framework-extension-manager' ),
 		[ $this, '_get_local_settings_overview' ],
 		[
-			'full' => false,
+			'full' => true,
 			'collapse' => false,
 			'move' => false,
 			'pane_id' => 'tsfem-e-local-settings-pane',

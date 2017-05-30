@@ -92,8 +92,8 @@
 	position: relative;
 	height: 50px;
 	background: #fefefe;
-	-webkit-box-shadow: 0 0 3px #ccc;
-	box-shadow: 0 0 3px #ccc;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
 	-webkit-align-items: center;
 	align-items: center;
 	cursor: pointer;

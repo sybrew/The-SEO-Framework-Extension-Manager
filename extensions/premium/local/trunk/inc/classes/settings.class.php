@@ -314,10 +314,10 @@ final class Settings {
 				]
 			);
 
-			$content_start = '<div class="tsfem-e-local-collapse-content">';
+			$content_start = '<div class="tsfem-e-local-collapse-content tsfem-flex">';
 
 			//* Already escaped.
-			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex" %s>%s%s%s', $id, $checkbox, $header, $content_start );
+			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex tsfem-flex-noshrink" %s>%s%s%s', $id, $checkbox, $header, $content_start );
 		} elseif ( 'end' === $what ) {
 			//* ok.
 			return '</div></div>';

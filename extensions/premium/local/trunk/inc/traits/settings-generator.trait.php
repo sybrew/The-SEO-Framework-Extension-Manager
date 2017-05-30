@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) or die;
  * @see TSF_Extension_Manager\Traits\Extension_Options
  */
 trait Settings_Generator {
-	// Load Instance type..
+	// Load Instance type.. set as class...
 
 	private $o_key;
 	private $has_o_key;
@@ -172,19 +172,24 @@ trait Settings_Generator {
 		}
 
 		return vsprintf(
-			'<div class="tsfem-flex tsfem-fields-multi-wrap" id="%s">%s%s</div>',
+			'<div class="tsfem-e-local-multi-setting tsfem-flex">%s%s</div>',
 			[
-				$this->create_field_id( $option ),
-				vsprintf(
-					'<h4>%s</h4>%s%s',
-					[
-						\esc_html( $title ),
-						$s_more,
-						$s_desc,
-					]
+				sprintf(
+					'<div class="tsfem-e-local-multi-setting-label tsfem-flex" id="%s">%s</div>',
+					$this->create_field_id( $option ),
+					vsprintf(
+						'<div class="tsfem-e-local-multi-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							sprintf(
+								'<div class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></div>',
+								sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more )
+							),
+							$s_desc,
+						]
+					)
 				),
 				sprintf(
-					'<div class="tsfem-flex tsfem-fields-wrap">%s</div>',
+					'<div class="tsfem-e-local-multi-setting-input tsfem-flex">%s</div>',
 					$_fields
 				),
 			]
@@ -215,13 +220,23 @@ trait Settings_Generator {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $description The description.
+	 * @param mixed $description The description field(s).
 	 * @return string The escaped flex HTML description output.
 	 */
 	private function create_fields_description( $description ) {
-		return sprintf( '<div class="tsfem-flex tsfem-flex-row"><span class="tsfem-option-description">%s</span></div>',
-			\esc_html( $description )
-		);
+
+		if ( is_scalar( $description ) ) {
+			return sprintf(
+				'<span class="tsfem-option-description">%s</span>',
+				\esc_html( $description )
+			);
+		} else {
+			$ret = '';
+			foreach ( $description as $desc ) {
+				$ret .= $this->create_fields_description( $desc );
+			}
+			return $ret;
+		}
 	}
 
 	/**
@@ -263,9 +278,9 @@ trait Settings_Generator {
 	}
 
 	private function clean_desc_index( array &$desc ) {
-		$desc[0] = isset( $desc[0] ) ? (string) $desc[0] : '';
-		$desc[1] = isset( $desc[1] ) ? (string) $desc[1] : '';
-		$desc[2] = isset( $desc[2] ) ? (string) $desc[2] : '';
+		$desc[0] = isset( $desc[0] ) ? $desc[0] : '';
+		$desc[1] = isset( $desc[1] ) ? $desc[1] : '';
+		$desc[2] = isset( $desc[2] ) ? $desc[2] : '';
 	}
 
 	//* Cleans range, including steps @ 1e-10
@@ -322,37 +337,158 @@ trait Settings_Generator {
 		//* Sigh.. PHP7+ TODO fix.
 		$s_range = $s_range ?? '';
 
-		return vsprintf( '<div class="tsfem-flex tsfem-flex-noshrink">%s%s</div>',
+		return vsprintf(
+			'<div class="tsfem-%s-field-wrapper tsfem-e-local-flex-setting tsfem-flex">%s%s</div>',
 			[
-				vsprintf( '<div class="%s-field-wrapper">%s%s</div>',
-					[
-						$s_type,
-						vsprintf( '<label for="%s">%s%s</label>',
-							[
-								$s_id,
-								\esc_html( $title ),
-								$s_more,
-							]
-						),
-						vsprintf( '<input type=%s id="%s" name=%s value="%s" %s %s class="regular-text tsfem-flex tsfem-flex-row">',
-							[
-								$s_type,
-								$s_id,
-								$s_name,
-								\esc_attr( $args['_default'] ),
-								$s_range,
-								$s_ph,
-							]
-						),
-					]
+				$s_type,
+				sprintf(
+					'<div class="tsfem-e-local-flex-setting-label tsfem-flex">%s</div>',
+					vsprintf(
+						'<div class="tsfem-e-local-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							vsprintf(
+								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></label>',
+								[
+									$s_id,
+									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+								]
+							),
+							$s_desc,
+						]
+					)
 				),
-				$s_desc,
+				sprintf(
+					'<div class="tsfem-e-local-flex-setting-input tsfem-flex">%s</div>',
+					vsprintf(
+						'<input type=%s id="%s" name=%s value="%s" %s %s>',
+						[
+							$s_type,
+							$s_id,
+							$s_name,
+							\esc_attr( $args['_default'] ),
+							$s_range,
+							$s_ph,
+						]
+					)
+				),
 			]
 		);
 	}
 
 	private function create_textarea_field( $option, array $args ) {}
-	private function create_select_field( $option, array $args ) {}
+	private function create_select_field( $option, array $args ) {
+
+		//* Not escaped.
+		$title = $args['_desc'][0];
+
+		$s_name = $s_id = $this->create_field_id( $option );
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		return vsprintf(
+			'<div class="tsfem-select-field-wrapper tsfem-e-local-flex-setting tsfem-flex">%s%s</div>',
+			[
+				sprintf(
+					'<div class="tsfem-e-local-flex-setting-label tsfem-flex">%s</div>',
+					vsprintf(
+						'<div class="tsfem-e-local-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							vsprintf(
+								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></label>',
+								[
+									$s_id,
+									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+								]
+							),
+							$s_desc,
+						]
+					)
+				),
+				sprintf(
+					'<div class="tsfem-e-local-flex-setting-input tsfem-flex">%s</div>',
+					vsprintf(
+						'<select id="%s" name=%s>%s</select>',
+						[
+							$s_id,
+							$s_name,
+							$this->get_select_options( $args['_select'], $args['_default'] ),
+						]
+					)
+				),
+			]
+		);
+	}
+
+	private function get_select_options( array $options, $default = '' ) {
+
+		$_fields = '';
+
+		foreach ( $this->generate_select_fields( $options, $default ) as $field ) {
+			//* Already escaped.
+			$_fields .= $field . PHP_EOL;
+		}
+
+		return $_fields;
+	}
+
+	/**
+	 * Heavily optimized for performance. Not according to DRY standards.
+	 */
+	private function generate_select_fields( array $fields, $default = '' ) {
+
+		static $_level = 0;
+
+		if ( '' !== $default ) :
+			foreach ( $fields as $args ) :
+
+				if ( $_level ) {
+					//= `&8213; `... gets escaped otherwise.
+					//* Multilevel isn't supported by Chrome, for instance, yet.
+					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
+					$args[1] = '― ' . $args[1];
+				}
+
+				if ( isset( $args[2] ) ) {
+					yield sprintf( '<optgroup label=%s>', $args[1] );
+					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+					$_level++;
+					yield $this->get_select_options( $args[2] );
+					$_level--;
+					yield '</optgroup>';
+				} else {
+					if ( $args[0] === $default ) {
+						yield sprintf( '<option value="%s" selected>%s</option>', $args[0], $args[1] );
+					} else {
+						yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+					}
+				}
+			endforeach;
+		else :
+			foreach ( $fields as $args ) :
+
+				if ( $_level ) {
+					//= `&8213; `... gets escaped otherwise.
+					//* Multilevel isn't supported by Chrome, for instance, yet.
+					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
+					$args[1] = '― ' . $args[1];
+				}
+
+				if ( isset( $args[2] ) ) {
+					yield sprintf( '<optgroup label="%s">', $args[1] );
+					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+					$_level++;
+					yield $this->get_select_options( $args[2] );
+					$_level--;
+					yield '</optgroup>';
+				} else {
+					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+				}
+			endforeach;
+		endif;
+
+		$level = 0;
+	}
+
 	private function create_checkbox_field( $option, array $args ) {}
 	private function create_radio_field( $option, array $args ) {}
 	private function create_address_field( $option, array $args ) {}
