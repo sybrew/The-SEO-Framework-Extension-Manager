@@ -154,7 +154,7 @@ trait Options_Template {
 				'_select' => $this->get_department_fields( false ),
 			],
 			'name' => [
-				'_default' => \the_seo_framework()->get_blogname(),
+				'_default' => '',
 				'_edit' => true,
 				'_ret' => 'string',
 				'_req' => true,
@@ -175,13 +175,13 @@ trait Options_Template {
 				'_default' => null,
 				'_edit' => true,
 				'_ret' => 'array',
-				'_req' => true,
-				'_type' => 'address',
+				'_req' => false,
+				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Department address', '' ),
 					\__( 'Fill in the exact address of the department.', '' ),
 				],
-				'_fields' => $this->get_address_fields(),
+				'_fields' => $this->get_address_fields() + $this->get_geo_fields(),
 			],
 			'url' => [
 				'_default' => '',
@@ -194,17 +194,6 @@ trait Options_Template {
 					\__( 'The fully-qualified URL of the specific department location.', '' ),
 					\__( 'For example, your contact page or home page. It must be a working link and the department location must be described on there.', '' ),
 				],
-			],
-			'geo' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => 'array',
-				'_req' => false,
-				'_type' => 'text',
-				'_desc' => [
-					\__( 'Geographic coordinates of the department.', '' ),
-				],
-				'_fields' => $this->get_geo_fields(),
 			],
 			'telephone' => [
 				'_default' => '',
@@ -235,7 +224,7 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
-				'_type' => '', // TODO,
+				'_type' => 'multi', // TODO,
 				'_desc' => [
 					\__( 'Department opening hours', '' ),
 				],
@@ -253,18 +242,18 @@ trait Options_Template {
 					\__( 'Department menu URL, if any.', '' ),
 				],
 			],
-			'acceptsReservations' => [
-				'_default' => 0,
+			'reservations' => [
+				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'integer', // Actually, a boolean...
+				'_ret' => 'array',
 				'_req' => false,
-				'_type' => 'select',
+				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Accept reservations', '' ),
-					\__( 'If you accept reservations, set this options. If you explicitly don\'t accept reservations as a food establishment, also set this option.', '' ),
+					\__( 'Reservations', '' ),
+					\__( 'Department customers\' reservation specification.', '' ),
+					\__( 'For food establishments.', '' ),
 				],
-				'_select' => [],
-			//	'_select' => $this->get_reservation_fields(), // 0, 1, 2... 0 = not specified, 1 = nope, 2 = yup TODO
+				'_fields' => $this->get_reservation_fields(),
 			],
 			'image' => [
 				'_default' => '',
@@ -274,7 +263,7 @@ trait Options_Template {
 				'_type' => 'image',
 				'_desc' => [
 					\__( 'Image', '' ),
-					\__( 'An image of the business.', '' ),
+					\__( 'An image of the department or building.', '' ),
 				],
 			],
 			'servesCuisine' => [
@@ -287,8 +276,7 @@ trait Options_Template {
 					\__( 'Cuisine', '' ),
 					\__( 'Provide the type of cuisine the department serves.', '' ),
 				],
-				'_select' => [],
-			//	'_select' => $this->get_cuisine_fields(), // TODO make list of cuisine types... there's no default list yet??
+				'_select' => $this->get_cuisine_fields(),
 			],
 		];
 	}
@@ -317,7 +305,7 @@ trait Options_Template {
 					\__( 'City, town, village', '' ),
 				],
 			],
-			'addressRegion' => [ // THIS IS INCORRECT!! TODO... must be state/provide code.
+			'addressRegion' => [
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 'string',
@@ -325,6 +313,7 @@ trait Options_Template {
 				'_type' => 'text',
 				'_desc' => [
 					\__( 'State or province', '' ),
+					\__( 'The region. For example, CA for California.' ),
 				],
 			],
 			'postalCode' => [
@@ -347,6 +336,45 @@ trait Options_Template {
 					\__( 'Country', '' ),
 				],
 				'_select' => $this->get_country_fields(),
+			],
+		];
+	}
+
+	function get_geo_fields() {
+		return [
+			'latitude' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'string',
+				'_req' => false,
+				'_type' => 'number',
+				'_range' => [
+					-90,
+					90,
+					1e-7,
+				],
+				'_desc' => [
+					\__( 'Latitude', '' ),
+					'',
+					\__( 'The geographic latitude.', '' ),
+				],
+			],
+			'longitude' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'string',
+				'_req' => false,
+				'_type' => 'number',
+				'_range' => [
+					-180,
+					180,
+					1e-7,
+				],
+				'_desc' => [
+					\__( 'Longitude', '' ),
+					'',
+					\__( 'The geographic longitude.', '' ),
+				],
 			],
 		];
 	}
@@ -1299,7 +1327,7 @@ trait Options_Template {
 			],
 			[
 				'GB',
-				'United Kingdom', //= United Kingdom of Great Britain and Northern Ireland
+				'United Kingdom of Great Britain and Northern Ireland',
 			],
 			[
 				'US',
@@ -1356,45 +1384,6 @@ trait Options_Template {
 			[
 				'ZW',
 				'Zimbabwe',
-			],
-		];
-	}
-
-	function get_geo_fields() {
-		return [
-			'latitude' => [
-				'_default' => '',
-				'_edit' => true,
-				'_ret' => 'string',
-				'_req' => false,
-				'_type' => 'number',
-				'_range' => [
-					-90,
-					90,
-					1e-7,
-				],
-				'_desc' => [
-					\__( 'Latitude', '' ),
-					'',
-					\__( 'The geographic latitude.', '' ),
-				],
-			],
-			'longitude' => [
-				'_default' => '',
-				'_edit' => true,
-				'_ret' => 'string',
-				'_req' => false,
-				'_type' => 'number',
-				'_range' => [
-					-180,
-					180,
-					1e-7,
-				],
-				'_desc' => [
-					\__( 'Longitude', '' ),
-					'',
-					\__( 'The geographic longitude.', '' ),
-				],
 			],
 		];
 	}
@@ -2038,6 +2027,110 @@ trait Options_Template {
 				'TravelAgency',
 				\__( 'Travel agency', '' ),
 				[],
+			],
+		];
+	}
+
+	/**
+	 * @see https://en.wikipedia.org/wiki/List_of_cuisines
+	 */
+	function get_cuisine_fields() {
+		return [
+			[
+				'',
+				'&mdash; ' . \__( 'No cuisine selected', '' ) . ' &mdash;',
+				null, // No subtypes, duh.
+			],
+			[
+				'African',
+				\__( 'African', '' ),
+				[
+
+				],
+			],
+			[
+				'American',
+				\__( 'American', '' ),
+				[
+
+				],
+			],
+			[
+				'Asian',
+				\__( 'Asian', '' ),
+				[
+
+				],
+			],
+			[
+				'Latin',
+				\__( 'Latin', '' ),
+				[
+
+				],
+			],
+			[
+				'European',
+				\__( 'European', '' ),
+				[
+
+				],
+			],
+			[
+				'Oceanic',
+				\__( 'Oceanic', '' ),
+				[
+
+				],
+			],
+			[
+				'Vegan',
+				\__( 'Vegan', '' ),
+				[
+
+				],
+			],
+			[
+				'Vegetarian',
+				\__( 'Vegetarian', '' ),
+				[
+
+				],
+			],
+		];
+	}
+
+	function get_reservation_fields() {
+		return [
+			'acceptsReservations' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'string',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'Accept Reservations', '' ),
+					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.' ),
+				],
+				'_select' => $this->get_reservation_action_fields(),
+			],
+			// TODO: ReserveAction fields.... it needs to loop...
+		];
+	}
+
+	function get_reservation_action_fields() {
+		return [
+			[
+				'',
+				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+			],
+			[
+				0,
+				\__( 'Accept reservations', '' ),
+			],
+			[
+				1,
+				\__( 'Don\'t accept reservations', '' ),
 			],
 		];
 	}

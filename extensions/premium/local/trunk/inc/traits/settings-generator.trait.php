@@ -26,13 +26,19 @@ defined( 'ABSPATH' ) or die;
 /**
  * Holds settings generator functions for package TSF_Extension_Manager\Extension\Local.
  *
+ * Not according to DRY standards for improved performance.
+ *
+ * This trait has dependencies!
+ *
  * @since 1.0.0
  * @access private
  * @uses trait TSF_Extension_Manager\Extension_Options
  * @see TSF_Extension_Manager\Traits\Extension_Options
+ * @uses trait TSF_Extension_Manager\Traits\UI
+ * @see TSF_Extension_Manager\Traits\UI
  */
 trait Settings_Generator {
-	// Load Instance type.. set as class...
+	// Load Instance type.. set as class...?
 
 	private $o_key;
 	private $has_o_key;
@@ -62,7 +68,7 @@ trait Settings_Generator {
 
 		foreach ( $this->generate_fields( $fields ) as $field ) {
 			//* Already escaped.
-			$_fields .= $field . PHP_EOL;
+			$_fields .= $field;
 		}
 
 		return $_fields;
@@ -75,7 +81,7 @@ trait Settings_Generator {
 	private function output_fields( array &$fields ) {
 		foreach ( $this->generate_fields( $fields ) as $field ) {
 			//* Already escaped.
-			echo $field . PHP_EOL;
+			echo $field;
 		}
 	}
 
@@ -111,6 +117,7 @@ trait Settings_Generator {
 			case 'number' :
 			case 'range' :
 			case 'color' :
+			case 'hidden' :
 				return $this->create_input_field_by_type( $option, $args );
 				break;
 
@@ -130,20 +137,8 @@ trait Settings_Generator {
 				return $this->create_radio_field( $option, $args );
 				break;
 
-			case 'address' :
-				return $this->create_address_field( $option, $args );
-				break;
-
 			case 'image' :
 				return $this->create_image_field( $option, $args );
-				break;
-
-			case 'number' :
-				return $this->create_number_field( $option, $args );
-				break;
-
-			case 'hidden' :
-				return $this->create_hidden_field( $option, $args );
 				break;
 
 			default :
@@ -180,9 +175,12 @@ trait Settings_Generator {
 					vsprintf(
 						'<div class="tsfem-e-local-multi-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
-							sprintf(
-								'<div class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></div>',
-								sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more )
+							vsprintf(
+								'<div class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								[
+									sprintf( 'tsfem-e-local-option-title%s', ( $s_desc ? ' tsfem-e-local-option-has-description' : '' ) ),
+									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+								]
 							),
 							$s_desc,
 						]
@@ -227,7 +225,7 @@ trait Settings_Generator {
 
 		if ( is_scalar( $description ) ) {
 			return sprintf(
-				'<span class="tsfem-option-description">%s</span>',
+				'<span class="tsfem-e-local-option-description">%s</span>',
 				\esc_html( $description )
 			);
 		} else {
@@ -296,17 +294,6 @@ trait Settings_Generator {
 	private function create_input_field_by_type( $option, array $args ) {
 
 		switch ( $args['_type'] ) :
-			case 'text' :
-			case 'password' :
-			case 'tel' :
-			case 'url' :
-			case 'search' :
-			case 'time' :
-			case 'week' :
-			case 'month' :
-			case 'datetime-local' :
-				// Nothing to-do here... (TODO remove these checks when set?)
-				break;
 
 			case 'date' :
 			case 'number' :
@@ -322,6 +309,20 @@ trait Settings_Generator {
 			case 'color' :
 				// TODO
 				break;
+
+			default :
+			case 'text' :
+			case 'password' :
+			case 'tel' :
+			case 'url' :
+			case 'search' :
+			case 'time' :
+			case 'week' :
+			case 'month' :
+			case 'datetime-local' :
+			case 'hidden' :
+				//= Look behind you.
+				break;
 		endswitch;
 
 		//* Not escaped.
@@ -333,9 +334,7 @@ trait Settings_Generator {
 		$s_ph   = $args['_ph'] ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-
-		//* Sigh.. PHP7+ TODO fix.
-		$s_range = $s_range ?? '';
+		$s_range = isset( $s_range ) ? $s_range : '';
 
 		return vsprintf(
 			'<div class="tsfem-%s-field-wrapper tsfem-e-local-flex-setting tsfem-flex">%s%s</div>',
@@ -347,9 +346,10 @@ trait Settings_Generator {
 						'<div class="tsfem-e-local-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></label>',
+								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
+									sprintf( 'tsfem-e-local-option-title%s', ( $s_desc ? ' tsfem-e-local-option-has-description' : '' ) ),
 									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
 								]
 							),
@@ -394,9 +394,10 @@ trait Settings_Generator {
 						'<div class="tsfem-e-local-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div>%s</div></label>',
+								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
+									sprintf( 'tsfem-e-local-option-title%s', ( $s_desc ? ' tsfem-e-local-option-has-description' : '' ) ),
 									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
 								]
 							),
@@ -425,14 +426,14 @@ trait Settings_Generator {
 
 		foreach ( $this->generate_select_fields( $options, $default ) as $field ) {
 			//* Already escaped.
-			$_fields .= $field . PHP_EOL;
+			$_fields .= $field;
 		}
 
 		return $_fields;
 	}
 
 	/**
-	 * Heavily optimized for performance. Not according to DRY standards.
+	 * Heavily optimized for performance.
 	 */
 	private function generate_select_fields( array $fields, $default = '' ) {
 
@@ -442,9 +443,10 @@ trait Settings_Generator {
 			foreach ( $fields as $args ) :
 
 				if ( $_level ) {
-					//= `&8213; `... gets escaped otherwise.
 					//* Multilevel isn't supported by Chrome, for instance, yet.
 					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
+
+					//= `&8213; `... gets escaped otherwise.
 					$args[1] = '― ' . $args[1];
 				}
 
@@ -467,9 +469,10 @@ trait Settings_Generator {
 			foreach ( $fields as $args ) :
 
 				if ( $_level ) {
-					//= `&8213; `... gets escaped otherwise.
 					//* Multilevel isn't supported by Chrome, for instance, yet.
 					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
+
+					//= `&8213; `... gets escaped otherwise.
 					$args[1] = '― ' . $args[1];
 				}
 
@@ -491,8 +494,167 @@ trait Settings_Generator {
 
 	private function create_checkbox_field( $option, array $args ) {}
 	private function create_radio_field( $option, array $args ) {}
-	private function create_address_field( $option, array $args ) {}
-	private function create_image_field( $option, array $args ) {}
-	private function create_number_field( $option, array $args ) {}
-	private function create_hidden_field( $option, array $args ) {}
+
+	/**
+	 *
+	 * @see _wp_ajax_crop_image() The AJAX cropper callback.
+	 */
+	private function create_image_field( $option, array $args ) {
+
+		/**
+		 * @uses trait TSF_Extension_Manager\UI
+		 * @package TSF_Extension_Manager\Traits
+		 */
+		$this->_register_media_l10n();
+
+		//* Not escaped.
+		$title = $args['_desc'][0];
+
+		// Escaped.
+		$s_type = \esc_attr( $args['_type'] );
+		$s_name = $s_id = $this->create_field_id( $option );
+		$s_ph   = $args['_ph'] ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		return vsprintf(
+			'<div class="tsfem-image-field-wrapper tsfem-e-local-flex-setting tsfem-flex">%s%s</div>',
+			[
+				sprintf(
+					'<div class="tsfem-e-local-flex-setting-label tsfem-flex">%s</div>',
+					vsprintf(
+						'<div class="tsfem-e-local-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							vsprintf(
+								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								[
+									$s_id,
+									sprintf( 'tsfem-e-local-option-title%s', ( $s_desc ? ' tsfem-e-local-option-has-description' : '' ) ),
+									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+								]
+							),
+							$s_desc,
+						]
+					)
+				),
+				vsprintf(
+					'<div class="tsfem-e-local-flex-setting-input tsfem-flex">%s<div class="tsfem-hide-if-no-js tsfem-e-local-image-buttons-wrap">%s</div></div>',
+					[
+						vsprintf(
+							'<input type=url id="%s" name=%s value="%s" %s>',
+							[
+								$s_id,
+								$s_name,
+								\esc_attr( $args['_default'] ),
+								$s_ph,
+							]
+						),
+						vsprintf(
+							'<button class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
+							[
+								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
+								\esc_attr_x( 'Select image', 'Button hover title', '' ),
+								$s_id,
+								\esc_html__( 'Select Image', '' ),
+							]
+						),
+					]
+				),
+			]
+		);
+	}
+
+	/**
+	 * Handles cropping of images on AJAX request.
+	 *
+	 * Copied from WordPress Core wp_ajax_crop_image.
+	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
+	 *           2. It now only accepts TSF own AJAX nonces.
+	 *           3. It now only accepts context 'tsf-image'
+	 *           4. It no longer accepts a default context.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
+	 */
+	final public function _wp_ajax_crop_image() {
+
+		if ( ! \check_ajax_referer( 'tsfem-upload-files', 'nonce', false ) || ! \current_user_can( 'upload_files' ) )
+			\wp_send_json_error();
+
+		$attachment_id = \absint( $_POST['id'] );
+
+		$context = \sanitize_key( str_replace( '_', '-', $_POST['context'] ) );
+		$data    = array_map( 'absint', $_POST['cropDetails'] );
+		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
+
+		if ( ! $cropped || \is_wp_error( $cropped ) )
+			\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) );
+
+		switch ( $context ) :
+			case 'tsf-image':
+
+				/**
+				 * Fires before a cropped image is saved.
+				 *
+				 * Allows to add filters to modify the way a cropped image is saved.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @param string $context       The Customizer control requesting the cropped image.
+				 * @param int    $attachment_id The attachment ID of the original image.
+				 * @param string $cropped       Path to the cropped image file.
+				 */
+				\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
+
+				/** This filter is documented in wp-admin/custom-header.php */
+				$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
+
+				$parent_url = \wp_get_attachment_url( $attachment_id );
+				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+
+				$size       = @getimagesize( $cropped );
+				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+
+				$object = array(
+					'post_title'     => basename( $cropped ),
+					'post_content'   => $url,
+					'post_mime_type' => $image_type,
+					'guid'           => $url,
+					'context'        => $context,
+				);
+
+				$attachment_id = \wp_insert_attachment( $object, $cropped );
+				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
+
+				/**
+				 * Filters the cropped image attachment metadata.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @see wp_generate_attachment_metadata()
+				 *
+				 * @param array $metadata Attachment metadata.
+				 */
+				$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
+				\wp_update_attachment_metadata( $attachment_id, $metadata );
+
+				/**
+				 * Filters the attachment ID for a cropped image.
+				 *
+				 * @since 4.3.0 WordPress Core
+				 *
+				 * @param int    $attachment_id The attachment ID of the cropped image.
+				 * @param string $context       The Customizer control requesting the cropped image.
+				 */
+				$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
+				break;
+
+			default :
+				\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) );
+				break;
+		endswitch;
+
+		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
+	}
 }

@@ -572,31 +572,25 @@ final class Admin extends Api {
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
-		$this->additional_css = [
-			[
-				'name' => 'tsfem-monitor',
-				'base' => TSFEM_E_MONITOR_DIR_URL,
-				'ver' => TSFEM_E_MONITOR_VERSION,
-			],
+		$this->additional_css[] = [
+			'name' => 'tsfem-monitor',
+			'base' => TSFEM_E_MONITOR_DIR_URL,
+			'ver' => TSFEM_E_MONITOR_VERSION,
 		];
 
-		$this->additional_js = [
-			[
-				'name' => 'tsfem-monitor',
-				'base' => TSFEM_E_MONITOR_DIR_URL,
-				'ver' => TSFEM_E_MONITOR_VERSION,
-			],
+		$this->additional_js[] = [
+			'name' => 'tsfem-monitor',
+			'base' => TSFEM_E_MONITOR_DIR_URL,
+			'ver' => TSFEM_E_MONITOR_VERSION,
 		];
 
-		$this->additional_l10n = [
-			[
-				'dependency' => 'tsfem-monitor',
-				'name' => 'tsfem_e_monitorL10n',
-				'strings' => [
-					'nonce' => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
-					'remote_data_timeout' => $this->get_remote_data_timeout(),
-					'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
-				],
+		$this->additional_l10n[] = [
+			'dependency' => 'tsfem-monitor',
+			'name' => 'tsfem_e_monitorL10n',
+			'strings' => [
+				'nonce' => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
+				'remote_data_timeout' => $this->get_remote_data_timeout(),
+				'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
 			],
 		];
 
@@ -759,7 +753,7 @@ final class Admin extends Api {
 			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">%s</div>', $output );
 	}
 
 	/**
@@ -799,7 +793,7 @@ final class Admin extends Api {
 	 * @return string The parsed Control Panel overview HTML data.
 	 */
 	protected function get_cp_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_cp_output() );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap">%s</div>', $this->get_cp_output() );
 	}
 
 	/**
@@ -1080,7 +1074,7 @@ final class Admin extends Api {
 	 */
 	protected function get_stats_overview() {
 		return sprintf(
-			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex"><h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p></div>',
+			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap"><h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p></div>',
 			$this->get_string_coming_soon(), \esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
 		);
 
@@ -1094,7 +1088,7 @@ final class Admin extends Api {
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap tsfem-flex tsfem-flex-row">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap">%s</div>', $output );
 	}
 
 	/**

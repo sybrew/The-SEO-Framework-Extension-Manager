@@ -379,15 +379,10 @@ class Core {
 		// PHP 5.6+ //= $i++;
 
 		//* wp_ajax sets required headers early.
-		// Experimental: patch this ASAP if users report admin POST/redirect errors.
-		// if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-		// 	if ( ! empty( headers_list() ) ) {
-				if ( ! headers_sent() ) {
-					header_remove();
-					$retval = $retval | 2; //= 2 ** $i
-				}
-		// 	}
-		// }
+		if ( ! headers_sent() ) {
+			header_remove();
+			$retval = $retval | 2; //= 2 ** $i
+		}
 
 		return $retval;
 	}

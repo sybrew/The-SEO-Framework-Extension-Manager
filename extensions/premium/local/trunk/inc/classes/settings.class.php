@@ -160,37 +160,31 @@ final class Settings {
 		 * Set additional CSS file calls.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->additional_css = [
-			[
-				'name' => 'tsfem-local',
-				'base' => TSFEM_E_LOCAL_DIR_URL,
-				'ver' => TSFEM_E_LOCAL_VERSION,
-			],
+		$this->additional_css[] = [
+			'name' => 'tsfem-local',
+			'base' => TSFEM_E_LOCAL_DIR_URL,
+			'ver' => TSFEM_E_LOCAL_VERSION,
 		];
 
 		/**
 		 * Set additional JS file calls.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->additional_js = [
-			[
-				'name' => 'tsfem-local',
-				'base' => TSFEM_E_LOCAL_DIR_URL,
-				'ver' => TSFEM_E_LOCAL_VERSION,
-			],
+		$this->additional_js[] = [
+			'name' => 'tsfem-local',
+			'base' => TSFEM_E_LOCAL_DIR_URL,
+			'ver' => TSFEM_E_LOCAL_VERSION,
 		];
 
 		/**
 		 * Set additional l10n.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->additional_l10n = [
-			[
-				'dependency' => 'tsfem-local',
-				'name' => 'tsfem_e_localL10n',
-				'strings' => [
-					'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
-				],
+		$this->additional_l10n[] = [
+			'dependency' => 'tsfem-local',
+			'name' => 'tsfem_e_localL10n',
+			'strings' => [
+				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
 			],
 		];
 
@@ -317,7 +311,7 @@ final class Settings {
 			$content_start = '<div class="tsfem-e-local-collapse-content tsfem-flex">';
 
 			//* Already escaped.
-			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex tsfem-flex-noshrink" %s>%s%s%s', $id, $checkbox, $header, $content_start );
+			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex tsfem-flex-noshrink tsfem-flex-row" %s>%s%s%s', $id, $checkbox, $header, $content_start );
 		} elseif ( 'end' === $what ) {
 			//* ok.
 			return '</div></div>';
@@ -335,7 +329,7 @@ final class Settings {
 	 * @return string The HTML formed entry state icon.
 	 */
 	protected function get_state_icon( $state = '' ) {
-		return sprintf( '<span class="tsfem-e-local-title-icon tsfem-e-local-icon-%1$s tsfem-e-local-title-icon-%1$s"></span>', \esc_attr( $state ) );
+		return sprintf( '<span class="tsfem-e-local-title-icon tsfem-e-local-icon-%1$s tsfem-e-local-title-icon-%s"></span>', $this->parse_defined_icon_state( $state ) );
 	}
 
 	/**

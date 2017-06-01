@@ -601,29 +601,23 @@ final class Admin {
 		 */
 		$this->ui_hook = $this->transporter_menu_page_hook;
 
-		$this->additional_css = [
-			[
-				'name' => 'tsfem-transporter',
-				'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-				'ver' => TSFEM_E_TRANSPORTER_VERSION,
-			],
+		$this->additional_css[] = [
+			'name' => 'tsfem-transporter',
+			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
+			'ver' => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
-		$this->additional_js = [
-			[
-				'name' => 'tsfem-transporter',
-				'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-				'ver' => TSFEM_E_TRANSPORTER_VERSION,
-			],
+		$this->additional_js[] = [
+			'name' => 'tsfem-transporter',
+			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
+			'ver' => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
-		$this->additional_l10n = [
-			[
-				'dependency' => 'tsfem-transporter',
-				'name' => 'tsfem_e_transporterL10n',
-				'strings' => [
-					'nonce' => \wp_create_nonce( 'tsfem-e-transporter-ajax-nonce' ),
-				],
+		$this->additional_l10n[] = [
+			'dependency' => 'tsfem-transporter',
+			'name' => 'tsfem_e_transporterL10n',
+			'strings' => [
+				'nonce' => \wp_create_nonce( 'tsfem-e-transporter-ajax-nonce' ),
 			],
 		];
 
@@ -704,7 +698,7 @@ final class Admin {
 	 * @since 1.0.0
 	 */
 	protected function get_transport_settings_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-transport-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_transport_settings_output() );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-transport-wrap">%s</div>', $this->get_transport_settings_output() );
 	}
 
 	/**
@@ -760,7 +754,7 @@ final class Admin {
 	 * @since 1.0.0
 	 */
 	protected function get_transport_meta_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-validate-wrap tsfem-flex tsfem-flex-row">%s</div>', $this->get_transport_meta_output() );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-transporter-validate-wrap">%s</div>', $this->get_transport_meta_output() );
 	}
 
 	/**

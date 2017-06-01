@@ -99,10 +99,10 @@ trait UI {
 		\add_action( 'update_footer', '__return_empty_string' );
 
 		//* Add body class.
-		\add_action( 'admin_body_class', [ $this, 'add_admin_body_class' ], 999, 1 );
+		\add_action( 'admin_body_class', [ $this, '_add_admin_body_class' ], 999, 1 );
 
 		//* Enqueue admin scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ], 0, 1 );
+		\add_action( 'admin_enqueue_scripts', [ $this, '_enqueue_admin_scripts' ], 0, 1 );
 
 	}
 
@@ -110,10 +110,11 @@ trait UI {
 	 * Enqueues styles and scripts in the admin area on the extension manager page.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $hook The current page hook.
 	 */
-	final public function enqueue_admin_scripts( $hook ) {
+	final public function _enqueue_admin_scripts( $hook ) {
 
 		if ( $this->ui_hook === $hook ) {
 
@@ -181,7 +182,7 @@ trait UI {
 	 * @since 1.0.0
 	 * @staticvar bool $registered : Prevents Re-registering of the style.
 	 */
-	protected function register_admin_css() {
+	final protected function register_admin_css() {
 
 		static $registered = null;
 
@@ -222,7 +223,7 @@ trait UI {
 	 * @since 1.0.0
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 */
-	protected function register_admin_javascript() {
+	final protected function register_admin_javascript() {
 
 		static $registered = null;
 
@@ -303,11 +304,46 @@ trait UI {
 	 * Adds an extra body class on the extensions manager page.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param string $classes The current body classes.
 	 * @return string The expanded body classes.
 	 */
-	final public function add_admin_body_class( $classes = '' ) {
+	final public function _add_admin_body_class( $classes = '' ) {
 		return trim( $classes ) . ' tsfem ';
+	}
+
+	/**
+	 * Registers Media L10n dependencies.
+	 *
+	 * @since 1.3.0
+	 * @staticvar $set Whether the dependency has been set.
+	 * @access private
+	 *
+	 * @retun bool True on set, false otherwise.
+	 */
+	final public function _register_media_l10n() {
+
+		static $set = false;
+
+		if ( $set )
+			return false;
+
+		$this->additional_l10n[] = [
+			'dependency' => $this->js_name,
+			'name' => 'tsfemImgL10n',
+			'strings' => [
+				'nonce'          => \current_user_can( 'upload_files' ) ? wp_create_nonce( 'tsfem-media-nonce' ) : '',
+				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
+				'imgSelectTitle' => \esc_attr_x( 'Select social image', 'Button hover', 'the-seo-framework-extension-manager' ),
+				'imgChange'      => \esc_attr__( 'Change Image', 'the-seo-framework-extension-manager' ),
+				'imgRemove'      => \esc_attr__( 'Remove Image', 'the-seo-framework-extension-manager' ),
+				'imgRemoveTitle' => \esc_attr__( 'Remove selected social image', 'the-seo-framework-extension-manager' ),
+				'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
+				'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
+			],
+		];
+
+		return $set = true;
 	}
 }

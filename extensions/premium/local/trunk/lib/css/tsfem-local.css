@@ -1,3 +1,7 @@
+.tsfem-e-local-collapse-wrap {
+	width: 100%;
+}
+
 .tsfem-e-local-collapse {
 	position: relative;
 	width: 100%;
@@ -26,6 +30,7 @@
 .tsfem-e-local-collapse-header {
 	position: relative;
 	height: 50px;
+	width: 100%;
 	background: #fefefe;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
@@ -158,6 +163,12 @@
 	overflow: initial;
 	max-height: none;
 	opacity: 1;
+	-webkit-flex: 1 0 100%;
+	flex: 1 0 100%;
+	max-width: 100%;
+	-webkit-flex-wrap: nowrap;
+	-ms-flex-wrap: nowrap;
+	flex-wrap: nowrap;
 	-webkit-transition: opacity 0.5s ease-in-out;
 	transition: opacity 0.5s ease-in-out;
 }
@@ -216,11 +227,15 @@ h4.tsfem-e-local-multi-title {
 }
 
 .tsfem-e-local-multi-setting-input,
-.tsfem-e-local-multi-setting-label-inner-wrap,
 .tsfem-e-local-flex-setting-input,
 .tsfem-e-local-flex-setting-label-inner-wrap {
 	-webkit-justify-content: center;
 	justify-content: center;
+}
+
+.tsfem-e-local-multi-setting-label-inner-wrap {
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
 }
 
 .tsfem-e-local-multi-setting-label-item > *,
@@ -240,4 +255,30 @@ h4.tsfem-e-local-multi-title {
 
 .tsfem-e-local-flex-setting-input textarea {
 	max-height: 250px;
+}
+
+.tsfem-e-local-option-title.tsfem-e-local-option-has-description {
+	margin: 0 0 0.5em;
+}
+
+.tsfem-e-local-option-description {
+	margin: .5em 0;
+}
+
+.tsfem-e-local-option-description:last-of-type {
+	margin: .5em 0 0;
+}
+
+.tsfem-e-local-flex-setting-input input,
+.tsfem-e-local-flex-setting-input select,
+.tsfem-e-local-flex-setting-input textarea {
+	display: block;
+	width: 100%;
+}
+
+.tsfem-e-local-image-buttons-wrap {
+	margin-top: 1em;
+	margin-left: 1px;
+	vertical-align: top;
+	line-height: 1em;
 }

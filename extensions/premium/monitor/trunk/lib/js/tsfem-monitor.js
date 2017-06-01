@@ -250,7 +250,7 @@ window[ 'tsfem_e_monitor' ] = {
 							} );
 						} else {
 
-							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap tsfem-flex tsfem-flex-row">' + issues.data + '</div>';
+							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">' + issues.data + '</div>';
 
 							jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
 								{ 'opacity' : 1 },

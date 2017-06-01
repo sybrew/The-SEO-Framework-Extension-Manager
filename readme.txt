@@ -81,7 +81,7 @@ The extensions test themselves upon activation. So, if any extension doesn't wor
 
 * This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
 * Read our [privacy policy](https://theseoframework.com/privacy/), it states that we respect your privacy.
-* Questions about privacy? Feel free to (contact us)[https://theseoframework.com/contact/].
+* Questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -98,10 +98,10 @@ Feedback and points for improvement will be always given. No monetized nor premi
 Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
 In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
 Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
-If you have any questions, before blindly implementing or circumvent security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
+If you have any questions, before blindly implementing or circumventing security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
 
 = For developers: Reluctance towards plugin modifications =
-This plugin should be compatible with any other plugin or theme (unless they cause PHP errors on their own).
+This plugin should be compatible with any other plugin or theme, unless they cause PHP errors on their own.
 You are allowed to edit this plugin and use hooks on this plugin (as per GPLv3), but any external or internal modification can stop working on any update without prior notice.
 This is to enhance the plugin security, stability, and overall performance. Please note that most core functions, classes, methods, and files are shielded against both direct and indirect calls.
 
@@ -200,6 +200,8 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* This changes all extensions' base structure.
 		* This speeds up autoloading twofold.
 	/
+	* **Improvement:** The layout no longer is a massive stack of repaintable flexboxes, but is now split up instead on scroll-point.
+		* This fixes a layout performance issue, most prominently seen in Google Chrome. Because it no longer has to repaint 20+ full-screen flexboxes on miniscule height variation.
 	* TODO **Improvement:** This plugin has now been tested against xDebug to eliminate common errors, performance culprits, and resource hogs.
 
 * **API:**

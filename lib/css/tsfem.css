@@ -17,6 +17,34 @@
 	margin-top: 18px;
 }
 
+/* ## Loading...
+/*--------------------------------------*/
+
+.tsfem-flex-status-loading > span {
+	font-size: 30px;
+	text-align: center;
+}
+
+.tsfem-flex-status-loading > span:after {
+	display: inline-block;
+	width: 1em;
+	content: "\f463";
+	font-size: 1em;
+	line-height: 1em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	vertical-align: middle;
+	color: #0ebfe9;
+	line-height: 1em;
+	font-size: 1em;
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
+	-moz-animation: tsfem-spin 1.5s linear infinite;
+	-o-animation: tsfem-spin 1.5s linear infinite;
+	animation: tsfem-spin 1.5s linear infinite;
+}
+
 /* ## Cursors
 /*--------------------------------------*/
 
@@ -102,6 +130,11 @@
 .tsfem-flex-space {
 	-webkit-justify-content: space-between;
 	justify-content: space-between;
+}
+
+.tsfem-flex-center {
+	-webkit-justify-content: center;
+	justify-content: center;
 }
 
 /* # Start Wraps.
@@ -275,21 +308,21 @@ body.tsfem .wrap {
 .tsfem-button:disabled,
 .tsfem-button-primary:disabled {
 	display: inline-block;
-	padding: 7px 14px;
+	padding: .5em 1em;
 	background: #eee;
-	font-size: 13px;
+	font-size: 1em;
 	border: 0;
 	border-radius: 3px;
-	-webkit-box-shadow: 0 3px 0 #cacaca;
-	box-shadow: 0 3px 0 #cacaca;
+	-webkit-box-shadow: 0 .2em 0 #cacaca;
+	box-shadow: 0 .2em 0 #cacaca;
 	color: #777;
 	text-shadow: 0 -1px 1px #efefef,1px 0 1px #efefef,0 1px 1px #efefef,-1px 0 1px #efefef;
 	font-size: 1em;
 	line-height: 1em;
 	text-decoration: none;
 	text-align: center;
-	margin-top: -3px;
-	margin-bottom: 3px;
+	margin-top: -.2em;
+	margin-bottom: .2em;
 	cursor: pointer;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -302,11 +335,15 @@ body.tsfem .wrap {
 	appearance: none;
 }
 
+.tsfem-button-small {
+	font-size: .9em;
+}
+
 .tsfem-button-primary,
 .tsfem-button-primary:disabled {
 	background: #05809e;
-	-webkit-box-shadow: 0 3px 0 #005c7a;
-	box-shadow: 0 3px 0 #005c7a;
+	-webkit-box-shadow: 0 .2em 0 #005c7a;
+	box-shadow: 0 .2em 0 #005c7a;
 	color: #fff;
 	text-shadow: 0 -1px 1px #005c7a,1px 0 1px #005c7a,0 1px 1px #005c7a,-1px 0 1px #005c7a;
 }
@@ -316,8 +353,8 @@ body.tsfem .wrap {
 .tsfem-button-primary-bright {
 	color: #fff;
 	background: #0ebfe9;
-	-webkit-box-shadow: 0 3px 0 #057f9c;
-	box-shadow: 0 3px 0 #057f9c;
+	-webkit-box-shadow: 0 .2em 0 #057f9c;
+	box-shadow: 0 .2em 0 #057f9c;
 	text-shadow: 0 -1px 1px #0078a2,1px 0 1px #0078a2,0 1px 1px #0078a2,-1px 0 1px #0078a2;
 }
 
@@ -327,8 +364,8 @@ body.tsfem .wrap {
 .tsfem-button-extension-activate {
 	color: #fff;
 	background: #00cd98;
-	-webkit-box-shadow: 0 3px 0 #008964;
-	box-shadow: 0 3px 0 #008964;
+	-webkit-box-shadow: 0 .2em 0 #008964;
+	box-shadow: 0 .2em 0 #008964;
 	text-shadow: 0 -1px 1px #008651,1px 0 1px #008651,0 1px 1px #008651,-1px 0 1px #008651;
 }
 
@@ -338,8 +375,8 @@ body.tsfem .wrap {
 .tsfem-button-extension-deactivate {
 	color: #fff;
 	background: #ff746a;
-	-webkit-box-shadow: 0 3px 0 #d14b44;
-	box-shadow: 0 3px 0 #d14b44;
+	-webkit-box-shadow: 0 .2em 0 #d14b44;
+	box-shadow: 0 .2em 0 #d14b44;
 	text-shadow: 0 -1px 1px #d14b44,1px 0 1px #d14b44,0 1px 1px #d14b44,-1px 0 1px #d14b44;
 }
 
@@ -355,6 +392,7 @@ body.tsfem .wrap {
 .tsfem-button-clipboard:after,
 .tsfem-button-index:after,
 .tsfem-button-cloud:after,
+.tsfem-button-image:after,
 .tsfem-button-loading:after {
 	display: inline-block;
 	width: 1em;
@@ -366,7 +404,12 @@ body.tsfem .wrap {
 	font-weight: 400;
 	font-style: normal;
 	vertical-align: top;
-	margin-left: 7px;
+	margin-left: .5em;
+}
+
+
+.tsfem-button-small:after {
+	font-size: .9em;
 }
 
 .tsfem-button-flag:after {
@@ -401,6 +444,10 @@ body.tsfem .wrap {
 
 .tsfem-button-cloud:after {
 	content: "\f176";
+}
+
+.tsfem-button-image:after {
+	content: "\f128";
 }
 
 .tsfem-button-loading:after {
@@ -685,6 +732,7 @@ body.tsfem .wrap {
 	max-height: 100%;
 	-webkit-flex-basis: 33vh;
 	flex-basis: 33vh;
+	min-height: 100%;
 }
 
 .tsfem-pane-header {
@@ -755,6 +803,7 @@ body.tsfem .wrap {
 	margin: 0;
 }
 
+.tsfem-pane-inner-collapsable-settings-wrap,
 .tsfem-pane-inner-wrap {
 	padding: 20px;
 	height: auto;
@@ -768,17 +817,16 @@ body.tsfem .wrap {
 
 .tsfem-pane-inner-collapsable-settings-wrap {
 	padding: 0;
-	height: auto;
-	max-height: 100%;
-	min-height: 150px;
-	width: 100%;
-	overflow: auto;
-	/* IE bugfix */
-	overflow-x: hidden;
 }
 
 .tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad {
+	width: 100%;
 	padding: 20px;
+}
+
+/* Grab every consecutive call */
+.tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad + .tsfem-pane-inner-pad {
+	padding-top: 0;
 }
 
 /* ## Specific panes.
