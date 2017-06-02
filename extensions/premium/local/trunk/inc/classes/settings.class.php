@@ -290,7 +290,7 @@ final class Settings {
 		if ( 'start' === $what ) {
 			$id = $id ? sprintf( 'id="tsfem-e-local-collapse[%s]"', \esc_attr( $id ) ) : '';
 
-			$checkbox_id = sprintf( 'tsfem-e-local-collapse-checkbox-%s', $it );
+			$checkbox_id = sprintf( 'tsfem-e-local-collapse-checkbox-%d', $it );
 			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
 
 			//* Requires JS to edit. Always start with warning.

@@ -1258,14 +1258,14 @@ class Core {
 			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button-primary tsfem-button-star tsfem-button-premium' : 'tsfem-button tsfem-button-premium';
+			$class = $love ? 'tsfem-button-primary tsfem-button-premium tsfem-button-primary-bright tsfem-button-star' : 'tsfem-button tsfem-button-premium tsfem-button-primary-bright';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
 
 			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button';
+			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button-primary';
 		}
 
 		return $this->get_link( [

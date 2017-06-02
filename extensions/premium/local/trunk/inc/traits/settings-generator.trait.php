@@ -505,7 +505,7 @@ trait Settings_Generator {
 		 * @uses trait TSF_Extension_Manager\UI
 		 * @package TSF_Extension_Manager\Traits
 		 */
-		$this->_register_media_l10n();
+		$this->register_media_scripts();
 
 		//* Not escaped.
 		$title = $args['_desc'][0];
@@ -538,7 +538,7 @@ trait Settings_Generator {
 					)
 				),
 				vsprintf(
-					'<div class="tsfem-e-local-flex-setting-input tsfem-flex">%s<div class="tsfem-hide-if-no-js tsfem-e-local-image-buttons-wrap">%s</div></div>',
+					'<div class="tsfem-e-local-flex-setting-input tsfem-flex">%s<div class="tsfem-e-local-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s>',
@@ -550,7 +550,7 @@ trait Settings_Generator {
 							]
 						),
 						vsprintf(
-							'<button class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
+							'<button class="tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
 							[
 								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
 								\esc_attr_x( 'Select image', 'Button hover title', '' ),

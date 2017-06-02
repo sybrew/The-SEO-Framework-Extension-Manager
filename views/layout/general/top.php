@@ -11,7 +11,7 @@ if ( $options ) {
 		$status = $this->get_subscription_status();
 
 		$account_url = $this->get_activation_url();
-		$account_button_class = 'tsfem-account-active';
+		$account_button_class = 'tsfem-button-primary-bright tsfem-button-star';
 		$account_text = \__( 'My Account', 'the-seo-framework-extension-manager' );
 		$account_title = \__( 'View account', 'the-seo-framework-extension-manager' );
 
@@ -22,13 +22,13 @@ if ( $options ) {
 			$about_to_expire = $then < $in_four_weeks;
 
 			if ( $about_to_expire ) {
-				$account_button_class = 'tsfem-account-about-to-expire';
+				$account_button_class = 'tsfem-button-red tsfem-button-warning';
 				$account_title = \__( 'Extend license', 'the-seo-framework-extension-manager' );
 			}
 		}
 	} else {
 		$account_url = $this->get_activation_url( 'shop/premium-subscription/' );
-		$account_button_class = 'tsfem-account-inactive';
+		$account_button_class = 'tsfem-button-green tsfem-button-love';
 		$account_title = \__( 'Get license', 'the-seo-framework-extension-manager' );
 		$account_text = \__( 'Go Premium', 'the-seo-framework-extension-manager' );
 	}

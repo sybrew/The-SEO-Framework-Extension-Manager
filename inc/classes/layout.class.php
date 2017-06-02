@@ -136,7 +136,7 @@ final class Layout extends Secure_Abstract {
 			$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n = \__( 'Deactivate account?', 'the-seo-framework-extension-manager' );
 
-			$button = '<button type="submit" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-button-primary tsfem-switcher-button tsfem-button-warning">' . \esc_html( $deactivate_i18n ) . '</button>';
+			$button = '<button type="submit" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning">' . \esc_html( $deactivate_i18n ) . '</button>';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'

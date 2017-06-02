@@ -32,20 +32,29 @@
 	height: 50px;
 	width: 100%;
 	background: #fefefe;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
-	box-shadow: 0 1px 3px 1px #ccc;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc, 0 0px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc, 0 0px 3px 1px #ccc;
 	-webkit-align-items: center;
 	align-items: center;
 	cursor: pointer;
 	z-index: 1;
 }
 
-.tsfem-e-local-collapse-header:hover {
+.tsfem-e-local-collapse:nth-of-type(2n-1) > .tsfem-e-local-collapse-header {
 	background: #f9f9f9;
 }
 
+.tsfem-e-local-collapse-header:hover {
+	background: #f7f7f7;
+}
+
+.tsfem-e-local-collapse:nth-of-type(2n-1) > .tsfem-e-local-collapse-header:hover,
 .tsfem-e-local-collapse-header:active {
-	background: #f3f3f3;
+	background: #f2f2f2;
+}
+
+.tsfem-e-local-collapse:nth-of-type(2n-1) > .tsfem-e-local-collapse-header:active {
+	background: #ededed;
 }
 
 .tsfem-e-local-collapse-title {
@@ -248,11 +257,6 @@ h4.tsfem-e-local-multi-title {
 	margin-right: 0;
 }
 
-.tsfem-e-local-social-image-buttons {
-	margin-top: 15px;
-	margin-left: 1px;
-}
-
 .tsfem-e-local-flex-setting-input textarea {
 	max-height: 250px;
 }
@@ -277,8 +281,16 @@ h4.tsfem-e-local-multi-title {
 }
 
 .tsfem-e-local-image-buttons-wrap {
-	margin-top: 1em;
+	margin-top: 1.15em;
 	margin-left: 1px;
 	vertical-align: top;
 	line-height: 1em;
+}
+
+.tsfem-e-local-image-buttons-wrap button {
+	margin-right: 1.15em;
+}
+
+.tsfem-e-local-image-buttons-wrap button:last-of-type {
+	margin-right: 0;
 }

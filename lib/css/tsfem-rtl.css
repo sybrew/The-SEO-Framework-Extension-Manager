@@ -309,7 +309,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-star,
-.tsfem-account-active,
 .tsfem-button-primary-bright {
 	color: #fff;
 	background: #0ebfe9;
@@ -319,8 +318,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-green,
-.tsfem-button-love,
-.tsfem-account-inactive,
 .tsfem-button-extension-activate {
 	color: #fff;
 	background: #00cd98;
@@ -340,8 +337,6 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #d14b44,1px 0 1px #d14b44,0 1px 1px #d14b44,-1px 0 1px #d14b44;
 }
 
-.tsfem-account-active:after,
-.tsfem-account-inactive:after,
 .tsfem-button-star:after,
 .tsfem-button-flag:after,
 .tsfem-button-love:after,
@@ -375,8 +370,7 @@ body.tsfem .wrap {
 	content: "\f534";
 }
 
-.tsfem-button-love:after,
-.tsfem-account-inactive:after {
+.tsfem-button-love:after {
 	content: "\f487";
 }
 

@@ -55,12 +55,13 @@ function extension_basename( $path ) {
  * Extracts the dirname of an extension from its file locaiton.
  *
  * @since 1.0.0
+ * @since 1.3.0 No longer uses trailingslashit
  *
  * @param string $file The extension file.
  * @return string The extension directory path.
  */
 function extension_dir_path( $file ) {
-	return \trailingslashit( dirname( $file ) );
+	return dirname( $file ) . DIRECTORY_SEPARATOR;
 }
 
 /**

@@ -149,7 +149,7 @@ trait Options_Template {
 						\__( 'Choose a (sub)type that exactly describes the business.', '' ),
 						\__( '(Sub)types with an asterisk are pending support.', '' ),
 					],
-					\__( 'Leave empty if your department type is not listed.', '' ),
+					\__( 'Leave unspecified if your department type is not listed.', '' ),
 				],
 				'_select' => $this->get_department_fields( false ),
 			],
@@ -1406,7 +1406,7 @@ trait Options_Template {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'No department selected', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
 				null, // No subtypes, doh.
 			],
 			[

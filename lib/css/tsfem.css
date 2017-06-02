@@ -303,10 +303,13 @@ body.tsfem .wrap {
 
 /* ## Buttons input.
 /*--------------------------------------*/
+
 .tsfem-button,
-.tsfem-button-primary,
 .tsfem-button:disabled,
-.tsfem-button-primary:disabled {
+.tsfem-button:focus,
+.tsfem-button-primary,
+.tsfem-button-primary:disabled,
+.tsfem-button-primary:focus {
 	display: inline-block;
 	padding: .5em 1em;
 	background: #eee;
@@ -335,12 +338,15 @@ body.tsfem .wrap {
 	appearance: none;
 }
 
-.tsfem-button-small {
+.tsfem-button-small,
+.tsfem-button-small:disabled,
+.tsfem-button-small:focus {
 	font-size: .9em;
 }
 
 .tsfem-button-primary,
-.tsfem-button-primary:disabled {
+.tsfem-button-primary:disabled,
+.tsfem-button-primary:focus {
 	background: #05809e;
 	-webkit-box-shadow: 0 .2em 0 #005c7a;
 	box-shadow: 0 .2em 0 #005c7a;
@@ -348,9 +354,8 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #005c7a,1px 0 1px #005c7a,0 1px 1px #005c7a,-1px 0 1px #005c7a;
 }
 
-.tsfem-button-star,
-.tsfem-account-active,
-.tsfem-button-primary-bright {
+.tsfem-button-primary-bright,
+.tsfem-button-primary-bright:focus {
 	color: #fff;
 	background: #0ebfe9;
 	-webkit-box-shadow: 0 .2em 0 #057f9c;
@@ -359,9 +364,9 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-green,
-.tsfem-button-love,
-.tsfem-account-inactive,
-.tsfem-button-extension-activate {
+.tsfem-button-green:focus,
+.tsfem-button-extension-activate,
+.tsfem-button-extension-deactivate:focus {
 	color: #fff;
 	background: #00cd98;
 	-webkit-box-shadow: 0 .2em 0 #008964;
@@ -370,9 +375,9 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-red,
-.tsfem-button-warning,
-.tsfem-account-about-to-expire,
-.tsfem-button-extension-deactivate {
+.tsfem-button-red:focus,
+.tsfem-button-extension-deactivate,
+.tsfem-button-extension-deactivate:focus {
 	color: #fff;
 	background: #ff746a;
 	-webkit-box-shadow: 0 .2em 0 #d14b44;
@@ -380,13 +385,10 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #d14b44,1px 0 1px #d14b44,0 1px 1px #d14b44,-1px 0 1px #d14b44;
 }
 
-.tsfem-account-active:after,
-.tsfem-account-inactive:after,
 .tsfem-button-star:after,
 .tsfem-button-flag:after,
 .tsfem-button-love:after,
 .tsfem-button-warning:after,
-.tsfem-account-about-to-expire:after,
 .tsfem-button-upload:after,
 .tsfem-button-download:after,
 .tsfem-button-clipboard:after,
@@ -407,7 +409,6 @@ body.tsfem .wrap {
 	margin-left: .5em;
 }
 
-
 .tsfem-button-small:after {
 	font-size: .9em;
 }
@@ -416,13 +417,11 @@ body.tsfem .wrap {
 	content: "\f227";
 }
 
-.tsfem-button-warning:after,
-.tsfem-account-about-to-expire:after {
+.tsfem-button-warning:after {
 	content: "\f534";
 }
 
-.tsfem-button-love:after,
-.tsfem-account-inactive:after {
+.tsfem-button-love:after {
 	content: "\f487";
 }
 
@@ -459,13 +458,16 @@ body.tsfem .wrap {
 }
 
 .tsfem-button:active,
-.tsfem-button:focus,
-.tsfem-button-primary:active,
-.tsfem-button-primary:focus {
+.tsfem-button-primary:active {
 	margin-top: 0;
 	margin-bottom: 0;
 	-webkit-box-shadow: none;
 	box-shadow: none;
+	outline: 0;
+}
+
+.tsfem-button:focus,
+.tsfem-button-primary:focus {
 	outline: 0;
 }
 
@@ -704,7 +706,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb,
 .tsfem-pane-full ::-webkit-scrollbar-thumb {
-	background-color: #0ebfdd;
+	background-color: #05809e;
 	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
 	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
 	border-radius: 0 0 3px;
@@ -712,7 +714,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb:active,
 .tsfem-pane-full ::-webkit-scrollbar-thumb:active {
-	background-color: #0cabc6;
+	background-color: #0082b3;
 }
 
 .tsfem-pane-half:first-of-type {
@@ -1104,7 +1106,8 @@ h5.tsfem-extension-type {
 }
 
 .tsfem-feed-top,
-.tsfem-feed-content {
+.tsfem-feed-content,
+.tsfem-feed-entry {
 	margin-bottom: 14px;
 }
 
@@ -1136,11 +1139,12 @@ h5.tsfem-extension-type {
 }
 
 .tsfem-feed-entry {
-	margin-bottom: 14px;
 	border-bottom: 2px solid #dedede;
 }
 
-.tsfem-feed-entry:last-of-type {
+.tsfem-feed-entry:last-of-type,
+.tsfem-feed-entry:last-of-type .tsfem-feed-content {
+	margin-bottom: 0;
 	border-bottom: none;
 }
 
@@ -1214,7 +1218,7 @@ h5.tsfem-extension-type {
 
 .tsfem-ajax.tsfem-loading:after {
 	content: "\f463";
-	color: #007bd2;
+	color: #057c99;
 	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	-moz-animation: tsfem-spin 1.5s linear infinite;
 	-o-animation: tsfem-spin 1.5s linear infinite;
@@ -1236,7 +1240,7 @@ h5.tsfem-extension-type {
 .tsfem-dashicon.tsfem-unknown:after,
 .tsfem-ajax.tsfem-unknown:after {
 	content: "\f223";
-	color: #007bd2;
+	color: #057c99;
 }
 
 .tsfem-dashicon.tsfem-warning:after {

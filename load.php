@@ -118,7 +118,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			basename( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
+			basename( __DIR__ ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
 		);
 	}
 }

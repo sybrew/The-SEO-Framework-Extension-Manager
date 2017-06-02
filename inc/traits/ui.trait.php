@@ -59,6 +59,24 @@ trait UI {
 	private $js_name;
 
 	/**
+	 * Main JS script to be loaded.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var array Main JS script containing name and location.
+	 */
+	private $main_js = [];
+
+	/**
+	 * Main CSS script to be loaded.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var array Main CSS script containing name and location.
+	 */
+	private $main_css = [];
+
+	/**
 	 * Additional CSS scripts to be loaded.
 	 *
 	 * @since 1.0.0
@@ -89,8 +107,9 @@ trait UI {
 	 * Initializes the UI traits.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now is private, instead of protected.
 	 */
-	final protected function init_ui() {
+	final private function init_ui() {
 
 		$this->ui_hook or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
@@ -110,6 +129,7 @@ trait UI {
 	 * Enqueues styles and scripts in the admin area on the extension manager page.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now runs an additional JS script loader.
 	 * @access private
 	 *
 	 * @param string $hook The current page hook.
@@ -118,20 +138,13 @@ trait UI {
 
 		if ( $this->ui_hook === $hook ) {
 
-			/**
-			 * Set JS and CSS names for the base (tsfem) layout.
-			 *
-			 * Currently, it works best with Default and Midnight. And a little
-			 * with Blue, Ectoplasm, Ocean.
-			 * @TODO consider visually appealing versions for other Admin Color Schemes.
-			 */
-			$this->css_name = 'tsfem';
-			$this->js_name = 'tsfem';
-
 			//* Enqueue styles
-			\add_action( 'admin_print_styles-' . $this->ui_hook, [ $this, 'enqueue_admin_css' ], 11 );
+			\add_action( 'admin_print_styles-' . $this->ui_hook, [ $this, '_enqueue_admin_css' ], 11 );
 			//* Enqueue scripts
-			\add_action( 'admin_print_scripts-' . $this->ui_hook, [ $this, 'enqueue_admin_javascript' ], 11 );
+			\add_action( 'admin_print_scripts-' . $this->ui_hook, [ $this, '_enqueue_admin_javascript' ], 11 );
+			//* Enqueue late initialized scripts.
+			\add_action( 'admin_footer', [ $this, '_enqueue_admin_javascript' ], 0 );
+			//* Enqueue localizations.
 			\add_action( 'admin_footer', [ $this, '_localize_admin_javascript' ] );
 		}
 	}
@@ -140,19 +153,22 @@ trait UI {
 	 * Enqueues required CSS for the plugin.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now is marked private.
+	 * @access private
 	 *
 	 * @param string $hook The current page hook
 	 */
-	final public function enqueue_admin_css( $hook ) {
+	final public function _enqueue_admin_css( $hook ) {
 
 		//* Register the script.
 		$this->register_admin_css();
 
-		\wp_enqueue_style( $this->css_name );
+		\wp_enqueue_style( $this->main_css['name'] );
 
 		if ( ! empty( $this->additional_css ) ) {
-			foreach ( $this->additional_css as $script )
+			foreach ( $this->additional_css as $script ) {
 				\wp_enqueue_style( $script['name'] );
+			}
 		}
 	}
 
@@ -160,20 +176,37 @@ trait UI {
 	 * Enqueues required JS for the plugin.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now is marked private and can register scripts JIT.
+	 * @staticvar array $enqueued List of enqueued scripts.
+	 * @access private
 	 *
 	 * @param string $hook The current page hook
 	 */
-	final public function enqueue_admin_javascript( $hook ) {
+	final public function _enqueue_admin_javascript( $hook ) {
 
-		//* Register the script.
+		static $enqueued = [];
+
+		//* Register the main scripts.
 		$this->register_admin_javascript();
 
-		\wp_enqueue_script( $this->js_name );
+		//* Merge scripts.
+		$_items = array_merge( [ $this->main_js ], $this->additional_js );
 
-		if ( ! empty( $this->additional_js ) ) {
-			foreach ( $this->additional_js as $script )
-				\wp_enqueue_script( $script['name'] );
+		//* Find new scripts.
+		$to_enqueue = array_diff( array_column( $_items, 'name' ), $enqueued );
+
+		if ( ! empty( $to_enqueue ) ) {
+			foreach ( $to_enqueue as $i => $script ) {
+				if ( ! \wp_script_is( $script, 'registered' ) ) {
+					//= Register JIT.
+					$this->register_additional_script( $_items[ $i ], 'js' );
+				}
+				\wp_enqueue_script( $script );
+			}
 		}
+
+		//* Cache all called scripts.
+		$enqueued += $to_enqueue;
 	}
 
 	/**
@@ -189,27 +222,23 @@ trait UI {
 		if ( isset( $registered ) )
 			return;
 
-		$rtl = \is_rtl() ? '-rtl' : '';
-
-		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
+		$this->main_css = [
+			'name' => 'tsfem',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+		];
 
 		\wp_register_style(
-			$this->css_name,
-			TSF_EXTENSION_MANAGER_DIR_URL . "lib/css/{$this->css_name}{$rtl}{$suffix}.css",
+			$this->main_css['name'],
+			$this->generate_file_url( $this->main_css, 'css' ),
 			[ 'dashicons' ],
-			TSF_EXTENSION_MANAGER_VERSION,
+			$this->main_css['ver'],
 			'all'
 		);
 
 		if ( ! empty( $this->additional_css ) ) :
 			foreach ( $this->additional_css as $script ) {
-				\wp_register_style(
-					$script['name'],
-					$script['base'] . "lib/css/{$script['name']}{$rtl}{$suffix}.css",
-					[ $this->css_name ],
-					$script['ver'],
-					'all'
-				);
+				$this->register_additional_script( $script, 'css' );
 			}
 		endif;
 
@@ -230,30 +259,86 @@ trait UI {
 		if ( isset( $registered ) )
 			return;
 
-		$suffix = \the_seo_framework()->script_debug ? '' : '.min';
+		$this->main_js = [
+			'name' => 'tsfem',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+		];
 
 		\wp_register_script(
-			$this->js_name,
-			TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$this->js_name}{$suffix}.js",
+			$this->main_js['name'],
+			$this->generate_file_url( $this->main_js, 'js' ),
 			[ 'jquery' ],
-			TSF_EXTENSION_MANAGER_VERSION,
+			$this->main_js['ver'],
 			true
 		);
 
 		if ( ! empty( $this->additional_js ) ) :
 			foreach ( $this->additional_js as $script ) {
-				\wp_register_script(
-					$script['name'],
-					$script['base'] . "lib/js/{$script['name']}{$suffix}.js",
-					[ $this->js_name ],
-					$script['ver'],
-					'all'
-				);
+				$this->register_additional_script( $script, 'js' );
 			}
 		endif;
 
 		$registered = true;
 
+	}
+
+	/**
+	 * Registers scripts and styles.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $script The script arguments.
+	 * @param array $type Either 'js' or 'css'.
+	 */
+	final private function register_additional_script( array $script, $type = 'js' ) {
+		switch ( $type ) :
+			case 'js' :
+				\wp_register_script(
+					$script['name'],
+					$this->generate_file_url( $script, 'js' ),
+					[ $this->main_js['name'] ],
+					$script['ver'],
+					true
+				);
+				break;
+
+			case 'css' :
+				\wp_register_style(
+					$script['name'],
+					$this->generate_file_url( $script, 'css' ),
+					[ $this->main_css['name'] ],
+					$script['ver'],
+					'all'
+				);
+				break;
+		endswitch;
+	}
+
+	/**
+	 * Generates file URL.
+	 *
+	 * @since 1.3.0
+	 * @staticvar string $suffix
+	 * @staticvar string $rtl
+	 *
+	 * @param array $script The script arguments.
+	 * @param array $type Either 'js' or 'css'.
+	 * @return string The file URL.
+	 */
+	final private function generate_file_url( array $script, $type = 'js' ) {
+
+		static $suffix, $rtl;
+
+		if ( ! $suffix ) {
+			$suffix = \the_seo_framework()->script_debug ? '' : '.min';
+			$rtl = \is_rtl() ? '-rtl' : '';
+		}
+
+		if ( 'js' === $type )
+			return $script['base'] . "lib/js/{$script['name']}{$suffix}.js";
+
+		return $script['base'] . "lib/css/{$script['name']}{$rtl}{$suffix}.css";
 	}
 
 	/**
@@ -288,7 +373,7 @@ trait UI {
 			'rtl' => (bool) \is_rtl(),
 		];
 
-		\wp_localize_script( $this->js_name, 'tsfemL10n', $strings );
+		\wp_localize_script( $this->main_js['name'], 'tsfemL10n', $strings );
 
 		if ( ! empty( $this->additional_l10n ) ) :
 			foreach ( $this->additional_l10n as $l10n ) {
@@ -298,6 +383,75 @@ trait UI {
 
 		$l7d = true;
 
+	}
+
+	/**
+	 * Registers Media CSS and JS scripts.
+	 *
+	 * @since 1.3.0
+	 * @staticvar $set Whether the dependency has been set.
+	 * @access protected
+	 *
+	 * @return bool True on set, false otherwise.
+	 */
+	final protected function register_media_scripts() {
+
+		static $set = false;
+
+		if ( $set )
+			return false;
+
+		$this->additional_js[] = [
+			'name' => 'tsfem-media',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+		];
+
+		$this->register_media_l10n();
+
+		\wp_enqueue_media();
+
+		return $set = true;
+	}
+
+	/**
+	 * Registers Media L10n dependencies.
+	 *
+	 * @since 1.3.0
+	 */
+	final private function register_media_l10n() {
+
+		$this->additional_l10n[] = [
+			'dependency' => 'tsfem-media',
+			'name' => 'tsfemMediaL10n',
+			'strings' => [
+				'nonce'          => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
+				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
+				'imgSelectTitle' => \esc_attr_x( 'Select social image', 'Button hover', 'the-seo-framework-extension-manager' ),
+				'imgChange'      => \esc_attr__( 'Change Image', 'the-seo-framework-extension-manager' ),
+				'imgRemove'      => \esc_attr__( 'Remove Image', 'the-seo-framework-extension-manager' ),
+				'imgRemoveTitle' => \esc_attr__( 'Remove selected social image', 'the-seo-framework-extension-manager' ),
+				'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
+				'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
+				'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
+			],
+		];
+	}
+
+	/**
+	 * Checks ajax referred set by set_js_nonces based on capability.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 * @uses WP Core check_ajax_referer()
+	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
+	 *
+	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
+	 *                   and generated between 0-12 hours ago, 2 if the nonce is
+	 *                   valid and generated between 12-24 hours ago.
+	 */
+	final public function _is_media_nonce_verified() {
+		return \check_ajax_referer( 'tsfem-media-nonce', 'nonce', false );
 	}
 
 	/**
@@ -311,39 +465,5 @@ trait UI {
 	 */
 	final public function _add_admin_body_class( $classes = '' ) {
 		return trim( $classes ) . ' tsfem ';
-	}
-
-	/**
-	 * Registers Media L10n dependencies.
-	 *
-	 * @since 1.3.0
-	 * @staticvar $set Whether the dependency has been set.
-	 * @access private
-	 *
-	 * @retun bool True on set, false otherwise.
-	 */
-	final public function _register_media_l10n() {
-
-		static $set = false;
-
-		if ( $set )
-			return false;
-
-		$this->additional_l10n[] = [
-			'dependency' => $this->js_name,
-			'name' => 'tsfemImgL10n',
-			'strings' => [
-				'nonce'          => \current_user_can( 'upload_files' ) ? wp_create_nonce( 'tsfem-media-nonce' ) : '',
-				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
-				'imgSelectTitle' => \esc_attr_x( 'Select social image', 'Button hover', 'the-seo-framework-extension-manager' ),
-				'imgChange'      => \esc_attr__( 'Change Image', 'the-seo-framework-extension-manager' ),
-				'imgRemove'      => \esc_attr__( 'Remove Image', 'the-seo-framework-extension-manager' ),
-				'imgRemoveTitle' => \esc_attr__( 'Remove selected social image', 'the-seo-framework-extension-manager' ),
-				'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
-				'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
-			],
-		];
-
-		return $set = true;
 	}
 }
