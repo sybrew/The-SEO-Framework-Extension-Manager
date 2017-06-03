@@ -6,15 +6,109 @@
 
 /* ## Notices.
 /*--------------------------------------*/
-.wrap.tsfem .notice {
+.wrap.tsfem .notice,
+.tsfem-notice {
 	margin: 0 0 20px;
 	-webkit-box-shadow: 0 1px 2px 1px #ccc;
 	box-shadow: 0 1px 2px 1px #ccc;
 	border-radius: 3px;
 }
 
-.tsfem-top-wrap .notice:first-of-type {
+.tsfem-top-wrap .notice:first-of-type,
+.tsfem-top-wrap .tsfem-notice:first-of-type {
 	margin-top: 18px;
+}
+
+/* ### Dismissible notices.
+/*--------------------------------------*/
+.tsfem-notice {
+	position: relative;
+	background: #fff;
+	border-left: 4px solid #fff;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
+	margin: 0 0 20px;
+	padding: 1px 12px;
+	border-radius: 3px;
+}
+
+.tsfem-notice p {
+	margin: 0.5em 0;
+	padding: 2px;
+}
+
+.tsfem-notice,
+.tsfem-notice-success {
+	border-left-color: #00cd98;
+}
+
+.tsfem-notice-warning {
+	border-left-color: #ffa01b;
+}
+
+.tsfem-notice-error {
+	border-left-color: #dd3811;
+}
+
+.tsfem-notice.tsfem-show-icon p:before {
+	content: '';
+	margin-right: 12px;
+	background: 0 0;
+	display: inline-block;
+	font: 400 14px/16px dashicons;
+	speak: none;
+	height: 16px;
+	text-align: center;
+	vertical-align: middle;
+	width: 16px;
+	line-height: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.tsfem-notice-success.tsfem-show-icon p:before {
+	color: #00cd98;
+	font-size: 16px;
+	content: "\f147";
+}
+
+.tsfem-notice-warning.tsfem-notice.tsfem-show-icon p:before {
+	color: #ffa01b;
+	content: "\f227";
+}
+
+.tsfem-notice-error.tsfem-notice.tsfem-show-icon p:before {
+	color: #dd3811;
+	content: "\f534";
+}
+
+a.tsfem-dismiss {
+	position: absolute;
+	top: 0;
+	right: 1px;
+	border: none;
+	margin: 0;
+	padding: 9px;
+	background: 0 0;
+	color: #b4b9be;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+a.tsfem-dismiss:before {
+	background: 0 0;
+	content: "\f153";
+	display: block;
+	font: 400 16px/20px dashicons;
+	speak: none;
+	height: 20px;
+	text-align: center;
+	width: 20px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a.tsfem-dismiss:hover {
+	color: #c00;
 }
 
 /* ## Loading...
@@ -366,7 +460,7 @@ body.tsfem .wrap {
 .tsfem-button-green,
 .tsfem-button-green:focus,
 .tsfem-button-extension-activate,
-.tsfem-button-extension-deactivate:focus {
+.tsfem-button-extension-activate:focus {
 	color: #fff;
 	background: #00cd98;
 	-webkit-box-shadow: 0 .2em 0 #008964;
@@ -962,6 +1056,7 @@ h4.tsfem-cp-title {
 	margin: 0;
 	padding: 0;
 	min-height: 122px;
+	border-radius: 3px;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	background: #fefefe;

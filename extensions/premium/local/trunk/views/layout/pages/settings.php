@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		 * Defer visual rendering of elements to prevent excessive painting if lots
 		 * of elements are loaded. Shaves off 25% load time on high-end machines.
 		 */
-		$count = $this->get_option( 'depAmount', 1 );
+		$count = $this->get_option( 'depAmount', 20 );
 		$i_defer = 20;
 		$defer = $count > $i_defer;
 
@@ -36,12 +36,13 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		<div class="tsfem-e-local-collapse-wrap" id="tsfem-e-local-deps-overview" <?php $defer and print 'style=display:none'; ?>>
 		<?php
 		$dep_main = \__( 'Main Department', 'the-seo-framework-extension-manager' );
-		$dep_sub = \__( 'Department', 'the-seo-framework-extension-manager' );
+		/* translators: %d is department number */
+		$dep_sub = \__( 'Department %d', 'the-seo-framework-extension-manager' );
 
 		$_fields = $this->get_global_department_fields();
 
 		for ( $it = 0; $it < $count; $it++ ) {
-			$title = $it ? $dep_sub : $dep_main;
+			$title = $it ? sprintf( $dep_sub, $it + 1 ) : $dep_main;
 			$id = "dep-$it";
 
 			//* Already escaped.

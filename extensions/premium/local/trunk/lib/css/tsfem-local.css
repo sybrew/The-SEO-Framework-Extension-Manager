@@ -5,6 +5,7 @@
 .tsfem-e-local-collapse {
 	position: relative;
 	width: 100%;
+	padding: 0 20px 20px;
 }
 
 .tsfem-e-local-collapse > input[type="checkbox"] {
@@ -32,12 +33,11 @@
 	height: 50px;
 	width: 100%;
 	background: #fefefe;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc, 0 0px 3px 1px #ccc;
-	box-shadow: 0 1px 3px 1px #ccc, 0 0px 3px 1px #ccc;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
 	-webkit-align-items: center;
 	align-items: center;
 	cursor: pointer;
-	z-index: 1;
 }
 
 .tsfem-e-local-collapse:nth-of-type(2n-1) > .tsfem-e-local-collapse-header {
@@ -172,6 +172,8 @@
 	overflow: initial;
 	max-height: none;
 	opacity: 1;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
 	-webkit-flex: 1 0 100%;
 	flex: 1 0 100%;
 	max-width: 100%;

@@ -126,6 +126,19 @@ trait UI {
 	}
 
 	/**
+	 * Performs after-top actions.
+	 *
+	 * Must be called after top wrap.
+	 *
+	 * @since 1.3.0
+	 */
+	final protected function _after_top_wrap() {
+		echo '<div class="tsfem-notice-wrap">';
+		\do_action( 'tsfem_notices' );
+		echo '</div>';
+	}
+
+	/**
 	 * Enqueues styles and scripts in the admin area on the extension manager page.
 	 *
 	 * @since 1.0.0
@@ -137,7 +150,6 @@ trait UI {
 	final public function _enqueue_admin_scripts( $hook ) {
 
 		if ( $this->ui_hook === $hook ) {
-
 			//* Enqueue styles
 			\add_action( 'admin_print_styles-' . $this->ui_hook, [ $this, '_enqueue_admin_css' ], 11 );
 			//* Enqueue scripts

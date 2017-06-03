@@ -46,3 +46,5 @@ if ( $options ) {
 	?>
 </section>
 <?php
+
+$this->_after_top_wrap();

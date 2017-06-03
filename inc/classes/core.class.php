@@ -2031,6 +2031,66 @@ class Core {
 	}
 
 	/**
+	 * Generates dismissible notice.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 * @return string The dismissible error notice.
+	 */
+	final public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+
+		if ( empty( $message ) )
+			return '';
+
+		switch ( $type ) :
+			case 'success' :
+			case 'updated' :
+				$type = 'tsfem-notice-success';
+				break;
+
+			case 'warning' :
+				$type = 'tsfem-notice-warning';
+				break;
+
+			case 'error' :
+				$type = 'tsfem-notice-error';
+				break;
+
+			default :
+				$type = '';
+				break;
+		endswitch;
+
+		$a11y = $a11y ? ' tsfem-show-icon' : '';
+
+		$notice = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
+		$notice .= '<a class="hide-if-no-js tsfem-dismiss" title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
+		$notice .= $escape ? \esc_html( $message ) : $message;
+		$notice .= '</p></div>';
+
+		return $notice;
+	}
+
+	/**
+	 * Echos generated dismissible notice.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 */
+	final public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+		echo $this->get_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
+	}
+
+	/**
 	 * Sets admin menu links so the pages can be safely used within AJAX.
 	 *
 	 * Does not forge a callback function, instead, the callback returns an empty string.

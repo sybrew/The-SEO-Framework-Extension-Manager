@@ -39,3 +39,5 @@ $about = '<div class="tsfem-top-about tsfem-flex tsfem-flex-row"><div>' . \esc_h
 	?>
 </section>
 <?php
+
+$this->_after_top_wrap();

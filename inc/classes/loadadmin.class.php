@@ -41,8 +41,8 @@ final class LoadAdmin extends AdminPages {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-		\add_action( 'admin_notices', [ $this, 'check_external_blocking' ] );
 		\add_action( 'admin_notices', [ $this, 'do_activation_notice' ] );
+		\add_action( 'tsfem_notices', [ $this, 'check_external_blocking' ] );
 	}
 
 	/**
@@ -71,7 +71,7 @@ final class LoadAdmin extends AdminPages {
 					[ 'code' ]
 				);
 				//* Already escaped.
-				\the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
+				$this->do_dismissible_notice( $notice, 'error', true, false );
 			}
 		}
 	}
@@ -95,6 +95,6 @@ final class LoadAdmin extends AdminPages {
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		//* No a11y icon. Already escaped.
-		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
+		$this->do_dismissible_notice( $notice, 'success', false, false );
 	}
 }
