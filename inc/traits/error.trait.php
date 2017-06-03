@@ -59,8 +59,6 @@ trait Error {
 		$this->error_notice_option or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
 		\add_action( 'tsfem_notices', [ $this, '_do_error_notices' ] );
-
-		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ $this, '_get_dismissible_notice' ] );
 	}
 
 	/**
@@ -84,35 +82,6 @@ trait Error {
 			\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
 			$this->unset_error_notice();
 		}
-	}
-
-	/**
-	 * Send AJAX notices. If any.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	final public function _get_dismissible_notice() {
-
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
-			if ( \tsf_extension_manager()->can_do_settings() ) :
-
-				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-
-					$key = \tsf_extension_manager()->coalensce_var( $_POST['tsfem-error-key'], false );
-
-					if ( $key && ( $key = \absint( $key ) ) ) {
-						$_notice = $this->get_error_notice( $key );
-						$type = $_notice['type'];
-						$notice = \tsf_extension_manager()->get_dismissible_notice( $_notice['message'], $_notice['type'], true, false );
-					}
-				}
-
-				\tsf_extension_manager()->send_json( compact( 'type', 'notice' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
-			endif;
-		endif;
-
-		exit;
 	}
 
 	/**
@@ -149,8 +118,11 @@ trait Error {
 	 */
 	final protected function get_error_notice( $option ) {
 
-		if ( is_array( $option ) )
+		if ( is_array( $option ) ) {
 			$key = key( $option );
+		} elseif ( is_scalar( $option ) ) {
+			$key = $option;
+		}
 
 		if ( empty( $key ) )
 			return '';
@@ -174,10 +146,10 @@ trait Error {
 
 		/* translators: 1: 'Error code:', 2: The error code */
 		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
-		$additional_info = $option[ $key ];
+		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? ' ' . $option[ $key ] : '';
 
 		/* translators: 1: Error code, 2: Error message, 3: Additional info */
-		$output = vsprintf( \esc_html__( '%1$s &mdash; %2$s %3$s', 'the-seo-framework-extension-manager' ),
+		$output = vsprintf( \esc_html__( '%1$s &mdash; %2$s%3$s', 'the-seo-framework-extension-manager' ),
 			[
 				sprintf( '<strong>%s</strong>', $status ),
 				$message,

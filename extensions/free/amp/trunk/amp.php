@@ -4,8 +4,6 @@
  */
 namespace TSF_Extension_Manager\Extension\AMP;
 
-break; // enforce bug.
-
 /**
  * Extension Name: AMP
  * Extension URI: https://premium.theseoframework.com/extensions/amp/

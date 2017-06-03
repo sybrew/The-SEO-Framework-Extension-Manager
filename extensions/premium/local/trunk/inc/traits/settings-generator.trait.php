@@ -579,7 +579,7 @@ trait Settings_Generator {
 	 */
 	final public function _wp_ajax_crop_image() {
 
-		if ( ! \check_ajax_referer( 'tsfem-upload-files', 'nonce', false ) || ! \current_user_can( 'upload_files' ) )
+		if ( ! \check_ajax_referer( 'tsfem-media-nonce', 'nonce', false ) || ! \current_user_can( 'upload_files' ) )
 			\wp_send_json_error();
 
 		$attachment_id = \absint( $_POST['id'] );

@@ -633,7 +633,7 @@ trait Extensions_Actions {
 
 		$compatibility = static::get_extension_compatibility( $extension );
 
-		//* bindec( '1111' )
+		//= bindec( '1111' )
 		$bit = 15;
 
 		//* Set first two bits ( 1100 );
@@ -672,11 +672,11 @@ trait Extensions_Actions {
 
 		/**
 		 * @param array $compatibility : {
-		 *		key => int : {
-		 *			0: Not compatible.
-		 *			1: Version exceeeds tested check. Likely compatible.
-		 *			2: Compatible.
-		 *		}
+		 *   key => int : {
+		 *     0: Not compatible.
+		 *     1: Version exceeeds tested check. Likely compatible.
+		 *     2: Compatible.
+		 *   }
 		 * }
 		 */
 		$compatibility = [
@@ -817,7 +817,7 @@ trait Extensions_Actions {
 
 		if ( empty( $json ) ) {
 			//* json file contents are invalid.
-			throw new \Exception( 'Extension test file is invalid.', E_USER_ERROR );
+			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
 			$success[] = false;
 			goto end;
 		}
@@ -832,9 +832,9 @@ trait Extensions_Actions {
 
 			if ( is_array( $_file ) ) {
 				//* Facade.
-				foreach ( $_file as $f_file ) :
+				foreach ( $_file as $f_file ) {
 					$success[] = static::persist_include_extension( $base_path . $f_file, $_instance, $bits );
-				endforeach;
+				}
 			} else {
 				$success[] = static::persist_include_extension( $base_path . $_file, $_instance, $bits );
 			}
@@ -980,14 +980,13 @@ trait Extensions_Actions {
 		$error['message'] = static::clean_error_message( $error['message'], $error );
 
 		$error_notice = $error_type . ' ' . \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
-		$advanced_error_notice = '<strong>Error message:</strong> <br>' . \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
+		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
 		if ( defined( 'DOING_AJAX' ) ) {
-			$notice = sprintf( '<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s">%s</span>', \wp_strip_all_tags( $advanced_error_notice ), \esc_attr( $advanced_error_notice ), $error_notice );
-
 			$status = [
 				'success' => 10005,
-				'notice' => $notice,
+				'notice' => $error_notice,
+				'topNotice' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
 			];
 
 			/**
@@ -999,9 +998,10 @@ trait Extensions_Actions {
 			exit;
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
+			$error_notice .= '<p><strong>Error message:</strong> <br>' . $advanced_error_notice . '</p>';
 
 			//* Already escaped.
-			\wp_die( $error_notice . '<p>' . $advanced_error_notice . '</p>', 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] );
+			\wp_die( $error_notice, 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] );
 		}
 	}
 

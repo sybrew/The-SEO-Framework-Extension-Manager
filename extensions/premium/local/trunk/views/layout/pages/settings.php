@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		 * of elements are loaded. Shaves off 25% load time on high-end machines.
 		 */
 		$count = $this->get_option( 'depAmount', 20 );
-		$i_defer = 20;
+		$i_defer = 10;
 		$defer = $count > $i_defer;
 
 		$defer and printf( '<div class="%s" id="tsfem-e-local-deps-loading" style=padding-top:4vh><span></span></div>', 'tsfem-flex-status-loading tsfem-flex tsfem-flex-center' );

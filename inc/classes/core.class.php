@@ -116,6 +116,10 @@ class Core {
 		 */
 		$this->error_notice_option = 'tsfem_error_notice_option';
 
+		//* Ajax listener for error notice catching.
+		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ $this, '_wp_ajax_get_dismissible_notice' ] );
+
+		//* Listener for updates.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 	}
@@ -215,6 +219,47 @@ class Core {
 			return $cache;
 
 		return $cache = $this->verify_options_hash( serialize( $this->get_all_options() ) );
+	}
+
+	/**
+	 * Send AJAX notices. If any.
+	 *
+	 * @since 1.3.0
+	 * @uses trait TSF_Extension_Manager\Extension_Options\Error
+	 * @access private
+	 */
+	final public function _wp_ajax_get_dismissible_notice() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+
+
+					$key = $this->coalesce_var( $_POST['tsfem-notice-key'], false );
+					$hasmsg = ! empty( $_POST['tsfem-notice-has-msg'] );
+					$key = \absint( $key );
+
+					error_log( var_export( $_POST, true ) );
+					error_log( var_export( $_POST['tsfem-notice-has-msg'], true ) );
+
+					if ( $key ) {
+						$_notice = $this->get_error_notice( $key );
+
+						if ( is_array( $_notice ) ) {
+							$msg = $hasmsg ? '' : $_notice['message'];
+							$type = $_notice['type'];
+
+							$notice = $this->get_dismissible_notice( $msg, $type, true, false );
+							$_type = $msg ? 'success' : 'failure';
+						}
+					}
+				}
+
+				$this->send_json( compact( 'type', 'notice', 'key' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
+			endif;
+		endif;
+
+		exit;
 	}
 
 	/**
@@ -2043,9 +2088,6 @@ class Core {
 	 * @return string The dismissible error notice.
 	 */
 	final public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-
-		if ( empty( $message ) )
-			return '';
 
 		switch ( $type ) :
 			case 'success' :

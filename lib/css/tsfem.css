@@ -4,13 +4,13 @@
 /* # Start Normalize.
 /*----------------------------------------------------------------------------*/
 
-/* ## Notices.
+/* ## Notices: Core + self.
 /*--------------------------------------*/
 .wrap.tsfem .notice,
 .tsfem-notice {
 	margin: 0 0 20px;
-	-webkit-box-shadow: 0 1px 2px 1px #ccc;
-	box-shadow: 0 1px 2px 1px #ccc;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
 	border-radius: 3px;
 }
 
@@ -19,17 +19,14 @@
 	margin-top: 18px;
 }
 
-/* ### Dismissible notices.
+/* ### Notices: Self.
 /*--------------------------------------*/
+
 .tsfem-notice {
 	position: relative;
 	background: #fff;
 	border-left: 4px solid #fff;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
-	box-shadow: 0 1px 3px 1px #ccc;
-	margin: 0 0 20px;
 	padding: 1px 12px;
-	border-radius: 3px;
 }
 
 .tsfem-notice p {
@@ -81,6 +78,8 @@
 	content: "\f534";
 }
 
+/* ### Dismissible notices.
+/*--------------------------------------*/
 a.tsfem-dismiss {
 	position: absolute;
 	top: 0;
@@ -439,7 +438,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-button-primary,
-.tsfem-button-primary:disabled,
 .tsfem-button-primary:focus {
 	background: #05809e;
 	-webkit-box-shadow: 0 .2em 0 #005c7a;
