@@ -173,7 +173,13 @@ class AdminPages extends AccountActivation {
 		//* Initialize error interface.
 		$this->init_errors();
 
-		//* Add something special for Vivaldi
+		/**
+		 * Revalidate subscription. See \TSF_Extension_Manager\AccountActivation
+		 * Requires \TSF_Extension_Manager\Error
+		 */
+		$this->revalidate_subscription();
+
+		//* Add something special for Vivaldi and Android.
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		//* Add footer output.
@@ -201,6 +207,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	public function _init_extension_manager_page() {
+
 		?>
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php

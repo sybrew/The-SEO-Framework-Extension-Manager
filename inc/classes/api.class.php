@@ -42,6 +42,72 @@ class API extends Core {
 	private function construct() { }
 
 	/**
+	 * Fetches status API request and returns response data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $args : {
+	 *		'licence_key'      => string The license key.
+	 *		'activation_email' => string The activation email.
+	 * }
+	 * @return bool|array {
+	 *		Always: False on failure.
+	 *		Deactivation: True on succesful deactivation.
+	 *		Activation/Status: Reponse data.
+	 * }
+	 */
+	protected function handle_request( $type = 'status', $args = [] ) {
+
+		if ( empty( $args['licence_key'] ) ) {
+			$this->set_error_notice( [ 101 => '' ] );
+			return false;
+		}
+
+		if ( empty( $args['activation_email'] ) ) {
+			$this->set_error_notice( [ 102 => '' ] );
+			return false;
+		}
+
+		$this->activation_key = trim( $args['licence_key'] );
+		$this->activation_email = \sanitize_email( $args['activation_email'] );
+
+		switch ( $type ) :
+			case 'status' :
+			case 'activation' :
+				break;
+
+			case 'deactivation' :
+				if ( false === $this->is_plugin_activated() ) {
+					$this->kill_options();
+					$this->set_error_notice( [ 103 => '' ] );
+					return false;
+				}
+
+				if ( false === $this->is_premium_user() ) {
+					return $this->do_free_deactivation();
+				}
+				//* Premium deactivation propagates through API, so nothing happens here.
+				break;
+
+			default :
+				$this->set_error_notice( [ 104 => '' ] );
+				return false;
+				break;
+		endswitch;
+
+		$request = [
+			'request'     => $type,
+			'licence_key' => $this->activation_key,
+			'email'       => $this->activation_email,
+		];
+
+		$response = $this->get_api_response( $request );
+		$response = $this->handle_response( $type, $response, WP_DEBUG );
+
+		return $response;
+	}
+
+	/**
 	 * Returns domain host of plugin holder.
 	 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
 	 * so only the host portion of the URL can be sent. For example the host portion might be

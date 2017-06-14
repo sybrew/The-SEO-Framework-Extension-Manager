@@ -15,9 +15,9 @@ if ( $options ) {
 		$account_text = \__( 'My Account', 'the-seo-framework-extension-manager' );
 		$account_title = \__( 'View account', 'the-seo-framework-extension-manager' );
 
-		if ( isset( $status['data']['end_date'] ) ) {
+		if ( isset( $status['status_extra']['end_date'] ) ) {
 			//* UTC.
-			$then = strtotime( $status['data']['end_date'] );
+			$then = strtotime( $status['status_extra']['end_date'] );
 			$in_four_weeks = strtotime( '+4 week' );
 			$about_to_expire = $then < $in_four_weeks;
 

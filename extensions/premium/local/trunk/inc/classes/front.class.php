@@ -40,7 +40,7 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
  * @since 1.0.0
  * @access private
  */
-final class Front {
+final class Front implements \ArrayAccess, \Iterator {
 	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
 
 	private function construct() { }

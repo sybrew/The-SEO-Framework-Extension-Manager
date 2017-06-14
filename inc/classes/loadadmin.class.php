@@ -94,7 +94,7 @@ final class LoadAdmin extends AdminPages {
 		$notice_link = '<a href="' . \esc_url( $url ) . '" title="' . \esc_attr( $title ) . '" target="_self">' . \esc_html( $title ) . '</a>';
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
-		//* No a11y icon. Already escaped.
-		$this->do_dismissible_notice( $notice, 'success', false, false );
+		//* No a11y icon. Already escaped. Use TSF as it loads styles.
+		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
 	}
 }

@@ -265,11 +265,14 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $instance Optional. When supplied it will delete entered instance.
 	 * @return bool
 	 */
-	final protected function delete_options_instance() {
+	final protected function delete_options_instance( $instance = '' ) {
 
-		\delete_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
+		$instance = $instance ?: $this->get_option( '_instance' );
+
+		\delete_option( 'tsfem_i_' . $instance );
 
 		return true;
 	}
@@ -318,7 +321,7 @@ trait Options {
 	 * @return bool True when hash passes, false on failure.
 	 */
 	final public function verify_options_hash( $data ) {
-		return hash_equals( $this->hash( $data, 'auth' ), $this->get_options_instance() );
+		return hash_equals( $this->hash( $data, 'auth' ), (string) $this->get_options_instance() );
 	}
 
 	/**

@@ -205,21 +205,23 @@ final class Layout extends Secure_Abstract {
 
 		$account = self::$account;
 
-		$unknown = \__( 'Unknown', 'the-seo-framework-extension-manager' );
-		$decoupled = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
+		$i18n_unknown = \__( 'Unknown', 'the-seo-framework-extension-manager' );
+		$i18n_decoupled = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 
 		$email = isset( $account['email'] ) ? $account['email'] : '';
 		$data = isset( $account['data'] ) ? $account['data'] : '';
-		$level = isset( $account['level'] ) ? $account['level'] : $unknown;
+		$level = ! empty( $account['level'] ) ? $account['level'] : $i18n_unknown;
 		$domain = '';
 		$end_date = '';
+		$payment_date = '';
 
 		if ( $data ) {
 			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
-				$level = $decoupled;
+				$level = $i18n_decoupled;
 			} else {
 				//* UTC.
 				$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
+				$payment_date = isset( $data['status']['status_extra']['payment_date'] ) ? $data['status']['status_extra']['payment_date'] : '';
 				$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
 			}
 		}
@@ -229,32 +231,45 @@ final class Layout extends Secure_Abstract {
 		if ( $email )
 			$output .= static::wrap_title_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
-		if ( $level ) {
-			$_class = in_array( $level, [ $unknown, $decoupled ], true ) ? 'tsfem-error' : 'tsfem-success';
+		switch ( $level ) :
+			case 'Premium' :
+				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
+				$_class = 'tsfem-success';
+				break;
 
-			if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
-				/**
-				 * @TODO bugfix/make consistent/put in function/put in action?
-				 * It only refreshes when a premium extension is being activated.
-				 * Otherwise, it will continue to count into negatives.
-				 *
-				 * This might prevent rechecking "decoupled" websites... which in that case is a bug.
-				 */
-				$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
+			case 'Free' :
+				$_level = \__( 'Free', 'the-seo-framework-extension-manager' );
+				$_class = 'tsfem-success';
+				break;
 
-				if ( $next_check_min > 0 ) {
-					$level_desc = sprintf(
-						\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
-						$next_check_min
-					);
-					$_class .= ' tsfem-has-hover-balloon';
-				}
+			default :
+				$_level = $level;
+				$_class = 'tsfem-error';
+				break;
+		endswitch;
+
+		if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
+			/**
+			 * @TODO bugfix/make consistent/put in function/put in action?
+			 * It only refreshes when a premium extension is being activated.
+			 * Otherwise, it will continue to count into negatives.
+			 *
+			 * This might prevent rechecking "decoupled" websites... which in that case is a bug.
+			 */
+			$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
+
+			if ( $next_check_min > 0 ) {
+				$level_desc = sprintf(
+					\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
+					$next_check_min
+				);
+				$_class .= ' tsfem-has-hover-balloon';
 			}
-
-			$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
-			$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
-			$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 		}
+
+		$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
+		$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
+		$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
@@ -316,6 +331,38 @@ final class Layout extends Secure_Abstract {
 			);
 
 			$output .= static::wrap_title_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
+		endif;
+
+		if ( $payment_date ) :
+			$date_until = strtotime( $payment_date );
+			$now = time();
+
+			$difference = $date_until - $now;
+			$_class = 'tsfem-success';
+			$payment_in = '';
+
+			if ( $difference < 0 ) {
+				//* Processing.
+				$payment_in = \__( 'Payment processing', 'the-seo-framework-extension-manager' );
+				$_class = 'tsfem-warning';
+			} elseif ( $difference < WEEK_IN_SECONDS ) {
+				$payment_in = \__( 'Less than a week', 'the-seo-framework-extension-manager' );
+			} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
+				$payment_in = \__( 'Less than two weeks', 'the-seo-framework-extension-manager' );
+			} else {
+				$n = round( $difference / MONTH_IN_SECONDS );
+				$payment_in = sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
+			}
+
+			$payment_date = isset( $payment_date ) ? date( 'Y-m-d', strtotime( $payment_date ) ) : '';
+			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y', strtotime( $payment_date ) ) : '';
+			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
+			$payment_in = sprintf(
+				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
+				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $payment_date ), \esc_html( $end_date_i18n ), \esc_html( $payment_in )
+			);
+
+			$output .= static::wrap_title_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
 		endif;
 
 		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );

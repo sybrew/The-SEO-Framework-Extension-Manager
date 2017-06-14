@@ -34,6 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
+ * @TODO Move trait items to own static class.
  */
 if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 	\TSF_Extension_Manager\_load_trait( 'extensions-layout' );
@@ -50,7 +51,8 @@ if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
  *
  * @since 1.0.0
  * @access private
- * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
+ *         You'll need to invoke the TSF_Extension_Manager\Core verification handler.
+ *         Which is impossible.
  * @final Please don't extend this.
  */
 final class Extensions extends Secure_Abstract {
@@ -75,7 +77,6 @@ final class Extensions extends Secure_Abstract {
 			default :
 				break;
 		endswitch;
-
 	}
 
 	/**
@@ -86,6 +87,7 @@ final class Extensions extends Secure_Abstract {
 	 * @param string $type Required. The instance type. Passed by reference.
 	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array $bits Required. The instance bits.
+	 * @return void
 	 */
 	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
@@ -93,31 +95,31 @@ final class Extensions extends Secure_Abstract {
 
 		if ( empty( $type ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
-		} else {
-
-			self::set( '_wpaction' );
-
-			switch ( $type ) :
-				case 'overview' :
-				case 'activation' :
-				case 'list' :
-				case 'load' :
-				case 'ajax_layout' :
-					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die();
-					self::set( '_type', $type );
-					static::set_up_variables();
-					break;
-
-				case 'reset' :
-					self::reset();
-					break;
-
-				default :
-					self::reset();
-					self::invoke_invalid_type( __METHOD__ );
-					break;
-			endswitch;
+			return;
 		}
+
+		self::set( '_wpaction' );
+
+		switch ( $type ) :
+			case 'overview' :
+			case 'activation' :
+			case 'list' :
+			case 'load' :
+			case 'ajax_layout' :
+				\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die();
+				self::set( '_type', $type );
+				static::set_up_variables();
+				break;
+
+			case 'reset' :
+				self::reset();
+				break;
+
+			default :
+				self::reset();
+				self::invoke_invalid_type( __METHOD__ );
+				break;
+		endswitch;
 	}
 
 	/**
@@ -127,7 +129,7 @@ final class Extensions extends Secure_Abstract {
 	 *
 	 * @param string $type Determines what to get.
 	 * @param string $slug The extension slug. Required with AJAX.
-	 * @return string
+	 * @return string|bool False on failure. String on success.
 	 */
 	public static function get( $type = '', $slug = '' ) {
 
@@ -197,7 +199,7 @@ final class Extensions extends Secure_Abstract {
 	 * Removes items from extension list based on $what and website conditions.
 	 *
 	 * @since 1.0.0
-	 * @todo clean this up and test again. It works for now.
+	 * @since 1.3.0 : Now uses its own sorting system, speeding it up by roughly 40 times.
 	 *
 	 * @param array $extensions The extension list.
 	 * @param string|array $what What to filter out of the list.
@@ -205,13 +207,17 @@ final class Extensions extends Secure_Abstract {
 	 */
 	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
 
+		//* Temporarily. Exchange for count( $what ) > 1
 		if ( is_array( $what ) ) {
-			foreach ( $what as $filter )
-				$extensions = static::filter_extensions( $extensions, $filter );
+			foreach ( $what as $w ) {
+				//* Reassigns and retests itself until filtered.
+				$extensions = static::filter_extensions( $extensions, $w );
+			}
 
 			return $extensions;
 		}
 
+		//* Temporarily check. Will be substituted by new functions that pass these as filters.
 		if ( 'maybe_network' === $what ) {
 			$network_mode = \tsf_extension_manager()->is_plugin_in_network_mode();
 
@@ -223,8 +229,33 @@ final class Extensions extends Secure_Abstract {
 			$filters = [ 'network' => '1' ];
 		} elseif ( 'single' === $what ) {
 			$filters = [ 'network' => '0' ];
+		} else {
+			return $extensions;
 		}
 
-		return \wp_list_filter( $extensions, $filters, 'AND' );
+		$_extensions = [];
+		$_to_unset = [];
+
+		foreach ( $filters as $k => $v ) {
+			$_test = array_column( $extensions, $k, 'slug' );
+			foreach ( $_test as $_slug => $_compare ) {
+				if ( $_compare === $v ) {
+					$_extensions[] = $_slug;
+				} else {
+					$_to_unset[] = $_slug;
+				}
+			}
+		}
+
+		foreach ( $_to_unset as $slug ) {
+			unset( $_extensions[ $slug ] );
+		}
+
+		$output = [];
+		foreach ( $_extensions as $slug ) {
+			$output[ $slug ] = $extensions[ $slug ];
+		}
+
+		return $output;
 	}
 }

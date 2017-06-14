@@ -114,6 +114,7 @@ a.tsfem-dismiss:hover {
 /*--------------------------------------*/
 
 .tsfem-flex-status-loading > span {
+	display: inline-block;
 	font-size: 30px;
 	text-align: center;
 }
@@ -1458,6 +1459,9 @@ h5.tsfem-extension-type {
 /* # Start JavaScript.
 /*----------------------------------------------------------------------------*/
 
+/* ## Tooltips / Balloons.
+/*----------------------------------------------------------------------------*/
+
 .tsfem-desc-balloon {
 	position: absolute;
 	padding: 0;
@@ -1481,6 +1485,11 @@ h5.tsfem-extension-type {
 	flex-direction: row;
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
+}
+
+.tsfem-desc-balloon-down {
+	bottom: initial;
+	top: 0;
 }
 
 .tsfem-desc-balloon > span {
@@ -1520,6 +1529,11 @@ h5.tsfem-extension-type {
 	justify-content: flex-start;
 }
 
+.tsfem-desc-balloon-down > span {
+	top: initial;
+	bottom: 0;
+}
+
 .tsfem-desc-balloon > span * {
 	white-space: pre;
 	overflow: auto;
@@ -1542,6 +1556,16 @@ h5.tsfem-extension-type {
 	z-index: 9999998;
 	left: 0;
 }
+
+.tsfem-desc-balloon-down > div {
+	border-top: none;
+	border-bottom: 12px solid #424242;
+	bottom: initial;
+	top: -8px;
+}
+
+/* ## Flipping descriptions
+/*----------------------------------------------------------------------------*/
 
 .tsfem-flip-hide-down,
 .tsfem-flip-hide-up {

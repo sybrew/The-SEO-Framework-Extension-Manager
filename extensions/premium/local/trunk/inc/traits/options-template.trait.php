@@ -68,24 +68,39 @@ trait Options_Template {
 	 *    }
 	 * }
 	 */
-	function get_departments_head_fields() {
+	function get_departments_fields() {
 		return [
-			'depAmount' => [
-				'_default' => 1,
+			'department' => [
+				'_default' => null,
 				'_edit' => true,
 				'_ret' => '',
 				'_req' => false,
-				'_type' => 'number',
-				'_desc' => [
-					\__( 'Set number of departments', '' ),
-					\__( 'Each department must have its own publicly recognizable name and type.', '' ),
-					\__( 'For example, if you have a small shop inside your restaurant, then set two departments.', '' ),
+				'_type' => 'iterate_main',
+				'_desc' => [],
+				'_iterate_selector' => [
+					'depAmount' => [
+						'_default' => 1,
+						'_edit' => true,
+						'_ret' => 'd',
+						'_req' => false,
+						'_type' => 'number',
+						'_desc' => [
+							\__( 'Set number of departments', '' ),
+							\__( 'Each department must have its own publicly recognizable name and type.', '' ),
+							\__( 'For example, if you have a small shop inside your restaurant, then set two departments.', '' ),
+						],
+						'_range' => [
+							0,
+							'',
+							1,
+						],
+					],
 				],
-				'_range' => [
-					0,
-					'',
-					1,
+				'_iterator_title' => [
+					\__( 'Main Department', '' ),
+					\__( 'Department %d', '' ),
 				],
+				'_fields' => $this->get_global_department_fields(),
 			],
 		];
 	}
@@ -167,14 +182,14 @@ trait Options_Template {
 			'@id' => [
 				'_default' => null,
 				'_edit' => false,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => true,
 				'_type' => 'text',
 			],
 			'address' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'array',
+				'_ret' => '',
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
@@ -198,7 +213,7 @@ trait Options_Template {
 			'telephone' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'tel',
 				'_desc' => [
@@ -222,13 +237,14 @@ trait Options_Template {
 			'openingHoursSpecification' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'array',
+				'_ret' => '',
 				'_req' => false,
-				'_type' => 'multi', // TODO,
+				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Department opening hours', '' ),
+					\__( 'Hours during which the business location is open.' ),
 				],
-			//	'_fields' => $this->get_opening_hours_fields(), // TODO
+				'_fields' => $this->get_opening_hours_fields(),
 			],
 			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'menu' => [
@@ -245,7 +261,7 @@ trait Options_Template {
 			'reservations' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'array',
+				'_ret' => '',
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
@@ -269,7 +285,7 @@ trait Options_Template {
 			'servesCuisine' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => false, // Must be true if RESTAURANT.
 				'_type' => 'select',
 				'_desc' => [
@@ -286,7 +302,7 @@ trait Options_Template {
 			'streetaddress' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'text',
 				'_desc' => [
@@ -298,7 +314,7 @@ trait Options_Template {
 			'addressLocality' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
@@ -308,7 +324,7 @@ trait Options_Template {
 			'addressRegion' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'text',
 				'_desc' => [
@@ -319,7 +335,7 @@ trait Options_Template {
 			'postalCode' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
@@ -329,7 +345,7 @@ trait Options_Template {
 			'addressCountry' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => true,
 				'_type' => 'select',
 				'_desc' => [
@@ -345,7 +361,7 @@ trait Options_Template {
 			'latitude' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => '%.7F',
 				'_req' => false,
 				'_type' => 'number',
 				'_range' => [
@@ -362,7 +378,7 @@ trait Options_Template {
 			'longitude' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => '%.7F',
 				'_req' => false,
 				'_type' => 'number',
 				'_range' => [
@@ -2100,14 +2116,183 @@ trait Options_Template {
 		];
 	}
 
+	function get_opening_hours_fields() {
+		return [
+			'openingHoursSpecification' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => 'array',
+				'_req' => false,
+				'_type' => 'iterate',
+				'_desc' => [],
+				'_iterate_selector' => $this->get_opening_hours_iterator_fields(),
+				'_iterator_title' => [
+					\__( 'Opening Hours %d', '' ),
+				],
+				'_fields' => $this->get_opening_hours_action_fields(),
+			],
+		];
+	}
+
+	function get_opening_hours_iterator_fields() {
+		return [
+			'openingHoursSpeficicationCount' => [
+				'_default' => 1, // TODO set to 0
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'number',
+				'_desc' => [
+					\__( 'Amount of times', '' ),
+					\__( 'When opening times fluctuate, change this number to specify more times.', '' ),
+					\__( 'Set to 0 or leave empty if unspecified.', '' ),
+				],
+				'_range' => [
+					0,
+					7,
+					1,
+				],
+			],
+		];
+	}
+
+	function get_opening_hours_action_fields() {
+		return [
+			'dayOfWeek' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'multi',
+				'_desc' => [
+					\__( 'Applied days', '' ),
+					\__( 'Select the days from and to which the opening and closing hours specify to.', '' ),
+				],
+				'_fields' => $this->get_opening_hours_days_fields(),
+			],
+			'isOpen' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => 'b',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'State of department', '' ),
+					\__( 'Set whether the department is open or closed on the applied days.', '' ),
+				],
+				'_select' => [
+					[
+						0,
+						\__( 'Open', '' ),
+					],
+					[
+						1,
+						\__( 'Closed', '' ),
+					],
+				],
+			],
+			'opens' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'time',
+				'_req' => false,
+				'_type' => 'time',
+				'_desc' => [
+					\__( 'Opening time', '' ),
+					\__( 'Time when the business location opens.', '' ),
+					\__( 'Specify the local time.', '' ),
+				],
+			],
+			'closes' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'time',
+				'_req' => false,
+				'_type' => 'time',
+				'_desc' => [
+					\__( 'Closing time', '' ),
+					\__( 'Time when the business location closes.', '' ),
+					\__( 'Specify the local time.', '' ),
+				],
+			],
+		];
+	}
+
+	function get_opening_hours_days_fields() {
+		return [
+			'dayOfWeekFrom' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'From', '' ),
+					\__( 'The opening and closing times apply from this day.', '' ),
+				],
+				'_select' => $this->get_days_fields(),
+			],
+			'dayOfWeekTo' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'To', '' ),
+					\__( 'The opening and closing times apply to this day.', '' ),
+					\__( 'Select the same day if the times apply to a single day.', '' ),
+				],
+				'_select' => $this->get_days_fields(),
+			],
+		];
+	}
+
+	function get_days_fields() {
+		return [
+			[
+				'',
+				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+			],
+			[
+				'Monday',
+				\__( 'Monday', '' ),
+			],
+			[
+				'Tuesday',
+				\__( 'Tuesday', '' ),
+			],
+			[
+				'Wednesday',
+				\__( 'Wednesday', '' ),
+			],
+			[
+				'Thursday',
+				\__( 'Thursday', '' ),
+			],
+			[
+				'Friday',
+				\__( 'Friday', '' ),
+			],
+			[
+				'Saturday',
+				\__( 'Saturday', '' ),
+			],
+			[
+				'Sunday',
+				\__( 'Sunday', '' ),
+			],
+		];
+	}
+
 	function get_reservation_fields() {
 		return [
 			'acceptsReservations' => [
-				'_default' => '',
+				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 'array',
 				'_req' => false,
-				'_type' => 'select',
+				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Accept Reservations', '' ),
 					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.' ),

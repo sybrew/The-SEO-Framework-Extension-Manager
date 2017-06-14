@@ -17,45 +17,11 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		<div class="tsfem-pane-inner-pad">
 			<h4 class="tsfem-form-title"><?php \esc_html_e( 'Set departments', 'the-seo-framework-extension-manager' ); ?></h4>
 			<span class="tsfem-description"><?php \esc_html_e( 'Fill in these fields as accurately as possible.' ); ?></span><br>
-			<span class="tsfem-description"><?php \esc_html_e( 'If a field doesn\'t allow a right answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span>
+			<span class="tsfem-description"><?php \esc_html_e( 'If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span>
 		</div>
 		<div class="tsfem-pane-inner-pad">
-			<?php $this->_fields( $this->get_departments_head_fields(), 'echo' ); ?>
+			<?php $this->_fields( $this->get_departments_fields(), 'echo' ); ?>
 		</div>
-		<?php
-		/**
-		 * Defer visual rendering of elements to prevent excessive painting if lots
-		 * of elements are loaded. Shaves off 25% load time on high-end machines.
-		 */
-		$count = $this->get_option( 'depAmount', 20 );
-		$i_defer = 10;
-		$defer = $count > $i_defer;
-
-		$defer and printf( '<div class="%s" id="tsfem-e-local-deps-loading" style=padding-top:4vh><span></span></div>', 'tsfem-flex-status-loading tsfem-flex tsfem-flex-center' );
-		?>
-		<div class="tsfem-e-local-collapse-wrap" id="tsfem-e-local-deps-overview" <?php $defer and print 'style=display:none'; ?>>
-		<?php
-		$dep_main = \__( 'Main Department', 'the-seo-framework-extension-manager' );
-		/* translators: %d is department number */
-		$dep_sub = \__( 'Department %d', 'the-seo-framework-extension-manager' );
-
-		$_fields = $this->get_global_department_fields();
-
-		for ( $it = 0; $it < $count; $it++ ) {
-			$title = $it ? sprintf( $dep_sub, $it + 1 ) : $dep_main;
-			$id = "dep-$it";
-
-			//* Already escaped.
-			echo $this->get_collapse_wrap( 'start', $it, $title, $id );
-			$this->_fields( $_fields, 'echo', $id );
-			//* Already escaped.
-			echo $this->get_collapse_wrap( 'end' );
-		}
-		?>
-		</div>
-		<?php
-		$defer and print '<script>document.getElementById("tsfem-e-local-deps-loading").outerHTML=null;document.getElementById("tsfem-e-local-deps-overview").style=null;</script>';
-		?>
 	</div>
 </div>
 <?php

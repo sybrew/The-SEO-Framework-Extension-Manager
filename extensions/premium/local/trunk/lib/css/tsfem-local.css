@@ -8,6 +8,18 @@
 	padding: 0 20px 20px;
 }
 
+.tsfem-e-local-collapse-sub-wrap {
+	padding-top: 15px;
+}
+
+.tsfem-e-local-collapse-sub-wrap .tsfem-e-local-collapse {
+	padding: 0 0 15px;
+}
+
+.tsfem-e-local-collapse-sub-wrap .tsfem-e-local-collapse:last-of-type {
+	padding: 0;
+}
+
 .tsfem-e-local-collapse > input[type="checkbox"] {
 	position: absolute;
 	width: 0;
@@ -200,6 +212,7 @@ h4.tsfem-e-local-multi-title {
 }*/
 
 .tsfem-e-local-multi-setting,
+.tsfem-e-local-iterator-setting,
 .tsfem-e-local-flex-setting {
 	width: 100%;
 	-webkit-flex-direction: row;
@@ -208,16 +221,20 @@ h4.tsfem-e-local-multi-title {
 
 .tsfem-e-local-multi-setting-label,
 .tsfem-e-local-multi-setting-input,
+.tsfem-e-local-iterator-setting-label,
+.tsfem-e-local-iterator-setting-input,
 .tsfem-e-local-flex-setting-label,
 .tsfem-e-local-flex-setting-input {
 	background-color: #fff;
 	padding: 15px 12px;
 	-webkit-flex: 10 1 350px;
 	flex: 10 1 350px;
+	-webkit-box-shadow: 0 0 0 1px #e9e9e9;
 	box-shadow: 0 0 0 1px #e9e9e9;
 }
 
 .tsfem-e-local-multi-setting-label,
+.tsfem-e-local-iterator-setting-label,
 .tsfem-e-local-flex-setting-label {
 	background-color: #f9f9f9;
 	-webkit-flex: 1 1 250px;
@@ -225,6 +242,7 @@ h4.tsfem-e-local-multi-title {
 }
 
 .tsfem-e-local-multi-setting-label-item,
+.tsfem-e-local-iterator-setting-label-item,
 .tsfem-e-local-flex-setting-label-item {
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
@@ -238,23 +256,27 @@ h4.tsfem-e-local-multi-title {
 }
 
 .tsfem-e-local-multi-setting-input,
+.tsfem-e-local-iterator-setting-input,
 .tsfem-e-local-flex-setting-input,
 .tsfem-e-local-flex-setting-label-inner-wrap {
 	-webkit-justify-content: center;
 	justify-content: center;
 }
 
-.tsfem-e-local-multi-setting-label-inner-wrap {
+.tsfem-e-local-multi-setting-label-inner-wrap,
+.tsfem-e-local-iterator-setting-label-inner-wrap {
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
 }
 
 .tsfem-e-local-multi-setting-label-item > *,
+.tsfem-e-local-iterator-setting-label-item > *,
 .tsfem-e-local-flex-setting-label-item > * {
 	margin-right: 4px;
 }
 
 .tsfem-e-local-multi-setting-label-item > *:last-child,
+.tsfem-e-local-iterator-setting-label-item > *:last-child,
 .tsfem-e-local-flex-setting-label-item > *:last-child {
 	margin-right: 0;
 }

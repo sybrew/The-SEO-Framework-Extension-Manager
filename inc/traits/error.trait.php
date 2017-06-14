@@ -144,7 +144,7 @@ trait Error {
 				break;
 		endswitch;
 
-		/* translators: 1: 'Error code:', 2: The error code */
+		/* translators: 1: 'Error code:', 2: The error code. */
 		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
 		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? ' ' . $option[ $key ] : '';
 
@@ -281,6 +281,17 @@ trait Error {
 			case 801 :
 				$message = \esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
+				break;
+
+			case 901 :
+				$message = \esc_html__( 'Your subscription has expired or has been deactivated remotely.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 902 :
+				/* translators: %s = My Account */
+				$message = sprintf( \esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$type = 'warning';
 				break;
 
 			case 2001 :

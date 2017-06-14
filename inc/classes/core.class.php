@@ -239,9 +239,6 @@ class Core {
 					$hasmsg = ! empty( $_POST['tsfem-notice-has-msg'] );
 					$key = \absint( $key );
 
-					error_log( var_export( $_POST, true ) );
-					error_log( var_export( $_POST['tsfem-notice-has-msg'], true ) );
-
 					if ( $key ) {
 						$_notice = $this->get_error_notice( $key );
 
@@ -1292,25 +1289,27 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $type The support link type. Accepts 'premium' or anything else for free.
-	 * @param bool $love Whether to show a heart after the button text.
+	 * @param bool $icon Whether to show a heart/star after the button text.
 	 * @return string The Support Link.
 	 */
-	final public function get_support_link( $type = 'free', $love = true ) {
+	final public function get_support_link( $type = 'free', $icon = true ) {
 
 		if ( 'premium' === $type ) {
-			$url = $this->get_activation_url( 'support/' );
+			$url = 'https://premium.theseoframework.com/support/';
 
 			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button-primary tsfem-button-premium tsfem-button-primary-bright tsfem-button-star' : 'tsfem-button tsfem-button-premium tsfem-button-primary-bright';
+			$class = 'tsfem-button-primary tsfem-button-primary-bright';
+			$class .= $icon ? ' tsfem-button-star' : '';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
 
 			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
 
-			$class = $love ? 'tsfem-button-primary tsfem-button-love' : 'tsfem-button-primary';
+			$class = 'tsfem-button-primary';
+			$class .= $icon ? ' tsfem-button-love' : '';
 		}
 
 		return $this->get_link( [
@@ -1592,7 +1591,7 @@ class Core {
 
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
-				if ( false === $this->validate_remote_subscription_license() ) {
+				if ( 0 === $this->validate_remote_subscription_license() ) {
 					$ajax or $this->set_error_notice( [ 10004 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
 				}

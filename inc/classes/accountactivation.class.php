@@ -109,72 +109,6 @@ class AccountActivation extends Panes {
 	}
 
 	/**
-	 * Fetches status API request and returns response data.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $args : {
-	 *		'licence_key'      => string The license key.
-	 *		'activation_email' => string The activation email.
-	 * }
-	 * @return bool|array {
-	 *		Always: False on failure.
-	 *		Deactivation: True on succesful deactivation.
-	 *		Activation/Status: Reponse data.
-	 * }
-	 */
-	protected function handle_request( $type = 'status', $args = [] ) {
-
-		if ( empty( $args['licence_key'] ) ) {
-			$this->set_error_notice( [ 101 => '' ] );
-			return false;
-		}
-
-		if ( empty( $args['activation_email'] ) ) {
-			$this->set_error_notice( [ 102 => '' ] );
-			return false;
-		}
-
-		$this->activation_key = trim( $args['licence_key'] );
-		$this->activation_email = \sanitize_email( $args['activation_email'] );
-
-		switch ( $type ) :
-			case 'status' :
-			case 'activation' :
-				break;
-
-			case 'deactivation' :
-				if ( false === $this->is_plugin_activated() ) {
-					$this->kill_options();
-					$this->set_error_notice( [ 103 => '' ] );
-					return false;
-				}
-
-				if ( false === $this->is_premium_user() ) {
-					return $this->do_free_deactivation();
-				}
-				//* Premium deactivation propagates through API, so nothing happens here.
-				break;
-
-			default :
-				$this->set_error_notice( [ 104 => '' ] );
-				return false;
-				break;
-		endswitch;
-
-		$request = [
-			'request'     => $type,
-			'licence_key' => $this->activation_key,
-			'email'       => $this->activation_email,
-		];
-
-		$response = $this->get_api_response( $request );
-		$response = $this->handle_response( $type, $response, WP_DEBUG );
-
-		return $response;
-	}
-
-	/**
 	 * Handles activation and returns status.
 	 *
 	 * @since 1.0.0
@@ -340,14 +274,14 @@ class AccountActivation extends Panes {
 	 * @TODO lower margin of error if server maintains stable.
 	 *
 	 * @param bool $moe Whether to allow a margin of error.
-	 *             May happen once every 60 days for 3 days.
+	 *             May happen once every 30 days for 3 days.
 	 * @return bool True on success. False on failure.
 	 */
 	protected function do_deactivation( $moe = false ) {
 
 		if ( $moe ) {
 			$expire = $this->get_option( 'moe', $nt = ( time() + DAY_IN_SECONDS * 3 ) );
-			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 60 ) ) {
+			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 30 ) ) {
 				$this->update_option( 'moe', $nt );
 				return false;
 			}
@@ -357,22 +291,79 @@ class AccountActivation extends Panes {
 	}
 
 	/**
+	 * Revalidate account status.
+	 *
+	 * @since 1.3.0
+	 * @see $this->validate_remote_subscription_license();
+	 *
+	 * @return int $this->validate_remote_subscription_license();
+	 */
+	protected function revalidate_subscription() {
+
+		$status = $this->validate_remote_subscription_license();
+
+		switch ( $status ) :
+			case 0 :
+				//= Already free.
+				break;
+
+			case 1 :
+				//= Used to be premium. Bummer.
+				$this->set_error_notice( [ 901 => '' ] );
+				$this->update_option( '_activation_level', 'Free' );
+				break;
+
+			case 2 :
+				//= Set 1 day timeout. Administrator has already been notified to fix this ASAP.
+				$this->do_deactivation( true );
+				// @TODO notify of timeout?
+				$this->set_error_notice( [ 902 => '' ] );
+				break;
+
+			case 3 :
+				//= Everything's OK. User gets notified through CP pane.
+				break;
+
+			case 4 :
+				//= Everything's superb.
+				break;
+		endswitch;
+
+		return $status;
+	}
+
+	/**
 	 * Validates local subscription status against remote through an API request.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now returns integer.
 	 *
-	 * @return bool True on success, false on failure.
+	 * @return int : {
+	 *   0 : Not subscribed.
+	 *   1 : Local Premium user.
+	 *   2 : Local Premium user. Remote Premium User.
+	 *   3 : Local Premium user. Remote Premium User. Instance verified.
+	 *   4 : Local Premium user. Remote Premium User. Instance verified. Domain verified.
+	 * }
 	 */
 	protected function validate_remote_subscription_license() {
 
 		$response = $this->get_remote_subscription_status();
 
-		if ( isset( $response['status_check'] ) && 'active' === $response['status_check'] )
-			if ( isset( $response['status_extra']['instance'] ) && $this->get_activation_instance() === $response['status_extra']['instance'] )
-				if ( isset( $response['status_extra']['activation_domain'] ) && $this->get_activation_site_domain() === $response['status_extra']['activation_domain'] )
-					return true;
+		if ( isset( $response['status_check'] ) ) {
+			if ( 'active' === $response['status_check'] ) {
+				if ( isset( $response['status_extra']['instance'] ) && $this->get_activation_instance() === $response['status_extra']['instance'] ) {
+					if ( isset( $response['status_extra']['activation_domain'] ) && $this->get_activation_site_domain() === $response['status_extra']['activation_domain'] ) {
+						return 4;
+					}
+					return 3;
+				}
+				return 2;
+			}
+			return 1;
+		}
 
-		return false;
+		return 0;
 	}
 
 	/**
@@ -398,7 +389,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function get_remote_subscription_status( $doing_activation = false ) {
 
-		if ( false === $doing_activation && 'Premium' !== $this->get_option( '_activation_level' ) )
+		if ( false === $doing_activation && ! $this->is_premium_user() )
 			return false;
 
 		static $response = null;
@@ -424,7 +415,7 @@ class AccountActivation extends Panes {
 			return $response = $status['status'];
 
 		if ( $doing_activation ) {
-			//* Wait 0.0625 seconds as a second request is following up (1~2x load time server).
+			//* Wait 0.0625 seconds as a second request is following up (1~20x load time server).
 			usleep( 62500 );
 
 			//* Fetch data from POST variables. As the options are cached and tainted already at this point.
@@ -445,38 +436,5 @@ class AccountActivation extends Panes {
 			$this->update_option( '_remote_subscription_status', [ 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ], 'regular', false );
 
 		return $response;
-	}
-
-	/**
-	 * Fetches extra remote subscription information and stores it in the data option.
-	 * Should happen only run once after subscription has been updated to Premium.
-	 *
-	 * @since 1.0.0
-	 * @ignore
-	 *
-	 * @param bool $doing_activation Whether an activation process is active.
-	 * @return bool True on success, false on failure or when activation level isn't Premium.
-	 */
-	protected function update_extra_subscription_data( $doing_activation = false ) {
-
-		$response = $this->get_remote_subscription_status( $doing_activation );
-
-		if ( false === $response )
-			return false;
-
-		if ( $doing_activation ) {
-			$data = [];
-		} else {
-			$data = $this->get_option( '_remote_subscription_status', [] );
-
-			if ( false === is_array( $data ) )
-				$data = [];
-		}
-
-		$data['expire'] = isset( $response['status_extra']['end_date'] ) ? $response['status_extra']['end_date'] : null;
-
-		$success = $this->update_option( '_remote_subscription_status', $data, 'instance', false );
-
-		return $success;
 	}
 }

@@ -37,20 +37,94 @@ defined( 'ABSPATH' ) or die;
  * @uses trait TSF_Extension_Manager\Traits\UI
  * @see TSF_Extension_Manager\Traits\UI
  */
+ // impements \Generator ??
 trait Settings_Generator {
 	// Load Instance type.. set as class...?
 
-	private $o_key;
-	private $has_o_key;
+	private $bits = 6, // Should be and changeable depending on "!!pre-set" depth (i.e. floor( $os_bits / $depth ))
+	        $level = 0,
+	        $it = 0;
+
+	private $o_key = '',
+	        $has_o_key = false;
+
+	/**
+	 * Sanitizeses ID. Mainly removing spaces and coding characters.
+	 *
+	 * Unlike sanitize_key(), it doens't alter the case nor applies filters.
+	 *
+	 * @see WordPress Core sanitize_key()
+	 * @since 1.0.0
+	 *
+	 * @param string $id The unsanitized ID.
+	 * @return string The sanitized ID.
+	 */
+	public function sanitize_id( $id ) {
+		return preg_replace( '/[^a-zA-Z0-9_\-]/', '', $id );
+	}
+
+	/**
+	 * Returns field name and ID attributes for form fields.
+	 *
+	 * @since 1.0.0
+	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses $this->o_index
+	 * @see TSF_Extension_Manager\Traits\Extension_Options
+	 * @uses $this->o_key
+	 * @access private
+	 *
+	 * @param string $option The option the field is for.
+	 * @return string Full field ID/name attribute.
+	 */
+	private function create_field_id( $option ) {
+
+		$option = $this->sanitize_id( $option );
+
+		if ( $this->has_o_key ) {
+			$k = sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
+		} else {
+			$k = sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
+		}
+
+		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
+
+		$k = sprintf( '%s[%d][%s]', $k, bindec( reset( $levels ) ), $option );
+
+		$i = 0;
+		foreach ( $levels as $b ) {
+			if ( $i > 0 ) {
+				$k = sprintf( '%s[%d]', $k, bindec( $b ) );
+			}
+			$i++;
+		}
+
+		return $k;
+	}
+
+	/**
+	 * @uses $this->bits;
+	 * @todo optimize
+	 */
+	private function get_binary_format_length( $current ) {
+
+		$length = count( str_split( decbin( $current ), $this->bits ) );
+
+		return $length * $this->bits;
+	}
 
 	/**
 	 * @param string $o_key The key given to the option. For when you want to prevent option collision.
 	 */
 	public function _fields( array $fields, $type = 'echo', $o_key = '' ) {
 
-		$this->o_key = \sanitize_key( $o_key );
+		$this->o_key = $this->sanitize_id( $o_key );
 		$this->has_o_key = (bool) $this->o_key;
+
+		// forclass :;
 		// $this->o_index = $o_index;
+		// $this->is_64 = \the_seo_framework()->is_64();
+		// IF NOT 64, max IT is 64 (bits = 6)... otherwise max IT is 4096 (bits = 12)... save as option?
 
 		if ( 'get' === $type )
 			return $this->get_fields( $fields );
@@ -59,10 +133,16 @@ trait Settings_Generator {
 	}
 
 	/**
+	 * Gets fields by references.
+	 *
+	 * @since 1.0.0
+	 * @see http://php.net/manual/en/language.references.return.php
+	 * @uses $this->generate_fields()
 	 *
 	 * @param array $fields. Passed by reference for performance.
+	 * @return string $_fields; Passed by reference to allow field and sequence stacking.
 	 */
-	private function get_fields( array &$fields ) {
+	private function &get_fields( array &$fields ) {
 
 		$_fields = '';
 
@@ -76,6 +156,7 @@ trait Settings_Generator {
 
 	/**
 	 *
+	 *
 	 * @param array $fields. Passed by reference for performance.
 	 */
 	private function output_fields( array &$fields ) {
@@ -85,10 +166,41 @@ trait Settings_Generator {
 		}
 	}
 
+	/**
+	 * Generates fields.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->create_field()
+	 * @generator
+	 *
+	 * @param array $fields The fields with sequence [ option => args ].
+	 * @yields Field based on input.
+	 */
 	private function generate_fields( array $fields ) {
-		foreach ( $fields as $option => $args ) {
-			yield $this->create_field( $option, $args );
+
+		/**
+		 * Pass down option level as main level.
+		 * Because it allows for 6 bits setting, each loop can iterate at 64
+		 * options for each depth (ie hex).
+		 * Maximum of depth of 5 @ 32 bit. 10 @ 64 bits.
+		 */
+		++$this->level;
+		foreach ( $fields as $option => $_args ) {
+			$this->iterate();
+			yield $this->create_field( $option, $_args );
 		}
+		$this->deiterate();
+	}
+
+	private function iterate() {
+		//* Add 1 to current level.
+		$this->it += ( 1 << ( ( $this->level - 1 ) * $this->bits ) );
+	}
+
+	private function deiterate() {
+		//* Unset last level.
+		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		--$this->level;
 	}
 
 	private function create_field( $option, array $args ) {
@@ -97,13 +209,22 @@ trait Settings_Generator {
 			return '';
 
 		$this->clean_list_index( $args );
-
-		if ( $args['_fields'] )
-			return $this->generate_fields_multi( $option, $args );
-
 		$this->clean_desc_index( $args['_desc'] );
 
 		switch ( $args['_type'] ) :
+			case 'multi' :
+				return $this->create_fields_multi( $option, $args );
+				break;
+
+			case 'iterate_main' :
+				//= Can only be used on main output field. Will echo. Will try to defer.
+				return $this->fields_iterator( $option, $args, 'echo' );
+				break;
+
+			case 'iterate' :
+				return $this->fields_iterator( $option, $args, 'return' );
+				break;
+
 			case 'text' :
 			case 'password' :
 			case 'tel' :
@@ -151,7 +272,7 @@ trait Settings_Generator {
 	/**
 	 * @see $this->create_field()
 	 */
-	private function generate_fields_multi( $option, array $args ) {
+	private function create_fields_multi( $option, array $args ) {
 
 		$this->clean_desc_index( $args['_desc'] );
 		$title = $args['_desc'][0];
@@ -159,12 +280,6 @@ trait Settings_Generator {
 
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-
-		$_fields = '';
-		foreach ( $this->generate_fields( $args['_fields'] ) as $field ) {
-			//* Already escaped.
-			$_fields .= $field . PHP_EOL;
-		}
 
 		return vsprintf(
 			'<div class="tsfem-e-local-multi-setting tsfem-flex">%s%s</div>',
@@ -188,11 +303,146 @@ trait Settings_Generator {
 				),
 				sprintf(
 					'<div class="tsfem-e-local-multi-setting-input tsfem-flex">%s</div>',
+					$this->get_fields( $args['_fields'] )
+				),
+			]
+		);
+	}
+
+	/**
+	 * @see $this->create_field()
+	 */
+	private function fields_iterator( $option, array $args, $type = 'echo' ) {
+
+		$o = '';
+
+		if ( 'echo' === $type ) {
+			$this->output_fields_iterator( $option, $args );
+		} else {
+			$o = $this->get_fields_iterator( $option, $args );
+		}
+
+		return $o;
+	}
+
+	private function output_fields_iterator( $option, array $args ) {
+
+		echo '<div class="tsfem-e-local-iterator-setting tsfem-flex">';
+
+		$it_option_key = key( $args['_iterate_selector'] );
+		//* The selector.
+		echo $this->create_field( $it_option_key, $args['_iterate_selector'][ $it_option_key ] );
+
+		//* 65 === TEMPORARILY var_dump() remove 65...
+		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 65 );
+
+		$_it_title_main = $args['_iterator_title'][0];
+		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
+
+		$defer = $count > 7;
+		$_id = $this->create_field_id( $it_option_key );
+
+		//* Already escaped.
+		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $_id );
+
+		//* Already escaped.
+		printf(
+			'<div class="tsfem-e-local-collapse-wrap tsfem-e-local-collapse-sub-wrap" id="%s-wrapper"%s>',
+			$_id,
+			( $defer ? ' style=display:none' : '' )
+		);
+
+		for ( $it = 0; $it < $count; $it++ ) {
+			// PHP automatically checks if sprintf is meaningful.
+			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+
+			$this->iterate();
+			//* Already escaped.
+			echo $this->get_collapse_wrap( 'start', $_title, $this->create_field_id( $it_option_key ) );
+			$this->output_fields( $args['_fields'], $_title );
+			//* Already escaped.
+			echo $this->get_collapse_wrap( 'end' );
+		}
+
+		echo '</div>';
+
+		//* Already escaped.
+		$defer and printf(
+			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
+			$_id
+		);
+	}
+
+	private function get_fields_iterator( $option, array $args ) {
+
+		$it_option_key = key( $args['_iterate_selector'] );
+		$selector = $this->create_field( $it_option_key, $args['_iterate_selector'][ $it_option_key ] );
+
+		//* 7 === TEMPORARILY var_dump() remove 7...
+		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 7 );
+
+		$_it_title_main = $args['_iterator_title'][0];
+		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
+
+		$_fields = '';
+		for ( $it = 0; $it < $count; $it++ ) {
+			// PHP automatically checks if sprintf is meaningful.
+			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+
+			$this->iterate();
+			$_fields .= $this->get_collapse_wrap( 'start', $_title, $this->create_field_id( $it_option_key ) );
+			$_fields .= $this->get_fields( $args['_fields'] );
+			$_fields .= $this->get_collapse_wrap( 'end' );
+		}
+
+		return vsprintf(
+			'<div class="tsfem-e-local-iterator-setting tsfem-flex">%s%s</div>',
+			[
+				$selector,
+				sprintf(
+					'<div class="tsfem-e-local-collapse-wrap tsfem-e-local-collapse-sub-wrap" id="%s">%s</div>',
+					$this->create_field_id( $it_option_key ),
 					$_fields
 				),
 			]
 		);
 	}
+
+	private function get_collapse_wrap( $what, $title = '', $id = '' ) {
+
+		if ( 'start' === $what ) {
+			$s_id = $id ? sprintf( 'id="tsfem-e-local-collapse-%s"', $id ) : '';
+
+			$checkbox_id = sprintf( 'tsfem-e-local-collapse-checkbox-%s', $id );
+			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
+
+			//* Requires JS to edit. Always start with warning.
+			$state = 'warning';
+			$title = $this->get_state_icon( $state ) . \esc_html( $title );
+
+			$title = sprintf( '<h3 class="tsfem-e-local-collapse-title">%s</h3>', $title );
+			$icon = sprintf( '<span class="tsfem-e-local-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-e-local-icon-%s"></span>', $state );
+
+			$header = vsprintf( '<label class="tsfem-e-local-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
+				[
+					$checkbox_id,
+					$title,
+					$icon,
+				]
+			);
+
+			$content_start = '<div class="tsfem-e-local-collapse-content tsfem-flex">';
+
+			//* Already escaped.
+			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex tsfem-flex-noshrink tsfem-flex-row" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
+		} elseif ( 'end' === $what ) {
+			//* ok.
+			return '</div></div>';
+		}
+
+		return '';
+	}
+
 
 	/**
 	 * Creates a JS and no-JS compatible description mark.
@@ -237,28 +487,14 @@ trait Settings_Generator {
 		}
 	}
 
-	/**
-	 * Returns field name and ID attributes for form fields.
-	 *
-	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
-	 * @uses $this->o_index
-	 * @see TSF_Extension_Manager\Traits\Extension_Options
-	 * @uses $this->o_key
-	 * @access private
-	 *
-	 * @param string $option The option the field is for.
-	 * @return string Full field ID/name attribute.
-	 */
-	private function create_field_id( $option ) {
-
-		$option = \sanitize_key( $option );
+	private function get_field_value( $option, $default = null ) {
 
 		if ( $this->has_o_key ) {
-			return sprintf( '%s[%s][%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key, $option );
+			$_options = $this->get_option( $this->o_key );
+			return isset( $_options[ $option ] ) ? $_options[ $option ] : $default;
 		}
 
-		return sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $option );
+		return $this->get_option( $option, $default );
 	}
 
 	//* TEMP. Simply put, all args need to be filled in correctly prior to running this to improve performance.
@@ -434,6 +670,8 @@ trait Settings_Generator {
 
 	/**
 	 * Heavily optimized for performance.
+	 *
+	 * @generator
 	 */
 	private function generate_select_fields( array $fields, $default = '' ) {
 
@@ -529,7 +767,10 @@ trait Settings_Generator {
 								'<label for="%s" class="tsfem-e-local-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
-									sprintf( 'tsfem-e-local-option-title%s', ( $s_desc ? ' tsfem-e-local-option-has-description' : '' ) ),
+									sprintf(
+										'tsfem-e-local-option-title%s',
+										( $s_desc ? ' tsfem-e-local-option-has-description' : '' )
+									),
 									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
 								]
 							),
@@ -562,99 +803,5 @@ trait Settings_Generator {
 				),
 			]
 		);
-	}
-
-	/**
-	 * Handles cropping of images on AJAX request.
-	 *
-	 * Copied from WordPress Core wp_ajax_crop_image.
-	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
-	 *           2. It now only accepts TSF own AJAX nonces.
-	 *           3. It now only accepts context 'tsf-image'
-	 *           4. It no longer accepts a default context.
-	 *
-	 * @since 1.3.0
-	 * @access private
-	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
-	 */
-	final public function _wp_ajax_crop_image() {
-
-		if ( ! \check_ajax_referer( 'tsfem-media-nonce', 'nonce', false ) || ! \current_user_can( 'upload_files' ) )
-			\wp_send_json_error();
-
-		$attachment_id = \absint( $_POST['id'] );
-
-		$context = \sanitize_key( str_replace( '_', '-', $_POST['context'] ) );
-		$data    = array_map( 'absint', $_POST['cropDetails'] );
-		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
-
-		if ( ! $cropped || \is_wp_error( $cropped ) )
-			\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) );
-
-		switch ( $context ) :
-			case 'tsf-image':
-
-				/**
-				 * Fires before a cropped image is saved.
-				 *
-				 * Allows to add filters to modify the way a cropped image is saved.
-				 *
-				 * @since 4.3.0 WordPress Core
-				 *
-				 * @param string $context       The Customizer control requesting the cropped image.
-				 * @param int    $attachment_id The attachment ID of the original image.
-				 * @param string $cropped       Path to the cropped image file.
-				 */
-				\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
-
-				/** This filter is documented in wp-admin/custom-header.php */
-				$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
-
-				$parent_url = \wp_get_attachment_url( $attachment_id );
-				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
-
-				$size       = @getimagesize( $cropped );
-				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
-
-				$object = array(
-					'post_title'     => basename( $cropped ),
-					'post_content'   => $url,
-					'post_mime_type' => $image_type,
-					'guid'           => $url,
-					'context'        => $context,
-				);
-
-				$attachment_id = \wp_insert_attachment( $object, $cropped );
-				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
-
-				/**
-				 * Filters the cropped image attachment metadata.
-				 *
-				 * @since 4.3.0 WordPress Core
-				 *
-				 * @see wp_generate_attachment_metadata()
-				 *
-				 * @param array $metadata Attachment metadata.
-				 */
-				$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
-				\wp_update_attachment_metadata( $attachment_id, $metadata );
-
-				/**
-				 * Filters the attachment ID for a cropped image.
-				 *
-				 * @since 4.3.0 WordPress Core
-				 *
-				 * @param int    $attachment_id The attachment ID of the cropped image.
-				 * @param string $context       The Customizer control requesting the cropped image.
-				 */
-				$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
-				break;
-
-			default :
-				\wp_send_json_error( array( 'message' => \esc_js__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) );
-				break;
-		endswitch;
-
-		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 	}
 }

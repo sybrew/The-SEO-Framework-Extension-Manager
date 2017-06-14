@@ -160,8 +160,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 				break;
 
 			default:
-				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
-				\wp_die();
+				static::invoke_invalid_type( __METHOD__ );
 				break;
 		endswitch;
 
@@ -186,8 +185,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 				break;
 
 			default:
-				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify a correct type.' );
-				\wp_die();
+				static::invoke_invalid_type( __METHOD__ );
 				break;
 		endswitch;
 
@@ -253,6 +251,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		\remove_all_filters( 'wp_die_handler' );
 
 		\wp_die( \esc_html( $method ) . '(): You must specify a correct initialization type.' );
+		die;
 	}
 
 	/**

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
  * Extension Name: Honeypot - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
  * Extension Description: The Honeypot extension catches comment spammers in four lightweight yet powerful ways. By adding hashed input fields that only real browsers can clear, it has a near 100% catch-rate.
- * Extension Version: 1.0.0-***β***
+ * Extension Version: 1.0.1-***β***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -46,7 +46,7 @@ use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Ma
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_HONEYPOT_VERSION', '1.0.0' );
+define( 'TSFEM_E_HONEYPOT_VERSION', '1.0.1' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -123,7 +123,7 @@ final class Core {
 		$this->setup = true;
 
 		//* Adds honeypot to comment fields.
-		\add_action( 'comment_form_before_fields', [ $this, '_add_honeypot' ] );
+		\add_action( 'comment_form_top', [ $this, '_add_honeypot' ] );
 
 		//* Checks honeypot existence before setting approval of a comment.
 		\add_filter( 'pre_comment_approved', [ $this, '_check_honeypot' ], 0, 2 );
@@ -135,9 +135,12 @@ final class Core {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @return void Early if not setup (i.e. statically called).
+	 * @return void Early if not setup (i.e. statically called) or if user is logged in.
 	 */
 	public function _add_honeypot() {
+
+		if ( \is_user_logged_in() )
+			return;
 
 		$this->set_hardcore();
 		$setup = $this->setup_display_properties() && $this->setup_post_check_properties();
@@ -233,11 +236,12 @@ final class Core {
 	 * When not hardcore, the name is valid indefinitely, differentiating per post.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 Moved display annotation into a scoped style node.
 	 * @todo Set CSS external rather than inline when http/2 using HTML5 spec?
 	 */
 	private function output_css_rotation_honeypot() {
 		printf(
-			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>',
+			'<p id="%1$s"><input type="text" name="%1$s" value=""><style scoped>#%1$s{display:none}</style></p>',
 			\esc_attr( $this->hp_properties['css_rotate_input_name'] )
 		);
 	}

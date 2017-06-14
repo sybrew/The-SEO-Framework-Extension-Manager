@@ -168,10 +168,10 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'premium',
 				'area' => 'spam',
-				'version' => '1.0.0',
+				'version' => '1.0.1',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1494567223',
+				'last_updated' => '1497020151',
 				'requires' => '4.4.0',
 				'tested' => '4.8.0',
 				'requires_tsf' => '2.7.0',
@@ -193,9 +193,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'a3ed733a06d7b429ba1a5310d30249c4e2dcf49f964dceca92d291458d22932f',
-			'sha1'   => '80d8b113765054f498ceebf23e9917ab60e79052',
-			'md5'    => '070318838645030eda2861fe82045229',
+			'sha256' => '72fed07ec85909350186cebb57250d3c3a11a8981297e42237643a989c38d28a',
+			'sha1'   => 'e5486724345db6a90db158af09aee9ce5b28ab0f',
+			'md5'    => 'efae4b1042a0199c83a96ad0fe7ded7a',
 		];
 	}
 
@@ -458,8 +458,16 @@ trait Extensions_Actions {
 			return $cache;
 
 		$options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+		$extensions = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : [];
+		$is_free_user = ! self::is_premium_user();
 
-		return $cache = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : [];
+		foreach ( $extensions as $_extension => $_active ) {
+			if ( $is_free_user && static::is_extension_premium( $_extension ) ) {
+				unset( $extensions[ $_extension ] );
+			}
+		}
+
+		return $cache = $extensions;
 	}
 
 	/**

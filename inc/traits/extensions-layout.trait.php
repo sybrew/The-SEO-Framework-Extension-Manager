@@ -372,13 +372,14 @@ trait Extensions_Layout {
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to make description footer from.
+	 * @param bool  $wrap      Whether to wrap the contents in a HTML div.
 	 * @return string HTML footer description.
 	 */
 	private static function get_extension_description_footer( $extension, $wrap = true ) {
 
 		$data = static::get_extension_header( $extension['slug'] );
 
-		//* Make extension author element.
+		//* Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
 		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
@@ -462,6 +463,7 @@ trait Extensions_Layout {
 						$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
 						break;
 				endswitch;
+				$compat_notice .= '<br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
 				break;
 
 			case -1 :
