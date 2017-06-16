@@ -161,12 +161,12 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Select supported department type', '' ),
 					[
-						\__( 'Choose a (sub)type that exactly describes the business.', '' ),
+						\__( 'Choose a (sub)type that closely describes the business.', '' ),
 						\__( '(Sub)types with an asterisk are pending support.', '' ),
 					],
-					\__( 'Leave unspecified if your department type is not listed.', '' ),
+					\__( 'Select "Local Business" if your department type is not listed.', '' ),
 				],
-				'_select' => $this->get_department_fields( false ),
+				'_select' => $this->get_department_items(),
 			],
 			'name' => [
 				'_default' => '',
@@ -226,7 +226,7 @@ trait Options_Template {
 			// 'potentialAction' => [ // SPLIT THIS?? -> i.e. "You can order.. We deliver... + fields..." TODO
 			// 	'_default' => null,
 			// 	'_edit' => true,
-			// 	'_ret' => 'array',
+			// 	'_ret' => '',
 			// 	'_req' => false,
 			// 	'_type' => '', // TODO,
 			// 	'_desc' => [
@@ -267,7 +267,6 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Reservations', '' ),
 					\__( 'Department customers\' reservation specification.', '' ),
-					\__( 'For food establishments.', '' ),
 				],
 				'_fields' => $this->get_reservation_fields(),
 			],
@@ -278,7 +277,7 @@ trait Options_Template {
 				'_req' => false, // Must be true if RESTAURANT.
 				'_type' => 'image',
 				'_desc' => [
-					\__( 'Image', '' ),
+					\__( 'Image URL', '' ),
 					\__( 'An image of the department or building.', '' ),
 				],
 			],
@@ -292,7 +291,7 @@ trait Options_Template {
 					\__( 'Cuisine', '' ),
 					\__( 'Provide the type of cuisine the department serves.', '' ),
 				],
-				'_select' => $this->get_cuisine_fields(),
+				'_select' => $this->get_cuisine_items(),
 			],
 		];
 	}
@@ -351,7 +350,7 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Country', '' ),
 				],
-				'_select' => $this->get_country_fields(),
+				'_select' => $this->get_country_items(),
 			],
 		];
 	}
@@ -399,7 +398,7 @@ trait Options_Template {
 	 * Use Generator Class + Iterator for dropdown parsing?
 	 * http://php.net/manual/en/class.generator.php
 	 */
-	function get_country_fields() {
+	function get_country_items() {
 		return [
 			[
 				'',
@@ -1418,12 +1417,17 @@ trait Options_Template {
 	 *   },
 	 * }
 	 */
-	function get_department_fields( $get_subfield = false ) {
+	function get_department_items() {
 		return [
 			[
 				'',
 				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
 				null, // No subtypes, doh.
+			],
+			[
+				'LocalBusiness',
+				\__( 'Local business', '' ),
+				[],
 			],
 			[
 				'AnimalShelter',
@@ -2050,7 +2054,7 @@ trait Options_Template {
 	/**
 	 * @see https://en.wikipedia.org/wiki/List_of_cuisines
 	 */
-	function get_cuisine_fields() {
+	function get_cuisine_items() {
 		return [
 			[
 				'',
@@ -2118,10 +2122,10 @@ trait Options_Template {
 
 	function get_opening_hours_fields() {
 		return [
-			'openingHoursSpecification' => [
+			'openingHours' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'array',
+				'_ret' => '',
 				'_req' => false,
 				'_type' => 'iterate',
 				'_desc' => [],
@@ -2143,8 +2147,8 @@ trait Options_Template {
 				'_req' => false,
 				'_type' => 'number',
 				'_desc' => [
-					\__( 'Amount of times', '' ),
-					\__( 'When opening times fluctuate, change this number to specify more times.', '' ),
+					\__( 'Number of opening hours', '' ),
+					\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
 					\__( 'Set to 0 or leave empty if unspecified.', '' ),
 				],
 				'_range' => [
@@ -2189,6 +2193,10 @@ trait Options_Template {
 						1,
 						\__( 'Closed', '' ),
 					],
+					[
+						2,
+						\__( 'Open 24 hours', '' ),
+					],
 				],
 			],
 			'opens' => [
@@ -2199,7 +2207,10 @@ trait Options_Template {
 				'_type' => 'time',
 				'_desc' => [
 					\__( 'Opening time', '' ),
-					\__( 'Time when the business location opens.', '' ),
+					[
+						\__( 'Time when the business location opens.', '' ),
+						\__( 'This time must be earlier than the closing time.', '' ),
+					],
 					\__( 'Specify the local time.', '' ),
 				],
 			],
@@ -2211,7 +2222,10 @@ trait Options_Template {
 				'_type' => 'time',
 				'_desc' => [
 					\__( 'Closing time', '' ),
-					\__( 'Time when the business location closes.', '' ),
+					[
+						\__( 'Time when the business location closes.', '' ),
+						\__( 'This time must be later than the opening time.', '' ),
+					],
 					\__( 'Specify the local time.', '' ),
 				],
 			],
@@ -2290,20 +2304,34 @@ trait Options_Template {
 			'acceptsReservations' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'array',
+				'_ret' => 'u',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'Accept reservations', '' ),
+					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', '' ),
+					\__( 'This specification accounts for both telephone calls reservations and online form reservations.', '' ),
+				],
+				'_select' => $this->get_reservation_accept_items(),
+			],/*
+			'reserveAction' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => '',
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Accept Reservations', '' ),
-					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.' ),
+					\__( 'Reservation actions', '' ),
+					[
+						\__( 'The details of the reservation.', '' ),
+					],
 				],
-				'_select' => $this->get_reservation_action_fields(),
-			],
-			// TODO: ReserveAction fields.... it needs to loop...
-		];
+				'_fields' => $this->get_reservation_result_fields() + $this->get_reservation_action_fields(), // $this->get_reservation_action_fields(),
+			],*/
+		] + $this->get_reservation_result_fields() + $this->get_reservation_action_fields();
 	}
 
-	function get_reservation_action_fields() {
+	function get_reservation_accept_items() {
 		return [
 			[
 				'',
@@ -2316,6 +2344,177 @@ trait Options_Template {
 			[
 				1,
 				\__( 'Don\'t accept reservations', '' ),
+			],
+		];
+	}
+
+	function get_reservation_action_fields() {
+		return [
+			'target' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'multi',
+				'_desc' => [
+					\__( 'Target specifications', '' ),
+					\__( 'Only specify these fields if the visitor can complete this reservation action through the website, not through a phonecall.', '' ),
+				],
+				'_fields' => $this->get_reservation_target_fields(),
+			],
+		];
+	}
+
+	function get_reservation_target_fields() {
+		return [
+			'url' => [
+				/**
+				 * We could also do urlTemplate, but that's a bit too advanced.
+				 * @see actionPlatform, which might allow redirecting (i.e. make it work)
+				 * if an urlTemplate is specified.
+				 */
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'url',
+				'_req' => false,
+				'_type' => 'url',
+				'_desc' => [
+					\__( 'Form URL', '' ),
+					\__( 'The location where the visitor can perform a reservation action.', '' ),
+				],
+			],
+			'inLanguage' => [
+				'_default' => \get_bloginfo( 'language' ),
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'text', // TODO convert to select with language items.
+				'_desc' => [
+					\__( 'Form language', '' ),
+					\__( 'Specify the main language of the form.', '' ),
+				],
+				'_select' => [], //crap... $this->get_language_items(),
+			],
+			'actionPlatform' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'Form platforms', '' ),
+					\__( 'Specify the supported web platforms', '' ),
+					\__( 'For example, if the form URL redirects mobile users, then select "Only desktop platforms".', '' ),
+				],
+				'_select' => [
+					[
+						'',
+						'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+					],
+					[
+						'all',
+						__( 'All platforms', '' ),
+					],
+					[
+						'desktop',
+						__( 'Only desktop platforms', '' ),
+					],
+					[
+						'mobile',
+						__( 'Only mobile platforms', '' ),
+					],
+				],
+			],
+		];
+	}
+
+	function get_reservation_result_fields() {
+		return [
+			'@type' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'select',
+				'_desc' => [
+					\__( 'Reservation type', '' ),
+					\__( 'Choose a type that describes the reservation.', '' ),
+					\__( 'If unlisted, select "Reservation".', '' ),
+				],
+				'_select' => $this->get_reservation_type_items(),
+			],
+			'name' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'text',
+				'_desc' => [
+					\__( 'Reservation action name', '' ),
+					\__( 'Describe the reservation, in a few words.', '' ),
+					\__( 'For example: "Reserve table" or "Table for four at Restaurant Name".', '' ),
+				],
+			],
+			//= TODO PLACEHOLDER === http://schema.org/Person
+			//= Redundant?
+			'provider' => [
+				'_default' => '',
+				'_edit' => false,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'multi',
+				'_desc' => [],
+				'_fields' => [],
+			],
+
+		];
+	}
+
+	function get_reservation_type_items() {
+		return [
+			[
+				'',
+				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+			],
+			[
+				'Reservation',
+				\__( 'Reservation', '' ),
+			],
+			[
+				'BusReservation',
+				\__( 'Bus reservation', '' ),
+			],
+			[
+				'EventReservation',
+				\__( 'Event reservation', '' ),
+			],
+			[
+				'FlightReservation',
+				\__( 'Flight reservation', '' ),
+			],
+			[
+				'FoodEstablishmentReservation',
+				\__( 'Food establishment reservation', '' ),
+			],
+			[
+				'LodgingReservation',
+				\__( 'Lodging reservation', '' ),
+			],
+			[
+				'RentalCarReservation',
+				\__( 'Rental car reservation', '' ),
+			],
+			[
+				'ReservationPackage',
+				\__( 'Reservation package', '' ),
+			],
+			[
+				'TaxiReservation',
+				\__( 'Taxi reservation', '' ),
+			],
+			[
+				'TrainReservation',
+				\__( 'Train reservation', '' ),
 			],
 		];
 	}

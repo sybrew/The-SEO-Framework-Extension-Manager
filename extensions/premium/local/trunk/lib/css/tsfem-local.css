@@ -186,12 +186,7 @@
 	opacity: 1;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
-	-webkit-flex: 1 0 100%;
-	flex: 1 0 100%;
-	max-width: 100%;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
+	width: 100%;
 	-webkit-transition: opacity 0.5s ease-in-out;
 	transition: opacity 0.5s ease-in-out;
 }

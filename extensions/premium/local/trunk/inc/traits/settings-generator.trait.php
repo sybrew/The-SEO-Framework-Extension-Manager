@@ -41,9 +41,10 @@ defined( 'ABSPATH' ) or die;
 trait Settings_Generator {
 	// Load Instance type.. set as class...?
 
-	private $bits = 6, // Should be and changeable depending on "!!pre-set" depth (i.e. floor( $os_bits / $depth ))
+	private $bits = 12, // Should be and changeable depending on "!!pre-set" depth (i.e. floor( $os_bits / $depth ))
 	        $level = 0,
-	        $it = 0;
+	        $it = 0,
+	        $level_names = [];
 
 	private $o_key = '',
 	        $has_o_key = false;
@@ -86,31 +87,21 @@ trait Settings_Generator {
 			$k = sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
 		}
 
+		//* Correct the length of bits, split them and put them in the right order.
 		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
 		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
 
-		$k = sprintf( '%s[%d][%s]', $k, bindec( reset( $levels ) ), $option );
-
 		$i = 0;
 		foreach ( $levels as $b ) {
-			if ( $i > 0 ) {
-				$k = sprintf( '%s[%d]', $k, bindec( $b ) );
+			$k = sprintf( '%s[%s]', $k, $this->level_names[ $i ] );
+			//= Only grab iterators.
+			if ( $b > 1 ) {
+				$k = sprintf( '%s[%d]', $k, bindec( $b ) - 1 );
 			}
 			$i++;
 		}
 
 		return $k;
-	}
-
-	/**
-	 * @uses $this->bits;
-	 * @todo optimize
-	 */
-	private function get_binary_format_length( $current ) {
-
-		$length = count( str_split( decbin( $current ), $this->bits ) );
-
-		return $length * $this->bits;
 	}
 
 	/**
@@ -178,6 +169,9 @@ trait Settings_Generator {
 	 */
 	private function generate_fields( array $fields ) {
 
+		//= Store first key, to be caught later when iterating.
+		$this->level_names[ $this->level ] = key( $fields );
+
 		/**
 		 * Pass down option level as main level.
 		 * Because it allows for 6 bits setting, each loop can iterate at 64
@@ -185,10 +179,16 @@ trait Settings_Generator {
 		 * Maximum of depth of 5 @ 32 bit. 10 @ 64 bits.
 		 */
 		++$this->level;
+		$this->iterate(); // This works.
+
 		foreach ( $fields as $option => $_args ) {
-			$this->iterate();
+			//= Overwrite later keys, to be caught when generating IDs
+			$this->level_names[ $this->level - 1 ] = $option;
+
+			//$this->iterate(); // This is more robust, but we already check the options by name.
 			yield $this->create_field( $option, $_args );
 		}
+
 		$this->deiterate();
 	}
 
@@ -200,6 +200,7 @@ trait Settings_Generator {
 	private function deiterate() {
 		//* Unset last level.
 		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		unset( $this->level_names[ $this->level ] );
 		--$this->level;
 	}
 
@@ -225,6 +226,10 @@ trait Settings_Generator {
 				return $this->fields_iterator( $option, $args, 'return' );
 				break;
 
+			case 'select' :
+				return $this->create_select_field( $option, $args );
+				break;
+
 			case 'text' :
 			case 'password' :
 			case 'tel' :
@@ -244,10 +249,6 @@ trait Settings_Generator {
 
 			case 'textarea' :
 				return $this->create_textarea_field( $option, $args );
-				break;
-
-			case 'select' :
-				return $this->create_select_field( $option, $args );
 				break;
 
 			case 'checkbox' :
@@ -333,13 +334,13 @@ trait Settings_Generator {
 		//* The selector.
 		echo $this->create_field( $it_option_key, $args['_iterate_selector'][ $it_option_key ] );
 
-		//* 65 === TEMPORARILY var_dump() remove 65...
-		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 65 );
+		//* 3 === TEMPORARILY var_dump() remove 3...
+		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 7 );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
 
-		$defer = $count > 7;
+		$defer = $count > 6; // Set to 5 when we add a save-menu?
 		$_id = $this->create_field_id( $it_option_key );
 
 		//* Already escaped.
@@ -378,8 +379,8 @@ trait Settings_Generator {
 		$it_option_key = key( $args['_iterate_selector'] );
 		$selector = $this->create_field( $it_option_key, $args['_iterate_selector'][ $it_option_key ] );
 
-		//* 7 === TEMPORARILY var_dump() remove 7...
-		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 7 );
+		//* 2 === TEMPORARILY var_dump() remove 2...
+		$count = $this->get_field_value( $it_option_key, $args['_iterate_selector'][ $it_option_key ]['_default'] | 2 );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
@@ -431,10 +432,9 @@ trait Settings_Generator {
 				]
 			);
 
-			$content_start = '<div class="tsfem-e-local-collapse-content tsfem-flex">';
+			$content_start = '<div class="tsfem-e-local-collapse-content">';
 
-			//* Already escaped.
-			return sprintf( '<div class="tsfem-e-local-collapse tsfem-flex tsfem-flex-noshrink tsfem-flex-row" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
+			return sprintf( '<div class="tsfem-e-local-collapse" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
 		} elseif ( 'end' === $what ) {
 			//* ok.
 			return '</div></div>';
