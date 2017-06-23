@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  * Extension Name: Articles - *gamma*
  * Extension URI: https://premium.theseoframework.com/extensions/articles/
  * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles). Premium until γ-test is done.
- * Extension Version: 1.0.0-***γ-2***
+ * Extension Version: 1.0.1-***γ***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -408,6 +408,8 @@ final class Core {
 	 *   'nonamp' => Will return empty.
 	 * }
 	 *
+	 * @since 1.0.0
+	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema Never
 	 * @return array The Article's Image
@@ -493,6 +495,8 @@ final class Core {
 	 * Returns the Article Published Date.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
+	 *                2. Now only invalidates AMP when something's wrong.
 	 *
 	 * @requiredSchema AMP (docs)
 	 * @ignoredSchema nonAMP
@@ -500,11 +504,11 @@ final class Core {
 	 */
 	private function get_article_published_date() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
 
 		if ( ! ( $post = $this->get_current_post() ) ) {
-			$this->invalidate( 'both' );
+			$this->invalidate( 'amp' );
 			return [];
 		}
 
@@ -519,6 +523,7 @@ final class Core {
 	 * Returns the Article Modified Date.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -526,7 +531,7 @@ final class Core {
 	 */
 	private function get_article_modified_date() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
 
 		if ( ! ( $post = $this->get_current_post() ) )
@@ -543,6 +548,8 @@ final class Core {
 	 * Returns the Article Author.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
+	 *                2. Now only invalidates AMP when something's wrong.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema nonAMP
@@ -550,11 +557,11 @@ final class Core {
 	 */
 	private function get_article_author() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
 
 		if ( ! $post = $this->get_current_post() ) {
-			$this->invalidate( 'both' );
+			$this->invalidate( 'amp' );
 			return [];
 		}
 
@@ -573,6 +580,8 @@ final class Core {
 	 * Returns the Article Publisher and logo.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
+	 *                2. Now only invalidates AMP when something's wrong.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema nonAMP
@@ -580,7 +589,7 @@ final class Core {
 	 */
 	private function get_article_publisher() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
 
 		/**
@@ -598,7 +607,7 @@ final class Core {
 		$_img_id = (int) \apply_filters( 'the_seo_framework_articles_logo_id', 0 ) ?: $_default_img_id;
 
 		if ( ! $_img_id ) {
-			$this->invalidate( 'both' );
+			$this->invalidate( 'amp' );
 			return [];
 		}
 
@@ -617,7 +626,7 @@ final class Core {
 		}
 
 		if ( empty( $url ) ) {
-			$this->invalidate( 'both' );
+			$this->invalidate( 'amp' );
 			return [];
 		}
 
@@ -640,6 +649,8 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.0.0-gamma-2: Changed excerpt length to 155, from 400.
+	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
+	 *                2. Now takes description from cache.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -647,17 +658,18 @@ final class Core {
 	 */
 	private function get_article_description() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
 
-		$id = $this->get_current_id();
+		// $id = $this->get_current_id();
 
 		/**
 		 * 155 length is a tested guess.
 		 * There's no documentation on this.
 		 * However, it uses the same pixel length calculations.
 		 */
-		$description = \the_seo_framework()->description_from_custom_field( [ 'id' => $id ] ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 );
+		$description = \the_seo_framework()->description_from_cache();
+		// $description = $description ?: ( \the_seo_framework()->description_from_custom_field( [ 'id' => $id ] ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 ) );
 
 		return [
 			'description' => \esc_attr( $description ),

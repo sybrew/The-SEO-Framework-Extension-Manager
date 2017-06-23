@@ -71,7 +71,7 @@ if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && funct
 
 		//* 10px margin of error.
 		if ( $width ) {
-			$flex_basis = sprintf( '%spx', intval( $width + 10 ) );
+			$flex_basis = sprintf( '%upx', $width + 10 );
 		}
 	endif;
 endif;
@@ -112,4 +112,4 @@ endif;
 </section>
 <?php
 
-$this->_after_top_wrap();
+$this->after_top_wrap();

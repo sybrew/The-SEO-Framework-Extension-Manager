@@ -169,7 +169,7 @@ final class Admin extends Api {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
-		$this->get_local_settings_instance()->_init( $this, $this->local_menu_page_hook );
+		$this->get_local_settings_instance()->_init( $this, $this->local_page_slug, $this->local_menu_page_hook );
 
 		return true;
 	}

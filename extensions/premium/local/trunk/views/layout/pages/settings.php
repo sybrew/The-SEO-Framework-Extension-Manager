@@ -16,11 +16,11 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 	<div class="tsfem-e-local-settings tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-hide-if-no-js">
 		<div class="tsfem-pane-inner-pad">
 			<h4 class="tsfem-form-title"><?php \esc_html_e( 'Set departments', 'the-seo-framework-extension-manager' ); ?></h4>
-			<span class="tsfem-description"><?php \esc_html_e( 'Fill in these fields as accurately as possible.' ); ?></span><br>
-			<span class="tsfem-description"><?php \esc_html_e( 'If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span>
+			<span class="description"><?php \esc_html_e( 'With these options, you can annotate the location and practice of the business. This does not impact search ranking outside of the region, unless the region is part of the search query.', 'the-seo-framework-extension-manager' ); ?></span><br>
+			<span class="description"><?php \esc_html_e( 'Fill in these fields as accurately as possible. If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span>
 		</div>
 		<div class="tsfem-pane-inner-pad">
-			<?php $this->_fields( $this->get_departments_fields(), 'echo' ); ?>
+			<?php $this->output_department_fields(); ?>
 		</div>
 	</div>
 </div>

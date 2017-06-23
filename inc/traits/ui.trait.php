@@ -132,7 +132,7 @@ trait UI {
 	 *
 	 * @since 1.3.0
 	 */
-	final protected function _after_top_wrap() {
+	final protected function after_top_wrap() {
 		echo '<div class="tsfem-notice-wrap">';
 		\do_action( 'tsfem_notices' );
 		echo '</div>';
@@ -395,6 +395,31 @@ trait UI {
 
 		$l7d = true;
 
+	}
+
+	/**
+	 * Registers form CSS.
+	 *
+	 * @since 1.3.0
+	 * @staticvar $set Wehther the dependency has been set.
+	 * @access protected
+	 *
+	 * @return bool True on set, false otherwise.
+	 */
+	final protected function register_form_scripts() {
+
+		static $set = false;
+
+		if ( $set )
+			return false;
+
+		$this->additional_css[] = [
+			'name' => 'tsfem-form',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+		];
+
+		return $set = true;
 	}
 
 	/**

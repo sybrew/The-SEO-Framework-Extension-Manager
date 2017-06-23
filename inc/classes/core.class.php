@@ -850,10 +850,11 @@ class Core {
 	 * Determines if the PHP handler can handle 64 bit integers.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.0 Now is public.
 	 *
 	 * @return bool True if handler supports 64 bits, false otherwise (63 or lower).
 	 */
-	final protected function is_64() {
+	final public function is_64() {
 		return is_int( 9223372036854775807 );
 	}
 

@@ -33,4 +33,4 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 </section>
 <?php
 
-$this->_after_top_wrap();
+$this->after_top_wrap();

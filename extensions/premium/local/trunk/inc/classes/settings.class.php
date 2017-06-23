@@ -57,12 +57,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'options-template' );
 
 /**
- * Require Local settings generator trait.
- * @since 1.0.0
- */
-\TSF_Extension_Manager\Extension\Local\_load_trait( 'settings-generator' );
-
-/**
  * Class TSF_Extension_Manager\Extension\Local\Settings
  *
  * Holds extension settings methods.
@@ -79,8 +73,16 @@ final class Settings {
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
 		Secure_Post,
-		Options_Template,
-		Settings_Generator;
+		Options_Template;
+
+	/**
+	 * The settings page slug.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string $slug
+	 */
+	protected $slug = '';
 
 	/**
 	 * Initializes and outputs Settings page.
@@ -89,9 +91,10 @@ final class Settings {
 	 * @access private
 	 *
 	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 * @param string $slug The menu slug.
 	 * @param string $hook The menu hook.
 	 */
-	public function _init( Core $_core, $hook ) {
+	public function _init( Core $_core, $slug, $hook ) {
 
 		/**
 		 * Set options index.
@@ -124,6 +127,11 @@ final class Settings {
 		$this->init_post_checks();
 
 		/**
+		 * Set page slug.
+		 */
+		$this->slug = $slug;
+
+		/**
 		 * Set UI hook.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
@@ -134,6 +142,18 @@ final class Settings {
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
+
+		/**
+		 * Registers form scripts.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
+		$this->register_form_scripts();
+
+		/**
+		 * Registers media scripts.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
+		$this->register_media_scripts();
 	}
 
 	/**
@@ -187,6 +207,14 @@ final class Settings {
 				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
 			],
 		];
+
+		/**
+		 * Register media scripts.
+		 *
+		 * @uses trait TSF_Extension_Manager\UI
+		 * @package TSF_Extension_Manager\Traits
+		 */
+		$this->register_media_scripts();
 
 		//* Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
@@ -285,42 +313,18 @@ final class Settings {
 		$this->get_view( 'layout/general/meta' );
 	}
 
-	/**
-	 * Parses entry state HTMl icon.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $state The icon state.
-	 * @return string The HTML formed entry state icon.
-	 */
-	protected function get_state_icon( $state = '' ) {
-		return sprintf( '<span class="tsfem-e-local-title-icon tsfem-e-local-icon-%1$s tsfem-e-local-title-icon-%s"></span>', $this->parse_defined_icon_state( $state ) );
-	}
+	protected function output_department_fields() {
 
-	/**
-	 * Parses known CSS icon states.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $state The could-be unknown state.
-	 * @return string The known state.
-	 */
-	protected function parse_defined_icon_state( $state = '' ) {
-
-		switch ( $state ) :
-			case 'good' :
-			case 'okay' :
-			case 'warning' :
-			case 'bad' :
-			case 'error' :
-				break;
-
-			default :
-				$state = 'unknown';
-				break;
-		endswitch;
-
-		return $state;
+		$args = [
+			'o_index'      => $this->o_index,
+			'o_key'        => '',
+			'levels'       => 5,
+			'architecture' => null,
+		];
+		$f = new \TSF_Extension_Manager\FormGenerator( $args );
+		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ) );
+		$f->_fields( $this->get_departments_fields() );
+		$f->_form_wrap( 'end' );
 	}
 
 	/**

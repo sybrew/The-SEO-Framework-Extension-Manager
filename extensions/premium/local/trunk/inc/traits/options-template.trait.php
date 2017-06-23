@@ -87,10 +87,10 @@ trait Options_Template {
 						'_desc' => [
 							\__( 'Set number of departments', '' ),
 							\__( 'Each department must have its own publicly recognizable name and type.', '' ),
-							\__( 'For example, if you have a small shop inside your restaurant, then set two departments.', '' ),
+							\__( 'For example, if you have a small shop inside or belonging to your restaurant, then set two departments.', '' ),
 						],
 						'_range' => [
-							0,
+							1,
 							'',
 							1,
 						],
@@ -175,8 +175,12 @@ trait Options_Template {
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'Name of the department', '' ),
-					\__( 'Fill in the name of the department accurately.', '' ),
+					\__( 'Department name', '' ),
+					[
+						\__( 'Fill in the name of the department accurately.', '' ),
+						\__( 'For example, myMart and myMart Pharmacy.', 'the-seo-framework-extension-manager' ),
+					],
+					\__( 'Include the store name with the department name in the following format: <code>{store name} {department name}</code>', '' ),
 				],
 			],
 			'@id' => [
@@ -222,18 +226,6 @@ trait Options_Template {
 					\__( 'Be sure to include the country code and area code in the phone number.', '' ),
 				],
 			],
-			//* This is still in a piloting program for Google by select businesses. Let user know through link or disable completely for the time being...
-			// 'potentialAction' => [ // SPLIT THIS?? -> i.e. "You can order.. We deliver... + fields..." TODO
-			// 	'_default' => null,
-			// 	'_edit' => true,
-			// 	'_ret' => '',
-			// 	'_req' => false,
-			// 	'_type' => '', // TODO,
-			// 	'_desc' => [
-			// 		\__( 'Geographic coordinates of the department', '' ),
-			// 	],
-			// //	'_fields' => $this->get_potential_action_fields(), // TODO
-			// ],
 			'openingHoursSpecification' => [
 				'_default' => null,
 				'_edit' => true,
@@ -245,6 +237,30 @@ trait Options_Template {
 					\__( 'Hours during which the business location is open.' ),
 				],
 				'_fields' => $this->get_opening_hours_fields(),
+			],
+			'image' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'url',
+				'_req' => false, // Must be true if RESTAURANT.
+				'_type' => 'image',
+				'_desc' => [
+					\__( 'Image URL', '' ),
+					\__( 'An image of the department or building.', '' ),
+				],
+			],
+			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
+			'servesCuisine' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 's||array',
+				'_req' => false, // Must be true if RESTAURANT.
+				'_type' => 'selectmultia11y',
+				'_desc' => [
+					\__( 'Cuisine', '' ),
+					\__( 'Provide the type of cuisine the department serves.', '' ),
+				],
+				'_select' => $this->get_cuisine_items(),
 			],
 			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'menu' => [
@@ -267,32 +283,28 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Reservations', '' ),
 					\__( 'Department customers\' reservation specification.', '' ),
+					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', '' ),
 				],
 				'_fields' => $this->get_reservation_fields(),
 			],
-			'image' => [
-				'_default' => '',
+			/*=
+			  = The order action might require more price specifications over multiple order types.
+			  = For this reason, I've temporarily disabled the fields.
+			  = Also, it's in piloting phase. This means the fields don't yield any effect, whatsoever, anyway.
+			'orders' => [
+				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'url',
-				'_req' => false, // Must be true if RESTAURANT.
-				'_type' => 'image',
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Image URL', '' ),
-					\__( 'An image of the department or building.', '' ),
+					\__( 'Orders', '' ),
+					\__( 'Department customers\' order specification.', '' ),
+					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', '' ),
 				],
+				'_fields' => $this->get_order_fields(),
 			],
-			'servesCuisine' => [
-				'_default' => '',
-				'_edit' => true,
-				'_ret' => 's',
-				'_req' => false, // Must be true if RESTAURANT.
-				'_type' => 'select',
-				'_desc' => [
-					\__( 'Cuisine', '' ),
-					\__( 'Provide the type of cuisine the department serves.', '' ),
-				],
-				'_select' => $this->get_cuisine_items(),
-			],
+			*/
 		];
 	}
 
@@ -2057,15 +2069,263 @@ trait Options_Template {
 	function get_cuisine_items() {
 		return [
 			[
-				'',
-				'&mdash; ' . \__( 'No cuisine selected', '' ) . ' &mdash;',
-				null, // No subtypes, duh.
-			],
-			[
 				'African',
 				\__( 'African', '' ),
 				[
-
+					[
+						'North African',
+						\__( 'North African', '' ),
+						[
+							[
+								'Algerian',
+								\__( 'Algerian', '' ),
+							],
+							[
+								'Egyptian',
+								\__( 'Egyptian', '' ),
+							],
+							[
+								'Libyan',
+								\__( 'Libyan', '' ),
+							],
+							[
+								'Mauritanian',
+								\__( 'Mauritanian', '' ),
+							],
+							[
+								'Moroccan',
+								\__( 'Moroccan', '' ),
+							],
+							[
+								'Sadunese',
+								\__( 'Sadunese', '' ),
+							],
+							[
+								'Tunisian',
+								\__( 'Tunisian', '' ),
+							],
+						],
+					],
+					[
+						'Horn of Africa',
+						\__( 'Horn of Africa', '' ),
+						[
+							[
+								'Djiboutian',
+								\__( 'Djiboutian', '' ),
+							],
+							[
+								'Ethiopian',
+								\__( 'Ethiopian', '' ),
+							],
+							[
+								'Eritrean',
+								\__( 'Eritrean', '' ),
+							],
+							[
+								'Somali',
+								\__( 'Somali', '' ),
+							],
+						],
+					],
+					[
+						'East African',
+						\__( 'East African', '' ),
+						[
+							[
+								'Burundian',
+								\__( 'Burundian', '' ),
+							],
+							[
+								'Kenyan',
+								\__( 'Kenyan', '' ),
+							],
+							[
+								'Rwandan',
+								\__( 'Rwandan', '' ),
+							],
+							[
+								'South Sudanese',
+								\__( 'South Sudanese', '' ),
+							],
+							[
+								'Tanzanian',
+								\__( 'Tanzanian', '' ),
+								[
+									[
+										'Zanzibari',
+										\__( 'Zanzibari', '' ),
+									],
+								],
+							],
+							[
+								'Ugandan',
+								\__( 'Ugandan', '' ),
+							],
+						],
+					],
+					[
+						'Central African',
+						\__( 'Central African', '' ),
+						[
+							[
+								'Angolan',
+								\__( 'Angolan', '' ),
+							],
+							[
+								'Cameroonian',
+								\__( 'Cameroonian', '' ),
+							],
+							[
+								'Centrafrican',
+								\__( 'Centrafrican', '' ),
+							],
+							[
+								'Chadian',
+								\__( 'Chadian', '' ),
+							],
+							[
+								'Congolese',
+								\__( 'Congolese', '' ),
+							],
+							[
+								'Equatorial Guinean',
+								\__( 'Equatorial Guinean', '' ),
+							],
+							[
+								'Gabonese',
+								\__( 'Gabonese', '' ),
+							],
+							[
+								'São Toméan',
+								\__( 'São Toméan', '' ),
+							],
+						],
+					],
+					[
+						'Southern African',
+						\__( 'Southern African', '' ),
+						[
+							[
+								'Botswanan',
+								\__( 'Botswanan', '' ),
+							],
+							[
+								'Comorian',
+								\__( 'Comorian', '' ),
+							],
+							[
+								'Lesothoan',
+								\__( 'Lesothoan', '' ),
+							],
+							[
+								'Malagasy',
+								\__( 'Malagasy', '' ),
+							],
+							[
+								'Malawian',
+								\__( 'Malawian', '' ),
+							],
+							[
+								'Mauritian',
+								\__( 'Mauritian', '' ),
+							],
+							[
+								'Mozambican',
+								\__( 'Mozambican', '' ),
+							],
+							[
+								'Namibian',
+								\__( 'Namibian', '' ),
+							],
+							[
+								'Seychellois',
+								\__( 'Seychellois', '' ),
+							],
+							[
+								'South African',
+								\__( 'South African', '' ),
+							],
+							[
+								'Swazis',
+								\__( 'Swazis', '' ),
+							],
+							[
+								'Zambian',
+								\__( 'Zambian', '' ),
+							],
+							[
+								'Zimbabwean',
+								\__( 'Zimbabwean', '' ),
+							],
+						],
+					],
+					[
+						'West African',
+						\__( 'West African', '' ),
+						[
+							[
+								'Benin',
+								\__( 'Benin', '' ),
+							],
+							[
+								'Burkinabé',
+								\__( 'Burkinabé', '' ),
+							],
+							[
+								'Cabo Verdean',
+								\__( 'Cabo Verdean', '' ),
+							],
+							[
+								'Nigerien',
+								\__( 'Nigerien', '' ),
+							],
+							[
+								'Gambian',
+								\__( 'Gambian', '' ),
+							],
+							[
+								'Ghanaian',
+								\__( 'Ghanaian', '' ),
+							],
+							[
+								'Guinean',
+								\__( 'Guinean', '' ),
+							],
+							[
+								'Bissau-Guinean',
+								\__( 'Bissau-Guinean', '' ),
+							],
+							[
+								'Ivorian',
+								\__( 'Ivorian', '' ),
+							],
+							[
+								'Liberian',
+								\__( 'Liberian', '' ),
+							],
+							[
+								'Malian',
+								\__( 'Malian', '' ),
+							],
+							[
+								'Nigerian',
+								\__( 'Nigerian', '' ),
+							],
+							[
+								'Senegalese',
+								\__( 'Senegalese', '' ),
+							],
+							[
+								'Sierra Leonean',
+								\__( 'Sierra Leonean', '' ),
+							],
+							[
+								'Togolese',
+								\__( 'Togolese', '' ),
+							],
+						],
+					],
 				],
 			],
 			[
@@ -2165,14 +2425,14 @@ trait Options_Template {
 			'dayOfWeek' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => '',
+				'_ret' => 'array',
 				'_req' => false,
-				'_type' => 'multi',
+				'_type' => 'selectmultia11y',
 				'_desc' => [
 					\__( 'Applied days', '' ),
 					\__( 'Select the days from and to which the opening and closing hours specify to.', '' ),
 				],
-				'_fields' => $this->get_opening_hours_days_fields(),
+				'_select' => $this->get_days_fields(),
 			],
 			'isOpen' => [
 				'_default' => null,
@@ -2232,42 +2492,8 @@ trait Options_Template {
 		];
 	}
 
-	function get_opening_hours_days_fields() {
-		return [
-			'dayOfWeekFrom' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => 's',
-				'_req' => false,
-				'_type' => 'select',
-				'_desc' => [
-					\__( 'From', '' ),
-					\__( 'The opening and closing times apply from this day.', '' ),
-				],
-				'_select' => $this->get_days_fields(),
-			],
-			'dayOfWeekTo' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => 's',
-				'_req' => false,
-				'_type' => 'select',
-				'_desc' => [
-					\__( 'To', '' ),
-					\__( 'The opening and closing times apply to this day.', '' ),
-					\__( 'Select the same day if the times apply to a single day.', '' ),
-				],
-				'_select' => $this->get_days_fields(),
-			],
-		];
-	}
-
 	function get_days_fields() {
 		return [
-			[
-				'',
-				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
-			],
 			[
 				'Monday',
 				\__( 'Monday', '' ),
@@ -2310,24 +2536,10 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Accept reservations', '' ),
 					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', '' ),
-					\__( 'This specification accounts for both telephone calls reservations and online form reservations.', '' ),
+					\__( 'Leave unspecified if the deparment doesn\'t accept reservations while also unlikely to accept reservations, like a Shopping Center.', '' ),
 				],
 				'_select' => $this->get_reservation_accept_items(),
-			],/*
-			'reserveAction' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => '',
-				'_req' => false,
-				'_type' => 'multi',
-				'_desc' => [
-					\__( 'Reservation actions', '' ),
-					[
-						\__( 'The details of the reservation.', '' ),
-					],
-				],
-				'_fields' => $this->get_reservation_result_fields() + $this->get_reservation_action_fields(), // $this->get_reservation_action_fields(),
-			],*/
+			],
 		] + $this->get_reservation_result_fields() + $this->get_reservation_action_fields();
 	}
 
@@ -2388,43 +2600,40 @@ trait Options_Template {
 				'_edit' => true,
 				'_ret' => 's',
 				'_req' => false,
-				'_type' => 'text', // TODO convert to select with language items.
+				'_type' => 'text', // TODO convert to select (or datalist) with language items.
 				'_desc' => [
 					\__( 'Form language', '' ),
 					\__( 'Specify the main language of the form.', '' ),
 				],
-				'_select' => [], //crap... $this->get_language_items(),
+				'_select' => [], //... $this->get_language_items(),
 			],
+			/*== These platforms are not specified on Sshema.org, Let's omit them for now.
 			'actionPlatform' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 's',
+				'_ret' => 'array',
 				'_req' => false,
-				'_type' => 'select',
+				'_type' => 'selectmultia11y',
 				'_desc' => [
 					\__( 'Form platforms', '' ),
 					\__( 'Specify the supported web platforms', '' ),
-					\__( 'For example, if the form URL redirects mobile users, then select "Only desktop platforms".', '' ),
+					\__( 'For example, if the form URL redirects Android users, then don\'t select it.', '' ),
 				],
 				'_select' => [
 					[
-						'',
-						'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
-					],
-					[
-						'all',
-						__( 'All platforms', '' ),
-					],
-					[
 						'desktop',
-						__( 'Only desktop platforms', '' ),
+						__( 'Desktop platforms', '' ),
 					],
 					[
-						'mobile',
-						__( 'Only mobile platforms', '' ),
+						'ios',
+						__( 'iOS platforms', '' ),
+					],
+					[
+						'android',
+						__( 'Android platforms', '' ),
 					],
 				],
-			],
+			],*/
 		];
 	}
 
@@ -2455,8 +2664,7 @@ trait Options_Template {
 					\__( 'For example: "Reserve table" or "Table for four at Restaurant Name".', '' ),
 				],
 			],
-			//= TODO PLACEHOLDER === http://schema.org/Person
-			//= Redundant?
+			/*= TODO PLACEHOLDER @see http://schema.org/Person ...Redundant?
 			'provider' => [
 				'_default' => '',
 				'_edit' => false,
@@ -2466,7 +2674,7 @@ trait Options_Template {
 				'_desc' => [],
 				'_fields' => [],
 			],
-
+			*/
 		];
 	}
 
@@ -2515,6 +2723,65 @@ trait Options_Template {
 			[
 				'TrainReservation',
 				\__( 'Train reservation', '' ),
+			],
+		];
+	}
+
+	function get_order_fields() {
+		return [
+			'deliveryMethod' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => 'array',
+				'_req' => false,
+				'_type' => 'selectmultia11y',
+				'_desc' => [
+					\__( 'Delivery method', '' ),
+					\__( 'Specify how the goods and delivered to the customers.', '' ),
+					\__( 'Select all that apply.', '' ),
+				],
+				'_select' => $this->get_order_method_items(),
+			],
+		]; //+ $this->get_order_price_fields() + $this->get_order_action_fields();
+	}
+
+	function get_order_method_items() {
+		return [
+			[
+				'',
+				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+			],
+			[
+				'pickup',
+				\__( 'Pickup', '' ),
+			],
+			[
+				'ownfleet',
+				\__( 'Delivery through own fleet', '' ),
+			],
+			[
+				'mail',
+				\__( 'Delivery through mail', '' ),
+			],
+			[
+				'freight',
+				\__( 'Delivery through freight', '' ),
+			],
+			[
+				'dhl',
+				\__( 'Delivery through DHL', '' ),
+			],
+			[
+				'federalexpress',
+				\__( 'Delivery through FedEx', '' ),
+			],
+			[
+				'ups',
+				\__( 'Delivery through UPS', '' ),
+			],
+			[
+				'download',
+				\__( 'Delivery through download', '' ),
 			],
 		];
 	}

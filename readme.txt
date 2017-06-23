@@ -235,10 +235,21 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 	* **Added:**
 * **Premium - Articles:**
 	* **Version:**
-		* 1.0.0-gamma-2
+		* 1.0.1-gamma
 		* **Premium only until gamma-testing is completed.**
 	* **Changed:**
-	* **Fixed:**
+		* Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked or useless. So:
+			* Published date is now also output on non-AMP.
+			* Modified date is now also output on non-AMP.
+			* Post Author is now also output on non-AMP.
+			* Publisher (Organization name) is now also output on non-AMP.
+			* Description is now also output on non-AMP.
+		* Note: The data may still be marked invalid by the [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool), although far less likely.
+			* The data will always be checked for validity on both AMP and non-AMP, while adhering to Google's guidelines.
+			* The data should never be marked invalid on the AMP version.
+	* **Improved:**
+		* The description is now taken from cache, rather than regenerated.
+			* This can yield a large beneficial performance effect when parsing huge texts.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
