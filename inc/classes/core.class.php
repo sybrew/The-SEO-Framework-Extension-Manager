@@ -904,7 +904,7 @@ class Core {
 			and is_int( $_i )
 			and ( $_i + $_boundary ) < PHP_INT_MAX
 			and $bit = $_bit = mt_rand( ~ $_i, $_i )
-			and $bit % 2
+			and $bit & 1
 			and $bit = $_bit++;
 		}
 
@@ -956,7 +956,6 @@ class Core {
 	 * Generates static hash based on $uid.
 	 *
 	 * Caution: This function does not generate cryptographically secure values.
-	 *          It is vulnerable to timing attacks.
 	 *
 	 * @since 1.2.0
 	 * @access private

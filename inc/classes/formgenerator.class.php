@@ -134,7 +134,7 @@ class FormGenerator {
 		switch ( $what ) :
 			case 'start' :
 				return vsprintf(
-					'<form action="%s" method=post id="%s" class="tsfem-form">',
+					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form">',
 					[
 						\esc_url( $url ),
 						$this->get_form_id(),
@@ -150,6 +150,30 @@ class FormGenerator {
 		endswitch;
 
 		return '';
+	}
+
+	public function _form_button( $what, $name, $type = 'echo' ) {
+
+		if ( 'get' === $type )
+			return $this->get_form_button( $what, $name );
+
+		echo $this->get_form_button( $what, $name );
+	}
+
+	private function get_form_button( $what, $name ) {
+
+		switch ( $what ) :
+			case 'submit' :
+				return vsprintf(
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary">%2$s</button>',
+					[
+						$this->get_form_id(),
+						\esc_html( $name ),
+					]
+				);
+
+			default;
+		endswitch;
 	}
 
 	/**
@@ -475,12 +499,12 @@ class FormGenerator {
 		echo $this->create_field( $args['_iterate_selector'][ $it_option_key ] );
 
 		//* 3 === TEMPORARILY var_dump() remove 3...
-		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] | 4 );
+		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] | 5 );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
 
-		$defer = $count > 6; // Set to 5 when we add a save-menu?
+		$defer = $count > 6;
 		$_id = $this->get_field_id();
 
 		//* Already escaped.
@@ -561,12 +585,8 @@ class FormGenerator {
 			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $id );
 			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
 
-			//* Requires JS to edit. Always start with warning.
-			$state = 'warning';
-			$title = $this->get_state_icon( $state ) . \esc_html( $title );
-
-			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', $title );
-			$icon = sprintf( '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-form-icon-%s"></span>', $state );
+			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', \esc_html( $title ) );
+			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-form-icon-unknown"></span>';
 
 			$header = vsprintf( '<label class="tsfem-form-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
 				[
@@ -585,44 +605,6 @@ class FormGenerator {
 		}
 
 		return '';
-	}
-
-	/**
-	 * Parses entry state HTMl icon.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $state The icon state.
-	 * @return string The HTML formed entry state icon.
-	 */
-	protected function get_state_icon( $state = '' ) {
-		return sprintf( '<span class="tsfem-e-local-title-icon tsfem-e-local-icon-%1$s tsfem-e-local-title-icon-%s"></span>', $this->parse_defined_icon_state( $state ) );
-	}
-
-	/**
-	 * Parses known CSS icon states.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $state The could-be unknown state.
-	 * @return string The known state.
-	 */
-	protected function parse_defined_icon_state( $state = '' ) {
-
-		switch ( $state ) :
-			case 'good' :
-			case 'okay' :
-			case 'warning' :
-			case 'bad' :
-			case 'error' :
-				break;
-
-			default :
-				$state = 'unknown';
-				break;
-		endswitch;
-
-		return $state;
 	}
 
 	/**
@@ -1076,7 +1058,7 @@ class FormGenerator {
 							]
 						),
 						vsprintf(
-							'<button class="tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
+							'<button type=button class="tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
 							[
 								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
 								\esc_attr_x( 'Select image', 'Button hover title', '' ),

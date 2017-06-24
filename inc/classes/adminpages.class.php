@@ -365,13 +365,16 @@ class AdminPages extends AccountActivation {
 	 * @param string $title The pane title.
 	 * @param string $callable The callable function or method that echos content.
 	 * @param array $args The output arguments : {
-	 *   'full'       bool   : Whether to output a half or full pane.
-	 *   'collapse'   bool   : Whether able to collapse the pane.
-	 *   'move'       bool   : Whether to be able to move the pane.
-	 *   'pane_id'    string : The pane div ID.
-	 *   'ajax'       bool   : Whether to use ajax.
-	 *   'ajax_id'    string : The AJAX div ID.
-	 *   'secure_obj' bool   : Whether to pass the class object for integrity checks.
+	 *   'full'       bool     : Whether to output a half or full pane.
+	 *   'collapse'   bool     : Whether able to collapse the pane.
+	 *   'move'       bool     : Whether to be able to move the pane.
+	 *   'pane_id'    string   : The pane div ID.
+	 *   'ajax'       bool     : Whether to use ajax.
+	 *   'ajax_id'    string   : The AJAX div ID.
+	 *   'secure_obj' bool     : Whether to pass the class object for integrity checks.
+	 *   'footer'     callable : Whether to add a footer wrap. If set, it must be
+	 *                           a callable. If secure_obj is also true, it must be an
+	 *                           object and it will pass the class object.
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
@@ -385,6 +388,7 @@ class AdminPages extends AccountActivation {
 			'ajax' => false,
 			'ajax_id' => '',
 			'secure_obj' => false,
+			'footer' => null,
 		];
 		$args = \wp_parse_args( $args, $defaults );
 		unset( $defaults );

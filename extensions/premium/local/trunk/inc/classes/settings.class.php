@@ -282,10 +282,21 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_i Used for integrity.
+	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
 	 */
-	public function _get_local_settings_overview( self $_i ) {
+	public function _get_local_settings_overview( self $_s ) {
 		$this->get_view( 'layout/pages/settings' );
+	}
+
+	/**
+	 * Outputs Settings bottom wrap for Local SEO Settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 */
+	public function _get_local_settings_bottom_wrap( self $_s ) {
+		echo $this->get_bottom_wrap_items();
 	}
 
 	/**
@@ -313,6 +324,13 @@ final class Settings {
 		$this->get_view( 'layout/general/meta' );
 	}
 
+	/**
+	 * Outputs department fields and floating buttons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return \TSF_Extension_Manager\FormGenerator
+	 */
 	protected function output_department_fields() {
 
 		$args = [
@@ -322,9 +340,59 @@ final class Settings {
 			'architecture' => null,
 		];
 		$f = new \TSF_Extension_Manager\FormGenerator( $args );
+
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ) );
 		$f->_fields( $this->get_departments_fields() );
 		$f->_form_wrap( 'end' );
+
+		$submit = $f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
+
+		//* Destruct class.
+		$f = null;
+
+	//	$this->set_bottom_wrap_items( $this->get_test_button() );
+		$this->set_bottom_wrap_items( $submit );
+	}
+
+	/**
+	 * Sets form bottom wrap items. In order.
+	 *
+	 * @since 1.0.0
+	 * @staticvar array $cache
+	 *
+	 * @param string $item The bottom wrap item.
+	 * @param bool   $get  Whether to retrieve or store $item.
+	 * @return void|array Void if $get is false. The stores items otherwise.
+	 */
+	protected function set_bottom_wrap_items( $item = null, $get = false ) {
+
+		static $cache = [];
+
+		if ( $get )
+			return $cache;
+
+		if ( isset( $item ) )
+			$cache[] = $item;
+	}
+
+	/**
+	 * Returns the form bottom wrap items.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->set_bottom_wrap_items() The stored items.
+	 *
+	 * @return string The bottom wrap items.
+	 */
+	protected function get_bottom_wrap_items() {
+
+		$items = $this->set_bottom_wrap_items( null, true );
+
+		$retval = '';
+		foreach ( $items as $item ) {
+			$retval .= $item;
+		}
+
+		return $retval;
 	}
 
 	/**

@@ -19,6 +19,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 			'ajax' => true,
 			'ajax_id' => 'tsfem-e-local-settings-ajax',
 			'secure_obj' => true,
+			'footer' => [ $this, '_get_local_settings_bottom_wrap' ],
 		]
 	);
 ?>

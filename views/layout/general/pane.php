@@ -45,5 +45,20 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 		}
 		?>
 	</div>
+	<?php
+	if ( isset( $args['footer'] ) ) {
+		?>
+		<footer class="tsfem-pane-footer-wrap">
+		<?php
+		if ( $args['secure_obj'] ) {
+			call_user_func( $args['footer'], $args['footer'][0] );
+		} else {
+			call_user_func( $args['footer'] );
+		}
+		?>
+		</footer>
+		<?php
+	}
+	?>
 </section>
 <?php
