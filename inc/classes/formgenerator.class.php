@@ -435,7 +435,7 @@ class FormGenerator {
 						'<div class="tsfem-form-multi-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<div class="tsfem-form-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
 									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
@@ -472,21 +472,22 @@ class FormGenerator {
 	/**
 	 * Sets max iterations based on bits and current value.
 	 *
-	 * <del>Allows 0. However, '' and null will be converted.</del>
-	 * Empty values will be converted to max it.
+	 * Empty values will be converted to max it. Iterations shouldn't go lower than 1.
 	 *
 	 * @since 1.3.0
-	 * @param int $max The maximum value. Passed by reference.
+	 * @param unsigned int (R>0) $max The maximum value. Passed by reference.
 	 */
 	private function set_max_iterations( &$max ) {
 
-		// if ( 0 !== $max ) {
-			if ( ! $max || $max > $this->max_it ) {
-				$max = $this->max_it;
-			}
-		// }
+		if ( $max < 1 || $max > $this->max_it ) {
+			$max = $this->max_it;
+		}
 	}
 
+	/**
+	 *
+	 * @iterator
+	 */
 	private function output_fields_iterator( array $args ) {
 
 		echo '<div class="tsfem-form-iterator-setting tsfem-flex">';
@@ -496,24 +497,28 @@ class FormGenerator {
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
 		//= The selector. Already escaped.
-		echo $this->create_field( $args['_iterate_selector'][ $it_option_key ] );
+		printf(
+			'<div class="tsfem-form-iterator-selector-wrap tsfem-flex">%s</div>',
+			$this->create_field( $args['_iterate_selector'][ $it_option_key ] )
+		);
 
-		//* 3 === TEMPORARILY var_dump() remove 3...
+		//* 5 === TEMPORARILY var_dump() remove 5...
 		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] | 5 );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
 
 		$defer = $count > 6;
-		$_id = $this->get_field_id();
+		//= Get wrap ID before iteration.
+		$wrap_id = $this->get_field_id();
 
 		//* Already escaped.
-		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $_id );
+		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $wrap_id );
 
 		//* Already escaped.
 		printf(
 			'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s-wrapper"%s>',
-			$_id,
+			$wrap_id,
 			( $defer ? ' style=display:none' : '' )
 		);
 
@@ -534,10 +539,14 @@ class FormGenerator {
 		//* Already escaped.
 		$defer and printf(
 			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
-			$_id
+			$wrap_id
 		);
 	}
 
+	/**
+	 *
+	 * @iterator
+	 */
 	private function get_fields_iterator( array $args ) {
 
 		$it_option_key = key( $args['_iterate_selector'] );
@@ -553,6 +562,9 @@ class FormGenerator {
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
 
+		//= Get wrap ID before iteration.
+		$wrap_id = $this->get_field_id();
+
 		$_fields = '';
 		for ( $it = 0; $it < $count; $it++ ) {
 			// PHP automatically checks if sprintf is meaningful.
@@ -567,10 +579,13 @@ class FormGenerator {
 		return vsprintf(
 			'<div class="tsfem-form-iterator-setting tsfem-flex">%s%s</div>',
 			[
-				$selector,
 				sprintf(
-					'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s">%s</div>',
-					$this->get_field_id(),
+					'<div class="tsfem-form-iterator-selector-wrap tsfem-flex">%s</div>',
+					$selector
+				),
+				sprintf(
+					'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s-wrapper">%s</div>',
+					$wrap_id,
 					$_fields
 				),
 			]
@@ -739,16 +754,16 @@ class FormGenerator {
 		$s_range = isset( $s_range ) ? $s_range : '';
 
 		return vsprintf(
-			'<div class="tsfem-%s-field-wrapper tsfem-form-flex-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$s_type,
 				sprintf(
-					'<div class="tsfem-form-flex-setting-label tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
@@ -760,7 +775,7 @@ class FormGenerator {
 					)
 				),
 				sprintf(
-					'<div class="tsfem-form-flex-setting-input tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<input type=%s id="%s" name=%s value="%s" %s %s>',
 						[
@@ -790,16 +805,16 @@ class FormGenerator {
 		$multiple = 'selectmulti' === $args['_type'];
 
 		return vsprintf(
-			'<div class="tsfem-%s-field-wrapper tsfem-form-flex-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$args['_type'], //= Doesn't need escaping.
 				sprintf(
-					'<div class="tsfem-form-flex-setting-label tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
@@ -811,7 +826,7 @@ class FormGenerator {
 					)
 				),
 				sprintf(
-					'<div class="tsfem-form-flex-setting-input tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<select id="%s" name=%s %s>%s</select>',
 						[
@@ -909,15 +924,15 @@ class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		return vsprintf(
-			'<div class="tsfem-selectmulti-a11y-field-wrapper tsfem-form-flex-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-selectmulti-a11y-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				sprintf(
-					'<div class="tsfem-form-flex-setting-label tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<div class="tsfem-form-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
 									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
@@ -928,7 +943,7 @@ class FormGenerator {
 					)
 				),
 				sprintf(
-					'<div class="tsfem-form-flex-setting-input tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<div class="tsfem-form-multi-select-wrap" id="%s">%s</div>',
 						[
@@ -1023,15 +1038,15 @@ class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		return vsprintf(
-			'<div class="tsfem-image-field-wrapper tsfem-form-flex-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-image-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				sprintf(
-					'<div class="tsfem-form-flex-setting-label tsfem-flex">%s</div>',
+					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-flex-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-flex-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
 								[
 									$s_id,
 									sprintf(
@@ -1046,7 +1061,7 @@ class FormGenerator {
 					)
 				),
 				vsprintf(
-					'<div class="tsfem-form-flex-setting-input tsfem-flex">%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s>',

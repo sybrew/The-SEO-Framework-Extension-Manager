@@ -419,6 +419,20 @@ trait UI {
 			'ver' => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
+		$this->additional_js[] = [
+			'name' => 'tsfem-form',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+		];
+
+		$this->additional_l10n[] = [
+			'dependency' => 'tsfem-form',
+			'name' => 'tsfemFormL10n',
+			'strings' => [
+				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
+			],
+		];
+
 		return $set = true;
 	}
 

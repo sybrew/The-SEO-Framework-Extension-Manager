@@ -296,6 +296,7 @@ final class Settings {
 	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
 	 */
 	public function _get_local_settings_bottom_wrap( self $_s ) {
+		//* Already escaped.
 		echo $this->get_bottom_wrap_items();
 	}
 
@@ -350,6 +351,7 @@ final class Settings {
 		//* Destruct class.
 		$f = null;
 
+		//* @TODO add test button... requires data wrapper....
 	//	$this->set_bottom_wrap_items( $this->get_test_button() );
 		$this->set_bottom_wrap_items( $submit );
 	}

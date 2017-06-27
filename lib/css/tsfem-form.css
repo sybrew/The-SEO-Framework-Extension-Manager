@@ -208,7 +208,7 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting,
 .tsfem-form-iterator-setting,
-.tsfem-form-flex-setting {
+.tsfem-form-setting {
 	width: 100%;
 	-webkit-flex-direction: row;
 	flex-direction: row;
@@ -218,8 +218,8 @@ h4.tsfem-form-multi-title {
 .tsfem-form-multi-setting-input,
 .tsfem-form-iterator-setting-label,
 .tsfem-form-iterator-setting-input,
-.tsfem-form-flex-setting-label,
-.tsfem-form-flex-setting-input {
+.tsfem-form-setting-label,
+.tsfem-form-setting-input {
 	background-color: #fff;
 	padding: 15px 12px;
 	-webkit-flex: 10 1 350px;
@@ -230,7 +230,7 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting-label,
 .tsfem-form-iterator-setting-label,
-.tsfem-form-flex-setting-label {
+.tsfem-form-setting-label {
 	background-color: #f9f9f9;
 	-webkit-flex: 1 1 250px;
 	flex: 1 1 250px;
@@ -238,7 +238,7 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting-label-item,
 .tsfem-form-iterator-setting-label-item,
-.tsfem-form-flex-setting-label-item {
+.tsfem-form-setting-label-item {
 	-webkit-flex-wrap: nowrap;
 	-ms-flex-wrap: nowrap;
 	flex-wrap: nowrap;
@@ -252,8 +252,8 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting-input,
 .tsfem-form-iterator-setting-input,
-.tsfem-form-flex-setting-input,
-.tsfem-form-flex-setting-label-inner-wrap {
+.tsfem-form-setting-input,
+.tsfem-form-setting-label-inner-wrap {
 	-webkit-justify-content: center;
 	justify-content: center;
 }
@@ -266,17 +266,17 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting-label-item > *,
 .tsfem-form-iterator-setting-label-item > *,
-.tsfem-form-flex-setting-label-item > * {
+.tsfem-form-setting-label-item > * {
 	margin-right: 4px;
 }
 
 .tsfem-form-multi-setting-label-item > *:last-child,
 .tsfem-form-iterator-setting-label-item > *:last-child,
-.tsfem-form-flex-setting-label-item > *:last-child {
+.tsfem-form-setting-label-item > *:last-child {
 	margin-right: 0;
 }
 
-.tsfem-form-flex-setting-input textarea {
+.tsfem-form-setting-input textarea {
 	max-height: 250px;
 }
 
@@ -292,15 +292,15 @@ h4.tsfem-form-multi-title {
 	margin: .5em 0 0;
 }
 
-.tsfem-form-flex-setting-input input,
-.tsfem-form-flex-setting-input select,
-.tsfem-form-flex-setting-input textarea {
+.tsfem-form-setting-input input,
+.tsfem-form-setting-input select,
+.tsfem-form-setting-input textarea {
 	display: inline-block;
 	width: 100%;
 }
 
-.tsfem-form-flex-setting-input input[type=radio],
-.tsfem-form-flex-setting-input input[type=checkbox] {
+.tsfem-form-setting-input input[type=radio],
+.tsfem-form-setting-input input[type=checkbox] {
 	width: initial;
 }
 
@@ -331,4 +331,19 @@ h4.tsfem-form-multi-title {
 /* Indent second or later */
 ul.tsfem-form-multi-a11y-wrap ul.tsfem-form-multi-a11y-wrap {
 	margin-left: 20px;
+}
+
+/* Timer */
+.tsfem-form-iterator-timer {
+	height: 3px;
+	width: 100%;
+	display: inline-block;
+}
+
+.tsfem-form-iterator-timer span {
+	height: 100%;
+	width: 0%;
+	max-width: 100%;
+	display: block;
+	background: #057c99;
 }

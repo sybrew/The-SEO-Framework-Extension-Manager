@@ -231,6 +231,11 @@ a.tsfem-dismiss:hover {
 	justify-content: center;
 }
 
+.tsfem-flex-end {
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
 /* # Start Wraps.
 /*----------------------------------------------------------------------------*/
 

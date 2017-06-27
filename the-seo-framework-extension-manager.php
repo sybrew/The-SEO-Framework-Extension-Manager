@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.3.0-dev2017.06.24.0
+ * Version: 1.3.0-dev2017.06.27.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -40,19 +40,19 @@ define( 'TSF_EXTENSION_MANAGER_VERSION', '1.2.0' );
  * The plugin map URL. Used for calling browser files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_URL', plugin_dir_url( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( __FILE__ ) );
 
 /**
  * The plugin map absolute path. Used for calling php files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH', plugin_dir_path( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH', \plugin_dir_path( __FILE__ ) );
 
 /**
  * The plugin file relative to the plugins dir.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', \plugin_basename( __FILE__ ) );
 
 /**
  * The plugin file, absolute unix path.
