@@ -429,7 +429,8 @@ trait UI {
 			'dependency' => 'tsfem-form',
 			'name' => 'tsfemFormL10n',
 			'strings' => [
-				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
+				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
+				'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 			],
 		];
 

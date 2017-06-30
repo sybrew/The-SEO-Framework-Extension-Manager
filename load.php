@@ -92,7 +92,10 @@ function _test_sever( $network_wide = false ) {
 			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
 			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage )
 		),
-		sprintf( 'The SEO Framework - Extension Manager &laquo; %s', \esc_attr( $subtitle ) ),
+		sprintf(
+			'The SEO Framework - Extension Manager &laquo; %s',
+			\esc_attr( $subtitle )
+		),
 		[ 'response' => intval( $response ) ]
 	);
 }

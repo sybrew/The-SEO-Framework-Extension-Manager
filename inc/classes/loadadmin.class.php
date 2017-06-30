@@ -41,8 +41,21 @@ final class LoadAdmin extends AdminPages {
 	 * @since 1.0.0
 	 */
 	private function construct() {
+
+		//* Load activation notices.
 		\add_action( 'admin_notices', [ $this, 'do_activation_notice' ] );
+
+		//* Check API blocking.
 		\add_action( 'tsfem_notices', [ $this, 'check_external_blocking' ] );
+
+		//* Ajax listener for error notice catching.
+		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ $this, '_wp_ajax_get_dismissible_notice' ] );
+
+		//* Ajax listener for form iterations.
+		\add_action( 'wp_ajax_tsfemForm_iterate', [ $this, '_wp_ajax_tsfemForm_iterate' ], 11 );
+
+		//* Listener for updates.
+		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 	}
 
 	/**
@@ -65,7 +78,7 @@ final class LoadAdmin extends AdminPages {
 				/* translators: Markdown. %s = API URL */
 				$notice = $this->convert_markdown(
 					sprintf(
-						\esc_html__( 'Your website is blocking external requests. This means you will not be able to connect to the API services. Please add %s to `WP_ACCESSIBLE_HOSTS`.', 'the-seo-framework-extension-manager' ),
+						\esc_html__( 'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.', 'the-seo-framework-extension-manager' ),
 						\esc_html( $host )
 					),
 					[ 'code' ]
@@ -74,6 +87,205 @@ final class LoadAdmin extends AdminPages {
 				$this->do_dismissible_notice( $notice, 'error', true, false );
 			}
 		}
+	}
+
+	/**
+	 * Send AJAX notices. If any.
+	 *
+	 * @since 1.3.0
+	 * @uses trait TSF_Extension_Manager\Error
+	 * @access private
+	 */
+	final public function _wp_ajax_get_dismissible_notice() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+
+					$key = \tsf_extension_manager()->coalesce_var( $_POST['tsfem-notice-key'], false );
+					$key = \absint( $key );
+
+					if ( $key ) {
+						$_notice = $this->get_error_notice( $key );
+
+						if ( is_array( $_notice ) ) {
+							//= If it has a custom message (already stored in browser), then don't output the notice message.
+							$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? '' : $_notice['message'];
+							$type = $_notice['type'];
+
+							$notice = $this->get_dismissible_notice( $msg, $type, true, false );
+							$_type = $msg ? 'success' : 'failure';
+						}
+					}
+				}
+
+				$this->send_json( compact( 'type', 'notice', 'key' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Propagate FormGenerator class AJAX calls.
+	 *
+	 * @since 1.3.0
+	 * @uses class TSF_Extension_Manager\FormGenerator
+	 * @access private
+	 */
+	final public function _wp_ajax_tsfemForm_iterate() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
+
+					/**
+					 * Allows callers to prepare iteration class.
+					 * @see class TSF_Extension_Manager\FormGenerator
+					 * @access protected
+					 */
+					\do_action( 'tsfem_form_prepare_ajax_iterations' );
+
+					/**
+					 * Outputs the iteration items when properly prepared and when matched.
+					 *
+					 * This action shouldn't be invoked by extensions.
+					 *
+					 * @see class TSF_Extension_Manager\FormGenerator
+					 * @access private
+					 */
+					\do_action( 'tsfem_form_do_ajax_iterations' );
+				}
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Handles plugin POST requests.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @return void If nonce failed.
+	 */
+	final public function _handle_update_post() {
+
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
+			return;
+
+		//* Post is taken and will be validated directly below.
+		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
+
+		//* Options exist. There's no need to check again them.
+		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
+			return;
+
+		switch ( $options['nonce-action'] ) :
+			case $this->request_name['activate-key'] :
+				$args = [
+					'licence_key' => trim( $options['key'] ),
+					'activation_email' => \sanitize_email( $options['email'] ),
+				];
+
+				$this->handle_request( 'activation', $args );
+				break;
+
+			case $this->request_name['activate-free'] :
+				$this->do_free_activation();
+				break;
+
+			case $this->request_name['activate-external'] :
+				$this->get_remote_activation_listener_response();
+				break;
+
+			case $this->request_name['deactivate'] :
+				if ( false === $this->is_plugin_activated() ) {
+					$this->set_error_notice( [ 701 => '' ] );
+					break;
+				} elseif ( false === $this->is_premium_user() || false === $this->are_options_valid() ) {
+					$this->do_free_deactivation();
+					break;
+				}
+
+				$args = [
+					'licence_key' => trim( $this->get_option( 'api_key' ) ),
+					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
+				];
+
+				$this->handle_request( 'deactivation', $args );
+				break;
+
+			case $this->request_name['enable-feed'] :
+				$success = $this->update_option( '_enable_feed', true, 'regular', false );
+				$code = $success ? 702 : 703;
+				$this->set_error_notice( [ $code => '' ] );
+				break;
+
+			case $this->request_name['activate-ext'] :
+				$success = $this->activate_extension( $options );
+				break;
+
+			case $this->request_name['deactivate-ext'] :
+				$success = $this->deactivate_extension( $options );
+				break;
+
+			default :
+				$this->set_error_notice( [ 708 => '' ] );
+				break;
+		endswitch;
+
+		//* Adds action to the URI. It's only used to visualize what has happened.
+		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
+		\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
+		exit;
+	}
+
+	/**
+	 * Checks the Extension Manager page's nonce. Returns false if nonce can't be found
+	 * or if user isn't allowed to perform nonce.
+	 * Performs wp_die() when nonce verification fails.
+	 *
+	 * Never run a sensitive function when it's returning false. This means no
+	 * nonce can or has been been verified.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $validated Determines whether the nonce has already been verified.
+	 *
+	 * @param string $key The nonce action used for caching.
+	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
+	 * @return bool True if verified and matches. False if can't verify.
+	 */
+	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
+
+		static $validated = [];
+
+		if ( isset( $validated[ $key ] ) )
+			return $validated[ $key ];
+
+		if ( false === $this->is_tsf_extension_manager_page() && false === $this->can_do_settings() )
+			return $validated[ $key ] = false;
+
+		if ( $check_post ) {
+			/**
+			 * If this page doesn't parse the site options,
+			 * there's no need to check them on each request.
+			 */
+			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+				return $validated[ $key ] = false;
+		}
+
+		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+
+		if ( false === $result ) {
+			//* Nonce failed. Set error notice and reload.
+			$this->set_error_notice( [ 9001 => '' ] );
+			\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+			exit;
+		}
+
+		return $validated[ $key ] = (bool) $result;
 	}
 
 	/**
@@ -96,5 +308,572 @@ final class LoadAdmin extends AdminPages {
 
 		//* No a11y icon. Already escaped. Use TSF as it loads styles.
 		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
+	}
+
+	/**
+	 * Returns admin page URL.
+	 * Defaults to the Extension Manager page ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $page The admin menu page slug. Defaults to TSF Extension Manager's.
+	 * @param array $args Other query arguments.
+	 * @return string Admin Page URL.
+	 */
+	final public function get_admin_page_url( $page = '', $args = [] ) {
+
+		$page = $page ? $page : $this->seo_extensions_page_slug;
+
+		$url = \add_query_arg( $args, \menu_page_url( $page, false ) );
+
+		return $url;
+	}
+
+	/**
+	 * Fetches files based on input to reduce memory overhead.
+	 * Passes on input vars.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $view The file name.
+	 * @param array $args The arguments to be supplied within the file name.
+	 *        Each array key is converted to a variable with its value attached.
+	 */
+	final protected function get_view( $view, array $args = [] ) {
+
+		foreach ( $args as $key => $val ) {
+			$$key = $val;
+		}
+
+		$this->get_verification_codes( $_instance, $bits );
+
+		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+
+		include( $file );
+	}
+
+	/**
+	 * Creates a link and returns it.
+	 *
+	 * If URL is '#', then it no href will be set.
+	 * If URL is empty, a doing it wrong notice will be output.
+	 *
+	 * @since 1.0.0
+	 * @since 1.2.0 : Added download, filename, id and data.
+	 *
+	 * @param array $args The link arguments : {
+	 *  'url'      => string The URL. Required.
+	 *  'target'   => string The target. Default '_self'.
+	 *  'class'    => string The link class. Default ''.
+	 *  'id'       => string The link id. Default ''.
+	 *  'title'    => string The link title. Default ''.
+	 *  'content'  => string The link content. Default ''.
+	 *  'download' => bool Whether to download. Default false.
+	 *  'filename' => string The optional download filename. Default ''.
+	 *  'data'     => array Array of data-$keys and $values.
+	 * }
+	 * @return string escaped link.
+	 */
+	final public function get_link( array $args = [] ) {
+
+		if ( empty( $args ) )
+			return '';
+
+		$defaults = [
+			'url'     => '',
+			'target'  => '_self',
+			'class'   => '',
+			'id'      => '',
+			'title'   => '',
+			'content' => '',
+			'download' => false,
+			'filename' => '',
+			'data' => [],
+		];
+		$args = \wp_parse_args( $args, $defaults );
+
+		$url = $args['url'] ? \esc_url( $args['url'] ) : '';
+
+		if ( empty( $url ) ) {
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
+			return '';
+		}
+
+		$url = '#' === $url ? '' : ' href="' . $url . '"';
+		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
+		$id = $args['id'] ? ' id="' . \esc_attr( $args['id'] ) . '"' : '';
+		$target = ' target="' . \esc_attr( $args['target'] ) . '"';
+		$title = $args['title'] ? ' title="' . \esc_attr( $args['title'] ) . '"' : '';
+		$download = $args['download'] ? ( $args['filename'] ? ' download="' . \esc_attr( $args['filename'] ) . '"' : ' download' ) : '';
+		$data = '';
+		if ( ! empty( $args['data'] ) ) {
+			foreach ( $args['data'] as $k => $v ) {
+				$data .= sprintf( ' data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
+			}
+		}
+
+		return '<a' . $url . $class . $id . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
+	}
+
+	/**
+	 * Creates a download button link from input arguments.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args The button arguments.
+	 * @return string The download button.
+	 */
+	final public function get_download_link( array $args = [] ) {
+
+		$defaults = [
+			'url'     => '',
+			'target'  => '_self',
+			'class'   => '',
+			'title'   => '',
+			'content' => '',
+			'download' => true,
+			'filename' => '',
+			'data' => [],
+		];
+
+		return $this->get_link( \wp_parse_args( $args, $defaults ) );
+	}
+
+	/**
+	 * Generates software API My Account page HTML link.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The My Account API URL.
+	 */
+	final protected function get_my_account_link() {
+		return $this->get_link( [
+			'url' => $this->get_activation_url( 'my-account/' ),
+			'target' => '_blank',
+			'class' => '',
+			'title' => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+			'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
+		] );
+	}
+
+	/**
+	 * Generates support link for both Free and Premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type The support link type. Accepts 'premium' or anything else for free.
+	 * @param bool $icon Whether to show a heart/star after the button text.
+	 * @return string The Support Link.
+	 */
+	final public function get_support_link( $type = 'free', $icon = true ) {
+
+		if ( 'premium' === $type ) {
+			$url = 'https://premium.theseoframework.com/support/';
+
+			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
+			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
+
+			$class = 'tsfem-button-primary tsfem-button-primary-bright';
+			$class .= $icon ? ' tsfem-button-star' : '';
+		} else {
+			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
+
+			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
+			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
+
+			$class = 'tsfem-button-primary';
+			$class .= $icon ? ' tsfem-button-love' : '';
+		}
+
+		return $this->get_link( [
+			'url' => $url,
+			'target' => '_blank',
+			'class' => $class,
+			'title' => $title,
+			'content' => $text,
+		] );
+	}
+
+	/**
+	 * Generates dismissible notice.
+	 * Also loads scripts and styles if out of The SEO Framework's context.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 * @return string The dismissible error notice.
+	 */
+	final public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+
+		switch ( $type ) :
+			case 'success' :
+			case 'updated' :
+				$type = 'tsfem-notice-success';
+				break;
+
+			case 'warning' :
+				$type = 'tsfem-notice-warning';
+				break;
+
+			case 'error' :
+				$type = 'tsfem-notice-error';
+				break;
+
+			default :
+				$type = '';
+				break;
+		endswitch;
+
+		$a11y = $a11y ? ' tsfem-show-icon' : '';
+
+		$notice = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
+		$notice .= '<a class="hide-if-no-js tsfem-dismiss" title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
+		$notice .= $escape ? \esc_html( $message ) : $message;
+		$notice .= '</p></div>';
+
+		return $notice;
+	}
+
+	/**
+	 * Echos generated dismissible notice.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param $message The notice message. Expected to be escaped if $escape is false.
+	 * @param string $type The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param bool $a11y Whether to add an accessibility icon.
+	 * @param bool $escape Whether to escape the whole output.
+	 */
+	final public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+		echo $this->get_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
+	}
+
+	/**
+	 * Sets admin menu links so the pages can be safely used within AJAX.
+	 *
+	 * Does not forge a callback function, instead, the callback returns an empty string.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 * @staticvar bool $parent_set
+	 * @staticvar array $slug_set
+	 *
+	 * @param string $slug The menu slug. Required.
+	 * @param string $capability The menu's required access capability.
+	 * @return bool True on success, false on failure.
+	 */
+	final public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
+
+		if ( ( ! $slug = \sanitize_key( $slug ) )
+		|| ( ! $capability = \sanitize_key( $capability ) )
+		|| ! \current_user_can( $capability )
+		) {
+			return false;
+		}
+
+		static $parent_set = false;
+		static $set = [];
+
+		if ( false === $parent_set && ( $parent_set = true ) ) {
+			//* Set parent slug.
+			\the_seo_framework()->add_menu_link();
+		}
+
+		if ( isset( $set[ $slug ] ) )
+			return $set[ $slug ];
+
+		//* Add arbitrary menu contents to known menu slug.
+		$menu = [
+			'parent_slug' => \the_seo_framework_options_page_slug(),
+			'page_title'  => '1',
+			'menu_title'  => '1',
+			'capability'  => $capability,
+			'menu_slug'   => $slug,
+			'callback'    => '\\__return_empty_string',
+		];
+
+		return $set[ $slug ] = (bool) \add_submenu_page(
+			$menu['parent_slug'],
+			$menu['page_title'],
+			$menu['menu_title'],
+			$menu['capability'],
+			$menu['menu_slug'],
+			$menu['callback']
+		);
+	}
+
+	/**
+	 * Determines if TSFEM AJAX has determined the correct page.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $cache
+	 * @NOTE Warning: Only set after valid nonce verification pass.
+	 *
+	 * @param bool $set If true, it registers the AJAX page.
+	 * @return bool True if set, false otherwise.
+	 */
+	final protected function ajax_is_tsf_extension_manager_page( $set = false ) {
+
+		static $cache = false;
+
+		return $set ? $cache = true : $cache;
+	}
+
+
+	/**
+	 * Activates extension based on form input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $options The form/request input options.
+	 * @param bool $ajax Whether this is an AJAX request.
+	 * @return bool|string False on invalid input or on activation failure.
+	 *         String on success or AJAX.
+	 */
+	final protected function activate_extension( $options, $ajax = false ) {
+
+		if ( empty( $options['extension'] ) )
+			return false;
+
+		$slug = $options['extension'];
+
+		$this->get_verification_codes( $_instance, $bits );
+
+		\TSF_Extension_Manager\Extensions::initialize( 'activation', $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
+		\TSF_Extension_Manager\Extensions::set_instance_extension_slug( $slug );
+
+		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
+		$result = $this->validate_extensions_checksum( $checksum );
+
+		if ( true !== $result ) :
+			switch ( $result ) :
+				case -1 :
+					//* No checksum found.
+					$ajax or $this->set_error_notice( [ 10001 => '' ] );
+					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
+					break;
+
+				case -2 :
+					//* Checksum mismatch.
+					$ajax or $this->set_error_notice( [ 10002 => '' ] );
+					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
+					break;
+
+				default :
+					//* Method mismatch error. Unknown error.
+					$ajax or $this->set_error_notice( [ 10003 => '' ] );
+					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
+					break;
+			endswitch;
+		endif;
+
+		$status = \TSF_Extension_Manager\Extensions::validate_extension_activation();
+
+		\TSF_Extension_Manager\Extensions::reset();
+
+		if ( $status['success'] ) :
+			if ( 2 === $status['case'] ) {
+				if ( 0 === $this->validate_remote_subscription_license() ) {
+					$ajax or $this->set_error_notice( [ 10004 => '' ] );
+					return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+				}
+			}
+
+			$test = $this->test_extension( $slug, $ajax );
+
+			if ( 4 !== $test || $this->_has_died() ) {
+				$ajax or $this->set_error_notice( [ 10005 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
+			}
+
+			$success = $this->enable_extension( $slug );
+
+			if ( false === $success ) {
+				$ajax or $this->set_error_notice( [ 10006 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 10006 ) : false;
+			}
+		endif;
+
+		switch ( $status['case'] ) :
+			case 1 :
+				//* No slug set.
+				$code = 10007;
+				break;
+
+			case 2 :
+				//* Premium activated.
+				$code = 10008;
+				break;
+
+			case 3 :
+				//* Premium failed: User not premium.
+				$code = 10009;
+				break;
+
+			case 4 :
+				//* Free activated.
+				$code = 10010;
+				break;
+
+			default :
+				//* Unknown case.
+				$code = 10011;
+				break;
+		endswitch;
+
+		$ajax or $this->set_error_notice( [ $code => '' ] );
+
+		return $ajax ? $this->get_ajax_notice( $status['success'], $code ) : $status['success'];
+	}
+
+	/**
+	 * Deactivates extension based on form input.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $options The form input options.
+	 * @param bool $ajax Whether this is an AJAX request.
+	 * @return bool False on invalid input.
+	 */
+	final protected function deactivate_extension( $options, $ajax = false ) {
+
+		if ( empty( $options['extension'] ) )
+			return false;
+
+		$slug = $options['extension'];
+		$success = $this->disable_extension( $slug );
+
+		$code = $success ? 11001 : 11002;
+		$ajax or $this->set_error_notice( [ $code => '' ] );
+
+		return $ajax ? $this->get_ajax_notice( $success, $code ) : $success;
+	}
+
+	/**
+	 * Test drives extension to see if an error occurs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug to load.
+	 * @param bool $ajax Whether this is an AJAX request.
+	 * @return int|void {
+	 *    -1 : No check has been performed.
+	 *    1  : No file header path can be created. (Invalid extension)
+	 *    2  : Extension header file is invalid. (Invalid extension)
+	 *    3  : Inclusion failed.
+	 *    4  : Success.
+	 *    void : Fatal error.
+	 * }
+	 */
+	final protected function test_extension( $slug, $ajax = false ) {
+
+		$this->get_verification_codes( $_instance, $bits );
+		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
+
+		$this->get_verification_codes( $_instance, $bits );
+		$result = \TSF_Extension_Manager\Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+
+		\TSF_Extension_Manager\Extensions::reset();
+
+		return $result;
+	}
+
+	/**
+	 * Enables extension through options.
+	 *
+	 * Kills options when activation fails.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @return bool False if extension enabling fails.
+	 */
+	final protected function enable_extension( $slug ) {
+		return $this->update_extension( $slug, true );
+	}
+
+	/**
+	 * Disables extension through options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @return bool False if extension disabling fails.
+	 */
+	final protected function disable_extension( $slug ) {
+		return $this->update_extension( $slug, false );
+	}
+
+	/**
+	 * Disables or enables an extension through options.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $slug The extension slug.
+	 * @param bool $enable Whether to enable or disable the extension.
+	 * @return bool False if extension enabling or disabling fails.
+	 */
+	final protected function update_extension( $slug, $enable = false ) {
+
+		$extensions = $this->get_option( 'active_extensions', [] );
+		$extensions[ $slug ] = (bool) $enable;
+
+		//* Kill options on failure when enabling.
+		$kill = $enable;
+
+		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
+	}
+
+	/**
+	 * Sanitizes AJAX input string.
+	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
+	 * Also prevents regex execution.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $input The AJAX input string.
+	 * @return string $output The cleaned AJAX input string.
+	 */
+	final protected function s_ajax_string( $input ) {
+		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+	}
+
+	/**
+	 * Returns font file location.
+	 * To be used for testing font-pixels.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $font The font name, should include .ttf.
+	 * @param bool $url Whether to return a path or URL.
+	 * @return string The font URL or path. Not escaped.
+	 */
+	final public function get_font_file_location( $font = '', $url = false ) {
+		if ( $url ) {
+			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
+		}
+	}
+
+	/**
+	 * Returns image file location.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $image The image name, should include .jpg, .png, etc..
+	 * @param bool $url Whether to return a path or URL.
+	 * @return string The image URL or path. Not escaped.
+	 */
+	final public function get_image_file_location( $image = '', $url = false ) {
+		if ( $url ) {
+			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/images/' . $image;
+		} else {
+			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
+		}
 	}
 }

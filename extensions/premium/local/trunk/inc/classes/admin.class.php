@@ -87,7 +87,7 @@ final class Admin extends Api {
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
 		//* Initialize Local page actions. Requires $this->local_menu_page_hook to be set.
-		\add_action( 'admin_init', [ $this, '_load_local_admin_actions' ], 0 );
+		\add_action( 'admin_init', [ $this, '_load_local_admin_actions' ], 10 );
 	}
 
 	/**
@@ -150,7 +150,12 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _load_local_admin_actions() {
-		\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$this->_do_settings_page_ajax_actions();
+		} else {
+			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
+		}
 	}
 
 	/**
@@ -175,7 +180,24 @@ final class Admin extends Api {
 	}
 
 	/**
-	 * Determines whether we're on the local overview page.
+	 * Hooks admin AJAX actions into the Local SEO pagehook.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True on actions loaded, false on second load or incorrect page.
+	 */
+	protected function _do_settings_page_ajax_actions() {
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
+			return false;
+
+		$this->get_local_settings_instance()->_init_ajax( $this );
+
+		return true;
+	}
+
+	/**
+	 * Determines whether we're on the Local overview page.
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $cache

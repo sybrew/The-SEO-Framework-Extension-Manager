@@ -37,6 +37,17 @@ class FormGenerator {
 	use \TSF_Extension_Manager\Extension_Options;
 
 	/**
+	 * Maintains the option key, and the boolean value thereof.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var int $bits
+	 * @var int $max_it
+	 */
+	private $o_key = '',
+	        $has_o_key = false;
+
+	/**
 	 * Holds the bits and maximum iterations thereof.
 	 *
 	 * @since 1.3.0
@@ -44,8 +55,8 @@ class FormGenerator {
 	 * @var int $bits
 	 * @var int $max_it
 	 */
-	public $bits = 12,
-	       $max_it = 0;
+	private $bits = 12,
+	        $max_it = 0;
 
 	/**
 	 * Maintains the reiteration level, the name thereof, and the iteration within.
@@ -63,16 +74,147 @@ class FormGenerator {
 	        $level_names = [],
 	        $it = 0;
 
+	private static $cur_ajax_caller = '',
+	               $ajax_it_fields = [],
+	               $ajax_it_args = [];
+
 	/**
-	 * Maintains the option key, and the boolean value thereof.
+	 * Determines and initializes AJAX iteration listener.
 	 *
 	 * @since 1.3.0
+	 * @static
+	 * @staticvar bool $found Prevents further callback matching to improve performance.
 	 *
-	 * @var int $bits
-	 * @var int $max_it
+	 * @param string $class The caller class.
+	 * @param array $args : The form arguments {
+	 *   string 'caller'   : Required. The calling class. Checks for "doing it right" iteration listeners.
+	 *   string 'o_index'  : Required. The option index field for storing extension options.
+	 *   string 'o_key'    : The pre-assigned option key. Great for when working
+	 *                       with multiple option fields.
+	 *   int 'level_depth' : Set how many levels the options can traverse.
+	 *                       e.g. 5 depth @ 64 bits => 12 bits =>> 12 bits === 4096 iterations.
+	 *                       e.g. 5 depth @ 32 bits =>  6 bits =>>  6 bits ===   64 iterations.
+	 *   int 'architecture' : The amount of bits to work with. If unassigned, it will autodetermine.
+	 * }
+	 * @return string|bool The called iterator name. False otherwise.
 	 */
-	private $o_key = '',
-	        $has_o_key = false;
+	public static function _parse_ajax_its_listener( $class, $args ) {
+
+		static $found = false;
+
+		if ( $found )
+			return false;
+
+		if ( static::is_ajax_callee( $class ) ) {
+			$found = true;
+			static::$cur_ajax_caller = $class;
+			static::$ajax_it_args = $args;
+
+			/**
+			 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
+			 * It has already checked referrer and capability.
+			 * @see \TSF_Extension_Manager\LoadAdmin
+			 */
+			\add_action( 'tsfem_form_do_ajax_iterations', __CLASS__ . '::_output_ajax_form_its', PHP_INT_MIN );
+
+			return static::get_ajax_target_id();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Verifies if the current AJAX callback caller is made for the callee class.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @global object $_POST
+	 *
+	 * @param string $caller The caller.
+	 * @return bool True if matched, false otherwise.
+	 */
+	private static function is_ajax_callee( $caller ) {
+		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
+	}
+
+	/**
+	 * Returns the AJAX callback iterator name (aka target ID).
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @global object $_POST
+	 *
+	 * @return string|bool The called iterator name. False otherwise.
+	 */
+	private static function get_ajax_target_id() {
+
+		if ( isset( $_POST['args']['caller'] ) )
+			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->satoma( stripslashes( $_POST['args']['caller'] ) ) );
+
+		return false;
+	}
+
+	/**
+	 */
+	public static function _output_ajax_form_its() {
+
+
+		$fields = static::$ajax_it_fields;
+
+		$o = new static( static::$ajax_it_args );
+		$o->prepare_ajax_iteration();
+		$o->prepare_ajax_iteration_fields();
+		$o->_fields( static::$ajax_it_fields );
+
+		exit;
+	}
+
+	/**
+	 * Prepares the current iteration and option levels and names.
+	 *
+	 * @since 1.3.0
+	 */
+	private function prepare_ajax_iteration() {
+
+		$caller = stripslashes( $_POST['args']['caller'] );
+		$items = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
+
+		//* Unset the option indexes.
+		$unset_count = $this->has_o_key ? 3 : 2;
+		while ( $unset_count-- ) {
+			array_shift( $items );
+		}
+		//* Remove current item.
+		array_pop( $items );
+
+		foreach ( $items as $item ) {
+			if ( is_numeric( $item ) ) {
+				$this->iterate( (int) $item );
+			} else {
+				++$this->level;
+				$this->level_names[ $this->level - 1 ] = $item;
+			}
+		}
+	}
+
+	/**
+	 * Registers currrent Ajax iteration fields.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 *
+	 * @return array Current ajax its fields. Passed by reference.
+	 */
+	public static function &_collect_ajax_its_fields() {
+		return static::$ajax_it_fields;
+	}
+
+	private function prepare_ajax_iteration_fields() {
+		foreach ( static::$ajax_it_fields as $k => $i ) {
+			$i['_type'] = 'iterate_ajax';
+			static::$ajax_it_fields[ $k ] = $i;
+		}
+	}
 
 	/**
 	 * Constructor. Sets up class.
@@ -96,7 +238,7 @@ class FormGenerator {
 	 */
 	public function __construct( &$args ) {
 
-		empty( $args['o_index'] ) and \wp_die( __METHOD__ . ' is very angry: Assign o_index.' );
+		empty( $args['o_index'] ) and \wp_die( __METHOD__ . ': Assign o_index.' );
 
 		/**
 		 * @see trait \TSF_Extension_Manager\Extension_Options
@@ -117,9 +259,40 @@ class FormGenerator {
 
 		$this->o_key = $args['o_key'] = $this->sanitize_id( $args['o_key'] );
 		$this->has_o_key = (bool) $this->o_key;
-
 	}
 
+	/**
+	 * Gets private properties.
+	 *
+	 * The $what is preset, this means not all properties can be attained.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what The property to get.
+	 * @return void|mixed The private property.
+	 */
+	public function get( $what = '' ) {
+		switch ( $what ) :
+			case 'bits' :
+				return $this->bits;
+
+			case 'max_it' :
+				return $this->max_it;
+
+			default;
+		endswitch;
+	}
+
+	/**
+	 * Returns or echos the form wrap.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what What to get. 'start' or 'end'.
+	 * @param string $url The form action POST URL for $what 'start'.
+	 * @param string $type Either 'echo' or 'get'.
+	 * @return void|string The form wrap on $type 'get'. Void otherwise.
+	 */
 	public function _form_wrap( $what, $url = '', $type = 'echo' ) {
 
 		if ( 'get' === $type )
@@ -129,6 +302,15 @@ class FormGenerator {
 		echo $this->get_form_wrap( $what, $url );
 	}
 
+	/**
+	 * Returns the form wraps.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what What to get. 'start' or 'end'.
+	 * @param string $url The form action POST URL for $what 'start'.
+	 * @return string|void The form wrappers. Void if unknown $what.
+	 */
 	private function get_form_wrap( $what, $url ) {
 
 		switch ( $what ) :
@@ -140,18 +322,25 @@ class FormGenerator {
 						$this->get_form_id(),
 					]
 				);
-				break;
 
 			case 'end' :
 				return '</form>';
-				break;
 
 			default;
 		endswitch;
-
-		return '';
 	}
 
+	/**
+	 * Returns or echos the form button.
+	 * The button may be placed outside the form wrap.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what What to get. Currently only supports 'submit'.
+	 * @param string $name The form name where the button is for.
+	 * @param string $type Either 'echo' or 'get'.
+	 * @return void|string The form button on $type 'get'. Void otherwise.
+	 */
 	public function _form_button( $what, $name, $type = 'echo' ) {
 
 		if ( 'get' === $type )
@@ -160,6 +349,15 @@ class FormGenerator {
 		echo $this->get_form_button( $what, $name );
 	}
 
+	/**
+	 * Returns the form button.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what What to get. Currently only supports 'submit'.
+	 * @param string $name The form name where the button is for.
+	 * @return string The form button.
+	 */
 	private function get_form_button( $what, $name ) {
 
 		switch ( $what ) :
@@ -177,9 +375,8 @@ class FormGenerator {
 	}
 
 	/**
-	 * @param string $o_key The key given to the option. For when you want to prevent option collision.
 	 */
-	public function _fields( array $fields, $type = 'echo', $o_key = '' ) {
+	public function _fields( array $fields, $type = 'echo' ) {
 
 		if ( 'get' === $type )
 			return $this->get_fields( $fields );
@@ -263,16 +460,16 @@ class FormGenerator {
 	}
 
 	/**
-	 * Gets fields by references.
+	 * Gets fields by reference.
 	 *
 	 * @since 1.3.0
 	 * @see http://php.net/manual/en/language.references.return.php
 	 * @uses $this->generate_fields()
 	 *
 	 * @param array $fields. Passed by reference for performance.
-	 * @return string $_fields; Passed by reference to allow field and sequence stacking.
+	 * @return string $_fields.
 	 */
-	private function &get_fields( array &$fields ) {
+	private function get_fields( array &$fields ) {
 
 		$_fields = '';
 
@@ -330,9 +527,9 @@ class FormGenerator {
 		$this->deiterate();
 	}
 
-	private function iterate() {
-		//* Add 1 to current level.
-		$this->it += ( 1 << ( ( $this->level - 1 ) * $this->bits ) );
+	private function iterate( $c = 0 ) {
+		//* Add $c to current level.
+		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
 	private function deiterate() {
@@ -342,6 +539,10 @@ class FormGenerator {
 		--$this->level;
 	}
 
+	/**
+	 *
+	 * @return mixed string the fields; empty string failure; bool true or false; void.
+	 */
 	private function create_field( array $args ) {
 
 		if ( empty( $args['_edit'] ) )
@@ -360,8 +561,13 @@ class FormGenerator {
 				return $this->fields_iterator( $args, 'echo' );
 				break;
 
+			case 'iterate_ajax' :
+				//= Can only be used in AJAX. Will echo. Will try to defer.
+				return $this->fields_iterator( $args, 'ajax' );
+				break;
+
 			case 'iterate' :
-				return $this->fields_iterator( $args, 'return' );
+				return $this->fields_iterator( $args, 'get' );
 				break;
 
 			case 'select' :
@@ -460,11 +666,21 @@ class FormGenerator {
 
 		$o = '';
 
-		if ( 'echo' === $type ) {
-			$this->output_fields_iterator( $args );
-		} else {
-			$o = $this->get_fields_iterator( $args );
-		}
+		switch ( $type ) :
+			case 'echo' :
+				$this->output_fields_iterator( $args );
+				break;
+
+			case 'ajax' :
+				$this->output_ajax_fields_iterator( $args );
+				break;
+
+			case 'get' :
+				$o = $this->get_fields_iterator( $args );
+				break;
+
+			default;
+		endswitch;
 
 		return $o;
 	}
@@ -502,8 +718,7 @@ class FormGenerator {
 			$this->create_field( $args['_iterate_selector'][ $it_option_key ] )
 		);
 
-		//* 5 === TEMPORARILY var_dump() remove 5...
-		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] | 5 );
+		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
@@ -543,6 +758,53 @@ class FormGenerator {
 		);
 	}
 
+	private function output_ajax_fields_iterator( array $args ) {
+
+
+		$it_option_key = key( $args['_iterate_selector'] );
+		//* Set maximum iterations based on option depth if left unassigned.
+		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
+
+		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] );
+
+		$_it_title_main = $args['_iterator_title'][0];
+		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
+
+		$defer = $count > 6;
+		//= Get wrap ID before iteration.
+		$wrap_id = $this->get_field_id();
+
+		//* Already escaped.
+		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $wrap_id );
+
+		//* Already escaped.
+		printf(
+			'<div class="tsfem-form-ajax-collapse-wrap tsfem-form-ajax-collapse-sub-wrap" id="%s-wrapper"%s>',
+			$wrap_id,
+			( $defer ? ' style=display:none' : '' )
+		);
+
+		for ( $it = 0; $it < $count; $it++ ) {
+			// PHP automatically checks if sprintf is meaningful.
+			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+
+			$this->iterate();
+			//* Already escaped.
+			echo $this->get_collapse_wrap( 'start', $_title, $this->get_field_id() );
+			$this->output_fields( $args['_fields'], $_title );
+			//* Already escaped.
+			echo $this->get_collapse_wrap( 'end' );
+		}
+
+		echo '</div>';
+
+		//* Already escaped.
+		$defer and printf(
+			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
+			$wrap_id
+		);
+	}
+
 	/**
 	 *
 	 * @iterator
@@ -556,8 +818,7 @@ class FormGenerator {
 
 		$selector = $this->create_field( $args['_iterate_selector'][ $it_option_key ] );
 
-		//* 2 === TEMPORARILY var_dump() remove 2...
-		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] | 2 );
+		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] );
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;

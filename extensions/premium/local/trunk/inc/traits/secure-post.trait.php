@@ -71,7 +71,7 @@ trait Secure_Post {
 			'default' => 'tsfem_e_local_nonce_action',
 
 			//* Update options.
-			'update' => 'tsfem_e_monitor_nonce_action_local_update',
+			'update' => 'tsfem_e_local_nonce_action_local_update',
 		];
 	}
 
@@ -85,15 +85,39 @@ trait Secure_Post {
 		//* Update POST listener.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			$this->init_ajax_post_checks();
+		}
+	}
+
+	/**
+	 * Checks AJAX POST for data through admin actions.
+	 *
+	 * Registers iteration callback.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function init_ajax_post_checks() {
+
 		//* AJAX update listener.
 		\add_action( 'wp_ajax_tsfem_e_local_update', [ $this, '_wp_ajax_update_data' ] );
 
 		//* AJAX API listener.
 		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
+
+		/**
+		 * Registers and checks form AJAX cb listeners.
+		 * @see class TSF_Extension_Manager\FormGenerator
+		 *
+		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
+		 * It has already checked referrer and capability.
+		 * @see \TSF_Extension_Manager\LoadAdmin
+		 */
+		\add_action( 'tsfem_form_prepare_ajax_iterations', [ $this, '_init_ajax_iteration_callback' ] );
 	}
 
 	/**
-	 * Handles Monitor POST requests.
+	 * Handles Local POST requests.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -117,7 +141,7 @@ trait Secure_Post {
 		endswitch;
 
 		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
+		\the_seo_framework()->admin_redirect( $this->local_page_slug, $args );
 		exit;
 	}
 
@@ -164,10 +188,57 @@ trait Secure_Post {
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 1079001 => '' ] );
-			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			\the_seo_framework()->admin_redirect( $this->local_page_slug );
 			exit;
 		}
 
 		return $validated[ $key ] = (bool) $result;
+	}
+
+	/**
+	 * Registers and checks form AJAX cb listeners.
+	 *
+	 * @since 1.0.0
+	 * @uses class TSF_Extension_Manager\FormGenerator
+	 */
+	public function _init_ajax_iteration_callback() {
+
+		$key = \TSF_Extension_Manager\FormGenerator::_parse_ajax_its_listener( __CLASS__, $this->form_args );
+
+		if ( $key ) {
+			if ( ( $method = $this->get_iterator_callback_by_key( $key ) ) ) {
+				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
+				$fields = $this->{$method}();
+			}
+		}
+	}
+
+	/**
+	 * Fetches the iterator callback by key.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key The valid iterator callback key.
+	 * @return string The iteration function name for key.
+	 */
+	private function get_iterator_callback_by_key( $key ) {
+
+		$items = $this->get_registered_iterator_callbacks();
+
+		return isset( $items[ $key ] ) ? $items[ $key ] : '';
+	}
+
+	/**
+	 * Returns a list of registered iterator callbacks.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The callbacks with their target key and attached method.
+	 */
+	private function get_registered_iterator_callbacks() {
+		return [
+			'department' => 'get_departments_fields',
+			'openingHours' => 'get_opening_hours_fields',
+		];
 	}
 }

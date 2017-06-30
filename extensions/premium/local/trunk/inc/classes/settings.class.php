@@ -36,7 +36,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+//\TSF_Extension_Manager\_load_trait( 'extension-forms' );
 
 /**
  * Require error trait.
@@ -69,7 +69,7 @@ final class Settings {
 	use \TSF_Extension_Manager\Enclose_Core_Final,
 		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
 		\TSF_Extension_Manager\UI,
-		\TSF_Extension_Manager\Extension_Forms,
+//		\TSF_Extension_Manager\Extension_Forms,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
 		Secure_Post,
@@ -96,35 +96,7 @@ final class Settings {
 	 */
 	public function _init( Core $_core, $slug, $hook ) {
 
-		/**
-		 * Set options index.
-		 * @see trait TSF_Extension_Manager\Extension_Options
-		 */
-		$this->o_index = 'local';
-
-		/**
-		 * Set error notice option.
-		 * @see trait TSF_Extension_Manager\Error
-		 */
-		$this->error_notice_option = 'tsfem_e_local_error_notice_option';
-
-		/**
-		 * Initialize error interface.
-		 * @see trait TSF_Extension_Manager\Error
-		 */
-		$this->init_errors();
-
-		/**
-		 * Sets nonces.
-		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
-		 */
-		$this->set_nonces();
-
-		/**
-		 * Initialize POST data checks.
-		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
-		 */
-		$this->init_post_checks();
+		$this->_init_main();
 
 		/**
 		 * Set page slug.
@@ -154,6 +126,71 @@ final class Settings {
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->register_media_scripts();
+	}
+
+	/**
+	 * Initializes AJAX for Settings page.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 */
+	public function _init_ajax( Core $_core ) {
+		$this->_init_main();
+	}
+
+	/**
+	 * Initializes main Settings page properties and methods.
+	 *
+	 * Both for AJAX and HTML output.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	private function _init_main() {
+
+		/**
+		 * Set options index.
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = 'local';
+
+		/**
+		 * Set form arguments.
+		 * @see class TSF_Extension_Manager\FormGenerator
+		 */
+		$this->form_args = [
+			'caller'       => __CLASS__,
+			'o_index'      => $this->o_index,
+			'o_key'        => '',
+			'levels'       => 5,
+			'architecture' => null,
+		];
+
+		/**
+		 * Set error notice option.
+		 * @see trait TSF_Extension_Manager\Error
+		 */
+		$this->error_notice_option = 'tsfem_e_local_error_notice_option';
+
+		/**
+		 * Initialize error interface.
+		 * @see trait TSF_Extension_Manager\Error
+		 */
+		$this->init_errors();
+
+		/**
+		 * Sets nonces.
+		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
+		 */
+		$this->set_nonces();
+
+		/**
+		 * Initialize POST data checks.
+		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
+		 */
+		$this->init_post_checks();
 	}
 
 	/**
@@ -235,7 +272,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	protected function output_admin_page() {
+	private function output_admin_page() {
 		?>
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php $this->output_local_overview_wrapper(); ?>
@@ -248,7 +285,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function output_local_overview_wrapper() {
+	private function output_local_overview_wrapper() {
 
 		$this->do_page_top_wrap();
 
@@ -264,7 +301,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function do_page_top_wrap() {
+	private function do_page_top_wrap() {
 		$this->get_view( 'layout/general/top' );
 	}
 
@@ -273,7 +310,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function do_local_overview() {
+	private function do_local_overview() {
 		$this->get_view( 'layout/pages/local' );
 	}
 
@@ -332,15 +369,9 @@ final class Settings {
 	 *
 	 * @return \TSF_Extension_Manager\FormGenerator
 	 */
-	protected function output_department_fields() {
+	private function output_department_fields() {
 
-		$args = [
-			'o_index'      => $this->o_index,
-			'o_key'        => '',
-			'levels'       => 5,
-			'architecture' => null,
-		];
-		$f = new \TSF_Extension_Manager\FormGenerator( $args );
+		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
 
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ) );
 		$f->_fields( $this->get_departments_fields() );
@@ -352,7 +383,7 @@ final class Settings {
 		$f = null;
 
 		//* @TODO add test button... requires data wrapper....
-	//	$this->set_bottom_wrap_items( $this->get_test_button() );
+		//	$this->set_bottom_wrap_items( $this->get_test_button() );
 		$this->set_bottom_wrap_items( $submit );
 	}
 
@@ -366,7 +397,7 @@ final class Settings {
 	 * @param bool   $get  Whether to retrieve or store $item.
 	 * @return void|array Void if $get is false. The stores items otherwise.
 	 */
-	protected function set_bottom_wrap_items( $item = null, $get = false ) {
+	private function set_bottom_wrap_items( $item = null, $get = false ) {
 
 		static $cache = [];
 
@@ -385,7 +416,7 @@ final class Settings {
 	 *
 	 * @return string The bottom wrap items.
 	 */
-	protected function get_bottom_wrap_items() {
+	private function get_bottom_wrap_items() {
 
 		$items = $this->set_bottom_wrap_items( null, true );
 
@@ -407,7 +438,7 @@ final class Settings {
 	 * @param array $args The arguments to be supplied within the file name.
 	 *        Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = [] ) {
+	private function get_view( $view, array $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;
@@ -417,8 +448,6 @@ final class Settings {
 
 		include( $file );
 	}
-
-
 
 	/**
 	 * TODO move this somewhere nice... var_dump().
