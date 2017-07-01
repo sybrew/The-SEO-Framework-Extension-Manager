@@ -155,9 +155,35 @@ class FormGenerator {
 	}
 
 	/**
+	 * Returns the iteration start for AJAX callback.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @global object $_POST
+	 *
+	 * @return unsigned int (R>0) $i The previous iteration value. 1 if $_POST value not set.
+	 */
+	private static function get_ajax_iteration_start() {
+		//= Careful, smart logic. Will return 1 if not set.
+		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
+	}
+
+	/**
+	 * Returns the iteration start for AJAX callback.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @global object $_POST
+	 *
+	 * @return unsigned int (R>=0) $i The new iteration value. 0 if $_POST is not set.
+	 */
+	private static function get_ajax_iteration_amount() {
+		return isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0;
+	}
+
+	/**
 	 */
 	public static function _output_ajax_form_its() {
-
 
 		$fields = static::$ajax_it_fields;
 
@@ -184,15 +210,14 @@ class FormGenerator {
 		while ( $unset_count-- ) {
 			array_shift( $items );
 		}
-		//* Remove current item.
+		//* Remove current item, as the iterator reintroduces it.
 		array_pop( $items );
 
 		foreach ( $items as $item ) {
 			if ( is_numeric( $item ) ) {
 				$this->iterate( (int) $item );
 			} else {
-				++$this->level;
-				$this->level_names[ $this->level - 1 ] = $item;
+				$this->level_names[ ++$this->level - 1 ] = $item;
 			}
 		}
 	}
@@ -210,10 +235,10 @@ class FormGenerator {
 	}
 
 	private function prepare_ajax_iteration_fields() {
-		foreach ( static::$ajax_it_fields as $k => $i ) {
-			$i['_type'] = 'iterate_ajax';
-			static::$ajax_it_fields[ $k ] = $i;
-		}
+		$k = key( static::$ajax_it_fields );
+		static::$ajax_it_fields[ $k ]['_type'] = 'iterate_ajax';
+		static::$ajax_it_fields[ $k ]['_ajax_it_start'] = static::get_ajax_iteration_start();
+		static::$ajax_it_fields[ $k ]['_ajax_it_new'] = static::get_ajax_iteration_amount();
 	}
 
 	/**
@@ -528,15 +553,14 @@ class FormGenerator {
 	}
 
 	private function iterate( $c = 0 ) {
-		//* Add $c to current level.
+		//* Add $c + 1 to current level. We normally count from 0.
 		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
 	private function deiterate() {
-		//* Unset last level.
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
-		unset( $this->level_names[ $this->level ] );
-		--$this->level;
+		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
+		//* Unset highest level.
+		unset( $this->level_names[ $this->level + 1 ] );
 	}
 
 	/**
@@ -548,7 +572,6 @@ class FormGenerator {
 		if ( empty( $args['_edit'] ) )
 			return '';
 
-		$this->clean_list_index( $args );
 		$this->clean_desc_index( $args['_desc'] );
 
 		switch ( $args['_type'] ) :
@@ -758,33 +781,26 @@ class FormGenerator {
 		);
 	}
 
+	/**
+	 *
+	 * @iterator
+	 */
 	private function output_ajax_fields_iterator( array $args ) {
-
 
 		$it_option_key = key( $args['_iterate_selector'] );
 		//* Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
-		$count = $this->get_field_value( $args['_iterate_selector'][ $it_option_key ]['_default'] );
+		$start = (int) $args['_ajax_it_start'];
+		$amount = (int) $args['_ajax_it_new'];
+		// $count = $amount + $start - 1; // (that's nice, dear.)
 
 		$_it_title_main = $args['_iterator_title'][0];
 		$_it_title      = isset( $args['_iterator_title'][1] ) ? $args['_iterator_title'][1] : $_it_title_main;
 
-		$defer = $count > 6;
-		//= Get wrap ID before iteration.
-		$wrap_id = $this->get_field_id();
+		$this->iterate( $start - 1 );
 
-		//* Already escaped.
-		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $wrap_id );
-
-		//* Already escaped.
-		printf(
-			'<div class="tsfem-form-ajax-collapse-wrap tsfem-form-ajax-collapse-sub-wrap" id="%s-wrapper"%s>',
-			$wrap_id,
-			( $defer ? ' style=display:none' : '' )
-		);
-
-		for ( $it = 0; $it < $count; $it++ ) {
+		for ( $it = $start; $it < $amount; $it++ ) {
 			// PHP automatically checks if sprintf is meaningful.
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
@@ -795,14 +811,6 @@ class FormGenerator {
 			//* Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
 		}
-
-		echo '</div>';
-
-		//* Already escaped.
-		$defer and printf(
-			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
-			$wrap_id
-		);
 	}
 
 	/**
@@ -903,7 +911,8 @@ class FormGenerator {
 	}
 
 	/**
-	 * Creates a description block.
+	 * Creates a description block from either a single description or multiple
+	 * descriptions fed through array,
 	 *
 	 * @since 1.3.0
 	 *
@@ -938,27 +947,30 @@ class FormGenerator {
 		return $this->get_option( $option, $default );
 	}
 
-	//* TEMP. Simply put, all args need to be filled in correctly prior to running this to improve performance.
-	private function clean_list_index( array &$args ) {
-		$args['_type']    = isset( $args['_type'] )    ? (string) $args['_type']    : '';
-		$args['_default'] = isset( $args['_default'] ) ? (string) $args['_default'] : '';
-		$args['_ph']      = isset( $args['_ph'] )      ? (string) $args['_ph']      : '';
-		$args['_ret']     = isset( $args['_ret'] )     ? (string) $args['_ret']     : '';
-		$args['_req']     = isset( $args['_req'] )     ? (bool) $args['_req']       : false;
-		$args['_edit']    = isset( $args['_edit'] )    ? (bool) $args['_edit']      : false;
-		$args['_desc']    = isset( $args['_desc'] )    ? (array) $args['_desc']     : [];
-		$args['_range']   = isset( $args['_range'] )   ? (array) $args['_range']    : [];
-		$args['_fields']  = isset( $args['_fields'] )  ? (array) $args['_fields']   : [];
-		$args['_dd']      = isset( $args['_dd'] )      ? (array) $args['_dd']       : [];
-	}
-
+	/**
+	 * Cleans up '_desc' index.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $desc The description index with plausibily missing values.
+	 *              Passed by reference.
+	 */
 	private function clean_desc_index( array &$desc ) {
 		$desc[0] = isset( $desc[0] ) ? $desc[0] : '';
 		$desc[1] = isset( $desc[1] ) ? $desc[1] : '';
 		$desc[2] = isset( $desc[2] ) ? $desc[2] : '';
 	}
 
-	//* Cleans range, including steps @ 1e-10
+	/**
+	 * Cleans up '_range' index.
+	 *
+	 * Up to steps e-/+10
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $range The range index with plausibly missing or exceeding values.
+	 *              Passed by reference.
+	 */
 	private function clean_range_index( array &$range ) {
 		$range[0] = isset( $range[0] ) ? (string) $range[0] : '';
 		$range[1] = isset( $range[1] ) ? (string) $range[1] : '';
@@ -1009,7 +1021,7 @@ class FormGenerator {
 		// Escaped.
 		$s_type = \esc_attr( $args['_type'] );
 		$s_name = $s_id = $this->get_field_id();
-		$s_ph   = $args['_ph'] ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_range = isset( $s_range ) ? $s_range : '';
@@ -1294,7 +1306,7 @@ class FormGenerator {
 
 		// Escaped.
 		$s_name = $s_id = $this->get_field_id();
-		$s_ph   = $args['_ph'] ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
