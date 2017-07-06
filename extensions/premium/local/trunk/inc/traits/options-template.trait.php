@@ -100,6 +100,9 @@ trait Options_Template {
 					\__( 'Main Department', '' ),
 					\__( 'Department %d', '' ),
 				],
+				'_iterator_title_dynamic' => [
+					'single' => 'name',
+				],
 				'_iterator_cb' => $this->get_iterator_callback_by_key( 'department' ),
 				'_fields' => $this->get_global_department_fields(),
 			],
@@ -2393,6 +2396,9 @@ trait Options_Template {
 				'_iterate_selector' => $this->get_opening_hours_iterator_fields(),
 				'_iterator_title' => [
 					\__( 'Opening Hours %d', '' ),
+				],
+				'_iterator_title_dynamic' => [
+					'plural' => 'dayOfWeek',
 				],
 				'_iterator_cb' => $this->get_iterator_callback_by_key( 'openingHours' ),
 				'_fields' => $this->get_opening_hours_action_fields(),

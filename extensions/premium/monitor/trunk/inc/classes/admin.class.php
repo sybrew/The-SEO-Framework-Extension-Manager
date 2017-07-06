@@ -1045,16 +1045,16 @@ final class Admin extends Api {
 		$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 		$da_i18n = \__( 'Disconnect site?', 'the-seo-framework-extension-manager' );
 
-		$button = '<button type="submit" for="' . $field_id . '-validator" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning">' . \esc_html( $disconnect_i18n ) . '</button>';
+		$button = '<button type=submit for="' . $field_id . '-validator" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning">' . \esc_html( $disconnect_i18n ) . '</button>';
 
 		$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
-						. '<input type="checkbox" id="' . $field_id . '-action" value="1" />'
+						. '<input type=checkbox id="' . $field_id . '-action" value=1 />'
 						. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . \esc_html( $disconnect_i18n ) . '</label>'
 						. $button
 					. '</div></div>';
 
 		$button = sprintf(
-			'<form name="deactivate" action="%s" method="post" id="tsfem-e-monitor-disconnect-form">%s</form>',
+			'<form name=deactivate action="%s" method=post id="tsfem-e-monitor-disconnect-form">%s</form>',
 			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ),
 			$nonce_action . $nonce . $switcher
 		);

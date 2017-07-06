@@ -13,8 +13,13 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 		<p class="hide-if-no-js" id="tsfem-e-monitor-privacy-readmore-wrap"><a class="tsfem-e-monitor-readmore" id="tsfem-e-monitor-privacy-readmore"><?php \esc_html_e( 'Read more...', 'the-seo-framework-extension-manager' ); ?></a></p>
 		<div class="hide-if-js" id="tsfem-e-monitor-privacy-readmore-content">
 			<p><?php
-				printf( \esc_html_x( 'This is a small introductory excerpt of our privacy policy. For full details, visit our %s.', '%s = Privacy Policy', 'the-seo-framework-extension-manager' ),
-					sprintf( '<a href="%s" rel="external nofollow">%s</a>', \esc_url( 'https://theseoframework.com/privacy/' ), \esc_html__( 'Privacy Policy' ) )
+				//* Already escaped.
+				echo \tsf_extension_manager()->convert_markdown(
+					sprintf(
+						\esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, visit our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),
+						'https://theseoframework.com/privacy/'
+					),
+					[ 'a' ]
 				);
 			?></p>
 			<h4 class="tsfem-form-title"><?php \esc_html_e( 'Data collection', 'the-seo-framework-extension-manager' ); ?></h4>

@@ -199,6 +199,7 @@ class FormGenerator {
 	 * Prepares the current iteration and option levels and names.
 	 *
 	 * @since 1.3.0
+	 * @iterator
 	 */
 	private function prepare_ajax_iteration() {
 
@@ -210,6 +211,7 @@ class FormGenerator {
 		while ( $unset_count-- ) {
 			array_shift( $items );
 		}
+
 		//* Remove current item, as the iterator reintroduces it.
 		array_pop( $items );
 
@@ -235,7 +237,10 @@ class FormGenerator {
 	}
 
 	private function prepare_ajax_iteration_fields() {
+
+		//* TODO Move this into method parameter so we can loop?
 		$k = key( static::$ajax_it_fields );
+
 		static::$ajax_it_fields[ $k ]['_type'] = 'iterate_ajax';
 		static::$ajax_it_fields[ $k ]['_ajax_it_start'] = static::get_ajax_iteration_start();
 		static::$ajax_it_fields[ $k ]['_ajax_it_new'] = static::get_ajax_iteration_amount();
@@ -455,7 +460,6 @@ class FormGenerator {
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @uses $this->o_key
-	 * @access private
 	 *
 	 * @return string Full field ID/name attribute.
 	 */
@@ -482,6 +486,26 @@ class FormGenerator {
 		}
 
 		return $k;
+	}
+
+	/**
+	 * Returns next field name and ID attributes for form fields based on $key.
+	 *
+	 * Careful, when used, it should be used for all fields within scope.
+	 * Otherwise, data will not get through POST. As the current ID is converted
+	 * to an array, rather than string.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->get_field_id()
+	 *
+	 * @param string $key The next form field key.
+	 * @return string Full field ID/name attribute.
+	 */
+	private function get_sub_field_id( $key ) {
+
+		$id = $this->get_field_id();
+
+		return sprintf( '%s[%s]', $id, $key );
 	}
 
 	/**
@@ -761,12 +785,19 @@ class FormGenerator {
 		);
 
 		for ( $it = 0; $it < $count; $it++ ) {
-			// PHP automatically checks if sprintf is meaningful.
+			//* PHP automatically checks if sprintf is meaningful.
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
+
+			$collapse_args = [
+				'title' => $_title,
+				'dyn_title' => $args['_iterator_title_dynamic'],
+				'id' => $this->get_field_id(),
+			];
+
 			//* Already escaped.
-			echo $this->get_collapse_wrap( 'start', $_title, $this->get_field_id() );
+			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
 			//* Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
@@ -801,12 +832,19 @@ class FormGenerator {
 		$this->iterate( $start - 1 );
 
 		for ( $it = $start; $it < $amount; $it++ ) {
-			// PHP automatically checks if sprintf is meaningful.
+			//* PHP automatically checks if sprintf is meaningful.
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
+
+			$collapse_args = [
+				'title' => $_title,
+				'dyn_title' => $args['_iterator_title_dynamic'],
+				'id' => $this->get_field_id(),
+			];
+
 			//* Already escaped.
-			echo $this->get_collapse_wrap( 'start', $_title, $this->get_field_id() );
+			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
 			//* Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
@@ -840,7 +878,14 @@ class FormGenerator {
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
-			$_fields .= $this->get_collapse_wrap( 'start', $_title, $this->get_field_id() );
+
+			$collapse_args = [
+				'title' => $_title,
+				'dyn_title' => $args['_iterator_title_dynamic'],
+				'id' => $this->get_field_id(),
+			];
+
+			$_fields .= $this->get_collapse_wrap( 'start', $collapse_args );
 			$_fields .= $this->get_fields( $args['_fields'] );
 			$_fields .= $this->get_collapse_wrap( 'end' );
 		}
@@ -861,20 +906,46 @@ class FormGenerator {
 		);
 	}
 
-	private function get_collapse_wrap( $what, $title = '', $id = '' ) {
+	private function get_collapse_wrap( $what, array $args = [] ) {
 
 		if ( 'start' === $what ) {
-			$s_id = $id ? sprintf( 'id="tsfem-form-collapse-%s"', $id ) : '';
 
-			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $id );
+			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
+
+			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
 			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
 
-			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', \esc_html( $title ) );
+			$dyn_title_type = key( $args['dyn_title'] );
+			$dyn_title_key = reset( $args['dyn_title'] );
+			$data = vsprintf(
+				'data-dyntitletype="%s" data-dyntitleid="%s" data-dyntitlekey="%s" data-dyntitleprep="%s"',
+				[
+					$dyn_title_type,
+					$args['id'],
+					$dyn_title_key,
+					$args['title'],
+				]
+			);
+
+			$_dyn_title = $this->get_field_value_by_key( $this->get_sub_field_id( $dyn_title_key ) );
+			if ( is_array( $_dyn_title ) ) {
+				$tmp = '';
+				foreach ( $_dyn_title as $_tmp ) {
+					$tmp = $_tmp . ',';
+				}
+				$_dyn_title = rtrim( $tmp, ', ' );
+			}
+
+			$_title = $_dyn_title ? $args['title'] . ' - ' . $_dyn_title : $args['title'];
+
+			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', \esc_html( $_title ) );
 			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-form-icon-unknown"></span>';
 
-			$header = vsprintf( '<label class="tsfem-form-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
+			$header = vsprintf(
+				'<label class="tsfem-form-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s" %s>%s%s</label>',
 				[
 					$checkbox_id,
+					$data,
 					$title,
 					$icon,
 				]
@@ -945,6 +1016,10 @@ class FormGenerator {
 		}
 
 		return $this->get_option( $option, $default );
+	}
+
+	private function get_field_value_by_key( $key, $default = null ) {
+		return '';
 	}
 
 	/**
@@ -1229,6 +1304,9 @@ class FormGenerator {
 		);
 	}
 
+	/**
+	 * @generator
+	 */
 	private function get_select_multi_a11y_options( array $select, $selected = '' ) {
 
 		$_fields = '';
@@ -1250,39 +1328,23 @@ class FormGenerator {
 
 		yield '<ul class="tsfem-form-multi-a11y-wrap">';
 
-		if ( '' !== $selected ) :
-			foreach ( $select as $args ) :
-				$this->iterate();
-				if ( isset( $args[2] ) ) {
-					//* Level up.
-					yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
-					yield '<li>';
-					yield $this->get_select_multi_a11y_options( $args[2], $selected );
-					yield '</li>';
-				} else {
-					if ( in_array( $args[0], [ $selected ], true ) ) {
-						yield sprintf( '<li><label><input type=checkbox name="%s" value="%s" checked>%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
-					} else {
-						yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
-					}
-				}
-			endforeach;
-		else :
-			foreach ( $select as $args ) :
-				$this->iterate();
-				if ( isset( $args[2] ) ) {
-					//* Level up.
-					yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
-					yield '<li>';
-					yield $this->get_select_multi_a11y_options( $args[2], $selected );
-					yield '</li>';
+		foreach ( $select as $args ) :
+			$this->iterate();
+			if ( isset( $args[2] ) ) {
+				//* Level up.
+				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
+				yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+				yield '<li>';
+				yield $this->get_select_multi_a11y_options( $args[2], $selected );
+				yield '</li>';
+			} else {
+				if ( '' !== $selected && in_array( $args[0], [ $selected ], true ) ) {
+					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s" checked>%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				} else {
 					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				}
-			endforeach;
-		endif;
+			}
+		endforeach;
 
 		yield '</ul>';
 	}
@@ -1305,7 +1367,8 @@ class FormGenerator {
 		$title = $args['_desc'][0];
 
 		// Escaped.
-		$s_name = $s_id = $this->get_field_id();
+		$s_name = $s_id = $this->get_sub_field_id( 'url' );
+		$s_name_id = $s_id_id = $this->get_sub_field_id( 'id' );
 		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
@@ -1334,23 +1397,33 @@ class FormGenerator {
 					)
 				),
 				vsprintf(
-					'<div class="tsfem-form-setting-input tsfem-flex">%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s>',
 							[
 								$s_id,
 								$s_name,
-								\esc_attr( $args['_default'] ),
+								\esc_attr( $args['_default'] ), // TODO get value
 								$s_ph,
 							]
 						),
 						vsprintf(
-							'<button type=button class="tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small" data-href="%1$s" title="%2$s" id="%3$s-select" data-inputid="%3$s">%4$s</button>',
+							'<input type=hidden id="%s" name=%s value="%s">',
 							[
+								$s_name_id,
+								$s_id_id,
+								\esc_attr( $args['_default'] ), // TODO get value
+							]
+						),
+						vsprintf(
+							'<button type=button class="%1$s" data-href="%2$s" title="%3$s" id="%4$s-select" data-input-url="%4$s" data-input-id="%5$s">%6$s</button>',
+							[
+								'tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small',
 								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
 								\esc_attr_x( 'Select image', 'Button hover title', '' ),
 								$s_id,
+								$s_id_id,
 								\esc_html__( 'Select Image', '' ),
 							]
 						),

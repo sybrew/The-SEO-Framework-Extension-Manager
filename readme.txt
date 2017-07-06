@@ -237,8 +237,14 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 	* **Version:**
 		* 1.0.1-gamma
 		* **Premium only until gamma-testing is completed.**
+	* **Added:**
+		/
+		* TODO You can now specify the article type within the in-post SEO settings.
+			/
+			* A global option is planned that will set the default for all of these. So please don't go through thousands of post finding the "correct" setting.
+			* Because of the above, a temporarily "Default" option is set. This means it will "auto-determine" (TODO this is not correct) until the global option is set.
 	* **Changed:**
-		* Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked or useless. So:
+		* Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked. So:
 			* Published date is now also output on non-AMP.
 			* Modified date is now also output on non-AMP.
 			* Post Author is now also output on non-AMP.
@@ -255,8 +261,7 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* 1.0.0-beta-3
 	* **Internal:**
 		* **Improved:**
-			/
-			* TODO The privacy policy link on the registration page now opens in a new window.
+			* The privacy policy link on the registration page now opens in a new window and no longer tells us where you clicked it.
 		* **Changed:**
 			/
 			* TODO The plugin interface is now only loaded in cache when on the Monitor page. Saving a lot of resources.
@@ -273,6 +278,9 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 			* **Fixed:**
 				* May 16th, 2017: The return data now officially supports 1.0.0-beta-3 and later, rather than 1.0.0 and later.
 					* This outputted a notice on all testing fields and therefore showed no useful information.
+				* July 6th, 2017: URLs with UTF-8 and UTF-16 characters can now be detected.
+					* This improves canonical URL detection on some sites.
+					* This improves icon detection when using Jetpack Photon.
 * **Premium - Honeypot:**
 	* **Version:**
 		* 1.0.1-beta

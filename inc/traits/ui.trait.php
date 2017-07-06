@@ -475,7 +475,7 @@ trait UI {
 
 		$this->additional_l10n[] = [
 			'dependency' => 'tsfem-media',
-			'name' => 'tsfemMediaL10n',
+			'name' => 'tsfemMediaData',
 			'strings' => [
 				'nonce'          => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
 				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
@@ -488,6 +488,19 @@ trait UI {
 				'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
 			],
 		];
+	}
+
+	/**
+	 * Adds an extra body class on the extensions manager page.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $classes The current body classes.
+	 * @return string The expanded body classes.
+	 */
+	final public function _add_admin_body_class( $classes = '' ) {
+		return trim( $classes ) . ' tsfem ';
 	}
 
 	/**
@@ -507,15 +520,103 @@ trait UI {
 	}
 
 	/**
-	 * Adds an extra body class on the extensions manager page.
+	 * Handles cropping of images on AJAX request.
 	 *
-	 * @since 1.0.0
+	 * Copied from WordPress Core wp_ajax_crop_image.
+	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
+	 *           2. It now only accepts TSF own AJAX nonces.
+	 *           3. It now only accepts context 'tsf-image'
+	 *           4. It no longer accepts a default context.
+	 *
+	 * @since 1.3.0
 	 * @access private
-	 *
-	 * @param string $classes The current body classes.
-	 * @return string The expanded body classes.
+	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
 	 */
-	final public function _add_admin_body_class( $classes = '' ) {
-		return trim( $classes ) . ' tsfem ';
+	final public function _wp_ajax_crop_image() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+
+				if ( ! $this->_is_media_nonce_verified() )
+					\wp_send_json_error();
+
+				$attachment_id = \absint( $_POST['id'] );
+
+				$context = \sanitize_key( str_replace( '_', '-', $_POST['context'] ) );
+				$data    = array_map( 'absint', $_POST['cropDetails'] );
+				$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
+
+				if ( ! $cropped || \is_wp_error( $cropped ) )
+					\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
+
+				switch ( $context ) :
+					case 'tsfem-image':
+
+						/**
+						 * Fires before a cropped image is saved.
+						 *
+						 * Allows to add filters to modify the way a cropped image is saved.
+						 *
+						 * @since 4.3.0 WordPress Core
+						 *
+						 * @param string $context       The Customizer control requesting the cropped image.
+						 * @param int    $attachment_id The attachment ID of the original image.
+						 * @param string $cropped       Path to the cropped image file.
+						 */
+						\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
+
+						/** This filter is documented in wp-admin/custom-header.php */
+						$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
+
+						$parent_url = \wp_get_attachment_url( $attachment_id );
+						$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+
+						$size       = @getimagesize( $cropped );
+						$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+
+						$object = [
+							'post_title'     => basename( $cropped ),
+							'post_content'   => $url,
+							'post_mime_type' => $image_type,
+							'guid'           => $url,
+							'context'        => $context,
+						];
+
+						$attachment_id = \wp_insert_attachment( $object, $cropped );
+						$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
+
+						/**
+						 * Filters the cropped image attachment metadata.
+						 *
+						 * @since 4.3.0 WordPress Core
+						 *
+						 * @see wp_generate_attachment_metadata()
+						 *
+						 * @param array $metadata Attachment metadata.
+						 */
+						$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
+						\wp_update_attachment_metadata( $attachment_id, $metadata );
+
+						/**
+						 * Filters the attachment ID for a cropped image.
+						 *
+						 * @since 4.3.0 WordPress Core
+						 *
+						 * @param int    $attachment_id The attachment ID of the cropped image.
+						 * @param string $context       The Customizer control requesting the cropped image.
+						 */
+						$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
+						break;
+
+					default :
+						\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
+						break;
+				endswitch;
+
+				\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
+			endif;
+		endif;
+
+		exit;
 	}
 }

@@ -54,6 +54,9 @@ final class LoadAdmin extends AdminPages {
 		//* Ajax listener for form iterations.
 		\add_action( 'wp_ajax_tsfemForm_iterate', [ $this, '_wp_ajax_tsfemForm_iterate' ], 11 );
 
+		//* Ajax listener for image saving.
+		\add_action( 'wp_ajax_tsfem_crop_image', [ $this, '_wp_ajax_crop_image' ] );
+
 		//* Listener for updates.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 	}
@@ -149,7 +152,7 @@ final class LoadAdmin extends AdminPages {
 					/**
 					 * Outputs the iteration items when properly prepared and when matched.
 					 *
-					 * This action shouldn't be invoked by extensions.
+					 * This action shouldn't be called upon by extensions.
 					 *
 					 * @see class TSF_Extension_Manager\FormGenerator
 					 * @access private
