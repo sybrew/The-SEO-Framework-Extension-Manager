@@ -106,7 +106,7 @@ trait Secure_Post {
 		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
 
 		/**
-		 * Registers and checks form AJAX cb listeners.
+		 * Registers and checks form AJAX iteration callback listeners.
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 *
 		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
@@ -114,91 +114,56 @@ trait Secure_Post {
 		 * @see \TSF_Extension_Manager\LoadAdmin
 		 */
 		\add_action( 'tsfem_form_prepare_ajax_iterations', [ $this, '_init_ajax_iteration_callback' ] );
+
+		/**
+		 * Listens to AJAX form save.
+		 * @see class TSF_Extension_Manager\FormGenerator
+		 *
+		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_save().
+		 * It has already checked referrer and capability.
+		 * @see \TSF_Extension_Manager\LoadAdmin
+		 */
+		\add_action( 'tsfem_form_do_ajax_save', [ $this, '_do_ajax_form_save' ] );
 	}
 
 	/**
-	 * Handles Local POST requests.
+	 * Checks AJAX POST for data through admin actions.
 	 *
 	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @return void If nonce failed.
+	 * @uses trait \TSF_Extension_Manager\Extension_Options
+	 * @uses trait \TSF_Extension_Manager\Error
+	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
+	 * @uses class \TSF_Extension_Manager\FormGenerator
 	 */
-	public function _handle_update_post() {
+	public function _do_ajax_form_save() {
 
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) )
-			return;
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
 
-		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+		$data = [];
+		parse_str( $post_data, $data );
 
-		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
-			return;
-
-		switch ( $options['nonce-action'] ) :
-			default :
-				$this->set_error_notice( [ 1070101 => '' ] );
-				break;
-		endswitch;
-
-		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\the_seo_framework()->admin_redirect( $this->local_page_slug, $args );
-		exit;
-	}
-
-	/**
-	 * Checks the Extension's page nonce. Returns false if nonce can't be found
-	 * or if user isn't allowed to perform nonce.
-	 * Performs wp_die() when nonce verification fails.
-	 *
-	 * Never run a sensitive function when it's returning false. This means no
-	 * nonce can or has been been verified.
-	 *
-	 * @since 1.0.0
-	 * @staticvar bool $validated Determines whether the nonce has already been verified.
-	 *
-	 * @param string $key The nonce action used for caching.
-	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
-	 * @return bool True if verified and matches. False if can't verify.
-	 */
-	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
-
-		static $validated = [];
-
-		if ( isset( $validated[ $key ] ) )
-			return $validated[ $key ];
-
-		if ( false === $this->is_local_page() && false === \tsf_extension_manager()->can_do_settings() )
-			return $validated[ $key ] = false;
-
-		if ( $check_post ) {
-			/**
-			 * If this page doesn't parse the site options,
-			 * there's no need to check them on each request.
-			 */
-			if ( empty( $_POST )
-			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			) {
-				return $validated[ $key ] = false;
-			}
+		/**
+		 * If this page doesn't parse the site options,
+		 * there's no need to check them on each request.
+		 */
+		if ( empty( $data )
+		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		) {
+			return $this->get_ajax_notice( false, 1070100 );
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 
-		if ( false === $result ) {
-			//* Nonce failed. Set error notice and reload.
-			$this->set_error_notice( [ 1079001 => '' ] );
-			\the_seo_framework()->admin_redirect( $this->local_page_slug );
-			exit;
-		}
-
-		return $validated[ $key ] = (bool) $result;
+		var_dump( $options ); exit;
+	//	$success = $this->save_option( )
 	}
 
 	/**
 	 * Registers and checks form AJAX cb listeners.
 	 *
 	 * @since 1.0.0
+	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
 	 * @uses class TSF_Extension_Manager\FormGenerator
 	 */
 	public function _init_ajax_iteration_callback() {
@@ -208,7 +173,7 @@ trait Secure_Post {
 		if ( $key ) {
 			if ( ( $method = $this->get_iterator_callback_by_key( $key ) ) ) {
 				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
-				$fields = $this->{$method}();
+				$fields = Options::get_instance()->{$method}();
 			}
 		}
 	}

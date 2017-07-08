@@ -51,10 +51,13 @@ final class LoadAdmin extends AdminPages {
 		//* Ajax listener for error notice catching.
 		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ $this, '_wp_ajax_get_dismissible_notice' ] );
 
-		//* Ajax listener for form iterations.
+		//* AJAX listener for form iterations.
 		\add_action( 'wp_ajax_tsfemForm_iterate', [ $this, '_wp_ajax_tsfemForm_iterate' ], 11 );
 
-		//* Ajax listener for image saving.
+		//* AJAX listener for form saving.
+		\add_action( 'wp_ajax_tsfemForm_save', [ $this, '_wp_ajax_tsfemForm_save' ], 11 );
+
+		//* AJAX listener for image cropping.
 		\add_action( 'wp_ajax_tsfem_crop_image', [ $this, '_wp_ajax_crop_image' ] );
 
 		//* Listener for updates.
@@ -130,7 +133,7 @@ final class LoadAdmin extends AdminPages {
 	}
 
 	/**
-	 * Propagate FormGenerator class AJAX calls.
+	 * Propagate FormGenerator class AJAX iteration calls.
 	 *
 	 * @since 1.3.0
 	 * @uses class TSF_Extension_Manager\FormGenerator
@@ -158,6 +161,31 @@ final class LoadAdmin extends AdminPages {
 					 * @access private
 					 */
 					\do_action( 'tsfem_form_do_ajax_iterations' );
+				}
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Propagate FormGenerator class AJAX save calls.
+	 *
+	 * @since 1.3.0
+	 * @uses class TSF_Extension_Manager\FormGenerator
+	 * @access private
+	 */
+	final public function _wp_ajax_tsfemForm_save() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
+					/**
+					 * Allows callers to save POST data.
+					 * @see class TSF_Extension_Manager\FormGenerator
+					 * @access protected
+					 */
+					\do_action( 'tsfem_form_do_ajax_save' );
 				}
 			endif;
 		endif;

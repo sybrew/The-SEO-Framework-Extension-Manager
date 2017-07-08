@@ -133,7 +133,7 @@ class Api extends Core {
 
 		return [
 			'success' => true,
-			'data' => \stripslashes_deep( $data ),
+			'data' => $data,
 		];
 	}
 

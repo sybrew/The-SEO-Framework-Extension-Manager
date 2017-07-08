@@ -29,24 +29,27 @@ defined( 'ABSPATH' ) or die;
 /**
  * Holds options template for package TSF_Extension_Manager\Extension\Local.
  *
+ * @NOTE Documentation is incomplete.
+ * Methods `set_instance()` and `get_instance()` are available.
+ *
  * @since 1.0.0
  * @access private
+ * @uses trait TSF_Extension_Manager\Enclose_Core_Final
+ * @uses trait TSF_Extension_Manager\Construct_Core_Static_Final_Instance
+ * @see TSF_Extension_Manager\Traits\Overload
+ *
+ * @final Can't be extended.
  */
-trait Options_Template {
-
-	function get_template_output( $option, $default ) {
-		yield [ $option => $this->get_option( $option ) ?: $default ];
-	}
-
-	//* Number of departments set.
-	function get_department_count() { }
-
-	//* The deparments set, in order??
-	function get_departments() { }
+final class Options {
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
+	 * Returns all department fields for form iteration.
 	 *
 	 * @link https://developers.google.com/search/docs/data-types/local-businesses
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return array : {
 	 *    string Option name => array Option attributes : {
@@ -68,7 +71,7 @@ trait Options_Template {
 	 *    }
 	 * }
 	 */
-	function get_departments_fields() {
+	public function get_departments_fields() {
 		return [
 			'department' => [
 				'_default' => null,
@@ -87,7 +90,7 @@ trait Options_Template {
 						'_desc' => [
 							\__( 'Set number of departments', '' ),
 							\__( 'Each department must have its own publicly recognizable name and type.', '' ),
-							\__( 'For example, if you have a small shop inside or belonging to your restaurant, then set two departments.', '' ),
+							\__( 'For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments.', '' ),
 						],
 						'_range' => [
 							1,
@@ -103,8 +106,36 @@ trait Options_Template {
 				'_iterator_title_dynamic' => [
 					'single' => 'name',
 				],
-				'_iterator_cb' => $this->get_iterator_callback_by_key( 'department' ),
 				'_fields' => $this->get_global_department_fields(),
+			],
+		];
+	}
+
+	/**
+	 * Returns iteratable opening hour fields.
+	 *
+	 * @since 1.0.0
+	 * @static
+	 *
+	 * @return array
+	 */
+	public function get_opening_hours_fields() {
+		return [
+			'openingHours' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'iterate',
+				'_desc' => [],
+				'_iterate_selector' => $this->get_opening_hours_iterator_fields(),
+				'_iterator_title' => [
+					\__( 'Opening Hours %d', '' ),
+				],
+				'_iterator_title_dynamic' => [
+					'plural' => 'dayOfWeek',
+				],
+				'_fields' => $this->get_opening_hours_action_fields(),
 			],
 		];
 	}
@@ -154,12 +185,12 @@ trait Options_Template {
 	 *    }
 	 * }
 	 */
-	function get_global_department_fields() {
+	private function get_global_department_fields() {
 		return [
 			'type' => [
 				'_default' => null,
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'select',
 				'_desc' => [
@@ -168,14 +199,20 @@ trait Options_Template {
 						\__( 'Choose a (sub)type that closely describes the business.', '' ),
 						\__( '(Sub)types with an asterisk are pending support.', '' ),
 					],
-					\__( 'Select "Local Business" if your department type is not listed.', '' ),
+					vsprintf(
+						'%s<br>%s',
+						[
+							\__( 'Select "Local Business" if the department type is not listed.', '' ),
+							\__( 'Select "Not Specified" to disable this department.', '' ),
+						]
+					),
 				],
 				'_select' => $this->get_department_items(),
 			],
 			'name' => [
 				'_default' => '',
 				'_edit' => true,
-				'_ret' => 'string',
+				'_ret' => 's',
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
@@ -215,7 +252,7 @@ trait Options_Template {
 				'_desc' => [
 					\__( 'Department URL', '' ),
 					\__( 'The fully-qualified URL of the specific department location.', '' ),
-					\__( 'For example, your contact page or home page. It must be a working link and the department location must be described on there.', '' ),
+					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described on there.', '' ),
 				],
 			],
 			'telephone' => [
@@ -312,7 +349,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_address_fields() {
+	private function get_address_fields() {
 		return [
 			'streetaddress' => [
 				'_default' => '',
@@ -371,7 +408,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_geo_fields() {
+	private function get_geo_fields() {
 		return [
 			'latitude' => [
 				'_default' => '',
@@ -414,7 +451,7 @@ trait Options_Template {
 	 * Use Generator Class + Iterator for dropdown parsing?
 	 * http://php.net/manual/en/class.generator.php
 	 */
-	function get_country_items() {
+	private function get_country_items() {
 		return [
 			[
 				'',
@@ -1433,7 +1470,7 @@ trait Options_Template {
 	 *   },
 	 * }
 	 */
-	function get_department_items() {
+	private function get_department_items() {
 		return [
 			[
 				'',
@@ -2070,7 +2107,7 @@ trait Options_Template {
 	/**
 	 * @see https://en.wikipedia.org/wiki/List_of_cuisines
 	 */
-	function get_cuisine_items() {
+	private function get_cuisine_items() {
 		return [
 			[
 				'African',
@@ -2384,29 +2421,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_opening_hours_fields() {
-		return [
-			'openingHours' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => '',
-				'_req' => false,
-				'_type' => 'iterate',
-				'_desc' => [],
-				'_iterate_selector' => $this->get_opening_hours_iterator_fields(),
-				'_iterator_title' => [
-					\__( 'Opening Hours %d', '' ),
-				],
-				'_iterator_title_dynamic' => [
-					'plural' => 'dayOfWeek',
-				],
-				'_iterator_cb' => $this->get_iterator_callback_by_key( 'openingHours' ),
-				'_fields' => $this->get_opening_hours_action_fields(),
-			],
-		];
-	}
-
-	function get_opening_hours_iterator_fields() {
+	private function get_opening_hours_iterator_fields() {
 		return [
 			'openingHoursSpeficicationCount' => [
 				'_default' => 1, // TODO set to 0
@@ -2428,7 +2443,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_opening_hours_action_fields() {
+	private function get_opening_hours_action_fields() {
 		return [
 			'dayOfWeek' => [
 				'_default' => null,
@@ -2500,7 +2515,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_days_fields() {
+	private function get_days_fields() {
 		return [
 			[
 				'Monday',
@@ -2533,7 +2548,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_reservation_fields() {
+	private function get_reservation_fields() {
 		return [
 			'acceptsReservations' => [
 				'_default' => null,
@@ -2551,7 +2566,7 @@ trait Options_Template {
 		] + $this->get_reservation_result_fields() + $this->get_reservation_action_fields();
 	}
 
-	function get_reservation_accept_items() {
+	private function get_reservation_accept_items() {
 		return [
 			[
 				'',
@@ -2568,7 +2583,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_reservation_action_fields() {
+	private function get_reservation_action_fields() {
 		return [
 			'target' => [
 				'_default' => null,
@@ -2585,7 +2600,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_reservation_target_fields() {
+	private function get_reservation_target_fields() {
 		return [
 			'url' => [
 				/**
@@ -2645,7 +2660,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_reservation_result_fields() {
+	private function get_reservation_result_fields() {
 		return [
 			'@type' => [
 				'_default' => '',
@@ -2686,7 +2701,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_reservation_type_items() {
+	private function get_reservation_type_items() {
 		return [
 			[
 				'',
@@ -2735,7 +2750,7 @@ trait Options_Template {
 		];
 	}
 
-	function get_order_fields() {
+	private function get_order_fields() {
 		return [
 			'deliveryMethod' => [
 				'_default' => null,
@@ -2750,10 +2765,10 @@ trait Options_Template {
 				],
 				'_select' => $this->get_order_method_items(),
 			],
-		]; //+ $this->get_order_price_fields() + $this->get_order_action_fields();
+		]; //+ $this->get_order_price_fields() + $this->get_order_action_fields(); <-- should define priceMin and priceMax
 	}
 
-	function get_order_method_items() {
+	private function get_order_method_items() {
 		return [
 			[
 				'',

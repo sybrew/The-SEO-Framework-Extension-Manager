@@ -531,6 +531,7 @@ body.tsfem .wrap {
 .tsfem-button-disabled:hover,
 .tsfem-button-disabled:active,
 .tsfem-button-disabled:focus {
+	color: #777;
 	-webkit-filter: grayscale(1);
 	filter: grayscale(1);
 	cursor: not-allowed;

@@ -472,11 +472,13 @@ class Core {
 	 * Great for parsing form array keys.
 	 * satoma: "Single Array to Multidimensional Array"
 	 *
+	 *
 	 * Example: '1[2][3]';
 	 * Becomes: [ 1 => [ 2 => [ 3 ] ];
 	 *
 	 * @since 1.3.0
 	 * @todo improve readability. It's very hackesque.
+	 * @see parse_str() You might wish to use that instead.
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
 	 * @param string $start The start wrapper.

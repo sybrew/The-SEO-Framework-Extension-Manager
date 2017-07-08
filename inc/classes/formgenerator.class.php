@@ -26,15 +26,24 @@ defined( 'ABSPATH' ) or die;
 /**
  * Holds settings generator functions for package TSF_Extension_Manager\Extension.
  *
+ * The class maintains static functions as well as a constructor. They go hand-in-hand.
+ * @see package TSF_Extension_Manager\Extension\Local\Settings for an example.
+ *
  * Not according to DRY standards for improved performance.
  *
  * @since 1.3.0
  * @access private
  * @uses trait TSF_Extension_Manager\Extension_Options
  * @see TSF_Extension_Manager\Traits\Extension_Options
+ * @uses trait TSF_Extension_Manager\Enclose_Core_Final
+ * @see TSF_Extension_Manager\Traits\Overload
+ *
+ * @final Can't be extended.
+ * @return void
  */
-class FormGenerator {
-	use \TSF_Extension_Manager\Extension_Options;
+final class FormGenerator {
+	use \TSF_Extension_Manager\Extension_Options,
+		\TSF_Extension_Manager\Enclose_Core_Final;
 
 	/**
 	 * Maintains the option key, and the boolean value thereof.
@@ -134,7 +143,7 @@ class FormGenerator {
 	 * @return bool True if matched, false otherwise.
 	 */
 	private static function is_ajax_callee( $caller ) {
-		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
+		return isset( $_POST['args']['callee'] ) && $caller === $_POST['args']['callee'];
 	}
 
 	/**
@@ -149,7 +158,7 @@ class FormGenerator {
 	private static function get_ajax_target_id() {
 
 		if ( isset( $_POST['args']['caller'] ) )
-			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->satoma( stripslashes( $_POST['args']['caller'] ) ) );
+			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->satoma( $_POST['args']['caller'] ) );
 
 		return false;
 	}
@@ -185,8 +194,6 @@ class FormGenerator {
 	 */
 	public static function _output_ajax_form_its() {
 
-		$fields = static::$ajax_it_fields;
-
 		$o = new static( static::$ajax_it_args );
 		$o->prepare_ajax_iteration();
 		$o->prepare_ajax_iteration_fields();
@@ -203,7 +210,7 @@ class FormGenerator {
 	 */
 	private function prepare_ajax_iteration() {
 
-		$caller = stripslashes( $_POST['args']['caller'] );
+		$caller = $_POST['args']['caller'];
 		$items = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
 		//* Unset the option indexes.
@@ -393,7 +400,7 @@ class FormGenerator {
 		switch ( $what ) :
 			case 'submit' :
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-form-submit-button">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),
@@ -478,7 +485,7 @@ class FormGenerator {
 		$i = 0;
 		foreach ( $levels as $b ) {
 			$k = sprintf( '%s[%s]', $k, $this->sanitize_id( $this->level_names[ $i ] ) );
-			//= Only grab iterators, they start at 2.
+			//= Only grab iterators, they start at 2 as the iteration caller is 1.
 			if ( $b > 1 ) {
 				$k = sprintf( '%s[%d]', $k, bindec( $b ) - 1 );
 			}
@@ -573,7 +580,7 @@ class FormGenerator {
 			yield $this->create_field( $_args );
 		}
 
-		$this->deiterate();
+		$this->delevel();
 	}
 
 	private function iterate( $c = 0 ) {
@@ -581,7 +588,17 @@ class FormGenerator {
 		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
-	private function deiterate() {
+	private function deiterate( $c = 0 ) {
+		//* Subtract $c + 1 to current level. We normally count from 0.
+		$this->it -= ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
+	}
+
+	private function reiterate() {
+		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		$this->it += ( 1 << ( ( $this->level - 1 ) * $this->bits ) );
+	}
+
+	private function delevel() {
 		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
 		//* Unset highest level.
 		unset( $this->level_names[ $this->level + 1 ] );
@@ -1296,7 +1313,7 @@ class FormGenerator {
 						'<div class="tsfem-form-multi-select-wrap" id="%s">%s</div>',
 						[
 							$this->get_field_id(),
-							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ) ),
+							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]
 					)
 				),
@@ -1305,9 +1322,12 @@ class FormGenerator {
 	}
 
 	/**
+	 *
+	 * Propagates to an iterator. That's why it can reiterate.
+	 *
 	 * @generator
 	 */
-	private function get_select_multi_a11y_options( array $select, $selected = '' ) {
+	private function get_select_multi_a11y_options( array $select, $selected = '', $reset = false ) {
 
 		$_fields = '';
 
@@ -1315,6 +1335,8 @@ class FormGenerator {
 			//* Already escaped.
 			$_fields .= $field;
 		}
+
+		$reset and $this->reiterate();
 
 		return $_fields;
 	}
@@ -1348,7 +1370,6 @@ class FormGenerator {
 
 		yield '</ul>';
 	}
-
 
 	private function create_checkbox_field( array $args ) {}
 	private function create_radio_field( array $args ) {}

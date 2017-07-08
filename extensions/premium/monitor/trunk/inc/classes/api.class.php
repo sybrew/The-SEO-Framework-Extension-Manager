@@ -134,7 +134,7 @@ class Api extends Data {
 
 		return [
 			'success' => true,
-			'data' => \stripslashes_deep( $data ),
+			'data' => $data,
 		];
 	}
 

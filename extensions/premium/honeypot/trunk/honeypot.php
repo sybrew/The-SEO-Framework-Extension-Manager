@@ -387,7 +387,7 @@ final class Core {
 		], '\\esc_attr' );
 
 		$_tick = 0;
-		$_input = stripslashes( $_POST[ $_field ] );
+		$_input = $_POST[ $_field ];
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
