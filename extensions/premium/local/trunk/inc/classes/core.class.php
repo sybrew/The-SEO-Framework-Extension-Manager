@@ -34,22 +34,18 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'extension-options' );
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use \TSF_Extension_Manager\Construct_Core_Interface as Construct_Core_Interface;
-use \TSF_Extension_Manager\Extension_Options as Extension_Options;
-
-/**
  * Class TSF_Extension_Manager\Extension\Local\Core
  *
  * Holds extension core methods.
  *
  * @since 1.0.0
  * @access private
+ * @uses TSF_Extension_Manager\Traits
  */
 class Core {
-	use Enclose_Stray_Private, Construct_Core_Interface, Extension_Options;
+	use \TSF_Extension_Manager\Enclose_Stray_Private,
+		\TSF_Extension_Manager\Construct_Core_Interface,
+		\TSF_Extension_Manager\Extension_Options;
 
 	/**
 	 * Constructor.

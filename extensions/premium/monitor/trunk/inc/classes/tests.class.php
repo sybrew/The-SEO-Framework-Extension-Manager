@@ -27,21 +27,17 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
-
-/**
  * Class TSF_Extension_Manager\Extension\Monitor\Tests
  *
  * Tests Monitor Data input. With an overuse of goto statements.
  *
  * @since 1.0.0
  * @access private
+ * @uses TSF_Extension_Manager\Traits
  */
 final class Tests {
-	use Enclose_Core_Final, Construct_Core_Static_Final;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Core_Static_Final;
 
 	/**
 	 * The object instance.

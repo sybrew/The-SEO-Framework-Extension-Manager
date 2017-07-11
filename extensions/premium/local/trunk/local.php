@@ -97,9 +97,9 @@ function _local_init() {
 		return $loaded;
 
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager\Extension\Local\Admin;
+		new Admin;
 	} else {
-//		new \TSF_Extension_Manager\Extension\Local\Front;
+//		new Front;
 	}
 
 	return $loaded = true;

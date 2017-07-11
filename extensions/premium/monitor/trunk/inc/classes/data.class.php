@@ -27,12 +27,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use \TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_Interface;
-
-/**
  * Class TSF_Extension_Manager\Extension\Monitor\Data
  *
  * Holds extension data methods.
@@ -40,9 +34,11 @@ use \TSF_Extension_Manager\Construct_Core_Once_Interface as Construct_Core_Once_
  * @since 1.0.0
  * @access private
  * @errorval 101xxxx
+ * @uses TSF_Extension_Manager\Traits
  */
 class Data {
-	use Enclose_Stray_Private, Construct_Core_Once_Interface;
+	use \TSF_Extension_Manager\Enclose_Stray_Private,
+		\TSF_Extension_Manager\Construct_Core_Once_Interface;
 
 	/**
 	 * Constructor. Verifies integrity.

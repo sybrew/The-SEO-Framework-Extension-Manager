@@ -30,10 +30,11 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  * @access private
- * @final Please don't extend this plugin.
+ * @final
  */
 final class LoadAdmin extends AdminPages {
-	use Construct_Master_Once_Interface, Enclose_Stray_Private;
+	use Construct_Master_Once_Interface,
+		Enclose_Stray_Private;
 
 	/**
 	 * Constructor, initializes WordPress actions.

@@ -29,21 +29,17 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance as Construct_Core_Static_Final_Instance;
-
-/**
  * Class TSF_Extension_Manager\Extension\Monitor\Graph
  *
  * Renders Monitor Data input to generate graphs.
  *
  * @since 1.0.0
  * @access private
+ * @uses TSF_Extension_Manager\Traits
  */
 final class Graph {
-	use Enclose_Core_Final, Construct_Core_Static_Final_Instance;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
 	 * Handles unapproachable invoked methods.

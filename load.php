@@ -190,7 +190,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 	 */
 	\TSF_Extension_Manager\_load_trait( 'overload' );
 
-	return \TSF_Extension_Manager\SecureOption::verify_option_instance( $new_value, $old_value, $option );
+	return SecureOption::verify_option_instance( $new_value, $old_value, $option );
 }
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_tsf_extension_manager', 6 );
@@ -237,9 +237,9 @@ function _init_tsf_extension_manager() {
 		 * @package TSF_Extension_Manager
 		 */
 		if ( \is_admin() ) {
-			$tsf_extension_manager = new \TSF_Extension_Manager\LoadAdmin;
+			$tsf_extension_manager = new LoadAdmin;
 		} else {
-			$tsf_extension_manager = new \TSF_Extension_Manager\LoadFront;
+			$tsf_extension_manager = new LoadFront;
 		}
 
 		//* Initialize extensions.
@@ -315,7 +315,7 @@ function _autoload_classes( $class ) {
 
 	if ( WP_DEBUG ) {
 		/**
-		 * Prevent loading sub-namespaces.
+		 * Prevent loading sub-namespaces when they're not initiated correctly.
 		 *
 		 * Only on a fatal error within autoloaded files, this function will run.
 		 * Prevent this function to then show an unrelated fatal error because
@@ -326,14 +326,14 @@ function _autoload_classes( $class ) {
 			return;
 	}
 
-	if ( strpos( $class, '_Abstract' ) ) {
+	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
+
+	if ( strpos( $class, '_abstract' ) ) {
+		$class = str_replace( '_abstract', '.abstract', $class );
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
 	} else {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
 	}
-
-	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
-	$class = str_replace( '_abstract', '.abstract', $class );
 
 	require_once( $path . $class . '.class.php' );
 }
@@ -357,7 +357,9 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
 
-	return $loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $file . '.trait.php' );
+	$_file = str_replace( 'extension-', 'extension' . DIRECTORY_SEPARATOR, $file );
+
+	return $loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
 }
 
 /**

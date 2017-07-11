@@ -208,6 +208,7 @@ h4.tsfem-form-multi-title {
 
 .tsfem-form-multi-setting,
 .tsfem-form-iterator-setting,
+.tsfem-form-iterator-selector-wrap,
 .tsfem-form-setting {
 	width: 100%;
 	-webkit-flex-direction: row;

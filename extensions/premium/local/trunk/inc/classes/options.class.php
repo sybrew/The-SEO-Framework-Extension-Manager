@@ -37,7 +37,6 @@ defined( 'ABSPATH' ) or die;
  * @uses trait TSF_Extension_Manager\Enclose_Core_Final
  * @uses trait TSF_Extension_Manager\Construct_Core_Static_Final_Instance
  * @see TSF_Extension_Manager\Traits\Overload
- *
  * @final Can't be extended.
  */
 final class Options {
@@ -81,7 +80,7 @@ final class Options {
 				'_type' => 'iterate_main',
 				'_desc' => [],
 				'_iterate_selector' => [
-					'depAmount' => [
+					'count' => [
 						'_default' => 1,
 						'_edit' => true,
 						'_ret' => 'd',
@@ -128,7 +127,25 @@ final class Options {
 				'_req' => false,
 				'_type' => 'iterate',
 				'_desc' => [],
-				'_iterate_selector' => $this->get_opening_hours_iterator_fields(),
+				'_iterate_selector' => [
+					'count' => [
+						'_default' => 1, // TODO set to 0
+						'_edit' => true,
+						'_ret' => '',
+						'_req' => false,
+						'_type' => 'number',
+						'_desc' => [
+							\__( 'Number of opening hours', '' ),
+							\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
+							\__( 'Set to 0 or leave empty if unspecified.', '' ),
+						],
+						'_range' => [
+							0,
+							7,
+							1,
+						],
+					],
+				],
 				'_iterator_title' => [
 					\__( 'Opening Hours %d', '' ),
 				],
@@ -280,9 +297,12 @@ final class Options {
 				'_fields' => $this->get_opening_hours_fields(),
 			],
 			'image' => [
-				'_default' => '',
+				'_default' => [
+					'url' => '',
+					'id' => '',
+				],
 				'_edit' => true,
-				'_ret' => 'url',
+				'_ret' => 'image',
 				'_req' => false, // Must be true if RESTAURANT.
 				'_type' => 'image',
 				'_desc' => [
@@ -292,7 +312,7 @@ final class Options {
 			],
 			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'servesCuisine' => [
-				'_default' => '',
+				'_default' => [],
 				'_edit' => true,
 				'_ret' => 's||array',
 				'_req' => false, // Must be true if RESTAURANT.
@@ -2421,32 +2441,10 @@ final class Options {
 		];
 	}
 
-	private function get_opening_hours_iterator_fields() {
-		return [
-			'openingHoursSpeficicationCount' => [
-				'_default' => 1, // TODO set to 0
-				'_edit' => true,
-				'_ret' => '',
-				'_req' => false,
-				'_type' => 'number',
-				'_desc' => [
-					\__( 'Number of opening hours', '' ),
-					\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
-					\__( 'Set to 0 or leave empty if unspecified.', '' ),
-				],
-				'_range' => [
-					0,
-					7,
-					1,
-				],
-			],
-		];
-	}
-
 	private function get_opening_hours_action_fields() {
 		return [
 			'dayOfWeek' => [
-				'_default' => null,
+				'_default' => [],
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
@@ -2632,7 +2630,7 @@ final class Options {
 			],
 			/*== These platforms are not specified on Sshema.org, Let's omit them for now.
 			'actionPlatform' => [
-				'_default' => '',
+				'_default' => [],
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,
@@ -2753,7 +2751,7 @@ final class Options {
 	private function get_order_fields() {
 		return [
 			'deliveryMethod' => [
-				'_default' => null,
+				'_default' => [],
 				'_edit' => true,
 				'_ret' => 'array',
 				'_req' => false,

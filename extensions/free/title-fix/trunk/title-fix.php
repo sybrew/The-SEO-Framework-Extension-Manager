@@ -36,12 +36,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
 //* Notify the existence of this extension through a lovely definition.
 define( 'TSFEM_E_TITLE_FIX', true );
 
@@ -75,7 +69,7 @@ function title_fix_init() {
 	//* Backwards compatibility
 	define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 
-	new \TSF_Extension_Manager\Extension\Title_Fix\Core;
+	new Core;
 
 	return $loaded = true;
 }
@@ -85,10 +79,12 @@ function title_fix_init() {
  *
  * @since 1.0.0
  *
- * @final Please don't extend this extension.
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Core {
-	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
 	 * Force the fix when no title-tag is present.

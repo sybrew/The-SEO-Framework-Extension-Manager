@@ -91,7 +91,7 @@ function transporter_init() {
 	\tsf_extension_manager()->_register_free_extension_autoload_path( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter' );
 
 	if ( \is_admin() ) {
-		new \TSF_Extension_Manager\Extension\Transporter\Admin;
+		new Admin;
 		$loaded = true;
 	} else {
 		$loaded = false;

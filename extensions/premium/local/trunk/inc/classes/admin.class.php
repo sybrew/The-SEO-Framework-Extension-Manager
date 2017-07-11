@@ -27,12 +27,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use \TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_Once_Interface;
-
-/**
  * Class TSF_Extension_Manager\Extension\Local\Admin
  *
  * Holds extension admin page methods.
@@ -40,9 +34,12 @@ use \TSF_Extension_Manager\Construct_Master_Once_Interface as Construct_Master_O
  * @since 1.0.0
  * @access private
  * @errorval 107xxxx
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Admin extends Api {
-	use Enclose_Stray_Private, Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Enclose_Stray_Private,
+		\TSF_Extension_Manager\Construct_Master_Once_Interface;
 
 	/**
 	 * Name of the page hook when the menu is registered.

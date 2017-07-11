@@ -37,12 +37,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
-/**
  * The extension version.
  * @since 1.0.0
  */
@@ -71,7 +65,7 @@ function honeypot_init() {
 	if ( \is_admin() )
 		return $loaded = false;
 
-	new \TSF_Extension_Manager\Extension\Honeypot\Core;
+	new Core;
 
 	return $loaded = true;
 }
@@ -80,11 +74,12 @@ function honeypot_init() {
  * Class TSF_Extension_Manager\Extension\Honeypot\Core
  *
  * @since 1.0.0
- *
- * @final Please don't extend this extension.
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Core {
-	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
 	 * Determines whether the class has been constructed.

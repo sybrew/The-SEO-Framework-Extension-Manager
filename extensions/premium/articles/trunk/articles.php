@@ -37,12 +37,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
-/**
  * The extension version.
  * @since 1.0.0
  */
@@ -77,7 +71,7 @@ function _articles_init() {
 		return $loaded;
 
 	if ( \the_seo_framework()->is_single() && 'post' === get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
-		new \TSF_Extension_Manager\Extension\Articles\Core;
+		new Core;
 		$loaded = true;
 	} else {
 		$loaded = false;
@@ -89,10 +83,12 @@ function _articles_init() {
 /**
  * Class TSF_Extension_Manager\Extension\Articles\Core
  *
- * @final Please don't extend extensions.
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Core {
-	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
 	 * States if the output is valid.

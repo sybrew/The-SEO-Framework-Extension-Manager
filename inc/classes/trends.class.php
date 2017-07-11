@@ -30,11 +30,12 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  * @access private
- * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
- * @final Please don't extend this.
+ *         You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
+ * @final
  */
 final class Trends {
-	use Enclose_Core_Final, Construct_Core_Static_Final;
+	use Enclose_Core_Final,
+		Construct_Core_Static_Final;
 
 	/**
 	 * Returns the trend call.

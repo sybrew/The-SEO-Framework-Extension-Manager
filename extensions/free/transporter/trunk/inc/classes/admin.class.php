@@ -51,16 +51,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-use \TSF_Extension_Manager\UI as UI;
-use \TSF_Extension_Manager\Extension_Options as Extension_Options;
-use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
-use \TSF_Extension_Manager\Error as Error;
-
-/**
  * Class TSF_Extension_Manager\Extension\Transporter\Admin
  *
  * Holds extension admin page methods.
@@ -68,9 +58,15 @@ use \TSF_Extension_Manager\Error as Error;
  * @since 1.0.0
  * @access private
  * @errorval 106xxxx
+ * @uses TSF_Extension_Manager\Traits
  */
 final class Admin {
-	use Enclose_Core_Final, Construct_Master_Once_Final_Interface, UI, Extension_Options, Extension_Forms, Error;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface,
+		\TSF_Extension_Manager\UI,
+		\TSF_Extension_Manager\Extension_Options,
+		\TSF_Extension_Manager\Extension_Forms,
+		\TSF_Extension_Manager\Error;
 
 	/**
 	 * The POST nonce validation name, action and name.

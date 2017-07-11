@@ -163,6 +163,7 @@ final class Settings {
 			'caller'       => __CLASS__,
 			'o_index'      => $this->o_index,
 			'o_key'        => '',
+			'use_stale'    => true,
 			'levels'       => 5,
 			'architecture' => null,
 		];

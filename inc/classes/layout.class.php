@@ -30,8 +30,8 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  * @access private
- * 		You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
- * @final Please don't extend this.
+ *         You'll need to invoke the TSF_Extension_Manager\Core verification handler. Which is impossible.
+ * @final
  */
 final class Layout extends Secure_Abstract {
 

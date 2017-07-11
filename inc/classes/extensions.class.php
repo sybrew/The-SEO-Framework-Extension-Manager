@@ -53,10 +53,13 @@ if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
  * @access private
  *         You'll need to invoke the TSF_Extension_Manager\Core verification handler.
  *         Which is impossible.
- * @final Please don't extend this.
+ * @final
  */
 final class Extensions extends Secure_Abstract {
-	use Extensions_i18n, Extensions_Properties, Extensions_Actions, Extensions_Layout;
+	use Extensions_i18n,
+		Extensions_Properties,
+		Extensions_Actions,
+		Extensions_Layout;
 
 	/**
 	 * Sets up class variables.

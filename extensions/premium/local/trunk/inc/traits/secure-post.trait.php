@@ -139,7 +139,6 @@ trait Secure_Post {
 
 		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
 
-		$data = [];
 		parse_str( $post_data, $data );
 
 		/**
@@ -155,8 +154,13 @@ trait Secure_Post {
 
 		$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 
-		var_dump( $options ); exit;
-	//	$success = $this->save_option( )
+		$success = $this->update_stale_options_array_by_key( $options );
+
+		if ( ! $success ) {
+			return $this->get_ajax_notice( false, 1070101 );
+		}
+
+		return $this->get_ajax_notice( true, 1070102 );
 	}
 
 	/**

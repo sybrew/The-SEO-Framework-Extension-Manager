@@ -418,7 +418,7 @@ trait Destruct_Core_Public_Final {
 }
 
 /**
- * Ignores invalid class properties, instead of initiating a fatal error.
+ * Warns invalid class property calls, instead of instating a fatal error.
  *
  * @since 1.0.0
  * @access private

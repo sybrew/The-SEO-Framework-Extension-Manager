@@ -27,21 +27,18 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Core_Final as Enclose_Core_Final;
-use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface as Construct_Master_Once_Final_Interface;
-
-/**
  * Class TSF_Extension_Manager\Extension\Front
  *
  * Holds extension front-end methods.
  *
  * @since 1.0.0
  * @access private
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Front implements \ArrayAccess, \Iterator {
-	use Enclose_Core_Final, Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Enclose_Core_Final,
+		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	private function construct() { }
 

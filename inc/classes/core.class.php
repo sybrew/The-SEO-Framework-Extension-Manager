@@ -425,16 +425,15 @@ class Core {
 	 * Becomes: '1[2][3]' => 'value';
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.0 Removed and shifted 2nd and 3rd parameter.
 	 * @staticvar string $last The last value;
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @param string $start The start wrapper.
-	 * @param string $end The end wrapper.
 	 * @param int $i The iteration count. This shouldn't be filled in.
 	 * @param bool $get Whether to return the value. This shouldn't be filled in.
 	 * @return array|false The iterated array to string. False if input isn't array.
 	 */
-	final public function matosa( $value, $start = '[', $end = ']', $i = 0, $get = true ) {
+	final public function matosa( $value, $i = 0, $get = true ) {
 
 		$output = '';
 		$i++;
@@ -448,9 +447,9 @@ class Core {
 
 			if ( is_array( $item ) ) {
 				if ( 1 === $i ) {
-					$output .= $index . $this->matosa( $item, $start, $end, $i, false );
+					$output .= $index . $this->matosa( $item, $i, false );
 				} else {
-					$output .= $start . $index . $end . $this->matosa( $item, $start, $end, $i, false );
+					$output .= '[' . $index . ']' . $this->matosa( $item, $i, false );
 				}
 			}
 		} elseif ( 1 === $i ) {
@@ -481,25 +480,45 @@ class Core {
 	 * @see parse_str() You might wish to use that instead.
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @param string $start The start wrapper.
-	 * @param string $end The end wrapper.
 	 * @return array The iterated string to array.
 	 */
-	final public function satoma( $value, $start = '[', $end = ']' ) {
+	final public function satoma( $value ) {
 
-		$regex = sprintf( '/[\%s\%s]+/', $start, $end );
+		$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
 
-		$items = preg_split( $regex, $value, -1, PREG_SPLIT_NO_EMPTY );
-		$count = count( $items );
+		return $this->convert_mda( $items );
+	}
 
-		$ret = [];
-		$ret[ $items[ $count - 2 ] ] = end( $items );
-		for ( $i = $count - 3; $i > -1; $i-- ) {
-			$ret[ $items[ $i ] ] = $ret;
-			unset( $ret[ $items[ $i + 1 ] ] );
+	/**
+	 * Converts a single or sequential|associative array into a multidimensional array.
+	 *
+	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
+	 *       Their values will be used as keys. Arrays can't be keys.
+	 *
+	 * @since 1.3.0
+	 * @staticvar array $_b Maintains iteration and depth.
+	 *
+	 * @param array $a The single dimensional array.
+	 * @return array Multidimensional array, where the values are the dimensional keys.
+	 */
+	final public function convert_mda( array $a ) {
+
+		static $_b;
+
+		$_b = $a;
+
+		if ( $_b ) {
+			$last = array_shift( $a );
+
+			if ( $a ) {
+				$r = [];
+				$r[ $last ] = $this->convert_mda( $a );
+			} else {
+				$r = $last;
+			}
 		}
 
-		return $ret;
+		return $r;
 	}
 
 	/**

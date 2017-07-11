@@ -39,14 +39,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
- * @package TSF_Extension_Manager\Traits
- */
-use \TSF_Extension_Manager\Enclose_Stray_Private as Enclose_Stray_Private;
-use \TSF_Extension_Manager\Construct_Core_Static_Final as Construct_Core_Static_Final;
-use \TSF_Extension_Manager\Extension_Forms as Extension_Forms;
-use \TSF_Extension_Manager\Error as Error;
-
-/**
  * Class TSF_Extension_Manager\Extension\Transporter\Steps
  *
  * Holds extension UI steps.
@@ -54,9 +46,14 @@ use \TSF_Extension_Manager\Error as Error;
  * @since 1.0.0
  * @access private
  * @errorval 106xxxx
+ * @uses TSF_Extension_Manager\Traits
+ * @final
  */
 final class Steps {
-	use Enclose_Stray_Private, Construct_Core_Static_Final, Extension_Forms, Error;
+	use \TSF_Extension_Manager\Enclose_Stray_Private,
+		\TSF_Extension_Manager\Construct_Core_Static_Final,
+		\TSF_Extension_Manager\Extension_Forms,
+		\TSF_Extension_Manager\Error;
 
 	/**
 	 * The object instance.
