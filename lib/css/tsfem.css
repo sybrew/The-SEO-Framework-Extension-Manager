@@ -405,9 +405,11 @@ body.tsfem .wrap {
 
 .tsfem-button,
 .tsfem-button:disabled,
+.tsfem-button:disabled:hover,
 .tsfem-button:focus,
 .tsfem-button-primary,
 .tsfem-button-primary:disabled,
+.tsfem-button-primary:disabled:hover,
 .tsfem-button-primary:focus {
 	display: inline-block;
 	padding: .5em 1em;
@@ -439,6 +441,7 @@ body.tsfem .wrap {
 
 .tsfem-button-small,
 .tsfem-button-small:disabled,
+.tsfem-button-small:disabled:hover,
 .tsfem-button-small:focus {
 	font-size: .9em;
 }
@@ -687,7 +690,6 @@ body.tsfem .wrap {
 .tsfem-button-disabled:hover,
 .tsfem-button-disabled:active,
 .tsfem-button-disabled:focus {
-	color: #777;
 	-webkit-filter: grayscale(1);
 	filter: grayscale(1);
 	cursor: not-allowed;

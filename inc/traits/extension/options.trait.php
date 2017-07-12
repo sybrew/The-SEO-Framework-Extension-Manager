@@ -210,16 +210,19 @@ trait Extension_Options {
 
 		//= If the array is sequential, convert it to a multidimensional array.
 		if ( array_values( $key ) === $key ) {
-			$key = $this->convert_mda( $key );
+			$key = $this->satoma( $key );
 		}
 
-		$value = $this->get_mda_value( $key, $this->get_extension_options() ) ?: $default;
+		$_ = $this->get_extension_options();
+		$value = $this->get_mda_value( $key, $_ ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
-		if ( isset( $this->o_defaults ) )
-			return $this->get_mda_value( $key, $this->o_defaults );
+		if ( isset( $this->o_defaults ) ) {
+			$_ = $this->o_defaults;
+			return $this->get_mda_value( $key, $_ );
+		}
 
 		return null;
 	}
@@ -331,13 +334,17 @@ trait Extension_Options {
 	 * Returns stale extension options array based upon $o_index;
 	 *
 	 * @since 1.3.0
-	 * @see $this->o_index The stale options index.
+	 * @staticvar array $options The cached options. Expected not to change during the loop.
+	 * @see $this->o_index The extension options index.
 	 *
 	 * @return array Stale extension options.
 	 */
 	final protected function get_stale_extension_options() {
 
-		$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		static $options = null;
+
+		if ( null === $options )
+			$options = \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
 
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
@@ -390,16 +397,19 @@ trait Extension_Options {
 
 		//= If the array is sequential, convert it to a multidimensional array.
 		if ( array_values( $key ) === $key ) {
-			$key = $this->convert_mda( $key );
+			$key = $this->satoma( $key );
 		}
 
-		$value = $this->get_mda_value( $key, $this->get_stale_extension_options() ) ?: $default;
+		$_ = $this->get_stale_extension_options();
+		$value = $this->get_mda_value( $key, $_ ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
-		if ( isset( $this->o_stale_defaults ) )
-			return $this->get_mda_value( $key, $this->o_stale_defaults );
+		if ( isset( $this->o_stale_defaults ) ) {
+			$_ = $this->o_stale_defaults;
+			return $this->get_mda_value( $key, $_ );
+		}
 
 		return null;
 	}
@@ -502,16 +512,18 @@ trait Extension_Options {
 	/**
 	 * Loops through multidimensional keys and values to find the corresponding one.
 	 *
-	 * Expected not to go beyond 10 keys.
+	 * Expected not to go beyond 10 key depth.
+	 * CAUTION: 2nd parameter is passed by reference and it will be annihilated.
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param array|string $keys  The keys that collapse with $value. For performance
 	 *                            benefits, the last value should be a string.
 	 * @param array|string        $value The values that might contain $keys' value.
+	 *                            Passed by reference for huge performance improvement.
 	 * @return mixed|null Null if not found. Value otherwise.
 	 */
-	final protected function get_mda_value( $keys, $value ) {
+	final protected function get_mda_value( $keys, &$value ) {
 
 		//= Because it's cast to array, the return will always be inside this loop.
 		foreach ( (array) $keys as $k => $v ) {
@@ -530,10 +542,15 @@ trait Extension_Options {
 	/**
 	 * Converts a single or sequential|associative array into a multidimensional array.
 	 *
-	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
-	 *       Their values will be used as keys. Arrays can't be keys.
+	 * satoma: "Single Array to Multidimensional Array"
+	 *
+	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
+	 * Becomes: [ a => [ b => [ c ] ];
 	 *
 	 * This function can also be found in class \TSF_Extension_Manager\Core.
+	 *
+	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
+	 *       Their values will be used as keys. Arrays can't be keys.
 	 *
 	 * @since 1.3.0
 	 * @staticvar array $_b Maintains iteration and depth.
@@ -541,7 +558,7 @@ trait Extension_Options {
 	 * @param array $a The single dimensional array.
 	 * @return array Multidimensional array, where the values are the dimensional keys.
 	 */
-	final protected function convert_mda( array $a ) {
+	final protected function satoma( array $a ) {
 
 		static $_b;
 
@@ -552,7 +569,7 @@ trait Extension_Options {
 
 			if ( $a ) {
 				$r = [];
-				$r[ $last ] = $this->convert_mda( $a );
+				$r[ $last ] = $this->satoma( $a );
 			} else {
 				$r = $last;
 			}

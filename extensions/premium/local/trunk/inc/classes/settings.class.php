@@ -33,12 +33,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'ui' );
 
 /**
- * Require extension forms trait.
- * @since 1.0.0
- */
-//\TSF_Extension_Manager\_load_trait( 'extension-forms' );
-
-/**
  * Require error trait.
  * @since 1.0.0
  */
@@ -69,7 +63,6 @@ final class Settings {
 	use \TSF_Extension_Manager\Enclose_Core_Final,
 		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
 		\TSF_Extension_Manager\UI,
-//		\TSF_Extension_Manager\Extension_Forms,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
 		Secure_Post;

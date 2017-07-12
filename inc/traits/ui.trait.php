@@ -479,10 +479,10 @@ trait UI {
 			'strings' => [
 				'nonce'          => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
 				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
-				'imgSelectTitle' => \esc_attr_x( 'Select social image', 'Button hover', 'the-seo-framework-extension-manager' ),
+				'imgSelectTitle' => \esc_attr_x( 'Select image', 'Button hover', 'the-seo-framework-extension-manager' ),
 				'imgChange'      => \esc_attr__( 'Change Image', 'the-seo-framework-extension-manager' ),
 				'imgRemove'      => \esc_attr__( 'Remove Image', 'the-seo-framework-extension-manager' ),
-				'imgRemoveTitle' => \esc_attr__( 'Remove selected social image', 'the-seo-framework-extension-manager' ),
+				'imgRemoveTitle' => \esc_attr__( 'Remove selected image', 'the-seo-framework-extension-manager' ),
 				'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
 				'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
 				'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),

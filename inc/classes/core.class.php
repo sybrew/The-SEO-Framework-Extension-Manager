@@ -469,11 +469,15 @@ class Core {
 	 * Converts single dimensional strings from matosa to a multidimensional array.
 	 *
 	 * Great for parsing form array keys.
-	 * satoma: "Single Array to Multidimensional Array"
+	 * umatosa: "Undo Multidimensional Array TO Single Array"
 	 *
+	 * Direct matosa to umatosa:
+	 * Example: '1[2][3]=value';
+	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
 	 *
-	 * Example: '1[2][3]';
-	 * Becomes: [ 1 => [ 2 => [ 3 ] ];
+	 * From form key:
+	 * Example: '1[2][3][value]';
+	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
 	 *
 	 * @since 1.3.0
 	 * @todo improve readability. It's very hackesque.
@@ -482,15 +486,25 @@ class Core {
 	 * @param string|array $value The array or string to loop. First call must be array.
 	 * @return array The iterated string to array.
 	 */
-	final public function satoma( $value ) {
+	final public function umatosa( $value ) {
 
-		$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
+		if ( ']' === substr( $value, -1 ) ) {
+			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
+			return $this->satoma( $items );
+		}
 
-		return $this->convert_mda( $items );
+		parse_str( $value, $items );
+
+		return $items;
 	}
 
 	/**
 	 * Converts a single or sequential|associative array into a multidimensional array.
+	 *
+	 * satoma: "Single Array to Multidimensional Array"
+	 *
+	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
+	 * Becomes: [ a => [ b => [ c ] ];
 	 *
 	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
 	 *       Their values will be used as keys. Arrays can't be keys.
@@ -501,7 +515,7 @@ class Core {
 	 * @param array $a The single dimensional array.
 	 * @return array Multidimensional array, where the values are the dimensional keys.
 	 */
-	final public function convert_mda( array $a ) {
+	final public function satoma( array $a ) {
 
 		static $_b;
 
@@ -512,7 +526,7 @@ class Core {
 
 			if ( $a ) {
 				$r = [];
-				$r[ $last ] = $this->convert_mda( $a );
+				$r[ $last ] = $this->satoma( $a );
 			} else {
 				$r = $last;
 			}
@@ -527,7 +541,7 @@ class Core {
 	 * I should get a nobel prize for this.
 	 *
 	 * @since 1.3.0
-	 * @see $this->satoma() Which creates a need for this.
+	 * @see $this->umatosa() Which created a need for this.
 	 *
 	 * @param array $a
 	 * @return string The last array value.

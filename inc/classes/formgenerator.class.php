@@ -29,6 +29,10 @@ defined( 'ABSPATH' ) or die;
  * The class maintains static functions as well as a constructor. They go hand-in-hand.
  * @see package TSF_Extension_Manager\Extension\Local\Settings for an example.
  *
+ * @TODO The AJAX part will be put in another class when PHP 5.6 will be the requirement.
+ *       We miss variadic functionality for proper static propagated construction.
+ *       Note to self: The static caller needs to moved.
+ *
  * Not according to DRY standards for improved performance.
  *
  * @since 1.3.0
@@ -160,7 +164,7 @@ final class FormGenerator {
 	private static function get_ajax_target_id() {
 
 		if ( isset( $_POST['args']['caller'] ) )
-			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->satoma( $_POST['args']['caller'] ) );
+			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->umatosa( $_POST['args']['caller'] ) );
 
 		return false;
 	}
@@ -1107,6 +1111,7 @@ final class FormGenerator {
 		$key = $this->get_raw_field_id( 'associative' );
 
 		if ( $this->use_stale ) {
+			$this->get_stale_option_by_mda_key( $key, $default );
 			return $this->get_stale_option_by_mda_key( $key, $default );
 		}
 
@@ -1326,7 +1331,7 @@ final class FormGenerator {
 
 				if ( isset( $args[2] ) ) {
 					//* Level up.
-					yield sprintf( '<optgroup label=%s>', $args[1] );
+					yield sprintf( '<optgroup label="%s">', $args[1] );
 					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $_selected, $args[1] );
 					++$_level;
 					yield $this->get_select_options( $args[2], $_next, $multiple );
@@ -1475,7 +1480,7 @@ final class FormGenerator {
 		// Escaped.
 		$s_url_name = $s_url_id = $this->get_sub_field_id( 'url' );
 		$s_id_name = $s_id_id = $this->get_sub_field_id( 'id' );
-		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_url_ph = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
@@ -1491,6 +1496,22 @@ final class FormGenerator {
 				$args['_default']['id']
 			)
 		);
+
+		$s_url_readonly = $s_remove_button = '';
+
+		if ( $s_id_value ) {
+			$s_url_readonly = ' readonly';
+			$s_remove_button = vsprintf(
+				'<button type=button class="%1$s" title="%2$s" id="%3$s-remove" data-input-url="%3$s" data-input-id="%4$s">%5$s</button>',
+				[
+					'tsfem-remove-image-button tsfem-button-primary tsfem-button-small',
+					\esc_attr_x( 'Remove selected image', 'Button hover title', '' ),
+					$s_url_id,
+					$s_id_id,
+					\esc_html__( 'Remove Image', '' ),
+				]
+			);
+		}
 
 		return vsprintf(
 			'<div class="tsfem-image-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
@@ -1516,15 +1537,16 @@ final class FormGenerator {
 					)
 				),
 				vsprintf(
-					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s%s</div></div>',
 					[
 						vsprintf(
-							'<input type=url id="%s" name=%s value="%s" %s>',
+							'<input type=url id="%s" name=%s value="%s" %s%s>',
 							[
 								$s_url_id,
 								$s_url_name,
 								$s_url_value,
-								$s_ph,
+								$s_url_ph,
+								$s_url_readonly,
 							]
 						),
 						vsprintf(
@@ -1540,12 +1562,13 @@ final class FormGenerator {
 							[
 								'tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small',
 								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
-								\esc_attr_x( 'Select image', 'Button hover title', '' ),
+								( $s_id_value ? \esc_attr_x( 'Change image', 'Button hover', '' ) : \esc_attr_x( 'Select image', 'Button hover', '' ) ),
 								$s_url_id,
 								$s_id_id,
-								\esc_html__( 'Select Image', '' ),
+								( $s_id_value ? \esc_html( 'Change Image', '' ) : \esc_html__( 'Select Image', '' ) ),
 							]
 						),
+						$s_remove_button,
 					]
 				),
 			]
