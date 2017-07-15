@@ -46,8 +46,8 @@ defined( 'ABSPATH' ) or die;
  * @return void
  */
 final class FormGenerator {
-	use \TSF_Extension_Manager\Extension_Options,
-		\TSF_Extension_Manager\Enclose_Core_Final;
+	use Extension_Options,
+		Enclose_Core_Final;
 
 	/**
 	 * Maintains the option key, and the boolean value thereof.
@@ -1128,7 +1128,7 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Cleans up '_desc' index.
+	 * Cleans up `$args['_desc']` index by assigning missing values.
 	 *
 	 * @since 1.3.0
 	 *
@@ -1142,9 +1142,8 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Cleans up '_range' index.
-	 *
-	 * Up to steps e-/+10
+	 * Cleans up `$args['_range']` index by assigning missing values.
+	 * Goes up (or down) to steps e-/+10.
 	 *
 	 * @since 1.3.0
 	 *
@@ -1195,10 +1194,10 @@ final class FormGenerator {
 				break;
 		endswitch;
 
-		//* Not escaped.
+		//= Not escaped.
 		$title = $args['_desc'][0];
 
-		// Escaped.
+		//= Escaped.
 		$s_type = \esc_attr( $args['_type'] );
 		$s_name = $s_id = $this->get_field_id();
 		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
@@ -1245,7 +1244,14 @@ final class FormGenerator {
 		);
 	}
 
-	private function create_textarea_field( array $args ) {}
+	/**
+	 * Creates single-select fields.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $args The select field arguments.
+	 * @return string A select field.
+	 */
 	private function create_select_field( array $args ) {
 
 		//* Not escaped.
@@ -1307,38 +1313,51 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Heavily optimized for performance.
+	 * Generates select fields.
 	 *
+	 * It maintains its own iteration. Therefore, it's not depending on class iterator fields.
+	 * It will clean up $selected if it is found. Unless $multiple is true.
+	 *
+	 * Heavily optimized for performance. Therefore, not according to DRY standards.
 	 * @generator
+	 * @since 1.3.0
+	 *
+	 * @param array        $select   The select fields.
+	 * @param string|array $selected The default or currently selected field.
+	 * @param bool         $multiple Whether it's a multi-select field.
+	 * @yield The select option field.
 	 */
 	private function generate_select_fields( array $select, $selected = '', $multiple = false ) {
 
 		static $_level = 0;
 
 		if ( '' !== $selected && [] !== $selected ) :
+
+			//= Convert $selected to array.
+			$a_selected = (array) $selected;
+
 			foreach ( $select as $args ) :
 
 				if ( $_level ) {
 					//* Multilevel isn't supported by Chrome, for instance, yet.
-					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
-					//= `&8213; `... gets escaped otherwise.
-					$args[1] = '― ' . $args[1];
+					// $args[1] = 1 === $_level ? '&nbsp;&nbsp;' . $args[1] : str_repeat( '&nbsp;&nbsp;', $_level ) . $args[1];
+					$args[1] = '&nbsp;&nbsp;' . $args[1];
 				}
 
-				$_selected = in_array( $args[0], (array) $selected, true ) ? ' selected' : '';
+				$s_selected = in_array( $args[0], $a_selected, true ) ? ' selected' : '';
 				//= Prevent more lookups if found.
-				$_next = $_selected && ! $multiple ? '' : $selected;
+				$_next = $s_selected && ! $multiple ? '' : $selected;
 
 				if ( isset( $args[2] ) ) {
 					//* Level up.
 					yield sprintf( '<optgroup label="%s">', $args[1] );
-					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $_selected, $args[1] );
+					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 					++$_level;
 					yield $this->get_select_options( $args[2], $_next, $multiple );
 					--$_level;
 					yield '</optgroup>';
 				} else {
-					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $_selected, $args[1] );
+					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 				}
 			endforeach;
 		else :
@@ -1346,9 +1365,8 @@ final class FormGenerator {
 
 				if ( $_level ) {
 					//* Multilevel isn't supported by Chrome, for instance, yet.
-					// $args[1] = 1 === $_level ? '― ' . $args[1] : str_repeat( '― ', $_level ) . $args[1];
-					//= `&8213; `... gets escaped otherwise.
-					$args[1] = '― ' . $args[1];
+					// $args[1] = 1 === $_level ? '&nbsp;&nbsp;' . $args[1] : str_repeat( '&nbsp;&nbsp;', $_level ) . $args[1];
+					$args[1] = '&nbsp;&nbsp;' . $args[1];
 				}
 
 				if ( isset( $args[2] ) ) {
@@ -1366,6 +1384,19 @@ final class FormGenerator {
 		endif;
 	}
 
+	/**
+	 * Creates multi-select fields that are accessible. i.e. It creates an iterated
+	 * list of checkboxes.
+	 *
+	 * @NOTE: Propagates to an iterator and generator. It will reset the next level of iterations.
+	 *        This shouldn't accompany any negative effect.
+	 *
+	 * @iterator Careful: it can and will reset current iteration count.
+	 * @since 1.3.0
+	 *
+	 * @param array $args The multi-select field arguments.
+	 * @return string An accessible option checkbox list acting as a multiselect field.
+	 */
 	private function create_select_multi_a11y_field( array $args ) {
 
 		//* Not escaped.
@@ -1408,10 +1439,19 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Passes select options through a generator to return multi-select checkbox
+	 * fields.
 	 *
 	 * Propagates to an iterator. That's why it can reiterate.
+	 * It loops back to itself to generate more fields.
 	 *
-	 * @generator
+	 * @iterator Careful: it can and will reset current iteration count.
+	 * @since 1.3.0
+	 *
+	 * @param array $select   The select fields.
+	 * @param array $selected The default or currently selected fields.
+	 * @param bool  $reset    Determines whether to reset the iterations.
+	 * @return string An unordered list of checkboxes acting as multiselect.
 	 */
 	private function get_select_multi_a11y_options( array $select, array $selected = [], $reset = false ) {
 
@@ -1428,9 +1468,20 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Heavily optimized for performance.
+	 * Generates multi select fields that are accessible.
+	 * Instead of creating an atrocious browser multi-select, it replaces the input
+	 * with checkboxes that iterate.
 	 *
+	 * For this reason, the POST return value will differ from regular select fields.
+	 *
+	 * Heavily optimized for performance. Therefore, not according to DRY standards.
 	 * @generator
+	 * @iterator
+	 * @since 1.3.0
+	 *
+	 * @param array $select   The select fields.
+	 * @param array $selected The default or currently selected fields.
+	 * @yield An unordered list of checkboxes acting as multiselect.
 	 */
 	private function generate_select_multi_a11y_fields( array $select, array $selected = [] ) {
 
@@ -1461,29 +1512,32 @@ final class FormGenerator {
 		yield '</ul>';
 	}
 
-	private function create_checkbox_field( array $args ) {}
-	private function create_radio_field( array $args ) {}
-
 	/**
+	 * Creates an image URL and ID field.
+	 * Adds dynamic buttons based on previous set value.
 	 *
 	 * Requires media scripts to be registered.
 	 * @see TSF_Extension_Manager\Traits\UI
 	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
+	 * @see method TSF_Extension_Manager\Traits\UI\_wp_ajax_crop_image() The AJAX cropper callback.
+	 * @uses \get_upload_iframe_src()
 	 *
-	 * @see _wp_ajax_crop_image() The AJAX cropper callback.
+	 * @since 1.3.0
+	 *
+	 * @param array $args The field generation arguments.
+	 * @return string The image field input with buttons.
 	 */
 	private function create_image_field( array $args ) {
 
-		//* Not escaped.
+		//= Not escaped.
 		$title = $args['_desc'][0];
 
-		// Escaped.
+		//= Escaped.
 		$s_url_name = $s_url_id = $this->get_sub_field_id( 'url' );
 		$s_id_name = $s_id_id = $this->get_sub_field_id( 'id' );
 		$s_url_ph = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'url', 'associative' ),
@@ -1565,7 +1619,7 @@ final class FormGenerator {
 								( $s_id_value ? \esc_attr_x( 'Change image', 'Button hover', '' ) : \esc_attr_x( 'Select image', 'Button hover', '' ) ),
 								$s_url_id,
 								$s_id_id,
-								( $s_id_value ? \esc_html( 'Change Image', '' ) : \esc_html__( 'Select Image', '' ) ),
+								( $s_id_value ? \esc_html__( 'Change Image', '' ) : \esc_html__( 'Select Image', '' ) ),
 							]
 						),
 						$s_remove_button,
@@ -1574,4 +1628,17 @@ final class FormGenerator {
 			]
 		);
 	}
+
+	/**
+	 * These methods are acting as a placeholder for future implementation.
+	 * Will be built when required.
+	 *
+	 * @since 1.3.0 Instated.
+	 *
+	 * @param array $args The field generation arguments.
+	 * @return void
+	 */
+	private function create_checkbox_field( array $args ) {}
+	private function create_radio_field( array $args ) {}
+	private function create_textarea_field( array $args ) {}
 }

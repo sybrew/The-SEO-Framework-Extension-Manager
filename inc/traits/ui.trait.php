@@ -431,6 +431,15 @@ trait UI {
 			'strings' => [
 				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
 				'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
+				'i18n' => [
+					'performanceWarning' => \esc_html__( 'Performance warning', 'the-seo-framework-extension-manager' ),
+					'itLargeConfirm' => \esc_html__( "You're about to load a large number of elements. This might degredate browser performance.", 'the-seo-framework-extension-manager' ),
+					'itHugeConfirm' => \esc_html__( "You're about to load a huge number of elements. This might crash your browser.", 'the-seo-framework-extension-manager' ),
+					'aysProceed' => \esc_html__( 'Are you sure you want to proceed?', 'the-seo-framework-extension-manager' ),
+					'proceed' => \esc_html__( 'Proceed', 'the-seo-framework-extension-manager' ),
+					'cancel' => \esc_html__( 'Cancel', 'the-seo-framework-extension-manager' ),
+					'dismiss' => \esc_html__( 'Dismiss', 'the-seo-framework-extension-manager' ),
+				],
 			],
 		];
 

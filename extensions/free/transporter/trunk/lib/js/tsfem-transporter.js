@@ -89,8 +89,8 @@ window[ 'tsfem_e_transporter' ] = {
 
 				if ( tsfem.debug ) console.log( response );
 
-				let data = response && response.data || undefined,
-					type = response && response.type || undefined;
+				let data = response && response.data || void 0,
+					type = response && response.type || void 0;
 
 				if ( ! data || ! type ) {
 					//* Erroneous output.

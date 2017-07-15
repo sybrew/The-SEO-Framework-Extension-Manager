@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
 ?>
-<div class="tsfem-pane-inner-collapsable-settings-wrap tsfem-e-local-settings-wrap">
+<div class="tsfem-pane-inner-wrap tsfem-pane-inner-collapsable-settings-wrap tsfem-e-local-settings-wrap">
 	<div class="tsfem-e-local-settings tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-hide-if-js">
 		<div class="tsfem-pane-inner-pad">
 			<h4 class="tsfem-info-title"><?php \esc_html_e( 'JavaScript required', 'the-seo-framework-extension-manager' ); ?></h4>

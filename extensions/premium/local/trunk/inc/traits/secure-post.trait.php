@@ -127,7 +127,9 @@ trait Secure_Post {
 	}
 
 	/**
-	 * Checks AJAX POST for data through admin actions.
+	 * Checks AJAX form POST for data through admin actions.
+	 *
+	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
 	 * @since 1.0.0
 	 * @uses trait \TSF_Extension_Manager\Extension_Options
@@ -149,18 +151,24 @@ trait Secure_Post {
 		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		) {
-			return $this->get_ajax_notice( false, 1070100 );
+			$type = 'failure';
+			$results = $this->get_ajax_notice( false, 1070100 );
+		} else {
+
+			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+			$success = $this->update_stale_options_array_by_key( $options );
+
+			if ( ! $success ) {
+				$type = 'failure';
+				$results = $this->get_ajax_notice( false, 1070101 );
+			} else {
+				$type = 'success';
+				$results = $this->get_ajax_notice( true, 1070102 );
+				$sdata = $this->get_stale_option( key( $options ) );
+			}
 		}
 
-		$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
-
-		$success = $this->update_stale_options_array_by_key( $options );
-
-		if ( ! $success ) {
-			return $this->get_ajax_notice( false, 1070101 );
-		}
-
-		return $this->get_ajax_notice( true, 1070102 );
+		\tsf_extension_manager()->send_json( compact( 'results', 'sdata' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
 	}
 
 	/**

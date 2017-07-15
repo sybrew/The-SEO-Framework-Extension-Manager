@@ -146,12 +146,15 @@ trait Error {
 
 		/* translators: 1: 'Error code:', 2: The error code. */
 		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
-		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? ' ' . $option[ $key ] : '';
+		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
+
+		/* translators: %s = Error code */
+		$before = sprintf( \__( '<strong>%s</strong> &mdash;', 'the-seo-framework-extension-manager' ), $status );
 
 		/* translators: 1: Error code, 2: Error message, 3: Additional info */
-		$output = vsprintf( \esc_html__( '%1$s &mdash; %2$s%3$s', 'the-seo-framework-extension-manager' ),
+		$output = vsprintf( \esc_html__( '%1$s %2$s %3$s', 'the-seo-framework-extension-manager' ),
 			[
-				sprintf( '<strong>%s</strong>', $status ),
+				$before,
 				$message,
 				$additional_info,
 			]
@@ -159,6 +162,7 @@ trait Error {
 
 		return [
 			'message' => $output,
+			'before' => $before,
 			'type' => $type,
 		];
 	}
@@ -175,6 +179,11 @@ trait Error {
 	protected function get_error_notice_by_key( $key, $get_type = true ) {
 
 		switch ( $key ) :
+			case -1 :
+				$message = '';
+				$type = 'error';
+				break;
+
 			case 101 :
 				$message = \esc_html__( 'No valid license key was supplied.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
@@ -221,14 +230,14 @@ trait Error {
 			case 303 :
 			case 307 :
 				/* translators: %s = My Account */
-				$message = sprintf( \esc_html__( 'Invalid API License Key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$message = sprintf( \esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
 				$type = 'error';
 				break;
 
 			case 304 :
 			case 1010203 :
 			case 1010204 :
-				$message = \esc_html__( 'Remote Software API error.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -247,7 +256,7 @@ trait Error {
 				break;
 
 			case 306 :
-				$message = \esc_html__( 'Invalid Instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Invalid instance ID. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -303,9 +312,10 @@ trait Error {
 
 			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001 :
+			case 9002 :
 			case 1019001 :
 			case 1069001 :
-				$message = \esc_html__( 'Nonce verification failed. Please try again.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -343,7 +353,7 @@ trait Error {
 				break;
 
 			case 1010403 :
-				$message = \esc_html__( 'Your site has been succesfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Your site has been successfully disconnected from the Monitor API server.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
@@ -365,7 +375,7 @@ trait Error {
 				break;
 
 			case 1010506 :
-				$message = \esc_html__( 'Crawl has been requested succesfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Crawl has been requested successfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';
 				break;
 
@@ -389,6 +399,21 @@ trait Error {
 				$type = 'success';
 				break;
 
+			case 1070100 :
+				$message = \esc_html__( 'Invalid data was sent to the server.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 1070102 :
+				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
+				$type = 'success';
+				break;
+
+			case 1071100 :
+				$message = \esc_html__( "Settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
 			case 602 :
 			case 703 :
@@ -406,6 +431,7 @@ trait Error {
 			case 1010605 :
 			case 1060101 :
 			case 1060402 :
+			case 1070101 :
 			default :
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
@@ -428,7 +454,7 @@ trait Error {
 	 *    'code'    => int $code,
 	 * }
 	 */
-	protected function get_ajax_notice( $success, $code, $dismissible = false ) {
+	protected function get_ajax_notice( $success, $code ) {
 		return [
 			'success' => $success,
 			'notice' => $this->get_error_notice_by_key( $code, false ),

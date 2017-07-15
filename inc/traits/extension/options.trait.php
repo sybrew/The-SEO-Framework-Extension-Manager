@@ -63,7 +63,7 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @return array The current extension options.
+	 * @return array All extension options.
 	 */
 	public static function _get_options_cache() {
 
@@ -75,11 +75,92 @@ final class Extensions_Options_Cache {
 
 	/**
 	 * Overrides current option stack with the new one.
-	 * Note: you can get the previous set through `TSF_Extension_Manager\_get_e_options_cache()`.
+	 * Note: you can get the previous set through `_get_options_cache()`.
 	 *
 	 * Also initializes the options cache, if not already.
 	 *
 	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string|int $index The option index that has to be changed.
+	 * @param null|array $new_options The new options to set.
+	 *        Should not have changed options from outside the current extension's scope.
+	 * @param bool $delete If $new_options aren't set, but this is true, then
+	 *        it will delete the current options $index from cache.
+	 * @return array The current extension options.
+	 */
+	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
+
+		if ( is_null( static::$options ) )
+			static::init_options_cache();
+
+		if ( isset( $new_options ) && $index ) {
+			static::$options[ $index ] = $new_options;
+		} elseif ( $delete ) {
+			unset( static::$options[ $index ] );
+		}
+
+		return static::$options;
+	}
+}
+
+/**
+ * Class TSF_Extension_Manager\Stale_Extensions_Options_Cache.
+ *
+ * Caches the stale extension options. Used for updating and managing options.
+ *
+ * @since 1.3.0
+ * @access private
+ * @final
+ */
+final class Stale_Extensions_Options_Cache {
+	use Construct_Core_Static_Final,
+		Enclose_Core_Final;
+
+	/**
+	 * Holds the extension options.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $options
+	 */
+	private static $options = null;
+
+	/**
+	 * Initializes the options cache.
+	 *
+	 * @since 1.3.0
+	 */
+	private static function init_options_cache() {
+		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+	}
+
+	/**
+	 * Returns all the extension options from cache.
+	 * Used internally to stack multiple extension options stacks.
+	 *
+	 * Also initializes the options cache, if not already.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 *
+	 * @return array All extension options.
+	 */
+	public static function _get_options_cache() {
+
+		if ( is_null( static::$options ) )
+			static::init_options_cache();
+
+		return static::$options;
+	}
+
+	/**
+	 * Overrides current option stack with the new one.
+	 * Note: you can get the previous set through `_get_options_cache()`.
+	 *
+	 * Also initializes the options cache, if not already.
+	 *
+	 * @since 1.3.0
 	 * @access private
 	 *
 	 * @param string|int $index The option index that has to be changed.
@@ -142,9 +223,78 @@ trait Extension_Options {
 	 * $this->get_option()'s second parameter is not null either.
 	 * @since 1.3.0
 	 *
-	 * @param array $o_defaults The default options.
+	 * @param array $o_stale_defaults The default options.
 	 */
 	protected $o_stale_defaults = [];
+
+	/**
+	 * Loops through multidimensional keys and values to find the corresponding one.
+	 *
+	 * Expected not to go beyond 10 key depth.
+	 * CAUTION: 2nd parameter is passed by reference and it will be annihilated.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array|string $keys  The keys that collapse with $value. For performance
+	 *                            benefits, the last value should be a string.
+	 * @param array|string        $value The values that might contain $keys' value.
+	 *                            Passed by reference for huge performance improvement.
+	 * @return mixed|null Null if not found. Value otherwise.
+	 */
+	final protected function get_mda_value( $keys, &$value ) {
+
+		//= Because it's cast to array, the return will always be inside this loop.
+		foreach ( (array) $keys as $k => $v ) {
+			if ( is_array( $v ) ) {
+				return isset( $value[ $k ] ) ? $this->get_mda_value( $v, $value[ $k ] ) : null;
+			} else {
+				if ( $k ) {
+					return isset( $value[ $k ][ $v ] ) ? $value[ $k ][ $v ] : null;
+				}
+
+				return isset( $value[ $v ] ) ? $value[ $v ] : null;
+			}
+		}
+	}
+
+	/**
+	 * Converts a single or sequential|associative array into a multidimensional array.
+	 *
+	 * satoma: "Single Array to Multidimensional Array"
+	 *
+	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
+	 * Becomes: [ a => [ b => [ c ] ];
+	 *
+	 * This function can also be found in class \TSF_Extension_Manager\Core.
+	 *
+	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
+	 *       Their values will be used as keys. Arrays can't be keys.
+	 *
+	 * @since 1.3.0
+	 * @staticvar array $_b Maintains iteration and depth.
+	 *
+	 * @param array $a The single dimensional array.
+	 * @return array Multidimensional array, where the values are the dimensional keys.
+	 */
+	final protected function satoma( array $a ) {
+
+		static $_b;
+
+		$_b = $a;
+
+		if ( $_b ) {
+			$last = array_shift( $a );
+
+			if ( $a ) {
+				$r = [];
+				$r[ $last ] = $this->satoma( $a );
+			} else {
+				$r = $last;
+			}
+		}
+
+		return $r;
+	}
 
 	/**
 	 * Returns current extension options array based upon $o_index;
@@ -174,7 +324,7 @@ trait Extension_Options {
 	 * @since 1.2.0 : Now listens to $this->o_defaults.
 	 *
 	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist. Defaults to $this->$o_defaults[ $option ].
+	 * @param mixed $default The fallback value if the option doesn't exist. Defaults to $this->o_defaults[ $option ].
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_option( $option, $default = null ) {
@@ -226,7 +376,6 @@ trait Extension_Options {
 
 		return null;
 	}
-
 
 	/**
 	 * Updates TSFEM Extensions option.
@@ -331,20 +480,16 @@ trait Extension_Options {
 	}
 
 	/**
-	 * Returns stale extension options array based upon $o_index;
+	 * Returns current stale extension options array based upon $o_index;
 	 *
 	 * @since 1.3.0
-	 * @staticvar array $options The cached options. Expected not to change during the loop.
-	 * @see $this->o_index The extension options index.
+	 * @see $this->o_index The current stale options index.
 	 *
-	 * @return array Stale extension options.
+	 * @return array Current extension options.
 	 */
 	final protected function get_stale_extension_options() {
 
-		static $options = null;
-
-		if ( null === $options )
-			$options = \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		$options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
 
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
@@ -356,7 +501,7 @@ trait Extension_Options {
 	}
 
 	/**
-	 * Fetches stale extension options.
+	 * Fetches current stale extension options.
 	 *
 	 * @since 1.3.0
 	 *
@@ -384,7 +529,7 @@ trait Extension_Options {
 	}
 
 	/**
-	 * Fetches stale extension options from multidimensional array.
+	 * Fetches current stale extension options from multidimensional array.
 	 *
 	 * @since 1.3.0
 	 *
@@ -415,7 +560,7 @@ trait Extension_Options {
 	}
 
 	/**
-	 * Merges TSFEM Extensions stale options.
+	 * Updates stale extension options based on array by key.
 	 *
 	 * @since 1.3.0
 	 *
@@ -430,13 +575,13 @@ trait Extension_Options {
 	}
 
 	/**
-	 * Updates TSFEM Extensions stale option.
+	 * Updates TSFEM stale Extensions option.
 	 *
 	 * @since 1.3.0
 	 *
 	 * @param string $option The option name.
 	 * @param mixed $value The option value.
-	 * @return bool True on success or the stale option is unchanged, false on failure.
+	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	final protected function update_stale_option( $option, $value ) {
 
@@ -451,15 +596,22 @@ trait Extension_Options {
 
 		$options[ $option ] = $value;
 
-		//* Prepare options.
-		$c_options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		//* Prepare options cache.
+		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		return \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+
+		if ( $success ) {
+			//* Update options cache on success.
+			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+		}
+
+		return $success;
 	}
 
 	/**
-	 * Deletes stale extension option.
+	 * Deletes current stale extension option.
 	 *
 	 * @since 1.3.0
 	 *
@@ -479,15 +631,22 @@ trait Extension_Options {
 
 		unset( $options[ $option ] );
 
-		//* Prepare options.
-		$c_options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		//* Prepare options cache.
+		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		return \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+
+		if ( $success ) {
+			//* Update options cache on success.
+			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+		}
+
+		return $success;
 	}
 
 	/**
-	 * Deletes all of the current extension options.
+	 * Deletes all of the current stale extension options.
 	 *
 	 * @since 1.3.0
 	 *
@@ -498,83 +657,22 @@ trait Extension_Options {
 		if ( ! $this->o_index )
 			return false;
 
-		$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		//* Prepare options cache.
+		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
 
 		//* If index is non existent, return true.
-		if ( ! isset( $options[ $this->o_index ] ) )
+		if ( ! isset( $c_options[ $this->o_index ] ) )
 			return true;
 
-		unset( $options[ $this->o_index ] );
+		unset( $c_options[ $this->o_index ] );
 
-		return \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $options, 'no' );
-	}
+		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
-	/**
-	 * Loops through multidimensional keys and values to find the corresponding one.
-	 *
-	 * Expected not to go beyond 10 key depth.
-	 * CAUTION: 2nd parameter is passed by reference and it will be annihilated.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array|string $keys  The keys that collapse with $value. For performance
-	 *                            benefits, the last value should be a string.
-	 * @param array|string        $value The values that might contain $keys' value.
-	 *                            Passed by reference for huge performance improvement.
-	 * @return mixed|null Null if not found. Value otherwise.
-	 */
-	final protected function get_mda_value( $keys, &$value ) {
-
-		//= Because it's cast to array, the return will always be inside this loop.
-		foreach ( (array) $keys as $k => $v ) {
-			if ( is_array( $v ) ) {
-				return isset( $value[ $k ] ) ? $this->get_mda_value( $v, $value[ $k ] ) : null;
-			} else {
-				if ( $k ) {
-					return isset( $value[ $k ][ $v ] ) ? $value[ $k ][ $v ] : null;
-				}
-
-				return isset( $value[ $v ] ) ? $value[ $v ] : null;
-			}
-		}
-	}
-
-	/**
-	 * Converts a single or sequential|associative array into a multidimensional array.
-	 *
-	 * satoma: "Single Array to Multidimensional Array"
-	 *
-	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
-	 * Becomes: [ a => [ b => [ c ] ];
-	 *
-	 * This function can also be found in class \TSF_Extension_Manager\Core.
-	 *
-	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
-	 *       Their values will be used as keys. Arrays can't be keys.
-	 *
-	 * @since 1.3.0
-	 * @staticvar array $_b Maintains iteration and depth.
-	 *
-	 * @param array $a The single dimensional array.
-	 * @return array Multidimensional array, where the values are the dimensional keys.
-	 */
-	final protected function satoma( array $a ) {
-
-		static $_b;
-
-		$_b = $a;
-
-		if ( $_b ) {
-			$last = array_shift( $a );
-
-			if ( $a ) {
-				$r = [];
-				$r[ $last ] = $this->satoma( $a );
-			} else {
-				$r = $last;
-			}
+		if ( $success ) {
+			//* Update options cache on success.
+			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 
-		return $r;
+		return $success;
 	}
 }

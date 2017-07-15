@@ -52,7 +52,7 @@ class API extends Core {
 	 * }
 	 * @return bool|array {
 	 *		Always: False on failure.
-	 *		Deactivation: True on succesful deactivation.
+	 *		Deactivation: True on successful deactivation.
 	 *		Activation/Status: Reponse data.
 	 * }
 	 */

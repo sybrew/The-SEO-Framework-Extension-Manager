@@ -56,17 +56,16 @@
 	background: #f9f9f9;
 }
 
-.tsfem-form-collapse-header:hover {
-	background: #f7f7f7;
+.tsfem-form-collapse-header:hover,
+.tsfem-form-collapse > input[type="checkbox"]:focus + .tsfem-form-collapse-header {
+	-webkit-filter: brightness(0.95);
+	filter: brightness(0.95);
 }
 
-.tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header:hover,
-.tsfem-form-collapse-header:active {
-	background: #f2f2f2;
-}
-
-.tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header:active {
-	background: #ededed;
+.tsfem-form-collapse > input[type="checkbox"]:active + .tsfem-form-collapse-header,
+.tsfem-forum-collapse-header:active {
+	-webkit-filter: brightness(0.925);
+	filter: brightness(0.925);
 }
 
 .tsfem-form-collapse-title {

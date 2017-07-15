@@ -91,6 +91,7 @@ a.tsfem-dismiss {
 	color: #b4b9be;
 	cursor: pointer;
 	text-decoration: none;
+	transition: color 0.15s;
 }
 
 a.tsfem-dismiss:before {
@@ -107,7 +108,7 @@ a.tsfem-dismiss:before {
 }
 
 a.tsfem-dismiss:hover {
-	color: #c00;
+	color: #d14b44;
 }
 
 /* ## Loading...
@@ -437,6 +438,10 @@ body.tsfem .wrap {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	-webkit-transition: -webkit-filter 0.15s, color 0.15s;
+	-moz-transition: filter 0.15s, color 0.15s;
+	-o-transition: -webkit-filter 0.15s, color 0.15s;
+	transition: filter 0.15s, color 0.15s;
 }
 
 .tsfem-button-small,
@@ -483,7 +488,7 @@ body.tsfem .wrap {
 	background: #ff746a;
 	-webkit-box-shadow: 0 .2em 0 #d14b44;
 	box-shadow: 0 .2em 0 #d14b44;
-	text-shadow: 0 -1px 1px #d14b44,1px 0 1px #d14b44,0 1px 1px #d14b44,-1px 0 1px #d14b44;
+	text-shadow: 0 -1px 1px #d14831,1px 0 1px #d14831,0 1px 1px #d14831,-1px 0 1px #d14831;
 }
 
 .tsfem-button-star:after,
@@ -572,11 +577,13 @@ body.tsfem .wrap {
 	outline: 0;
 }
 
-.tsfem-button:hover {
+.tsfem-button:hover,
+.tsfem-button:active,
+.tsfem-button:focus {
 	/* Too lazy to figure out exact colors */
 	color: #777;
-	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
-	filter: hue-rotate(5deg) saturate(1.2) brightness(0.975);
+	-webkit-filter: brightness(0.925);
+	filter: brightness(0.925);
 }
 
 .tsfem-button-primary:hover,
@@ -584,8 +591,8 @@ body.tsfem .wrap {
 .tsfem-button-primary:focus {
 	/* Too lazy to figure out exact colors */
 	color: #fff;
-	-webkit-filter: hue-rotate(5deg) saturate(1.2);
-	filter: hue-rotate(5deg) saturate(1.2);
+	-webkit-filter: hue-rotate(5deg) saturate(1.2) brightness(1.025);
+	filter: hue-rotate(5deg) saturate(1.2) brightness(1.025);
 }
 
 /* ## Switching/Rotating buttons.
@@ -906,7 +913,6 @@ body.tsfem .wrap {
 	margin: 0;
 }
 
-.tsfem-pane-inner-collapsable-settings-wrap,
 .tsfem-pane-inner-wrap {
 	padding: 20px;
 	height: auto;
@@ -1635,4 +1641,141 @@ body.js .tsfem-flex-hide-if-no-js {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
+}
+
+/* ## Modal.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-modal-mask {
+	position: absolute;
+	background-color: transparent;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 2147483645;
+}
+
+.tsfem-modal-mask-noscroll {
+	display: block;
+	position: absolute;
+	background-color: rgba(40,40,40,.15);
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 2147483646;
+}
+
+.tsfem-modal-container,
+.tsfem-modal-dialog,
+.tsfem-modal-title,
+.tsfem-modal-buttons {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+}
+
+.tsfem-modal-container {
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-align-items: center;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2147483647;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	background: rgba(33,33,33,.15);
+	opacity: 0;
+}
+
+/* Max-width prevents admin bar collapse */
+.tsfem-modal-dialog {
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	background: #fff;
+	border-radius: 3px;
+	min-width: 240px;
+	max-width: calc( 90% - 240px );
+	max-height: 80%;
+	position: relative;
+	overflow: auto;
+	-webkit-box-shadow: 0 0 4px 2px #aaa;
+	box-shadow: 0 0 4px 2px #aaa;
+}
+
+.tsfem-modal-title,
+.tsfem-modal-buttons {
+	margin: 0;
+	padding: 14px 20px;
+	-webkit-box-shadow: 0px 1px 3px 0px #ccc;
+	box-shadow: 0px 1px 3px 0px #ccc;
+	z-index: 5;
+}
+
+.tsfem-modal-buttons {
+	-webkit-box-shadow: 0px -1px 3px 0px #ccc;
+	box-shadow: 0px -1px 3px 0px #ccc;
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+}
+
+.tsfem-modal-title h4 {
+	margin: 0;
+	padding: 0;
+	font-size: 1.4em;
+	line-height: 1.2em;
+	color: #057f9c;
+	font-weight: 400;
+}
+
+.tsfem-modal-text {
+	padding: 20px;
+	max-width: 640px;
+}
+
+.tsfem-modal-text p:first-of-type {
+	margin: 0;
+}
+
+.tsfem-modal-text p:last-of-type {
+	margin-bottom: 0;
+}
+
+.tsfem-modal-buttons button:nth-child(n+2) {
+	margin-left: 14px;
+}
+
+.tsfem-modal-dismiss {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	margin: 7px;
+	padding: 7px;
+	background: 0 0;
+	color: #b4b9be;
+	cursor: pointer;
+	text-decoration: none;
+	z-index: 6;
+	transition: color 0.15s;
+}
+
+.tsfem-modal-dismiss:hover {
+	color: #d14b44;
+}
+
+.tsfem-modal-dismiss:before {
+	background: 0 0;
+	content: "\f153";
+	display: block;
+	font: 400 16px/20px dashicons;
+	speak: none;
+	height: 20px;
+	text-align: center;
+	width: 20px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }

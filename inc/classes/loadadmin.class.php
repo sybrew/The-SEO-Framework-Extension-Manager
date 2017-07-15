@@ -110,18 +110,18 @@ final class LoadAdmin extends AdminPages {
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
 
 					$key = \tsf_extension_manager()->coalesce_var( $_POST['tsfem-notice-key'], false );
-					$key = \absint( $key );
+					$key = intval( $key );
 
 					if ( $key ) {
 						$_notice = $this->get_error_notice( $key );
 
 						if ( is_array( $_notice ) ) {
 							//= If it has a custom message (already stored in browser), then don't output the notice message.
-							$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? '' : $_notice['message'];
+							$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $_notice['before'] : $_notice['message'];
 							$type = $_notice['type'];
 
 							$notice = $this->get_dismissible_notice( $msg, $type, true, false );
-							$_type = $msg ? 'success' : 'failure';
+							$_type = $notice ? 'success' : 'failure';
 						}
 					}
 				}
@@ -189,6 +189,8 @@ final class LoadAdmin extends AdminPages {
 					\do_action( 'tsfem_form_do_ajax_save' );
 				}
 			endif;
+
+			$this->send_json( [ 'results' => $this->get_ajax_notice( false, 9002 ) ], 'failure' );
 		endif;
 
 		exit;
