@@ -95,6 +95,8 @@ final class FormGenerator {
 	/**
 	 * Determines and initializes AJAX iteration listener.
 	 *
+	 * The listener will check for referrer and capability.
+	 *
 	 * @since 1.3.0
 	 * @static
 	 * @staticvar bool $found Prevents further callback matching to improve performance.
@@ -148,6 +150,7 @@ final class FormGenerator {
 	 * @return bool True if matched, false otherwise.
 	 */
 	private static function is_ajax_callee( $caller ) {
+		//* Referer check OK.
 		//= Stripslashes is required, as `\WP_Scripts::localize` adds them.
 		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
 	}
@@ -163,6 +166,7 @@ final class FormGenerator {
 	 */
 	private static function get_ajax_target_id() {
 
+		//* Referer check OK.
 		if ( isset( $_POST['args']['caller'] ) )
 			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->umatosa( $_POST['args']['caller'] ) );
 
@@ -179,6 +183,7 @@ final class FormGenerator {
 	 * @return unsigned int (R>0) $i The previous iteration value. 1 if $_POST value not set.
 	 */
 	private static function get_ajax_iteration_start() {
+		//* Referer check OK.
 		//= Careful, smart logic. Will return 1 if not set.
 		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
 	}
@@ -193,7 +198,8 @@ final class FormGenerator {
 	 * @return unsigned int (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
-		return isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0;
+		//* Referer check OK.
+		return  \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
 	}
 
 	/**
@@ -211,11 +217,14 @@ final class FormGenerator {
 	/**
 	 * Prepares the current iteration and option levels and names.
 	 *
+	 * Performs sanitation on items.
+	 *
 	 * @since 1.3.0
 	 * @iterator
 	 */
 	private function prepare_ajax_iteration() {
 
+		//* Referer check OK.
 		$caller = $_POST['args']['caller'];
 		$items = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
@@ -232,7 +241,7 @@ final class FormGenerator {
 			if ( is_numeric( $item ) ) {
 				$this->iterate( (int) $item );
 			} else {
-				$this->level_names[ ++$this->level - 1 ] = $item;
+				$this->level_names[ ++$this->level - 1 ] = $this->sanitize_id( $item );
 			}
 		}
 	}
@@ -338,16 +347,17 @@ final class FormGenerator {
 	 *
 	 * @param string $what What to get. 'start' or 'end'.
 	 * @param string $url The form action POST URL for $what 'start'.
+	 * @param bool   $validator Whether the form applies a validator.
 	 * @param string $type Either 'echo' or 'get'.
 	 * @return void|string The form wrap on $type 'get'. Void otherwise.
 	 */
-	public function _form_wrap( $what, $url = '', $type = 'echo' ) {
+	public function _form_wrap( $what, $url = '', $validator = false, $type = 'echo' ) {
 
 		if ( 'get' === $type )
-			return $this->get_form_wrap( $what, $url );
+			return $this->get_form_wrap( $what, $url, $validator );
 
 		//* Already escaped.
-		echo $this->get_form_wrap( $what, $url );
+		echo $this->get_form_wrap( $what, $url, $validator );
 	}
 
 	/**
@@ -355,19 +365,21 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $what What to get. 'start' or 'end'.
-	 * @param string $url The form action POST URL for $what 'start'.
+	 * @param string $what      What to get. 'start' or 'end'.
+	 * @param string $url       The form action POST URL for $what 'start'.
+	 * @param bool   $validator Whether the form applies a validator.
 	 * @return string|void The form wrappers. Void if unknown $what.
 	 */
-	private function get_form_wrap( $what, $url ) {
+	private function get_form_wrap( $what, $url, $validator ) {
 
 		switch ( $what ) :
 			case 'start' :
 				return vsprintf(
-					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form">',
+					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s">',
 					[
 						\esc_url( $url ),
 						$this->get_form_id(),
+						$validator ? ' tsfem-form-validate' : '',
 					]
 				);
 
@@ -772,8 +784,9 @@ final class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		return vsprintf(
-			'<div class="tsfem-form-multi-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-form-multi-setting tsfem-flex"%s>%s%s</div>',
 			[
+				$this->get_fields_data( $args['_data'] ),
 				sprintf(
 					'<div class="tsfem-form-multi-setting-label tsfem-flex" id="%s">%s</div>',
 					$this->get_field_id(),
@@ -1156,6 +1169,39 @@ final class FormGenerator {
 		$range[2] = isset( $range[2] ) ? (string) rtrim( sprintf( '%.10F', $range[2] ), '.0' ) : '';
 	}
 
+	private function get_fields_data( &$data ) {
+
+		if ( $data ) {
+			$_data = $data;
+			$ret = '';
+			foreach ( $data as $k => $v ) {
+				if ( is_array( $v ) )
+					$v = implode( ',', $v );
+
+				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+			}
+
+			return $ret;
+		}
+
+		return '';
+	}
+
+	private function get_fields_pattern( &$pattern, $fallback = '' ) {
+
+		if ( $pattern ) {
+			if ( false !== preg_match( "/$pattern/", null ) ) {
+				return sprintf( 'pattern="%s"', $pattern );
+			}
+		}
+
+		if ( $fallback ) {
+			return sprintf( 'pattern="%s"', $fallback );
+		}
+
+		return '';
+	}
+
 	/**
 	 * Accepted types... TODO
 	 * Text inputs only
@@ -1173,16 +1219,24 @@ final class FormGenerator {
 				$s_range .= '' !== $args['_range'][0] ? sprintf( 'min=%s', $args['_range'][0] ) : '';
 				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
 				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
+
+				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 
 			case 'color' :
 				// TODO
 				break;
 
+			case 'tel' :
+				$s_pattern = $this->get_fields_pattern(
+					$args['_pattern'],
+					'(\+|00)(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$'
+				);
+				break;
+
 			default :
 			case 'text' :
 			case 'password' :
-			case 'tel' :
 			case 'url' :
 			case 'search' :
 			case 'time' :
@@ -1190,7 +1244,7 @@ final class FormGenerator {
 			case 'month' :
 			case 'datetime-local' :
 			case 'hidden' :
-				//= Look behind you.
+				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 		endswitch;
 
@@ -1204,6 +1258,7 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_range = isset( $s_range ) ? $s_range : '';
+		$s_pattern = isset( $s_pattern ) ? $s_pattern : '';
 
 		return vsprintf(
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
@@ -1229,14 +1284,16 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<input type=%s id="%s" name=%s value="%s" %s %s>',
+						'<input type=%s id="%s" name=%s value="%s" %s %s %s %s>',
 						[
 							$s_type,
 							$s_id,
 							$s_name,
 							\esc_attr( $this->get_field_value( $args['_default'] ) ),
 							$s_range,
+							$s_pattern,
 							$s_ph,
+							$this->get_fields_data( $args['_data'] ),
 						]
 					)
 				),
@@ -1287,11 +1344,12 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<select id="%s" name=%s %s>%s</select>',
+						'<select id="%s" name=%s %s %s>%s</select>',
 						[
 							$s_id,
 							$s_name,
 							( $multiple ? 'multiple' : '' ),
+							$this->get_fields_data( $args['_data'] ),
 							$this->get_select_options( $args['_select'], $this->get_field_value( $args['_default'] ), $multiple ),
 						]
 					)
@@ -1427,9 +1485,10 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-multi-select-wrap" id="%s">%s</div>',
+						'<div class="tsfem-form-multi-select-wrap" id="%s" %s>%s</div>',
 						[
 							$this->get_field_id(),
+							$this->get_fields_data( $args['_data'] ),
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]
 					)
@@ -1594,13 +1653,14 @@ final class FormGenerator {
 					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s%s</div></div>',
 					[
 						vsprintf(
-							'<input type=url id="%s" name=%s value="%s" %s%s>',
+							'<input type=url id="%s" name=%s value="%s" %s%s%s>',
 							[
 								$s_url_id,
 								$s_url_name,
 								$s_url_value,
 								$s_url_ph,
 								$s_url_readonly,
+								$this->get_fields_data( $args['_data'] ),
 							]
 						),
 						vsprintf(

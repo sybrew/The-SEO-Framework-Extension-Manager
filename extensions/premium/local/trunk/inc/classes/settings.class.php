@@ -368,7 +368,7 @@ final class Settings {
 
 		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
 
-		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ) );
+		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
 		$f->_fields( Options::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
 

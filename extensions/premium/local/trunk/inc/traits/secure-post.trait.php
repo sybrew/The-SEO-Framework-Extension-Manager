@@ -99,12 +99,6 @@ trait Secure_Post {
 	 */
 	protected function init_ajax_post_checks() {
 
-		//* AJAX update listener.
-		\add_action( 'wp_ajax_tsfem_e_local_update', [ $this, '_wp_ajax_update_data' ] );
-
-		//* AJAX API listener.
-		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
-
 		/**
 		 * Registers and checks form AJAX iteration callback listeners.
 		 * @see class TSF_Extension_Manager\FormGenerator
@@ -114,6 +108,9 @@ trait Secure_Post {
 		 * @see \TSF_Extension_Manager\LoadAdmin
 		 */
 		\add_action( 'tsfem_form_prepare_ajax_iterations', [ $this, '_init_ajax_iteration_callback' ] );
+
+		//* Registers google API request
+		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
 
 		/**
 		 * Listens to AJAX form save.

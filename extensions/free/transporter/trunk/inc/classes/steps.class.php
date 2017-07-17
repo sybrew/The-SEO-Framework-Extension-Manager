@@ -324,7 +324,7 @@ final class Steps {
 
 	private function get_settings_export_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-blue tsfem-button-upload tsfem-button-ajax';
+		$class = 'tsfem-button-primary tsfem-button-blue tsfem-button-upload';
 		$name = \__( 'Export SEO Settings', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Export SEO Settings to text or file', 'the-seo-framework-extension-manager' );
 
@@ -458,7 +458,7 @@ final class Steps {
 
 	private function get_settings_import_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-blue tsfem-button-download tsfem-button-ajax';
+		$class = 'tsfem-button-primary tsfem-button-blue tsfem-button-download';
 		$name = \__( 'Import SEO Settings', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Import SEO Settings from text or file', 'the-seo-framework-extension-manager' );
 

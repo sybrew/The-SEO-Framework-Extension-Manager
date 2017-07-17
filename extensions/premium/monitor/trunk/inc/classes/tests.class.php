@@ -109,7 +109,7 @@ final class Tests {
 		$content = '';
 		$state = 'unknown';
 
-		if ( ! isset( $data['meta'] ) && ! isset( $data['static'] ) ) {
+		if ( ! isset( $data['meta'], $data['static'] ) ) {
 			$state = 'unknown';
 			$content = $this->no_data_found();
 			goto end;

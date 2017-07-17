@@ -169,7 +169,7 @@ class Api extends Core {
 	 */
 	protected function get_update_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-store tsfem-button-ajax';
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-store';
 		$name = \__( 'Update Settings', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Save your current settings', 'the-seo-framework-extension-manager' );
 

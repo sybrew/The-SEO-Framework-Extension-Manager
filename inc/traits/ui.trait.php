@@ -439,6 +439,7 @@ trait UI {
 					'proceed' => \esc_html__( 'Proceed', 'the-seo-framework-extension-manager' ),
 					'cancel' => \esc_html__( 'Cancel', 'the-seo-framework-extension-manager' ),
 					'dismiss' => \esc_html__( 'Dismiss', 'the-seo-framework-extension-manager' ),
+					'autocomplete' => \esc_html__( 'Autocomplete', 'the-seo-framework-extension-manager' ),
 				],
 			],
 		];

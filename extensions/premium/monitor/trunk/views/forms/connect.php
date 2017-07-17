@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_active_class() and $this instanceof $_class or die;
 
-$class = 'tsfem-button-primary tsfem-button-cloud tsfem-button-ajax';
+$class = 'tsfem-button-primary tsfem-button-cloud';
 $name = \__( 'Register', 'the-seo-framework-extension-manager' );
 $title = \__( 'Connect this website to SEO Monitor', 'the-seo-framework-extension-manager' );
 

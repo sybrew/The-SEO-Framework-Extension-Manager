@@ -139,7 +139,7 @@ final class SecureOption extends Secure_Abstract {
 
 		$instance = self::$_instance;
 
-		if ( isset( $instance[0] ) && isset( $instance[1][1] ) ) {
+		if ( isset( $instance[0], $instance[1][1] ) ) {
 			\tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
 			self::reset();

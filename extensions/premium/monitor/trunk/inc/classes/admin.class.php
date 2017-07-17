@@ -874,7 +874,7 @@ final class Admin extends Api {
 	 */
 	protected function get_update_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud tsfem-button-ajax';
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
 		$name = \__( 'Update Data', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 
@@ -904,7 +904,7 @@ final class Admin extends Api {
 	 */
 	protected function get_crawl_button() {
 
-		$class = 'tsfem-button tsfem-button-cloud tsfem-button-ajax';
+		$class = 'tsfem-button tsfem-button-cloud';
 		$name = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
 

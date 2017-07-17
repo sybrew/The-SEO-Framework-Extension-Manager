@@ -100,6 +100,7 @@ final class Options {
 				],
 				'_iterator_title' => [
 					\__( 'Main Department', '' ),
+					/* translators: %d is department iteration number */
 					\__( 'Department %d', '' ),
 				],
 				'_iterator_title_dynamic' => [
@@ -147,6 +148,7 @@ final class Options {
 					],
 				],
 				'_iterator_title' => [
+					/* translators: %d is opening hours iteration number */
 					\__( 'Opening Hours %d', '' ),
 				],
 				'_iterator_title_dynamic' => [
@@ -258,6 +260,10 @@ final class Options {
 					\__( 'Department address', '' ),
 					\__( 'Fill in the exact address of the department.', '' ),
 				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'action',
+				],
 				'_fields' => $this->get_address_fields() + $this->get_geo_fields(),
 			],
 			'url' => [
@@ -278,10 +284,11 @@ final class Options {
 				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'tel',
+				'_pattern' => '\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$',
 				'_desc' => [
 					\__( 'Telephone number', '' ),
-					\__( 'A business phone number meant to be the primary contact method for customers.', '' ),
-					\__( 'Be sure to include the country code and area code in the phone number.', '' ),
+					\__( 'This phone number meant to be the primary contact method for customers.', '' ),
+					\__( 'Be sure to include the country code and area code in the phone number: <code>+15555555555</code>', '' ),
 				],
 			],
 			'openingHoursSpecification' => [
@@ -382,6 +389,10 @@ final class Options {
 					'',
 					\__( 'Street number, street name, and unit number (if applicable).', '' ),
 				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => [ 'route', 'street_number' ],
+				],
 			],
 			'addressLocality' => [
 				'_default' => '',
@@ -391,6 +402,10 @@ final class Options {
 				'_type' => 'text',
 				'_desc' => [
 					\__( 'City, town, village', '' ),
+				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'locality',
 				],
 			],
 			'addressRegion' => [
@@ -403,6 +418,10 @@ final class Options {
 					\__( 'State or province', '' ),
 					\__( 'The region. For example, CA for California.' ),
 				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'area',
+				],
 			],
 			'postalCode' => [
 				'_default' => '',
@@ -413,6 +432,10 @@ final class Options {
 				'_desc' => [
 					\__( 'Postal or zip code', '' ),
 				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'postal_code',
+				],
 			],
 			'addressCountry' => [
 				'_default' => '',
@@ -422,6 +445,10 @@ final class Options {
 				'_type' => 'select',
 				'_desc' => [
 					\__( 'Country', '' ),
+				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'country',
 				],
 				'_select' => $this->get_country_items(),
 			],
@@ -446,6 +473,10 @@ final class Options {
 					'',
 					\__( 'The geographic latitude.', '' ),
 				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'lat',
+				],
 			],
 			'longitude' => [
 				'_default' => '',
@@ -462,6 +493,10 @@ final class Options {
 					\__( 'Longitude', '' ),
 					'',
 					\__( 'The geographic longitude.', '' ),
+				],
+				'_data' => [
+					'geo-api' => true,
+					'geo-api-component' => 'long',
 				],
 			],
 		];
@@ -2626,6 +2661,7 @@ final class Options {
 					\__( 'Form language', '' ),
 					\__( 'Specify the main language of the form.', '' ),
 				],
+				'_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
 				'_select' => [], //... $this->get_language_items(),
 			],
 			/*== These platforms are not specified on Sshema.org, Let's omit them for now.

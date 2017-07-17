@@ -41,7 +41,7 @@ if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 } else {
 	//* Empty dummy traits.
 	trait Extensions_Layout { }
-	trait Extensions_i18n { }
+	trait Extensions_I18n { }
 }
 
 /**
@@ -56,7 +56,7 @@ if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
  * @final
  */
 final class Extensions extends Secure_Abstract {
-	use Extensions_i18n,
+	use Extensions_I18n,
 		Extensions_Properties,
 		Extensions_Actions,
 		Extensions_Layout;

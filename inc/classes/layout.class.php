@@ -248,7 +248,7 @@ final class Layout extends Secure_Abstract {
 				break;
 		endswitch;
 
-		if ( isset( $data['timestamp'] ) && isset( $data['divider'] ) ) {
+		if ( isset( $data['timestamp'], $data['divider'] ) ) {
 			/**
 			 * @TODO bugfix/make consistent/put in function/put in action?
 			 * It only refreshes when a premium extension is being activated.

@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) or die;
 * @since 1.0.0
 * @access private
 */
-trait Extensions_i18n {
+trait Extensions_I18n {
 
 	/**
 	 * Initializes i18n.
@@ -122,7 +122,7 @@ trait Extensions_Layout {
 
 		foreach ( $extensions as $id => $extension ) {
 
-			if ( false === ( isset( $extension['slug'] ) && isset( $extension['type'] ) && isset( $extension['area'] ) ) )
+			if ( ! isset( $extension['slug'], $extension['type'], $extension['area'] ) )
 				continue;
 
 			if ( false === static::get_extension_header( $extension['slug'] ) )
@@ -254,7 +254,7 @@ trait Extensions_Layout {
 	 * account type. Also initializes nonces for those buttons.
 	 *
 	 * @since 1.0.0
-	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to make button from.
@@ -291,7 +291,7 @@ trait Extensions_Layout {
 	 * Builds extension button form and builds nonce. Supports both JS and no-JS.
 	 *
 	 * @since 1.0.0
-	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 *
 	 * @param string $slug The extension slug.
 	 * @param string $type The button type.
@@ -339,7 +339,7 @@ trait Extensions_Layout {
 	 * Outputs the extension description wrap and content.
 	 *
 	 * @since 1.0.0
-	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to fetch the description wrap from.
@@ -368,7 +368,7 @@ trait Extensions_Layout {
 	 * account type.
 	 *
 	 * @since 1.0.0
-	 * @uses trait TSF_Extension_Manager\Extensions_i18n
+	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
 	 *
 	 * @param array $extension The extension to make description footer from.

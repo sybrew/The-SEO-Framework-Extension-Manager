@@ -17,7 +17,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		<div class="tsfem-pane-inner-pad">
 			<h4 class="tsfem-form-title"><?php \esc_html_e( 'Set departments', 'the-seo-framework-extension-manager' ); ?></h4>
 			<span class="description"><?php \esc_html_e( 'With these options, you can annotate the location and practice of the business. This does not impact search ranking outside of the region, unless the region is part of the search query.', 'the-seo-framework-extension-manager' ); ?></span><br>
-			<span class="description"><?php \esc_html_e( 'Fill in these fields as accurately as possible. If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span>
+			<span class="description"><?php \esc_html_e( 'Fill in these fields as accurately as possible. If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span><br>
+			<span class="description"><?php \esc_html_e( 'All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in.', 'the-seo-framework-extension-manager' ); ?></span>
 		</div>
 		<div class="tsfem-pane-inner-pad">
 			<?php $this->output_department_fields(); ?>
