@@ -359,7 +359,7 @@ final class Settings {
 	 * Outputs department fields and floating buttons.
 	 *
 	 * @since 1.0.0
-	 * @uses \TSF_Extension_Manager\Extension\Local\Options
+	 * @uses \TSF_Extension_Manager\Extension\Local\Fields
 	 * @uses \TSF_Extension_Manager\FormGenerator
 	 *
 	 * @return \TSF_Extension_Manager\FormGenerator
@@ -369,7 +369,7 @@ final class Settings {
 		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
 
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
-		$f->_fields( Options::get_instance()->get_departments_fields() );
+		$f->_fields( Fields::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
 
 		$submit = $f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );

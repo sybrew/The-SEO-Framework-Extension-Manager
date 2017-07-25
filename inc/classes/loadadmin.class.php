@@ -58,6 +58,9 @@ final class LoadAdmin extends AdminPages {
 		//* AJAX listener for form saving.
 		\add_action( 'wp_ajax_tsfemForm_save', [ $this, '_wp_ajax_tsfemForm_save' ], 11 );
 
+		//* AJAX listener for Geocoding.
+		\add_action( 'wp_ajax_tsfemForm_get_geocode', [ $this, '_wp_ajax_tsfemForm_get_geocode' ], 11 );
+
 		//* AJAX listener for image cropping.
 		\add_action( 'wp_ajax_tsfem_crop_image', [ $this, '_wp_ajax_crop_image' ] );
 
@@ -164,6 +167,8 @@ final class LoadAdmin extends AdminPages {
 					\do_action( 'tsfem_form_do_ajax_iterations' );
 				}
 			endif;
+
+			$this->send_json( [ 'results' => $this->get_ajax_notice( false, 9002 ) ], 'failure' );
 		endif;
 
 		exit;
@@ -190,7 +195,47 @@ final class LoadAdmin extends AdminPages {
 				}
 			endif;
 
-			$this->send_json( [ 'results' => $this->get_ajax_notice( false, 9002 ) ], 'failure' );
+			$this->send_json( [ 'results' => $this->get_ajax_notice( false, 9003 ) ], 'failure' );
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Returns Geocoding data form FormGenerator's address fields.
+	 *
+	 * @since 1.3.0
+	 * @see class TSF_Extension_Manager\FormGenerator
+	 * @access private
+	 */
+	final public function _wp_ajax_tsfemForm_get_geocode() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( $this->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
+
+					$input = \wp_unslash( $_POST['input'] );
+					//* TODO bind API from $input.
+					//* TODO pass language https://developers.google.com/maps/documentation/geocoding/intro#geocoding
+					//* TODO pass language https://developers.google.com/maps/faq#languagesupport
+					//* TODO pass language RESOLVE best guess on API server. Not here.
+					$data = json_encode( json_decode( file_get_contents( TSFEM_E_LOCAL_DIR_PATH . 'example.json', false ) ) );
+
+					if ( $data ) {
+						$results = $this->get_ajax_notice( false, 17000 );
+						$geodata =& $data;
+						$_type = 'success';
+					} else {
+						$results = $this->get_ajax_notice( false, 17001 );
+						$_type = 'failure';
+					}
+
+					$this->send_json( compact( 'results', 'geodata' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
+					exit;
+				}
+			endif;
+
+			$this->send_json( [ 'results' => $this->get_ajax_notice( false, 9004 ) ], 'failure' );
 		endif;
 
 		exit;
@@ -310,7 +355,7 @@ final class LoadAdmin extends AdminPages {
 				return $validated[ $key ] = false;
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( stripslashes( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -424,7 +469,7 @@ final class LoadAdmin extends AdminPages {
 			'filename' => '',
 			'data' => [],
 		];
-		$args = \wp_parse_args( $args, $defaults );
+		$args = array_merge( $defaults, $args );
 
 		$url = $args['url'] ? \esc_url( $args['url'] ) : '';
 
@@ -433,6 +478,7 @@ final class LoadAdmin extends AdminPages {
 			return '';
 		}
 
+		//= What a mess. @TODO clean up.
 		$url = '#' === $url ? '' : ' href="' . $url . '"';
 		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
 		$id = $args['id'] ? ' id="' . \esc_attr( $args['id'] ) . '"' : '';

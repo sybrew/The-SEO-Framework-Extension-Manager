@@ -172,7 +172,7 @@ trait Secure_Post {
 	 * Registers and checks form AJAX cb listeners.
 	 *
 	 * @since 1.0.0
-	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
+	 * @uses class \TSF_Extension_Manager\Extension\Local\Fields
 	 * @uses class TSF_Extension_Manager\FormGenerator
 	 */
 	public function _init_ajax_iteration_callback() {
@@ -182,7 +182,7 @@ trait Secure_Post {
 		if ( $key ) {
 			if ( ( $method = $this->get_iterator_callback_by_key( $key ) ) ) {
 				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
-				$fields = Options::get_instance()->{$method}();
+				$fields = Fields::get_instance()->{$method}();
 			}
 		}
 	}

@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
 // TODO @see https://developers.google.com/maps/documentation/geocoding/intro (note STATUS result.. we require an API key bound to an account)
 
 /**
- * Holds options template for package TSF_Extension_Manager\Extension\Local.
+ * Holds fields template for package TSF_Extension_Manager\Extension\Local.
  *
  * @NOTE Documentation is incomplete.
  * Methods `set_instance()` and `get_instance()` are available.
@@ -39,7 +39,7 @@ defined( 'ABSPATH' ) or die;
  * @see TSF_Extension_Manager\Traits\Overload
  * @final Can't be extended.
  */
-final class Options {
+final class Fields {
 	use \TSF_Extension_Manager\Enclose_Core_Final,
 		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
@@ -92,7 +92,7 @@ final class Options {
 							\__( 'For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments.', '' ),
 						],
 						'_range' => [
-							1,
+							0,
 							'',
 							1,
 						],
@@ -496,7 +496,7 @@ final class Options {
 				],
 				'_data' => [
 					'geo-api' => true,
-					'geo-api-component' => 'long',
+					'geo-api-component' => 'lng',
 				],
 			],
 		];
@@ -2659,12 +2659,14 @@ final class Options {
 				'_type' => 'text', // TODO convert to select (or datalist) with language items.
 				'_desc' => [
 					\__( 'Form language', '' ),
-					\__( 'Specify the main language of the form.', '' ),
+					\__( 'Specify the main language of the form code.', '' ),
 				],
-				'_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
-				'_select' => [], //... $this->get_language_items(),
+				//* This pattern is confusing for the user.
+				// '_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
+				//* This pattern is quite restrictive, but will work with any language.
+				'_pattern' => '^[a-zA-Z]{2,3}((-([a-zA-Z]{2,4})-([a-zA-Z]{2,3}))|(-[a-zA-Z]{2,3})|(-[0-9]{3}))?$',
 			],
-			/*== These platforms are not specified on Sshema.org, Let's omit them for now.
+			/*== These platforms are not specified on Sshema.org, Let's omit them for now until they figure out what to do with it.
 			'actionPlatform' => [
 				'_default' => [],
 				'_edit' => true,

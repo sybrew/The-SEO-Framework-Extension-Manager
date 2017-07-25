@@ -1464,12 +1464,12 @@ final class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		return vsprintf(
-			'<div class="tsfem-selectmulti-a11y-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				sprintf(
 					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						'<div class="tsfem-form-select-multi-a11y-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
 								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',

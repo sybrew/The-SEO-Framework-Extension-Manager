@@ -52,16 +52,19 @@
 	cursor: pointer;
 }
 
+/* TODO might be a performance hit: */
 .tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header {
 	background: #f9f9f9;
 }
 
+/* TODO might be a performance hit: */
 .tsfem-form-collapse-header:hover,
 .tsfem-form-collapse > input[type="checkbox"]:focus + .tsfem-form-collapse-header {
 	-webkit-filter: brightness(0.95);
 	filter: brightness(0.95);
 }
 
+/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:active + .tsfem-form-collapse-header,
 .tsfem-forum-collapse-header:active {
 	-webkit-filter: brightness(0.925);
@@ -166,11 +169,13 @@
 	transform: translate(2px, 0) rotate(45deg);
 }
 
+/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:before {
 	-webkit-transform: translate(-2px, 0) rotate(45deg);
 	transform: translate(-2px, 0) rotate(45deg);
 }
 
+/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:after {
 	-webkit-transform: translate(2px, 0) rotate(-45deg);
 	transform: translate(2px, 0) rotate(-45deg);
@@ -260,6 +265,7 @@ h4.tsfem-form-multi-title {
 }
 
 .tsfem-form-multi-setting-label-inner-wrap,
+.tsfem-form-select-multi-a11y-label-inner-wrap,
 .tsfem-form-iterator-setting-label-inner-wrap {
 	-webkit-justify-content: flex-start;
 	justify-content: flex-start;
@@ -297,16 +303,23 @@ h4.tsfem-form-multi-title {
 	margin: .5em 0 0;
 }
 
-.tsfem-form-setting-input input,
+.tsfem-form-validate .tsfem-form-setting-input input[type=text],
+.tsfem-form-validate .tsfem-form-setting-input input[type=password],
+.tsfem-form-validate .tsfem-form-setting-input input[type=tel],
+.tsfem-form-validate .tsfem-form-setting-input input[type=url],
+.tsfem-form-validate .tsfem-form-setting-input input[type=search],
+.tsfem-form-validate .tsfem-form-setting-input input[type=time],
+.tsfem-form-validate .tsfem-form-setting-input input[type=week],
+.tsfem-form-validate .tsfem-form-setting-input input[type=month],
+.tsfem-form-validate .tsfem-form-setting-input input[type=date],
+.tsfem-form-validate .tsfem-form-setting-input input[type=number],
+.tsfem-form-validate .tsfem-form-setting-input input[type=range],
+.tsfem-form-validate .tsfem-form-setting-input input[type=color],
+.tsfem-form-validate .tsfem-form-setting-input input[type=hidden],
 .tsfem-form-setting-input select,
 .tsfem-form-setting-input textarea {
 	display: inline-block;
 	width: 100%;
-}
-
-.tsfem-form-setting-input input[type=radio],
-.tsfem-form-setting-input input[type=checkbox] {
-	width: initial;
 }
 
 .tsfem-form-image-buttons-wrap {
@@ -355,6 +368,10 @@ ul.tsfem-form-multi-a11y-wrap ul.tsfem-form-multi-a11y-wrap {
 	background: #057c99;
 }
 
+.tsfem-form-iterator-timer-invalid span {
+	background: #d14b44;
+}
+
 /* Validator */
 /* TODO?
 input[type=checkbox]
@@ -375,7 +392,7 @@ input[type=radio]
 .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid,
 .tsfem-form-validate .tsfem-form-setting-input select:invalid,
 .tsfem-form-validate .tsfem-form-setting-input textarea:invalid {
-	border-left: 5px solid #d14b44;
+	border-left: 3px solid #d14b44;
 }
 
 .tsfem-form-validate .tsfem-form-setting-input input[type=text]:valid,
@@ -393,23 +410,23 @@ input[type=radio]
 .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:valid,
 .tsfem-form-validate .tsfem-form-setting-input select:valid,
 .tsfem-form-validate .tsfem-form-setting-input textarea:valid {
-	border-left: 5px solid #008964;
+	border-left: 3px solid #008964;
 }
 
-.tsfem-form-validate .tsfem-form-setting-input input[type=text]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=password]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=tel]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=url]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=search]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=time]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=week]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=month]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=date]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=number]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=range]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=color]:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:focus,
-.tsfem-form-validate .tsfem-form-setting-input select:focus,
-.tsfem-form-validate .tsfem-form-setting-input textarea:focus {
-	border-left: 5px solid #0ebfe9;
+.tsfem-form-validate .tsfem-form-setting-input input[type=text]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=password]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=tel]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=url]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=search]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=time]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=week]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=month]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=date]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=number]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=range]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input select:invalid:focus,
+.tsfem-form-validate .tsfem-form-setting-input textarea:invalid:focus {
+	border-color: #0ebfe9;
 }

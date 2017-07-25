@@ -47,13 +47,13 @@ class API extends Core {
 	 * @since 1.0.0
 	 *
 	 * @param array $args : {
-	 *		'licence_key'      => string The license key.
-	 *		'activation_email' => string The activation email.
+	 *    'licence_key'      => string The license key.
+	 *    'activation_email' => string The activation email.
 	 * }
 	 * @return bool|array {
-	 *		Always: False on failure.
-	 *		Deactivation: True on successful deactivation.
-	 *		Activation/Status: Reponse data.
+	 *    Always: False on failure.
+	 *    Deactivation: True on successful deactivation.
+	 *    Activation/Status: Reponse data.
 	 * }
 	 */
 	protected function handle_request( $type = 'status', $args = [] ) {

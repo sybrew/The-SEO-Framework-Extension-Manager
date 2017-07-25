@@ -23,6 +23,8 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+//* @TODO create error legend/index for codes.
+
 /**
  * Holds Error handling functionality.
  *
@@ -313,6 +315,8 @@ trait Error {
 			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001 :
 			case 9002 :
+			case 9003 :
+			case 9004 :
 			case 1019001 :
 			case 1069001 :
 				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
@@ -414,7 +418,14 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 17001 :
+			case 1071200 :
+				$message = \esc_html__( 'Unable to fetch Geo data.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
+			default :
 			case 602 :
 			case 703 :
 			case 802 :
@@ -432,7 +443,6 @@ trait Error {
 			case 1060101 :
 			case 1060402 :
 			case 1070101 :
-			default :
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;

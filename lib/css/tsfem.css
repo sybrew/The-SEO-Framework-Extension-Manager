@@ -732,6 +732,7 @@ body.tsfem .wrap {
 	justify-content: flex-end;
 }
 
+/* TODO might be a performance hit: */
 .tsfem-connect-fields-row > *:nth-child(1n+2) .tsfem-button {
 	margin-left: 7px;
 }
@@ -1060,6 +1061,7 @@ h4.tsfem-cp-title {
 
 /* Remove grow from first item if only one is displayed. */
 /* Remove grow from last item, only if 3 or more items are present in odd order. */
+/* TODO might be a performance hit: */
 .tsfem-extension-entry-wrap:first-of-type:last-of-type,
 .tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
 	-webkit-flex-grow: 0;
@@ -1744,6 +1746,7 @@ body.js .tsfem-flex-hide-if-no-js {
 	margin-bottom: 0;
 }
 
+/* TODO might be a performance hit: */
 .tsfem-modal-buttons button:nth-child(n+2) {
 	margin-left: 14px;
 }
