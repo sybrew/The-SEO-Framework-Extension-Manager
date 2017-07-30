@@ -1650,7 +1650,6 @@ body.js .tsfem-flex-hide-if-no-js {
 
 .tsfem-modal-mask {
 	position: absolute;
-	background-color: transparent;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -1661,36 +1660,46 @@ body.js .tsfem-flex-hide-if-no-js {
 .tsfem-modal-mask-noscroll {
 	display: block;
 	position: absolute;
-	background-color: rgba(40,40,40,.15);
-	right: 0;
 	top: 0;
+	right: 0;
+	left: 0;
 	bottom: 0;
 	z-index: 2147483646;
 }
 
 .tsfem-modal-container,
+.tsfem-modal-dialog-wrap,
 .tsfem-modal-dialog,
 .tsfem-modal-title,
-.tsfem-modal-buttons {
+.tsfem-modal-select,
+.tsfem-modal-buttons,
+.tsfem-modal-select-option {
 	display: -webkit-box;
 	display: -webkit-flex;
 	display: flex;
 }
 
 .tsfem-modal-container {
-	-webkit-justify-content: center;
-	justify-content: center;
-	-webkit-align-items: center;
-	align-items: center;
 	position: absolute;
 	top: 0;
 	left: 0;
-	z-index: 2147483647;
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
 	background: rgba(33,33,33,.15);
 	opacity: 0;
+}
+
+.tsfem-modal-dialog-wrap {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-align-items: center;
+	align-items: center;
 }
 
 /* Max-width prevents admin bar collapse */
@@ -1703,9 +1712,10 @@ body.js .tsfem-flex-hide-if-no-js {
 	max-width: calc( 90% - 240px );
 	max-height: 80%;
 	position: relative;
-	overflow: auto;
+	overflow: hidden;
 	-webkit-box-shadow: 0 0 4px 2px #aaa;
 	box-shadow: 0 0 4px 2px #aaa;
+	z-index: 2147483647;
 }
 
 .tsfem-modal-title,
@@ -1715,6 +1725,8 @@ body.js .tsfem-flex-hide-if-no-js {
 	-webkit-box-shadow: 0px 1px 3px 0px #ccc;
 	box-shadow: 0px 1px 3px 0px #ccc;
 	z-index: 5;
+	-webkit-flex-shrink: 0;
+	flex-shrink: 0;
 }
 
 .tsfem-modal-buttons {
@@ -1733,9 +1745,11 @@ body.js .tsfem-flex-hide-if-no-js {
 	font-weight: 400;
 }
 
-.tsfem-modal-text {
+.tsfem-modal-inner {
 	padding: 20px;
 	max-width: 640px;
+	overflow: auto;
+	overflow-x: hidden;
 }
 
 .tsfem-modal-text p:first-of-type {
@@ -1746,7 +1760,79 @@ body.js .tsfem-flex-hide-if-no-js {
 	margin-bottom: 0;
 }
 
-/* TODO might be a performance hit: */
+.tsfem-modal-text + .tsfem-modal-select {
+	margin-top: 20px;
+}
+
+.tsfem-modal-select {
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-align-items: flex-start;
+	align-items: flex-start;
+}
+
+.tsfem-modal-select-option {
+	margin-bottom: 14px;
+	padding: 0 7px;
+	-webkit-flex-basis: 140px;
+	flex-basis: 140px;
+	max-width: calc( 50% - 14px );
+	-webkit-flex-grow: 1;
+	flex-grow: 1;
+}
+
+.tsfem-modal-select-option:first-of-type:last-of-type {
+	max-width: none;
+}
+
+.tsfem-modal-select-option input {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.tsfem-modal-select-option label {
+	font-weight: 600;
+	border: 1px solid transparent;
+	background: #fefefe;
+	-webkit-box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 1px 3px 1px #ccc;
+	cursor: pointer;
+	padding: 14px;
+	width: 100%;
+	-webkit-transition: all .33s;
+	-moz-transition: all .33s;
+	-o-transition: all .33s;
+	transition: all .33s;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tsfem-modal-select-option:hover label {
+	-webkit-filter: brightness(0.95);
+	filter: brightness(0.95);
+}
+
+.tsfem-modal-select-option > input:checked + label {
+	border-color: #05809e;
+}
+
+.tsfem-modal-select-option input:active + label,
+.tsfem-modal-select-option input:focus + label {
+	-webkit-box-shadow: 0 1px 3px 1px #05809e;
+	box-shadow: 0 1px 3px 1px #05809e;
+}
+
 .tsfem-modal-buttons button:nth-child(n+2) {
 	margin-left: 14px;
 }

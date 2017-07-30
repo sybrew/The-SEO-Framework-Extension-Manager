@@ -389,6 +389,7 @@ final class Fields {
 					'',
 					\__( 'Street number, street name, and unit number (if applicable).', '' ),
 				],
+				'_pattern' => '^((([0-9\/-]+([\/-0-9A-Z]+)?(\s|(,\s)))([\u00a1-\uffffa-zA-Z\s]|[0-9_/-])+))|(([\u00a1-\uffffa-zA-Z\s]|[0-9_/-])+)((\s|(,\s))([0-9\/-]+([\/-0-9A-Z]+)?))$',
 				'_data' => [
 					'geo-api' => true,
 					'geo-api-component' => [ 'route', 'street_number' ],
@@ -420,7 +421,7 @@ final class Fields {
 				],
 				'_data' => [
 					'geo-api' => true,
-					'geo-api-component' => 'area',
+					'geo-api-component' => 'region',
 				],
 			],
 			'postalCode' => [

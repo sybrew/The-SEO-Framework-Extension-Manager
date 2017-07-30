@@ -1190,9 +1190,10 @@ final class FormGenerator {
 	private function get_fields_pattern( &$pattern, $fallback = '' ) {
 
 		if ( $pattern ) {
-			if ( false !== preg_match( "/$pattern/", null ) ) {
+			// We can't test all of JS regex. Also, this is a performance issue.
+			// if ( false !== preg_match( "/$pattern/", null ) ) {
 				return sprintf( 'pattern="%s"', $pattern );
-			}
+			// }
 		}
 
 		if ( $fallback ) {

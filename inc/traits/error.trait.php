@@ -420,7 +420,7 @@ trait Error {
 
 			case 17001 :
 			case 1071200 :
-				$message = \esc_html__( 'Unable to fetch Geo data.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Unable to fetch geocoding data.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
