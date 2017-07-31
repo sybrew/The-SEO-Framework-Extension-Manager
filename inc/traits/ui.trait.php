@@ -432,7 +432,7 @@ trait UI {
 				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
 				'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 				'i18n' => [
-					//* TODO categorize + =>?? put correctly into externs.
+					//* TODO categorize + maybe put correctly into externs.
 
 					// General.
 					'proceed' => \esc_html__( 'Proceed', 'the-seo-framework-extension-manager' ),
@@ -450,7 +450,7 @@ trait UI {
 					'validate' => \esc_html__( 'Validate', 'the-seo-framework-extension-manager' ),
 					'selectAddressTitle' => \esc_html__( 'Select address', 'the-seo-framework-extension-manager' ),
 					'selectAddressText' => \esc_html__( 'Select one of the addresses below.', 'the-seo-framework-extension-manager' ),
-
+					'reverseGeoWarning' => \esc_html__( 'Validation will be done only using Latitude and Longitude.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 		];

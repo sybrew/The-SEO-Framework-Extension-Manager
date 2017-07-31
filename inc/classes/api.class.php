@@ -227,16 +227,20 @@ class API extends Core {
 		}
 
 		$target_url = $this->get_api_url( $args );
-
-		/**
-		 * @since 1.0.0:
-		 * Applies filters 'tsf_extension_manager_request_timeout' : int
-		 *		7 seconds should be more than sufficient and equals the API server keep_alive_timeout. Default is 5.
-		 * Applies filters 'tsf_extension_manager_http_request_version' : string
-		 *		1.1 is used for improved performance. Default is '1.0'
-		 */
 		$http_args = [
+			/**
+			 * Applies filters 'tsf_extension_manager_request_timeout' : int
+			 * @since 1.0.0
+			 * @param int $timeout 7 seconds should be more than sufficient and equals
+			 *                     the API server keep_alive_timeout. WP default is 5.
+			 */
 			'timeout' => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
+			/**
+			 * Applies filters 'tsf_extension_manager_http_request_version' : string
+			 * @since 1.0.0
+			 * @param string $httpversion HTTP 1.1 is used for improved performance.
+			 *                            WP default is '1.0'
+			 */
 			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
 		];
 
@@ -276,7 +280,7 @@ class API extends Core {
 		$additional_info = '';
 
 		//* If the user's already using a free account, don't deactivate.
-		$free = $this->is_plugin_activated() && false === $this->is_premium_user();
+		$registered_free = $this->is_plugin_activated() && false === $this->is_premium_user();
 
 		if ( 'status' !== $type ) {
 			if ( 'activation' === $type ) :
@@ -293,37 +297,37 @@ class API extends Core {
 				case '100' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 302 => $additional_info ] );
-					$free or $this->do_deactivation( true );
+					$registered_free or $this->do_deactivation( true );
 					break;
 				case '101' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 303 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				case '102' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 304 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				case '103' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 305 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				case '104' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 306 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				case '105' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 307 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				case '106' :
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 308 => $additional_info ] );
-					$free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation();
 					break;
 				default :
 					break;

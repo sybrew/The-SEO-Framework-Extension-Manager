@@ -203,6 +203,7 @@ final class LoadAdmin extends AdminPages {
 
 	/**
 	 * Returns Geocoding data form FormGenerator's address fields.
+	 * On failure, it returns an AJAX error code.
 	 *
 	 * @since 1.3.0
 	 * @see class TSF_Extension_Manager\FormGenerator
@@ -214,20 +215,90 @@ final class LoadAdmin extends AdminPages {
 			if ( $this->can_do_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 
-					$input = \wp_unslash( $_POST['input'] );
-					//* TODO bind API from $input.
-					//* TODO pass language https://developers.google.com/maps/documentation/geocoding/intro#geocoding
-					//* TODO pass language https://developers.google.com/maps/faq#languagesupport
-					//* TODO pass language RESOLVE best guess on API server. Not here.
-					$data = json_encode( json_decode( file_get_contents( TSFEM_E_LOCAL_DIR_PATH . 'example.json', false ) ) );
+					//= Input gets forwarded to secure location. Sanitation happens externally.
+					$input = isset( $_POST['input'] ) ? \wp_unslash( $_POST['input'] ) : '';
 
-					if ( $data ) {
+					if ( ! $input || ! is_array( $input ) ) {
 						$results = $this->get_ajax_notice( false, 17000 );
-						$geodata =& $data;
-						$_type = 'success';
 					} else {
-						$results = $this->get_ajax_notice( false, 17001 );
-						$_type = 'failure';
+						$subscription = $this->get_subscription_status();
+						$args = [
+							'request'     => 'geocoding/get',
+							'email'       => $subscription['email'],
+							'licence_key' => $subscription['key'],
+							'data' => [
+								'geodata' => $input,
+								//= get_user_locale() is WP 4.7+
+								'locale' => function_exists( '\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+							],
+						];
+
+						$response = $this->get_api_response( $args );
+						$response = json_decode( $response );
+
+						if ( ! isset( $response->success ) ) {
+							$results = $this->get_ajax_notice( false, 17001 );
+						} else {
+							if ( ! isset( $response->data ) ) {
+								$results = $this->get_ajax_notice( false, 17002 );
+							} else {
+								$data = json_decode( $response->data, true );
+
+								if ( ! $data ) {
+									$results = $this->get_ajax_notice( false, 17003 );
+								} else {
+									$this->coalesce_var( $data['status'] );
+
+									if ( 'OK' !== $data['status'] ) {
+										switch ( $data['status'] ) :
+											//* @link https://developers.google.com/maps/documentation/geocoding/intro#reverse-response
+											case 'ZERO_RESULTS' :
+												$results = $this->get_ajax_notice( false, 17004 );
+												break;
+
+											case 'OVER_QUERY_LIMIT' :
+												// This should never be invoked.
+												$results = $this->get_ajax_notice( false, 17005 );
+												break;
+
+											case 'REQUEST_DENIED' :
+												// This should never be invoked.
+												$results = $this->get_ajax_notice( false, 17006 );
+												break;
+
+											case 'INVALID_REQUEST' :
+												//= Data is missing.
+												$results = $this->get_ajax_notice( false, 17007 );
+												break;
+
+											case 'UNKNOWN_ERROR' :
+												//= Remote Geocoding API error. Try again...
+												$results = $this->get_ajax_notice( false, 17008 );
+												break;
+
+											case 'TIMEOUT' :
+												//= Too many consecutive requests.
+												$results = $this->get_ajax_notice( false, 17009 );
+												break;
+
+											case 'RATE_LIMIT' :
+												//= Too many requests in the last period.
+												$results = $this->get_ajax_notice( false, 17010 );
+												break;
+
+											default :
+												//= ??
+												$results = $this->get_ajax_notice( false, 17011 );
+												break;
+										endswitch;
+									} else {
+										$results = $this->get_ajax_notice( false, 17012 );
+										$geodata =& $data;
+										$_type = 'success';
+									}
+								}
+							}
+						}
 					}
 
 					$this->send_json( compact( 'results', 'geodata' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );

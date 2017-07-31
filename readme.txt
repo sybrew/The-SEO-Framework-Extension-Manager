@@ -186,8 +186,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* TODO Month dayth, 2017
 
 **New Extension:**
-/
-* **Local SEO**: TODO
+
+* **Local SEO**: This allows you to set up important local business information for Search Engines to consume.
 
 **Detailed log:**
 
@@ -227,8 +227,18 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 
 * **Premium - Local:**
 	* **Version:**
-		* **This is a new extension**.
-		* 1.0.0
+		* **This is a new extension.**
+			* 1.0.0
+		* [View use cases here](https://developers.google.com/search/docs/data-types/local-businesses#use_cases).
+		* This extension allows you to set up detailed business information as Structured Data.
+			* It outputs Schema.org JSON-LD scripts as Structure Data when set up.
+				* This means its output works on any theme.
+				* Users generally won't see this output.
+			* Note that the Structured Data should reflect on what's outputted as text for the users on the website.
+		* It's great for both small and large businesses whom want to be found regionally.
+			* Note that its output will only be used when the site is adequate.
+		* It features an API connection with our servers for geocoding, so your business address can be filled in accurately.
+		* It features a state-of-the-art form generator, which allows you to register up to 4096 departments.
 * **Free - AMP:**
 	* **Version:**
 		* 1.0.1
@@ -242,7 +252,7 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* TODO You can now specify the article type within the in-post SEO settings.
 			/
 			* A global option is planned that will set the default for all of these. So please don't go through thousands of post finding the "correct" setting.
-			* Because of the above, a temporarily "Default" option is set. This means it will "auto-determine" (TODO this is not correct) until the global option is set.
+			* Because of the above, a temporarily "Default" option is set. This means it will "auto-determine" (TODO this is not correct, it just uses the undefined option) until the global option is set.
 	* **Changed:**
 		* Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked. So:
 			* Published date is now also output on non-AMP.
@@ -261,13 +271,12 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* 1.0.0-beta-3
 	* **Internal:**
 		* **Improved:**
-			* The privacy policy link on the registration page now opens in a new window and no longer tells us where you clicked it.
+			* The privacy policy link on the registration page now opens in a new window and no longer tells us from where you clicked it.
 		* **Changed:**
 			/
 			* TODO The plugin interface is now only loaded in cache when on the Monitor page. Saving a lot of resources.
 				* See Local implementation.
 		* **Fixed:**
-			/
 			* Manual updates are no longer handled registered twice.
 			* When debugging, the Update Data button no longer fails AJAX call when parsing data.
 	* **API:**
@@ -388,7 +397,7 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 * **Premium - Honeypot:**
 	* **Version:**
 		* 1.0.0-beta
-	* **This is a new extension**.
+	* **This is a new extension.**
 	* It uses four powerful and lightweight techniques to stop comment spamming:
 		1. A rotating by ID input field, hidden through rotating CSS.
 			* This field must stay empty.
@@ -460,13 +469,13 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 * **Free - AMP:**
 	* **Version:**
 		* 1.0.0
-	* **This is a new extension**.
+	* **This is a new extension.**
 	* It binds The SEO Framework social and general output to the [AMP plugin](https://wordpress.org/plugins/amp/).
 	* Use this extension in combination with the Articles extension to further enhance output.
 * **Premium - Articles:**
 	* **Version:**
 		* 1.0.0-gamma
-	* **This is a new extension**.
+	* **This is a new extension.**
 	* **Premium only until gamma-testing is completed.**
 	* It outputs Article Schema.org output for both AMP (AMP extension required) and non-AMP pages.
 	* Note: Google's Structured Data Tester renders output data invalid, even though it's valid and output according to their set requirements.

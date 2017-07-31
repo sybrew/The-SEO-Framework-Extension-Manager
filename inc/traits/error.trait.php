@@ -237,12 +237,15 @@ trait Error {
 				break;
 
 			case 304 :
+			case 17001 :
+			case 17002 :
 			case 1010203 :
 			case 1010204 :
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
+			case 17008 :
 			case 1010301 :
 			case 1010401 :
 			case 1010501 :
@@ -418,10 +421,41 @@ trait Error {
 				$type = 'error';
 				break;
 
-			case 17001 :
-			case 1071200 :
+			case 17000 :
+			case 17003 :
+			case 17200 :
 				$message = \esc_html__( 'Unable to fetch geocoding data.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
+				break;
+
+			case 17004 :
+			case 17007 :
+				$message = \esc_html__( 'No results found. Inspect your current input.', 'the-seo-framework-extension-manager' );
+				switch ( $key ) {
+					case 17004 :
+						$type = 'warning';
+						break 2;
+
+					default :
+					case 17007 :
+						$type = 'error';
+						break 2;
+				}
+				break;
+
+			case 17009 :
+				$message = \esc_html__( 'Please wait a few seconds before making another request.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 17010 :
+				$message = \esc_html__( 'Too many requests in the last period. Limit will be lifted soon.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 17012 :
+				$message = \esc_html__( 'Geocoding data received.', 'the-seo-framework-extension-manager' );
+				$type = 'success';
 				break;
 
 			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
@@ -434,6 +468,9 @@ trait Error {
 			case 10007 :
 			case 10011 :
 			case 11002 :
+			case 17005 :
+			case 17006 :
+			case 17011 :
 			case 1010302 :
 			case 1010303 :
 			case 1010402 :
