@@ -714,8 +714,8 @@ class Core {
 	 * @param string $instance The verification instance key. Passed by reference.
 	 * @param array $bits The verification instance bits. Passed by reference.
 	 * @yield array Generator : {
-	 *		$instance string The verification instance key
-	 *		$bits array The verification instance bits
+	 *    $instance string The verification instance key
+	 *    $bits array The verification instance bits
 	 * }
 	 */
 	final public function _yield_verification_instance( $count, &$instance, &$bits ) {
@@ -864,13 +864,10 @@ class Core {
 			 *
 			 * Because it either goes up or down based on integer, it's timing attack secure.
 			 */
-			    $bit  = $_bit <= 0 ? ~$bit-- | ~$_bit-- : ~$bit-- | ~$_bit++
+			    $bit  = $_bit <= 0 ? ~$bit | ~$_bit-- : ~$bit | ~$_bit++
 			and $bit  = $bit++ & $_bit--
-			and $bit  = $bit < 0 ? $bit++ : $bit--
 			and $_bit = $_bit < 0 ? $_bit : ~$_bit
-			and $bit  = ~$_bit++
-			and $_bit = $_bit < 0 ? $_bit : ~$_bit
-			and $bit++;
+			and $bit  = ~$_bit++ + 1;
 		}
 
 		return [ $_bit, $bit ];
