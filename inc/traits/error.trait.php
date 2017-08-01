@@ -210,8 +210,12 @@ trait Error {
 				$type = 'error';
 				break;
 
-			case 202 :
 			case 301 :
+				$message = \esc_html__( 'No response received from the API server. Please try again later. If this error keeps coming back, contact your hosting provider.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 202 :
 			case 302 :
 			case 403 :
 			case 404 :
@@ -225,14 +229,20 @@ trait Error {
 
 			case 401 :
 				/* translators: %s = My Account */
-				$message = sprintf( \esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$message = sprintf(
+					\esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ),
+					$this->get_my_account_link()
+				);
 				$type = 'error';
 				break;
 
 			case 303 :
 			case 307 :
 				/* translators: %s = My Account */
-				$message = sprintf( \esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$message = sprintf(
+					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
+					$this->get_my_account_link()
+				);
 				$type = 'error';
 				break;
 
@@ -256,7 +266,10 @@ trait Error {
 
 			case 305 :
 				/* translators: %s = My Account */
-				$message = sprintf( \esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$message = sprintf(
+					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
+					$this->get_my_account_link()
+				);
 				$type = 'error';
 				break;
 
@@ -304,7 +317,10 @@ trait Error {
 
 			case 902 :
 				/* translators: %s = My Account */
-				$message = sprintf( \esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ), $this->get_my_account_link() );
+				$message = sprintf(
+					\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
+					$this->get_my_account_link()
+				);
 				$type = 'warning';
 				break;
 

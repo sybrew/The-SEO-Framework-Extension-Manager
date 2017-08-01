@@ -449,7 +449,7 @@ trait UI {
 					// Geo
 					'validate' => \esc_html__( 'Validate', 'the-seo-framework-extension-manager' ),
 					'selectAddressTitle' => \esc_html__( 'Select address', 'the-seo-framework-extension-manager' ),
-					'selectAddressText' => \esc_html__( 'Select one of the addresses below.', 'the-seo-framework-extension-manager' ),
+					'selectAddressText' => \esc_html__( 'Select an address below.', 'the-seo-framework-extension-manager' ),
 					'reverseGeoWarning' => \esc_html__( 'Validation will be done only using Latitude and Longitude.', 'the-seo-framework-extension-manager' ),
 				],
 			],

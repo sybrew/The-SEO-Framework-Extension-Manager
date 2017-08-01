@@ -220,6 +220,10 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* When a subscription fails to validate, it will now allow you to reactivate it, without killing the options.
 			* This might require a second try for API propagation, reason unknown.
 		* You can now see your subscription end date and/or next payment date.
+		* Error code 301 now suggests to contact your hosting provider.
+			* It means that our API services can't be contacted at its very early stages.
+			* Because we constantly monitor our API services, this is most likely an issue with your host or how your site is secured.
+			* If you receive this error code, try again in 30 minutes. If it still doesn't work, proceed with contacting support.
 	* **External:**
 		* We're now sending recurring payment info.
 

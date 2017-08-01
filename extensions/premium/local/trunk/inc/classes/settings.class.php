@@ -45,12 +45,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
 
 /**
- * Require Local options template trait.
- * @since 1.0.0
- */
-\TSF_Extension_Manager\Extension\Local\_load_trait( 'options-template' );
-
-/**
  * Class TSF_Extension_Manager\Extension\Local\Settings
  *
  * Holds extension settings methods.

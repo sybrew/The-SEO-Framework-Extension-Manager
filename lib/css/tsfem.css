@@ -409,8 +409,6 @@ body.tsfem .wrap {
 .tsfem-button:disabled:hover,
 .tsfem-button:focus,
 .tsfem-button-primary,
-.tsfem-button-primary:disabled,
-.tsfem-button-primary:disabled:hover,
 .tsfem-button-primary:focus {
 	display: inline-block;
 	padding: .5em 1em;
@@ -694,6 +692,7 @@ body.tsfem .wrap {
 /* ## Disabled Buttons.
 /*--------------------------------------*/
 .tsfem-button-disabled,
+.tsfem-button-disabled:disabled,
 .tsfem-button-disabled:hover,
 .tsfem-button-disabled:active,
 .tsfem-button-disabled:focus {
@@ -921,6 +920,7 @@ body.tsfem .wrap {
 	min-height: 150px;
 	width: 100%;
 	overflow: auto;
+	will-change: scroll-position;
 	/* IE bugfix */
 	overflow-x: hidden;
 }
@@ -992,12 +992,12 @@ body.tsfem .wrap {
 	font-weight: 600;
 }
 
-h4.tsfem-form-title,
-h4.tsfem-info-title,
-h4.tsfem-status-title,
-h4.tsfem-support-title,
-h4.tsfem-action-title,
-h4.tsfem-cp-title {
+.tsfem-form-title,
+.tsfem-info-title,
+.tsfem-status-title,
+.tsfem-support-title,
+.tsfem-action-title,
+.tsfem-cp-title {
 	padding: 0;
 	margin: 0 0 14px;
 	font-size: 1.33em;
@@ -1142,7 +1142,7 @@ h4.tsfem-cp-title {
 	white-space: pre;
 }
 
-h4.tsfem-extension-title {
+.tsfem-extension-title {
 	min-width: 120px;
 	font-size: 1.33em;
 	word-break: break-word;
@@ -1152,7 +1152,7 @@ h4.tsfem-extension-title {
 	padding: 0;
 }
 
-h5.tsfem-extension-type {
+.tsfem-extension-type {
 	margin: 0;
 	padding: 0;
 	font-size: 0.83em;
@@ -1652,23 +1652,20 @@ body.js .tsfem-flex-hide-if-no-js {
 /* ## Modal.
 /*----------------------------------------------------------------------------*/
 
-.tsfem-modal-mask {
-	position: absolute;
+.tsfem-modal-mask,
+.tsfem-modal-mask-noscroll {
+	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: 2147483645;
+	z-index: 2147483644;
+	opacity: 0;
 }
 
 .tsfem-modal-mask-noscroll {
-	display: block;
 	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	z-index: 2147483646;
+	z-index: 2147483645;
 }
 
 .tsfem-modal-container,
@@ -1684,7 +1681,7 @@ body.js .tsfem-flex-hide-if-no-js {
 }
 
 .tsfem-modal-container {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	overflow: hidden;
@@ -1692,6 +1689,7 @@ body.js .tsfem-flex-hide-if-no-js {
 	height: 100%;
 	background: rgba(33,33,33,.15);
 	opacity: 0;
+	z-index: 2147483646;
 }
 
 .tsfem-modal-dialog-wrap {
@@ -1822,7 +1820,7 @@ body.js .tsfem-flex-hide-if-no-js {
 	user-select: none;
 }
 
-.tsfem-modal-select-option:hover label {
+.tsfem-modal-select-option:hover input:not(:checked) + label {
 	-webkit-filter: brightness(0.95);
 	filter: brightness(0.95);
 }
@@ -1831,6 +1829,7 @@ body.js .tsfem-flex-hide-if-no-js {
 	border-color: #05809e;
 }
 
+.tsfem-modal-select-option:hover input:checked + label,
 .tsfem-modal-select-option input:active + label,
 .tsfem-modal-select-option input:focus + label {
 	-webkit-box-shadow: 0 1px 3px 1px #05809e;
