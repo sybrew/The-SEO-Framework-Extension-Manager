@@ -1,0 +1,478 @@
+{
+	"_MAIN" : {
+		"@context" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "default",
+				"_value" : "http://schema.org"
+			},
+			"_handlers" : {}
+		},
+		"@type" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"type"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field",
+				"_condition" : [
+					"empty",
+					"clear",
+					"_MAIN"
+				]
+			}
+		},
+		"image" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"image",
+					"url"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "esc_url_raw",
+				"_condition" : [
+					"empty",
+					"clear",
+					"_MAIN"
+				]
+			}
+		},
+		"@id" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "_concat",
+				"_concat" : [
+					{
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"name"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_key",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					},
+					{
+						"_data" : {
+							"_type" : "single",
+							"_from" : "default",
+							"_value" : "."
+						},
+						"_handlers" : {}
+					},
+					{
+						"_data" : {
+							"_type" : "single",
+							"_from" : "bloginfo",
+							"_value" : "url"
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "convert_to_host"
+						}
+					}
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "esc_url_raw"
+			}
+		},
+		"name" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"name"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field",
+				"_condition" : [
+					"empty",
+					"clear",
+					"_MAIN"
+				]
+			}
+		},
+		"address" : {
+			"_data" : {
+				"_type" : "object",
+				"_from" : "generator",
+				"_config" : {
+					"@type" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "default",
+							"_value" : "PostalAddress"
+						},
+						"_handlers" : {}
+					},
+					"streetAddress" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"streetAddress"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					},
+					"addressLocality" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"addressLocality"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					},
+					"addressRegion" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"addressRegion"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					},
+					"postalCode" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"postalCode"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					},
+					"addressCountry" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"addressCountry"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"_MAIN"
+							]
+						}
+					}
+				}
+			},
+			"_handlers" : {
+				"_out" : "object"
+			}
+		},
+		"geo" : {
+			"_data" : {
+				"_type" : "object",
+				"_from" : "generator",
+				"_config" : {
+					"@type" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "default",
+							"_value" : "GeoCoordinates"
+						},
+						"_handlers" : {}
+					},
+					"latitude" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"latitude"
+							]
+						},
+						"_handlers" : {
+							"_out" : "float",
+							"_condition" : [
+								"empty",
+								"clear",
+								"this"
+							]
+						}
+					},
+					"longitude" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"address",
+								"longitude"
+							]
+						},
+						"_handlers" : {
+							"_out" : "float",
+							"_condition" : [
+								"empty",
+								"clear",
+								"this"
+							]
+						}
+					}
+				}
+			},
+			"_handlers" : {
+				"_out" : "object"
+			}
+		},
+		"url" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"url"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "esc_url_raw"
+			}
+		},
+		"telephone" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"telephone"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field"
+			}
+		},
+		"menu" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"menu"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "esc_url_raw"
+			}
+		},
+		"openingHoursSpecification" : {
+			"_data" : {
+				"_type" : "iterate",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"openingHoursSpecification",
+					"openingHours",
+					"count"
+				],
+				"_config" : {
+					"@type" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "default",
+							"_value" : "OpeningHoursSpecification"
+						},
+						"_handlers" : {}
+					},
+					"dayOfWeek" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"openingHoursSpecification",
+								"openingHours",
+								"$nth",
+								"dayOfWeek"
+							]
+						},
+						"_handlers" : {
+							"_out" : "array",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"this"
+							]
+						}
+					},
+					"opens" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"openingHoursSpecification",
+								"openingHours",
+								"$nth",
+								"opens"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"this"
+							]
+						}
+					},
+					"closes" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								1,
+								"openingHoursSpecification",
+								"openingHours",
+								"$nth",
+								"closes"
+							]
+						},
+						"_handlers" : {
+							"_out" : "string",
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								"empty",
+								"clear",
+								"this"
+							]
+						}
+					}
+				}
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field"
+			}
+		},
+		"reservations" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"telephone"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field"
+			}
+		},
+		"department" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					1,
+					"telephone"
+				]
+			},
+			"_handlers" : {
+				"_out" : "string",
+				"_escape" : "sanitize_text_field"
+			}
+		}
+	}
+}

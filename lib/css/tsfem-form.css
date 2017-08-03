@@ -42,7 +42,7 @@
 
 .tsfem-form-collapse-header {
 	position: relative;
-	height: 50px;
+	min-height: 50px; /* TODO Performance hog as it's flex too? */
 	width: 100%;
 	background: #fefefe;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
@@ -54,6 +54,15 @@
 	-moz-transition: -webkit-filter .33s;
 	-o-transition: -webkit-filter .33s;
 	transition: filter .33s;
+}
+
+.tsfem-form-collapse-header h3 {
+	color: #23282d;
+}
+
+.tsfem-form-collapse-header-error,
+.tsfem-form-collapse-header-error h3 {
+	color: #dd3811;
 }
 
 .tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header {
@@ -75,68 +84,9 @@
 .tsfem-form-collapse-title {
 	line-height: 1.15em;
 	font-size: 1.15em;
-	padding: 0;
-	margin: 0 0 0 14px;
+	padding: 14px 0;
+	margin: 0 2.3em 0 14px;
 	vertical-align: middle;
-}
-
-.tsfem-form-title-icon:before {
-	display: inline-block;
-	width: 19px;
-	line-height: 1;
-	font-family: dashicons;
-	font-style: normal;
-	font-weight: 400;
-	font-size: 1em;
-	vertical-align: middle;
-	content: "";
-	margin-right: 2px;
-}
-
-.tsfem-form-icon-good {
-	color: #0cc34b;
-}
-
-.tsfem-form-icon-okay,
-.tsfem-form-icon-warning {
-	color: #ffa01b;
-}
-
-.tsfem-form-icon-warning {
-	color: #ffa01b;
-}
-
-.tsfem-form-icon-bad,
-.tsfem-form-icon-error {
-	color: #dd3811;
-}
-
-.tsfem-form-icon-unknown {
-	color: #057f9c;
-}
-
-.tsfem-form-title-icon-okay:before,
-.tsfem-form-title-icon-good:before {
-	font-size: 1.1em;
-	content: "\f147";
-	margin-left: -2px;
-	margin-right: 4px;
-}
-
-.tsfem-form-title-icon-warning:before {
-	content: "\f227";
-}
-
-.tsfem-form-title-icon-bad:before {
-	content: "\f227";
-}
-
-.tsfem-form-title-icon-error:before {
-	content: "\f153";
-}
-
-.tsfem-form-title-icon-unknown:before {
-	content: "\f223";
 }
 
 .tsfem-form-collapse-icon {

@@ -1025,7 +1025,7 @@ final class FormGenerator {
 			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
 
 			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
-			$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
+			$checkbox = sprintf( '<input type="checkbox" id="%s" class="tsfem-form-collapse-checkbox" checked>', $checkbox_id );
 
 			$dyn_title_type = key( $args['dyn_title'] );
 			$dyn_title_key = reset( $args['dyn_title'] );
@@ -1051,7 +1051,7 @@ final class FormGenerator {
 			$_title = $_dyn_title ? $args['title'] . ' - ' . $_dyn_title : $args['title'];
 
 			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', \esc_html( $_title ) );
-			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-form-icon-unknown"></span>';
+			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"></span>';
 
 			$header = vsprintf(
 				'<label class="tsfem-form-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s" %s>%s%s</label>',

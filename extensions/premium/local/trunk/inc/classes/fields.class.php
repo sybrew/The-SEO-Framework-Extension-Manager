@@ -259,6 +259,7 @@ final class Fields {
 				'_desc' => [
 					\__( 'Department address', '' ),
 					\__( 'Fill in the exact address of the department.', '' ),
+					\__( 'If this is not the main department, and this department has the same address as the main department, leave these fields empty.', '' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -378,7 +379,7 @@ final class Fields {
 
 	private function get_address_fields() {
 		return [
-			'streetaddress' => [
+			'streetAddress' => [
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 's',

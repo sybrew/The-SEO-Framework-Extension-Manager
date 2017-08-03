@@ -446,6 +446,9 @@ trait UI {
 					'itHugeConfirm' => \esc_html__( "You're about to load a huge number of elements. This might crash your browser.", 'the-seo-framework-extension-manager' ),
 					'aysProceed' => \esc_html__( 'Are you sure you want to proceed?', 'the-seo-framework-extension-manager' ),
 
+					// Collapse
+					'collapseValidate' => \esc_html__( 'Please fix the required fields before saving.', 'the-seo-framework-extension-manager' ),
+
 					// Geo
 					'validate' => \esc_html__( 'Validate', 'the-seo-framework-extension-manager' ),
 					'selectAddressTitle' => \esc_html__( 'Select address', 'the-seo-framework-extension-manager' ),

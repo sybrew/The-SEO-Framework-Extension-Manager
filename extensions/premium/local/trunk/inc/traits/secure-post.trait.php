@@ -132,7 +132,6 @@ trait Secure_Post {
 	 * @uses trait \TSF_Extension_Manager\Extension_Options
 	 * @uses trait \TSF_Extension_Manager\Error
 	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
-	 * @uses class \TSF_Extension_Manager\FormGenerator
 	 */
 	public function _do_ajax_form_save() {
 
@@ -173,7 +172,7 @@ trait Secure_Post {
 	 *
 	 * @since 1.0.0
 	 * @uses class \TSF_Extension_Manager\Extension\Local\Fields
-	 * @uses class TSF_Extension_Manager\FormGenerator
+	 * @uses class \TSF_Extension_Manager\FormGenerator
 	 */
 	public function _init_ajax_iteration_callback() {
 
