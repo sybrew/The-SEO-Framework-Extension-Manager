@@ -251,17 +251,6 @@ final class Settings {
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_ui();
-
-	//	var_dump( json_decode( file_get_contents( TSFEM_E_LOCAL_DIR_PATH . 'lib/schema/schema.json', false ) ) );
-
-		$a = $this->get_stale_extension_options();
-	//	var_dump( $a );
-		$data = new \TSF_Extension_Manager\SchemaPacker(
-			$a,
-			$b = json_decode( file_get_contents( TSFEM_E_LOCAL_DIR_PATH . 'lib/schema/schema.json', false ) ),
-			true
-		);
-		//var_dump( $data );
 	}
 
 	/**

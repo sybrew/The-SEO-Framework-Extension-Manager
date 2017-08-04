@@ -328,6 +328,7 @@ final class Fields {
 				'_desc' => [
 					\__( 'Cuisine', '' ),
 					\__( 'Provide the type of cuisine the department serves.', '' ),
+					\__( 'This is mandatory for food establishments.', '' ),
 				],
 				'_select' => $this->get_cuisine_items(),
 			],
@@ -341,6 +342,7 @@ final class Fields {
 				'_desc' => [
 					\__( 'Menu URL', '' ),
 					\__( 'Department menu URL, if any.', '' ),
+					\__( 'This is mandatory for food establishments.', '' ),
 				],
 			],
 			'reservations' => [

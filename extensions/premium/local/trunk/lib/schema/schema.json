@@ -1,4 +1,8 @@
 {
+	"_OPTIONS" :{
+		"levels" : 5,
+		"architecture" : null
+	},
 	"_MAIN" : {
 		"@context" : {
 			"_data" : {
@@ -14,7 +18,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"type"
 				]
 			},
@@ -24,7 +28,7 @@
 				"_condition" : [
 					"empty",
 					"clear",
-					"_MAIN"
+					"department"
 				]
 			}
 		},
@@ -34,7 +38,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"image",
 					"url"
 				]
@@ -45,7 +49,7 @@
 				"_condition" : [
 					"empty",
 					"clear",
-					"_MAIN"
+					"department"
 				]
 			}
 		},
@@ -60,7 +64,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"name"
 							]
 						},
@@ -70,7 +74,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					},
@@ -106,7 +110,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"name"
 				]
 			},
@@ -116,7 +120,7 @@
 				"_condition" : [
 					"empty",
 					"clear",
-					"_MAIN"
+					"department"
 				]
 			}
 		},
@@ -139,7 +143,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"streetAddress"
 							]
@@ -150,7 +154,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					},
@@ -160,7 +164,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"addressLocality"
 							]
@@ -171,7 +175,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					},
@@ -181,7 +185,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"addressRegion"
 							]
@@ -192,7 +196,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					},
@@ -202,7 +206,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"postalCode"
 							]
@@ -213,7 +217,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					},
@@ -223,7 +227,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"addressCountry"
 							]
@@ -234,7 +238,7 @@
 							"_condition" : [
 								"empty",
 								"clear",
-								"_MAIN"
+								"department"
 							]
 						}
 					}
@@ -263,7 +267,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"latitude"
 							]
@@ -283,7 +287,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"address",
 								"longitude"
 							]
@@ -309,7 +313,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"url"
 				]
 			},
@@ -324,7 +328,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"telephone"
 				]
 			},
@@ -339,7 +343,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"menu"
 				]
 			},
@@ -354,7 +358,7 @@
 				"_from" : "data",
 				"_access" : [
 					"department",
-					1,
+					"$nth",
 					"openingHoursSpecification",
 					"openingHours",
 					"count"
@@ -374,7 +378,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"openingHoursSpecification",
 								"openingHours",
 								"$nth",
@@ -397,7 +401,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"openingHoursSpecification",
 								"openingHours",
 								"$nth",
@@ -420,7 +424,7 @@
 							"_from" : "data",
 							"_access" : [
 								"department",
-								1,
+								"$nth",
 								"openingHoursSpecification",
 								"openingHours",
 								"$nth",
@@ -444,34 +448,159 @@
 				"_escape" : "sanitize_text_field"
 			}
 		},
-		"reservations" : {
+		"acceptsReservations" : {
 			"_data" : {
 				"_type" : "single",
 				"_from" : "data",
 				"_access" : [
 					"department",
 					1,
-					"telephone"
+					"reservations",
+					"acceptsReservations"
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "sanitize_text_field"
+				"_out" : "boolean",
+				"_condition" : [
+					"empty",
+					"skip",
+					"reservations"
+				]
 			}
 		},
-		"department" : {
+		"reservations" : {
 			"_data" : {
-				"_type" : "single",
-				"_from" : "data",
-				"_access" : [
-					"department",
-					1,
-					"telephone"
-				]
+				"_type" : "object",
+				"_from" : "generator",
+				"_config" : {
+					"@type" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "default",
+							"_value" : "ReserveAction"
+						},
+						"_handlers" : {}
+					},
+					"target" : {
+						"_data" : {
+							"_type" : "object",
+							"_from" : "generator",
+							"_config" : {
+								"@type" : {
+									"_data" : {
+										"_type" : "single",
+										"_from" : "default",
+										"_value" : "EntryPoint"
+									},
+									"_handlers" : {}
+								},
+								"url" : {
+									"_data" : {
+										"_type" : "single",
+										"_from" : "data",
+										"_access" : [
+											"department",
+											"$nth",
+											"reservations",
+											"target",
+											"url"
+										]
+									},
+									"_handlers" : {
+										"_out" : "string",
+										"_escape" : "esc_url_raw",
+										"_condition" : [
+											"empty",
+											"clear",
+											"this"
+										]
+									}
+								},
+								"inLanguage" : {
+									"_data" : {
+										"_type" : "single",
+										"_from" : "data",
+										"_access" : [
+											"department",
+											"$nth",
+											"reservations",
+											"target",
+											"inLanguage"
+										]
+									},
+									"_handlers" : {
+										"_out" : "string",
+										"_escape" : "sanitize_text_field",
+										"_condition" : [
+											"empty",
+											"clear",
+											"this"
+										]
+									}
+								}
+							}
+						},
+						"_handlers" : {
+							"_out" : "object"
+						}
+					},
+					"result" : {
+						"_data" : {
+							"_type" : "object",
+							"_from" : "generator",
+							"_config" : {
+								"@type" : {
+									"_data" : {
+										"_type" : "single",
+										"_from" : "data",
+										"_access" : [
+											"department",
+											"$nth",
+											"reservations",
+											"type"
+										]
+									},
+									"_handlers" : {
+										"_out" : "string",
+										"_escape" : "sanitize_text_field",
+										"_condition" : [
+											"empty",
+											"clear",
+											"this"
+										]
+									}
+								},
+								"name" : {
+									"_data" : {
+										"_type" : "single",
+										"_from" : "data",
+										"_access" : [
+											"department",
+											"$nth",
+											"reservations",
+											"name"
+										]
+									},
+									"_handlers" : {
+										"_out" : "string",
+										"_escape" : "sanitize_text_field",
+										"_condition" : [
+											"empty",
+											"clear",
+											"this"
+										]
+									}
+								}
+							}
+						},
+						"_handlers" : {
+							"_out" : "object"
+						}
+					}
+				}
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "sanitize_text_field"
+				"_out" : "object"
 			}
 		}
 	}

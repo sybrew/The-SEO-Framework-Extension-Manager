@@ -57,17 +57,40 @@ class Core {
 		$that = __NAMESPACE__ . ( \is_admin() ? '\\Admin' : '\\Front' );
 		$this instanceof $that or \wp_die( -1 );
 
-		$this->_init_options();
+		/**
+		 * Set options index.
+		 * @see trait TSF_Extension_Manager\Extension_Options
+		 */
+		$this->o_index = 'local';
 	}
 
-	/**
-	 * Initializes extension options.
-	 *
-	 * @since 1.0.0
-	 * @uses trait \TSF_Extension_Manager\Extension_Options
-	 */
-	protected function _init_options() {
+	protected function get_packed_data( $pretty = false ) {
 
-		$this->o_index = 'local';
+		$data = $this->get_stale_extension_options();
+		$schema = json_decode( file_get_contents( TSFEM_E_LOCAL_DIR_PATH . 'lib/schema/schema.json', false ) );
+
+		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
+
+		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
+		$_json = null;
+		if ( $count ) {
+			$_json = &$packer->_collector();
+
+			$packer->_iterate_base();
+			$_json = $packer->_pack();
+
+			if ( $count > 1 ) {
+				$_json->department = [];
+				for ( $i = 1; $i <= $count; $i++ ) {
+					$packer->_iterate_base();
+					$_json->department[] = (object) $packer->_pack();
+				}
+			}
+		}
+
+		$options = JSON_UNESCAPED_SLASHES;
+		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
+
+		return json_encode( $packer->_get(), $options );
 	}
 }

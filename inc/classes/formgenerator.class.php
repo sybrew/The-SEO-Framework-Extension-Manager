@@ -69,8 +69,8 @@ final class FormGenerator {
 	 * @var int $bits
 	 * @var int $max_it
 	 */
-	private $bits = 12,
-	        $max_it = 0;
+	private $bits,
+	        $max_it;
 
 	/**
 	 * Maintains the reiteration level, the name thereof, and the iteration within.
@@ -435,6 +435,13 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Outputs or returns fields.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array  $fields. Passed by reference for performance.
+	 * @param string $type. Accepts 'get' and 'echo'.
+	 * @return string|void $_fields. Void if $type is echo.
 	 */
 	public function _fields( array $fields, $type = 'echo' ) {
 
@@ -442,6 +449,43 @@ final class FormGenerator {
 			return $this->get_fields( $fields );
 
 		$this->output_fields( $fields );
+	}
+
+	/**
+	 * Gets fields by reference.
+	 *
+	 * @since 1.3.0
+	 * @see http://php.net/manual/en/language.references.return.php
+	 * @uses $this->generate_fields()
+	 *
+	 * @param array $fields. Passed by reference for performance.
+	 * @return string $_fields.
+	 */
+	private function get_fields( array &$fields ) {
+
+		$_fields = '';
+
+		foreach ( $this->generate_fields( $fields ) as $field ) {
+			//* Already escaped.
+			$_fields .= $field;
+		}
+
+		return $_fields;
+	}
+
+	/**
+	 * Outputs fields by reference.
+	 *
+	 * @see http://php.net/manual/en/language.references.return.php
+	 * @uses $this->generate_fields()
+	 *
+	 * @param array $fields. Passed by reference for performance.
+	 */
+	private function output_fields( array &$fields ) {
+		foreach ( $this->generate_fields( $fields ) as $field ) {
+			//* Already escaped.
+			echo $field;
+		}
 	}
 
 	/**
@@ -604,40 +648,6 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Gets fields by reference.
-	 *
-	 * @since 1.3.0
-	 * @see http://php.net/manual/en/language.references.return.php
-	 * @uses $this->generate_fields()
-	 *
-	 * @param array $fields. Passed by reference for performance.
-	 * @return string $_fields.
-	 */
-	private function get_fields( array &$fields ) {
-
-		$_fields = '';
-
-		foreach ( $this->generate_fields( $fields ) as $field ) {
-			//* Already escaped.
-			$_fields .= $field;
-		}
-
-		return $_fields;
-	}
-
-	/**
-	 *
-	 *
-	 * @param array $fields. Passed by reference for performance.
-	 */
-	private function output_fields( array &$fields ) {
-		foreach ( $this->generate_fields( $fields ) as $field ) {
-			//* Already escaped.
-			echo $field;
-		}
-	}
-
-	/**
 	 * Generates fields.
 	 *
 	 * @since 1.3.0
@@ -658,8 +668,7 @@ final class FormGenerator {
 		 * options for each depth (ie hex).
 		 * Maximum of depth of 5 @ 32 bit. 10 @ 64 bits.
 		 */
-		++$this->level;
-		$this->iterate();
+		$this->level();
 
 		foreach ( $fields as $option => $_args ) {
 			//= Overwrite later keys, to be caught when generating IDs
@@ -671,29 +680,90 @@ final class FormGenerator {
 		$this->delevel();
 	}
 
+	/**
+	 * Levels current generator level by one.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->level
+	 * @uses $this->iterate()
+	 *
+	 * @return void
+	 */
+	private function level() {
+		++$this->level;
+		$this->iterate();
+	}
+
+	/**
+	 * Unsets current generator level.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->it
+	 * @uses $this->level
+	 * @uses $this->bits
+	 *
+	 * @return void
+	 */
+	private function delevel() {
+		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
+		//= Unset highest level.
+		unset( $this->level_names[ $this->level + 1 ] );
+	}
+
+	/**
+	 * Iterates current generator level.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->it
+	 * @uses $this->level
+	 * @uses $this->bits
+	 *
+	 * @param int $c The amount to iterate.
+	 * @return void
+	 */
 	private function iterate( $c = 0 ) {
 		//* Add $c + 1 to current level. We normally count from 0.
 		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
+	/**
+	 * Deiterates current generator level.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->it
+	 * @uses $this->level
+	 * @uses $this->bits
+	 *
+	 * @param int $c The amount to deiterate.
+	 * @return void
+	 */
 	private function deiterate( $c = 0 ) {
 		//* Subtract $c + 1 to current level. We normally count from 0.
 		$this->it -= ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
+	/**
+	 * Resets and reiterates current generator level to 1.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->it
+	 * @uses $this->level
+	 * @uses $this->bits
+	 * @uses $this->level()
+	 *
+	 * @return void
+	 */
 	private function reiterate() {
 		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
-		$this->it += ( 1 << ( ( $this->level - 1 ) * $this->bits ) );
-	}
-
-	private function delevel() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
-		//* Unset highest level.
-		unset( $this->level_names[ $this->level + 1 ] );
+		$this->iterate();
 	}
 
 	/**
+	 * Creates option field.
 	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $args The field arguments.
 	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
 	private function create_field( array $args ) {
@@ -772,7 +842,13 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Creates field wrapper to generate multiple fields.
+	 *
+	 * @since 1.3.0
 	 * @see $this->create_field()
+	 *
+	 * @param array $args The field arguments.
+	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
 	private function create_fields_multi( array $args ) {
 
