@@ -99,7 +99,7 @@ function _local_init() {
 	if ( \is_admin() ) {
 		new Admin;
 	} else {
-//		new Front;
+		new Front;
 	}
 
 	return $loaded = true;

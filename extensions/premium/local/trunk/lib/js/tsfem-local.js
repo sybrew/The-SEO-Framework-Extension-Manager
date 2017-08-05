@@ -55,6 +55,108 @@ window[ 'tsfem_e_local' ] = {
 	 */
 	i18n : tsfem_e_localL10n.i18n,
 
+	validateFormJson: function( event ) {
+
+		let formId = event.target.getAttribute( 'form' ),
+			form,
+			button;
+
+		if ( formId ) {
+			form = document.getElementById( formId );
+			if ( ! form )
+				return false;
+
+			if ( ! tsfemForm.doValidityRoutine( form, tsfem_e_local.i18n['fixForm'] ) )
+				return false;
+
+			button = event.target;
+		} else {
+			return false;
+		}
+
+		//let buttonClassName = 'tsfem-button-disabled tsfem-button-loading'; // ES6
+		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
+			status = 0, loaderText = '';
+
+		//* Disable the submit button.
+		tsfemForm.disableButton( button );
+
+		//* Reset ajax loader
+		tsfem.resetAjaxLoader( $loader );
+
+		//* Set ajax loader.
+		tsfem.setAjaxLoader( $loader );
+
+		// Do ajax...
+		jQuery.ajax( {
+			method: 'POST',
+			url: ajaxurl,
+			dataType: 'json',
+			data: {
+				'action' : 'tsfem_e_local_validateFormJson',
+				'nonce' : tsfem_e_local.nonce,
+				'data' : jQuery( form ).serialize(),
+			},
+			processData: true,
+			timeout: 14000,
+			async: true,
+		} ).done( function( response ) {
+
+			response = tsfem.convertJSONResponse( response );
+
+			if ( tsfem.debug ) console.log( response );
+
+			let data = response && response.data || void 0,
+				type = response && response.type || void 0;
+
+			if ( ! data || ! type ) {
+				//* Erroneous output.
+				loaderText = tsfem.i18n['InvalidResponse'];
+			} else {
+				let rCode = data.results && data.results.code || void 0,
+					success = data.results && data.results.success || void 0;
+
+				if ( rCode ) {
+					if ( ! success ) {
+						tsfem.setTopNotice( rCode );
+					} else {
+						let tdata = data.tdata || void 0;
+
+						status = 1;
+
+						if ( tdata ) {
+							let $form = jQuery( '<form>', {
+								action: 'https://search.google.com/structured-data/testing-tool',
+								method: 'post',
+								target: '_blank'
+							} );
+
+							jQuery( '<input>' ).attr( 'type', 'submit' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
+							jQuery( '<textarea>' ).attr( 'name', 'code' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
+							$form.appendTo( 'body' ).submit();
+							$form.remove();
+						}
+					}
+				} else {
+					//* Erroneous output.
+					loaderText = tsfem.i18n['UnknownError'];
+				}
+			}
+		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+			// Set Ajax response for wrapper.
+			loaderText = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+
+			// Try to set top notices, regardless. First notifies that there's an error saving.
+			tsfem.setTopNotice( 1072100 );
+			tsfem.setTopNotice( -1, errorThrown );
+		} ).always( function() {
+			tsfem.updatedResponse( $loader, status, loaderText, 0 );
+			tsfemForm.enableButton( button );
+		} );
+
+		return true;
+	},
+
 	/**
 	 * Initialises all aspects of the scripts.
 	 *
@@ -69,6 +171,9 @@ window[ 'tsfem_e_local' ] = {
 	 * @function
 	 */
 	ready: function( jQ ) {
+
+		//* Turn validate button into an AJAX pusher.
+		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).click( tsfem_e_local.validateFormJson );
 	}
 };
 jQuery( tsfem_e_local.ready );

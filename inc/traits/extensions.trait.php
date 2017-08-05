@@ -186,9 +186,9 @@ trait Extensions_Properties {
 	 * @since 1.0.0
 	 *
 	 * @return array {
-	 *		'sha256' => string sha256 checksum key,
-	 *		'sha1'   => string sha1 checksum key,
-	 *		'md5'    => string md5 checksum key,
+	 *    'sha256' => string sha256 checksum key,
+	 *    'sha1'   => string sha1 checksum key,
+	 *    'md5'    => string md5 checksum key,
 	 * }
 	 */
 	private static function get_external_extensions_checksum() {

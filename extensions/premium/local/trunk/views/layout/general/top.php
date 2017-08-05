@@ -17,15 +17,23 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 			];
 			$size = '1em';
 
-			printf( \esc_html_x( '%1$s %2$s', '1: Local, 2: SEO', 'the-seo-framework-extension-manager' ),
-				sprintf( '<span class="tsfem-logo">%s%s</span>',
-					sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>',
+			printf(
+				\esc_html_x( '%1$s %2$s', '1: Local, 2: SEO', 'the-seo-framework-extension-manager' ),
+				sprintf(
+					'<span class="tsfem-logo">%s%s</span>',
+					sprintf(
+						'<svg width="%1$s" height="%1$s">%2$s</svg>',
 						\esc_attr( $size ),
-						sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-							\esc_url( $image['svg'] ), \esc_url( $image['1x'] ), \esc_attr( $size )
+						sprintf(
+							'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+							\esc_url( $image['svg'], [ 'http', 'https' ] ),
+							\esc_url( $image['1x'], [ 'http', 'https' ] ),
+							\esc_attr( $size )
 						)
-					), \esc_html__( 'Local', 'the-seo-framework-extension-manager' )
-				), 'SEO'
+					),
+					\esc_html__( 'Local', 'the-seo-framework-extension-manager' )
+				),
+				'SEO'
 			);
 			?>
 		</h1></header>

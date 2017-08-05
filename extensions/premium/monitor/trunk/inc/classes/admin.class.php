@@ -953,7 +953,7 @@ final class Admin extends Api {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
 
-		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \home_url() ) );
+		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 		$_domain = $this->get_expected_domain();
 		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );
@@ -1052,7 +1052,7 @@ final class Admin extends Api {
 
 		$button = sprintf(
 			'<form name=deactivate action="%s" method=post id="tsfem-e-monitor-disconnect-form">%s</form>',
-			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ) ),
+			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'http', 'https' ] ),
 			$nonce_action . $nonce . $switcher
 		);
 

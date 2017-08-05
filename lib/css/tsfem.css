@@ -498,6 +498,7 @@ body.tsfem .wrap {
 .tsfem-button-clipboard:after,
 .tsfem-button-index:after,
 .tsfem-button-cloud:after,
+.tsfem-button-external:after,
 .tsfem-button-image:after,
 .tsfem-button-loading:after {
 	display: inline-block;
@@ -547,6 +548,10 @@ body.tsfem .wrap {
 
 .tsfem-button-cloud:after {
 	content: "\f176";
+}
+
+.tsfem-button-external:after {
+	content: "\f504";
 }
 
 .tsfem-button-image:after {
@@ -947,6 +952,10 @@ body.tsfem .wrap {
 	z-index: 5;
 }
 
+.tsfem-pane-footer-wrap *:nth-of-type(-n+1) {
+	margin-right: 14px;
+}
+
 /* ## Specific panes.
 /*--------------------------------------*/
 
@@ -1074,6 +1083,14 @@ body.tsfem .wrap {
 .tsfem-extension-entry-inner {
 	margin: 0 20px 20px 0;
 }
+
+/* Remove margin from the bottom two (or one) entries. */
+/* Concept. Stills needs to be tested on Safari, and it breaks on mobile.
+.tsfem-extension-entry-wrap:nth-last-of-type(-n+2):nth-of-type(odd) .tsfem-extension-entry-inner,
+.tsfem-extension-entry-wrap:nth-last-of-type(-n+2):nth-of-type(odd) + .tsfem-extension-entry-wrap .tsfem-extension-entry-inner {
+	margin: 0 20px 0 0;
+}
+*/
 
 .tsfem-extension-entry {
 	margin: 0;
@@ -1465,6 +1482,7 @@ body.tsfem .wrap {
 
 	body.tsfem #wpfooter {
 		display: block;
+		position: static;
 	}
 }
 

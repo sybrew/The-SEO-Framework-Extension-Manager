@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Holds secure POST functions for package TSF_Extension_Manager\Extension\Local.
+ * Holds secure POST functions for package \TSF_Extension_Manager\Extension\Local\Settings.
  *
  * Note: This trait has dependencies!
  *
@@ -109,9 +109,6 @@ trait Secure_Post {
 		 */
 		\add_action( 'tsfem_form_prepare_ajax_iterations', [ $this, '_init_ajax_iteration_callback' ] );
 
-		//* Registers google API request
-		\add_action( 'wp_ajax_tsfem_e_local_api_request', [ $this, '_wp_ajax_do_api' ] );
-
 		/**
 		 * Listens to AJAX form save.
 		 * @see class TSF_Extension_Manager\FormGenerator
@@ -121,6 +118,11 @@ trait Secure_Post {
 		 * @see \TSF_Extension_Manager\LoadAdmin
 		 */
 		\add_action( 'tsfem_form_do_ajax_save', [ $this, '_do_ajax_form_save' ] );
+
+		/**
+		 * Listens to AJAX form validation
+		 */
+		\add_action( 'wp_ajax_tsfem_e_local_validateFormJson', [ $this, '_prepare_ajax_form_json_validation' ] );
 	}
 
 	/**
@@ -153,6 +155,7 @@ trait Secure_Post {
 
 			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 			$success = $this->update_stale_options_array_by_key( $options );
+			$this->process_all_stored_data();
 
 			if ( ! $success ) {
 				$type = 'failure';
@@ -213,5 +216,54 @@ trait Secure_Post {
 			'department' => 'get_departments_fields',
 			'openingHours' => 'get_opening_hours_fields',
 		];
+	}
+
+	public function _prepare_ajax_form_json_validation() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			if ( \tsf_extension_manager()->can_do_settings() ) :
+				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
+					$this->send_ajax_form_json_validation();
+				}
+			endif;
+
+			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 9003 ) ], 'failure' ); // TODO var_dump() set number
+		endif;
+
+		exit;
+	}
+
+	private function send_ajax_form_json_validation() {
+
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+
+		parse_str( $post_data, $data );
+
+		/**
+		 * If this page doesn't parse the site options,
+		 * there's no need to check them on each request.
+		 */
+		if ( empty( $data )
+		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		) {
+			$type = 'failure';
+			$results = $this->get_ajax_notice( false, 1070200 );
+		} else {
+
+			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+			$data = $this->pack_data( $options, true );
+
+			if ( ! $data ) {
+				$type = 'failure';
+				$results = $this->get_ajax_notice( false, 1070201 );
+			} else {
+				$type = 'success';
+				$results = $this->get_ajax_notice( true, 1070202 );
+				$tdata = '<script type="application/ld+json">' . PHP_EOL . $data . PHP_EOL . '</script>';
+			}
+		}
+
+		\tsf_extension_manager()->send_json( compact( 'results', 'tdata' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
 	}
 }

@@ -39,10 +39,16 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'error' );
 
 /**
- * Require Local security trait.
+ * Require Local POST handling trait.
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
+
+/**
+ * Require Local Schema Data Packer trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\Extension\Local\_load_trait( 'schema-packer' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Local\Settings
@@ -59,7 +65,8 @@ final class Settings {
 		\TSF_Extension_Manager\UI,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
-		Secure_Post;
+		Secure_Post,
+		Schema_Packer;
 
 	/**
 	 * The settings page slug.
@@ -204,11 +211,13 @@ final class Settings {
 		 * Set additional CSS file calls.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
+		/*
 		$this->additional_css[] = [
 			'name' => 'tsfem-local',
 			'base' => TSFEM_E_LOCAL_DIR_URL,
 			'ver' => TSFEM_E_LOCAL_VERSION,
 		];
+		*/
 
 		/**
 		 * Set additional JS file calls.
@@ -229,6 +238,9 @@ final class Settings {
 			'name' => 'tsfem_e_localL10n',
 			'strings' => [
 				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
+				'i18n' => [
+					'fixForm' => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
+				],
 			],
 		];
 
@@ -356,7 +368,7 @@ final class Settings {
 	 * @uses \TSF_Extension_Manager\Extension\Local\Fields
 	 * @uses \TSF_Extension_Manager\FormGenerator
 	 *
-	 * @return \TSF_Extension_Manager\FormGenerator
+	 * @return void
 	 */
 	private function output_department_fields() {
 
@@ -366,14 +378,28 @@ final class Settings {
 		$f->_fields( Fields::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
 
-		$submit = $f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
+		$this->set_bottom_wrap_items( $this->get_test_button() );
+		$this->set_bottom_wrap_items(
+			$f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
+		);
 
 		//* Destruct class.
 		$f = null;
+	}
 
-		//* @TODO add test button... requires data wrapper....
-		//	$this->set_bottom_wrap_items( $this->get_test_button() );
-		$this->set_bottom_wrap_items( $submit );
+	/**
+	 * Returns test button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The validation button.
+	 */
+	private function get_test_button() {
+		return sprintf(
+			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="tsfem-hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external">%s</button>',
+			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
+			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
+		);
 	}
 
 	/**

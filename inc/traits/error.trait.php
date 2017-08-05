@@ -437,6 +437,11 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 1072100 :
+				$message = \esc_html__( "Couldn't fetch data.", 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			case 17000 :
 			case 17003 :
 			case 17200 :

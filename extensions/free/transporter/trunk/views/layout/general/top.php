@@ -20,15 +20,22 @@ $about = '<div class="tsfem-top-about tsfem-flex tsfem-flex-row"><div>' . \esc_h
 			];
 			$size = '1em';
 
-			printf( \esc_html_x( '%1$s %2$s', '1: SEO, 2: Transporter', 'the-seo-framework-extension-manager' ),
-				sprintf( '<span class="tsfem-logo">%sSEO</span>',
-					sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>',
+			printf(
+				\esc_html_x( '%1$s %2$s', '1: SEO, 2: Transporter', 'the-seo-framework-extension-manager' ),
+				sprintf(
+					'<span class="tsfem-logo">%sSEO</span>',
+					sprintf(
+						'<svg width="%1$s" height="%1$s">%2$s</svg>',
 						\esc_attr( $size ),
-						sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-							\esc_url( $image['svg'] ), \esc_url( $image['1x'] ), \esc_attr( $size )
+						sprintf(
+							'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+							\esc_url( $image['svg'], [ 'http', 'https' ] ),
+							\esc_url( $image['1x'], [ 'http', 'https' ] ),
+							\esc_attr( $size )
 						)
 					)
-				), \esc_html__( 'Transporter', 'the-seo-framework-extension-manager' )
+				),
+				\esc_html__( 'Transporter', 'the-seo-framework-extension-manager' )
 			);
 			?>
 		</h1></header>

@@ -250,6 +250,18 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'text',
 			],
+			'url' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'url',
+				'_req' => false,
+				'_type' => 'url',
+				'_desc' => [
+					\__( 'Department URL', '' ),
+					\__( 'The fully-qualified URL of the specific department location.', '' ),
+					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described on there.', '' ),
+				],
+			],
 			'address' => [
 				'_default' => null,
 				'_edit' => true,
@@ -266,18 +278,6 @@ final class Fields {
 					'geo-api-component' => 'action',
 				],
 				'_fields' => $this->get_address_fields() + $this->get_geo_fields(),
-			],
-			'url' => [
-				'_default' => '',
-				'_edit' => true,
-				'_ret' => 'url',
-				'_req' => false,
-				'_type' => 'url',
-				'_desc' => [
-					\__( 'Department URL', '' ),
-					\__( 'The fully-qualified URL of the specific department location.', '' ),
-					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described on there.', '' ),
-				],
 			],
 			'telephone' => [
 				'_default' => '',
@@ -392,7 +392,7 @@ final class Fields {
 					'',
 					\__( 'Street number, street name, and unit number (if applicable).', '' ),
 				],
-				'_pattern' => '^((([0-9\/-]+([\/-0-9A-Z]+)?(\s|(,\s)))([\u00a1-\uffffa-zA-Z\s]|[0-9_/-])+))|(([\u00a1-\uffffa-zA-Z\s]|[0-9_/-])+)((\s|(,\s))([0-9\/-]+([\/-0-9A-Z]+)?))$',
+				'_pattern' => '^((([0-9\/-]+([\/-0-9A-Z]+)?(\s|(,\s)))([\u00a1-\uffffa-zA-Z\.\s]|[0-9_/-])+))|(([\u00a1-\uffffa-zA-Z\.\s]|[0-9_/-])+)((\s|(,\s))([0-9\/-]+([\/-0-9A-Z]+)?))$',
 				'_data' => [
 					'geo-api' => true,
 					'geo-api-component' => [ 'route', 'street_number' ],

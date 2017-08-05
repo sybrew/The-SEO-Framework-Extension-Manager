@@ -181,12 +181,26 @@ trait Extensions_Layout {
 		];
 
 		if ( $items['svg'] ) {
-			$image = sprintf( '<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>', \esc_url( $items['svg'] ), \esc_url( $items['1x'] ), \esc_attr( $size ) );
+			$image = sprintf(
+				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+				\esc_url( $items['svg'], [ 'http', 'https' ] ),
+				\esc_url( $items['1x'], [ 'http', 'https' ] ),
+				\esc_attr( $size )
+			);
 			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', \esc_attr( $size ), $image );
 		} elseif ( $items['2x'] ) {
-			$image = sprintf( '<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">', \esc_url( $items['1x'] ), \esc_url( $items['2x'] ), \esc_attr( $size ) );
+			$image = sprintf(
+				'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">',
+				\esc_url( $items['1x'], [ 'http', 'https' ] ),
+				\esc_url( $items['2x'], [ 'http', 'https' ] ),
+				\esc_attr( $size )
+			);
 		} elseif ( $items['1x'] ) {
-			$image = sprintf( '<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">', \esc_url( $items['1x'] ), \esc_attr( $size ) );
+			$image = sprintf(
+				'<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">',
+				\esc_url( $items['1x'], [ 'http', 'https' ] ),
+				\esc_attr( $size )
+			);
 		}
 
 		return $image;
@@ -326,8 +340,20 @@ trait Extensions_Layout {
 			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', \esc_attr( $class ), \esc_attr( $text ) );
 			$form = $nonce_action . $nonce . $extension . $submit;
 
-			$nojs = sprintf( '<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>', \esc_url( \tsf_extension_manager()->get_admin_page_url() ), \esc_attr( $slug ), $form );
-			$js = sprintf( '<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>', \esc_attr( $slug ), \esc_attr( $class ), \esc_attr( $slug ), \esc_attr( $type ), \esc_html( $text ) );
+			$nojs = sprintf(
+				'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
+				\esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'http', 'https' ] ),
+				\esc_attr( $slug ),
+				$form
+			);
+			$js = sprintf(
+				'<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>',
+				\esc_attr( $slug ),
+				\esc_attr( $class ),
+				\esc_attr( $slug ),
+				\esc_attr( $type ),
+				\esc_html( $text )
+			);
 
 			$button = $nojs . $js;
 		}
@@ -382,7 +408,7 @@ trait Extensions_Layout {
 		//* Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'http', 'https' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
 		//* Make extension version element.
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
@@ -424,7 +450,9 @@ trait Extensions_Layout {
 	private static function get_extension_desc_home_item( $url ) {
 		return sprintf(
 			'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
-			\esc_url( $url ), \esc_attr( static::get_i18n( 'visit-extension' ) ), \esc_html( static::get_i18n( 'extension-home' ) )
+			\esc_url( $url, [ 'http', 'https' ] ),
+			\esc_attr( static::get_i18n( 'visit-extension' ) ),
+			\esc_html( static::get_i18n( 'extension-home' ) )
 		);
 	}
 
@@ -496,7 +524,9 @@ trait Extensions_Layout {
 	private static function get_extension_desc_menu_item( $slug ) {
 		return sprintf(
 			'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
-			\esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ) ), \esc_attr( static::get_i18n( 'visit-menupage' ) ), \esc_html( static::get_i18n( 'menupage' ) )
+			\esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ), [ 'http', 'https' ] ),
+			\esc_attr( static::get_i18n( 'visit-menupage' ) ),
+			\esc_html( static::get_i18n( 'menupage' ) )
 		);
 	}
 }

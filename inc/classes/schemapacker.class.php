@@ -96,9 +96,9 @@ final class SchemaPacker {
 		return true;
 	}
 
-	public function _iterate_base() {
+	public function _iterate_base( $by = 1 ) {
 		$this->level or ++$this->level;
-		$this->iterate();
+		$this->iterate( $by - 1 );
 	}
 
 	public function _pack() {
@@ -374,7 +374,7 @@ final class SchemaPacker {
 				return parse_url( $value, PHP_URL_HOST ) ?: '';
 
 			case 'esc_url_raw' :
-				return \esc_url_raw( $value );
+				return \esc_url_raw( $value, [ 'http', 'https' ] );
 
 			default :
 			case 'sanitize_text_field' :

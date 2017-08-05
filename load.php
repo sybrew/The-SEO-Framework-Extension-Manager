@@ -90,7 +90,7 @@ function _test_sever( $network_wide = false ) {
 		sprintf(
 			'<p><strong>The SEO Framework - Extension Manager</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
 			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
-			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage )
+			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage, [ 'http', 'https' ] )
 		),
 		sprintf(
 			'The SEO Framework - Extension Manager &laquo; %s',

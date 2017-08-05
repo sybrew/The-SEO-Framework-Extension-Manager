@@ -117,6 +117,7 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @uses const AMP_QUERY_VAR
+	 * @staticvar bool $cache
 	 *
 	 * @return bool True if AMP is enabled.
 	 */
@@ -277,7 +278,7 @@ final class Core {
 		$data = $this->get_article_data();
 
 		if ( ! empty( $data ) )
-			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data ) ) . PHP_EOL;
+			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, JSON_UNESCAPED_SLASHES ) ) . PHP_EOL;
 
 		return '';
 	}
@@ -425,7 +426,7 @@ final class Core {
 		return [
 			'image' => [
 				'@type' => 'ImageObject',
-				'url' => \esc_url( $image['url'] ),
+				'url' => \esc_url( $image['url'], [ 'http', 'https' ] ),
 				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
 				'width' => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
 			],
@@ -632,7 +633,7 @@ final class Core {
 				'name' => \esc_attr( $name ),
 				'logo' => [
 					'@type' => 'ImageObject',
-					'url' => \esc_url( $url ),
+					'url' => \esc_url( $url, [ 'http', 'https' ] ),
 					'width' => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
 					'height' => abs( filter_var( $h, FILTER_SANITIZE_NUMBER_INT ) ),
 				],

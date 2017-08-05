@@ -196,9 +196,9 @@ class Panes extends API {
 
 		$output = '';
 
-		$googleblog = sprintf( '<a href="%s" target="_blank">Google Webmaster Central Blog</a>', \esc_url( 'https://webmasters.googleblog.com/' ) );
+		$googleblog = sprintf( '<a href="%s" target="_blank">Google Webmaster Central Blog</a>', 'https://webmasters.googleblog.com/' );
 		$acquiredfrom = sprintf( \esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
-		$googleprivacy = sprintf( '<a href="%s" target="_blank">Google\'s Privacy Policy</a>', \esc_url( 'https://www.google.com/policies/privacy/' ) );
+		$googleprivacy = sprintf( '<a href="%s" target="_blank">Google\'s Privacy Policy</a>', 'https://www.google.com/policies/privacy/' );
 		/* translators: %s = "Google's Privacy Policy" */
 		$privacystatement = sprintf( \esc_html__( 'Read %s.', 'the-seo-framework-extension-manager' ), $googleprivacy );
 

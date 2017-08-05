@@ -423,7 +423,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'submit' :
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-form-submit-button">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),

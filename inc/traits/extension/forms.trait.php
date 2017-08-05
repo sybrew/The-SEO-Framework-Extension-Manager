@@ -271,17 +271,26 @@ trait Extension_Forms {
 
 			$output .= sprintf(
 				'<form action="%s" method=post id="%s" class="hide-if-js %s">%s</form>',
-				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
+				\esc_url( $url, [ 'http', 'https' ] ),
+				\esc_attr( $items['id'] ),
+				\esc_attr( $items['class'] ),
+				$form
 			);
 
 			$output .= sprintf(
 				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
-				\esc_attr( $items['ajax-id'] ), \esc_attr( $items['ajax-class'] ), \esc_attr( $items['ajax-title'] ), \esc_html( $items['ajax-name'] )
+				\esc_attr( $items['ajax-id'] ),
+				\esc_attr( $items['ajax-class'] ), 
+				\esc_attr( $items['ajax-title'] ),
+				\esc_html( $items['ajax-name'] )
 			);
 		} else {
 			$output .= sprintf(
 				'<form action="%s" method=post id="%s" class="%s">%s</form>',
-				\esc_url( $url ), \esc_attr( $items['id'] ), \esc_attr( $items['class'] ), $form
+				\esc_url( $url, [ 'http', 'https' ] ),
+				\esc_attr( $items['id'] ),
+				\esc_attr( $items['class'] ),
+				$form
 			);
 		}
 
