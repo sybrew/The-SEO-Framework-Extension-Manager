@@ -427,18 +427,28 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 1070101 :
+				$message = \esc_url__( "Settings aren't saved", 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			case 1070102 :
 				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
 				$type = 'success';
 				break;
 
 			case 1071100 :
-				$message = \esc_html__( "Settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Unable to verify if settings are saved.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
 			case 1072100 :
 				$message = \esc_html__( "Couldn't fetch data.", 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
+			case 1070201 :
+				$message = \esc_html__( 'Unable to create markup. Inspect your fields for errors or contact support.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -500,7 +510,6 @@ trait Error {
 			case 1010605 :
 			case 1060101 :
 			case 1060402 :
-			case 1070101 :
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;

@@ -240,6 +240,7 @@ final class Settings {
 				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
 				'i18n' => [
 					'fixForm' => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
+					'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 		];

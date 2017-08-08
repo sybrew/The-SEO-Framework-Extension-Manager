@@ -72,6 +72,7 @@ final class SchemaPacker {
 	private $data;
 	private $schema;
 	private $output;
+	private $condition = [];
 
 	//	private $unpack = false;
 	//	private $it;
@@ -80,9 +81,8 @@ final class SchemaPacker {
 
 		$this->data =& $data;
 
-		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) ) {
+		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) )
 			return false;
-		}
 
 		$o = $schema->_OPTIONS;
 
@@ -187,7 +187,7 @@ final class SchemaPacker {
 	private function delevel() {
 		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
 		//= Unset highest level.
-		unset( $this->level_names[ $this->level + 1 ] );
+	//	unset( $this->pack_names[ $this->level + 1 ] );
 	}
 
 	/**
@@ -246,6 +246,20 @@ final class SchemaPacker {
 		$_ = [];
 
 		foreach ( $this->generate_data( $schema ) as $key => $data ) {
+			switch ( $this->get_condition( $key ) ) {
+				case 'kill_pack' :
+					return null;
+
+				case 'kill_sub' :
+					break 2;
+
+				case 'kill_this' :
+					continue 2;
+
+				default :
+					break;
+			}
+
 			isset( $key, $data ) and $_[ $key ] = $data;
 		}
 
@@ -259,28 +273,38 @@ final class SchemaPacker {
 	private function generate_data( \stdClass $schema ) {
 
 		foreach ( $schema as $k => $s ) {
-			$a = $this->get_data( $k, $s );
-			yield key( $a ) => current( $a );
+			yield $k => $this->get_value( $k, $s );
 		}
 	}
 
-	private function get_data( $key, \stdClass $schema ) {
+	private function get_value( $key, \stdClass $schema ) {
 
 		switch ( $schema->_data->_type ) {
 			case 'single' :
-				$data = $this->make_data( $schema );
+				$value = $this->make_data( $schema );
 				break;
 
 			case 'object' :
-				$data = $this->pack( $schema->_data->_config );
+				$value = $this->pack( $schema->_data->_config );
 				break;
 
 			case 'iterate' :
-				$data = $this->make_iteration( $schema );
+				$value = $this->make_iteration( $schema );
 				break;
 		}
 
-		return [ $key => $data ];
+		if ( isset( $schema->_handlers->_escape ) )
+			$value = $this->escape( $value, $schema->_handlers->_escape );
+
+		if ( isset( $schema->_handlers->_condition ) ) {
+			$this->condition[ $key ] = [];
+			$value = $this->condition( $key, $value, $schema->_handlers->_condition );
+		}
+
+		if ( isset( $value ) && isset( $schema->_handlers->_out ) )
+			$value = $this->convert( $value, $schema->_handlers->_out );
+
+		return $value;
 	}
 
 	private function make_iteration( \stdClass $schema ) {
@@ -293,11 +317,17 @@ final class SchemaPacker {
 
 		$data = [];
 		for ( $i = 0; $i < $count; $i++ ) {
-			$data[] = $this->pack( $_schema );
+
+			$_d = $this->pack( $_schema );
+			isset( $_d ) and $data[] = $_d;
+
 			$this->iterate();
 		}
 
 		$this->delevel();
+
+		if ( empty( $data ) )
+			return null;
 
 		return $data;
 	}
@@ -314,7 +344,11 @@ final class SchemaPacker {
 				break;
 
 			case 'bloginfo' :
-				$value = \get_bloginfo( $schema->_data->_value );
+				$value = \get_bloginfo( $schema->_data->_access );
+				break;
+
+			case 'concat' :
+				$value = $this->concat( $schema->_data->_config );
 				break;
 
 			default :
@@ -322,14 +356,17 @@ final class SchemaPacker {
 				break;
 		}
 
-		if ( isset( $schema->_handlers->_escape ) )
-			$value = $this->escape( $value, $schema->_handlers->_escape );
+		return $value;
+	}
 
-		if ( isset( $schema->_handlers->_condition ) )
-			$value = $this->condition( $value, $schema->_handlers->_condition );
+	/**
+	 * NOTE: This is not a generator.
+	 */
+	private function concat( \stdClass $schema ) {
 
-		if ( isset( $schema->_handlers->_out ) ) {
-			$value = $this->convert( $value, $schema->_handlers->_out );
+		$value = '';
+		foreach ( ( $this->pack( $schema ) ) as $k => $v ) {
+			$value .= $v;
 		}
 
 		return $value;
@@ -382,9 +419,113 @@ final class SchemaPacker {
 		endswitch;
 	}
 
-	private function condition( $value, $what ) {
-		//* TODO This requires traversing
-		return $value;
+	private function get_condition( $key ) {
+
+		if ( empty( $this->condition[ $key ] ) ) {
+			unset( $this->condition[ $key ] );
+			return -1;
+		}
+
+		$c = $this->condition[ $key ];
+		unset( $this->condition[ $key ] );
+
+		$kill_this = $kill_sub = $kill_pack = 0;
+
+		foreach ( $c as $v ) {
+			${$v} = 1;
+		}
+
+		//= Returns in order of impact.
+		if ( $kill_pack )
+			return 'kill_pack';
+
+		if ( $kill_sub )
+			return 'kill_sub';
+
+		if ( $kill_this )
+			return 'kill_this';
+
+		return 0;
+	}
+
+	private function condition( $key, $value, $what ) {
+
+		if ( count( $what ) > 1 ) {
+			foreach ( $what as $w ) {
+				$value = $this->condition( $key, $value, $w );
+			}
+			return $value;
+		}
+
+		$c = is_array( $what ) ? current( $what ) : $what;
+
+		switch ( $c->_if ) {
+			case 'this' :
+				$v =& $value;
+				break;
+
+			case 'data' :
+				$v = $this->access_data( $c->_access );
+				break;
+
+			default :
+				return $value;
+		}
+
+		switch ( $c->_op ) {
+			case '==' :
+				$action = $v == $c->_value;
+				break;
+
+			case '===' :
+				$action = $v === $c->_value;
+				break;
+
+			case '!=' :
+				$action = $v != $c->_value;
+				break;
+
+			case '!==' :
+				$action = $v !== $c->_value;
+				break;
+
+			case '>' :
+				$action = $v > $c->_value;
+				break;
+
+			case 'empty' :
+				$action = empty( $v );
+				break;
+
+			case 'type_is' :
+				$action = gettype( $v ) === $c->_value;
+				break;
+
+			case 'type_not' :
+				$action = gettype( $v ) !== $c->_value;
+				break;
+
+			default :
+				$action = false;
+				break;
+		}
+
+		if ( ! $action )
+			return $value;
+
+		switch ( $c->_do ) {
+			case 'kill_this' :
+			case 'kill_level' :
+			case 'kill_pack' :
+				$this->condition[ $key ][] = $c->_do;
+				return null;
+
+			case 'set' :
+				return $c->_to;
+
+			default :
+				return $value;
+		}
 	}
 
 	private function convert( $value, $to ) {
@@ -392,6 +533,9 @@ final class SchemaPacker {
 		switch ( $to ) :
 			case 'string' :
 				return (string) $value;
+
+			case 'boolean' :
+				return (bool) $value;
 
 			case 'integer' :
 				return (int) $value;

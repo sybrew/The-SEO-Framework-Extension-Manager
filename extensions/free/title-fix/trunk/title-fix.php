@@ -206,7 +206,7 @@ final class Core {
 			case 2 :
 				/**
 				 * Second run. Capture WP head.
-				 * 		{\add_action( 'wp_head', 'wp_title' );.. who knows?}
+				 * Scenario: \add_action( 'wp_head', 'wp_title' );.. or another callback.
 				 * Start at where wp_head is run (last run left off).
 				 * Stop right at the end of wp_head.
 				 */
@@ -218,7 +218,7 @@ final class Core {
 				/**
 				 * Third run. Capture the page.
 				 * Start at where wp_head has ended (last run left off),
-				 *		or at wp_head start (first run left off).
+				 * or at wp_head start (first run left off).
 				 * Stop at the footer.
 				 */
 				\add_action( 'wp_head', [ $this, 'maybe_start_ob' ], 9999 );

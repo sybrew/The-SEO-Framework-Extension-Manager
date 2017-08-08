@@ -315,8 +315,24 @@ h4.tsfem-form-multi-title {
 	overflow-y: auto;
 }
 
+.tsfem-form-multi-select-wrap-row ul {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+.tsfem-form-multi-select-wrap-row ul li {
+	margin: 7px 14px 7px 0;
+}
+
 /* Indent second or later */
-ul.tsfem-form-multi-a11y-wrap ul.tsfem-form-multi-a11y-wrap {
+.tsfem-form-multi-a11y-wrap .tsfem-form-multi-a11y-wrap {
 	margin-left: 20px;
 }
 

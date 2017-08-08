@@ -1,5 +1,5 @@
 {
-	"_OPTIONS" :{
+	"_OPTIONS" : {
 		"levels" : 5,
 		"architecture" : null
 	},
@@ -23,13 +23,13 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
 				"_escape" : "sanitize_text_field",
-				"_condition" : [
-					"empty",
-					"clear",
-					"department"
-				]
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				},
+				"_out" : "string"
 			}
 		},
 		"image" : {
@@ -44,21 +44,21 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
 				"_escape" : "esc_url_raw",
-				"_condition" : [
-					"empty",
-					"clear",
-					"department"
-				]
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				},
+				"_out" : "string"
 			}
 		},
 		"@id" : {
 			"_data" : {
 				"_type" : "single",
-				"_from" : "_concat",
-				"_concat" : [
-					{
+				"_from" : "concat",
+				"_config" : {
+					"0" : {
 						"_data" : {
 							"_type" : "single",
 							"_from" : "data",
@@ -69,16 +69,16 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_key",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					},
-					{
+					"1" : {
 						"_data" : {
 							"_type" : "single",
 							"_from" : "default",
@@ -86,22 +86,29 @@
 						},
 						"_handlers" : {}
 					},
-					{
+					"2" : {
 						"_data" : {
 							"_type" : "single",
 							"_from" : "bloginfo",
-							"_value" : "url"
+							"_access" : "url"
 						},
 						"_handlers" : {
-							"_out" : "string",
-							"_escape" : "convert_to_host"
+							"_escape" : "convert_to_host",
+							"_out" : "string"
 						}
 					}
-				]
+				}
 			},
 			"_handlers" : {
 				"_out" : "string",
-				"_escape" : "esc_url_raw"
+				"_escape" : "esc_url_raw",
+				"_condition" : [
+					{
+						"_if" : "this",
+						"_op" : "empty",
+						"_do" : "kill_pack"
+					}
+				]
 			}
 		},
 		"name" : {
@@ -115,13 +122,13 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
 				"_escape" : "sanitize_text_field",
-				"_condition" : [
-					"empty",
-					"clear",
-					"department"
-				]
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				},
+				"_out" : "string"
 			}
 		},
 		"address" : {
@@ -149,13 +156,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					},
 					"addressLocality" : {
@@ -170,13 +177,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					},
 					"addressRegion" : {
@@ -191,13 +198,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					},
 					"postalCode" : {
@@ -212,13 +219,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					},
 					"addressCountry" : {
@@ -233,18 +240,23 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"department"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "string"
 						}
 					}
 				}
 			},
 			"_handlers" : {
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				},
 				"_out" : "object"
 			}
 		},
@@ -273,12 +285,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "float",
-							"_condition" : [
-								"empty",
-								"clear",
-								"this"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "===",
+								"_value" : "",
+								"_do" : "kill_pack"
+							},
+							"_out" : "float"
 						}
 					},
 					"longitude" : {
@@ -293,17 +306,23 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "float",
-							"_condition" : [
-								"empty",
-								"clear",
-								"this"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "===",
+								"_value" : "",
+								"_do" : "kill_pack"
+							},
+							"_out" : "float"
 						}
 					}
 				}
 			},
 			"_handlers" : {
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_this"
+				},
 				"_out" : "object"
 			}
 		},
@@ -318,8 +337,13 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "esc_url_raw"
+				"_escape" : "esc_url_raw",
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_this"
+				},
+				"_out" : "string"
 			}
 		},
 		"telephone" : {
@@ -333,8 +357,13 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "sanitize_text_field"
+				"_escape" : "sanitize_text_field",
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_this"
+				},
+				"_out" : "string"
 			}
 		},
 		"menu" : {
@@ -348,8 +377,13 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "esc_url_raw"
+				"_escape" : "esc_url_raw",
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_this"
+				},
+				"_out" : "string"
 			}
 		},
 		"openingHoursSpecification" : {
@@ -386,13 +420,13 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "array",
 							"_escape" : "sanitize_text_field",
-							"_condition" : [
-								"empty",
-								"clear",
-								"this"
-							]
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
+							"_out" : "array"
 						}
 					},
 					"opens" : {
@@ -409,13 +443,32 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
 							"_condition" : [
-								"empty",
-								"clear",
-								"this"
-							]
+								{
+									"#" : "Open or Closed all day",
+									"_if" : "data",
+									"_access" : [
+										"department",
+										"$nth",
+										"openingHoursSpecification",
+										"openingHours",
+										"$nth",
+										"isOpen"
+									],
+									"_op" : ">",
+									"_value" : 0,
+									"_do" : "set",
+									"_to" : "0:00"
+								},
+								{
+									"_if" : "this",
+									"_op" : "===",
+									"_value" : "",
+									"_do" : "kill_pack"
+								}
+							],
+							"_out" : "string"
 						}
 					},
 					"closes" : {
@@ -432,20 +485,59 @@
 							]
 						},
 						"_handlers" : {
-							"_out" : "string",
 							"_escape" : "sanitize_text_field",
 							"_condition" : [
-								"empty",
-								"clear",
-								"this"
-							]
+								{
+									"#" : "Open all day",
+									"_if" : "data",
+									"_access" : [
+										"department",
+										"$nth",
+										"openingHoursSpecification",
+										"openingHours",
+										"$nth",
+										"isOpen"
+									],
+									"_op" : "==",
+									"_value" : 2,
+									"_do" : "set",
+									"_to" : "23:59"
+								},
+								{
+									"#" : "Closed all day",
+									"_if" : "data",
+									"_access" : [
+										"department",
+										"$nth",
+										"openingHoursSpecification",
+										"openingHours",
+										"$nth",
+										"isOpen"
+									],
+									"_op" : "==",
+									"_value" : 1,
+									"_do" : "set",
+									"_to" : "0:00"
+								},
+								{
+									"_if" : "this",
+									"_op" : "===",
+									"_value" : "",
+									"_do" : "kill_pack"
+								}
+							],
+							"_out" : "string"
 						}
 					}
 				}
 			},
 			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "sanitize_text_field"
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				},
+				"_out" : "array"
 			}
 		},
 		"acceptsReservations" : {
@@ -460,15 +552,17 @@
 				]
 			},
 			"_handlers" : {
-				"_out" : "boolean",
-				"_condition" : [
-					"empty",
-					"skip",
-					"reservations"
-				]
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "===",
+					"_value" : "",
+					"_do" : "kill_this"
+				},
+				"_out" : "boolean"
 			}
 		},
-		"reservations" : {
+		"potentialAction" : {
+			"#" : "This is the reserve action type",
 			"_data" : {
 				"_type" : "object",
 				"_from" : "generator",
@@ -479,7 +573,21 @@
 							"_from" : "default",
 							"_value" : "ReserveAction"
 						},
-						"_handlers" : {}
+						"_handlers" : {
+							"_condition" : {
+								"#" : "If no acceptsReservations is selected, kill early.",
+								"_if" : "data",
+								"_access" : [
+									"department",
+									"$nth",
+									"reservations",
+									"acceptsReservations"
+								],
+								"_op" : "!=",
+								"_value" : 1,
+								"_do" : "kill_pack"
+							}
+						}
 					},
 					"target" : {
 						"_data" : {
@@ -507,13 +615,13 @@
 										]
 									},
 									"_handlers" : {
-										"_out" : "string",
 										"_escape" : "esc_url_raw",
-										"_condition" : [
-											"empty",
-											"clear",
-											"this"
-										]
+										"_condition" : {
+											"_if" : "this",
+											"_op" : "empty",
+											"_do" : "kill_pack"
+										},
+										"_out" : "string"
 									}
 								},
 								"inLanguage" : {
@@ -529,18 +637,38 @@
 										]
 									},
 									"_handlers" : {
-										"_out" : "string",
 										"_escape" : "sanitize_text_field",
-										"_condition" : [
-											"empty",
-											"clear",
-											"this"
+										"_condition" : {
+											"_if" : "this",
+											"_op" : "empty",
+											"_do" : "kill_pack"
+										},
+										"_out" : "string"
+									}
+								},
+								"actionPlatform" : {
+									"#" : "This field is unspecified and undocumented, yet required... Oh Googs",
+									"_data" : {
+										"_type" : "single",
+										"_from" : "default",
+										"_value" : [
+											"http://schema.org/DesktopWebPlatform",
+											"http://schema.org/IOSPlatform",
+											"http://schema.org/AndroidPlatform"
 										]
+									},
+									"_handlers" : {
+										"_out" : "array"
 									}
 								}
 							}
 						},
 						"_handlers" : {
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
 							"_out" : "object"
 						}
 					},
@@ -561,13 +689,13 @@
 										]
 									},
 									"_handlers" : {
-										"_out" : "string",
 										"_escape" : "sanitize_text_field",
-										"_condition" : [
-											"empty",
-											"clear",
-											"this"
-										]
+										"_condition" : {
+											"_if" : "this",
+											"_op" : "empty",
+											"_do" : "kill_pack"
+										},
+										"_out" : "string"
 									}
 								},
 								"name" : {
@@ -582,24 +710,34 @@
 										]
 									},
 									"_handlers" : {
-										"_out" : "string",
 										"_escape" : "sanitize_text_field",
-										"_condition" : [
-											"empty",
-											"clear",
-											"this"
-										]
+										"_condition" : {
+											"_if" : "this",
+											"_op" : "empty",
+											"_do" : "kill_pack"
+										},
+										"_out" : "string"
 									}
 								}
 							}
 						},
 						"_handlers" : {
+							"_condition" : {
+								"_if" : "this",
+								"_op" : "empty",
+								"_do" : "kill_pack"
+							},
 							"_out" : "object"
 						}
 					}
 				}
 			},
 			"_handlers" : {
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "this_this"
+				},
 				"_out" : "object"
 			}
 		}

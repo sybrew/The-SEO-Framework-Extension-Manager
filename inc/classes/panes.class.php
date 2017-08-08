@@ -176,9 +176,8 @@ class Panes extends API {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		if ( $ajax ) {
+		if ( $ajax )
 			return \TSF_Extension_Manager\Trends::get( 'ajax_feed', $_instance, $bits );
-		}
 
 		return \TSF_Extension_Manager\Trends::get( 'feed', $_instance, $bits );
 	}

@@ -55,6 +55,16 @@ window[ 'tsfem_e_local' ] = {
 	 */
 	i18n : tsfem_e_localL10n.i18n,
 
+	/**
+	 * Saves form input through AJAX.
+	 *
+	 * @since 1.3.0
+	 * @access private
+	 *
+	 * @function
+	 * @param {jQuery.event} event jQuery event
+	 * @return {boolean} False if form isn't valid. True on AJAX completion.
+	 */
 	validateFormJson: function( event ) {
 
 		let formId = event.target.getAttribute( 'form' ),
@@ -74,18 +84,24 @@ window[ 'tsfem_e_local' ] = {
 			return false;
 		}
 
-		//let buttonClassName = 'tsfem-button-disabled tsfem-button-loading'; // ES6
 		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
 			status = 0, loaderText = '';
 
-		//* Disable the submit button.
+		//= Disable the submit button.
 		tsfemForm.disableButton( button );
 
-		//* Reset ajax loader
+		//= Reset ajax loader
 		tsfem.resetAjaxLoader( $loader );
 
-		//* Set ajax loader.
+		//= Set ajax loader.
 		tsfem.setAjaxLoader( $loader );
+
+		//= Capture current window.
+		let _currentWindow = window;
+
+		//= Assign a new window and open it. Regardless of outcome to circumvent popup blockers.
+		let _windowTarget = '_tsfemMarkupTester',
+			_window = window.open( 'about:blank', _windowTarget );
 
 		// Do ajax...
 		jQuery.ajax( {
@@ -119,30 +135,38 @@ window[ 'tsfem_e_local' ] = {
 				if ( rCode ) {
 					if ( ! success ) {
 						tsfem.setTopNotice( rCode );
+						_window.close();
+						_currentWindow.focus();
 					} else {
 						let tdata = data.tdata || void 0;
 
 						status = 1;
+						loaderText = tsfem_e_local.i18n['testNewWindow'];
 
 						if ( tdata ) {
 							let $form = jQuery( '<form>', {
 								action: 'https://search.google.com/structured-data/testing-tool',
 								method: 'post',
-								target: '_blank'
+								target: _windowTarget
 							} );
 
-							jQuery( '<input>' ).attr( 'type', 'submit' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
+							//jQuery( '<input>' ).attr( 'type', 'submit' ).css( 'display', 'none' ).appendTo( $form );
 							jQuery( '<textarea>' ).attr( 'name', 'code' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
 							$form.appendTo( 'body' ).submit();
 							$form.remove();
+							_windowTarget.focus();
 						}
 					}
 				} else {
 					//* Erroneous output.
 					loaderText = tsfem.i18n['UnknownError'];
+					_window.close();
+					_currentWindow.focus();
 				}
 			}
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+			_window.close();
+			_currentWindow.focus();
 			// Set Ajax response for wrapper.
 			loaderText = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 

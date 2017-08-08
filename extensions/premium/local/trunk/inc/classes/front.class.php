@@ -57,8 +57,9 @@ final class Front extends Core {
 
 	protected function get_processed_packed_data_from_url( $url ) {
 
-		$data = $this->get_processed_packed_data();
 		$url = $this->remove_scheme( $url );
+		$data = $this->get_processed_packed_data();
+		var_dump( $data );
 
 		if ( isset( $data[ $url ] ) )
 			return $data[ $url ];
@@ -177,6 +178,8 @@ final class Front extends Core {
 		//= If no data is found, and when we're on the front page, try for Main department (id=1).
 		// if ( ! $json && \is_front_page() )
 			// $json = $this->get_processed_packed_data_from_id( 1 );
+
+		var_dump( $json );
 
 		if ( $json )
 			return '<script type="application/ld+json">' . $json . '</script>' . PHP_EOL;

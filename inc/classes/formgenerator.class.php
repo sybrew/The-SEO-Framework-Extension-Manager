@@ -1286,7 +1286,6 @@ final class FormGenerator {
 	private function create_input_field_by_type( array $args ) {
 
 		switch ( $args['_type'] ) :
-
 			case 'date' :
 			case 'number' :
 			case 'range' :
@@ -1336,6 +1335,7 @@ final class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_range = isset( $s_range ) ? $s_range : '';
 		$s_pattern = isset( $s_pattern ) ? $s_pattern : '';
+		$s_required = $args['_req'] ? 'required' : '';
 
 		return vsprintf(
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
@@ -1361,7 +1361,7 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<input type=%s id="%s" name=%s value="%s" %s %s %s %s>',
+						'<input type=%s id="%s" name=%s value="%s" %s %s %s %s %s>',
 						[
 							$s_type,
 							$s_id,
@@ -1369,6 +1369,7 @@ final class FormGenerator {
 							\esc_attr( $this->get_field_value( $args['_default'] ) ),
 							$s_range,
 							$s_pattern,
+							$s_required,
 							$s_ph,
 							$this->get_fields_data( $args['_data'] ),
 						]
@@ -1394,6 +1395,7 @@ final class FormGenerator {
 		$s_name = $s_id = $this->get_field_id();
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_required = $args['_req'] ? 'required' : '';
 
 		$multiple = 'selectmulti' === $args['_type'];
 
@@ -1421,10 +1423,11 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<select id="%s" name=%s %s %s>%s</select>',
+						'<select id="%s" name=%s %s %s %s>%s</select>',
 						[
 							$s_id,
 							$s_name,
+							$s_required,
 							( $multiple ? 'multiple' : '' ),
 							$this->get_fields_data( $args['_data'] ),
 							$this->get_select_options( $args['_select'], $this->get_field_value( $args['_default'] ), $multiple ),
@@ -1562,8 +1565,9 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-multi-select-wrap" id="%s" %s>%s</div>',
+						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s>%s</div>',
 						[
+							isset( $args['_display'] ) && 'row' === $args['_display'] ? 'tsfem-form-multi-select-wrap-row' : '',
 							$this->get_field_id(),
 							$this->get_fields_data( $args['_data'] ),
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),

@@ -77,6 +77,9 @@ trait Schema_Packer {
 
 		$schema = $this->get_schema();
 
+		if ( ! is_object( $schema ) )
+			return '';
+
 		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
 
 		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
@@ -87,7 +90,7 @@ trait Schema_Packer {
 
 			//= Get root/main department first.
 			$packer->_iterate_base();
-			$_collection = (object) $packer->_pack();
+			$_collection = $packer->_pack();
 
 			if ( $count > 1 ) {
 				//= Get sub departments.
@@ -98,20 +101,27 @@ trait Schema_Packer {
 					if ( $url ) {
 						/**
 						 * Gets sub-department data, and store it inclusively.
-						 * Inclusively for homepage for $_collection.
+						 * i.e. Inclusively for homepage for $_collection.
 						 */
-						$_collection->department[] = (object) $packer->_pack();
+						$_data = $packer->_pack();
+	 					if ( isset( $_data ) ) {
+	 						$_collection->department[] = $_data;
+	 					}
 					}
 				}
-				if ( empty( $collection->department ) )
-					unset( $collection->department );
+				if ( [] === $_collection->department )
+					unset( $_collection->department );
 			}
 		}
+
+		$_data = $packer->_get();
+		if ( ! $_data )
+			return null;
 
 		$options = JSON_UNESCAPED_SLASHES;
 		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
 
-		return json_encode( $packer->_get(), $options );
+		return json_encode( $_data, $options );
 	}
 
 	/**
@@ -145,38 +155,47 @@ trait Schema_Packer {
 
 			//= Get root/main department first.
 			$packer->_iterate_base();
-			$_collection = (object) $packer->_pack();
+			$_collection = $packer->_pack();
 			/**
 			 * Store root department for URL.
 			 * Note, if it's the home URL, it will be overwritten out of this loop.
 			 */
 			$_data = $_collection;
-			$this->store_packed_data( $main_url, $_data );
+			$this->store_packed_data( $main_url, json_encode( $_data, $json_options ) );
 
 			if ( $count > 1 ) {
 				//= Get sub departments.
 				$_collection->department = [];
 				for ( $i = 2; $i <= $count; $i++ ) {
 					$packer->_iterate_base();
-					$url = isset( $data['department'][ $i ]['url'] ) ? $data['department'][ $i ]['url'] : $i;
-					if ( $url ) {
-						/**
-						 * Gets sub-department data, and store it separately and inclusively.
-						 * Separately in database through store_packed_data().
-						 * Inclusively for homepage in $_collection.
-						 */
-						$_data = (object) $packer->_pack();
-						$this->store_packed_data( $url, json_encode( $_data, $json_options ) );
+
+					/**
+					 * Generates ID out of URL if set, so it can be extracted at
+					 * run-time to test matched URLs.
+					 *
+					 * Alternatively, it creates it from the iteration.
+					 */
+					$id = isset( $data['department'][ $i ]['url'] ) ? $data['department'][ $i ]['url'] : $i;
+
+					/**
+					 * Gets sub-department data, and store it separately and inclusively.
+					 * Separately in database through store_packed_data().
+					 * Inclusively for homepage in $_collection.
+					 */
+					$_data = $packer->_pack();
+					if ( isset( $_data ) ) {
+						$this->store_packed_data( $id, json_encode( $_data, $json_options ) );
 						$_collection->department[] = $_data;
 					}
 				}
-				if ( empty( $collection->department ) )
-					unset( $collection->department );
+				if ( [] === $_collection->department )
+					unset( $_collection->department );
 			}
 		}
 
 		$_data = $packer->_get();
-		$this->store_packed_data( \get_home_url(), json_encode( $_data, $json_options ) );
+		if ( $_data )
+			$this->store_packed_data( \get_home_url(), json_encode( $_data, $json_options ) );
 
 		$this->save_packed_data();
 	}
@@ -198,6 +217,7 @@ trait Schema_Packer {
 	 *
 	 * @since 1.0.0
 	 * @see $this->store_packed_data();
+	 * @staticvar array $_d The stored data.
 	 *
 	 * @return bool|void : {
 	 *   Saving:  True on success, false on failure.
@@ -206,7 +226,7 @@ trait Schema_Packer {
 	 */
 	protected function store_packed_data( $url, $data, $save = false ) {
 
-		static $_d;
+		static $_d = [];
 
 		if ( $save )
 			return $this->update_option( 'packed_data', $_d );

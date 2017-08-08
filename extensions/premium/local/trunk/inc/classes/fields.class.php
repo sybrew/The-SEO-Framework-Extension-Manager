@@ -258,8 +258,12 @@ final class Fields {
 				'_type' => 'url',
 				'_desc' => [
 					\__( 'Department URL', '' ),
-					\__( 'The fully-qualified URL of the specific department location.', '' ),
-					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described on there.', '' ),
+					[
+						\__( 'The fully-qualified URL of this department.', '' ),
+						\__( 'If this URL matches a page on this website, then this department data will be outputted there.', '' ),
+						\__( 'Leave empty if no assigned page exists.', '' ),
+					],
+					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described accurately on there.', '' ),
 				],
 			],
 			'address' => [
@@ -300,7 +304,8 @@ final class Fields {
 				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Department opening hours', '' ),
-					\__( 'Hours during which the business location is open.' ),
+					\__( 'Specify the hours during which the business location is open.' ),
+					\__( 'Be sure to specify all days of the week.' ),
 				],
 				'_fields' => $this->get_opening_hours_fields(),
 			],
@@ -311,7 +316,7 @@ final class Fields {
 				],
 				'_edit' => true,
 				'_ret' => 'image',
-				'_req' => false, // Must be true if RESTAURANT.
+				'_req' => true, // Must be true if RESTAURANT.
 				'_type' => 'image',
 				'_desc' => [
 					\__( 'Image URL', '' ),
@@ -323,7 +328,7 @@ final class Fields {
 				'_default' => [],
 				'_edit' => true,
 				'_ret' => 's||array',
-				'_req' => false, // Must be true if RESTAURANT.
+				'_req' => true, // Must be true if RESTAURANT.
 				'_type' => 'selectmultia11y',
 				'_desc' => [
 					\__( 'Cuisine', '' ),
@@ -385,7 +390,7 @@ final class Fields {
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 's',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
 					\__( 'Street address', '' ),
@@ -2486,8 +2491,9 @@ final class Fields {
 				'_default' => [],
 				'_edit' => true,
 				'_ret' => 'array',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'selectmultia11y',
+				'_display' => 'row',
 				'_desc' => [
 					\__( 'Applied days', '' ),
 					\__( 'Select the days from and to which the opening and closing hours specify to.', '' ),
@@ -2523,7 +2529,7 @@ final class Fields {
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 'time',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'time',
 				'_desc' => [
 					\__( 'Opening time', '' ),
@@ -2538,7 +2544,7 @@ final class Fields {
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 'time',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'time',
 				'_desc' => [
 					\__( 'Closing time', '' ),
@@ -2595,8 +2601,10 @@ final class Fields {
 				'_type' => 'select',
 				'_desc' => [
 					\__( 'Accept reservations', '' ),
-					\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', '' ),
-					\__( 'Leave unspecified if the deparment doesn\'t accept reservations while also unlikely to accept reservations, like a Shopping Center.', '' ),
+					[
+						\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', '' ),
+						\__( 'The reservation action must be completed through the website, not through a phonecall.', '' ),
+					],
 				],
 				'_select' => $this->get_reservation_accept_items(),
 			],
@@ -2610,11 +2618,11 @@ final class Fields {
 				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
 			],
 			[
-				0,
+				1,
 				\__( 'Accept reservations', '' ),
 			],
 			[
-				1,
+				0,
 				\__( 'Don\'t accept reservations', '' ),
 			],
 		];
@@ -2630,7 +2638,7 @@ final class Fields {
 				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Target specifications', '' ),
-					\__( 'Only specify these fields if the visitor can complete this reservation action through the website, not through a phonecall.', '' ),
+					\__( 'Specify where the user can complete a reservation.', '' ),
 				],
 				'_fields' => $this->get_reservation_target_fields(),
 			],
@@ -2663,7 +2671,7 @@ final class Fields {
 				'_type' => 'text', // TODO convert to select (or datalist) with language items.
 				'_desc' => [
 					\__( 'Form language', '' ),
-					\__( 'Specify the main language of the form code.', '' ),
+					\__( 'Specify the main language code of the form.', '' ),
 				],
 				//* This pattern is confusing for the user.
 				// '_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
