@@ -434,6 +434,9 @@ trait UI {
 				'i18n' => [
 					//* TODO categorize + maybe put correctly into externs.
 
+					// Validation.
+					'requiredSelectAny' => \esc_html__( 'Please select any of the fields to proceed.', 'the-seo-framework-extension-manager' ),
+
 					// General.
 					'proceed' => \esc_html__( 'Proceed', 'the-seo-framework-extension-manager' ),
 					'select' => \esc_html__( 'Select', 'the-seo-framework-extension-manager' ),

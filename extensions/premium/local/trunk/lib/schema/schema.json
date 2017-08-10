@@ -10,7 +10,13 @@
 				"_from" : "default",
 				"_value" : "http://schema.org"
 			},
-			"_handlers" : {}
+			"_handlers" : {
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				}
+			}
 		},
 		"@type" : {
 			"_data" : {
@@ -736,7 +742,7 @@
 				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
-					"_do" : "this_this"
+					"_do" : "kill_this"
 				},
 				"_out" : "object"
 			}

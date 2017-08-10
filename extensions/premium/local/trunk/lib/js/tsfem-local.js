@@ -154,7 +154,7 @@ window[ 'tsfem_e_local' ] = {
 							jQuery( '<textarea>' ).attr( 'name', 'code' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
 							$form.appendTo( 'body' ).submit();
 							$form.remove();
-							_windowTarget.focus();
+							_window.focus();
 						}
 					}
 				} else {

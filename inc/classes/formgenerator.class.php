@@ -1126,7 +1126,16 @@ final class FormGenerator {
 
 			$_title = $_dyn_title ? $args['title'] . ' - ' . $_dyn_title : $args['title'];
 
-			$title = sprintf( '<h3 class="tsfem-form-collapse-title">%s</h3>', \esc_html( $_title ) );
+			$title = vsprintf(
+				'<h3 class="tsfem-form-collapse-title-wrap">%s%s</h3>',
+				[
+					'<span class="tsfem-form-title-icon tsfem-form-title-icon-unknown">',
+					sprintf(
+						'<span class="tsfem-form-collapse-title">%s</span>',
+						\esc_html( $_title )
+					),
+				]
+			);
 			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"></span>';
 
 			$header = vsprintf(
@@ -1142,7 +1151,7 @@ final class FormGenerator {
 			$content_start = '<div class="tsfem-form-collapse-content">';
 
 			return sprintf( '<div class="tsfem-form-collapse" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
-			;
+			; // Added to prevent breaking alternative if/elseif control.
 		elseif ( 'end' === $what ) :
 			//* ok.
 			return '</div></div>';
@@ -1543,6 +1552,8 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
+		$_data_required = isset( $args['_req'] ) ? 'data-required=1' : '';
+
 		return vsprintf(
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
@@ -1565,11 +1576,12 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s>%s</div>',
+						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s %s>%s</div>',
 						[
 							isset( $args['_display'] ) && 'row' === $args['_display'] ? 'tsfem-form-multi-select-wrap-row' : '',
 							$this->get_field_id(),
 							$this->get_fields_data( $args['_data'] ),
+							$_data_required,
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]
 					)
@@ -1690,6 +1702,7 @@ final class FormGenerator {
 				$args['_default']['id']
 			)
 		);
+		$s_required = isset( $args['_req'] ) ? 'required' : '';
 
 		$s_url_readonly = $s_remove_button = '';
 
@@ -1734,11 +1747,12 @@ final class FormGenerator {
 					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-hide-if-no-js">%s%s</div></div>',
 					[
 						vsprintf(
-							'<input type=url id="%s" name=%s value="%s" %s%s%s>',
+							'<input type=url id="%s" name=%s value="%s" %s %s%s%s>',
 							[
 								$s_url_id,
 								$s_url_name,
 								$s_url_value,
+								$s_required,
 								$s_url_ph,
 								$s_url_readonly,
 								$this->get_fields_data( $args['_data'] ),

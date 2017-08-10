@@ -56,12 +56,15 @@
 	transition: filter .33s;
 }
 
-.tsfem-form-collapse-header h3 {
+.tsfem-form-collapse-header {
 	color: #23282d;
 }
 
-.tsfem-form-collapse-header-error,
-.tsfem-form-collapse-header-error h3 {
+.tsfem-form-collapse-header-good .tsfem-form-collapse-icon {
+	color: #0cc34b;
+}
+
+.tsfem-form-collapse-header-error .tsfem-form-collapse-icon {
 	color: #dd3811;
 }
 
@@ -81,12 +84,54 @@
 	filter: brightness(0.925);
 }
 
-.tsfem-form-collapse-title {
+.tsfem-form-collapse-title-wrap {
 	line-height: 1.15em;
 	font-size: 1.15em;
+	vertical-align: middle;
 	padding: 14px 0;
 	margin: 0 2.3em 0 14px;
-	vertical-align: middle;
+}
+
+.tsfem-form-title-icon:before {
+	display: inline-block;
+	width: 19px;
+	line-height: inherit;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: inherit;
+	vertical-align: top;
+	content: "";
+	margin-right: 2px;
+}
+
+.tsfem-form-title-icon-okay:before,
+.tsfem-form-title-icon-good:before {
+	color: #0cc34b;
+	font-size: 1.1em;
+	content: "\f147";
+	margin-left: -2px;
+	margin-right: 4px;
+}
+.tsfem-form-title-icon-okay:before,
+.tsfem-form-title-icon-warning:before {
+	color: #ffa01b;
+}
+.tsfem-form-title-icon-warning:before {
+	content: "\f227";
+}
+
+.tsfem-form-title-icon-error:before,
+.tsfem-form-title-icon-bad:before {
+	color: #dd3811;
+	content: "\f227";
+}
+.tsfem-form-title-icon-error:before {
+	content: "\f153";
+}
+
+.tsfem-form-title-icon-unknown:before {
+	content: "\f223";
 }
 
 .tsfem-form-collapse-icon {
@@ -313,6 +358,7 @@ h4.tsfem-form-multi-title {
 	box-shadow: 0 0 0 1px #e9e9e9;
 	overflow: hidden;
 	overflow-y: auto;
+	position: relative; /* For traps */
 }
 
 .tsfem-form-multi-select-wrap-row ul {
@@ -357,7 +403,24 @@ h4.tsfem-form-multi-title {
 	background: #d14b44;
 }
 
-/* Validator */
+/**------------------------------------
+ * # VALIDATORS
+ * ------------------------------------ */
+
+/* So important when SCRIPT_DEBUG... */
+.tsfem-form-checkbox-required {
+	height: 100% !important;
+	width: 0 !important;
+	min-width: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	pointer-events: none;
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	left: 0;
+}
+
 /* TODO?
 input[type=checkbox]
 input[type=radio]
@@ -376,7 +439,8 @@ input[type=radio]
 .tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid,
 .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid,
 .tsfem-form-validate .tsfem-form-setting-input select:invalid,
-.tsfem-form-validate .tsfem-form-setting-input textarea:invalid {
+.tsfem-form-validate .tsfem-form-setting-input textarea:invalid,
+.tsfem-form-validate .tsfem-form-multi-invalid {
 	border-left: 3px solid #d14b44;
 }
 
@@ -394,7 +458,8 @@ input[type=radio]
 .tsfem-form-validate .tsfem-form-setting-input input[type=color]:valid,
 .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:valid,
 .tsfem-form-validate .tsfem-form-setting-input select:valid,
-.tsfem-form-validate .tsfem-form-setting-input textarea:valid {
+.tsfem-form-validate .tsfem-form-setting-input textarea:valid,
+.tsfem-form-validate .tsfem-form-multi-valid {
 	border-left: 3px solid #008964;
 }
 
