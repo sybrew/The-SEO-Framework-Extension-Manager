@@ -383,9 +383,9 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 * @return array : {
-	 * 		'hash'    => string The generated hash,
-	 * 		'type'    => string The hash type used,
-	 * 		'matches' => array The pre-calculated hash matches.
+	 *    'hash'    => string The generated hash,
+	 *    'type'    => string The hash type used,
+	 *    'matches' => array The pre-calculated hash matches.
 	 * }
 	 */
 	private static function get_extensions_checksum() {
@@ -415,8 +415,8 @@ trait Extensions_Actions {
 	 * @param string $instance The verification instance.
 	 * @param array $bits The verification bits.
 	 * @return array : {
-	 * 		'hash' => string The generated hash,
-	 * 		'type' => string The hash type used,
+	 *    'hash' => string The generated hash,
+	 *    'type' => string The hash type used,
 	 * }
 	 */
 	private static function get_extension_checksum() {
@@ -447,7 +447,7 @@ trait Extensions_Actions {
 	 *
 	 * @param array $placeholder Unused.
 	 * @return array : {
-	 * 		string The extension slug => bool True if active
+	 *    string The extension slug => bool True if active
 	 * }
 	 */
 	private static function get_active_extensions( $placeholder = [] ) {
@@ -476,8 +476,8 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @return array : {
-	 *		'success' => bool Whether the activation can proceed.
-	 *		'case'    => int The status key.
+	 *    'success' => bool Whether the activation can proceed.
+	 *    'case'    => int The status key.
 	 * }
 	 */
 	public static function validate_extension_activation() {
@@ -567,13 +567,14 @@ trait Extensions_Actions {
 	 *
 	 * @param array|string $extension The extension to check.
 	 * @return int Compatibility : {
-	 *		0 is compatible.
-	 *		1, 2 and 3 is okay but might require update of either WP or TSF. {
-	 *			1 : TSF version is greater than tested against.
-	 * 			2 : TSF is compatible. WP Version is greater than tested against.
-	 * 			3 : TSF and WP versions are both greater than tested against.
-	 * 		}
-	 *		-1 is not compatible.
+	 *    0 is compatible.
+	 *    1, 2 and 3 is okay but might require update of either WP or TSF. {
+	 *        1 : TSF version is greater than tested against.
+	 *        2 : TSF is compatible. WP Version is greater than tested against.
+	 *        3 : TSF and WP versions are both greater than tested against.
+	 *     }
+	 *     -1 is not compatible.
+	 * }
 	 */
 	private static function is_extension_compatible( $extension ) {
 
@@ -626,15 +627,15 @@ trait Extensions_Actions {
 	 * @param array|string $extension The extension to check.
 	 * @param bool $get_bits Whether to get bits or int.
 	 * @return int|string Either 4 bits or an integer that determine compatibility : {
-	 *		0  | '0000' = good => Completely compatible.
-	 *		1  | '0001' = okay => TSF version is greater than tested against.
-	 *		3  | '0011' = bad  => TSF is not compatible.
-	 *		4  | '0100' = okay => TSF is compatible. WP Version is greater than tested against.
-	 *		5  | '0101' = okay => TSF and WP versions are both greater than tested against.
-	 *		7  | '0111' = bad  => TSF is not compatible. WP version is greater than tested against.
-	 *		12 | '1100' = bad  => WP is not compatible.
-	 *		13 | '1101' = bad  => WP is not compatible. TSF version is greater than testest against.
-	 *		15 | '1111' = bad  => Not compatible.
+	 *    0  | '0000' = good => Completely compatible.
+	 *    1  | '0001' = okay => TSF version is greater than tested against.
+	 *    3  | '0011' = bad  => TSF is not compatible.
+	 *    4  | '0100' = okay => TSF is compatible. WP Version is greater than tested against.
+	 *    5  | '0101' = okay => TSF and WP versions are both greater than tested against.
+	 *    7  | '0111' = bad  => TSF is not compatible. WP version is greater than tested against.
+	 *    12 | '1100' = bad  => WP is not compatible.
+	 *    13 | '1101' = bad  => WP is not compatible. TSF version is greater than testest against.
+	 *    15 | '1111' = bad  => Not compatible.
 	 * }
 	 */
 	private static function determine_extension_compatibility( $extension, $get_bits = false ) {
@@ -668,8 +669,8 @@ trait Extensions_Actions {
 	 *
 	 * @param array|string $extension The extension to check.
 	 * @return array Whether the extension is compatible. : {
-	 *		'tsf' => int (0-2),
-	 *		'wp' => int Compatibility (0-2),
+	 *    'tsf' => int (0-2),
+	 *    'wp' => int Compatibility (0-2),
 	 * }
 	 */
 	private static function get_extension_compatibility( $extension ) {
@@ -998,7 +999,6 @@ trait Extensions_Actions {
 			];
 
 			/**
-			 * @TODO make notice copy-able by clicking.
 			 * @TODO set slug.
 			 */
 			$response = WP_DEBUG ? [ 'status' => $status, 'slug' => '', 'case' => 'activate' ] : [ 'status' => $status ];
