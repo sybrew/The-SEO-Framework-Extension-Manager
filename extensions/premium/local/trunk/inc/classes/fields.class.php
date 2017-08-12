@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Local\Traits
+ * @package TSF_Extension_Manager\Extension\Local\Fields
  */
 namespace TSF_Extension_Manager\Extension\Local;
 
@@ -23,19 +23,16 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// TODO @see https://angular.io/docs/ts/latest/cookbook/form-validation.html
-// TODO @see https://developers.google.com/maps/documentation/geocoding/intro (note STATUS result.. we require an API key bound to an account)
-
 /**
  * Holds fields template for package TSF_Extension_Manager\Extension\Local.
  *
- * @NOTE Documentation is incomplete.
- * Methods `set_instance()` and `get_instance()` are available.
+ * Methods `set_instance()` and `get_instance()` are available through trait
+ * `\TSF_Extension_Manager\Construct_Core_Static_Final_Instance`.
  *
  * @since 1.0.0
  * @access private
- * @uses trait TSF_Extension_Manager\Enclose_Core_Final
- * @uses trait TSF_Extension_Manager\Construct_Core_Static_Final_Instance
+ * @uses trait \TSF_Extension_Manager\Enclose_Core_Final
+ * @uses trait \TSF_Extension_Manager\Construct_Core_Static_Final_Instance
  * @see TSF_Extension_Manager\Traits\Overload
  * @final Can't be extended.
  */
@@ -46,9 +43,9 @@ final class Fields {
 	/**
 	 * Returns all department fields for form iteration.
 	 *
-	 * @link https://developers.google.com/search/docs/data-types/local-businesses
-	 *
+	 * @TODO clean up the documentation. This was setup prior to creating the generator class.
 	 * @since 1.0.0
+	 * @link https://developers.google.com/search/docs/data-types/local-businesses
 	 *
 	 * @return array : {
 	 *    string Option name => array Option attributes : {
@@ -112,55 +109,10 @@ final class Fields {
 	}
 
 	/**
-	 * Returns iteratable opening hour fields.
+	 * Returns iteratable department fields.
 	 *
+	 * @TODO clean up documentation return value. It was set-up prior to the generation class.
 	 * @since 1.0.0
-	 * @static
-	 *
-	 * @return array
-	 */
-	public function get_opening_hours_fields() {
-		return [
-			'openingHours' => [
-				'_default' => null,
-				'_edit' => true,
-				'_ret' => '',
-				'_req' => false,
-				'_type' => 'iterate',
-				'_desc' => [],
-				'_iterate_selector' => [
-					'count' => [
-						'_default' => 1, // TODO set to 0
-						'_edit' => true,
-						'_ret' => '',
-						'_req' => false,
-						'_type' => 'number',
-						'_desc' => [
-							\__( 'Number of opening hours', '' ),
-							\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
-							\__( 'Set to 0 or leave empty if unspecified.', '' ),
-						],
-						'_range' => [
-							0,
-							7,
-							1,
-						],
-					],
-				],
-				'_iterator_title' => [
-					/* translators: %d is opening hours iteration number */
-					\__( 'Opening Hours %d', '' ),
-				],
-				'_iterator_title_dynamic' => [
-					'plural' => 'dayOfWeek',
-				],
-				'_fields' => $this->get_opening_hours_action_fields(),
-			],
-		];
-	}
-
-	/**
-	 *
 	 * @link https://developers.google.com/search/docs/data-types/local-businesses
 	 *
 	 * @return array : {
@@ -206,7 +158,7 @@ final class Fields {
 	 */
 	private function get_global_department_fields() {
 		return [
-			'type' => [
+			'@type' => [
 				'_default' => null,
 				'_edit' => true,
 				'_ret' => 's',
@@ -222,9 +174,27 @@ final class Fields {
 						'%s<br>%s',
 						[
 							\__( 'Select "Local Business" if the department type is not listed.', '' ),
-							\__( 'Select "Not Specified" to disable this department.', '' ),
+							\__( 'Select "Disabled" to disable this department.', '' ),
 						]
 					),
+				],
+				'_data' => [
+					'is-type-listener' => '1',
+					'set-type-to-if-value' => [
+						'FoodEstablishment' => [
+							'FoodEstablishment',
+							'Bakery',
+							'BarOrPub',
+							'Brewery',
+							'CafeOrCoffeeShop',
+							'FastFoodRestaurant',
+							'IceCreamShop',
+							'Restaurant',
+							'Winery',
+							'Distillery',
+						],
+					],
+					'showif-catcher' => 'department.type',
 				],
 				'_select' => $this->get_department_items(),
 			],
@@ -323,21 +293,25 @@ final class Fields {
 					\__( 'An image of the department or building.', '' ),
 				],
 			],
-			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'servesCuisine' => [
 				'_default' => [],
 				'_edit' => true,
 				'_ret' => 's||array',
-				'_req' => true, // Must be true if RESTAURANT.
+				'_req' => true,
 				'_type' => 'selectmultia11y',
 				'_desc' => [
 					\__( 'Cuisine', '' ),
 					\__( 'Provide the type of cuisine the department serves.', '' ),
 					\__( 'This is mandatory for food establishments.', '' ),
 				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.type' => 'FoodEstablishment',
+					],
+				],
 				'_select' => $this->get_cuisine_items(),
 			],
-			// THESE ARE FOOD ESTABLISHMENT SPECIFIC... TODO split?
 			'menu' => [
 				'_default' => '',
 				'_edit' => true,
@@ -348,6 +322,12 @@ final class Fields {
 					\__( 'Menu URL', '' ),
 					\__( 'Department menu URL, if any.', '' ),
 					\__( 'This is mandatory for food establishments.', '' ),
+				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.type' => 'FoodEstablishment',
+					],
 				],
 			],
 			'reservations' => [
@@ -360,6 +340,17 @@ final class Fields {
 					\__( 'Reservations', '' ),
 					\__( 'Department customers\' reservation specification.', '' ),
 					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', '' ),
+				],
+				/**
+				 * TODO this is incorrect. Only the acceptsReservations should be for FoodEstablishment.
+				 * However, this data type is still being prepared by Google. So, we're limiting it
+				 * until we know more.
+				 */
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.type' => 'FoodEstablishment',
+					],
 				],
 				'_fields' => $this->get_reservation_fields(),
 			],
@@ -384,6 +375,13 @@ final class Fields {
 		];
 	}
 
+	/**
+	 * Returns the address components sub-fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_address_fields() {
 		return [
 			'streetAddress' => [
@@ -464,6 +462,13 @@ final class Fields {
 		];
 	}
 
+	/**
+	 * Returns the geo coordinates sub-fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_geo_fields() {
 		return [
 			'latitude' => [
@@ -512,8 +517,59 @@ final class Fields {
 	}
 
 	/**
-	 * Use Generator Class + Iterator for dropdown parsing?
-	 * http://php.net/manual/en/class.generator.php
+	 * Returns iteratable opening hour fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function get_opening_hours_fields() {
+		return [
+			'openingHours' => [
+				'_default' => null,
+				'_edit' => true,
+				'_ret' => '',
+				'_req' => false,
+				'_type' => 'iterate',
+				'_desc' => [],
+				'_iterate_selector' => [
+					'count' => [
+						'_default' => 0,
+						'_edit' => true,
+						'_ret' => '',
+						'_req' => false,
+						'_type' => 'number',
+						'_desc' => [
+							\__( 'Number of opening hours', '' ),
+							\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
+							\__( 'Set to 0 or leave empty if unspecified.', '' ),
+						],
+						'_range' => [
+							0,
+							7,
+							1,
+						],
+					],
+				],
+				'_iterator_title' => [
+					/* translators: %d is opening hours iteration number */
+					\__( 'Opening Hours %d', '' ),
+				],
+				'_iterator_title_dynamic' => [
+					'plural' => 'dayOfWeek',
+				],
+				'_fields' => $this->get_opening_hours_action_fields(),
+			],
+		];
+	}
+
+	/**
+	 * Returns the ISO 3166-1-Alpha-2 country list items.
+	 *
+	 * @since 1.0.0
+	 * @see https://en.wikipedia.org/wiki/ISO_3166-1
+	 *
+	 * @return array
 	 */
 	private function get_country_items() {
 		return [
@@ -1521,9 +1577,10 @@ final class Fields {
 	}
 
 	/**
+	 * Returns the department types select deep-list.
 	 *
-	 *
-	 * @see https://jsfiddle.net/xgk8osdc/4/ for EZ i18n generator.
+	 * @since 1.0.0
+	 * @see https://jsfiddle.net/xgk8osdc/4/ for EZ copy-paste i18n generator.
 	 *
 	 * @return array : {
 	 *   0 : mixed  Option return value,
@@ -1538,7 +1595,7 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Disabled', '' ) . ' &mdash;',
 				null, // No subtypes, doh.
 			],
 			[
@@ -2169,7 +2226,12 @@ final class Fields {
 	}
 
 	/**
+	 * Returns the cuisine types a11y select list.
+	 *
+	 * @since 1.0.0
 	 * @see https://en.wikipedia.org/wiki/List_of_cuisines
+	 *
+	 * @return array
 	 */
 	private function get_cuisine_items() {
 		return [
@@ -2485,6 +2547,13 @@ final class Fields {
 		];
 	}
 
+	/**
+	 * Returns the opening hours multi-fields list.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_opening_hours_action_fields() {
 		return [
 			'dayOfWeek' => [
@@ -2510,18 +2579,27 @@ final class Fields {
 					\__( 'State of department', '' ),
 					\__( 'Set whether the department is open or closed on the applied days.', '' ),
 				],
+				'_data' => [
+					'is-type-listener' => '1',
+					'set-type-to-if-value' => [
+						'open' => '0',
+						'open24' => '1',
+						'closed' => '2',
+					],
+					'showif-catcher' => 'department.openinghours.type',
+				],
 				'_select' => [
 					[
-						0,
+						'0',
 						\__( 'Open', '' ),
 					],
 					[
-						1,
-						\__( 'Closed', '' ),
+						'1',
+						\__( 'Open 24 hours', '' ),
 					],
 					[
-						2,
-						\__( 'Open 24 hours', '' ),
+						'2',
+						\__( 'Closed', '' ),
 					],
 				],
 			],
@@ -2539,6 +2617,12 @@ final class Fields {
 					],
 					\__( 'Specify the local time.', '' ),
 				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.openinghours.type' => 'open',
+					],
+				],
 			],
 			'closes' => [
 				'_default' => '',
@@ -2554,10 +2638,23 @@ final class Fields {
 					],
 					\__( 'Specify the local time.', '' ),
 				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.openinghours.type' => 'open',
+					],
+				],
 			],
 		];
 	}
 
+	/**
+	 * Returns the days select list.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_days_fields() {
 		return [
 			[
@@ -2591,6 +2688,13 @@ final class Fields {
 		];
 	}
 
+	/**
+	 * Returns the reservation fields multi-fields list.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_reservation_fields() {
 		return [
 			'acceptsReservations' => [
@@ -2606,28 +2710,38 @@ final class Fields {
 						\__( 'The reservation action must be completed through the website, not through a phonecall.', '' ),
 					],
 				],
-				'_select' => $this->get_reservation_accept_items(),
+				'_select' => [
+					[
+						'',
+						'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+					],
+					[
+						1,
+						\__( 'Accept reservations', '' ),
+					],
+					[
+						0,
+						\__( 'Don\'t accept reservations', '' ),
+					],
+				],
+				'_data' => [
+					'is-type-listener' => '1',
+					'set-type-to-if-value' => [
+						'accept' => '1',
+					],
+					'showif-catcher' => 'department.acceptsReservations.type',
+				],
 			],
 		] + $this->get_reservation_result_fields() + $this->get_reservation_action_fields();
 	}
 
-	private function get_reservation_accept_items() {
-		return [
-			[
-				'',
-				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
-			],
-			[
-				1,
-				\__( 'Accept reservations', '' ),
-			],
-			[
-				0,
-				\__( 'Don\'t accept reservations', '' ),
-			],
-		];
-	}
-
+	/**
+	 * Returns the reservation action sub-fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_reservation_action_fields() {
 		return [
 			'target' => [
@@ -2640,11 +2754,27 @@ final class Fields {
 					\__( 'Target specifications', '' ),
 					\__( 'Specify where the user can complete a reservation.', '' ),
 				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.acceptsReservations.type' => 'accept',
+					],
+				],
 				'_fields' => $this->get_reservation_target_fields(),
 			],
 		];
 	}
 
+	/**
+	 * Returns the reservation target sub-fields.
+	 *
+	 * @TODO specify actionPlatform, currently, this is undocumented by Schema.org
+	 * @TODO allow urlTemplate. For now, it's too advanced to explain and yields no
+	 * additional benefit to 99.9% of users within WordPress.
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_reservation_target_fields() {
 		return [
 			'url' => [
@@ -2678,7 +2808,7 @@ final class Fields {
 				//* This pattern is quite restrictive, but will work with any language.
 				'_pattern' => '^[a-zA-Z]{2,3}((-([a-zA-Z]{2,4})-([a-zA-Z]{2,3}))|(-[a-zA-Z]{2,3})|(-[0-9]{3}))?$',
 			],
-			/*== These platforms are not specified on Sshema.org, Let's omit them for now until they figure out what to do with it.
+			/*== These platforms are not specified on Schema.org, Let's omit them for now until they figure out what to do with it.
 			'actionPlatform' => [
 				'_default' => [],
 				'_edit' => true,
@@ -2708,6 +2838,13 @@ final class Fields {
 		];
 	}
 
+	/**
+	 * Returns the reservation fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_reservation_result_fields() {
 		return [
 			'@type' => [
@@ -2720,6 +2857,12 @@ final class Fields {
 					\__( 'Reservation type', '' ),
 					\__( 'Choose a type that describes the reservation.', '' ),
 					\__( 'If unlisted, select "Reservation".', '' ),
+				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.acceptsReservations.type' => 'accept',
+					],
 				],
 				'_select' => $this->get_reservation_type_items(),
 			],
@@ -2734,6 +2877,12 @@ final class Fields {
 					\__( 'Describe the reservation, in a few words.', '' ),
 					\__( 'For example: "Reserve table" or "Table for four at Restaurant Name".', '' ),
 				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.acceptsReservations.type' => 'accept',
+					],
+				],
 			],
 			/*= TODO PLACEHOLDER @see http://schema.org/Person ...Redundant?
 			'provider' => [
@@ -2743,12 +2892,26 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.acceptsReservations.type' => '1',
+					],
+				],
 				'_fields' => [],
 			],
 			*/
 		];
 	}
 
+	/**
+	 * Returns the reservation types select list.
+	 *
+	 * @TODO allow other fields. Currently, it's limited to FoodEstablishment.
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_reservation_type_items() {
 		return [
 			[
@@ -2759,6 +2922,7 @@ final class Fields {
 				'Reservation',
 				\__( 'Reservation', '' ),
 			],
+			/*
 			[
 				'BusReservation',
 				\__( 'Bus reservation', '' ),
@@ -2771,10 +2935,12 @@ final class Fields {
 				'FlightReservation',
 				\__( 'Flight reservation', '' ),
 			],
+			*/
 			[
 				'FoodEstablishmentReservation',
 				\__( 'Food establishment reservation', '' ),
 			],
+			/*
 			[
 				'LodgingReservation',
 				\__( 'Lodging reservation', '' ),
@@ -2795,9 +2961,17 @@ final class Fields {
 				'TrainReservation',
 				\__( 'Train reservation', '' ),
 			],
+			*/
 		];
 	}
 
+	/**
+	 * Returns the order fields.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_order_fields() {
 		return [
 			'deliveryMethod' => [
@@ -2816,6 +2990,13 @@ final class Fields {
 		]; //+ $this->get_order_price_fields() + $this->get_order_action_fields(); <-- should define priceMin and priceMax
 	}
 
+	/**
+	 * Returns the order methods select list.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
 	private function get_order_method_items() {
 		return [
 			[

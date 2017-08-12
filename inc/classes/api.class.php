@@ -251,9 +251,7 @@ class API extends Core {
 			return false;
 		}
 
-		$response = \wp_remote_retrieve_body( $request );
-
-		return $response;
+		return \wp_remote_retrieve_body( $request );
 	}
 
 	/**

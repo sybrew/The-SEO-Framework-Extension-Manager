@@ -492,6 +492,7 @@ final class FormGenerator {
 	 * Sanitizeses ID. Mainly removing spaces and coding characters.
 	 *
 	 * Unlike sanitize_key(), it doens't alter the case nor applies filters.
+	 * It also maintains the '@' character.
 	 *
 	 * @see WordPress Core sanitize_key()
 	 * @since 1.3.0
@@ -500,7 +501,7 @@ final class FormGenerator {
 	 * @return string The sanitized ID.
 	 */
 	private function sanitize_id( $id ) {
-		return preg_replace( '/[^a-zA-Z0-9_\-]/', '', $id );
+		return preg_replace( '/[^a-zA-Z0-9_\-@]/', '', $id );
 	}
 
 	/**
@@ -860,7 +861,7 @@ final class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		return vsprintf(
-			'<div class="tsfem-form-multi-setting tsfem-flex"%s>%s%s</div>',
+			'<div class="tsfem-form-multi-setting tsfem-form-setting tsfem-flex"%s>%s%s</div>',
 			[
 				$this->get_fields_data( $args['_data'] ),
 				sprintf(
@@ -1260,10 +1261,13 @@ final class FormGenerator {
 			$_data = $data;
 			$ret = '';
 			foreach ( $data as $k => $v ) {
-				if ( is_array( $v ) )
-					$v = implode( ',', $v );
-
-				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+				if ( is_array( $v ) ) {
+					$v = json_encode( $v, JSON_UNESCAPED_SLASHES );
+					//* NOTE: Using single quotes.
+					$ret .= sprintf( " data-%s='%s'", $k, $v );
+				} else {
+					$ret .= sprintf( ' data-%s="%s"', $k, $v );
+				}
 			}
 
 			return $ret;
@@ -1555,8 +1559,9 @@ final class FormGenerator {
 		$_data_required = isset( $args['_req'] ) ? 'data-required=1' : '';
 
 		return vsprintf(
-			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
 			[
+				$this->get_fields_data( $args['_data'] ),
 				sprintf(
 					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
@@ -1576,11 +1581,10 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s %s>%s</div>',
+						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s>%s</div>',
 						[
 							isset( $args['_display'] ) && 'row' === $args['_display'] ? 'tsfem-form-multi-select-wrap-row' : '',
 							$this->get_field_id(),
-							$this->get_fields_data( $args['_data'] ),
 							$_data_required,
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]

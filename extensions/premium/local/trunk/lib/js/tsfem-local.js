@@ -28,7 +28,7 @@
 // @output_file_name tsfem_e_local.min.js
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/jquery-1.9.js
 // @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/lib/js/tsfem.externs.js
-// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/extensions/premium/local/trunk/lib/js/tsfem-local.externs.js
+// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/extensions/premium/local/trunk/lib/js/externs/tsfem-local.externs.js
 // ==/ClosureCompiler==
 // http://closure-compiler.appspot.com/home
 
@@ -41,7 +41,7 @@
  *
  * @constructor
  */
-window[ 'tsfem_e_local' ] = {
+window.tsfem_e_local = {
 
 	/**
 	 * @since 1.0.0

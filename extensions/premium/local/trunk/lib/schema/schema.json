@@ -25,7 +25,7 @@
 				"_access" : [
 					"department",
 					"$nth",
-					"type"
+					"@type"
 				]
 			},
 			"_handlers" : {
@@ -505,7 +505,7 @@
 										"isOpen"
 									],
 									"_op" : "==",
-									"_value" : 2,
+									"_value" : 1,
 									"_do" : "set",
 									"_to" : "23:59"
 								},
@@ -521,7 +521,7 @@
 										"isOpen"
 									],
 									"_op" : "==",
-									"_value" : 1,
+									"_value" : 2,
 									"_do" : "set",
 									"_to" : "0:00"
 								},
@@ -691,7 +691,7 @@
 											"department",
 											"$nth",
 											"reservations",
-											"type"
+											"@type"
 										]
 									},
 									"_handlers" : {

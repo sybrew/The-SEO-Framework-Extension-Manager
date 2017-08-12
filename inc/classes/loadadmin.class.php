@@ -216,9 +216,9 @@ final class LoadAdmin extends AdminPages {
 				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 
 					//= Input gets forwarded to secure location. Sanitation happens externally.
-					$input = isset( $_POST['input'] ) ? \wp_unslash( $_POST['input'] ) : '';
+					$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
 
-					if ( ! $input || ! is_array( $input ) ) {
+					if ( ! $input || ! is_object( $input ) ) {
 						$results = $this->get_ajax_notice( false, 17000 );
 					} else {
 						$subscription = $this->get_subscription_status();
@@ -227,7 +227,7 @@ final class LoadAdmin extends AdminPages {
 							'email'       => $subscription['email'],
 							'licence_key' => $subscription['key'],
 							'data' => [
-								'geodata' => $input,
+								'geodata' => json_encode( $input ),
 								//= get_user_locale() is WP 4.7+
 								'locale' => function_exists( '\get_user_locale' ) ? \get_user_locale() : \get_locale(),
 							],
