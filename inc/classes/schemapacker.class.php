@@ -497,6 +497,14 @@ final class SchemaPacker {
 				$action = empty( $v );
 				break;
 
+			case 'count' :
+				$action = count( $v ) === $c->_value;
+				break;
+
+			case 'count_gt' :
+				$action = count( $v ) > $c->_value;
+				break;
+
 			case 'type_is' :
 				$action = gettype( $v ) === $c->_value;
 				break;
@@ -522,6 +530,12 @@ final class SchemaPacker {
 
 			case 'set' :
 				return $c->_to;
+
+			case 'current' :
+				return current( $value );
+
+			case 'convert' :
+				return $this->convert( $value, $c->_to );
 
 			default :
 				return $value;

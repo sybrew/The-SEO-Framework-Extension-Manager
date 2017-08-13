@@ -84,9 +84,9 @@ final class Fields {
 						'_req' => false,
 						'_type' => 'number',
 						'_desc' => [
-							\__( 'Set number of departments', '' ),
-							\__( 'Each department must have its own publicly recognizable name and type.', '' ),
-							\__( 'For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments.', '' ),
+							\__( 'Set number of departments', 'the-seo-framework-extension-manager' ),
+							\__( 'Each department must have its own publicly recognizable name and type.', 'the-seo-framework-extension-manager' ),
+							\__( 'For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments.', 'the-seo-framework-extension-manager' ),
 						],
 						'_range' => [
 							0,
@@ -96,9 +96,9 @@ final class Fields {
 					],
 				],
 				'_iterator_title' => [
-					\__( 'Main Department', '' ),
+					\__( 'Main Department', 'the-seo-framework-extension-manager' ),
 					/* translators: %d is department iteration number */
-					\__( 'Department %d', '' ),
+					\__( 'Department %d', 'the-seo-framework-extension-manager' ),
 				],
 				'_iterator_title_dynamic' => [
 					'single' => 'name',
@@ -165,16 +165,16 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'select',
 				'_desc' => [
-					\__( 'Select supported department type', '' ),
+					\__( 'Select supported department type', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'Choose a (sub)type that closely describes the business.', '' ),
-						\__( '(Sub)types with an asterisk are pending support.', '' ),
+						\__( 'Choose a (sub)type that closely describes the business.', 'the-seo-framework-extension-manager' ),
+						\__( '(Sub)types with an asterisk are pending support.', 'the-seo-framework-extension-manager' ),
 					],
 					vsprintf(
 						'%s<br>%s',
 						[
-							\__( 'Select "Local Business" if the department type is not listed.', '' ),
-							\__( 'Select "Disabled" to disable this department.', '' ),
+							\__( 'Select "Local Business" if the department type is not listed.', 'the-seo-framework-extension-manager' ),
+							\__( 'Select "Disabled" to disable this department.', 'the-seo-framework-extension-manager' ),
 						]
 					),
 				],
@@ -205,12 +205,12 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'Department name', '' ),
+					\__( 'Department name', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'Fill in the name of the department accurately.', '' ),
+						\__( 'Fill in the name of the department accurately.', 'the-seo-framework-extension-manager' ),
 						\__( 'For example, myMart and myMart Pharmacy.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'Include the store name with the department name in the following format: <code>{store name} {department name}</code>', '' ),
+					\__( 'Include the store name with the department name in the following format: <code>{store name} {department name}</code>', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'@id' => [
@@ -227,13 +227,13 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'url',
 				'_desc' => [
-					\__( 'Department URL', '' ),
+					\__( 'Department URL', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'The fully-qualified URL of this department.', '' ),
-						\__( 'If this URL matches a page on this website, then this department data will be outputted there.', '' ),
-						\__( 'Leave empty if no assigned page exists.', '' ),
+						\__( 'The fully-qualified URL of this department.', 'the-seo-framework-extension-manager' ),
+						\__( 'If this URL matches a page on this website, then this department data will be outputted there.', 'the-seo-framework-extension-manager' ),
+						\__( 'Leave empty if no assigned page exists.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described accurately on there.', '' ),
+					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described accurately on there.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'address' => [
@@ -243,9 +243,9 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Department address', '' ),
-					\__( 'Fill in the exact address of the department.', '' ),
-					\__( 'If this is not the main department, and this department has the same address as the main department, leave these fields empty.', '' ),
+					\__( 'Department address', 'the-seo-framework-extension-manager' ),
+					\__( 'Fill in the exact address of the department.', 'the-seo-framework-extension-manager' ),
+					\__( 'If this is not the main department, and this department has the same address as the main department, leave these fields empty.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -261,9 +261,9 @@ final class Fields {
 				'_type' => 'tel',
 				'_pattern' => '\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$',
 				'_desc' => [
-					\__( 'Telephone number', '' ),
-					\__( 'This phone number meant to be the primary contact method for customers.', '' ),
-					\__( 'Be sure to include the country code and area code in the phone number: <code>+15555555555</code>', '' ),
+					\__( 'Telephone number', 'the-seo-framework-extension-manager' ),
+					\__( 'This phone number meant to be the primary contact method for customers.', 'the-seo-framework-extension-manager' ),
+					\__( 'Be sure to include the country code and area code in the phone number: <code>+15555555555</code>', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'openingHoursSpecification' => [
@@ -273,7 +273,7 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Department opening hours', '' ),
+					\__( 'Department opening hours', 'the-seo-framework-extension-manager' ),
 					\__( 'Specify the hours during which the business location is open.' ),
 					\__( 'Be sure to specify all days of the week.' ),
 				],
@@ -289,8 +289,8 @@ final class Fields {
 				'_req' => true, // Must be true if RESTAURANT.
 				'_type' => 'image',
 				'_desc' => [
-					\__( 'Image URL', '' ),
-					\__( 'An image of the department or building.', '' ),
+					\__( 'Image URL', 'the-seo-framework-extension-manager' ),
+					\__( 'An image of the department or building.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'servesCuisine' => [
@@ -300,9 +300,9 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'selectmultia11y',
 				'_desc' => [
-					\__( 'Cuisine', '' ),
-					\__( 'Provide the type of cuisine the department serves.', '' ),
-					\__( 'This is mandatory for food establishments.', '' ),
+					\__( 'Cuisine', 'the-seo-framework-extension-manager' ),
+					\__( 'Select the types of cuisine the department serves.', 'the-seo-framework-extension-manager' ),
+					\__( 'Multiple are allowed.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -319,9 +319,9 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'url',
 				'_desc' => [
-					\__( 'Menu URL', '' ),
-					\__( 'Department menu URL, if any.', '' ),
-					\__( 'This is mandatory for food establishments.', '' ),
+					\__( 'Menu URL', 'the-seo-framework-extension-manager' ),
+					\__( 'The department menu URL.', 'the-seo-framework-extension-manager' ),
+					\__( 'This must be a fully-qualified URL.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -337,9 +337,9 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Reservations', '' ),
-					\__( 'Department customers\' reservation specification.', '' ),
-					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', '' ),
+					\__( 'Reservations', 'the-seo-framework-extension-manager' ),
+					\__( 'Department customers\' reservation specification.', 'the-seo-framework-extension-manager' ),
+					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', 'the-seo-framework-extension-manager' ),
 				],
 				/**
 				 * TODO this is incorrect. Only the acceptsReservations should be for FoodEstablishment.
@@ -365,9 +365,9 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Orders', '' ),
-					\__( 'Department customers\' order specification.', '' ),
-					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', '' ),
+					\__( 'Orders', 'the-seo-framework-extension-manager' ),
+					\__( 'Department customers\' order specification.', 'the-seo-framework-extension-manager' ),
+					\__( 'These fields are still being tested by Search Engines. Usage will likely yield no effect.', 'the-seo-framework-extension-manager' ),
 				],
 				'_fields' => $this->get_order_fields(),
 			],
@@ -391,9 +391,9 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'Street address', '' ),
+					\__( 'Street address', 'the-seo-framework-extension-manager' ),
 					'',
-					\__( 'Street number, street name, and unit number (if applicable).', '' ),
+					\__( 'Street number, street name, and unit number (if applicable).', 'the-seo-framework-extension-manager' ),
 				],
 				'_pattern' => '^((([0-9\/-]+([\/-0-9A-Z]+)?(\s|(,\s)))([\u00a1-\uffffa-zA-Z\.\s]|[0-9_/-])+))|(([\u00a1-\uffffa-zA-Z\.\s]|[0-9_/-])+)((\s|(,\s))([0-9\/-]+([\/-0-9A-Z]+)?))$',
 				'_data' => [
@@ -408,7 +408,7 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'City, town, village', '' ),
+					\__( 'City, town, village', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -422,7 +422,7 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'State or province', '' ),
+					\__( 'State or province', 'the-seo-framework-extension-manager' ),
 					\__( 'The region. For example, CA for California.' ),
 				],
 				'_data' => [
@@ -437,7 +437,7 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'Postal or zip code', '' ),
+					\__( 'Postal or zip code', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -451,7 +451,7 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'select',
 				'_desc' => [
-					\__( 'Country', '' ),
+					\__( 'Country', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -483,9 +483,9 @@ final class Fields {
 					1e-7,
 				],
 				'_desc' => [
-					\__( 'Latitude', '' ),
+					\__( 'Latitude', 'the-seo-framework-extension-manager' ),
 					'',
-					\__( 'The geographic latitude.', '' ),
+					\__( 'The geographic latitude.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -504,9 +504,9 @@ final class Fields {
 					1e-7,
 				],
 				'_desc' => [
-					\__( 'Longitude', '' ),
+					\__( 'Longitude', 'the-seo-framework-extension-manager' ),
 					'',
-					\__( 'The geographic longitude.', '' ),
+					\__( 'The geographic longitude.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'geo-api' => true,
@@ -540,9 +540,9 @@ final class Fields {
 						'_req' => false,
 						'_type' => 'number',
 						'_desc' => [
-							\__( 'Number of opening hours', '' ),
-							\__( 'When opening hours fluctuate, change this number to specify more opening hours.', '' ),
-							\__( 'Set to 0 or leave empty if unspecified.', '' ),
+							\__( 'Number of opening hours', 'the-seo-framework-extension-manager' ),
+							\__( 'When opening hours fluctuate, increase this number to specify more opening hours.', 'the-seo-framework-extension-manager' ),
+							\__( 'Set to 0 or leave empty if unspecified.', 'the-seo-framework-extension-manager' ),
 						],
 						'_range' => [
 							0,
@@ -553,7 +553,7 @@ final class Fields {
 				],
 				'_iterator_title' => [
 					/* translators: %d is opening hours iteration number */
-					\__( 'Opening Hours %d', '' ),
+					\__( 'Opening Hours %d', 'the-seo-framework-extension-manager' ),
 				],
 				'_iterator_title_dynamic' => [
 					'plural' => 'dayOfWeek',
@@ -575,7 +575,7 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'No country selected', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'No country selected', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 			],
 			[
 				'AF',
@@ -1595,631 +1595,631 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'Disabled', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Disabled', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 				null, // No subtypes, doh.
 			],
 			[
 				'LocalBusiness',
-				\__( 'Local business', '' ),
+				\__( 'Local business', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'AnimalShelter',
-				\__( 'Animal shelter', '' ),
+				\__( 'Animal shelter', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'AutomotiveBusiness',
-				\__( 'Automotive business', '' ),
+				\__( 'Automotive business', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'AutoBodyShop',
-						\__( 'Auto body shop', '' ),
+						\__( 'Auto body shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutoDealer',
-						\__( 'Auto dealer', '' ),
+						\__( 'Auto dealer', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutoPartsStore',
-						\__( 'Auto parts store', '' ),
+						\__( 'Auto parts store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutoRental',
-						\__( 'Auto rental', '' ),
+						\__( 'Auto rental', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutoRepair',
-						\__( 'Auto repair', '' ),
+						\__( 'Auto repair', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutoWash',
-						\__( 'Auto wash', '' ),
+						\__( 'Auto wash', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'GasStation',
-						\__( 'Gas station', '' ),
+						\__( 'Gas station', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MotorcycleDealer',
-						\__( 'Motorcycle dealer', '' ),
+						\__( 'Motorcycle dealer', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MotorcycleRepair',
-						\__( 'Motorcycle repair', '' ),
+						\__( 'Motorcycle repair', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'ChildCare',
-				\__( 'Child care', '' ),
+				\__( 'Child care', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'MedicalBusiness',
-				\__( 'Medical business', '' ) . ' *',
+				\__( 'Medical business', 'the-seo-framework-extension-manager' ) . ' *',
 				[
 					//= Names with asterisk are still under review by Schema.org and are currently Extensions...
 					[
 						'CommunityHealth',
-						\__( 'Community health', '' ) . ' *',
+						\__( 'Community health', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Dentist',
-						\__( 'Dentist', '' ),
+						\__( 'Dentist', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Dermatology',
-						\__( 'Dermatology', '' ) . ' *',
+						\__( 'Dermatology', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'DietNutrition',
-						\__( 'Diet / Nutrition', '' ) . ' *',
+						\__( 'Diet / Nutrition', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Emergency',
-						\__( 'Emergency / Trauma', '' ) . ' *',
+						\__( 'Emergency / Trauma', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Geriatric',
-						\__( 'Geriatric', '' ) . ' *',
+						\__( 'Geriatric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Gynecologic',
-						\__( 'Gynecologic', '' ) . ' *',
+						\__( 'Gynecologic', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'MedicalClinic',
-						\__( 'Medical clinic', '' ) . ' *',
+						\__( 'Medical clinic', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Midwifery',
-						\__( 'Midwifery', '' ) . ' *',
+						\__( 'Midwifery', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Nursing',
-						\__( 'Nursing', '' ) . ' *',
+						\__( 'Nursing', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Obstetric',
-						\__( 'Obstetric', '' ) . ' *',
+						\__( 'Obstetric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Oncologic',
-						\__( 'Oncologic', '' ) . ' *',
+						\__( 'Oncologic', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Optician',
-						\__( 'Optician', '' ) . ' *',
+						\__( 'Optician', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Optometric',
-						\__( 'Optometric', '' ) . ' *',
+						\__( 'Optometric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Otolaryngologic',
-						\__( 'Otolaryngologic', '' ) . ' *',
+						\__( 'Otolaryngologic', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Pediatric',
-						\__( 'Pediatric', '' ) . ' *',
+						\__( 'Pediatric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Pharmacy',
-						\__( 'Pharmacy', '' ),
+						\__( 'Pharmacy', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Physician',
-						\__( 'Physician', '' ),
+						\__( 'Physician', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Physiotherapy',
-						\__( 'Physiotherapy', '' ) . ' *',
+						\__( 'Physiotherapy', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'PlasticSurgery',
-						\__( 'Plastic surgery', '' ) . ' *',
+						\__( 'Plastic surgery', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Podiatric',
-						\__( 'Podiatric', '' ) . ' *',
+						\__( 'Podiatric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'PrimaryCare',
-						\__( 'Primary care', '' ) . ' *',
+						\__( 'Primary care', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'Psychiatric',
-						\__( 'Psychiatric', '' ) . ' *',
+						\__( 'Psychiatric', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 					[
 						'PublicHealth',
-						\__( 'Public health', '' ) . ' *',
+						\__( 'Public health', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 				],
 			],
 			[
 				'DryCleaningOrLaundry',
-				\__( 'Dry cleaning or laundry', '' ),
+				\__( 'Dry cleaning or laundry', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'EmergencyService',
-				\__( 'Emergency service', '' ),
+				\__( 'Emergency service', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'FireStation',
-						\__( 'Fire station', '' ),
+						\__( 'Fire station', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Hospital',
-						\__( 'Hospital', '' ),
+						\__( 'Hospital', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'PoliceStation',
-						\__( 'Police station', '' ),
+						\__( 'Police station', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'EmploymentAgency',
-				\__( 'Employment agency', '' ),
+				\__( 'Employment agency', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'EntertainmentBusiness',
-				\__( 'Entertainment business', '' ),
+				\__( 'Entertainment business', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'AdultEntertainment',
-						\__( 'Adult entertainment', '' ),
+						\__( 'Adult entertainment', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AmusementPark',
-						\__( 'Amusement park', '' ),
+						\__( 'Amusement park', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ArtGallery',
-						\__( 'Art gallery', '' ),
+						\__( 'Art gallery', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Casino',
-						\__( 'Casino', '' ),
+						\__( 'Casino', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ComedyClub',
-						\__( 'Comedy club', '' ),
+						\__( 'Comedy club', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MovieTheater',
-						\__( 'Movie theater', '' ),
+						\__( 'Movie theater', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'NightClub',
-						\__( 'Night club', '' ),
+						\__( 'Night club', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'FinancialService',
-				\__( 'Financial service', '' ),
+				\__( 'Financial service', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'AccountingService',
-						\__( 'Accounting service', '' ),
+						\__( 'Accounting service', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'AutomatedTeller',
-						\__( 'Automated teller', '' ),
+						\__( 'Automated teller', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'BankOrCreditUnion',
-						\__( 'Bank-or credit union', '' ),
+						\__( 'Bank-or credit union', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'InsuranceAgency',
-						\__( 'Insurance agency', '' ),
+						\__( 'Insurance agency', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'FoodEstablishment',
-				\__( 'Food establishment', '' ),
+				\__( 'Food establishment', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'Bakery',
-						\__( 'Bakery', '' ),
+						\__( 'Bakery', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'BarOrPub',
-						\__( 'Bar or pub', '' ),
+						\__( 'Bar or pub', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Brewery',
-						\__( 'Brewery', '' ),
+						\__( 'Brewery', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'CafeOrCoffeeShop',
-						\__( 'Cafe or coffee shop', '' ),
+						\__( 'Cafe or coffee shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'FastFoodRestaurant',
-						\__( 'Fast food restaurant', '' ),
+						\__( 'Fast food restaurant', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'IceCreamShop',
-						\__( 'Ice cream shop', '' ),
+						\__( 'Ice cream shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Restaurant',
-						\__( 'Restaurant', '' ),
+						\__( 'Restaurant', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Winery',
-						\__( 'Winery', '' ),
+						\__( 'Winery', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Distillery',
-						\__( 'Distillery', '' ) . ' *',
+						\__( 'Distillery', 'the-seo-framework-extension-manager' ) . ' *',
 					],
 				],
 			],
 			[
 				'GovernmentOffice',
-				\__( 'Government office', '' ),
+				\__( 'Government office', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'PostOffice',
-						\__( 'Post office', '' ),
+						\__( 'Post office', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'HealthAndBeautyBusiness',
-				\__( 'Health and beauty business', '' ),
+				\__( 'Health and beauty business', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'BeautySalon',
-						\__( 'Beauty salon', '' ),
+						\__( 'Beauty salon', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'DaySpa',
-						\__( 'Day spa', '' ),
+						\__( 'Day spa', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HairSalon',
-						\__( 'Hair salon', '' ),
+						\__( 'Hair salon', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HealthClub',
-						\__( 'Health club', '' ),
+						\__( 'Health club', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'NailSalon',
-						\__( 'Nail salon', '' ),
+						\__( 'Nail salon', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'TattooParlor',
-						\__( 'Tattoo parlor', '' ),
+						\__( 'Tattoo parlor', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'HomeAndConstructionBusiness',
-				\__( 'Home and construction business', '' ),
+				\__( 'Home and construction business', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'Electrician',
-						\__( 'Electrician', '' ),
+						\__( 'Electrician', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'GeneralContractor',
-						\__( 'General contractor', '' ),
+						\__( 'General contractor', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HVACBusiness',
 						/* translators: Keep it short! Or, keep it HVAC. */
-						\_x( 'HVAC business', 'Heating, Ventalation, Air Conditioning', '' ),
+						\_x( 'HVAC business', 'Heating, Ventalation, Air Conditioning', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Locksmith',
-						\__( 'Locksmith', '' ),
+						\__( 'Locksmith', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MovingCompany',
-						\__( 'Moving company', '' ),
+						\__( 'Moving company', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Plumber',
-						\__( 'Plumber', '' ),
+						\__( 'Plumber', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'RoofingContractor',
-						\__( 'Roofing contractor', '' ),
+						\__( 'Roofing contractor', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'InternetCafe',
-				\__( 'Internet cafe', '' ),
+				\__( 'Internet cafe', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'LegalService',
-				\__( 'Legal service', '' ),
+				\__( 'Legal service', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'Attorney',
-						\__( 'Attorney', '' ),
+						\__( 'Attorney', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Notary',
-						\__( 'Notary', '' ),
+						\__( 'Notary', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'Library',
-				\__( 'Library', '' ),
+				\__( 'Library', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'LodgingBusiness',
-				\__( 'Lodging business', '' ),
+				\__( 'Lodging business', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'BedAndBreakfast',
-						\__( 'Bed and breakfast', '' ),
+						\__( 'Bed and breakfast', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Campground',
-						\__( 'Campground', '' ),
+						\__( 'Campground', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Hostel',
-						\__( 'Hostel', '' ),
+						\__( 'Hostel', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Hotel',
-						\__( 'Hotel', '' ),
+						\__( 'Hotel', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Motel',
-						\__( 'Motel', '' ),
+						\__( 'Motel', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Resort',
-						\__( 'Resort', '' ),
+						\__( 'Resort', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			// MORE FOUND HERE: http://schema.org/ProfessionalService
 			[
 				'RadioStation',
-				\__( 'Radio station', '' ),
+				\__( 'Radio station', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'RealEstateAgent',
-				\__( 'Real estate agent', '' ),
+				\__( 'Real estate agent', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'RecyclingCenter',
-				\__( 'Recycling center', '' ),
+				\__( 'Recycling center', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'SelfStorage',
-				\__( 'Self storage', '' ),
+				\__( 'Self storage', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'ShoppingCenter',
-				\__( 'Shopping center', '' ),
+				\__( 'Shopping center', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'SportsActivityLocation',
-				\__( 'Sports activity location', '' ),
+				\__( 'Sports activity location', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'BowlingAlley',
-						\__( 'Bowling alley', '' ),
+						\__( 'Bowling alley', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ExerciseGym',
-						\__( 'Exercise gym', '' ),
+						\__( 'Exercise gym', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'GolfCourse',
-						\__( 'Golf course', '' ),
+						\__( 'Golf course', 'the-seo-framework-extension-manager' ),
 					],
 					[ //= DUPE
 						'HealthClub',
-						\__( 'Health club', '' ),
+						\__( 'Health club', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'PublicSwimmingPool',
-						\__( 'Public swimming pool', '' ),
+						\__( 'Public swimming pool', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'SkiResort',
-						\__( 'Ski resort', '' ),
+						\__( 'Ski resort', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'SportsClub',
-						\__( 'Sports club', '' ),
+						\__( 'Sports club', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'StadiumOrArena',
-						\__( 'Stadium or arena', '' ),
+						\__( 'Stadium or arena', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'TennisComplex',
-						\__( 'Tennis complex', '' ),
+						\__( 'Tennis complex', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'Store',
-				\__( 'Store', '' ),
+				\__( 'Store', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'AutoPartsStore',
-						\__( 'Auto parts store', '' ),
+						\__( 'Auto parts store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'BikeStore',
-						\__( 'Bike store', '' ),
+						\__( 'Bike store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'BookStore',
-						\__( 'Book store', '' ),
+						\__( 'Book store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ClothingStore',
-						\__( 'Clothing store', '' ),
+						\__( 'Clothing store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ComputerStore',
-						\__( 'Computer store', '' ),
+						\__( 'Computer store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ConvenienceStore',
-						\__( 'Convenience store', '' ),
+						\__( 'Convenience store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'DepartmentStore',
-						\__( 'Department store', '' ),
+						\__( 'Department store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ElectronicsStore',
-						\__( 'Electronics store', '' ),
+						\__( 'Electronics store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Florist',
-						\__( 'Florist', '' ),
+						\__( 'Florist', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'FurnitureStore',
-						\__( 'Furniture store', '' ),
+						\__( 'Furniture store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'GardenStore',
-						\__( 'Garden store', '' ),
+						\__( 'Garden store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'GroceryStore',
-						\__( 'Grocery store', '' ),
+						\__( 'Grocery store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HardwareStore',
-						\__( 'Hardware store', '' ),
+						\__( 'Hardware store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HobbyShop',
-						\__( 'Hobby shop', '' ),
+						\__( 'Hobby shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'HomeGoodsStore',
-						\__( 'Home goods store', '' ),
+						\__( 'Home goods store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'JewelryStore',
-						\__( 'Jewelry store', '' ),
+						\__( 'Jewelry store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'LiquorStore',
-						\__( 'Liquor store', '' ),
+						\__( 'Liquor store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MensClothingStore',
-						\__( 'Mens clothing store', '' ),
+						\__( 'Mens clothing store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MobilePhoneStore',
-						\__( 'Mobile phone store', '' ),
+						\__( 'Mobile phone store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MovieRentalStore',
-						\__( 'Movie rental store', '' ),
+						\__( 'Movie rental store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'MusicStore',
-						\__( 'Music store', '' ),
+						\__( 'Music store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'OfficeEquipmentStore',
-						\__( 'Office equipment store', '' ),
+						\__( 'Office equipment store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'OutletStore',
-						\__( 'Outlet store', '' ),
+						\__( 'Outlet store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'PawnShop',
-						\__( 'Pawn shop', '' ),
+						\__( 'Pawn shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'PetStore',
-						\__( 'Pet store', '' ),
+						\__( 'Pet store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ShoeStore',
-						\__( 'Shoe store', '' ),
+						\__( 'Shoe store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'SportingGoodsStore',
-						\__( 'Sporting goods store', '' ),
+						\__( 'Sporting goods store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'TireShop',
-						\__( 'Tire shop', '' ),
+						\__( 'Tire shop', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ToyStore',
-						\__( 'Toy store', '' ),
+						\__( 'Toy store', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'WholesaleStore',
-						\__( 'Wholesale store', '' ),
+						\__( 'Wholesale store', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
 			[
 				'TelevisionStation',
-				\__( 'Television station', '' ),
+				\__( 'Television station', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'TouristInformationCenter',
-				\__( 'Tourist information center', '' ),
+				\__( 'Tourist information center', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 			[
 				'TravelAgency',
-				\__( 'Travel agency', '' ),
+				\__( 'Travel agency', 'the-seo-framework-extension-manager' ),
 				[],
 			],
 		];
@@ -2237,259 +2237,259 @@ final class Fields {
 		return [
 			[
 				'African',
-				\__( 'African', '' ),
+				\__( 'African', 'the-seo-framework-extension-manager' ),
 				[
 					[
 						'North African',
-						\__( 'North African', '' ),
+						\__( 'North African', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Algerian',
-								\__( 'Algerian', '' ),
+								\__( 'Algerian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Egyptian',
-								\__( 'Egyptian', '' ),
+								\__( 'Egyptian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Libyan',
-								\__( 'Libyan', '' ),
+								\__( 'Libyan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Mauritanian',
-								\__( 'Mauritanian', '' ),
+								\__( 'Mauritanian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Moroccan',
-								\__( 'Moroccan', '' ),
+								\__( 'Moroccan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Sadunese',
-								\__( 'Sadunese', '' ),
+								\__( 'Sadunese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Tunisian',
-								\__( 'Tunisian', '' ),
+								\__( 'Tunisian', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
 					[
 						'Horn of Africa',
-						\__( 'Horn of Africa', '' ),
+						\__( 'Horn of Africa', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Djiboutian',
-								\__( 'Djiboutian', '' ),
+								\__( 'Djiboutian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Ethiopian',
-								\__( 'Ethiopian', '' ),
+								\__( 'Ethiopian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Eritrean',
-								\__( 'Eritrean', '' ),
+								\__( 'Eritrean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Somali',
-								\__( 'Somali', '' ),
+								\__( 'Somali', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
 					[
 						'East African',
-						\__( 'East African', '' ),
+						\__( 'East African', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Burundian',
-								\__( 'Burundian', '' ),
+								\__( 'Burundian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Kenyan',
-								\__( 'Kenyan', '' ),
+								\__( 'Kenyan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Rwandan',
-								\__( 'Rwandan', '' ),
+								\__( 'Rwandan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'South Sudanese',
-								\__( 'South Sudanese', '' ),
+								\__( 'South Sudanese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Tanzanian',
-								\__( 'Tanzanian', '' ),
+								\__( 'Tanzanian', 'the-seo-framework-extension-manager' ),
 								[
 									[
 										'Zanzibari',
-										\__( 'Zanzibari', '' ),
+										\__( 'Zanzibari', 'the-seo-framework-extension-manager' ),
 									],
 								],
 							],
 							[
 								'Ugandan',
-								\__( 'Ugandan', '' ),
+								\__( 'Ugandan', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
 					[
 						'Central African',
-						\__( 'Central African', '' ),
+						\__( 'Central African', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Angolan',
-								\__( 'Angolan', '' ),
+								\__( 'Angolan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Cameroonian',
-								\__( 'Cameroonian', '' ),
+								\__( 'Cameroonian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Centrafrican',
-								\__( 'Centrafrican', '' ),
+								\__( 'Centrafrican', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Chadian',
-								\__( 'Chadian', '' ),
+								\__( 'Chadian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Congolese',
-								\__( 'Congolese', '' ),
+								\__( 'Congolese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Equatorial Guinean',
-								\__( 'Equatorial Guinean', '' ),
+								\__( 'Equatorial Guinean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Gabonese',
-								\__( 'Gabonese', '' ),
+								\__( 'Gabonese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'São Toméan',
-								\__( 'São Toméan', '' ),
+								\__( 'São Toméan', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
 					[
 						'Southern African',
-						\__( 'Southern African', '' ),
+						\__( 'Southern African', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Botswanan',
-								\__( 'Botswanan', '' ),
+								\__( 'Botswanan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Comorian',
-								\__( 'Comorian', '' ),
+								\__( 'Comorian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Lesothoan',
-								\__( 'Lesothoan', '' ),
+								\__( 'Lesothoan', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Malagasy',
-								\__( 'Malagasy', '' ),
+								\__( 'Malagasy', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Malawian',
-								\__( 'Malawian', '' ),
+								\__( 'Malawian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Mauritian',
-								\__( 'Mauritian', '' ),
+								\__( 'Mauritian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Mozambican',
-								\__( 'Mozambican', '' ),
+								\__( 'Mozambican', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Namibian',
-								\__( 'Namibian', '' ),
+								\__( 'Namibian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Seychellois',
-								\__( 'Seychellois', '' ),
+								\__( 'Seychellois', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'South African',
-								\__( 'South African', '' ),
+								\__( 'South African', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Swazis',
-								\__( 'Swazis', '' ),
+								\__( 'Swazis', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Zambian',
-								\__( 'Zambian', '' ),
+								\__( 'Zambian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Zimbabwean',
-								\__( 'Zimbabwean', '' ),
+								\__( 'Zimbabwean', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
 					[
 						'West African',
-						\__( 'West African', '' ),
+						\__( 'West African', 'the-seo-framework-extension-manager' ),
 						[
 							[
 								'Benin',
-								\__( 'Benin', '' ),
+								\__( 'Benin', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Burkinabé',
-								\__( 'Burkinabé', '' ),
+								\__( 'Burkinabé', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Cabo Verdean',
-								\__( 'Cabo Verdean', '' ),
+								\__( 'Cabo Verdean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Nigerien',
-								\__( 'Nigerien', '' ),
+								\__( 'Nigerien', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Gambian',
-								\__( 'Gambian', '' ),
+								\__( 'Gambian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Ghanaian',
-								\__( 'Ghanaian', '' ),
+								\__( 'Ghanaian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Guinean',
-								\__( 'Guinean', '' ),
+								\__( 'Guinean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Bissau-Guinean',
-								\__( 'Bissau-Guinean', '' ),
+								\__( 'Bissau-Guinean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Ivorian',
-								\__( 'Ivorian', '' ),
+								\__( 'Ivorian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Liberian',
-								\__( 'Liberian', '' ),
+								\__( 'Liberian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Malian',
-								\__( 'Malian', '' ),
+								\__( 'Malian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Nigerian',
-								\__( 'Nigerian', '' ),
+								\__( 'Nigerian', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Senegalese',
-								\__( 'Senegalese', '' ),
+								\__( 'Senegalese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Sierra Leonean',
-								\__( 'Sierra Leonean', '' ),
+								\__( 'Sierra Leonean', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Togolese',
-								\__( 'Togolese', '' ),
+								\__( 'Togolese', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],
@@ -2497,49 +2497,49 @@ final class Fields {
 			],
 			[
 				'American',
-				\__( 'American', '' ),
+				\__( 'American', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'Asian',
-				\__( 'Asian', '' ),
+				\__( 'Asian', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'Latin',
-				\__( 'Latin', '' ),
+				\__( 'Latin', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'European',
-				\__( 'European', '' ),
+				\__( 'European', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'Oceanic',
-				\__( 'Oceanic', '' ),
+				\__( 'Oceanic', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'Vegan',
-				\__( 'Vegan', '' ),
+				\__( 'Vegan', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
 			],
 			[
 				'Vegetarian',
-				\__( 'Vegetarian', '' ),
+				\__( 'Vegetarian', 'the-seo-framework-extension-manager' ),
 				[
 
 				],
@@ -2564,8 +2564,8 @@ final class Fields {
 				'_type' => 'selectmultia11y',
 				'_display' => 'row',
 				'_desc' => [
-					\__( 'Applied days', '' ),
-					\__( 'Select the days from and to which the opening and closing hours specify to.', '' ),
+					\__( 'Applied days', 'the-seo-framework-extension-manager' ),
+					\__( 'Select the days from and to which the opening and closing hours specify to.', 'the-seo-framework-extension-manager' ),
 				],
 				'_select' => $this->get_days_fields(),
 			],
@@ -2576,8 +2576,8 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'select',
 				'_desc' => [
-					\__( 'State of department', '' ),
-					\__( 'Set whether the department is open or closed on the applied days.', '' ),
+					\__( 'State of department', 'the-seo-framework-extension-manager' ),
+					\__( 'Set whether the department is open or closed on the applied days.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-type-listener' => '1',
@@ -2591,15 +2591,15 @@ final class Fields {
 				'_select' => [
 					[
 						'0',
-						\__( 'Open', '' ),
+						\__( 'Open', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'1',
-						\__( 'Open 24 hours', '' ),
+						\__( 'Open 24 hours', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'2',
-						\__( 'Closed', '' ),
+						\__( 'Closed', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
@@ -2610,12 +2610,12 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'time',
 				'_desc' => [
-					\__( 'Opening time', '' ),
+					\__( 'Opening time', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'Time when the business location opens.', '' ),
-						\__( 'This time must be earlier than the closing time.', '' ),
+						\__( 'Time when the business location opens.', 'the-seo-framework-extension-manager' ),
+						\__( 'This time must be earlier than the closing time.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'Specify the local time.', '' ),
+					\__( 'Specify the local time.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -2631,12 +2631,12 @@ final class Fields {
 				'_req' => true,
 				'_type' => 'time',
 				'_desc' => [
-					\__( 'Closing time', '' ),
+					\__( 'Closing time', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'Time when the business location closes.', '' ),
-						\__( 'This time must be later than the opening time.', '' ),
+						\__( 'Time when the business location closes.', 'the-seo-framework-extension-manager' ),
+						\__( 'This time must be later than the opening time.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'Specify the local time.', '' ),
+					\__( 'Specify the local time.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -2659,31 +2659,31 @@ final class Fields {
 		return [
 			[
 				'Monday',
-				\__( 'Monday', '' ),
+				\__( 'Monday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Tuesday',
-				\__( 'Tuesday', '' ),
+				\__( 'Tuesday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Wednesday',
-				\__( 'Wednesday', '' ),
+				\__( 'Wednesday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Thursday',
-				\__( 'Thursday', '' ),
+				\__( 'Thursday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Friday',
-				\__( 'Friday', '' ),
+				\__( 'Friday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Saturday',
-				\__( 'Saturday', '' ),
+				\__( 'Saturday', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'Sunday',
-				\__( 'Sunday', '' ),
+				\__( 'Sunday', 'the-seo-framework-extension-manager' ),
 			],
 		];
 	}
@@ -2704,24 +2704,24 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'select',
 				'_desc' => [
-					\__( 'Accept reservations', '' ),
+					\__( 'Accept reservations', 'the-seo-framework-extension-manager' ),
 					[
-						\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', '' ),
-						\__( 'The reservation action must be completed through the website, not through a phonecall.', '' ),
+						\__( 'Specify whether this department accepts reservations or explicitly doesn\'t.', 'the-seo-framework-extension-manager' ),
+						\__( 'The reservation action must be completed through the website, not through a phonecall.', 'the-seo-framework-extension-manager' ),
 					],
 				],
 				'_select' => [
 					[
 						'',
-						'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+						'&mdash; ' . \__( 'Not specified', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 					],
 					[
 						1,
-						\__( 'Accept reservations', '' ),
+						\__( 'Accept reservations', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						0,
-						\__( 'Don\'t accept reservations', '' ),
+						\__( 'Don\'t accept reservations', 'the-seo-framework-extension-manager' ),
 					],
 				],
 				'_data' => [
@@ -2751,8 +2751,8 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'multi',
 				'_desc' => [
-					\__( 'Target specifications', '' ),
-					\__( 'Specify where the user can complete a reservation.', '' ),
+					\__( 'Target specifications', 'the-seo-framework-extension-manager' ),
+					\__( 'Specify where the user can complete a reservation.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -2789,8 +2789,8 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'url',
 				'_desc' => [
-					\__( 'Form URL', '' ),
-					\__( 'The location where the visitor can perform a reservation action.', '' ),
+					\__( 'Form URL', 'the-seo-framework-extension-manager' ),
+					\__( 'The location where the visitor can perform a reservation action.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'inLanguage' => [
@@ -2800,8 +2800,8 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'text', // TODO convert to select (or datalist) with language items.
 				'_desc' => [
-					\__( 'Form language', '' ),
-					\__( 'Specify the main language code of the form.', '' ),
+					\__( 'Form language', 'the-seo-framework-extension-manager' ),
+					\__( 'Specify the main language code of the form.', 'the-seo-framework-extension-manager' ),
 				],
 				//* This pattern is confusing for the user.
 				// '_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
@@ -2816,22 +2816,22 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'selectmultia11y',
 				'_desc' => [
-					\__( 'Form platforms', '' ),
-					\__( 'Specify the supported web platforms', '' ),
-					\__( 'For example, if the form URL redirects Android users, then don\'t select it.', '' ),
+					\__( 'Form platforms', 'the-seo-framework-extension-manager' ),
+					\__( 'Specify the supported web platforms', 'the-seo-framework-extension-manager' ),
+					\__( 'For example, if the form URL redirects Android users, then don\'t select it.', 'the-seo-framework-extension-manager' ),
 				],
 				'_select' => [
 					[
 						'desktop',
-						__( 'Desktop platforms', '' ),
+						__( 'Desktop platforms', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'ios',
-						__( 'iOS platforms', '' ),
+						__( 'iOS platforms', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'android',
-						__( 'Android platforms', '' ),
+						__( 'Android platforms', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],*/
@@ -2851,12 +2851,12 @@ final class Fields {
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 's',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'select',
 				'_desc' => [
-					\__( 'Reservation type', '' ),
-					\__( 'Choose a type that describes the reservation.', '' ),
-					\__( 'If unlisted, select "Reservation".', '' ),
+					\__( 'Reservation type', 'the-seo-framework-extension-manager' ),
+					\__( 'Choose a type that describes the reservation.', 'the-seo-framework-extension-manager' ),
+					\__( 'If unlisted, select "Reservation".', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -2870,12 +2870,12 @@ final class Fields {
 				'_default' => '',
 				'_edit' => true,
 				'_ret' => 's',
-				'_req' => false,
+				'_req' => true,
 				'_type' => 'text',
 				'_desc' => [
-					\__( 'Reservation action name', '' ),
-					\__( 'Describe the reservation, in a few words.', '' ),
-					\__( 'For example: "Reserve table" or "Table for four at Restaurant Name".', '' ),
+					\__( 'Reservation action name', 'the-seo-framework-extension-manager' ),
+					\__( 'Describe the reservation, in a few words.', 'the-seo-framework-extension-manager' ),
+					\__( 'For example: "Reserve table" or "Table for four at Restaurant Name".', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -2916,50 +2916,50 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Not specified', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 			],
 			[
 				'Reservation',
-				\__( 'Reservation', '' ),
+				\__( 'Reservation', 'the-seo-framework-extension-manager' ),
 			],
 			/*
 			[
 				'BusReservation',
-				\__( 'Bus reservation', '' ),
+				\__( 'Bus reservation', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'EventReservation',
-				\__( 'Event reservation', '' ),
+				\__( 'Event reservation', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'FlightReservation',
-				\__( 'Flight reservation', '' ),
+				\__( 'Flight reservation', 'the-seo-framework-extension-manager' ),
 			],
 			*/
 			[
 				'FoodEstablishmentReservation',
-				\__( 'Food establishment reservation', '' ),
+				\__( 'Food establishment reservation', 'the-seo-framework-extension-manager' ),
 			],
 			/*
 			[
 				'LodgingReservation',
-				\__( 'Lodging reservation', '' ),
+				\__( 'Lodging reservation', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'RentalCarReservation',
-				\__( 'Rental car reservation', '' ),
+				\__( 'Rental car reservation', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'ReservationPackage',
-				\__( 'Reservation package', '' ),
+				\__( 'Reservation package', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'TaxiReservation',
-				\__( 'Taxi reservation', '' ),
+				\__( 'Taxi reservation', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'TrainReservation',
-				\__( 'Train reservation', '' ),
+				\__( 'Train reservation', 'the-seo-framework-extension-manager' ),
 			],
 			*/
 		];
@@ -2981,9 +2981,9 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'selectmultia11y',
 				'_desc' => [
-					\__( 'Delivery method', '' ),
-					\__( 'Specify how the goods and delivered to the customers.', '' ),
-					\__( 'Select all that apply.', '' ),
+					\__( 'Delivery method', 'the-seo-framework-extension-manager' ),
+					\__( 'Specify how the goods and delivered to the customers.', 'the-seo-framework-extension-manager' ),
+					\__( 'Select all that apply.', 'the-seo-framework-extension-manager' ),
 				],
 				'_select' => $this->get_order_method_items(),
 			],
@@ -3001,39 +3001,39 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'Not specified', '' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Not specified', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 			],
 			[
 				'pickup',
-				\__( 'Pickup', '' ),
+				\__( 'Pickup', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'ownfleet',
-				\__( 'Delivery through own fleet', '' ),
+				\__( 'Delivery through own fleet', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'mail',
-				\__( 'Delivery through mail', '' ),
+				\__( 'Delivery through mail', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'freight',
-				\__( 'Delivery through freight', '' ),
+				\__( 'Delivery through freight', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'dhl',
-				\__( 'Delivery through DHL', '' ),
+				\__( 'Delivery through DHL', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'federalexpress',
-				\__( 'Delivery through FedEx', '' ),
+				\__( 'Delivery through FedEx', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'ups',
-				\__( 'Delivery through UPS', '' ),
+				\__( 'Delivery through UPS', 'the-seo-framework-extension-manager' ),
 			],
 			[
 				'download',
-				\__( 'Delivery through download', '' ),
+				\__( 'Delivery through download', 'the-seo-framework-extension-manager' ),
 			],
 		];
 	}

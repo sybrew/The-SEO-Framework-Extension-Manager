@@ -1649,18 +1649,20 @@ final class FormGenerator {
 				//* Level up.
 				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
 				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s" checked>%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				} else {
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				}
 				yield '<li>';
+				//* Level continue.
 				yield $this->get_select_multi_a11y_options( $args[2], $selected );
+				//* Level down.
 				yield '</li>';
 			} else {
 				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s" checked>%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				} else {
-					yield sprintf( '<li><label><input type=checkbox name="%s" value="%s">%s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
 				}
 			}
 		endforeach;
@@ -1716,10 +1718,10 @@ final class FormGenerator {
 				'<button type=button class="%1$s" title="%2$s" id="%3$s-remove" data-input-url="%3$s" data-input-id="%4$s">%5$s</button>',
 				[
 					'tsfem-remove-image-button tsfem-button-primary tsfem-button-small',
-					\esc_attr_x( 'Remove selected image', 'Button hover title', '' ),
+					\esc_attr_x( 'Remove selected image', 'Button hover title', 'the-seo-framework-extension-manager' ),
 					$s_url_id,
 					$s_id_id,
-					\esc_html__( 'Remove Image', '' ),
+					\esc_html__( 'Remove Image', 'the-seo-framework-extension-manager' ),
 				]
 			);
 		}
@@ -1775,10 +1777,10 @@ final class FormGenerator {
 							[
 								'tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small',
 								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
-								( $s_id_value ? \esc_attr_x( 'Change image', 'Button hover', '' ) : \esc_attr_x( 'Select image', 'Button hover', '' ) ),
+								( $s_id_value ? \esc_attr_x( 'Change image', 'Button hover', 'the-seo-framework-extension-manager' ) : \esc_attr_x( 'Select image', 'Button hover', 'the-seo-framework-extension-manager' ) ),
 								$s_url_id,
 								$s_id_id,
-								( $s_id_value ? \esc_html__( 'Change Image', '' ) : \esc_html__( 'Select Image', '' ) ),
+								( $s_id_value ? \esc_html__( 'Change Image', 'the-seo-framework-extension-manager' ) : \esc_html__( 'Select Image', 'the-seo-framework-extension-manager' ) ),
 							]
 						),
 						$s_remove_button,

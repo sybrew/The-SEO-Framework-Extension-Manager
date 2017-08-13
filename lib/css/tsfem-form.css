@@ -182,8 +182,8 @@
 	position: relative;
 	margin: 0;
 	padding: 0;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
-	box-shadow: 0 1px 3px 1px #ccc;
+	-webkit-box-shadow: 0 2px 3px 1px #ccc;
+	box-shadow: 0 2px 3px 1px #ccc;
 	width: 100%;
 	-webkit-animation: tsfemForm-fade-in .25s;
 	-moz-animation: tsfemForm-fade-in .25s;

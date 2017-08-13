@@ -208,7 +208,7 @@
 							"_condition" : {
 								"_if" : "this",
 								"_op" : "empty",
-								"_do" : "kill_pack"
+								"_do" : "kill_this"
 							},
 							"_out" : "string"
 						}
@@ -427,12 +427,26 @@
 						},
 						"_handlers" : {
 							"_escape" : "sanitize_text_field",
-							"_condition" : {
-								"_if" : "this",
-								"_op" : "empty",
-								"_do" : "kill_pack"
-							},
-							"_out" : "array"
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "empty",
+									"_do" : "kill_pack"
+								},
+								{
+									"_if" : "this",
+									"_op" : "count",
+									"_value" : 1,
+									"_do" : "current"
+								},
+								{
+									"_if" : "this",
+									"_op" : "count_gt",
+									"_value" : 1,
+									"_do" : "convert",
+									"_to" : "array"
+								}
+							]
 						}
 					},
 					"opens" : {
@@ -541,7 +555,7 @@
 				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
-					"_do" : "kill_pack"
+					"_do" : "kill_this"
 				},
 				"_out" : "array"
 			}
