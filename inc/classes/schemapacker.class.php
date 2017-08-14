@@ -63,27 +63,39 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @var int   $level
-	 * @var int   $it
+	 * @var int $level
+	 * @var int $it
 	 */
 	private $level = 0,
 	        $it = 0;
 
+	/**
+	 * Maintains data and corresponding data.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var array  $data
+	 * @var object $schema
+	 */
 	private $data;
-	private $schema;
-	private $output;
-	private $condition = [];
+	        $schema;
 
-	//	private $unpack = false;
-	//	private $it;
-
+	/**
+	 * Constructor. Sets up class main variables.
+	 *
+	 * @param array  $data   The data to iterate over.
+	 * @param object $schema The JSON decoded schema to use. {
+	 *    object '_OPTIONS' : Any processing options attached.
+	 *    object '_MAIN'    : The main data to iterate over.
+	 * }
+	 * @return bool true On setup. False otherwise.
+	 */
 	public function __construct( array $data, \stdClass $schema ) {
-
-		$this->data =& $data;
 
 		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) )
 			return false;
 
+		$this->data =& $data;
 		$o = $schema->_OPTIONS;
 
 		$architecture = $o->architecture ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
@@ -96,11 +108,25 @@ final class SchemaPacker {
 		return true;
 	}
 
+	/**
+	 * Adds iterations prior to packing that ups the first $nth value in $this->schema.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param unsigned int (i>0) $by
+	 */
 	public function _iterate_base( $by = 1 ) {
 		$this->level or ++$this->level;
 		$this->iterate( $by - 1 );
 	}
 
+	/**
+	 * Packs current iteration data.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return object The packed data.
+	 */
 	public function _pack() {
 		return $this->pack( $this->schema );
 	}
@@ -114,6 +140,7 @@ final class SchemaPacker {
 	 * @since 1.3.0
 	 * @collector
 	 *
+	 * @param mixed ...
 	 * @return object $this->output
 	 */
 	public function &_collector() {
@@ -186,8 +213,6 @@ final class SchemaPacker {
 	 */
 	private function delevel() {
 		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
-		//= Unset highest level.
-	//	unset( $this->pack_names[ $this->level + 1 ] );
 	}
 
 	/**
@@ -239,7 +264,13 @@ final class SchemaPacker {
 	}
 
 	/**
+	 * Packs input iteration data. Checks condition prior to packing.
+	 * Can and will destroy output based on conditions.
+	 *
 	 * @since 1.3.0
+	 *
+	 * @param object $schema
+	 * @return object The packed data.
 	 */
 	private function pack( \stdClass $schema ) {
 
@@ -267,8 +298,13 @@ final class SchemaPacker {
 	}
 
 	/**
+	 * Generates data by looping over the schema.
+	 *
 	 * @since 1.3.0
 	 * @generator
+	 *
+	 * @param object $schema
+	 * @yield array { string $key => mixed $value }
 	 */
 	private function generate_data( \stdClass $schema ) {
 
@@ -277,6 +313,15 @@ final class SchemaPacker {
 		}
 	}
 
+	/**
+	 * Returns value from $key based on current $schema.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $key
+	 * @param object $schema
+	 * @return mixed The key's value.
+	 */
 	private function get_value( $key, \stdClass $schema ) {
 
 		switch ( $schema->_data->_type ) {
@@ -307,6 +352,14 @@ final class SchemaPacker {
 		return $value;
 	}
 
+	/**
+	 * Creates iteration for $schema.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param object $schema
+	 * @return mixed The packed iteration data, if successful.
+	 */
 	private function make_iteration( \stdClass $schema ) {
 
 		$count = $this->access_data( $schema->_data->_access );
@@ -332,6 +385,14 @@ final class SchemaPacker {
 		return $data;
 	}
 
+	/**
+	 * Builds data based on $schema.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param object $schema
+	 * @return mixed The expected data.
+	 */
 	private function make_data( \stdClass $schema ) {
 
 		switch ( $schema->_data->_from ) {
@@ -360,11 +421,17 @@ final class SchemaPacker {
 	}
 
 	/**
-	 * NOTE: This is not a generator.
+	 * Builds concatenated data based on $schema.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param object $schema
+	 * @return mixed The concatenated data.
 	 */
 	private function concat( \stdClass $schema ) {
 
 		$value = '';
+		//= Not invoking a generator. Data does not yield, but return.
 		foreach ( ( $this->pack( $schema ) ) as $k => $v ) {
 			$value .= $v;
 		}
@@ -372,6 +439,15 @@ final class SchemaPacker {
 		return $value;
 	}
 
+	/**
+	 * Builds accessed data based on $schema from $this->data.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->data
+	 *
+	 * @param array $keys The $this->data access keys.
+	 * @return mixed The data from $this->data's $keys' level.
+	 */
 	private function access_data( array $keys ) {
 
 		$v = $this->data;
@@ -394,6 +470,17 @@ final class SchemaPacker {
 		return $v;
 	}
 
+	/**
+	 * Escapes data based on prior input schema.
+	 * Can loop through arrays of data.
+	 *
+	 * @todo implement this function in $this->condition() for conditional escape.
+	 * @since 1.3.0
+	 *
+	 * @param mixed $value The value to escape. $keys The $this->data access keys.
+	 * @param string $how The how-to escape $value.
+	 * @return mixed The escaped data.
+	 */
 	private function escape( $value, $how ) {
 
 		if ( is_array( $value ) ) {
@@ -419,6 +506,15 @@ final class SchemaPacker {
 		endswitch;
 	}
 
+	/**
+	 * Gets condition for $this->pack(), if any.
+	 * Note, the conditions get cleaned up after each $this->pack() run.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $key The schema conditional access key.
+	 * @return integer|string The condition output, based on importance rather than order.
+	 */
 	private function get_condition( $key ) {
 
 		if ( empty( $this->condition[ $key ] ) ) {
@@ -445,9 +541,22 @@ final class SchemaPacker {
 		if ( $kill_this )
 			return 'kill_this';
 
+		//= This should never happen.
 		return 0;
 	}
 
+	/**
+	 * Conditions $value for $key based on schema $what.
+	 *
+	 * @since 1.3.0
+	 * @todo implement self-resolving staticvar that breaks the loop?
+	 *
+	 * @param string $key   The value's key
+	 * @param mixed  $value The value to be conditioned.
+	 * @param array|object $what The conditional parameters. Can and must loop
+	 *                     over all conditions that apply, in order.
+	 * @return mixed The likely conditioned value.
+	 */
 	private function condition( $key, $value, $what ) {
 
 		if ( count( $what ) > 1 ) {
@@ -542,6 +651,15 @@ final class SchemaPacker {
 		}
 	}
 
+	/**
+	 * Converts value to set type.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param mixed $value
+	 * @param string $to
+	 * @return mixed The probable converted value.
+	 */
 	private function convert( $value, $to ) {
 
 		switch ( $to ) :
