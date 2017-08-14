@@ -45,13 +45,15 @@ window.tsfem_e_local = {
 
 	/**
 	 * @since 1.0.0
-	 * @param {String} nonce Ajax nonce
+	 * @access private
+	 * @param {string} nonce Ajax nonce
 	 */
 	nonce : tsfem_e_localL10n.nonce,
 
 	/**
 	 * @since 1.0.0
-	 * @param {Array} i18n Localized strings
+	 * @access private
+	 * @param {object} i18n Localized strings
 	 */
 	i18n : tsfem_e_localL10n.i18n,
 
@@ -190,6 +192,7 @@ window.tsfem_e_local = {
 	 * keeps any screen jumping from occuring later on.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @param {Object} jQ jQuery
 	 * @function

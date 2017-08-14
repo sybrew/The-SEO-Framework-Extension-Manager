@@ -28,7 +28,7 @@
 // @output_file_name tsfem_e_monitor.min.js
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/jquery-1.9.js
 // @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/lib/js/tsfem.externs.js
-// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/extensions/premium/monitor/trunk/lib/js/tsfem-monitor.externs.js
+// @externs_url https://raw.githubusercontent.com/sybrew/The-SEO-Framework-Extension-Manager/master/extensions/premium/monitor/trunk/lib/js/externs/tsfem-monitor.externs.js
 // ==/ClosureCompiler==
 // http://closure-compiler.appspot.com/home
 

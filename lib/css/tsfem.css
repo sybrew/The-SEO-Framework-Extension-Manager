@@ -1001,12 +1001,12 @@ body.tsfem .wrap {
 	font-weight: 600;
 }
 
-.tsfem-form-title,
-.tsfem-info-title,
-.tsfem-status-title,
-.tsfem-support-title,
-.tsfem-action-title,
-.tsfem-cp-title {
+h4.tsfem-form-title,
+h4.tsfem-info-title,
+h4.tsfem-status-title,
+h4.tsfem-support-title,
+h4.tsfem-action-title,
+h4.tsfem-cp-title {
 	padding: 0;
 	margin: 0 0 14px;
 	font-size: 1.33em;
@@ -1049,6 +1049,7 @@ body.tsfem .wrap {
 	height: auto;
 	max-height: 750px;
 	padding-right: 0;
+	padding-bottom: 0;
 	margin: 0;
 }
 
@@ -1083,14 +1084,6 @@ body.tsfem .wrap {
 .tsfem-extension-entry-inner {
 	margin: 0 20px 20px 0;
 }
-
-/* Remove margin from the bottom two (or one) entries. */
-/* Concept. Stills needs to be tested on Safari, and it breaks on mobile.
-.tsfem-extension-entry-wrap:nth-last-of-type(-n+2):nth-of-type(odd) .tsfem-extension-entry-inner,
-.tsfem-extension-entry-wrap:nth-last-of-type(-n+2):nth-of-type(odd) + .tsfem-extension-entry-wrap .tsfem-extension-entry-inner {
-	margin: 0 20px 0 0;
-}
-*/
 
 .tsfem-extension-entry {
 	margin: 0;

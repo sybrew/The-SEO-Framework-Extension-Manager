@@ -331,7 +331,7 @@ trait UI {
 	 * Generates file URL.
 	 *
 	 * @since 1.3.0
-	 * @staticvar string $suffix
+	 * @staticvar string $min
 	 * @staticvar string $rtl
 	 *
 	 * @param array $script The script arguments.
@@ -340,17 +340,17 @@ trait UI {
 	 */
 	final private function generate_file_url( array $script, $type = 'js' ) {
 
-		static $suffix, $rtl;
+		static $min, $rtl;
 
-		if ( ! $suffix ) {
-			$suffix = \the_seo_framework()->script_debug ? '' : '.min';
-			$rtl = \is_rtl() ? '-rtl' : '';
+		if ( ! isset( $min, $rtl ) ) {
+			$min = \the_seo_framework()->script_debug ? '' : '.min';
+			$rtl = \is_rtl() ? '.rtl' : '';
 		}
 
 		if ( 'js' === $type )
-			return $script['base'] . "lib/js/{$script['name']}{$suffix}.js";
+			return $script['base'] . "lib/js/{$script['name']}{$min}.js";
 
-		return $script['base'] . "lib/css/{$script['name']}{$rtl}{$suffix}.css";
+		return $script['base'] . "lib/css/{$script['name']}{$rtl}{$min}.css";
 	}
 
 	/**
