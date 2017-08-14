@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\AMP;
  * Extension Name: AMP
  * Extension URI: https://premium.theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.0.1
+ * Extension Version: 1.0.2
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -157,12 +157,20 @@ final class Front {
 	 * Data is taken from The SEO Framework.
 	 *
 	 * @since 1.0.1
+	 * @since 1.0.2 Added filters.
 	 *
 	 * @return string The social metadata.
 	 */
 	protected function get_social_metadata() {
 
 		$tsf = \the_seo_framework();
+
+		/**
+		 * Applies filters 'the_seo_framework_amp_pre' : string
+		 * Adds content before the output.
+		 * @since 1.0.2
+		 */
+		$before = (string) \apply_filters( 'the_seo_framework_amp_pre', '' );
 
 		$output = $tsf->og_image()
 				. $tsf->og_locale()
@@ -183,6 +191,13 @@ final class Front {
 				. $tsf->twitter_description()
 				. $tsf->twitter_image();
 
-		return $output;
+		/**
+		 * Applies filters 'the_seo_framework_amp_pro' : string
+		 * Adds content afters the output.
+		 * @since 1.0.2
+		 */
+		$after = (string) \apply_filters( 'the_seo_framework_amp_pro', '' );
+
+		return $before . $output . $after;
 	}
 }

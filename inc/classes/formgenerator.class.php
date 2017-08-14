@@ -35,6 +35,11 @@ defined( 'ABSPATH' ) or die;
  *
  * Not according to DRY standards for improved performance.
  *
+ * @NOTE Most generation pre-input data must be escaped.
+ * The generator will NOT escape these:
+ *   1. _pattern
+ *   2. _data
+ *
  * @since 1.3.0
  * @access private
  * @uses trait TSF_Extension_Manager\Extension_Options
@@ -203,6 +208,13 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Outputs form iterations for AJAX.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @see $this->prepare_ajax_iteration()
+	 * @see $this->prepare_ajax_iteration_fields()
+	 * @uses $this->_fields()
 	 */
 	public static function _output_ajax_form_its() {
 
@@ -258,6 +270,14 @@ final class FormGenerator {
 		return static::$ajax_it_fields;
 	}
 
+	/**
+	 * Prepares and sanitizes first $ajax_it_fields input.
+	 *
+	 * @since 1.3.0
+	 * @static
+	 * @uses $this->get_ajax_iteration_start()
+	 * @uses $this->get_ajax_iteration_amount()
+	 */
 	private function prepare_ajax_iteration_fields() {
 
 		//* TODO Move this into method parameter so we can loop?
@@ -860,10 +880,12 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
+		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
 		return vsprintf(
 			'<div class="tsfem-form-multi-setting tsfem-form-setting tsfem-flex"%s>%s%s</div>',
 			[
-				$this->get_fields_data( $args['_data'] ),
+				$s_data,
 				sprintf(
 					'<div class="tsfem-form-multi-setting-label tsfem-flex" id="%s">%s</div>',
 					$this->get_field_id(),
@@ -890,7 +912,16 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Outputs or returns iterator fields. Compatible with AJAX.
+	 *
+	 * Main field iterator callback.
+	 *
+	 * @since 1.3.0
 	 * @see $this->create_field()
+	 *
+	 * @param array $args The iterator fields arguments.
+	 * @param string $type Determines whether to output, output for AJAX or return.
+	 * @return string HTML on return. Empty string on echo.
 	 */
 	private function fields_iterator( array $args, $type = 'echo' ) {
 
@@ -921,6 +952,7 @@ final class FormGenerator {
 	 * Empty values will be converted to max it. Iterations shouldn't go lower than 1.
 	 *
 	 * @since 1.3.0
+	 *
 	 * @param unsigned int (R>0) $max The maximum value. Passed by reference.
 	 */
 	private function set_max_iterations( &$max ) {
@@ -931,8 +963,12 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Outputs the fields iterator wrap and fields.
 	 *
+	 * @since 1.3.0
 	 * @iterator
+	 *
+	 * @param array $args The fields iterator arguments.
 	 */
 	private function output_fields_iterator( array $args ) {
 
@@ -999,8 +1035,12 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Outputs the fields iterator wrap and fields for AJAX.
 	 *
+	 * @since 1.3.0
 	 * @iterator
+	 *
+	 * @param array $args The fields iterator arguments.
 	 */
 	private function output_ajax_fields_iterator( array $args ) {
 
@@ -1038,8 +1078,13 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Returns the fields iterator wrap and fields.
 	 *
+	 * @since 1.3.0
 	 * @iterator
+	 *
+	 * @param array $args The fields iterator arguments.
+	 * @return string
 	 */
 	private function get_fields_iterator( array $args ) {
 
@@ -1095,6 +1140,15 @@ final class FormGenerator {
 		);
 	}
 
+	/**
+	 * Returns collapse wrap for fields iterator.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $what Whether to 'start' or 'end' the wrap.
+	 * @param array $args The collapse wrap arguments.
+	 * @return string
+	 */
 	private function get_collapse_wrap( $what, array $args = [] ) {
 
 		if ( 'start' === $what ) :
@@ -1205,23 +1259,44 @@ final class FormGenerator {
 		}
 	}
 
+	/**
+	 * Returns field value for current field.
+	 *
+	 * @NOTE Do not optimize this.
+	 * It's basically a copy of $this->get_field_value_by_key(). But it will
+	 * create function overhead if associated.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->get_raw_field_id()
+	 * @uses trait \TSF_Extension_Manager\Extension_Options
+	 *
+	 * @param mixed $default The default field value.
+	 * @return mixed The field value if set, $default otherwise.
+	 */
 	private function get_field_value( $default = null ) {
 
 		$key = $this->get_raw_field_id( 'associative' );
 
-		if ( $this->use_stale ) {
-			$this->get_stale_option_by_mda_key( $key, $default );
+		if ( $this->use_stale )
 			return $this->get_stale_option_by_mda_key( $key, $default );
-		}
 
 		return $this->get_option_by_mda_key( $key, $default );
 	}
 
-	private function get_field_value_by_key( $key, $default = null ) {
+	/**
+	 * Returns field value for input $key
+	 *
+	 * @since 1.3.0
+	 * @uses trait \TSF_Extension_Manager\Extension_Options
+	 *
+	 * @param array $key The associative field key.
+	 * @param mixed $default The default field value.
+	 * @return mixed The field value if set, $default otherwise.
+	 */
+	private function get_field_value_by_key( array $key, $default = null ) {
 
-		if ( $this->use_stale ) {
+		if ( $this->use_stale )
 			return $this->get_stale_option_by_mda_key( $key, $default );
-		}
 
 		return $this->get_option_by_mda_key( $key, $default );
 	}
@@ -1255,16 +1330,22 @@ final class FormGenerator {
 		$range[2] = isset( $range[2] ) ? (string) rtrim( sprintf( '%.10F', $range[2] ), '.0' ) : '';
 	}
 
-	private function get_fields_data( &$data ) {
+	/**
+	 * Creates fields data based on input.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $data The field's data.
+	 * @return string The field's data.
+	 */
+	private function get_fields_data( array $data ) {
 
 		if ( $data ) {
-			$_data = $data;
 			$ret = '';
 			foreach ( $data as $k => $v ) {
 				if ( is_array( $v ) ) {
-					$v = json_encode( $v, JSON_UNESCAPED_SLASHES );
 					//* NOTE: Using single quotes.
-					$ret .= sprintf( " data-%s='%s'", $k, $v );
+					$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
 				} else {
 					$ret .= sprintf( ' data-%s="%s"', $k, $v );
 				}
@@ -1276,18 +1357,23 @@ final class FormGenerator {
 		return '';
 	}
 
+	/**
+	 * Creates fields pattern based on input.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param string $pattern The field's pattern.
+	 *              Passed by reference to circumvent coalescing key requirements.
+	 * @param string $fallback The fallback pattern.
+	 * @return string The field's pattern.
+	 */
 	private function get_fields_pattern( &$pattern, $fallback = '' ) {
 
-		if ( $pattern ) {
-			// We can't test all of JS regex. Also, this is a performance issue.
-			// if ( false !== preg_match( "/$pattern/", null ) ) {
-				return sprintf( 'pattern="%s"', $pattern );
-			// }
-		}
+		if ( $pattern )
+			return sprintf( 'pattern="%s"', $pattern );
 
-		if ( $fallback ) {
+		if ( $fallback )
 			return sprintf( 'pattern="%s"', $fallback );
-		}
 
 		return '';
 	}
@@ -1384,7 +1470,7 @@ final class FormGenerator {
 							$s_pattern,
 							$s_required,
 							$s_ph,
-							$this->get_fields_data( $args['_data'] ),
+							isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '',
 						]
 					)
 				),
@@ -1409,6 +1495,8 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_required = $args['_req'] ? 'required' : '';
+
+		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$multiple = 'selectmulti' === $args['_type'];
 
@@ -1442,7 +1530,7 @@ final class FormGenerator {
 							$s_name,
 							$s_required,
 							( $multiple ? 'multiple' : '' ),
-							$this->get_fields_data( $args['_data'] ),
+							$s_data,
 							$this->get_select_options( $args['_select'], $this->get_field_value( $args['_default'] ), $multiple ),
 						]
 					)
@@ -1451,6 +1539,17 @@ final class FormGenerator {
 		);
 	}
 
+	/**
+	 * Returns select options from generator.
+	 *
+	 * @since 1.3.0
+	 * @uses $this->generate_select_fields()
+	 *
+	 * @param array        $select   The select fields.
+	 * @param string|array $selected The default or currently selected field.
+	 * @param bool         $multiple Whether it's a multi-select field.
+	 * @return string The select options.
+	 */
 	private function get_select_options( array $select, $selected = '', $multiple = false ) {
 
 		$_fields = '';
@@ -1557,11 +1656,12 @@ final class FormGenerator {
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		$_data_required = isset( $args['_req'] ) ? 'data-required=1' : '';
+		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		return vsprintf(
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
 			[
-				$this->get_fields_data( $args['_data'] ),
+				$s_data,
 				sprintf(
 					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
@@ -1709,6 +1809,7 @@ final class FormGenerator {
 			)
 		);
 		$s_required = isset( $args['_req'] ) ? 'required' : '';
+		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$s_url_readonly = $s_remove_button = '';
 
@@ -1761,7 +1862,7 @@ final class FormGenerator {
 								$s_required,
 								$s_url_ph,
 								$s_url_readonly,
-								$this->get_fields_data( $args['_data'] ),
+								$s_data,
 							]
 						),
 						vsprintf(

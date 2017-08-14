@@ -512,7 +512,7 @@ trait UI {
 				'imgRemoveTitle' => \esc_attr__( 'Remove selected image', 'the-seo-framework-extension-manager' ),
 				'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
 				'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
-				'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
+				// 'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
 			],
 		];
 	}

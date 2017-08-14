@@ -245,8 +245,11 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 		* It features a state-of-the-art form generator, which allows you to register up to 4096 departments.
 * **Free - AMP:**
 	* **Version:**
-		* 1.0.1
+		* 1.0.2
 	* **Added:**
+		* Output filters:
+			* `(string) the_seo_framework_amp_pre`
+			* `(string) the_seo_framework_amp_pro`
 * **Premium - Articles:**
 	* **Version:**
 		* 1.0.1-gamma

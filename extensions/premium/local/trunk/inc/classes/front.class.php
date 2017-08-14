@@ -42,50 +42,24 @@ final class Front extends Core {
 
 	/**
 	 * The constructor, initialize plugin.
+	 *
+	 * @since 1.0.0
 	 */
 	private function construct() {
-		$this->init();
-	}
-
-	protected function remove_scheme( $url ) {
-		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( $url, [ 'http', 'https' ] ) );
-	}
-
-	protected function get_processed_packed_data() {
-		return $this->get_option( 'packed_data' );
-	}
-
-	protected function get_processed_packed_data_from_url( $url ) {
-
-		$url = $this->remove_scheme( $url );
-		$data = $this->get_processed_packed_data();
-		var_dump( $data );
-
-		if ( isset( $data[ $url ] ) )
-			return $data[ $url ];
-
-		return false;
-	}
-
-	protected function get_processed_packed_data_from_id( $id = 0 ) {
-
-		$data = $this->get_processed_packed_data();
-
-		if ( isset( $data[ $id ] ) )
-			return $data[ $id ];
-
-		return false;
+		\add_action( 'the_seo_framework_do_before_output', [ $this, '_init' ], 10 );
+		\add_action( 'the_seo_framework_do_before_amp_output', [ $this, '_init' ], 10 );
 	}
 
 	/**
 	 * Initializes front-end hooks.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
-	private function init() {
+	public function _init() {
 		if ( $this->is_amp() ) {
 			//* Initialize output in The SEO Framework's front-end AMP meta object.
-			\add_action( 'the_seo_framework_do_after_amp_output', [ $this, '_local_hook_amp_output' ] );
+			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
 			//* Initialize output in The SEO Framework's front-end meta object.
 			\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
@@ -93,32 +67,16 @@ final class Front extends Core {
 	}
 
 	/**
-	 * Determines if the current page is AMP supported.
-	 *
-	 * @since 1.0.0
-	 * @uses const AMP_QUERY_VAR
-	 * @staticvar bool $cache
-	 *
-	 * @return bool True if AMP is enabled.
-	 */
-	public function is_amp() {
-
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
-	}
-
-	/**
 	 * Outputs the AMP Local script.
 	 *
 	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param string $output The current AMP pro output.
+	 * @return string The added local script.
 	 */
-	public function _local_hook_amp_output() {
-		//= Already escaped.
-		echo $this->_get_local_json_output();
+	public function _local_hook_amp_output( $output = '' ) {
+		return $output .= $this->_get_local_json_output();
 	}
 
 	/**
@@ -142,11 +100,91 @@ final class Front extends Core {
 	}
 
 	/**
+	 * Determines if the current page is AMP supported.
+	 *
+	 * @since 1.0.0
+	 * @uses const AMP_QUERY_VAR
+	 * @staticvar bool $cache
+	 *
+	 * @return bool True if AMP is enabled.
+	 */
+	protected function is_amp() {
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		return $cache = defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
+	}
+
+	/**
+	 * Removes schema from input $url.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url URL with or without scheme.
+	 * @return string URL without scheme.
+	 */
+	protected function remove_scheme( $url ) {
+		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( $url, [ 'http', 'https' ] ) );
+	}
+
+	/**
+	 * Gets packed data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The packed data.
+	 */
+	protected function get_processed_packed_data() {
+		return $this->get_option( 'packed_data' );
+	}
+
+	/**
+	 * Gets packed data from URL.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url The URL where the data might be for.
+	 * @return array The packed data.
+	 */
+	protected function get_processed_packed_data_from_url( $url ) {
+
+		$url = $this->remove_scheme( $url );
+		$data = $this->get_processed_packed_data();
+
+		if ( isset( $data[ $url ] ) )
+			return $data[ $url ];
+
+		return false;
+	}
+
+	/**
+	 * Gets packed data from URL.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url The URL where the data might be for.
+	 * @return array The packed data.
+	 */
+	protected function get_processed_packed_data_from_id( $id = 0 ) {
+
+		$data = $this->get_processed_packed_data();
+
+		if ( isset( $data[ $id ] ) )
+			return $data[ $id ];
+
+		return false;
+	}
+
+	/**
 	 * Returns the Local Business JSON-LD script output.
 	 * Runs at 'the_seo_framework_after_output' filter.
 	 *
 	 * @since 1.0.0
 	 * @link https://developers.google.com/search/docs/data-types/local-businesses
+	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article script.
 	 */
@@ -169,17 +207,8 @@ final class Front extends Core {
 		if ( ! $url )
 			return '';
 
-		//* @TODO test AMP url.
-		var_dump( $url );
-
 		//= Get data by URL.
 		$json = $this->get_processed_packed_data_from_url( $url );
-
-		//= If no data is found, and when we're on the front page, try for Main department (id=1).
-		// if ( ! $json && \is_front_page() )
-			// $json = $this->get_processed_packed_data_from_id( 1 );
-
-		var_dump( $json );
 
 		if ( $json )
 			return '<script type="application/ld+json">' . $json . '</script>' . PHP_EOL;

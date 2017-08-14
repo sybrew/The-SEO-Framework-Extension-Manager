@@ -113,6 +113,21 @@ final class Core {
 	}
 
 	/**
+	 * Initializes hooks.
+	 *
+	 * @since 1.0.0
+	 */
+	private function init() {
+		if ( $this->is_amp() ) {
+			//* Initialize output in The SEO Framework's front-end AMP meta object.
+			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
+		} else {
+			//* Initialize output in The SEO Framework's front-end meta object.
+			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
+		}
+	}
+
+	/**
 	 * Determines if the current page is AMP supported.
 	 *
 	 * @since 1.0.0
@@ -198,28 +213,17 @@ final class Core {
 	}
 
 	/**
-	 * Initializes hooks.
-	 *
-	 * @since 1.0.0
-	 */
-	private function init() {
-		if ( $this->is_amp() ) {
-			//* Initialize output in The SEO Framework's front-end AMP meta object.
-			\add_action( 'the_seo_framework_do_after_amp_output', [ $this, '_articles_hook_amp_output' ] );
-		} else {
-			//* Initialize output in The SEO Framework's front-end meta object.
-			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
-		}
-	}
-
-	/**
 	 * Outputs the AMP Articles script.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.1 Changed from action to filter output.
+	 * @access private
+	 *
+	 * @param string $output The current AMP pro output.
+	 * @return string
 	 */
-	public function _articles_hook_amp_output() {
-		//* Already escaped.
-		echo $this->_get_articles_json_output();
+	public function _articles_hook_amp_output( $output = '' ) {
+		return $output .= $this->_get_articles_json_output();
 	}
 
 	/**
@@ -248,6 +252,7 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @link https://developers.google.com/search/docs/data-types/articles
+	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article scripts.
 	 */
@@ -658,18 +663,8 @@ final class Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		// $id = $this->get_current_id();
-
-		/**
-		 * 155 length is a tested guess.
-		 * There's no documentation on this.
-		 * However, it uses the same pixel length calculations.
-		 */
-		$description = \the_seo_framework()->description_from_cache();
-		// $description = $description ?: ( \the_seo_framework()->description_from_custom_field( [ 'id' => $id ] ) ?: \the_seo_framework()->generate_excerpt( $id, '', 155 ) );
-
 		return [
-			'description' => \esc_attr( $description ),
+			'description' => \esc_attr( \the_seo_framework()->description_from_cache() ),
 		];
 	}
 }

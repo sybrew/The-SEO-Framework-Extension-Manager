@@ -218,6 +218,13 @@ trait Secure_Post {
 		];
 	}
 
+	/**
+	 * Prepares AJAX form validation checks.
+	 *
+	 * @since 1.0.0
+	 * @see $this->send_ajax_form_json_validation()
+	 * @access private
+	 */
 	public function _prepare_ajax_form_json_validation() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
@@ -233,6 +240,17 @@ trait Secure_Post {
 		exit;
 	}
 
+	/**
+	 * Packs and sends AJAX form validation that will be passed to Google's Structured
+	 * Data validator.
+	 * It does not store the packed data.
+	 *
+	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
+	 *
+	 * @since 1.0.0
+	 * @see $this->send_ajax_form_json_validation()
+	 * @access private
+	 */
 	private function send_ajax_form_json_validation() {
 
 		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';

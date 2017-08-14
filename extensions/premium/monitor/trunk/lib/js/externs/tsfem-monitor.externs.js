@@ -35,18 +35,13 @@
  */
 
 /**
- * @constructor
- */
-function tsfem_e_monitor() {};
-
-/**
- * @type {Object}
+ * @type {object}
  * @const
  */
 var tsfem_e_monitor = {};
 
 /**
- * @type {(Object<string, *>|Array<Object<string, *>>)}
+ * @type {object|null}
  * @const
  */
 var tsfem_e_monitorL10n = {};

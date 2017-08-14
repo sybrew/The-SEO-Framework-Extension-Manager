@@ -48,7 +48,7 @@ class Core {
 		\TSF_Extension_Manager\Extension_Options;
 
 	/**
-	 * Constructor.
+	 * Child constructor.
 	 *
 	 * @since 1.0.0
 	 */
