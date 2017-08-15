@@ -36,8 +36,8 @@ function extension_basename( $path ) {
 	$path = \wp_normalize_path( $path );
 	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
 
-	$path = trim( $path, '/' );
-	$extension_dir = trim( $extension_dir, '/' );
+	$path = trim( $path, DIRECTORY_SEPARATOR );
+	$extension_dir = trim( $extension_dir, DIRECTORY_SEPARATOR );
 
 	/**
 	 * @TODO figure out why preg_replace is used in WP Core.
@@ -46,7 +46,7 @@ function extension_basename( $path ) {
 	 */
 	//$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
 	$path = str_replace( $extension_dir, '', $path );
-	$path = trim( $path, '/' );
+	$path = trim( $path, DIRECTORY_SEPARATOR );
 
 	return $path;
 }
@@ -75,8 +75,9 @@ function extension_dir_path( $file ) {
 function extension_dir_url( $file ) {
 
 	$path = dirname( \TSF_Extension_Manager\extension_basename( $file ) );
-	$url = TSF_EXTENSION_MANAGER_DIR_URL;
+	$path = str_replace( '/', DIRECTORY_SEPARATOR, $path );
 
+	$url = TSF_EXTENSION_MANAGER_DIR_URL;
 	$url .= trim( $path, '/ ' ) . '/';
 
 	return $url;

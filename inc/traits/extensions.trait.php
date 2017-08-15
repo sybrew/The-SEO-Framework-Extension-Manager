@@ -87,11 +87,11 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1502682291',
+				'last_updated' => '1502820526',
 				'requires' => '4.7.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.3',
+				'tested_tsf' => '2.9.4',
 			],
 			'amp' => [
 				'slug' => 'amp',
@@ -103,23 +103,23 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1502682016',
 				'requires' => '4.4.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 			'articles' => [
 				'slug' => 'articles',
 				'network' => '0',
 				'type' => 'premium',
 				'area' => 'news',
-				'version' => '1.0.0',
+				'version' => '1.0.1',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1494391221',
+				'last_updated' => '1499090718',
 				'requires' => '4.4.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 			'monitor' => [
 				'slug' => 'monitor',
@@ -131,9 +131,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1494391221',
 				'requires' => '4.4.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 			'incognito' => [
 				'slug' => 'incognito',
@@ -145,9 +145,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 			'title-fix' => [
 				'slug' => 'title-fix',
@@ -159,9 +159,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 			'honeypot' => [
 				'slug' => 'honeypot',
@@ -173,9 +173,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1497020151',
 				'requires' => '4.4.0',
-				'tested' => '4.8.0',
+				'tested' => '4.8.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.2',
+				'tested_tsf' => '2.9.4',
 			],
 		];
 	}
@@ -193,9 +193,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '8d6cff733800412e600e550347a13977ac64ec4ab8a0893d2b2de4a8f3591dd0',
-			'sha1'   => '08fc82476c7bdd9eff3ad6c3dfb9f8558fe1f4a7',
-			'md5'    => '4c7e3bfdb366b0abf9d0a7c962f737c1',
+			'sha256' => '197142ae565aba4feacb49ba4553c9fa311313676f3335bd21a80c662dd5bd8d',
+			'sha1'   => 'ef2faaab020f59fe7566d0af1e32e84fc5a939fd',
+			'md5'    => 'bf5ec57da1b009f362fb5ec656b5b22a',
 		];
 	}
 
@@ -818,7 +818,7 @@ trait Extensions_Actions {
 
 		$success = [];
 
-		if ( 0 !== \validate_file( $json_file ) || ! file_exists( $json_file ) )
+		if ( ! static::validate_file( $json_file, 'json' ) || ! file_exists( $json_file ) )
 			goto end;
 
 		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
@@ -1090,7 +1090,7 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) {
-		return (bool) include_once( $file );
+		return (bool) include_once $file;
 	}
 
 	/**
@@ -1101,10 +1101,17 @@ trait Extensions_Actions {
 	 * @param string $file The extension file, already normalized.
 	 * @return bool True on success, false on failure.
 	 */
-	private static function validate_file( $file ) {
+	private static function validate_file( $file, $type = 'php' ) {
 
-		if ( '.php' === substr( $file, -4 ) && 0 === \validate_file( $file ) && file_exists( $file ) )
-			return true;
+		if ( ( '.' . $type ) === substr( $file, - ( strlen( $type ) + 1 ) ) && file_exists( $file ) ) {
+			$t = \validate_file( $file );
+
+			if ( 0 === $t )
+				return true;
+
+			if ( 2 === $t && 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) )
+				return true;
+		}
 
 		return false;
 	}

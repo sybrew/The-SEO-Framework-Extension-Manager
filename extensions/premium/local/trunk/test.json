@@ -1,0 +1,18 @@
+{
+	"slug" : "local",
+	"namespace" : "TSF_Extension_Manager\\Extension\\Local",
+	"#comments" : {
+		"#" : "When the Settings class is broken, it doesn't affect the dashboard nor front-end, however, it prevents the extension from being deactivated.",
+		"#" : "Although Settings doesn't pertain in Admin or Core, it is loaded by them.",
+		"#" : "We can't do 'new Settings', so this file is bound to change in the future.",
+		"#" : "It means that we're missing a testing feature for static instances. Which is fine for now."
+	},
+	"test" : {
+		"_base" : "local.php",
+		"Admin" : [
+			"inc/classes/admin.class.php",
+			"inc/classes/core.class.php",
+			"inc/classes/settings.class.php"
+		]
+	}
+}

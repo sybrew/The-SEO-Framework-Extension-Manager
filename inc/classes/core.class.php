@@ -765,19 +765,23 @@ class Core {
 		$bits = $this->get_bits();
 		$_bit = $bits[0];
 
+		$n_bit = ~$_bit;
+
 		//* Timing-attack safe.
-		if ( isset( $instance[ ~ $_bit ] ) ) {
+		if ( isset( $instance[ $n_bit ] ) ) {
 			//= Timing attack mitigated.
 
 			//* Don't use hash_equals(). This is already safe.
-			if ( empty( $instance[ $bit ] ) || $instance[ ~ $_bit ] !== $instance[ $bit ] ) {
+			if ( empty( $instance[ $bit ] ) || $instance[ $n_bit ] !== $instance[ $bit ] ) {
 				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
-				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' ) xor $instance = [];
+				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' );
+				$instance = [];
 				return '';
 			}
 
 			//* Set retval and empty to prevent recursive timing attacks.
-			$_retval = $instance[ $bit ] and $instance = [];
+			$_retval = $instance[ $bit ];
+			$instance = [];
 
 			return $_retval;
 		}
@@ -796,7 +800,7 @@ class Core {
 		//* This creates a unique salt for each bit.
 		$hash = $this->hash( $_bit . '\\' . mt_rand( ~ $timer, $timer ) . '\\' . $bit, 'instance' );
 
-		return $instance[ $bit ] = $instance[ ~ $_bit ] = $hash;
+		return $instance[ $bit ] = $instance[ $n_bit ] = $hash;
 	}
 
 	/**
@@ -984,21 +988,21 @@ class Core {
 			$_key = mt_rand( 0, count( $schemes ) - 1 );
 			$instance_scheme = $schemes[ $_key ];
 		}
-		$scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
+		$_scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
 
-		if ( in_array( $scheme, $schemes, true ) ) {
+		if ( in_array( $_scheme, $schemes, true ) ) {
 			foreach ( [ 'key', 'salt' ] as $type ) :
-				$const = strtoupper( "{$scheme}_{$type}" );
+				$const = strtoupper( "{$_scheme}_{$type}" );
 				if ( defined( $const ) && constant( $const ) ) {
 					$values[ $type ] = constant( $const );
 				} elseif ( empty( $values[ $type ] ) ) {
-					$values[ $type ] = \get_site_option( "{$scheme}_{$type}" );
+					$values[ $type ] = \get_site_option( "{$_scheme}_{$type}" );
 					if ( ! $values[ $type ] ) {
 						/**
 						 * Hash keys not defined in wp-config.php nor in database.
 						 * Let wp_salt() handle this. This should run at most once per site per scheme.
 						 */
-						$values[ $type ] = \wp_salt( $scheme );
+						$values[ $type ] = \wp_salt( $_scheme );
 					}
 				}
 			endforeach;
@@ -1255,6 +1259,7 @@ class Core {
 
 			$this->get_verification_codes( $_instance, $bits );
 
+			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
 			return $loaded[ $class ] = require_once( $_path . $_file . '.class.php' );
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );

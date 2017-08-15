@@ -362,6 +362,10 @@ body.tsfem .wrap {
 	display: inline;
 }
 
+.tsfem-top-wrap .tsfem-title-centered h1 {
+	line-height: 1em;
+}
+
 .tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	display: inline-block;
 	white-space: pre-wrap;

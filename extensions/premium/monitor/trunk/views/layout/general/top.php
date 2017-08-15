@@ -17,7 +17,7 @@ if ( $options ) {
 
 ?>
 <section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
-	<div class="tsfem-title tsfem-flex tsfem-flex-row">
+	<div class="tsfem-title tsfem-title-centered tsfem-flex tsfem-flex-row">
 		<header><h1>
 			<?php
 			$image = [

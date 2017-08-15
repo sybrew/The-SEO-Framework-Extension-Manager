@@ -174,7 +174,7 @@ final class Fields {
 						'%s<br>%s',
 						[
 							\__( 'Select "Local Business" if the department type is not listed.', 'the-seo-framework-extension-manager' ),
-							\__( 'Select "Disabled" to disable this department.', 'the-seo-framework-extension-manager' ),
+							\__( 'Select "Department disabled" to disable this department.', 'the-seo-framework-extension-manager' ),
 						]
 					),
 				],
@@ -1596,7 +1596,7 @@ final class Fields {
 		return [
 			[
 				'',
-				'&mdash; ' . \__( 'Disabled', 'the-seo-framework-extension-manager' ) . ' &mdash;',
+				'&mdash; ' . \__( 'Department disabled', 'the-seo-framework-extension-manager' ) . ' &mdash;',
 				null, // No subtypes, doh.
 			],
 			[

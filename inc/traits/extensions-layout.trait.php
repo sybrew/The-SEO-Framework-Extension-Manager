@@ -319,12 +319,12 @@ trait Extensions_Layout {
 			case 'activate' :
 				$nonce_key = 'activate-ext';
 				$text = static::get_i18n( 'activate' );
-				$class = 'tsfem-button-extension-activate';
+				$s_class = 'tsfem-button-extension-activate';
 				break;
 			case 'deactivate' :
 				$nonce_key = 'deactivate-ext';
 				$text = static::get_i18n( 'deactivate' );
-				$class = 'tsfem-button-extension-deactivate';
+				$s_class = 'tsfem-button-extension-deactivate';
 				break;
 			default :
 				return '';
@@ -332,26 +332,44 @@ trait Extensions_Layout {
 		endswitch;
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', \esc_attr( $class ), \esc_html( $text ) );
+			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
+
+			static $cache = [];
+
+			if ( empty( $cache ) ) {
+				$cache['input_name'] = \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) );
+				$cache['admin_url'] = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'http', 'https' ] );
+			}
+
+			$s_slug = \sanitize_key( $slug );
+
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 			$nonce = \wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-			$extension = '<input type="hidden" name="' . \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) ) . '" value="' . \esc_attr( $slug ) . '">';
-			$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">', \esc_attr( $class ), \esc_attr( $text ) );
+			$extension = sprintf(
+				'<input type="hidden" name="%s" value="%s">',
+				$cache['input_name'],
+				$s_slug
+			);
+			$submit = sprintf(
+				'<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">',
+				$s_class,
+				\esc_attr( $text )
+			);
 			$form = $nonce_action . $nonce . $extension . $submit;
 
 			$nojs = sprintf(
 				'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
-				\esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'http', 'https' ] ),
-				\esc_attr( $slug ),
+				$cache['admin_url'],
+				$s_slug,
 				$form
 			);
 			$js = sprintf(
 				'<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>',
-				\esc_attr( $slug ),
-				\esc_attr( $class ),
-				\esc_attr( $slug ),
-				\esc_attr( $type ),
+				$s_slug,
+				$s_class,
+				$s_slug,
+				$type,
 				\esc_html( $text )
 			);
 
@@ -497,8 +515,8 @@ trait Extensions_Layout {
 			case -1 :
 			default :
 				$compat_class = 'tsfem-error';
-				/* translators: 1: Version number, 2: Version number */
 				$compat_notice = sprintf(
+					/* translators: 1: Version number, 2: Version number */
 					\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
 					$extension['requires'], $extension['requires_tsf']
 				);

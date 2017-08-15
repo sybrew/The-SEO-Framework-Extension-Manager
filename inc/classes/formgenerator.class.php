@@ -1032,6 +1032,8 @@ final class FormGenerator {
 			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
 			$wrap_id
 		);
+
+		echo '</div>';
 	}
 
 	/**
@@ -1184,7 +1186,7 @@ final class FormGenerator {
 			$title = vsprintf(
 				'<h3 class="tsfem-form-collapse-title-wrap">%s%s</h3>',
 				[
-					'<span class="tsfem-form-title-icon tsfem-form-title-icon-unknown">',
+					'<span class="tsfem-form-title-icon tsfem-form-title-icon-unknown"></span>',
 					sprintf(
 						'<span class="tsfem-form-collapse-title">%s</span>',
 						\esc_html( $_title )

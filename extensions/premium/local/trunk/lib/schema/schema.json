@@ -291,13 +291,21 @@
 							]
 						},
 						"_handlers" : {
-							"_condition" : {
-								"_if" : "this",
-								"_op" : "===",
-								"_value" : "",
-								"_do" : "kill_pack"
-							},
-							"_out" : "float"
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "===",
+									"_value" : "",
+									"_do" : "kill_pack"
+								},
+								{
+									"_if" : "this",
+									"_op" : "!==",
+									"_value" : null,
+									"_do" : "round",
+									"_to" : "7"
+								}
+							]
 						}
 					},
 					"longitude" : {
@@ -312,13 +320,21 @@
 							]
 						},
 						"_handlers" : {
-							"_condition" : {
-								"_if" : "this",
-								"_op" : "===",
-								"_value" : "",
-								"_do" : "kill_pack"
-							},
-							"_out" : "float"
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "===",
+									"_value" : "",
+									"_do" : "kill_pack"
+								},
+								{
+									"_if" : "this",
+									"_op" : "!==",
+									"_value" : null,
+									"_do" : "round",
+									"_to" : "7"
+								}
+							]
 						}
 					}
 				}
@@ -344,7 +360,8 @@
 			},
 			"_handlers" : {
 				"_escape" : "esc_url_raw",
-				"_condition" : {
+				"_condition" :
+				{
 					"_if" : "this",
 					"_op" : "empty",
 					"_do" : "kill_this"

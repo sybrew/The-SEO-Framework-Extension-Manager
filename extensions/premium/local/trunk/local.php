@@ -149,5 +149,5 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
 
-	return $loaded[ $file ] = (bool) require_once( TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php' );
+	return $loaded[ $file ] = (bool) require( TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php' );
 }

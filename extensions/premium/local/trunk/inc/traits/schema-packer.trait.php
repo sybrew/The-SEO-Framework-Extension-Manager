@@ -36,6 +36,89 @@ defined( 'ABSPATH' ) or die;
 trait Schema_Packer {
 
 	/**
+	 * Determines whether php.ini 'serialize_precision' should be changed.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	private function should_change_precision() {
+
+		static $cache;
+
+		if ( isset( $cache ) )
+			return $cache;
+
+		$precision = function_exists( 'ini_get' ) ? ini_get( 'serialize_precision' ) : null;
+
+		//= -1 means it's optimized correctly. 7 to 14 would also do, actually.
+		if ( isset( $precision ) && -1 !== (int) $precision )
+			return $cache = true;
+
+		return $cache = false;
+	}
+
+	/**
+	 * Determines whether php.ini 'serialize_precision' is changeable.
+	 *
+	 * @since 1.0.0
+	 * @staticvar bool $cache
+	 *
+	 * @return bool
+	 */
+	private function can_change_precision() {
+
+		static $cache;
+
+		if ( ! function_exists( 'ini_get_all' ) )
+			return $cache = false;
+
+		$ini_all = ini_get_all();
+
+		if ( empty( $ini_all['serialize_precision']['access'] ) )
+			return $cache = false;
+
+		$access = &$ini_all['serialize_precision']['access'];
+
+		if ( INI_USER & $access || INI_ALL & $access )
+			return $cache = true;
+
+		return $cache = false;
+	}
+
+	/**
+	 * Sets php.ini serialize_precision to correct value, i.e. -1.
+	 *
+	 * @since 1.0.0
+	 * @staticvar string $prev The previous serialize_precision value.
+	 *
+	 * @param bool $reset Whether to reset to previous serialize_precision value.
+	 */
+	private function correct_precision( $reset = false ) {
+
+		static $prev = null;
+
+		if ( $this->should_change_precision() && $this->can_change_precision() ) {
+			if ( $reset ) {
+				$prev && ini_set( 'serialize_precision', $prev );
+			} else {
+				$prev = ini_get( 'serialize_precision' );
+				ini_set( 'serialize_precision', '-1' );
+			}
+		}
+	}
+
+	/**
+	 * Resets php.ini serialize_precision to previous value.
+	 *
+	 * @since 1.0.0
+	 */
+	private function reset_precision() {
+		$this->correct_precision( true );
+	}
+
+	/**
 	 * Removes scheme from input URL.
 	 *
 	 * @since 1.0.0
@@ -80,12 +163,13 @@ trait Schema_Packer {
 		if ( ! is_object( $schema ) )
 			return '';
 
+		$this->correct_precision();
+
 		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
 
 		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
-		$main_url = isset( $data['department'][1]['url'] ) ? $data['department'][1]['url'] : null;
 
-		if ( $count && $main_url ) {
+		if ( $count ) {
 			$_collection = &$packer->_collector();
 
 			//= Get root/main department first.
@@ -97,17 +181,13 @@ trait Schema_Packer {
 				$_collection->department = [];
 				for ( $i = 2; $i <= $count; $i++ ) {
 					$packer->_iterate_base();
-					$url = isset( $data['department'][ $i ]['url'] ) ? $data['department'][ $i ]['url'] : null;
-					if ( $url ) {
-						/**
-						 * Gets sub-department data, and store it inclusively.
-						 * i.e. Inclusively for homepage for $_collection.
-						 */
-						$_data = $packer->_pack();
-	 					if ( isset( $_data ) ) {
-	 						$_collection->department[] = $_data;
-	 					}
-					}
+					/**
+					 * Gets sub-department data, and store it inclusively.
+					 * i.e. Inclusively for homepage for $_collection.
+					 */
+					$_data = $packer->_pack();
+					if ( isset( $_data ) )
+			 			$_collection->department[] = $_data;
 				}
 				if ( [] === $_collection->department )
 					unset( $_collection->department );
@@ -115,13 +195,19 @@ trait Schema_Packer {
 		}
 
 		$_data = $packer->_get();
-		if ( ! $_data )
+		if ( ! $_data ) {
+			$this->reset_precision();
 			return null;
+		}
 
 		$options = JSON_UNESCAPED_SLASHES;
 		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
 
-		return json_encode( $_data, $options );
+		$output = json_encode( $_data, $options );
+
+		$this->reset_precision();
+
+		return $output;
 	}
 
 	/**
@@ -143,12 +229,14 @@ trait Schema_Packer {
 		$data = $this->get_stale_extension_options();
 		$schema = $this->get_schema();
 
+		$this->correct_precision();
+
 		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
 
 		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
-		$main_url = isset( $data['department'][1]['url'] ) ? $data['department'][1]['url'] : 1;
+		$main_url = isset( $data['department'][1]['url'] ) ? $this->remove_scheme( $data['department'][1]['url'] ) : 1;
 
-		$json_options = JSON_UNESCAPED_SLASHES;
+		$json_options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
 
 		if ( $count ) {
 			$_collection = &$packer->_collector();
@@ -175,7 +263,7 @@ trait Schema_Packer {
 					 *
 					 * Alternatively, it creates it from the iteration.
 					 */
-					$id = isset( $data['department'][ $i ]['url'] ) ? $data['department'][ $i ]['url'] : $i;
+					$id = isset( $data['department'][ $i ]['url'] ) ? $this->remove_scheme( $data['department'][ $i ]['url'] ) : $i;
 
 					/**
 					 * Gets sub-department data, and store it separately and inclusively.
@@ -195,7 +283,9 @@ trait Schema_Packer {
 
 		$_data = $packer->_get();
 		if ( $_data )
-			$this->store_packed_data( \get_home_url(), json_encode( $_data, $json_options ) );
+			$this->store_packed_data( $this->remove_scheme( \get_home_url() ), json_encode( $_data, $json_options ) );
+
+		$this->reset_precision();
 
 		$this->save_packed_data();
 	}
@@ -219,19 +309,21 @@ trait Schema_Packer {
 	 * @see $this->store_packed_data();
 	 * @staticvar array $_d The stored data.
 	 *
+	 * @param string|int $id Either the URL or ID.
+	 * @param object     $data The data to store.
+	 * @param bool      $save Whether to store save the stored output.
 	 * @return bool|void : {
 	 *   Saving:  True on success, false on failure.
 	 *   Storing: void.
 	 * }
 	 */
-	protected function store_packed_data( $url, $data, $save = false ) {
+	protected function store_packed_data( $id, $data, $save = false ) {
 
 		static $_d = [];
 
 		if ( $save )
 			return $this->update_option( 'packed_data', $_d );
 
-		$url = $this->remove_scheme( $url );
-		$_d[ $url ] = $data;
+		$_d[ $id ] = $data;
 	}
 }

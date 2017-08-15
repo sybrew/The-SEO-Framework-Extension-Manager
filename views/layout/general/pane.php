@@ -44,21 +44,21 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 			printf( '<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">%s</div>', $content );
 		}
 		?>
-	</div>
-	<?php
-	if ( isset( $args['footer'] ) ) {
-		?>
-		<footer class="tsfem-pane-footer-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-end">
 		<?php
-		if ( $args['secure_obj'] ) {
-			call_user_func( $args['footer'], $args['footer'][0] );
-		} else {
-			call_user_func( $args['footer'] );
+		if ( isset( $args['footer'] ) ) {
+			?>
+			<footer class="tsfem-pane-footer-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-end">
+			<?php
+			if ( $args['secure_obj'] ) {
+				call_user_func( $args['footer'], $args['footer'][0] );
+			} else {
+				call_user_func( $args['footer'] );
+			}
+			?>
+			</footer>
+			<?php
 		}
 		?>
-		</footer>
-		<?php
-	}
-	?>
+	</div>
 </section>
 <?php

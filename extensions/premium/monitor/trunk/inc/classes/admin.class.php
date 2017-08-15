@@ -956,7 +956,7 @@ final class Admin extends Api {
 		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 		$_domain = $this->get_expected_domain();
 		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
-		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</time>', \esc_attr( $class ), \esc_html( $_domain ) );
+		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
 
 		$output = \TSF_Extension_Manager\Layout::wrap_title_content( \esc_html__( 'Account site:', 'the-seo-framework-extension-manager' ), $domain, false );
 

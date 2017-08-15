@@ -268,7 +268,7 @@ final class Layout extends Secure_Abstract {
 		}
 
 		$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
-		$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
+		$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
 		$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 
 		if ( $domain ) {
@@ -290,7 +290,7 @@ final class Layout extends Secure_Abstract {
 			}
 
 			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
-			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</time>', \esc_attr( $_class ), $domain_desc, \esc_html( $domain ) );
+			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $domain_desc, \esc_html( $domain ) );
 			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 

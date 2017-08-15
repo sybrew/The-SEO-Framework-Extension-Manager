@@ -335,7 +335,7 @@ function _autoload_classes( $class ) {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
 	}
 
-	require_once( $path . $class . '.class.php' );
+	require $path . $class . '.class.php';
 }
 
 /**
@@ -359,7 +359,7 @@ function _load_trait( $file ) {
 
 	$_file = str_replace( 'extension-', 'extension' . DIRECTORY_SEPARATOR, $file );
 
-	return $loaded[ $file ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
+	return $loaded[ $file ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
 }
 
 /**
@@ -391,5 +391,5 @@ function _load_wp_compat( $version = '' ) {
 	if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
 		return $loaded[ $version ] = true;
 
-	return $loaded[ $version ] = (bool) require_once( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
+	return $loaded[ $version ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
 }

@@ -77,8 +77,17 @@ final class SchemaPacker {
 	 * @var array  $data
 	 * @var object $schema
 	 */
-	private $data;
+	private $data,
 	        $schema;
+
+	/**
+	 * Maintains output.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var object $output
+	 */
+	private $output;
 
 	/**
 	 * Constructor. Sets up class main variables.
@@ -632,7 +641,7 @@ final class SchemaPacker {
 
 		switch ( $c->_do ) {
 			case 'kill_this' :
-			case 'kill_level' :
+			case 'kill_sub' :
 			case 'kill_pack' :
 				$this->condition[ $key ][] = $c->_do;
 				return null;
@@ -642,6 +651,9 @@ final class SchemaPacker {
 
 			case 'current' :
 				return current( $value );
+
+			case 'round' :
+				return (float) number_format( (float) $value, $c->_to );
 
 			case 'convert' :
 				return $this->convert( $value, $c->_to );

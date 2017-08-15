@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.3.0-dev2017.08.14.2
+ * Version: 1.3.0-beta-2017.08.15.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
  * The plugin version. Always 3 point.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '1.2.0' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '1.3.0-beta' );
 
 /**
  * The plugin map URL. Used for calling browser files.
@@ -46,7 +46,7 @@ define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( __FILE__ ) );
  * The plugin map absolute path. Used for calling php files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH', \plugin_dir_path( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH', \untrailingslashit( __DIR__ ) . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin file relative to the plugins dir.
@@ -113,14 +113,14 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS', 'tsf-extension-manager-
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH
  */
-require_once( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
+require( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
 
 /**
  * Load functions file.
  * @since 1.0.0
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
  */
-require_once( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
+require( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
 
 /**
  * Loads the class from cache.

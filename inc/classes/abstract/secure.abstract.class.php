@@ -126,15 +126,11 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	final private static function reset_instance() {
 
 		$class_vars = get_class_vars( __CLASS__ );
-		$other_vars = get_class_vars( get_called_class() );
 
-		$properties = array_merge( $class_vars, $other_vars );
-
-		foreach ( $properties as $property => $value ) :
+		foreach ( $class_vars as $property => $value ) :
 			if ( isset( self::$$property ) )
 				self::$$property = is_array( self::$$property ) ? [] : null;
 		endforeach;
-
 	}
 
 	/**

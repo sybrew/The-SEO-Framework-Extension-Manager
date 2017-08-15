@@ -42,9 +42,9 @@
 
 .tsfem-form-collapse-header {
 	position: relative;
-	min-height: 50px; /* TODO Performance hog as it's flex too? */
 	width: 100%;
 	background: #fefefe;
+	color: #23282d;
 	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	-webkit-align-items: center;
@@ -54,10 +54,6 @@
 	-moz-transition: -webkit-filter .33s;
 	-o-transition: -webkit-filter .33s;
 	transition: filter .33s;
-}
-
-.tsfem-form-collapse-header {
-	color: #23282d;
 }
 
 .tsfem-form-collapse-header-good .tsfem-form-collapse-icon {
@@ -101,6 +97,7 @@
 	font-weight: 400;
 	font-size: inherit;
 	vertical-align: top;
+	line-height: 1em;
 	content: "";
 	margin-right: 2px;
 }
