@@ -338,6 +338,7 @@ trait Error {
 			case 9004 :
 			case 1019001 :
 			case 1069001 :
+			case 1079001 :
 				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;

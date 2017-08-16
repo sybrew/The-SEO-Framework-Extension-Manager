@@ -1940,7 +1940,11 @@ final class Fields {
 					[
 						'HVACBusiness',
 						/* translators: Keep it short! Or, keep it HVAC. */
-						\_x( 'HVAC business', 'Heating, Ventalation, Air Conditioning', 'the-seo-framework-extension-manager' ),
+						\_x( 'HVAC business', 'Heating, Ventilation, Air Conditioning', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'HousePainter',
+						\__( 'House painter', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Locksmith',
@@ -2014,7 +2018,6 @@ final class Fields {
 					],
 				],
 			],
-			// MORE FOUND HERE: http://schema.org/ProfessionalService
 			[
 				'RadioStation',
 				\__( 'Radio station', 'the-seo-framework-extension-manager' ),
@@ -2055,10 +2058,6 @@ final class Fields {
 					[
 						'GolfCourse',
 						\__( 'Golf course', 'the-seo-framework-extension-manager' ),
-					],
-					[ //= DUPE
-						'HealthClub',
-						\__( 'Health club', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'PublicSwimmingPool',
@@ -2497,53 +2496,964 @@ final class Fields {
 				],
 			],
 			[
-				'American',
-				\__( 'American', 'the-seo-framework-extension-manager' ),
+				'North American',
+				\__( 'North American', 'the-seo-framework-extension-manager' ),
 				[
-
+					[
+						'Canadian',
+						\__( 'Canadian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'American',
+						\__( 'American', 'the-seo-framework-extension-manager' ),
+						[
+							[
+								'Alabamian',
+								\__( 'Alabamian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Alaskan',
+								\__( 'Alaskan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Arizonan',
+								\__( 'Arizonan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Arkansan',
+								\__( 'Arkansan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Californian',
+								\__( 'Californian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Coloradan',
+								\__( 'Coloradan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Connecticuter',
+								\__( 'Connecticuter', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Delawarean',
+								\__( 'Delawarean', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Floridian',
+								\__( 'Floridian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Georgian',
+								\__( 'Georgian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Hawaiian',
+								\__( 'Hawaiian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Idahoan',
+								\__( 'Idahoan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Illinoisan',
+								\__( 'Illinoisan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Hoosier',
+								\__( 'Hoosier', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Iowan',
+								\__( 'Iowan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Kansan',
+								\__( 'Kansan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Kentuckian',
+								\__( 'Kentuckian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Louisianian',
+								\__( 'Louisianian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Mainer',
+								\__( 'Mainer', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Marylander',
+								\__( 'Marylander', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Massachusettsan',
+								\__( 'Massachusettsan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Michiganian',
+								\__( 'Michiganian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Minnesotan',
+								\__( 'Minnesotan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Mississippian',
+								\__( 'Mississippian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Missourian',
+								\__( 'Missourian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Montanan',
+								\__( 'Montanan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Nebraskan',
+								\__( 'Nebraskan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Nevadan',
+								\__( 'Nevadan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'New Hampshirite',
+								\__( 'New Hampshirite', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'New Jerseyan',
+								\__( 'New Jerseyan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'New Mexican',
+								\__( 'New Mexican', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'New Yorker',
+								\__( 'New Yorker', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'North Carolinian',
+								\__( 'North Carolinian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'North Dakotan',
+								\__( 'North Dakotan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Ohioan',
+								\__( 'Ohioan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Oklahoman',
+								\__( 'Oklahoman', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Oregonian',
+								\__( 'Oregonian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Pennsylvanian',
+								\__( 'Pennsylvanian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Puerto Rican',
+								\__( 'Puerto Rican', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Rhode Islander',
+								\__( 'Rhode Islander', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'South Carolinian',
+								\__( 'South Carolinian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'South Dakotan',
+								\__( 'South Dakotan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Tennessean',
+								\__( 'Tennessean', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Texan',
+								\__( 'Texan', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Utahn',
+								\__( 'Utahn', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Vermonter',
+								\__( 'Vermonter', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Virginian',
+								\__( 'Virginian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Washingtonian',
+								\__( 'Washingtonian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'West Virginian',
+								\__( 'West Virginian', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Wisconsinite',
+								\__( 'Wisconsinite', 'the-seo-framework-extension-manager' ),
+							],
+							[
+								'Wyomingite',
+								\__( 'Wyomingite', 'the-seo-framework-extension-manager' ),
+							],
+						],
+					],
+					[
+						'Mexican',
+						\__( 'Mexican', 'the-seo-framework-extension-manager' ),
+					],
+				],
+			],
+			[
+				'Central American',
+				\__( 'Central American', 'the-seo-framework-extension-manager' ),
+				[
+					[
+						'Belizean',
+						\__( 'Belizean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Costa Rican',
+						\__( 'Costa Rican', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Salvadoran',
+						\__( 'Salvadoran', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guatemalan',
+						\__( 'Guatemalan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Honduran',
+						\__( 'Honduran', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Nicaraguan',
+						\__( 'Nicaraguan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Panamanian',
+						\__( 'Panamanian', 'the-seo-framework-extension-manager' ),
+					],
+				],
+			],
+			[
+				'South American',
+				\__( 'South American', 'the-seo-framework-extension-manager' ),
+				[
+					[
+						'Bralizian',
+						\__( 'Bralizian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Colombian',
+						\__( 'Colombian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Argentine',
+						\__( 'Argentine', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Peruvian',
+						\__( 'Peruvian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Venezuelan',
+						\__( 'Venezuelan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Chilean',
+						\__( 'Chilean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Ecuadorian',
+						\__( 'Ecuadorian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bolivian',
+						\__( 'Bolivian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Paraguayan',
+						\__( 'Paraguayan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Uruguayan',
+						\__( 'Uruguayan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guyanese',
+						\__( 'Guyanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Surinamese',
+						\__( 'Surinamese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guyanese',
+						\__( 'Guyanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guianan',
+						\__( 'Guianan', 'the-seo-framework-extension-manager' ),
+					],
+				],
+			],
+			[
+				'Caribbean',
+				\__( 'Caribbean', 'the-seo-framework-extension-manager' ),
+				[
+					[
+						'Anguillan',
+						\__( 'Anguillan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Antiguan',
+						\__( 'Antiguan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Aruban',
+						\__( 'Aruban', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bahamian',
+						\__( 'Bahamian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Barbadian',
+						\__( 'Barbadian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Belizean',
+						\__( 'Belizean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bermudian',
+						\__( 'Bermudian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Caymanian',
+						\__( 'Caymanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Cuban',
+						\__( 'Cuban', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Curaçaoan',
+						\__( 'Curaçaoan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Dominican',
+						\__( 'Dominican', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Grenadian',
+						\__( 'Grenadian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guadeloupean',
+						\__( 'Guadeloupean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guianan',
+						\__( 'Guianan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guyanese',
+						\__( 'Guyanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Haitian',
+						\__( 'Haitian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Jamaican',
+						\__( 'Jamaican', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Kittitian',
+						\__( 'Kittitian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Martinican',
+						\__( 'Martinican', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Montserratian',
+						\__( 'Montserratian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Nevisian',
+						\__( 'Nevisian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Saint Lucian',
+						\__( 'Saint Lucian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Tobagonian',
+						\__( 'Tobagonian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Trinidadian',
+						\__( 'Trinidadian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Turks and Caicos Islanders',
+						\__( 'Turks and Caicos Islanders', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Vincentian',
+						\__( 'Vincentian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Virgin Islander',
+						\__( 'Virgin Islander', 'the-seo-framework-extension-manager' ),
+					],
 				],
 			],
 			[
 				'Asian',
 				\__( 'Asian', 'the-seo-framework-extension-manager' ),
 				[
-
-				],
-			],
-			[
-				'Latin',
-				\__( 'Latin', 'the-seo-framework-extension-manager' ),
-				[
-
+					[
+						'Afghan',
+						\__( 'Afghan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Armenian',
+						\__( 'Armenian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Azerbaijani',
+						\__( 'Azerbaijani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bahraini',
+						\__( 'Bahraini', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bangladeshi',
+						\__( 'Bangladeshi', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bhutanese',
+						\__( 'Bhutanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bruneian',
+						\__( 'Bruneian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Burmese',
+						\__( 'Burmese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Cambodian',
+						\__( 'Cambodian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Chinese',
+						\__( 'Chinese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Cypriot',
+						\__( 'Cypriot', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Emirati',
+						\__( 'Emirati', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Filipino',
+						\__( 'Filipino', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Georgian',
+						\__( 'Georgian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Indian',
+						\__( 'Indian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Indonesian',
+						\__( 'Indonesian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Iranian',
+						\__( 'Iranian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Iraqi',
+						\__( 'Iraqi', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Israeli',
+						\__( 'Israeli', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Japanese',
+						\__( 'Japanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Jordanian',
+						\__( 'Jordanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Kazakhstani',
+						\__( 'Kazakhstani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Kuwaiti',
+						\__( 'Kuwaiti', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Kyrgyzstani',
+						\__( 'Kyrgyzstani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Lao',
+						\__( 'Lao', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Lebanese',
+						\__( 'Lebanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Malaysian',
+						\__( 'Malaysian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Maldivian',
+						\__( 'Maldivian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Mongolian',
+						\__( 'Mongolian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Nepali',
+						\__( 'Nepali', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'North Korean',
+						\__( 'North Korean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Omani',
+						\__( 'Omani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Pakistani',
+						\__( 'Pakistani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Palestinian',
+						\__( 'Palestinian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Qatari',
+						\__( 'Qatari', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Russian',
+						\__( 'Russian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Saudi',
+						\__( 'Saudi', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Singaporean',
+						\__( 'Singaporean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'South Korean',
+						\__( 'South Korean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Sri Lankan',
+						\__( 'Sri Lankan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Syrian',
+						\__( 'Syrian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Taiwanese',
+						\__( 'Taiwanese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Tajikistani',
+						\__( 'Tajikistani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Thai',
+						\__( 'Thai', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Timorese',
+						\__( 'Timorese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Turkish',
+						\__( 'Turkish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Turkmen',
+						\__( 'Turkmen', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Uzbekistani',
+						\__( 'Uzbekistani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Vietnamese',
+						\__( 'Vietnamese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Yemeni',
+						\__( 'Yemeni', 'the-seo-framework-extension-manager' ),
+					],
 				],
 			],
 			[
 				'European',
 				\__( 'European', 'the-seo-framework-extension-manager' ),
 				[
-
+					[
+						'Albanian',
+						\__( 'Albanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Andorran',
+						\__( 'Andorran', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Austrian',
+						\__( 'Austrian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Azerbaijani',
+						\__( 'Azerbaijani', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Belarusian',
+						\__( 'Belarusian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Belgian',
+						\__( 'Belgian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bosnian',
+						\__( 'Bosnian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'British',
+						\__( 'British', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Bulgarian',
+						\__( 'Bulgarian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Croatian',
+						\__( 'Croatian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Czech',
+						\__( 'Czech', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Danish',
+						\__( 'Danish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Dutch',
+						\__( 'Dutch', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Estonian',
+						\__( 'Estonian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Finnish',
+						\__( 'Finnish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'French',
+						\__( 'French', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'German',
+						\__( 'German', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Greek',
+						\__( 'Greek', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Herzegovinian',
+						\__( 'Herzegovinian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Hungarian',
+						\__( 'Hungarian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Icelandic',
+						\__( 'Icelandic', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Irish',
+						\__( 'Irish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Italian',
+						\__( 'Italian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Kosovar',
+						\__( 'Kosovar', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Latvian',
+						\__( 'Latvian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Liechtensteiner',
+						\__( 'Liechtensteiner', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Lithuanian',
+						\__( 'Lithuanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Luxembourg',
+						\__( 'Luxembourg', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Macedonian',
+						\__( 'Macedonian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Maltese',
+						\__( 'Maltese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Moldovan',
+						\__( 'Moldovan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Montenegrin',
+						\__( 'Montenegrin', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Monégasque',
+						\__( 'Monégasque', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Norwegian',
+						\__( 'Norwegian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Polish',
+						\__( 'Polish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Portuguese',
+						\__( 'Portuguese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Romanian',
+						\__( 'Romanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Sammarinese',
+						\__( 'Sammarinese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Serbian',
+						\__( 'Serbian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Slovak',
+						\__( 'Slovak', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Slovenian',
+						\__( 'Slovenian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Spanish',
+						\__( 'Spanish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Swedish',
+						\__( 'Swedish', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Swiss',
+						\__( 'Swiss', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Ukrainian',
+						\__( 'Ukrainian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Vatican',
+						\__( 'Vatican', 'the-seo-framework-extension-manager' ),
+					],
 				],
 			],
 			[
 				'Oceanic',
 				\__( 'Oceanic', 'the-seo-framework-extension-manager' ),
 				[
-
+					[
+						'American Samoan',
+						\__( 'American Samoan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Australian',
+						\__( 'Australian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Cook Islander',
+						\__( 'Cook Islander', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Micronesian',
+						\__( 'Micronesian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Fijian',
+						\__( 'Fijian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'French Polynesian',
+						\__( 'French Polynesian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Futunan',
+						\__( 'Futunan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Guamanian',
+						\__( 'Guamanian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'I-Kiribati',
+						\__( 'I-Kiribati', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Marshallese',
+						\__( 'Marshallese', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Nauruan',
+						\__( 'Nauruan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'New Caledonian',
+						\__( 'New Caledonian', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'New Zealander',
+						\__( 'New Zealander', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Niuean',
+						\__( 'Niuean', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Norfolk Islander',
+						\__( 'Norfolk Islander', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Northern Marianan',
+						\__( 'Northern Marianan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Palauan',
+						\__( 'Palauan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Papuan',
+						\__( 'Papuan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Pitcairn Islander',
+						\__( 'Pitcairn Islander', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Samoan',
+						\__( 'Samoan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Solomon Islander',
+						\__( 'Solomon Islander', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Tokelauan',
+						\__( 'Tokelauan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Tongan',
+						\__( 'Tongan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Tuvaluan',
+						\__( 'Tuvaluan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Vanuatuan',
+						\__( 'Vanuatuan', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'Wallisian',
+						\__( 'Wallisian', 'the-seo-framework-extension-manager' ),
+					],
 				],
 			],
 			[
-				'Vegan',
-				\__( 'Vegan', 'the-seo-framework-extension-manager' ),
-				[
-
-				],
+				'Barbecue',
+				\__( 'Barbecue', 'the-seo-framework-extension-manager' ),
+				[],
+			],
+			[
+				'Fast Food',
+				\__( 'Fast Food', 'the-seo-framework-extension-manager' ),
+				[],
 			],
 			[
 				'Vegetarian',
 				\__( 'Vegetarian', 'the-seo-framework-extension-manager' ),
-				[
-
-				],
+				[],
+			],
+			[
+				'Vegan',
+				\__( 'Vegan', 'the-seo-framework-extension-manager' ),
+				[],
 			],
 		];
 	}

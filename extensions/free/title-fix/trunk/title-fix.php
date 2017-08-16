@@ -304,9 +304,6 @@ final class Core {
 	/**
 	 * Finds the title tag and replaces it if found; will echo content from buffer otherwise.
 	 *
-	 * @uses _wp_can_use_pcre_u() WP Core function
-	 *		(Compat for lower than WP 4.1.0 provided within The SEO Framework)
-	 *
 	 * @since 1.0.0
 	 * @since 1.0.2: Always echos $content.
 	 *

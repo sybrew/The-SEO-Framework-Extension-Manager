@@ -234,7 +234,7 @@ trait Secure_Post {
 				}
 			endif;
 
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 9003 ) ], 'failure' ); // TODO var_dump() set number
+			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
 		endif;
 
 		exit;

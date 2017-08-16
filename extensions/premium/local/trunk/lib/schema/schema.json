@@ -108,13 +108,11 @@
 			"_handlers" : {
 				"_out" : "string",
 				"_escape" : "esc_url_raw",
-				"_condition" : [
-					{
-						"_if" : "this",
-						"_op" : "empty",
-						"_do" : "kill_pack"
-					}
-				]
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_pack"
+				}
 			}
 		},
 		"name" : {
@@ -360,8 +358,7 @@
 			},
 			"_handlers" : {
 				"_escape" : "esc_url_raw",
-				"_condition" :
-				{
+				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
 					"_do" : "kill_this"

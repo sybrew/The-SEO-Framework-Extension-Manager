@@ -818,7 +818,7 @@ trait Extensions_Actions {
 
 		$success = [];
 
-		if ( ! static::validate_file( $json_file, 'json' ) || ! file_exists( $json_file ) )
+		if ( ! static::validate_file( $json_file, 'json' ) )
 			goto end;
 
 		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
@@ -854,9 +854,8 @@ trait Extensions_Actions {
 			}
 		}
 
-		end : {
-			return ! in_array( false, $success, true );
-		}
+		end :;
+		return ! in_array( false, $success, true );
 	}
 
 	/**

@@ -71,6 +71,9 @@ trait Schema_Packer {
 
 		static $cache;
 
+		if ( isset( $cache ) )
+			return $cache;
+
 		if ( ! function_exists( 'ini_get_all' ) )
 			return $cache = false;
 
