@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api, monitor, modules, title, seo, schema
 Requires at least: 4.4.0
 Tested up to: 4.8.1
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,19 +15,18 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 **Advanced and powerful SEO.**
 **Delivered through extension for [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
 
-This plugin provides an advanced dashboard where you can activate the latest free and premium extensions.
+This plugin provides an advanced WordPress administrative dashboard page where you can activate the latest free and premium extensions.
 
 = Included Extensions =
 
-This plugin adds an extra dashboard menu entry, in which you can activate the latest free and premium extensions.
-
 **The following extensions are included:**
 
+* **Local:** The Local extension lets you set up important local business information for search engines to consume.
 * **AMP:** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
-* **Incognito:** The Incognito extension removes all front-end branding from The SEO Framework.
-* **Monitor:** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
-* **Title Fix:** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
 * **Articles:** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
+* **Monitor:** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
+* **Incognito:** The Incognito extension removes all front-end branding from The SEO Framework.
+* **Title Fix:** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
 * **Honeypot:** The Honeypot extension catches comment spammers in four lightweight yet powerful ways.
 
 = Upcoming Extensions =
@@ -35,7 +34,7 @@ This plugin adds an extra dashboard menu entry, in which you can activate the la
 **These extensions are being worked on:**
 
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
-* **Local SEO:** When configured, it tells Search Engines about the physical location of your business.
+* **Attachment Redirect:** It will automatically redirect visitors to the parent post of attachment pages.
 
 = How it works =
 
@@ -51,7 +50,7 @@ A premium subscription will allow you to activate all premium extensions for one
 
 Some premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
 
-As long as the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
+If the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
 == Installation ==
 
@@ -72,7 +71,7 @@ As long as the subscription is active, you're allowed to use all premium extensi
 = This plugin will then guide you through an activation process: =
 
 1. Follow the link provided or go to the Extensions submenu of SEO.
-2. Choose your subscription.
+2. Choose your subscription type.
 3. That's it! Feel free to activate any extension available.
 
 The extensions test themselves upon activation. So, if any extension doesn't work on your site it will let you know why.
@@ -91,12 +90,12 @@ The extensions test themselves upon activation. So, if any extension doesn't wor
 
 = Are you a developer? =
 And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
-A full code review will take place prior to releasing it. The code has to pass at least all of the WordPress.org plugin standards and all code must be licensed under GPLv3.
-Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted as of yet. API connections aren't allowed either.
+A full code review will take place prior to releasing it. The code must pass at least all the WordPress.org plugin standards and all code must be licensed under GPLv3.
+Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted yet. API connections aren't allowed either.
 
 = For developers: Security =
-Because this plugin handles multiple input fields, multiple nonce fields had to be created in order to prevent XSS from otherwise unauthorized users.
-In order to minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
+Because this plugin handles multiple input fields, multiple nonce fields had to be created to prevent XSS from otherwise unauthorized users.
+To minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
 Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
 If you have any questions, before blindly implementing or circumventing security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
 
@@ -108,7 +107,7 @@ This is to enhance the plugin security, stability, and overall performance. Plea
 == Screenshots ==
 
 1. The activation page. You can choose both premium and free subscriptions.
-2. The SEO Extensions overview page, running on a multisite.
+2. The SEO Extensions overview page, running on a Multisite.
 
 == Frequently Asked Questions ==
 
@@ -123,7 +122,7 @@ An extension is like a plugin, and can be activated and deactivated on demand. A
 
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
-Each extension will include carefully crafted documentation in the near future.
+Each extension will include carefully crafted documentation soon.
 
 = Do I need to register an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
@@ -144,12 +143,12 @@ Follow the steps provided next to the error code, if any. If the error keeps com
 Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
 = Which users can activate extensions? =
-Only users who can manage options are allowed to interact with this plugin.
+Only users who can manage options can interact with this plugin.
 
 = Where are the extensions acquired from? =
 Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
 
-= Does the Extension Manager need to stay activated in order to run the extensions? =
+= Does the Extension Manager need to stay activated to run the extensions? =
 Yes. The Extension Manager supplies its own extension activation management system apart from WordPress'.
 Deactivating the Extension Manager will also deactivate all extensions.
 
@@ -157,16 +156,16 @@ Deactivating the Extension Manager will also deactivate all extensions.
 When your premium subscription expires, the premium extensions will automatically deactivate.
 A margin of error is allowed, so you don't have to worry for if the activation server is down.
 
-= Does this plugin work on MultiSite Networks? =
+= Does this plugin work on Multisite Networks? =
 Absolutely. This plugin can be network activated while The SEO Framework base plugin is activated site-by-site without issues.
 Alternatively, this plugin can be activated per site while The SEO Framework is network activated. Any other combination is possible too.
 
-= Are there WordPress MultiSite network specific SEO extensions? =
-They're planned! Unfortunately, there's still a lot to be done before this is even possible.
+= Are there WordPress Multisite network specific SEO extensions? =
+They're planned! However, there's still a lot to be done before this is even possible.
 
 = What happens when I deactivate my account? =
 All plugin settings will be deleted, this includes which extensions were enabled.
-Each extension handles its own options (if any); those settings won't be lost, not even upon re-activation of the extension at a later time.
+Each extension handles its own options (if any); those settings won't be lost, not even upon re-activation of the extension afterwards.
 
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
@@ -182,12 +181,11 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 = 1.3.0 - Secular SEO =
 
 * **Release date:**
-	/
-	* August TODO'th, 2017
+	* August 22nd, 2017
 
 **New Extension:**
 
-* **Local SEO**: This allows you to set up important local business information for Search Engines to consume.
+* **Local SEO**: This allows you to set up important local business information for search engines to consume.
 
 **Detailed log:**
 
@@ -195,26 +193,28 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 
 **Plugin Improvements:**
 
-* **Local:**
-	* **Improvement:** The extension autoloaded now uses namespaces rather than classnames.
+* **Main:**
+	* **Improvement:** The extension autoloader now uses namespaces rather than class names.
 		* This changes all extensions' base structure.
-		* This speeds up autoloading twofold.
+		* This speeds up autoloading twofold, because it no longer has to manipulate the class name.
 	* **Improvement:** The layout no longer is a massive stack of repaintable flexboxes, but is now split up instead on scroll-point.
-		* This fixes a layout performance issue, most prominently seen in Google Chrome. Because it no longer has to repaint 20+ full-screen flexboxes on miniscule height variation changes.
+		* This fixes a layout performance issue, most prominently seen in Google Chrome. Because it no longer has to repaint 20+ full-screen flexboxes on miniscule height variation changes when scrolling.
 	* **Improvement:** This plugin has now been tested against xDebug to eliminate common errors, performance culprits, and resource hogs.
 		* Most prominently were security functions. They unintentionally busted the cache.
 	* **Improvement:** Admin error dismissible notices can now be send and set up through AJAX, instead of only a box-header or inline notification.
 		* This is great for when you encounter an error when activating an extension.
+		* At most two notifications can be displayed simultaneously. It's fun to play with.
 	* **Improvement:** Notices generated by this plugin no longer jump when using JavaScript.
 		* This also improved non-JS admin notices, where they're output where they should be instantaneously.
-	* **Fixed:** Tooltips no longer disappear when the caller is tapped or clicked.
+	* **Fixed:** Various browser memory leaks have been resolved.
+	* **Fixed:** Tooltips no longer disappear when the caller is tapped or clicked upon.
 	* **Fixed:** Tooltips no longer overflow out of bounds when too high.
 	* **Fixed:** Remote status check now warns you when the subscription for when the subscription is expiring.
-	* **Fixed:** Extenstion files can now be validated, and therefore activated, on Windows servers.
+	* **Fixed:** Extension files can now be validated, and therefore activated, on Windows servers.
 	* **Noted:** WP Engine staging environments will generate error 2001 when switching from staging to production and vice-versa.
 		* This means that the site's integrity can't be verified. This is intentional but unwanted. We're working on a fix. Stay tuned!
 		* Current workaround:
-			* Write down the active extension.
+			* Write down the active extensions.
 			* Deactivate account.
 			* Reactivate account.
 			* Reactivate written down extensions.
@@ -222,31 +222,46 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 * **API:**
 	* **Internal:**
 		* When a subscription fails to validate, it will now allow you to reactivate it, without killing the options.
-			* This might require a second try for API propagation, reason unknown.
+			* This might require a second try for API propagation when you manually disconnect your site through our website, as our caches need to catch up.
 		* You can now see your subscription end date and/or next payment date.
+			* See "External" for more information.
 		* Error code 301 now suggests to contact your hosting provider.
 			* It means that our API services can't be contacted at its very early stages.
 			* Because we constantly monitor our API services, this is most likely an issue with your host or how your site is secured.
-			* If you receive this error code, try again in 30 minutes. If it still doesn't work, proceed with contacting support.
+			* If you receive this error code, try again in 30 minutes. If the error is still outputted, proceed with contacting support.
 	* **External:**
-		* We're now sending recurring payment info.
+		* We're now sending recurring payment data information. So you'll know better when your subscription expires.
 
 **Extension Improvements:**
 
 * **Premium - Local:**
 	* **Version:**
+		* 1.0.0
 		* **This is a new extension.**
-			* 1.0.0
+	* **Features:**
 		* [View use cases here](https://developers.google.com/search/docs/data-types/local-businesses#use_cases).
+		* All supported businesses are included.
+		* Food Establishment types can annotate their cuisines, menu URL, and reservation actions.
+			* Are you missing a cuisine? Let us know!
 		* This extension allows you to set up detailed business information as Structured Data.
 			* It outputs Schema.org JSON-LD scripts as Structure Data when set up.
 				* This means its output works on any theme.
 				* Users generally won't see this output.
+				* Note that its output will only be used when the site is adequate.
 			* Note that the Structured Data should reflect on what's outputted as text for the users on the website.
+			* Note that Google My Business is leading, whereas this extension then provides complimentary data.
+				* If you haven't registered with Google My Business, then this extension's output is leading.
+				* If you have multiple departments and are using Google My Business, they should also be registered there.
+				* You do not need to verify your business address when using this extension before it shows up in Google.
+		* It allows for up to 4095 sub-departments.
+			* If you've also signed up for Google My Business, these sub-departments will be displayed under the main department's name only.
+			* The sub-departments must be annotated on the same website.
 		* It's great for both small and large businesses whom want to be found regionally.
-			* Note that its output will only be used when the site is adequate.
 		* It features an API connection with our servers for (reverse) geocoding, so your business address can be filled in accurately.
+			* This means you won't have to sign up at Google yourself, which saves you a lot of time.
 		* It features a state-of-the-art form generator, which allows you to register up to 4096 departments.
+	* **Documentation:**
+		* We're currently preparing our site for documentation. When finished, we'll release an update which will add hyperlinks to the extension entry boxes.
 * **Free - AMP:**
 	* **Version:**
 		* 1.0.2
@@ -269,8 +284,8 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 			* The data will always be checked for validity on both AMP and non-AMP, while adhering to Google's guidelines.
 			* The data should never be marked invalid on the AMP version.
 	* **Improved:**
-		* The description is now taken from cache, rather than regenerated.
-			* This can yield a large beneficial performance effect when parsing huge texts.
+		* The description is now taken from cache, rather than being regenerated.
+			* This can yield a large beneficial performance effect when parsing large texts.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
@@ -287,7 +302,7 @@ TODO View the [changeset on GitHub](https://example.com/#1).
 					* This outputted a notice on all testing fields and therefore showed no useful information.
 				* July 6th, 2017: URLs with UTF-8 and UTF-16 characters can now be detected.
 					* This improves canonical URL detection on some sites.
-					* This improves icon detection when using Jetpack Photon.
+					* This improves icon detection when using Jetpack Photon, for example.
 * **Premium - Honeypot:**
 	* **Version:**
 		* 1.0.1-beta
@@ -311,7 +326,7 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 
 **Plugin Improvements:**
 
-* **Local:**
+* **Main:**
 	* Performance: Instance verification key options are now correctly deleted upon account deactivation.
 	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID pollution.
 	* Performance: Error notice option is now no longer autoloaded when unset.
@@ -444,7 +459,7 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 
 **Plugin Improvements:**
 
-* **Local:**
+* **Main:**
 	* Performance: Improved plugin performance by eliminating duplicated autoloader checks.
 	* Improvement: Plugin is tested and working on WordPress 4.8 (alpha).
 	* Improvement: Extension list has been reordered.

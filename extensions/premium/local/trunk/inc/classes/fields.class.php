@@ -297,7 +297,7 @@ final class Fields {
 				'_default' => [],
 				'_edit' => true,
 				'_ret' => 's||array',
-				'_req' => true,
+				'_req' => false,
 				'_type' => 'selectmultia11y',
 				'_desc' => [
 					\__( 'Cuisine', 'the-seo-framework-extension-manager' ),

@@ -1657,7 +1657,7 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
-		$_data_required = isset( $args['_req'] ) ? 'data-required=1' : '';
+		$_data_required = ! empty( $args['_req'] ) ? 'data-required=1' : '';
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		return vsprintf(

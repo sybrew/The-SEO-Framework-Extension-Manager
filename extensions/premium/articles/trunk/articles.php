@@ -101,6 +101,8 @@ final class Core {
 
 	/**
 	 * The constructor, initialize plugin.
+	 *
+	 * @since 1.0.0
 	 */
 	private function construct() {
 
@@ -326,6 +328,8 @@ final class Core {
 	/**
 	 * Returns the Article Context.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @requiredSchema Always
 	 * @ignoredSchema Never
 	 * @return array The Article context.
@@ -340,6 +344,7 @@ final class Core {
 	 * Possibilities: 'Article', 'NewsArticle', 'BlogPosting'.
 	 * 'Article' is most conventional and convinient, and covers all three types.
 	 *
+	 * @since 1.0.0
 	 * @todo TSF allow selection of article/news/blogpost.
 	 * @todo Maybe extension? i.e. News SEO.
 	 *
@@ -354,19 +359,28 @@ final class Core {
 	/**
 	 * Returns the Article Main Entity of Page.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
 	 * @return array The Article's main entity of the page.
 	 */
 	private function get_article_main_entity() {
 
-		if ( ! $this->is_amp() || ! $this->is_json_valid() )
+		if ( ! $this->is_json_valid() )
 			return [];
+
+		$url = \the_seo_framework()->the_url_from_cache();
+
+		if ( ! $url ) {
+			$this->invalidate( 'amp' );
+			return [];
+		}
 
 		return [
 			'mainEntityOfPage' => [
 				'@type' => 'WebPage',
-				'@id' => \the_seo_framework()->the_url_from_cache(),
+				'@id' => $url,
 			],
 		];
 	}
@@ -378,6 +392,7 @@ final class Core {
 	 *   'amp'    => Will invalidate output.
 	 *   'nonamp' => Will return empty.
 	 * }
+	 * @since 1.0.0
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema Never

@@ -85,10 +85,13 @@ final class LoadAdmin extends AdminPages {
 			$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
 			if ( false === defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
-				/* translators: Markdown. %s = API URL */
 				$notice = $this->convert_markdown(
 					sprintf(
-						\esc_html__( 'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.', 'the-seo-framework-extension-manager' ),
+						/* translators: Markdown. %s = API URL */
+						\esc_html__(
+							'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.',
+							'the-seo-framework-extension-manager'
+						),
 						\esc_html( $host )
 					),
 					[ 'code' ]

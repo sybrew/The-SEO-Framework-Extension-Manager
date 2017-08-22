@@ -61,6 +61,7 @@
 		},
 		"@id" : {
 			"_data" : {
+				"#comment" : "Allow users to set up their own for multisite compat, use this as fallback + show change through JS.",
 				"_type" : "single",
 				"_from" : "concat",
 				"_config" : {
@@ -404,6 +405,40 @@
 					"_do" : "kill_this"
 				},
 				"_out" : "string"
+			}
+		},
+		"servesCuisine" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					"$nth",
+					"servesCuisine"
+				]
+			},
+			"_handlers" : {
+				"_escape" : "sanitize_text_field",
+				"_condition" : [
+					{
+						"_if" : "this",
+						"_op" : "empty",
+						"_do" : "kill_this"
+					},
+					{
+						"_if" : "this",
+						"_op" : "count",
+						"_value" : 1,
+						"_do" : "current"
+					},
+					{
+						"_if" : "this",
+						"_op" : "count_gt",
+						"_value" : 1,
+						"_do" : "convert",
+						"_to" : "array"
+					}
+				]
 			}
 		},
 		"openingHoursSpecification" : {
