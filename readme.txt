@@ -189,7 +189,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **Detailed log:**
 
-TODO View the [changeset on GitHub](https://example.com/#1).
+* View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/compare/988fa6211c57074303388b1fbc1a86ea186a58e0...1f56769f4a6010cea8046c9de7c2c8bc297da2e6).
 
 **Plugin Improvements:**
 
