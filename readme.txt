@@ -4,7 +4,7 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, api, monitor, modules, title, seo, schema
 Requires at least: 4.4.0
 Tested up to: 4.8.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -178,6 +178,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
+= 1.3.1 =
+
+* **Fixed:** Added missing underscore in FormGenerator browser script file, which prevented ReservationAction settings from showing up on FoodEstablishment types.
+
 = 1.3.0 - Secular SEO =
 
 * **Release date:**
@@ -208,7 +212,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* This also improved non-JS admin notices, where they're output where they should be instantaneously.
 	* **Fixed:** Various browser memory leaks have been resolved.
 	* **Fixed:** Tooltips no longer disappear when the caller is tapped or clicked upon.
-	* **Fixed:** Tooltips no longer overflow out of bounds when too high.
+	* **Fixed:** Tooltips no longer overflow out of bounds when shown too high up.
 	* **Fixed:** Remote status check now warns you when the subscription for when the subscription is expiring.
 	* **Fixed:** Extension files can now be validated, and therefore activated, on Windows servers.
 	* **Noted:** WP Engine staging environments will generate error 2001 when switching from staging to production and vice-versa.
