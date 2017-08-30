@@ -168,6 +168,8 @@ class API extends Core {
 	 * Generates software API URL to connect to the WooCommerce API manager.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Circumvented improper separator and encoding.
+	 * @link http://php.net/arg-separator.output
 	 *
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
