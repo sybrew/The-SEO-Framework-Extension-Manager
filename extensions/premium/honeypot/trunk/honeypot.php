@@ -7,8 +7,8 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 /**
  * Extension Name: Honeypot - *beta*
  * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches comment spammers in four lightweight yet powerful ways. By adding hashed input fields that only real browsers can clear, it has a near 100% catch-rate.
- * Extension Version: 1.0.1-***β***
+ * Extension Description: The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
+ * Extension Version: 1.0.2-***β***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -179,7 +179,7 @@ final class Core {
 
 		$i = 0;
 		do {
-			switch ( $i ) :
+			switch ( $i++ ) :
 				case 0 :
 					$this->check_css_field( $approved );
 					break;
@@ -199,7 +199,6 @@ final class Core {
 				default :
 					break 2;
 			endswitch;
-			$i++;
 		} while ( 'spam' !== $approved );
 
 		return $approved;
@@ -348,7 +347,7 @@ final class Core {
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ) ?: false;
+		$set = ! empty( $_POST[ $_field ] );
 
 		if ( $set ) {
 			// Empty check failed.
@@ -573,6 +572,7 @@ final class Core {
 	 * Otherwise, each key is unique per post ID.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.2 Values always start with an alphabetic character
 	 * @staticvar array $_hashes
 	 *
 	 * @param int  $length   The length of the hash to get.
@@ -619,7 +619,7 @@ final class Core {
 
 		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
 		$hash = $flip ? strrev( $hash ) : $hash;
-		return (string) substr( $hash, 0, $length );
+		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
 	}
 
 	/**
@@ -627,6 +627,7 @@ final class Core {
 	 * Each key is different per Post ID minutes.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.2 Values always start with an alphabetic character
 	 * @staticvar string $_hash
 	 *
 	 * @param int  $length   The length of the hash to get.
@@ -643,7 +644,7 @@ final class Core {
 		}
 
 		$hash = $flip ? strrev( $_hash ) : $_hash;
-		return (string) substr( $hash, 0, $length );
+		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
 	}
 
 	/**
@@ -656,6 +657,7 @@ final class Core {
 	 * the hash will then fail the spam check. 24 hours is very generous, however.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.2 Values always start with an alphabetic character
 	 * @staticvar array $_hashes
 	 *
 	 * @param int  $length   The length of the hash to get.
@@ -696,6 +698,26 @@ final class Core {
 
 		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
 		$hash = $flip ? strrev( $hash ) : $hash;
-		return (string) substr( $hash, 0, $length );
+		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
+	}
+
+	/**
+	 * Transforms first character of hash to alphabetic if not.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param string $hash
+	 * @return string $hash
+	 */
+	private function alpha_first( $hash ) {
+
+		$first_char = substr( $hash, 0, 1 );
+
+		if ( ! is_numeric( $first_char ) )
+			return $hash;
+
+		$table = range( 'a', 'z' );
+
+		return $table[ round( count( $table ) / $first_char ) ] . substr( $hash, 1 );
 	}
 }

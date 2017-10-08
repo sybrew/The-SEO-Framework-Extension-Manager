@@ -4,7 +4,8 @@ Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, monitor, modules, title, seo, schema, local, articles, honeypot, amp
 Requires at least: 4.4.0
 Tested up to: 4.8.1
-Stable tag: 1.3.1
+Requires PHP: 5.5
+Stable tag: 1.3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -27,7 +28,7 @@ This plugin provides an advanced WordPress administrative dashboard page where y
 * **Monitor:** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
 * **Incognito:** The Incognito extension removes all front-end branding from The SEO Framework.
 * **Title Fix:** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
-* **Honeypot:** The Honeypot extension catches comment spammers in four lightweight yet powerful ways.
+* **Honeypot:** The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
 
 = Upcoming Extensions =
 
@@ -178,6 +179,39 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
+= 1.4.0 - TODO SEO =
+
+* **Release date:**
+	/
+	* TODO
+
+**New Extension:**
+/
+* **Attachment Redirect**: TODO
+
+* **API:**
+	* **Internal:**
+		/
+		* TODO
+	* **External:**
+		/
+		* August TODO-th, 2017: WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
+
+**Extension Improvements:**
+
+* **Premium - Honeypot:**
+	* **Version:**
+		* 1.0.2-beta
+	* **Fixed:**
+		* The scoped style node now works in newer version of Blink, Gecko and Webkit. Making the scoped field disappear for users as intended.
+
+* **Premium - Articles:**
+	* **Version:**
+		* TODO
+	* **Added:**
+		* The SEO Framework 3.0.0 URL generation compatibility.
+			* If you do not update the Extension Manager, this extension will invoke deprecation warnings.
+
 = 1.3.2 =
 
 * **Fixed:** On some PHP installations, the [arg_separator.output](http://php.net/arg-separator.output) can be unjustifiably adjusted, preventing API connections to our servers. The plugin now enforces the correct separator regardless.
@@ -296,7 +330,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 			* This can yield a large beneficial performance effect when parsing large texts.
 * **Premium - Monitor:**
 	* **Version:**
-		* 1.0.0-beta-3
+		* 1.0.0-beta-4
 	* **Internal:**
 		* **Improved:**
 			* The privacy policy link on the registration page now opens in a new window and no longer tells us from where you clicked it.

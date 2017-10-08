@@ -995,39 +995,4 @@ final class LoadAdmin extends AdminPages {
 	final protected function s_ajax_string( $input ) {
 		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
-
-	/**
-	 * Returns font file location.
-	 * To be used for testing font-pixels.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $font The font name, should include .ttf.
-	 * @param bool $url Whether to return a path or URL.
-	 * @return string The font URL or path. Not escaped.
-	 */
-	final public function get_font_file_location( $font = '', $url = false ) {
-		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
-		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
-		}
-	}
-
-	/**
-	 * Returns image file location.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $image The image name, should include .jpg, .png, etc..
-	 * @param bool $url Whether to return a path or URL.
-	 * @return string The image URL or path. Not escaped.
-	 */
-	final public function get_image_file_location( $image = '', $url = false ) {
-		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/images/' . $image;
-		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
-		}
-	}
 }

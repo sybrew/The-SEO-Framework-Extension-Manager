@@ -360,6 +360,7 @@ final class Core {
 	 * Returns the Article Main Entity of Page.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.2 Added TSF 3.0 compat.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -370,7 +371,13 @@ final class Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$url = \the_seo_framework()->the_url_from_cache();
+		$tsf = \the_seo_framework();
+
+		if ( method_exists( $tsf, 'get_current_permalink' ) ) {
+			$url = $tsf->get_current_permalink();
+		} else {
+			$url = $tsf->the_url_from_cache();
+		}
 
 		if ( ! $url ) {
 			$this->invalidate( 'amp' );

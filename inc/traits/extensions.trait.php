@@ -111,7 +111,7 @@ trait Extensions_Properties {
 				'slug' => 'articles',
 				'network' => '0',
 				'type' => 'premium',
-				'area' => 'news',
+				'area' => 'blogging, news',
 				'version' => '1.0.1',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
@@ -125,11 +125,11 @@ trait Extensions_Properties {
 				'slug' => 'monitor',
 				'network' => '0',
 				'type' => 'premium',
-				'area' => 'general',
+				'area' => 'uptime, syntax',
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1494391221',
+				'last_updated' => '1502820526',
 				'requires' => '4.4.0',
 				'tested' => '4.8.2',
 				'requires_tsf' => '2.7.0',
@@ -153,7 +153,7 @@ trait Extensions_Properties {
 				'slug' => 'title-fix',
 				'network' => '0',
 				'type' => 'free',
-				'area' => 'general',
+				'area' => 'theme',
 				'version' => '1.0.3',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
@@ -167,11 +167,11 @@ trait Extensions_Properties {
 				'slug' => 'honeypot',
 				'network' => '0',
 				'type' => 'premium',
-				'area' => 'spam',
-				'version' => '1.0.1',
+				'area' => 'anti-spam',
+				'version' => '1.0.2',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1497020151',
+				'last_updated' => '1504940235',
 				'requires' => '4.4.0',
 				'tested' => '4.8.2',
 				'requires_tsf' => '2.7.0',
@@ -193,9 +193,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'e5a0c3acc5692c825feb8b2eb1ef65eb5a0434ee96607cfb9522126a300fac07',
-			'sha1'   => '185d0f6b76a33f2c4ed4447b3fc5611fe1ad10f6',
-			'md5'    => 'f5fcaf59538572a610cceb2c0c5eaac5',
+			'sha256' => '03c9f131ff738b8d20aec2e660f1a0a5c5775eb2112e5e6d91d4b9cfb1c2021c',
+			'sha1'   => '2eadf9f2c2e80fea0790758ff24197b06a061dfa',
+			'md5'    => '507c89ef8085e655e599217f6474951d',
 		];
 	}
 
@@ -915,7 +915,7 @@ trait Extensions_Actions {
 	 * @todo Reset WP_DEBUG functionality? i.e. by caching the filters current input.
 	 *
 	 * @param null|int $val The error reporting level. If null, it will reset
-	 *			error_reporting to its previous value.
+	 *        error_reporting to its previous value.
 	 * @return void Early if $val is null.
 	 */
 	private static function set_error_reporting( $val = null ) {
@@ -1065,10 +1065,10 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		if ( ( $file = static::get_extension_header_file_location( $slug ) ) ) {
-			if ( static::validate_file( $file ) ) {
-				return static::include_extension( $file, $_instance, $bits );
-			}
+		$file = static::get_extension_header_file_location( $slug );
+
+		if ( $file && static::validate_file( $file ) ) {
+			return static::include_extension( $file, $_instance, $bits );
 		}
 
 		//* Tick the instance on failure.
@@ -1098,6 +1098,7 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 *
 	 * @param string $file The extension file, already normalized.
+	 * @param string $type The file (extension) type.
 	 * @return bool True on success, false on failure.
 	 */
 	private static function validate_file( $file, $type = 'php' ) {
