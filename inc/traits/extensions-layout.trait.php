@@ -435,9 +435,9 @@ trait Extensions_Layout {
 		);
 
 		//* Make extension home element.
-		// if ( ! empty( $data['ExtensionURI'] ) ) {
-		//	$home = static::get_extension_desc_home_item( $data['ExtensionURI'] );
-		// }
+		if ( ! empty( $data['ExtensionURI'] ) ) {
+			$home = static::get_extension_desc_home_item( $data['ExtensionURI'] );
+		}
 
 		//* Make extension compatibility element.
 		$compatible = static::get_extension_desc_compat_item( $extension );
@@ -467,7 +467,7 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_desc_home_item( $url ) {
 		return sprintf(
-			'<a href="%s" target="_blank" class="tsfem-extension-description-home" title="%s">%s</a>',
+			'<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-home" title="%s">%s</a>',
 			\esc_url( $url, [ 'http', 'https' ] ),
 			\esc_attr( static::get_i18n( 'visit-extension' ) ),
 			\esc_html( static::get_i18n( 'extension-home' ) )

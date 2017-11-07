@@ -44,7 +44,11 @@ defined( 'ABSPATH' ) or die;
  * @access private
  */
 class Core {
-	use Enclose_Stray_Private, Construct_Core_Interface, Destruct_Core_Public_Final, Options, Error;
+	use Enclose_Stray_Private,
+		Construct_Core_Interface,
+		Destruct_Core_Public_Final,
+		Options,
+		Error;
 
 	/**
 	 * The POST nonce validation name, action and name.

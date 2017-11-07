@@ -9,7 +9,6 @@
 .wrap.tsfem .notice,
 .tsfem-notice {
 	margin: 0 0 20px;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	border-radius: 3px;
 }
@@ -249,7 +248,6 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap {
 	background-color: #333;
-	-webkit-box-shadow: 0 1px 2px 1px #aaa;
 	box-shadow: 0 1px 2px 1px #aaa;
 	width: 100%;
 	margin: 0 0 20px;
@@ -401,7 +399,6 @@ body.tsfem .wrap {
 .tsfem select:focus,
 .tsfem textarea:focus {
 	border-color: #057f9c;
-	-webkit-box-shadow: 0 0 2px rgba(66,144,183,.8);
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
 }
 
@@ -420,7 +417,6 @@ body.tsfem .wrap {
 	font-size: 1em;
 	border: 0;
 	border-radius: 3px;
-	-webkit-box-shadow: 0 .2em 0 #cacaca;
 	box-shadow: 0 .2em 0 #cacaca;
 	color: #777;
 	text-shadow: 0 -1px 1px #efefef,1px 0 1px #efefef,0 1px 1px #efefef,-1px 0 1px #efefef;
@@ -456,7 +452,6 @@ body.tsfem .wrap {
 .tsfem-button-primary,
 .tsfem-button-primary:focus {
 	background: #05809e;
-	-webkit-box-shadow: 0 .2em 0 #005c7a;
 	box-shadow: 0 .2em 0 #005c7a;
 	color: #fff;
 	text-shadow: 0 -1px 1px #005c7a,1px 0 1px #005c7a,0 1px 1px #005c7a,-1px 0 1px #005c7a;
@@ -466,7 +461,6 @@ body.tsfem .wrap {
 .tsfem-button-primary-bright:focus {
 	color: #fff;
 	background: #0ebfe9;
-	-webkit-box-shadow: 0 .2em 0 #057f9c;
 	box-shadow: 0 .2em 0 #057f9c;
 	text-shadow: 0 -1px 1px #0078a2,1px 0 1px #0078a2,0 1px 1px #0078a2,-1px 0 1px #0078a2;
 }
@@ -477,7 +471,6 @@ body.tsfem .wrap {
 .tsfem-button-extension-activate:focus {
 	color: #fff;
 	background: #00cd98;
-	-webkit-box-shadow: 0 .2em 0 #008964;
 	box-shadow: 0 .2em 0 #008964;
 	text-shadow: 0 -1px 1px #008651,1px 0 1px #008651,0 1px 1px #008651,-1px 0 1px #008651;
 }
@@ -488,7 +481,6 @@ body.tsfem .wrap {
 .tsfem-button-extension-deactivate:focus {
 	color: #fff;
 	background: #ff746a;
-	-webkit-box-shadow: 0 .2em 0 #d14b44;
 	box-shadow: 0 .2em 0 #d14b44;
 	text-shadow: 0 -1px 1px #d14831,1px 0 1px #d14831,0 1px 1px #d14831,-1px 0 1px #d14831;
 }
@@ -574,7 +566,6 @@ body.tsfem .wrap {
 .tsfem-button-primary:active {
 	margin-top: 0;
 	margin-bottom: 0;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 	outline: 0;
 }
@@ -751,7 +742,6 @@ body.tsfem .wrap {
 	padding: 1.33em 40px;
 	margin-bottom: 20px;
 	border: 1px solid #e2e2e2;
-	-webkit-box-shadow: 0 1px 3px 1px #dedede;
 	box-shadow: 0 1px 3px 1px #dedede;
 	background: #fff;
 	overflow: hidden;
@@ -799,7 +789,6 @@ body.tsfem .wrap {
 	flex-basis: calc( 50% - 10px );
 	background: #fff;
 	border-radius: 3px;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	margin: 0;
 	padding: 0;
@@ -824,7 +813,6 @@ body.tsfem .wrap {
 .tsfem-pane-half ::-webkit-scrollbar-thumb,
 .tsfem-pane-full ::-webkit-scrollbar-thumb {
 	background-color: #05809e;
-	-webkit-box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
 	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
 	border-radius: 0 0 3px;
 }
@@ -855,7 +843,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-header {
-	-webkit-box-shadow: 0px 1px 3px 0px #ccc;
 	box-shadow: 0px 1px 3px 0px #ccc;
 	z-index: 5;
 }
@@ -951,7 +938,6 @@ body.tsfem .wrap {
 .tsfem-pane-footer-wrap {
 	margin: 0;
 	padding: 14px 20px;
-	-webkit-box-shadow: 0px -1px 3px 0px #ccc;
 	box-shadow: 0px -1px 3px 0px #ccc;
 	z-index: 5;
 }
@@ -1094,7 +1080,6 @@ h4.tsfem-cp-title {
 	padding: 0;
 	min-height: 122px;
 	border-radius: 3px;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	background: #fefefe;
 	-webkit-align-self: auto;
@@ -1542,7 +1527,6 @@ h4.tsfem-cp-title {
 	margin: 0;
 	padding: 10px 12px;
 	background: #424242;
-	-webkit-box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
 	box-shadow: 0px 0px 2px rgba(0,0,0,0.6);
 	text-shadow: 0 -1px 1px #333,1px 0 1px #333,0 1px 1px #333,-1px 0 1px #333;
 	text-align: left;
@@ -1730,7 +1714,6 @@ body.js .tsfem-flex-hide-if-no-js {
 	max-height: 80%;
 	position: relative;
 	overflow: hidden;
-	-webkit-box-shadow: 0 0 4px 2px #aaa;
 	box-shadow: 0 0 4px 2px #aaa;
 	z-index: 2147483647;
 }
@@ -1739,7 +1722,6 @@ body.js .tsfem-flex-hide-if-no-js {
 .tsfem-modal-buttons {
 	margin: 0;
 	padding: 14px 20px;
-	-webkit-box-shadow: 0px 1px 3px 0px #ccc;
 	box-shadow: 0px 1px 3px 0px #ccc;
 	z-index: 5;
 	-webkit-flex-shrink: 0;
@@ -1747,7 +1729,6 @@ body.js .tsfem-flex-hide-if-no-js {
 }
 
 .tsfem-modal-buttons {
-	-webkit-box-shadow: 0px -1px 3px 0px #ccc;
 	box-shadow: 0px -1px 3px 0px #ccc;
 	-webkit-justify-content: flex-end;
 	justify-content: flex-end;
@@ -1819,7 +1800,6 @@ body.js .tsfem-flex-hide-if-no-js {
 	font-weight: 600;
 	border: 1px solid transparent;
 	background: #fefefe;
-	-webkit-box-shadow: 0 1px 3px 1px #ccc;
 	box-shadow: 0 1px 3px 1px #ccc;
 	cursor: pointer;
 	padding: 14px;
@@ -1847,7 +1827,6 @@ body.js .tsfem-flex-hide-if-no-js {
 .tsfem-modal-select-option:hover input:checked + label,
 .tsfem-modal-select-option input:active + label,
 .tsfem-modal-select-option input:focus + label {
-	-webkit-box-shadow: 0 1px 3px 1px #05809e;
 	box-shadow: 0 1px 3px 1px #05809e;
 }
 

@@ -157,22 +157,23 @@ This helps search engines tailor displayed search results for its users. So, you
 
 ## Changelog
 
-### 1.0.2-gamma
+### 1.1.0-gamma
 
 [tsfep-release time="-1"]
 
-* **Added:** TSF 3.0.0 compatibility.
+* **Added:** TSF 3.0 URL compatibility.
+* **Added:** http://schema.org/publisher output now uses the new TSF 3.0 logo. It is resized correctly on-the-fly for AMP, once.
 
 ### 1.0.1-gamma
 
 [tsfep-release time="August 22nd, 2017"]
 
 * **Changed:** Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked. So:
-	* Published date is now also output on non-AMP.
-	* Modified date is now also output on non-AMP.
-	* Post Author is now also output on non-AMP.
-	* Publisher (Organization name) is now also output on non-AMP.
-	* Description is now also output on non-AMP.
+	* Published date is now also outputted on non-AMP.
+	* Modified date is now also outputted on non-AMP.
+	* Post Author is now also outputted on non-AMP.
+	* Publisher (Organization name) is now also outputted on non-AMP.
+	* Description is now also outputted on non-AMP.
 	* **Note:** The data may still be marked invalid by the [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool), although far less likely.
 		* The data will always be checked for validity on both AMP and non-AMP, while adhering to Google's guidelines.
 		* The data should never be marked invalid on the AMP version.

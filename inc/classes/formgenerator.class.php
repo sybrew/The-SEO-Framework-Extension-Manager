@@ -1381,8 +1381,12 @@ final class FormGenerator {
 	}
 
 	/**
-	 * Accepted types... TODO
-	 * Text inputs only
+	 * Returns various input (text/numeric) inputs.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $args The input field arguments.
+	 * @return string The input field.
 	 */
 	private function create_input_field_by_type( array $args ) {
 

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Transporter;
 
 /**
  * Extension Name: Transporter
- * Extension URI: https://premium.theseoframework.com/extensions/transporter/
+ * Extension URI: https://theseoframework.com/extensions/transporter/
  * Extension Description: The Transporter extensions allows you to export and import your SEO settings from site to site.
  * Extension Version: 1.0.0-dev2017.05.15
  * Extension Author: Sybre Waaijer

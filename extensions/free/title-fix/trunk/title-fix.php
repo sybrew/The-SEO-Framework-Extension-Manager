@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager\Extension\Title_Fix;
 
 /**
  * Extension Name: Title Fix
- * Extension URI: https://premium.theseoframework.com/extensions/title-fix/
+ * Extension URI: https://theseoframework.com/extensions/title-fix/
  * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
  * Extension Version: 1.0.3
  * Extension Author: Sybre Waaijer

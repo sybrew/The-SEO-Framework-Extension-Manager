@@ -460,8 +460,6 @@ final class Settings {
 			$$key = $val;
 		}
 
-		$file = TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
-
-		include( $file );
+		include TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 	}
 }

@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager\Extension\Incognito;
 
 /**
  * Extension Name: Incognito
- * Extension URI: https://premium.theseoframework.com/extensions/incognito/
+ * Extension URI: https://theseoframework.com/extensions/incognito/
  * Extension Description: The Incognito extension removes all front-end branding from The SEO Framework.
  * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer

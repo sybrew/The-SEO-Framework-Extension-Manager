@@ -2,7 +2,7 @@
  * This file holds Local extension for The SEO Framework plugin's JS code.
  * Serve JavaScript as an addition, not as an ends or means.
  *
- * @author Sybre Waaijer https://cyberwire.nl/
+ * @author Sybre Waaijer <https://cyberwire.nl/>
  * @pluginURI https://wordpress.org/plugins/the-seo-framework-extension-manager/
  */
 

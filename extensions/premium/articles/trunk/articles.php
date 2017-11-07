@@ -6,9 +6,9 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 /**
  * Extension Name: Articles - *gamma*
- * Extension URI: https://premium.theseoframework.com/extensions/articles/
+ * Extension URI: https://theseoframework.com/extensions/articles/
  * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles). Premium until γ-test is done.
- * Extension Version: 1.0.1-***γ***
+ * Extension Version: 1.1.0-***γ***
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -100,6 +100,14 @@ final class Core {
 	private $is_json_valid = [];
 
 	/**
+	 * Registers the image size name.
+	 *
+	 * @since 1.1.0
+	 * @var string $image_size_name
+	 */
+	private $image_size_name = 'tsfem-e-articles-logo';
+
+	/**
 	 * The constructor, initialize plugin.
 	 *
 	 * @since 1.0.0
@@ -120,6 +128,7 @@ final class Core {
 	 * @since 1.0.0
 	 */
 	private function init() {
+
 		if ( $this->is_amp() ) {
 			//* Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
@@ -127,6 +136,15 @@ final class Core {
 			//* Initialize output in The SEO Framework's front-end meta object.
 			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
 		}
+	}
+
+	/**
+	 * Registers logo image size in WordPress.
+	 *
+	 * @since 1.1.0
+	 */
+	private function register_logo_image_size() {
+		\add_image_size( $this->image_size_name, 60, 60, false );
 	}
 
 	/**
@@ -138,7 +156,7 @@ final class Core {
 	 *
 	 * @return bool True if AMP is enabled.
 	 */
-	public function is_amp() {
+	private function is_amp() {
 
 		static $cache;
 
@@ -164,6 +182,7 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @see $this->is_json_valid
+	 * @see $this->is_json_valid()
 	 *
 	 * @param string $what
 	 */
@@ -294,7 +313,7 @@ final class Core {
 	 * Builds up article data by shifting array keys through reset.
 	 *
 	 * @since 1.0.0
-	 * @see $this->get_article_data
+	 * @see $this->get_article_data()
 	 *
 	 * @param array $array The input element
 	 */
@@ -307,7 +326,7 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @staticvar $data The generated data.
-	 * @see $this->build_article_data
+	 * @see $this->build_article_data()
 	 *
 	 * @param bool $get Whether to return the accumulated data.
 	 * @param array $array The input element
@@ -360,7 +379,7 @@ final class Core {
 	 * Returns the Article Main Entity of Page.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.2 Added TSF 3.0 compat.
+	 * @since 1.1.0 Added TSF 3.0 compat.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -606,6 +625,7 @@ final class Core {
 	 * @since 1.0.0
 	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
 	 *                2. Now only invalidates AMP when something's wrong.
+	 * @since 1.1.0 : Now fetches TSF 3.0 logo ID.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema nonAMP
@@ -616,17 +636,18 @@ final class Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
+		$tsf = \the_seo_framework();
+
 		/**
 		 * Applies filters the_seo_framework_articles_name : string
 		 * @since 1.0.0
 		 */
-		$name = (string) \apply_filters( 'the_seo_framework_articles_name', \the_seo_framework()->get_option( 'knowledge_name' ) ) ?: \the_seo_framework()->get_blogname();
+		$name = (string) \apply_filters( 'the_seo_framework_articles_name', $tsf->get_option( 'knowledge_name' ) ) ?: $tsf->get_blogname();
 
-		$_default_img_id = (int) \get_option( 'site_icon' );
+		$_default_img_id = (int) $tsf->get_option( 'knowledge_logo_id' ) ?: \get_option( 'site_icon' );
 		/**
 		 * Applies filters the_seo_framework_articles_logo_id : int
 		 * @since 1.0.0
-		 * @todo make option.
 		 */
 		$_img_id = (int) \apply_filters( 'the_seo_framework_articles_logo_id', 0 ) ?: $_default_img_id;
 
@@ -635,13 +656,22 @@ final class Core {
 			return [];
 		}
 
+		$this->register_logo_image_size();
+		$resize = false;
+
 		if ( $_default_img_id === $_img_id ) {
-			$size = [ 60, 60 ];
+			$size = $this->image_size_name;
+			$resize = true;
 		} else {
 			$size = 'full';
 		}
 
 		$_src = \wp_get_attachment_image_src( $_img_id, $size );
+		if ( $resize && isset( $_src[3] ) && ! $_src[3] ) {
+			//= Add intermediate size, so $_src[3] will return true next time.
+			if ( $this->make_amp_logo( $_img_id ) )
+				$_src = \wp_get_attachment_image_src( $_img_id, $size );
+		}
 
 		if ( count( $_src ) >= 3 ) {
 			$url = $_src[0];
@@ -688,5 +718,32 @@ final class Core {
 		return [
 			'description' => \esc_attr( \the_seo_framework()->description_from_cache() ),
 		];
+	}
+
+	/**
+	 * Makes AMP logo from attachment ID.
+	 *
+	 * @NOTE: The image size must be registered first.
+	 * @see $this->register_logo_image_size().
+	 * @since 1.1.0
+	 *
+	 * @param int $attachment_id The attachment to make a logo from.
+	 * @return bool True on success, false on failure.
+	 */
+	private function make_amp_logo( $attachment_id ) {
+
+		$success = false;
+		$size = \wp_get_additional_image_sizes()[ $this->image_size_name ];
+
+		$_file = \get_attached_file( $attachment_id );
+		$_resized_file = \image_make_intermediate_size( $_file, $size['width'], $size['height'], false );
+
+		if ( $_resized_file ) {
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			$_data = \wp_generate_attachment_metadata( $attachment_id, $_file );
+			$success = (bool) \wp_update_attachment_metadata( $attachment_id, $_data );
+		}
+
+		return $success;
 	}
 }

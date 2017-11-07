@@ -70,7 +70,7 @@ function extension_dir_path( $file ) {
  * @since 1.0.0
  *
  * @param string $file The extension file path.
- * @return The extension URL path.
+ * @return string The extension URL path.
  */
 function extension_dir_url( $file ) {
 

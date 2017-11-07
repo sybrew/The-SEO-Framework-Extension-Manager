@@ -175,7 +175,8 @@ trait Options {
 	 * @since 1.0.0
 	 *
 	 * @param array $options : {
-	 *		$option_name => $value,
+	 *    $option_name => $value,
+	 *    ...
 	 * }
 	 * @param string $type The option update type, accepts 'instance' and 'regular'.
 	 * @param bool $kill Whether to kill the plugin on invalid instance.

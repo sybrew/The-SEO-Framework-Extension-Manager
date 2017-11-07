@@ -6,7 +6,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 
 /**
  * Extension Name: Honeypot - *beta*
- * Extension URI: https://premium.theseoframework.com/extensions/honeypot/
+ * Extension URI: https://theseoframework.com/extensions/honeypot/
  * Extension Description: The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
  * Extension Version: 1.0.2-***β***
  * Extension Author: Sybre Waaijer
@@ -717,6 +717,8 @@ final class Core {
 			return $hash;
 
 		$table = range( 'a', 'z' );
+		//= We can't divide by 0.
+		$first_char = $first_char ?: 10;
 
 		return $table[ round( count( $table ) / $first_char ) ] . substr( $hash, 1 );
 	}
