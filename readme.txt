@@ -48,9 +48,9 @@ Some of the extensions are completely free to use, others are premium and are co
 
 A premium subscription will allow you to activate all premium extensions for one single subscription price.
 
-The premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+The premium extensions communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
 
-If the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
+When the subscription is active, you're allowed to use all premium extensions. If the subscription is expired or deactivated, the premium extensions will no longer be accessible.
 
 == Installation ==
 
@@ -91,7 +91,7 @@ The extensions test themselves upon activation. So, if any extension doesn't wor
 = Are you a developer? =
 And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
 A full code review will take place prior to releasing it. The code must pass at least all the WordPress.org plugin standards and all code must be licensed under GPLv3.
-Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted yet. API connections aren't allowed either.
+Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted, API connections aren't allowed either.
 
 = For developers: Security =
 Because this plugin handles multiple input fields, multiple nonce fields had to be created to prevent XSS from otherwise unauthorized users.
@@ -190,6 +190,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 **Plugin Improvements:**
 
 * **Added:** Since we now have extension overview pages, non-tracking links have been added for each extension.
+* **Improved:** Semantics regarding the differences between Premium and Free.
 * **Fixed:** Buttons no longer disappear on hover in EdgeHTML.
 * **Fixed:** Button shadows no longer flicker on hover in Blink.
 
@@ -200,13 +201,11 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 		* 1.1.0
 		* **This extension is now freely available to everyone.**
 	* [View full changelog](https://theseoframework.com/extensions/honeypot/#changelog).
-
 * **Free - Articles:**
 	* **Version:**
 		* 1.1.0
 		* **This extension is now freely available to everyone.**
 	* [View full changelog](https://theseoframework.com/extensions/articles/#changelog).
-
 * **Free - Origin:**
 	* **Version:**
 		* 1.0.0

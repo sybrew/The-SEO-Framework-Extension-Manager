@@ -1,7 +1,7 @@
 # Articles
 Contributors:
 Location: https://theseoframework.com/extensions/articles/
-Tags: spam
+Tags: blogging, news
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
 Tested up to: 4.9.0

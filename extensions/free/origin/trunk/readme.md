@@ -1,7 +1,7 @@
 # Monitor
 Contributors:
 Location: https://theseoframework.com/extensions/origin/
-Tags: media
+Tags: Uptime, syntax
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
 Tested up to: 4.9.0
@@ -32,6 +32,10 @@ All you'll need to do is activate the Origin extension.
 There is no setup required and no options are available.
 
 [tsfep-image id="1"]
+
+### Not all attachments are affected
+
+For an attachment page to redirect, it must be uploaded through the post edit screen. The assigned post must also exist.
 
 ## Changelog
 

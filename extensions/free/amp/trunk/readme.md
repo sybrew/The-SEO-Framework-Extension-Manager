@@ -1,6 +1,6 @@
 # AMP
 Contributors:
-Location: https://theseoframework.com/extensions/title-fix/
+Location: https://theseoframework.com/extensions/amp/
 Tags: general
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5

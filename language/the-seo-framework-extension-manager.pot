@@ -2,15 +2,27 @@
 # This file is distributed under the same license as the The SEO Framework - Extension Manager package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework - Extension Manager 1.3.0-beta-2017.08.22.0\n"
+"Project-Id-Version: The SEO Framework - Extension Manager 1.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework-extension-manager\n"
-"POT-Creation-Date: 2017-08-22 15:46:42+00:00\n"
+"POT-Creation-Date: 2017-11-09 05:12:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: extensions/free/honeypot/trunk/honeypot.php:535
+msgid "You are human!"
+msgstr ""
+
+#: extensions/free/honeypot/trunk/honeypot.php:546
+msgid "Please remove this comment to prove you're human."
+msgstr ""
+
+#: extensions/free/honeypot/trunk/honeypot.php:557
+msgid "Comments for robots"
+msgstr ""
 
 #: extensions/free/transporter/trunk/inc/classes/admin.class.php:206
 msgid "SEO Transporter"
@@ -94,18 +106,6 @@ msgstr ""
 
 #: extensions/free/transporter/trunk/views/layout/pages/transporter.php:12
 msgid "Transport SEO Settings"
-msgstr ""
-
-#: extensions/premium/honeypot/trunk/honeypot.php:536
-msgid "You are human!"
-msgstr ""
-
-#: extensions/premium/honeypot/trunk/honeypot.php:547
-msgid "Please remove this comment to prove you're human."
-msgstr ""
-
-#: extensions/premium/honeypot/trunk/honeypot.php:558
-msgid "Comments for robots"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:116
@@ -2509,11 +2509,11 @@ msgstr ""
 msgid "You should add a site icon through the customizer."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:183
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:181
 msgid "Something is causing a PHP error on your website. This prevents correctly closing of HTML tags."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:184
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:182
 msgid "Affected page:"
 msgid_plural "Affected pages:"
 msgstr[0] ""
@@ -2522,104 +2522,104 @@ msgstr[1] ""
 #. translators: Backticks are markdown for <code>Text</code>. Keep the
 #. backticks.
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:223
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:221
 msgid "No `robots.txt` file has been found. Please check your server configuration."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:232
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:230
 msgid "This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the
 #. backticks.
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:254
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:252
 msgid "The `robots.txt` file is handled correctly by The SEO Framework."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the
 #. backticks.
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:266
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:264
 msgid "The `robots.txt` file is not handled by The SEO Framework."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the
 #. backticks.
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:278
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:276
 msgid "The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:311
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:309
 msgid "No sitemap file could be found. Enable the sitemap or check your server configuration."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:320
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:318
 msgid "The sitemap file is bigger than 10MB, you should make it smaller."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:329
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:327
 msgid "The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:366
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:364
 msgid "Your website forces HTTPS through the server configuration. That is great!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:375
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:373
 msgid "Your website is accessible on both HTTPS as HTTP."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:387
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:385
 msgid "Your website is only accessible on HTTP."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:397
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:395
 msgid "No canonical URL is found."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:406
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:404
 msgid "Both versions of your site point to the secure version. Great!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:411
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:409
 msgid "Both versions of your site point to the insecure version. Is this intended?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:422
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:420
 msgid "The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s)."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:432
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:430
 msgid "No canonical URL is found on the HTTPS version of your site."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:439
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:437
 msgid "The canonical URL scheme matches the expected scheme."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:449
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:447
 msgid "The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s)."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:460
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:458
 msgid "The canonical URL does not seem to have a set scheme. The active theme, another plugin or an external service might be interfering."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:485
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:483
 msgid "More issue tests are coming soon!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:516
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:514
 msgid "No issues have been found."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:534
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:532
 msgid "No data has been found on this issue."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:552
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:550
 msgid "This has been evaluated with a small sample size."
 msgstr ""
 
@@ -2717,30 +2717,30 @@ msgstr ""
 msgid "Extensions"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1824
+#: inc/classes/formgenerator.class.php:1828
 msgctxt "Button hover title"
 msgid "Remove selected image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1827 inc/traits/ui.trait.php:511
+#: inc/classes/formgenerator.class.php:1831 inc/traits/ui.trait.php:511
 msgid "Remove Image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1883
+#: inc/classes/formgenerator.class.php:1887
 msgctxt "Button hover"
 msgid "Change image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1883 inc/traits/ui.trait.php:509
+#: inc/classes/formgenerator.class.php:1887 inc/traits/ui.trait.php:509
 msgctxt "Button hover"
 msgid "Select image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1886 inc/traits/ui.trait.php:510
+#: inc/classes/formgenerator.class.php:1890 inc/traits/ui.trait.php:510
 msgid "Change Image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:1886 inc/traits/ui.trait.php:508
+#: inc/classes/formgenerator.class.php:1890 inc/traits/ui.trait.php:508
 msgid "Select Image"
 msgstr ""
 
@@ -3077,7 +3077,7 @@ msgstr ""
 msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
 msgstr ""
 
-#: inc/traits/error.trait.php:354 inc/traits/extensions.trait.php:990
+#: inc/traits/error.trait.php:354 inc/traits/extensions.trait.php:1005
 msgid "Extension is not compatible with your server configuration."
 msgstr ""
 
@@ -3202,11 +3202,11 @@ msgid "Go to the author homepage"
 msgstr ""
 
 #: inc/traits/extensions-layout.trait.php:59
-msgid "Go to the extension homepage"
+msgid "Go to the extension overview page"
 msgstr ""
 
 #: inc/traits/extensions-layout.trait.php:60
-msgid "Extension home"
+msgid "Overview"
 msgstr ""
 
 #: inc/traits/extensions-layout.trait.php:61
@@ -3251,7 +3251,7 @@ msgstr ""
 msgid "WordPress %1$s and The SEO Framework %2$s are required."
 msgstr ""
 
-#: inc/traits/extensions.trait.php:1007
+#: inc/traits/extensions.trait.php:1022
 msgid "Extension has not been activated."
 msgstr ""
 
@@ -3390,7 +3390,7 @@ msgid "Use your key"
 msgstr ""
 
 #: views/layout/pages/activation.php:38
-msgid "Manually enter an API key"
+msgid "Get access to premium extensions"
 msgstr ""
 
 #: views/layout/pages/activation.php:39
@@ -3406,11 +3406,11 @@ msgid "Go free"
 msgstr ""
 
 #: views/layout/pages/activation.php:65
-msgid "Unlimited free access"
+msgid "Get access to free extensions"
 msgstr ""
 
 #: views/layout/pages/activation.php:66
-msgid "Rather go for a test-drive? You can always upgrade later."
+msgid "You can always upgrade later."
 msgstr ""
 
 #: views/layout/pages/activation.php:74
