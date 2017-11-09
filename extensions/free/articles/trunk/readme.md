@@ -4,7 +4,7 @@ Location: https://theseoframework.com/extensions/articles/
 Tags: spam
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.8.1
+Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -157,12 +157,13 @@ This helps search engines tailor displayed search results for its users. So, you
 
 ## Changelog
 
-### 1.1.0-gamma
+### 1.1.0
 
 [tsfep-release time="-1"]
 
 * **Added:** TSF 3.0 URL compatibility.
 * **Added:** http://schema.org/publisher output now uses the new TSF 3.0 logo. It is resized correctly on-the-fly for AMP, once.
+* **Changed:** This extension is now free and out of testing phase.
 
 ### 1.0.1-gamma
 

@@ -4,7 +4,7 @@ Location: https://theseoframework.com/extensions/monitor/
 Tags: spam
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.8.1
+Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -82,7 +82,7 @@ And, when you disconnect your site from our services, all crawled data will be e
 
 ### Activate Monitor
 
-First, you'll need to activate monitor.
+First, you'll need to activate Monitor.
 
 After activating the extension, you'll find a menu link displayed next to the activation button.
 That link will direct you to the Monitor registration page.

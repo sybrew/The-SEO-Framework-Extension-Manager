@@ -5,10 +5,10 @@
 namespace TSF_Extension_Manager\Extension\Honeypot;
 
 /**
- * Extension Name: Honeypot - *beta*
+ * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
  * Extension Description: The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
- * Extension Version: 1.0.2-***β***
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -40,7 +40,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_HONEYPOT_VERSION', '1.0.1' );
+define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.0' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**

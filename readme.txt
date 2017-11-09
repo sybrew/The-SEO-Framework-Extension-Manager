@@ -3,7 +3,7 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, monitor, modules, title, seo, schema, local, articles, honeypot, amp
 Requires at least: 4.4.0
-Tested up to: 4.8.1
+Tested up to: 4.9.0
 Requires PHP: 5.5
 Stable tag: 1.3.2
 License: GPLv3
@@ -22,34 +22,33 @@ This plugin provides an advanced WordPress administrative dashboard page where y
 
 **The following extensions are included:**
 
-* **Local:** The Local extension lets you set up important local business information for search engines to consume.
-* **AMP:** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
-* **Articles:** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
-* **Monitor:** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
-* **Incognito:** The Incognito extension removes all front-end branding from The SEO Framework.
-* **Title Fix:** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
-* **Honeypot:** The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
+* **[Local](https://theseoframework.com/extensions/local/):** The Local extension lets you set up important local business information for search engines to consume.
+* **[AMP](https://theseoframework.com/extensions/amp/):** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
+* **[Articles](https://theseoframework.com/extensions/articles/):** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
+* **[Monitor](https://theseoframework.com/extensions/monitor/):** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
+* **[Incognito](https://theseoframework.com/extensions/incognito/):** The Incognito extension removes all front-end branding from The SEO Framework.
+* **[Title Fix](https://theseoframework.com/extensions/title-fix/):** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
+* **[Honeypot](https://theseoframework.com/extensions/honeypot/):** The Honeypot extension catches comment spammers in four lightweight yet powerful ways.
+* **[Origin](https://theseoframework.com/extensions/origin/):** The Origin extension redirects attachment-page visitors back to the parent post.
 
 = Upcoming Extensions =
 
 **These extensions are being worked on:**
 
 * **Transporter:** It allows you to export and import your SEO settings from site to site.
-* **Attachment Redirect:** It will automatically redirect visitors to the parent post of attachment pages.
 
 = How it works =
 
 This plugin offers a lightweight dashboard wherein you can activate and deactivate extensions.
 Only the activated extensions are loaded. Other extensions are dormant and the files of those aren't even touched.
 
-Some of the extensions are completely free to use, others are premium.
-Because we want to see how our new state-of-the-art extensions perform before releasing it to everyone, all beta-staged extensions are temporarily premium.
+Some of the extensions are completely free to use, others are premium and are connected to our servers.
 
 = About Premium =
 
 A premium subscription will allow you to activate all premium extensions for one single subscription price.
 
-Some premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
+The premium extensions can communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
 
 If the subscription is active, you're allowed to use all premium extensions. When the subscription expires or is deactivated, the premium extensions will no longer be accessible.
 
@@ -179,38 +178,40 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
-= 1.4.0 - TODO SEO =
+= 1.4.0 - Extricated SEO =
 
 * **Release date:**
-	/
-	* TODO
+	* November 9th, 2017
 
 **New Extension:**
-/
-* **Attachment Redirect**: TODO
 
-* **API:**
-	* **Internal:**
-		/
-		* TODO
-	* **External:**
-		/
-		* August TODO-th, 2017: WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
+* **[Origin](https://theseoframework.com/extensions/origin/)**: This free extension redirects attachment-page visitors back to the parent post.
+
+**Plugin Improvements:**
+
+* **Added:** Since we now have extension overview pages, non-tracking links have been added for each extension.
+* **Fixed:** Buttons no longer disappear on hover in EdgeHTML.
+* **Fixed:** Button shadows no longer flicker on hover in Blink.
 
 **Extension Improvements:**
 
-* **Premium - Honeypot:**
+* **Free - Honeypot:**
 	* **Version:**
-		* 1.0.2-beta
-	* **Fixed:**
-		* The scoped style node now works in newer version of Blink, Gecko and Webkit. Making the scoped field disappear for users as intended.
+		* 1.1.0
+		* **This extension is now freely available to everyone.**
+	* [View full changelog](https://theseoframework.com/extensions/honeypot/#changelog).
 
-* **Premium - Articles:**
+* **Free - Articles:**
 	* **Version:**
-		* TODO
-	* **Added:**
-		* The SEO Framework 3.0.0 URL generation compatibility.
-			* If you do not update the Extension Manager, this extension will invoke deprecation warnings.
+		* 1.1.0
+		* **This extension is now freely available to everyone.**
+	* [View full changelog](https://theseoframework.com/extensions/articles/#changelog).
+
+* **Free - Origin:**
+	* **Version:**
+		* 1.0.0
+		* **This is a new extension.**
+	* [View full changelog](https://theseoframework.com/extensions/articles/#changelog).
 
 = 1.3.2 =
 
@@ -280,30 +281,6 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		* 1.0.0
 		* **This is a new extension.**
-	* **Features:**
-		* [View use cases here](https://developers.google.com/search/docs/data-types/local-businesses#use_cases).
-		* All supported businesses are included.
-		* Food Establishment types can annotate their cuisines, menu URL, and reservation actions.
-			* Are you missing a cuisine? Let us know!
-		* This extension allows you to set up detailed business information as Structured Data.
-			* It outputs Schema.org JSON-LD scripts as Structure Data when set up.
-				* This means its output works on any theme.
-				* Users generally won't see this output.
-				* Note that its output will only be used when the site is adequate.
-			* Note that the Structured Data should reflect on what's outputted as text for the users on the website.
-			* Note that Google My Business is leading, whereas this extension then provides complimentary data.
-				* If you haven't registered with Google My Business, then this extension's output is leading.
-				* If you have multiple departments and are using Google My Business, they should also be registered there.
-				* You do not need to verify your business address when using this extension before it shows up in Google.
-		* It allows for up to 4095 sub-departments.
-			* If you've also signed up for Google My Business, these sub-departments will be displayed under the main department's name only.
-			* The sub-departments must be annotated on the same website.
-		* It's great for both small and large businesses whom want to be found regionally.
-		* It features an API connection with our servers for (reverse) geocoding, so your business address can be filled in accurately.
-			* This means you won't have to sign up at Google yourself, which saves you a lot of time.
-		* It features a state-of-the-art form generator, which allows you to register up to 4096 departments.
-	* **Documentation:**
-		* We're currently preparing our site for documentation. When finished, we'll release an update which will add hyperlinks to the extension entry boxes.
 * **Free - AMP:**
 	* **Version:**
 		* 1.0.2
@@ -315,43 +292,12 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		* 1.0.1-gamma
 		* **Premium only until gamma-testing is completed.**
-	* **Changed:**
-		* Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked. So:
-			* Published date is now also output on non-AMP.
-			* Modified date is now also output on non-AMP.
-			* Post Author is now also output on non-AMP.
-			* Publisher (Organization name) is now also output on non-AMP.
-			* Description is now also output on non-AMP.
-		* Note: The data may still be marked invalid by the [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool), although far less likely.
-			* The data will always be checked for validity on both AMP and non-AMP, while adhering to Google's guidelines.
-			* The data should never be marked invalid on the AMP version.
-	* **Improved:**
-		* The description is now taken from cache, rather than being regenerated.
-			* This can yield a large beneficial performance effect when parsing large texts.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-4
-	* **Internal:**
-		* **Improved:**
-			* The privacy policy link on the registration page now opens in a new window and no longer tells us from where you clicked it.
-		* **Fixed:**
-			* Manual update buttons are no longer handling clicks of it twice.
-			* When debugging, the Update Data button no longer fails AJAX calls when parsing data.
-	* **API:**
-		* **External**
-			* **Fixed:**
-				* May 16th, 2017: The return data now supports 1.0.0-beta-3 and later, rather than 1.0.0 and later.
-					* This outputted a notice on all testing fields and therefore showed no useful information.
-				* July 6th, 2017: URLs with UTF-8 and UTF-16 characters can now be detected.
-					* This improves canonical URL detection on some sites.
-					* This improves icon detection when using Jetpack Photon, for example.
 * **Premium - Honeypot:**
 	* **Version:**
 		* 1.0.1-beta
-	* **Improved:**
-		* The CSS rotation field now uses a scoped style node, rather than inline styling.
-	* **Changed:**
-		* Moved the honeypot above the comment form, so spammers will more easily fill it in.
 
 = 1.2.0 - Aptitudinal SEO =
 
@@ -407,75 +353,13 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 	* **Version:**
 		* 1.0.0-gamma-2
 	* **Premium only until gamma-testing is completed.**
-	* **Changed:**
-		* The automated description is now set to 155 characters, rather than 400.
-			* Evidently, it uses the same restrictions as regular search results.
-	* **Fixed:**
-		* No more PHP notices should be output when fetching an image from the SEO settings.
-		* Social image from SEO settings now works if set, but only if TSF 2.9+ is active.
-			* Otherwise the Featured Image is used, if any.
-		* It no longer outputs Schema.org metadata on WooCommerce products or other single custom post types.
-			* Instead, it only outputs on WordPress' Posts.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-3
-	* **Internal:**
-		* **Changed:**
-			* The Monitor menu item now is visible for users with the `manage_options` capability, rather than `install_plugins`.
-		* **Fixed:**
-			* More aggressive buffer cleaning has been put in place to prevent failing AJAX requests.
-			* The SEO Framework's internal debugging methods can no longer interfere with the output.
-			* Server and Browser AJAX errors can now resolve when requesting updates.
-			* Server and Browser AJAX errors can now resolve when requesting crawl.
-	* **API:**
-		* **Note:** These API changes affect only this plugin version.
-			* **Added:**
-				* The crawler now tests for Scheme settings. It checks for HTTPS headers and the related canonical URL output.
-					* Also vice versa, so if your site isn't accessible on HTTPS, but your canonical URL states it is, it will warn you.
-		* **Note:** These API changes affect all plugin versions.
-			* **Added:**
-				* May 7th, 2017: Only the root file is now checked, rather than subdirectories.
-				* May 14th, 2017: It now confirms if your website is accessible on HTTPS.
-				* May 14th, 2017: It now checks canonical URLs for scheme issues.
-			* **Fixed:**
-				* March 18th, 2017: When your site embeds external services like YouTube, the crawler no longer crashes.
-				* April 1st, 2017: When your metadata favicon isn't output by WordPress, it can now also be detected.
-				* **A better foundation:**
-					* May 14th, 2017: Alternative output of the metadata favicon tag's closing tag can now be detected too.
-					* May 14th, 2017: Compressed pages can now also be correctly tested for favicons.
-					* May 14th, 2017: Single quotes' favicons metadata can now also be detected.
 * **Premium - Honeypot:**
 	* **Version:**
 		* 1.0.0-beta
 	* **This is a new extension.**
-	* It uses four powerful and lightweight techniques to stop comment spamming:
-		1. A rotating by ID input field, hidden through rotating CSS.
-			* This field must stay empty.
-			* This requires the spammer to enable styling.
-			* This field is rotated per post.
-		1. A rotating by time input field, hidden through rotating CSS.
-			* This field must stay empty.
-			* This requires the spammer to enable styling.
-			* A new key is generated every hour and for every post.
-			* After two hours of waiting, this field has no positive or negative effect.
-			* It acts as the first method when using caching.
-		1. A rotating by time input field that must be emptied, hidden and automatically emptied through rotating JavaScript.
-			* This field must become empty.
-			* This requires the spammer to enable scripts.
-			* If scripts are disabled, the user needs to manually clear the field.
-				* A helpful message is displayed that clearly indicates it's an anti-spam technique.
-				* That message is translatable; in the future options will be added so you can manually adjust these fields.
-			* This always works with caching and is proven to be the most effective method with 99,99% catch rate over 1500 comments in 1 month.
-		1. A rotating by time nonce field, that must be identical to the expected value.
-			* This field must have an expected value.
-			* This prevents spammers using PHP files to comment; instead, the must view and render your comment forms.
-			* The nonce key is different for each post and is time-attack secure.
-			* The nonce key changes every 12 hours. Each key is valid for 24 hours.
-				* When using caching, the nonce key changes every 5 days. Each key is valid for 10 days.
-	* It works by using expected hashing algorithms. So it doesn't make use of the database. Therefore, it's extremely lightweight.
-	* It works wherever WordPress' comments are used, also on WooCommerce reviews.
-	* It works only when users are logged out. Users who are logged in aren't checked.
-	* It works with caching, then being less aggressive.
 * **Free - Transporter:**
 	* **Version:**
 		* 1.0.0-dev2017-05-15
@@ -520,53 +404,20 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 	* **Version:**
 		* 1.0.0
 	* **This is a new extension.**
-	* It binds The SEO Framework social and general output to the [AMP plugin](https://wordpress.org/plugins/amp/).
-	* Use this extension in combination with the Articles extension to further enhance output.
 * **Premium - Articles:**
 	* **Version:**
 		* 1.0.0-gamma
 	* **This is a new extension.**
 	* **Premium only until gamma-testing is completed.**
-	* It outputs Article Schema.org output for both AMP (AMP extension required) and non-AMP pages.
-	* Note: Google's Structured Data Tester renders output data invalid, even though it's valid and output according to their set requirements.
 * **Premium - Monitor:**
 	* **Version:**
 		* 1.0.0-beta-2
-	* **Internal:**
-		* **Improved:**
-			* The "invalid sitemap" notification now suggest you contacting premium support, rather than stating the inconvinient obvious.
-		* **Fixed:**
-			* The robots.txt file got marked as static whilst being dynamic when another plugin or theme affects the output.
-			* Requesting a crawl through AJAX now works correctly when debugging is disabled.
-			* Updating data through AJAX now works correctly when debugging is disabled.
-	* **API:**
-		* **Note:** These API changes affect only this plugin version.
-			* **Fixed:**
-				* A PHP warning was output when making the first connection.
-				* Disconnection on decoupled sites now works.
-				* When the site has been decoupled from the API server, the notices are now more in-line with events.
-				* When the site has been decoupled from the API server, the remote data will be removed from view.
-		* **Note:** These API changes affect all plugin versions.
-			* **Improved:**
-				* The API server has been moved to a dedicated server instance. This allows for more accurate measurements in upcoming features.
-				* The API server now parses crawl requests automatically.
-			* **Fixed:**
-				* The sitemap detection for more advanced sitemaps now works.
-				* When an HTTP error is generated when fetching the sitemap, this is now correctly handled.
 * **Free - Incognito:**
 	* **Version:**
 		* 1.1.0
-	* **Added:**
-		* Now also removes The SEO Framework 2.8.0 sitemap stylesheet plugin link.
 * **Free - Title Fix:**
 	* **Version:**
 		* 1.0.3
-	* **Improved:**
-		* Removed redundant UTF-8 check.
-		* It now enqueues fewer actions when the title is fixed early.
-		* It also enqueues fewer WordPress actions overall. Which reduces memory usage marginally.
-	* **Fixed:**
-		* The SEO Framework can now recognize this extension, therefore re-enabling otherwise disabled features.
 
 = 1.0.0 - Amplified SEO =
 

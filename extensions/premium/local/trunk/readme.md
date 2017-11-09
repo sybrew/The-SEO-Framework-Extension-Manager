@@ -4,7 +4,7 @@ Location: https://theseoframework.com/extensions/local/
 Tags: local, business
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.8.1
+Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -64,7 +64,6 @@ When you've acquired a premium subscription for the Extension Manager, the Local
 
 We took care of all the API connections with geocoding services, and packaged it within the user interface for a smooth admin experience.
 
-Because the output is predetermined through cached scripts, you do not have to initiate further API calls once set up.
 In the end, this saves you a lot of time.
 
 ## Usage

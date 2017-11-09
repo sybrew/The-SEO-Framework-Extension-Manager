@@ -5,10 +5,10 @@
 namespace TSF_Extension_Manager\Extension\Articles;
 
 /**
- * Extension Name: Articles - *gamma*
+ * Extension Name: Articles
  * Extension URI: https://theseoframework.com/extensions/articles/
- * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles). Premium until γ-test is done.
- * Extension Version: 1.1.0-***γ***
+ * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles).
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -40,7 +40,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.0.0-gamma-2' );
+define( 'TSFEM_E_ARTICLES_VERSION', '1.1.0' );
 
 /**
  * Removes AMP articles if AMP extension is active.

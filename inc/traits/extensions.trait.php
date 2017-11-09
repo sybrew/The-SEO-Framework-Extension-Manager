@@ -89,9 +89,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1502820526',
 				'requires' => '4.7.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'amp' => [
 				'slug' => 'amp',
@@ -103,23 +103,23 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1502682016',
 				'requires' => '4.4.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'articles' => [
 				'slug' => 'articles',
 				'network' => '0',
-				'type' => 'premium',
+				'type' => 'free',
 				'area' => 'blogging, news',
 				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1510015492',
 				'requires' => '4.4.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'monitor' => [
 				'slug' => 'monitor',
@@ -131,9 +131,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1502820526',
 				'requires' => '4.4.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'incognito' => [
 				'slug' => 'incognito',
@@ -145,9 +145,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'title-fix' => [
 				'slug' => 'title-fix',
@@ -159,23 +159,37 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1494391221',
 				'requires' => '3.9.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
 			],
 			'honeypot' => [
 				'slug' => 'honeypot',
 				'network' => '0',
-				'type' => 'premium',
+				'type' => 'free',
 				'area' => 'anti-spam',
-				'version' => '1.0.2',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
 				'last_updated' => '1504940235',
 				'requires' => '4.4.0',
-				'tested' => '4.8.2',
+				'tested' => '4.9.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '2.9.4',
+				'tested_tsf' => '3.0.0',
+			],
+			'origin' => [
+				'slug' => 'origin',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'media',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1510175308',
+				'requires' => '4.4.0',
+				'tested' => '4.9.0',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '3.0.0',
 			],
 		];
 	}
@@ -193,9 +207,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '4d3df4feaa090210b0543bdb1c5c59170762f8d964793df676b628526953e7dc',
-			'sha1'   => '875841088ab21ef0c7787646594f62a1113b1520',
-			'md5'    => '15d72586742aa9f4f3b1db44e77f6867',
+			'sha256' => '573c5ab756c14886b04182b28be56e893d2dbe65059775ead579f2876ce08bf4',
+			'sha1'   => 'f502cfc6307097f6d4a124b0adad9cd5c85bf4ac',
+			'md5'    => '5baa41c7d92cdd7ab6bd2acb9c7c9026',
 		];
 	}
 
@@ -882,6 +896,7 @@ trait Extensions_Actions {
 			switch ( $yield_count ) :
 				case 0 :
 					$success[] = static::include_extension( $file, $_instance, $bits );
+					//= Continue to default for counting.
 
 				default :
 					$yield_count++;
@@ -1016,7 +1031,7 @@ trait Extensions_Actions {
 	 * Removes redundant data from $message.
 	 *
 	 * @since 1.0.0
-	 * @NOTE Output is not sanitized.
+	 * @NOTE Output is not escaped.
 	 *
 	 * @param string $message The current error message.
 	 * @param array $error The PHP triggered error.

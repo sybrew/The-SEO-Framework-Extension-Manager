@@ -424,7 +424,7 @@ body.tsfem .wrap {
 	line-height: 1em;
 	text-decoration: none;
 	text-align: center;
-	margin-top: -.2em;
+	margin-top: .2em;
 	margin-bottom: .2em;
 	cursor: pointer;
 	-webkit-touch-callout: none;
@@ -436,10 +436,11 @@ body.tsfem .wrap {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	-webkit-transition: -webkit-filter 0.15s, color 0.15s;
+	/* Filter transistions are buggy in Edge and Blink. */
+	/*-webkit-transition: -webkit-filter 0.15s, color 0.15s;
 	-moz-transition: filter 0.15s, color 0.15s;
 	-o-transition: -webkit-filter 0.15s, color 0.15s;
-	transition: filter 0.15s, color 0.15s;
+	transition: filter 0.15s, color 0.15s;*/
 }
 
 .tsfem-button-small,
@@ -564,7 +565,7 @@ body.tsfem .wrap {
 
 .tsfem-button:active,
 .tsfem-button-primary:active {
-	margin-top: 0;
+	margin-top: .4em;
 	margin-bottom: 0;
 	box-shadow: none;
 	outline: 0;
@@ -606,7 +607,7 @@ body.tsfem .wrap {
 	position: relative;
 	/* EdgeHTML BUG. Causes subpixel font-rendering to fail. */
 	/*	transform-style: preserve-3d; */
-	margin: 0 auto;
+	margin: 0 auto 1em;
 	width: 120px;
 	height: 27px;
 	padding: 0;
@@ -639,7 +640,7 @@ body.tsfem .wrap {
 .tsfem-switch-button-container label,
 .tsfem-switch-button-container button {
 	position: absolute;
-	top: 0;
+	bottom: -.2em;
 	left: 0;
 	text-align: center;
 	-webkit-transition: -webkit-transform 1s, opacity .5s;
@@ -744,7 +745,8 @@ body.tsfem .wrap {
 	border: 1px solid #e2e2e2;
 	box-shadow: 0 1px 3px 1px #dedede;
 	background: #fff;
-	overflow: hidden;
+	/* EdgeHTML bug: Disappearing buttons when present */
+	/* overflow: hidden; */
 	border-radius: 3px;
 	-webkit-align-items: center;
 	align-items: center;

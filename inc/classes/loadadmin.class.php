@@ -456,7 +456,7 @@ final class LoadAdmin extends AdminPages {
 		$url = $this->get_admin_page_url();
 		$title = \__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
 
-		$notice_link = '<a href="' . \esc_url( $url ) . '" title="' . \esc_attr( $title ) . '" target="_self">' . \esc_html( $title ) . '</a>';
+		$notice_link = '<a href="' . \esc_url( $url ) . '" title="' . \esc_attr( $title ) . '" target=_self>' . \esc_html( $title ) . '</a>';
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		//* No a11y icon. Already escaped. Use TSF as it loads styles.
@@ -776,7 +776,6 @@ final class LoadAdmin extends AdminPages {
 		return $set ? $cache = true : $cache;
 	}
 
-
 	/**
 	 * Activates extension based on form input.
 	 *
@@ -796,11 +795,11 @@ final class LoadAdmin extends AdminPages {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		\TSF_Extension_Manager\Extensions::initialize( 'activation', $_instance, $bits );
-		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
-		\TSF_Extension_Manager\Extensions::set_instance_extension_slug( $slug );
+		Extensions::initialize( 'activation', $_instance, $bits );
+		Extensions::set_account( $this->get_subscription_status() );
+		Extensions::set_instance_extension_slug( $slug );
 
-		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
+		$checksum = Extensions::get( 'extensions_checksum' );
 		$result = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
@@ -825,9 +824,9 @@ final class LoadAdmin extends AdminPages {
 			endswitch;
 		endif;
 
-		$status = \TSF_Extension_Manager\Extensions::validate_extension_activation();
+		$status = Extensions::validate_extension_activation();
 
-		\TSF_Extension_Manager\Extensions::reset();
+		Extensions::reset();
 
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) {
@@ -926,12 +925,12 @@ final class LoadAdmin extends AdminPages {
 	final protected function test_extension( $slug, $ajax = false ) {
 
 		$this->get_verification_codes( $_instance, $bits );
-		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
+		Extensions::initialize( 'load', $_instance, $bits );
 
 		$this->get_verification_codes( $_instance, $bits );
-		$result = \TSF_Extension_Manager\Extensions::test_extension( $slug, $ajax, $_instance, $bits );
+		$result = Extensions::test_extension( $slug, $ajax, $_instance, $bits );
 
-		\TSF_Extension_Manager\Extensions::reset();
+		Extensions::reset();
 
 		return $result;
 	}

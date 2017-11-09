@@ -164,9 +164,7 @@ final class Tests {
 				if ( false !== $id ) {
 					$home = isset( $value['home'] ) && $value['home'];
 					$post = \get_post( $id );
-				//	$url = \the_seo_framework()->the_url( '', [ 'home' => $home, 'external' => true, 'id' => $id ] );
 					$url = \get_permalink( $post );
-				//	$title = \the_seo_framework()->title( '', '', '', [ 'notagline' => true, 'get_custom_field' => true, 'term_id' => $id, 'page_on_front' => $home, 'escape' => true ] );
 					$title = \get_the_title( $post );
 
 					$links[] = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $title );
@@ -270,7 +268,7 @@ final class Tests {
 			goto end;
 		}
 
-		not_equal : {
+		static_file : {
 			$state = 'okay';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
@@ -379,9 +377,9 @@ final class Tests {
 				$_expected_scheme = 'https';
 				break;
 
+			default :
 			case 3 :
 			case 0 :
-			default :
 				// Forced HTTP or error on HTTPS.
 				$content .= $this->wrap_info(
 					\esc_html__( 'Your website is only accessible on HTTP.', 'the-seo-framework-extension-manager' )

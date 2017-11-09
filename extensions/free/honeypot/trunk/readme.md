@@ -4,7 +4,7 @@ Location: https://theseoframework.com/extensions/honeypot/
 Tags: spam
 Requires at least: 4.4.0
 Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.8.1
+Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -110,10 +110,11 @@ If you still receive a bunch of spam, consider combining this extension with an 
 
 ## Changelog
 
-### 1.0.2-beta
+### 1.1.0
 
 [tsfep-release time="-1"]
 
+* **Changed:** This extension is now free and out of testing phase.
 * **Fixed:** Generated hashes now always start with an alphabetic character. Making the scoped field always disappear for users as intended.
 
 ### 1.0.1-beta

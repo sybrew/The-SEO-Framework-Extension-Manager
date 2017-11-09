@@ -56,8 +56,8 @@ trait Extensions_I18n {
 			'third-party'     => \__( 'Third party', 'the-seo-framework-extension-manager' ),
 			'view-details'    => \__( 'View detais', 'the-seo-framework-extension-manager' ),
 			'visit-author'    => \__( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
-			'visit-extension' => \__( 'Go to the extension homepage', 'the-seo-framework-extension-manager' ),
-			'extension-home'  => \__( 'Extension home', 'the-seo-framework-extension-manager' ),
+			'visit-extension' => \__( 'Go to the extension overview page', 'the-seo-framework-extension-manager' ),
+			'overview'        => \__( 'Overview', 'the-seo-framework-extension-manager' ),
 			'compatible'      => \__( 'Compatible', 'the-seo-framework-extension-manager' ),
 			'incompatible'    => \__( 'Incompatible', 'the-seo-framework-extension-manager' ),
 			'menupage'        => \__( 'Menu Page', 'the-seo-framework-extension-manager' ),
@@ -470,7 +470,7 @@ trait Extensions_Layout {
 			'<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-home" title="%s">%s</a>',
 			\esc_url( $url, [ 'http', 'https' ] ),
 			\esc_attr( static::get_i18n( 'visit-extension' ) ),
-			\esc_html( static::get_i18n( 'extension-home' ) )
+			\esc_html( static::get_i18n( 'overview' ) )
 		);
 	}
 

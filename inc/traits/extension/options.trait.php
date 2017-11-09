@@ -237,7 +237,7 @@ trait Extension_Options {
 	 *
 	 * @param array|string $keys  The keys that collapse with $value. For performance
 	 *                            benefits, the last value should be a string.
-	 * @param array|string        $value The values that might contain $keys' value.
+	 * @param array|string $value The values that might contain $keys' value.
 	 *                            Passed by reference for huge performance improvement.
 	 * @return mixed|null Null if not found. Value otherwise.
 	 */
