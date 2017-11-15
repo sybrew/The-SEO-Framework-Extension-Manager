@@ -5,7 +5,7 @@ Tags: the seo framework, extensions, monitor, modules, title, seo, schema, local
 Requires at least: 4.4.0
 Tested up to: 4.9.0
 Requires PHP: 5.5
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -181,7 +181,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 = 1.4.0 - Extricated SEO =
 
 * **Release date:**
-	* November 9th, 2017
+	* November 10th, 2017
 
 **New Extension:**
 
@@ -210,7 +210,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* **Version:**
 		* 1.0.0
 		* **This is a new extension.**
-	* [View full changelog](https://theseoframework.com/extensions/articles/#changelog).
+	* [View full changelog](https://theseoframework.com/extensions/origin/#changelog).
 
 = 1.3.2 =
 

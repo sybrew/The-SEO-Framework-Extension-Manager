@@ -159,7 +159,7 @@ This helps search engines tailor displayed search results for its users. So, you
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 10th, 2017"]
 
 * **Added:** TSF 3.0 URL compatibility.
 * **Added:** http://schema.org/publisher output now uses the new TSF 3.0 logo. It is resized correctly on-the-fly for AMP, once.

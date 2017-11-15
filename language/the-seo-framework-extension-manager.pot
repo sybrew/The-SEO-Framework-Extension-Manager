@@ -3194,7 +3194,7 @@ msgid "Third party"
 msgstr ""
 
 #: inc/traits/extensions-layout.trait.php:57
-msgid "View detais"
+msgid "View details"
 msgstr ""
 
 #: inc/traits/extensions-layout.trait.php:58

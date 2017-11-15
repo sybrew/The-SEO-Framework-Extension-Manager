@@ -54,7 +54,7 @@ trait Extensions_I18n {
 			'version'         => \__( 'Version', 'the-seo-framework-extension-manager' ),
 			'first-party'     => \__( 'First party', 'the-seo-framework-extension-manager' ),
 			'third-party'     => \__( 'Third party', 'the-seo-framework-extension-manager' ),
-			'view-details'    => \__( 'View detais', 'the-seo-framework-extension-manager' ),
+			'view-details'    => \__( 'View details', 'the-seo-framework-extension-manager' ),
 			'visit-author'    => \__( 'Go to the author homepage', 'the-seo-framework-extension-manager' ),
 			'visit-extension' => \__( 'Go to the extension overview page', 'the-seo-framework-extension-manager' ),
 			'overview'        => \__( 'Overview', 'the-seo-framework-extension-manager' ),

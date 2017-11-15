@@ -1,4 +1,4 @@
-# Monitor
+# Origin
 Contributors:
 Location: https://theseoframework.com/extensions/origin/
 Tags: Uptime, syntax
@@ -41,6 +41,6 @@ For an attachment page to redirect, it must be uploaded through the post edit sc
 
 ### 1.0.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 10th, 2017"]
 
 * Initial extension release.

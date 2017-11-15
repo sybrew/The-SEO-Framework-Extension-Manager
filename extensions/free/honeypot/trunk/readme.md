@@ -112,7 +112,7 @@ If you still receive a bunch of spam, consider combining this extension with an 
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 10th, 2017"]
 
 * **Changed:** This extension is now free and out of testing phase.
 * **Fixed:** Generated hashes now always start with an alphabetic character. Making the scoped field always disappear for users as intended.
