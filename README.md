@@ -1,11 +1,13 @@
 # [The SEO Framework Extension Manager](https://premium.theseoframework.com) #
 
-Get The SEO Framework - Extension Manager [from WordPress.org](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
+## WordPress.org trunk ##
 
-## Screenshots
+[![The SEO Framework Plugin](https://img.shields.io/wordpress/plugin/v/the-seo-framework-extension-manager.svg)](https://wordpress.org/plugins/the-seo-framework-extension-manager/)
+[![The SEO Framework Stats](https://img.shields.io/wordpress/plugin/dt/the-seo-framework-extension-manager.svg)](https://wordpress.org/plugins/the-seo-framework-extension-manager/advanced/)
+[![The SEO Framework Reviews](https://img.shields.io/wordpress/plugin/r/the-seo-framework-extension-manager.svg)](https://wordpress.org/support/plugin/the-seo-framework-extension-manager/reviews/)
 
-The activation page. You can choose both premium and free subscriptions:
-![Activation overview](https://theseoframework.com/share/other/screenshot-1.jpg)
+> A free plugin for The SEO Framework. Get the Extension Manager [from WordPress.org](https://wordpress.org/plugins/the-seo-framework-extension-manager/).
 
-The SEO Extensions overview page, running on a multisite:
-![Dashboard Preview](https://theseoframework.com/share/other/screenshot-2.jpg)
+# Issues are managed elsewhere
+
+See [https://github.com/sybrew/the-seo-framework/labels/%5BExtension%20Manager%5D](Extension Manager issues).
