@@ -10,4 +10,4 @@
 
 # Issues are managed elsewhere
 
-See [https://github.com/sybrew/the-seo-framework/labels/%5BExtension%20Manager%5D](Extension Manager issues).
+See [Extension Manager issues](https://github.com/sybrew/the-seo-framework/labels/%5BExtension%20Manager%5D).
