@@ -55,7 +55,7 @@ For more information, please visit:
 
 ### 1.0.2
 
-[tsfep-release time="January 1st, 2017"]
+[tsfep-release time="August 22nd, 2017"]
 
 * **Added:** Output filters, respectively before and after:
 	* `(string) the_seo_framework_amp_pre`

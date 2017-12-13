@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Traits
+ * @package TSF_Extension_Manager\Traits\Overload
  */
 namespace TSF_Extension_Manager;
 
@@ -183,7 +183,8 @@ trait Construct_Master_Once_Interface {
 		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count < 1 or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
+		$count < 1
+			or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
 		$count++;
 
 		parent::__construct();
@@ -211,7 +212,8 @@ trait Construct_Master_Once_Final_Interface {
 		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count < 1 or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
+		$count < 1
+			or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
 		$count++;
 
 		$this->construct();
@@ -236,7 +238,8 @@ trait Construct_Sub_Once_Interface {
 		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count < 1 or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
+		$count < 1
+			or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
 		$count++;
 
 		parent::__construct();
@@ -263,7 +266,8 @@ trait Construct_Core_Once_Interface {
 		static $count = 0;
 
 		//* Don't execute this instance twice. For some reason conditional counting can't be done.
-		$count < 1 or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
+		$count < 1
+			or \wp_die( '<code>' . \esc_html( __CLASS__ . '::' . __FUNCTION__ ) . '()</code> may only be called once. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
 		$count++;
 
 		$this->construct();

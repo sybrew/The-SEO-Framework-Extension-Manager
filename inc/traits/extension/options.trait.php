@@ -186,7 +186,7 @@ final class Stale_Extensions_Options_Cache {
 }
 
 /**
- * Holds option functions for package TSF_Extension_Manager_Extension.
+ * Holds options functionality for package TSF_Extension_Manager\Extension.
  *
  * @since 1.0.0
  * @access private
@@ -469,7 +469,11 @@ trait Extension_Options {
 
 		unset( $c_options[ $this->o_index ] );
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		if ( [] === $c_options ) {
+			$success = \delete_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS );
+		} else {
+			$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		}
 
 		if ( $success ) {
 			//* Update options cache on success.
@@ -635,7 +639,11 @@ trait Extension_Options {
 		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		if ( [] === $c_options ) {
+			$success = \delete_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS );
+		} else {
+			$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		}
 
 		if ( $success ) {
 			//* Update options cache on success.

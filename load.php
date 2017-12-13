@@ -259,9 +259,17 @@ function _init_tsf_extension_manager() {
 function _register_autoloader() {
 
 	//* Prevent overriding of security classes by checking their existence.
-	! ( class_exists( 'TSF_Extension_Manager\Core', false ) || class_exists( 'TSF_Extension_Manager\Secure_Abstract', false ) || class_exists( 'TSF_Extension_Manager\SecureOption', false ) )
-	and ! ( class_exists( 'TSF_Extension_Manager\LoadAdmin', false ) || class_exists( 'TSF_Extension_Manager\LoadFront', false ) )
-		or \wp_die( -1 );
+	$integrity_classes = [
+		'\TSF_Extension_Manager\Core',
+		'\TSF_Extension_Manager\Secure_Abstract',
+		'\TSF_Extension_Manager\SecureOption',
+		'\TSF_Extension_Manager\LoadAdmin',
+		'\TSF_Extension_Manager\LoadFront',
+	];
+
+	foreach ( $integrity_classes as $_class )
+		$iniquity = class_exists( $_class, false );
+	$iniquity and die;
 
 	/**
 	 * Register class autoload here.
@@ -317,7 +325,7 @@ function _autoload_classes( $class ) {
 		/**
 		 * Prevent loading sub-namespaces when they're not initiated correctly.
 		 *
-		 * Only on a fatal error within autoloaded files, this function will run.
+		 * Only on a fatal error within autoloaded files, this check will yield true.
 		 * Prevent this function to then show an unrelated fatal error because
 		 * it's not meant load that file. Then it will propagate the error
 		 * towards the actual error within the previously and already loaded file.

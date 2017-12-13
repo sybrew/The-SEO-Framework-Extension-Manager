@@ -157,7 +157,7 @@ trait Schema_Packer {
 	 *
 	 * @param array $data   The data to pack.
 	 * @param bool  $pretty Whether to output prettified JSON
-	 * @return string The JSON data.
+	 * @return string|null The JSON data. Null on failure.
 	 */
 	protected function pack_data( array $data, $pretty = false ) {
 
@@ -199,8 +199,8 @@ trait Schema_Packer {
 
 		$_data = $packer->_get();
 		if ( ! $_data ) {
-			$this->reset_precision();
-			return null;
+			$output = null;
+			goto reset;
 		}
 
 		$options = JSON_UNESCAPED_SLASHES;
@@ -208,6 +208,7 @@ trait Schema_Packer {
 
 		$output = json_encode( $_data, $options );
 
+		reset:;
 		$this->reset_precision();
 
 		return $output;

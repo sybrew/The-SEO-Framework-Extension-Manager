@@ -244,7 +244,7 @@ class Core {
 	 *                3. Now returns a numeric value. From 0 to 3.
 	 * @access private
 	 *
-	 * @return bitwise integer : {
+	 * @return int (bitwise) : {
 	 *    0 = 0000 : Did nothing.
 	 *    1 = 0001 : Cleared PHP output buffer.
 	 *    2 = 0010 : Cleared HTTP headers.

@@ -48,7 +48,6 @@ defined( 'ABSPATH' ) or die;
  * @see TSF_Extension_Manager\Traits\Overload
  *
  * @final Can't be extended.
- * @return void
  */
 final class FormGenerator {
 	use Extension_Options,

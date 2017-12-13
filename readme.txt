@@ -178,6 +178,20 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
+= 1.5.0 - TODO =
+
+/
+* TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
+* TODO add shortcode for Local SEO addresses.
+* TODO add title test to Monitor.
+* TODO init uptime monitoring for Monitor.
+* TODO add Articles per-page selection toolbox.
+* TODO add TSF's upgrade handler.
+* TODO add TSF's server test handler.
+* TODO Add PHP 5.2 error handling compatibility (i.e. `__DIR__`, which can't be checked as it's magic).
+* TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
+* The extension option database entries will now be deleted when no indexes are present.
+
 = 1.4.0 - Extricated SEO =
 
 * **Release date:**

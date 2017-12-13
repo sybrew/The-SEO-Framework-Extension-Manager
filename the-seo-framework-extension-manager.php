@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.4.0
+ * Version: 1.5.0-dev2017.12.13.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
  * The plugin version. Always 3 point.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '1.4.0' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '1.5.0-dev' );
 
 /**
  * The plugin map URL. Used for calling browser files.
@@ -46,7 +46,7 @@ define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( __FILE__ ) );
  * The plugin map absolute path. Used for calling php files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH', \untrailingslashit( __DIR__ ) . DIRECTORY_SEPARATOR );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH', __DIR__ . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin file relative to the plugins dir.
@@ -101,6 +101,18 @@ define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' )
  * @since 1.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
+
+/**
+ * The extension options base name.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_POST_META', 'tsfem-extension-post-meta' );
+
+/**
+ * The extension options base name.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_TERM_META', 'tsfem-extension-term-meta' );
 
 /**
  * The extension options stale base name.

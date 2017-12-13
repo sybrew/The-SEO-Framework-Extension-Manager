@@ -36,7 +36,6 @@ defined( 'ABSPATH' ) or die;
  * @see TSF_Extension_Manager\Traits\Overload
  *
  * @final Can't be extended.
- * @return void|fase on failure.
  */
 final class SchemaPacker {
 	use Enclose_Core_Final;

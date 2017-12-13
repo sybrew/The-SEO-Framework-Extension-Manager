@@ -577,8 +577,7 @@ trait UI {
 					\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
 
 				switch ( $context ) :
-					case 'tsfem-image':
-
+					case 'tsfem-image' :
 						/**
 						 * Fires before a cropped image is saved.
 						 *
