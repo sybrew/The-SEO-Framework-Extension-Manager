@@ -76,6 +76,15 @@ final class InpostGUI {
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
 	}
 
+	/**
+	 * Registers available tabs.
+	 *
+	 * Any more than 6 tabs will cause GUI incompatibilities. Therefore, it's
+	 * recommended to only use these assigned tabs.
+	 *
+	 * @since 1.5.0
+	 * @uses static::$tabs The registered tabs that are written.
+	 */
 	private function register_tabs() {
 		static::$tabs = [
 			'structure' => [
@@ -100,25 +109,33 @@ final class InpostGUI {
 	}
 
 	/**
+	 * Outputs nonces to be verified at POST.
+	 *
+	 * Doesn't output a referer field, as that's already outputted by WordPress,
+	 * including a duplicate by The SEO Framework.
+	 *
 	 * @since 1.5.0
 	 * @access private
 	 * @uses static::NONCE_NAME
 	 * @uses static::NONCE_NAME
 	 * @see @package The_SEO_Framework\Classes
 	 *    method singular_inpost_box() [...] add_inpost_seo_box()
-	 *
 	 */
 	public function _output_nonce() {
 		\current_user_can( 'edit_post', $GLOBALS['post']->ID )
-			and \wp_nonce_field( static::NONCE_ACTION, static::NONCE_NAME );
+			and \wp_nonce_field( static::NONCE_ACTION, static::NONCE_NAME, false );
 	}
 
 	/**
+	 * Verifies nonce on POST and writes the class $save_access_state variable.
 	 *
 	 * @since 1.5.0
+	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
+	 *
+	 * @return void Early when nonce or user can't be verified.
 	 */
 	public function _verify_nonce( $post_id, $post ) {
 
@@ -137,6 +154,7 @@ final class InpostGUI {
 			static::$save_access_state |= 0b1000;
 
 		/**
+		 * Runs after nonce has been verified.
 		 *
 		 * @since 1.5.0
 		 * @param int (bitwise) $save_access_state The state the save is in.
@@ -149,19 +167,31 @@ final class InpostGUI {
 		 *     15 = 1111 : Post is manually published or updated.
 		 *    }
 		 */
-		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ &static::$save_access_state ] );
-
-		// var_dump()
-		// if ( ! ( $save_access_state ^ 0b1111 ) ) // passed all tests.
+		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ static::$save_access_state ] );
 	}
 
 	/**
+	 * Determines whether POST data can be safely written.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return bool True if user verification passed, and not doing autosave, cron or ajax.
+	 */
+	public static function can_safely_write() {
+		return ! ( $save_access_state ^ 0b1111 );
+	}
+
+	/**
+	 * Adds registered active tabs to The SEO Framework inpost metabox.
+	 *
 	 * @since 1.5.0
 	 * @access private
 	 *
+	 * @param array  $tabs  The registered tabs.
 	 * @param string $label The post type label.
+	 * @return array $tabs The SEO Framework's tabs.
 	 */
-	public function _load_tabs( $tabs, $label ) {
+	public function _load_tabs( array $tabs, $label ) {
 
 		$registered_tabs = static::$tabs;
 		$active_tab_keys = static::$active_tab_keys;
@@ -174,14 +204,28 @@ final class InpostGUI {
 		return $tabs;
 	}
 
+	/**
+	 * Appends post type label argument to the tab arguments.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array  $tab_args The current tab arguments.
+	 * @param string $label    The post type label.
+	 * @return array The extended tab arguments.
+	 */
 	private function append_type_arg( array $tab_args, $label ) {
 		$tab_args['args'] += [ 'post_type_label' => $label ];
 		return $tab_args;
 	}
 
 	/**
+	 * Output tabs content through loading registered tab views in order of
+	 * priority or registration time.
+	 *
 	 * @since 1.5.0
 	 * @access private
+	 *
+	 * @param string $tab The tab that invoked this method call.
 	 */
 	public function _output_tab_content( $tab ) {
 
@@ -195,6 +239,19 @@ final class InpostGUI {
 		}
 	}
 
+	/**
+	 * Outputs tab view, whilst trying to prevent 3rd party interference on views.
+	 *
+	 * There's a secret key generated on each tab load. This key can be accessed
+	 * in the view through `$_secret`, and be sent back to this class.
+	 * @see \TSF_Extension_Manager\InpostGUI::verify( $secret )
+	 *
+	 * @since 1.5.0
+	 * @uses static::$include_secret
+	 *
+	 * @param string $file The file location.
+	 * @param array  $args The registered view arguments.
+	 */
 	private function output_view( $file, array $args ) {
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;
@@ -202,38 +259,104 @@ final class InpostGUI {
 		unset( $_key, $_val, $args );
 
 		//= Prevent private includes hijacking.
-		static::$include_secret = $_secret = mt_rand( -2073011, 2072977 );
+		static::$include_secret = $_secret = mt_rand() . uniqid();
 		include $file;
 		static::$include_secret = null;
 	}
 
+	/**
+	 * Verifies view inclusion secret.
+	 *
+	 * @since 1.5.0
+	 * @see static::output_view()
+	 * @uses static::$include_secret
+	 *
+	 * @param string $secret The passed secret.
+	 * @return bool True on success, false on failure.
+	 */
 	public static function verify( $secret ) {
 		return static::$include_secret === $secret;
 	}
 
+	/**
+	 * Activates registered tab for display.
+	 *
+	 * Structure: Rich/structured data controls.
+	 * Audit:     Monitoring, reviewing content, analytics, etc.
+	 * Advanced:  Everything else.
+	 *
+	 * @since 1.5.0
+	 * @see static::register_tabs()
+	 * @uses static::$active_tab_keys
+	 *
+	 * @param string $tab The tab to activate.
+	 *               Either 'structure', 'audit' or 'advanced'.
+	 */
 	public static function activate_tab( $key ) {
 		static::$active_tab_keys[ $key ] = true;
 	}
 
+	/**
+	 * Registers view for tab.
+	 *
+	 * @since 1.5.0
+	 * @see static::activate_tab();
+	 * @uses static::$views
+	 *
+	 * @param string $file The file to include.
+	 * @param array  $args The arguments to pass to the file. Each array index is
+	 *               converted to a respectively named variable.
+	 * @param string $tab  The tab the view is outputted in.
+	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
+	 */
 	public static function register_view( $file, array $args = [], $tab = 'advanced', $priority = 10 ) {
 		$_views = static::$views;
 
-		if ( ! isset( $_views[ $tab ] ) ) {
+		if ( ! isset( $_views[ $tab ] ) )
 			$_views[ $tab ] = [];
-		}
-		if ( ! isset( $_views[ $tab ][ $priority ] ) ) {
+		if ( ! isset( $_views[ $tab ][ $priority ] ) )
 			$_views[ $tab ][ $priority ] = [];
-		}
 
 		$_views[ $tab ][ $priority ] += [ $file, $args ];
+
 		static::$views = $_views;
 	}
 
-	public static function wrap_flex( $what, $content ) {
+	/**
+	 * Wraps and outputs content in common flex wrap for tabs.
+	 *
+	 * @since 1.5.0
+	 * @uses static::construct_flex_wrap();
+	 * @see documentation static::construct_flex_wrap();
+	 *
+	 * @param string $what    The type of wrap to use.
+	 * @param string $content The content to wrap.
+	 * @param string $for     The input ID an input label is for.
+	 */
+	public static function wrap_flex( $what, $content, $for = '' ) {
 		//= Input should already be escaped.
-		echo static::construct_flex_wrap( $what, $content );
+		echo static::construct_flex_wrap( $what, $content, $for );
 	}
 
+	/**
+	 * Wraps content in common flex wrap for tabs.
+	 *
+	 * @since 1.5.0
+	 * @see static::wrap_flex();
+	 *
+	 * @param string $what The type of wrap to use. Accepts:
+	 *               'block'        : The main wrap. Wraps a label and input/content block.
+	 *               'label'        : Wraps a label.
+	 *                                Be sure to wrap parts in `<div>` for alignment.
+	 *               'label-input'  : Wraps an input label.
+	 *                                Be sure to assign the $for parameter.
+	 *                                Be sure to wrap parts in `<div>` for alignment.
+	 *               'input'        : Wraps input content fields, plainly.
+	 *               'content'      : Same as 'input'.
+	 *               'checkbox'     : Wraps a checkbox and its label.
+	 * @param string $content The content to wrap.
+	 * @param string $for     The input ID an input label is for.
+	 */
 	public static function construct_flex_wrap( $what, $content, $for = '' ) {
 
 		switch ( $what ) :
@@ -242,7 +365,6 @@ final class InpostGUI {
 				break;
 
 			case 'label' :
-			case 'label-static' :
 				$content = sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex">
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
@@ -275,6 +397,10 @@ final class InpostGUI {
 			case 'input' :
 			case 'content' :
 				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex">%s</div>', $content );
+				break;
+
+			case 'checkbox' :
+				$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
 				break;
 
 			default;
