@@ -184,7 +184,7 @@ final class FormGenerator {
 	 * @static
 	 * @global object $_POST
 	 *
-	 * @return unsigned int (R>0) $i The previous iteration value. 1 if $_POST value not set.
+	 * @return int <unsigned> (R>0) $i The previous iteration value. 1 if $_POST value not set.
 	 */
 	private static function get_ajax_iteration_start() {
 		//* Referer check OK.
@@ -199,7 +199,7 @@ final class FormGenerator {
 	 * @static
 	 * @global object $_POST
 	 *
-	 * @return unsigned int (R>=0) $i The new iteration value. 0 if $_POST is not set.
+	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
 		//* Referer check OK.

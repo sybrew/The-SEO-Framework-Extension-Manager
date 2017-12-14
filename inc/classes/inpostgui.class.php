@@ -58,10 +58,21 @@ final class InpostGUI {
 
 	public static $save_access_state = 0;
 
-	private static $tabs = [];
 	private static $include_secret;
+
+	private static $tabs = [];
 	private static $active_tab_keys = [];
 	private static $views = [];
+
+	/**
+	 * Prepares the class.
+	 *
+	 * Use this if the actions need to be registered early, but nothing else of
+	 * this class is needed yet.
+	 *
+	 * @since 1.5.0
+	 */
+	public static function prepare() {}
 
 	/**
 	 * Constructor. Loads all appropriate actions asynchronously.
@@ -70,7 +81,7 @@ final class InpostGUI {
 
 		$this->register_tabs();
 
-		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ] );
+		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
 		\add_action( 'save_post', [ $this, '_verify_nonce' ], 1, 2 );
 
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
@@ -134,7 +145,6 @@ final class InpostGUI {
 	 *
 	 * @param integer  $post_id Post ID.
 	 * @param \WP_Post $post    Post object.
-	 *
 	 * @return void Early when nonce or user can't be verified.
 	 */
 	public function _verify_nonce( $post_id, $post ) {
@@ -157,6 +167,7 @@ final class InpostGUI {
 		 * Runs after nonce has been verified.
 		 *
 		 * @since 1.5.0
+		 * @param \WP_Post      $post              The post object.
 		 * @param int (bitwise) $save_access_state The state the save is in.
 		 *    Any combination of : {
 		 *      1 = 0001 : Passed nonce and capability checks. Always set at this point.
@@ -167,7 +178,7 @@ final class InpostGUI {
 		 *     15 = 1111 : Post is manually published or updated.
 		 *    }
 		 */
-		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ static::$save_access_state ] );
+		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ $post, static::$save_access_state ] );
 	}
 
 	/**
@@ -336,6 +347,41 @@ final class InpostGUI {
 	public static function wrap_flex( $what, $content, $for = '' ) {
 		//= Input should already be escaped.
 		echo static::construct_flex_wrap( $what, $content, $for );
+	}
+
+	/**
+	 * Wraps and outputs and array of content in common flex wrap for tabs.
+	 *
+	 * Mainly used to wrap blocks and checkboxes.
+	 * Does not accept title labels directly.
+	 *
+	 * @since 1.5.0
+	 * @uses static::construct_flex_wrap();
+	 * @see documentation static::construct_flex_wrap();
+	 *
+	 * @param string $what    The type of wrap to use.
+	 * @param array  $contents The contents to wrap.
+	 */
+	public static function wrap_flex_multi( $what, array $contents ) {
+		//= Input should already be escaped.
+		echo static::contruct_flex_wrap_multi( $what, $contents );
+	}
+
+	/**
+	 * Wraps an array content in common flex wrap for tabs.
+	 *
+	 * Mainly used to wrap blocks and checkboxes.
+	 * Does not accept title labels directly.
+	 *
+	 * @since 1.5.0
+	 * @uses static::construct_flex_wrap();
+	 * @see documentation static::construct_flex_wrap();
+	 *
+	 * @param string $what    The type of wrap to use.
+	 * @param array  $contents The contents to wrap.
+	 */
+	public static function contruct_flex_wrap_multi( $what, array $contents ) {
+		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ) );
 	}
 
 	/**
