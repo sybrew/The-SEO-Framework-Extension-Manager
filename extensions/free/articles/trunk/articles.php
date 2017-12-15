@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) or die;
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.1.0' );
+define( 'TSFEM_E_ARTICLES_VERSION', '1.2.0' );
 
 /**
  * The extension file, absolute unix path.
@@ -47,25 +47,25 @@ define( 'TSFEM_E_ARTICLES_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
- * @since 1.1.0
+ * @since 1.2.0
  */
-//define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_TRANSPORTER_BASE_FILE ) );
+//define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_ARTICLES_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
- * @since 1.1.0
+ * @since 1.2.0
  */
 define( 'TSFEM_E_ARTICLES_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_ARTICLES_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
- * @since 1.1.0
+ * @since 1.2.0
  */
 define( 'TSFEM_E_ARTICLES_PATH_CLASS', TSFEM_E_ARTICLES_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
- * @since 1.1.0
+ * @since 1.2.0
  */
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
 	return;

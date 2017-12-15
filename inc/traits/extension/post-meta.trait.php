@@ -37,48 +37,28 @@ final class Extensions_Post_Meta_Cache {
 		Enclose_Core_Final;
 
 	/**
-	 * Hols the post ID.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int|null $id
-	 */
-	private static $id = null;
-
-	/**
 	 * Holds the extension meta.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array|null $meta
+	 * @param array $meta : {
+	 *    'id' => [ 'key' => 'value' ],
+	 * }
 	 */
-	private static $meta = null;
+	private static $meta = [];
 
 	/**
 	 * Initializes the meta cache.
 	 *
 	 * @since 1.5.0
+	 *
+	 * @param int $id The Post ID.
 	 * @return void
 	 */
-	private static function init_meta_cache() {
-
-		if ( is_null( static::$id ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'No ID is set.' );
-			return;
-		}
-
-		static::$meta = (array) \get_post_meta( static::$id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, [] );
-	}
-
-	/**
-	 * Sets the active ID.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int $id The ID.
-	 */
-	public static function set_id( $id ) {
-		static::$id = (int) $id;
+	private static function init_meta_cache( $id ) {
+		static::$meta[ $id ] = (array) unserialize(
+			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( [] ) )
+		);
 	}
 
 	/**
@@ -90,14 +70,15 @@ final class Extensions_Post_Meta_Cache {
 	 * @since 1.5.0
 	 * @access private
 	 *
-	 * @return array All extension meta.
+	 * @param int $id The Post ID.
+	 * @return array Every extension's meta for ID.
 	 */
-	public static function _get_meta_cache() {
+	public static function _get_meta_cache( $id ) {
 
-		if ( is_null( static::$meta ) )
-			static::init_meta_cache();
+		if ( ! isset( static::$meta[ $id ] ) )
+			static::init_meta_cache( $id );
 
-		return static::$meta;
+		return static::$meta[ $id ];
 	}
 
 	/**
@@ -109,25 +90,26 @@ final class Extensions_Post_Meta_Cache {
 	 * @since 1.5.0
 	 * @access private
 	 *
-	 * @param string|int $index The meta index that has to be changed.
+	 * @param int $id The Post ID.
+	 * @param string $index The meta index that has to be changed.
 	 * @param null|array $new_meta The new meta to set.
 	 *        Should not have changed meta from outside the current extension's scope.
 	 * @param bool $delete If $new_meta aren't set, but this is true, then
 	 *        it will delete the current meta $index from cache.
-	 * @return array The current extension meta.
+	 * @return array The updated extension meta for every extension for ID.
 	 */
-	public static function _set_meta_cache( $index = '', $new_meta = null, $delete = false ) {
+	public static function _set_meta_cache( $id, $index, $new_meta = null, $delete = false ) {
 
-		if ( is_null( static::$meta ) )
-			static::init_meta_cache();
+		if ( ! isset( static::$meta[ $id ] ) )
+			static::init_meta_cache( $id );
 
 		if ( isset( $new_meta ) && $index ) {
-			static::$meta[ $index ] = $new_meta;
+			static::$meta[ $id ][ $index ] = $new_meta;
 		} elseif ( $delete ) {
-			unset( static::$meta[ $index ] );
+			unset( static::$meta[ $id ][ $index ] );
 		}
 
-		return static::$meta;
+		return static::$meta[ $id ];
 	}
 }
 
@@ -150,6 +132,15 @@ trait Extension_Post_Meta {
 	 * @param string $pm_index The current extension meta base index field.
 	 */
 	protected $pm_index = '';
+
+	/**
+	 * Holds the post ID.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int|null $id
+	 */
+	protected $pm_id = null;
 
 	/**
 	 * Current Extension default meta.
@@ -179,7 +170,7 @@ trait Extension_Post_Meta {
 	 * @param int $id The ID.
 	 */
 	final protected function set_extension_post_meta_id( $id ) {
-		\TSF_Extension_Manager\Extensions_Post_Meta_Cache::set_id( $id );
+		$this->pm_id = $id;
 		$this->pm_initialized = true;
 	}
 
@@ -189,8 +180,7 @@ trait Extension_Post_Meta {
 	 * @since 1.5.0
 	 */
 	final protected function reset_extension_post_meta_id() {
-		\TSF_Extension_Manager\Extensions_Post_Meta_Cache::set_id( \the_seo_framework()->get_the_real_ID() );
-		$this->pm_initialized = true;
+		$this->set_extension_post_meta_id( \the_seo_framework()->get_the_real_ID() );
 	}
 
 	/**
@@ -205,7 +195,7 @@ trait Extension_Post_Meta {
 
 		if ( ! $this->pm_initialized ) $this->reset_extension_post_meta_id();
 
-		$meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache();
+		$meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
 		if ( isset( $meta[ $this->pm_index ] ) ) {
 			return $meta[ $this->pm_index ];
@@ -220,7 +210,6 @@ trait Extension_Post_Meta {
 	 * Fetches current extension meta.
 	 *
 	 * @since 1.5.0
-	 * @since 1.2.0 : Now listens to $this->pm_defaults.
 	 *
 	 * @param string $key The meta name.
 	 * @param mixed $default The fallback value if the meta doesn't exist. Defaults to $this->pm_defaults[ $meta ].
@@ -272,14 +261,14 @@ trait Extension_Post_Meta {
 		$meta[ $key ] = $value;
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache();
+		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, $c_meta );
+		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_index, $meta );
+			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
 		return $success;
@@ -309,14 +298,14 @@ trait Extension_Post_Meta {
 		unset( $meta[ $key ] );
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache();
+		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, $c_meta );
+		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_index, $meta );
+			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
 		return $success;
@@ -337,7 +326,7 @@ trait Extension_Post_Meta {
 		if ( ! $this->pm_initialized ) $this->reset_extension_post_meta_id();
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache();
+		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
 		//* If index is non existent, return true.
 		if ( ! isset( $c_meta[ $this->pm_index ] ) )
@@ -348,12 +337,12 @@ trait Extension_Post_Meta {
 		if ( [] === $c_meta ) {
 			$success = \delete_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		} else {
-			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, $c_meta );
+			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 		}
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_index, null, true );
+			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, null, true );
 		}
 
 		return $success;

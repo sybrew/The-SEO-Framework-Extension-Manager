@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.5.0-dev2017.12.14.1
+ * Version: 1.5.0-dev2017.12.15.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -104,15 +104,17 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extens
 
 /**
  * The extension options base name.
- * @since 1.0.0
+ * Has an underscore to hide it from custom fields.
+ * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_POST_META', 'tsfem-extension-post-meta' );
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_POST_META', '_tsfem-extension-post-meta' );
 
 /**
  * The extension options base name.
- * @since 1.0.0
+ * Has an underscore to conform to TSF_EXTENSION_MANAGER_EXTENSION_POST_META.
+ * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_TERM_META', 'tsfem-extension-term-meta' );
+define( 'TSF_EXTENSION_MANAGER_EXTENSION_TERM_META', '_tsfem-extension-term-meta' );
 
 /**
  * The extension options stale base name.

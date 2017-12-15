@@ -56,6 +56,8 @@ final class InpostGUI {
 	const NONCE_ACTION = 'tsfem-e-save-inpost-nonce';
 	const NONCE_NAME = 'tsfem-e-inpost-settings';
 
+	const META_PREFIX = 'tsfem-pm';
+
 	public static $save_access_state = 0;
 
 	private static $include_secret;
@@ -163,11 +165,15 @@ final class InpostGUI {
 		if ( ! defined( 'DOING_CRON' ) || ! DOING_CRON )
 			static::$save_access_state |= 0b1000;
 
+		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? $_POST[ static::META_PREFIX ] : null;
+
 		/**
-		 * Runs after nonce has been verified.
+		 * Runs after nonce and possibly interfering actions have been verified.
 		 *
 		 * @since 1.5.0
+		 *
 		 * @param \WP_Post      $post              The post object.
+		 * @param array|null    $data              The meta data.
 		 * @param int (bitwise) $save_access_state The state the save is in.
 		 *    Any combination of : {
 		 *      1 = 0001 : Passed nonce and capability checks. Always set at this point.
@@ -178,7 +184,7 @@ final class InpostGUI {
 		 *     15 = 1111 : Post is manually published or updated.
 		 *    }
 		 */
-		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ $post, static::$save_access_state ] );
+		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ $post, $data, static::$save_access_state ] );
 	}
 
 	/**
@@ -186,7 +192,7 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @return bool True if user verification passed, and not doing autosave, cron or ajax.
+	 * @return bool True if user verification passed, and not doing autosave, cron, or ajax.
 	 */
 	public static function can_safely_write() {
 		return ! ( $save_access_state ^ 0b1111 );
@@ -334,6 +340,21 @@ final class InpostGUI {
 	}
 
 	/**
+	 * Builds option key index, which can later be retrieved in POST.
+	 *
+	 * @since 1.5.0
+	 * @see trait \TSF_Extension_Manager\Extension_Post_Meta
+	 * @see static::_verify_nonce();
+	 *
+	 * @param string $option The option.
+	 * @param string $index  The pm_index.
+	 * @return string The option prefix.
+	 */
+	public static function get_option_key( $option, $index ) {
+		return sprintf( '%s[%s][%s]', static::META_PREFIX, $index, $option );
+	}
+
+	/**
 	 * Wraps and outputs content in common flex wrap for tabs.
 	 *
 	 * @since 1.5.0
@@ -424,9 +445,7 @@ final class InpostGUI {
 				break;
 
 			case 'label-input' :
-				//= Soft fail if $for is omitted.
-				// TEST. var_dump();
-				false and $for or \the_seo_framework()->_doing_it_wrong( __METHOD__, sprintf( 'Use %s::wrap_flex_settings_label() instead.', \esc_html( static::class ) ) );
+				$for or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
 				$content = sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex">
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">

@@ -51,13 +51,13 @@ final class Admin extends Core {
 	 */
 	private function prepare_inpostgui() {
 
+		//= Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		//= This also initiates InpostGUI nonce check action.
+		//= Defered because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
-		// Defered because we need to access the meta object after current_screen.
-		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 2 );
+		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
 	}
 
 	/**
@@ -69,6 +69,9 @@ final class Admin extends Core {
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {
+
+		if ( ! \the_seo_framework()->is_single_admin() )
+			return;
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 
@@ -97,8 +100,50 @@ final class Admin extends Core {
 		);
 	}
 
-	private function save_meta( $post, $save_access_state ) {
+	/**
+	 * Saves or deletes post meta.
+	 *
+	 * @since 1.2.0
+	 * @see \TSF_Extension_Manager\InpostGUI::_verify_nonce()
+	 * @see action 'tsfem_inpostgui_verified_nonce'
+	 *
+	 * @param \WP_Post      $post              The post object.
+	 * @param array|null    $data              The meta data.
+	 * @param int (bitwise) $save_access_state The state the save is in.
+	 */
+	public function _save_meta( $post, $data, $save_access_state ) {
 
+		if ( $save_access_state ^ 0b1111 )
+			return;
+
+		if ( empty( $data[ $this->pm_index ] ) )
+			return;
+
+		$this->set_extension_post_meta_id( $post->ID );
+
+		$store = [];
+		/**
+		 * @TODO add meta sanitation filters.
+		 */
+		foreach ( $data[ $this->pm_index ] as $key => $value ) :
+			switch ( $key ) {
+				case 'type' :
+					if ( in_array( $value, [ 'Article', 'NewsArticle', 'BlogPosting' ], true ) ) {
+						$store[ $key ] = $value;
+					}
+					break;
+
+				default;
+			}
+		endforeach;
+
+		if ( empty( $store ) ) {
+			$this->delete_post_meta_index();
+		} else {
+			foreach ( $store as $key => $value ) {
+				$this->update_post_meta( $key, $value );
+			}
+		}
 	}
 
 	/**
