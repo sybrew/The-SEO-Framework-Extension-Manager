@@ -190,6 +190,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * TODO add TSF's server test handler.
 * TODO Add PHP 5.2 error handling compatibility (i.e. `__DIR__`, which can't be checked as it's magic).
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
+* TODO WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
+* TODO Monitor now notifies you when first crawl isn't finished, sending back incorrect data otherwise.
 * The extension option database entries will now be deleted when no indexes are present.
 
 = 1.4.0 - Extricated SEO =

@@ -136,6 +136,89 @@ final class Tests {
 	}
 
 	/**
+	 * Determines if the Title is correctly output.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param array $data The input data.
+	 * @return string The evaluated data.
+	 */
+	public function issue_title( $data ) {
+
+		$content = '';
+		$state = 'unknown';
+
+		if ( ! isset( $data['located'] ) ) {
+			$state = 'unknown';
+			$content = $this->no_data_found();
+			goto end;
+		}
+
+		$state = 'good';
+		$content = '';
+		$consult_theme_author = false;
+
+		if ( ! $data['located'] ) {
+			$state = 'error';
+			$consult_theme_author = true;
+		} elseif ( isset( $data['value'] ) && $data['value'] ) {
+			preg_match( '/(?:<title.*?>)(.*)?(?:<\/title>)/is', $data['value'], $matches );
+			$first_found_title = isset( $matches[1] ) ? trim( $matches[1] ) : '';
+
+			if ( '' === $first_found_title ) {
+				$content .= $this->wrap_info( \esc_html__( 'The homepage title tag is empty.', 'the-seo-framework-extension-manager' ) );
+				$state = 'error';
+				$consult_theme_author = true;
+			} else {
+				$_expected_title = \the_seo_framework()->build_title( '', '', [ 'page_on_front' => true ] );
+				if ( $_expected_title !== $first_found_title ) {
+					$content = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
+					$state = 'bad';
+				} else {
+					$content = $this->wrap_info( \esc_html__( 'The homepage title is as expected.', 'the-seo-framework-extension-manager' ) );
+				}
+			}
+		}
+
+		if ( isset( $data['count'] ) && $data['count'] > 1 ) {
+			$content .= $this->wrap_info( sprintf(
+				/* translators: %d = the number "2" or greater */
+				\esc_html__( '%d title tags are found on the homepage.', 'the-seo-framework-extension-manager' ),
+				$data['count']
+			) );
+			$state = 'bad';
+			$consult_theme_author = true;
+		}
+
+		if ( $consult_theme_author ) {
+			$_theme = \wp_get_theme();
+			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
+			if ( $_theme_contact ) {
+				$_dev = sprintf(
+					'<a href="%s" target=_blank rel="noreferer noopener">%s</a>',
+					\esc_url( $_theme_contact ),
+					\esc_html__( 'theme developer', 'the-seo-framework-extension-manager' )
+				);
+			} else {
+				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
+			}
+
+			$content .= $this->wrap_info( sprintf(
+				/* translators: %s = theme developer */
+				\esc_html__( 'Please consult with your %s to fix the title.', 'the-seo-framework-extension-manager' ),
+				$_dev
+			) );
+		}
+
+		end :;
+		return [
+			'content' => $content,
+			'state' => $state,
+		];
+	}
+
+	/**
 	 * Determines if there are PHP errors detected.
 	 *
 	 * @since 1.0.0
@@ -175,7 +258,7 @@ final class Tests {
 		//* Links are filled in with erroneous pages.
 		if ( empty( $links ) ) {
 			$state = 'good';
-			$content = $this->no_issue_found();
+			$content = $this->wrap_info( $this->no_issue_found() );
 		} else {
 			$state = 'bad';
 			$content = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
@@ -188,7 +271,7 @@ final class Tests {
 			$content .= '</ul>';
 		}
 
-		$content .= $this->small_sample_disclaimer();
+		$content .= $this->wrap_info( $this->small_sample_disclaimer() );
 
 		end :;
 		return [
@@ -494,7 +577,7 @@ final class Tests {
 	 * @return string The HTML wrapped information text.
 	 */
 	protected function wrap_info( $text ) {
-		return sprintf( '<div class="tsfem-e-monitor-info">%s</div>', $text );
+		return sprintf( '<p class="tsfem-e-monitor-info">%s</p>', $text );
 	}
 
 	/**
@@ -510,7 +593,7 @@ final class Tests {
 		static $cache = null;
 
 		return $cache ?: $cache = sprintf(
-			'<div class="tsfem-description">%s</div>',
+			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
 		);
 	}
@@ -528,7 +611,7 @@ final class Tests {
 		static $cache = null;
 
 		return $cache ?: $cache = sprintf(
-			'<div class="tsfem-description">%s</div>',
+			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
 		);
 	}
@@ -546,7 +629,7 @@ final class Tests {
 		static $cache = null;
 
 		return $cache ?: $cache = sprintf(
-			'<div class="tsfem-description">%s</div>',
+			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )
 		);
 	}

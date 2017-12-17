@@ -121,6 +121,16 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.0.0-beta-5
+
+[tsfep-release time="-1"]
+
+* **API - Extension:**
+	* **Added:** The crawler now tests for title tags. It checks if the [tsfep-extension name="title-fix"] is needed, or when you need to consult with your theme developer.
+* **API - Our servers:**
+	* **December 17th, 2017:**
+		* **Added:** We now store title tags.
+
 ### 1.0.0-beta-4
 
 [tsfep-release time="August 22nd, 2017"]
@@ -157,7 +167,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 	* **March 18th, 2017:**
 		* **Fixed:** When your site embeds external services like YouTube, the crawler no longer crashes.
 	* **April 1st, 2017:**
-		* **Fixed:** When your metadata favicon isn't output by WordPress, it can now also be detected.
+		* **Fixed:** When your metadata favicon isn't outputted by WordPress, it can now also be detected.
 	* **May 7th, 2017:**
 		* **Added:** Only the root file is now checked, rather than subdirectories.
 	* **May 14th, 2017:**

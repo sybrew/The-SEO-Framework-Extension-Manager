@@ -200,7 +200,8 @@ trait Extension_Post_Meta {
 		if ( isset( $meta[ $this->pm_index ] ) ) {
 			return $meta[ $this->pm_index ];
 		} else {
-			empty( $this->pm_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Post_Meta->pm_index.' );
+			empty( $this->pm_index )
+				and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>TSF_Extension_Manager\Extension_Post_Meta::$pm_index</code>.' );
 		}
 
 		return [];

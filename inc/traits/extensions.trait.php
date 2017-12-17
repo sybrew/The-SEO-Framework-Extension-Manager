@@ -112,10 +112,10 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'blogging, news',
-				'version' => '1.1.0',
+				'version' => '1.2.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1510015492',
+				'last_updated' => '1513377345',
 				'requires' => '4.4.0',
 				'tested' => '4.9.0',
 				'requires_tsf' => '2.8.2',
@@ -129,7 +129,7 @@ trait Extensions_Properties {
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1502820526',
+				'last_updated' => '1513526444',
 				'requires' => '4.4.0',
 				'tested' => '4.9.0',
 				'requires_tsf' => '2.7.0',
@@ -191,6 +191,20 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '3.0.0',
 			],
+			// 'transporter' => [
+			// 	'slug' => 'transporter',
+			// 	'network' => '0',
+			// 	'type' => 'free',
+			// 	'area' => 'media',
+			// 	'version' => '1.0.0',
+			// 	'author' => 'Sybre Waaijer',
+			// 	'party' => 'first',
+			// 	'last_updated' => '1510175308',
+			// 	'requires' => '4.4.0',
+			// 	'tested' => '4.9.0',
+			// 	'requires_tsf' => '2.7.0',
+			// 	'tested_tsf' => '3.0.0',
+			// ],
 		];
 	}
 
@@ -207,9 +221,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '573c5ab756c14886b04182b28be56e893d2dbe65059775ead579f2876ce08bf4',
-			'sha1'   => 'f502cfc6307097f6d4a124b0adad9cd5c85bf4ac',
-			'md5'    => '5baa41c7d92cdd7ab6bd2acb9c7c9026',
+			'sha256' => 'ec025ba4e4247a6ff776d62b5193340262d6cb2bb2088b2fe6faa8d162ed3986',
+			'sha1'   => '1e88ddf71574aff0d55e0932152aac8d92c19341',
+			'md5'    => 'ecaa5dc5ceb31ffb6e531c01fc7c48f6',
 		];
 	}
 

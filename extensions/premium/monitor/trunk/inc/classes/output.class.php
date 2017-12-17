@@ -394,24 +394,28 @@ final class Output {
 		switch ( $type ) :
 			case 'issues' :
 				switch ( $key ) :
-					case 'favicon' :
-						$title = \__( 'Favicon output', 'the-seo-framework-extension-manager' );
+					case 'title' :
+						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
+						break 2;
+
+					case 'https' :
+						$title = \__( 'Scheme', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'php' :
 						$title = \__( 'PHP errors', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'robots' :
-						$title = \__( 'Robots.txt output', 'the-seo-framework-extension-manager' );
-						break 2;
-
 					case 'sitemap' :
 						$title = \__( 'Sitemap output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'https' :
-						$title = \__( 'Scheme', 'the-seo-framework-extension-manager' );
+					case 'robots' :
+						$title = \__( 'Robots.txt output', 'the-seo-framework-extension-manager' );
+						break 2;
+
+					case 'favicon' :
+						$title = \__( 'Favicon output', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'moresoon' :
@@ -419,8 +423,10 @@ final class Output {
 						break 2;
 
 					default :
+						//* Falls back to underlying default.
 						break 1;
 				endswitch;
+				//= No break to fall back to default.
 
 			default :
 				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );

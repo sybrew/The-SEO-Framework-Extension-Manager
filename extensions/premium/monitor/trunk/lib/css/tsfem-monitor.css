@@ -236,3 +236,11 @@
 	max-height: 0;
 	opacity: 0;
 }
+
+.tsfem-e-monitor-info:first-of-type {
+	margin-top: 0;
+}
+
+.tsfem-e-monitor-info:last-of-type {
+	margin-bottom: 0;
+}

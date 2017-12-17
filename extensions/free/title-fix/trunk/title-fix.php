@@ -313,7 +313,7 @@ final class Core {
 	public function find_title_tag( $content ) {
 
 		//* Let's use regex.
-		if ( 1 === preg_match( '/<title.*?<\/title>/ius', $content, $matches ) ) {
+		if ( 1 === preg_match( '/<title.*?<\/title>/is', $content, $matches ) ) {
 			$title_tag = isset( $matches[0] ) ? $matches[0] : null;
 
 			if ( isset( $title_tag ) ) {

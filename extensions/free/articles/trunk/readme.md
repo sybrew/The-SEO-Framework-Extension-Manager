@@ -62,7 +62,9 @@ Most prominently, an image and the publisher needs to be present. Read more on t
 
 All you'll need to do is activate the Articles extension.
 
-There is no setup required and no options are currently available.
+There is no additional setup required.
+
+On every post, you can set the Article Type under the Structure tab.
 
 Every WordPress post, if the rendered data is valid, will have Articles data outputted in the header through a JSON-LD script.
 
@@ -74,8 +76,8 @@ Every WordPress post, if the rendered data is valid, will have Articles data out
 
 1. Don't use HTML code in your post titles. The theme, through CSS, should render titles correctly.
 2. Do set featured images for posts.
-3. Don't forget to set up basic information within the SEO Schema Settings.
-4. Don't forget to set up a Site Icon in Customizer if you wish to use AMP.
+3. Don't forget to set up basic information at the global SEO Schema settings.
+4. Don't forget to set up a Site Icon at the global SEO Schema settings or within Customizer.
 
 ### Automated output
 
@@ -111,9 +113,9 @@ Articles can be defined through various types.
 
 Google supports General Articles, Blog Postings and News Articles.
 
-**To annotate the data, the following is used:**
+**In detail, to annotate the data, the following is used:**
 
-1. The type, e.g. "article", "blog posting", or "news article".
+1. The type, e.g. "Article", "NewsArticle", or "BlogPosting".
 2. A headline, i.e. the real title.
 3. The description.
 4. The main image to be displayed with the article.
@@ -121,7 +123,7 @@ Google supports General Articles, Blog Postings and News Articles.
 6. The author, i.e. Schema.org Person.
 7. The publisher, i.e. Schema.org Organization, including the logo.
 
-#### General Articles
+#### Articles (generic)
 
 The general article type covers all types.
 
@@ -132,8 +134,6 @@ The general article type covers all types.
 * A blog posting.
 
 So, News Articles and Blog Postings are covered by General Articles. But, they can also be defined more specifically.
-
-*N.B. User control for Article (General), News Article and Blog Posting structures will be released soon. Currently, all output defaults to Article types.*
 
 #### News Articles
 
@@ -155,7 +155,36 @@ This information is mainly used to bind authors, organizations and dates to the 
 
 This helps search engines tailor displayed search results for its users. So, you increase likelihood to get returning visitors, thus increasing engagement.
 
+## Development
+
+### Filters
+
+Here you can find the available filters for Articles.
+
+### Adjust default post meta
+
+Specifically the article type.
+
+```
+add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
+
+	// Change 'type' default from 'Article' to 'NewsArticle'
+	$meta['type'] = 'NewsArticle';
+
+	return $meta;
+} );
+```
+
 ## Changelog
+
+### 1.2.0
+
+[tsfep-release time="-1"]
+
+* **Added:** Article Type selection on every post.
+	* You can select **"Article"**, **"NewsArticle"** and **"BlogPosting"**.
+* **Added:** New filter: `the_seo_framework_articles_default_meta`.
+	* Documented at [development](#development).
 
 ### 1.1.0
 
