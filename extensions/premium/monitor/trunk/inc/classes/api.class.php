@@ -347,7 +347,7 @@ class Api extends Data {
 		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'issues', 'stats' ], true ) ) {
+			if ( in_array( $type, [ 'issues', 'stats', 'issues_lc' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -480,7 +480,7 @@ class Api extends Data {
 	}
 
 	/**
-	 * Determines the last crawl of the website.
+	 * Determines the last crawl request of the website.
 	 *
 	 * @since 1.0.0
 	 * @see trait TSF_Extension_Manager\Extension_Options
@@ -492,6 +492,19 @@ class Api extends Data {
 	 */
 	protected function get_remote_crawl_timeout() {
 		return (int) $this->get_option( 'monitor_crawl_requested' );
+	}
+
+	/**
+	 * Returns the last recorded issue crawl.
+	 *
+	 * @since 1.0.0
+	 * @see trait TSF_Extension_Manager\Extension_Options
+	 *
+	 * @return int The remote last crawl time in UNIX time.
+	 *             Can be 0 if time isn't ever recorded.
+	 */
+	protected function get_last_issues_crawl() {
+		return (int) $this->get_option( 'issues_lc' );
 	}
 
 	/**

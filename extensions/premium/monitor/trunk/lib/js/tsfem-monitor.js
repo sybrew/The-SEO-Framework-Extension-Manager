@@ -227,8 +227,9 @@ window[ 'tsfem_e_monitor' ] = {
 						notice = data.status['notice'];
 
 					if ( 'success' === status ) {
-						var issues = content['issues'],
-							stats = content['stats'];
+						let issues = content['issues'],
+							stats = content['stats'],
+							lc = content['lc'];
 
 						if ( issues['found'] ) {
 							//* Expected to be inputting a single div.
@@ -258,6 +259,14 @@ window[ 'tsfem_e_monitor' ] = {
 								'swing'
 							);
 						}
+
+						jQuery( '#tsfem-e-monitor-last-crawled' ).replaceWith( jQuery( lc ).css( 'opacity', 0 ) );
+						//= Node is gone from memory. Reaccess it.
+						jQuery( '#tsfem-e-monitor-last-crawled' ).animate(
+							{ 'opacity' : 1 },
+							{ queue: true, duration: 1000 },
+							'swing'
+						);
 
 						jQuery( '.tsfem-e-monitor-stats-wrap' ).empty().css( 'opacity', 0 ).append( stats ).animate(
 							{ 'opacity' : 1 },

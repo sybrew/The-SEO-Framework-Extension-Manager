@@ -180,6 +180,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 = 1.5.0 - TODO =
 
+* **Release date:**
+	/
+	* TODO
+
 /
 * TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
 * TODO add shortcode for Local SEO addresses.

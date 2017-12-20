@@ -323,7 +323,7 @@ final class Layout extends Secure_Abstract {
 			}
 
 			$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
-			$end_date_i18n = $end_date ? \date_i18n( 'F j, Y', strtotime( $end_date ) ) : '';
+			$end_date_i18n = $end_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $end_date ) ) : '';
 			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
 			$expires_in = sprintf(
 				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
@@ -355,7 +355,7 @@ final class Layout extends Secure_Abstract {
 			}
 
 			$payment_date = isset( $payment_date ) ? date( 'Y-m-d', strtotime( $payment_date ) ) : '';
-			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y', strtotime( $payment_date ) ) : '';
+			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $payment_date ) ) : '';
 			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
 			$payment_in = sprintf(
 				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
@@ -421,8 +421,12 @@ final class Layout extends Secure_Abstract {
 			$form = $input . $nonce_action . $nonce . $submit;
 
 			return sprintf(
-				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>', \esc_attr( self::$request_name['activate-key'] ),
-				\esc_url( \tsf_extension_manager()->get_admin_page_url() ), 'input-activation', '', $form
+				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>',
+				\esc_attr( self::$request_name['activate-key'] ),
+				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
+				'input-activation',
+				'',
+				$form
 			);
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The upgrade form only supports the form type.' );

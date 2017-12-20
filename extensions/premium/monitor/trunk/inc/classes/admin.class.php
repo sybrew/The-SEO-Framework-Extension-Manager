@@ -405,6 +405,7 @@ final class Admin extends Api {
 							'content' => [
 								'issues' => $this->ajax_get_issues_data(),
 								'stats' => $this->ajax_get_stats_data(),
+								'lc' => $this->get_last_crawled_field(),
 							],
 							'type' => $type,
 							'notice' => $response['notice'],
@@ -951,18 +952,53 @@ final class Admin extends Api {
 	 */
 	protected function get_account_data_fields() {
 
-		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Overview', 'the-seo-framework-extension-manager' ) );
 
-		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
-		$_domain = $this->get_expected_domain();
-		$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
-		$domain = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
+		domain : {
+			$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
+			$_domain = $this->get_expected_domain();
+			$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
+			$domain = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
 
-		$output = \TSF_Extension_Manager\Layout::wrap_title_content( \esc_html__( 'Account site:', 'the-seo-framework-extension-manager' ), $domain, false );
+			$output = \TSF_Extension_Manager\Layout::wrap_title_content(
+				\esc_html__( 'Connected site:', 'the-seo-framework-extension-manager' ),
+				$domain,
+				false
+			);
+		}
+
+		lc : {
+			$output .= \TSF_Extension_Manager\Layout::wrap_title_content(
+				\esc_html__( 'Last crawled:', 'the-seo-framework-extension-manager' ),
+				$this->get_last_crawled_field(),
+				false
+			);
+		}
 
 		$output = sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 
 		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );
+	}
+
+	/**
+	 * Wraps and returns the Monitor last crawled field.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Monitor last crawled field.
+	 */
+	protected function get_last_crawled_field() {
+
+		$last_crawl = $this->get_last_issues_crawl();
+		$class = $last_crawl ? 'tsfem-success' : 'tsfem-error';
+		$last_crawl_i18n = $last_crawl ? \date_i18n( 'F j, Y, g:i A', $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
+		$lc = sprintf( 
+			'<span class="tsfem-dashicon %s" id=tsfem-e-monitor-last-crawled>%s</span>',
+			\esc_attr( $class ),
+			\esc_html( $last_crawl_i18n )
+		);
+
+		return $lc;
 	}
 
 	/**
@@ -1072,7 +1108,8 @@ final class Admin extends Api {
 	protected function get_stats_overview() {
 		return sprintf(
 			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap"><h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p></div>',
-			$this->get_string_coming_soon(), \esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
+			$this->get_string_coming_soon(),
+			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
 		);
 
 		$output = '';
@@ -1099,7 +1136,8 @@ final class Admin extends Api {
 	protected function ajax_get_stats_data() {
 		return sprintf(
 			'<h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p>',
-			$this->get_string_coming_soon(), \esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
+			$this->get_string_coming_soon(),
+			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
 		);
 	}
 
