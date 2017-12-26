@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
  * Require extensions traits.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extensions' );
+\TSF_Extension_Manager\_load_trait( 'manager/extensions' );
 
 /**
  * Require extensions layout traits depending on admin page type.
@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) or die;
  * @TODO Move trait items to own static class.
  */
 if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
-	\TSF_Extension_Manager\_load_trait( 'extensions-layout' );
+	\TSF_Extension_Manager\_load_trait( 'manager/extensions-layout' );
 } else {
 	//* Empty dummy traits.
 	trait Extensions_Layout { }

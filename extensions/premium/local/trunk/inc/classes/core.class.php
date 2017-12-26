@@ -31,7 +31,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require extension options trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-options' );
+\TSF_Extension_Manager\_load_trait( 'extension/options' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Local\Core

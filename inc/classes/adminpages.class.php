@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) or die;
  * Require user interface trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'ui' );
+\TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Class TSF_Extension_Manager\AdminPages
@@ -38,7 +38,9 @@ defined( 'ABSPATH' ) or die;
  * @access private
  */
 class AdminPages extends AccountActivation {
-	use Enclose_Stray_Private, Construct_Child_Interface, UI;
+	use Enclose_Stray_Private,
+		Construct_Child_Interface,
+		UI;
 
 	/**
 	 * Name of the page hook when the menu is registered.

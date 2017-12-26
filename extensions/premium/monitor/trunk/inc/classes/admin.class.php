@@ -30,19 +30,25 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require user interface trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'ui' );
+\TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require extension options trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-options' );
+\TSF_Extension_Manager\_load_trait( 'extension/options' );
 
 /**
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+\TSF_Extension_Manager\_load_trait( 'extension/forms' );
+
+/**
+ * Require time factory trait.
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'factory/time' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Monitor\Admin
@@ -58,6 +64,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 final class Admin extends Api {
 	use \TSF_Extension_Manager\Enclose_Stray_Private,
 		\TSF_Extension_Manager\Construct_Master_Once_Interface,
+		\TSF_Extension_Manager\Time,
 		\TSF_Extension_Manager\UI,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Extension_Forms,
@@ -991,10 +998,12 @@ final class Admin extends Api {
 
 		$last_crawl = $this->get_last_issues_crawl();
 		$class = $last_crawl ? 'tsfem-success' : 'tsfem-error';
-		$last_crawl_i18n = $last_crawl ? \date_i18n( 'F j, Y, g:i A', $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
-		$lc = sprintf( 
-			'<span class="tsfem-dashicon %s" id=tsfem-e-monitor-last-crawled>%s</span>',
+		$last_crawl_i18n = $last_crawl ? $this->get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
+		$lc = sprintf(
+			'<time class="tsfem-dashicon tsfem-has-hover-balloon %s" id=tsfem-e-monitor-last-crawled datetime=%s data-desc="%s">%s</time>',
 			\esc_attr( $class ),
+			$this->get_rectified_date( 'c', $last_crawl ),
+			$last_crawl ? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl ) : \esc_html__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' ),
 			\esc_html( $last_crawl_i18n )
 		);
 

@@ -490,7 +490,9 @@ trait Extensions_Actions {
 		$is_free_user = ! self::is_premium_user();
 
 		foreach ( $extensions as $_extension => $_active ) {
-			if ( $is_free_user && static::is_extension_premium( $_extension ) ) {
+			if ( ( $is_free_user && static::is_extension_premium( $_extension ) )
+			|| ( -1 === static::is_extension_compatible( $_extension ) )
+			   ) {
 				unset( $extensions[ $_extension ] );
 			}
 		}

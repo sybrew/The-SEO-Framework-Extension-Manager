@@ -27,13 +27,13 @@ defined( 'ABSPATH' ) or die;
  * Require option trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'options' );
+\TSF_Extension_Manager\_load_trait( 'manager/options' );
 
 /**
  * Require error trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'error' );
+\TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Class TSF_Extension_Manager\Core

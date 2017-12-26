@@ -184,6 +184,11 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	/
 	* TODO
 
+**Plugin Improvements:**
+
+* **Added:** Extensions no longer load if they're not deemed compatible to ensure stability.
+
+
 /
 * TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
 * TODO add shortcode for Local SEO addresses.

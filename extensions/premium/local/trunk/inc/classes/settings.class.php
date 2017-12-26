@@ -30,13 +30,13 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 * Require user interface trait.
 * @since 1.0.0
 */
-\TSF_Extension_Manager\_load_trait( 'ui' );
+\TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require error trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'error' );
+\TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Require Local POST handling trait.

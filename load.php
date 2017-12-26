@@ -188,7 +188,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 	/**
 	 * Load class overloading traits.
 	 */
-	\TSF_Extension_Manager\_load_trait( 'overload' );
+	\TSF_Extension_Manager\_load_trait( 'core/overload' );
 
 	return SecureOption::verify_option_instance( $new_value, $old_value, $option );
 }
@@ -231,7 +231,7 @@ function _init_tsf_extension_manager() {
 		/**
 		 * Load class overloading traits.
 		 */
-		\TSF_Extension_Manager\_load_trait( 'overload' );
+		\TSF_Extension_Manager\_load_trait( 'core/overload' );
 
 		/**
 		 * @package TSF_Extension_Manager
@@ -355,7 +355,7 @@ function _autoload_classes( $class ) {
  * @access private
  * @staticvar array $loaded
  *
- * @param string $file Where the trait is for.
+ * @param string $file Where the trait is for. Must be lowercase.
  * @return bool True if loaded, false otherwise.
  */
 function _load_trait( $file ) {
@@ -365,7 +365,7 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
 
-	$_file = str_replace( 'extension-', 'extension' . DIRECTORY_SEPARATOR, $file );
+	$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
 
 	return $loaded[ $file ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
 }
