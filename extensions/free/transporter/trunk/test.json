@@ -1,10 +1,10 @@
 {
 	"slug" : "transporter",
-	"namespace" : "TSF_Extension_Manager\\Extension",
+	"namespace" : "TSF_Extension_Manager\\Extension\\Transporter",
 	"test" : {
-		"_base"         : "transporter.php",
-		"Transporter_Admin" : [
-			"inc/classes/transporter-admin.class.php"
+		"_base" : "transporter.php",
+		"Admin" : [
+			"inc/classes/admin.class.php"
 		]
 	}
 }

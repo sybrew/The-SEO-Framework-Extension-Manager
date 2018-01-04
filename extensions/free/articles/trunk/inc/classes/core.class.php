@@ -12,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Articles extension for The SEO Framework
- * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -31,7 +31,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require extension options trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-post-meta' );
+\TSF_Extension_Manager\_load_trait( 'extension/post-meta' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Articles\Core

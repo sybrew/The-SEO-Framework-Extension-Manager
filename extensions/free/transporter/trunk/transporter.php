@@ -19,12 +19,9 @@ namespace TSF_Extension_Manager\Extension\Transporter;
 
 defined( 'ABSPATH' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
-	return;
-
 /**
  * Transporter extension for The SEO Framework
- * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -69,6 +66,13 @@ define( 'TSFEM_E_TRANSPORTER_DIR_PATH', \TSF_Extension_Manager\extension_dir_pat
  */
 define( 'TSFEM_E_TRANSPORTER_PATH_CLASS', TSFEM_E_TRANSPORTER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
+/**
+ * Verify integrity and sets up autoloader.
+ * @since 1.0.0
+ */
+if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter', $_instance, $bits ) )
+	return;
+
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\transporter_init', 11 );
 /**
  * Initializes the extension.
@@ -88,7 +92,7 @@ function transporter_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	\tsf_extension_manager()->_register_free_extension_autoload_path( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter' );
+	// \tsf_extension_manager()->_register_free_extension_autoload_path( TSFEM_E_TRANSPORTER_PATH_CLASS, 'Transporter' );
 
 	if ( \is_admin() ) {
 		new Admin;

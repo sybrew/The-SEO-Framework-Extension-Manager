@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Transporter extension for The SEO Framework
- * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -30,13 +30,13 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+\TSF_Extension_Manager\_load_trait( 'extension/forms' );
 
 /**
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'error' );
+\TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Transporter\Steps
@@ -246,7 +246,7 @@ final class Steps {
 	 */
 	private function get_transport_settings_export_actions( $ajax = false ) {
 
-		$export_data = \TSF_Extension_Manager\Extension\Transporter_Admin::get_the_seo_framework_options_export_data( false );
+		$export_data = Admin::get_the_seo_framework_options_export_data( false );
 		$transport_id = 'tsfem-e-transporter-export-settings-data-text';
 
 		$download_button = $this->get_settings_download_button_wrap();

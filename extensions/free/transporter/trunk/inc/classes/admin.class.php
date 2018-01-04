@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Transporter extension for The SEO Framework
- * Copyright (C) 2017 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -30,25 +30,25 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Require user interface trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'ui' );
+\TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require extension options trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-options' );
+\TSF_Extension_Manager\_load_trait( 'extension/options' );
 
 /**
  * Require extension forms trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'extension-forms' );
+\TSF_Extension_Manager\_load_trait( 'extension/forms' );
 
 /**
  * Require error trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\_load_trait( 'error' );
+\TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Transporter\Admin
@@ -360,11 +360,11 @@ final class Admin {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return object \TSF_Extension_Manager\Extension\Transporter_Steps
+	 * @return object \TSF_Extension_Manager\Extension\Transporter\Steps
 	 */
 	protected function get_transporter_steps_instance() {
 
-		$steps_instance = \TSF_Extension_Manager\Extension\Transporter_Steps::get_instance();
+		$steps_instance = Steps::get_instance();
 		$steps_instance->_set_instance_properties( [
 			'nonce_name' => $this->nonce_name,
 			'request_name' => $this->request_name,
@@ -716,7 +716,7 @@ final class Admin {
 		return $js_steps . $nojs_steps;
 	}
 
-	protected function get_transport_settings_js_steps( Transporter_Steps $steps_instance ) {
+	protected function get_transport_settings_js_steps( Steps $steps_instance ) {
 
 		$step_1 = $steps_instance->_get_step( 1, 'settings', false );
 
@@ -731,7 +731,7 @@ final class Admin {
 		return sprintf( '<div class="tsfem-e-transporter-transport tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s</div>', $output );
 	}
 
-	protected function get_transport_settings_nojs_steps( Transporter_Steps $steps_instance ) {
+	protected function get_transport_settings_nojs_steps( Steps $steps_instance ) {
 
 		$exporter = $steps_instance->_get_step( 2, 'settings-export', false );
 		$importer = $steps_instance->_get_step( 2, 'settings-import', false );
