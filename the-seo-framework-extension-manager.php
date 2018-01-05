@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.5.0-dev2017.12.26.0
+ * Version: 1.5.0-dev2018.01.05.1
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -37,116 +37,71 @@ defined( 'ABSPATH' ) or die;
 define( 'TSF_EXTENSION_MANAGER_VERSION', '1.5.0-dev' );
 
 /**
- * The plugin map URL. Used for calling browser files.
- * @since 1.0.0
+ * The plugin's database version.
+ * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '1500' );
 
 /**
- * The plugin map absolute path. Used for calling php files.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH', __DIR__ . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin file relative to the plugins dir.
+ * The plugin basename relative to the plugins directory.
  * @since 1.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', \plugin_basename( __FILE__ ) );
 
 /**
- * The plugin file, absolute unix path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
-
-/**
- * The plugin class map absolute path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_CLASS', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin class map absolute path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin function map absolute path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'functions' . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin function map absolute path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT', TSF_EXTENSION_MANAGER_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'compat' . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin extensions base path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_PATH', TSF_EXTENSION_MANAGER_DIR_PATH . 'extensions' . DIRECTORY_SEPARATOR );
-
-/**
- * The plugin options base name.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
-
-/**
- * The extension options base name.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
-
-/**
- * The extension options base name.
- * Has an underscore to hide it from custom fields.
+ * The plugin's bootstrap folder location.
  * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_POST_META', '_tsfem-extension-post-meta' );
+define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
 /**
- * The extension options base name.
- * Has an underscore to conform to TSF_EXTENSION_MANAGER_EXTENSION_POST_META.
+ * Checks whether to start plugin or test server.
+ *
  * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_TERM_META', '_tsfem-extension-term-meta' );
+if ( get_option( 'tsfem_tested_upgrade_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION ) {
+	tsf_extension_manager_boot();
+} else {
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'test-environment.php';
+
+	if ( get_option( 'tsfem_tested_upgrade_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION )
+		tsf_extension_manager_boot();
+}
 
 /**
- * The extension options stale base name.
- * @since 1.3.0
- */
-define( 'TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS', 'tsf-extension-manager-extension-s-settings' );
-
-/**
- * Load plugin files.
- * @since 1.0.0
- * @uses TSF_EXTENSION_MANAGER_DIR_PATH
- */
-require( TSF_EXTENSION_MANAGER_DIR_PATH . 'load.php' );
-
-/**
- * Load functions file.
- * @since 1.0.0
- * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
- */
-require( TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php' );
-
-/**
- * Loads the class from cache.
+ * Starts the plugin.
  *
- * This is the recommended way of calling the class, if needed.
- * Call this after action 'init' priority 0 otherwise it will kill the plugin,
- * or even other plugins.
- *
- * @since 1.0.0
- *
- * @return null|object The plugin class object.
+ * @since 1.5.0
+ * @access private
  */
-function tsf_extension_manager() {
-	return \TSF_Extension_Manager\_init_tsf_extension_manager();
+function tsf_extension_manager_boot() {
+
+	/**
+	 * Defines environental constants.
+	 * @since 1.5.0
+	 */
+	$__file = __FILE__;
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'define.php';
+	unset( $__file );
+
+	/**
+	 * Load plugin API file.
+	 * @since 1.5.0
+	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH
+	 */
+	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
+
+	/**
+	 * Load functions file.
+	 * @since 1.0.0
+	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
+	 */
+	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php';
+
+	/**
+	 * Load plugin files.
+	 * @since 1.0.0
+	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH
+	 */
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'load.php';
 }

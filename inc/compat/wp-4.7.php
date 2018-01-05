@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -20,9 +20,9 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * All functions within this file are exact copies from WordPress Core 4.5.
+ * All functions within this file are exact copies from WordPress Core 4.7.
  * @link https://wordpress.org/
  * @license GPLv2+
  *
- * @TODO fill this in. For now, this plugin and its extensions work with WordPress 4.4+
+ * @TODO fill this in. For now, this plugin and its extensions work with WordPress 4.6+
  */

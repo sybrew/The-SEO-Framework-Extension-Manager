@@ -1,6 +1,6 @@
 <?php
 /**
-* @package TSF_Extension_Manager
+* @package TSF_Extension_Manager/Bootstrap
 */
 namespace TSF_Extension_Manager;
 
@@ -23,83 +23,6 @@ defined( 'TSF_EXTENSION_MANAGER_DIR_PATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\add_action( 'activate_' . TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, __NAMESPACE__ . '\\_test_sever' );
-/**
- * Checks whether the server can run this plugin on activation.
- * If not, it will deactivate this plugin.
- *
- * This function will create a parse error on PHP < 5.3 (use of goto wrappers).
- * Which makes a knowledge database entry easier to make as it won't change anytime soon.
- * Otherwise, it will crash in the next called file because of the "use" keyword.
- *
- * @since 1.0.0
- * @see register_activation_hook():
- * @link https://developer.wordpress.org/reference/functions/register_activation_hook/
- * @access private
- *
- * @param bool $network_wide Whether the plugin is activated on a multisite network.
- * @return void Early if tests pass.
- */
-function _test_sever( $network_wide = false ) {
-
-	evaluate : {
-		   PHP_VERSION_ID < 50521 and $test = 1
-		or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < 50605 and $test = 2
-		or $GLOBALS['wp_db_version'] < 35700 and $test = 3
-		or $test = true;
-	}
-
-	//* All good.
-	if ( true === $test )
-		return;
-
-	deactivate : {
-		//* Not good. Deactivate plugin.
-		\deactivate_plugins( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, false, $network_wide );
-	}
-
-	switch ( $test ) :
-		case 1 :
-		case 2 :
-			//* PHP requirements not met, always count up to encourage best standards.
-			$requirement = 1 === $test ? 'PHP 5.5.21 or later' : 'PHP 5.6.5 or later';
-			$issue = 'PHP version';
-			$version = phpversion();
-			$subtitle = 'Server Requirements';
-			break;
-
-		case 3 :
-			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.4 or later';
-			$issue = 'WordPress version';
-			$version = $GLOBALS['wp_version'];
-			$subtitle = 'WordPress Requirements';
-			break;
-
-		default :
-			\wp_die();
-	endswitch;
-
-	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.
-	$pluginspage = $network_wide ? \network_admin_url( 'plugins.php' ) : \admin_url( 'plugins.php' );
-
-	//* Let's have some fun with teapots.
-	$response = floor( time() / DAY_IN_SECONDS ) === floor( strtotime( 'first day of April ' . date( 'Y' ) ) / DAY_IN_SECONDS ) ? 418 : 500;
-
-	\wp_die(
-		sprintf(
-			'<p><strong>The SEO Framework - Extension Manager</strong> requires <em>%s</em>. Sorry about that!<br>Your %s is: <code>%s</code></p>
-			<p>Do you want to <strong><a onclick="window.history.back()" href="%s">go back</a></strong>?</p>',
-			\esc_html( $requirement ), \esc_html( $issue ), \esc_html( $version ), \esc_url( $pluginspage, [ 'http', 'https' ] )
-		),
-		sprintf(
-			'The SEO Framework - Extension Manager &laquo; %s',
-			\esc_attr( $subtitle )
-		),
-		[ 'response' => intval( $response ) ]
-	);
-}
-
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
 /**
  * Loads plugin locale: 'the-seo-framework-extension-manager'
@@ -112,9 +35,7 @@ function _test_sever( $network_wide = false ) {
  * @return void Early if already loaded.
  */
 function _init_locale( $ignore = false ) {
-
 	if ( \is_admin() || $ignore ) {
-
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return;
 
@@ -124,21 +45,6 @@ function _init_locale( $ignore = false ) {
 			basename( __DIR__ ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
 		);
 	}
-}
-
-/**
- * Returns the minimum role required to adjust and access settings.
- *
- * @since 1.0.0
- * @staticvar bool $cache
- *
- * @return string The minimum required capability for extension installation.
- */
-function can_do_settings() {
-
-	static $cache = null;
-
-	return isset( $cache ) ? $cache : $cache = \current_user_can( 'manage_options' );
 }
 
 \TSF_Extension_Manager\_protect_options();

@@ -2,8 +2,8 @@
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: the seo framework, extensions, monitor, modules, title, seo, schema, local, articles, honeypot, amp
-Requires at least: 4.4.0
-Tested up to: 4.9.0
+Requires at least: 4.6.0
+Tested up to: 4.9.2
 Requires PHP: 5.5
 Stable tag: 1.4.0
 License: GPLv3
@@ -183,6 +183,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Release date:**
 	/
 	* TODO
+
+**Important note:**
+
+* This plugin now requires WordPress 4.6.
 
 **Plugin Improvements:**
 
@@ -453,5 +457,9 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 * Initial public release.
 
 == Upgrade Notice ==
+
+= 1.5.0 =
+
+This plugin now requires WordPress 4.6 or higher.
 
 == Other Notes ==
