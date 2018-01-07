@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Traits\Functions
+ * @package TSF_Extension_Manager\Traits\Factory
  */
 namespace TSF_Extension_Manager;
 
@@ -136,10 +136,13 @@ trait Time {
 	 * @since 1.5.0
 	 *
 	 * @param string   $format    The Datetime format.
-	 * @param int|false $timestamp The UNIX timestamp. When false it uses time().
+	 * @param int|null $timestamp The UNIX timestamp. When null it uses time().
 	 * @return string The formatted i18n date.
 	 */
-	protected function get_rectified_date_i18n( $format, $timestamp = false ) {
+	protected function get_rectified_date_i18n( $format, $timestamp = null ) {
+
+		is_null( $timestamp )
+			and $timestamp = time();
 
 		$this->set_timezone();
 		$out = \date_i18n( $format, $timestamp );

@@ -190,22 +190,30 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **Plugin Improvements:**
 
-* **Added:** Extensions no longer load if they're not deemed compatible to ensure stability.
+* **Added:** Extensions no longer load when they're no longer deemed compatible due to environmental changes to ensure stability.
+* **Added:** A plugin and extension database upgrader for future improvements deemed necessary.
+* **Added:** The plugin and extensions can now abstractly tell time.
+* **Added:** The plugin and extensions can now track memory to prevent exhaustion on heavy tasks.
+* **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean.
+* **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
+* **Improved:** The plugin's bootstrap has been rewritten to be more efficient and lighter.
+* **Improved:** The extension option database entries will now be deleted when no indexes are present.
+* **Improved:** Various UI elements now fit more neatly on some screens.
 
+/ TODO make this neat.
+**Extension Improvements:**
+	* Add Articles per-page selection toolbox.
+	* Add title test to Monitor.
+	* Notify users when settings change that makes Monitor data outdated and they should request a new crawl.
 
 /
 * TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
 * TODO add shortcode for Local SEO addresses.
-* TODO add title test to Monitor.
 * TODO init uptime monitoring for Monitor.
-* TODO add Articles per-page selection toolbox.
-* TODO add TSF's upgrade handler.
-* TODO add TSF's server test handler.
-* TODO Add PHP 5.2 error handling compatibility (i.e. `__DIR__`, which can't be checked as it's magic).
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
 * TODO WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
 * TODO Monitor now notifies you when first crawl isn't finished, sending back incorrect data otherwise.
-* The extension option database entries will now be deleted when no indexes are present.
+* TODO improve privacy on external links (i.e. e.g. Google Webmaster Central Blog).
 
 = 1.4.0 - Extricated SEO =
 

@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) or die;
 class Core {
 	use Enclose_Stray_Private,
 		Construct_Core_Interface,
-		Destruct_Core_Public_Final,
+		Destruct_Core_Public_Final_Interface,
 		Options,
 		Error;
 
@@ -174,21 +174,19 @@ class Core {
 		$result = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
-			switch ( $result ) :
-				case -1 :
-					//* No extensions have ever been active...
-					;
-
+			switch ( $result ) {
 				case -2 :
 					//* Failed checksum.
 					$this->set_error_notice( [ 2002 => '' ] );
-					;
-
-				default :
-					\TSF_Extension_Manager\Extensions::reset();
-					return $loaded = false;
 					break;
-			endswitch;
+
+				case -1 :
+					//* No extensions have ever been active...
+					break;
+			}
+
+			\TSF_Extension_Manager\Extensions::reset();
+			return $loaded = false;
 		endif;
 
 		$extensions = \TSF_Extension_Manager\Extensions::get( 'active_extensions_list' );

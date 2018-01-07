@@ -30,20 +30,22 @@ tsf_extension_manager_pre_boot_test();
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
+ *
+ * @return void
  */
 function tsf_extension_manager_pre_boot_test() {
 
 	$ms = is_multisite();
 
-	if ( $ms && class_exists( 'WP_Network', false ) ) {
+	if ( $ms && function_exists( 'get_network' ) ) {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
 			//= Free memory. Var is not passed by reference, so it's safe.
 			unset( $nw );
 
-			if ( get_blog_option( $nw->site_id, 'tsfem_tested_upgrade_version' ) ) {
-				update_option( 'tsfem_tested_upgrade_version', TSF_EXTENSION_MANAGER_DB_VERSION );
+			if ( get_blog_option( $nw->site_id, 'tsfem_tested_environment_version' ) ) {
+				update_option( 'tsfem_tested_environment_version', TSF_EXTENSION_MANAGER_DB_VERSION );
 				return;
 			}
 		}
@@ -64,7 +66,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 	//* All good.
 	if ( true === $test ) {
-		update_option( 'tsfem_tested_upgrade_version', TSF_EXTENSION_MANAGER_DB_VERSION );
+		update_option( 'tsfem_tested_environment_version', TSF_EXTENSION_MANAGER_DB_VERSION );
 		return;
 	}
 

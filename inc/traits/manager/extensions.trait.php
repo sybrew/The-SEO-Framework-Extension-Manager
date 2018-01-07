@@ -618,27 +618,14 @@ trait Extensions_Actions {
 
 		$compatibility = static::determine_extension_compatibility( $extension );
 
-		switch ( $compatibility ) :
-			case 0 :
-				$_compatibility = 0;
-				break;
+		$table = [
+			0 => 0,
+			1 => 1,
+			4 => 2,
+			5 => 3,
+		];
 
-			case 1 :
-				$_compatibility = 1;
-				break;
-
-			case 4 :
-				$_compatibility = 2;
-				break;
-
-			case 5 :
-				$_compatibility = 3;
-				break;
-
-			default :
-				$_compatibility = -1;
-				break;
-		endswitch;
+		$_compatibility = isset( $table[ $compatibility ] ) ? $table[ $compatibility ] : -1;
 
 		return $cache[ $extension['slug'] ] = $_compatibility;
 	}

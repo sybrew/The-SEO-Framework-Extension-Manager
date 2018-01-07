@@ -397,7 +397,7 @@ trait Construct_Stray_Private {
  * @since 1.0.0
  * @access private
  */
-trait Destruct_Core_Public_Final {
+trait Destruct_Core_Public_Final_Interface {
 
 	final public function __destruct() {
 		$this->_has_died( true );

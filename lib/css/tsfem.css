@@ -985,6 +985,11 @@ body.tsfem .wrap {
 	margin-bottom: 20px;
 }
 
+.tsfem-pane-split > div > div:last-of-type,
+.tsfem-actions > div > div:last-of-type {
+	margin-bottom: 0px;
+}
+
 .tsfem-flex-account-info-rows {
 	line-height: 1.625em;
 }

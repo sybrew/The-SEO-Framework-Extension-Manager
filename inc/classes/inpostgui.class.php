@@ -26,11 +26,12 @@ defined( 'ABSPATH' ) or die;
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
- * @see EOF. Because of the autoloader, we can't do it before the class is read.
+ * @see EOF. Because of the autoloader and trait calling, we can't do it before the class is read.
+ * @link https://bugs.php.net/bug.php?id=75771
  */
-function _load_inpostgui_class() {
+$_load_inpostgui_class = function() {
 	new InpostGUI();
-}
+};
 
 /**
  * Registers and outputs inpost GUI elements. Auto-invokes everything the moment
@@ -468,11 +469,12 @@ final class InpostGUI {
 				$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
 				break;
 
-			default;
+			default :
+				break;
 		endswitch;
 
 		return $content;
 	}
 }
 
-\TSF_Extension_Manager\_load_inpostgui_class();
+$_load_inpostgui_class();

@@ -133,7 +133,8 @@ final class Admin extends Core {
 					}
 					break;
 
-				default;
+				default :
+					break;
 			}
 		endforeach;
 

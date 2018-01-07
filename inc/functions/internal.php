@@ -111,3 +111,13 @@ function has_run( $caller ) {
 
 	return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
 }
+
+/**
+ * Loads the plugin upgrader.
+ * Function is outside of the plugin namespace so it call be called in the boot file.
+ *
+ * @since 1.5.0
+ */
+function load_upgrader() {
+	require_once TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrader.class.php';
+}

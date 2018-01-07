@@ -55,17 +55,16 @@ define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', \plugin_basename( __FILE__ ) );
 define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
 /**
- * Checks whether to start plugin or test server.
- *
+ * Checks whether to start plugin or test server first.
  * @since 1.5.0
  */
-if ( get_option( 'tsfem_tested_upgrade_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION ) {
-	tsf_extension_manager_boot();
-} else {
-	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'test-environment.php';
+if ( get_option( 'tsfem_tested_environment_version' ) < TSF_EXTENSION_MANAGER_DB_VERSION ) {
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'envtest.php';
 
-	if ( get_option( 'tsfem_tested_upgrade_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION )
+	if ( get_option( 'tsfem_tested_environment_version' ) < TSF_EXTENSION_MANAGER_DB_VERSION )
 		tsf_extension_manager_boot();
+} else {
+	tsf_extension_manager_boot();
 }
 
 /**
@@ -87,21 +86,26 @@ function tsf_extension_manager_boot() {
 	/**
 	 * Load plugin API file.
 	 * @since 1.5.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH
 	 */
 	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
 
 	/**
-	 * Load functions file.
+	 * Load internal functions file.
 	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION
 	 */
-	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'functions.php';
+	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'internal.php';
+
+	/**
+	 * Prepare plugin upgrader before the plugin loads.
+	 * @since 1.5.0
+	 */
+	if ( tsf_extension_manager_db_version() < TSF_EXTENSION_MANAGER_DB_VERSION ) {
+		require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrade.php';
+	}
 
 	/**
 	 * Load plugin files.
 	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH
 	 */
 	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'load.php';
 }

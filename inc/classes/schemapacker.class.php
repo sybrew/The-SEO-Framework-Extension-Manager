@@ -121,7 +121,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param unsigned int (i>0) $by
+	 * @param int <unsigned> (R>0) $by
 	 */
 	public function _iterate_base( $by = 1 ) {
 		$this->level or ++$this->level;

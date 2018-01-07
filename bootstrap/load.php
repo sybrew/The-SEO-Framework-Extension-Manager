@@ -118,6 +118,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  * @since 1.0.0
  * @staticvar object $tsf_extension_manager
  * @access private
+ * @factory
  *
  * @return null|object TSF Extension Manager class object.
  */
@@ -150,6 +151,12 @@ function _init_tsf_extension_manager() {
 
 		//* Initialize extensions.
 		$tsf_extension_manager->_init_extensions();
+
+		/**
+		 * Runs after extensions are initialized
+		 * @since 1.5.0
+		 */
+		do_action( 'tsfem_extensions_initialized' );
 	}
 
 	return $tsf_extension_manager;
@@ -250,60 +257,4 @@ function _autoload_classes( $class ) {
 	}
 
 	require $path . $class . '.class.php';
-}
-
-/**
- * Requires trait files once.
- *
- * @since 1.0.0
- * @since 1.2.0 Now returns state in boolean rather than void.
- * @uses TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT
- * @access private
- * @staticvar array $loaded
- *
- * @param string $file Where the trait is for. Must be lowercase.
- * @return bool True if loaded, false otherwise.
- */
-function _load_trait( $file ) {
-
-	static $loaded = [];
-
-	if ( isset( $loaded[ $file ] ) )
-		return $loaded[ $file ];
-
-	$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
-
-	return $loaded[ $file ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
-}
-
-/**
- * Requires WordPress compat files once.
- *
- * @since 1.0.0
- * @uses TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT
- * @access private
- * @staticvar array $loaded
- *
- * @param string $version The version where the WordPress compatibility is required for.
- * @return bool True if loaded; false otherwise.
- */
-function _load_wp_compat( $version = '' ) {
-
-	static $loaded = [];
-
-	if ( isset( $loaded[ $version ] ) )
-		return $loaded[ $version ];
-
-	if ( empty( $version ) || 3 !== strlen( $version ) ) {
-		\the_seo_framework()->_doing_it_wrong( __FUNCTION__, 'You must tell the two-point required WordPress version.' );
-		return $loaded[ $version ] = false;
-	}
-
-	/**
-	 * @global string $wp_version
-	 */
-	if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
-		return $loaded[ $version ] = true;
-
-	return $loaded[ $version ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
 }

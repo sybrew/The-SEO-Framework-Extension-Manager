@@ -355,7 +355,8 @@ final class FormGenerator {
 			case 'max_it' :
 				return $this->max_it;
 
-			default;
+			default :
+				break;
 		endswitch;
 	}
 
@@ -405,7 +406,8 @@ final class FormGenerator {
 			case 'end' :
 				return '</form>';
 
-			default;
+			default :
+				break;
 		endswitch;
 	}
 
@@ -448,8 +450,10 @@ final class FormGenerator {
 						\esc_html( $name ),
 					]
 				);
+				break;
 
-			default;
+			default :
+				break;
 		endswitch;
 	}
 
@@ -855,7 +859,8 @@ final class FormGenerator {
 				return $this->create_image_field( $args );
 				break;
 
-			default;
+			default :
+				break;
 		endswitch;
 
 		return '';
@@ -939,7 +944,8 @@ final class FormGenerator {
 				$o = $this->get_fields_iterator( $args );
 				break;
 
-			default;
+			default :
+				break;
 		endswitch;
 
 		return $o;
@@ -952,7 +958,7 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param unsigned int (R>0) $max The maximum value. Passed by reference.
+	 * @param int <unsigned> (R>0) $max The maximum value. Passed by reference.
 	 */
 	private function set_max_iterations( &$max ) {
 
