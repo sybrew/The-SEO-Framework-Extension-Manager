@@ -121,3 +121,25 @@ function has_run( $caller ) {
 function load_upgrader() {
 	require_once TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrader.class.php';
 }
+
+/**
+ * Builds error notice.
+ *
+ * @since 1.5.0
+ *
+ * @param bool   $success The success status, either boolean, int, or other.
+ * @param string $notice  The error notice displayed to the user.
+ * @param int    $code    The error code. Defaults to -1 (undefined).
+ * @return array {
+ *    'success' => mixed $success,
+ *    'notice'  => string $notice,
+ *    'code'    => int $code,
+ * }
+ */
+function get_ajax_notice( $success = false, $notice = '', $code = -1 ) {
+	return [
+		'success' => $success,
+		'notice' => $notice,
+		'code' => intval( $code ),
+	];
+}

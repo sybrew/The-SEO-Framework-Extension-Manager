@@ -563,6 +563,54 @@ body.tsfem .wrap {
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
+.tsfem-button-pulse {
+	-webkit-animation: tsfem-button-pulse 5s ease-in-out infinite;
+	-moz-animation: tsfem-button-pulse 5s ease-in-out infinite;
+	-o-animation: tsfem-button-pulse 5s ease-in-out infinite;
+	animation: tsfem-button-pulse 5s ease-in-out infinite;
+}
+
+@-webkit-keyframes tsfem-button-pulse {
+	0% {
+		-webkit-filter: brightness(1);
+		filter: brightness(1);
+	}
+	25% {
+		-webkit-filter: brightness(0.925);
+		filter: brightness(0.925);
+	}
+	75% {
+		-webkit-filter: brightness(1.025);
+		filter: brightness(1.025);
+	}
+	100% {
+		-webkit-filter: brightness(1);
+		filter: brightness(1);
+	}
+}
+
+@keyframes tsfem-button-pulse {
+	0% {
+		-webkit-filter: brightness(1);
+		filter: brightness(1);
+	}
+	25% {
+		-webkit-filter: brightness(0.925);
+		filter: brightness(0.925);
+	}
+	75% {
+		-webkit-filter: brightness(1.025);
+		filter: brightness(1.025);
+	}
+	100% {
+		-webkit-filter: brightness(1);
+		filter: brightness(1);
+	}
+}
+
+/* ## User interaction
+/*--------------------------------------*/
+
 .tsfem-button:active,
 .tsfem-button-primary:active {
 	margin-top: .4em;

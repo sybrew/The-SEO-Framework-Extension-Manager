@@ -867,7 +867,7 @@ trait Extensions_Actions {
 
 			if ( $_class ) {
 				$class = $namespace . '\\' . $_class;
-				$success[] = new $class;
+				$success[] = (bool) new $class;
 			}
 		}
 
@@ -1009,17 +1009,13 @@ trait Extensions_Actions {
 		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
 		if ( defined( 'DOING_AJAX' ) ) {
-			$status = [
-				'success' => 10005,
-				'notice' => $error_notice,
-				'topNotice' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
-			];
+			$results = \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 );
+			$fatal_error = sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice );
 
 			/**
 			 * @TODO set slug.
 			 */
-			$response = WP_DEBUG ? [ 'status' => $status, 'slug' => '', 'case' => 'activate' ] : [ 'status' => $status ];
-			\tsf_extension_manager()->send_json( $response, 'failure' );
+			\tsf_extension_manager()->send_json( compact( 'results', 'fatal_error' ), 'failure' );
 			exit;
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
@@ -1107,7 +1103,7 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) {
-		return (bool) include_once $file;
+		return (bool) include $file;
 	}
 
 	/**

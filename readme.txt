@@ -178,27 +178,36 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 == Changelog ==
 
-= 1.5.0 - TODO =
+= 1.5.0 - Impeccable SEO =
 
 * **Release date:**
 	/
 	* TODO
 
+**New Extensions:**
+
+* **Debugger**: This free extension enables The SEO Framework's debugging interface for admin users.
+	/
+	* TODO Is this actually possible as extensions are loaded after TSF? I'd like to think so...
+
 **Important note:**
 
-* This plugin now requires WordPress 4.6.
+* This plugin now requires WordPress 4.6 or later.
 
 **Plugin Improvements:**
 
-* **Added:** Extensions no longer load when they're no longer deemed compatible due to environmental changes to ensure stability.
-* **Added:** A plugin and extension database upgrader for future improvements deemed necessary.
+* **Added:** Extensions no longer load when they're deemed incompatible due to environmental changes to ensure stability.
+* **Added:** A plugin and extension database upgrader for future improvements for when necessary.
 * **Added:** The plugin and extensions can now abstractly tell time.
 * **Added:** The plugin and extensions can now track memory to prevent exhaustion on heavy tasks.
 * **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean.
+* **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
+* **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
 * **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
-* **Improved:** The plugin's bootstrap has been rewritten to be more efficient and lighter.
+* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, lighter and easier to read.
 * **Improved:** The extension option database entries will now be deleted when no indexes are present.
 * **Improved:** Various UI elements now fit more neatly on some screens.
+* **Improved:** When the extension class autoloader be registered, the extension in question fails safely.
 
 / TODO make this neat.
 **Extension Improvements:**

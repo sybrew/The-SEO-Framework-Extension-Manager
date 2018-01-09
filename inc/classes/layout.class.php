@@ -136,11 +136,21 @@ final class Layout extends Secure_Abstract {
 			$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n = \__( 'Deactivate account?', 'the-seo-framework-extension-manager' );
 
-			$button = '<button type=submit title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning">' . \esc_html( $deactivate_i18n ) . '</button>';
+			$button_class = 'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning';
+			$button = vsprintf(
+				'<button type=submit title="%s" class="%s">%s</button>',
+				[
+					\esc_attr( $ays_i18n ),
+					$button_class,
+					\esc_html( $deactivate_i18n ),
+				]
+			);
 
+			$switcher_class = 'tsfem-button-flag tsfem-button';
+			$switcher_class .= \tsf_extension_manager()->are_options_valid() ? '' : ' tsfem-button-pulse';
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type=checkbox id="' . $field_id . '-action" value="1" />'
-							. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . \esc_html( $deactivate_i18n ) . '</label>'
+							. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="' . $switcher_class . '">' . \esc_html( $deactivate_i18n ) . '</label>'
 							. $button
 						. '</div></div>';
 

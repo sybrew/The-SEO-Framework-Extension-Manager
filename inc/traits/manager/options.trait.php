@@ -114,6 +114,8 @@ trait Options {
 	 * Updates TSF Extension Manager option.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Option reversal has been forwarded to option verification,
+	 *              so the verification key no longers gets out of sync.
 	 *
 	 * @param string $option The option name.
 	 * @param mixed $value The option value.
@@ -153,15 +155,15 @@ trait Options {
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
-		$key = '_instance' === $option ? $value : $options['_instance'];
-		$this->set_options_instance( $options, $key );
+		if ( $success ) {
+			$key = '_instance' === $option ? $value : $options['_instance'];
+			$this->set_options_instance( $options, $key );
+		}
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
 			$this->set_error_notice( [ 7001 => '' ] );
 
-			//* Revert option.
-			if ( false === $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+			//* Options have already been reverted.
 
 			return false;
 		}

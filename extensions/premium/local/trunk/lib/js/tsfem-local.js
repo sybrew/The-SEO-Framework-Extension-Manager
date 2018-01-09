@@ -174,7 +174,7 @@ window.tsfem_e_local = {
 
 			// Try to set top notices, regardless. First notifies that there's an error saving.
 			tsfem.setTopNotice( 1072100 );
-			tsfem.setTopNotice( -1, errorThrown );
+			errorThrown && tsfem.setTopNotice( -1, 'jQ error: ' + errorThrown );
 		} ).always( function() {
 			tsfem.updatedResponse( $loader, status, loaderText, 0 );
 			tsfemForm.enableButton( button );

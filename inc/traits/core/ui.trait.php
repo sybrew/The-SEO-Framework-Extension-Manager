@@ -122,7 +122,6 @@ trait UI {
 
 		//* Enqueue admin scripts.
 		\add_action( 'admin_enqueue_scripts', [ $this, '_enqueue_admin_scripts' ], 0, 1 );
-
 	}
 
 	/**
@@ -158,6 +157,8 @@ trait UI {
 			\add_action( 'admin_footer', [ $this, '_enqueue_admin_javascript' ], 0 );
 			//* Enqueue localizations.
 			\add_action( 'admin_footer', [ $this, '_localize_admin_javascript' ] );
+			//* Enqueue templates.
+			\add_action( 'admin_footer', [ $this, '_include_templates' ] );
 		}
 	}
 
@@ -280,7 +281,7 @@ trait UI {
 		\wp_register_script(
 			$this->main_js['name'],
 			$this->generate_file_url( $this->main_js, 'js' ),
-			[ 'jquery' ],
+			[ 'jquery', 'wp-util' ],
 			$this->main_js['ver'],
 			true
 		);
@@ -360,7 +361,7 @@ trait UI {
 	 * @staticvar bool $l7d : Prevents relocalizing of the scripts.
 	 * @access private
 	 *
-	 * @return void early If run twice or more.
+	 * @return void early When run twice or more.
 	 */
 	final public function _localize_admin_javascript() {
 
@@ -379,6 +380,7 @@ trait UI {
 				'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 				'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
 				'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
+				'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
 				'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
 				'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
 			],
@@ -394,7 +396,29 @@ trait UI {
 		endif;
 
 		$l7d = true;
+	}
 
+	/**
+	 * Includes templates.
+	 *
+	 * @since 1.5.0
+	 * @staticvar bool $included : Prevents reinclusion of the scripts.
+	 * @access private
+	 *
+	 * @return void early When run twice or more.
+	 */
+	final public function _include_templates() {
+
+		//* Localized.
+		static $included = null;
+
+		if ( isset( $included ) )
+			return;
+
+		//= Default templates.
+		\tsf_extension_manager()->_include_template( 'fbtopnotice' );
+
+		$included = true;
 	}
 
 	/**

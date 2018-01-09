@@ -215,11 +215,12 @@ class Core {
 	 * Verifies integrity of the options.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Now is public.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool True if options are valid, false if not.
 	 */
-	final protected function are_options_valid() {
+	final public function are_options_valid() {
 
 		static $cache = null;
 
@@ -305,6 +306,7 @@ class Core {
 	 * is actually JSON encoded. When it's 1, we can safely assume it's JSON.
 	 *
 	 * @since 1.2.0
+	 * @TODO set a standard for $data, i.e. [ 'results'=>,'html'=>"", etc. ];
 	 *
 	 * @param mixed $data The data that needs to be send.
 	 * @param string $type The status type.
@@ -1135,8 +1137,7 @@ class Core {
 		if ( false === ( $this->_verify_instance( $_instance, $bits[1] ) or $this->_maybe_die() ) )
 			return false;
 
-		$this->_register_premium_extension_autoload_path( $path, $namespace );
-		return true;
+		return $this->register_extension_autoload_path( $path, $namespace );
 	}
 
 	/**
@@ -1145,22 +1146,26 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.3.0 : 1. Now handles namespaces instead of class bases.
-	 *                2. Removed some checks as it's not protected.
 	 *                2. Now is protected.
+	 *                3. Removed some checks as it's protected.
+	 * @since 1.5.0 : No longer returns void.
 	 * @access private
 	 *
 	 * @param string $path      The extension path to look for.
 	 * @param string $namespace The namespace.
-	 * @return bool True on success, false on failure.
+	 * @return bool : {
+	 *    false  : The extension namespace wasn't set.
+	 *    true   : The extension namespace is set.
+	 * }
 	 */
-	final protected function _register_premium_extension_autoload_path( $path, $namespace ) {
+	final protected function register_extension_autoload_path( $path, $namespace ) {
 
-		if ( false === $this->is_premium_user() || false === $this->are_options_valid() )
+		if ( false === $this->are_options_valid() )
 			return false;
 
 		$this->register_extension_autoloader();
 
-		return $this->set_extension_autoload_path( $path, $namespace );
+		return (bool) $this->set_extension_autoload_path( $path, $namespace );
 	}
 
 	/**
@@ -1190,11 +1195,11 @@ class Core {
 	 * @param string|null $path      The extension path to look for.
 	 * @param string|null $class     The $class name including namespace.
 	 * @param string|null $get       The namespace path to get from cache.
-	 * @return void|bool|array : {
-	 *    false  : The extension namespace wasn't set.
+	 * @return void|bool|string : {
+	 *    false  : The extension namespace wasn't set when $get is true.
+	 *    string : The extension namespace location when $get is true.
 	 *    true   : The extension namespace is set.
-	 *    void   : The extension namespace isn't set.
-	 *    string : The extension namespace location.
+	 *    void   : The extension namespace isn't set. $namespace was considered false-esque.
 	 * }
 	 */
 	final protected function set_extension_autoload_path( $path, $namespace, $get = null ) {
@@ -1241,9 +1246,9 @@ class Core {
 	 */
 	final protected function autoload_extension_class( $class ) {
 
-		$class = ltrim( $class, '\\' );
+		$class = '\\' . ltrim( $class, '\\' );
 
-		if ( 0 !== strpos( $class, 'TSF_Extension_Manager\\Extension\\', 0 ) )
+		if ( 0 !== strpos( $class, '\\TSF_Extension_Manager\\Extension\\', 0 ) )
 			return;
 
 		static $loaded = [];
@@ -1251,7 +1256,7 @@ class Core {
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
 
-		$_class = str_replace( 'TSF_Extension_Manager\\Extension\\', '', $class );
+		$_class = str_replace( '\\TSF_Extension_Manager\\Extension\\', '', $class );
 		$_ns = substr( $_class, 0, strpos( $_class, '\\' ) );
 
 		$_path = $this->get_extension_autload_path( $_ns );

@@ -122,6 +122,7 @@ final class SecureOption extends Secure_Abstract {
 	 * Performs wp_die() on failure.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 This now returns the old value instead of executing wp_die();
 	 *
 	 * @param mixed $value The new, unserialized option value.
 	 * @param mixed $old_value The old option value.
@@ -158,20 +159,31 @@ final class SecureOption extends Secure_Abstract {
 					$verified = true;
 				} else {
 					self::reset();
-
-					$notice = "Options have been altered outside of this plugin's scope. This is not allowed for security reasons. Please deactivate your account and try again.";
+					$verified = false;
 
 					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-						echo json_encode( [ 'status' => [ 'success' => false, 'notice' => \esc_html( $notice ) ] ] );
+						$notice = \esc_html__(
+							"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
+							'the-seo-framework-extension-manager'
+						);
+
+						$results = \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 );
+						$type = 'failure';
+
+						\tsf_extension_manager()->send_json( compact( 'results' ), $type );
+
+						//= Who knows, someone could filter wp_die();.
+						$value = $old_value;
+
 						\wp_die();
 					} else {
-						\wp_die( \esc_html( $notice ) );
+						$value = $old_value;
 					}
 				}
 			}
 		}
 
-		static::verify_option_update( true );
+		static::verify_option_update( $verified );
 
 		return $value;
 	}

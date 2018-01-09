@@ -1,6 +1,6 @@
 {
 	"slug" : "monitor",
-	"namespace" : "TSF_Extension_Manager\\Extension\\Monitor",
+	"namespace" : "\\TSF_Extension_Manager\\Extension\\Monitor",
 	"test" : {
 		"_base" : "monitor.php",
 		"Admin" : [

@@ -238,6 +238,7 @@ class Panes extends API {
 	 * Enables feed through AJAX and echos the feed output through AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	public function _wp_ajax_enable_feeds() {
@@ -284,6 +285,7 @@ class Panes extends API {
 	 * Updates extension through AJAX and returns AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Now uses the updated AJAX handler.
 	 * @access private
 	 */
 	public function _wp_ajax_tsfem_update_extension() {
@@ -308,23 +310,19 @@ class Panes extends API {
 					];
 
 					if ( 'activate' === $case ) {
-						$status = $this->activate_extension( $options, true );
+						$results = $this->activate_extension( $options, true );
 					} elseif ( 'deactivate' === $case ) {
-						$status = $this->deactivate_extension( $options, true );
+						$results = $this->deactivate_extension( $options, true );
+					} else {
+						$results = $this->get_ajax_notice( false, 10101 );
 					}
 				} else {
-					$status = [
-						'success' => -1,
-						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					];
+					$results = $this->get_ajax_notice( false, 10102 );
 				}
 
-				$type = ! empty( $status['success'] ) ? 'success' : 'error';
+				$data = compact( 'status', 'slug', 'case' );
 
-				//* Send back input when WP_DEBUG is on.
-				$response = WP_DEBUG ? [ 'status' => $status, 'slug' => $slug, 'case' => $case ] : [ 'status' => $status ];
-
-				$this->send_json( $response, $type );
+				$this->send_json( compact( 'results', 'data' ), $this->coalesce_var( $type, 'failure' ) );
 			endif;
 		endif;
 

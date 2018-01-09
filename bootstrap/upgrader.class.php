@@ -326,7 +326,6 @@ final class Upgrader {
 			if ( $args['success'] ) {
 				$updated = $this->update_member( $member, $args['version'] );
 			} else {
-				$updated = false;
 				// TODO log error. Wait for logger factory/framework.
 				// REASON: Undefined callback or callback returned false for any reason.
 				// Continue anyway?

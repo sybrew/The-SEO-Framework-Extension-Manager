@@ -130,25 +130,54 @@ trait Error {
 			return '';
 
 		$notice = $this->get_error_notice_by_key( $key, true );
+		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
 
-		$message = $notice['message'];
-		$type = $notice['type'];
+		$args = [
+			'type' => $notice['type'],
+			'message' => $notice['message'],
+			'additional_info' => $additional_info,
+		];
 
-		switch ( $type ) :
+		return $this->format_error_notice( $key, $args );
+	}
+
+	/**
+	 * Formats notice through input.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int|string $code The error code or formatting placeholder.
+	 * @param array      $args : {
+	 *    'type'            : string The type,
+	 *    'message'         : string The message,
+	 *    'additional_info' : string Additional info, like HTML,
+	 * }
+	 * @return array|string The escaped notice. Empty string when no array key is set.
+	 */
+	protected function format_error_notice( $code, array $args ) {
+
+		$defaults = [
+			'type' => 'updated',
+			'message' => '',
+			'additional_info' => '',
+		];
+
+		$args = array_merge( $defaults, $args );
+
+		switch ( $args['type'] ) :
 			case 'error' :
 			case 'warning' :
 				$status_i18n = \esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
 				break;
 
-			case 'updated' :
 			default :
+			case 'updated' :
 				$status_i18n = \esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
 				break;
 		endswitch;
 
 		/* translators: 1: 'Error code:', 2: The error code. */
-		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $key );
-		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
+		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $code );
 
 		/* translators: %s = Error code */
 		$before = sprintf( \__( '<strong>%s</strong> &mdash;', 'the-seo-framework-extension-manager' ), $status );
@@ -157,15 +186,15 @@ trait Error {
 		$output = vsprintf( \esc_html__( '%1$s %2$s %3$s', 'the-seo-framework-extension-manager' ),
 			[
 				$before,
-				$message,
-				$additional_info,
+				$args['message'],
+				$args['additional_info'],
 			]
 		);
 
 		return [
 			'message' => $output,
-			'before' => $before,
-			'type' => $type,
+			'before' => $before, // To be used when adding a personal message.
+			'type' => $args['type'],
 		];
 	}
 
@@ -182,7 +211,7 @@ trait Error {
 
 		switch ( $key ) :
 			case -1 :
-				$message = '';
+				$message = 'Undefined error. Check other messages.';
 				$type = 'error';
 				break;
 
@@ -362,7 +391,7 @@ trait Error {
 				break;
 
 			case 10009 :
-				$message = \esc_html__( 'Extension is not valid.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "Daa-na na na, na na, na na... Can't touch this.", 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -490,7 +519,8 @@ trait Error {
 				$type = 'success';
 				break;
 
-			//* These errors shouldn't occur. Most likely WordPress Database/Option issues.
+			//* These errors shouldn't occur. Most likely WordPress Database/Option issues,
+			//  or some doofus spread erroneous files to the public.
 			default :
 			case 602 :
 			case 703 :
@@ -499,6 +529,8 @@ trait Error {
 			case 10006 :
 			case 10007 :
 			case 10011 :
+			case 10101 :
+			case 10102 :
 			case 11002 :
 			case 17005 :
 			case 17006 :
@@ -533,10 +565,10 @@ trait Error {
 	 * }
 	 */
 	protected function get_ajax_notice( $success, $code ) {
-		return [
-			'success' => $success,
-			'notice' => $this->get_error_notice_by_key( $code, false ),
-			'code' => intval( $code ),
-		];
+		return \TSF_Extension_Manager\get_ajax_notice(
+			$success,
+			$this->get_error_notice_by_key( $code, false ),
+			$code
+		);
 	}
 }

@@ -41,9 +41,6 @@ function tsf_extension_manager_pre_boot_test() {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
-			//= Free memory. Var is not passed by reference, so it's safe.
-			unset( $nw );
-
 			if ( get_blog_option( $nw->site_id, 'tsfem_tested_environment_version' ) ) {
 				update_option( 'tsfem_tested_environment_version', TSF_EXTENSION_MANAGER_DB_VERSION );
 				return;

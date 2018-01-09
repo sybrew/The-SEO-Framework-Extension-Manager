@@ -376,6 +376,7 @@ final class Admin extends Api {
 	 * Updates Monitor Data through AJAX and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	final public function _wp_ajax_update_data() {
@@ -461,6 +462,7 @@ final class Admin extends Api {
 	 * Requests Monitor to crawl the site and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	final public function _wp_ajax_request_crawl() {

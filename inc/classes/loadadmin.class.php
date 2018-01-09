@@ -500,9 +500,28 @@ final class LoadAdmin extends AdminPages {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views'
+		      . DIRECTORY_SEPARATOR . $view . '.php';
 
-		include( $file );
+		include $file;
+	}
+
+	/**
+	 * Includes templates for JS.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $template The template file name.
+	 */
+	final public function _include_template( $template ) {
+
+		$this->get_verification_codes( $_instance, $bits );
+
+		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views'
+		      . DIRECTORY_SEPARATOR . 'template'
+		      . DIRECTORY_SEPARATOR . $template . '.php';
+
+		include $file;
 	}
 
 	/**

@@ -431,10 +431,11 @@ class AccountActivation extends Panes {
 		}
 
 		$response = $this->handle_request( 'status', $args );
+		$success = false;
 
 		if ( ! empty( $response ) )
-			$this->update_option( '_remote_subscription_status', [ 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ], 'regular', false );
+			$success = $this->update_option( '_remote_subscription_status', [ 'timestamp' => $timestamp, 'status' => $response, 'divider' => $divider ], 'regular', false );
 
-		return $response;
+		return $success ? $response : false;
 	}
 }
