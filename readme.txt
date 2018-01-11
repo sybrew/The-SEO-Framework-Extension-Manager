@@ -202,6 +202,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Added:** The plugin and extensions can now track memory to prevent exhaustion on heavy tasks.
 * **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean.
 * **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
+* **Improved:** External links (e.g. to Google and TSF sites) are no longer tracked.
 * **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
 * **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
 * **Improved:** The plugin's bootstrap has been rewritten to be more efficient, lighter and easier to read.
@@ -209,12 +210,10 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Improved:** Various UI elements now fit more neatly on some screens.
 * **Improved:** When the extension class autoloader be registered, the extension in question fails safely.
 
-/ TODO make this neat.
-**Extension Improvements:**
-	* Add Articles per-page selection toolbox.
-	* Add title test to Monitor.
-	* Notify users when settings change that makes Monitor data outdated and they should request a new crawl.
-
+* **Updated Extensions:**
+	* Articles.
+	* Monitor.
+	* Title Fix.
 /
 * TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
 * TODO add shortcode for Local SEO addresses.
@@ -222,7 +221,6 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
 * TODO WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
 * TODO Monitor now notifies you when first crawl isn't finished, sending back incorrect data otherwise.
-* TODO improve privacy on external links (i.e. e.g. Google Webmaster Central Blog).
 
 = 1.4.0 - Extricated SEO =
 

@@ -532,17 +532,18 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 : Added download, filename, id and data.
+	 * @since 1.5.0 : Now always adds `rel="nofollow noopener noreferrer"`
 	 *
 	 * @param array $args The link arguments : {
-	 *  'url'      => string The URL. Required.
-	 *  'target'   => string The target. Default '_self'.
-	 *  'class'    => string The link class. Default ''.
-	 *  'id'       => string The link id. Default ''.
-	 *  'title'    => string The link title. Default ''.
-	 *  'content'  => string The link content. Default ''.
-	 *  'download' => bool Whether to download. Default false.
-	 *  'filename' => string The optional download filename. Default ''.
-	 *  'data'     => array Array of data-$keys and $values.
+	 *   'url'      => string The URL. Required.
+	 *   'target'   => string The target. Default '_self'.
+	 *   'class'    => string The link class. Default ''.
+	 *   'id'       => string The link id. Default ''.
+	 *   'title'    => string The link title. Default ''.
+	 *   'content'  => string The link content. Default ''.
+	 *   'download' => bool Whether to download. Default false.
+	 *   'filename' => string The optional download filename. Default ''.
+	 *   'data'     => array Array of data-$keys and $values.
 	 * }
 	 * @return string escaped link.
 	 */
@@ -554,6 +555,7 @@ final class LoadAdmin extends AdminPages {
 		$defaults = [
 			'url'     => '',
 			'target'  => '_self',
+			'rel' => 'nofollow noopener noreferrer',
 			'class'   => '',
 			'id'      => '',
 			'title'   => '',
@@ -562,30 +564,56 @@ final class LoadAdmin extends AdminPages {
 			'filename' => '',
 			'data' => [],
 		];
-		$args = array_merge( $defaults, $args );
+		$args = array_filter( array_merge( $defaults, $args ) );
 
-		$url = $args['url'] ? \esc_url( $args['url'] ) : '';
-
-		if ( empty( $url ) ) {
+		if ( empty( $args['url'] ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
 			return '';
 		}
 
-		//= What a mess. @TODO clean up.
-		$url = '#' === $url ? '' : ' href="' . $url . '"';
-		$class = $args['class'] ? ' class="' . \esc_attr( $args['class'] ) . '"' : '';
-		$id = $args['id'] ? ' id="' . \esc_attr( $args['id'] ) . '"' : '';
-		$target = ' target="' . \esc_attr( $args['target'] ) . '"';
-		$title = $args['title'] ? ' title="' . \esc_attr( $args['title'] ) . '"' : '';
-		$download = $args['download'] ? ( $args['filename'] ? ' download="' . \esc_attr( $args['filename'] ) . '"' : ' download' ) : '';
-		$data = '';
-		if ( ! empty( $args['data'] ) ) {
-			foreach ( $args['data'] as $k => $v ) {
-				$data .= sprintf( ' data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
-			}
-		}
+		$content = ! empty( $args['content'] ) ? $args['content'] : '';
+		unset( $args['content'] );
+		$parts = [];
 
-		return '<a' . $url . $class . $id . $target . $title . $download . $data . '>' . \esc_html( $args['content'] ) . '</a>';
+		foreach ( $args as $type => $value ) :
+			switch ( $type ) :
+				case 'class' :
+				case 'title' :
+				case 'rel' :
+					$parts[] = $type . '="' . \esc_attr( $value ) . '"';
+					break;
+
+				case 'id' :
+				case 'target' :
+					$parts[] = $type . '=' . \esc_attr( $value );
+					break;
+
+				case 'url' :
+					if ( '#' !== $value )
+						$parts[] = 'href="' . $value . '"';
+					break;
+
+				case 'download' :
+					if ( isset( $args['filename'] ) ) {
+						$parts[] = 'download="' . \esc_attr( $args['filename'] ) . '"';
+					} else {
+						$parts[] = 'download';
+					}
+					unset( $args['filename'] );
+					break;
+
+				case 'data' :
+					foreach ( $value as $k => $v ) {
+						$parts[] = sprintf( 'data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
+					}
+					break;
+
+				default :
+					break;
+			endswitch;
+		endforeach;
+
+		return sprintf( '<a %s>%s</a>', implode( ' ', $parts ), \esc_html( $content ) );
 	}
 
 	/**

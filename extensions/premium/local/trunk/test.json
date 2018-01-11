@@ -10,8 +10,8 @@
 	"test" : {
 		"_base" : "local.php",
 		"Admin" : [
-			"inc/classes/admin.class.php",
 			"inc/classes/core.class.php",
+			"inc/classes/admin.class.php",
 			"inc/classes/settings.class.php"
 		]
 	}

@@ -65,6 +65,14 @@ To force a fix of the title, add the following filter to your theme's `functions
 
 ## Changelog
 
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* **Removed:** filter `the_seo_framework_force_title_fix`.
+	* In preparation for TSF 3.1.
+	* This was added to add multisite support for the plugin, but this now an extension.
+
 ### 1.0.3
 
 [tsfep-release time="February 17th, 2017"]

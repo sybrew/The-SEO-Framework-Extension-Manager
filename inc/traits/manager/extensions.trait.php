@@ -154,12 +154,12 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'theme',
-				'version' => '1.0.3',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1494391221',
+				'last_updated' => '1515648076',
 				'requires' => '3.9.0',
-				'tested' => '4.9.0',
+				'tested' => '4.9.2',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '3.0.0',
 			],
@@ -221,9 +221,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'ec025ba4e4247a6ff776d62b5193340262d6cb2bb2088b2fe6faa8d162ed3986',
-			'sha1'   => '1e88ddf71574aff0d55e0932152aac8d92c19341',
-			'md5'    => 'ecaa5dc5ceb31ffb6e531c01fc7c48f6',
+			'sha256' => '3c84db7684ed0347117ce661bcd333cb2a617596629f67a7e7c9d9df6e9bdff4',
+			'sha1'   => 'cbc3f0e3da4af7617e67f0476483f11d30dbcc6e',
+			'md5'    => '93eb5f1ad9f9c03aff9a385ac810bdeb',
 		];
 	}
 

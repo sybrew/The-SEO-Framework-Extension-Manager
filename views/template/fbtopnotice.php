@@ -24,4 +24,14 @@ $notice = $this->format_error_notice(
 	);
 	?>
 </script>
+<script type="text/html" id="tmpl-tsfem-fbtopnotice-msg">
+	<?php
+	$this->do_dismissible_notice(
+		$notice['before'] . ' ' . '{{{msg}}}',
+		'error',
+		$a11y = true,
+		$escape = false
+	);
+	?>
+</script>
 <?php

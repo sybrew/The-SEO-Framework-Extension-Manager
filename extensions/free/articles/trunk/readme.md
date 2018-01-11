@@ -181,7 +181,7 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 
 [tsfep-release time="-1"]
 
-* **Added:** Article Type selection on every post.
+* **Added:** Article Type selection is now available on every post.
 	* You can select **"Article"**, **"NewsArticle"** and **"BlogPosting"**.
 * **Added:** New filter: `the_seo_framework_articles_default_meta`.
 	* Documented at [development](#development).

@@ -4,7 +4,7 @@
 */
 namespace TSF_Extension_Manager;
 
-defined( 'TSF_EXTENSION_MANAGER_DIR_PATH' ) or die;
+defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin

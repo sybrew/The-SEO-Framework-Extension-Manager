@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Title_Fix;
  * Extension Name: Title Fix
  * Extension URI: https://theseoframework.com/extensions/title-fix/
  * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
- * Extension Version: 1.0.3
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -87,15 +87,6 @@ final class Core {
 		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
-	 * Force the fix when no title-tag is present.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var bool $force_title_fix
-	 */
-	protected $force_title_fix = false;
-
-	/**
 	 * Check if title has been found, otherwise continue flushing till the bottom of plugin output.
 	 *
 	 * @since 1.0.0
@@ -148,22 +139,11 @@ final class Core {
 		if ( \is_admin() )
 			return;
 
-		if ( false === $this->current_theme_supports_title_tag() ) :
-			/**
-			 * Applies filters 'the_seo_framework_force_title_fix'
-			 * @since 1.0.1
-			 * @since 1.0.2 Value changed from 'false' to version comparing, true when The SEO Framework is below v2.7.0, false otherwise.
-			 * @since 1.0.2 / TSF Extension Manager 1.0.0 : Defaults to false.
-			 * @param bool Whether to force the title fixing.
-			 */
-			$this->force_title_fix = (bool) \apply_filters( 'the_seo_framework_force_title_fix', false );
-		endif;
-
 		/**
 		 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
 		 * Requires initial load after theme switch.
 		 */
-		if ( $this->force_title_fix || false === \the_seo_framework()->theme_title_doing_it_right() ) :
+		if ( false === $this->current_theme_supports_title_tag() ) :
 			//* Start loader.
 			$this->loader();
 

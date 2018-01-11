@@ -195,11 +195,11 @@ final class Tests {
 			$_theme = \wp_get_theme();
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
-				$_dev = sprintf(
-					'<a href="%s" target=_blank rel="noreferer noopener">%s</a>',
-					\esc_url( $_theme_contact ),
-					\esc_html__( 'theme developer', 'the-seo-framework-extension-manager' )
-				);
+				$_dev = \tsf_extension_manager()->get_link( [
+					'url' => $_theme_contact,
+					'content' => \__( 'theme developer', 'the-seo-framework-extension-manager' ),
+					'target' => '_blank',
+				] );
 			} else {
 				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
 			}
@@ -250,7 +250,7 @@ final class Tests {
 					$url = \get_permalink( $post );
 					$title = \get_the_title( $post );
 
-					$links[] = sprintf( '<a href="%s" target="_blank">%s</a>', $url, $title );
+					$links[] = sprintf( '<a href="%s" target="_blank" rel="noopener">%s</a>', $url, $title );
 				}
 			endif;
 		endforeach;

@@ -391,7 +391,7 @@ trait Error {
 				break;
 
 			case 10009 :
-				$message = \esc_html__( "Daa-na na na, na na, na na... Can't touch this.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "Can't touch this.", 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 

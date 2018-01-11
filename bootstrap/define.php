@@ -4,7 +4,6 @@
  */
 
 //* @NOTE $__file should be defined as the plugin base file.
-
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) and isset( $__file ) or die;
 
 /**

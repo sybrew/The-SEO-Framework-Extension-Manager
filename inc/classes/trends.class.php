@@ -192,7 +192,7 @@ final class Trends {
 
 			//* No need for translations, it's English only.
 			$title = sprintf(
-				'<h4><a href="%s" target="_blank" rel="external nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
+				'<h4><a href="%s" target="_blank" rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
 				\esc_url( $link, [ 'http', 'https' ] ),
 				$title
 			);

@@ -125,8 +125,6 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 [tsfep-release time="-1"]
 
-* **Extension:**
-	* **Added:** Last-crawled date is now visible on the monitor page.
 * **API - Extension:**
 	* **Added:** The crawler now tests for title tags. It checks if the [tsfep-extension name="title-fix"] is needed, or when you need to consult with your theme developer.
 	* **Added:** Last-crawled date is now fetched.

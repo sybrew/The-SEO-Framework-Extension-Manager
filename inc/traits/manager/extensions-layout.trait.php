@@ -426,7 +426,7 @@ trait Extensions_Layout {
 		//* Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target="_blank" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'http', 'https' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'http', 'https' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
 		//* Make extension version element.
 		$version = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
@@ -466,12 +466,13 @@ trait Extensions_Layout {
 	 * @return string The escaped extension Home URL item.
 	 */
 	private static function get_extension_desc_home_item( $url ) {
-		return sprintf(
-			'<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-home" title="%s">%s</a>',
-			\esc_url( $url, [ 'http', 'https' ] ),
-			\esc_attr( static::get_i18n( 'visit-extension' ) ),
-			\esc_html( static::get_i18n( 'overview' ) )
-		);
+		return \tsf_extension_manager()->get_link( [
+			'url' => $url,
+			'content' => static::get_i18n( 'overview' ),
+			'title' => static::get_i18n( 'visit-extension' ),
+			'target' => '_blank',
+			'class' => 'tsfem-extension-description-home',
+		] );
 	}
 
 	/**
@@ -540,11 +541,13 @@ trait Extensions_Layout {
 	 * @return string The escaped extension compatibility item.
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {
-		return sprintf(
-			'<a href="%s" class="tsfem-extension-description-menuslug" title="%s">%s</a>',
-			\esc_url( \tsf_extension_manager()->get_admin_page_url( $slug ), [ 'http', 'https' ] ),
-			\esc_attr( static::get_i18n( 'visit-menupage' ) ),
-			\esc_html( static::get_i18n( 'menupage' ) )
-		);
+		return \tsf_extension_manager()->get_link( [
+			'url' => \tsf_extension_manager()->get_admin_page_url( $slug ),
+			'content' => static::get_i18n( 'menupage' ),
+			'title' => static::get_i18n( 'visit-menupage' ),
+			'class' => 'tsfem-extension-description-menuslug',
+			'target' => '_self',
+			'rel' => '',
+		] );
 	}
 }

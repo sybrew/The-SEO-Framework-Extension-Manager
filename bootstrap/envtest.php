@@ -3,7 +3,7 @@
  * @package TSF_Extension_Manager/Bootstrap
  */
 
-defined( 'TSF_EXTENSION_MANAGER_VERSION' ) or die;
+defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
