@@ -220,7 +220,6 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * TODO init uptime monitoring for Monitor.
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
 * TODO WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
-* TODO Monitor now notifies you when first crawl isn't finished, sending back incorrect data otherwise.
 
 = 1.4.0 - Extricated SEO =
 

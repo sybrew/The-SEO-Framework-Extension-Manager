@@ -1016,7 +1016,7 @@ body.tsfem .wrap {
 .tsfem-pane-split > div,
 .tsfem-actions > div {
 	margin-right: 20px;
-/*	margin-bottom: 20px;*/
+	margin-bottom: 20px;
 	-webkit-flex-basis: 200px;
 	flex-basis: 200px;
 	min-width: 200px;

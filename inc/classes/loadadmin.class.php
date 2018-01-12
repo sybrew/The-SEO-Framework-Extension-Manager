@@ -838,7 +838,7 @@ final class LoadAdmin extends AdminPages {
 		if ( empty( $options['extension'] ) )
 			return false;
 
-		$slug = $options['extension'];
+		$slug = \sanitize_key( $options['extension'] );
 
 		$this->get_verification_codes( $_instance, $bits );
 
@@ -925,7 +925,7 @@ final class LoadAdmin extends AdminPages {
 				break;
 		endswitch;
 
-		$ajax or $this->set_error_notice( [ $code => '' ] );
+		$ajax or $this->register_extension_state_change_notice( $code, $slug );
 
 		return $ajax ? $this->get_ajax_notice( $status['success'], $code ) : $status['success'];
 	}
@@ -944,13 +944,34 @@ final class LoadAdmin extends AdminPages {
 		if ( empty( $options['extension'] ) )
 			return false;
 
-		$slug = $options['extension'];
+		$slug = \sanitize_key( $options['extension'] );
 		$success = $this->disable_extension( $slug );
 
 		$code = $success ? 11001 : 11002;
-		$ajax or $this->set_error_notice( [ $code => '' ] );
+		$ajax or $this->register_extension_state_change_notice( $code, $slug );
 
 		return $ajax ? $this->get_ajax_notice( $success, $code ) : $success;
+	}
+
+	/**
+	 * Registers extension state change code including slug message.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int    $code The error/success code.
+	 * @param string $slug The extension slug. Must be escaped.
+	 */
+	final protected function register_extension_state_change_notice( $code, $slug ) {
+		$this->set_error_notice( [
+			$code => sprintf(
+				'<strong><em>(%s)</em></strong>',
+				sprintf(
+					/* translators: %s = extension slug */
+					\esc_html__( 'Extension slug: %s', 'the-seo-framework-extension-manager' ),
+					$slug
+				)
+			),
+		] );
 	}
 
 	/**
