@@ -2,8 +2,8 @@
  * This file holds Monitor extension for The SEO Framework plugin's JS code.
  * Serve JavaScript as an addition, not as an ends or means.
  *
- * @author Sybre Waaijer https://cyberwire.nl/
- * @pluginURI https://wordpress.org/plugins/the-seo-framework-extension-manager/
+ * @author Sybre Waaijer <https://cyberwire.nl/>
+ * @pluginURI <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
  */
 
 /**
@@ -32,6 +32,8 @@
 // ==/ClosureCompiler==
 // http://closure-compiler.appspot.com/home
 
+'use strict';
+
 /**
  * Holds tsfem_e_monitor values in an object to avoid polluting global namespace.
  *
@@ -39,7 +41,7 @@
  *
  * @constructor
  */
-window[ 'tsfem_e_monitor' ] = {
+window.tsfem_e_monitor = {
 
 	/**
 	 * @since 1.0.0
@@ -74,7 +76,6 @@ window[ 'tsfem_e_monitor' ] = {
 	 * @param {Object} event jQuery event
 	 */
 	showReadMore: function( event ) {
-		'use strict';
 
 		let $parent = jQuery( '#' + event.target.id + '-wrap' ),
 			$content = jQuery( '#' + event.target.id + '-content' );
@@ -93,14 +94,14 @@ window[ 'tsfem_e_monitor' ] = {
 	 * @return {(undefined|null)}
 	 */
 	requestCrawl: function( event ) {
-		'use strict';
 
-		var loading = 'tsfem-button-disabled tsfem-button-loading',
-			$button = jQuery( event.target ),
-			loader = '#tsfem-e-monitor-cp-pane .tsfem-pane-header .tsfem-ajax';
+		let $button = jQuery( event.target );
 
 		if ( $button.prop( 'disabled' ) )
 			return;
+
+		let loading = 'tsfem-button-disabled tsfem-button-loading',
+			loader = '#tsfem-e-monitor-cp-pane .tsfem-pane-header .tsfem-ajax';
 
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );
@@ -111,8 +112,7 @@ window[ 'tsfem_e_monitor' ] = {
 		//* Set ajax loader.
 		tsfem.setAjaxLoader( loader );
 
-		//* Setup external update.
-		let settings = {
+		jQuery.ajax( {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
@@ -123,67 +123,62 @@ window[ 'tsfem_e_monitor' ] = {
 			},
 			timeout: 10000,
 			async: true,
-			success: function( response ) {
+		} ).done( function( response ) {
 
-				response = tsfem.convertJSONResponse( response );
+			response = tsfem.convertJSONResponse( response );
 
-				if ( tsfem.debug ) console.log( response );
+			if ( tsfem.debug ) console.log( response );
 
-				let data = response && response.data || undefined,
-					type = response && response.type || undefined;
+			let data = response && response.data || void 0,
+				type = response && response.type || void 0;
 
-				if ( ! data ) {
-					//* Erroneous output.
-					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
+			if ( ! data ) {
+				//* Erroneous output.
+				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
+			} else {
+				if ( 'undefined' !== typeof data.status['timeout'] )
+					tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
+
+				let status = data.status['type'],
+					notice = data.status['notice'];
+
+				if ( 'success' === status ) {
+					tsfem.updatedResponse( loader, 1, notice, 0 );
+				} else if ( 'yield_unchanged' === status ) {
+					tsfem.updatedResponse( loader, 2, notice, 0 );
+				} else if ( 'requires_fix' === status ) {
+					tsfem_e_monitor.add_requires_fix( data.status['requires_fix'] );
+					tsfem.updatedResponse( loader, 0, notice, 0 );
 				} else {
-					if ( 'undefined' !== typeof data.status['timeout'] )
-						tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
-
-					let status = data.status['type'],
-						notice = data.status['notice'];
-
-					if ( 'success' === status ) {
-						tsfem.updatedResponse( loader, 1, notice, 0 );
-					} else if ( 'yield_unchanged' === status ) {
-						tsfem.updatedResponse( loader, 2, notice, 0 );
-					} else if ( 'requires_fix' === status ) {
-						tsfem_e_monitor.add_requires_fix( data.status['requires_fix'] );
-						tsfem.updatedResponse( loader, 0, notice, 0 );
-					} else {
-						tsfem.updatedResponse( loader, 0, notice, 0 );
-					}
+					tsfem.updatedResponse( loader, 0, notice, 0 );
 				}
-			},
-			error: function( jqXHR, textStatus, errorThrown ) {
-				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
-				tsfem.updatedResponse( loader, 0, _error, 0 );
-			},
-			complete: function() {
-				$button.removeClass( loading );
-				$button.prop( 'disabled', false );
-			},
-		}
-
-		jQuery.ajax( settings );
+			}
+		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+			tsfem.updatedResponse( loader, 0, _error, 0 );
+		} ).always( function() {
+			$button.removeClass( loading );
+			$button.prop( 'disabled', false );
+		} );
 	},
 
 	/**
-	 * Updates the data option and returns new values.
+	 * Fetches the data option and returns new values.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @function
 	 * @param {jQuery.event} event
 	 */
-	updateData: function( event ) {
-		'use strict';
+	fetchData: function( event ) {
 
-		var loading = 'tsfem-button-disabled tsfem-button-loading',
-			$button = jQuery( event.target ),
-			loader = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax, #tsfem-e-monitor-stats-pane .tsfem-pane-header .tsfem-ajax';
+		let $button = jQuery( event.target );
 
 		if ( $button.prop( 'disabled' ) )
 			return;
+
+		let loading = 'tsfem-button-disabled tsfem-button-loading',
+			loader = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax, #tsfem-e-monitor-stats-pane .tsfem-pane-header .tsfem-ajax';
 
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );
@@ -194,110 +189,118 @@ window[ 'tsfem_e_monitor' ] = {
 		//* Set ajax loader.
 		tsfem.setAjaxLoader( loader );
 
-		//* Setup external update.
-		let settings = {
+		let lastCrawled = document.getElementById( 'tsfem-e-monitor-last-crawled' ),
+			lastCrawledClass = lastCrawled.classList.contains( 'tsfem-success' ) ? 'tsfem-success' : 'tsfem-error';
+		lastCrawled.classList.remove( 'tsfem-success' );
+		lastCrawled.classList.remove( 'tsfem-error' );
+		lastCrawled.classList.add( 'tsfem-loading' );
+
+		jQuery.ajax( {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
 			data: {
-				'action' : 'tsfem_e_monitor_update',
+				'action' : 'tsfem_e_monitor_fetch',
 				'nonce' : tsfem_e_monitor.nonce,
 				'remote_data_timeout' : tsfem_e_monitor.rDataTimeout,
 			},
 			timeout: 15000,
 			async: true,
-			success: function( response ) {
+		} ).done( function( response ) {
 
-				response = tsfem.convertJSONResponse( response );
+			response = tsfem.convertJSONResponse( response );
 
-				if ( tsfem.debug ) console.log( response );
+			if ( tsfem.debug ) console.log( response );
 
-				let data = response && response.data || undefined,
-					type = response && response.type || undefined;
+			let data = response && response.data || void 0,
+				type = response && response.type || void 0;
 
-				if ( ! data || ! data.status ) {
-					//* Erroneous output.
-					tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
-				} else {
-					if ( 'undefined' !== typeof data.status['timeout'] )
-						tsfem_e_monitor.rDataTimeout = data.status['timeout'];
+			if ( ! data || ! data.status ) {
+				//* Erroneous output.
+				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
+			} else {
+				if ( 'undefined' !== typeof data.status['timeout'] )
+					tsfem_e_monitor.rDataTimeout = data.status['timeout'];
 
-					let status = data.status['type'],
-						content = data.status['content'],
-						notice = data.status['notice'];
+				let status = data.status['type'],
+					content = data.status['content'],
+					notice = data.status['notice'];
 
-					if ( 'success' === status ) {
-						let issues = content['issues'],
-							stats = content['stats'],
-							lc = content['lc'];
+				if ( 'success' === status ) {
+					let issues = content['issues'],
+						stats = content['stats'],
+						lc = content['lc'];
 
-						if ( issues['found'] ) {
-							//* Expected to be inputting a single div.
-							jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issues.data.wrap ).animate(
-								{ 'opacity' : 1 },
-								{ queue: true, duration: 250 },
-								'swing'
-							);
-
-							//* Loop through each issue and slowly insert it.
-							jQuery.each( issues.data.info, function( index, value ) {
-								setTimeout( function() {
-									jQuery( value ).appendTo( '.tsfem-e-monitor-issues-wrap > div' ).css( 'opacity', 0 ).animate(
-										{ 'opacity' : 1 },
-										{ queue: false, duration: 250 },
-										'swing'
-									);
-								}, 250 * index );
-							} );
-						} else {
-
-							let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">' + issues.data + '</div>';
-
-							jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
-								{ 'opacity' : 1 },
-								{ queue: true, duration: 1000 },
-								'swing'
-							);
-						}
-
-						jQuery( '#tsfem-e-monitor-last-crawled' ).replaceWith( jQuery( lc ).css( 'opacity', 0 ) );
-						//= Node is gone from memory. Reaccess it.
-						jQuery( '#tsfem-e-monitor-last-crawled' ).animate(
+					if ( issues['found'] ) {
+						//* Expected to be inputting a single div.
+						jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issues.data.wrap ).animate(
 							{ 'opacity' : 1 },
-							{ queue: true, duration: 1000 },
+							{ queue: true, duration: 250 },
 							'swing'
 						);
 
-						jQuery( '.tsfem-e-monitor-stats-wrap' ).empty().css( 'opacity', 0 ).append( stats ).animate(
-							{ 'opacity' : 1 },
-							{ queue: true, duration: 1000 },
-							'swing'
-						);
-						setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
-
-						//* Update hover cache.
-						tsfem.initDescHover();
-					} else if ( 'yield_unchanged' === status ) {
-						tsfem.updatedResponse( loader, 2, notice, 0 );
-					} else if ( 'requires_fix' === status ) {
-						tsfem_e_monitor.add_requires_fix();
-						tsfem.updatedResponse( loader, 0, notice, 0 );
+						//* Loop through each issue and slowly insert it.
+						jQuery.each( issues.data.info, function( index, value ) {
+							setTimeout( function() {
+								jQuery( value ).appendTo( '.tsfem-e-monitor-issues-wrap > div' ).css( 'opacity', 0 ).animate(
+									{ 'opacity' : 1 },
+									{ queue: false, duration: 250 },
+									'swing'
+								);
+							}, 250 * index );
+						} );
 					} else {
-						tsfem.updatedResponse( loader, 0, notice, 0 );
-					}
-				}
-			},
-			error: function( jqXHR, textStatus, errorThrown ) {
-				let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
-				tsfem.updatedResponse( loader, 0, _error, 0 );
-			},
-			complete: function() {
-				$button.removeClass( loading );
-				$button.prop( 'disabled', false );
-			},
-		}
+						let issuesOutput = '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">' + issues.data + '</div>';
 
-		jQuery.ajax( settings );
+						jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
+							{ 'opacity' : 1 },
+							{ queue: true, duration: 1000 },
+							'swing'
+						);
+					}
+
+					jQuery( '#tsfem-e-monitor-last-crawled' ).replaceWith( jQuery( lc ).css( 'opacity', 0 ) );
+					//= Node is gone from memory. Reaccess it.
+					jQuery( '#tsfem-e-monitor-last-crawled' ).animate(
+						{ 'opacity' : 1 },
+						{ queue: true, duration: 1000 },
+						'swing'
+					);
+
+					jQuery( '.tsfem-e-monitor-stats-wrap' ).empty().css( 'opacity', 0 ).append( stats ).animate(
+						{ 'opacity' : 1 },
+						{ queue: true, duration: 1000 },
+						'swing'
+					);
+					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
+
+					//* Update hover cache.
+					tsfem.initDescHover();
+				} else if ( 'yield_unchanged' === status ) {
+					tsfem.updatedResponse( loader, 2, notice, 0 );
+				} else if ( 'requires_fix' === status ) {
+					tsfem_e_monitor.add_requires_fix();
+					tsfem.updatedResponse( loader, 0, notice, 0 );
+				} else {
+					tsfem.updatedResponse( loader, 0, notice, 0 );
+				}
+			}
+		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+			tsfem.updatedResponse( loader, 0, _error, 0 );
+		} ).always( function() {
+			/**
+			 * If the element isn't replaced, this will work as intended.
+			 * If the elemnt is replaced, then the replacement is correct.
+			 */
+			if ( document.body.contains( lastCrawled ) ) {
+				lastCrawled.classList.remove( 'tsfem-loading' );
+				lastCrawled.classList.add( lastCrawledClass );
+			}
+
+			$button.removeClass( loading );
+			$button.prop( 'disabled', false );
+		} );
 	},
 
 	/**
@@ -310,12 +313,11 @@ window[ 'tsfem_e_monitor' ] = {
 	 * @return {Void} If element already exists.
 	 */
 	add_requires_fix: function() {
-		'use strict';
 
 		if ( jQuery( '.tsfem-account-fix' ).length > 0 || jQuery( '.tsfem-account-info' ).length < 1 )
 			return;
 
-		let settings = {
+		jQuery.ajax( {
 			method: 'POST',
 			url: ajaxurl,
 			datatype: 'json',
@@ -325,30 +327,25 @@ window[ 'tsfem_e_monitor' ] = {
 			},
 			timeout: 3000,
 			async: true,
-			success: function( response ) {
+		} ).done( function( response ) {
 
-				response = tsfem.convertJSONResponse( response );
+			response = tsfem.convertJSONResponse( response );
 
-				if ( tsfem.debug ) console.log( response );
+			if ( tsfem.debug ) console.log( response );
 
-				let data = response && response.data || undefined,
-					type = response && response.type || undefined;
+			let data = response && response.data || void 0,
+				type = response && response.type || void 0;
 
-				//* No error handling, as this is invoked automatically.
-				if ( data && data.html )
-					jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
-			},
-			error: function( jqXHR, textStatus, errorThrown ) {
-				//* No elaborate handling, as this function is invoked automatically.
-				if ( tsfem.debug ) {
-					console.log( jqXHR.responseText );
-					console.log( errorThrown );
-				}
-			},
-			complete: function() { },
-		}
-
-		jQuery.ajax( settings );
+			//* No error handling, as this is invoked automatically.
+			if ( data && data.html )
+				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
+		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+			//* No elaborate handling, as this function is invoked automatically.
+			if ( tsfem.debug ) {
+				console.log( jqXHR.responseText );
+				console.log( errorThrown );
+			}
+		} );
 	},
 
 	/**
@@ -365,8 +362,6 @@ window[ 'tsfem_e_monitor' ] = {
 	 * @function
 	 */
 	ready: function( jQ ) {
-		'use strict';
-
 		// Disable semi-disabled buttons.
 		jQ( 'a#tsfem-e-monitor-privacy-readmore' ).on( 'click touchstart MSPointerDown', tsfem_e_monitor.showReadMore );
 
@@ -374,7 +369,7 @@ window[ 'tsfem_e_monitor' ] = {
 		jQ( 'a#tsfem-e-monitor-crawl-button' ).on( 'click', tsfem_e_monitor.requestCrawl );
 
 		// AJAX data update.
-		jQ( 'a#tsfem-e-monitor-update-button' ).on( 'click', tsfem_e_monitor.updateData );
+		jQ( 'a#tsfem-e-monitor-fetch-button' ).on( 'click', tsfem_e_monitor.fetchData );
 	}
 };
 jQuery( tsfem_e_monitor.ready );

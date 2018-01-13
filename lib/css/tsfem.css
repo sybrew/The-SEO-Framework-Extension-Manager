@@ -1388,6 +1388,7 @@ h4.tsfem-cp-title {
 	margin-left: 2px;
 }
 
+.tsfem-dashicon.tsfem-loading:after,
 .tsfem-ajax.tsfem-loading:after {
 	content: "\f463";
 	color: #057c99;

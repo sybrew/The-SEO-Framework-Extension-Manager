@@ -197,6 +197,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 **Plugin Improvements:**
 
 * **Added:** Extensions no longer load when they're deemed incompatible due to environmental changes to ensure stability.
+* **Added:** Extensions can now add in-post options in predefined tabs (Audit, Structure and Advanced).
 * **Added:** A plugin and extension database upgrader for future improvements for when necessary.
 * **Added:** The plugin and extensions can now abstractly tell time.
 * **Added:** The plugin and extensions can now track memory to prevent exhaustion on heavy tasks.

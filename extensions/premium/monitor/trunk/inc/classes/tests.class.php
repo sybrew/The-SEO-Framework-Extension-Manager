@@ -138,7 +138,7 @@ final class Tests {
 	/**
 	 * Determines if the Title is correctly output.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 * @access private
 	 *
 	 * @param array $data The input data.
@@ -310,7 +310,9 @@ final class Tests {
 
 		if ( ! \get_option( 'blog_public' ) ) {
 			$state = 'bad';
-			$content = $this->wrap_info( \esc_html__( 'This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website.', 'the-seo-framework-extension-manager' ) );
+			$content = $this->wrap_info(
+				\esc_html__( 'This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website.', 'the-seo-framework-extension-manager' )
+			);
 			goto end;
 		}
 
@@ -498,8 +500,8 @@ final class Tests {
 						defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
 						$content .= $this->wrap_info(
 							\tsf_extension_manager()->convert_markdown(
-								/* tranlators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								sprintf(
+									/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 									\esc_html__( 'The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
 									\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'http', 'https' ] )
 								),
@@ -525,8 +527,8 @@ final class Tests {
 					defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
 					$content .= $this->wrap_info(
 						\tsf_extension_manager()->convert_markdown(
-							/* tranlators: URLs are in markdown. %s = SEO Settings page admin URL. */
 							sprintf(
+								/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
 								\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'http', 'https' ] )
 							),

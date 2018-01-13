@@ -342,7 +342,7 @@ final class Steps {
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
 
 	private function get_settings_clipboard_button_wrap( $type = 'copy', $textarea_id = '' ) {
@@ -444,7 +444,7 @@ final class Steps {
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
 
 	private function get_settings_import_option_wrap() {
@@ -476,7 +476,7 @@ final class Steps {
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
 
 	/**
@@ -515,6 +515,6 @@ final class Steps {
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->transporter_page_slug ), $args );
 	}
 }

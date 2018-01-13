@@ -85,20 +85,14 @@ trait Extension_Forms {
 	 * Echo constructed id attributes in form fields.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Removed the 2nd parameter. No longer returns value.
 	 * @access private
 	 * @uses $this->_get_field_id() Constructs id attributes for use in form fields.
 	 *
 	 * @param string $id Field id base
-	 * @param boolean $echo echo or return
-	 * @return string Full field id
 	 */
-	public function _field_id( $id, $echo = true ) {
-
-		if ( $echo ) {
-			echo \esc_attr( $this->_get_field_id( $id ) );
-		} else {
-			return $this->_get_field_id( $id );
-		}
+	public function _field_id( $id ) {
+		echo \esc_attr( $this->_get_field_id( $id ) );
 	}
 
 	/**
@@ -194,7 +188,7 @@ trait Extension_Forms {
 	/**
 	 * Outputs a form action button from input.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 * @access private
 	 *
 	 * @param string $url The admin page action URL.
@@ -208,15 +202,15 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _action_form( $url = '', array $items = [] ) {
+	public function _action_button( $url = '', array $items = [] ) {
 		//* Should already be escaped before input.
-		echo $this->_get_action_form( $url, $items );
+		echo $this->_get_action_button( $url, $items );
 	}
 
 	/**
 	 * Outputs a form action button from input.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 * @access private
 	 *
 	 * @param string $url The admin page action URL.
@@ -232,7 +226,7 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _get_action_form( $url = '', array $items = [] ) {
+	public function _get_action_button( $url = '', array $items = [] ) {
 
 		if ( empty( $url ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
@@ -255,7 +249,7 @@ trait Extension_Forms {
 			'ajax-title' => '',
 		];
 
-		$items = \wp_parse_args( $items, $defaults );
+		$items = array_merge( $defaults, $items );
 
 		$form = '';
 		foreach ( $items['input'] as $item ) {
@@ -280,7 +274,7 @@ trait Extension_Forms {
 			$output .= sprintf(
 				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
 				\esc_attr( $items['ajax-id'] ),
-				\esc_attr( $items['ajax-class'] ), 
+				\esc_attr( $items['ajax-class'] ),
 				\esc_attr( $items['ajax-title'] ),
 				\esc_html( $items['ajax-name'] )
 			);

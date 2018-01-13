@@ -119,11 +119,14 @@ final class Admin extends Api {
 			//* Disconnect site from API.
 			'disconnect' => 'disconnect',
 
-			//* Statistics fetch.
-			'update' => 'update',
+			//* Data fetch.
+			'fetch' => 'fetch',
 
 			//* Request crawl.
 			'crawl' => 'crawl',
+
+			//* Settings update.
+			'update' => 'update',
 
 			//* Fix instance.
 			'fix' => 'fix',
@@ -138,14 +141,17 @@ final class Admin extends Api {
 			//* Disconnect site from API.
 			'disconnect' => 'tsfem_e_monitor_nonce_action_disconnect_site',
 
-			//* Statistics fetch.
-			'update' => 'tsfem_e_monitor_nonce_action_monitor_update',
+			//* Data fetch.
+			'fetch' => 'tsfem_e_monitor_nonce_action_remote_fetch',
 
 			//* Request crawl.
-			'crawl' => 'tsfem_e_monitor_nonce_action_monitor_crawl',
+			'crawl' => 'tsfem_e_monitor_nonce_action_remote_crawl',
+
+			//* Settings update.
+			'update' => 'tsfem_e_monitor_nonce_action_remote_update',
 
 			//* Fix instance.
-			'fix' => 'tsfem_e_monitor_nonce_action_monitor_fix',
+			'fix' => 'tsfem_e_monitor_nonce_action_remote_fix',
 		];
 
 		$this->monitor_page_slug = 'theseoframework-monitor';
@@ -172,7 +178,7 @@ final class Admin extends Api {
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		//* AJAX update listener.
-		\add_action( 'wp_ajax_tsfem_e_monitor_update', [ $this, '_wp_ajax_update_data' ] );
+		\add_action( 'wp_ajax_tsfem_e_monitor_fetch', [ $this, '_wp_ajax_fetch_data' ] );
 
 		//* AJAX crawl listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_crawl', [ $this, '_wp_ajax_request_crawl' ] );
@@ -308,8 +314,12 @@ final class Admin extends Api {
 				$this->api_request_crawl();
 				break;
 
-			case $this->request_name['update'] :
+			case $this->request_name['fetch'] :
 				$this->api_get_remote_data();
+				break;
+
+			case $this->request_name['update'] :
+				$this->api_update_remote_settings();
 				break;
 
 			default :
@@ -373,13 +383,13 @@ final class Admin extends Api {
 	}
 
 	/**
-	 * Updates Monitor Data through AJAX and echos the output through AJAX response.
+	 * Fetches Monitor Data through AJAX and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
 	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
-	final public function _wp_ajax_update_data() {
+	final public function _wp_ajax_fetch_data() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
@@ -826,22 +836,39 @@ final class Admin extends Api {
 	 * @return string The Control Panel pane left side output.
 	 */
 	protected function get_cp_left_output() {
-		return sprintf( '<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $this->get_site_actions() );
+		return sprintf(
+			'<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>',
+			$this->get_site_actions_view() . $this->get_disconnect_site_view()
+		);
+	}
+
+	/**
+	 * Wraps and outputs the left side of the Control Panel pane.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string The Control Panel pane left side output.
+	 */
+	protected function get_cp_right_output() {
+		return sprintf(
+			'<div class="tsfem-e-monitor-cp-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>',
+			$this->get_account_information() . $this->get_site_settings_view()
+		);
 	}
 
 	/**
 	 * Wraps Monitor site action buttons.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 *
 	 * @return string The Monitor site action buttons.
 	 */
-	protected function get_site_actions() {
+	protected function get_site_actions_view() {
 
 		$buttons = [];
 		$description = [];
 
-		$buttons[1] = $this->get_update_button();
+		$buttons[1] = $this->get_fetch_button();
 		$description[1] = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
 
 		$buttons[2] = $this->get_crawl_button();
@@ -859,50 +886,128 @@ final class Admin extends Api {
 	}
 
 	/**
-	 * Wraps and outputs the left side of the Control Panel pane.
+	 * Wraps Monitor site settings view.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 *
-	 * @return string The Control Panel pane left side output.
+	 * @return string The Monitor site settings view.
 	 */
-	protected function get_cp_right_output() {
+	protected function get_site_settings_view() {
 
-		$output = '';
-		$output .= $this->get_account_information();
-		$output .= $this->get_disconnect_button();
+		$title = sprintf( '<h4 class="tsfem-cp-title">%s</h4>', \esc_html__( 'Settings', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-e-monitor-cp-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+		$content = '';
+		$form_id = 'tsfem-e-monitor-update-settings';
+
+		fields : {
+			$_uptime_values = [ 0, 5, 10, 30 ];
+			$_performance_values = [ 0, 30, 60, 180, 720, 1440 ];
+			$current_uptime_value = $this->get_option( 'uptime-settings', 0 );
+			$current_performance_value = $this->get_option( 'performance-settings', 0 );
+			// TODO make this compact.
+			$uptime_options = '';
+			foreach ( $_uptime_values as $_option ) :
+				$uptime_options .= vsprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						$_option,
+						$current_uptime_value === $_option ? 'selected' : '',
+						$this->scale_time( $_option, 'minutes', 0 ),
+					]
+				);
+			endforeach;
+
+			$uptime_monitoring = vsprintf(
+				'<select form=%s id=%s name=%s>%s</select>',
+				[
+					$form_id,
+					$this->_get_field_id( 'uptime-monitoring' ),
+					$this->_get_field_name( 'uptime-monitoring' ),
+					$uptime_options,
+				]
+			);
+
+			$performance_options = '';
+			foreach ( $_performance_values as $_option ) :
+				$performance_options .= vsprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						$_option,
+						$current_performance_value === $_option ? 'selected' : '',
+						$this->scale_time( $_option, 'minutes', 1 ),
+					]
+				);
+			endforeach;
+
+			$performance_monitoring = vsprintf(
+				'<select form=%s id=%s name=%s>%s</select>',
+				[
+					$form_id,
+					$this->_get_field_id( 'performance-monitoring' ),
+					$this->_get_field_name( 'performance-monitoring' ),
+					$performance_options,
+				]
+			);
+		}
+
+		js : {
+			foreach ( [ $uptime_monitoring, $performance_monitoring ] as $_fields ) :
+				$content .= sprintf(
+					'<span>%s <span class="tsfem-dashicon tsfem-cloud"></span></span>',
+					$_fields
+				);
+			endforeach;
+		}
+
+		nojs : {
+			$nonce_action = $this->_get_nonce_action_field( 'update' );
+			$nonce = $this->_get_nonce_field( 'update' );
+			$submit = $this->_get_submit_button(
+				\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
+				'',
+				'tsfem-button-primary tsfem-button-cloud'
+			);
+			$content .= sprintf(
+				'<form action=%s method=post id=%s class="%s">%s</form>',
+				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'http', 'https' ] ),
+				$form_id,
+				'hide-if-js',
+				$nonce_action . $nonce . $submit
+			);
+		}
+
+		return sprintf( '<div class="tsfem-e-monitor-cp-settings">%s%s</div>', $title, $content );
 	}
 
 	/**
-	 * Renders and returns update button.
+	 * Renders and returns fetch button.
 	 *
 	 * @since 1.0.0
 	 * @uses trait \TSF_Extension_Manager\Extension_Forms
 	 *
-	 * @return string The update button.
+	 * @return string The fetch button.
 	 */
-	protected function get_update_button() {
+	protected function get_fetch_button() {
 
 		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
-		$name = \__( 'Update Data', 'the-seo-framework-extension-manager' );
+		$name = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 
-		$nonce_action = $this->_get_nonce_action_field( 'update' );
-		$nonce = $this->_get_nonce_field( 'update' );
+		$nonce_action = $this->_get_nonce_action_field( 'fetch' );
+		$nonce = $this->_get_nonce_field( 'fetch' );
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [
-			'id'         => 'tsfem-e-monitor-update-form',
+			'id'         => 'tsfem-e-monitor-fetch-form',
 			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'       => true,
-			'ajax-id'    => 'tsfem-e-monitor-update-button',
+			'ajax-id'    => 'tsfem-e-monitor-fetch-button',
 			'ajax-class' => $class,
 			'ajax-name'  => $name,
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 	/**
 	 * Renders and returns crawl button.
@@ -932,7 +1037,7 @@ final class Admin extends Api {
 			'ajax-title' => $title,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 
 	/**
@@ -955,6 +1060,7 @@ final class Admin extends Api {
 	 * Returns account data fields.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Now outputs last crawled field.
 	 * @uses TSF_Extension_Manager\Layout::wrap_title_content()
 	 *
 	 * @return string The account data fields.
@@ -992,7 +1098,7 @@ final class Admin extends Api {
 	/**
 	 * Wraps and returns the Monitor last crawled field.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 *
 	 * @return string The Monitor last crawled field.
 	 */
@@ -1070,17 +1176,17 @@ final class Admin extends Api {
 			'ajax'  => false,
 		];
 
-		return $this->_get_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 
 	/**
 	 * Renders and returns Monitor disconnect button.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 *
 	 * @return string The disconnect button.
 	 */
-	protected function get_disconnect_button() {
+	protected function get_disconnect_site_view() {
 
 		$nonce_action = $this->_get_nonce_action_field( 'disconnect' );
 		$nonce = $this->_get_nonce_field( 'disconnect' );

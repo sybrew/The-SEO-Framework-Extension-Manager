@@ -18,4 +18,4 @@ $args = [
 	'input' => compact( 'nonce_action', 'nonce', 'submit' ),
 ];
 
-$this->_action_form( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+$this->_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );

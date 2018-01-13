@@ -363,8 +363,8 @@ final class InpostGUI {
 	 * @see documentation static::construct_flex_wrap();
 	 *
 	 * @param string $what    The type of wrap to use.
-	 * @param string $content The content to wrap.
-	 * @param string $for     The input ID an input label is for.
+	 * @param string $content The content to wrap. Should be escaped.
+	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
 	public static function wrap_flex( $what, $content, $for = '' ) {
 		//= Input should already be escaped.
@@ -382,7 +382,7 @@ final class InpostGUI {
 	 * @see documentation static::construct_flex_wrap();
 	 *
 	 * @param string $what    The type of wrap to use.
-	 * @param array  $contents The contents to wrap.
+	 * @param array  $contents The contents to wrap. Should be escaped.
 	 */
 	public static function wrap_flex_multi( $what, array $contents ) {
 		//= Input should already be escaped.
@@ -400,7 +400,7 @@ final class InpostGUI {
 	 * @see documentation static::construct_flex_wrap();
 	 *
 	 * @param string $what    The type of wrap to use.
-	 * @param array  $contents The contents to wrap.
+	 * @param array  $contents The contents to wrap. Should be escaped.
 	 */
 	public static function contruct_flex_wrap_multi( $what, array $contents ) {
 		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ) );
@@ -422,8 +422,8 @@ final class InpostGUI {
 	 *               'input'        : Wraps input content fields, plainly.
 	 *               'content'      : Same as 'input'.
 	 *               'checkbox'     : Wraps a checkbox and its label.
-	 * @param string $content The content to wrap.
-	 * @param string $for     The input ID an input label is for.
+	 * @param string $content The content to wrap. Should be escaped.
+	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
 	public static function construct_flex_wrap( $what, $content, $for = '' ) {
 

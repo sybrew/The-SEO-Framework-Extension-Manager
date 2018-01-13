@@ -152,6 +152,180 @@ trait Time {
 	}
 
 	/**
+	 * Scales time according to input.
+	 *
+	 * @since 1.5.0
+	 * @uses $this->_upscale_time()
+	 *
+	 * @param int    $x       The time to convert.
+	 * @param string $x_scale The time scale $x is in.
+	 * @param int    $upscale How often to upscale the time when it's passing a
+	 *                        conventional threshold times its value. (60 seconds/minutes, 24 hours, 7 days)
+	 * @return string Scaled i18n time. Not escaped.
+	 */
+	protected function scale_time( $x, $x_scale = 'seconds', $upscale = 3 ) {
+
+		$time_i18n = '';
+
+		//= Can't upscale 0.
+		if ( $upscale && $x )
+			return $this->_upscale_time( $x, $x_scale, $upscale );
+
+		$x = round( $x );
+
+		switch ( $x_scale ) :
+			case 'seconds' :
+				/* translators: %d = seconds */
+				$time_i18n = sprintf( \_n( '%d second', '%d seconds', $x, 'the-seo-framework-extension-manager' ), $x );
+				break;
+
+			case 'minutes' :
+				/* translators: %d = minutes */
+				$time_i18n = sprintf( \_n( '%d minute', '%d minutes', $x, 'the-seo-framework-extension-manager' ), $x );
+				break;
+
+			case 'hours' :
+				/* translators: %d = hours */
+				$time_i18n = sprintf( \_n( '%d hour', '%d hours', $x, 'the-seo-framework-extension-manager' ), $x );
+				break;
+
+			case 'days' :
+				/* translators: %d = days */
+				$time_i18n = sprintf( \_n( '%d day', '%d days', $x, 'the-seo-framework-extension-manager' ), $x );
+				break;
+
+			case 'weeks' :
+				/* translators: %d = weeks */
+				$time_i18n = sprintf( \_n( '%d week', '%d weeks', $x, 'the-seo-framework-extension-manager' ), $x );
+				break;
+		endswitch;
+
+		return $time_i18n;
+	}
+
+	/**
+	 * Upscales time, reiterates over itself until it's happy.
+	 *
+	 * This is a helper function for $this->scale_time().
+	 *
+	 * @since 1.5.0
+	 * @access private
+	 * @see $this->scale_time()
+	 *
+	 * @param int    $x       The time to convert.
+	 * @param string $x_scale The time scale $x is in.
+	 * @param int    $upscale How often to upscale the time when it's passing a
+	 *                        conventional threshold times its value. (60 seconds/minutes, 24 hours, 7 days)
+	 * @return string Scaled i18n time. Not escaped.
+	 */
+	protected function _upscale_time( $x, $x_scale, $upscale, $get = true ) {
+
+		$x_remaining = $x;
+		$start_upscale = $upscale;
+		$times = [];
+
+		while ( $x_remaining && $upscale-- ) :
+			switch ( $x_scale ) :
+				case 'seconds' :
+					$_threshold = 60;
+					$_next_scale = 'minutes';
+					break;
+				case 'minutes' :
+					$_threshold = 60;
+					$_next_scale = 'hours';
+					break;
+				case 'hours' :
+					$_threshold = 24;
+					$_next_scale = 'days';
+					break;
+				case 'days' :
+					$_threshold = 7;
+					$_next_scale = 'weeks';
+					break;
+				case 'weeks' :
+					$_threshold = PHP_INT_MAX;
+					$_next_scale = 'overflow';
+					break;
+				// Months and years are too variable for the static purpose of this method.
+				default :
+					break 2;
+			endswitch;
+
+			if ( $x_remaining >= $_threshold ) { // > vs >= is 24 hours vs 1 day.
+				// Add scale to prevent reducing the next item when rescaling it.
+				++$upscale;
+				if ( $x_remaining % $_threshold ) {
+					$_next_scale_time = floor( $x_remaining / $_threshold );
+
+					//= Leftover time. Loops back.
+					$x_remaining = ( $x_remaining / $_threshold - $_next_scale_time ) * $_threshold;
+
+					//= Rescale up if necessary.
+					$times[] = $this->_upscale_time( $_next_scale_time, $_next_scale, $upscale, false );
+				} else {
+					//= Rescale up if necessary.
+					$_next_scale_time = round( $x_remaining / $_threshold );
+					$times[] = $this->_upscale_time( $_next_scale_time, $_next_scale, $upscale, false );
+					$x_remaining = 0;
+				}
+				continue;
+			} else {
+				//= Reached threshold.
+				$times[] = $this->scale_time( $x_remaining, $x_scale, 0 );
+
+				// No need to try upcoming scales, save processing power.
+				break;
+			}
+		endwhile;
+
+		if ( ! $get )
+			return $times;
+
+		$ret_items = [];
+		//* Correct stack.
+		while ( $times ) {
+			$times = array_reverse( $times );
+			if ( isset( $times[1] ) ) {
+				//= More items to be found.
+				$ret_items[] = $times[0];
+				$times = $times[1];
+			} elseif ( is_array( $times[0] ) ) {
+				//= Layered stack.
+				$times = $times[0];
+			} else {
+				//= End of array.
+				$ret_items[] = $times[0];
+				$times = null;
+			}
+		}
+
+		$out = '';
+		$ret_items = array_reverse( $ret_items );
+		$count = count( $ret_items );
+		//= Don't return more items than the threshold.
+		$count = $count > $start_upscale ? $start_upscale : $count;
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			if ( 0 === $i ) {
+				$out .= $ret_items[ $i ];
+			} elseif ( $i === $count - 1 ) {
+				$out = sprintf(
+					/* translators: 1: Greater time, 2: Smaller time */
+					\_x( '%1$s and %2$s', '5 minutes and 3 seconds', 'the-seo-framework-extension-manager' ),
+					$out, $ret_items[ $i ]
+				);
+			} else {
+				$out = sprintf(
+					/* translators: 1: Greater time, 2: Smaller time */
+					\_x( '%1$s, %2$s', '7 hours, 8 minutes [and...]', 'the-seo-framework-extension-manager' ),
+					$out, $ret_items[ $i ]
+				);
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Sets and resets the timezone.
 	 *
 	 * @since 1.5.0

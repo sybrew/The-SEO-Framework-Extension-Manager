@@ -364,6 +364,10 @@ class Api extends Data {
 		return $ajax ? $this->get_ajax_notice( true, 1010606 ) : true;
 	}
 
+	protected function api_update_remote_settings( $ajax = false ) {
+
+	}
+
 	/**
 	 * Determines if the site is connected.
 	 * This does not inheritly tell if the connection is valid.
