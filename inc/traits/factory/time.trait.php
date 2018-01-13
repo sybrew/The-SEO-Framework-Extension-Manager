@@ -157,19 +157,25 @@ trait Time {
 	 * @since 1.5.0
 	 * @uses $this->_upscale_time()
 	 *
-	 * @param int    $x       The time to convert.
-	 * @param string $x_scale The time scale $x is in.
-	 * @param int    $upscale How often to upscale the time when it's passing a
-	 *                        conventional threshold times its value. (60 seconds/minutes, 24 hours, 7 days)
+	 * @param int <R> $x       The time to convert.
+	 * @param string  $x_scale The time scale $x is in.
+	 * @param int     $scales  When $precise is true:
+	 *                          How often to upscale the time when it's passing a
+	 *                          conventional threshold times its value.
+	 *                         When $precise is false:
+	 *                          The number of time iterations shown.
+	 * @param bool    $precise When true, the output maintains the exact offset value.
+	 *                         So at scale 2, "3666" seconds won't become "1 hour and 1 minute",
+	 *                         but instead it will return "61 minutes and 6 seconds".
 	 * @return string Scaled i18n time. Not escaped.
 	 */
-	protected function scale_time( $x, $x_scale = 'seconds', $upscale = 3 ) {
+	protected function scale_time( $x, $x_scale = 'seconds', $scales = 2, $precise = false ) {
 
 		$time_i18n = '';
 
 		//= Can't upscale 0.
-		if ( $upscale && $x )
-			return $this->_upscale_time( $x, $x_scale, $upscale );
+		if ( $scales && $x )
+			return $this->_upscale_time( $x, $x_scale, $scales, $precise );
 
 		$x = round( $x );
 
@@ -207,118 +213,81 @@ trait Time {
 	 * Upscales time, reiterates over itself until it's happy.
 	 *
 	 * This is a helper function for $this->scale_time().
+	 * Don't call this.
 	 *
 	 * @since 1.5.0
 	 * @access private
 	 * @see $this->scale_time()
+	 * @documentation $this->scale_time();
 	 *
-	 * @param int    $x       The time to convert.
-	 * @param string $x_scale The time scale $x is in.
-	 * @param int    $upscale How often to upscale the time when it's passing a
-	 *                        conventional threshold times its value. (60 seconds/minutes, 24 hours, 7 days)
+	 * @param int <R> $x
+	 * @param string  $x_scale
+	 * @param int     $scales
+	 * @param bool    $precise
 	 * @return string Scaled i18n time. Not escaped.
 	 */
-	protected function _upscale_time( $x, $x_scale, $upscale, $get = true ) {
+	protected function _upscale_time( $x, $x_scale, $scales, $precise = false ) {
 
 		$x_remaining = $x;
-		$start_upscale = $upscale;
 		$times = [];
 
-		while ( $x_remaining && $upscale-- ) :
-			switch ( $x_scale ) :
-				case 'seconds' :
-					$_threshold = 60;
-					$_next_scale = 'minutes';
-					break;
-				case 'minutes' :
-					$_threshold = 60;
-					$_next_scale = 'hours';
-					break;
-				case 'hours' :
-					$_threshold = 24;
-					$_next_scale = 'days';
-					break;
-				case 'days' :
-					$_threshold = 7;
-					$_next_scale = 'weeks';
-					break;
-				case 'weeks' :
-					$_threshold = PHP_INT_MAX;
-					$_next_scale = 'overflow';
-					break;
-				// Months and years are too variable for the static purpose of this method.
-				default :
-					break 2;
-			endswitch;
+		//= type => [ threshold_for_next, next ];
+		$scale_table = [
+			'seconds' => [ 60, 'minutes' ],
+			'minutes' => [ 60, 'hours' ],
+			'hours' => [ 24, 'days' ],
+			'days' => [ 7, 'weeks' ],
+			'weeks' => [ PHP_INT_MAX, 'eternity' ],
+			// Months and years are too variable for the static purpose of this method.
+		];
 
-			if ( $x_remaining >= $_threshold ) { // > vs >= is 24 hours vs 1 day.
-				// Add scale to prevent reducing the next item when rescaling it.
-				++$upscale;
+		while ( $x_remaining ) :
+			$_threshold = $scale_table[ $x_scale ][0];
+			if ( $x_remaining >= $_threshold                        // > vs >= is 24 hours vs 1 day.
+			&& ( ! $precise || ( count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
+			   ) {
 				if ( $x_remaining % $_threshold ) {
-					$_next_scale_time = floor( $x_remaining / $_threshold );
+					// Calculate current and next time scale.
+					$_next_time = floor( $x_remaining / $_threshold );
+					$_current_time = round( $x_remaining - $_next_time * $_threshold );
 
-					//= Leftover time. Loops back.
-					$x_remaining = ( $x_remaining / $_threshold - $_next_scale_time ) * $_threshold;
+					// Found leftovers, use them.
+					$times[] = $this->scale_time( $_current_time, $x_scale, 0 );
 
-					//= Rescale up if necessary.
-					$times[] = $this->_upscale_time( $_next_scale_time, $_next_scale, $upscale, false );
+					$x_remaining = $_next_time;
+					$x_scale = $scale_table[ $x_scale ][1];
 				} else {
-					//= Rescale up if necessary.
-					$_next_scale_time = round( $x_remaining / $_threshold );
-					$times[] = $this->_upscale_time( $_next_scale_time, $_next_scale, $upscale, false );
-					$x_remaining = 0;
+					//= Rescale up.
+					$x_remaining = round( $x_remaining / $_threshold );
+					$x_scale = $scale_table[ $x_scale ][1];
 				}
-				continue;
 			} else {
-				//= Reached threshold.
+				//= Reached threshold through precision or time overlap.
 				$times[] = $this->scale_time( $x_remaining, $x_scale, 0 );
-
 				// No need to try upcoming scales, save processing power.
 				break;
 			}
 		endwhile;
 
-		if ( ! $get )
-			return $times;
-
-		$ret_items = [];
-		//* Correct stack.
-		while ( $times ) {
-			$times = array_reverse( $times );
-			if ( isset( $times[1] ) ) {
-				//= More items to be found.
-				$ret_items[] = $times[0];
-				$times = $times[1];
-			} elseif ( is_array( $times[0] ) ) {
-				//= Layered stack.
-				$times = $times[0];
-			} else {
-				//= End of array.
-				$ret_items[] = $times[0];
-				$times = null;
-			}
-		}
-
 		$out = '';
-		$ret_items = array_reverse( $ret_items );
-		$count = count( $ret_items );
+		$times = array_reverse( $times );
 		//= Don't return more items than the threshold.
-		$count = $count > $start_upscale ? $start_upscale : $count;
+		$count = min( count( $times ), $scales );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			if ( 0 === $i ) {
-				$out .= $ret_items[ $i ];
+				$out .= $times[ $i ];
 			} elseif ( $i === $count - 1 ) {
 				$out = sprintf(
 					/* translators: 1: Greater time, 2: Smaller time */
 					\_x( '%1$s and %2$s', '5 minutes and 3 seconds', 'the-seo-framework-extension-manager' ),
-					$out, $ret_items[ $i ]
+					$out, $times[ $i ]
 				);
 			} else {
 				$out = sprintf(
 					/* translators: 1: Greater time, 2: Smaller time */
 					\_x( '%1$s, %2$s', '7 hours, 8 minutes [and...]', 'the-seo-framework-extension-manager' ),
-					$out, $ret_items[ $i ]
+					$out, $times[ $i ]
 				);
 			}
 		}

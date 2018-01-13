@@ -934,7 +934,7 @@ final class Admin extends Api {
 					[
 						$_option,
 						$current_performance_value === $_option ? 'selected' : '',
-						$this->scale_time( $_option, 'minutes', 1 ),
+						$this->scale_time( $_option, 'minutes', 1, false ),
 					]
 				);
 			endforeach;
