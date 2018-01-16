@@ -239,7 +239,7 @@ final class Layout extends Secure_Abstract {
 		$output = '';
 
 		if ( $email )
-			$output .= static::wrap_title_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
+			$output .= static::wrap_row_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
 		switch ( $level ) :
 			case 'Premium' :
@@ -279,7 +279,7 @@ final class Layout extends Secure_Abstract {
 
 		$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
 		$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
-		$output .= static::wrap_title_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
+		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
@@ -301,7 +301,7 @@ final class Layout extends Secure_Abstract {
 
 			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
 			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $domain_desc, \esc_html( $domain ) );
-			$output .= static::wrap_title_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
+			$output .= static::wrap_row_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 
 		if ( $end_date ) :
@@ -340,7 +340,7 @@ final class Layout extends Secure_Abstract {
 				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $end_date ), \esc_html( $end_date_i18n ), \esc_html( $expires_in )
 			);
 
-			$output .= static::wrap_title_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
+			$output .= static::wrap_row_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
 		endif;
 
 		if ( $payment_date ) :
@@ -372,7 +372,7 @@ final class Layout extends Secure_Abstract {
 				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $payment_date ), \esc_html( $end_date_i18n ), \esc_html( $payment_in )
 			);
 
-			$output .= static::wrap_title_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
+			$output .= static::wrap_row_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
 		endif;
 
 		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
@@ -389,16 +389,16 @@ final class Layout extends Secure_Abstract {
 	 * @param bool $escape Whether to escape the output.
 	 * @return string The Title/Content wrap.
 	 */
-	public static function wrap_title_content( $title, $content, $escape = true ) {
+	public static function wrap_row_content( $title, $content, $escape = true ) {
 
 		if ( $escape ) {
 			$title = \esc_html( $title );
 			$content = \esc_html( $content );
 		}
 
-		$output = sprintf( '<div class="tsfem-actions-account-info-title">%s</div><div class="tsfem-actions-account-info-content">%s</div>', $title, $content );
+		$output = sprintf( '<div class="tsfem-row-info-title">%s</div><div class="tsfem-row-info-value">%s</div>', $title, $content );
 
-		return sprintf( '<div class="tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>', $output );
+		return sprintf( '<div class="tsfem-row-info tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>', $output );
 	}
 
 	/**

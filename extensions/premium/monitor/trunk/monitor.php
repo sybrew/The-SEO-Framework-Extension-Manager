@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) or die;
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_MONITOR_VERSION', '1.1.0-beta-5' );
+define( 'TSFEM_E_MONITOR_VERSION', '1.1.0' );
 
 /**
  * The extension file, absolute unix path.

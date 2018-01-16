@@ -492,6 +492,7 @@ class Core {
 	 */
 	final public function umatosa( $value ) {
 
+		$items = [];
 		if ( ']' === substr( $value, -1 ) ) {
 			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
 			return $this->satoma( $items );
@@ -575,6 +576,9 @@ class Core {
 	 * If the value isn't set, it will set it to the fallback variable.
 	 *
 	 * It will also return the value so it can be used in a return statement.
+	 *
+	 * Example: `$v ?? $f` becomes `coalesce_var( $v, $f )`
+	 * The fallback value must always be set, so performance benefits thereof aren't present.
 	 *
 	 * PHP < 7 wrapper for null coalescing.
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
@@ -1089,7 +1093,7 @@ class Core {
 	 * Once.
 	 *
 	 * @since 1.0.0
-	 * @NOTE Expensive operation.
+	 * @NOTE Expensive operation. TODO set secret instead?
 	 * @see $this->_yield_verification_instance() for faster looping instances.
 	 * @access private
 	 *
@@ -1574,6 +1578,21 @@ class Core {
 			return 0;
 
 		return (int) strlen( $content );
+	}
+
+	/**
+	 * Sanitizes AJAX input string.
+	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
+	 * Also prevents regex execution.
+	 *
+	 * @since 1.0.0
+	 * @since 1.5.0 Now is public and moved to class Core.
+	 *
+	 * @param string $input The AJAX input string.
+	 * @return string $output The cleaned AJAX input string.
+	 */
+	final public function s_ajax_string( $input ) {
+		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
 
 	/**

@@ -180,12 +180,12 @@ final class Output {
 		$checkbox = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
 
 		$title = sprintf( '<h3 class="tsfem-e-monitor-collapse-title">%s</h3>', $title );
-		$icon = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-e-monitor-icon-%s"></span>', $icon_state );
+		$icon = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-e-monitor-icon-%s"></span>', $icon_state );
 
 		$header = sprintf( '<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>', $checkbox_id, $title, $icon );
 		$content = sprintf( '<div class="tsfem-e-monitor-collapse-content">%s</div>', $content );
 
-		return sprintf( '<div class="tsfem-e-monitor-collapse tsfem-flex"%s>%s%s%s</div>', $id, $checkbox, $header, $content );
+		return sprintf( '<div class="tsfem-e-monitor-collapse"%s>%s%s%s</div>', $id, $checkbox, $header, $content );
 	}
 
 	/**
@@ -480,7 +480,7 @@ final class Output {
 		static $tests = null;
 
 		if ( is_null( $tests ) )
-			$tests = \TSF_Extension_Manager\Extension\Monitor\Tests::get_instance();
+			$tests = Tests::get_instance();
 
 		$content = '';
 
@@ -495,6 +495,7 @@ final class Output {
 				}
 			}
 		} else {
+			var_dump( $value );
 			$content = $this->get_em_requires_update_notification();
 		}
 
@@ -517,7 +518,7 @@ final class Output {
 		static $graph = null;
 
 		if ( is_null( $graph ) )
-			$graph = \TSF_Extension_Manager\Extension\Monitor\Graph::get_instance();
+			$graph = Graph::get_instance();
 
 		$content = '';
 

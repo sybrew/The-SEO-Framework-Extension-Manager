@@ -178,6 +178,9 @@ final class Admin extends Api {
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		//* AJAX update listener.
+		\add_action( 'wp_ajax_tsfem_e_monitor_update', [ $this, '_wp_ajax_update_settings' ] );
+
+		//* AJAX fetch listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_fetch', [ $this, '_wp_ajax_fetch_data' ] );
 
 		//* AJAX crawl listener.
@@ -319,7 +322,7 @@ final class Admin extends Api {
 				break;
 
 			case $this->request_name['update'] :
-				$this->api_update_remote_settings();
+				$this->api_update_remote_settings( $options );
 				break;
 
 			default :
@@ -383,6 +386,54 @@ final class Admin extends Api {
 	}
 
 	/**
+	 * Updates settings.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 */
+	final public function _wp_ajax_update_settings() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			$tsfem = \tsf_extension_manager();
+			if ( $tsfem->can_do_settings() ) :
+				$option = '';
+				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+					$data = $_POST;
+
+					//= Option is cleaned and requires unpacking.
+					$option = isset( $data['option'] ) ? $tsfem->s_ajax_string( $data['option'] ) : '';
+					$value = isset( $data['value'] ) ? \absint( $data['value'] ) : 0;
+				} else {
+					$results = $this->get_ajax_notice( false, 1019002 );
+				}
+
+				if ( $option ) {
+					//= Unpack option.
+					$_option = $tsfem->get_last_value( $tsfem->umatosa( $option ) );
+					$options = [
+						$_option => $value,
+					];
+					$response = $this->api_update_remote_settings( $options, true );
+
+					//= Get new options, regardless of response.
+					$settings = [];
+					foreach ( [ 'uptime_setting', 'performance_setting' ] as $setting ) {
+						$settings[ $setting ] = $this->get_option( $setting, 0 );
+					}
+					$type = empty( $response['success'] ) ? 'failure' : 'success';
+					$results = $response;
+				} else {
+					$results = $this->get_ajax_notice( false, 1010702 );
+				}
+
+				$tsfem->send_json( compact( 'results', 'settings' ), $tsfem->coalesce_var( $type, 'failure' ) );
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
 	 * Fetches Monitor Data through AJAX and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
@@ -424,6 +475,10 @@ final class Admin extends Api {
 								'issues' => $this->ajax_get_issues_data(),
 								'stats' => $this->ajax_get_stats_data(),
 								'lc' => $this->get_last_crawled_field(),
+								'settings' => [
+									'uptime_setting' => $this->get_option( 'uptime_setting', 0 ),
+									'performance_setting' => $this->get_option( 'performance_setting', 0 ),
+								],
 							],
 							'type' => $type,
 							'notice' => $response['notice'],
@@ -766,7 +821,7 @@ final class Admin extends Api {
 		if ( empty( $issues ) ) {
 			$output .= sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
-			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
+			$instance = Output::get_instance();
 			$output = $instance->_get_data( $issues, 'issues' );
 		}
 
@@ -792,7 +847,7 @@ final class Admin extends Api {
 			$data = sprintf( '<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>', $this->get_string_no_data_found() );
 		} else {
 			$found = true;
-			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
+			$instance = Output::get_instance();
 			$data = $instance->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
@@ -838,7 +893,7 @@ final class Admin extends Api {
 	protected function get_cp_left_output() {
 		return sprintf(
 			'<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>',
-			$this->get_site_actions_view() . $this->get_disconnect_site_view()
+			$this->get_account_information() . $this->get_site_actions_view()
 		);
 	}
 
@@ -852,7 +907,7 @@ final class Admin extends Api {
 	protected function get_cp_right_output() {
 		return sprintf(
 			'<div class="tsfem-e-monitor-cp-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>',
-			$this->get_account_information() . $this->get_site_settings_view()
+			$this->get_site_settings_view() . $this->get_disconnect_site_view()
 		);
 	}
 
@@ -865,21 +920,14 @@ final class Admin extends Api {
 	 */
 	protected function get_site_actions_view() {
 
-		$buttons = [];
-		$description = [];
-
-		$buttons[1] = $this->get_fetch_button();
-		$description[1] = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
-
-		$buttons[2] = $this->get_crawl_button();
-		$description[2] = \__( 'If your website has recently been updated, ask us to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
-
 		$title = sprintf( '<h4 class="tsfem-cp-title">%s</h4>', \esc_html__( 'Actions', 'the-seo-framework-extension-manager' ) );
-
+		$buttons = [
+			$this->get_fetch_button(),
+			$this->get_crawl_button(),
+		];
 		$content = '';
-		foreach ( $buttons as $key => $button ) {
-			$extra = sprintf( '<span class="tsfem-description">%s</span>', \esc_html( $description[ $key ] ) );
-			$content .= sprintf( '<div class="tsfem-cp-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
+		foreach ( $buttons as $button ) {
+			$content .= sprintf( '<div class="tsfem-cp-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s</div>', $button );
 		}
 
 		return sprintf( '<div class="tsfem-e-monitor-cp-actions">%s%s</div>', $title, $content );
@@ -900,66 +948,101 @@ final class Admin extends Api {
 		$form_id = 'tsfem-e-monitor-update-settings';
 
 		fields : {
-			$_uptime_values = [ 0, 5, 10, 30 ];
-			$_performance_values = [ 0, 30, 60, 180, 720, 1440 ];
-			$current_uptime_value = $this->get_option( 'uptime-settings', 0 );
-			$current_performance_value = $this->get_option( 'performance-settings', 0 );
-			// TODO make this compact.
-			$uptime_options = '';
-			foreach ( $_uptime_values as $_option ) :
-				$uptime_options .= vsprintf(
-					'<option value="%s" %s>%s</option>',
-					[
-						$_option,
-						$current_uptime_value === $_option ? 'selected' : '',
-						$this->scale_time( $_option, 'minutes', 0 ),
-					]
-				);
+			$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
+			$time_settings = [
+				'uptime_setting' => [
+					'title'   => \__( 'Uptime monitoring:', 'the-seo-framework-extension-manager' ),
+					'help'    => \__( 'Set how often you want Monitor to test your website for availability.', 'the-seo-framework-extension-manager' ),
+					'option'  => 'uptime_setting',
+					'value'   => $this->get_option( 'uptime_setting', 0 ),
+					'options' => [
+						'values'   => [ 0, 5, 10, 30 ],
+						'in'       => 'minutes',
+						'scale'    => 0,
+						'if-empty' => $_disabled_i18n,
+					],
+				],
+				'performance_setting' => [
+					'title'   => \__( 'Performance monitoring:', 'the-seo-framework-extension-manager' ),
+					'help'    => \__( 'Set how often you want Monitor to test your website for performance.', 'the-seo-framework-extension-manager' ),
+					'option'  => 'performance_setting',
+					'value'   => $this->get_option( 'performance_setting', 0 ),
+					'options' => [
+						'values'   => [ 0, 60, 180, 720, 1440 ],
+						'in'       => 'minutes',
+						'scale'    => 1,
+						'if-empty' => $_disabled_i18n,
+					],
+				],
+			];
+
+			$options = [];
+			foreach ( $time_settings as $id => $args ) :
+				$_options = [];
+				foreach ( $args['options']['values'] as $_value ) {
+					$_options[] = vsprintf(
+						'<option value="%s" %s>%s</option>',
+						[
+							$_value,
+							$args['value'] === $_value ? 'selected' : '',
+							\esc_html( $_value
+								? $this->scale_time( $_value, $args['options']['in'], $args['options']['scale'], false )
+								: $args['options']['if-empty']
+							),
+						]
+					);
+				}
+
+				$_field_id = ! empty( $args['id'] ) ? $args['id'] : $this->_get_field_id( $args['option'] );
+
+				$options[ $id ] = [
+					'edit' => vsprintf(
+						'<select form=%s id=%s name=%s class="hide-if-js">%s</select>',
+						[
+							$form_id,
+							\esc_attr( $_field_id ),
+							$this->_get_field_name( $args['option'] ),
+							implode( '', $_options ),
+						]
+					),
+					'js' => vsprintf(
+						'<span class="hide-if-no-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s>%s</span>',
+						[
+							\esc_attr( $_field_id ),
+							\esc_html( $args['value']
+								? $this->scale_time( $args['value'], $args['options']['in'], $args['options']['scale'], false )
+								: $args['options']['if-empty']
+							),
+						]
+					),
+				];
 			endforeach;
-
-			$uptime_monitoring = vsprintf(
-				'<select form=%s id=%s name=%s>%s</select>',
-				[
-					$form_id,
-					$this->_get_field_id( 'uptime-monitoring' ),
-					$this->_get_field_name( 'uptime-monitoring' ),
-					$uptime_options,
-				]
-			);
-
-			$performance_options = '';
-			foreach ( $_performance_values as $_option ) :
-				$performance_options .= vsprintf(
-					'<option value="%s" %s>%s</option>',
-					[
-						$_option,
-						$current_performance_value === $_option ? 'selected' : '',
-						$this->scale_time( $_option, 'minutes', 1, false ),
-					]
-				);
-			endforeach;
-
-			$performance_monitoring = vsprintf(
-				'<select form=%s id=%s name=%s>%s</select>',
-				[
-					$form_id,
-					$this->_get_field_id( 'performance-monitoring' ),
-					$this->_get_field_name( 'performance-monitoring' ),
-					$performance_options,
-				]
-			);
 		}
 
-		js : {
-			foreach ( [ $uptime_monitoring, $performance_monitoring ] as $_fields ) :
-				$content .= sprintf(
-					'<span>%s <span class="tsfem-dashicon tsfem-cloud"></span></span>',
-					$_fields
+		rows : {
+			$_rows = '';
+			foreach ( $options as $id => $_fields ) :
+				$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
+					sprintf(
+						'<span class="tsfem-has-hover-balloon" title="%1$s" data-desc="%1$s">%2$s</span>',
+						\esc_attr( $time_settings[ $id ]['help'] ),
+						\esc_html( $time_settings[ $id ]['title'] )
+					),
+					vsprintf(
+						'<div class="tsfem-e-monitor-settings-holder" data-option-id=%1$s id=%1$s>%2$s</div>',
+						[
+							\esc_attr( $id ),
+							$_fields['edit'] . $_fields['js'],
+						]
+					),
+					false
 				);
 			endforeach;
+
+			$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
 		}
 
-		nojs : {
+		form : {
 			$nonce_action = $this->_get_nonce_action_field( 'update' );
 			$nonce = $this->_get_nonce_field( 'update' );
 			$submit = $this->_get_submit_button(
@@ -992,6 +1075,7 @@ final class Admin extends Api {
 		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
 		$name = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
+		$ajax_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'fetch' );
 		$nonce = $this->_get_nonce_field( 'fetch' );
@@ -1002,9 +1086,9 @@ final class Admin extends Api {
 			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'       => true,
 			'ajax-id'    => 'tsfem-e-monitor-fetch-button',
-			'ajax-class' => $class,
+			'ajax-class' => $class . ' tsfem-has-hover-balloon',
 			'ajax-name'  => $name,
-			'ajax-title' => $title,
+			'ajax-title' => $ajax_title,
 		];
 
 		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
@@ -1022,6 +1106,7 @@ final class Admin extends Api {
 		$class = 'tsfem-button tsfem-button-cloud';
 		$name = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
+		$ajax_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'crawl' );
 		$nonce = $this->_get_nonce_field( 'crawl' );
@@ -1032,9 +1117,9 @@ final class Admin extends Api {
 			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
 			'ajax'       => true,
 			'ajax-id'    => 'tsfem-e-monitor-crawl-button',
-			'ajax-class' => $class,
+			'ajax-class' => $class . ' tsfem-has-hover-balloon',
 			'ajax-name'  => $name,
-			'ajax-title' => $title,
+			'ajax-title' => $ajax_title,
 		];
 
 		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
@@ -1061,13 +1146,14 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.1.0 Now outputs last crawled field.
-	 * @uses TSF_Extension_Manager\Layout::wrap_title_content()
+	 * @uses TSF_Extension_Manager\Layout::wrap_row_content()
 	 *
 	 * @return string The account data fields.
 	 */
 	protected function get_account_data_fields() {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Overview', 'the-seo-framework-extension-manager' ) );
+		$output = '';
 
 		domain : {
 			$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
@@ -1075,7 +1161,7 @@ final class Admin extends Api {
 			$class = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 			$domain = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
 
-			$output = \TSF_Extension_Manager\Layout::wrap_title_content(
+			$output .= \TSF_Extension_Manager\Layout::wrap_row_content(
 				\esc_html__( 'Connected site:', 'the-seo-framework-extension-manager' ),
 				$domain,
 				false
@@ -1083,7 +1169,7 @@ final class Admin extends Api {
 		}
 
 		lc : {
-			$output .= \TSF_Extension_Manager\Layout::wrap_title_content(
+			$output .= \TSF_Extension_Manager\Layout::wrap_row_content(
 				\esc_html__( 'Last crawled:', 'the-seo-framework-extension-manager' ),
 				$this->get_last_crawled_field(),
 				false
@@ -1107,15 +1193,18 @@ final class Admin extends Api {
 		$last_crawl = $this->get_last_issues_crawl();
 		$class = $last_crawl ? 'tsfem-success' : 'tsfem-error';
 		$last_crawl_i18n = $last_crawl ? $this->get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
-		$lc = sprintf(
-			'<time class="tsfem-dashicon tsfem-has-hover-balloon %s" id=tsfem-e-monitor-last-crawled datetime=%s data-desc="%s">%s</time>',
+		$title = $last_crawl
+		       ? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl )
+		       : \esc_html__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
+
+		return sprintf(
+			'<time class="tsfem-dashicon tsfem-has-hover-balloon %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s" data-desc="%s">%s</time>',
 			\esc_attr( $class ),
 			$this->get_rectified_date( 'c', $last_crawl ),
-			$last_crawl ? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl ) : \esc_html__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' ),
+			$title,
+			$title,
 			\esc_html( $last_crawl_i18n )
 		);
-
-		return $lc;
 	}
 
 	/**
@@ -1235,7 +1324,7 @@ final class Admin extends Api {
 		if ( empty( $stats ) ) {
 			$output .= $this->get_string_no_data_found();
 		} else {
-			$instance = \TSF_Extension_Manager\Extension\Monitor\Output::get_instance();
+			$instance = Output::get_instance();
 			$output = $instance->_get_data( $stats, 'stats' );
 		}
 

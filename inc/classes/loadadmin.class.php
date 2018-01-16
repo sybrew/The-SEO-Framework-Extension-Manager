@@ -239,7 +239,7 @@ final class LoadAdmin extends AdminPages {
 						$response = $this->get_api_response( $args );
 						$response = json_decode( $response );
 
-						if ( ! isset( $response->success ) ) {
+						if ( empty( $response->success ) ) {
 							$results = $this->get_ajax_notice( false, 17001 );
 						} else {
 							if ( ! isset( $response->data ) ) {
@@ -1047,19 +1047,5 @@ final class LoadAdmin extends AdminPages {
 		$kill = $enable;
 
 		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
-	}
-
-	/**
-	 * Sanitizes AJAX input string.
-	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
-	 * Also prevents regex execution.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $input The AJAX input string.
-	 * @return string $output The cleaned AJAX input string.
-	 */
-	final protected function s_ajax_string( $input ) {
-		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
 }

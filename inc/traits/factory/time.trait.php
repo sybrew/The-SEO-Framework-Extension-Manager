@@ -173,11 +173,11 @@ trait Time {
 
 		$time_i18n = '';
 
+		$x = round( $x );
+
 		//= Can't upscale 0.
 		if ( $scales && $x )
 			return $this->_upscale_time( $x, $x_scale, $scales, $precise );
-
-		$x = round( $x );
 
 		switch ( $x_scale ) :
 			case 'seconds' :
@@ -226,7 +226,7 @@ trait Time {
 	 * @param bool    $precise
 	 * @return string Scaled i18n time. Not escaped.
 	 */
-	protected function _upscale_time( $x, $x_scale, $scales, $precise = false ) {
+	protected function _upscale_time( $x, $x_scale, $scales, $precise ) {
 
 		$x_remaining = $x;
 		$times = [];

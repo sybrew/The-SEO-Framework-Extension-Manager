@@ -134,8 +134,6 @@ a.tsfem-dismiss:hover {
 	line-height: 1em;
 	font-size: 1em;
 	-webkit-animation: tsfem-spin 1.5s linear infinite;
-	-moz-animation: tsfem-spin 1.5s linear infinite;
-	-o-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
@@ -437,10 +435,7 @@ body.tsfem .wrap {
 	-moz-appearance: none;
 	appearance: none;
 	/* Filter transistions are buggy in Edge and Blink. */
-	/*-webkit-transition: -webkit-filter 0.15s, color 0.15s;
-	-moz-transition: filter 0.15s, color 0.15s;
-	-o-transition: -webkit-filter 0.15s, color 0.15s;
-	transition: filter 0.15s, color 0.15s;*/
+	/* transition: filter 0.15s, color 0.15s;*/
 }
 
 .tsfem-button-small,
@@ -558,15 +553,11 @@ body.tsfem .wrap {
 .tsfem-button-loading:after {
 	content: "\f463";
 	-webkit-animation: tsfem-spin 1.5s linear infinite;
-	-moz-animation: tsfem-spin 1.5s linear infinite;
-	-o-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
 .tsfem-button-pulse {
 	-webkit-animation: tsfem-button-pulse 5s ease-in-out infinite;
-	-moz-animation: tsfem-button-pulse 5s ease-in-out infinite;
-	-o-animation: tsfem-button-pulse 5s ease-in-out infinite;
 	animation: tsfem-button-pulse 5s ease-in-out infinite;
 }
 
@@ -691,7 +682,6 @@ body.tsfem .wrap {
 	bottom: -.2em;
 	left: 0;
 	text-align: center;
-	-webkit-transition: -webkit-transform 1s, opacity .5s;
 	transition: transform 1s, opacity .5s;
 	z-index: 1;
 }
@@ -712,7 +702,6 @@ body.tsfem .wrap {
 	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;
-	-webkit-transition: -webkit-transform 1.2s, opacity 0.6s;
 	transition: transform 1.2s, opacity 0.6s;
 }
 
@@ -725,7 +714,6 @@ body.tsfem .wrap {
 	transform: rotateX(90deg) translateY(-100%);
 	opacity: 0;
 	z-index: 0;
-	-webkit-transition: -webkit-transform 1.2s, opacity 0.6s;
 	transition: transform 1.2s, opacity 0.6s;
 }
 
@@ -734,7 +722,6 @@ body.tsfem .wrap {
 	transform: rotateX(0deg);
 	opacity: 1;
 	z-index: 2;
-	-webkit-transition: -webkit-transform 1s, opacity .5s;
 	transition: transform 1s, opacity .5s;
 }
 
@@ -1038,12 +1025,23 @@ body.tsfem .wrap {
 	margin-bottom: 0px;
 }
 
-.tsfem-flex-account-info-rows {
-	line-height: 1.625em;
+.tsfem-row-info {
+	-webkit-align-items: center;
+	align-items: center;
+	padding: 2px 0;
 }
 
-.tsfem-actions-account-info-title {
+.tsfem-row-info-title {
 	font-weight: 600;
+}
+
+.tsfem-row-info-value {
+	min-width: 100px;
+	text-align: right;
+}
+
+.tsfem-row-info-value * {
+	width: 100%;
 }
 
 h4.tsfem-form-title,
@@ -1370,19 +1368,20 @@ h4.tsfem-cp-title {
 .tsfem-dashicon:after,
 .tsfem-ajax:after {
 	display: inline-block;
-	line-height: 1;
 	font-family: dashicons;
 	font-style: normal;
 	font-weight: 400;
 	font-size: 1.225em;
+	line-height: 0.816em; /* 1:1.225, needs this correction for flex */
 	width: 1em;
-	vertical-align: baseline;
+	vertical-align: middle;
 	content: "";
 	margin-left: 4px;
 }
 
 .tsfem-dashicon:after {
 	font-size: 1.2em;
+	line-height: 1em;
 	vertical-align: middle;
 	vertical-align: text-bottom;
 	margin-left: 2px;
@@ -1393,9 +1392,12 @@ h4.tsfem-cp-title {
 	content: "\f463";
 	color: #057c99;
 	-webkit-animation: tsfem-spin 1.5s linear infinite;
-	-moz-animation: tsfem-spin 1.5s linear infinite;
-	-o-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
+}
+
+.tsfem-dashicon-fadeout-3000:after {
+	-webkit-animation: tsfem-fadeout 3s linear 1;
+	animation: tsfem-fadeout 3s linear 1;
 }
 
 .tsfem-dashicon.tsfem-error:after,
@@ -1421,6 +1423,16 @@ h4.tsfem-cp-title {
 	color: #ffa01b;
 }
 
+.tsfem-dashicon.tsfem-edit:after {
+	content: "\f464";
+	color: #ffa01b;
+}
+
+.tsfem-dashicon.tsfem-close:after {
+	content: "\f158";
+	color: #ffa01b;
+}
+
 @-webkit-keyframes tsfem-spin {
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -1429,13 +1441,25 @@ h4.tsfem-cp-title {
 		-webkit-transform: rotate(360deg);
 	}
 }
-
 @keyframes tsfem-spin {
 	0% {
 		transform: rotate(0deg);
 	}
 	100% {
 		transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes tsfem-fadeout {
+	0% {}
+	100% {
+		opacity: 0;
+	}
+}
+@keyframes tsfem-fadeout {
+	0% {}
+	100% {
+		opacity: 0;
 	}
 }
 
@@ -1658,7 +1682,6 @@ h4.tsfem-cp-title {
 	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;
-	-webkit-transition: -webkit-transform .25s, opacity 0.25s;
 	transition: transform .25s, opacity 0.25s;
 }
 
@@ -1672,7 +1695,6 @@ h4.tsfem-cp-title {
 	-webkit-transform: rotateX(0deg) translateY(0em);
 	transform: rotateX(0deg) translateY(0em);
 	opacity: 1;
-	-webkit-transition: -webkit-transform .25s, opacity 0.125s;
 	transition: transform .25s, opacity 0.125s;
 }
 
@@ -1860,9 +1882,6 @@ body.js .tsfem-flex-hide-if-no-js {
 	cursor: pointer;
 	padding: 14px;
 	width: 100%;
-	-webkit-transition: all .33s;
-	-moz-transition: all .33s;
-	-o-transition: all .33s;
 	transition: all .33s;
 	-webkit-user-select: none;
 	-khtml-user-select: none;

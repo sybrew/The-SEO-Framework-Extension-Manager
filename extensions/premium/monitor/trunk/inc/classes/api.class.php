@@ -60,10 +60,11 @@ class Api extends Data {
 	 * @see trait TSF_Extension_Manager\Error
 	 *
 	 * @param string $type The request type.
-	 * @param bool $ajax Whether the request call is from AJAX.
+	 * @param bool   $ajax Whether the request call is from AJAX.
+	 * @param array  $args Additional arguments to send.
 	 * @return array The response body. Or error notice on AJAX.
 	 */
-	protected function get_monitor_api_response( $type = '', $ajax = false ) {
+	protected function get_monitor_api_response( $type = '', $ajax = false, array $args = [] ) {
 
 		if ( empty( $type ) ) {
 			$ajax or $this->set_error_notice( [ 1010201 => '' ] );
@@ -89,11 +90,11 @@ class Api extends Data {
 
 				case 2 :
 					if ( is_array( $subscription ) ) {
-						$args = [
+						$args = array_merge( $args, [
 							'request'     => 'extension/monitor/' . $type,
 							'email'       => $subscription['email'],
 							'licence_key' => $subscription['key'],
-						];
+						] );
 						$response = \tsf_extension_manager()->_get_api_response( $args, $_instance, $bits );
 					} else {
 						\tsf_extension_manager()->_verify_instance( $instance, $bits );
@@ -116,7 +117,7 @@ class Api extends Data {
 			$this->delete_data();
 		}
 
-		if ( ! isset( $response->success ) ) {
+		if ( empty( $response->success ) ) {
 			$ajax or $this->set_error_notice( [ 1010203 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010203 ) : false;
 		}
@@ -245,7 +246,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'request_crawl', $ajax );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice have already been set.
+			//* Notice has already been set.
 			return $ajax ? $response : false;
 		}
 
@@ -321,13 +322,11 @@ class Api extends Data {
 			$ajax or $this->set_error_notice( [ 1010601 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010601 ) : false;
 		}
-
 		if ( 'site expired' === $response['status'] ) {
 			$this->update_option( 'site_requires_fix', true );
 			$ajax or $this->set_error_notice( [ 1010602 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010602 ) : false;
 		}
-
 		if ( 'site inactive' === $response['status'] ) {
 			$this->update_option( 'site_marked_inactive', true );
 			$ajax or $this->set_error_notice( [ 1010603 => '' ] );
@@ -335,6 +334,7 @@ class Api extends Data {
 		}
 
 		/**
+		 * Updates timeout to prevent DDoS.
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$success = $this->set_remote_data_timeout();
@@ -347,7 +347,7 @@ class Api extends Data {
 		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'issues', 'stats', 'issues_lc' ], true ) ) {
+			if ( in_array( $type, [ 'issues', 'stats', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -364,8 +364,79 @@ class Api extends Data {
 		return $ajax ? $this->get_ajax_notice( true, 1010606 ) : true;
 	}
 
-	protected function api_update_remote_settings( $ajax = false ) {
+	/**
+	 * Updates monitor site settings.
+	 *
+	 * @since 1.1.0
+	 * @see trait TSF_Extension_Manager\Error
+	 *
+	 * @param array $settings The new settings.
+	 * @param bool  $ajax     Whether this request is done through AJAX.
+	 * @return bool|array False on invalid input or on activation failure. True otherwise.
+	 *         Array The status notice on AJAX.
+	 */
+	protected function api_update_remote_settings( array $settings, $ajax = false ) {
 
+		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
+			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			if ( $this->get_option( 'site_requires_fix' ) ) {
+				return $ajax ? $this->get_ajax_notice( false, 1010802 ) : false;
+			} else {
+				return $ajax ? $this->get_ajax_notice( false, 1010803 ) : false;
+			}
+		}
+
+		$old_settings = [
+			'uptime_setting' => $this->get_option( 'uptime_setting', 0 ),
+			'performance_setting' => $this->get_option( 'performance_setting', 0 ),
+		];
+		//= Filters and merges old and new settings. Magic.
+		$settings = array_intersect_key(
+			array_merge( $old_settings, $settings ),
+			$old_settings
+		);
+
+		$response = $this->get_monitor_api_response( 'update_site', $ajax, compact( 'settings' ) );
+
+		if ( empty( $response['success'] ) ) {
+			//* Notice has already been set in response.
+			return $ajax ? $response : false;
+		}
+
+		$response = $response['data'];
+
+		if ( 'failure' === $response['status'] ) {
+			$ajax or $this->set_error_notice( [ 1010801 => '' ] );
+			return $ajax ? $this->get_ajax_notice( false, 1010801 ) : false;
+		}
+		if ( 'site expired' === $response['status'] ) {
+			$this->update_option( 'site_requires_fix', true );
+			$ajax or $this->set_error_notice( [ 1010802 => '' ] );
+			return $ajax ? $this->get_ajax_notice( false, 1010802 ) : false;
+		}
+		if ( 'site inactive' === $response['status'] ) {
+			$this->update_option( 'site_marked_inactive', true );
+			$ajax or $this->set_error_notice( [ 1010803 => '' ] );
+			return $ajax ? $this->get_ajax_notice( false, 1010803 ) : false;
+		}
+
+		$success = [];
+		foreach ( $response as $type => $values ) {
+			if ( in_array( $type, [ 'uptime_setting', 'performance_setting' ], true ) ) {
+				/**
+				 * @see trait TSF_Extension_Manager\Extension_Options
+				 */
+				$success[] = $this->update_option( $type, $values );
+			}
+		}
+
+		if ( in_array( false, $success, true ) ) {
+			$ajax or $this->set_error_notice( [ 1010804 => '' ] );
+			return $ajax ? $this->get_ajax_notice( false, 1010804 ) : false;
+		}
+
+		$ajax or $this->set_error_notice( [ 1010805 => '' ] );
+		return $ajax ? $this->get_ajax_notice( true, 1010805 ) : true;
 	}
 
 	/**

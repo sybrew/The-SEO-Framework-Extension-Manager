@@ -229,6 +229,7 @@ trait Error {
 			case 104 :
 			case 701 :
 			case 708 :
+			case 1010702 :
 				$message = \esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -257,8 +258,8 @@ trait Error {
 				break;
 
 			case 401 :
-				/* translators: %s = My Account */
 				$message = sprintf(
+					/* translators: %s = My Account */
 					\esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
@@ -267,8 +268,8 @@ trait Error {
 
 			case 303 :
 			case 307 :
-				/* translators: %s = My Account */
 				$message = sprintf(
+					/* translators: %s = My Account */
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
@@ -289,13 +290,14 @@ trait Error {
 			case 1010401 :
 			case 1010501 :
 			case 1010601 :
+			case 1010801 :
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
 			case 305 :
-				/* translators: %s = My Account */
 				$message = sprintf(
+					/* translators: %s = My Account */
 					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
@@ -345,8 +347,8 @@ trait Error {
 				break;
 
 			case 902 :
-				/* translators: %s = My Account */
 				$message = sprintf(
+					/* translators: %s = My Account */
 					\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
@@ -366,6 +368,7 @@ trait Error {
 			case 9003 :
 			case 9004 :
 			case 1019001 :
+			case 1019002 :
 			case 1069001 :
 			case 1079001 :
 				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
@@ -412,12 +415,14 @@ trait Error {
 
 			case 1010502 :
 			case 1010602 :
+			case 1010802 :
 				$message = \esc_html__( 'The Monitor API server does not recognize your instance. Request a fix.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
 
 			case 1010503 :
 			case 1010603 :
+			case 1010803 :
 				$message = \esc_html__( 'Your website has been marked as inactive by the Monitor API server.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
@@ -437,8 +442,18 @@ trait Error {
 				$type = 'updated';
 				break;
 
+			case 1010804 :
+				$message = \esc_html__( 'Monitor has updated your site settings, but your site is now out of sync. You should fetch data.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010805 :
+				$message = \esc_html__( 'Monitor has updated your site settings.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
 			case 1060301 :
-				$message = \esc_html__( "The SEO Settings couldn't be converted to file.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "The SEO settings couldn't be converted to file.", 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -453,6 +468,7 @@ trait Error {
 				break;
 
 			case 1070100 :
+			case 1070701 :
 				$message = \esc_html__( 'Invalid data was sent to the server.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -467,9 +483,16 @@ trait Error {
 				$type = 'success';
 				break;
 
+			case 1011700 :
 			case 1071100 :
+			case 1071101 :
 				$message = \esc_html__( 'Unable to verify if settings are saved.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
+				break;
+
+			case 1011800 :
+				$message = \esc_html__( 'Unable to propagate request. Are you running the latest version?', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
 				break;
 
 			case 1072100 :

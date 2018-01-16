@@ -147,7 +147,7 @@ window.tsfem_e_monitor = {
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {
-					tsfem_e_monitor.add_requires_fix( data.status['requires_fix'] );
+					tsfem_e_monitor.addRequiresFix( data.status['requires_fix'] );
 					tsfem.updatedResponse( loader, 0, notice, 0 );
 				} else {
 					tsfem.updatedResponse( loader, 0, notice, 0 );
@@ -189,11 +189,15 @@ window.tsfem_e_monitor = {
 		//* Set ajax loader.
 		tsfem.setAjaxLoader( loader );
 
+		//* Set lastCrawled ajax loader.
 		let lastCrawled = document.getElementById( 'tsfem-e-monitor-last-crawled' ),
 			lastCrawledClass = lastCrawled.classList.contains( 'tsfem-success' ) ? 'tsfem-success' : 'tsfem-error';
 		lastCrawled.classList.remove( 'tsfem-success' );
 		lastCrawled.classList.remove( 'tsfem-error' );
 		lastCrawled.classList.add( 'tsfem-loading' );
+
+		//* Set settings loader.
+		tsfem_e_monitor.setSettingsLoader();
 
 		jQuery.ajax( {
 			method: 'POST',
@@ -229,7 +233,18 @@ window.tsfem_e_monitor = {
 				if ( 'success' === status ) {
 					let issues = content['issues'],
 						stats = content['stats'],
-						lc = content['lc'];
+						lc = content['lc'],
+						settings = content['settings'];
+
+					if ( 'undefined' !== typeof settings ) {
+						for ( let _setting in settings ) {
+							// Ignore prototypes.
+							if ( ! settings.hasOwnProperty( _setting ) )
+								continue;
+
+							tsfem_e_monitor.setSetting( _setting, settings[ _setting ], true );
+						}
+					}
 
 					if ( issues['found'] ) {
 						//* Expected to be inputting a single div.
@@ -279,7 +294,7 @@ window.tsfem_e_monitor = {
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {
-					tsfem_e_monitor.add_requires_fix();
+					tsfem_e_monitor.addRequiresFix();
 					tsfem.updatedResponse( loader, 0, notice, 0 );
 				} else {
 					tsfem.updatedResponse( loader, 0, notice, 0 );
@@ -298,6 +313,7 @@ window.tsfem_e_monitor = {
 				lastCrawled.classList.add( lastCrawledClass );
 			}
 
+			tsfem_e_monitor.unsetSettingsLoader();
 			$button.removeClass( loading );
 			$button.prop( 'disabled', false );
 		} );
@@ -312,7 +328,7 @@ window.tsfem_e_monitor = {
 	 * @function
 	 * @return {Void} If element already exists.
 	 */
-	add_requires_fix: function() {
+	addRequiresFix: function() {
 
 		if ( jQuery( '.tsfem-account-fix' ).length > 0 || jQuery( '.tsfem-account-info' ).length < 1 )
 			return;
@@ -349,6 +365,311 @@ window.tsfem_e_monitor = {
 	},
 
 	/**
+	 * Sets loaders to setting clickers, effectively blocking them from input.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @return {undefined}
+	 */
+	setSettingsLoader() {
+		let settingElements = document.querySelectorAll( '.tsfem-e-monitor-edit' );
+		for ( let i = 0; i < settingElements.length; i++ ) {
+			settingElements[ i ].classList.remove( 'tsfem-edit' );
+			settingElements[ i ].classList.remove( 'tsfem-dashicon-fadeout-3000' );
+			settingElements[ i ].classList.add( 'tsfem-loading' );
+		}
+	},
+
+	/**
+	 * Removes loaders from setting clickers.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @return {undefined}
+	 */
+	unsetSettingsLoader: function() {
+		let e = document.querySelectorAll( '.tsfem-e-monitor-edit' );
+		for ( let i = 0; i < e.length; i++ ) {
+			tsfem_e_monitor.animateResetClicker( e[ i ] );
+		}
+	},
+
+	/**
+	 * Sets new settings for display.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @param {string} what The setting to update.
+	 * @param {integer|string} value The new setting.
+	 * @param {boolean|undefined} animate Whether to animate and reset the edit button.
+	 * @return {undefined}
+	 */
+	setSetting: function( what, value, animate ) {
+
+		animate = animate || false;
+
+		let holder = document.querySelector( '.tsfem-e-monitor-settings-holder[data-option-id="' + what + '"]' ),
+			clicker = holder && holder.querySelector( '.tsfem-e-monitor-edit' ),
+			selector = void 0,
+			selectId = '';
+
+		if ( ! clicker ) {
+			// Clicker not found. Update your plugins message.
+			tsfem.setTopNotice( 1011800 );
+			return;
+		}
+
+		if ( 'for' in clicker.dataset )
+			selectId = clicker.dataset.for;
+
+		selector = selectId && document.getElementById( selectId );
+
+		if ( ! selector )
+			return; // User edited the DOM. Shun.
+
+		selector.value = value;
+		clicker.innerHTML = selector.options[ selector.selectedIndex ].text;
+		animate && tsfem_e_monitor.animateResetClicker( clicker );
+	},
+
+	/**
+	 * Animates clicker by resetting all values.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @param {Element} clicker The clicker element to animate.
+	 * @return {undefined} Early so if already animated.
+	 */
+	animateResetClicker: function( clicker ) {
+
+		if ( clicker.classList.contains( 'tsfem-dashicon-fadeout-3000' )
+		|| ( clicker.classList.contains( 'tsfem-edit' ) ) )
+			return;
+
+		clicker.classList.remove( 'tsfem-loading' );
+
+		// Thank you for using IE11.
+		if ( ! clicker.classList.contains( 'tsfem-success' )
+		&& ( ! clicker.classList.contains( 'tsfem-error' ) )
+		&& ( ! clicker.classList.contains( 'tsfem-unknown' ) ) ) {
+			clicker.classList.add( 'tsfem-edit' );
+		} else {
+			clicker.classList.add( 'tsfem-dashicon-fadeout-3000' );
+			setTimeout( function() {
+				clicker.classList.remove( 'tsfem-success' );
+				clicker.classList.remove( 'tsfem-error' );
+				clicker.classList.remove( 'tsfem-dashicon-fadeout-3000' );
+				// End thanks.
+				clicker.classList.add( 'tsfem-edit' );
+			}, 3000 );
+		}
+	},
+
+	/**
+	 * Shows dropdown edit field and attaches listeners.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @param {jQuery.event} event
+	 * @return {boolean|undefined} False on error. Undefined otherwise.
+	 */
+	editSetting: function( event ) {
+
+		let clicker = event.target,
+			selectId = void 0,
+			selector = void 0,
+			lastVal = 0,
+			lastText = '',
+			newVal = 0,
+			newText = '',
+			option = '';
+
+		if ( clicker.classList.contains( 'tsfem-loading' ) )
+			return false;
+
+		if ( 'for' in clicker.dataset )
+			selectId = clicker.dataset.for;
+
+		if ( ! selectId )
+			return false;
+
+		selector = document.getElementById( selectId );
+
+		if ( ! selector )
+			return false;
+
+		lastVal = selector.value;
+		lastText = clicker.innerHTML;
+
+		const doChange = function() {
+			const showAjaxEditError = function() {
+				clicker.classList.remove( 'tsfem-loading' );
+				clicker.classList.add( 'tsfem-error' );
+			}
+			const showAjaxEditSuccess = function() {
+				clicker.classList.remove( 'tsfem-loading' );
+				clicker.classList.add( 'tsfem-success' );
+			}
+
+			removeListeners();
+			showClicker();
+
+			let loader = '#tsfem-e-monitor-cp-pane .tsfem-pane-header .tsfem-ajax',
+				status = 0,
+				topNotice = '',
+				topNoticeCode = 0,
+				loaderText = '';
+
+			//* Reset ajax loader
+			tsfem.resetAjaxLoader( loader );
+
+			//* Set ajax loader.
+			tsfem.setAjaxLoader( loader );
+
+			//* Set settings Ajax loaders.
+			tsfem_e_monitor.setSettingsLoader();
+
+			//= Show new option...
+			clicker.innerHTML = newText;
+
+			jQuery.ajax( {
+				method: 'POST',
+				url: ajaxurl,
+				datatype: 'json',
+				data: {
+					'action' : 'tsfem_e_monitor_update',
+					'nonce' : tsfem_e_monitor.nonce,
+					'option' : option,
+					'value' : newVal,
+				},
+				timeout: 15000,
+				async: true,
+			} ).done( function( response ) {
+
+				response = tsfem.convertJSONResponse( response );
+
+				tsfem.debug && console.log( response );
+
+				let data = response && response.data || void 0,
+					type = response && response.type || void 0;
+
+				if ( ! data || ! type ) {
+					//* Erroneous output.
+					loaderText = tsfem.i18n['UnknownError'];
+					undoChanges();
+					showAjaxEditError();
+				} else {
+					let rCode = data.results && data.results.code || void 0,
+						success = data.results && data.results.success || void 0;
+
+					loaderText = data.results && data.results.notice || void 0;
+
+					if ( success ) {
+						showAjaxEditSuccess();
+					} else {
+						showAjaxEditError();
+					}
+
+					switch ( rCode ) {
+						case 1010805 : // updated.
+							status = 1;
+							break;
+
+						case 1010804 : // Settings didn't save. Suggest Fetch Data.
+							topNoticeCode = rCode;
+							status = 2;
+							break;
+
+						default :
+						case 1010801 : // Remote error.
+						case 1010802 : // Subscription expired.
+						case 1010803 : // Site marked inactive by Monitor.
+						case 1019002 : // No access.
+						case 1010702 : // No option sent.
+							loaderText = tsfem.i18n['UnknownError'];
+							topNoticeCode = rCode || false;
+							status = 0;
+							break;
+					}
+
+					if ( 'undefined' !== typeof data.settings ) {
+						for ( let _setting in data.settings ) {
+							// Ignore prototypes.
+							if ( ! data.settings.hasOwnProperty( _setting ) )
+								continue;
+
+							tsfem_e_monitor.setSetting( _setting, data.settings[ _setting ], false );
+						}
+					}
+				}
+			} ).fail( function( jqXHR, textStatus, errorThrown ) {
+				//= Undo new option.
+				undoChanges();
+				showAjaxEditError();
+
+				// Set Ajax response for wrapper.
+				loaderText = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
+
+				// Try to set top notices, regardless.
+				tsfem.setTopNotice( 1011700 ); // Notifies that there's an error saving.
+				errorThrown && tsfem.setTopNotice( -1, 'jQ error: ' + errorThrown );
+			} ).always( function() {
+				tsfem.updatedResponse( loader, status, loaderText, 0 );
+			 	if ( topNoticeCode ) {
+					tsfem.setTopNotice( topNoticeCode, topNotice );
+				}
+				tsfem_e_monitor.unsetSettingsLoader();
+			} );
+		}
+		const undoChanges = function() {
+			clicker.innerHTML = lastText;
+			selector.value = lastVal;
+		}
+		const showForm = function() {
+			jQuery( clicker ).hide();
+			jQuery( selector ).slideDown( 200 );
+		}
+		const showClicker = function() {
+			jQuery( selector ).hide();
+			jQuery( clicker ).fadeIn( 300 );
+		}
+		const onChange = function( event ) {
+			let _target = event.target;
+			newVal = _target.value;
+			newText = _target.options[ _target.selectedIndex ].text;
+			option = _target.name;
+			newVal == lastVal && reset() || doChange();
+		}
+		const clickOff = function( event ) {
+			let $select = jQuery( event.target ).closest( selector );
+			if ( $select.length < 1 ) {
+				reset();
+			}
+		}
+		const reset = function() {
+			showClicker();
+			removeListeners();
+			return true;
+		}
+		const addListeners = function() {
+			window.addEventListener( 'click', clickOff );
+			selector.addEventListener( 'change', onChange );
+		}
+		const removeListeners = function() {
+			window.removeEventListener( 'click', clickOff );
+			selector.removeEventListener( 'change', onChange );
+		}
+		showForm();
+		//= Don't propagate current events.
+		setTimeout( addListeners, 10 );
+	},
+
+	/**
 	 * Initialises all aspects of the scripts.
 	 *
 	 * Generally ordered with stuff that inserts new elements into the DOM first,
@@ -363,13 +684,16 @@ window.tsfem_e_monitor = {
 	 */
 	ready: function( jQ ) {
 		// Disable semi-disabled buttons.
-		jQ( 'a#tsfem-e-monitor-privacy-readmore' ).on( 'click touchstart MSPointerDown', tsfem_e_monitor.showReadMore );
+		jQ( '#tsfem-e-monitor-privacy-readmore' ).on( 'click', tsfem_e_monitor.showReadMore );
 
 		// AJAX crawl request.
-		jQ( 'a#tsfem-e-monitor-crawl-button' ).on( 'click', tsfem_e_monitor.requestCrawl );
+		jQ( '#tsfem-e-monitor-crawl-button' ).on( 'click', tsfem_e_monitor.requestCrawl );
 
 		// AJAX data update.
-		jQ( 'a#tsfem-e-monitor-fetch-button' ).on( 'click', tsfem_e_monitor.fetchData );
+		jQ( '#tsfem-e-monitor-fetch-button' ).on( 'click', tsfem_e_monitor.fetchData );
+
+		// AJAX edit setting attacher.
+		jQ( '.tsfem-e-monitor-edit' ).on( 'click', tsfem_e_monitor.editSetting );
 	}
 };
 jQuery( tsfem_e_monitor.ready );

@@ -510,7 +510,7 @@ trait Extensions_Layout {
 						$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
 						break;
 				endswitch;
-				$compat_notice .= '<br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
+				$compat_notice .= ' <br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
 				break;
 
 			case -1 :
@@ -526,9 +526,14 @@ trait Extensions_Layout {
 		endswitch;
 
 		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
-		return sprintf(
+		return vsprintf(
 			'<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>',
-			\esc_attr( $compat_notice ), \esc_html( $compat_notice ), \esc_html( $compat_name ), $compat_icon
+			[
+				\esc_attr( \wp_strip_all_tags( $compat_notice ) ),
+				\esc_html( $compat_notice ),
+				\esc_html( $compat_name ),
+				$compat_icon,
+			]
 		);
 	}
 
