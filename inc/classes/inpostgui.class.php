@@ -54,15 +54,35 @@ final class InpostGUI {
 	use Enclose_Core_Final,
 		Construct_Master_Once_Final_Interface;
 
+	/**
+	 * @since 1.5.0
+	 * @param string NONCE_ACTION The nonce action.
+	 * @param string NONCE_NAME   The nonce name.
+	 */
 	const NONCE_ACTION = 'tsfem-e-save-inpost-nonce';
 	const NONCE_NAME = 'tsfem-e-inpost-settings';
 
 	const META_PREFIX = 'tsfem-pm';
 
+	/**
+	 * @since 1.5.0
+	 * @see static::_verify_nonce()
+	 * @param string $save_access_state The state the save is in.
+	 */
 	public static $save_access_state = 0;
 
+	/**
+	 * @since 1.5.0
+	 * @param string $include_secret The inclusion secret generated on tab load.
+	 */
 	private static $include_secret;
 
+	/**
+	 * @since 1.5.0
+	 * @param array $tabs The registered tabs.
+	 * @param array $active_tab_keys The activate tab keys of static::$tabs
+	 * @param array $views The registered view files for the tabs.
+	 */
 	private static $tabs = [];
 	private static $active_tab_keys = [];
 	private static $views = [];

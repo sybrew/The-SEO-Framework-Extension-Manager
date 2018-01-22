@@ -81,23 +81,23 @@ Every WordPress post, if the rendered data is valid, will have Articles data out
 
 ### Automated output
 
-The data for output is fetched accordingly to your post's structure.
+The data used for output is fetched automatically from your post's structure.
 
 **These fields are evaluated:**
 
 * **Type:** The type of the article, either "Article", "Blog Posting" or "News Article".
 * **Main Entity:** The article URL.
 * **Headline:** The title, this defaults to the post title. It will fall back to the SEO title.
-* **Images:** The images set for the article. It defaults to the post's SEO settings image, and will fall back to the "Featured Image".
+* **Images:** The images set for the article. This defaults to the post's SEO settings image, and will fall back to the "Featured Image".
 * **Published date:** The date the article was published.
 * **Modified date:** The date the article was last modified.
 * **Author:** The article's author, set in the "Author" metabox. Defaults to the author's display name.
-* **Publisher:** The organization, defaults to the "Schema.org" settings within The SEO Framework.
-* **Description:** The article's description, this is the same as the description output by The SEO Framework.
+* **Publisher:** The organization, which defaults to the "Schema.org" settings within The SEO Framework.
+* **Description:** The article's description, which is the same as the description output by The SEO Framework.
 
 ### Required data
 
-Most data are required before the Article data is outputted, for completeness.
+Most data is required before the Article data is outputted, for completeness.
 
 In general, you shouldn't have to worry about the output.
 However, for valid AMP output, you need to make sure the following fields are filled in.
@@ -107,21 +107,11 @@ However, for valid AMP output, you need to make sure the following fields are fi
 * **Image:** This image needs to be set in the in-post SEO settings' metabox. Alternatively, you can use the Featured Image.
 * **Publisher:** The website must represent an Organization, and it must include a logo, which is taken from "Customizer's Site Icon" (requires theme support).
 
-### Types and data
+### Types
 
 Articles can be defined through various types.
 
 Google supports General Articles, Blog Postings and News Articles.
-
-**In detail, to annotate the data, the following is used:**
-
-1. The type, e.g. "Article", "NewsArticle", or "BlogPosting".
-2. A headline, i.e. the real title.
-3. The description.
-4. The main image to be displayed with the article.
-5. The freshness, i.e. the date published and modified.
-6. The author, i.e. Schema.org Person.
-7. The publisher, i.e. Schema.org Organization, including the logo.
 
 #### Articles (generic)
 

@@ -246,7 +246,7 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap {
 	background-color: #333;
-	box-shadow: 0 1px 2px 1px #aaa;
+	box-shadow: 0 1px 2px 0px #999;
 	width: 100%;
 	margin: 0 0 20px;
 	padding: 20px;
@@ -1705,10 +1705,12 @@ h4.tsfem-cp-title {
 	display: none;
 }
 
-.tsfem-has-hover-balloon {
+/*
+.tsfem-tooltip-item {
 	position: relative;
 	cursor: help;
 }
+*/
 
 .tsfem-ltr {
 	direction: ltr;

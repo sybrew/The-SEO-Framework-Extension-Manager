@@ -27,6 +27,11 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
+ * Imports HTML.
+ */
+use \TSF_Extension_Manager\HTML as HTML;
+
+/**
  * Require user interface trait.
  * @since 1.0.0
  */
@@ -1023,11 +1028,10 @@ final class Admin extends Api {
 			$_rows = '';
 			foreach ( $options as $id => $_fields ) :
 				$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
-					sprintf(
-						'<span class="tsfem-has-hover-balloon" title="%1$s" data-desc="%1$s">%2$s</span>',
-						\esc_attr( $time_settings[ $id ]['help'] ),
-						\esc_html( $time_settings[ $id ]['title'] )
-					),
+					HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+						\esc_html( $time_settings[ $id ]['title'] ),
+						\esc_attr( $time_settings[ $id ]['help'] )
+					) ),
 					vsprintf(
 						'<div class="tsfem-e-monitor-settings-holder" data-option-id=%1$s id=%1$s>%2$s</div>',
 						[
@@ -1082,16 +1086,22 @@ final class Admin extends Api {
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [
-			'id'         => 'tsfem-e-monitor-fetch-form',
-			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
-			'ajax'       => true,
-			'ajax-id'    => 'tsfem-e-monitor-fetch-button',
-			'ajax-class' => $class . ' tsfem-has-hover-balloon',
-			'ajax-name'  => $name,
-			'ajax-title' => $ajax_title,
+			'id'           => 'tsfem-e-monitor-fetch-form',
+			'input'        => compact( 'nonce_action', 'nonce', 'submit' ),
+			'ajax'         => true,
+			'ajax-id'      => 'tsfem-e-monitor-fetch-button',
+			'ajax-class'   => $class,
+			'ajax-tooltip' => true,
+			'ajax-name'    => $name,
+			'ajax-title'   => $ajax_title,
 		];
 
-		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return sprintf(
+			$this->_get_action_button(
+				\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+				$args
+			)
+		);
 	}
 	/**
 	 * Renders and returns crawl button.
@@ -1113,16 +1123,22 @@ final class Admin extends Api {
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [
-			'id'         => 'tsfem-e-monitor-crawl-form',
-			'input'      => compact( 'nonce_action', 'nonce', 'submit' ),
-			'ajax'       => true,
-			'ajax-id'    => 'tsfem-e-monitor-crawl-button',
-			'ajax-class' => $class . ' tsfem-has-hover-balloon',
-			'ajax-name'  => $name,
-			'ajax-title' => $ajax_title,
+			'id'           => 'tsfem-e-monitor-crawl-form',
+			'input'        => compact( 'nonce_action', 'nonce', 'submit' ),
+			'ajax'         => true,
+			'ajax-id'      => 'tsfem-e-monitor-crawl-button',
+			'ajax-class'   => $class,
+			'ajax-tooltip' => true,
+			'ajax-name'    => $name,
+			'ajax-title'   => $ajax_title,
 		];
 
-		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return sprintf(
+			$this->_get_action_button(
+				\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+				$args
+			)
+		);
 	}
 
 	/**
@@ -1171,7 +1187,7 @@ final class Admin extends Api {
 		lc : {
 			$output .= \TSF_Extension_Manager\Layout::wrap_row_content(
 				\esc_html__( 'Last crawled:', 'the-seo-framework-extension-manager' ),
-				$this->get_last_crawled_field(),
+				HTML::wrap_inline_tooltip( $this->get_last_crawled_field() ),
 				false
 			);
 		}
@@ -1195,14 +1211,13 @@ final class Admin extends Api {
 		$last_crawl_i18n = $last_crawl ? $this->get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
 		$title = $last_crawl
 		       ? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl )
-		       : \esc_html__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
+		       : \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
 
 		return sprintf(
-			'<time class="tsfem-dashicon tsfem-has-hover-balloon %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s" data-desc="%s">%s</time>',
+			'<time class="tsfem-dashicon tsfem-tooltip-item %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s">%s</time>',
 			\esc_attr( $class ),
-			$this->get_rectified_date( 'c', $last_crawl ),
-			$title,
-			$title,
+			\esc_attr( $this->get_rectified_date( 'c', $last_crawl ) ),
+			\esc_attr( $title ),
 			\esc_html( $last_crawl_i18n )
 		);
 	}
@@ -1313,9 +1328,8 @@ final class Admin extends Api {
 	 */
 	protected function get_stats_overview() {
 		return sprintf(
-			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap"><h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p></div>',
-			$this->get_string_coming_soon(),
-			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
+			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap">%s</div>',
+			$this->ajax_get_stats_data() // I know, this isn't ajax.
 		);
 
 		$output = '';
@@ -1341,9 +1355,10 @@ final class Admin extends Api {
 	 */
 	protected function ajax_get_stats_data() {
 		return sprintf(
-			'<h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p>',
+			'<h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p><p class="tsfem-description">%s</p>',
 			$this->get_string_coming_soon(),
-			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' )
+			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' ),
+			\esc_html__( 'Your website can participate in the uptime and performance monitoring runtime testing stages. To opt-in, simply adjust the settings above.', 'the-seo-framework-extension-manager' )
 		);
 	}
 

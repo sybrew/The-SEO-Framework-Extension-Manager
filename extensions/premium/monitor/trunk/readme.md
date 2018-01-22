@@ -129,6 +129,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 	* **Added:** The crawler now tests for title tags. It checks if the [tsfep-extension name="title-fix"] is needed, or when you need to consult with your theme developer.
 	* **Added:** Last-crawled date is now fetched and displayed.
 	* **Added:** You can now set uptime monitoring and performance monitoring delays.
+		* When enabled, your website can participate in the initial uptime and performance monitoring runtime testing stages.
 	* **Fixed:** When a scripting error occurs on the Monitor servers, you'll now be notified correctly.
 * **API - Our servers:**
 	* **January 16th, 2018:**

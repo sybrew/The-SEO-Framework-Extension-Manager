@@ -302,7 +302,7 @@ final class Fields {
 				'_desc' => [
 					\__( 'Cuisine', 'the-seo-framework-extension-manager' ),
 					\__( 'Select the types of cuisine the department serves.', 'the-seo-framework-extension-manager' ),
-					\__( 'Multiple are allowed.', 'the-seo-framework-extension-manager' ),
+					\__( 'Multiple cuisines are allowed.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',

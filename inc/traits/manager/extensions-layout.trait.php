@@ -525,16 +525,19 @@ trait Extensions_Layout {
 				break;
 		endswitch;
 
-		$compat_icon = sprintf( '<span class="tsfem-extension-description-icon tsfem-dashicon %s"></span>', $compat_class );
-		return vsprintf(
-			'<span class="tsfem-extension-description-compat tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s%s</span></span>',
-			[
-				\esc_attr( \wp_strip_all_tags( $compat_notice ) ),
-				\esc_html( $compat_notice ),
-				\esc_html( $compat_name ),
-				$compat_icon,
-			]
-		);
+		$classes = [
+			'tsfem-extension-description-compat',
+			'tsfem-dashicon',
+			'tsfem-tooltip-item',
+			$compat_class,
+		];
+
+		return HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+			\esc_html( $compat_name ),
+			$compat_notice,
+			$compat_notice,
+			$classes
+		) );
 	}
 
 	/**

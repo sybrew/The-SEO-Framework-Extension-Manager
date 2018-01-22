@@ -238,6 +238,9 @@
 	opacity: 0;
 }
 
+/* # Start Control Panel.
+/*----------------------------------------------------------------------------*/
+
 .tsfem-e-monitor-info:first-of-type {
 	margin-top: 0;
 }
@@ -247,5 +250,11 @@
 }
 
 .tsfem-e-monitor-edit {
+	cursor: pointer;
+}
+
+#tsfem-e-monitor-fetch-button,
+#tsfem-e-monitor-crawl-button {
+	min-width: 150px;
 	cursor: pointer;
 }

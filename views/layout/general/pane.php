@@ -21,27 +21,30 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 <section class="<?php echo \esc_attr( $pane_class ); ?> tsfem-flex" id="<?php echo \esc_attr( $pane_id ); ?>">
 	<div class="tsfem-pane-wrap tsfem-flex tsfem-flex-nowrap">
 		<?php
-		//* $ajax is already escaped.
-		printf( '<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>', \esc_html( $title ), $ajax );
-
-		if ( isset( $callable ) ) {
+		printf(
+			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>',
+			\esc_html( $title ),
+			//= Already escaped.
+			$ajax
+		);
+		if ( isset( $callable ) || isset( $content ) ) {
 			?>
-			<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">
+			<div class="tsfem-pane-content tsfem-tooltip-boundary tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">
 			<?php
-
-			//* If secure, pass object.
-			if ( $args['secure_obj'] ) {
-				call_user_func( $callable, $callable[0] );
-			} else {
-				call_user_func( $callable );
+			if ( isset( $callable ) ) {
+				//* If secure, pass object.
+				if ( $args['secure_obj'] ) {
+					call_user_func( $callable, $callable[0] );
+				} else {
+					call_user_func( $callable );
+				}
+			} elseif ( isset( $content ) ) {
+				//= Unknown $content. Ought to be escaped.
+				echo $content;
 			}
-
 			?>
 			</div>
 			<?php
-		} elseif ( isset( $content ) ) {
-			//* $content should already have been escaped.
-			printf( '<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">%s</div>', $content );
 		}
 		?>
 		<?php

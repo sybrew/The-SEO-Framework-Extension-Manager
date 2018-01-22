@@ -241,20 +241,22 @@ final class Layout extends Secure_Abstract {
 		if ( $email )
 			$output .= static::wrap_row_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
 
+		$_class = [ 'tsfem-dashicon' ];
+
 		switch ( $level ) :
 			case 'Premium' :
 				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-success';
+				$_class[] = 'tsfem-success';
 				break;
 
 			case 'Free' :
 				$_level = \__( 'Free', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-success';
+				$_class[] = 'tsfem-success';
 				break;
 
 			default :
 				$_level = $level;
-				$_class = 'tsfem-error';
+				$_class[] = 'tsfem-error';
 				break;
 		endswitch;
 
@@ -273,34 +275,45 @@ final class Layout extends Secure_Abstract {
 					\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
 					$next_check_min
 				);
-				$_class .= ' tsfem-has-hover-balloon';
 			}
 		}
 
-		$level_desc = isset( $level_desc ) ? sprintf( ' data-desc="%s"', \esc_html( $level_desc ) ) : '';
-		$level = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $level_desc, \esc_html( $level ) );
+		$level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+			$level,
+			tsf_extension_manager()->coalesce_var( $level_desc, '' ),
+			'',
+			$_class
+		) );
+
 		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 
 		if ( $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
 			$_domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
+			$_warning = '';
+			$_classes = [ 'tsfem-dashicon' ];
 
 			if ( $_domain === $domain ) {
-				$_class = 'tsfem-success';
+				$_classes[] = 'tsfem-success';
 			} else {
-				$domain_desc = \tsf_extension_manager()->convert_markdown(
+				$_warning = \tsf_extension_manager()->convert_markdown(
 					sprintf(
-						/* translators: `%s` = domain in markdown wrapper */
+						/* translators: `%s` = domain with markdown backtics */
 						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again.', 'the-seo-framework-extension-manager' ),
 						$_domain
 					),
 					[ 'code' ]
 				);
-				$_class = 'tsfem-error tsfem-has-hover-balloon';
+				$_classes[] = 'tsfem-error';
 			}
 
-			$domain_desc = isset( $domain_desc ) ? sprintf( ' data-desc="%s"', $domain_desc ) : '';
-			$that_domain = sprintf( '<span class="tsfem-dashicon %s"%s>%s</span>', \esc_attr( $_class ), $domain_desc, \esc_html( $domain ) );
+			//= Not necessarily this domain.
+			$that_domain = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+				$domain,
+				$_warning,
+				'',
+				$_classes
+			) );
 			$output .= static::wrap_row_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 
@@ -334,11 +347,15 @@ final class Layout extends Secure_Abstract {
 
 			$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
 			$end_date_i18n = $end_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $end_date ) ) : '';
-			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
-			$expires_in = sprintf(
-				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
-				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $end_date ), \esc_html( $end_date_i18n ), \esc_html( $expires_in )
-			);
+			$expires_in = HTML::wrap_inline_tooltip( vsprintf(
+				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
+				[
+					\esc_attr( $_class ),
+					\esc_attr( $end_date_i18n ),
+					\esc_attr( $end_date ),
+					\esc_html( $expires_in ),
+				]
+			) );
 
 			$output .= static::wrap_row_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
 		endif;
@@ -366,15 +383,20 @@ final class Layout extends Secure_Abstract {
 
 			$payment_date = isset( $payment_date ) ? date( 'Y-m-d', strtotime( $payment_date ) ) : '';
 			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $payment_date ) ) : '';
-			$date_until = isset( $date_until ) ? \date_i18n( \get_option( 'date_format' ), $date_until ) : '';
-			$payment_in = sprintf(
-				'<time class="tsfem-question-cursor tsfem-dashicon tsfem-has-hover-balloon %s" title="%s" datetime="%s" data-desc="%s">%s</time>',
-				\esc_attr( $_class ), \esc_attr( $date_until ), \esc_attr( $payment_date ), \esc_html( $end_date_i18n ), \esc_html( $payment_in )
-			);
+			$payment_in = HTML::wrap_inline_tooltip( vsprintf(
+				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
+				[
+					\esc_attr( $_class ),
+					\esc_attr( $end_date_i18n ),
+					\esc_attr( $payment_date ),
+					\esc_html( $payment_in ),
+				]
+			) );
 
 			$output .= static::wrap_row_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
 		endif;
 
+		//= Wrap tooltips here.
 		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
 

@@ -1231,14 +1231,12 @@ final class FormGenerator {
 	 * @return string The escaped inline HTML description output.
 	 */
 	private function create_fields_sub_description( $description ) {
-		return vsprintf(
-			'<span class="tsfem-has-hover-balloon" title="%s" data-desc="%s"><span>%s</span></span>',
-			[
-				\esc_attr( $description ),
-				\esc_html( $description ),
-				'<span class="tsfem-extension-description-icon tsfem-dashicon tsfem-unknown"></span>',
-			]
-		);
+		return HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+			'',
+			$description,
+			$description,
+			[ 'tsfem-dashicon', 'tsfem-unknown' ]
+		) );
 	}
 
 	/**

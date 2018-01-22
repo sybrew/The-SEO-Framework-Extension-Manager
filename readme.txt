@@ -196,20 +196,22 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **Plugin Improvements:**
 
-* **Added:** Extensions no longer load when they're deemed incompatible due to environmental changes to ensure stability.
+* **Added:** Extensions no longer load when they're deemed incompatible due to WordPress' environmental changes to ensure stability.
 * **Added:** Extensions can now add in-post options in predefined tabs (Audit, Structure and Advanced).
-* **Added:** A plugin and extension database upgrader for future improvements for when necessary.
+* **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
 * **Added:** The plugin and extensions can now abstractly tell time.
-* **Added:** The plugin and extensions can now track memory to prevent exhaustion on heavy tasks.
+* **Added:** The plugin and extensions can now track memory performance to prevent exhaustion prior executing heavy tasks.
 * **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean.
 * **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
 * **Improved:** External links (e.g. to Google and TSF sites) are no longer tracked.
 * **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
 * **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
-* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, lighter and easier to read.
+* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, faster, and easier to read.
 * **Improved:** The extension option database entries will now be deleted when no indexes are present.
 * **Improved:** Various UI elements now fit more neatly on some screens.
-* **Improved:** When the extension class autoloader be registered, the extension in question fails safely.
+* **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
+* **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented.
+* **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
 
 * **Updated Extensions:**
 	* Articles.

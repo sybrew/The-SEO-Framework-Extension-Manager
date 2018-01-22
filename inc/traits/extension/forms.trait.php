@@ -215,14 +215,15 @@ trait Extension_Forms {
 	 *
 	 * @param string $url The admin page action URL.
 	 * @param array $items The form items : {
-	 *    'class'      => string The form class.
-	 *    'id'         => string The form ID.
-	 *    'input'      => array The form input entry items.
-	 *    'ajax'       => bool Whether to support AJAX.
-	 *    'ajax-id'    => string The AJAX <a> button ID.
-	 *    'ajax-class' => string The AJAX <a> button class.
-	 *    'ajax-name'  => string The AJAX <a> button name.
-	 *    'ajax-title' => string The AJAX <a> button on-hover title.
+	 *    'class'        => string The form class.
+	 *    'id'           => string The form ID.
+	 *    'input'        => array The form input entry items.
+	 *    'ajax'         => bool Whether to support AJAX.
+	 *    'ajax-id'      => string The AJAX <a> button ID.
+	 *    'ajax-class'   => string The AJAX <a> button class.
+	 *    'ajax-tooltip' => bool Whether to wrap the ajax button in a tooltip container.
+	 *    'ajax-name'    => string The AJAX <a> button name.
+	 *    'ajax-title'   => string The AJAX <a> button on-hover title.
 	 * }
 	 * @return string The input submit button.
 	 */
@@ -239,14 +240,15 @@ trait Extension_Forms {
 		}
 
 		$defaults = [
-			'class'      => '',
-			'id'         => '',
-			'input'      => [],
-			'ajax'       => false,
-			'ajax-id'    => '',
-			'ajax-class' => '',
-			'ajax-name'  => '',
-			'ajax-title' => '',
+			'class'        => '',
+			'id'           => '',
+			'input'        => [],
+			'ajax'         => false,
+			'ajax-id'      => '',
+			'ajax-class'   => '',
+			'ajax-tooltip' => false,
+			'ajax-name'    => '',
+			'ajax-title'   => '',
 		];
 
 		$items = array_merge( $defaults, $items );
@@ -271,13 +273,18 @@ trait Extension_Forms {
 				$form
 			);
 
-			$output .= sprintf(
+			$button = sprintf(
 				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
 				\esc_attr( $items['ajax-id'] ),
-				\esc_attr( $items['ajax-class'] ),
+				\esc_attr( $items['ajax-class'] ) . ( strlen( $items['ajax-tooltip'] ) ? ' tsfem-tooltip-item' : '' ),
 				\esc_attr( $items['ajax-title'] ),
 				\esc_html( $items['ajax-name'] )
 			);
+			if ( strlen( $items['ajax-tooltip'] ) ) {
+				$output .= HTML::wrap_inline_tooltip( $button );
+			} else {
+				$output .= $button;
+			}
 		} else {
 			$output .= sprintf(
 				'<form action="%s" method=post id="%s" class="%s">%s</form>',

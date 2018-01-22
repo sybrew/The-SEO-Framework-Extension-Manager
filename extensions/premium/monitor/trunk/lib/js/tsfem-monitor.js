@@ -290,7 +290,7 @@ window.tsfem_e_monitor = {
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 
 					//* Update hover cache.
-					tsfem.initDescHover();
+					jQuery( window ).trigger( 'tsfem-reset-tooltips' );
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {
