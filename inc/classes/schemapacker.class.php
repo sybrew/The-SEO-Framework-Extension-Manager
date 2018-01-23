@@ -567,14 +567,14 @@ final class SchemaPacker {
 	 */
 	private function condition( $key, $value, $what ) {
 
-		if ( count( $what ) > 1 ) {
+		if ( is_array( $what ) && count( $what ) > 1 ) {
 			foreach ( $what as $w ) {
 				$value = $this->condition( $key, $value, $w );
 			}
 			return $value;
 		}
 
-		$c = is_array( $what ) ? current( $what ) : $what;
+		$c = is_array( $what ) ? (object) current( $what ) : $what;
 
 		switch ( $c->_if ) {
 			case 'this' :
@@ -615,11 +615,29 @@ final class SchemaPacker {
 				break;
 
 			case 'count' :
-				$action = count( $v ) === $c->_value;
+				// $v can be NULL or string.
+				if ( ! $v ) {
+					$action = 0 === $c->_value;
+				} else {
+					if ( ! is_array( $v ) && ! is_object( $v ) ) {
+						$action = 1 === $c->_value;
+					} else {
+						$action = count( $v ) === $c->_value;
+					}
+				}
 				break;
 
 			case 'count_gt' :
-				$action = count( $v ) > $c->_value;
+				// $v can be NULL or string.
+				if ( ! $v ) {
+					$action = 0 > $c->_value;
+				} else {
+					if ( ! is_array( $v ) && ! is_object( $v ) ) {
+						$action = 1 > $c->_value;
+					} else {
+						$action = count( $v ) > $c->_value;
+					}
+				}
 				break;
 
 			case 'type_is' :

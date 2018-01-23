@@ -212,6 +212,9 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
 * **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented.
 * **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
+* **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
+	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
+	* No action is required from the user.
 
 * **Updated Extensions:**
 	* Articles.
