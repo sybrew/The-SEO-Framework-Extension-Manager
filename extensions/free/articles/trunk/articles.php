@@ -76,6 +76,7 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  * @since 1.0.0
  */
 \add_filter( 'the_seo_framework_remove_amp_articles', '\\__return_true' );
+
 \add_action( 'the_seo_framework_do_before_output', __NAMESPACE__ . '\\_articles_init', 10 );
 \add_action( 'the_seo_framework_do_before_amp_output', __NAMESPACE__ . '\\_articles_init', 10 );
 \add_action( 'admin_init', __NAMESPACE__ . '\\_articles_init', 10 );
@@ -87,6 +88,7 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  * @staticvar bool $loaded True when loaded.
  * @action 'the_seo_framework_do_before_output'
  * @action 'the_seo_framework_do_before_amp_output'
+ * @action 'admin_init'
  * @priority 10
  * @access private
  *

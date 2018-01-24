@@ -221,11 +221,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Monitor.
 	* Title Fix.
 /
-* TODO see <https://wordpress.org/support/topic/troubles-when-i-migrated-a-development-site/>
 * TODO add shortcode for Local SEO addresses.
-* TODO init uptime monitoring for Monitor.
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
-* TODO WP Fastest cache footer indicates PHP errors.... TODO notify user (mail inbox keyword: WP Fastest Cache).
 
 = 1.4.0 - Extricated SEO =
 

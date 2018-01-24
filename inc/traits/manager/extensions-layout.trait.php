@@ -49,6 +49,7 @@ trait Extensions_I18n {
 		return $i18n = [
 			'free'            => \__( 'Free', 'the-seo-framework-extension-manager' ),
 			'premium'         => \__( 'Premium', 'the-seo-framework-extension-manager' ),
+			'free+premium'    => \__( 'Free+Premium', 'the-seo-framework-extension-manager' ),
 			'activate'        => \__( 'Activate', 'the-seo-framework-extension-manager' ),
 			'deactivate'      => \__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 			'version'         => \__( 'Version', 'the-seo-framework-extension-manager' ),
@@ -236,7 +237,16 @@ trait Extensions_Layout {
 		$data = static::get_extension_header( $extension['slug'] );
 		$title = sprintf( '<h4 class="tsfem-extension-title">%s</h4>', \tsf_extension_manager()->convert_markdown( \esc_html( $data['Name'] ), [ 'strong', 'em' ] ) );
 
-		$type = 'free' === $extension['type'] ? static::get_i18n( 'free' ) : static::get_i18n( 'premium' );
+		switch ( $extension['type'] ) {
+			case 'free' :
+			case 'free+premium' :
+			case 'premium' :
+				$type = static::get_i18n( $extension['type'] );
+				break;
+			default :
+				$type = '';
+				break;
+		}
 		$type = '<h5 class="tsfem-extension-type">' . \esc_html( $type ) . '</h5>';
 
 		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
@@ -443,7 +453,10 @@ trait Extensions_Layout {
 		$compatible = static::get_extension_desc_compat_item( $extension );
 
 		if ( ! empty( $data['MenuSlug'] ) && static::is_extension_active( $extension ) ) {
-			$menu = static::get_extension_desc_menu_item( $data['MenuSlug'] );
+			$_menu = static::get_extension_desc_menu_item( $data['MenuSlug'] );
+			//= The menu item can't be generated when extensions aren't loaded.
+			// This should ONLY happen when the verification fails.
+			if ( $_menu ) $menu = $_menu;
 		}
 
 		$items = implode( ' | ', compact( 'version', 'compatible', 'home', 'menu' ) );
@@ -549,8 +562,13 @@ trait Extensions_Layout {
 	 * @return string The escaped extension compatibility item.
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {
+
+		$url = \tsf_extension_manager()->get_admin_page_url( $slug );
+
+		if ( ! $url ) return '';
+
 		return \tsf_extension_manager()->get_link( [
-			'url' => \tsf_extension_manager()->get_admin_page_url( $slug ),
+			'url' => $url,
 			'content' => static::get_i18n( 'menupage' ),
 			'title' => static::get_i18n( 'visit-menupage' ),
 			'class' => 'tsfem-extension-description-menuslug',

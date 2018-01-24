@@ -93,6 +93,20 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.8.2',
 				'tested_tsf' => '3.0.0',
 			],
+			'focus' => [
+				'slug' => 'focus',
+				'network' => '0',
+				'type' => 'free+premium',
+				'area' => 'audit',
+				'version' => '1.0.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1516787293',
+				'requires' => '4.8.0',
+				'tested' => '4.9.3',
+				'requires_tsf' => '3.0.0',
+				'tested_tsf' => '3.0.3',
+			],
 			'amp' => [
 				'slug' => 'amp',
 				'network' => '0',
@@ -149,20 +163,6 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.2.0',
 				'tested_tsf' => '3.0.0',
 			],
-			'title-fix' => [
-				'slug' => 'title-fix',
-				'network' => '0',
-				'type' => 'free',
-				'area' => 'theme',
-				'version' => '1.1.0',
-				'author' => 'Sybre Waaijer',
-				'party' => 'first',
-				'last_updated' => '1515648076',
-				'requires' => '3.9.0',
-				'tested' => '4.9.2',
-				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.0',
-			],
 			'honeypot' => [
 				'slug' => 'honeypot',
 				'network' => '0',
@@ -187,6 +187,20 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1510175308',
 				'requires' => '4.4.0',
+				'tested' => '4.9.2',
+				'requires_tsf' => '2.7.0',
+				'tested_tsf' => '3.0.0',
+			],
+			'title-fix' => [
+				'slug' => 'title-fix',
+				'network' => '0',
+				'type' => 'free',
+				'area' => 'theme',
+				'version' => '1.1.0',
+				'author' => 'Sybre Waaijer',
+				'party' => 'first',
+				'last_updated' => '1515648076',
+				'requires' => '3.9.0',
 				'tested' => '4.9.2',
 				'requires_tsf' => '2.7.0',
 				'tested_tsf' => '3.0.0',
@@ -221,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '9eabde0961dc23a629a23b6a49b6264947316e3be6fa9e80816f2eeb2a3e420a',
-			'sha1'   => 'a6b820466a490c1144b9cdbe867e1b3ca80e728b',
-			'md5'    => '4f7a98ed02246e003486b2581acf4c5a',
+			'sha256' => 'cf411a393a2b8ac6b4a8300f756091e6d5870c0c9ed2ead5069e9241141bd2c1',
+			'sha1'   => '078f1add2e90cc2ff4e62ec993b00172d9af3ceb',
+			'md5'    => 'c8c83385d11d9d14f5facd13be4301ca',
 		];
 	}
 

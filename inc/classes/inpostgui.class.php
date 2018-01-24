@@ -62,6 +62,10 @@ final class InpostGUI {
 	const NONCE_ACTION = 'tsfem-e-save-inpost-nonce';
 	const NONCE_NAME = 'tsfem-e-inpost-settings';
 
+	/**
+	 * @since 1.5.0
+	 * @param string META_PREFIX The meta prefix to be stored in the database.
+	 */
 	const META_PREFIX = 'tsfem-pm';
 
 	/**
@@ -105,7 +109,7 @@ final class InpostGUI {
 		$this->register_tabs();
 
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
-		\add_action( 'save_post', [ $this, '_verify_nonce' ], 1, 2 );
+		\add_action( 'save_post', static::class . '::_verify_nonce', 1, 2 );
 
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
 	}
@@ -170,7 +174,7 @@ final class InpostGUI {
 	 * @param \WP_Post $post    Post object.
 	 * @return void Early when nonce or user can't be verified.
 	 */
-	public function _verify_nonce( $post_id, $post ) {
+	public static function _verify_nonce( $post_id, $post ) {
 
 		if ( ( empty( $_POST[ static::NONCE_NAME ] ) )
 		|| ( ! \wp_verify_nonce( \wp_unslash( $_POST[ static::NONCE_NAME ] ), static::NONCE_ACTION ) )
@@ -194,7 +198,7 @@ final class InpostGUI {
 		 * @since 1.5.0
 		 *
 		 * @param \WP_Post      $post              The post object.
-		 * @param array|null    $data              The meta data.
+		 * @param array|null    $data              The meta data, set through `pm_index` keys.
 		 * @param int (bitwise) $save_access_state The state the save is in.
 		 *    Any combination of : {
 		 *      1 = 0001 : Passed nonce and capability checks. Always set at this point.
@@ -216,7 +220,7 @@ final class InpostGUI {
 	 * @return bool True if user verification passed, and not doing autosave, cron, or ajax.
 	 */
 	public static function can_safely_write() {
-		return ! ( $save_access_state ^ 0b1111 );
+		return ! ( static::$save_access_state ^ 0b1111 );
 	}
 
 	/**
@@ -368,7 +372,7 @@ final class InpostGUI {
 	 * @see static::_verify_nonce();
 	 *
 	 * @param string $option The option.
-	 * @param string $index  The pm_index.
+	 * @param string $index  The post meta index (pm_index).
 	 * @return string The option prefix.
 	 */
 	public static function get_option_key( $option, $index ) {
