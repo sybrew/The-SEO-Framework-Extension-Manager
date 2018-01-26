@@ -85,4 +85,29 @@ final class HTML {
 			]
 		);
 	}
+
+	/**
+	 * Makes an dropdown options list from input.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $options : {
+	 *    'value' => (string) $value The option value,
+	 *    'title' => (string) $title The option title,
+	 * }
+	 * @param string|int $selected The currently selected value.
+	 * @return string The formatted options list.
+	 */
+	static function make_dropdown_option_list( array $options, $selected = '' ) {
+		$out = '';
+		foreach ( $options as $o ) {
+			$out .= sprintf(
+				'<option value="%s"%s>%s</option>',
+				\esc_attr( $o['value'] ),
+				$o['value'] == $selected ? ' selected' : '',
+				\esc_html( $o['title'] )
+			);
+		}
+		return $out;
+	}
 }

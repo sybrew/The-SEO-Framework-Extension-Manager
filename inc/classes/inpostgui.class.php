@@ -239,7 +239,7 @@ final class InpostGUI {
 		$active_tab_keys = static::$active_tab_keys;
 
 		foreach ( $registered_tabs as $index => $args ) :
-			! empty( $active_tab_keys[ $index ] ) and
+			empty( $active_tab_keys[ $index ] ) or
 				$tabs[ $index ] = $this->append_type_arg( $args, $label );
 		endforeach;
 
@@ -352,7 +352,8 @@ final class InpostGUI {
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
 	public static function register_view( $file, array $args = [], $tab = 'advanced', $priority = 10 ) {
-		$_views = static::$views;
+		//= Prevent excessive static calls and write directly to var.
+		$_views =& static::$views;
 
 		if ( ! isset( $_views[ $tab ] ) )
 			$_views[ $tab ] = [];
@@ -360,8 +361,6 @@ final class InpostGUI {
 			$_views[ $tab ][ $priority ] = [];
 
 		$_views[ $tab ][ $priority ] += [ $file, $args ];
-
-		static::$views = $_views;
 	}
 
 	/**
@@ -489,9 +488,25 @@ final class InpostGUI {
 				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex">%s</div>', $content );
 				break;
 
-			case 'checkbox' :
-				$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
+			case 'block-open' :
+				$content = sprintf( '<div class="tsf-flex-setting tsf-flex">%s', $content );
 				break;
+
+			case 'input-open' :
+			case 'content-open' :
+				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex">%s', $content );
+				break;
+
+			case 'block-close' :
+			case 'input-close' :
+			case 'content-close' :
+				$content = '</div>';
+				break;
+
+			//! Not used.
+			// case 'checkbox' :
+			// 	$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
+			// 	break;
 
 			default :
 				break;

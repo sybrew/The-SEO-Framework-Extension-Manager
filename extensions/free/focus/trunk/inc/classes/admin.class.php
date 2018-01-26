@@ -79,21 +79,25 @@ final class Admin extends Core {
 		$post_meta = [
 			'pm_index' => $this->pm_index,
 			'post_id' => \the_seo_framework()->get_the_real_ID(),
-			'type' => [
+			'focus' => [
 				'label' => [
-					'title' => \__( 'Focus', 'the-seo-framework-extension-manager' ),
-					'desc' => \__( 'Set keywords and learn how you can improve focus.', 'the-seo-framework-extension-manager' ),
+					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),
+					'desc' => \__( 'Set subjects and learn how you can improve their focus.', 'the-seo-framework-extension-manager' ),
 					'link' => 'https://theseoframework.com/extensions/focus/#usage',
 				],
-				'option' => [
-					// TODO
-				],
+				//! Don't set default, it's already pre-populated.
+				'values' => $this->get_post_meta( 'focus', null ),
+				'option_index' => 'focus',
 			],
 		];
 
 		\TSF_Extension_Manager\InpostGUI::register_view(
 			$this->get_view_location( 'inpost/inpost' ),
-			[ 'post_meta' => $post_meta ],
+			[
+				'post_meta' => $post_meta,
+				'template_cb' => [ $this, '_output_focus_template' ],
+				'is_premium' => \tsf_extension_manager()->is_premium_user(),
+			],
 			'audit'
 		);
 	}
@@ -168,6 +172,37 @@ final class Admin extends Core {
 				$this->update_post_meta( $key, $value );
 			}
 		}
+	}
+
+	/**
+	 * Outputs focus template.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param array $args The focus template arguments.
+	 */
+	public function _output_focus_template( array $args ) {
+		$this->get_view( 'inpost/focus-template', $args );
+	}
+
+	/**
+	 * Fetches files based on input to reduce memory overhead.
+	 * Passes on input vars.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $view The file name.
+	 * @param array $args The arguments to be supplied within the file name.
+	 *        Each array key is converted to a variable with its value attached.
+	 */
+	protected function get_view( $view, array $args = [] ) {
+
+		foreach ( $args as $key => $val ) {
+			$$key = $val;
+		}
+
+		include $this->get_view_location( $view );
 	}
 
 	/**

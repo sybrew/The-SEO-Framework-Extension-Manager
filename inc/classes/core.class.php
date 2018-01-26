@@ -1334,11 +1334,12 @@ class Core {
 	 * Determines whether the plugin's use is premium.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Now public. Enjoy.
 	 * @staticvar bool $cache
 	 *
 	 * @return bool True if the plugin is connected to the API handler.
 	 */
-	final protected function is_premium_user() {
+	final public function is_premium_user() {
 		return 'Premium' === $this->get_option( '_activation_level' );
 	}
 

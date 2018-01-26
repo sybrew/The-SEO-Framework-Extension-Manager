@@ -91,21 +91,30 @@ The data used for output is fetched automatically from your post's structure.
 * **Images:** The images set for the article. This defaults to the post's SEO settings image, and will fall back to the "Featured Image".
 * **Published date:** The date the article was published.
 * **Modified date:** The date the article was last modified.
-* **Author:** The article's author, set in the "Author" metabox. Defaults to the author's display name.
+* **Author:** The article's author, set in the "Author" meta box. Defaults to the author's display name.
 * **Publisher:** The organization, which defaults to the "Schema.org" settings within The SEO Framework.
 * **Description:** The article's description, which is the same as the description output by The SEO Framework.
 
-### Required data
+### Required fields
 
-Most data is required before the Article data is outputted, for completeness.
+Most of the fields above are required before the Article type data is outputted.
 
-In general, you shouldn't have to worry about the output.
-However, for valid AMP output, you need to make sure the following fields are filled in.
+In general, you shouldn't have to worry about the output with Articles.
+The extension automatically checks whether the output is valid.
 
-**These fields require special attention for AMP:**
+Google's [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool) might annotate the Articles data as invalid.
+This is because there are two different requirement standards for AMP and non-AMP pages. The testing tool enforces the AMP standard.
 
-* **Image:** This image needs to be set in the in-post SEO settings' metabox. Alternatively, you can use the Featured Image.
-* **Publisher:** The website must represent an Organization, and it must include a logo, which is taken from "Customizer's Site Icon" (requires theme support).
+#### Special attention for AMP
+
+For valid AMP output, you need to make sure the following two fields are available.
+These fields aren't required for non-AMP, but they are recommended.
+
+* **Image:** This image needs to be set in the in-post SEO social settings.
+	* Alternatively, you can use the Featured Image.
+* **Publisher:** The website must represent an Organization and it must include a logo.
+	* The logo is taken from **"SEO Settings -> Schema Settings -> Presence -> Website logo"**.  
+	* Alternatively, you can set a site icon in Customizer, this requires theme support.
 
 ### Types
 
