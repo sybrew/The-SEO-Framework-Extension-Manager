@@ -92,7 +92,13 @@ final class InpostGUI {
 	private static $views = [];
 
 	/**
-	 * Prepares the class.
+	 * @since 1.5.0
+	 * @param array $tabs The registered scripts.
+	 */
+	private static $scripts = [];
+
+	/**
+	 * Prepares the class and loads constructor.
 	 *
 	 * Use this if the actions need to be registered early, but nothing else of
 	 * this class is needed yet.
@@ -108,9 +114,14 @@ final class InpostGUI {
 
 		$this->register_tabs();
 
+		//= Scripts.
+		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
+
+		//= Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
 		\add_action( 'save_post', static::class . '::_verify_nonce', 1, 2 );
 
+		//= Output.
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
 	}
 
@@ -144,6 +155,73 @@ final class InpostGUI {
 				'args' => [ 'advanced' ],
 			],
 		];
+	}
+
+	public function _prepare_admin_scripts( $hook ) {
+
+		if ( 'post.php' !== $hook )
+			return;
+
+		\do_action_ref_array( 'tsfem_inpostgui_enqueue_scripts', [ static::class, $hook ] );
+
+		$this->output_scripts();
+	}
+
+	public static function register_script( array $script ) {
+		static::$scripts[] = $script;
+	}
+
+	private function output_scripts() {
+
+		//= Register them first to accomodate for dependencies.
+		foreach ( static::$scripts as $s ) {
+			switch ( $s['type'] ) {
+				case 'css' :
+					\wp_register_style( $s['name'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
+					break;
+				case 'js' :
+					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
+					break;
+			}
+		}
+
+		foreach ( static::$scripts as $s ) {
+			switch ( $s['type'] ) {
+				case 'css' :
+					\wp_enqueue_style( $s['name'] );
+					break;
+				case 'js' :
+					\wp_enqueue_script( $s['name'] );
+					break;
+			}
+		}
+	}
+
+	/**
+	 * Generates file URL.
+	 *
+	 * @since 1.5.0
+	 * @staticvar string $min
+	 * @staticvar string $rtl
+	 * @NOTE smell: dupe from UI.trait
+	 *
+	 * @param array $script The script arguments.
+	 * @param array $type Either 'js' or 'css'.
+	 * @return string The file URL.
+	 */
+	final private function generate_file_url( array $script, $type = 'js' ) {
+
+		static $min, $rtl;
+
+		if ( ! isset( $min, $rtl ) ) {
+			$min = \the_seo_framework()->script_debug ? '' : '.min';
+			$rtl = \is_rtl() ? '.rtl' : '';
+		}
+
+		if ( 'js' === $type )
+			return $script['base'] . "lib/js/{$script['name']}{$min}.js";
+
+		return $script['base'] . "lib/css/{$script['name']}{$rtl}{$min}.css";
 	}
 
 	/**

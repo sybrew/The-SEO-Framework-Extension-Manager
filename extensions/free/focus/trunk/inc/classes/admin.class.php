@@ -55,10 +55,30 @@ final class Admin extends Core {
 		//= Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		//= Defered because we need to access the meta object after current_screen.
+		\add_action( 'tsfem_inpostgui_enqueue_scripts', [ $this, '_enqueue_inpost_scripts' ] );
+
+		//= Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
+	}
+
+	public function _enqueue_inpost_scripts( $inpostgui ) {
+		$inpostgui::register_script( [
+			'type' => 'js',
+			'name' => 'tsfem-inpost-focus',
+			'base' => TSFEM_E_FOCUS_DIR_URL,
+			'ver' => TSFEM_E_FOCUS_VERSION,
+			'deps' => [ 'jquery' ],
+			'l10n' => null,
+		] );
+		$inpostgui::register_script( [
+			'type' => 'css',
+			'name' => 'tsfem-inpost-focus',
+			'base' => TSFEM_E_FOCUS_DIR_URL,
+			'ver' => TSFEM_E_FOCUS_VERSION,
+			'deps' => [],
+		] );
 	}
 
 	/**
@@ -71,23 +91,20 @@ final class Admin extends Core {
 	 */
 	public function _prepare_inpost_views() {
 
-		if ( ! \the_seo_framework()->is_single_admin() )
-			return;
-
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'audit' );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
 			'post_id' => \the_seo_framework()->get_the_real_ID(),
-			'focus' => [
+			'kw' => [
 				'label' => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),
 					'desc' => \__( 'Set subjects and learn how you can improve their focus.', 'the-seo-framework-extension-manager' ),
 					'link' => 'https://theseoframework.com/extensions/focus/#usage',
 				],
 				//! Don't set default, it's already pre-populated.
-				'values' => $this->get_post_meta( 'focus', null ),
-				'option_index' => 'focus',
+				'values' => $this->get_post_meta( 'kw', null ),
+				'option_index' => 'kw',
 			],
 		];
 

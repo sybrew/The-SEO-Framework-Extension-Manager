@@ -221,21 +221,30 @@
 .tsfem-e-monitor-collapse-content {
 	margin: 20px 0;
 	padding: 0 20px;
-	position: relative;
 	overflow: hidden;
-	max-height: 800px;
-	opacity: 1;
-	-webkit-transform: translate(0, 0);
-	transform: translate(0, 0);
-	transition: all 0.5s ease-in-out;
+	display: block;
+	-webkit-animation: tsfem-e-monitor-fade-in .25s;
+	animation: tsfem-e-monitor-fade-in .25s;
 }
 
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked ~ .tsfem-e-monitor-collapse-content {
-	-webkit-transform: translate(0, 25%);
-	transform: translate(0, 25%);
-	margin: 0;
-	max-height: 0;
-	opacity: 0;
+	display: none;
+}
+
+@-webkit-keyframdes tsfem-e-monitor-fade-in {
+	from {
+		opacity: 0;
+	} to {
+		opacity: 1;
+	}
+}
+
+@keyframes tsfem-e-monitor-fade-in {
+	from {
+		opacity: 0;
+	} to {
+		opacity: 1;
+	}
 }
 
 /* # Start Control Panel.

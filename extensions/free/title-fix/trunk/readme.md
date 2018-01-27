@@ -40,7 +40,7 @@ When The SEO Framework detects incorrect usage, it will set up a flag. This exte
 When the flag is found, this extension will look for the title tag in the source.
 When found, it will overwrite the title tag with a correct version.
 
-All this happens before it's being sent to the page visitor or crawler in less than 2 miliseconds.
+All this happens before it's being sent to the page visitor or crawler in less than 2 milliseconds.
 
 ## Usage
 
@@ -56,7 +56,7 @@ There is no setup required and no options are available.
 
 ### Still not fixed?
 
-In unlikely occassions, the wrong title detection flag might not be set up.
+In unlikely occasions, the wrong title detection flag might not be set up.
 
 To force a fix of the title, add the following filter to your theme's `functions.php` file:
 
@@ -71,7 +71,7 @@ To force a fix of the title, add the following filter to your theme's `functions
 
 * **Removed:** filter `the_seo_framework_force_title_fix`.
 	* In preparation for TSF 3.1.
-	* This was added to add multisite support for the plugin, but this now an extension.
+	* This was added to add multisite support for the plugin, but as this now an extension it automatically has support.
 
 ### 1.0.3
 

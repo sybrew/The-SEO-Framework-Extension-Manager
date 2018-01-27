@@ -62,9 +62,9 @@ class Core {
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
 		$this->pm_index = 'focus';
-		//= Fills 5 sequential array keys with these values.
 		$this->pm_defaults = [
-			'focus' => array_fill( 0, 5, [
+			//= Fills 5 sequential array keys with these values.
+			'kw' => array_fill( 0, 5, [
 				'active' => false,
 				'keyword' => '',
 				'subject' => '',

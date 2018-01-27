@@ -183,7 +183,7 @@
 	display: none;
 }
 
-@-webkit-keyframdes tsfemForm-fade-in {
+@-webkit-keyframes tsfemForm-fade-in {
 	from {
 		opacity: 0;
 	} to {

@@ -186,13 +186,12 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **New Extensions:**
 
-* **Debugger**: This free extension enables The SEO Framework's debugging interface for admin users.
-	/
-	* TODO Is this actually possible as extensions are loaded after TSF? I'd like to think so...
+* **Focus:** This free extension guides you through the process of writing quality content with focus keywords and subjects.
 
-**Important note:**
+**Important notes:**
 
-* This plugin now requires WordPress 4.6 or later.
+1. This plugin now requires WordPress 4.6 or later, or it will deactivate itself.
+2. This plugin now requires The SEO Framework 2.8 or later, or it will stay dormant.
 
 **Plugin Improvements:**
 
@@ -217,9 +216,12 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* No action is required from the user.
 
 * **Updated Extensions:**
-	* Articles.
-	* Monitor.
-	* Title Fix.
+	/
+	* Local SEO
+	* TODO AMP
+	* Articles
+	* Monitor
+	* Title Fix
 /
 * TODO add shortcode for Local SEO addresses.
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...

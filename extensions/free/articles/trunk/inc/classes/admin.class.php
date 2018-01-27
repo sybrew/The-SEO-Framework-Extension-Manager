@@ -54,7 +54,7 @@ final class Admin extends Core {
 		//= Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		//= Defered because we need to access the meta object after current_screen.
+		//= Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
@@ -70,6 +70,7 @@ final class Admin extends Core {
 	 */
 	public function _prepare_inpost_views() {
 
+		//= Only output on Single/Post.
 		if ( ! \the_seo_framework()->is_single_admin() )
 			return;
 
