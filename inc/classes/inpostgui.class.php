@@ -181,6 +181,8 @@ final class InpostGUI {
 					break;
 				case 'js' :
 					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
+					isset( $s['l10n'] )
+						and \wp_localize_script( $s['name'], $s['l10n']['name'], $s['l10n']['data'] );
 					break;
 			}
 		}

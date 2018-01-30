@@ -2,6 +2,7 @@
 .tsfem-e-focus-collapse-wrap {
 	position: relative;
 	width: 100%;
+	box-shadow: 0 0px 2px 1px #ccc inset;
 }
 
 .tsfem-e-focus-collapse-checkbox {
@@ -52,17 +53,20 @@
 /* # Collapse
 ----------------------------------------------*/
 
+.tsfem-e-focus-collapse-content-wrap {
+	overflow: hidden;
+	display: block;
+	-webkit-animation: tsfem-e-focus-fade-in .5s;
+	animation: tsfem-e-focus-fade-in .5s;
+}
+
+.tsfem-e-focus-collapse-checkbox:checked ~ .tsfem-e-focus-collapse-content-wrap {
+	display: none;
+}
+
 .tsfem-e-focus-collapse-content {
 	margin: 20px 0;
 	padding: 0 20px;
-	overflow: hidden;
-	display: block;
-	-webkit-animation: tsfem-e-focus-fade-in .25s;
-	animation: tsfem-e-focus-fade-in .25s;
-}
-
-.tsfem-e-focus-collapse-checkbox:checked ~ .tsfem-e-focus-collapse-content {
-	display: none;
 }
 
 @-webkit-keyframdes tsfem-e-focus-fade-in {
@@ -97,6 +101,12 @@
 	height: 100%;
 	display: block;
 	cursor: inherit !important;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .tsfem-e-focus-arrow {
@@ -115,7 +125,7 @@
 	position: absolute;
 	width: 6px;
 	top: 50%;
-	left: 50%;
+	left: calc( 50% - 8px ); /* 2px line + 6px box */
 	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
@@ -148,12 +158,13 @@
 
 .tsfem-e-focus-highligher input {
 	position: absolute;
-	width: 0;
-	height: 0;
+	width: 0 !important;
+	height: 0 !important;
 	opacity: 0;
 	margin: 0 !important;
 	padding: 0 !important;
 	border: 0;
+	z-index: -9001;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;

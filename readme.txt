@@ -225,6 +225,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 /
 * TODO add shortcode for Local SEO addresses.
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...
+* TODO Fix Monitor Jetpack sitemap recognition.
 
 = 1.4.0 - Extricated SEO =
 

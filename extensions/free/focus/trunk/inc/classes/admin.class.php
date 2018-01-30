@@ -63,18 +63,72 @@ final class Admin extends Core {
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
 	}
 
+	private function get_focus_elements() {
+		/**
+		 * Applies filters 'the_seo_framework_focus_elements'
+		 *
+		 * When an item is dominating, the order is considered. When the item is
+		 * the last dominating thing on the list, it's the only thing used for the scoring.
+		 *
+		 * When an item is appending, and no dominating items are available, then
+		 * it's considered as an addition for scoring.
+		 *
+		 * The querySelector fields must be visible for highlighting. When it's
+		 * not visible, highlighting is ignored.
+		 *
+		 * The fields must be in order of importance when dominating.
+		 * Apply this filter with a high $priority value to ensure domination.
+		 * @see WordPress `add_filter()`
+		 * @see `array_push()`
+		 * @see `array_unshift()`
+		 * @since 1.0.0
+		 *
+		 * @param array $elements : { 'type' => [
+		 *    'querySelector' => string 'append|dominate'.
+		 * }
+		 */
+		return \apply_filters_ref_array( 'the_seo_framework_focus_elements', [
+			[
+				'pageTitle' => [
+					'#titlewrap > input' => 'append',
+				],
+				'pageUrl' => [
+					'#editable-post-name-full' => 'dominate',
+				],
+				'pageContent' => [
+					'#content_ifr #tinymce' => 'append',
+				],
+				'seoTitle' => [
+					'#autodescription_title' => 'dominate',
+				],
+				'seoDescription' => [
+					'#autodescription_description' => 'dominate',
+				],
+			],
+		] );
+	}
+
 	public function _enqueue_inpost_scripts( $inpostgui ) {
 		$inpostgui::register_script( [
 			'type' => 'js',
-			'name' => 'tsfem-inpost-focus',
+			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
 			'deps' => [ 'jquery' ],
-			'l10n' => null,
+			'l10n' => [
+				'name' => 'tsfem_e_focusInpostL10n',
+				'data' => [
+					'post_ID' => $GLOBALS['post']->ID,
+					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
+					'isPremium' => \tsf_extension_manager()->is_premium_user(),
+					'locale' => \get_locale(),
+					'focusElements' => $this->get_focus_elements(),
+				],
+			],
 		] );
 		$inpostgui::register_script( [
 			'type' => 'css',
-			'name' => 'tsfem-inpost-focus',
+			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
 			'deps' => [],
