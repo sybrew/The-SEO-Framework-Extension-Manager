@@ -838,7 +838,7 @@ class Core {
 		 * Create new bits on first run.
 		 * Prevents random abstract collision by filtering odd numbers.
 		 *
-		 * Uses various primes to prevent overflow (which is heavy and can loop) on x86 architecture.
+		 * Uses various primes to prevent overflow (which is heavy and can loop) on 32 bit architecture.
 		 * Time can never be 0, because it will then loop.
 		 */
 		set : {
@@ -855,13 +855,13 @@ class Core {
 
 			    $_i = $_i * $_prime
 			and is_int( $_i )
-			and ( $_i + $_boundary ) < PHP_INT_MAX
+			and ( $_i + $_boundary ) < PHP_INT_MAX // if this fails, there's a precision error in PHP.
 			and $bit = $_bit = mt_rand( ~ $_i, $_i )
 			and $bit & 1
 			and $bit = $_bit++;
 		}
 
-		//* Hit 0 or is overflown on x86. Retry.
+		//* Hit 0 or is overflown on 32 bit. Retry.
 		if ( 0 === $bit || is_double( $bit ) ) {
 			$_prime = array_rand( array_flip( [ 317539, 58171, 16417, 6997, 379, 109, 17 ] ) );
 			goto set;

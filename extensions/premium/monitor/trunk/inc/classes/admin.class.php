@@ -1294,17 +1294,31 @@ final class Admin extends Api {
 
 		$nonce_action = $this->_get_nonce_action_field( 'disconnect' );
 		$nonce = $this->_get_nonce_field( 'disconnect' );
-		$field_id = 'disconnect-switcher';
+		$s_field_id = 'disconnect-switcher';
 		$disconnect_i18n = \__( 'Disconnect', 'the-seo-framework-extension-manager' );
 		$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 		$da_i18n = \__( 'Disconnect site?', 'the-seo-framework-extension-manager' );
 
-		$button = '<button type=submit for="' . $field_id . '-validator" title="' . \esc_attr( $ays_i18n ) . '" class="tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning">' . \esc_html( $disconnect_i18n ) . '</button>';
-
 		$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
-						. '<input type=checkbox id="' . $field_id . '-action" value=1 />'
-						. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="tsfem-button tsfem-button-flag">' . \esc_html( $disconnect_i18n ) . '</label>'
-						. $button
+						. sprintf(
+							'<input type=checkbox id="%s-action" value=1 />',
+							$s_field_id
+						)
+						. sprintf(
+							'<label for="%s-action" title="%s" class="tsfem-button tsfem-button-flag">%s</label>',
+							$s_field_id,
+							\esc_attr( $da_i18n ),
+							\esc_html( $disconnect_i18n )
+						)
+						. vsprintf(
+							'<button type=submit for="%s-validator" title="%s" class="%s">%s</button>',
+							[
+								$s_field_id,
+								\esc_attr( $ays_i18n ),
+								'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning',
+								\esc_html( $disconnect_i18n ),
+							]
+						)
 					. '</div></div>';
 
 		$button = sprintf(
