@@ -53,15 +53,22 @@ window.tsfem_e_focus_inpost = {
 
 	},
 
+	/**
+	 * Parses focus elements and their existence and registers them as available areas.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @function
+	 */
 	setFocusAreas: function() {
 
 		let elements;
 
-		if ( 'object' === typeof tsfem_e_focusInpostL10n
-		  && tsfem_e_focusInpostL10n.hasOwnProperty( 'focusElements' )
-		) elements = tsfem_e_focusInpostL10n.focusElements;
+		if ( tsfem_e_focusInpostL10n.hasOwnProperty( 'focusElements' ) )
+			elements = tsfem_e_focusInpostL10n.focusElements;
 
-		if ( ! elements ) return;
+		if ( ! elements || elements !== Object( elements ) ) return;
 
 		let areas = {},
 			hasDominant = false,
@@ -72,11 +79,15 @@ window.tsfem_e_focus_inpost = {
 		//= Filter elements.
 		for ( let currentElement in elements ) {
 			el = elements[ currentElement ];
-			if ( el && 'object' === typeof el ) {
+			if ( el === Object( el ) ) {
 				hasDominant = false;
 				lastDominant = '';
 				keys = [];
 				for ( let selector in el ) {
+					//= Skip if the selector doesn't exist.
+					if ( ! document.querySelector( selector ) )
+						continue;
+
 					if ( 'dominate' === el[ selector ] ) {
 						hasDominant = true;
 						lastDominant = selector;
@@ -88,12 +99,18 @@ window.tsfem_e_focus_inpost = {
 				if ( hasDominant ) {
 					areas[ currentElement ] = [ lastDominant ];
 				} else {
-					areas[ currentElement ] = keys;
+					keys.length && (
+						areas[ currentElement ] = keys
+					);
 				}
 			}
 		}
 
 		tsfem_e_focus_inpost.focusAreas = areas;
+	},
+
+	addFocusArea: function( area, selector ) {
+
 	},
 
 	doCheckup: function() {
@@ -155,10 +172,16 @@ window.tsfem_e_focus_inpost = {
 	},
 
 	disableFocus: function() {
+		let el = document.getElementById( 'tsf-flex-inpost-tab-audit-content' )
+			.querySelector( '.tsf-flex-setting-input' );
 
+		if ( el instanceof Element )
+			el.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
 	},
 
 	onReady: function( event ) {
+
+		tsfem_e_focus_inpost.setFocusAreas();
 
 		//= There's nothing to focus on.
 		if ( 0 === Object.keys( tsfem_e_focus_inpost.focusAreas ).length ) {
@@ -180,8 +203,6 @@ window.tsfem_e_focus_inpost = {
 	 * @return {undefined}
 	 */
 	load: function( $ ) {
-
-		tsfem_e_focus_inpost.setFocusAreas();
 
 		//= Reenable focus elements.
 		$( '.tsfem-e-focus-enable-if-js' ).removeProp( 'disabled' );

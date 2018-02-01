@@ -397,8 +397,9 @@ final class Settings {
 	 */
 	private function get_test_button() {
 		return sprintf(
-			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external">%s</button>',
+			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
 			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
+			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);
 	}

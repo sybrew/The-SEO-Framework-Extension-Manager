@@ -96,7 +96,7 @@ final class Admin extends Core {
 					'#editable-post-name-full' => 'dominate',
 				],
 				'pageContent' => [
-					'#content_ifr #tinymce' => 'append',
+					'#content' => 'append',
 				],
 				'seoTitle' => [
 					'#autodescription_title' => 'dominate',
@@ -124,6 +124,9 @@ final class Admin extends Core {
 					'locale' => \get_locale(),
 					'focusElements' => $this->get_focus_elements(),
 				],
+			],
+			'tmpl' => [
+				'file' => $this->get_view_location( 'inpost/js-templates' ),
 			],
 		] );
 		$inpostgui::register_script( [

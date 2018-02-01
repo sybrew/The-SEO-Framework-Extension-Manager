@@ -94,8 +94,10 @@ final class InpostGUI {
 	/**
 	 * @since 1.5.0
 	 * @param array $tabs The registered scripts.
+	 * @param array $templates The registered templates.
 	 */
 	private static $scripts = [];
+	private static $templates = [];
 
 	/**
 	 * Prepares the class and loads constructor.
@@ -116,6 +118,7 @@ final class InpostGUI {
 
 		//= Scripts.
 		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
+		\add_action( 'admin_footer', [ $this, '_output_templates' ] );
 
 		//= Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
@@ -157,21 +160,67 @@ final class InpostGUI {
 		];
 	}
 
+	/**
+	 * Prepares scripts for output on post edit screens.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $hook The current admin hook.
+	 */
 	public function _prepare_admin_scripts( $hook ) {
 
-		if ( 'post.php' !== $hook )
+		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) )
 			return;
 
+		/**
+		 * Does action 'tsfem_inpostgui_enqueue_scripts'
+		 *
+		 * Use this hook to enqueue scripts on the post edit screens.
+		 *
+		 * @since 1.5.0
+		 * @param string $class The static class caller name.
+		 * @param string $hook  The current page hook.
+		 */
 		\do_action_ref_array( 'tsfem_inpostgui_enqueue_scripts', [ static::class, $hook ] );
 
-		$this->output_scripts();
+		$this->enqueue_scripts();
 	}
 
+	/**
+	 * Registers script to be enqueued.
+	 *
+	 * @since 1.5.0
+	 * @uses static::$scripts
+	 * @see $this->enqueue_scripts()
+	 *
+	 * @param array $script The script : {
+	 *   'type' => string 'css|js',
+	 *   'name' => string The unique script name, which is also the file name,
+	 *   'deps' => array  Dependencies,
+	 *   'ver'  => string Script version,
+	 *   'l10n' => array : {
+	 *      'name' => string The JavaScript variable,
+	 *      'data' => mixed  The l10n properties,
+	 *   }
+	 *   'tmpl' => array Either multidimensional or single : {
+	 *      'file' => string $file. The full file location,
+	 *      'args' => array $args. Optional,
+	 *    }
+	 * }
+	 */
 	public static function register_script( array $script ) {
 		static::$scripts[] = $script;
 	}
 
-	private function output_scripts() {
+	/**
+	 * Enqueues scripts, l10n and templates.
+	 *
+	 * @since 1.5.0
+	 * @uses static::$scripts
+	 * @uses $this->generate_file_url()
+	 * @uses $this->register_template()
+	 */
+	private function enqueue_scripts() {
 
 		//= Register them first to accomodate for dependencies.
 		foreach ( static::$scripts as $s ) {
@@ -183,6 +232,8 @@ final class InpostGUI {
 					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
 					isset( $s['l10n'] )
 						and \wp_localize_script( $s['name'], $s['l10n']['name'], $s['l10n']['data'] );
+					isset( $s['tmpl'] )
+						and $this->register_template( $s['tmpl'] );
 					break;
 			}
 		}
@@ -197,6 +248,40 @@ final class InpostGUI {
 					break;
 			}
 		}
+	}
+
+	/**
+	 * Registers template for output in the admin footer.
+	 *
+	 * Set a multidimensional array to register multiple views.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $templates, single or multi-dimensional : {
+	 *   'file' => string $file. The full file location,
+	 *   'args' => array $args. Optional,
+	 * }
+	 */
+	private function register_template( array $templates ) {
+		//= Wrap template if it's only one on the base.
+		if ( isset( $templates['file'] ) )
+			$templates = [ $templates ];
+
+		foreach ( $templates as $t )
+			static::$templates[] = [ $t['file'], \tsf_extension_manager()->coalesce_var( $t['args'], [] ) ];
+	}
+
+	/**
+	 * Outputs template views.
+	 *
+	 * The loop will only run when templates are registered.
+	 * @see $this->enqueue_scripts()
+	 *
+	 * @since 1.5.0
+	 */
+	public function _output_templates() {
+		foreach ( static::$templates as $template )
+			$this->output_view( $template[0], $template[1] );
 	}
 
 	/**
