@@ -552,11 +552,12 @@ final class InpostGUI {
 	 *
 	 * @param string $what    The type of wrap to use.
 	 * @param string $content The content to wrap. Should be escaped.
+	 * @param string $id      The wrap ID.
 	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
-	public static function wrap_flex( $what, $content, $for = '' ) {
+	public static function wrap_flex( $what, $content, $id = '', $for = '' ) {
 		//= Input should already be escaped.
-		echo static::construct_flex_wrap( $what, $content, $for );
+		echo static::construct_flex_wrap( $what, $content, $id, $for );
 	}
 
 	/**
@@ -569,12 +570,13 @@ final class InpostGUI {
 	 * @uses static::construct_flex_wrap();
 	 * @see documentation static::construct_flex_wrap();
 	 *
-	 * @param string $what    The type of wrap to use.
+	 * @param string $what     The type of wrap to use.
 	 * @param array  $contents The contents to wrap. Should be escaped.
+	 * @param string $id       The wrap ID.
 	 */
-	public static function wrap_flex_multi( $what, array $contents ) {
+	public static function wrap_flex_multi( $what, array $contents, $id = '' ) {
 		//= Input should already be escaped.
-		echo static::contruct_flex_wrap_multi( $what, $contents );
+		echo static::contruct_flex_wrap_multi( $what, $contents, $id );
 	}
 
 	/**
@@ -587,11 +589,12 @@ final class InpostGUI {
 	 * @uses static::construct_flex_wrap();
 	 * @see documentation static::construct_flex_wrap();
 	 *
-	 * @param string $what    The type of wrap to use.
+	 * @param string $what     The type of wrap to use.
 	 * @param array  $contents The contents to wrap. Should be escaped.
+	 * @param string $id       The wrap ID.
 	 */
-	public static function contruct_flex_wrap_multi( $what, array $contents ) {
-		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ) );
+	public static function contruct_flex_wrap_multi( $what, array $contents, $id = '' ) {
+		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ), $id );
 	}
 
 	/**
@@ -611,24 +614,28 @@ final class InpostGUI {
 	 *               'content'      : Same as 'input'.
 	 *               'checkbox'     : Wraps a checkbox and its label.
 	 * @param string $content The content to wrap. Should be escaped.
+	 * @param string $id      The wrap ID.
 	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
-	public static function construct_flex_wrap( $what, $content, $for = '' ) {
+	public static function construct_flex_wrap( $what, $content, $id = '', $for = '' ) {
+
+		$id = $id ? "id=$id" : '';
 
 		switch ( $what ) :
 			case 'block' :
-				$content = sprintf( '<div class="tsf-flex-setting tsf-flex">%s</div>', $content );
+				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
 			case 'label' :
 				$content = sprintf(
-					'<div class="tsf-flex-setting-label tsf-flex">
+					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 							<div class="tsf-flex-setting-label-item tsf-flex">
 								%s
 							</div>
 						</div>
 					</div>',
+					$id,
 					$content
 				);
 				break;
@@ -636,13 +643,14 @@ final class InpostGUI {
 			case 'label-input' :
 				$for or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
 				$content = sprintf(
-					'<div class="tsf-flex-setting-label tsf-flex">
+					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 							<label for="%s" class="tsf-flex-setting-label-item tsf-flex">
 								%s
 							</label>
 						</div>
 					</div>',
+					$id,
 					$for,
 					$content
 				);
@@ -650,16 +658,16 @@ final class InpostGUI {
 
 			case 'input' :
 			case 'content' :
-				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex">%s</div>', $content );
+				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
 			case 'block-open' :
-				$content = sprintf( '<div class="tsf-flex-setting tsf-flex">%s', $content );
+				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s', $id, $content );
 				break;
 
 			case 'input-open' :
 			case 'content-open' :
-				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex">%s', $content );
+				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s', $id, $content );
 				break;
 
 			case 'block-close' :

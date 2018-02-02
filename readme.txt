@@ -214,6 +214,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
 	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
 	* No action is required from the user.
+* **Fixed:** When you're requesting to the geocoding services too rapidly (e.g. in Local SEO), you're now correctly notified.
 
 * **Updated Extensions:**
 	/

@@ -34,7 +34,8 @@
  */
 window.tsfem_e_focus_inpost = {
 
-	focusAreas: {},
+	focusRegistry: {},
+	activeFocusAreas: {},
 
 	/**
 	 * Gets string until last numeric ID index.
@@ -54,63 +55,117 @@ window.tsfem_e_focus_inpost = {
 	},
 
 	/**
+	 * Updates focus registry selectors.
+	 *
+	 * When adding objects dynamically, it's best to always use the append type.
+	 *
+	 * @since 1.0.0
+	 * @see tsfem_e_focus_inpost.updateActiveFocusAreas() To be called after the
+	 *      registry has been updated.
+	 * @access private
+	 *
+	 * @function
+	 * @param {!Object} elements : {
+	 *   'context' => [ selector => string Type 'append|dominate' ]
+	 * }
+	 * @param {bool|undefined} set Whether to add or remove the elements.
+	 */
+	updateFocusRegistry: function( elements, set ) {
+
+		if ( ! elements || elements !== Object( elements ) ) return;
+
+		let registry = tsfem_e_focus_inpost.focusRegistry;
+		set = !! set;
+
+		let selectors, type;
+
+		//= Filter elements.
+		for ( let context in elements ) {
+			selectors = elements[ context ];
+			if ( selectors !== Object( selectors ) )
+				continue;
+
+			registry[ context ]
+				|| ( registry[ context ] = {} );
+
+			for ( let selector in selectors ) {
+				type = selectors[ selector ];
+
+				//= Test if entries exist.
+				registry[ context ][ type ]
+					|| ( registry[ context ][ type ] = [] );
+
+				if ( set ) {
+					if ( registry[ context ][ type ].hasOwnProperty( selector ) )
+						continue;
+
+					registry[ context ][ type ].push( selector );
+				} else {
+					//= Unset
+					registry[ context ][ type ] =
+						registry[ context ][ type ].filter( s => s !== selector );
+				}
+			}
+		}
+		tsfem_e_focus_inpost.focusRegistry = registry;
+	},
+
+	/**
 	 * Parses focus elements and their existence and registers them as available areas.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 *
 	 * @function
+	 * @param {!Object} elements : {
+	 *   'context' => [ selector => string type 'append|dominate' ]
+	 * }
 	 */
-	setFocusAreas: function() {
+	updateActiveFocusAreas: function() {
 
-		let elements;
-
-		if ( tsfem_e_focusInpostL10n.hasOwnProperty( 'focusElements' ) )
-			elements = tsfem_e_focusInpostL10n.focusElements;
+		let elements = tsfem_e_focus_inpost.focusRegistry;
 
 		if ( ! elements || elements !== Object( elements ) ) return;
 
 		let areas = {},
+			types = {},
 			hasDominant = false,
 			lastDominant = '',
-			keys = [],
-			el;
+			keys = [];
 
-		//= Filter elements.
-		for ( let currentElement in elements ) {
-			el = elements[ currentElement ];
-			if ( el === Object( el ) ) {
-				hasDominant = false;
-				lastDominant = '';
-				keys = [];
-				for ( let selector in el ) {
+		//= Filter elements. The input is expected.
+		for ( let context in elements ) {
+			types = elements[ context ];
+			hasDominant = false;
+			lastDominant = '';
+			keys = [];
+			if ( 'dominate' in types ) {
+				types.dominate.forEach( selector => {
 					//= Skip if the selector doesn't exist.
 					if ( ! document.querySelector( selector ) )
-						continue;
-
-					if ( 'dominate' === el[ selector ] ) {
-						hasDominant = true;
-						lastDominant = selector;
-					} else {
-						//? No need to push if there's a dominant.
-						hasDominant || keys.push( selector );
-					}
-				}
-				if ( hasDominant ) {
-					areas[ currentElement ] = [ lastDominant ];
-				} else {
-					keys.length && (
-						areas[ currentElement ] = keys
-					);
-				}
+						return;
+					hasDominant = true;
+					lastDominant = selector;
+				} );
+			}
+			if ( ! hasDominant && 'append' in types ) {
+				types.append.forEach( selector => {
+					//= Skip if the selector doesn't exist.
+					if ( ! document.querySelector( selector ) )
+						return;
+					keys.push( selector );
+				} );
+			}
+			if ( hasDominant ) {
+				areas[ context ] = [ lastDominant ];
+			} else {
+				keys.length && (
+					areas[ context ] = keys
+				);
 			}
 		}
 
-		tsfem_e_focus_inpost.focusAreas = areas;
-	},
-
-	addFocusArea: function( area, selector ) {
-
+		tsfem_e_focus_inpost.activeFocusAreas = areas;
 	},
 
 	doCheckup: function() {
@@ -172,7 +227,7 @@ window.tsfem_e_focus_inpost = {
 	},
 
 	disableFocus: function() {
-		let el = document.getElementById( 'tsf-flex-inpost-tab-audit-content' )
+		let el = document.getElementById( 'tsfem-e-focus-analysis-wrap' )
 			.querySelector( '.tsf-flex-setting-input' );
 
 		if ( el instanceof Element )
@@ -181,10 +236,13 @@ window.tsfem_e_focus_inpost = {
 
 	onReady: function( event ) {
 
-		tsfem_e_focus_inpost.setFocusAreas();
+		if ( tsfem_e_focusInpostL10n.hasOwnProperty( 'focusElements' ) ) {
+			tsfem_e_focus_inpost.updateFocusRegistry( tsfem_e_focusInpostL10n.focusElements, true );
+			tsfem_e_focus_inpost.updateActiveFocusAreas();
+		}
 
 		//= There's nothing to focus on.
-		if ( 0 === Object.keys( tsfem_e_focus_inpost.focusAreas ).length ) {
+		if ( 0 === Object.keys( tsfem_e_focus_inpost.activeFocusAreas ).length ) {
 			tsfem_e_focus_inpost.disableFocus();
 			return;
 		}

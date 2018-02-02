@@ -50,6 +50,6 @@ create_type_field :;
 
 	type_field_output :;
 		InpostGUI::wrap_flex_multi( 'block', [
-			InpostGUI::construct_flex_wrap( 'label-input', $type_label, $type_option_key ),
+			InpostGUI::construct_flex_wrap( 'label-input', $type_label, '', $type_option_key ),
 			InpostGUI::construct_flex_wrap( 'input', $type_field ),
 		] );

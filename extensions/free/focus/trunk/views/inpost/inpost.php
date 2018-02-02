@@ -27,7 +27,7 @@ create_analysis_field :;
 	$focus_label = $focus_title . $focus_info;
 
 	analysis_fields_output :;
-		InpostGUI::wrap_flex( 'block-open', '' );
+		InpostGUI::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
 			InpostGUI::wrap_flex( 'label', $focus_label );
 			InpostGUI::wrap_flex( 'content-open', '' );
 				foreach ( $post_meta['kw']['values'] as $id => $values ) :

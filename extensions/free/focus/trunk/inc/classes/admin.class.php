@@ -65,16 +65,22 @@ final class Admin extends Core {
 
 	private function get_focus_elements() {
 		/**
-		 * Applies filters 'the_seo_framework_focus_elements'
+		 * Applies filters 'the_seo_framework_focus_elements'.
 		 *
-		 * When an item is dominating, the order is considered. When the item is
+		 * When a selector can't be found in the DOM, it's skipped and cannot be appended
+		 * or be dominating.
+		 *
+		 * When a selector is dominating, the order is considered. When the selector is
 		 * the last dominating thing on the list, it's the only thing used for the scoring.
 		 *
-		 * When an item is appending, and no dominating items are available, then
+		 * When a selector is appending, and no dominating items are available, then
 		 * it's considered as an addition for scoring.
 		 *
 		 * The querySelector fields must be visible for highlighting. When it's
 		 * not visible, highlighting is ignored.
+		 *
+		 * Elements can also be added dynamically in JS, for Gutengerg block support.
+		 * @see JavaScript tsfem_e_focus_inpost.updateFocusRegistry();
 		 *
 		 * The fields must be in order of importance when dominating.
 		 * Apply this filter with a high $priority value to ensure domination.

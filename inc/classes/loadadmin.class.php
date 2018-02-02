@@ -239,7 +239,7 @@ final class LoadAdmin extends AdminPages {
 						$response = $this->get_api_response( $args );
 						$response = json_decode( $response );
 
-						if ( empty( $response->success ) ) {
+						if ( ! isset( $response->success ) ) {
 							$results = $this->get_ajax_notice( false, 17001 );
 						} else {
 							if ( ! isset( $response->data ) ) {
