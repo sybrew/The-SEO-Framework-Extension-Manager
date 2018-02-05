@@ -1,7 +1,9 @@
 <?php
 /**
  * @package TSF_Extension_Manager\Extension\Focus\Admin\Views
+ * @subpackage TSF_Extension_Manager\Inpost\Audit;
  */
+namespace TSF_Extension_Manager\Extension\Focus;
 
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
 
@@ -26,7 +28,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			'<input type=text name=%1$s id=%1$s value="%2$s" class=tsfem-e-focus-keyword-entry placeholder="%3$s" autocomplete=off>',
 			\esc_attr( $keyword['id'] ),
 			\esc_attr( $keyword['value'] ),
-			\esc_attr__( 'Enter keyword...', 'the-seo-framework-extension-manager' )
+			$supportive
+				? \esc_attr__( 'Enter supportive keyword...', 'the-seo-framework-extension-manager' )
+				: \esc_attr__( 'Enter keyword...', 'the-seo-framework-extension-manager' )
 		);
 		if ( $is_premium ) {
 			//?! TODO make these visible for non-premium users regardless?
@@ -57,7 +61,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		);
 		printf(
 			'<label class="tsfem-e-focus-highligher tsfem-e-focus-highlighter-disabled" title="%s"><input type=checkbox id=%s value="1"></label>',
-			\esc_attr__( 'Highlighting requires JavaScript.', 'the-seo-framework-extension-manager' ),
+			\esc_attr__( 'Highlighting requires JavaScript', 'the-seo-framework-extension-manager' ),
 			\esc_attr( $highlighter['id'] )
 		);
 		printf(
@@ -73,7 +77,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 	</div>
 	<div class="tsfem-e-focus-collapse-content-wrap">
 		<div class="tsfem-e-focus-collapse-content">
-			Content here.
+			<?php
+			$this->output_score_template( compact( 'is_premium', 'is_active', 'sub_scores' ) );
+			?>
 		</div>
 	</div>
 </div>

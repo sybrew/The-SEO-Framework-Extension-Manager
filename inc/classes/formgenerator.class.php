@@ -1345,21 +1345,17 @@ final class FormGenerator {
 	 */
 	private function get_fields_data( array $data ) {
 
-		if ( $data ) {
-			$ret = '';
-			foreach ( $data as $k => $v ) {
-				if ( is_array( $v ) ) {
-					//* NOTE: Using single quotes.
-					$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
-				} else {
-					$ret .= sprintf( ' data-%s="%s"', $k, $v );
-				}
+		$ret = '';
+		foreach ( $data as $k => $v ) {
+			if ( is_array( $v ) ) {
+				//* NOTE: Using single quotes.
+				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
+			} else {
+				$ret .= sprintf( ' data-%s="%s"', $k, $v );
 			}
-
-			return $ret;
 		}
 
-		return '';
+		return $ret;
 	}
 
 	/**

@@ -46,7 +46,11 @@ window.tsfem_e_focus_inpost = {
 	 *
 	 */
 	getSubIdPrefix: function( id ) {
-		return /.*\[[0-9]+\]/.exec( id );
+		return /.*\[[0-9]+\]/.exec( id )[0];
+	},
+
+	getSubElementById: function( prefix, type ) {
+		return document.getElementById( prefix + '[' + type + ']' );
 	},
 
 	doAnalysis: function( what ) {
@@ -91,11 +95,11 @@ window.tsfem_e_focus_inpost = {
 			for ( let selector in selectors ) {
 				type = selectors[ selector ];
 
-				//= Test if entries exist.
 				registry[ context ][ type ]
 					|| ( registry[ context ][ type ] = [] );
 
 				if ( set ) {
+					//= Test if entries exist.
 					if ( registry[ context ][ type ].hasOwnProperty( selector ) )
 						continue;
 
@@ -159,9 +163,7 @@ window.tsfem_e_focus_inpost = {
 			if ( hasDominant ) {
 				areas[ context ] = [ lastDominant ];
 			} else {
-				keys.length && (
-					areas[ context ] = keys
-				);
+				if ( keys.length ) areas[ context ] = keys;
 			}
 		}
 
@@ -173,25 +175,37 @@ window.tsfem_e_focus_inpost = {
 
 	prepareSubjectSetter: function( event ) {
 
-		let getIdPrefix = getSubIdPrefix( event.target.id );
+		let keyword = event.target.value,
+			idPrefix = tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
+			subjectField = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'subject' );
 
+		if ( ! subjectField ) return;
+
+		//! TODO AJAX here for subject fetching, setting and executing.
 	},
 
 	prepareScores: function( event ) {
 
-		let getIdPrefix = getSubIdPrefix( event.target.id );
+		let idPrefix = tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
+			scoreEl = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'score' ),
+			subScores = document.querySelectorAll( '.' + idPrefix + '-scoring' );
 
+		if ( ! subScores.length ) return;
+
+		subScores.forEach( e => {
+
+		} );
 	},
 
 	doKeywordEntry: function( event ) {
 
 		let target = event.target,
 			val = target.value || '',
-			prev = target.dataSet.prev || '';
+			prev = target.dataset.prev || '';
 
 		//= No change happened.
 		if ( val === prev ) return;
-		target.dataSet.prev = val;
+		target.dataset.prev = val;
 
 		//! Weak check, but sufficient.
 		if ( ! val ) return;
@@ -200,7 +214,6 @@ window.tsfem_e_focus_inpost = {
 			tsfem_e_focus_inpost.prepareSubjectSetter( event );
 		}
 
-		tsfem_e_focus_inpost.prepareSubjectSetter( event );
 		tsfem_e_focus_inpost.prepareScores( event );
 	},
 

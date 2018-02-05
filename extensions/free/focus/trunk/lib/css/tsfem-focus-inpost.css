@@ -5,20 +5,21 @@
 	box-shadow: 0 0px 2px 1px #ccc inset;
 }
 
-.tsfem-e-focus-collapse-checkbox {
+input[type="checkbox"].tsfem-e-focus-collapse-checkbox {
 	position: absolute;
 	width: 0;
 	height: 0;
 	opacity: 0;
-	margin: 0 !important;
-	padding: 0 !important;
+	margin: 0;
+	padding: 0;
 	border: 0;
+	z-index: -1;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 }
 
-.tsfem-e-focus-collapse-checkbox:checked:before {
+input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 	content: none;
 	float: none;
 	margin: 0;

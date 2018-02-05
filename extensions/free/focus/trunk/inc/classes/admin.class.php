@@ -267,6 +267,18 @@ final class Admin extends Core {
 	}
 
 	/**
+	 * Outputs focus template.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param array $args The focus template arguments.
+	 */
+	private function output_score_template( array $args ) {
+		$this->get_view( 'inpost/score-template', $args );
+	}
+
+	/**
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *

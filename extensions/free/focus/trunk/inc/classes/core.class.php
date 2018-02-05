@@ -63,8 +63,8 @@ class Core {
 		 */
 		$this->pm_index = 'focus';
 		$this->pm_defaults = [
-			//= Fills 5 sequential array keys with these values.
-			'kw' => array_fill( 0, 5, [
+			//= Fills 3 sequential array keys with these values.
+			'kw' => array_fill( 0, 3, [
 				'active' => false,
 				'keyword' => '',
 				'subject' => '',

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Focus\Views
+ * @package TSF_Extension_Manager\Extension\Focus\Admin\Views
  * @subpackage TSF_Extension_Manager\Inpost\Audit;
  */
 namespace TSF_Extension_Manager\Extension\Focus;
@@ -30,9 +30,11 @@ create_analysis_field :;
 		InpostGUI::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
 			InpostGUI::wrap_flex( 'label', $focus_label );
 			InpostGUI::wrap_flex( 'content-open', '' );
+				$i = 0;
 				foreach ( $post_meta['kw']['values'] as $id => $values ) :
 					call_user_func(
 						$template_cb, [
+							'supportive' => (bool) $i++,
 							'is_premium' => $is_premium,
 							'is_active' => $values['active'],
 							'keyword' => [
@@ -45,11 +47,15 @@ create_analysis_field :;
 								'options' => $values['keywords'],
 							],
 							'subject_edit' => [
-								'id' => sprintf( 'tsfem-e-local-subject-edit-%s', $id ),
+								'id' => $make_option_id( $id, 'subject-edit' ),
 							],
 							'score' => [
 								'id' => $make_option_id( $id, 'score' ),
 								'value' => $values['score'],
+							],
+							'sub_scores' => [
+								'key' => $make_option_id( $id, 'scores' ),
+								'values' => $values['scores'],
 							],
 							'highlighter' => [
 								'id' => sprintf( 'tsfem-e-local-highligher-%s', $id ),
