@@ -1,29 +1,10 @@
+/* # Collapse
+----------------------------------------------*/
 
 .tsfem-e-focus-collapse-wrap {
 	position: relative;
 	width: 100%;
 	box-shadow: 0 0px 2px 1px #ccc inset;
-}
-
-input[type="checkbox"].tsfem-e-focus-collapse-checkbox {
-	position: absolute;
-	width: 0;
-	height: 0;
-	opacity: 0;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	z-index: -1;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-}
-
-input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
-	content: none;
-	float: none;
-	margin: 0;
-	width: 0;
 }
 
 .tsfem-e-focus-collapse-header {
@@ -32,17 +13,6 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 	padding: .5em 1em;
 	background: #fefefe;
 	box-shadow: 0 1px 3px 1px #ccc;
-	transition: filter .33s;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: wrap;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
 	-webkit-flex-direction: row;
 	flex-direction: row;
 	-webkit-justify-content: space-between;
@@ -51,7 +21,7 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 	align-items: center;
 }
 
-/* # Collapse
+/* ## Collapse content
 ----------------------------------------------*/
 
 .tsfem-e-focus-collapse-content-wrap {
@@ -88,6 +58,24 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 
 /* ## Collapse arrow
 ----------------------------------------------*/
+
+input[type="checkbox"].tsfem-e-focus-collapse-checkbox {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	z-index: -1;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
+	content: none;
+}
 
 .tsfem-e-focus-arrow-label {
 	display: block;
@@ -126,7 +114,7 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 	position: absolute;
 	width: 6px;
 	top: 50%;
-	left: calc( 50% - 8px ); /* 2px line + 6px box */
+	left: calc( 50% - 8px ); /* 2px translate + 6px width */
 	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
@@ -157,21 +145,25 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 /* # Highligher
 ----------------------------------------------*/
 
-.tsfem-e-focus-highligher input {
+input[type="checkbox"].tsfem-e-focus-highlighter-checkbox {
 	position: absolute;
-	width: 0 !important;
-	height: 0 !important;
+	width: 0;
+	height: 0;
 	opacity: 0;
-	margin: 0 !important;
-	padding: 0 !important;
+	margin: 0;
+	padding: 0;
 	border: 0;
-	z-index: -9001;
+	z-index: -1;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 }
 
-.tsfem-e-focus-highligher {
+input[type="checkbox"].tsfem-e-focus-highlighter-checkbox:checked:before {
+	content: none;
+}
+
+.tsfem-e-focus-highlighter {
 	display: block;
 	background: #ccc;
 	width: 1em;
@@ -179,6 +171,94 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:before {
 	border-radius: 50%;
 }
 
-.tsfem-e-focus-highligher-disabled {
+.tsfem-e-focus-highlighter-disabled {
 	cursor: not-allowed;
+}
+
+/* # Assessments
+----------------------------------------------*/
+
+.tsfem-e-focus-no-keyword-wrap {
+	display: inline-block;
+	margin-bottom: 1em;
+}
+
+.tsfem-e-focus-assessment-wrap {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-align-items: safe center;
+	align-items: center;
+	align-items: safe center;
+	padding: .33em 0;
+}
+
+.tsfem-e-focus-assessment-rating {
+	margin-right: .5em;
+	width: 1em;
+}
+
+.tsfem-e-focus-assessment-title {
+	-webkit-flex: 0 1 110px;
+	flex: 0 1 110px;
+	margin-right: 1em;
+}
+
+/* # Icons
+----------------------------------------------*/
+
+.tsfem-e-focus-icon:before {
+	display: block;
+	width: 1em;
+	line-height: 1;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1em;
+	content: "";
+}
+
+.tsfem-e-focus-icon-good {
+	color: #0cc34b;
+}
+
+.tsfem-e-focus-icon-okay,
+.tsfem-e-focus-icon-warning {
+	color: #ffa01b;
+}
+
+.tsfem-e-focus-icon-warning {
+	color: #ffa01b;
+}
+
+.tsfem-e-focus-icon-bad,
+.tsfem-e-focus-icon-error {
+	color: #dd3811;
+}
+
+.tsfem-e-focus-icon-unknown {
+	color: #057f9c;
+}
+
+.tsfem-e-focus-icon-okay:before,
+.tsfem-e-focus-icon-good:before {
+	font-size: 1.1em;
+	content: "\f147";
+	margin-left: -2px;
+	margin-right: 4px;
+}
+
+.tsfem-e-focus-icon-warning:before {
+	content: "\f227";
+}
+
+.tsfem-e-focus-icon-bad:before {
+	content: "\f227";
+}
+
+.tsfem-e-focus-icon-error:before {
+	content: "\f153";
+}
+
+.tsfem-e-focus-icon-unknown:before {
+	content: "\f223";
 }

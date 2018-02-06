@@ -632,10 +632,10 @@ window.tsfem_e_monitor = {
 		}
 		const showForm = function() {
 			jQuery( clicker ).hide();
-			jQuery( selector ).slideDown( 200 );
+			jQuery( selector ).slideDown( 200 ).focus();
 		}
 		const showClicker = function() {
-			jQuery( selector ).hide();
+			jQuery( selector ).blur().hide();
 			jQuery( clicker ).fadeIn( 300 );
 		}
 		const onChange = function( event ) {
@@ -652,17 +652,20 @@ window.tsfem_e_monitor = {
 			}
 		}
 		const reset = function() {
-			showClicker();
 			removeListeners();
+			showClicker();
 			return true;
 		}
 		const addListeners = function() {
-			window.addEventListener( 'click', clickOff );
+			selector.addEventListener( 'blur', reset );
 			selector.addEventListener( 'change', onChange );
+			//= Fallback:
+			window.addEventListener( 'click', clickOff );
 		}
 		const removeListeners = function() {
-			window.removeEventListener( 'click', clickOff );
+			selector.removeEventListener( 'blur', reset );
 			selector.removeEventListener( 'change', onChange );
+			window.removeEventListener( 'click', clickOff );
 		}
 		showForm();
 		//= Don't propagate current events.

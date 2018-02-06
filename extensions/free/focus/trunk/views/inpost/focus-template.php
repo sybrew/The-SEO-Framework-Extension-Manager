@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		\esc_attr( $collapse['id'] )
 	);
 	?>
-	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header">
+	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header tsf-flex">
 		<?php
 		printf(
 			'<input type=text name=%1$s id=%1$s value="%2$s" class=tsfem-e-focus-keyword-entry placeholder="%3$s" autocomplete=off>',
@@ -60,7 +60,11 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			\esc_attr( $score['value'] )
 		);
 		printf(
-			'<label class="tsfem-e-focus-highligher tsfem-e-focus-highlighter-disabled" title="%s"><input type=checkbox id=%s value="1"></label>',
+			'<input type=checkbox id=%s class="tsfem-e-focus-highlighter-checkbox" value="1">',
+			\esc_attr( $highlighter['id'] )
+		);
+		printf(
+			'<label class="tsfem-e-focus-highlighter tsfem-e-focus-highlighter-disabled" title="%s" for=%s></label>',
 			\esc_attr__( 'Highlighting requires JavaScript', 'the-seo-framework-extension-manager' ),
 			\esc_attr( $highlighter['id'] )
 		);

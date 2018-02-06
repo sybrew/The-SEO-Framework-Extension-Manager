@@ -81,6 +81,6 @@ class Core {
 		 * @TODO see if this is necessary.
 		 * @param array $pm_defaults The default post meta settings.
 		 */
-		// \apply_filters_ref_array( 'the_seo_framework_focus_default_meta', [ $this->pm_defaults ] );
+		//$this->pm_defaults = \apply_filters_ref_array( 'the_seo_framework_focus_default_meta', [ $this->pm_defaults ] );
 	}
 }

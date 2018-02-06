@@ -72,6 +72,6 @@ class Core {
 		 * @since 1.2.0
 		 * @param array $pm_defaults The default post meta settings.
 		 */
-		\apply_filters_ref_array( 'the_seo_framework_articles_default_meta', [ $this->pm_defaults ] );
+		$this->pm_defaults = \apply_filters_ref_array( 'the_seo_framework_articles_default_meta', [ $this->pm_defaults ] );
 	}
 }

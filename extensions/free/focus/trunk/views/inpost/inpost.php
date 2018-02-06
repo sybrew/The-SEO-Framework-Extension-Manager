@@ -58,7 +58,7 @@ create_analysis_field :;
 								'values' => $values['scores'],
 							],
 							'highlighter' => [
-								'id' => sprintf( 'tsfem-e-local-highligher-%s', $id ),
+								'id' => sprintf( 'tsfem-e-local-highlighter-%s', $id ),
 							],
 							'collapse' => [
 								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),

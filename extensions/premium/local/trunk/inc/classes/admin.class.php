@@ -134,6 +134,7 @@ final class Admin extends Core {
 	 * Outputs Local SEO settings page.
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 */
 	public function _output_local_settings_page() {
 		$this->get_local_settings_instance()->_output_settings_page( $this );
@@ -149,7 +150,7 @@ final class Admin extends Core {
 	public function _load_local_admin_actions() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$this->_do_settings_page_ajax_actions();
+			$this->do_settings_page_ajax_actions();
 		} else {
 			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
 		}
@@ -160,6 +161,7 @@ final class Admin extends Core {
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
+	 * @access private
 	 *
 	 * @return bool True on actions loaded, false on second load or incorrect page.
 	 */
@@ -183,7 +185,7 @@ final class Admin extends Core {
 	 *
 	 * @return bool True on actions loaded, false on second load or incorrect page.
 	 */
-	protected function _do_settings_page_ajax_actions() {
+	protected function do_settings_page_ajax_actions() {
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;

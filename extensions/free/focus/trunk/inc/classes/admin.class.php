@@ -140,7 +140,7 @@ final class Admin extends Core {
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
-			'deps' => [],
+			'deps' => [ 'tsf' ],
 		] );
 	}
 
