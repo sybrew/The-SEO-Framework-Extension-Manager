@@ -133,7 +133,6 @@ a.tsfem-dismiss:hover {
 	color: #0ebfe9;
 	line-height: 1em;
 	font-size: 1em;
-	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
@@ -552,12 +551,10 @@ body.tsfem .wrap {
 
 .tsfem-button-loading:after {
 	content: "\f463";
-	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
 .tsfem-button-pulse {
-	-webkit-animation: tsfem-button-pulse 5s ease-in-out infinite;
 	animation: tsfem-button-pulse 5s ease-in-out infinite;
 }
 
@@ -1390,12 +1387,10 @@ h4.tsfem-cp-title {
 .tsfem-ajax.tsfem-loading:after {
 	content: "\f463";
 	color: #057c99;
-	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
 .tsfem-dashicon-fadeout-3000:after {
-	-webkit-animation: tsfem-fadeout 3s linear 1;
 	animation: tsfem-fadeout 3s linear 1;
 }
 

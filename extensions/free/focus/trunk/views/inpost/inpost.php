@@ -36,7 +36,6 @@ create_analysis_field :;
 						$template_cb, [
 							'supportive' => (bool) $i++,
 							'is_premium' => $is_premium,
-							'is_active' => $values['active'],
 							'keyword' => [
 								'id' => $make_option_id( $id, 'keyword' ),
 								'value' => $values['keyword'],
@@ -44,7 +43,10 @@ create_analysis_field :;
 							'subject' => [
 								'id' => $make_option_id( $id, 'subject' ),
 								'value' => $values['subject'],
-								'options' => $values['keywords'],
+								'options' => $values['subjects'],
+							],
+							'collapse' => [
+								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),
 							],
 							'subject_edit' => [
 								'id' => $make_option_id( $id, 'subject-edit' ),
@@ -59,9 +61,6 @@ create_analysis_field :;
 							],
 							'highlighter' => [
 								'id' => sprintf( 'tsfem-e-local-highlighter-%s', $id ),
-							],
-							'collapse' => [
-								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),
 							],
 						]
 					);

@@ -241,22 +241,22 @@ $_scores = [
 ];
 
 $make_score_id = function( $type ) use ( $key ) {
-	return sprintf( '%s[%s]', $type, $key );
+	return sprintf( '%s[%s]', $key, $type );
 };
 $get_score_value = function( $type ) use ( $values ) {
 	return isset( $values[ $type ] ) ? round( (float) $values[ $type ] ) : 0;
 };
 $make_data = function( array $data ) {
-	$ret = '';
+	$ret = [];
 	foreach ( $data as $k => $v ) {
 		if ( is_array( $v ) ) {
-			$ret .= sprintf( ' data-%s="%s"', $k, htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' ) );
+			$ret[] = sprintf( 'data-%s="%s"', $k, htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' ) );
 		} else {
-			$ret .= sprintf( ' data-%s="%s"', $k, $v );
+			$ret[] = sprintf( 'data-%s="%s"', $k, $v );
 		}
 	}
 
-	return $ret;
+	return implode( ' ', $ret );
 };
 
 /**
@@ -299,7 +299,7 @@ $_get_icon_class = function( array $ratings, $value ) use ( $_get_nearest_numeri
 // }
 
 $assessment_classes = [ 'tsfem-e-focus-assessment-wrap', 'tsf-flex' ];
-if ( \is_rtl() ) $assessment_classes += 'tsfem-flex-rtl';
+if ( \is_rtl() ) $assessment_classes[] = 'tsfem-flex-rtl';
 $assessment_class = implode( ' ', $assessment_classes );
 
 output_scores :;
@@ -309,7 +309,7 @@ output_scores :;
 		$_id = \esc_attr( $make_score_id( $type ) );
 		//! All output below should already be escaped.
 		vprintf(
-			'<span class="%s" id=%s%s>%s%s%s</span>',
+			'<span class="%s" id=%s %s>%s%s%s</span>',
 			[
 				$assessment_class,
 				$_id,
@@ -339,6 +339,7 @@ output_scores :;
 				),
 			]
 		);
+		//= Data capturer.
 		printf(
 			'<input type=hidden name=%s value="%s">',
 			$_id,

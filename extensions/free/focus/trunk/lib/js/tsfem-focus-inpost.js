@@ -280,6 +280,9 @@ window.tsfem_e_focus_inpost = {
 		//= Disable nojs placeholders.
 		$( '.tsfem-e-focus-disable-if-js' ).prop( 'disabled', 'disabled' );
 
+		//= Reenable highlighter.
+		$( '.tsfem-e-focus-requires-javascript' ).removeClass( 'tsfem-e-focus-requires-javascript' );
+
 		// Initialize image uploader button cache.
 		$( document.body ).ready( tsfem_e_focus_inpost.onReady );
 	}

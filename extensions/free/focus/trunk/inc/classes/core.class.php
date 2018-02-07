@@ -65,10 +65,9 @@ class Core {
 		$this->pm_defaults = [
 			//= Fills 3 sequential array keys with these values.
 			'kw' => array_fill( 0, 3, [
-				'active' => false,
 				'keyword' => '',
 				'subject' => '',
-				'keywords' => [],
+				'subjects' => [ '' => \__( 'No subject', 'the-seo-framework-extension-manager' ) ],
 				'score' => 0,
 				'scores' => [],
 			] ),
