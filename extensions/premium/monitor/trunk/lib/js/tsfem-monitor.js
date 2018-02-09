@@ -250,8 +250,7 @@ window.tsfem_e_monitor = {
 						//* Expected to be inputting a single div.
 						jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issues.data.wrap ).animate(
 							{ 'opacity' : 1 },
-							{ queue: true, duration: 250 },
-							'swing'
+							{ queue: true, duration: 250 }
 						);
 
 						//* Loop through each issue and slowly insert it.
@@ -259,8 +258,7 @@ window.tsfem_e_monitor = {
 							setTimeout( function() {
 								jQuery( value ).appendTo( '.tsfem-e-monitor-issues-wrap > div' ).css( 'opacity', 0 ).animate(
 									{ 'opacity' : 1 },
-									{ queue: false, duration: 250 },
-									'swing'
+									{ queue: false, duration: 250 }
 								);
 							}, 250 * index );
 						} );
@@ -269,8 +267,7 @@ window.tsfem_e_monitor = {
 
 						jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
 							{ 'opacity' : 1 },
-							{ queue: true, duration: 1000 },
-							'swing'
+							{ queue: true, duration: 1000 }
 						);
 					}
 
@@ -278,14 +275,12 @@ window.tsfem_e_monitor = {
 					//= Node is gone from memory. Reaccess it.
 					jQuery( '#tsfem-e-monitor-last-crawled' ).animate(
 						{ 'opacity' : 1 },
-						{ queue: true, duration: 1000 },
-						'swing'
+						{ queue: true, duration: 1000 }
 					);
 
 					jQuery( '.tsfem-e-monitor-stats-wrap' ).empty().css( 'opacity', 0 ).append( stats ).animate(
 						{ 'opacity' : 1 },
-						{ queue: true, duration: 1000 },
-						'swing'
+						{ queue: true, duration: 1000 }
 					);
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 

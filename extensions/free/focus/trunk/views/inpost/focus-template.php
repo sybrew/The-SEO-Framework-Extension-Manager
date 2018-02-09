@@ -70,12 +70,14 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 
 //! END TEMP.
 
+// TODO create group for input / buttons, so they nicely collapse.
+
 ?>
-<div class=tsfem-e-focus-collapse-wrap>
+<div class=tsfem-e-focus-collapse-wrap id="<?php echo \esc_attr( $wrap['id'] ); ?>">
 	<?php
 	printf(
 		'<input type="checkbox" id=%s value="1" checked class=tsfem-e-focus-collapse-checkbox>',
-		\esc_attr( $collapse['id'] )
+		\esc_attr( $collapser['id'] )
 	);
 	?>
 	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header tsf-flex">
@@ -168,7 +170,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		);
 		printf(
 			'<label class="tsfem-e-focus-arrow-label tsf-tooltip-wrap" for=%s>%s</label>',
-			\esc_attr( $collapse['id'] ), // @see first checkbox
+			\esc_attr( $collapser['id'] ), // @see first checkbox
 			sprintf(
 				'<span class="tsf-tooltip-item tsfem-e-focus-arrow-item" title="%1$s" data-desc="%1$s"></span>',
 				\esc_attr__( 'View analysis.', 'the-seo-framework-extension-manager' )
@@ -179,7 +181,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 	<div class="tsfem-e-focus-collapse-content-wrap">
 		<div class="tsfem-e-focus-collapse-content">
 			<?php
-			$this->output_score_template( compact( 'is_premium', 'is_active', 'sub_scores' ) );
+			$this->output_score_template( compact( 'is_premium', 'is_active', 'keyword', 'sub_scores' ) );
 			?>
 		</div>
 	</div>

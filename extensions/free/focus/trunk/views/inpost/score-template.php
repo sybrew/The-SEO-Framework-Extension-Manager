@@ -9,14 +9,17 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 
 $key = $sub_scores['key'];
 $values = $sub_scores['values'];
+$has_keyword = (bool) strlen( $keyword['value'] );
 
 printf(
-	'<span class="hide-if-js attention">%s</span>',
-	\esc_html__( 'JavaScript is required to perform a subject analysis. Below you find the previous assessments.', 'the-seo-framework-extension-manager' )
+	'<span class="hide-if-js attention">%s %s</span>',
+	\esc_html__( 'JavaScript is required to perform a subject analysis.', 'the-seo-framework-extension-manager' ),
+	$has_keyword ? \esc_html__( 'Below you find the previous assessments.', 'the-seo-framework-extension-manager' ) : ''
 );
 printf(
-	'<span class="tsfem-e-focus-no-keyword-wrap hide-if-no-js attention" id=%s>%s</span>',
+	'<span class="tsfem-e-focus-no-keyword-wrap hide-if-no-js attention" %s id=%s>%s</span>',
 	\esc_attr( $key . '-no-content-wrap' ),
+	$has_keyword ? 'style="display:none"' : '',
 	\esc_html__( 'No keyword has been set, so no analysis can be made.', 'the-seo-framework-extension-manager' )
 );
 
@@ -30,14 +33,22 @@ printf(
  */
 $_scores = [
 	'seoTitle' => [
-		'title' => esc_html__( 'Document title:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'seoTitle',
+		'title' => esc_html__( 'Meta title:', 'the-seo-framework-extension-manager' ),
+		'assessment' => [
+			'content' => 'seoTitle',
+			'regex' => '/{{kw}}/giu',
+			'eval' => [
+				'input',
+				'innerHTML',
+				'placeholder',
+			],
+		],
 		'maxScore' => 200,
 		'minScore' => 0,
 		'phrasing' => [
-			200 => esc_html__( 'The keyword was found in the meta title, this is good.', 'the-seo-framework-extension-manager' ),
-			50  => esc_html__( 'The subject was found in the meta title, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
-			0   => esc_html__( 'The keyword was not found in the meta title, you should add it.', 'the-seo-framework-extension-manager' ),
+			200 => esc_html__( 'The keyword is found in the meta title, this is good.', 'the-seo-framework-extension-manager' ),
+			50  => esc_html__( 'The subject is found in the meta title, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
+			0   => esc_html__( 'The keyword is not found in the meta title, you should add it.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			200 => 4,
@@ -61,13 +72,19 @@ $_scores = [
 	],
 	'pageTitle' => [
 		'title' => esc_html__( 'Page title:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'pageTitle',
+		'assessment' => [
+			'content' => 'pageTitle',
+			'regex' => '/{{kw}}/giu',
+			'eval' => [
+				'input',
+			],
+		],
 		'maxScore' => 150,
 		'minScore' => 0,
 		'phrasing' => [
-			150 => esc_html__( 'The keyword was found in the page title, this is good.', 'the-seo-framework-extension-manager' ),
-			66  => esc_html__( 'The subject was found in the page title, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
-			0   => esc_html__( 'The keyword was not found in the page title, you should add it.', 'the-seo-framework-extension-manager' ),
+			150 => esc_html__( 'The keyword is found in the page title, this is good.', 'the-seo-framework-extension-manager' ),
+			66  => esc_html__( 'The subject is found in the page title, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
+			0   => esc_html__( 'The keyword is not found in the page title, you should add it.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			150 => 4,
@@ -91,7 +108,17 @@ $_scores = [
 	],
 	'firstParagraph' => [
 		'title' => esc_html__( 'First paragraph:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'pageContent',
+		'assessment' => [
+			'content' => 'pageContent',
+			'regex' => [
+				'/^.*?(?=\\r?\\n(\\r?\\n)|$)/gius', // 1: Match first paragraph
+				'/(?=>|.)[^>]+(?=<)/gis',           // 2: All but tags.
+				'/{{kw}}/giu',                      // 3: Match words.
+			],
+			'eval' => [
+				'input',
+			],
+		],
 		'maxScore' => 100,
 		'minScore' => 0,
 		'phrasing' => [
@@ -108,7 +135,7 @@ $_scores = [
 		'scoring' => [
 			'type' => 'n',
 			'keyword' => [
-				'score' => 66,
+				'score' => 50,
 				'per' => 1,
 				'max' => 2,
 			],
@@ -121,43 +148,59 @@ $_scores = [
 	],
 	'density' => [
 		'title' => esc_html__( 'Subject density:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'pageContent',
+		'assessment' => [
+			'content' => 'pageContent',
+			'regex' => [
+				'/[^>]+(?=<|$|^)/gm', // 1: All but tags.
+				'/{{kw}}/giu',        // 2: Match words.
+			],
+			'eval' => [
+				'input',
+			],
+		],
 		'maxScore' => 800,
 		'minScore' => 0,
 		'phrasing' => [
+			1200 => esc_html__( 'The subject density is far too high, consider lowering the keyword usage as it may seem like spam.', 'the-seo-framework-extension-manager' ),
+			801  => esc_html__( 'The subject density is high, consider lowering the subject usage.', 'the-seo-framework-extension-manager' ),
 			400  => esc_html__( 'The subject is recognizable from the content, this is good.', 'the-seo-framework-extension-manager' ),
 			200  => esc_html__( 'The subject is slightly recognizable from the content, consider highlighting it more.', 'the-seo-framework-extension-manager' ),
-			0    => esc_html__( 'The subject is not found in the content, this is bad.', 'the-seo-framework-extension-manager' ),
-			801  => esc_html__( 'The subject density is too high, consider lowering the keyword usage as it seems like spam.', 'the-seo-framework-extension-manager' ),
+			0    => esc_html__( 'The subject is not recognizable from the content, you should improve this.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
-			801  => 2, // threshold
+			1200 => 1, // threshold 6%
+			801  => 2, // threshold 4%
 			400  => 4,
 			200  => 2,
 			0    => 1,
 		],
 		'scoring' => [
 			'type' => 'p',
-			'threshold' => 3, // percent
+			'threshold' => 4, // percent
+			'penalty' => 3, // 3x the points are deducted per point going over the threshold.
 			'keyword' => [
 				'weight' => 100, // percent
-				'per' => 1,
 			],
 			'subject' => [
 				'weight' => 75, // percent
-				'per' => 1,
 			],
 		],
 	],
 	'linking' => [
 		'title' => esc_html__( 'Linking:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'pageContent',
+		'assessment' => [
+			'content' => 'pageContent',
+			'regex' => '/<a\\W.*href=("|\')?(.*?{{kw}}.*?\\2(\\s|\\W).*?>.*?<\\/a>)|(\\2\W).*?(\\W|>){{kw}}(\\W|>)?.*?<\\/a>/giu',
+			'eval' => [
+				'input',
+			],
+		],
 		'maxScore' => 200,
 		'minScore' => 0,
 		'phrasing' => [
-			100 => esc_html__( 'A few links have been found related to this subject. This is good.', 'the-seo-framework-extension-manager' ),
-			50  => esc_html__( 'A link has been found related to this subject. This is good, but consider adding more.', 'the-seo-framework-extension-manager' ),
-			0   => esc_html__( 'No links have been found related to this subject.', 'the-seo-framework-extension-manager' ),
+			100 => esc_html__( 'A few links are found related to this subject. This is good.', 'the-seo-framework-extension-manager' ),
+			50  => esc_html__( 'A link is found related to this subject. This is good, but consider adding more.', 'the-seo-framework-extension-manager' ),
+			0   => esc_html__( 'No links are found related to this subject.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			100 => 4,
@@ -181,13 +224,20 @@ $_scores = [
 	],
 	'seoDescription' => [
 		'title' => esc_html__( 'Meta description:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'seoDescription',
+		'assessment' => [
+			'content' => 'seoDescription',
+			'regex' => '/{{kw}}/giu',
+			'eval' => [
+				'input',
+				'placeholder',
+			],
+		],
 		'maxScore' => 50,
 		'minScore' => 0,
 		'phrasing' => [
-			50  => esc_html__( 'The subject was clearly found in the meta description, this is good.', 'the-seo-framework-extension-manager' ),
-			25  => esc_html__( 'The subject was found in the meta description, this is good.', 'the-seo-framework-extension-manager' ),
-			0   => esc_html__( 'The keyword was not found in the meta description, you should add it.', 'the-seo-framework-extension-manager' ),
+			50  => esc_html__( 'The subject is clearly found in the meta description, this is good.', 'the-seo-framework-extension-manager' ),
+			25  => esc_html__( 'The subject is found in the meta description, this is good.', 'the-seo-framework-extension-manager' ),
+			0   => esc_html__( 'The keyword is not found in the meta description, you should add it.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			50 => 4,
@@ -210,13 +260,19 @@ $_scores = [
 	],
 	'url' => [
 		'title' => esc_html__( 'Page URL:', 'the-seo-framework-extension-manager' ),
-		'assessment' => 'pageUrl',
+		'assessment' => [
+			'content' => 'pageUrl',
+			'regex' => '/{{kw}}/giu',
+			'eval' => [
+				'innerHTML',
+			],
+		],
 		'maxScore' => 125,
 		'minScore' => 0,
 		'phrasing' => [
-			100 => esc_html__( 'The keyword was found in the page URL, this is good.', 'the-seo-framework-extension-manager' ),
-			33  => esc_html__( 'The subject was found in the page URL, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
-			0   => esc_html__( 'The keyword was not found in the page URL, you should add it.', 'the-seo-framework-extension-manager' ),
+			100 => esc_html__( 'The keyword is found in the page URL, this is good.', 'the-seo-framework-extension-manager' ),
+			33  => esc_html__( 'The subject is found in the page URL, consider using the keyword instead.', 'the-seo-framework-extension-manager' ),
+			0   => esc_html__( 'The keyword is not found in the page URL, you should add it.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			100 => 4,
@@ -264,7 +320,7 @@ $make_data = function( array $data ) {
  * @param int $value
  */
 $_get_nearest_numeric_index_value = function( array $a, $value ) {
-	ksort( $a, SORT_NATURAL );
+	ksort( $a, SORT_NUMERIC );
 	$ret = null;
 	foreach ( $a as $k => $v ) {
 		if ( is_numeric( $k ) ) {
@@ -299,11 +355,16 @@ $_get_icon_class = function( array $ratings, $value ) use ( $_get_nearest_numeri
 // }
 
 $assessment_classes = [ 'tsfem-e-focus-assessment-wrap', 'tsf-flex' ];
-if ( \is_rtl() ) $assessment_classes[] = 'tsfem-flex-rtl';
 $assessment_class = implode( ' ', $assessment_classes );
 
+$block_style = $has_keyword ? '' : 'style="display:none"';
+
 output_scores :;
-	echo '<div class="tsfem-e-focus-scores tsfem-flex" id=' . \esc_attr( $key . '-scores-wrap' ) . '>';
+	printf(
+		'<div class="tsfem-e-focus-scores tsfem-flex" id=%s %s>',
+		\esc_attr( $key ),
+		$has_keyword ? '' : 'style="display:none"'
+	);
 	foreach ( $_scores as $type => $args ) :
 		$_value = \esc_attr( $get_score_value( $type ) );
 		$_id = \esc_attr( $make_score_id( $type ) );

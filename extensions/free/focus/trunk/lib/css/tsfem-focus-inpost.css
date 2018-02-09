@@ -31,7 +31,7 @@
 }
 
 .tsfem-e-focus-icon-unknown,
-.tsfem-e-focus-icon-loading, {
+.tsfem-e-focus-icon-loading {
 	color: #057f9c;
 }
 
@@ -69,7 +69,7 @@
 
 .tsfem-e-focus-icon-loading:after {
 	content: "\f463";
-	animation: tsfem-spin 1.5s linear infinite;
+	animation: tsfem-e-local-spin 1.5s linear infinite;
 }
 
 @-webkit-keyframes tsfem-e-local-spin {
@@ -348,8 +348,6 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 ----------------------------------------------*/
 
 .tsfem-e-focus-no-keyword-wrap {
-	display: inline-block;
-	margin-bottom: 1em;
 }
 
 .tsfem-e-focus-assessment-wrap {

@@ -107,8 +107,7 @@ window[ 'tsfem_e_transporter' ] = {
 							//* Expected to be inputting a single div.
 							jQuery( '.tsfem-e-transporter-step-2' ).empty().css( 'opacity', 0 ).append( html ).animate(
 								{ 'opacity' : 1 },
-								{ queue: true, duration: 1000 },
-								'swing'
+								{ queue: true, duration: 1000 }
 							);
 							tsfem_e_transporter.setupListenersStep( 2, 'settings-export' );
 						} else {
@@ -117,8 +116,7 @@ window[ 'tsfem_e_transporter' ] = {
 
 							jQuery( '.tsfem-e-transporter-steps' ).empty().css( 'opacity', 0 ).append( issuesOutput ).animate(
 								{ 'opacity' : 1 },
-								{ queue: true, duration: 1000 },
-								'swing'
+								{ queue: true, duration: 1000 }
 							);*/
 						}
 

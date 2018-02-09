@@ -36,6 +36,12 @@ create_analysis_field :;
 						$template_cb, [
 							'supportive' => (bool) $i++,
 							'is_premium' => $is_premium,
+							'wrap' => [
+								'id' => $make_option_id( $id, 'wrap' ),
+							],
+							'collapser' => [
+								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),
+							],
 							'keyword' => [
 								'id' => $make_option_id( $id, 'keyword' ),
 								'value' => $values['keyword'],
@@ -44,9 +50,6 @@ create_analysis_field :;
 								'id' => $make_option_id( $id, 'subject' ),
 								'value' => $values['subject'],
 								'options' => $values['subjects'],
-							],
-							'collapse' => [
-								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),
 							],
 							'subject_edit' => [
 								'id' => $make_option_id( $id, 'subject-edit' ),

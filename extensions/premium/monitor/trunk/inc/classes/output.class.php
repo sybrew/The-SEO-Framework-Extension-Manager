@@ -495,7 +495,6 @@ final class Output {
 				}
 			}
 		} else {
-			var_dump( $value );
 			$content = $this->get_em_requires_update_notification();
 		}
 

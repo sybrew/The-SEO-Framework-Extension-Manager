@@ -53,6 +53,15 @@ window.tsfem_e_focus_inpost = {
 		return document.getElementById( prefix + '[' + type + ']' );
 	},
 
+	sortMap: function( o ) {
+		//? Objects are automatically sorted in Chrome and IE. Sort again anyway.
+		Object.keys( o ).sort( ( a, b ) => {
+			return Object.keys( a )[0] - Object.keys( b )[0];
+		} );
+
+		return o;
+	},
+
 	doAnalysis: function( what ) {
 		if ( ! what ) return;
 
@@ -170,7 +179,217 @@ window.tsfem_e_focus_inpost = {
 		tsfem_e_focus_inpost.activeFocusAreas = areas;
 	},
 
-	doCheckup: function() {
+	doCheckAll: function( idPrefix ) {
+	},
+
+	// TODO:
+	// 1. Add onchange listeners.
+	doCheck: function ( rater, keyword, synonyms ) {
+
+		let $rater = jQuery( rater ),
+			data = $rater.data( 'scores' ),
+			checkElements = tsfem_e_focus_inpost.activeFocusAreas[ data.assessment.content ],
+			countKeyword = 0,
+			countSubject = 0,
+			charCountKeyword = 0,
+			charCountSubject = 0,
+			charCount = 0,
+			content,
+			regex = data.assessment.regex;
+
+		//= Convert regex to object if it isn't already.
+		if ( regex !== Object( regex ) ) {
+			regex = [ regex ];
+		}
+
+		const countChars = ( contents ) => {
+			// Strip all tags first.
+			contents = contents.match( /[^>]+(?=<|$|^)/gm );
+			return contents && contents.join( '' ).length || 0;
+		};
+		const countKeywords = ( kw, contents ) => {
+			let n = regex.length,
+				p;
+
+			for ( let i = 0; i < n; ) {
+				p = /\/(.*)\/(.*)/.exec( regex[ i ] );
+
+				contents = contents.match( RegExp(
+					p[1].replace(
+						/\{\{kw\}\}/g,
+						kw.replace( /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&' )
+					),
+					p[2]
+				) );
+
+				if ( ! contents )
+					break;
+
+				if ( ++i < n ) {
+					//= Join content if this is a recursive regexp.
+					contents = contents.join( ' ' );
+				}
+			}
+			return contents && contents.length || 0;
+		};
+
+		//! TODO cache values found per selector. In data?
+		checkElements.forEach( selector => {
+			//= Wrap content in spaces to simulate word boundaries.
+			let $selector = jQuery( selector );
+
+			content = '';
+
+			for ( let i in data.assessment.eval ) {
+				switch ( data.assessment.eval[ i ] ) {
+					case 'input' :
+						content = $selector.val();
+						break;
+
+					case 'placeholder' :
+						content = $selector.attr( 'placeholder' );
+						break;
+
+					case 'innerHTML' :
+						content = $selector.text();
+						break;
+				}
+				if ( content.length )
+					break;
+			}
+
+			if ( content.length ) {
+				switch ( data.scoring.type ) {
+					case 'n' :
+						countKeyword += countKeywords( keyword, content );
+						if ( synonyms ) {
+							synonyms.forEach( synonym => countSubject += countKeywords( synonym, content ) );
+						}
+						break;
+
+					case 'p' :
+						charCount += countChars( content );
+						countKeyword += countKeywords( keyword, content );
+						charCountKeyword += keyword.length * countKeyword;
+						if ( synonyms ) {
+							synonyms.forEach( synonym => {
+								let _count = countKeywords( synonym, content );
+								countSubject += _count;
+								charCountKeyword += synonym.length * _count;
+							} );
+						}
+						break;
+				}
+			}
+		} );
+
+		let scoring = data.scoring,
+			maxScore = data.maxScore,
+			density = 0,
+			realScore = 0,
+			endScore = 0;
+
+		const calcScoreN = ( scoring, value ) => {
+			return Math.floor( value / scoring.per ) * scoring.score;
+		};
+		const calcSChars = ( weight, value ) => {
+			return value * ( weight / 100 );
+		};
+		/**
+		 * @param {int} charCount Character count in text.
+		 * @param {int} sChars Simulated chars through weight.
+		 */
+		const calcDensity = ( charCount, sChars ) => {
+			return ( sChars / charCount ) * 100;
+		};
+		const calcRealDensityScore = ( scoring, density ) => {
+			return density / scoring.threshold * data.maxScore;
+		};
+		const calcEndDensityScore = ( score, max, min, penalty ) => {
+			return tsfem_e_focus_inpost.getMaxIfOver( max, Math.max( min, max - ( score - max ) * penalty ) );
+		};
+
+		switch ( scoring.type ) {
+			case 'n' :
+				if ( countKeyword )
+					realScore += calcScoreN( scoring.keyword, tsfem_e_focus_inpost.getMaxIfOver( scoring.keyword.max, countKeyword ) );
+				if ( countSubject )
+					realScore += calcScoreN( scoring.subject, tsfem_e_focus_inpost.getMaxIfOver( scoring.subject.max, countSubject ) );
+
+				endScore = realScore;
+				break;
+
+			case 'p' :
+				if ( charCount ) {
+					if ( charCountKeyword )
+						density += calcDensity( charCount, calcSChars( scoring.keyword.weight, charCountKeyword ) );
+					if ( charCountSubject )
+						density += calcDensity( charCount, calcSChars( scoring.subject.weight, charCountSubject ) );
+				}
+
+				realScore = calcRealDensityScore( scoring, density );
+				endScore = calcEndDensityScore( realScore, scoring.max, scoring.min, scoring.penalty );
+				break;
+		}
+
+		let iconType = tsfem_e_focus_inpost.getIconType( data.rating, realScore ),
+			phrase = tsfem_e_focus_inpost.getNearestNumericIndexValue( data.phrasing, realScore );
+
+		let $description = jQuery( rater ).find( '.tsfem-e-focus-assessment-description' );
+		$description.animate( { 'opacity' : 0 }, {
+			queue: false,
+			duration: 150,
+			complete: () => {
+				$description.text( phrase + ' ' + realScore ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
+				tsfem_e_focus_inpost.setIconClass(
+					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
+					iconType
+				);
+			}
+		} );
+	},
+
+	getMaxIfOver: function( max, value ) {
+		return value > max ? max : value;
+	},
+
+	/**
+	 *
+	 * @TODO find new source after cleanup:
+	 * @source PHP TSF_Extension_Manager\Extension\Focus\Admin\Views\$_get_nearest_numeric_index_value();
+	 */
+	getNearestNumericIndexValue: function( obj, value ) {
+
+		let ret = void 0;
+
+		obj = tsfem_e_focus_inpost.sortMap( obj );
+
+		for ( let index in obj ) {
+			if ( ! isNaN( parseFloat( index ) ) && isFinite( index ) ) {
+				if ( index <= value ) {
+					ret = obj[ index ];
+				} else {
+					break;
+				}
+			}
+		}
+
+		return ret ? ret : obj[ Object.keys( obj )[0] ];
+	},
+
+	getIconType: function( ratings, value ) {
+
+		let index = tsfem_e_focus_inpost.getNearestNumericIndexValue( ratings, value ).toString(),
+			classes = {
+				'-1' : 'error',
+				'0'  : 'unknown',
+				'1'  : 'bad',
+				'2'  : 'warning',
+				'3'  : 'okay',
+				'4'  : 'good',
+			};
+
+		return ( index in classes ) && classes[ index ] || classes['0'];
 	},
 
 	prepareSubjectSetter: function( event ) {
@@ -187,34 +406,92 @@ window.tsfem_e_focus_inpost = {
 	prepareScores: function( event ) {
 
 		let idPrefix = tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
-			scoreEl = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'score' ),
-			subScores = document.querySelectorAll( '.' + idPrefix + '-scoring' );
+			contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' ),
+			scoresWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'scores' ),
+			subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
-		if ( ! subScores.length ) return;
+		// TODO add error?
+		if ( ! subScores || subScores !== Object( subScores ) ) return;
 
+		tsfem_e_focus_inpost.toggleKeywordVisuals(
+			idPrefix,
+			'enable'
+		);
+
+		let data, $e, rating, blind, input;
 		subScores.forEach( e => {
+			rating = e.querySelector( '.tsfem-e-focus-assessment-rating' );
+			tsfem_e_focus_inpost.setIconClass( rating, 'loading' );
+			blind = true;
+			$e = jQuery( e );
+			data = $e.data( 'scores' );
 
+			if ( data && data.hasOwnProperty( 'assessment' ) ) {
+				if ( tsfem_e_focus_inpost.activeFocusAreas.hasOwnProperty( data.assessment.content ) ) {
+					e.dataset.assess = true;
+					blind = false;
+					$e.fadeIn( {
+						queue: false, // defer, go to next check.
+						duration: 250,
+						complete: () => { tsfem_e_focus_inpost.doCheck( e, event.target.value ); }
+					} );
+				}
+			}
+			if ( blind ) {
+				tsfem_e_focus_inpost.setIconClass( rating, 'unknown' );
+				e.dataset.assess = false;
+
+				input = document.getElementsByName( e.id );
+				if ( input && input[0] ) input[0].value = 0;
+
+				$e.fadeOut( 500 );
+			}
 		} );
+
 	},
 
 	doKeywordEntry: function( event ) {
 
 		let target = event.target,
-			val = target.value || '',
+			val = target.value.trim().replace( /[\s\t\r\n]+/g, ' ' ) || '',
 			prev = target.dataset.prev || '';
+
+		// Feed back trimmed.
+		event.target.value = val;
 
 		//= No change happened.
 		if ( val === prev ) return;
+
 		target.dataset.prev = val;
 
-		//! Weak check, but sufficient.
-		if ( ! val ) return;
+		if ( ! val.length ) {
+			tsfem_e_focus_inpost.toggleKeywordVisuals(
+				tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
+				'disable'
+			);
+			return;
+		}
 
 		if ( tsfem_e_focusInpostL10n.isPremium ) {
 			tsfem_e_focus_inpost.prepareSubjectSetter( event );
 		}
 
 		tsfem_e_focus_inpost.prepareScores( event );
+		// tsfem_e_focus_inpost.prepareHighlighter( event );
+	},
+
+	toggleKeywordVisuals: function( idPrefix, state ) {
+		let contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' );
+
+		if ( 'disable' === state ) {
+			jQuery( contentWrap ).find( '.tsfem-e-focus-scores' ).fadeOut( 150, () => {
+				jQuery( contentWrap ).find( '.tsfem-e-focus-no-keyword-wrap' ).fadeIn( 250 );
+			} );
+		} else {
+			jQuery( contentWrap ).find( '.tsfem-e-focus-no-keyword-wrap' ).fadeOut( 150, () => {
+				jQuery( contentWrap ).find( '.tsfem-e-focus-scores' ).fadeIn( 250 );
+			} );
+		}
 	},
 
 	resetCollapserListeners: function() {
@@ -237,6 +514,25 @@ window.tsfem_e_focus_inpost = {
 					tsfem_e_focus_inpost.doKeywordEntry( e );
 				}, keywordTimeout );
 			} );
+	},
+
+	setIconClass: function( element, to ) {
+
+		let classes = [
+			'edit',
+			'loading',
+			'unknown',
+			'error',
+			'bad',
+			'warning',
+			'okay',
+			'good',
+		];
+
+		classes.forEach( c => {
+			element.classList.remove( 'tsfem-e-focus-icon-' + c );
+			c === to && element.classList.add( 'tsfem-e-focus-icon-' + c );
+		} );
 	},
 
 	disableFocus: function() {
