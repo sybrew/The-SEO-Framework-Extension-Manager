@@ -109,8 +109,8 @@
 	flex-direction: row;
 	-webkit-justify-content: space-between;
 	justify-content: space-between;
-	-webkit-align-items: center;
-	align-items: center;
+	-webkit-align-items: safe center;
+	align-items: safe center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -118,7 +118,16 @@
 	user-select: none;
 }
 
-.tsfem-e-focus-collapse-header > * {
+.tsfem-e-focus-collapse-header-row {
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+	-webkit-align-items: safe center;
+	align-items: safe center;
+}
+
+.tsfem-e-focus-collapse-header-row > * {
 	margin: .25em .5em;
 }
 
@@ -148,11 +157,10 @@
 	padding: 2px 5px;
 	font-size: 14px;
 	line-height: 27px;
-	max-width: 300px;
-	-webkit-flex: 1 1 200px;
-	flex: 1 1 200px;
+	-webkit-flex: 1 1 180px;
+	flex: 1 1 180px;
 	width:  100%;
-	margin: .25em .5em;
+	margin: .375em .5em;
 }
 
 @-webkit-keyframdes tsfem-e-focus-fade-in {
@@ -354,20 +362,26 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	-webkit-flex-direction: row;
 	flex-direction: row;
 	-webkit-align-items: safe center;
-	align-items: center;
 	align-items: safe center;
 	padding: .33em 0;
 }
 
 .tsfem-e-focus-assessment-rating {
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
 	margin-right: .5em;
 	width: 1em;
 }
 
 .tsfem-e-focus-assessment-title {
-	-webkit-flex: 0 1 110px;
-	flex: 0 1 110px;
+	-webkit-flex: 1 33 110px;
+	flex: 1 33 110px;
 	margin-right: 1em;
+}
+
+.tsfem-e-focus-assessment-description {
+	-webkit-flex: 66 1 auto;
+	flex: 66 1 auto;
 }
 
 /* # Misc

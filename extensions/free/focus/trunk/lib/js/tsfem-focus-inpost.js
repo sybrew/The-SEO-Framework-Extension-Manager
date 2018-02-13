@@ -214,7 +214,7 @@ window.tsfem_e_focus_inpost = {
 			for ( let i = 0; i < n; ) {
 				p = /\/(.*)\/(.*)/.exec( regex[ i ] );
 
-				contents = contents.match( RegExp(
+				contents = contents.match( new RegExp(
 					p[1].replace(
 						/\{\{kw\}\}/g,
 						kw.replace( /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&' )

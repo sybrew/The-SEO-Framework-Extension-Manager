@@ -218,7 +218,7 @@ final class Admin extends Core {
 		if ( ! $save_access_state )
 			return;
 
-		//= If doing more than just AJAX, or when stop.
+		//= If doing more than just AJAX, stop.
 		if ( $save_access_state ^ 0b1111 ^ 0b0100 )
 			return;
 

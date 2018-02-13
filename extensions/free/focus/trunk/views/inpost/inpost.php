@@ -34,7 +34,7 @@ create_analysis_field :;
 				foreach ( $post_meta['kw']['values'] as $id => $values ) :
 					call_user_func(
 						$template_cb, [
-							'supportive' => (bool) $i++,
+							'supportive' => (bool) $i++, // true if 2nd or later iteration.
 							'is_premium' => $is_premium,
 							'wrap' => [
 								'id' => $make_option_id( $id, 'wrap' ),

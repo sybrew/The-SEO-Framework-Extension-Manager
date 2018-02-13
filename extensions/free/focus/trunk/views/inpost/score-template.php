@@ -111,9 +111,10 @@ $_scores = [
 		'assessment' => [
 			'content' => 'pageContent',
 			'regex' => [
-				'/^.*?(?=\\r?\\n(\\r?\\n)|$)/gius', // 1: Match first paragraph
-				'/(?=>|.)[^>]+(?=<)/gis',           // 2: All but tags.
-				'/{{kw}}/giu',                      // 3: Match words.
+				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
+				'/^(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/giu', // 1: Match first paragraph
+				'/(?=>|(.|\\s))[^>]+(?=<)/gi',           // 2: All but tags.
+				'/{{kw}}/giu',                           // 3: Match words.
 			],
 			'eval' => [
 				'input',
