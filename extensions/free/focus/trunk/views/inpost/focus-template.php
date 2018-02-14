@@ -91,7 +91,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 <div class=tsfem-e-focus-collapse-wrap id="<?php echo \esc_attr( $wrap['id'] ); ?>">
 	<?php
 	printf(
-		'<input type="checkbox" id=%s value="1" checked class=tsfem-e-focus-collapse-checkbox>',
+		'<input type=checkbox id=%s value="1" checked class=tsfem-e-focus-collapse-checkbox>',
 		\esc_attr( $collapser['id'] )
 	);
 	?>
@@ -188,8 +188,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			?>
 		</div>
 	</div>
-	<div class="tsfem-e-focus-collapse-content-wrap">
-		<div class="tsfem-e-focus-collapse-content">
+	<div class=tsfem-e-focus-collapse-content-wrap>
+		<div class=tsfem-e-focus-content-loader><div class=tsfem-e-focus-content-loader-bar></div></div>
+		<div class=tsfem-e-focus-collapse-content>
 			<?php
 			$this->output_score_template( compact( 'is_premium', 'is_active', 'keyword', 'sub_scores' ) );
 			?>

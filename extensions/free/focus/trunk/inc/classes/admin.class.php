@@ -141,6 +141,11 @@ final class Admin extends Core {
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
 			'deps' => [ 'tsf' ],
+			'colors' => [
+				'.tsfem-e-focus-content-loader-bar' => [
+					'background:{{$color_accent}}',
+				],
+			],
 		] );
 	}
 

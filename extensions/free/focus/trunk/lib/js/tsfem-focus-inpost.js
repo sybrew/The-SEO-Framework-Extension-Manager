@@ -481,37 +481,94 @@ window.tsfem_e_focus_inpost = {
 	},
 
 	toggleKeywordVisuals: function( idPrefix, state ) {
-		let contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' );
+		let contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' ),
+			$wrap = jQuery( contentWrap );
 
 		if ( 'disable' === state ) {
-			jQuery( contentWrap ).find( '.tsfem-e-focus-scores' ).fadeOut( 150, () => {
-				jQuery( contentWrap ).find( '.tsfem-e-focus-no-keyword-wrap' ).fadeIn( 250 );
+			$wrap.find( '.tsfem-e-focus-scores' ).fadeOut( 150, () => {
+				$wrap.find( '.tsfem-e-focus-no-keyword-wrap' ).fadeIn( 250 );
 			} );
 		} else {
-			jQuery( contentWrap ).find( '.tsfem-e-focus-no-keyword-wrap' ).fadeOut( 150, () => {
-				jQuery( contentWrap ).find( '.tsfem-e-focus-scores' ).fadeIn( 250 );
+			$wrap.find( '.tsfem-e-focus-no-keyword-wrap' ).fadeOut( 150, () => {
+				$wrap.find( '.tsfem-e-focus-scores' ).fadeIn( 250 );
 			} );
 		}
+	},
+
+	isActionableElement: function( element ) {
+
+		if ( ! element instanceof HTMLElement )
+			return false;
+
+		let test =
+			   element instanceof HTMLInputElement
+			|| element instanceof HTMLSelectElement
+			|| element instanceof HTMLButtonElement
+			|| element instanceof HTMLTextAreaElement
+			|| element instanceof HTMLLabelElement
+			;
+
+		return test;
 	},
 
 	resetCollapserListeners: function() {
 
 		//= Make the whole collapse bar a double-clickable expander/retractor.
-		jQuery( '.tsfem-e-focus-header' )
+		jQuery( '.tsfem-e-focus-collapse-header' )
 			.off( 'dblclick.tsfem-e-focus' )
 			.on( 'dblclick.tsfem-e-focus', ( e ) => {
-				let a = e.target.parentNode.querySelector( 'input' );
-				if ( a instanceof Element ) a.checked = ! a.checked;
+				if ( tsfem_e_focus_inpost.isActionableElement( e.target ) )
+					return;
+
+				let $a = jQuery( e.target ).closest( '.tsfem-e-focus-collapse-wrap' ).find( 'input' );
+				$a.prop( 'checked', ! $a.prop( 'checked' ) );
+				//= Doesn't support IE11.
+				// let a = e.target.closest( '.tsfem-e-focus-collapse-wrap' ).querySelector( 'input' );
+				// if ( a instanceof Element ) a.checked = ! a.checked;
 			} );
 
-		let keywordBuffer = 0, keywordTimeout = 1000;
+		let keywordBuffer = {},
+			keywordTimeout = 1500;
+
+		let barSmoothness = 2.5,
+			superSmooth = true,
+			barWidth = {},
+			barBuffer = {},
+			barTimeout = keywordTimeout / ( 100 * barSmoothness );
+
+		//= Subtract a little of the bar timer to prevent painting/scripting overlap.
+		if ( superSmooth )
+			barTimeout *= .975;
+
+		const barGo = ( id, bar ) => {
+			bar.style.width = ++barWidth[ id ] / barSmoothness + '%';
+		}
+		const barStop = ( id, bar ) => {
+			barWidth[ id ] = 0;
+			bar.style.width = '0%';
+		}
+
 		//= Set keyword entry listener
 		jQuery( '.tsfem-e-focus-keyword-entry' )
 			.off( 'input.tsfem-e-focus' )
-			.on( 'input.tsfem-e-focus', ( e ) => {
-				clearTimeout( keywordBuffer );
-				keywordBuffer = setTimeout( () => {
-					tsfem_e_focus_inpost.doKeywordEntry( e );
+			.on( 'input.tsfem-e-focus', event => {
+
+				//= Vars must be registered here as it's asynchronous.
+				let loaderId = event.target.name;
+				let bar = jQuery( event.target )
+						.closest( '.tsfem-e-focus-collapse-wrap' )
+						.find( '.tsfem-e-focus-content-loader-bar' )[0];
+
+				clearInterval( barBuffer[ loaderId ] );
+				clearTimeout( keywordBuffer[ loaderId ] );
+				barStop( loaderId, bar );
+				barBuffer[ loaderId ] = setInterval( () => barGo( loaderId, bar ), barTimeout );
+
+				//= TODO set visuals somewhere.
+				keywordBuffer[ loaderId ] = setTimeout( () => {
+					tsfem_e_focus_inpost.doKeywordEntry( event );
+					clearInterval( barBuffer[ loaderId ] );
+					barStop( loaderId, bar );
 				}, keywordTimeout );
 			} );
 	},

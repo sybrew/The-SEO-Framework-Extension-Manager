@@ -139,10 +139,22 @@
 	display: block;
 	-webkit-animation: tsfem-e-focus-fade-in .5s;
 	animation: tsfem-e-focus-fade-in .5s;
+	position: relative;
 }
 
 .tsfem-e-focus-collapse-checkbox:checked ~ .tsfem-e-focus-collapse-content-wrap {
 	display: none;
+}
+
+.tsfem-e-focus-content-loader {
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+.tsfem-e-focus-content-loader-bar {
+	width: 0%;
+	height: 3px;
+	background: #007bd2;
 }
 
 .tsfem-e-focus-collapse-content {
