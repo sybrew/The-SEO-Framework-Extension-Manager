@@ -99,7 +99,7 @@ final class Admin extends Core {
 					'#titlewrap > input' => 'append',
 				],
 				'pageUrl' => [
-					'#editable-post-name-full' => 'dominate',
+					'#post_name' => 'dominate',
 				],
 				'pageContent' => [
 					'#content' => 'append',

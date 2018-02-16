@@ -17,10 +17,14 @@ printf(
 	$has_keyword ? \esc_html__( 'Below you find the previous assessments.', 'the-seo-framework-extension-manager' ) : ''
 );
 printf(
-	'<span class="tsfem-e-focus-no-keyword-wrap hide-if-no-js attention" %s id=%s>%s</span>',
-	\esc_attr( $key . '-no-content-wrap' ),
-	$has_keyword ? 'style="display:none"' : '',
+	'<span class="tsfem-e-focus-no-keyword-wrap hide-if-no-js attention" %s>%s</span>',
+	$has_keyword ? 'style=display:none' : '',
 	\esc_html__( 'No keyword has been set, so no analysis can be made.', 'the-seo-framework-extension-manager' )
+);
+printf(
+	'<span class="tsfem-e-focus-something-wrong-wrap hide-if-no-js attention" %s>%s</span>',
+	'style=display:none',
+	\esc_html__( 'Something went wrong evaluating the subject.', 'the-seo-framework-extension-manager' )
 );
 
 /**
@@ -113,7 +117,7 @@ $_scores = [
 			'regex' => [
 				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
 				'/^(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/giu', // 1: Match first paragraph
-				'/(?=>|(.|\\s))[^>]+(?=<)/gi',           // 2: All but tags.
+				'/[^>]+(?=<|$|^)/gi',                    // 2: All but tags.
 				'/{{kw}}/giu',                           // 3: Match words.
 			],
 			'eval' => [
@@ -152,7 +156,7 @@ $_scores = [
 		'assessment' => [
 			'content' => 'pageContent',
 			'regex' => [
-				'/[^>]+(?=<|$|^)/gm', // 1: All but tags.
+				'/[^>]+(?=<|$|^)/gi', // 1: All but tags.
 				'/{{kw}}/giu',        // 2: Match words.
 			],
 			'eval' => [
@@ -191,7 +195,14 @@ $_scores = [
 		'title' => esc_html__( 'Linking:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageContent',
-			'regex' => '/<a\\W.*href=("|\')?(.*?{{kw}}.*?\\2(\\s|\\W).*?>.*?<\\/a>)|(\\2\W).*?(\\W|>){{kw}}(\\W|>)?.*?<\\/a>/giu',
+			// Magic. Get all hyperlinks with title, href or contents with a matching keyword.
+			'regex' => '/(?=.*?href=)<a\\s.*?(((href|title)=(((["\']).*?{{kw}}[^=\'"]*\6)|({{kw}}[^=\'"])))|(.*?>.*?{{kw}})).*?<\/a>/giu',
+			/*[
+				// 1: Get all hyperlinks with keywords attached.
+				'(?=.*{{kw}})<a\\b[^>]*href=[^>]*>.*?<\\/a>',
+				// 2: Get title, href and contents with a matching keyword.
+				'((href|title)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.){{kw}}["\']?)|((?=>|(.|\\s)){{kw}}[^>]+(?=<))',
+			],*/
 			'eval' => [
 				'input',
 			],
@@ -199,8 +210,8 @@ $_scores = [
 		'maxScore' => 200,
 		'minScore' => 0,
 		'phrasing' => [
-			100 => esc_html__( 'A few links are found related to this subject. This is good.', 'the-seo-framework-extension-manager' ),
-			50  => esc_html__( 'A link is found related to this subject. This is good, but consider adding more.', 'the-seo-framework-extension-manager' ),
+			100 => esc_html__( 'A few links are found related to this subject, this is good.', 'the-seo-framework-extension-manager' ),
+			50  => esc_html__( 'A link is found related to this subject, this is good, but consider adding more.', 'the-seo-framework-extension-manager' ),
 			0   => esc_html__( 'No links are found related to this subject.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
@@ -265,7 +276,7 @@ $_scores = [
 			'content' => 'pageUrl',
 			'regex' => '/{{kw}}/giu',
 			'eval' => [
-				'innerHTML',
+				'input',
 			],
 		],
 		'maxScore' => 125,
@@ -362,7 +373,7 @@ $block_style = $has_keyword ? '' : 'style="display:none"';
 
 output_scores :;
 	printf(
-		'<div class="tsfem-e-focus-scores tsfem-flex" id=%s %s>',
+		'<div class="tsfem-e-focus-scores-wrap tsfem-flex" id=%s %s>',
 		\esc_attr( $key ),
 		$has_keyword ? '' : 'style="display:none"'
 	);
@@ -408,4 +419,4 @@ output_scores :;
 			$_value
 		);
 	endforeach;
-	echo '</div>'; //= END tsfem-e-focus-scores;
+	echo '</div>'; //= END tsfem-e-focus-scores-wrap;

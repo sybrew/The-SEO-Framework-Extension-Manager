@@ -174,7 +174,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						'tsf-tooltip-item',
 					] ) ),
 					\esc_attr__( 'Highlighting requires JavaScript', 'the-seo-framework-extension-manager' ),
-					\esc_attr__( 'Highlight evaluated keyword and synonyms.', 'the-seo-framework-extension-manager' )
+					\esc_attr__( 'Highlight evaluated keywords and synonyms.', 'the-seo-framework-extension-manager' )
 				)
 			);
 			printf(

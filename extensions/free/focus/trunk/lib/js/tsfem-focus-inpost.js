@@ -36,6 +36,7 @@ window.tsfem_e_focus_inpost = {
 
 	focusRegistry: {},
 	activeFocusAreas: {},
+	activeAssessments: {},
 
 	/**
 	 * Gets string until last numeric ID index.
@@ -62,9 +63,24 @@ window.tsfem_e_focus_inpost = {
 		return o;
 	},
 
-	doAnalysis: function( what ) {
-		if ( ! what ) return;
+	isActionableElement: function( element ) {
 
+		if ( ! element instanceof HTMLElement )
+			return false;
+
+		let test =
+			   element instanceof HTMLInputElement
+			|| element instanceof HTMLSelectElement
+			|| element instanceof HTMLLabelElement
+			|| element instanceof HTMLButtonElement
+			|| element instanceof HTMLTextAreaElement
+			;
+
+		return test;
+	},
+
+	getMaxIfOver: function( max, value ) {
+		return value > max ? max : value;
 	},
 
 	/**
@@ -79,7 +95,7 @@ window.tsfem_e_focus_inpost = {
 	 *
 	 * @function
 	 * @param {!Object} elements : {
-	 *   'context' => [ selector => string Type 'append|dominate' ]
+	 *   'area' => [ selector => string Type 'append|dominate' ]
 	 * }
 	 * @param {bool|undefined} set Whether to add or remove the elements.
 	 */
@@ -93,30 +109,30 @@ window.tsfem_e_focus_inpost = {
 		let selectors, type;
 
 		//= Filter elements.
-		for ( let context in elements ) {
-			selectors = elements[ context ];
+		for ( let area in elements ) {
+			selectors = elements[ area ];
 			if ( selectors !== Object( selectors ) )
 				continue;
 
-			registry[ context ]
-				|| ( registry[ context ] = {} );
+			registry[ area ]
+				|| ( registry[ area ] = {} );
 
 			for ( let selector in selectors ) {
 				type = selectors[ selector ];
 
-				registry[ context ][ type ]
-					|| ( registry[ context ][ type ] = [] );
+				registry[ area ][ type ]
+					|| ( registry[ area ][ type ] = [] );
 
 				if ( set ) {
 					//= Test if entries exist.
-					if ( registry[ context ][ type ].hasOwnProperty( selector ) )
+					if ( registry[ area ][ type ].hasOwnProperty( selector ) )
 						continue;
 
-					registry[ context ][ type ].push( selector );
+					registry[ area ][ type ].push( selector );
 				} else {
 					//= Unset
-					registry[ context ][ type ] =
-						registry[ context ][ type ].filter( s => s !== selector );
+					registry[ area ][ type ] =
+						registry[ area ][ type ].filter( s => s !== selector );
 				}
 			}
 		}
@@ -130,25 +146,27 @@ window.tsfem_e_focus_inpost = {
 	 * @access private
 	 *
 	 * @function
-	 * @param {!Object} elements : {
-	 *   'context' => [ selector => string type 'append|dominate' ]
-	 * }
+	 * @param {string|undefined} area The area to reset. Default undefined (catch-all).
 	 */
-	updateActiveFocusAreas: function() {
+	updateActiveFocusAreas: function( area ) {
 
-		let elements = tsfem_e_focus_inpost.focusRegistry;
+		/**
+		 * @param {!Object} elements : {
+		 *   'area' => [ selector => string type 'append|dominate' ]
+		 * }
+		 */
+		const elements = tsfem_e_focus_inpost.focusRegistry;
 
 		if ( ! elements || elements !== Object( elements ) ) return;
 
-		let areas = {},
+		let areas = tsfem_e_focus_inpost.activeFocusAreas,
 			types = {},
 			hasDominant = false,
 			lastDominant = '',
 			keys = [];
 
-		//= Filter elements. The input is expected.
-		for ( let context in elements ) {
-			types = elements[ context ];
+		const update = ( area ) => {
+			types = elements[ area ];
 			hasDominant = false;
 			lastDominant = '';
 			keys = [];
@@ -170,20 +188,35 @@ window.tsfem_e_focus_inpost = {
 				} );
 			}
 			if ( hasDominant ) {
-				areas[ context ] = [ lastDominant ];
+				areas[ area ] = [ lastDominant ];
 			} else {
-				if ( keys.length ) areas[ context ] = keys;
+				if ( keys.length ) {
+					areas[ area ] = keys;
+				} else {
+					delete areas[ area ];
+				}
+			}
+		}
+
+		if ( area ) {
+			if ( area in elements )
+				update( area );
+		} else {
+			//= Filter elements. The input is expected.
+			for ( let _area in elements ) {
+				update( _area );
 			}
 		}
 
 		tsfem_e_focus_inpost.activeFocusAreas = areas;
 	},
 
-	doCheckAll: function( idPrefix ) {
-	},
-
 	// TODO:
-	// 1. Add onchange listeners.
+	// 1. Add synonyms entry.
+	/**
+	 *
+	 * @param {object<integer,string>|(array|undefined)} synonyms
+	 */
 	doCheck: function ( rater, keyword, synonyms ) {
 
 		let $rater = jQuery( rater ),
@@ -204,7 +237,7 @@ window.tsfem_e_focus_inpost = {
 
 		const countChars = ( contents ) => {
 			// Strip all tags first.
-			contents = contents.match( /[^>]+(?=<|$|^)/gm );
+			contents = contents.match( /[^>]+(?=<|$|^)/gi );
 			return contents && contents.join( '' ).length || 0;
 		};
 		const countKeywords = ( kw, contents ) => {
@@ -340,17 +373,16 @@ window.tsfem_e_focus_inpost = {
 			queue: false,
 			duration: 150,
 			complete: () => {
-				$description.text( phrase + ' ' + realScore ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
-				tsfem_e_focus_inpost.setIconClass(
+				// TEMP
+				// $description.text( phrase ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
+				// TEMP: exchange for line above!!
+				$description.html( phrase + ' <code>Temp eval: ' + realScore + '</code>' ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
+				tsfem_e_focus_inpost.setRaterIconClass(
 					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
 					iconType
 				);
 			}
 		} );
-	},
-
-	getMaxIfOver: function( max, value ) {
-		return value > max ? max : value;
 	},
 
 	/**
@@ -403,51 +435,72 @@ window.tsfem_e_focus_inpost = {
 		//! TODO AJAX here for subject fetching, setting and executing.
 	},
 
-	prepareScores: function( event ) {
+	/**
+	 * Prepares all scores after keyword entry. Sets action listeners and performs
+	 * first check. Asynchronously.
+	 *
+	 * @since 1.0.0
+	 */
+	prepareAllScores: function( event ) {
 
 		let idPrefix = tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
 			contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' ),
 			scoresWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'scores' ),
 			subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
-		// TODO add error?
-		if ( ! subScores || subScores !== Object( subScores ) ) return;
+		if ( ! subScores || subScores !== Object( subScores ) ) {
+			//= subScores isn't set.
+			tsfem_e_focus_inpost.toggleEvaluationVisuals(
+				idPrefix,
+				'error'
+			);
+			return;
+		}
 
-		tsfem_e_focus_inpost.toggleKeywordVisuals(
+		tsfem_e_focus_inpost.toggleEvaluationVisuals(
 			idPrefix,
 			'enable'
 		);
 
-		let data, $e, rating, blind, input;
-		subScores.forEach( e => {
-			rating = e.querySelector( '.tsfem-e-focus-assessment-rating' );
-			tsfem_e_focus_inpost.setIconClass( rating, 'loading' );
+		subScores.forEach( el => {
+			//= Set vars here to prevent async clashes.
+			let data, $el, rating, blind, input;
+
+			rating = el.querySelector( '.tsfem-e-focus-assessment-rating' );
+			tsfem_e_focus_inpost.setRaterIconClass( rating, 'loading' );
 			blind = true;
-			$e = jQuery( e );
-			data = $e.data( 'scores' );
+			$el = jQuery( el );
+			data = $el.data( 'scores' );
 
 			if ( data && data.hasOwnProperty( 'assessment' ) ) {
 				if ( tsfem_e_focus_inpost.activeFocusAreas.hasOwnProperty( data.assessment.content ) ) {
-					e.dataset.assess = true;
+					el.dataset.assess = true;
+					tsfem_e_focus_inpost.addToChangeListener( el, data.assessment.content );
 					blind = false;
-					$e.fadeIn( {
+					$el.fadeIn( {
 						queue: false, // defer, go to next check.
-						duration: 250,
-						complete: () => { tsfem_e_focus_inpost.doCheck( e, event.target.value ); }
+						duration: 150,
+						complete: () => {
+							// defer and wait for paint lag.
+							setTimeout( () => {
+								tsfem_e_focus_inpost.doCheck( el, event.target.value );
+							}, 150 );
+						}
 					} );
 				}
 			}
 			if ( blind ) {
-				tsfem_e_focus_inpost.setIconClass( rating, 'unknown' );
-				e.dataset.assess = false;
+				//= Hide the element when it can't be parsed, for now.
 
-				input = document.getElementsByName( e.id );
+				tsfem_e_focus_inpost.setRaterIconClass( rating, 'unknown' );
+				el.dataset.assess = false;
+
+				input = document.getElementsByName( el.id );
 				if ( input && input[0] ) input[0].value = 0;
 
-				$e.fadeOut( 500 );
+				$el.fadeOut( { queue: false, duration: 250 } );
 			}
 		} );
-
 	},
 
 	doKeywordEntry: function( event ) {
@@ -465,7 +518,7 @@ window.tsfem_e_focus_inpost = {
 		target.dataset.prev = val;
 
 		if ( ! val.length ) {
-			tsfem_e_focus_inpost.toggleKeywordVisuals(
+			tsfem_e_focus_inpost.toggleEvaluationVisuals(
 				tsfem_e_focus_inpost.getSubIdPrefix( event.target.id ),
 				'disable'
 			);
@@ -476,39 +529,44 @@ window.tsfem_e_focus_inpost = {
 			tsfem_e_focus_inpost.prepareSubjectSetter( event );
 		}
 
-		tsfem_e_focus_inpost.prepareScores( event );
+		tsfem_e_focus_inpost.prepareAllScores( event );
 		// tsfem_e_focus_inpost.prepareHighlighter( event );
 	},
 
-	toggleKeywordVisuals: function( idPrefix, state ) {
+	toggleEvaluationVisuals: function( idPrefix, state ) {
+
 		let contentWrap = tsfem_e_focus_inpost.getSubElementById( idPrefix, 'wrap' ),
-			$wrap = jQuery( contentWrap );
+			$wrap = jQuery( contentWrap ),
+			hideClasses = [
+				'.tsfem-e-focus-scores-wrap',
+				'.tsfem-e-focus-no-keyword-wrap',
+				'.tsfem-e-focus-something-wrong-wrap'
+			],
+			show = '';
 
-		if ( 'disable' === state ) {
-			$wrap.find( '.tsfem-e-focus-scores' ).fadeOut( 150, () => {
-				$wrap.find( '.tsfem-e-focus-no-keyword-wrap' ).fadeIn( 250 );
-			} );
-		} else {
-			$wrap.find( '.tsfem-e-focus-no-keyword-wrap' ).fadeOut( 150, () => {
-				$wrap.find( '.tsfem-e-focus-scores' ).fadeIn( 250 );
-			} );
+		switch ( state ) {
+			case 'disable' :
+				show = '.tsfem-e-focus-no-keyword-wrap';
+				break;
+
+			case 'enable' :
+				show = '.tsfem-e-focus-scores-wrap';
+				break;
+
+			default :
+			case 'error' :
+				show = '.tsfem-e-focus-something-wrong-wrap';
+				break;
 		}
-	},
 
-	isActionableElement: function( element ) {
+		hideClasses.splice( hideClasses.indexOf( show ), 1 );
 
-		if ( ! element instanceof HTMLElement )
-			return false;
-
-		let test =
-			   element instanceof HTMLInputElement
-			|| element instanceof HTMLSelectElement
-			|| element instanceof HTMLButtonElement
-			|| element instanceof HTMLTextAreaElement
-			|| element instanceof HTMLLabelElement
-			;
-
-		return test;
+		$wrap.find( hideClasses.join( ', ' ) ).fadeOut( 150, () => {
+			//= Paint lag escape.
+			setTimeout( () => {
+				$wrap.find( show ).fadeIn( 250 );
+			}, 150 );
+		} );
 	},
 
 	resetCollapserListeners: function() {
@@ -564,16 +622,15 @@ window.tsfem_e_focus_inpost = {
 				barStop( loaderId, bar );
 				barBuffer[ loaderId ] = setInterval( () => barGo( loaderId, bar ), barTimeout );
 
-				//= TODO set visuals somewhere.
 				keywordBuffer[ loaderId ] = setTimeout( () => {
-					tsfem_e_focus_inpost.doKeywordEntry( event );
 					clearInterval( barBuffer[ loaderId ] );
+					tsfem_e_focus_inpost.doKeywordEntry( event );
 					barStop( loaderId, bar );
 				}, keywordTimeout );
 			} );
 	},
 
-	setIconClass: function( element, to ) {
+	setRaterIconClass: function( element, to ) {
 
 		let classes = [
 			'edit',
@@ -592,6 +649,8 @@ window.tsfem_e_focus_inpost = {
 		} );
 	},
 
+	//! TODO use inline style instead.
+	//= @see toggleEvaluationVisuals
 	disableFocus: function() {
 		let el = document.getElementById( 'tsfem-e-focus-analysis-wrap' )
 			.querySelector( '.tsf-flex-setting-input' );
@@ -600,11 +659,233 @@ window.tsfem_e_focus_inpost = {
 			el.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
 	},
 
+	setAllRatersOfTo: function( type, to ) {
+
+		let assessments = tsfem_e_focus_inpost.activeAssessments;
+
+		if ( ! assessments || assessments !== Object( assessments )
+		|| ! ( type in assessments ) ) {
+			return;
+		}
+
+		to = to || 'unknown';
+
+		assessments[ type ].forEach( id => {
+			let el = document.getElementById( id ),
+				prefixID = tsfem_e_focus_inpost.getSubIdPrefix( id ),
+				rater = el.querySelector( '.tsfem-e-focus-assessment-rating' );
+
+			tsfem_e_focus_inpost.setRaterIconClass( rater, to );
+		} );
+	},
+
+	addToChangeListener: function( checkerWrap, contentType ) {
+
+		let areas = tsfem_e_focus_inpost.activeFocusAreas,
+			assessments = tsfem_e_focus_inpost.activeAssessments;
+
+		if ( ! assessments || assessments !== Object( assessments ) ) {
+			assessments = [];
+		}
+
+		if ( ! assessments[ contentType ]
+		|| assessments[ contentType ] !== Object( assessments[ contentType ] ) ) {
+			assessments[ contentType ] = [];
+		}
+
+		//? Redundant check.
+		if ( areas.hasOwnProperty( contentType ) ) {
+			assessments[ contentType ].push( checkerWrap.id );
+		} else {
+			delete assessments[ contentType ][ checkerWrap.id ];
+		}
+
+		tsfem_e_focus_inpost.activeAssessments = assessments;
+	},
+
+	triggerChangeListener: function( event ) {
+
+		let assessments = tsfem_e_focus_inpost.activeAssessments;
+
+		if ( ! assessments || assessments !== Object( assessments )
+		|| ! ( event.data.type in assessments ) ) {
+			return;
+		}
+
+		assessments[ event.data.type ].forEach( id => {
+			let el = document.getElementById( id ),
+				prefixID = tsfem_e_focus_inpost.getSubIdPrefix( id ),
+				kwInput = tsfem_e_focus_inpost.getSubElementById( prefixID, 'keyword' ),
+				kw = kwInput.value || '';
+
+			if ( ! kw.length )
+				return; // continue
+
+			let rater = el.querySelector( '.tsfem-e-focus-assessment-rating' );
+			tsfem_e_focus_inpost.setRaterIconClass( rater, 'loading' );
+
+			//= defer.
+			setTimeout( () => {
+				tsfem_e_focus_inpost.doCheck(
+					el,
+					kw,
+					void 0 // TODO set synonyms
+				);
+			}, 150 );
+		} );
+	},
+
+	/**
+	 *
+	 * @TODO test if this leaks memory. If so, place listener and buffers in object's scope.
+	 *
+	 * @param {string|undefined} type The type to reset. Default undefined (catch-all).
+	 */
+	resetChangeListeners: function( type ) {
+		let areas = tsfem_e_focus_inpost.activeFocusAreas;
+
+		let changeTimeout = 1500,
+			changeBuffers = {};
+
+		const listener = ( event ) => {
+			let key = event.target.id || event.target.classList.join();
+			clearTimeout( changeBuffers[ key ] );
+			changeBuffers[ key ] = setTimeout( () => {
+				tsfem_e_focus_inpost.triggerChangeListener( event );
+			}, changeTimeout );
+		};
+		const reset = ( type ) => {
+			let changeEventName = tsfem_e_focus_inpost.getChangeEventName( type );
+			jQuery( areas[ type ].join( ', ' ) )
+				.off( changeEventName )
+				.on( changeEventName, { 'type' : type }, listener );
+		};
+
+		if ( type ) {
+			if ( type in areas )
+				reset( type );
+		} else {
+			for ( let _type in areas ) {
+				reset( _type );
+			}
+		}
+	},
+
+	getChangeEvents: function( type ) {
+		return [
+			'input.tsfem-e-focus-' + type,
+			// 'click.tsfem-e-focus-' + type,
+			'change.tsfem-e-focus-' + type
+		];
+	},
+
+	getChangeEventName: function( type ) {
+		return tsfem_e_focus_inpost.getChangeEvents( type ).join( ' ' );
+	},
+
+	getChangeEventTrigger: function( type ) {
+		return tsfem_e_focus_inpost.getChangeEvents( type )[0];
+	},
+
+	monkeyPatch: function() {
+
+		const MutationObserver =
+			   window.MutationObserver
+			|| window.WebKitMutationObserver
+			|| window.MozMutationObserver;
+
+		const interval = 3000;
+
+		/**
+		 * Add interval-based change event listeners on '#post_name'
+		 * @see ..\wp-admin\post.js:editPermalink()
+		 */
+		(() => {
+			let lastValue, listenNode;
+			listenNode = document.getElementById( 'post_name' );
+			const compare = () => {
+				if ( listenNode.value !== lastValue ) {
+					lastValue = listenNode.value;
+					jQuery( listenNode ).trigger(
+						tsfem_e_focus_inpost.getChangeEventName( 'pageUrl' )
+					);
+				}
+			};
+			if ( listenNode ) {
+				lastValue = listenNode.value;
+				setInterval( compare, interval );
+			}
+		})();
+
+		/**
+		 * Add change event listeners on '#content' for tinyMCE
+		 * @see ..\wp-admin\editor.js:initialize()
+		 */
+		(() => {
+			if ( typeof tinyMCE === 'undefined' || typeof tinyMCE.on !== 'function' )
+				return;
+
+			let loaded = false;
+
+			tinyMCE.on( 'addEditor', ( event ) => {
+				if ( loaded ) return;
+				if ( event.editor.id === 'content' ) {
+					loaded = true;
+
+					tsfem_e_focus_inpost.updateActiveFocusAreas( 'pageContent' );
+					tsfem_e_focus_inpost.resetChangeListeners( 'pageContent' );
+
+					let buffers = {},
+						editor = tinyMCE.get( 'content' ),
+						buffering = false;
+
+					editor.on( 'GetContent', ( event ) => {
+						clearTimeout( buffers['GetContent'] );
+						if ( ! buffering && editor.isDirty() ) {
+							tsfem_e_focus_inpost.setAllRatersOfTo( 'pageContent', 'loading' );
+							buffering = true;
+						}
+						buffers['GetContent'] = setTimeout( () => {
+							editor.isDirty() || jQuery( '#content' ).trigger(
+								tsfem_e_focus_inpost.getChangeEventTrigger( 'pageContent' )
+							);
+							buffering = false;
+						}, 1000 );
+					} );
+					editor.on( 'Dirty', ( event ) => {
+						clearTimeout( buffers['Dirty'] );
+						if ( ! buffering ) {
+							buffers['Dirty'] = setTimeout( () => {
+								tsfem_e_focus_inpost.setAllRatersOfTo( 'pageContent', 'unknown' );
+							}, 500 );
+						}
+					} );
+				}
+			} );
+
+			// let listenNode, observer, config;
+			// observer = new MutationObserver( mutationsList => {
+			// 	tsfem_e_focus_inpost.updateActiveFocusAreas( 'pageContent' );
+			// 	tsfem_e_focus_inpost.resetChangeListeners( 'pageContent' );
+			// 	jQuery( '#content' ).trigger(
+			// 		tsfem_e_focus_inpost.getChangeEventName( 'pageContent' )
+			// 	);
+			// } );
+			//= Tab switch events and heartbeat: Not important.
+			// config = { attributes: true, characterData: true };
+			// listenNode = document.getElementById( 'content' );
+			// listenNode && observer.observe( listenNode, config );
+		})();
+	},
+
 	onReady: function( event ) {
+
+		tsfem_e_focus_inpost.monkeyPatch();
 
 		if ( tsfem_e_focusInpostL10n.hasOwnProperty( 'focusElements' ) ) {
 			tsfem_e_focus_inpost.updateFocusRegistry( tsfem_e_focusInpostL10n.focusElements, true );
 			tsfem_e_focus_inpost.updateActiveFocusAreas();
+			tsfem_e_focus_inpost.resetChangeListeners();
 		}
 
 		//= There's nothing to focus on.
