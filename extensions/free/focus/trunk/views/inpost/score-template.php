@@ -41,11 +41,6 @@ $_scores = [
 		'assessment' => [
 			'content' => 'seoTitle',
 			'regex' => '/{{kw}}/giu',
-			'eval' => [
-				'input',
-				'innerHTML',
-				'placeholder',
-			],
 		],
 		'maxScore' => 200,
 		'minScore' => 0,
@@ -79,9 +74,6 @@ $_scores = [
 		'assessment' => [
 			'content' => 'pageTitle',
 			'regex' => '/{{kw}}/giu',
-			'eval' => [
-				'input',
-			],
 		],
 		'maxScore' => 150,
 		'minScore' => 0,
@@ -120,9 +112,6 @@ $_scores = [
 				'/[^>]+(?=<|$|^)/gi',                    // 2: All but tags.
 				'/{{kw}}/giu',                           // 3: Match words.
 			],
-			'eval' => [
-				'input',
-			],
 		],
 		'maxScore' => 100,
 		'minScore' => 0,
@@ -158,9 +147,6 @@ $_scores = [
 			'regex' => [
 				'/[^>]+(?=<|$|^)/gi', // 1: All but tags.
 				'/{{kw}}/giu',        // 2: Match words.
-			],
-			'eval' => [
-				'input',
 			],
 		],
 		'maxScore' => 800,
@@ -203,9 +189,6 @@ $_scores = [
 				// 2: Get title, href and contents with a matching keyword.
 				'((href|title)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.){{kw}}["\']?)|((?=>|(.|\\s)){{kw}}[^>]+(?=<))',
 			],*/
-			'eval' => [
-				'input',
-			],
 		],
 		'maxScore' => 200,
 		'minScore' => 0,
@@ -239,10 +222,6 @@ $_scores = [
 		'assessment' => [
 			'content' => 'seoDescription',
 			'regex' => '/{{kw}}/giu',
-			'eval' => [
-				'input',
-				'placeholder',
-			],
 		],
 		'maxScore' => 50,
 		'minScore' => 0,
@@ -275,9 +254,6 @@ $_scores = [
 		'assessment' => [
 			'content' => 'pageUrl',
 			'regex' => '/{{kw}}/giu',
-			'eval' => [
-				'input',
-			],
 		],
 		'maxScore' => 125,
 		'minScore' => 0,
@@ -318,9 +294,17 @@ $make_data = function( array $data ) {
 	$ret = [];
 	foreach ( $data as $k => $v ) {
 		if ( is_array( $v ) ) {
-			$ret[] = sprintf( 'data-%s="%s"', $k, htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' ) );
+			$ret[] = sprintf(
+				'data-%s="%s"',
+				strtolower( preg_replace( '/([A-Z])/', '-$1', $k ) ), // dash case.
+				htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+			);
 		} else {
-			$ret[] = sprintf( 'data-%s="%s"', $k, $v );
+			$ret[] = sprintf(
+				'data-%s="%s"',
+				strtolower( preg_replace( '/([A-Z])/', '-$1', $k ) ), // dash case.
+				$v
+			);
 		}
 	}
 
@@ -396,7 +380,8 @@ output_scores :;
 						'phrasing'   => $args['phrasing'],
 						'rating'     => $args['rating'],
 						'scoring'    => $args['scoring'],
-					]
+					],
+					'assessmentType' => $type,
 				] ),
 				sprintf(
 					'<span class="tsfem-e-focus-assessment-rating tsfem-e-focus-icon %s"></span>',
