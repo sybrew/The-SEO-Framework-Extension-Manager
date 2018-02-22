@@ -223,6 +223,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 	* Articles
 	* Monitor
 	* Title Fix
+	* Honeypot
 /
 * TODO add shortcode for Local SEO addresses.
 * TODO Local SEO now accepts street entries without numbers? <- This is common in the UK, but it will break other things...

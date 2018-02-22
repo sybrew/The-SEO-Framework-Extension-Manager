@@ -720,6 +720,6 @@ final class Core {
 		//= We can't divide by 0.
 		$first_char = $first_char ?: 10;
 
-		return $table[ round( count( $table ) / $first_char ) ] . substr( $hash, 1 );
+		return $table[ round( count( $table ) / $first_char ) - 1 ] . substr( $hash, 1 );
 	}
 }

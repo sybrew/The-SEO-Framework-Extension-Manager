@@ -110,6 +110,12 @@ If you still receive a bunch of spam, consider combining this extension with an 
 
 ## Changelog
 
+### 1.1.1
+
+[tsfep-release time="-1"]
+
+* **Fixed:** An off-by-one error has been resolved generating a random first alphabetic character.
+
 ### 1.1.0
 
 [tsfep-release time="November 10th, 2017"]
