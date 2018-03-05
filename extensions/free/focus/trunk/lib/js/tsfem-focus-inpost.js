@@ -251,10 +251,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	// 1. Add synonyms entry.
 	/**
 	 * @param {HTMLElement} rater
-	 * @param {(string|object<integer,string>|(array|undefined))} conjunctions
+	 * @param {(string|object<integer,string>|(array|undefined))} inflections
 	 * @param {object<integer,string>|(array|undefined)} synonyms
 	 */
-	const doCheck = ( rater, conjunctions, synonyms ) => {
+	const doCheck = ( rater, inflections, synonyms ) => {
 
 		let $rater = $( rater );
 
@@ -263,11 +263,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		let data = $rater.data( 'scores' ),
 			checkElements = activeFocusAreas[ data.assessment.content ],
-			countConjunction = 0,
-			countSynonym = 0,
-			charcountConjunction = 0,
-			charCountSynonym = 0,
-			charCount = 0,
+			inflectionCount = 0,
+			synonymCount = 0,
+			inflectctionCharCount = 0,
+			synonymCharCount = 0,
+			contentCharCount = 0,
 			content,
 			regex = data.assessment.regex;
 
@@ -276,13 +276,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			regex = [ regex ];
 		}
 
-		//= Conjunctions to object if it isn't already.
-		if ( conjunctions !== Object( conjunctions ) ) {
-			conjunctions = [ conjunctions ];
+		//= Convert inflections to object if it isn't already.
+		if ( inflections !== Object( inflections ) ) {
+			inflections = [ inflections ];
 		}
-
-		//= TEMP!!! var_dump()
-		conjunctions = [ 'dursley', 'dursleys' ];
 
 		const escapeRegex = ( word ) => word.replace( /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&' );
 		const escapeStr = ( str ) => {
@@ -323,34 +320,35 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				//= Join content as this is a recursive regexp.
 				matches = matches.join( ' ' );
 			}
-			if ( 'p' === data.scoring.type ) console.log( [ contents, matches, matches && matches.length ] );
 			// Return the number of matches found.
 			return matches && matches.length || 0;
 		};
-		const stripWord = ( word, contents ) => {
-			return contents.replace(
-				new RegExp(
-					escapeRegex( escapeStr( word ) ),
-					'gi'
-				),
-				'/' //? A filler that doesn't break XML tag attribute closures ("|'|%20).
-			);
+		const stripWord = ( word ) => {
+			return {
+				from: ( contents ) => contents.replace(
+					new RegExp(
+						escapeRegex( escapeStr( word ) ),
+						'gi'
+					),
+					'/' //? A filler that doesn't break XML tag attribute closures ("|'|%20).
+				)
+			};
 		};
-		const countConjunctions = ( conjunctions, content ) => {
-			let _conjunctions = conjunctions,
+		const countInflections = ( inflections, content ) => {
+			let _inflections = inflections,
 				_content = content;
 			//= Sort words by longest to shortest, but in natural language order (a-z).
-			_conjunctions.sort( ( a, b ) => {
+			_inflections.sort( ( a, b ) => {
 				return b.length - a.length || a.localeCompare( b );
 			} );
-			_conjunctions.forEach( ( cj ) => {
-				let count = countWords( cj, _content, true );
+			_inflections.forEach( ( cj ) => {
+				let count = countWords( cj, _content );
 					// console.log( [ cj, cj.length, count, _content ] );
 
-				countConjunction += count;
-				charcountConjunction += cj.length * count;
+				inflectionCount += count;
+				inflectctionCharCount += cj.length * count;
 				//= Strip found word from contents.
-				_content = stripWord( cj, _content );
+				_content = stripWord( cj ).from( _content );
 			} );
 		};
 		const countSynonyms = ( synonyms, contents ) => {
@@ -374,9 +372,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 
 			if ( foundContent( content ) ) {
-				countConjunctions( conjunctions, content );
+				countInflections( inflections, content );
 				countSynonyms( synonyms, content );
-				charCount += countChars( content );
+				contentCharCount += countChars( content );
 			}
 		} );
 
@@ -398,20 +396,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		switch ( scoring.type ) {
 			case 'n' :
-				if ( countConjunction )
-					realScore += calcScoreN( scoring.keyword, getMaxIfOver( scoring.keyword.max, countConjunction ) );
-				if ( countSynonym )
-					realScore += calcScoreN( scoring.synonym, getMaxIfOver( scoring.synonym.max, countSynonym ) );
+				if ( inflectionCount )
+					realScore += calcScoreN( scoring.keyword, getMaxIfOver( scoring.keyword.max, inflectionCount ) );
+				if ( synonymCount )
+					realScore += calcScoreN( scoring.synonym, getMaxIfOver( scoring.synonym.max, synonymCount ) );
 
 				endScore = realScore;
 				break;
 
 			case 'p' :
-				if ( charCount ) {
-					if ( charcountConjunction )
-						density += calcDensity( charCount, calcSChars( scoring.keyword.weight, charcountConjunction ) );
-					if ( charCountSynonym )
-						density += calcDensity( charCount, calcSChars( scoring.synonym.weight, charCountSynonym ) );
+				if ( contentCharCount ) {
+					if ( inflectctionCharCount )
+						density += calcDensity( contentCharCount, calcSChars( scoring.keyword.weight, inflectctionCharCount ) );
+					if ( synonymCharCount )
+						density += calcDensity( contentCharCount, calcSChars( scoring.synonym.weight, synonymCharCount ) );
 				}
 
 				realScore = calcRealDensityScore( scoring, density );
