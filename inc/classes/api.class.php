@@ -197,7 +197,7 @@ class API extends Core {
 	public function _get_api_response( array $args, &$_instance, &$bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) )
-			return $this->get_api_response( $args );
+			return $this->get_api_response( $args, false );
 
 		return false;
 	}
@@ -208,10 +208,11 @@ class API extends Core {
 	 * @since 1.0.0
 	 * @see $this->handle_request() The request validation wrapper.
 	 *
-	 * @param array $args The API query parameters.
+	 * @param array $args     The API query parameters.
+	 * @param bool  $internal Whether the API call is for $this object.
 	 * @return string Response body. Empty string if no body or incorrect parameter given.
 	 */
-	protected function get_api_response( array $args ) {
+	protected function get_api_response( array $args, $internal = true ) {
 
 		$defaults = [
 			'request'     => '',
@@ -224,7 +225,7 @@ class API extends Core {
 		$args = \wp_parse_args( $args, $defaults );
 
 		if ( empty( $args['request'] ) ) {
-			$this->set_error_notice( [ 201 => '' ] );
+			$internal && $this->set_error_notice( [ 201 => '' ] );
 			return false;
 		}
 
@@ -249,7 +250,7 @@ class API extends Core {
 		$request = \wp_safe_remote_get( $target_url, $http_args );
 
 		if ( 200 !== (int) \wp_remote_retrieve_response_code( $request ) ) {
-			$this->set_error_notice( [ 202 => '' ] );
+			$internal && $this->set_error_notice( [ 202 => '' ] );
 			return false;
 		}
 
@@ -335,5 +336,88 @@ class API extends Core {
 		endif;
 
 		return $_response;
+	}
+
+	/**
+	 * Returns API secret for a final static class.
+	 *
+	 * The final static class shouldn't be instanced.
+	 *
+	 * @since 1.5.0
+	 * @param string $class The class instance name.
+	 * @param string $_instance The verification instance. Passed by reference.
+	 * @param array $bits The verification bits. Passed by reference.
+	 */
+	final public function _init_final_static_extension_api_access( $class, &$_instance, &$bits ) {
+
+		if ( $this->_has_died() )
+			return false;
+
+		if ( false === ( $this->_verify_instance( $_instance, $bits[1] ) or $this->_maybe_die() ) )
+			return false;
+
+		if ( false === $class )
+			return false;
+
+		return $this->generate_api_access_key( $class )[ $class ];
+	}
+
+	/**
+	 * Gets API response for extension.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param object $object The caller class.
+	 * @param string $key    The API access key for $object.
+	 * @param array $args : {
+	 *   'request' => string The request type.
+	 *    ...      => mixed  Additional parameters.
+	 * }
+	 * @return bool|string False on failure. JSON/HTML response otherwise.
+	 */
+	final public function _get_extension_api_response( $object, $key, $args ) {
+
+		if ( ! $this->_verify_api_access( $object, $key ) )
+			return false;
+
+		$subscription = $this->get_subscription_status();
+		$args = array_merge( $args, [
+			'email'       => $subscription['email'],
+			'licence_key' => $subscription['key'],
+		] );
+
+		return $this->get_api_response( $args, false );
+	}
+
+	/**
+	 * Verifies API access.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param object $object The class object to verify.
+	 * @param string $key    The attached object key.
+	 * @return bool True if verified, false otherwise.
+	 */
+	final private function _verify_api_access( $object, $key ) {
+		$keys = &$this->generate_api_access_key();
+		return $this->coalesce_var( $keys[ get_class( $object ) ], null ) === $key;
+	}
+
+	/**
+	 * Generates API access keys.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string|bool $class The class name. If false, no key is generated.
+	 * @return array $keys, the storage keys. Passed by reference.
+	 */
+	final private function &generate_api_access_key( $class = false ) {
+
+		static $keys = [];
+
+		if ( false !== $class )
+			$keys[ $class ] = mt_rand() . uniqid();
+
+		return $keys;
 	}
 }

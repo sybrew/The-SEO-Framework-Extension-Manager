@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 /**
  * Extension Name: Focus
  * Extension URI: https://theseoframework.com/extensions/focus/
- * Extension Description: The Focus extension guides you through the process of writing quality content with focus keywords and subjects.
+ * Extension Description: The Focus extension guides you through the process of writing quality content with focus keywords, inflections, and synonyms.
  * Extension Version: 1.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/

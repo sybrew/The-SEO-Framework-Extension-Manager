@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
  * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
  * Extension Description: The Honeypot extension catches comment spammers through four lightweight yet powerful ways.
- * Extension Version: 1.1.0
+ * Extension Version: 1.1.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -436,8 +436,8 @@ final class Core {
 		 * Determines whether the hashing is randomized, or otherwise static.
 		 * Set this to true if you don't use caching and still get spam through.
 		 *
-		 * @uses @const WP_CACHE If WP_CACHE is true, hardcore is false.
-		 *
+		 * @since 1.0.0
+		 * @uses const WP_CACHE If WP_CACHE is true, hardcore is false.
 		 * @todo make option.
 		 * @param bool $hardcore
 		 */
@@ -684,11 +684,14 @@ final class Core {
 			 * If you're using page caching, set this higher.
 			 *
 			 * @since 1.0.0
+			 * @since 1.1.1 Now passes the $hardcore parameter.
+			 * @see $this->set_hardcore()
 			 *
-			 * @param int $scale The time in seconds on how fast the check works.
-			 *            Note that this value is doubled for the fallback check.
+			 * @param int  $scale    The time in seconds on how fast the check works.
+			 *             Note that this value is doubled for the fallback check.
+			 * @param bool $hardcore Whether hardcore mode is activated.
 			 */
-			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', $time );
+			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', $time, $this->hardcore );
 
 			$_hashes = [
 				'current'  => \tsf_extension_manager()->_get_timed_hash( $uid, $scale ),
@@ -705,6 +708,7 @@ final class Core {
 	 * Transforms first character of hash to alphabetic if not.
 	 *
 	 * @since 1.0.2
+	 * @since 1.1.1 Fixed OB1 error.
 	 *
 	 * @param string $hash
 	 * @return string $hash

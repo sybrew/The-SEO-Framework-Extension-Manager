@@ -8,7 +8,7 @@ Tested up to: 4.9.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension guides you through the process of writing quality content with focus keywords and subjects.
+This extension guides you through the process of writing quality content with focus keywords, inflections, and synonyms.
 
 ## Overview
 

@@ -62,7 +62,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 1,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 50,
 				'per' => 1,
 				'max' => 2,
@@ -95,7 +95,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 1,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 2 / 3 * 100,
 				'per' => 1,
 				'max' => 2,
@@ -133,7 +133,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 2,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 1 / 3 * 100,
 				'per' => 1,
 				'max' => 3,
@@ -172,7 +172,7 @@ $_scores = [
 			'keyword' => [
 				'weight' => 100, // percent
 			],
-			'subject' => [
+			'synonym' => [
 				'weight' => 75, // percent
 			],
 		],
@@ -210,7 +210,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 4,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 1 / 3 * 100,
 				'per' => 1,
 				'max' => 4,
@@ -242,7 +242,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 1,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 25,
 				'per' => 1,
 				'max' => 2,
@@ -275,7 +275,7 @@ $_scores = [
 				'per' => 1,
 				'max' => 1,
 			],
-			'subject' => [
+			'synonym' => [
 				'score' => 1 / 3 * 100,
 				'per' => 1,
 				'max' => 2,

@@ -114,6 +114,7 @@ If you still receive a bunch of spam, consider combining this extension with an 
 
 [tsfep-release time="-1"]
 
+* **Changed:** Filter `the_seo_framework_honeypot_nonce_scale` now passes a second "hardcore" boolean parameter.
 * **Fixed:** An off-by-one error has been resolved generating a random first alphabetic character.
 
 ### 1.1.0

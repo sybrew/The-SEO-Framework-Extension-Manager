@@ -32,7 +32,8 @@ defined( 'ABSPATH' ) or die;
  * @access private
  */
 class Panes extends API {
-	use Enclose_Stray_Private, Construct_Child_Interface;
+	use Enclose_Stray_Private,
+		Construct_Child_Interface;
 
 	/**
 	 * Constructor, initializes WordPress Admin actions.
@@ -306,11 +307,11 @@ class Panes extends API {
 				$slug = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					$data = $_POST;
+					$_data = $_POST;
 
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
-					$slug = isset( $data['slug'] ) ? $this->s_ajax_string( $data['slug'] ) : '';
-					$case = isset( $data['case'] ) ? $this->s_ajax_string( $data['case'] ) : '';
+					$slug = isset( $_data['slug'] ) ? $this->s_ajax_string( $_data['slug'] ) : '';
+					$case = isset( $_data['case'] ) ? $this->s_ajax_string( $_data['case'] ) : '';
 				}
 
 				if ( $case && $slug ) {
@@ -355,11 +356,11 @@ class Panes extends API {
 				$case = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					$data = $_POST;
+					$_data = $_POST;
 
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
-					$slug = isset( $data['slug'] ) ? $this->s_ajax_string( $data['slug'] ) : '';
-					$case = isset( $data['case'] ) ? $this->s_ajax_string( $data['case'] ) : '';
+					$slug = isset( $_data['slug'] ) ? $this->s_ajax_string( $_data['slug'] ) : '';
+					$case = isset( $_data['case'] ) ? $this->s_ajax_string( $_data['case'] ) : '';
 				}
 
 				if ( $slug && $case ) :

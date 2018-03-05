@@ -186,7 +186,7 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 
 **New Extensions:**
 
-* **Focus:** This free extension guides you through the process of writing quality content with focus keywords and subjects.
+* **Focus:** This free extension guides you through the process of writing quality content with focus keywords, inflections, and synonyms.
 
 **Important notes:**
 
@@ -200,7 +200,8 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 * **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
 * **Added:** The plugin and extensions can now abstractly tell time.
 * **Added:** The plugin and extensions can now track memory performance to prevent exhaustion prior executing heavy tasks.
-* **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean.
+* **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean, expects value of `current_user_can()`.
+* **Changed:** Form iterations now have 10 seconds to load, instead of 5. This means more Local SEO departments can be loaded at once and timeouts should occur less often.
 * **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
 * **Improved:** External links (e.g. to Google and TSF sites) are no longer tracked.
 * **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.

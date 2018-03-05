@@ -35,14 +35,24 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 final class Admin extends Core {
 	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Master_Once_Interface,
-		\TSF_Extension_Manager\Error;
+		\TSF_Extension_Manager\Construct_Master_Once_Interface;
+		//,\TSF_Extension_Manager\Error;
 
 	/**
 	 * Constructor.
 	 */
 	private function construct() {
+		$this->prepare_ajax();
 		$this->prepare_inpostgui();
+	}
+
+	/**
+	 * Prepares inpost AJAX callbacks.
+	 *
+	 * @since 1.0.0
+	 */
+	private function prepare_ajax() {
+		\wp_doing_ajax() and Ajax::_init( $this );
 	}
 
 	/**

@@ -306,7 +306,7 @@ class Core {
 	 * is actually JSON encoded. When it's 1, we can safely assume it's JSON.
 	 *
 	 * @since 1.2.0
-	 * @TODO set a standard for $data, i.e. [ 'results'=>,'html'=>"", etc. ];
+	 * @TODO set a standard for $data, i.e. [ 'results'=>[],'html'=>"", etc. ];
 	 *
 	 * @param mixed $data The data that needs to be send.
 	 * @param string $type The status type.
@@ -323,7 +323,7 @@ class Core {
 			$this->set_status_header( null, 'json' );
 		}
 
-		echo \wp_json_encode( compact( 'data', 'type', 'json' ) );
+		echo json_encode( compact( 'data', 'type', 'json' ) );
 
 		die;
 	}
@@ -619,6 +619,7 @@ class Core {
 			$this->_has_died( true );
 
 			if ( $message ) {
+				debug_print_backtrace();
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
@@ -1129,11 +1130,11 @@ class Core {
 	 *
 	 * @param string $path      The extension path to look for.
 	 * @param string $namespace The namespace.
-	 * @param string $_instance The verification instance.
-	 * @param array  $bits      The verification instance bits.
+	 * @param string $_instance The verification instance. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return bool False on failure, true on success.
 	 */
-	final public function _init_early_extension_autoloader( $path, $namespace, &$_instance = null, &$bits = null ) {
+	final public function _init_early_extension_autoloader( $path, $namespace, &$_instance, &$bits ) {
 
 		if ( $this->_has_died() )
 			return false;
@@ -1271,7 +1272,7 @@ class Core {
 			$this->get_verification_codes( $_instance, $bits );
 
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
-			return $loaded[ $class ] = require_once( $_path . $_file . '.class.php' );
+			return $loaded[ $class ] = require_once $_path . $_file . '.class.php';
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
 
@@ -1379,11 +1380,11 @@ class Core {
 			return $status;
 
 		return $status = [
-			'key'     => $this->get_option( 'api_key' ),
-			'email'   => $this->get_option( 'activation_email' ),
-			'active'  => $this->get_option( '_activated' ),
-			'level'   => $this->get_option( '_activation_level' ),
-			'data'    => $this->get_option( '_remote_subscription_status' ),
+			'key'    => $this->get_option( 'api_key' ),
+			'email'  => $this->get_option( 'activation_email' ),
+			'active' => $this->get_option( '_activated' ),
+			'level'  => $this->get_option( '_activation_level' ),
+			'data'   => $this->get_option( '_remote_subscription_status' ),
 		];
 	}
 

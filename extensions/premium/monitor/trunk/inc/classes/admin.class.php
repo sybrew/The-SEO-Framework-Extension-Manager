@@ -403,11 +403,11 @@ final class Admin extends Api {
 			if ( $tsfem->can_do_settings() ) :
 				$option = '';
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$data = $_POST;
+					$_data = $_POST;
 
 					//= Option is cleaned and requires unpacking.
-					$option = isset( $data['option'] ) ? $tsfem->s_ajax_string( $data['option'] ) : '';
-					$value = isset( $data['value'] ) ? \absint( $data['value'] ) : 0;
+					$option = isset( $_data['option'] ) ? $tsfem->s_ajax_string( $_data['option'] ) : '';
+					$value = isset( $_data['value'] ) ? \absint( $_data['value'] ) : 0;
 				} else {
 					$results = $this->get_ajax_notice( false, 1019002 );
 				}

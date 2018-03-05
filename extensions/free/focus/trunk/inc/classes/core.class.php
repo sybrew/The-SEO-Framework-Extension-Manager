@@ -66,8 +66,8 @@ class Core {
 			//= Fills 3 sequential array keys with these values.
 			'kw' => array_fill( 0, 3, [
 				'keyword' => '',
-				'subject' => '',
-				'subjects' => [ '' => \__( 'No subject', 'the-seo-framework-extension-manager' ) ],
+				'definition' => '',
+				'definitions' => [ '' => \__( 'No definition', 'the-seo-framework-extension-manager' ) ],
 				'score' => 0,
 				'scores' => [],
 			] ),

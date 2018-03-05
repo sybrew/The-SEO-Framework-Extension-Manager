@@ -46,10 +46,10 @@ create_analysis_field :;
 								'id' => $make_option_id( $id, 'keyword' ),
 								'value' => $values['keyword'],
 							],
-							'subject' => [
-								'id' => $make_option_id( $id, 'subject' ),
-								'value' => $values['subject'],
-								'options' => $values['subjects'],
+							'definition' => [
+								'id' => $make_option_id( $id, 'definition' ),
+								'value' => $values['definition'],
+								'options' => $values['definitions'],
 							],
 							'subject_edit' => [
 								'id' => $make_option_id( $id, 'subject-edit' ),

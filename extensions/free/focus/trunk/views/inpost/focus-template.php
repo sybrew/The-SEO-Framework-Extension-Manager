@@ -115,16 +115,16 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						sprintf(
 							'<select name=%%1$s id=%%1$s value="%%2$s" class="%s" disabled>%%3$s</select>',
 							\esc_attr( implode( ' ', [
-								'tsfem-e-focus-subject-selection',
+								'tsfem-e-focus-definition-selection',
 								'tsfem-e-focus-enable-if-js',
 								'tsfem-e-focus-requires-javascript',
 							] ) )
 						),
 						'<input type=hidden class=tsfem-e-focus-disable-if-js name=%1$s value="%2$s">'
 					),
-					\esc_attr( $subject['id'] ),
-					\esc_attr( $subject['value'] ),
-					\TSF_Extension_Manager\HTML::make_dropdown_option_list( $subject['options'], $subject['value'] ?: '' )
+					\esc_attr( $definition['id'] ),
+					\esc_attr( $definition['value'] ),
+					\TSF_Extension_Manager\HTML::make_dropdown_option_list( $definition['options'], $definition['value'] ?: '' )
 				);
 			}
 			?>
@@ -149,8 +149,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 							'tsfem-e-focus-icon-edit',
 							'tsf-tooltip-item',
 						] ) ),
-						\esc_attr__( 'Adjusting synonyms requires JavaScript', 'the-seo-framework-extension-manager' ),
-						\esc_attr__( 'Adjust synonyms.', 'the-seo-framework-extension-manager' )
+						\esc_attr__( 'Adjusting the subject requires JavaScript', 'the-seo-framework-extension-manager' ),
+						\esc_attr__( 'Adjust subject.', 'the-seo-framework-extension-manager' )
 					)
 				);
 			}

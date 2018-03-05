@@ -120,7 +120,7 @@ These fields aren't required for non-AMP, but they are recommended.
 
 Articles can be defined through various types.
 
-Google supports General Articles, Blog Postings and News Articles.
+Google supports generic Articles, Blog Postings and News Articles.
 
 #### Articles (generic)
 
