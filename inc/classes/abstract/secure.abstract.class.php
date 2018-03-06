@@ -67,7 +67,9 @@ interface Secure_Static_Abstracts {
  *      to the extending classes.
  */
 abstract class Secure_Abstract implements Secure_Static_Abstracts {
-	use Enclose_Core_Final, Construct_Core_Static_Final, Ignore_Properties_Core_Public_Final;
+	use Enclose_Core_Final,
+		Construct_Core_Static_Final,
+		Ignore_Properties_Core_Public_Final;
 
 	/**
 	 * Holds the class instance type.

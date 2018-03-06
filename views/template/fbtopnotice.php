@@ -1,4 +1,7 @@
 <?php
+/**
+ * Fall-Back Top Notice.
+ */
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 //* This file can be called through public functions; destroy as much as possible.
@@ -14,7 +17,7 @@ $notice = $this->format_error_notice(
 );
 
 ?>
-<script type="text/html" id="tmpl-tsfem-fbtopnotice">
+<script type=text/html id=tmpl-tsfem-fbtopnotice>
 	<?php
 	$this->do_dismissible_notice(
 		$notice['before'] . ' ' . $message,
@@ -24,10 +27,10 @@ $notice = $this->format_error_notice(
 	);
 	?>
 </script>
-<script type="text/html" id="tmpl-tsfem-fbtopnotice-msg">
+<script type=text/html id=tmpl-tsfem-fbtopnotice-msg>
 	<?php
 	$this->do_dismissible_notice(
-		$notice['before'] . ' ' . '{{{msg}}}',
+		$notice['before'] . ' ' . '{{{data.msg}}}',
 		'error',
 		$a11y = true,
 		$escape = false

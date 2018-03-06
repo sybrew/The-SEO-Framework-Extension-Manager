@@ -58,9 +58,13 @@ final class InpostGUI {
 	 * @since 1.5.0
 	 * @param string NONCE_ACTION The nonce action.
 	 * @param string NONCE_NAME   The nonce name.
+	 * @param string JS_NONCE_ACTION The JS nonce action.
+	 * @param string JS_NONCE_NAME   The JS nonce name.
 	 */
-	const NONCE_ACTION = 'tsfem-e-save-inpost-nonce';
-	const NONCE_NAME = 'tsfem-e-inpost-settings';
+	const NONCE_ACTION = 'tsfem-save-inpost-nonce';
+	const NONCE_NAME = 'tsfem-inpost-settings';
+	const JS_NONCE_ACTION = 'tsfem-ajax-save-inpost-nonce';
+	const JS_NONCE_NAME = 'nonce';
 
 	/**
 	 * @since 1.5.0
@@ -179,6 +183,8 @@ final class InpostGUI {
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) )
 			return;
 
+		$this->register_default_scripts();
+
 		/**
 		 * Does action 'tsfem_inpostgui_enqueue_scripts'
 		 *
@@ -194,6 +200,58 @@ final class InpostGUI {
 	}
 
 	/**
+	 * Registers default inpost scripts.
+	 *
+	 * @since 1.5.0
+	 * @uses static::register_script
+	 */
+	private function register_default_scripts() {
+		static::register_script( [
+			'type' => 'js',
+			'autoload' => false,
+			'name' => 'tsfem-inpost',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'deps' => [ 'jquery', 'tsf' ],
+			'l10n' => [
+				'name' => 'tsfem_inpostL10n',
+				'data' => [
+					'post_ID' => $GLOBALS['post']->ID,
+					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
+					'isPremium' => \tsf_extension_manager()->is_premium_user(),
+					'locale' => \get_locale(),
+					'debug' => (bool) WP_DEBUG,
+					'rtl' => (bool) \is_rtl(),
+				],
+				'i18n' => [
+					'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
+					'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
+					'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
+					'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
+					'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
+					'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
+				],
+			],
+			'tmpl' => [
+				'file' => tsf_extension_manager()->get_template_location( 'inpostnotice' ),
+			],
+		] );
+		static::register_script( [
+			'type' => 'css',
+			'autoload' => false,
+			'name' => 'tsfem-inpost',
+			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
+			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'deps' => [ 'tsf' ],
+			// 'colors' => [
+			// 	'.tsfem-e-focus-content-loader-bar' => [
+			// 		'background:{{$color_accent}}',
+			// 	],
+			// ],
+		] );
+	}
+
+	/**
 	 * Registers script to be enqueued.
 	 *
 	 * @since 1.5.0
@@ -202,6 +260,9 @@ final class InpostGUI {
 	 *
 	 * @param array $script The script : {
 	 *   'type' => string 'css|js',
+	 *   'autoload' => boolean|void If void|null|true, the script will be loaded.
+	 *                              If false, it'll only be registered for dependencies.
+	 *                              Templates are always outputted,
 	 *   'name' => string The unique script name, which is also the file name,
 	 *   'deps' => array  Dependencies,
 	 *   'ver'  => string Script version,
@@ -248,13 +309,15 @@ final class InpostGUI {
 		}
 
 		foreach ( static::$scripts as $s ) {
-			switch ( $s['type'] ) {
-				case 'css' :
-					\wp_enqueue_style( $s['name'] );
-					break;
-				case 'js' :
-					\wp_enqueue_script( $s['name'] );
-					break;
+			if ( ! isset( $s['autoload'] ) || $s['autoload'] ) {
+				switch ( $s['type'] ) {
+					case 'css' :
+						\wp_enqueue_style( $s['name'] );
+						break;
+					case 'js' :
+						\wp_enqueue_script( $s['name'] );
+						break;
+				}
 			}
 		}
 	}
@@ -417,6 +480,19 @@ final class InpostGUI {
 	}
 
 	/**
+	 * Determines if the current user can edit the post.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int|null $post_id
+	 * @return bool True if user has acces. False otherwise.
+	 */
+	public static function current_user_can_edit_post( $post_id = null ) {
+		$post_id = isset( $post_id ) ? $post_id : $GLOBALS['post']->ID;
+		return \current_user_can( 'edit_post', $post_id );
+	}
+
+	/**
 	 * Outputs nonces to be verified at POST.
 	 *
 	 * Doesn't output a referer field, as that's already outputted by WordPress,
@@ -430,7 +506,7 @@ final class InpostGUI {
 	 *    method singular_inpost_box() [...] add_inpost_seo_box()
 	 */
 	public function _output_nonce() {
-		\current_user_can( 'edit_post', $GLOBALS['post']->ID )
+		static::current_user_can_edit_post()
 			and \wp_nonce_field( static::NONCE_ACTION, static::NONCE_NAME, false );
 	}
 
@@ -646,6 +722,17 @@ final class InpostGUI {
 	 */
 	public static function get_option_key( $option, $index ) {
 		return sprintf( '%s[%s][%s]', static::META_PREFIX, $index, $option );
+	}
+
+	/**
+	 * Outputs notification area.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $id The notification area ID.
+	 */
+	public static function notification_area( $id ) {
+		printf( '<div class=tsfem-flex-settings-notification-area id=%s></div>', esc_attr( $id ) );
 	}
 
 	/**

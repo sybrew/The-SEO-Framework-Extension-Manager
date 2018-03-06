@@ -130,14 +130,11 @@ final class Admin extends Core {
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'jquery', 'tsf' ],
+			'deps' => [ 'jquery', 'tsf', 'tsfem-inpost' ],
 			'l10n' => [
 				'name' => 'tsfem_e_focusInpostL10n',
 				'data' => [
-					'post_ID' => $GLOBALS['post']->ID,
 					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
-					'isPremium' => \tsf_extension_manager()->is_premium_user(),
-					'locale' => \get_locale(),
 					'focusElements' => $this->get_focus_elements(),
 				],
 			],
@@ -150,7 +147,7 @@ final class Admin extends Core {
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver' => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'tsf' ],
+			'deps' => [ 'tsf', 'tsfem-inpost' ],
 			'colors' => [
 				'.tsfem-e-focus-content-loader-bar' => [
 					'background:{{$color_accent}}',

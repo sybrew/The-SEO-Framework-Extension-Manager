@@ -154,7 +154,7 @@ trait Error {
 	 * }
 	 * @return array|string The escaped notice. Empty string when no array key is set.
 	 */
-	protected function format_error_notice( $code, array $args ) {
+	final public function format_error_notice( $code, array $args ) {
 
 		$defaults = [
 			'type' => 'updated',
@@ -201,6 +201,7 @@ trait Error {
 	/**
 	 * Fetches notices by option and returns type.
 	 *
+	 * Not final. Can be overwritten.
 	 * @since 1.0.0
 	 *
 	 * @param int $key The error key.
@@ -587,7 +588,7 @@ trait Error {
 	 *    'code'    => int $code,
 	 * }
 	 */
-	protected function get_ajax_notice( $success, $code ) {
+	final protected function get_ajax_notice( $success, $code ) {
 		return \TSF_Extension_Manager\get_ajax_notice(
 			$success,
 			$this->get_error_notice_by_key( $code, false ),

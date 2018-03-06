@@ -3,7 +3,7 @@
  * @package TSF_Extension_Manager/Bootstrap
  */
 
-//* @NOTE $__file should be defined as the plugin base file.
+//! NOTE $__file should be defined as the plugin base file.
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) and isset( $__file ) or die;
 
 /**

@@ -51,6 +51,7 @@ final class LoadAdmin extends AdminPages {
 
 		//* Ajax listener for error notice catching.
 		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ $this, '_wp_ajax_get_dismissible_notice' ] );
+		\add_action( 'wp_ajax_tsfem_inpost_get_dismissible_notice', [ $this, '_wp_ajax_inpost_get_dismissible_notice' ] );
 
 		//* AJAX listener for form iterations.
 		\add_action( 'wp_ajax_tsfemForm_iterate', [ $this, '_wp_ajax_tsfemForm_iterate' ], 11 );
@@ -106,7 +107,7 @@ final class LoadAdmin extends AdminPages {
 	 * Send AJAX notices. If any.
 	 *
 	 * @since 1.3.0
-	 * @uses trait TSF_Extension_Manager\Error
+	 * @see $this->build_ajax_dismissible_notice()
 	 * @access private
 	 */
 	final public function _wp_ajax_get_dismissible_notice() {
@@ -114,29 +115,67 @@ final class LoadAdmin extends AdminPages {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( $this->can_do_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-
-					$key = \tsf_extension_manager()->coalesce_var( $_POST['tsfem-notice-key'], false );
-					$key = intval( $key );
-
-					if ( $key ) {
-						$_notice = $this->get_error_notice( $key );
-
-						if ( is_array( $_notice ) ) {
-							//= If it has a custom message (already stored in browser), then don't output the notice message.
-							$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $_notice['before'] : $_notice['message'];
-							$type = $_notice['type'];
-
-							$notice = $this->get_dismissible_notice( $msg, $type, true, false );
-							$_type = $notice ? 'success' : 'failure';
-						}
-					}
+					$notice_data = $this->build_ajax_dismissible_notice();
 				}
 
-				$this->send_json( compact( 'type', 'notice', 'key' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
+				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $_type, 'failure' ) );
 			endif;
 		endif;
 
 		exit;
+	}
+
+	/**
+	 * Send AJAX notices for inpost. If any.
+	 *
+	 * @since 1.5.0
+	 * @see $this->build_ajax_dismissible_notice()
+	 * @package TSF_Extension_Manager\InpostGUI
+	 * @uses class InpostGUI
+	 * @access private
+	 */
+	final public function _wp_ajax_inpost_get_dismissible_notice() {
+
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+			$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
+			if ( $post_id && InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) :
+				if ( \check_ajax_referer( InpostGUI::JS_NONCE_ACTION, InpostGUI::JS_NONCE_NAME, false ) ) {
+					$notice_data = $this->build_ajax_dismissible_notice();
+				}
+
+				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $_type, 'failure' ) );
+			endif;
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Builds AJAX notices.
+	 *
+	 * @since 1.5.0
+	 * @uses trait TSF_Extension_Manager\Error
+	 * @access private
+	 */
+	final protected function build_ajax_dismissible_notice() {
+
+		$key = $this->coalesce_var( $_POST['tsfem-notice-key'], false );
+		$key = intval( $key );
+
+		if ( $key ) {
+			$_notice = $this->get_error_notice( $key );
+
+			if ( is_array( $_notice ) ) {
+				//= If it has a custom message (already stored in browser), then don't output the notice message.
+				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $_notice['before'] : $_notice['message'];
+				$type = $_notice['type'];
+
+				$notice = $this->get_dismissible_notice( $msg, $type, true, false );
+				$_type = $notice ? 'success' : 'failure';
+			}
+		}
+
+		return compact( 'type', 'notice', 'key' );
 	}
 
 	/**
@@ -500,16 +539,13 @@ final class LoadAdmin extends AdminPages {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views'
-		      . DIRECTORY_SEPARATOR . $view . '.php';
-
-		include $file;
+		include $this->get_view_location( $view );
 	}
 
 	/**
 	 * Includes templates for JS.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 *
 	 * @param string $template The template file name.
 	 */
@@ -517,11 +553,29 @@ final class LoadAdmin extends AdminPages {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		$file = TSF_EXTENSION_MANAGER_DIR_PATH . 'views'
-		      . DIRECTORY_SEPARATOR . 'template'
-		      . DIRECTORY_SEPARATOR . $template . '.php';
+		include $this->get_template_location( $template );
+	}
 
-		include $file;
+	/**
+	 * Returns view location.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $view The view file name.
+	 */
+	final public function get_view_location( $view ) {
+		return TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+	}
+
+	/**
+	 * Returns template location.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $template The template file name.
+	 */
+	final public function get_template_location( $template ) {
+		return $this->get_view_location( 'template' . DIRECTORY_SEPARATOR . $template );
 	}
 
 	/**

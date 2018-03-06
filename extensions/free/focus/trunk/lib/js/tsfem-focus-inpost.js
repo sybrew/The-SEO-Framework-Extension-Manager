@@ -38,37 +38,11 @@
 window.tsfem_e_focus_inpost = function( $ ) {
 
 	const l10n = tsfem_e_focusInpostL10n;
+	const noticeArea = '#tsfem-e-focus-analysis-notification-area';
 
 	var focusRegistry = {},
 		activeFocusAreas = {},
 		activeAssessments = {};
-
-	/**
-	 * @source tsfem.js
-	 */
-	const convertJSONResponse = ( response ) => {
-
-		let testJSON = response && response.json || void 0,
-			isJSON = 1 === testJSON;
-
-		if ( ! isJSON ) {
-			let _response = response;
-
-			try {
-				response = JSON.parse( response );
-				isJSON = true;
-			} catch ( error ) {
-				isJSON = false;
-			}
-
-			if ( ! isJSON ) {
-				// Reset response.
-				response = _response;
-			}
-		}
-
-		return response;
-	}
 
 	/**
 	 * Gets string until last numeric ID index.
@@ -158,6 +132,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				if ( set ) {
 					//= Test if entries exist.
 
+					// let values = Object.values( registry[ area ][ type ] );
 					//= IE11 replacement for Object.values. <https://stackoverflow.com/a/42830295>
 					let values = Object.keys( registry[ area ][ type ] ).map( e => registry[ area ][ type ][ e ] );
 
@@ -323,21 +298,21 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// Return the number of matches found.
 			return matches && matches.length || 0;
 		};
-		const stripWord = ( word ) => {
-			return {
-				from: ( contents ) => contents.replace(
+		const stripWord = ( word ) => { return {
+			from: ( contents ) =>
+				contents.replace(
 					new RegExp(
 						escapeRegex( escapeStr( word ) ),
 						'gi'
 					),
 					'/' //? A filler that doesn't break XML tag attribute closures ("|'|%20).
 				)
-			};
-		};
+		} };
 		const countInflections = ( inflections, content ) => {
 			let _inflections = inflections,
 				_content = content;
 			//= Sort words by longest to shortest, but in natural language order (a-z).
+			//= The natural order doesn't pertain to effectiveness. It's just cleaner in debugging.
 			_inflections.sort( ( a, b ) => {
 				return b.length - a.length || a.localeCompare( b );
 			} );
@@ -494,6 +469,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				//= TODO carry information over to input field as encoded JSON for later use.
 				definitionField.add( definition );
 			} );
+		} ).fail( () => {
+			// handled in getDefinitions().
 		} );
 	}
 
@@ -514,27 +491,57 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			async: true,
 		};
 
-		let dfd = $.Deferred();
+		let dfd = $.Deferred(),
+			notice;
 
 		$.ajax( ops ).done( ( response ) => {
 			dfd.notify();
 
-			response = convertJSONResponse( response );
+			response = tsfem_inpost.convertJSONResponse( response );
 
-			// tsfem.debug && console.log( response );
+			tsfem_inpost.debug && console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
 
-			if ( ! data || ! type || 'success' !== type || ! ( 'definitions' in data ) ) {
+			if ( ! data || ! type ) {
 				dfd.reject();
+				notice = {
+					type: 'error',
+					code: -1,
+					text: tsfem_inpost.i18n['InvalidResponse'],
+				};
+				return;
+			}
+
+			let noticeCode = data.results && data.results.code || void 0,
+				noticeText = data.results && data.results.notice || void 0;
+
+			if ( 'success' !== type || ! ( 'definitions' in data ) ) {
+				notice = {
+					type: 'error',
+					code: noticeCode,
+					text: noticeText,
+				};
 			} else {
+				notice = {
+					type: 'success',
+					code: noticeCode,
+					text: noticeText,
+				};
 				dfd.resolve( data.definitions );
 			}
 		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			dfd.notify();
-			// tsfem.debug && console.log( response );
+			tsfem_inpost.debug && console.log( response );
+			notice = {
+				type: 'success',
+				code: -1,
+				text: tsfem_inpost.getAjaxError( jqXHR, textStatus, errorThrown ),
+			};
 			dfd.reject();
+		} ).always( () => {
+			notice && tsfem_inpost.setFlexNotice( notice ).in( noticeArea );
 		} );
 
 		return dfd.promise();
@@ -644,7 +651,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			return;
 		}
 
-		if ( l10n.isPremium ) {
+		if ( tsfem_inpost.isPremium ) {
 			prepareDefinitionSetter( idPrefix );
 		}
 

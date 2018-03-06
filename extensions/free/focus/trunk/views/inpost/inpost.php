@@ -30,6 +30,7 @@ create_analysis_field :;
 		InpostGUI::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
 			InpostGUI::wrap_flex( 'label', $focus_label );
 			InpostGUI::wrap_flex( 'content-open', '' );
+				InpostGUI::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
 				foreach ( $post_meta['kw']['values'] as $id => $values ) :
 					call_user_func(
