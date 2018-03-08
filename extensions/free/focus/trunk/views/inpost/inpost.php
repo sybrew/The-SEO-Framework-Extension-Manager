@@ -9,6 +9,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  * @package TSF_Extension_Manager\Classes
  */
 use \TSF_Extension_Manager\InpostGUI as InpostGUI;
+use \TSF_Extension_Manager\InpostHTML as InpostHTML;
 
 defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 
@@ -27,10 +28,10 @@ create_analysis_field :;
 	$focus_label = $focus_title . $focus_info;
 
 	analysis_fields_output :;
-		InpostGUI::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
-			InpostGUI::wrap_flex( 'label', $focus_label );
-			InpostGUI::wrap_flex( 'content-open', '' );
-				InpostGUI::notification_area( 'tsfem-e-focus-analysis-notification-area' );
+		InpostHTML::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
+			InpostHTML::wrap_flex( 'label', $focus_label );
+			InpostHTML::wrap_flex( 'content-open', '' );
+				InpostHTML::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
 				foreach ( $post_meta['kw']['values'] as $id => $values ) :
 					call_user_func(
@@ -50,10 +51,21 @@ create_analysis_field :;
 							'definition' => [
 								'id' => $make_option_id( $id, 'definition' ),
 								'value' => $values['definition'],
-								'options' => $values['definitions'],
+							],
+							'definition_data' => [
+								'id' => $make_option_id( $id, 'definition_data' ),
+								'value' => $values['definition_data'],
 							],
 							'subject_edit' => [
-								'id' => $make_option_id( $id, 'subject-edit' ),
+								'id' => $make_option_id( $id, 'subject_edit' ),
+							],
+							'inflection_data' => [
+								'id' => $make_option_id( $id, 'inflection_data' ),
+								'value' => $values['inflection_data'],
+							],
+							'synonym_data' => [
+								'id' => $make_option_id( $id, 'synonym_data' ),
+								'value' => $values['synonym_data'],
 							],
 							'score' => [
 								'id' => $make_option_id( $id, 'score' ),
@@ -69,5 +81,5 @@ create_analysis_field :;
 						]
 					);
 				endforeach;
-			InpostGUI::wrap_flex( 'content-close', '' );
-		InpostGUI::wrap_flex( 'block-close', '' );
+			InpostHTML::wrap_flex( 'content-close', '' );
+		InpostHTML::wrap_flex( 'block-close', '' );

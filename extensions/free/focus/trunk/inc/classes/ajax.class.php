@@ -74,7 +74,7 @@ final class Ajax {
 		 */
 		$instance->error_notice_option = 'tsfem_e_focus_ajax_error_notice_option';
 
-		//* AJAX crawl listener.
+		//* AJAX definition getter listener.
 		\add_action( 'wp_ajax_tsfem_e_local_get_definitions', [ $instance, '_get_definitions' ] );
 	}
 
@@ -89,44 +89,77 @@ final class Ajax {
 		);
 	}
 
-	public function _get_definitions() {
+	/**
+	 * Verifies premium status, user access, and user nonce.
+	 *
+	 * @return bool|void True on success. Void and exit on failure.
+	 */
+	private function verify_api_access() {
 
 		$tsfem = \tsf_extension_manager();
+		$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
 
-		if ( $tsfem->is_premium_user() && $tsfem->can_do_settings() ) {
-			if ( \check_ajax_referer( 'tsfem-e-focus-inpost-nonce', 'nonce', false ) ) {
-				$_data = $_POST;
-
-				$keyword = isset( $_data['keyword'] ) ? $tsfem->s_ajax_string( $_data['keyword'] ) : '';
-				$language = isset( $_data['language'] ) ? $tsfem->s_ajax_string( $_data['language'] ) : '';
+		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) {
+			if ( $tsfem->is_premium_user() ) {
+				if ( \check_ajax_referer( 'tsfem-e-focus-inpost-nonce', 'nonce', false ) ) {
+					return true;
+				}
 			}
 		}
 
-		if ( isset( $keyword, $language ) && strlen( $keyword ) ) {
+		$results = $this->get_ajax_notice( false, 1109001 );
+		$tsfem->send_json( compact( 'results' ), 'failure' );
+		exit;
+	}
+
+	/**
+	 * Gets word definitions.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->verify_api_access()
+	 */
+	public function _get_definitions() {
+
+		$this->verify_api_access();
+
+		$tsfem = \tsf_extension_manager();
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+
+		$keyword = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
+		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
+
+		if ( ! strlen( $keyword ) || ! $language ) {
+			//= How in the...
+			$results = $this->get_ajax_notice( false, 1100101 );
+		} else {
 			$response = $this->get_api_response( 'definitions', compact( 'keyword', 'language' ) );
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				$results = $this->get_ajax_notice( false, 1100103 );
+				$results = $this->get_ajax_notice( false, 1100102 );
 			} elseif ( ! isset( $response->data ) ) {
-				$results = $this->get_ajax_notice( false, 1100104 );
+				$results = $this->get_ajax_notice( false, 1100103 );
 			} else {
-				$data = json_decode( $response->data, true );
+				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
-				if ( ! isset( $data->definitions ) ) {
-					$results = $this->get_ajax_notice( false, 1100105 );
-				} else {
+				if ( isset( $data->definitions ) ) {
 					$type = 'success';
 					$definitions = $data->definitions;
-					$results = $this->get_ajax_notice( true, 1100106 );
+					if ( empty( $definitions ) ) {
+						$results = $this->get_ajax_notice( false, 1100104 );
+					} else {
+						$results = $this->get_ajax_notice( true, 1100105 );
+					}
+				} else {
+					if ( isset( $data->error ) )
+						$error = $data->error;
+
+					$results = $this->get_ajax_notice( false, 1100106 );
 				}
 			}
-		} else {
-			// Not authenticated.
-			$results = $this->get_ajax_notice( false, 1100107 );
 		}
 
-		$data = compact( 'definitions' );
+		$data = compact( 'definitions', 'error' );
 
 		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
 	}

@@ -45,12 +45,12 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 // $_get_icon_class = function( array $ratings, $value ) use ( $_get_nearest_numeric_index_value ) {
 // 	$index = $_get_nearest_numeric_index_value( $ratings, $value );
 // 	$classes = [
-// 		-1 => 'tsfem-e-focus-icon-error', // reserved, unused.
-// 		0  => 'tsfem-e-focus-icon-unknown',
-// 		1  => 'tsfem-e-focus-icon-bad',
-// 		2  => 'tsfem-e-focus-icon-warning',
-// 		3  => 'tsfem-e-focus-icon-okay',
-// 		4  => 'tsfem-e-focus-icon-good',
+// 		-1 => 'tsfem-e-inpost-icon-error', // reserved, unused.
+// 		0  => 'tsfem-e-inpost-icon-unknown',
+// 		1  => 'tsfem-e-inpost-icon-bad',
+// 		2  => 'tsfem-e-inpost-icon-warning',
+// 		3  => 'tsfem-e-inpost-icon-okay',
+// 		4  => 'tsfem-e-inpost-icon-good',
 // 	];
 // 	return isset( $classes[ $index ] ) ? $classes[ $index ] : $classes[0];
 // };
@@ -66,14 +66,14 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 // ];
 // $score_icon_class = $keyword['value']
 // 	? $_get_icon_class( $_score_ratings, $_get_score_percentage( $score['max'] ?? 1200, $score['value'] ) )
-// 	: 'tsfem-e-focus-icon-unknown';
+// 	: 'tsfem-e-inpost-icon-unknown';
 
 // Leftover score accumulator:
 // printf(
 // 	'<span class="tsfem-e-focus-score-wrap tsf-tooltip-wrap">%s%s</span>',
 // 	sprintf(
 // 		'<span class="%1$s" title="%2$s" data-desc="%2$s"></span>',
-// 		\esc_attr( implode( ' ', [ 'tsfem-e-focus-score-item', 'tsfem-e-focus-icon', $score_icon_class, 'tsf-tooltip-item' ] ) ),
+// 		\esc_attr( implode( ' ', [ 'tsfem-e-focus-score-item', 'tsfem-e-inpost-icon', $score_icon_class, 'tsf-tooltip-item' ] ) ),
 // 		\esc_attr__( 'Subject rating.', 'the-seo-framework-extension-manager' )
 // 	),
 // 	sprintf(
@@ -124,7 +124,12 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					),
 					\esc_attr( $definition['id'] ),
 					\esc_attr( $definition['value'] ),
-					\TSF_Extension_Manager\HTML::make_dropdown_option_list( $definition['options'], $definition['value'] ?: '' )
+					\TSF_Extension_Manager\HTML::make_dropdown_option_list( json_decode( $definition_data['value'], true ), $definition['value'] ?: '' )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $definition_data['id'] ),
+					\esc_attr( $definition_data['value'] )
 				);
 			}
 			?>
@@ -145,8 +150,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						'<span class="%s" title="%s" data-desc="%s"></span>',
 						\esc_attr( implode( ' ', [
 							'tsfem-e-focus-edit-subject',
-							'tsfem-e-focus-icon',
-							'tsfem-e-focus-icon-edit',
+							'tsfem-e-inpost-icon',
+							'tsfem-e-inpost-icon-edit',
 							'tsf-tooltip-item',
 						] ) ),
 						\esc_attr__( 'Adjusting the subject requires JavaScript', 'the-seo-framework-extension-manager' ),
@@ -191,6 +196,20 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 	<div class=tsfem-e-focus-collapse-content-wrap>
 		<div class=tsfem-e-focus-content-loader><div class=tsfem-e-focus-content-loader-bar></div></div>
 		<div class=tsfem-e-focus-collapse-content>
+			<div class=tsfem-e-focus-edit-subject style=display:none>
+				<?php
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $inflection_data['id'] ),
+					\esc_attr( $inflection_data['value'] )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $synonym_data['id'] ),
+					\esc_attr( $synonym_data['value'] )
+				);
+				?>
+			</div>
 			<?php
 			$this->output_score_template( compact( 'is_premium', 'is_active', 'keyword', 'sub_scores' ) );
 			?>

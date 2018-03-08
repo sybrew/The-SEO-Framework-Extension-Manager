@@ -332,12 +332,12 @@ $_get_nearest_numeric_index_value = function( array $a, $value ) {
 $_get_icon_class = function( array $ratings, $value ) use ( $_get_nearest_numeric_index_value ) {
 	$index = $_get_nearest_numeric_index_value( $ratings, $value );
 	$classes = [
-		-1 => 'tsfem-e-focus-icon-error', // reserved, unused.
-		0  => 'tsfem-e-focus-icon-unknown',
-		1  => 'tsfem-e-focus-icon-bad',
-		2  => 'tsfem-e-focus-icon-warning',
-		3  => 'tsfem-e-focus-icon-okay',
-		4  => 'tsfem-e-focus-icon-good',
+		-1 => 'tsfem-e-inpost-icon-error', // reserved, unused.
+		0  => 'tsfem-e-inpost-icon-unknown',
+		1  => 'tsfem-e-inpost-icon-bad',
+		2  => 'tsfem-e-inpost-icon-warning',
+		3  => 'tsfem-e-inpost-icon-okay',
+		4  => 'tsfem-e-inpost-icon-good',
 	];
 	return isset( $classes[ $index ] ) ? $classes[ $index ] : $classes[0];
 };
@@ -384,7 +384,7 @@ output_scores :;
 					'assessmentType' => $type,
 				] ),
 				sprintf(
-					'<span class="tsfem-e-focus-assessment-rating tsfem-e-focus-icon %s"></span>',
+					'<span class="tsfem-e-focus-assessment-rating tsfem-e-inpost-icon %s"></span>',
 					$_get_icon_class( $args['rating'], $_value )
 				),
 				sprintf(

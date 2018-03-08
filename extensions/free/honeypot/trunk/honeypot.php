@@ -40,7 +40,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * The extension version.
  * @since 1.0.0
  */
-define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.0' );
+define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.1' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -179,20 +179,20 @@ final class Core {
 
 		$i = 0;
 		do {
-			switch ( $i++ ) :
-				case 0 :
+			switch ( ++$i ) :
+				case 1 :
 					$this->check_css_field( $approved );
 					break;
 
-				case 1 :
+				case 2 :
 					$this->check_css_rotation_fields( $approved );
 					break;
 
-				case 2 :
+				case 3 :
 					$this->check_js_field( $approved );
 					break;
 
-				case 3 :
+				case 4 :
 					$this->check_nonce_rotation_field( $approved );
 					break;
 

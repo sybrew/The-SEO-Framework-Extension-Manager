@@ -91,3 +91,94 @@ a.tsfem-dismiss:before {
 a.tsfem-dismiss:hover {
 	color: #d14b44;
 }
+
+/* # Icons
+----------------------------------------------*/
+
+.tsfem-e-inpost-icon:after {
+	display: block;
+	width: 1em;
+	line-height: 1;
+	font-family: dashicons;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1em;
+	content: "";
+}
+
+.tsfem-e-inpost-icon-good {
+	color: #0cc34b;
+}
+
+.tsfem-e-inpost-icon-okay,
+.tsfem-e-inpost-icon-warning {
+	color: #ffa01b;
+}
+
+.tsfem-e-inpost-icon-warning {
+	color: #ffa01b;
+}
+
+.tsfem-e-inpost-icon-bad,
+.tsfem-e-inpost-icon-error {
+	color: #dd3811;
+}
+
+.tsfem-e-inpost-icon-unknown,
+.tsfem-e-inpost-icon-loading {
+	color: #057f9c;
+}
+
+.tsfem-e-inpost-icon-edit {
+	color: #ffa01b;
+}
+
+.tsfem-e-inpost-icon-okay:after,
+.tsfem-e-inpost-icon-good:after {
+	font-size: 1.1em;
+	content: "\f147";
+	margin-left: -2px;
+	margin-right: 4px;
+}
+
+.tsfem-e-inpost-icon-warning:after {
+	content: "\f227";
+}
+
+.tsfem-e-inpost-icon-bad:after {
+	content: "\f227";
+}
+
+.tsfem-e-inpost-icon-error:after {
+	content: "\f153";
+}
+
+.tsfem-e-inpost-icon-unknown:after {
+	content: "\f223";
+}
+
+.tsfem-e-inpost-icon-edit:after {
+	content: "\f464";
+}
+
+.tsfem-e-inpost-icon-loading:after {
+	content: "\f463";
+	animation: tsfem-inpost-spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes tsfem-inpost-spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@keyframes tsfem-inpost-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

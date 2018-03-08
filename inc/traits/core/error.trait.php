@@ -60,6 +60,7 @@ trait Error {
 
 		$this->error_notice_option or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
+		//? Can this be applied in-post too, when $this->error_notice_option is known? Otherwise, supply parameter?
 		\add_action( 'tsfem_notices', [ $this, '_do_error_notices' ] );
 	}
 
@@ -67,6 +68,7 @@ trait Error {
 	 * Outputs notices. If any, and only on the Extension manager pages.
 	 *
 	 * @since 1.0.0
+	 * @uses $this->error_notice_option
 	 * @access private
 	 */
 	final public function _do_error_notices() {
@@ -212,6 +214,7 @@ trait Error {
 
 		switch ( $key ) :
 			case -1 :
+				//? Placeholder error. See TSF_Extension_Manager\_wp_ajax_get_dismissible_notice()
 				$message = 'Undefined error. Check other messages.';
 				$type = 'error';
 				break;
@@ -237,6 +240,7 @@ trait Error {
 
 			case 201 :
 			case 1010201 :
+			case 1100101 :
 				$message = \esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -282,6 +286,8 @@ trait Error {
 			case 17002 :
 			case 1010203 :
 			case 1010204 :
+			case 1100102 :
+			case 1100103 :
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -292,6 +298,7 @@ trait Error {
 			case 1010501 :
 			case 1010601 :
 			case 1010801 :
+			case 1100106 :
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -372,6 +379,7 @@ trait Error {
 			case 1019002 :
 			case 1069001 :
 			case 1079001 :
+			case 1109001 :
 				$message = \esc_html__( 'User verification failed. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -540,6 +548,16 @@ trait Error {
 
 			case 17012 :
 				$message = \esc_html__( 'Geocoding data received.', 'the-seo-framework-extension-manager' );
+				$type = 'success';
+				break;
+
+			case 1100104 :
+				$message = \esc_html__( 'No definitions found. Check your spelling, or supply your own inflections and synonyms.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1100105 :
+				$message = \esc_html__( 'Definitions received.', 'the-seo-framework-extension-manager' );
 				$type = 'success';
 				break;
 

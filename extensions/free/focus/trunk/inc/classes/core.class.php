@@ -67,7 +67,9 @@ class Core {
 			'kw' => array_fill( 0, 3, [
 				'keyword' => '',
 				'definition' => '',
-				'definitions' => [ '' => \__( 'No definition', 'the-seo-framework-extension-manager' ) ],
+				'definition_data' => json_encode( [ '' => \__( 'No definition', 'the-seo-framework-extension-manager' ) ] ),
+				'inflection_data' => '',
+				'synonym_data' => '',
 				'score' => 0,
 				'scores' => [],
 			] ),

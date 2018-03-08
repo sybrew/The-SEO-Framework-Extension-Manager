@@ -9,6 +9,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  * @package TSF_Extension_Manager\Classes
  */
 use \TSF_Extension_Manager\InpostGUI as InpostGUI;
+use \TSF_Extension_Manager\InpostHTML as InpostHTML;
 
 defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 
@@ -49,7 +50,7 @@ create_type_field :;
 	);
 
 	type_field_output :;
-		InpostGUI::wrap_flex_multi( 'block', [
-			InpostGUI::construct_flex_wrap( 'label-input', $type_label, '', $type_option_key ),
-			InpostGUI::construct_flex_wrap( 'input', $type_field ),
+		InpostHTML::wrap_flex_multi( 'block', [
+			InpostHTML::construct_flex_wrap( 'label-input', $type_label, '', $type_option_key ),
+			InpostHTML::construct_flex_wrap( 'input', $type_field ),
 		] );

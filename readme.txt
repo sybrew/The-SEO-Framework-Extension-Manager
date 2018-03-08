@@ -1,10 +1,10 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: the seo framework, extensions, monitor, modules, title, seo, schema, local, articles, honeypot, amp
+Tags: seo, the seo framework, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title
 Requires at least: 4.6.0
-Tested up to: 4.9.2
-Requires PHP: 5.5
+Tested up to: 4.9.4
+Requires PHP: 5.5.21
 Stable tag: 1.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -57,10 +57,10 @@ When the subscription is active, you're allowed to use all premium extensions. I
 = This plugin requires: =
 
 * PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
-* WordPress 4.4 or later. For improved AJAX and meta support.
-* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.7 or later. Or it will stay dormant.
+* WordPress 4.6 or later. For improved AJAX and meta support.
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.8 or later. Or it will stay dormant.
 * Internet Explorer 11 or later for the best admin experience.
-* For improved performance, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
+* For improved performance and more available options, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
 
 = Installation instructions: =
 
@@ -89,7 +89,7 @@ The extensions test themselves upon activation. So, if any extension doesn't wor
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
 = Are you a developer? =
-And do you wish to add your own extension to the extension manager? Please contact me on [Slack](https://wordpress.slack.com/messages/@cybr/) about your idea.
+And do you wish to add your own extension to the extension manager? Please contact the plugin author on [Slack](https://wordpress.slack.com/messages/@cybr/) about your ideas.
 A full code review will take place prior to releasing it. The code must pass at least all the WordPress.org plugin standards and all code must be licensed under GPLv3.
 Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted, API connections aren't allowed either.
 
@@ -97,7 +97,7 @@ Feedback and points for improvement will be always given. No monetized nor premi
 Because this plugin handles multiple input fields, multiple nonce fields had to be created to prevent XSS from otherwise unauthorized users.
 To minimize overhead, each nonce type has been supplied an action. This way, the validation all falls under one function.
 Many more security techniques, some unprecedented in open source, have been implemented into this plugin.
-If you have any questions, before blindly implementing or circumventing security, feel free to contact me (the plugin author) on [Slack](https://wordpress.slack.com/messages/@cybr/).
+If you have any questions, before blindly implementing or circumventing security, feel free to contact the plugin author on [Slack](https://wordpress.slack.com/messages/@cybr/).
 
 = For developers: Reluctance towards plugin modifications =
 This plugin should be compatible with any other plugin or theme, unless they cause PHP errors on their own.
@@ -122,7 +122,7 @@ An extension is like a plugin, and can be activated and deactivated on demand. A
 
 = Do I need to activate all extensions? =
 No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
-Each extension will include carefully crafted documentation soon.
+Each extension has included carefully crafted documentation, which are linked on the extensions activation page.
 
 = Do I need to register an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
@@ -133,6 +133,7 @@ Some buttons, like on the extension activation page, can lead you to the site wh
 
 = Does this plugin track my usage? =
 Absolutely not! This plugin does not include any user tracking software. We completely rely on your feedback to know what you require.
+For some services, we retrieve the user input and website's language; e.g. for reverse geocoding or keyword lookups.
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
@@ -143,7 +144,7 @@ Follow the steps provided next to the error code, if any. If the error keeps com
 Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
 
 = Which users can activate extensions? =
-Only users who can manage options can interact with this plugin.
+By default, only users who can manage options can interact with this plugin.
 
 = Where are the extensions acquired from? =
 Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
@@ -151,6 +152,7 @@ Both free and premium extensions are provided within the plugin package acquired
 = Does the Extension Manager need to stay activated to run the extensions? =
 Yes. The Extension Manager supplies its own extension activation management system apart from WordPress'.
 Deactivating the Extension Manager will also deactivate all extensions.
+Most extensions use in-house frameworks embedded in the extension manager, too.
 
 = When my subscription expires, what happens? =
 When your premium subscription expires, the premium extensions will automatically deactivate.
@@ -170,11 +172,6 @@ Each extension handles its own options (if any); those settings won't be lost, n
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
 If you were to get a plugin activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable and secure version.
-
-= The layout of the plugin pages just doesn't look right, why? =
-This plugin has been tested against many browsers with the help of [BrowserStack](https://www.browserstack.com/), we support the latest and most popular browsers, even Internet Explorer!
-However, because the plugin pages have been completely written in [state-of-the-art experimental CSS flexbox](https://www.w3.org/TR/css-flexbox-1/), it's possible not all browsers act alike.
-Although everything should always fit perfectly; if you do find any issue, please state your browser and operating system and tell us where the issue resides. Thanks!
 
 == Changelog ==
 
@@ -196,21 +193,21 @@ Although everything should always fit perfectly; if you do find any issue, pleas
 **Plugin Improvements:**
 
 * **Added:** Extensions no longer load when they're deemed incompatible due to WordPress' environmental changes to ensure stability.
-* **Added:** Extensions can now add in-post options in predefined tabs (Audit, Structure and Advanced).
+* **Added:** Extensions can now add in-post options in predefined tabs (Structure, Audit, and Advanced).
 * **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
-* **Added:** The plugin and extensions can now abstractly tell time.
-* **Added:** The plugin and extensions can now track memory performance to prevent exhaustion prior executing heavy tasks.
+* **Added:** The plugin and extensions can now abstractly tell time, like AI human would.
+* **Added:** The plugin and extensions can now prevent memory exhaustion prior executing heavy tasks.
 * **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean, expects value of `current_user_can()`.
 * **Changed:** Form iterations now have 10 seconds to load, instead of 5. This means more Local SEO departments can be loaded at once and timeouts should occur less often.
 * **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
-* **Improved:** External links (e.g. to Google and TSF sites) are no longer tracked.
+* **Improved:** External links (e.g. to Google and TSF sites) are no longer traceable.
 * **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
 * **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
-* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, faster, and easier to read.
+* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, faster, and easier to maintain.
 * **Improved:** The extension option database entries will now be deleted when no indexes are present.
 * **Improved:** Various UI elements now fit more neatly on some screens.
 * **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
-* **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented.
+* **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented, and improved further upon.
 * **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
 * **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
 	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.

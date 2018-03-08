@@ -115,10 +115,12 @@ final class Admin extends Core {
 					'#content' => 'append',
 				],
 				'seoTitle' => [
-					'#autodescription_title' => 'dominate',
+					'#autodescription_title' => 'dominate', //= backwards compatibility.
+					'#tsf-title-reference' => 'dominate', //! TSF 3.0.4+
 				],
 				'seoDescription' => [
-					'#autodescription_description' => 'dominate',
+					'#autodescription_description' => 'dominate', //= backwards compatibility.
+					'#tsf-description-reference' => 'dominate', //! TSF 3.0.4+
 				],
 			],
 		] );
