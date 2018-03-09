@@ -46,11 +46,9 @@ class Api extends Data {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-
 		//* Verify integrity.
 		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
-
 	}
 
 	/**
@@ -183,6 +181,7 @@ class Api extends Data {
 		}
 
 		$this->set_error_notice( [ 1010304 => '' ] );
+		$this->set_error_notice( [ 1010305 => '' ] );
 		return true;
 	}
 
@@ -206,18 +205,18 @@ class Api extends Data {
 		$response = $response['data'];
 
 		if ( 'failure' === $response['status'] ) {
-			$this->set_error_notice( [ 1010401 => '' ] );
+			$this->set_error_notice( [ 1010401 => '' ], true );
 			return false;
 		}
 
 		$success = $this->delete_option_index();
 
 		if ( false === $success ) {
-			$this->set_error_notice( [ 1010402 => '' ] );
+			$this->set_error_notice( [ 1010402 => '' ], true );
 			return false;
 		}
 
-		$this->set_error_notice( [ 1010403 => '' ] );
+		$this->set_error_notice( [ 1010403 => '' ], true );
 		return true;
 	}
 
@@ -226,6 +225,7 @@ class Api extends Data {
 	 * Prevents API spam by setting monitor_crawl_requested option.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Added check & error 1010507.
 	 * @see trait TSF_Extension_Manager\Error
 	 *
 	 * @param bool $ajax Whether to request is done through AJAX.
@@ -243,6 +243,12 @@ class Api extends Data {
 			}
 		}
 
+		if ( ! $this->can_request_next_crawl() ) {
+			//= AJAX shouldn't get this far.
+			$ajax or $this->set_error_notice( [ 1010507 => $this->get_try_again_notice( $this->get_remote_crawl_timeout_remainder() ) ] );
+			return false;
+		}
+
 		$response = $this->get_monitor_api_response( 'request_crawl', $ajax );
 
 		if ( empty( $response['success'] ) ) {
@@ -256,19 +262,16 @@ class Api extends Data {
 			$ajax or $this->set_error_notice( [ 1010501 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
 		}
-
 		if ( 'site expired' === $response['status'] ) {
 			$this->update_option( 'site_requires_fix', true );
 			$ajax or $this->set_error_notice( [ 1010502 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010502 ) : false;
 		}
-
 		if ( 'site inactive' === $response['status'] ) {
 			$this->update_option( 'site_marked_inactive', true );
 			$ajax or $this->set_error_notice( [ 1010503 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010503 ) : false;
 		}
-
 		if ( 'queued' === $response['status'] ) {
 			$this->set_remote_crawl_timeout();
 			$ajax or $this->set_error_notice( [ 1010504 => '' ] );
@@ -292,6 +295,7 @@ class Api extends Data {
 	 * Prevents API spam by setting monitor_data_requested option with two minute delay.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Added check & error 1010607.
 	 * @see trait TSF_Extension_Manager\Error
 	 *
 	 * @param bool $ajax Whether this request is done through AJAX.
@@ -307,6 +311,12 @@ class Api extends Data {
 			} else {
 				return $ajax ? $this->get_ajax_notice( false, 1010603 ) : false;
 			}
+		}
+
+		if ( ! $this->is_remote_data_expired() ) {
+			//= AJAX shouldn't get this far.
+			$ajax or $this->set_error_notice( [ 1010607 => $this->get_try_again_notice( $this->get_remote_data_timeout_remainder() ) ] );
+			return false;
 		}
 
 		$response = $this->get_monitor_api_response( 'get_data', $ajax );
@@ -463,6 +473,42 @@ class Api extends Data {
 	 */
 	protected function set_installing_site( $val = true ) {
 		$this->update_option( 'monitor_installing', (bool) $val );
+	}
+
+	/**
+	 * Returns try again notice.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $seconds The seconds to try again in.
+	 */
+	protected function get_try_again_notice( $seconds ) {
+		return sprintf(
+			\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
+			(int) $seconds
+		);
+	}
+
+	/**
+	 * Returns remaining time in seconds of data fetch.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return int
+	 */
+	protected function get_remote_data_timeout_remainder() {
+		return $this->get_remote_data_timeout() + $this->get_remote_data_buffer() - time();
+	}
+
+	/**
+	 * Returns remaining time in seconds crawl request.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return int
+	 */
+	protected function get_remote_crawl_timeout_remainder() {
+		return $this->get_remote_crawl_timeout() + $this->get_request_next_crawl_buffer() - time();
 	}
 
 	/**

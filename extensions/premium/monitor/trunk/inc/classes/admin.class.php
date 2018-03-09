@@ -496,10 +496,7 @@ final class Admin extends Api {
 						$status = [
 							'content' => null,
 							'type' => 'yield_unchanged',
-							'notice' => sprintf(
-								\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
-								(int) $seconds
-							),
+							'notice' => $this->get_try_again_notice( $seconds ),
 							'timeout' => $current_timeout,
 						];
 					endif;
@@ -568,21 +565,20 @@ final class Admin extends Api {
 								break;
 						endswitch;
 
+						//* Get new timeout.
+						$current_timeout = $this->get_remote_crawl_timeout();
+
 						$status = [
 							'type' => $type,
 							'notice' => $response['notice'],
-							//* Get new timeout.
-							'timeout' => $current_timeout = $this->get_remote_crawl_timeout(),
+							'timeout' => $current_timeout,
 						];
 					else :
 						//* Crawl has already been requested recently.
 						$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
 						$status = [
 							'type' => 'yield_unchanged',
-							'notice' => sprintf(
-								\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
-								(int) $seconds
-							),
+							'notice' => $this->get_try_again_notice( $seconds ),
 							'timeout' => $current_timeout,
 						];
 					endif;
@@ -702,6 +698,7 @@ final class Admin extends Api {
 			<?php
 
 			if ( $this->is_api_connected() ) {
+				$this->prepare_data();
 				$this->output_monitor_overview_wrapper();
 			} else {
 				$this->output_monitor_connect_wrapper();
@@ -1052,7 +1049,7 @@ final class Admin extends Api {
 			$submit = $this->_get_submit_button(
 				\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
 				'',
-				'tsfem-button-primary tsfem-button-cloud'
+				'tsfem-button-primary tsfem-button-flat tsfem-button-cloud'
 			);
 			$content .= sprintf(
 				'<form action=%s method=post id=%s class="%s">%s</form>',
@@ -1076,7 +1073,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fetch_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
+		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-flat tsfem-button-cloud';
 		$name = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 		$ajax_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
@@ -1113,7 +1110,7 @@ final class Admin extends Api {
 	 */
 	protected function get_crawl_button() {
 
-		$class = 'tsfem-button tsfem-button-cloud';
+		$class = 'tsfem-button tsfem-button-flat tsfem-button-cloud';
 		$name = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
 		$ajax_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );

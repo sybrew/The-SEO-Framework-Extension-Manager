@@ -150,6 +150,7 @@ trait Options {
 
 		$this->initialize_option_update_instance( $type );
 
+		//? TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
 		if ( empty( $options['_instance'] ) && '_instance' !== $option )
 			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 

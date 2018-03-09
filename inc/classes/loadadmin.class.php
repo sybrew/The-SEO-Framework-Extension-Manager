@@ -728,7 +728,7 @@ final class LoadAdmin extends AdminPages {
 			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
 
-			$class = 'tsfem-button-primary tsfem-button-primary-bright';
+			$class = 'tsfem-button-primary tsfem-button-flat tsfem-button-primary-bright';
 			$class .= $icon ? ' tsfem-button-star' : '';
 		} else {
 			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
@@ -736,7 +736,7 @@ final class LoadAdmin extends AdminPages {
 			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
 			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
 
-			$class = 'tsfem-button-primary';
+			$class = 'tsfem-button-primary tsfem-button-flat';
 			$class .= $icon ? ' tsfem-button-love' : '';
 		}
 

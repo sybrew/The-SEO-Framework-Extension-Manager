@@ -68,23 +68,26 @@ trait Error {
 	 * Outputs notices. If any, and only on the Extension manager pages.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Now outputs multiple notices.
 	 * @uses $this->error_notice_option
 	 * @access private
 	 */
 	final public function _do_error_notices() {
 
-		if ( $option = \get_option( $this->error_notice_option, false ) ) {
+		if ( $options = \get_option( $this->error_notice_option, false ) ) {
 
-			$notice = $this->get_error_notice( $option );
+			$notices = $this->get_error_notices( $options );
 
-			if ( empty( $notice ) ) {
-				$this->unset_error_notice();
+			if ( empty( $notices ) ) {
+				$this->unset_error_notice_option();
 				return;
 			}
 
 			//* Already escaped.
-			\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
-			$this->unset_error_notice();
+			foreach ( $notices as $notice ) {
+				\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
+			}
+			$this->unset_error_notice_option();
 		}
 	}
 
@@ -92,11 +95,29 @@ trait Error {
 	 * Sets notices option, only does so when in the admin area.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 : 1. Now stores multiple notices.
+	 *                2. Added a new parameter to clear previous notices.
 	 *
-	 * @param array $notice The notice.
+	 * @param array $notice The notice. : {
+	 *    0 => int    key,
+	 *    1 => string additional message
+	 * }
+	 * @return void
 	 */
-	final protected function set_error_notice( $notice = [] ) {
-		\is_admin() and $this->error_notice_option and \update_option( $this->error_notice_option, $notice, 'yes' );
+	final protected function set_error_notice( $notice = [], $clear_old = false ) {
+
+		if ( ! \is_admin() || ! $this->error_notice_option )
+			return;
+
+		$notices = $clear_old ? [] : \get_option( $this->error_notice_option ) ?: [];
+
+		if ( empty( $notices ) ) {
+			$notices = [ $notice ];
+		} else {
+			array_push( $notices, $notice );
+		}
+
+		\update_option( $this->error_notice_option, $notices, 'yes' );
 	}
 
 	/**
@@ -105,10 +126,11 @@ trait Error {
 	 * @since 1.0.0
 	 * @since 1.2.0 1. No longer deletes option, but instead overwrites it.
 	 *              2. Now removes the option from autoload.
+	 * @since 1.5.0 No longer called `unset_error_notice()`
 	 *
 	 * @param array $notice The notice.
 	 */
-	final protected function unset_error_notice() {
+	final protected function unset_error_notice_option() {
 		$this->error_notice_option and \update_option( $this->error_notice_option, null, 'no' );
 	}
 
@@ -116,6 +138,7 @@ trait Error {
 	 * Fetches notices by option and returns type.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 @see $this->get_error_notices(), the processing callback.
 	 *
 	 * @param int|array $option The error notice key.
 	 * @return array|string The escaped notice. Empty string when no array key is set.
@@ -141,6 +164,25 @@ trait Error {
 		];
 
 		return $this->format_error_notice( $key, $args );
+	}
+
+	/**
+	 * Parses error notices from options.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $options
+	 * @return array $notices
+	 */
+	final protected function get_error_notices( array $options = [] ) {
+
+		$notices = [];
+
+		foreach ( $options as $option ) {
+			$notices[] = $this->get_error_notice( $option );
+		}
+
+		return $notices;
 	}
 
 	/**
@@ -441,6 +483,17 @@ trait Error {
 				$type = 'warning';
 				break;
 
+			case 1010507 :
+				$message = \esc_html__( 'Crawl request has just been submitted.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010607 :
+				$message = \esc_html__( 'Data has just been updated.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1010305 :
 			case 1010506 :
 				$message = \esc_html__( 'Crawl has been requested successfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
 				$type = 'updated';

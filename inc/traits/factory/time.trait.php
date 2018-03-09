@@ -144,7 +144,8 @@ trait Time {
 		is_null( $timestamp )
 			and $timestamp = time();
 
-		$this->set_timezone();
+		//= We don't want nor need to guess here.
+		$this->set_timezone( $this->get_timezone_string( false ) );
 		$out = \date_i18n( $format, $timestamp );
 		$this->reset_timezone();
 
@@ -319,7 +320,7 @@ trait Time {
 			return date_default_timezone_set( $old_tz );
 
 		if ( empty( $tzstring ) )
-			$tzstring = $this->get_timezone_string( true );
+			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
 
 		return date_default_timezone_set( $tzstring );
 	}

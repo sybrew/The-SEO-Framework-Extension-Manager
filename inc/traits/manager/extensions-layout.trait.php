@@ -375,7 +375,7 @@ trait Extensions_Layout {
 				$form
 			);
 			$js = sprintf(
-				'<a id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>',
+				'<a id="tsfem-activate[%s]" class="tsfem-button-primary tsfem-button-flat hide-if-no-js %s" data-slug="%s" data-case="%s">%s</a>',
 				$s_slug,
 				$s_class,
 				$s_slug,

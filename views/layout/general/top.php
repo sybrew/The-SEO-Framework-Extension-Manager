@@ -36,7 +36,7 @@ if ( $options ) {
 	$account_link = $this->get_link( [
 		'url' => $account_url,
 		'target' => '_blank',
-		'class' => 'tsfem-button-primary ' . $account_button_class,
+		'class' => 'tsfem-button-primary tsfem-button-flat ' . $account_button_class,
 		'title' => $account_title,
 		'content' => $account_text,
 	] );

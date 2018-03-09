@@ -4,13 +4,20 @@
 /* # Start Normalize.
 /*----------------------------------------------------------------------------*/
 
+/* ## Notices: Annoyances.
+/* We don't ever want to remove potentially non-recurring notices.
+/*--------------------------------------*/
+body.tsfem .update-nag,
+body.tsfem #update-nag {
+	display: none;
+}
+
 /* ## Notices: Core + self.
 /*--------------------------------------*/
 .wrap.tsfem .notice,
 .tsfem-notice {
-	margin: 0 0 20px;
-	box-shadow: 0 1px 3px 1px #ccc;
-	border-radius: 3px;
+	margin: 0 0 2em;
+	box-shadow: 0 0.3em 1em rgba(0,0,0,.18);
 }
 
 .tsfem-top-wrap .notice:first-of-type,
@@ -133,6 +140,7 @@ a.tsfem-dismiss:hover {
 	color: #0ebfe9;
 	line-height: 1em;
 	font-size: 1em;
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
@@ -236,25 +244,37 @@ a.tsfem-dismiss:hover {
 /* # Start Wraps.
 /*----------------------------------------------------------------------------*/
 
+body.tsfem #wpbody-content {
+	padding-bottom: 0;
+}
+
 body.tsfem .wrap {
-	height: calc( 100vh - 140px );
-	margin-top: 20px;
+	height: calc( 100vh - 8.33em );
 	overflow: visible;
 	padding: 0;
+	margin:  0;
+	margin-left: -20px;
+	box-sizing: border-box;
+}
+
+.tsfem-notice-wrap,
+.tsfem-connect-wrap,
+.tsfem-panes-wrap,
+.tsfem-panes-wrap {
+	margin: 0 2em;
 }
 
 .tsfem-top-wrap {
-	background-color: #333;
-	box-shadow: 0 1px 2px 0px #999;
+	background-color: #fff;
+	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
 	width: 100%;
-	margin: 0 0 20px;
-	padding: 20px;
-	border-radius: 3px;
+	margin: 0 0 2em;
+	padding: 1em 2em;
 }
 
 .tsfem-footer-wrap {
 	width: 100%;
-	padding: 1.33em 40px;
+	padding: 1.33em 2em;
 	margin: 0 auto;
 	overflow: hidden;
 	-webkit-align-items: center;
@@ -264,7 +284,7 @@ body.tsfem .wrap {
 
 .tsfem.connect-wrap {
 	max-width: 690px;
-	min-width: 175px;
+	min-width: 275px;
 }
 
 .tsfem-flex-textarea-wrap {
@@ -318,14 +338,14 @@ body.tsfem .wrap {
 	display: inline-block;
 	text-align: justify;
 	max-width: calc( 100% - 1.2em - 14px );
-	color: #fff;
+	color: #333;
 	letter-spacing: .2px;
-	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+	/*text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;*/
 }
 
 .tsfem-about-activation:before {
 	display: inline-block;
-	color: #fff;
+	color: #0ebfe9;
 	content: "\f112";
 	font-size: 1.2em;
 	line-height: 1.2em;
@@ -336,7 +356,7 @@ body.tsfem .wrap {
 	margin: 0 7px;
 	vertical-align: baseline;
 	white-space: pre-wrap;
-	text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;
+	/*text-shadow: 0 -1px 1px #222,1px 0 1px #222,0 1px 1px #222,-1px 0 1px #222;*/
 }
 
 /* ## Title.
@@ -344,6 +364,10 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap .tsfem-title header {
 	width: calc( 100% - 7px );
+}
+
+.tsfem-top-wrap .tsfem-title * {
+	vertical-align: top;
 }
 
 .tsfem-top-wrap .tsfem-title h1 {
@@ -366,7 +390,6 @@ body.tsfem .wrap {
 	white-space: pre-wrap;
 	padding: 0;
 	margin-right: 7px;
-	margin-left: .1em;
 	line-height: 29px;
 	vertical-align: top;
 }
@@ -413,10 +436,9 @@ body.tsfem .wrap {
 	background: #eee;
 	font-size: 1em;
 	border: 0;
-	border-radius: 3px;
-	box-shadow: 0 .2em 0 #cacaca;
-	color: #777;
-	text-shadow: 0 -1px 1px #efefef,1px 0 1px #efefef,0 1px 1px #efefef,-1px 0 1px #efefef;
+	box-shadow: 0 0.2em 0 #cacaca;
+	color: #666;
+	text-shadow: 0 -1px 1px #efefef, 1px 0 1px #efefef, 0 1px 1px #efefef, -1px 0 1px #efefef;
 	font-size: 1em;
 	line-height: 1em;
 	text-decoration: none;
@@ -434,7 +456,10 @@ body.tsfem .wrap {
 	-moz-appearance: none;
 	appearance: none;
 	/* Filter transistions are buggy in Edge and Blink. */
-	/* transition: filter 0.15s, color 0.15s;*/
+	/*-webkit-transition: -webkit-filter 0.15s, color 0.15s;
+	-moz-transition: filter 0.15s, color 0.15s;
+	-o-transition: -webkit-filter 0.15s, color 0.15s;
+	transition: filter 0.15s, color 0.15s;*/
 }
 
 .tsfem-button-small,
@@ -551,53 +576,11 @@ body.tsfem .wrap {
 
 .tsfem-button-loading:after {
 	content: "\f463";
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
+	-moz-animation: tsfem-spin 1.5s linear infinite;
+	-o-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
-
-.tsfem-button-pulse {
-	animation: tsfem-button-pulse 5s ease-in-out infinite;
-}
-
-@-webkit-keyframes tsfem-button-pulse {
-	0% {
-		-webkit-filter: brightness(1);
-		filter: brightness(1);
-	}
-	25% {
-		-webkit-filter: brightness(0.925);
-		filter: brightness(0.925);
-	}
-	75% {
-		-webkit-filter: brightness(1.025);
-		filter: brightness(1.025);
-	}
-	100% {
-		-webkit-filter: brightness(1);
-		filter: brightness(1);
-	}
-}
-
-@keyframes tsfem-button-pulse {
-	0% {
-		-webkit-filter: brightness(1);
-		filter: brightness(1);
-	}
-	25% {
-		-webkit-filter: brightness(0.925);
-		filter: brightness(0.925);
-	}
-	75% {
-		-webkit-filter: brightness(1.025);
-		filter: brightness(1.025);
-	}
-	100% {
-		-webkit-filter: brightness(1);
-		filter: brightness(1);
-	}
-}
-
-/* ## User interaction
-/*--------------------------------------*/
 
 .tsfem-button:active,
 .tsfem-button-primary:active {
@@ -630,39 +613,49 @@ body.tsfem .wrap {
 	filter: hue-rotate(5deg) saturate(1.2) brightness(1.025);
 }
 
+/* ### Flat buttons.
+/*--------------------------------------*/
+.tsfem-button-flat,
+.tsfem-button-flat:hover,
+.tsfem-button-flat:active,
+.tsfem-button-flat:focus {
+	margin: 0;
+	box-shadow: none;
+	-webkit-filter: 0 0 0.3em rgba(0,0,0,0); /* transition positioning */
+	filter: none;
+	transition: box-shadow .15s;
+}
+
+.tsfem-button-flat:hover,
+.tsfem-button-flat:focus {
+	margin: 0;
+	box-shadow: 0 .2em 1em rgba(0,0,0,.3);
+}
+
+.tsfem-button-flat:active {
+	margin: 0;
+	box-shadow: 0 .1em .7em .2em rgba(0,0,0,.3)
+}
+
 /* ## Switching/Rotating buttons.
 /*--------------------------------------*/
 
 .tsfem-switch-button-container-wrap {
 	display: inline-block;
 	perspective: 800px;
-	perspective-origin: 50% 120px;
+	perspective-origin: 50%;
 }
 
 .tsfem-switch-button-container {
 	position: relative;
 	/* EdgeHTML BUG. Causes subpixel font-rendering to fail. */
-	/*	transform-style: preserve-3d; */
-	margin: 0 auto 1em;
-	width: 120px;
-	height: 27px;
+	/* transform-style: preserve-3d; */
+	margin: 0;
+	margin-bottom: 1em;
+	width: 140px;
+	height: 2em;
 	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	-webkit-flex-direction: column;
-	flex-direction: column;
-	-webkit-justify-content: center;
-	justify-content: center;
+	display: block;
 }
 
 .tsfem-switch-button-container input[type=checkbox] {
@@ -676,11 +669,15 @@ body.tsfem .wrap {
 .tsfem-switch-button-container label,
 .tsfem-switch-button-container button {
 	position: absolute;
-	bottom: -.2em;
 	left: 0;
+	top: 0;
 	text-align: center;
 	transition: transform 1s, opacity .5s;
 	z-index: 1;
+	width: 100%;
+	display: block;
+	width:  140px;
+	box-sizing:  border-box;
 }
 
 .tsfem-switch-button-container input[type=checkbox] + label {
@@ -694,9 +691,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-switch-button-container button {
-	-webkit-transform: rotateX(-100deg);
-	transform: rotateX(-100deg);
-	-webkit-transform-origin: 0 100% 0;
+	transform: rotateX(-90deg);
 	transform-origin: 0 100% 0;
 	opacity: 0;
 	transition: transform 1.2s, opacity 0.6s;
@@ -707,7 +702,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-switch-button-container input[type=checkbox]:checked + label {
-	-webkit-transform: rotateX(90deg) translateY(-100%);
 	transform: rotateX(90deg) translateY(-100%);
 	opacity: 0;
 	z-index: 0;
@@ -715,7 +709,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-switch-button-container input[type=checkbox]:checked ~ button {
-	-webkit-transform: rotateX(0deg);
 	transform: rotateX(0deg);
 	opacity: 1;
 	z-index: 2;
@@ -742,9 +735,30 @@ body.tsfem .wrap {
 
 /* # Start Activation/Connect.
 /*----------------------------------------------------------------------------*/
+.tsfem-connect-option {
+	width: 100%;
+	max-width: 690px;
+	padding: 1.5em;
+	margin-bottom: 2em;
+	border: 1px solid #e2e2e2;
+	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
+	background: #fff;
+	/* EdgeHTML bug: Disappearing buttons when present */
+	-webkit-align-items: center;
+	align-items: center;
+	justify-content:  space-between;
+}
+
+.tsfem-connect-option:last-of-type {
+	margin-bottom: 0;
+}
+
 .tsfem-connect-description,
 .tsfem-connect-action {
-	width: 100%;
+	margin: .5em 0;
+	flex: 1 1 49%;
+	min-width: 175px;
+	padding: 3px;
 }
 
 .tsfem-connect-action form {
@@ -752,40 +766,19 @@ body.tsfem .wrap {
 	padding: 0;
 }
 
+.tsfem-connect-description-text > * {
+	margin: 0 0 1em;
+	display: block;
+}
+
+.tsfem-connect-description-text > *:last-child {
+	margin-bottom: 0;
+}
+
 .tsfem-connect-description h3 {
 	font-size: 1.66em;
 	color: #057f9c;
 	font-weight: 400;
-	margin: 14px 0;
-}
-
-.tsfem-connect-fields-row {
-	-webkit-justify-content: flex-end;
-	justify-content: flex-end;
-}
-
-/* TODO might be a performance hit: */
-.tsfem-connect-fields-row > *:nth-child(1n+2) .tsfem-button {
-	margin-left: 7px;
-}
-
-.tsfem-connect-option {
-	width: 100%;
-	max-width: 690px;
-	padding: 1.33em 40px;
-	margin-bottom: 20px;
-	border: 1px solid #e2e2e2;
-	box-shadow: 0 1px 3px 1px #dedede;
-	background: #fff;
-	/* EdgeHTML bug: Disappearing buttons when present */
-	/* overflow: hidden; */
-	border-radius: 3px;
-	-webkit-align-items: center;
-	align-items: center;
-}
-
-.tsfem-connect-option.tsfem-connect-highlighted {
-	border: 1px solid #057f9c;
 }
 
 /* # Start Panes.
@@ -794,8 +787,6 @@ body.tsfem .wrap {
 /* # Global panes wrap.
 /*--------------------------------------*/
 .tsfem-panes-wrap {
-	width: 100%;
-	margin: 0;
 	padding: 0;
 	-webkit-align-items: center;
 	align-items: center;
@@ -805,7 +796,7 @@ body.tsfem .wrap {
 
 .tsfem-panes-row {
 	width: 100%;
-	margin: 0 0 20px;
+	margin: 0 0 2em;
 	padding: 0;
 	min-height: 150px;
 }
@@ -818,12 +809,11 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 .tsfem-pane-half,
 .tsfem-pane-full {
-	max-width: calc( 50% - 10px );
-	-webkit-flex-basis: calc( 50% - 10px );
-	flex-basis: calc( 50% - 10px );
+	max-width: calc( 50% - 1em );
+	-webkit-flex-basis: 50%;
+	flex-basis: 50%;
 	background: #fff;
-	border-radius: 3px;
-	box-shadow: 0 1px 3px 1px #ccc;
+	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
 	margin: 0;
 	padding: 0;
 	min-height: 250px;
@@ -841,23 +831,23 @@ body.tsfem .wrap {
 .tsfem-pane-full ::-webkit-scrollbar {
 	width: 12px;
 	height: 6px;
-	background: #f1f1f1;
+	background: #fff;
+	box-shadow: 0 0 1.3em rgba(0,0,0,.18);
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb,
 .tsfem-pane-full ::-webkit-scrollbar-thumb {
 	background-color: #05809e;
-	box-shadow: 0 0 10px rgba(0,0,0,.3) inset;
-	border-radius: 0 0 3px;
+	box-shadow: 0 0 1.3em rgba(0,0,0,.15);
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb:active,
 .tsfem-pane-full ::-webkit-scrollbar-thumb:active {
-	background-color: #0082b3;
+	box-shadow: 0 0 1.3em rgba(0,0,0,.4);
 }
 
 .tsfem-pane-half:first-of-type {
-	margin-right: 20px;
+	margin-right: 2em;
 }
 
 .tsfem-pane-full {
@@ -869,7 +859,7 @@ body.tsfem .wrap {
 .tsfem-pane-wrap {
 	padding: 0;
 	margin: 0;
-	overflow: visible;
+	overflow: hidden;
 	max-height: 100%;
 	-webkit-flex-basis: 33vh;
 	flex-basis: 33vh;
@@ -877,14 +867,14 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-header {
-	box-shadow: 0px 1px 3px 0px #ccc;
+	box-shadow: 0 .2em .75em rgba(0,0,0,.18);
 	z-index: 5;
 }
 
 .tsfem-pane-header,
 .tsfem-pane-content {
 	margin: 0;
-	padding: 14px 20px;
+	padding: 1em 1.5em;
 }
 
 .tsfem-pane-content {
@@ -944,7 +934,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-inner-wrap {
-	padding: 20px;
+	padding: 1.5em;
 	height: auto;
 	max-height: 100%;
 	min-height: 150px;
@@ -961,7 +951,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad {
 	width: 100%;
-	padding: 20px;
+	padding: 1.5em;
 }
 
 /* Grab every consecutive call */
@@ -971,7 +961,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-footer-wrap {
 	margin: 0;
-	padding: 14px 20px;
+	padding: 1em 1.5em;
 	box-shadow: 0px -1px 3px 0px #ccc;
 	z-index: 5;
 }
@@ -999,8 +989,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-split > div,
 .tsfem-actions > div {
-	margin-right: 20px;
-	margin-bottom: 20px;
+	margin-right: 1em;
 	-webkit-flex-basis: 200px;
 	flex-basis: 200px;
 	min-width: 200px;
@@ -1014,30 +1003,15 @@ body.tsfem .wrap {
 
 .tsfem-pane-split > div > div,
 .tsfem-actions > div > div {
-	margin-bottom: 20px;
+	margin-bottom: 1em;
 }
 
-.tsfem-pane-split > div > div:last-of-type,
-.tsfem-actions > div > div:last-of-type {
-	margin-bottom: 0px;
+.tsfem-flex-account-info-rows {
+	line-height: 1.625em;
 }
 
-.tsfem-row-info {
-	-webkit-align-items: center;
-	align-items: center;
-	padding: 2px 0;
-}
-
-.tsfem-row-info-title {
+.tsfem-actions-account-info-title {
 	font-weight: 600;
-}
-
-.tsfem-row-info-value {
-	text-align: right;
-}
-
-.tsfem-row-info-value * {
-	width: 100%;
 }
 
 h4.tsfem-form-title,
@@ -1048,7 +1022,7 @@ h4.tsfem-action-title,
 h4.tsfem-cp-title {
 	padding: 0;
 	margin: 0 0 14px;
-	font-size: 1.33em;
+	font-size: 1.16em;
 	font-weight: 400;
 	color: #057f9c;
 }
@@ -1111,26 +1085,27 @@ h4.tsfem-cp-title {
 /* Remove grow from first item if only one is displayed. */
 /* Remove grow from last item, only if 3 or more items are present in odd order. */
 /* TODO might be a performance hit: */
-.tsfem-extension-entry-wrap:first-of-type:last-of-type,
+/* var_dump() */
+/* .tsfem-extension-entry-wrap:first-of-type:last-of-type,
 .tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
 	-webkit-flex-grow: 0;
 	flex-grow: 0;
 	-webkit-flex-basis: 100%;
 	flex-basis: 100%;
-}
+} */
 
 /* Safari 9 ~ 9.1 flow fix */
 .tsfem-extension-entry-inner {
-	margin: 0 20px 20px 0;
+	margin: 0 1.5em 1.5em 0;
 }
 
 .tsfem-extension-entry {
 	margin: 0;
-	padding: 0;
+	padding: .33em;
 	min-height: 122px;
-	border-radius: 3px;
-	box-shadow: 0 1px 3px 1px #ccc;
-	background: #fefefe;
+	border-radius: .5em 0 0 .5em;
+	box-shadow: 0 .1em .5em .1em rgba(0,0,0,.18) inset;
+	background: #fff;
 	-webkit-align-self: auto;
 	align-self: auto;
 }
@@ -1274,7 +1249,7 @@ h4.tsfem-cp-title {
 .tsfem-feed-top,
 .tsfem-feed-content,
 .tsfem-feed-entry {
-	margin-bottom: 14px;
+	margin-bottom: 1em;
 }
 
 .tsfem-feed-top {
@@ -1305,7 +1280,9 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-feed-entry {
-	border-bottom: 2px solid #dedede;
+	border-bottom: 1px solid #dedede;
+	margin: 0 -1em 1em;
+	padding: 0 1em;
 }
 
 .tsfem-feed-entry:last-of-type,
@@ -1327,33 +1304,41 @@ h4.tsfem-cp-title {
 .tsfem #input-activation .tsfem-button {
 	margin-left: 0;
 	margin-right: 0;
-	border-radius: 3px;
+	border-radius: 0;
 	width: 100%;
 	font-size: 13px;
 }
 
-.tsfem #input-activation .regular-text:nth-child(1n+2) {
-	margin-top: 4px;
-	margin-bottom: 8px;
+.tsfem #input-activation .regular-text {
+	margin: 4px 0;
+}
+
+.tsfem #input-activation .regular-text:first-child {
+	margin-top: 0;
+}
+
+.tsfem #input-activation .regular-text:nth-of-type(2) {
+	margin-bottom: 5px;
 }
 
 /* # Start footer.
 /*----------------------------------------------------------------------------*/
 
-#wpfooter {
+.tsfem #wpfooter {
 	z-index: -1;
+	padding: 0;
 }
 
-#wpfooter .tsfem-footer-wrap .tsfem-footer-title,
-#wpfooter .tsfem-footer-wrap .tsfem-footer-motto {
-	font-size: 13px;
+.tsfem-footer-wrap .tsfem-footer-title,
+.tsfem-footer-wrap .tsfem-footer-motto {
+	font-size: 1em;
 	margin: 0;
 	color: #646d78;
 	font-weight: 300;
 	cursor: default;
 }
 
-#wpfooter .tsfem-footer-wrap .tsfem-footer-title {
+.tsfem-footer-wrap .tsfem-footer-title {
 	font-weight: 400;
 	color: #555d66;
 }
@@ -1364,29 +1349,32 @@ h4.tsfem-cp-title {
 .tsfem-dashicon:after,
 .tsfem-ajax:after {
 	display: inline-block;
+	line-height: 1;
 	font-family: dashicons;
 	font-style: normal;
 	font-weight: 400;
-	font-size: 1.225em;
-	line-height: 0.816em; /* 1:1.225, needs this correction for flex */
 	width: 1em;
-	vertical-align: middle;
+	vertical-align: baseline;
 	content: "";
 	margin-left: 4px;
 }
 
+.tsfem-ajax:after {
+	font-size: 1.225em;
+	line-height: 0.816em; /* 1:1.225, needs this correction for flex */
+}
+
 .tsfem-dashicon:after {
 	font-size: 1.2em;
-	line-height: 1em;
 	vertical-align: middle;
 	vertical-align: text-bottom;
 	margin-left: 2px;
 }
 
-.tsfem-dashicon.tsfem-loading:after,
 .tsfem-ajax.tsfem-loading:after {
 	content: "\f463";
 	color: #057c99;
+	-webkit-animation: tsfem-spin 1.5s linear infinite;
 	animation: tsfem-spin 1.5s linear infinite;
 }
 
@@ -1427,14 +1415,6 @@ h4.tsfem-cp-title {
 	color: #ffa01b;
 }
 
-@-webkit-keyframes tsfem-spin {
-	0% {
-		-webkit-transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
-}
 @keyframes tsfem-spin {
 	0% {
 		transform: rotate(0deg);
@@ -1444,12 +1424,6 @@ h4.tsfem-cp-title {
 	}
 }
 
-@-webkit-keyframes tsfem-fadeout {
-	0% {}
-	100% {
-		opacity: 0;
-	}
-}
 @keyframes tsfem-fadeout {
 	0% {}
 	100% {
@@ -1482,8 +1456,8 @@ h4.tsfem-cp-title {
 @media screen and ( max-height: 800px ), ( max-width: 782px ) {
 	body.tsfem .wrap {
 		height: auto;
-		min-height: calc( 100vh - 147px );
-		margin-bottom: 30px;
+		/* min-height: calc( 100vh - 147px ); */
+		/* margin-bottom: 30px; */
 	}
 }
 
@@ -1491,6 +1465,7 @@ h4.tsfem-cp-title {
 @media screen and ( max-width: 782px ) {
 	body.tsfem .wrap {
 		margin-bottom: 0;
+		margin-left: -10px;
 	}
 
 	body.tsfem #wpbody-content {
@@ -1539,22 +1514,6 @@ h4.tsfem-cp-title {
 	body.tsfem #wpfooter {
 		display: block;
 		position: static;
-	}
-}
-
-/* Small phones */
-@media only screen and ( max-width: 600px ) {
-	.tsfem-connect-option {
-		-webkit-flex-direction: column;
-		flex-direction: column;
-		-webkit-align-items: flex-start;
-		align-items: flex-start;
-		padding: 1em 20px 1.66em;
-	}
-
-	.tsfem-connect-fields-row {
-		-webkit-justify-content: flex-start;
-		justify-content: flex-start;
 	}
 }
 
@@ -1704,6 +1663,7 @@ a.tsfem-tooltip-item {
 	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;
+	-webkit-transition: -webkit-transform .25s, opacity 0.25s;
 	transition: transform .25s, opacity 0.25s;
 }
 
@@ -1717,6 +1677,7 @@ a.tsfem-tooltip-item {
 	-webkit-transform: rotateX(0deg) translateY(0em);
 	transform: rotateX(0deg) translateY(0em);
 	opacity: 1;
+	-webkit-transition: -webkit-transform .25s, opacity 0.125s;
 	transition: transform .25s, opacity 0.125s;
 }
 
@@ -1725,6 +1686,11 @@ a.tsfem-tooltip-item {
 
 .tsfem-hidden {
 	display: none;
+}
+
+.tsfem-has-hover-balloon {
+	position: relative;
+	cursor: help;
 }
 
 .tsfem-ltr {
@@ -1899,6 +1865,9 @@ body.js .tsfem-flex-hide-if-no-js {
 	cursor: pointer;
 	padding: 14px;
 	width: 100%;
+	-webkit-transition: all .33s;
+	-moz-transition: all .33s;
+	-o-transition: all .33s;
 	transition: all .33s;
 	-webkit-user-select: none;
 	-khtml-user-select: none;

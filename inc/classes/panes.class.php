@@ -583,7 +583,7 @@ class Panes extends API {
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
-			$extra = sprintf( '<span class="tsfem-description">%s</span>', \esc_html( $description[ $key ] ) );
+			$extra = sprintf( '<p class="tsfem-description">%s</p>', \esc_html( $description[ $key ] ) );
 			$content .= sprintf( '<div class="tsfem-support-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
 		}
 

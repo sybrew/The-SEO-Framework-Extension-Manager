@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 				//* Already escaped.
 				echo \tsf_extension_manager()->convert_markdown(
 					sprintf(
-						\esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, visit our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),
+						\esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),
 						'https://theseoframework.com/privacy/'
 					),
 					[ 'a' ]
@@ -36,9 +36,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 			<p><?php \esc_html_e( 'Get detailed information about your website. Automatically.', 'the-seo-framework-extension-manager' ); ?></p>
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
-			<div class="tsfem-connect-fields-row tsfem-flex tsfem-flex-row">
-				<?php $this->get_view( 'forms/connect' ); ?>
-			</div>
+			<?php $this->get_view( 'forms/connect' ); ?>
 		</div>
 	</div>
 </div>

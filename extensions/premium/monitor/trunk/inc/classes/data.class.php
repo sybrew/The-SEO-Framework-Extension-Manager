@@ -46,11 +46,22 @@ class Data {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-
 		//* Verify integrity.
 		$that = __NAMESPACE__ . ( \is_admin() ? '\\Admin' : '\\Front' );
 		$this instanceof $that or \wp_die( -1 );
+	}
 
+	/**
+	 * Ticks data caches to see if there's an update required.
+	 * Loaded early to set notices in time.
+	 *
+	 * @since 1.1.0
+	 */
+	protected function prepare_data() {
+		if ( ! $this->get_option( 'monitor_installing', false ) ) {
+			$this->get_data( 'issues', [] );
+			$this->get_data( 'stats', [] );
+		}
 	}
 
 	/**
