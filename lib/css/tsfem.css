@@ -14,14 +14,16 @@ body.tsfem #update-nag {
 
 /* ## Notices: Core + self.
 /*--------------------------------------*/
+ /* "margin: .7% 0" Edge/Firefox inline margins issue */
 .wrap.tsfem .notice,
 .tsfem-notice {
-	margin: .7% 0;
+	margin: .6vw 0;
 	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
 }
 
+/* "margin-bottom: -.7%" Edge/Firefox inline margins issue */
 .tsfem-notice-wrap > *:last-child {
-	margin-bottom: -.7%;
+	margin-bottom: -.6vw;
 }
 
 /* ### Notices: Self.
@@ -257,8 +259,9 @@ body.tsfem .wrap {
 	padding-top: 32px;
 }
 
+/* "margin: 0 1.4%" Edge/Firefox inline margins issue */
 .tsfem-notice-wrap {
-	margin: 0 1.4%;
+	margin: 0 1.2vw;
 }
 
 /* Streches content over the page, pushing footer down. */
@@ -268,12 +271,14 @@ body.tsfem .wrap {
 	flex: 1 1 auto;
 }
 
+/* "margin: .7%" Edge/Firefox inline margins issue */
 .tsfem-panes-wrap {
-	margin: .7%;
+	margin: .6vw;
 }
 
+/* "margin: 1.4%" Edge/Firefox inline margins issue */
 .tsfem-connect-wrap {
-	margin: 1.4%;
+	margin: 1.2vw;
 }
 
 .tsfem-top-wrap {
@@ -284,9 +289,11 @@ body.tsfem .wrap {
 	padding: 1em 2em;
 }
 
+/* "padding: 0 0 1.4%" Edge/Firefox inline margins issue */
+/* "margin: 0 1.4%;" Edge/Firefox inline margins issue */
 .tsfem-footer-wrap {
-	padding: 0 0 1.4%;
-	margin: 0 1.4%;
+	padding: 0 0 1.2vw;
+	margin: 0 1.2vw;
 	overflow: hidden;
 	white-space: nowrap;
 	text-align: center;
@@ -744,11 +751,13 @@ body.tsfem .wrap {
 
 /* # Start Activation/Connect.
 /*----------------------------------------------------------------------------*/
+
+/* "margin: 0 auto 1.4%;" Edge/Firefox inline margins issue */
 .tsfem-connect-option {
 	width: 100%;
 	max-width: 690px;
 	padding: 1em 1.5em;
-	margin: 0 auto 1.4%;
+	margin: 0 auto 1.2vw;
 	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
 	background: #fff;
 	box-sizing: border-box;
@@ -814,13 +823,16 @@ body.tsfem .wrap {
 
 /* ## Singular panes layout.
 /*--------------------------------------*/
+
+/* "flex-basis: 48.6%" Edge/Firefox inline margins issue */
+/* "margin: .7%" Edge/Firefox inline margins issue */
 .tsfem-pane-half,
 .tsfem-pane-full {
-	-webkit-flex-basis: 48.6%;
-	flex-basis: 48.6%;
+	-webkit-flex-basis: calc( 50% - 1.2vw );
+	flex-basis: calc( 50% - 1.2vw );
 	background: #fff;
 	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
-	margin: 0.7%;
+	margin: .6vw;
 	padding: 0;
 	min-height: 300px;
 	min-width: 300px;
@@ -979,7 +991,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-split > div,
 .tsfem-actions > div {
-	margin-right: 1em;
+	margin-right: 2em;
 	-webkit-flex-basis: 200px;
 	flex-basis: 200px;
 	min-width: 200px;
@@ -993,7 +1005,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-split > div > div,
 .tsfem-actions > div > div {
-	margin-bottom: 1em;
+	margin-bottom: 2em;
 }
 
 .tsfem-flex-account-info-rows {
@@ -1039,7 +1051,12 @@ h4.tsfem-cp-title {
 .tsfem-cp-buttons > form,
 .tsfem-cp-buttons > a {
 	cursor: pointer;
+	min-width: 50%;
 	display: inline-block;
+}
+
+.tsfem-cp-buttons button {
+	width: 100%;
 }
 
 .tsfem-description {
@@ -1139,9 +1156,11 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-extension-description-footer {
-	-webkit-align-items: flex-end;
-	align-items: flex-end;
-	white-space: pre;
+	display: block;
+	width: 100%;
+	white-space: pre-line;
+	/* -webkit-flex: 0 1 0%;
+	flex: 0 1 0%; */
 }
 
 .tsfem-extension-title {
@@ -1192,16 +1211,17 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-extension-description {
-	padding: 1.33em;
+	padding: 1em;
 }
 
 .tsfem-extension-description-header {
 	padding-bottom: 1em;
 }
 
-.tsfem-extension-description-footer > span {
+/* Edge: (tooltip) performance issues. Firefox: (tooltip) Positioning issues. */
+/* .tsfem-extension-description-footer > * {
 	white-space: pre;
-}
+} */
 
 /* ### Feed pane.
 /*--------------------------------------*/
@@ -1531,8 +1551,8 @@ a.tsfem-tooltip-item {
 	border-right: 9px solid transparent;
 	border-top: 9px solid rgba(0,0,0,.25);
 	position: absolute;
-	bottom: -1px;
-	left: -1px;
+	bottom: 0;
+	left: 0;
 }
 
 .tsfem-tooltip-arrow:after {
@@ -1541,8 +1561,8 @@ a.tsfem-tooltip-item {
 	border-right: 8px solid transparent;
 	border-top: 8px solid #424242;
 	position: absolute;
-	bottom: 0;
-	left: 0;
+	bottom: 1px;
+	left: 1px;
 }
 
 .tsfem-tooltip-down .tsfem-tooltip-arrow:before {

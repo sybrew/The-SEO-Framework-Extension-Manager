@@ -409,7 +409,7 @@ trait Extensions_Layout {
 		$footer = static::get_extension_description_footer( $extension );
 
 		//* Put it all together.
-		$content = sprintf( '<div class="tsfem-extension-description-header tsfem-flex tsfem-flex-row"><span>%s</span></div>', $description );
+		$content = sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
 		$content .= $footer;
 
 		$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
@@ -462,7 +462,7 @@ trait Extensions_Layout {
 		$items = implode( ' | ', compact( 'version', 'compatible', 'home', 'menu' ) );
 
 		if ( $wrap ) {
-			$footer = sprintf( '<div class="tsfem-extension-description-footer tsfem-flex tsfem-flex-row">%s</div>', $items );
+			$footer = sprintf( '<div class=tsfem-extension-description-footer>%s</div>', $items );
 		} else {
 			$footer = $items;
 		}
@@ -541,7 +541,6 @@ trait Extensions_Layout {
 		$classes = [
 			'tsfem-extension-description-compat',
 			'tsfem-dashicon',
-			'tsfem-tooltip-item',
 			$compat_class,
 		];
 

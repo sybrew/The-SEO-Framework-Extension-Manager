@@ -221,7 +221,7 @@ final class Layout extends Secure_Abstract {
 		$email = isset( $account['email'] ) ? $account['email'] : '';
 		$data = isset( $account['data'] ) ? $account['data'] : '';
 		$level = ! empty( $account['level'] ) ? $account['level'] : $i18n_unknown;
-		$domain = '';
+		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 		$end_date = '';
 		$payment_date = '';
 

@@ -425,7 +425,7 @@ class Panes extends API {
 	protected function get_actions_left_output() {
 
 		$output = '';
-
+		$output .= $this->get_account_information();
 		$output .= $this->get_support_buttons();
 
 		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
@@ -441,13 +441,11 @@ class Panes extends API {
 	protected function get_actions_right_output() {
 
 		$output = '';
-
-		if ( $this->is_premium_user() && $this->are_options_valid() ) {
-			$output .= $this->get_account_information();
+		if ( ! $this->is_premium_user() || ! $this->are_options_valid() ) {
+			$output .= $this->get_account_upgrade_form();
+		} else {
 			//* TODO make this happen (on request/modal?).
 			//	$output .= $this->get_account_extend_form();
-		} else {
-			$output .= $this->get_account_upgrade_form();
 		}
 
 		$output .= $this->get_disconnect_button();

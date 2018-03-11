@@ -133,11 +133,11 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
-### 1.1.0
+### 1.0.1
 
 [tsfep-release time="-1"]
 
-* Improved: Various layout improvements.
+* **Improved:** The admin layout matches the new and modernized standard.
 
 ### 1.0.0
 

@@ -206,7 +206,7 @@ final class Settings {
 	/**
 	 * Outputs monitor header.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.1
 	 * @access private
 	 */
 	final public function _output_local_header() {
@@ -216,7 +216,7 @@ final class Settings {
 	/**
 	 * Outputs monitor content.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.1
 	 * @access private
 	 */
 	final public function _output_local_content() {
@@ -226,7 +226,7 @@ final class Settings {
 	/**
 	 * Outputs monitor footer.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.1
 	 * @access private
 	 */
 	final public function _output_local_footer() {
