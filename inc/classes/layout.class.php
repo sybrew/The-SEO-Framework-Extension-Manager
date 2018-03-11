@@ -88,8 +88,8 @@ final class Layout extends Secure_Abstract {
 		}
 
 		switch ( $type ) :
-			case 'deactivation-button' :
-				return static::get_deactivation_button();
+			case 'disconnect-button' :
+				return static::get_disconnect_button();
 				break;
 
 			case 'free-support-button' :
@@ -117,13 +117,13 @@ final class Layout extends Secure_Abstract {
 	}
 
 	/**
-	 * Outputs deactivation button.
+	 * Outputs disconnect button.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 *
-	 * @return string The deactivation button.
+	 * @return string The disconnect button.
 	 */
-	private static function get_deactivation_button() {
+	private static function get_disconnect_button() {
 
 		$output = '';
 
@@ -131,10 +131,10 @@ final class Layout extends Secure_Abstract {
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['deactivate'] );
 			$nonce = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
-			$field_id = 'deactivation-switcher';
-			$deactivate_i18n = \__( 'Deactivate', 'the-seo-framework-extension-manager' );
+			$field_id = 'disconnect-switcher';
+			$deactivate_i18n = \__( 'Disconnect', 'the-seo-framework-extension-manager' );
 			$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
-			$da_i18n = \__( 'Deactivate account?', 'the-seo-framework-extension-manager' );
+			$da_i18n = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
 
 			$button_class = 'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning';
 			$button = vsprintf(
@@ -159,7 +159,7 @@ final class Layout extends Secure_Abstract {
 				$nonce_action . $nonce . $switcher
 			);
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The deactivation button only supports the form type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The disconnect button only supports the form type.' );
 		}
 
 		return $output;
@@ -446,7 +446,7 @@ final class Layout extends Secure_Abstract {
 			$nonce = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
-				'<input type=submit name=submit id=submit class="tsfem-button tsfem-button-primary" value="%s">',
+				'<input type=submit name=submit id=submit class="tsfem-button tsfem-button-flat tsfem-button-primary" value="%s">',
 				\esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 

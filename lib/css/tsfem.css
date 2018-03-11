@@ -16,13 +16,12 @@ body.tsfem #update-nag {
 /*--------------------------------------*/
 .wrap.tsfem .notice,
 .tsfem-notice {
-	margin: 0 0 2em;
-	box-shadow: 0 0.3em 1em rgba(0,0,0,.18);
+	margin: .7% 0;
+	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
 }
 
-.tsfem-top-wrap .notice:first-of-type,
-.tsfem-top-wrap .tsfem-notice:first-of-type {
-	margin-top: 18px;
+.tsfem-notice-wrap > *:last-child {
+	margin-bottom: -.7%;
 }
 
 /* ### Notices: Self.
@@ -249,37 +248,48 @@ body.tsfem #wpbody-content {
 }
 
 body.tsfem .wrap {
-	height: calc( 100vh - 8.33em );
+	min-height: 100vh;
 	overflow: visible;
 	padding: 0;
 	margin:  0;
 	margin-left: -20px;
-	box-sizing: border-box;
+	margin-top: -32px;
+	padding-top: 32px;
 }
 
-.tsfem-notice-wrap,
-.tsfem-connect-wrap,
+.tsfem-notice-wrap {
+	margin: 0 1.4%;
+}
+
+/* Streches content over the page, pushing footer down. */
 .tsfem-panes-wrap,
+.tsfem-connect-wrap {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+}
+
 .tsfem-panes-wrap {
-	margin: 0 2em;
+	margin: .7%;
+}
+
+.tsfem-connect-wrap {
+	margin: 1.4%;
 }
 
 .tsfem-top-wrap {
 	background-color: #fff;
-	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
+	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
 	width: 100%;
-	margin: 0 0 2em;
+	margin: 0;
 	padding: 1em 2em;
 }
 
 .tsfem-footer-wrap {
-	width: 100%;
-	padding: 1.33em 2em;
-	margin: 0 auto;
+	padding: 0 0 1.4%;
+	margin: 0 1.4%;
 	overflow: hidden;
-	-webkit-align-items: center;
-	align-items: center;
 	white-space: nowrap;
+	text-align: center;
 }
 
 .tsfem.connect-wrap {
@@ -620,8 +630,7 @@ body.tsfem .wrap {
 .tsfem-button-flat:active,
 .tsfem-button-flat:focus {
 	margin: 0;
-	box-shadow: none;
-	-webkit-filter: 0 0 0.3em rgba(0,0,0,0); /* transition positioning */
+	box-shadow: 0 0 0.3em rgba(0,0,0,0); /* transition positioning */
 	filter: none;
 	transition: box-shadow .15s;
 }
@@ -738,22 +747,26 @@ body.tsfem .wrap {
 .tsfem-connect-option {
 	width: 100%;
 	max-width: 690px;
-	padding: 1.5em;
-	margin-bottom: 2em;
-	border: 1px solid #e2e2e2;
+	padding: 1em 1.5em;
+	margin: 0 auto 1.4%;
 	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
 	background: #fff;
+	box-sizing: border-box;
+}
+
+.tsfem-connect-row {
 	/* EdgeHTML bug: Disappearing buttons when present */
 	-webkit-align-items: center;
 	align-items: center;
-	justify-content:  space-between;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
 }
 
 .tsfem-connect-option:last-of-type {
 	margin-bottom: 0;
 }
 
-.tsfem-connect-description,
+.tsfem-connect-text,
 .tsfem-connect-action {
 	margin: .5em 0;
 	flex: 1 1 49%;
@@ -766,16 +779,16 @@ body.tsfem .wrap {
 	padding: 0;
 }
 
-.tsfem-connect-description-text > * {
+.tsfem-connect-description > * {
 	margin: 0 0 1em;
 	display: block;
 }
 
-.tsfem-connect-description-text > *:last-child {
+.tsfem-connect-description > *:last-child {
 	margin-bottom: 0;
 }
 
-.tsfem-connect-description h3 {
+.tsfem-connect-wrap h3 {
 	font-size: 1.66em;
 	color: #057f9c;
 	font-weight: 400;
@@ -790,41 +803,29 @@ body.tsfem .wrap {
 	padding: 0;
 	-webkit-align-items: center;
 	align-items: center;
-	/* Gecko bugfix. */
-	min-height: 0;
+	min-height: 300px;
 }
 
 .tsfem-panes-row {
 	width: 100%;
-	margin: 0 0 2em;
-	padding: 0;
-	min-height: 150px;
-}
-
-.tsfem-panes-row:last-of-type {
 	margin: 0;
+	padding: 0;
 }
 
 /* ## Singular panes layout.
 /*--------------------------------------*/
 .tsfem-pane-half,
 .tsfem-pane-full {
-	max-width: calc( 50% - 1em );
-	-webkit-flex-basis: 50%;
-	flex-basis: 50%;
+	-webkit-flex-basis: 48.6%;
+	flex-basis: 48.6%;
 	background: #fff;
 	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
-	margin: 0;
+	margin: 0.7%;
 	padding: 0;
-	min-height: 250px;
+	min-height: 300px;
+	min-width: 300px;
 	/* EdgeHTML bugfix */
-	max-height: 100%;
-}
-
-.tsfem-pane-half:first-of-type:last-of-type {
-	max-width: 50%;
-	-webkit-flex-basis: 50%;
-	flex-basis: 50%;
+	/* max-height: 100% */
 }
 
 .tsfem-pane-half ::-webkit-scrollbar,
@@ -844,16 +845,6 @@ body.tsfem .wrap {
 .tsfem-pane-half ::-webkit-scrollbar-thumb:active,
 .tsfem-pane-full ::-webkit-scrollbar-thumb:active {
 	box-shadow: 0 0 1.3em rgba(0,0,0,.4);
-}
-
-.tsfem-pane-half:first-of-type {
-	margin-right: 2em;
-}
-
-.tsfem-pane-full {
-	-webkit-flex-direction: row;
-	flex-direction: row;
-	max-width: 100%;
 }
 
 .tsfem-pane-wrap {
@@ -880,8 +871,6 @@ body.tsfem .wrap {
 .tsfem-pane-content {
 	padding: 0;
 	border-top: 0;
-	-webkit-flex: 1 1 33vh;
-	flex: 1 1 33vh;
 	max-height: 100%;
 	/* EdgeHTML bugfix */
 	overflow: hidden;
@@ -892,8 +881,6 @@ body.tsfem .wrap {
 	line-height: 1em;
 	margin: 0;
 	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -934,15 +921,16 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-inner-wrap {
+	box-sizing: border-box;;
 	padding: 1.5em;
 	height: auto;
 	max-height: 100%;
-	min-height: 150px;
 	width: 100%;
 	overflow: auto;
 	will-change: scroll-position;
 	/* IE bugfix */
 	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 
 .tsfem-pane-inner-collapsable-settings-wrap {
@@ -977,11 +965,13 @@ body.tsfem .wrap {
 .tsfem-actions,
 .tsfem-trends,
 .tsfem-trends-activation {
-	max-width: 1600px;
-	min-height: 150px;
 	/* ie fix + blink expand lag fix */
 	-webkit-flex-basis: 100%;
 	flex-basis: 100%;
+}
+
+#tsfem-extensions-pane {
+	min-height: 350px;
 }
 
 /* ### Actions pane.
@@ -1040,14 +1030,16 @@ h4.tsfem-cp-title {
 	flex-basis: 50%;
 }
 
-.tsfem-support-buttons form button,
-.tsfem-cp-buttons form button {
-	width: 100%;
-}
-
 .tsfem-support-buttons:last-of-type,
 .tsfem-cp-buttons:last-of-type {
 	margin-bottom: 0;
+}
+
+.tsfem-support-buttons > a,
+.tsfem-cp-buttons > form,
+.tsfem-cp-buttons > a {
+	cursor: pointer;
+	display: inline-block;
 }
 
 .tsfem-description {
@@ -1060,7 +1052,6 @@ h4.tsfem-cp-title {
 /*--------------------------------------*/
 .tsfem-extensions-wrap {
 	height: auto;
-	max-height: 750px;
 	padding-right: 0;
 	padding-bottom: 0;
 	margin: 0;
@@ -1082,18 +1073,6 @@ h4.tsfem-cp-title {
 	min-width: 280px;
 }
 
-/* Remove grow from first item if only one is displayed. */
-/* Remove grow from last item, only if 3 or more items are present in odd order. */
-/* TODO might be a performance hit: */
-/* var_dump() */
-/* .tsfem-extension-entry-wrap:first-of-type:last-of-type,
-.tsfem-extension-entry-wrap:nth-child(n+2):last-of-type:nth-child(odd) {
-	-webkit-flex-grow: 0;
-	flex-grow: 0;
-	-webkit-flex-basis: 100%;
-	flex-basis: 100%;
-} */
-
 /* Safari 9 ~ 9.1 flow fix */
 .tsfem-extension-entry-inner {
 	margin: 0 1.5em 1.5em 0;
@@ -1108,14 +1087,14 @@ h4.tsfem-cp-title {
 	background: #fff;
 	-webkit-align-self: auto;
 	align-self: auto;
+	-webkit-justify-content: center;
+	justify-content: center;
 }
 
 .tsfem-extension-entry > * {
 	min-height: 100px;
 	margin: 0;
 	padding: 0;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -1434,86 +1413,12 @@ h4.tsfem-cp-title {
 /* # Start Media Queries.
 /*----------------------------------------------------------------------------*/
 
-/* Huge and beyond screens. */
-@media screen and ( min-height: 800px ) {
-	.tsfem-extensions-wrap {
-		max-height: initial;
-	}
-}
-
-/* Both conditions need to be true, tall screens, WordPress compat for footer. */
-@media only screen and ( min-height: 600px ) and ( max-width: 782px ) {
-	body.tsfem .wrap {
-		margin-bottom: 0;
-	}
-
-	body.tsfem #wpfooter {
-		margin: 0;
-	}
-}
-
-/* Either conditions need to be true, small screens/tablets. WordPress compat for footer. */
-@media screen and ( max-height: 800px ), ( max-width: 782px ) {
-	body.tsfem .wrap {
-		height: auto;
-		/* min-height: calc( 100vh - 147px ); */
-		/* margin-bottom: 30px; */
-	}
-}
-
 /* WordPress compat for footer. When screen has large width. */
 @media screen and ( max-width: 782px ) {
 	body.tsfem .wrap {
-		margin-bottom: 0;
 		margin-left: -10px;
-	}
-
-	body.tsfem #wpbody-content {
-		padding-bottom: 0;
-	}
-}
-
-/* Either conditions need to be true, very small screens/large phones */
-@media only screen and ( max-height: 600px ), ( max-width: 782px ) {
-	.tsfem-pane-half,
-	.tsfem-pane-full {
-		min-width: 100%;
-		max-width: 100%;
-		min-height: 250px;
-		-webkit-flex-direction: row;
-		flex-direction: row;
-		-webkit-flex-basis: 100%;
-		flex-basis: 100%;
-	}
-
-	.tsfem-panes-row .tsfem-pane-half {
-		margin-bottom: 20px;
-	}
-
-	.tsfem-trends-activation,
-	.tsfem-pane-content {
-		-webkit-flex: 1 1 auto;
-		flex: 1 1 auto;
-	}
-
-	.tsfem-panes-row .tsfem-pane-half:last-of-type {
-		margin-bottom: 0;
-	}
-
-	/* Make users be able to scroll through with 33vh margin */
-	.tsfem-pane-wrap {
-		-webkit-flex: 1 1 100%;
-		flex: 1 1 100%;
-		max-height: 67vh;
-	}
-
-	.tsfem-pane-half:first-of-type {
-		margin-right: 0;
-	}
-
-	body.tsfem #wpfooter {
-		display: block;
-		position: static;
+		margin-top: -46px;
+		padding-top: 46px;
 	}
 }
 
@@ -1525,6 +1430,7 @@ h4.tsfem-cp-title {
 
 .tsfem-tooltip-wrap {
 	position: relative;
+	font-size: 13px;
 }
 
 .tsfem-tooltip-item {
@@ -1663,7 +1569,7 @@ a.tsfem-tooltip-item {
 	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;
-	-webkit-transition: -webkit-transform .25s, opacity 0.25s;
+	-webkit-transition: -webkit-transform .25s, opacity .25s;
 	transition: transform .25s, opacity 0.25s;
 }
 
@@ -1677,8 +1583,8 @@ a.tsfem-tooltip-item {
 	-webkit-transform: rotateX(0deg) translateY(0em);
 	transform: rotateX(0deg) translateY(0em);
 	opacity: 1;
-	-webkit-transition: -webkit-transform .25s, opacity 0.125s;
-	transition: transform .25s, opacity 0.125s;
+	-webkit-transition: -webkit-transform .25s, opacity .125s;
+	transition: transform .25s, opacity .125s;
 }
 
 /* # Start override.

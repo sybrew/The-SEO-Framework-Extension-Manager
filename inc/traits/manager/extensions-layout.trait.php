@@ -342,7 +342,7 @@ trait Extensions_Layout {
 		endswitch;
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled ">%s</span>', $s_class, \esc_html( $text ) );
+			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-flat tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
 
 			static $cache = [];

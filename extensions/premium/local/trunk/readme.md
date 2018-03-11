@@ -133,6 +133,12 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* Improved: Various layout improvements.
+
 ### 1.0.0
 
 [tsfep-release time="August 22nd, 2017"]

@@ -29,7 +29,7 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 		);
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
-			<div class="tsfem-pane-content tsfem-tooltip-boundary tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap">
+			<div class="tsfem-pane-content tsfem-tooltip-boundary tsfem-flex tsfem-flex-row tsfem-flex-nowrap">
 			<?php
 			if ( isset( $callable ) ) {
 				//* If secure, pass object.

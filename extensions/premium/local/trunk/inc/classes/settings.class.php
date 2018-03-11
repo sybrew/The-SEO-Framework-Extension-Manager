@@ -196,8 +196,43 @@ final class Settings {
 	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
 	 */
 	public function _output_settings_page( Core $_core ) {
-		$this->output_admin_page();
+		\add_action( 'tsfem_header', [ $this, '_output_local_header' ] );
+		\add_action( 'tsfem_content', [ $this, '_output_local_content' ] );
+		\add_action( 'tsfem_footer', [ $this, '_output_local_footer' ] );
+
+		$this->ui_wrap( 'panes' );
 	}
+
+	/**
+	 * Outputs monitor header.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 */
+	final public function _output_local_header() {
+		$this->get_view( 'layout/general/top' );
+	}
+
+	/**
+	 * Outputs monitor content.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 */
+	final public function _output_local_content() {
+		$this->get_view( 'layout/pages/local' );
+	}
+
+	/**
+	 * Outputs monitor footer.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 */
+	final public function _output_local_footer() {
+		$this->get_view( 'layout/general/footer' );
+	}
+
 
 	/**
 	 * Initializes user interface styles, scripts and footer.
@@ -256,62 +291,11 @@ final class Settings {
 		//* Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
-		//* Add footer output.
-		\add_action( 'in_admin_footer', [ $this, '_init_local_footer_wrap' ] );
-
 		/**
 		 * Initialize UI calls.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_ui();
-	}
-
-	/**
-	 * Outputs the admin page.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	private function output_admin_page() {
-		?>
-		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
-			<?php $this->output_local_overview_wrapper(); ?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos main page wrapper.
-	 *
-	 * @since 1.0.0
-	 */
-	private function output_local_overview_wrapper() {
-
-		$this->do_page_top_wrap();
-
-		?>
-		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
-			<?php $this->do_local_overview(); ?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos the page top wrap.
-	 *
-	 * @since 1.0.0
-	 */
-	private function do_page_top_wrap() {
-		$this->get_view( 'layout/general/top' );
-	}
-
-	/**
-	 * Echos the settings overview.
-	 *
-	 * @since 1.0.0
-	 */
-	private function do_local_overview() {
-		$this->get_view( 'layout/pages/local' );
 	}
 
 	/**
@@ -335,20 +319,6 @@ final class Settings {
 	public function _get_local_settings_bottom_wrap( self $_s ) {
 		//* Already escaped.
 		echo $this->get_bottom_wrap_items();
-	}
-
-	/**
-	 * Outputs the admin footer.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function _init_local_footer_wrap() {
-		?>
-		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
-			<?php $this->get_view( 'layout/general/footer' ); ?>
-		</div>
-		<?php
 	}
 
 	/**

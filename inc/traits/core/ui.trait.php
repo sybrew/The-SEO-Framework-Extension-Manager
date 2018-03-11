@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  */
 
 /**
- * Holds User Interface functionality.
+ * Holds TSFEM admin-page User Interface functionality.
  *
  * @since 1.0.0
  * @access private
@@ -125,16 +125,91 @@ trait UI {
 	}
 
 	/**
-	 * Performs after-top actions.
+	 * Outputs default UI wrap in logical order.
 	 *
-	 * Must be called after top wrap.
+	 * @since 1.5.0
+	 *
+	 * @param $type The type of main content. Accepts 'panes', 'connect'.
+	 */
+	final protected function ui_wrap( $type = 'panes' ) {
+		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
+		\add_action( 'tsfem_page', [ $this, 'notice_wrap' ], 50 );
+		\add_action( 'tsfem_page', [ $this, $type . '_wrap' ], 100 );
+		\add_action( 'tsfem_page', [ $this, 'footer_wrap' ], 200 );
+
+		\do_action( 'tsfem_before_page' );
+		$this->page_wrap();
+		\do_action( 'tsfem_after_page' );
+	}
+
+	/**
+	 * Outputs page wrap and does callback.
+	 *
+	 * @since 1.5.0
+	 */
+	final protected function page_wrap() {
+		echo '<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">';
+		\do_action( 'tsfem_page' );
+		echo '</div>';
+	}
+
+	/**
+	 * Outputs header wrap and does callback.
+	 *
+	 * @since 1.5.0
+	 */
+	final public function header_wrap() {
+		echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">';
+		\do_action( 'tsfem_header' );
+		echo '</section>';
+	}
+
+	/**
+	 * Outputs notice wrap and does callback.
+	 *
+	 * Must be called directly after header wrap.
 	 *
 	 * @since 1.3.0
 	 */
-	final protected function after_top_wrap() {
-		echo '<div class="tsfem-notice-wrap">';
+	final public function notice_wrap() {
+		echo '<aside class="tsfem-notice-wrap">';
 		\do_action( 'tsfem_notices' );
-		echo '</div>';
+		echo '</aside>';
+	}
+
+	/**
+	 * Outputs panes wrap and does callback.
+	 *
+	 * @since 1.5.0
+	 */
+	final public function panes_wrap() {
+		echo '<main class="tsfem-panes-wrap tsfem-flex tsfem-flex-column">';
+		\do_action( 'tsfem_content' );
+		echo '</main>';
+	}
+
+	/**
+	 * Outputs panes wrap and does callback.
+	 *
+	 * @since 1.5.0
+	 */
+	final public function connect_wrap() {
+		echo '<main class=tsfem-connect-wrap>';
+		\do_action( 'tsfem_content' );
+		echo '</main>';
+	}
+
+	/**
+	 * Performs footer actions.
+	 *
+	 * Must be called in footer.
+	 *
+	 * @since 1.5.0
+	 */
+	final public function footer_wrap() {
+		echo '<footer class="tsfem-footer-wrap tsfem-disable-cursor">';
+		\do_action( 'tsfem_footer' );
+		echo '</footer>';
 	}
 
 	/**

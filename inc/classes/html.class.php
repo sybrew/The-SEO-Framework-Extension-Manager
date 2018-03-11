@@ -57,6 +57,23 @@ final class HTML {
 	}
 
 	/**
+	 * Makes working tooltip item when titles exists in a question mark.
+	 * Otherwise, it simply makes a question mark.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $title      The title displayed when JS is disabled.
+	 *                           Also functions as tooltip (without HTML) if $title_html
+	 *                           is omitted.
+	 * @param string $title_html The definite tooltip, may contain HTML. Optional.
+	 */
+	static function make_inline_question_tooltip( $title, $title_html = '' ) {
+		return static::wrap_inline_tooltip(
+			static::make_inline_tooltip( '', $title, $title_html, [ 'tsfem-dashicon', 'tsfem-unknown' ] )
+		);
+	}
+
+	/**
 	 * Makes tooltip item when titles exists.
 	 *
 	 * @since 1.5.0

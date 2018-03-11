@@ -281,9 +281,6 @@ final class Admin extends Api {
 		//* Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
-		//* Add footer output.
-		\add_action( 'in_admin_footer', [ $this, '_init_monitor_footer_wrap' ] );
-
 		return true;
 	}
 
@@ -693,107 +690,54 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _init_monitor_page() {
-		?>
-		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
-			<?php
+		\add_action( 'tsfem_header', [ $this, '_output_monitor_header' ] );
+		\add_action( 'tsfem_content', [ $this, '_output_monitor_content' ] );
+		\add_action( 'tsfem_footer', [ $this, '_output_monitor_footer' ] );
 
-			if ( $this->is_api_connected() ) {
-				$this->prepare_data();
-				$this->output_monitor_overview_wrapper();
-			} else {
-				$this->output_monitor_connect_wrapper();
-			}
-			?>
-		</div>
-		<?php
+		if ( $this->is_api_connected() ) {
+			$this->prepare_data();
+			$this->ui_wrap( 'panes' );
+		} else {
+			$this->ui_wrap( 'connect' );
+		}
 	}
 
 	/**
-	 * Echos main page wrapper for monitor.
+	 * Outputs monitor header.
 	 *
-	 * @since 1.0.0
-	 */
-	protected function output_monitor_overview_wrapper() {
-
-		$this->do_page_top_wrap( true );
-
-		?>
-		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
-			<?php
-			$this->do_monitor_overview();
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos main page connect wrapper for monitor.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_monitor_connect_wrapper() {
-
-		$this->do_page_top_wrap( false );
-
-		?>
-		<div class="tsfem-connect-wrap">
-			<?php
-			$this->do_connect_overview();
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos the page top wrap.
-	 *
-	 * @since 1.0.0
-	 * @param bool $options Whether to show options.
-	 */
-	protected function do_page_top_wrap( $options = false ) {
-		$this->get_view( 'layout/general/top', get_defined_vars() );
-	}
-
-	/**
-	 * Echos the monitor connection overview.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function do_connect_overview() {
-		$this->get_view( 'layout/pages/connect' );
-	}
-
-	/**
-	 * Echos the monitor overview.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function do_monitor_overview() {
-		$this->get_view( 'layout/pages/monitor' );
-	}
-
-	/**
-	 * Initializes the admin footer output.
-	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 * @access private
 	 */
-	public function _init_monitor_footer_wrap() {
-		?>
-		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
-			<?php
-			$this->do_page_footer_wrap();
-			?>
-		</div>
-		<?php
+	final public function _output_monitor_header() {
+		$this->get_view(
+			'layout/general/top',
+			[
+				'options' => $this->is_api_connected(),
+			]
+		);
 	}
 
 	/**
-	 * Echos the page footer wrap.
+	 * Outputs monitor content.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
+	 * @access private
 	 */
-	protected function do_page_footer_wrap() {
+	final public function _output_monitor_content() {
+		if ( $this->is_api_connected() ) {
+			$this->get_view( 'layout/pages/monitor' );
+		} else {
+			$this->get_view( 'layout/pages/connect' );
+		}
+	}
+
+	/**
+	 * Outputs monitor footer.
+	 *
+	 * @since 1.1.0
+	 * @access private
+	 */
+	final public function _output_monitor_footer() {
 		$this->get_view( 'layout/general/footer' );
 	}
 
@@ -929,7 +873,7 @@ final class Admin extends Api {
 		];
 		$content = '';
 		foreach ( $buttons as $button ) {
-			$content .= sprintf( '<div class="tsfem-cp-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s</div>', $button );
+			$content .= sprintf( '<div class="tsfem-cp-buttons">%s</div>', $button );
 		}
 
 		return sprintf( '<div class="tsfem-e-monitor-cp-actions">%s%s</div>', $title, $content );
@@ -1076,7 +1020,7 @@ final class Admin extends Api {
 		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-flat tsfem-button-cloud';
 		$name = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
-		$ajax_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
+		$question_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'fetch' );
 		$nonce = $this->_get_nonce_field( 'fetch' );
@@ -1088,17 +1032,14 @@ final class Admin extends Api {
 			'ajax'         => true,
 			'ajax-id'      => 'tsfem-e-monitor-fetch-button',
 			'ajax-class'   => $class,
-			'ajax-tooltip' => true,
 			'ajax-name'    => $name,
-			'ajax-title'   => $ajax_title,
+			'ajax-title'   => $title,
 		];
 
-		return sprintf(
-			$this->_get_action_button(
-				\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
-				$args
-			)
-		);
+		return $this->_get_action_button(
+			\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+			$args
+		) . \TSF_Extension_Manager\HTML::make_inline_question_tooltip( $question_title );
 	}
 	/**
 	 * Renders and returns crawl button.
@@ -1113,7 +1054,7 @@ final class Admin extends Api {
 		$class = 'tsfem-button tsfem-button-flat tsfem-button-cloud';
 		$name = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
-		$ajax_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
+		$question_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'crawl' );
 		$nonce = $this->_get_nonce_field( 'crawl' );
@@ -1125,17 +1066,14 @@ final class Admin extends Api {
 			'ajax'         => true,
 			'ajax-id'      => 'tsfem-e-monitor-crawl-button',
 			'ajax-class'   => $class,
-			'ajax-tooltip' => true,
 			'ajax-name'    => $name,
-			'ajax-title'   => $ajax_title,
+			'ajax-title'   => $title,
 		];
 
-		return sprintf(
-			$this->_get_action_button(
-				\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
-				$args
-			)
-		);
+		return $this->_get_action_button(
+			\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+			$args
+		) . \TSF_Extension_Manager\HTML::make_inline_question_tooltip( $question_title );
 	}
 
 	/**
@@ -1326,7 +1264,7 @@ final class Admin extends Api {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-deactivate">%s%s</div>', $title, $button );
+		return sprintf( '<div class="tsfem-account-disconnect">%s%s</div>', $title, $button );
 	}
 
 	/**

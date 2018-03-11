@@ -264,7 +264,7 @@ final class Admin {
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		//* Add footer output.
-		\add_action( 'in_admin_footer', [ $this, '_init_transporter_footer_wrap' ] );
+		\add_action( 'tsfem_footer', [ $this, '_init_transporter_footer_wrap' ] );
 
 		//* Update POST listener.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
@@ -647,6 +647,7 @@ final class Admin {
 		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
 			<?php
 			$this->output_transporter_overview_wrapper();
+			\do_action( 'tsfem_footer' );
 			?>
 		</div>
 		<?php
@@ -774,13 +775,7 @@ final class Admin {
 	 * @access private
 	 */
 	public function _init_transporter_footer_wrap() {
-		?>
-		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
-			<?php
-			$this->do_page_footer_wrap();
-			?>
-		</div>
-		<?php
+		$this->do_page_footer_wrap();
 	}
 
 	/**

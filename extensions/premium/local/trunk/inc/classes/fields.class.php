@@ -83,6 +83,7 @@ final class Fields {
 						'_ret' => 'd',
 						'_req' => false,
 						'_type' => 'number',
+						'_pattern' => '[0-9]*',
 						'_desc' => [
 							\__( 'Set number of departments', 'the-seo-framework-extension-manager' ),
 							\__( 'Each department must have its own publicly recognizable name and type.', 'the-seo-framework-extension-manager' ),
@@ -477,6 +478,7 @@ final class Fields {
 				'_ret' => '%.7F',
 				'_req' => false,
 				'_type' => 'number',
+				'_pattern' => '[0-9\.]*',
 				'_range' => [
 					-90,
 					90,
@@ -498,6 +500,7 @@ final class Fields {
 				'_ret' => '%.7F',
 				'_req' => false,
 				'_type' => 'number',
+				'_pattern' => '[0-9\.]*',
 				'_range' => [
 					-180,
 					180,
@@ -539,6 +542,7 @@ final class Fields {
 						'_ret' => '',
 						'_req' => false,
 						'_type' => 'number',
+						'_pattern' => '[0-9]*',
 						'_desc' => [
 							\__( 'Number of opening hours', 'the-seo-framework-extension-manager' ),
 							\__( 'When opening hours fluctuate, increase this number to specify more opening hours.', 'the-seo-framework-extension-manager' ),

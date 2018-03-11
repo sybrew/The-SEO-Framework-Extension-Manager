@@ -197,8 +197,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
 * **Added:** The plugin and extensions can now abstractly tell time, like AI human would.
 * **Added:** The plugin and extensions can now prevent memory exhaustion prior executing heavy tasks.
+* **Added:** Enhanced Microsoft Edge, IE11, and iOS touch support, like momentum scrolling.
 * **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean, expects value of `current_user_can()`.
-* **Changed:** The layout of the extension manager pages have been modernized.
+* **Changed:** The extension manager pages have been modernized, standardized, and now have vastly improved rendering time. No more screen detection is required through the magic of flex.
 * **Changed:** Form iterations now have 10 seconds to load, instead of 5. This means more Local SEO departments can be loaded at once and timeouts should occur less often.
 * **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
 * **Improved:** External links (e.g. to Google and TSF sites) are no longer traceable.
@@ -213,8 +214,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
 	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
 	* No action is required from the user.
-* **Fixed:** When you're requesting to the geocoding services too rapidly (e.g. in Local SEO), you're now correctly notified.
-* **Fixed:** Various browser rendering glitches have been ironed out.
+* **Fixed:** When you're requesting for geocoding services too rapidly (e.g. in Local SEO), you're now correctly notified.
+/
+* TODO **Fixed:** Various browser rendering glitches have been ironed out, like changing borders on "missile switch cover"-buttons.
 
 * **Updated Extensions:**
 	/

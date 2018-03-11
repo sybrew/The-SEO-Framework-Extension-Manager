@@ -10,7 +10,7 @@ if ( $options ) {
 
 		$status = $this->get_subscription_status();
 
-		$account_url = $this->get_activation_url();
+		$account_url = $this->get_activation_url( 'my-account/' );
 		$account_button_class = 'tsfem-button-primary-bright tsfem-button-star';
 		$account_text = \__( 'My Account', 'the-seo-framework-extension-manager' );
 		$account_title = \__( 'View account', 'the-seo-framework-extension-manager' );
@@ -27,7 +27,7 @@ if ( $options ) {
 			}
 		}
 	} else {
-		$account_url = $this->get_activation_url( 'shop/premium-subscription/' );
+		$account_url = $this->get_activation_url( 'shop/' );
 		$account_button_class = 'tsfem-button-green tsfem-button-love';
 		$account_title = \__( 'Get license', 'the-seo-framework-extension-manager' );
 		$account_text = \__( 'Go Premium', 'the-seo-framework-extension-manager' );
@@ -76,47 +76,40 @@ if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && funct
 	endif;
 endif;
 
+//* Print style.
+isset( $flex_basis ) and printf( '<style>.tsfem-top-wrap .tsfem-title{-webkit-flex-basis:%1$s;flex-basis:%1$s}</style>', \esc_html( $flex_basis ) );
 ?>
-<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">
-	<?php
-	//* Print style.
-	isset( $flex_basis ) and printf( '<style>.tsfem-top-wrap .tsfem-title{-webkit-flex-basis:%1$s;flex-basis:%1$s}</style>', \esc_html( $flex_basis ) );
-	?>
-	<div class="tsfem-title tsfem-flex tsfem-flex-row">
-		<header><h1>
-			<?php
-			$image = [
-				'svg' => $this->get_image_file_location( 'tsflogo.svg', true ),
-				//	'2x' => $this->get_image_file_location( 'tsflogo-58x58px.png', true ),
-				'1x' => $this->get_image_file_location( 'tsflogo-29x29px.png', true ),
-			];
-			$size = '1em';
+<div class="tsfem-title tsfem-flex tsfem-flex-row">
+	<header><h1>
+		<?php
+		$image = [
+			'svg' => $this->get_image_file_location( 'tsflogo.svg', true ),
+			//	'2x' => $this->get_image_file_location( 'tsflogo-58x58px.png', true ),
+			'1x' => $this->get_image_file_location( 'tsflogo-29x29px.png', true ),
+		];
+		$size = '1em';
 
-			printf(
-				\esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ),
+		printf(
+			\esc_html_x( '%1$s %2$s', '1: SEO, 2: Extensions', 'the-seo-framework-extension-manager' ),
+			sprintf(
+				'<span class="tsfem-logo">%sSEO</span>',
 				sprintf(
-					'<span class="tsfem-logo">%sSEO</span>',
+					'<svg width="%1$s" height="%1$s">%2$s</svg>',
+					\esc_attr( $size ),
 					sprintf(
-						'<svg width="%1$s" height="%1$s">%2$s</svg>',
-						\esc_attr( $size ),
-						sprintf(
-							'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-							\esc_url( $image['svg'], [ 'http', 'https' ] ),
-							\esc_url( $image['1x'], [ 'http', 'https' ] ),
-							\esc_attr( $size )
-						)
+						'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+						\esc_url( $image['svg'], [ 'http', 'https' ] ),
+						\esc_url( $image['1x'], [ 'http', 'https' ] ),
+						\esc_attr( $size )
 					)
-				),
-				\esc_html( $extensions_i18n )
-			);
-			?>
-		</h1></header>
-	</div>
-	<?php
-	//* Already escaped.
-	echo $about, $actions;
-	?>
-</section>
+				)
+			),
+			\esc_html( $extensions_i18n )
+		);
+		?>
+	</h1></header>
+</div>
 <?php
 
-$this->after_top_wrap();
+//* Already escaped.
+echo $about, $actions;

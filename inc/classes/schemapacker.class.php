@@ -170,6 +170,7 @@ final class SchemaPacker {
 	 * Returns iteration from current level.
 	 *
 	 * @since 1.3.0
+	 * @since 1.5.0 Offsetted level calculation to variable to circumvent PHP7 compat checks.
 	 * @uses $this->it
 	 * @uses $this->level
 	 * @uses $this->bits()
@@ -177,13 +178,15 @@ final class SchemaPacker {
 	 * @return int The current iteration of the current level.
 	 */
 	private function get_current_iteration() {
-		return $this->it >> ( ( $this->level - 1 ) * $this->bits );
+		$it_level = $this->level - 1;
+		return $this->it >> $it_level;
 	}
 
 	/**
 	 * Returns iteration from level.
 	 *
 	 * @since 1.3.0
+	 * @since 1.5.0 Offsetted level calculation to variable to circumvent PHP7 compat checks.
 	 * @uses $this->it
 	 * @uses $this->level
 	 * @uses $this->bits()
@@ -192,7 +195,9 @@ final class SchemaPacker {
 	 * @return int The current iteration of the current level.
 	 */
 	private function get_iteration_from_level( $l = 0 ) {
-		return ( $this->it >> ( ( $l - 1 ) * $this->bits ) ) & ( pow( 2, $this->bits ) - 1 );
+		$bits_level = ( $l - 1 ) * $this->bits;
+		$written_bits = ( pow( 2, $this->bits ) - 1 );
+		return ( $this->it >> $bits_level ) & $written_bits;
 	}
 
 	/**

@@ -221,7 +221,6 @@ trait Extension_Forms {
 	 *    'ajax'         => bool Whether to support AJAX.
 	 *    'ajax-id'      => string The AJAX <a> button ID.
 	 *    'ajax-class'   => string The AJAX <a> button class.
-	 *    'ajax-tooltip' => bool Whether to wrap the ajax button in a tooltip container.
 	 *    'ajax-name'    => string The AJAX <a> button name.
 	 *    'ajax-title'   => string The AJAX <a> button on-hover title.
 	 * }
@@ -246,7 +245,6 @@ trait Extension_Forms {
 			'ajax'         => false,
 			'ajax-id'      => '',
 			'ajax-class'   => '',
-			'ajax-tooltip' => false,
 			'ajax-name'    => '',
 			'ajax-title'   => '',
 		];
@@ -276,15 +274,11 @@ trait Extension_Forms {
 			$button = sprintf(
 				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
 				\esc_attr( $items['ajax-id'] ),
-				\esc_attr( $items['ajax-class'] ) . ( strlen( $items['ajax-tooltip'] ) ? ' tsfem-tooltip-item' : '' ),
+				\esc_attr( $items['ajax-class'] ),
 				\esc_attr( $items['ajax-title'] ),
 				\esc_html( $items['ajax-name'] )
 			);
-			if ( strlen( $items['ajax-tooltip'] ) ) {
-				$output .= HTML::wrap_inline_tooltip( $button );
-			} else {
-				$output .= $button;
-			}
+			$output .= $button;
 		} else {
 			$output .= sprintf(
 				'<form action="%s" method=post id="%s" class="%s">%s</form>',

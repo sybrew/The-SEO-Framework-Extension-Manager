@@ -184,9 +184,6 @@ class AdminPages extends AccountActivation {
 		//* Add something special for Vivaldi and Android.
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
-		//* Add footer output.
-		\add_action( 'in_admin_footer', [ $this, '_init_footer_wrap' ] );
-
 		return $run = true;
 	}
 
@@ -203,40 +200,57 @@ class AdminPages extends AccountActivation {
 	}
 
 	/**
-	 * Initializes the admin page output.
+	 * Initializes and outputs the default admin page output.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function _init_extension_manager_page() {
+	final public function _init_extension_manager_page() {
+		\add_action( 'tsfem_header', [ $this, '_output_em_header' ] );
+		\add_action( 'tsfem_content', [ $this, '_output_em_content' ] );
+		\add_action( 'tsfem_footer', [ $this, '_output_em_footer' ] );
 
-		?>
-		<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">
-			<?php
-			if ( $this->is_plugin_activated() ) {
-				$this->output_extension_overview_wrapper();
-			} else {
-				$this->output_plugin_connect_wrapper();
-			}
-			?>
-		</div>
-		<?php
+		$type = $this->is_plugin_activated() ? 'panes' : 'connect';
+		$this->ui_wrap( $type );
 	}
 
 	/**
-	 * Initializes the admin footer output.
+	 * Outputs extension manager header.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 * @access private
 	 */
-	public function _init_footer_wrap() {
-		?>
-		<div class="tsfem-footer-wrap tsfem-flex tsfem-flex-nowrap tsfem-disable-cursor">
-			<?php
-			$this->do_page_footer_wrap();
-			?>
-		</div>
-		<?php
+	final public function _output_em_header() {
+		$this->get_view(
+			'layout/general/top',
+			[
+				'options' => $this->is_plugin_activated(),
+			]
+		);
+	}
+
+	/**
+	 * Outputs extension manager content.
+	 *
+	 * @since 1.5.0
+	 * @access private
+	 */
+	final public function _output_em_content() {
+		if ( $this->is_plugin_activated() ) {
+			$this->get_view( 'layout/pages/extensions' );
+		} else {
+			$this->get_view( 'layout/pages/activation' );
+		}
+	}
+
+	/**
+	 * Outputs extension manager footer.
+	 *
+	 * @since 1.5.0
+	 * @access private
+	 */
+	final public function _output_em_footer() {
+		$this->get_view( 'layout/general/footer' );
 	}
 
 	/**
@@ -246,82 +260,8 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function _output_theme_color_meta() {
+	final public function _output_theme_color_meta() {
 		$this->get_view( 'layout/pages/meta' );
-	}
-
-	/**
-	 * Echos main page wrapper for extension activation.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_extension_overview_wrapper() {
-
-		$this->do_page_top_wrap( true );
-
-		?>
-		<div class="tsfem-panes-wrap tsfem-flex tsfem-flex-nowrap">
-			<?php
-			$this->do_extensions_overview();
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos main page wrapper for account activation.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function output_plugin_connect_wrapper() {
-
-		$this->do_page_top_wrap( false );
-
-		?>
-		<div class="tsfem-connect-wrap">
-			<?php
-			$this->do_connect_overview();
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Echos the page top wrap.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param bool $options Whether to output the options.
-	 */
-	protected function do_page_top_wrap( $options = true ) {
-		$this->get_view( 'layout/general/top', get_defined_vars() );
-	}
-
-	/**
-	 * Echos the page footer wrap.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function do_page_footer_wrap() {
-		$this->get_view( 'layout/general/footer' );
-	}
-
-	/**
-	 * Echos the activation overview.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function do_connect_overview() {
-		$this->get_view( 'layout/pages/activation' );
-	}
-
-	/**
-	 * Echos the extension overview.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function do_extensions_overview() {
-		$this->get_view( 'layout/pages/extensions' );
 	}
 
 	/**
@@ -342,7 +282,7 @@ class AdminPages extends AccountActivation {
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	public function _do_pane_wrap( $title = '', $content = '', $args = [], $extra = '' ) {
+	final public function _do_pane_wrap( $title = '', $content = '', $args = [], $extra = '' ) {
 
 		$defaults = [
 			'full' => true,

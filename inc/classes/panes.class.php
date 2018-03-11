@@ -450,7 +450,7 @@ class Panes extends API {
 			$output .= $this->get_account_upgrade_form();
 		}
 
-		$output .= $this->get_deactivation_button();
+		$output .= $this->get_disconnect_button();
 
 		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
 	}
@@ -517,13 +517,13 @@ class Panes extends API {
 	}
 
 	/**
-	 * Renders and returns deactivation button.
+	 * Renders and returns disconnect button.
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 *
-	 * @return string The deactivation button.
+	 * @return string The disconnect button.
 	 */
-	protected function get_deactivation_button() {
+	protected function get_disconnect_button() {
 
 		$this->get_verification_codes( $_instance, $bits );
 
@@ -533,26 +533,30 @@ class Panes extends API {
 		Layout::set_nonces( 'request_name', $this->request_name );
 		Layout::set_nonces( 'nonce_action', $this->nonce_action );
 
-		$button = Layout::get( 'deactivation-button' );
+		$button = Layout::get( 'disconnect-button' );
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Deactivate account', 'the-seo-framework-extension-manager' ) );
-
-		$extras = [];
-		$_extra = '';
-
-		$extras[] = \esc_html__( 'This will deactivate all extensions. All extension options are held intact.', 'the-seo-framework-extension-manager' );
-		$extras[] = $this->is_premium_user() ? \esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' ) : '';
-
-		foreach ( $extras as $extra ) {
-			if ( $extra )
-				$_extra .= sprintf( '<div class="tsfem-description">%s</div>', $extra );
+		$infos = [];
+		$infos[] = \esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
+		$infos[] = \esc_html__( 'No options from extensions will be lost.', 'the-seo-framework-extension-manager' );
+		if ( $this->is_premium_user() ) {
+			$note = sprintf(
+				'<div class=tsfem-description>%s</div>',
+				\esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' )
+			);
 		}
 
-		$extra = sprintf( '<div class="tsfem-flex tsfem-flex-nowrap">%s</div>', $_extra );
+		$title = sprintf(
+			'<h4 class="tsfem-info-title">%s %s</h4>',
+			\esc_html__( 'Disconnect account', 'the-seo-framework-extension-manager' ),
+			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
+		);
 
-		return sprintf( '<div class="tsfem-account-deactivate">%s%s%s</div>', $title, $button, $extra );
+		return sprintf(
+			'<div class="tsfem-account-disconnect">%s</div>',
+			implode( '', compact( 'title', 'button', 'note' ) )
+		);
 	}
 
 	/**
@@ -583,8 +587,11 @@ class Panes extends API {
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
-			$extra = sprintf( '<p class="tsfem-description">%s</p>', \esc_html( $description[ $key ] ) );
-			$content .= sprintf( '<div class="tsfem-support-buttons tsfem-flex tsfem-flex-nogrow tsfem-flex-nowrap">%s%s</div>', $button, $extra );
+			$content .= sprintf(
+				'<div class="tsfem-support-buttons">%s%s</div>',
+				$button,
+				HTML::make_inline_question_tooltip( $description[ $key ] )
+			);
 		}
 
 		return sprintf( '<div class="tsfem-account-support">%s%s</div>', $title, $content );
