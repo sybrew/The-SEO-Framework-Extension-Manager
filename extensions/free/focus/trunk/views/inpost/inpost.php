@@ -50,6 +50,7 @@ create_analysis_field :;
 							],
 							'definition' => [
 								'id' => $make_option_id( $id, 'definition' ),
+								'selector_id' => $make_option_id( $id, 'definition_selector' ),
 								'value' => $values['definition'],
 							],
 							'definition_data' => [

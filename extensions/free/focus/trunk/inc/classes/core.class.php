@@ -48,6 +48,14 @@ class Core {
 		\TSF_Extension_Manager\Extension_Post_Meta;
 
 	/**
+	 * Holds default definition value.
+	 *
+	 * @since 1.0.0
+	 * @param string Default definition value in JSON.
+	 */
+	protected $default_definition;
+
+	/**
 	 * Child constructor.
 	 *
 	 * @since 1.0.0
@@ -56,6 +64,13 @@ class Core {
 
 		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
+
+		$this->default_definition = json_encode( (object) [
+			[
+				'value' => '',
+				'name'  => \__( 'No definition', 'the-seo-framework-extension-manager' ),
+			],
+		] );
 
 		/**
 		 * Set meta index and defaults.
@@ -67,7 +82,7 @@ class Core {
 			'kw' => array_fill( 0, 3, [
 				'keyword' => '',
 				'definition' => '',
-				'definition_data' => json_encode( [ '' => \__( 'No definition', 'the-seo-framework-extension-manager' ) ] ),
+				'definition_data' => $this->default_definition,
 				'inflection_data' => '',
 				'synonym_data' => '',
 				'score' => 0,

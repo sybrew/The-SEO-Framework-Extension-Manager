@@ -256,20 +256,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			inflections = [ inflections ];
 		}
 
-		const escapeRegex = ( word ) => word.replace( /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&' );
-		const escapeStr = ( str ) => {
-			if ( ! str.length ) return '';
-			return str.replace( /[&<>"']/g, ( m ) => {
-				return {
-					'&': '&amp;',
-					'<': '&lt;',
-					'>': '&gt;',
-					'"': '&quot;',
-					"'": '&#039;'
-				}[ m ];
-			} );
-		};
-
 		const countChars = ( contents ) => {
 			// Strip all XML tags first.
 			contents = contents.match( /[^>]+(?=<|$|^)/gi );
@@ -280,7 +266,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				pReg,
 				matches = contents,
 				count = 0,
-				sWord = escapeRegex( escapeStr( word ) );
+				sWord = tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) );
 
 			//= Iterate over multiple regex scripts.
 			for ( let i = 0; i < n; i++ ) {
@@ -302,7 +288,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			from: ( contents ) =>
 				contents.replace(
 					new RegExp(
-						escapeRegex( escapeStr( word ) ),
+						tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ),
 						'gi'
 					),
 					'/' //? A filler that doesn't break XML tag attribute closures ("|'|\s).
@@ -454,7 +440,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		return ( index in classes ) && classes[ index ] || classes['0'];
 	}
 
-	const prepareDefinitionSetter = ( idPrefix ) => {
+	const runDefinitionSetter = ( idPrefix ) => {
 
 		clearDefinition( idPrefix );
 		clearInflections( idPrefix );
@@ -463,15 +449,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		let keyword = getSubElementById( idPrefix, 'keyword' ).value,
 			definitionField = getSubElementById( idPrefix, 'definition' );
 
-		if ( ! definitionField instanceof HTMLSelectElement ) return;
+		if ( ! definitionField instanceof HTMLInputElement ) return;
 
 		setEditButton( idPrefix ).to( 'enabled, loading' );
 
 		$.when( getDefinitions( idPrefix, keyword ) ).done( ( data ) => {
-			data.definitions.forEach( ( definition ) => {
-				//= TODO carry information over to input field as encoded JSON for later use.
-				// definitionField.add( definition );
-			} );
+			setDefinitionSelectionFields( idPrefix, data.definitions );
 		} ).always( () => {
 			setEditButton( idPrefix ).to( 'edit' );
 		} );
@@ -552,18 +535,75 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	}
 
 	const clearDefinition = ( idPrefix ) => {
-		let definition = getSubElementById( idPrefix, 'definition' );
+		let definitionField = getSubElementById( idPrefix, 'definition' ),
+			definitionSelector = getSubElementById( idPrefix, 'definition_selector' ),
+			definitionHolder = getSubElementById( idPrefix, 'definition_data' );
 
-		if ( ! definition instanceof HTMLSelectElement ) return;
-
-		definition.disabled = true;
-		//= Removes all options but the first.
-		for ( let _i = definition.options.length; _i >= 1; _i-- ) {
-			definition.remove( _i );
+		if ( definitionField instanceof HTMLInputElement ) {
+			definitionField.value = '';
 		}
-		definition.selectedIndex = 0;
-
+		if ( definitionHolder instanceof HTMLInputElement ) {
+			definitionHolder.value = '';
+		}
+		if ( definitionSelector instanceof HTMLSelectElement ) {
+			definitionSelector.disabled = true;
+			definitionSelector.selectedIndex = 0;
+			updateDefinitionSelector( idPrefix, l10n.defaultDefinition );
+		}
 		//= TODO clear synonyms and all relationships thereof.
+	}
+	const updateDefinitionSelector = ( idPrefix, definitions ) => {
+		let definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
+
+		//= Removes all options.
+		for ( let _i = definitionSelector.options.length; _i >= 0; _i-- ) {
+			definitionSelector.remove( _i );
+		}
+
+		let _option = document.createElement( 'option' ),
+			_list = JSON.parse( definitions );
+
+		if ( _list ) {
+			for ( let i in _list ) {
+				_option = _option.cloneNode();
+				_option.value = tsfem_inpost.escapeStr( i );
+				_option.innerHTML = tsfem_inpost.escapeStr( _list[ i ].name );
+				definitionSelector.appendChild( _option );
+			}
+		}
+	}
+
+	const setDefinitionSelectionFields = ( idPrefix, definitions ) => {
+
+		let definitionField = getSubElementById( idPrefix, 'definition' ),
+			definitionSelector = getSubElementById( idPrefix, 'definition_selector' ),
+			definitionHolder = getSubElementById( idPrefix, 'definition_data' );
+
+		let _definitions = JSON.parse( l10n.defaultDefinition );
+		// _definitions = Object.values( _definitions );
+		//= IE11 replacement for Object.values.
+		_definitions = Object.keys( _definitions ).map( e => _definitions[ e ] );
+		definitions.forEach( ( entry ) => {
+			if ( entry.inflection && entry.lexicalCategory ) {
+				_definitions.push( {
+					'value' : entry.inflection,
+					'name' : entry.lexicalCategory + ': ' + entry.inflection,
+				} );
+			}
+		} );
+		let definitionsValue = _definitions.length && JSON.stringify( _definitions ) || l10n.defaultDefinition;
+
+		if ( definitionField instanceof HTMLInputElement ) {
+			definitionField.value = '';
+		}
+		if ( definitionHolder instanceof HTMLInputElement ) {
+			definitionHolder.value = definitionsValue;
+		}
+		if ( definitionSelector instanceof HTMLSelectElement ) {
+			updateDefinitionSelector( idPrefix, definitionsValue );
+			definitionSelector.disabled = false;
+			definitionSelector.selectedIndex = 0;
+		}
 	}
 
 	const clearInflections = ( idPrefix ) => { }
@@ -660,7 +700,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		if ( tsfem_inpost.isPremium ) {
-			prepareDefinitionSetter( idPrefix );
+			runDefinitionSetter( idPrefix );
 		}
 
 		prepareWrapScoreElements( idPrefix );
@@ -754,6 +794,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				// let a = e.target.closest( '.tsfem-e-focus-collapse-wrap' ).querySelector( 'input' );
 				// if ( a instanceof Element ) a.checked = ! a.checked;
 			} );
+	}
+
+	const resetKeywordEntryListeners = () => {
 
 		let keywordBuffer = {},
 			keywordTimeout = 1500;
@@ -781,7 +824,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		//= Set keyword entry listener
 		$keywordEntries
 			.off( 'input.tsfem-e-focus' )
-			.on( 'input.tsfem-e-focus', event => {
+			.on( 'input.tsfem-e-focus', ( event ) => {
 				//= Vars must be registered here as it's asynchronous.
 				let loaderId = event.target.name;
 				let bar = $( event.target )
@@ -945,7 +988,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			   window.MutationObserver
 			|| window.WebKitMutationObserver
 			|| window.MozMutationObserver;
-
 		const interval = 3000;
 
 		/**
@@ -1043,6 +1085,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		resetCollapserListeners();
+		resetKeywordEntryListeners();
 	}
 
 	/**

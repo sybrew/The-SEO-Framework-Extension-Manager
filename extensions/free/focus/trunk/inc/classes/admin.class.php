@@ -138,6 +138,7 @@ final class Admin extends Core {
 				'data' => [
 					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
 					'focusElements' => $this->get_focus_elements(),
+					'defaultDefinition' => $this->default_definition,
 				],
 			],
 			'tmpl' => [

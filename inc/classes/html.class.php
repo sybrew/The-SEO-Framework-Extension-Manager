@@ -109,7 +109,8 @@ final class HTML {
 	 * @since 1.5.0
 	 *
 	 * @param array $options : {
-	 *    'value' (string) <weak> The option value => 'title' (string) The option title,
+	 *    'value' (string) => The option value
+	 *    'name' (string)  => The option name,
 	 * }
 	 * @param string $selected The currently selected value.
 	 * @return string The formatted options list.
@@ -117,13 +118,13 @@ final class HTML {
 	static function make_dropdown_option_list( array $options, $selected = '' ) {
 		$out = '';
 		$selected = (string) $selected;
-		foreach ( $options as $value => $title ) {
-			$value = \esc_attr( $value );
+		foreach ( $options as $entry ) {
+			$value = \esc_attr( $entry['value'] );
 			$out .= sprintf(
 				'<option value="%s"%s>%s</option>',
 				$value,
 				$value === $selected ? ' selected' : '',
-				\esc_html( $title )
+				\esc_html( $entry['name'] )
 			);
 		}
 		return $out;

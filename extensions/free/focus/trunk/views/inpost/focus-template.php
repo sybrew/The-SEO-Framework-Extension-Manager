@@ -112,18 +112,19 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				printf(
 					sprintf(
 						'%s%s',
+						'<input type=hidden id=%1$s name=%1$s value="%2$s" id=%3$s>',
 						sprintf(
-							'<select name=%%1$s id=%%1$s value="%%2$s" class="%s" disabled>%%3$s</select>',
+							'<select value="%%2$s" id=%%3$s class="%s" disabled>%%4$s</select>',
 							\esc_attr( implode( ' ', [
 								'tsfem-e-focus-definition-selection',
 								'tsfem-e-focus-enable-if-js',
 								'tsfem-e-focus-requires-javascript',
 							] ) )
-						),
-						'<input type=hidden class=tsfem-e-focus-disable-if-js name=%1$s value="%2$s">'
+						)
 					),
 					\esc_attr( $definition['id'] ),
 					\esc_attr( $definition['value'] ),
+					\esc_attr( $definition['selector_id'] ),
 					\TSF_Extension_Manager\HTML::make_dropdown_option_list( json_decode( $definition_data['value'], true ), $definition['value'] ?: '' )
 				);
 				printf(
