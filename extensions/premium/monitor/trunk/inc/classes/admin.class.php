@@ -1086,8 +1086,8 @@ final class Admin extends Api {
 	protected function get_account_information() {
 
 		$output = '';
-		$output .= $this->get_account_data_fields();
 		$output .= $this->get_site_fix_fields();
+		$output .= $this->get_account_data_fields();
 
 		return $output;
 	}
@@ -1201,7 +1201,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fix_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-cloud';
+		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-flat tsfem-button-cloud';
 		$name = \__( 'Request Reactivation', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to reconnect your website', 'the-seo-framework-extension-manager' );
 

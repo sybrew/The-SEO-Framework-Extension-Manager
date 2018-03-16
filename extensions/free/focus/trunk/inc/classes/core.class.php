@@ -68,7 +68,7 @@ class Core {
 		$this->default_definition = json_encode( (object) [
 			[
 				'value' => '',
-				'name'  => \__( 'No definition', 'the-seo-framework-extension-manager' ),
+				'name'  => \__( '&mdash; Lexical form &mdash;', 'the-seo-framework-extension-manager' ),
 			],
 		] );
 

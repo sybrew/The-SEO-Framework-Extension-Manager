@@ -76,6 +76,7 @@ final class Ajax {
 
 		//* AJAX definition getter listener.
 		\add_action( 'wp_ajax_tsfem_e_local_get_definitions', [ $instance, '_get_definitions' ] );
+		\add_action( 'wp_ajax_tsfem_e_local_get_synonyms', [ $instance, '_get_synonyms' ] );
 	}
 
 	private function get_api_response( $type, $data ) {
@@ -91,6 +92,8 @@ final class Ajax {
 
 	/**
 	 * Verifies premium status, user access, and user nonce.
+	 *
+	 * @since 1.0.0
 	 *
 	 * @return bool|void True on success. Void and exit on failure.
 	 */
@@ -144,7 +147,7 @@ final class Ajax {
 
 				if ( isset( $data->definitions ) ) {
 					$type = 'success';
-					$definitions = $data->definitions;
+					$definitions = $data->definitions ?: [];
 					if ( empty( $definitions ) ) {
 						$results = $this->get_ajax_notice( false, 1100104 );
 					} else {
@@ -160,6 +163,61 @@ final class Ajax {
 		}
 
 		$data = compact( 'definitions', 'error' );
+
+		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
+	}
+
+	/**
+	 * Gets definition synonyms.
+	 *
+	 * @since 1.0.0
+	 * @uses $this->verify_api_access()
+	 */
+	public function _get_synonyms() {
+
+		$this->verify_api_access();
+
+		$tsfem = \tsf_extension_manager();
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+
+		$definition_keys = [ 'category', 'value' ];
+		$definition = isset( $_args['definition'] ) ? \map_deep( $_args['definition'], [ $tsfem, 's_ajax_string' ] ) : '';
+		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
+
+		if ( ! $tsfem->has_required_array_keys( $definition, $definition_keys ) || ! $language ) {
+			//= How in the...
+			$results = $this->get_ajax_notice( false, 1100201 );
+		} else {
+			$definition = json_encode( $tsfem->filter_keys( $definition, $definition_keys ) );
+
+			$response = $this->get_api_response( 'synonyms', compact( 'definition', 'language' ) );
+			$response = json_decode( $response );
+
+			if ( empty( $response->success ) ) {
+				$results = $this->get_ajax_notice( false, 1100202 );
+			} elseif ( ! isset( $response->data ) ) {
+				$results = $this->get_ajax_notice( false, 1100203 );
+			} else {
+				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+
+				if ( isset( $data->synonyms ) ) {
+					$type = 'success';
+					$synonyms = $data->synonyms ?: [];
+					if ( empty( $synonyms ) ) {
+						$results = $this->get_ajax_notice( false, 1100204 );
+					} else {
+						$results = $this->get_ajax_notice( true, 1100205 );
+					}
+				} else {
+					if ( isset( $data->error ) )
+						$error = $data->error;
+
+					$results = $this->get_ajax_notice( false, 1100206 );
+				}
+			}
+		}
+
+		$data = compact( 'synonyms', 'error' );
 
 		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
 	}

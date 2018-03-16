@@ -637,20 +637,21 @@ body.tsfem .wrap {
 .tsfem-button-flat:active,
 .tsfem-button-flat:focus {
 	margin: 0;
-	box-shadow: 0 0 0.3em rgba(0,0,0,0); /* transition positioning */
+	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset; /* 1,2: transition positioning */
 	filter: none;
-	transition: box-shadow .15s;
+	transition: box-shadow .25s;
 }
 
 .tsfem-button-flat:hover,
 .tsfem-button-flat:focus {
 	margin: 0;
-	box-shadow: 0 .2em 1em rgba(0,0,0,.3);
+	box-shadow: 0 .2em 1em rgba(0,0,0,.3), 0 0 0 rgba(0,0,0,0) inset; /* 2: transition positioning */
 }
 
 .tsfem-button-flat:active {
 	margin: 0;
-	box-shadow: 0 .1em .7em .2em rgba(0,0,0,.3)
+	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 .1em .7em .2em rgba(0,0,0,.3) inset; /* 1: transition positioning */
+	transition-duration: .15s;
 }
 
 /* ## Switching/Rotating buttons.
@@ -842,21 +843,33 @@ body.tsfem .wrap {
 
 .tsfem-pane-half ::-webkit-scrollbar,
 .tsfem-pane-full ::-webkit-scrollbar {
-	width: 12px;
-	height: 6px;
-	background: #fff;
-	box-shadow: 0 0 1.3em rgba(0,0,0,.18);
+	width: .7em;
+	height: .7em;
+	background: rgba(0,0,0,.04);
+}
+.tsfem-pane-half ::-webkit-scrollbar:hover,
+.tsfem-pane-full ::-webkit-scrollbar:hover {
+	background: rgba(0,0,0,.06);
+}
+.tsfem-pane-half ::-webkit-scrollbar:active,
+.tsfem-pane-full ::-webkit-scrollbar:active {
+	background: rgba(0,0,0,.08);
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb,
 .tsfem-pane-full ::-webkit-scrollbar-thumb {
 	background-color: #05809e;
-	box-shadow: 0 0 1.3em rgba(0,0,0,.15);
+	box-shadow: 0 0 1em rgba(0,0,0,.25);
+}
+
+.tsfem-pane-half ::-webkit-scrollbar-thumb:hover,
+.tsfem-pane-full ::-webkit-scrollbar-thumb:hover {
+	box-shadow: 0 0 .7em .2em rgba(0,0,0,.25);
 }
 
 .tsfem-pane-half ::-webkit-scrollbar-thumb:active,
 .tsfem-pane-full ::-webkit-scrollbar-thumb:active {
-	box-shadow: 0 0 1.3em rgba(0,0,0,.4);
+	box-shadow: 0 0 .6em .2em rgba(0,0,0,.35);
 }
 
 .tsfem-pane-wrap {

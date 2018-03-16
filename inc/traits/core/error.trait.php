@@ -283,7 +283,7 @@ trait Error {
 			case 201 :
 			case 1010201 :
 			case 1100101 :
-				$message = \esc_html__( 'An empty API request was supplied.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'An incomplete API request was supplied.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -468,7 +468,7 @@ trait Error {
 			case 1010602 :
 			case 1010802 :
 				$message = \esc_html__( 'The Monitor API server does not recognize your instance. Request a fix.', 'the-seo-framework-extension-manager' );
-				$type = 'warning';
+				$type = 'error';
 				break;
 
 			case 1010503 :

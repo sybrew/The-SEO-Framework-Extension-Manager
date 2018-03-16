@@ -378,12 +378,12 @@ class Core {
 	final public function _get_ajax_post_object( array $args ) {
 
 		$required = [
-			'options_key' => '',
-			'options_index' => '',
-			'menu_slug' => '',
-			'nonce_name' => '',
-			'request_name' => '',
-			'nonce_action' => '',
+			'options_key',
+			'options_index',
+			'menu_slug',
+			'nonce_name',
+			'request_name',
+			'nonce_action',
 		];
 
 		//* If the required keys aren't found, bail.
@@ -562,13 +562,14 @@ class Core {
 	 * Determines if all required keys are set in $input.
 	 *
 	 * @since 1.2.0
+	 * @since 1.5.0 $compare now accepts keys as values only.
 	 *
 	 * @param array $input The input keys.
 	 * @param array $compare The keys to compare it to.
 	 * @return bool True on success, false if keys are missing.
 	 */
 	final public function has_required_array_keys( array $input, array $compare ) {
-		return empty( array_diff_key( $compare, $input ) );
+		return empty( array_diff_key( array_flip( $compare ), $input ) );
 	}
 
 	/**
@@ -1292,11 +1293,7 @@ class Core {
 	 */
 	final protected function validate_extensions_checksum( $checksum ) {
 
-		$required = [
-			'hash' => '',
-			'matches' => '',
-			'type' => '',
-		];
+		$required = [ 'hash', 'matches', 'type' ];
 
 		//* If the required keys aren't found, bail.
 		if ( ! $this->has_required_array_keys( $checksum, $required ) ) {
@@ -1595,6 +1592,19 @@ class Core {
 	 */
 	final public function s_ajax_string( $input ) {
 		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+	}
+
+	/**
+	 * Filters keys from input array.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $input The input with possible keys.
+	 * @param array $keys The wanted keys, e.g. ['key','key2']
+	 */
+	final public function filter_keys( array $input, array $keys ) {
+		$expected_keys = array_fill_keys( $keys, '' );
+		return array_intersect_key( array_merge( $expected_keys, $input ), $expected_keys );
 	}
 
 	/**

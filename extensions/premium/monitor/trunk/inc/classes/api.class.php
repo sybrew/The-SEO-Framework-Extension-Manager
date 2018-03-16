@@ -314,9 +314,9 @@ class Api extends Data {
 		}
 
 		if ( ! $this->is_remote_data_expired() ) {
-			//= AJAX shouldn't get this far.
+			//= AJAX shouldn't get this far... But it does, after the page is just loaded whilst data is fetched.
 			$ajax or $this->set_error_notice( [ 1010607 => $this->get_try_again_notice( $this->get_remote_data_timeout_remainder() ) ] );
-			return false;
+			return $ajax ? $this->get_ajax_notice( false, 1010607 ) : false;
 		}
 
 		$response = $this->get_monitor_api_response( 'get_data', $ajax );
