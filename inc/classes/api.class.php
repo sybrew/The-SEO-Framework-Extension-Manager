@@ -400,7 +400,7 @@ class API extends Core {
 	 */
 	final private function _verify_api_access( $object, $key ) {
 		$keys = &$this->generate_api_access_key();
-		return $this->coalesce_var( $keys[ get_class( $object ) ], null ) === $key;
+		return $this->coalesce_var( $keys[ get_class( $object ) ], null ) === (string) $key;
 	}
 
 	/**

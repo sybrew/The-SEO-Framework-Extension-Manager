@@ -138,7 +138,7 @@ final class Admin extends Core {
 				'data' => [
 					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
 					'focusElements' => $this->get_focus_elements(),
-					'defaultDefinition' => $this->default_definition,
+					'defaultLexicalForm' => $this->default_lexical_form,
 				],
 			],
 			'tmpl' => [
@@ -154,6 +154,9 @@ final class Admin extends Core {
 			'colors' => [
 				'.tsfem-e-focus-content-loader-bar' => [
 					'background:{{$color_accent}}',
+				],
+				'.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-item' => [
+					'color:{{$color}}',
 				],
 			],
 		] );

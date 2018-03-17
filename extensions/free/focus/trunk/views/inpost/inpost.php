@@ -38,46 +38,58 @@ create_analysis_field :;
 						$template_cb, [
 							'supportive' => (bool) $i++, // true if 2nd or later iteration.
 							'is_premium' => $is_premium,
-							'wrap' => [
-								'id' => $make_option_id( $id, 'wrap' ),
-							],
-							'collapser' => [
-								'id' => sprintf( 'tsfem-e-local-collapse-%s', $id ),
-							],
-							'keyword' => [
-								'id' => $make_option_id( $id, 'keyword' ),
-								'value' => $values['keyword'],
-							],
-							'definition' => [
-								'id' => $make_option_id( $id, 'definition' ),
-								'selector_id' => $make_option_id( $id, 'definition_selector' ),
-								'value' => $values['definition'],
-							],
-							'definition_data' => [
-								'id' => $make_option_id( $id, 'definition_data' ),
-								'value' => $values['definition_data'],
-							],
-							'subject_edit' => [
-								'id' => $make_option_id( $id, 'subject_edit' ),
-							],
-							'inflection_data' => [
-								'id' => $make_option_id( $id, 'inflection_data' ),
-								'value' => $values['inflection_data'],
-							],
-							'synonym_data' => [
-								'id' => $make_option_id( $id, 'synonym_data' ),
-								'value' => $values['synonym_data'],
-							],
-							'score' => [
-								'id' => $make_option_id( $id, 'score' ),
-								'value' => $values['score'],
-							],
+							'has_keyword' => (bool) strlen( $values['keyword'] ),
 							'sub_scores' => [
 								'key' => $make_option_id( $id, 'scores' ),
 								'values' => $values['scores'],
 							],
-							'highlighter' => [
-								'id' => sprintf( 'tsfem-e-local-highlighter-%s', $id ),
+							'wrap_ids' => [
+								/* These shouldn't be saved. */
+								'collapse' => $make_option_id( $id, 'collapse' ),
+								'header'   => $make_option_id( $id, 'header' ),
+								'content'  => $make_option_id( $id, 'content' ),
+								'edit'     => $make_option_id( $id, 'edit' ),
+								'evaluate' => $make_option_id( $id, 'evaluate' ),
+								'inflections' => $make_option_id( $id, 'inflections' ),
+								'synonyms' => $make_option_id( $id, 'synonyms' ),
+							],
+							'action_ids' => [
+								/* These shouldn't be saved. */
+								'collapser'   => $make_option_id( $id, 'collapser' ),
+								'highlighter' => $make_option_id( $id, 'highlighter' ),
+								'subject_edit' => $make_option_id( $id, 'subject_edit' ),
+								'definition_selector' => $make_option_id( $id, 'definition_selector' ),
+							],
+							'post_input' => [
+								'keyword' => [
+									'id' => $make_option_id( $id, 'keyword' ),
+									'value' => $values['keyword'],
+								],
+								'lexical_form' => [
+									'id' => $make_option_id( $id, 'lexical_form' ),
+									'selector_id' => $make_option_id( $id, 'lexical_selector' ),
+									'value' => $values['lexical_form'],
+								],
+								'lexical_data' => [
+									'id' => $make_option_id( $id, 'lexical_data' ),
+									'value' => $values['lexical_data'],
+								],
+								'definition_selection' => [
+									'id' => $make_option_id( $id, 'definition_selection' ),
+									'value' => $values['definition_selection'],
+								],
+								'inflection_data' => [
+									'id' => $make_option_id( $id, 'inflection_data' ),
+									'value' => $values['inflection_data'],
+								],
+								'synonym_data' => [
+									'id' => $make_option_id( $id, 'synonym_data' ),
+									'value' => $values['synonym_data'],
+								],
+								'score' => [
+									'id' => $make_option_id( $id, 'score' ),
+									'value' => $values['score'],
+								],
 							],
 						]
 					);

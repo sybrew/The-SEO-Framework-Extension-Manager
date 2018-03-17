@@ -75,10 +75,19 @@ final class Ajax {
 		$instance->error_notice_option = 'tsfem_e_focus_ajax_error_notice_option';
 
 		//* AJAX definition getter listener.
-		\add_action( 'wp_ajax_tsfem_e_local_get_definitions', [ $instance, '_get_definitions' ] );
-		\add_action( 'wp_ajax_tsfem_e_local_get_synonyms', [ $instance, '_get_synonyms' ] );
+		\add_action( 'wp_ajax_tsfem_e_focus_get_lexicalforms', [ $instance, '_get_lexicalforms' ] );
+		\add_action( 'wp_ajax_tsfem_e_focus_get_synonyms', [ $instance, '_get_synonyms' ] );
 	}
 
+	/**
+	 * Returns API response for Focus.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type The API request type.
+	 * @param mixed  $data The attached API data.
+	 * @return bool|void True on success. Void and exit on failure.
+	 */
 	private function get_api_response( $type, $data ) {
 		return \tsf_extension_manager()->_get_extension_api_response(
 			$this,
@@ -116,12 +125,13 @@ final class Ajax {
 	}
 
 	/**
-	 * Gets word definitions.
+	 * Gets word forms on AJAX request.
 	 *
 	 * @since 1.0.0
 	 * @uses $this->verify_api_access()
+	 * @uses $this->get_api_response()
 	 */
-	public function _get_definitions() {
+	public function _get_lexicalforms() {
 
 		$this->verify_api_access();
 
@@ -135,7 +145,7 @@ final class Ajax {
 			//= How in the...
 			$results = $this->get_ajax_notice( false, 1100101 );
 		} else {
-			$response = $this->get_api_response( 'definitions', compact( 'keyword', 'language' ) );
+			$response = $this->get_api_response( 'lexicalform', compact( 'keyword', 'language' ) );
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
@@ -145,10 +155,10 @@ final class Ajax {
 			} else {
 				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
-				if ( isset( $data->definitions ) ) {
+				if ( isset( $data->forms ) ) {
 					$type = 'success';
-					$definitions = $data->definitions ?: [];
-					if ( empty( $definitions ) ) {
+					$forms = $data->forms ?: [];
+					if ( empty( $forms ) ) {
 						$results = $this->get_ajax_notice( false, 1100104 );
 					} else {
 						$results = $this->get_ajax_notice( true, 1100105 );
@@ -162,16 +172,17 @@ final class Ajax {
 			}
 		}
 
-		$data = compact( 'definitions', 'error' );
+		$data = compact( 'forms', 'error' );
 
 		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
 	}
 
 	/**
-	 * Gets definition synonyms.
+	 * Gets lexical form synonyms on AJAX request.
 	 *
 	 * @since 1.0.0
 	 * @uses $this->verify_api_access()
+	 * @uses $this->get_api_response()
 	 */
 	public function _get_synonyms() {
 
@@ -180,17 +191,17 @@ final class Ajax {
 		$tsfem = \tsf_extension_manager();
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
-		$definition_keys = [ 'category', 'value' ];
-		$definition = isset( $_args['definition'] ) ? \map_deep( $_args['definition'], [ $tsfem, 's_ajax_string' ] ) : '';
+		$form_keys = [ 'category', 'value' ];
+		$form = isset( $_args['form'] ) ? \map_deep( $_args['form'], [ $tsfem, 's_ajax_string' ] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
 
-		if ( ! $tsfem->has_required_array_keys( $definition, $definition_keys ) || ! $language ) {
+		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
 			//= How in the...
 			$results = $this->get_ajax_notice( false, 1100201 );
 		} else {
-			$definition = json_encode( $tsfem->filter_keys( $definition, $definition_keys ) );
+			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
 
-			$response = $this->get_api_response( 'synonyms', compact( 'definition', 'language' ) );
+			$response = $this->get_api_response( 'synonyms', compact( 'form', 'language' ) );
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {

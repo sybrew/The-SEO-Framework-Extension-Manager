@@ -36,7 +36,7 @@
 }
 
 .tsfem-e-focus-collapse-header-row > * {
-	margin: .25em .5em;
+	margin: .25em;
 }
 
 /* ## Collapse content
@@ -126,6 +126,12 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	width:  2em;
 	vertical-align: middle;
 	cursor: pointer;
+	position: relative;
+	transition: box-shadow .25s ease-in-out;
+}
+
+.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-label {
+	box-shadow: 0 0 3px 1px rgba(0,0,0,.25) inset;
 }
 
 .tsfem-e-focus-arrow {
@@ -136,8 +142,8 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 
 .tsfem-e-focus-arrow-item {
 	display: block;
-	height: 100%;
-	width: 100%;
+	height: 0;
+	width: 0;
 	cursor: inherit;
 }
 
@@ -146,12 +152,12 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	content: "";
 	position: absolute;
 	width: 6px;
-	top: 50%;
-	left: calc( 50% - 4px ); /* 6px width - 2px translate */
+	top: calc( 1em - 1px );
+	left: calc( .5em + 1px );
 	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
-	transition: all 0.5s ease-in-out;
+	transition: all .5s ease-in-out, background .25s ease-in-out;
 	background: currentColor;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -163,35 +169,35 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 }
 
 .tsfem-e-focus-arrow-item:before {
-	transform: translate(-2px, 0) rotate(-45deg);
+	transform: rotate(-45deg);
 }
 
 .tsfem-e-focus-arrow-item:after {
-	transform: translate(2px, 0) rotate(45deg);
+	transform: translate(4px, 0) rotate(45deg);
 }
 
 .tsfem-e-focus-collapse-checkbox:checked + .tsfem-e-focus-collapse-header .tsfem-e-focus-arrow-item:before {
-	transform: translate(-2px, 0) rotate(45deg);
+	transform: rotate(45deg);
 }
 
 .tsfem-e-focus-collapse-checkbox:checked + .tsfem-e-focus-collapse-header .tsfem-e-focus-arrow-item:after {
-	transform: translate(2px, 0) rotate(-45deg);
+	transform: translate(4px, 0) rotate(-45deg);
 }
 
-/* ## Keywords editor
+/* ## Subject editor switcher
 ----------------------------------------------*/
 
-.tsfem-e-focus-edit-subject-wrap {
+.tsfem-e-focus-edit-subject-button-wrap {
 	cursor: pointer;
-	width:  2em;
-	height:  2em;
+	width: 2em;
+	height: 2em;
 }
 
 .tsfem-e-focus-edit-subject {
 	cursor: inherit;
-	display:  block;
-	width:  100%;
-	height:  100%;
+	display: block;
+	width: 100%;
+	height: 100%;
 }
 
 .tsfem-e-focus-edit-subject:after {
@@ -201,12 +207,12 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	font-size: 18px;
 }
 
-.tsfem-e-focus-edit-subject-wrap-disabled {
+.tsfem-e-focus-edit-subject-button-wrap-disabled {
 	cursor: not-allowed;
 	color: #ccc;
 }
 
-.tsfem-e-focus-edit-subject-wrap-disabled .tsfem-e-focus-edit-subject {
+.tsfem-e-focus-edit-subject-button-wrap-disabled .tsfem-e-focus-edit-subject {
 	color: inherit;
 }
 
@@ -254,6 +260,7 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	cursor: not-allowed;
 }
 
+input[type="checkbox"].tsfem-e-focus-edit-subject-checkbox,
 input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox {
 	position: absolute;
 	width: 0;
@@ -268,16 +275,15 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox {
 	appearance: none;
 }
 
+input[type="checkbox"].tsfem-e-focus-edit-subject-checkbox:checked:after,
 input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	content: none;
 }
 
-/* # Assessments
+/* #  Subject Editor + Assessments
 ----------------------------------------------*/
 
-.tsfem-e-focus-no-keyword-wrap {
-}
-
+.tsfem-e-focus-definition-selection-holder,
 .tsfem-e-focus-assessment-wrap {
 	-webkit-flex-direction: row;
 	flex-direction: row;
@@ -286,6 +292,22 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	padding: .33em 0;
 }
 
+.tsfem-e-focus-definition-selection-title,
+.tsfem-e-focus-assessment-title {
+	-webkit-flex: 1 33 110px;
+	flex: 1 33 110px;
+	margin-right: 1em;
+}
+
+.tsfem-e-focus-definition-selection-tool,
+.tsfem-e-focus-assessment-description {
+	-webkit-flex: 66 1 auto;
+	flex: 66 1 auto;
+}
+
+/* # Assessments
+----------------------------------------------*/
+
 .tsfem-e-focus-assessment-rating {
 	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
@@ -293,15 +315,11 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	width: 1em;
 }
 
-.tsfem-e-focus-assessment-title {
-	-webkit-flex: 1 33 110px;
-	flex: 1 33 110px;
-	margin-right: 1em;
-}
+/* # Subject editor
+----------------------------------------------*/
 
-.tsfem-e-focus-assessment-description {
-	-webkit-flex: 66 1 auto;
-	flex: 66 1 auto;
+.tsfem-e-focus-definition-editor {
+	cursor: pointer;
 }
 
 /* # Misc

@@ -95,7 +95,7 @@ a.tsfem-dismiss:hover {
 ----------------------------------------------*/
 
 .tsfem-e-inpost-icon:after {
-	display: block;
+	display: inherit;
 	width: 1em;
 	line-height: 1;
 	font-family: dashicons;

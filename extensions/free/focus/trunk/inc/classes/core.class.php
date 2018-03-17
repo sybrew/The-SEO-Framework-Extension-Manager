@@ -48,12 +48,12 @@ class Core {
 		\TSF_Extension_Manager\Extension_Post_Meta;
 
 	/**
-	 * Holds default definition value.
+	 * Holds default lexical form value.
 	 *
 	 * @since 1.0.0
-	 * @param string Default definition value in JSON.
+	 * @param string Default lexical form value in JSON.
 	 */
-	protected $default_definition;
+	protected $default_lexical_form;
 
 	/**
 	 * Child constructor.
@@ -65,7 +65,7 @@ class Core {
 		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
 
-		$this->default_definition = json_encode( (object) [
+		$this->default_lexical_form = json_encode( (object) [
 			[
 				'value' => '',
 				'name'  => \__( '&mdash; Lexical form &mdash;', 'the-seo-framework-extension-manager' ),
@@ -81,8 +81,9 @@ class Core {
 			//= Fills 3 sequential array keys with these values.
 			'kw' => array_fill( 0, 3, [
 				'keyword' => '',
-				'definition' => '',
-				'definition_data' => $this->default_definition,
+				'lexical_form' => '',
+				'lexical_data' => $this->default_lexical_form,
+				'definition_selection' => '',
 				'inflection_data' => '',
 				'synonym_data' => '',
 				'score' => 0,

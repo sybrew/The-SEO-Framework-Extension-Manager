@@ -9,7 +9,6 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 
 $key = $sub_scores['key'];
 $values = $sub_scores['values'];
-$has_keyword = (bool) strlen( $keyword['value'] );
 
 printf(
 	'<span class="hide-if-js attention">%s %s</span>',
@@ -350,11 +349,6 @@ $_get_icon_class = function( array $ratings, $value ) use ( $_get_nearest_numeri
 // 	$current_score += $get_score_value( $type );
 // }
 
-$assessment_classes = [ 'tsfem-e-focus-assessment-wrap', 'tsf-flex' ];
-$assessment_class = implode( ' ', $assessment_classes );
-
-$block_style = $has_keyword ? '' : 'style="display:none"';
-
 output_scores :;
 	printf(
 		'<div class="tsfem-e-focus-scores-wrap tsfem-flex" id=%s %s>',
@@ -366,10 +360,10 @@ output_scores :;
 		$_id = \esc_attr( $make_score_id( $type ) );
 		//! All output below should already be escaped.
 		vprintf(
-			'<span class="%s" id=%s %s>%s%s%s</span>',
+			'<span id=%s class="%s" %s>%s%s%s</span>',
 			[
-				$assessment_class,
 				$_id,
+				'tsfem-e-focus-assessment-wrap tsf-flex',
 				$make_data( [
 					'scores' => [
 						// 1: array_intersect_key( $args, array_fill_keys( [ 'assessment', 'maxScore', ...'' ], null ) )
