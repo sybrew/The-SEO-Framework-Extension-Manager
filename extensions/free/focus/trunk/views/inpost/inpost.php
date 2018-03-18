@@ -74,6 +74,14 @@ create_analysis_field :;
 									'id' => $make_option_id( $id, 'lexical_data' ),
 									'value' => $values['lexical_data'],
 								],
+								'active_inflections' => [
+									'id' => $make_option_id( $id, 'active_inflections' ),
+									'value' => $values['active_inflections'],
+								],
+								'active_synonyms' => [
+									'id' => $make_option_id( $id, 'active_synonyms' ),
+									'value' => $values['active_synonyms'],
+								],
 								'definition_selection' => [
 									'id' => $make_option_id( $id, 'definition_selection' ),
 									'value' => $values['definition_selection'],

@@ -86,6 +86,8 @@ class Core {
 				'definition_selection' => '',
 				'inflection_data' => '',
 				'synonym_data' => '',
+				'active_inflections' => '',
+				'active_synonyms' => '',
 				'score' => 0,
 				'scores' => [],
 			] ),

@@ -116,7 +116,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						sprintf(
 							'<select value="%%2$s" id=%%3$s class="%s" disabled>%%4$s</select>',
 							\esc_attr( implode( ' ', [
-								'tsfem-e-focus-definition-selection',
+								'tsfem-e-focus-lexical-selector',
 								'tsfem-e-focus-enable-if-js',
 								'tsfem-e-focus-requires-javascript',
 							] ) )
@@ -131,6 +131,26 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					'<input type=hidden id=%s value="%s">',
 					\esc_attr( $post_input['lexical_data']['id'] ),
 					\esc_attr( $post_input['lexical_data']['value'] )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $post_input['inflection_data']['id'] ),
+					\esc_attr( $post_input['inflection_data']['value'] )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $post_input['synonym_data']['id'] ),
+					\esc_attr( $post_input['synonym_data']['value'] )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $post_input['active_inflections']['id'] ),
+					\esc_attr( $post_input['active_inflections']['value'] )
+				);
+				printf(
+					'<input type=hidden id=%s value="%s">',
+					\esc_attr( $post_input['active_synonyms']['id'] ),
+					\esc_attr( $post_input['active_synonyms']['value'] )
 				);
 			}
 			?>
@@ -147,8 +167,13 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						'tsf-tooltip-wrap',
 					] ) ),
 					vsprintf(
-						'<label class="%s" title="%s" data-desc="%s">%s</label>',
+						'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 						[
+							sprintf(
+								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox" value="1" disabled>',
+								\esc_attr( $action_ids['subject_edit'] )
+							),
+							\esc_attr( $action_ids['subject_edit'] ),
 							\esc_attr( implode( ' ', [
 								'tsfem-e-focus-edit-subject',
 								'tsfem-e-inpost-icon',
@@ -157,10 +182,6 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 							] ) ),
 							\esc_attr__( 'Adjusting the subject requires JavaScript', 'the-seo-framework-extension-manager' ),
 							\esc_attr__( 'Adjust subject inflections and synonyms.', 'the-seo-framework-extension-manager' ),
-							sprintf(
-								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox" value="1" disabled>',
-								\esc_attr( $action_ids['subject_edit'] )
-							),
 						]
 					)
 				);
@@ -204,45 +225,39 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		<div class=tsfem-e-focus-collapse-content>
 			<div class=tsfem-e-focus-subject id=<?php echo \esc_attr( $wrap_ids['edit'] ); ?> style=display:none>
 				<?php
-				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['inflection_data']['id'] ),
-					\esc_attr( $post_input['inflection_data']['value'] )
-				);
-				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['synonym_data']['id'] ),
-					\esc_attr( $post_input['synonym_data']['value'] )
-				);
-				printf(
-					vsprintf(
-						'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s %s>%s%s</div>',
-						[
-							\esc_attr( $action_ids['definition_selector'] ),
-							'style=display:none;',
-							sprintf(
-								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
-								\esc_html__( 'Definition:', 'the-seo-framework-extension-manager' )
-							),
-							sprintf(
-								'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
-								'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s"></span>',
-								'<select id=%1$s name=%1$s class="hide-if-js" value="%2$s"></select>'
-							),
-						]
-					),
-					\esc_attr( $post_input['definition_selection']['id'] ),
-					\esc_attr( $post_input['definition_selection']['value'] )
-				);
+				if ( $is_premium ) :
+					printf(
+						vsprintf(
+							'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s %s>%s%s</div>',
+							[
+								\esc_attr( $action_ids['definition_selector'] ),
+								'style=display:none;',
+								sprintf(
+									'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
+									\esc_html__( 'Example:', 'the-seo-framework-extension-manager' )
+								),
+								sprintf(
+									'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
+									'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s"></span>',
+									'<select id=%1$s name=%1$s class="hide-if-js" value="%2$s"></select>'
+								),
+							]
+						),
+						\esc_attr( $post_input['definition_selection']['id'] ),
+						\esc_attr( $post_input['definition_selection']['value'] )
+					);
+					?>
+					<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['inflections'] ); ?>>
+						<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Inflections', 'the-seo-framework-extension-manager' ); ?></h2>
+						<div class=tsfem-e-focus-subject-selection></div>
+					</div>
+					<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['synonyms'] ); ?>>
+						<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
+						<div class=tsfem-e-focus-subject-selection></div>
+					</div>
+				<?php
+				endif;
 				?>
-				<section class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['inflections'] ); ?>>
-					<header><h2><?php \esc_html_e( 'Inflections', 'the-seo-framework-extension-manager' ); ?></h2></header>
-					<div></div>
-				</section>
-				<section class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['synonyms'] ); ?>>
-					<header><h2><?php \esc_html_e( 'Synonyms', 'the-seo-framework-extension-manager' ); ?></h2></header>
-					<div></div>
-				</section>
 			</div>
 			<div class=tsfem-e-focus-evaluation id=<?php echo \esc_attr( $wrap_ids['evaluate'] ); ?>>
 				<?php
