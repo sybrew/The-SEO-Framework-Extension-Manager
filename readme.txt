@@ -211,6 +211,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
 * **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented, and improved further upon.
 * **Improved:** Reduced floating operations required on various browser painting operations, for a smoother experience.
+* **Improved:** Added various accessibility improvements, like focus highlighting.
 * **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
 * **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
 	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
