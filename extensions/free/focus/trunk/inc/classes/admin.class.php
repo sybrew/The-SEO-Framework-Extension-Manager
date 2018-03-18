@@ -95,8 +95,8 @@ final class Admin extends Core {
 		 * The fields must be in order of importance when dominating.
 		 * Apply this filter with a high $priority value to ensure domination.
 		 * @see WordPress `add_filter()`
-		 * @see `array_push()`
-		 * @see `array_unshift()`
+		 * @see PHP `array_push()`
+		 * @see PHP `array_unshift()`
 		 * @since 1.0.0
 		 *
 		 * @param array $elements : { 'type' => [

@@ -495,7 +495,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const clearDefinition = ( idPrefix ) => {
 		let lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
 			lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
-			lexicalData = getSubElementById( idPrefix, 'lexical_data' );
+			lexicalData = getSubElementById( idPrefix, 'lexical_data' ),
+			editToggle = getSubElementById( idPrefix, 'subject_edit' );
 
 		if ( lexicalFormField instanceof HTMLInputElement ) {
 			lexicalFormField.value = '';
@@ -507,6 +508,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			lexicalSelector.disabled = true;
 			lexicalSelector.selectedIndex = 0;
 			updateLexicalSelector( idPrefix, l10n.defaultLexicalForm );
+		}
+		if ( editToggle instanceof HTMLInputElement ) {
+			if ( editToggle.checked ) {
+				editToggle.checked = false;
+				jQuery( editToggle ).trigger( 'change' );
+			}
 		}
 		//= TODO clear synonyms and all relationships thereof.
 	}
@@ -922,20 +929,24 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			.off( 'input.tsfem-e-focus' )
 			.on( 'input.tsfem-e-focus', ( event ) => {
 				//= Vars must be registered here as it's asynchronous.
-				let loaderId = event.target.name;
-				let bar = $( event.target )
-						.closest( '.tsfem-e-focus-collapse-wrap' )
-						.find( '.tsfem-e-focus-content-loader-bar' )[0];
+				let idPrefix = getSubIdPrefix( event.target.id ),
+					bar = getSubElementById( idPrefix, 'content' ).querySelector( '.tsfem-e-focus-content-loader-bar' ),
+					collapser = getSubElementById( idPrefix, 'collapser' );
 
-				clearInterval( barBuffer[ loaderId ] );
-				clearTimeout( keywordBuffer[ loaderId ] );
-				barStop( loaderId, bar );
-				barBuffer[ loaderId ] = setInterval( () => barGo( loaderId, bar ), barTimeout );
+				if ( collapser.checked ) {
+					collapser.checked = false;
+					jQuery( collapser ).trigger( 'change' );
+				}
 
-				keywordBuffer[ loaderId ] = setTimeout( () => {
-					clearInterval( barBuffer[ loaderId ] );
+				clearInterval( barBuffer[ idPrefix ] );
+				clearTimeout( keywordBuffer[ idPrefix ] );
+				barStop( idPrefix, bar );
+				barBuffer[ idPrefix ] = setInterval( () => barGo( idPrefix, bar ), barTimeout );
+
+				keywordBuffer[ idPrefix ] = setTimeout( () => {
+					clearInterval( barBuffer[ idPrefix ] );
 					doKeywordEntry( event );
-					barStop( loaderId, bar );
+					barStop( idPrefix, bar );
 				}, keywordTimeout );
 			} );
 
@@ -1049,7 +1060,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const showSubjectEditor = ( event ) => {
 			let idPrefix = getSubIdPrefix( event.target.id ),
 				editor = getSubElementById( idPrefix, 'edit' ),
-				evaluator = getSubElementById( idPrefix, 'evaluate' );
+				evaluator = getSubElementById( idPrefix, 'evaluate' ),
+				label = event.target.parentNode,
+				activeClass = 'tsfem-e-focus-edit-subject-active';
 
 			let collapser = getSubElementById( idPrefix, 'collapser' ),
 				collapsed = collapser instanceof HTMLInputElement && collapser.checked || false;
@@ -1073,6 +1086,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						tsfem_inpost.fadeIn( evaluator, 250 );
 					} );
 				}
+			}
+
+			if ( event.target.checked ) {
+				//= Simulate toggle(*,true) IE11.
+				label.classList.remove( activeClass );
+				label.classList.add( activeClass );
+			} else {
+				//= Simulate toggle(*,false) IE11.
+				label.classList.add( activeClass );
+				label.classList.remove( activeClass );
 			}
 		}
 
