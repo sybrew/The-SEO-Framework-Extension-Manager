@@ -452,7 +452,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		if ( ! lexicalFormField instanceof HTMLInputElement ) return;
 
-		setEditButton( idPrefix ).to( 'enabled, loading' );
+		setEditButton( idPrefix ).to( 'loading' );
 
 		$.when( getLexicalForms( idPrefix, keyword ) ).done( ( data ) => {
 			setLexicalFormSelectionFields( idPrefix, data.forms );
@@ -506,6 +506,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( lexicalSelector instanceof HTMLSelectElement ) {
 				lexicalSelector.disabled = true;
 				lexicalSelector.selectedIndex = 0;
+				lexicalSelector.dataset.prev = 0;
 				updateLexicalSelector( idPrefix, l10n.defaultLexicalForm );
 			}
 			setEditButton( idPrefix ).to( 'unchecked' );
@@ -667,6 +668,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const setDefinition = ( idPrefix, value ) => {
 			//= Set static lexicalform field.
 			getSubElementById( idPrefix, 'lexical_form' ).value = value;
+			getSubElementById( idPrefix, 'lexical_selector' ).value = value;
 		}
 		const prepareInflections = ( idPrefix ) => {
 			let inflectionHolder = getSubElementById( idPrefix, 'inflection_data' );
@@ -707,8 +709,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				//= Make value visible.
 				$( definitionSelector ).find( '.tsfem-e-focus-definition-editor' )
 					.trigger( 'set-tsfem-e-focus-definition' );
-			} ).always( () => {
-				setEditButton( idPrefix ).to( 'edit, checked' );
+
+				setEditButton( idPrefix ).to( 'enabled, edit, checked' );
+			} ).fail( () => {
+				let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
+				setDefinition( idPrefix, lexicalSelector.dataset.prev || 0 );
+				setEditButton( idPrefix ).to( 'edit' );
 			} );
 		}
 		const enable = ( selector ) => {
@@ -722,17 +728,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						if ( event.target.dataset.prev == event.target.value ) {
 							setEditButton( idPrefix ).to( 'edit' );
 						} else {
-							event.target.dataset.prev = event.target.value;
 							setDefinition( idPrefix, event.target.value );
-							prepareInflections( idPrefix );
 							if ( +event.target.value ) {
+								//? Button changes at prepareSynonyms
 								prepareSynonyms( idPrefix );
 							} else {
+								setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
 								clearData( idPrefix, 'definition' );
 								clearData( idPrefix, 'synonyms' );
 								clearData( idPrefix, 'inflections' );
-								setEditButton( idPrefix ).to( 'edit' );
 							}
+							prepareInflections( idPrefix );
+							event.target.dataset.prev = event.target.value;
 						}
 					}, 1500 );
 				} );
@@ -931,12 +938,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	}
 
 	const setEditButton = ( idPrefix ) => {
-		let editToggle = getSubElementById( idPrefix, 'subject_edit' ),
-			editLabel = editToggle && document.querySelector( 'label[for="' + editToggle.id + '"]' ),
-			editWrap = editToggle && editToggle.parentNode,
-			disabledClass = 'tsfem-e-focus-edit-subject-button-wrap-disabled';
-
 		return { to: ( state ) => {
+			let editToggle = getSubElementById( idPrefix, 'subject_edit' );
+			if ( ! editToggle || ! editToggle instanceof HTMLInputElement ) return;
+
+			let editLabel = document.querySelector( 'label[for="' + editToggle.id + '"]' ),
+				editWrap = editToggle.parentNode,
+				disabledClass = 'tsfem-e-focus-edit-subject-button-wrap-disabled';
+
 			state.split( ',' ).forEach( ( _state ) => {
 				switch ( _state.trim() ) {
 					case 'checked' :
@@ -1153,6 +1162,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			//= Don't propagate current events to new listeners.
 			setTimeout( addListeners, 10 );
 		}
+		const a11yEditSubject = ( event ) => {
+			if ( 32 == event.which ) {
+				event.preventDefault();
+				editSubject( event );
+			}
+		}
 
 		const showSubjectEditor = ( event ) => {
 			let idPrefix = getSubIdPrefix( event.target.id ),
@@ -1186,10 +1201,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		let subjectEditAction = 'click.tsfem-e-focus-definition-editor',
+			a11ySubjectEditAction = 'keypress.tsfem-e-focus-definition-editor',
 			customSubjectEditAction = 'set-tsfem-e-focus-definition';
-		$( '.tsfem-e-focus-definition-selection-holder' )
+		$( '.tsfem-e-focus-definition-editor' )
 			.off( subjectEditAction )
 			.on( subjectEditAction, editSubject )
+			.off( a11ySubjectEditAction )
+			.on( a11ySubjectEditAction, a11yEditSubject )
 			.off( customSubjectEditAction )
 			.on( customSubjectEditAction, { 'change': 1 }, editSubject );
 
@@ -1425,14 +1443,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		activeAssessments = assessments;
 	}
 
-	let changeListenersBuffers = {};
+	var changeListenersBuffers = {},
+		changeListenerFlags = {};
 	/**
 	 * Resets change listeners for analysis on the available content elements.
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @TODO test if this leaks memory. If so, place listener in class's scope.
-	 *       It probably won't.
 	 *
 	 * @function
 	 * @param {string|undefined} type The type to reset. Default undefined (catch-all).
@@ -1462,10 +1479,23 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			} );
 		};
 		const listener = ( event ) => {
-			let key = event.target.id || event.target.classList.join();
+			let key = event.target.id || event.target.name || event.target.classList.join('');
 			clearTimeout( changeListenersBuffers[ key ] );
+
+			//= Show the world it's unknown, maintaining a caching flag.
+			//! Don't revert this flag if this event is done. The state remains unknown on failure!
+			if ( ! changeListenerFlags[ event.data.type ] ) {
+				setTimeout( () => tsfem_inpost.setIconClass(
+					document.querySelectorAll(
+						'[data-assessment-type="' + event.data.type + '"] .tsfem-e-focus-assessment-rating'
+					), 'unknown'
+				), 0 );
+				changeListenerFlags[ event.data.type ] = true;
+			}
+
 			changeListenersBuffers[ key ] = setTimeout( () => {
 				triggerChangeListener( event );
+				changeListenerFlags[ event.data.type ] = false;
 			}, changeTimeout );
 		};
 		const reset = ( type ) => {

@@ -952,7 +952,7 @@ final class Admin extends Api {
 						]
 					),
 					'js' => vsprintf(
-						'<span class="hide-if-no-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s>%s</span>',
+						'<span class="hide-if-no-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
 						[
 							\esc_attr( $_field_id ),
 							\esc_html( $args['value']

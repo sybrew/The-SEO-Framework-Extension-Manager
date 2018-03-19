@@ -283,6 +283,7 @@ trait Error {
 			case 201 :
 			case 1010201 :
 			case 1100101 :
+			case 1100201 :
 				$message = \esc_html__( 'An incomplete API request was supplied.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -330,6 +331,8 @@ trait Error {
 			case 1010204 :
 			case 1100102 :
 			case 1100103 :
+			case 1100202 :
+			case 1100203 :
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -341,6 +344,7 @@ trait Error {
 			case 1010601 :
 			case 1010801 :
 			case 1100106 :
+			case 1100206 :
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -610,7 +614,8 @@ trait Error {
 				break;
 
 			case 1100105 :
-				$message = \esc_html__( 'Definitions received.', 'the-seo-framework-extension-manager' );
+			case 1100205 :
+				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
 				$type = 'success';
 				break;
 

@@ -668,6 +668,21 @@ window.tsfem_e_monitor = {
 	},
 
 	/**
+	 * Propagates keyboard event to editSetting.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @function
+	 * @param {jQuery.event} event
+	 */
+	a11yEditSetting: function( event ) {
+		if ( event.which == 32 ) {
+			event.preventDefault();
+			tsfem_e_monitor.editSetting( event );
+		}
+	},
+
+	/**
 	 * Initialises all aspects of the scripts.
 	 *
 	 * Generally ordered with stuff that inserts new elements into the DOM first,
@@ -692,6 +707,7 @@ window.tsfem_e_monitor = {
 
 		// AJAX edit setting attacher.
 		jQ( '.tsfem-e-monitor-edit' ).on( 'click', tsfem_e_monitor.editSetting );
+		jQ( '.tsfem-e-monitor-edit' ).on( 'keypress', tsfem_e_monitor.a11yEditSetting );
 	}
 };
 jQuery( tsfem_e_monitor.ready );
