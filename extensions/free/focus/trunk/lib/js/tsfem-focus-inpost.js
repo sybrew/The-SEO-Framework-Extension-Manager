@@ -79,15 +79,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		if ( ! element instanceof HTMLElement )
 			return false;
 
-		let test =
-			   element instanceof HTMLInputElement
+		return element instanceof HTMLInputElement
 			|| element instanceof HTMLSelectElement
 			|| element instanceof HTMLLabelElement
 			|| element instanceof HTMLButtonElement
 			|| element instanceof HTMLTextAreaElement
 			;
-
-		return test;
 	}
 
 	const getMaxIfOver = ( max, value ) => {
@@ -243,7 +240,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			checkElements = activeFocusAreas[ data.assessment.content ],
 			inflectionCount = 0,
 			synonymCount = 0,
-			inflectctionCharCount = 0,
+			inflectionCharCount = 0,
 			synonymCharCount = 0,
 			contentCharCount = 0,
 			content,
@@ -255,8 +252,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		/**
-		 * @param {(string|object<integer,string>|(array|undefined))} inflections
-		 * @param {object<integer,string>|(array|undefined)} synonyms
+		 * @param {(boolean|object<number,string>|array)} inflections
+		 * @param {boolean|object<number,string>|array)} synonyms
 		 */
 		let idPrefix = getSubIdPrefix( rater.id ),
 			inflections = activeWords( idPrefix ).get( 'inflections' ),
@@ -312,16 +309,30 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let count = countWords( cj, _content );
 
 				inflectionCount += count;
-				inflectctionCharCount += cj.length * count;
+				inflectionCharCount += cj.length * count;
 				//= Strip found word from contents.
 				_content = stripWord( cj ).from( _content );
 			} );
 		};
 		const countSynonyms = ( synonyms, contents ) => {
+			let _synonyms = synonyms,
+				_content = content;
+			//= Sort words by longest to shortest, but in natural language order (a-z).
+			//= The natural order doesn't pertain to effectiveness. It's just cleaner in debugging.
+			_synonyms.sort( ( a, b ) => {
+				return b.length - a.length || a.localeCompare( b );
+			} );
+			_synonyms.forEach( ( cj ) => {
+				let count = countWords( cj, _content );
+
+				synonymCount += count;
+				synonymCharCount += cj.length * count;
+				//= Strip found word from contents.
+				_content = stripWord( cj ).from( _content );
+			} );
 		};
 		const foundContent = content => !! ( void 0 !== content && content.length );
 
-		//! TODO cache values found per selector. In data?
 		checkElements.forEach( selector => {
 			//= Wrap content in spaces to simulate word boundaries.
 			let $selector = $( selector );
@@ -335,13 +346,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				content = $selector.attr( 'placeholder' );
 				if ( foundContent( content ) ) break;
 				content = $selector.text();
+				if ( ! foundContent( content ) ) return; // ! continue
 			}
-
-			if ( foundContent( content ) ) {
-				countInflections( inflections, content );
-				countSynonyms( synonyms, content );
-				contentCharCount += countChars( content );
-			}
+			countInflections( inflections, content );
+			countSynonyms( synonyms, content );
+			contentCharCount += countChars( content );
 		} );
 
 		let scoring = data.scoring,
@@ -372,8 +381,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			case 'p' :
 				if ( contentCharCount ) {
-					if ( inflectctionCharCount )
-						density += calcDensity( contentCharCount, calcSChars( scoring.keyword.weight, inflectctionCharCount ) );
+					if ( inflectionCharCount )
+						density += calcDensity( contentCharCount, calcSChars( scoring.keyword.weight, inflectionCharCount ) );
 					if ( synonymCharCount )
 						density += calcDensity( contentCharCount, calcSChars( scoring.synonym.weight, synonymCharCount ) );
 				}
@@ -395,10 +404,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			queue: false,
 			duration: 150,
 			complete: () => {
-				// TEMP
-				// $description.text( phrase ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
-				// TEMP: exchange for line above!!
-				$description.html( phrase + ' <code>Temp eval: ' + realScore + '</code>' ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
+				$description.text( phrase ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
+				// debug:
+				// $description.html( phrase + ' <code>Temp eval: ' + realScore + '</code>' ).animate( { 'opacity' : 1 }, { queue: false, duration: 250 } );
 				tsfem_inpost.setIconClass(
 					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
 					iconType
@@ -806,6 +814,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * first check. Asynchronously.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @function
+	 * @param {string} idPrefix
 	 */
 	const prepareWrapScoreElements = ( idPrefix ) => {
 		let scoresWrap = getSubElementById( idPrefix, 'scores' ),
@@ -1217,10 +1228,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			.on( subjectEditToggle, showSubjectEditor );
 	}
 
+	var subjectFilterBuffer = {};
 	const resetSubjectFilterListeners = () => {
 
 		const getIterationFromId = id => ( /\[([0-9]+)\]$/.exec( id ) || '' )[1];
-
 		const setActiveInflections = ( idPrefix ) => {
 			let inflectionSection = getSubElementById( idPrefix, 'inflections' ),
 				selected = inflectionSection.querySelectorAll( 'input:checked' ),
@@ -1230,6 +1241,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			} );
 			getSubElementById( idPrefix, 'active_inflections' ).value = values.join();
 			activeWords( idPrefix ).clearCache( 'inflections' );
+			triggerAllAnalysis( idPrefix );
 		}
 		const setActiveSynonyms = ( idPrefix ) => {
 			let synonymSection = getSubElementById( idPrefix, 'synonyms' ),
@@ -1240,6 +1252,29 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			} );
 			getSubElementById( idPrefix, 'active_synonyms' ).value = values.join();
 			activeWords( idPrefix ).clearCache( 'synonyms' );
+			triggerAllAnalysis( idPrefix );
+		}
+		const updateActive = ( event ) => {
+			let idPrefix = event.data.idPrefix,
+				type = event.data.type,
+				bufferKey = idPrefix + type;
+
+			clearTimeout( subjectFilterBuffer[ bufferKey ] );
+			subjectFilterBuffer[ bufferKey ] = setTimeout( () => {
+				switch ( type ) {
+					case 'inflections' :
+						setActiveInflections( idPrefix );
+						break;
+					case 'synonyms' :
+						setActiveSynonyms( idPrefix );
+						break;
+				}
+			}, 500 );
+		}
+		const resetElementListeners = ( idPrefix, type ) => {
+			$( getSubElementById( idPrefix, type ) ).find( 'input' )
+				.off( 'change.tsfem-e-focus' )
+				.on( 'change.tsfem-e-focus', { 'idPrefix': idPrefix, 'type': type }, updateActive );
 		}
 
 		const fillSubjectSelection = ( event, data ) => {
@@ -1282,7 +1317,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			for ( let i in inflections ) {
 				html += subjectTemplate( {
 					'id': createSubId( prefix, i ),
-					'value': inflections[ i ]
+					'value': inflections[ i ],
+					'disabled': !!+i ? '' : 'disabled' // Disable the first inflection.
 				} );
 			}
 			inflectionEntries.innerHTML = html;
@@ -1302,6 +1338,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			setActiveInflections( idPrefix );
 			setActiveSynonyms( idPrefix );
+			resetElementListeners( idPrefix, 'inflections' );
+			resetElementListeners( idPrefix, 'synonyms' );
 		}
 
 		let updatedAction = 'tsfem-e-focus-updated-subject.tsfem-e-focus';
@@ -1483,7 +1521,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			clearTimeout( changeListenersBuffers[ key ] );
 
 			//= Show the world it's unknown, maintaining a caching flag.
-			//! Don't revert this flag if this event is done. The state remains unknown on failure!
+			//! Don't revert this flag here when this event is done. The state remains unknown on failure!
 			if ( ! changeListenerFlags[ event.data.type ] ) {
 				setTimeout( () => tsfem_inpost.setIconClass(
 					document.querySelectorAll(
@@ -1515,6 +1553,41 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
+	var triggerAllBuffer = {};
+	/**
+	 * Triggers all analysis.
+	 *
+	 * Another buffer is maintained at trigger level.
+	 * However, this loop can be heavy.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @function
+	 * @param {(string|undefined)} idPrefix The idPrefix. If omitted, all checks are performed.
+	 */
+	const triggerAllAnalysis = ( idPrefix ) => {
+		idPrefix = idPrefix || 0;
+		clearTimeout( triggerAllBuffer[ idPrefix ] );
+		triggerAllBuffer[ idPrefix ] = setTimeout( () => {
+			if ( idPrefix ) {
+				let scoresWrap = getSubElementById( idPrefix, 'scores' ),
+					subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
+				subScores instanceof NodeList
+					&& subScores.forEach( el => {
+						tsfem_inpost.setIconClass( el.querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
+						//= defer.
+						setTimeout( () => doCheck( el ), 150 );
+					} );
+			} else {
+				for ( let _type in activeFocusAreas ) {
+					$( activeFocusAreas[ _type ].join( ', ' ) )
+						.trigger( analysisChangeEvents( _type ).get( 'trigger' ) );
+				}
+			}
+		}, 200 );
+	}
+
 	/**
 	 * Returns all analysis jQuery event types from type.
 	 *
@@ -1526,6 +1599,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const analysisChangeEvents = ( type ) => {
 		const events = [
+			'tsfem-e-focus.tsfem-e-focus-' + type, // Custom trigger.
 			'input.tsfem-e-focus-' + type,
 			'change.tsfem-e-focus-' + type
 		];
@@ -1552,7 +1626,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			   window.MutationObserver
 			|| window.WebKitMutationObserver
 			|| window.MozMutationObserver;
-		const interval = 3000;
+		// const interval = 3000;
 
 		/**
 		 * Observes page URL changes.
@@ -1560,13 +1634,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 */
 		(()=>{
 			if ( 'pageUrl' in l10n.focusElements ) {
-				let listenNode, observer, config;
+				let listenNode = document.getElementById( 'edit-slug-box' );
+				if ( ! listenNode || ! listenNode instanceof HTMLElement )
+					return;
+
+				let observer, config;
 
 				const updatePageUrlRegistry = () => {
 					let unregisteredUrlAssessments = document.querySelectorAll(
 						'.tsfem-e-focus-assessment-wrap[data-assessment-type="url"][data-assess="0"]'
 					);
-					if ( unregisteredUrlAssessments.length ) {
+					if ( unregisteredUrlAssessments instanceof NodeList && unregisteredUrlAssessments.length ) {
 						updateActiveFocusAreas( 'pageUrl' );
 						resetAnalysisChangeListeners( 'pageUrl' );
 						unregisteredUrlAssessments.forEach( el => prepareScoreElement( el ) );
@@ -1579,8 +1657,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				} );
 				//? Observe the childList data.
 				config = { childList: true };
-				listenNode = document.getElementById( 'edit-slug-box' );
-				listenNode && observer.observe( listenNode, config );
+				observer.observe( listenNode, config );
 			}
 		})();
 
@@ -1705,6 +1782,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		updateFocusRegistry,
 		updateActiveFocusAreas,
 		resetAnalysisChangeListeners,
+		triggerAllAnalysis,
 		analysisChangeEvents,
 		getSubIdPrefix,
 		getSubElementById,

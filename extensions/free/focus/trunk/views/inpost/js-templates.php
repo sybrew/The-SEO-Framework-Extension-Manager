@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 
 <script type=text/html id=tmpl-tsfem-e-focus-subject-item>
 	<label class="tsfem-e-focus-subject-item">
-		<input type=checkbox id={{{data.id}}} name={{{data.id}}} class="tsfem-e-focus-subject-item" value=1 checked>
+		<input type=checkbox id={{{data.id}}} class="tsfem-e-focus-subject-item" {{{data.disabled}}} value=1 checked>
 		<span>{{data.value}}</span>
 	</label>
 </script>

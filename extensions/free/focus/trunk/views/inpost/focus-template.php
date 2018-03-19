@@ -105,6 +105,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						]
 					)
 				);
+			} else {
+				//= TEMP until highligher comes.
+				print '<span class=tsfem-e-focus-pusher></span>';
 			}
 			// TODO: upcoming version.
 			// printf(

@@ -449,6 +449,7 @@ trait Error {
 				break;
 
 			case 10009 :
+			case 10102 :
 				$message = \esc_html__( "Can't touch this.", 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -630,7 +631,6 @@ trait Error {
 			case 10007 :
 			case 10011 :
 			case 10101 :
-			case 10102 :
 			case 11002 :
 			case 17005 :
 			case 17006 :

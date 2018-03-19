@@ -26,6 +26,7 @@
 	user-select: none;
 }
 
+/* Didn't care for the min-width, it's "too neat"--removing visual balance. */
 .tsfem-e-focus-collapse-header-row {
 	-webkit-flex-direction: row;
 	flex-direction: row;
@@ -33,8 +34,7 @@
 	justify-content: space-between;
 	-webkit-align-items: safe center;
 	align-items: safe center;
-	-webkit-justify-content: safe flex-end;
-	justify-content: safe flex-end;
+	/* min-width: 50%; */
 }
 
 .tsfem-e-focus-collapse-header-row > * {
@@ -79,10 +79,10 @@
 	padding: 2px 5px;
 	font-size: 14px;
 	line-height: 27px;
-	-webkit-flex: 1 1 180px;
-	flex: 1 1 180px;
-	width:  100%;
-	margin: .375em .5em;
+	-webkit-flex: 1 0 180px;
+	flex: 1 0 180px;
+	width: 100%;
+	margin: .375em .1875em;
 }
 
 @-webkit-keyframdes tsfem-e-focus-fade-in {
@@ -196,6 +196,12 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 /* ## Subject editor switcher + Highligher
 ----------------------------------------------*/
 
+/* ! TEMP */
+.tsfem-e-focus-pusher {
+	width: 2em;
+	height: 2em;
+}
+
 .tsfem-e-focus-highlight-subject-button-wrap,
 .tsfem-e-focus-edit-subject-button-wrap {
 	cursor: pointer;
@@ -299,22 +305,25 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 .tsfem-e-focus-assessment-wrap {
 	-webkit-flex-direction: row;
 	flex-direction: row;
-	-webkit-align-items: safe center;
-	align-items: safe center;
+	-webkit-align-items: safe flex-start;
+	align-items: safe flex-start;
 	padding: .33em 0;
+}
+
+.tsfem-e-focus-assessment-rating:after {
+	line-height: inherit;
 }
 
 .tsfem-e-focus-definition-selection-title,
 .tsfem-e-focus-assessment-title {
-	-webkit-flex: 1 33 110px;
-	flex: 1 33 110px;
+	-webkit-flex: 1 1 110px;
+	flex: 1 1 110px;
 	margin-right: 1em;
 }
 
-.tsfem-e-focus-definition-selection-tool,
 .tsfem-e-focus-assessment-description {
-	-webkit-flex: 66 1 auto;
-	flex: 66 1 auto;
+	-webkit-flex: 1 1 66%;
+	flex: 1 1 66%;
 }
 
 /* # Assessments
@@ -339,6 +348,11 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	padding: 0 .5em 1em;
 	margin: 0 0 1em;
 	border-bottom: 1px solid #ccc;
+}
+
+.tsfem-e-focus-definition-selection-tool {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 #tsf-flex-inpost-tab-audit-content h2.tsfem-e-focus-subject-selection-title {
