@@ -180,8 +180,11 @@ $_scores = [
 		'title' => esc_html__( 'Linking:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageContent',
-			// Magic. Get all hyperlinks with title, href or contents with a matching keyword.
-			'regex' => '/(?=.*?href=)<a\\s.*?(((href|title)=(((["\']).*?{{kw}}[^=\'"]*\6)|({{kw}}[^=\'"])))|(.*?>.*?{{kw}})).*?<\/a>/giu',
+			// Magic. Get all hyperlinks with title, href or contents with a matching keyword. LAGGY!!
+			// OPTIMIZE:
+			/* 'regex' => '/(?=.*?href=)<a\\s.*?(((href|title)=(((["\']).*?{{kw}}[^=\'"]*\6)|({{kw}}[^=\'"])))|(.*?>.*?{{kw}})).*?<\/a>/giu', */
+			// A dumber version that doesn't care about semantics and expects "loose standards":
+			'regex' => '/<a\\s.*?((href|title)=(["\'].*?{{kw}}.*?["\']))|(.*?>.*?{{kw}}).*?<\/a>/giu',
 			/*[
 				// 1: Get all hyperlinks with keywords attached.
 				'(?=.*{{kw}})<a\\b[^>]*href=[^>]*>.*?<\\/a>',
@@ -360,7 +363,7 @@ output_scores :;
 		$_id = \esc_attr( $make_score_id( $type ) );
 		//! All output below should already be escaped.
 		vprintf(
-			'<span id=%s class="%s" %s>%s%s%s</span>',
+			'<span id=%s class="%s" %s>%s%s</span>',
 			[
 				$_id,
 				'tsfem-e-focus-assessment-wrap tsf-flex',
@@ -378,12 +381,15 @@ output_scores :;
 					'assessmentType' => $type,
 				] ),
 				sprintf(
-					'<span class="tsfem-e-focus-assessment-rating tsfem-e-inpost-icon %s"></span>',
-					$_get_icon_class( $args['rating'], $_value )
-				),
-				sprintf(
-					'<strong class=tsfem-e-focus-assessment-title>%s</strong>',
-					$args['title']
+					'<span class=tsfem-e-focus-assessment-title-wrap>%s%s</span>',
+					sprintf(
+						'<span class="tsfem-e-focus-assessment-rating tsfem-e-inpost-icon %s"></span>',
+						$_get_icon_class( $args['rating'], $_value )
+					),
+					sprintf(
+						'<strong class=tsfem-e-focus-assessment-title>%s</strong>',
+						$args['title']
+					)
 				),
 				sprintf(
 					'<span class=tsfem-e-focus-assessment-description>%s</span>',

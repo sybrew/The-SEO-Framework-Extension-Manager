@@ -65,6 +65,7 @@
 	width: 0%;
 	height: 3px;
 	background: #007bd2;
+	will-change: transform;
 }
 
 .tsfem-e-focus-collapse-content {
@@ -315,9 +316,9 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 }
 
 .tsfem-e-focus-definition-selection-title,
-.tsfem-e-focus-assessment-title {
-	-webkit-flex: 1 1 110px;
-	flex: 1 1 110px;
+.tsfem-e-focus-assessment-title-wrap {
+	-webkit-flex: 1 1 130px;
+	flex: 1 1 130px;
 	margin-right: 1em;
 }
 
@@ -329,30 +330,38 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 /* # Assessments
 ----------------------------------------------*/
 
-.tsfem-e-focus-assessment-title {
+.tsfem-e-focus-assessment-title-wrap {
 	-webkit-flex-grow: 0;
 	flex-grow: 0;
 }
 
 .tsfem-e-focus-assessment-rating {
-	-webkit-flex: 0 0 auto;
-	flex: 0 0 auto;
 	margin-right: .5em;
 	width: 1em;
+	vertical-align: middle;
+	display: inline-block;
 }
 
 /* # Subject editor
 ----------------------------------------------*/
 
 .tsfem-e-focus-definition-selection-holder {
-	padding: 0 .5em 1em;
+	padding: .5em .5em 1.5em;
 	margin: 0 0 1em;
 	border-bottom: 1px solid #ccc;
+	align-items: center;
+	will-change: contents;
 }
 
 .tsfem-e-focus-definition-selection-tool {
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
+}
+
+.tsfem-e-focus-definition-editor::after {
+	font-size: 1.2em;
+	vertical-align: text-bottom;
+	margin-left: 3px;
 }
 
 #tsf-flex-inpost-tab-audit-content h2.tsfem-e-focus-subject-selection-title {

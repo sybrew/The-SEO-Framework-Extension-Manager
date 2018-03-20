@@ -161,7 +161,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 							'style=display:none;',
 							sprintf(
 								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
-								\esc_html__( 'Homonymous example:', 'the-seo-framework-extension-manager' )
+								\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
 							),
 							sprintf(
 								'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
