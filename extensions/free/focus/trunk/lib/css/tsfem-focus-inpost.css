@@ -5,6 +5,7 @@
 	position: relative;
 	width: 100%;
 	box-shadow: 0 0 2px 1px #ccc inset;
+	box-sizing: border-box; /* Dinkle... Gutenberg!! */
 }
 
 .tsfem-e-focus-collapse-header {

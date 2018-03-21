@@ -242,36 +242,36 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// Strip all XML tags first.
 			contents = contents.match( /[^>]+(?=<|$|^)/gi );
 			return contents && contents.join( '' ).length || 0;
-		};
+		}
 		const countWords = ( word, contentMatch ) => {
-			let n = regex.length,
-				pReg,
-				count = 0,
+			let pReg,
 				sWord = tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) );
 
 			//= Iterate over multiple regex scripts.
-			for ( let i = 0; i < n; i++ ) {
+			for ( let i = 0; i < regex.length; i++ ) {
 				pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
 				contentMatch = contentMatch.match( new RegExp(
 					pReg[1].replace( /\{\{kw\}\}/g, sWord ),
 					pReg[2]
 				) );
 
-				if ( ! contentMatch || i === n - 1 ) break;
+				//= Stop if there's no content, or when this is the last iteration.
+				if ( ! contentMatch || i === regex.length - 1 ) break;
 
 				//= Join content as this is a recursive regexp.
 				contentMatch = contentMatch.join( ' ' );
 			}
 			// Return the number of matches found.
 			return contentMatch && contentMatch.length || 0;
-		};
-		const stripWord = ( word, contents ) => contents.replace(
-			new RegExp(
-				tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ),
-				'gi'
-			),
-			'/' //? A filler that doesn't break XML tag attribute closures ("|'|\s).
-		);
+		}
+		const stripWord = ( word, contents ) =>
+			contents.replace(
+				new RegExp(
+					tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ),
+					'gi'
+				),
+				'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
+			);
 
 		const countInflections = ( content ) => {
 			let _inflections = inflections,
@@ -283,7 +283,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				inflectionCount += count;
 				inflectionCharCount += inflection.length * count;
 				_content = stripWord( inflection, _content );
-			} );
+			}, 5 );
 		}
 		const countSynonyms = ( content ) => {
 			let _synonyms = synonyms,
@@ -296,16 +296,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				synonymCount += count;
 				synonymCharCount += synonym.length * count;
 				_content = stripWord( synonym, _content );
-			} );
+			}, 5 );
 		}
 
 		const checkElement = ( element ) => {
 			let selector = document.querySelector( element ),
 		 		$dfd = $.Deferred();
 
-			content = selector.value || '';
-			// content = content || selector.placeholder || '';
-			content = content || selector.innerHTML || '';
+			content = typeof selector.value !== 'undefined' ? selector.value : '';
+			// if ( ! content.length ) content = selector.placeholder;
+			if ( ! content.length ) content = selector.innerHTML;
 
 			if ( ! content.length ) return $dfd.resolve();
 
@@ -345,7 +345,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					if ( synonymCount )
 						realScore += calcScoreN( scoring.synonym, getMaxIfOver( scoring.synonym.max, synonymCount ) );
 
-					endScore = realScore;
+					// endScore = realScore;
 					break;
 
 				case 'p' :
@@ -357,33 +357,41 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					}
 
 					realScore = calcRealDensityScore( scoring, density );
-					endScore = calcEndDensityScore( realScore, scoring.max, scoring.min, scoring.penalty );
+					// endScore = calcEndDensityScore( realScore, scoring.max, scoring.min, scoring.penalty );
 					break;
 			}
 
 			//= Store realScore in input for saving.
 			let input = document.querySelector( 'input[name="' + rater.id + '"]' );
 			if ( input ) input.value = realScore;
-			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' );
-			// if (
-			// 	getComputedStyle( getSubElementById( idPrefix, 'content' ) ).display === 'none'
-			// 	|| getComputedStyle( getSubElementById( idPrefix, 'evaluate' ) ).display === 'none'
-			// ) {
-			// 	setValues();
-			// } else {
-			description.style.willChange = 'contents, opacity';
-			description.style.opacity = '0';
-			description.innerHTML = getNearestNumericIndexValue( data.phrasing, realScore );
-			tsfem_inpost.setIconClass(
-				rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
-				getIconType( data.rating, realScore )
-			);
-			tsfem_inpost.fadeIn( description );
-			description.style.willChange = 'auto';
+
+			//= Gets description based on nearest threshold value.
+			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
+				newDescription = getNearestNumericIndexValue( data.phrasing, realScore );
+
+			if ( description.innerHTML === newDescription ) {
+				// Nothing changed.
+				tsfem_inpost.setIconClass(
+					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
+					getIconType( data.rating, realScore )
+				);
+				description.style.opacity = '1';
+				description.style.willChange = 'auto';
+			} else {
+				description.style.willChange = 'contents, opacity';
+				description.style.opacity = '0';
+				description.innerHTML = newDescription;
+				tsfem_inpost.setIconClass(
+					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
+					getIconType( data.rating, realScore )
+				);
+				tsfem_inpost.fadeIn( description );
+				description.style.willChange = 'auto';
+			}
 		}
 
 		//= Run over element asynchronously and sequentially, when done, resolve function promise.
-		$.when( tsfem_inpost.promiseLoop( activeFocusAreas[ data.assessment.content ], checkElement ) ).done( showScore );
+		$.when( tsfem_inpost.promiseLoop( activeFocusAreas[ data.assessment.content ], checkElement, 5 ) ).done( showScore );
 	}
 
 	/**
@@ -448,41 +456,79 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		setEditButton( idPrefix ).to( 'loading' );
 
+		const setLexicalFormSelectionFields = ( entries ) => {
+			let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
+				lexicalData = getSubElementById( idPrefix, 'lexical_data' );
+
+			//= Get default form field, and append to it.
+			let _forms = JSON.parse( l10n.defaultLexicalForm );
+
+			//? IE11 replacement for Object.values( _forms ).
+			_forms = Object.keys( _forms ).map( e => _forms[ e ] );
+
+			if ( entries.length ) {
+				entries.forEach( ( entry ) => {
+					if ( entry.inflection && entry.category ) {
+						_forms.push( {
+							'value' : entry.inflection,
+							'category' : entry.category,
+							'name' : entry.category + ': ' + entry.inflection,
+						} );
+					}
+				} );
+
+				//= Start change listeners.
+				setLexicalFormSelectionListener( idPrefix ).to( 'enabled' );
+			}
+			let formValues = _forms.length && JSON.stringify( _forms ) || l10n.defaultLexicalForm;
+
+			lexicalFormField.value = '';
+			if ( lexicalData instanceof HTMLInputElement ) {
+				lexicalData.value = formValues;
+			}
+			if ( lexicalSelector instanceof HTMLSelectElement ) {
+				updateLexicalSelector( idPrefix, formValues );
+				lexicalSelector.disabled = false;
+				lexicalSelector.selectedIndex = 0;
+			}
+		}
+		const getLexicalForms = ( idPrefix, keyword ) => {
+			let ops = {
+				method: 'POST',
+				url: ajaxurl,
+				dataType: 'json',
+				data: {
+					'action' : 'tsfem_e_focus_get_lexicalforms',
+					'nonce' : l10n.nonce,
+					'post_ID' : tsfem_inpost.postID,
+					'args' : {
+						'keyword': keyword,
+						'language': 'en' // language || 'en', // TODO
+					},
+				},
+				timeout: 10000,
+				async: true,
+			};
+
+			let $dfd = $.Deferred();
+
+			tsfem_inpost.doAjax(
+				$dfd,
+				ops,
+				{ 'noticeArea': noticeArea, 'premium': true }
+			);
+
+			return $dfd.promise();
+		}
+
 		$.when( getLexicalForms( idPrefix, keyword ) ).done( ( data ) => {
-			setLexicalFormSelectionFields( idPrefix, data.forms );
+			setLexicalFormSelectionFields( data.forms );
+		} ).fail( () => {
+			//= Redundant.
+			clearData( idPrefix, 'lexical' );
 		} ).always( () => {
 			setEditButton( idPrefix ).to( 'edit' );
 		} );
-	}
-
-	const getLexicalForms = ( idPrefix, keyword ) => {
-
-		let ops = {
-			method: 'POST',
-			url: ajaxurl,
-			dataType: 'json',
-			data: {
-				'action' : 'tsfem_e_focus_get_lexicalforms',
-				'nonce' : l10n.nonce,
-				'post_ID' : tsfem_inpost.postID,
-				'args' : {
-					'keyword': keyword,
-					'language': 'en' // language || 'en', // TODO
-				},
-			},
-			timeout: 5000,
-			async: true,
-		};
-
-		let $dfd = $.Deferred();
-
-		tsfem_inpost.doAjax(
-			$dfd,
-			ops,
-			{ 'noticeArea': noticeArea, 'premium': true }
-		);
-
-		return $dfd.promise();
 	}
 
 	const clearData = ( idPrefix, what ) => {
@@ -607,48 +653,134 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
-	const setLexicalFormSelectionFields = ( idPrefix, entries ) => {
-		let lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
+	var lexicalFormSelectionBuffer = {};
+	const lexicalSelectorChangeHandler = ( event ) => {
+		let idPrefix = event.data.idPrefix,
 			lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
-			lexicalData = getSubElementById( idPrefix, 'lexical_data' );
+			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
+			lexicalDataField = getSubElementById( idPrefix, 'lexical_data' );
 
-		//= Get default form field, and append to it.
-		let _forms = JSON.parse( l10n.defaultLexicalForm );
+		/**
+		 * AJAX handler.
+		 */
+		const getSynonyms = ( idPrefix ) => {
+			let forms = JSON.parse( lexicalDataField.value ),
+				form = forms[ lexicalFormField.value ];
 
-		//? IE11 replacement for Object.values( _forms ).
-		_forms = Object.keys( _forms ).map( e => _forms[ e ] );
+			let ops = {
+				method: 'POST',
+				url: ajaxurl,
+				dataType: 'json',
+				data: {
+					'action' : 'tsfem_e_focus_get_synonyms',
+					'nonce' : l10n.nonce,
+					'post_ID' : tsfem_inpost.postID,
+					'args' : {
+						'form': form,
+						'language': 'en' // language || 'en', // TODO
+					},
+				},
+				timeout: 15000,
+				async: true,
+			};
 
-		if ( entries.length ) {
-			entries.forEach( ( entry ) => {
-				if ( entry.inflection && entry.category ) {
-					_forms.push( {
-						'value' : entry.inflection,
-						'category' : entry.category,
-						'name' : entry.category + ': ' + entry.inflection,
-					} );
+			let $dfd = $.Deferred();
+
+			tsfem_inpost.doAjax(
+				$dfd,
+				ops,
+				{ 'noticeArea': noticeArea, 'premium': true }
+			);
+
+			return $dfd.promise();
+		}
+
+		const setDefinition = ( value ) => {
+			//= Set static lexicalform field.
+			lexicalFormField.value = value;
+			lexicalSelector.value = value;
+			lexicalSelector.selectedIndex = +value;
+		}
+		const fetchInflections = ( idPrefix ) => {
+			let inflectionHolder = getSubElementById( idPrefix, 'inflection_data' );
+
+			//= We can't retrieve these yet. Set current value and base value.
+			let keyword = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase(),
+				lexicalForm = lexicalFormField.value,
+				lexicalData = lexicalDataField.value,
+				lexicalWord = '',
+				words = [];
+
+			lexicalWord = JSON.parse( lexicalData )[ lexicalForm ].value.toLowerCase();
+			words.push( keyword );
+			if ( keyword !== lexicalWord ) words.push( lexicalWord );
+
+			inflectionHolder.value = JSON.stringify( [ { 'inflections' : words } ] );
+		}
+		const fetchSynonyms = () => {
+			let idPrefix = event.data.idPrefix;
+			$.when( getSynonyms( idPrefix ) ).done( ( data ) => {
+				let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
+					definitionSelection = getSubElementById( idPrefix, 'definition_selection' ),
+					definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
+
+				event.target.dataset.prev = event.target.value;
+
+				synonymHolder.value = JSON.stringify( data.synonyms );
+
+				let definitionSelectionClone = definitionSelection.cloneNode( true );
+
+				//= Removes all previous options.
+				for ( let _i = definitionSelectionClone.options.length; _i--; ) {
+					definitionSelectionClone.remove( _i );
 				}
+				let _option = document.createElement( 'option' );
+				for ( let _i = 0; _i < data.synonyms.length; _i++ ) {
+					_option = _option.cloneNode();
+					_option.value = _i;
+					_option.innerHTML = tsfem_inpost.escapeStr( data.synonyms[ _i ].example );
+					definitionSelectionClone.appendChild( _option );
+				}
+				definitionSelection.innerHTML = definitionSelectionClone.innerHTML;
+				definitionSelector.style.display = null;
+				//= Make value visible.
+				$( definitionSelector ).find( '.tsfem-e-focus-definition-editor' )
+					.trigger( 'set-tsfem-e-focus-definition' );
+
+				setEditButton( idPrefix ).to( 'enabled, edit, checked' );
+			} ).fail( () => {
+				setDefinition( lexicalSelector.dataset.prev || 0 );
+				setEditButton( idPrefix ).to( 'edit' );
 			} );
+		}
+		const run = () => {
+			setEditButton( idPrefix ).to( 'loading' );
+			clearTimeout( lexicalFormSelectionBuffer[ idPrefix ] );
 
-			//= Start change listeners.
-			setLexicalFormSelectionListener( idPrefix ).to( 'enabled' );
+			lexicalFormSelectionBuffer[ idPrefix ] = setTimeout( () => {
+				if ( event.target.dataset.prev == event.target.value ) {
+					setEditButton( idPrefix ).to( 'edit' );
+				} else {
+					setDefinition( event.target.value );
+					if ( +event.target.value ) {
+						//? Button changes at prepareSynonyms
+						fetchSynonyms();
+					} else {
+						event.target.dataset.prev = event.target.value;
+						setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
+						clearData( idPrefix, 'definition' );
+						clearData( idPrefix, 'synonyms' );
+						clearData( idPrefix, 'inflections' );
+					}
+					fetchInflections( idPrefix );
+				}
+			}, 1500 );
 		}
-		let formValues = _forms.length && JSON.stringify( _forms ) || l10n.defaultLexicalForm;
-
-		if ( lexicalFormField instanceof HTMLInputElement ) {
-			lexicalFormField.value = '';
-		}
-		if ( lexicalData instanceof HTMLInputElement ) {
-			lexicalData.value = formValues;
-		}
-		if ( lexicalSelector instanceof HTMLSelectElement ) {
-			updateLexicalSelector( idPrefix, formValues );
-			lexicalSelector.disabled = false;
-			lexicalSelector.selectedIndex = 0;
-		}
+		run();
 	}
 
-	var lexicalFormSelectionBuffer = {};
 	/**
+	 * Enables lexical selection change handlers.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -659,84 +791,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * } }
 	 */
 	const setLexicalFormSelectionListener = ( idPrefix ) => {
-		const setDefinition = ( idPrefix, value ) => {
-			//= Set static lexicalform field.
-			getSubElementById( idPrefix, 'lexical_form' ).value = value;
-			getSubElementById( idPrefix, 'lexical_selector' ).value = value;
-		}
-		const prepareInflections = ( idPrefix ) => {
-			let inflectionHolder = getSubElementById( idPrefix, 'inflection_data' );
-
-			//= We can't retrieve these yet. Set current value and base value.
-			let keyword = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase(),
-				lexicalForm = getSubElementById( idPrefix, 'lexical_form' ).value,
-				lexicalData = getSubElementById( idPrefix, 'lexical_data' ).value,
-				lexicalWord = '',
-				words = [];
-
-			lexicalWord = JSON.parse( lexicalData )[ lexicalForm ].value.toLowerCase();
-			words.push( keyword );
-			if ( keyword !== lexicalWord ) words.push( lexicalWord );
-
-			inflectionHolder.value = JSON.stringify( [ { 'inflections' : words } ] );
-		}
-		const prepareSynonyms = ( idPrefix ) => {
-			$.when( getSynonyms( idPrefix ) ).done( ( data ) => {
-				let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
-					definitionSelection = getSubElementById( idPrefix, 'definition_selection' ),
-					definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
-
-				synonymHolder.value = JSON.stringify( data.synonyms );
-
-				//= Removes all previous options.
-				for ( let _i = definitionSelection.options.length; _i--; ) {
-					definitionSelection.remove( _i );
-				}
-				let _option = document.createElement( 'option' );
-				for ( let _i = 0; _i < data.synonyms.length; _i++ ) {
-					_option = _option.cloneNode();
-					_option.value = _i;
-					_option.innerHTML = tsfem_inpost.escapeStr( data.synonyms[ _i ].example );
-					definitionSelection.appendChild( _option );
-				}
-				definitionSelector.style.display = null;
-				//= Make value visible.
-				$( definitionSelector ).find( '.tsfem-e-focus-definition-editor' )
-					.trigger( 'set-tsfem-e-focus-definition' );
-
-				setEditButton( idPrefix ).to( 'enabled, edit, checked' );
-			} ).fail( () => {
-				let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
-				setDefinition( idPrefix, lexicalSelector.dataset.prev || 0 );
-				setEditButton( idPrefix ).to( 'edit' );
-			} );
-		}
 		const enable = ( selector ) => {
 			$( selector )
 				.off( 'change.tsfemInpostLexical' )
-				.on( 'change.tsfemInpostLexical', { 'idPrefix': idPrefix }, ( event ) => {
-					let idPrefix = event.data.idPrefix;
-					setEditButton( idPrefix ).to( 'loading' );
-					clearTimeout( lexicalFormSelectionBuffer[ idPrefix ] );
-					lexicalFormSelectionBuffer[ idPrefix ] = setTimeout( () => {
-						if ( event.target.dataset.prev == event.target.value ) {
-							setEditButton( idPrefix ).to( 'edit' );
-						} else {
-							setDefinition( idPrefix, event.target.value );
-							if ( +event.target.value ) {
-								//? Button changes at prepareSynonyms
-								prepareSynonyms( idPrefix );
-							} else {
-								setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
-								clearData( idPrefix, 'definition' );
-								clearData( idPrefix, 'synonyms' );
-								clearData( idPrefix, 'inflections' );
-							}
-							prepareInflections( idPrefix );
-							event.target.dataset.prev = event.target.value;
-						}
-					}, 1500 );
-				} );
+				.on( 'change.tsfemInpostLexical', { 'idPrefix': idPrefix }, lexicalSelectorChangeHandler );
 		}
 		const disable = ( selector ) => {
 			$( selector ).off( 'change.tsfemInpostLexical' );
@@ -757,42 +815,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				}
 			}
 		}
-	}
-
-	const getSynonyms = ( idPrefix ) => {
-
-		let lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
-			lexicalData = getSubElementById( idPrefix, 'lexical_data' );
-
-		let forms = JSON.parse( lexicalData.value ),
-			form = forms[ lexicalFormField.value ];
-
-		let ops = {
-			method: 'POST',
-			url: ajaxurl,
-			dataType: 'json',
-			data: {
-				'action' : 'tsfem_e_focus_get_synonyms',
-				'nonce' : l10n.nonce,
-				'post_ID' : tsfem_inpost.postID,
-				'args' : {
-					'form': form,
-					'language': 'en' // language || 'en', // TODO
-				},
-			},
-			timeout: 7000,
-			async: true,
-		};
-
-		let $dfd = $.Deferred();
-
-		tsfem_inpost.doAjax(
-			$dfd,
-			ops,
-			{ 'noticeArea': noticeArea, 'premium': true }
-		);
-
-		return $dfd.promise();
 	}
 
 	/**
@@ -1366,7 +1388,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			cachedActiveWords[ idPrefix ].synonyms = null;
 		}
 
-		const getInflections = () => {
+		const getActiveInflections = () => {
 			let ret, inflections,
 				active = getSubElementById( idPrefix, 'active_inflections' );
 
@@ -1388,7 +1410,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			return ret;
 		}
-		const getSynonyms = () => {
+		const geActiveSynonyms = () => {
 			let ret, synonyms,
 				active = getSubElementById( idPrefix, 'active_synonyms' ),
 				selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
@@ -1418,16 +1440,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			switch ( what ) {
 				case 'inflections' :
-					return getInflections();
+					return getActiveInflections();
 					break;
 				case 'synonyms' :
-					return getSynonyms();
+					return geActiveSynonyms();
 					break;
 
 				default :
 					return {
-						'inflections': getInflections(),
-						'synonyms': getSynonyms()
+						'inflections': getActiveInflections(),
+						'synonyms': geActiveSynonyms()
 					};
 					break;
 			}

@@ -37,7 +37,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 	$ms = is_multisite();
 
-	if ( $ms && function_exists( 'get_network' ) ) {
+	if ( $ms && class_exists( 'WP_Network', false ) ) {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
@@ -56,7 +56,7 @@ function tsf_extension_manager_pre_boot_test() {
 		'wp' => '37965',
 	);
 
-	   PHP_VERSION_ID < $_req['php']['5.5'] and $test = 1
+	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $test = 1
 	or PHP_VERSION_ID >= 50600 && PHP_VERSION_ID < $_req['php']['5.6'] and $test = 2
 	or $GLOBALS['wp_db_version'] < $_req['wp'] and $test = 3
 	or $test = true;

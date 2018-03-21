@@ -39,7 +39,7 @@ $_scores = [
 		'title' => esc_html__( 'Meta title:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'seoTitle',
-			'regex' => '/{{kw}}/giu',
+			'regex' => '/{{kw}}/gi',
 		],
 		'maxScore' => 200,
 		'minScore' => 0,
@@ -72,7 +72,7 @@ $_scores = [
 		'title' => esc_html__( 'Page title:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageTitle',
-			'regex' => '/{{kw}}/giu',
+			'regex' => '/{{kw}}/gi',
 		],
 		'maxScore' => 150,
 		'minScore' => 0,
@@ -107,9 +107,9 @@ $_scores = [
 			'content' => 'pageContent',
 			'regex' => [
 				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
-				'/^(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/giu', // 1: Match first paragraph
+				'/^(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/gi', // 1: Match first paragraph
 				'/[^>]+(?=<|$|^)/gi',                    // 2: All but tags.
-				'/{{kw}}/giu',                           // 3: Match words.
+				'/{{kw}}/gi',                           // 3: Match words.
 			],
 		],
 		'maxScore' => 100,
@@ -145,7 +145,7 @@ $_scores = [
 			'content' => 'pageContent',
 			'regex' => [
 				'/[^>]+(?=<|$|^)/gi', // 1: All but tags.
-				'/{{kw}}/giu',        // 2: Match words.
+				'/{{kw}}/gi',        // 2: Match words.
 			],
 		],
 		'maxScore' => 800,
@@ -184,7 +184,7 @@ $_scores = [
 			// OPTIMIZE:
 			/* 'regex' => '/(?=.*?href=)<a\\s.*?(((href|title)=(((["\']).*?{{kw}}[^=\'"]*\6)|({{kw}}[^=\'"])))|(.*?>.*?{{kw}})).*?<\/a>/giu', */
 			// A dumber version that doesn't care about semantics and expects "loose standards":
-			'regex' => '/<a\\s.*?((href|title)=(["\'].*?{{kw}}.*?["\']))|(.*?>.*?{{kw}}).*?<\/a>/giu',
+			'regex' => '/<a\\s.*?((href|title)=(["\'].*?{{kw}}.*?["\']))|(.*?>.*?{{kw}}).*?<\/a>/gi',
 			/*[
 				// 1: Get all hyperlinks with keywords attached.
 				'(?=.*{{kw}})<a\\b[^>]*href=[^>]*>.*?<\\/a>',
@@ -223,7 +223,7 @@ $_scores = [
 		'title' => esc_html__( 'Meta description:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'seoDescription',
-			'regex' => '/{{kw}}/giu',
+			'regex' => '/{{kw}}/gi',
 		],
 		'maxScore' => 50,
 		'minScore' => 0,
@@ -255,7 +255,7 @@ $_scores = [
 		'title' => esc_html__( 'Page URL:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageUrl',
-			'regex' => '/{{kw}}/giu',
+			'regex' => '/{{kw}}/gi',
 		],
 		'maxScore' => 125,
 		'minScore' => 0,
