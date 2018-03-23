@@ -36,7 +36,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 final class Admin extends Core {
 	use \TSF_Extension_Manager\Enclose_Stray_Private,
 		\TSF_Extension_Manager\Construct_Master_Once_Interface;
-		//,\TSF_Extension_Manager\Error;
 
 	/**
 	 * Constructor.
@@ -73,6 +72,13 @@ final class Admin extends Core {
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
 	}
 
+	/**
+	 * Returns active focus elements.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array The active focus elements.
+	 */
 	private function get_focus_elements() {
 		/**
 		 * Applies filters 'the_seo_framework_focus_elements'.
@@ -126,6 +132,16 @@ final class Admin extends Core {
 		] );
 	}
 
+	/**
+	 * Enqueues in-post scripts, dependencies, colors, etc.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 * @uses \TSF_Extension_Manager\InpostGUI
+	 * Callback via \TSF_Extension_Manager\InpostGUI
+	 *
+	 * @param string Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
+	 */
 	public function _enqueue_inpost_scripts( $inpostgui ) {
 		$inpostgui::register_script( [
 			'type' => 'js',
@@ -138,7 +154,7 @@ final class Admin extends Core {
 				'data' => [
 					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
 					'focusElements' => $this->get_focus_elements(),
-					'defaultLexicalForm' => $this->default_lexical_form,
+					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
 				],
 			],
 			'tmpl' => [
@@ -163,11 +179,13 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Prepares inpost options.
+	 * Prepares inpost options for the 'audit' tab.
 	 *
 	 * Defered because we need to access meta.
 	 *
 	 * @since 1.0.0
+	 * @uses class \TSF_Extension_Manager\InpostGUI
+	 * @uses trait \TSF_Extension_Manager\Extensions_Post_Meta_Cache
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {
@@ -193,6 +211,7 @@ final class Admin extends Core {
 			$this->get_view_location( 'inpost/inpost' ),
 			[
 				'post_meta' => $post_meta,
+				'defaults' => $this->pm_defaults,
 				'template_cb' => [ $this, '_output_focus_template' ],
 				'is_premium' => \tsf_extension_manager()->is_premium_user(),
 			],
@@ -243,6 +262,15 @@ final class Admin extends Core {
 		$this->process_meta( $post, $data );
 	}
 
+	/**
+	 * Processes post metdata after validation.
+	 *
+	 * @since 1.0.0
+	 * @uses trait \TSF_Extension_Manager\Extensions_Post_Meta_Cache
+	 *
+	 * @param \WP_Post   $post The post object.
+	 * @param array|null $data The meta data.
+	 */
 	private function process_meta( $post, $data ) {
 
 		if ( empty( $data[ $this->pm_index ] ) )
@@ -251,12 +279,11 @@ final class Admin extends Core {
 		$this->set_extension_post_meta_id( $post->ID );
 
 		$store = [];
-		/**
-		 * @TODO add meta sanitation filters.
-		 */
 		foreach ( $data[ $this->pm_index ] as $key => $value ) :
 			switch ( $key ) {
-				// TODO
+				case 'kw' :
+					$store[ $key ] = $this->sanitize_keyword_data( (array) $value );
+					break;
 
 				default :
 					break;
@@ -270,6 +297,97 @@ final class Admin extends Core {
 				$this->update_post_meta( $key, $value );
 			}
 		}
+	}
+
+	/**
+	 * Sanitizes all keyword data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $values The keyword data.
+	 * @return array|null The sanitized keyword data.
+	 */
+	private function sanitize_keyword_data( array $values ) {
+		$output = [];
+		foreach ( $values as $id => $items ) {
+			foreach ( (array) $items as $key => $value ) {
+				$out = $this->sanitize_keyword_data_by_type( $key, $value );
+				if ( isset( $out ) )
+					$output[ $id ][ $key ] = $out;
+			}
+		}
+
+		//= When all entries are emptied, clear meta data.
+		if ( empty( $output ) )
+			return null;
+
+		//= Fills missing data to maintain consistency.
+		foreach ( [ 0, 1, 2 ] as $k ) {
+			if ( ! isset( $values[ $k ] ) ) {
+				$output[ $k ] = $this->pm_defaults['kw'][ $k ];
+			}
+		}
+		return $output ?: null;
+	}
+
+	/**
+	 * Sanitizes keyword data by type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $type  The keyword entry type.
+	 * @param string $value The corresponding value.
+	 * @return string|null The sanitized value.
+	 */
+	private function sanitize_keyword_data_by_type( $type, $value ) {
+		switch ( $type ) :
+			case 'keyword' :
+				$value = \sanitize_text_field( $value );
+				break;
+
+			case 'lexical_form' :
+			case 'definition_selection' :
+				$value = (string) \absint( $value );
+				break;
+
+			case 'lexical_data' :
+			case 'inflection_data' :
+			case 'synonym_data' :
+				//= Decode and encode the values. An empty array will be returned on failure.
+				$value = json_decode(
+					json_encode(
+						json_decode( stripslashes( $value ) ) ?: [],
+						JSON_UNESCAPED_UNICODE
+					), true
+				);
+				break;
+
+			case 'scores' :
+				if ( ! is_array( $value ) ) {
+					$value = [];
+				} else {
+					foreach ( $value as $_t => $_v ) {
+						//= Convert to float, have 2 f decimals, trim trailing zeros, trim trailing dots, convert to string.
+						$value[ $_t ] = (string) ( rtrim( rtrim( sprintf( '%.2F', (float) $_v ), '0' ), '.' ) ?: 0 );
+					}
+				}
+				break;
+
+			case 'active_inflections' :
+			case 'active_synonyms' :
+				$patterns = [
+					'/[^0-9,]+/', // Remove everything but "0-9,"
+					'/(?=(,,)),|,[^0-9]?+$/', // Fix ",,,"->"," and remove trailing ","
+				];
+				$value = preg_replace( $patterns, '', $value );
+				break;
+
+			default :
+				unset( $value );
+				break;
+		endswitch;
+
+		return isset( $value ) ? $value : null;
 	}
 
 	/**

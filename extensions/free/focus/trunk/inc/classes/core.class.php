@@ -65,12 +65,12 @@ class Core {
 		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
 
-		$this->default_lexical_form = json_encode( (object) [
+		$this->default_lexical_form = [
 			[
 				'value' => '',
 				'name'  => \__( '&mdash; Lexical form &mdash;', 'the-seo-framework-extension-manager' ),
 			],
-		] );
+		];
 
 		/**
 		 * Set meta index and defaults.
@@ -84,8 +84,8 @@ class Core {
 				'lexical_form' => '',
 				'lexical_data' => $this->default_lexical_form,
 				'definition_selection' => '',
-				'inflection_data' => '',
-				'synonym_data' => '',
+				'inflection_data' => [],
+				'synonym_data' => [],
 				'active_inflections' => '',
 				'active_synonyms' => '',
 				'score' => 0,

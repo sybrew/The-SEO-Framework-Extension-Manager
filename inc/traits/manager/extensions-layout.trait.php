@@ -354,36 +354,38 @@ trait Extensions_Layout {
 
 			$s_slug = \sanitize_key( $slug );
 
-			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
-			$nonce = \wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
-			$extension = sprintf(
-				'<input type="hidden" name="%s" value="%s">',
-				$cache['input_name'],
-				$s_slug
-			);
-			$submit = sprintf(
-				'<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">',
-				$s_class,
-				\esc_attr( $text )
-			);
-			$form = $nonce_action . $nonce . $extension . $submit;
+			nojs:;
+				$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
+				$nonce = \wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
+				$extension = sprintf(
+					'<input type="hidden" name="%s" value="%s">',
+					$cache['input_name'],
+					$s_slug
+				);
+				$submit = sprintf(
+					'<input type="submit" name="submit" id="submit" class="tsfem-button-primary tsfem-button-flat %s" value="%s">',
+					$s_class,
+					\esc_attr( $text )
+				);
+				$nojs = sprintf(
+					'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
+					$cache['admin_url'],
+					$s_slug,
+					$nonce_action . $nonce . $extension . $submit
+				);
 
-			$nojs = sprintf(
-				'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
-				$cache['admin_url'],
-				$s_slug,
-				$form
-			);
-			$js = sprintf(
-				'<button type=button id="tsfem-activate[%s]" class="tsfem-button-primary tsfem-button-flat hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
-				$s_slug,
-				$s_class,
-				$s_slug,
-				$type,
-				\esc_html( $text )
-			);
+			js:;
+				$js = sprintf(
+					'<button type=button id="tsfem-activate[%s]" class="tsfem-button-primary tsfem-button-flat hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
+					$s_slug,
+					$s_class,
+					$s_slug,
+					$type,
+					\esc_html( $text )
+				);
 
-			$button = $nojs . $js;
+			output:;
+				$button = $nojs . $js;
 		}
 
 		return sprintf( '<div class="tsfem-extension-action tsfem-flex tsfem-flex-row">%s</div>', $button );

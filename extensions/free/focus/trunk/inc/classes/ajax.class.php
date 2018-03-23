@@ -125,7 +125,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Gets word forms on AJAX request.
+	 * Gets keyword's lexical forms on AJAX request.
 	 *
 	 * @since 1.0.0
 	 * @uses $this->verify_api_access()
@@ -178,7 +178,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Gets lexical form synonyms on AJAX request.
+	 * Gets lexical form's synonyms on AJAX request.
 	 *
 	 * @since 1.0.0
 	 * @uses $this->verify_api_access()

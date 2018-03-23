@@ -90,7 +90,8 @@ final class HTML {
 		$title = \esc_attr( \wp_strip_all_tags( $title ) );
 		$title_html = $title_html ? sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
 
-		strlen( $title . $title_html ) and $classes[] = 'tsfem-tooltip-item';
+		strlen( $title . $title_html )
+			and $classes[] = 'tsfem-tooltip-item';
 
 		return vsprintf(
 			'<span class="%s" title="%s" %s>%s</span>',
@@ -104,7 +105,7 @@ final class HTML {
 	}
 
 	/**
-	 * Makes an dropdown options list from input.
+	 * Makes a dropdown options list from input.
 	 *
 	 * @since 1.5.0
 	 *
@@ -128,5 +129,29 @@ final class HTML {
 			);
 		}
 		return $out;
+	}
+
+	/**
+	 * Makes a sequential dropdown options list from input.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $options : sequential {
+	 *    'name' (string)  => The option name,
+	 * }
+	 * @param  int $selected The currently selected value.
+	 * @return string The formatted options list.
+	 */
+	static function make_sequential_dropdown_option_list( array $options, $selected = 0 ) {
+
+		$_options = [];
+		$i = 0;
+		foreach ( $options as $key => $entry ) {
+			$_options[ $key ]['value'] = $i;
+			$_options[ $key ]['name'] = $entry['name'];
+			$i++;
+		}
+
+		return static::make_dropdown_option_list( $_options, $selected ?: 0 );
 	}
 }

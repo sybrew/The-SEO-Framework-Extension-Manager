@@ -59,11 +59,11 @@ class Memory_Cache {
 		if ( $limit )
 			return $limit;
 
-		$val = trim( ini_get( 'memory_limit' ) );
-		$last = strtolower( $val[ strlen( $val ) - 1 ] );
-		$val = filter_var( $val, FILTER_SANITIZE_NUMBER_INT );
+		$_limit = trim( ini_get( 'memory_limit' ) );
+		$quantifier = strtolower( $_limit[ strlen( $_limit ) - 1 ] );
+		$val = filter_var( $_limit, FILTER_SANITIZE_NUMBER_INT );
 
-		switch ( $last ) {
+		switch ( $quantifier ) {
 			case 'g':
 				$val *= 1024;
 				// No break. Run next calculation.
@@ -96,7 +96,7 @@ trait Memory {
 		Memory_Cache::increased_available_memory()
 			or function_exists( '\wp_is_ini_value_changeable' )
 				and \wp_is_ini_value_changeable( 'memory_limit' )
-				and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );;
+				and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
 	}
 
 	/**

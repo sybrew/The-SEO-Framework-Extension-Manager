@@ -27,13 +27,19 @@ create_analysis_field :;
 	) );
 	$focus_label = $focus_title . $focus_info;
 
+	//= Fix array if data is missing.
+	$keyword_meta = array_slice( array_merge_recursive( $post_meta['kw']['values'], $defaults ), 0, 3 );
+
 	analysis_fields_output :;
 		InpostHTML::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
 			InpostHTML::wrap_flex( 'label', $focus_label );
 			InpostHTML::wrap_flex( 'content-open', '' );
 				InpostHTML::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
-				foreach ( $post_meta['kw']['values'] as $id => $values ) :
+				foreach ( $keyword_meta as $id => $values ) :
+					$get_value = function( $id ) use ( $values ) {
+						return isset( $values[ $id ] ) ? $values[ $id ] : '';
+					};
 					call_user_func(
 						$template_cb, [
 							'supportive' => (bool) $i++, // true if 2nd or later iteration.
@@ -63,40 +69,41 @@ create_analysis_field :;
 							'post_input' => [
 								'keyword' => [
 									'id' => $make_option_id( $id, 'keyword' ),
-									'value' => $values['keyword'],
+									'value' => $get_value( 'keyword' ),
 								],
 								'lexical_form' => [
 									'id' => $make_option_id( $id, 'lexical_form' ),
 									'selector_id' => $make_option_id( $id, 'lexical_selector' ),
-									'value' => $values['lexical_form'],
+									'value' => $get_value( 'lexical_form' ),
 								],
 								'lexical_data' => [
 									'id' => $make_option_id( $id, 'lexical_data' ),
-									'value' => $values['lexical_data'],
+									'value' => $get_value( 'lexical_data' ) ?: [],
 								],
 								'active_inflections' => [
 									'id' => $make_option_id( $id, 'active_inflections' ),
-									'value' => $values['active_inflections'],
+									'value' => $get_value( 'active_inflections' ),
 								],
 								'active_synonyms' => [
 									'id' => $make_option_id( $id, 'active_synonyms' ),
-									'value' => $values['active_synonyms'],
+									'value' => $get_value( 'active_synonyms' ),
 								],
 								'definition_selection' => [
 									'id' => $make_option_id( $id, 'definition_selection' ),
-									'value' => $values['definition_selection'],
+									'selector_id' => $make_option_id( $id, 'definition_dropdown' ),
+									'value' => $get_value( 'definition_selection' ),
 								],
 								'inflection_data' => [
 									'id' => $make_option_id( $id, 'inflection_data' ),
-									'value' => $values['inflection_data'],
+									'value' => $get_value( 'inflection_data' ) ?: [],
 								],
 								'synonym_data' => [
 									'id' => $make_option_id( $id, 'synonym_data' ),
-									'value' => $values['synonym_data'],
+									'value' => $get_value( 'synonym_data' ) ?: [],
 								],
 								'score' => [
 									'id' => $make_option_id( $id, 'score' ),
-									'value' => $values['score'],
+									'value' => $get_value( 'score' ) ?: [],
 								],
 							],
 						]

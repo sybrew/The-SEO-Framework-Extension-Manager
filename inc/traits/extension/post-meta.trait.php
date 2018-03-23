@@ -30,6 +30,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.5.0
  * @access private
+ * @uses TSF_Extension_Manager\Traits
  * @final
  */
 final class Extensions_Post_Meta_Cache {
@@ -239,6 +240,8 @@ trait Extension_Post_Meta {
 
 	/**
 	 * Updates TSFEM Extensions meta.
+	 *
+	 * This data may not be JSON encoded; but if so, the quotes need to be escaped or slashed.
 	 *
 	 * @since 1.5.0
 	 *

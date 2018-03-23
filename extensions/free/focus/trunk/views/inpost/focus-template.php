@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		<div class="tsfem-e-focus-collapse-header-row tsf-flex">
 			<?php
 			printf(
-				'<input type=text name=%1$s id=%1$s value="%2$s" class=tsfem-e-focus-keyword-entry placeholder="%3$s" autocomplete=off>',
+				'<input type=text id=%1$s name=%1$s value="%2$s" class=tsfem-e-focus-keyword-entry placeholder="%3$s" autocomplete=off>',
 				\esc_attr( $post_input['keyword']['id'] ),
 				\esc_attr( $post_input['keyword']['value'] ),
 				$supportive
@@ -27,50 +27,43 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					: \esc_attr__( 'Keyword...', 'the-seo-framework-extension-manager' )
 			);
 			if ( $is_premium ) {
-				//?! TODO make these visible for non-premium users regardless?
-				//? It's useless as they require API; aside from showing capabilities.
 				printf(
-					sprintf(
-						'%s%s',
-						'<input type=hidden id=%1$s name=%1$s value="%2$s" id=%3$s>',
-						sprintf(
-							'<select value="%%2$s" id=%%3$s class="%s" disabled>%%4$s</select>',
-							\esc_attr( implode( ' ', [
-								'tsfem-e-focus-lexical-selector',
-								'tsfem-e-focus-enable-if-js',
-								'tsfem-e-focus-requires-javascript',
-							] ) )
-						)
-					),
-					\esc_attr( $post_input['lexical_form']['id'] ),
-					\esc_attr( $post_input['lexical_form']['value'] ),
+					'<select id=%s value="%s" class="%s" disabled>%s</select>',
 					\esc_attr( $post_input['lexical_form']['selector_id'] ),
-					\TSF_Extension_Manager\HTML::make_dropdown_option_list( json_decode( $post_input['lexical_data']['value'], true ), $post_input['lexical_form']['value'] ?: '' )
+					\esc_attr( $post_input['lexical_form']['value'] ),
+					\esc_attr( implode( ' ', [
+						'tsfem-e-focus-lexical-selector',
+						'tsfem-e-focus-enable-if-js',
+						'tsfem-e-focus-requires-javascript',
+					] ) ),
+					\TSF_Extension_Manager\HTML::make_sequential_dropdown_option_list( $post_input['lexical_data']['value'], $post_input['lexical_form']['value'] ?: '' )
 				);
+			}
+			/**
+			 * Fields that need resaving and reprocessing as the user engages.
+			 * This ensures a smooth "premium -> free -> premium" experience without
+			 * data loss.
+			 */
+			foreach (
+				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
+				as $hidden_input
+			) {
 				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['lexical_data']['id'] ),
-					\esc_attr( $post_input['lexical_data']['value'] )
+					'<input type=hidden id=%s name=%s value="%s">',
+					$is_premium ? \esc_attr( $hidden_input['id'] ) : '""',
+					\esc_attr( $hidden_input['id'] ),
+					\esc_attr( json_encode( $hidden_input['value'] ) )
 				);
+			}
+			foreach (
+				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
+				as $hidden_input
+			) {
 				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['inflection_data']['id'] ),
-					\esc_attr( $post_input['inflection_data']['value'] )
-				);
-				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['synonym_data']['id'] ),
-					\esc_attr( $post_input['synonym_data']['value'] )
-				);
-				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['active_inflections']['id'] ),
-					\esc_attr( $post_input['active_inflections']['value'] )
-				);
-				printf(
-					'<input type=hidden id=%s value="%s">',
-					\esc_attr( $post_input['active_synonyms']['id'] ),
-					\esc_attr( $post_input['active_synonyms']['value'] )
+					'<input type=hidden id=%s name=%s value="%s">',
+					$is_premium ? \esc_attr( $hidden_input['id'] ) : '""',
+					\esc_attr( $hidden_input['id'] ),
+					\esc_attr( $hidden_input['value'] )
 				);
 			}
 			?>
@@ -155,10 +148,9 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				<?php
 				printf(
 					vsprintf(
-						'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s %s>%s%s</div>',
+						'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s>%s%s</div>',
 						[
 							\esc_attr( $action_ids['definition_selector'] ),
-							'style=display:none;',
 							sprintf(
 								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
 								\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
@@ -170,16 +162,16 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 							),
 						]
 					),
-					\esc_attr( $post_input['definition_selection']['id'] ),
+					\esc_attr( $post_input['definition_selection']['selector_id'] ),
 					\esc_attr( $post_input['definition_selection']['value'] )
 				);
 				?>
 				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['inflections'] ); ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Inflections', 'the-seo-framework-extension-manager' ); ?></h2>
+					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Choose inflections', 'the-seo-framework-extension-manager' ); ?></h2>
 					<div class=tsfem-e-focus-subject-selection></div>
 				</div>
 				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['synonyms'] ); ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
+					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Choose synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
 					<div class=tsfem-e-focus-subject-selection></div>
 				</div>
 			</div>

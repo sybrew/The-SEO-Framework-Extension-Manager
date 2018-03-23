@@ -1325,6 +1325,7 @@ final class FormGenerator {
 	 * Goes up (or down) to steps e-/+10.
 	 *
 	 * @since 1.3.0
+	 * @since 1.5.0 Rounded decamals are now allowed in the steps [2].
 	 *
 	 * @param array $range The range index with plausibly missing or exceeding values.
 	 *              Passed by reference.
@@ -1332,7 +1333,7 @@ final class FormGenerator {
 	private function clean_range_index( array &$range ) {
 		$range[0] = isset( $range[0] ) ? (string) $range[0] : '';
 		$range[1] = isset( $range[1] ) ? (string) $range[1] : '';
-		$range[2] = isset( $range[2] ) ? (string) rtrim( sprintf( '%.10F', $range[2] ), '.0' ) : '';
+		$range[2] = isset( $range[2] ) ? (string) rtrim( rtrim( sprintf( '%.10F', $range[2] ), '0' ), '.' ) : '';
 	}
 
 	/**
