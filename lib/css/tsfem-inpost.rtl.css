@@ -3,7 +3,6 @@
 .tsfem-notice {
 	margin: 0 0 15px;
 	box-shadow: 0 1px 3px 1px #ccc;
-	border-radius: 3px;
 	position: relative;
 	background: #fff;
 	border-right: 4px solid #fff;
@@ -11,7 +10,8 @@
 }
 
 .tsfem-notice p {
-	margin: .5em 19px .5em 0;
+	margin: .5em 0;
+	margin-left: 19px;
 	padding: 2px;
 }
 
@@ -95,8 +95,8 @@ a.tsfem-dismiss:hover {
 /* # Icons
 ----------------------------------------------*/
 
-.tsfem-inpost-icon:after {
-	display: block;
+.tsfem-e-inpost-icon:after {
+	display: inherit;
 	width: 1em;
 	line-height: 1;
 	font-family: dashicons;
@@ -106,62 +106,59 @@ a.tsfem-dismiss:hover {
 	content: "";
 }
 
-.tsfem-inpost-icon-good {
+.tsfem-e-inpost-icon-good {
 	color: #0cc34b;
 }
 
-.tsfem-inpost-icon-okay,
-.tsfem-inpost-icon-warning {
+.tsfem-e-inpost-icon-okay,
+.tsfem-e-inpost-icon-warning {
 	color: #ffa01b;
 }
 
-.tsfem-inpost-icon-warning {
+.tsfem-e-inpost-icon-warning {
 	color: #ffa01b;
 }
 
-.tsfem-inpost-icon-bad,
-.tsfem-inpost-icon-error {
+.tsfem-e-inpost-icon-bad,
+.tsfem-e-inpost-icon-error {
 	color: #dd3811;
 }
 
-.tsfem-inpost-icon-unknown,
-.tsfem-inpost-icon-loading {
+.tsfem-e-inpost-icon-unknown,
+.tsfem-e-inpost-icon-loading {
 	color: #057f9c;
 }
 
-.tsfem-inpost-icon-edit {
+.tsfem-e-inpost-icon-edit {
 	color: #ffa01b;
 }
 
-.tsfem-inpost-icon-okay:after,
-.tsfem-inpost-icon-good:after {
-	font-size: 1.1em;
+.tsfem-e-inpost-icon-okay:after,
+.tsfem-e-inpost-icon-good:after {
 	content: "\f147";
-	margin-left: -2px;
-	margin-right: 4px;
 }
 
-.tsfem-inpost-icon-warning:after {
+.tsfem-e-inpost-icon-warning:after {
 	content: "\f227";
 }
 
-.tsfem-inpost-icon-bad:after {
+.tsfem-e-inpost-icon-bad:after {
 	content: "\f227";
 }
 
-.tsfem-inpost-icon-error:after {
+.tsfem-e-inpost-icon-error:after {
 	content: "\f153";
 }
 
-.tsfem-inpost-icon-unknown:after {
+.tsfem-e-inpost-icon-unknown:after {
 	content: "\f223";
 }
 
-.tsfem-inpost-icon-edit:after {
+.tsfem-e-inpost-icon-edit:after {
 	content: "\f464";
 }
 
-.tsfem-inpost-icon-loading:after {
+.tsfem-e-inpost-icon-loading:after {
 	content: "\f463";
 	animation: tsfem-inpost-spin 1.5s linear infinite;
 }

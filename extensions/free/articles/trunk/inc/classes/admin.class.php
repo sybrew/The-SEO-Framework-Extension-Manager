@@ -144,6 +144,7 @@ final class Admin extends Core {
 		endforeach;
 
 		if ( empty( $store ) ) {
+			//= Delete everything. Using defaults.
 			$this->delete_post_meta_index();
 		} else {
 			foreach ( $store as $key => $value ) {

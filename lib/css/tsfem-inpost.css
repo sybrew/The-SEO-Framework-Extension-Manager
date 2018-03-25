@@ -10,7 +10,8 @@
 }
 
 .tsfem-notice p {
-	margin: .5em 19px .5em 0;
+	margin: .5em 0;
+	margin-right: 19px;
 	padding: 2px;
 }
 
@@ -135,8 +136,6 @@ a.tsfem-dismiss:hover {
 .tsfem-e-inpost-icon-okay:after,
 .tsfem-e-inpost-icon-good:after {
 	content: "\f147";
-	margin-left: -2px;
-	margin-right: 4px;
 }
 
 .tsfem-e-inpost-icon-warning:after {

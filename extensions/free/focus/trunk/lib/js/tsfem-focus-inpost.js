@@ -312,9 +312,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			contents = contents.match( /[^>]+(?=<|$|^)/gi );
 			return contents && contents.join( '' ).length || 0;
 		}
+
 		const countWords = ( word, contentMatch ) => {
 			let pReg,
-				sWord = tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) );
+				sWord = tsfem_inpost.bewilderRegexNonWords( tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ) );
 
 			//= Iterate over multiple regex scripts.
 			for ( let i = 0; i < regex.length; i++ ) {
@@ -377,6 +378,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( ! content.length ) content = selector.innerHTML;
 
 			if ( ! content.length ) return $dfd.resolve();
+			content = tsfem_inpost.normalizeSpacing( content ).trim();
+			if ( ! content.length ) return $dfd.resolve();
 
 			contentCharCount += countChars( content );
 			$.when(
@@ -396,7 +399,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				density = 0,
 				realScore = 0,
 				endScore = 0;
-
 
 			/**
 			 * Returns the value if not higher than max. Otherwise it returns max.
@@ -445,7 +447,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				newDescription = getNearestNumericIndexValue( data.phrasing, realScore );
 
 			if ( description.innerHTML === newDescription ) {
-				// Nothing changed.
+				//* Nothing changed.
 				tsfem_inpost.setIconClass(
 					rater.querySelector( '.tsfem-e-focus-assessment-rating' ),
 					getIconType( data.rating, realScore )
@@ -1202,9 +1204,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			barBuffer = {},
 			barTimeout = keywordTimeout / ( 100 * barSmoothness );
 
-		//= Subtract a little of the bar timer to prevent painting/scripting overlap.
+		//= Add a little to make it visually "faster".
 		if ( superSmooth )
-			barTimeout *= .975;
+			barTimeout *= 1.175;
 
 		const barGo = ( id, bar ) => {
 			bar.style.width = ++barWidth[ id ] / barSmoothness + '%';
@@ -1801,7 +1803,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let el = document.getElementById( id ),
 					rater = el.querySelector( '.tsfem-e-focus-assessment-rating' );
 				tsfem_inpost.setIconClass( rater, 'loading' );
-				doCheck( el );
+				setTimeout( () => doCheck( el ), 150 );
 			} );
 		}
 		const listener = ( event ) => {
@@ -1877,7 +1879,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					for ( let _i = subScores.length; _i--; ) {
 						tsfem_inpost.setIconClass( subScores[ _i ].querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
 						//= defer.
-						setTimeout( () => doCheck( subScores[ _i ] ), 0 );
+						setTimeout( () => doCheck( subScores[ _i ] ), 150 );
 					}
 				}
 			} else {
