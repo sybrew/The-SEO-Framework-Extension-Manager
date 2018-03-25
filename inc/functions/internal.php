@@ -130,16 +130,20 @@ function load_upgrader() {
  * @param bool   $success The success status, either boolean, int, or other.
  * @param string $notice  The error notice displayed to the user.
  * @param int    $code    The error code. Defaults to -1 (undefined).
+ * @param string $type    The notice type. Accepts 'success', 'warning', 'error'.
+ *                        Defaults to $success state: 'success'/'error'
  * @return array {
  *    'success' => mixed $success,
  *    'notice'  => string $notice,
  *    'code'    => int $code,
+ *    'type'    => string $type
  * }
  */
-function get_ajax_notice( $success = false, $notice = '', $code = -1 ) {
+function get_ajax_notice( $success = false, $notice = '', $code = -1, $type = '' ) {
 	return [
 		'success' => $success,
 		'notice' => $notice,
 		'code' => intval( $code ),
+		'type' => $type ?: ( $success ? 'success' : 'error' ),
 	];
 }

@@ -133,6 +133,17 @@ final class Admin extends Core {
 	}
 
 	/**
+	 * Determines if the API supports the language.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if supported, false otherwise.
+	 */
+	private function is_language_supported() {
+		return substr( \get_locale(), 0, 2 ) === 'en';
+	}
+
+	/**
 	 * Enqueues in-post scripts, dependencies, colors, etc.
 	 *
 	 * @since 1.0.0
@@ -155,6 +166,7 @@ final class Admin extends Core {
 					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
 					'focusElements' => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
+					'languageSupported' => $this->is_language_supported(),
 				],
 			],
 			'tmpl' => [
@@ -214,6 +226,7 @@ final class Admin extends Core {
 				'defaults' => $this->pm_defaults,
 				'template_cb' => [ $this, '_output_focus_template' ],
 				'is_premium' => \tsf_extension_manager()->is_premium_user(),
+				'language_supported' => $this->is_language_supported(),
 			],
 			'audit'
 		);

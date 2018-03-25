@@ -71,6 +71,10 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 		<div class="tsfem-e-focus-collapse-header-row tsf-flex">
 			<?php
 			if ( $is_premium ) {
+				$_tooltip = $language_supported
+					? \__( 'Adjust subject inflections and synonyms.', 'the-seo-framework-extension-manager' )
+					: \__( 'Only the English language currently supports lexical adjustments.', 'the-seo-framework-extension-manager' );
+
 				printf(
 					'<span class="%s">%s</span>',
 					\esc_attr( implode( ' ', [
@@ -94,7 +98,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 								'tsf-tooltip-item',
 							] ) ),
 							\esc_attr__( 'Adjusting the subject requires JavaScript', 'the-seo-framework-extension-manager' ),
-							\esc_attr__( 'Adjust subject inflections and synonyms.', 'the-seo-framework-extension-manager' ),
+							\esc_attr( $_tooltip ),
 						]
 					)
 				);

@@ -210,8 +210,11 @@ trait Error {
 
 		switch ( $args['type'] ) :
 			case 'error' :
-			case 'warning' :
 				$status_i18n = \esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
+				break;
+
+			case 'warning' :
+				$status_i18n = \esc_html__( 'Notice code:', 'the-seo-framework-extension-manager' );
 				break;
 
 			default :
@@ -329,10 +332,8 @@ trait Error {
 			case 17002 :
 			case 1010203 :
 			case 1010204 :
-			case 1100102 :
-			case 1100103 :
-			case 1100202 :
-			case 1100203 :
+			case 1100104 :
+			case 1100204 :
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -343,8 +344,10 @@ trait Error {
 			case 1010501 :
 			case 1010601 :
 			case 1010801 :
-			case 1100106 :
-			case 1100206 :
+			case 1100103 :
+			case 1100107 :
+			case 1100203 :
+			case 1100207 :
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
@@ -609,13 +612,20 @@ trait Error {
 				$type = 'success';
 				break;
 
-			case 1100104 :
-				$message = \esc_html__( 'No definitions found. Check your spelling, or supply your own inflections and synonyms.', 'the-seo-framework-extension-manager' );
+			case 1100102 :
+			case 1100105 :
+				$message = \esc_html__( 'No definitions found. Check your spelling.', 'the-seo-framework-extension-manager' );
 				$type = 'warning';
 				break;
 
-			case 1100105 :
+			case 1100202 :
 			case 1100205 :
+				$message = \esc_html__( 'No synonyms found.', 'the-seo-framework-extension-manager' );
+				$type = 'warning';
+				break;
+
+			case 1100106 :
+			case 1100206 :
 				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
 				$type = 'success';
 				break;
@@ -655,6 +665,7 @@ trait Error {
 	 * Returns Ajax notice from $code.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.0 Now appends notice type.
 	 *
 	 * @param mixed $success The success status, either boolean, int, or other.
 	 * @param int $code The error code.
@@ -665,10 +676,14 @@ trait Error {
 	 * }
 	 */
 	final protected function get_ajax_notice( $success, $code ) {
+
+		$notice = $this->get_error_notice_by_key( $code );
+
 		return \TSF_Extension_Manager\get_ajax_notice(
 			$success,
-			$this->get_error_notice_by_key( $code, false ),
-			$code
+			$notice['message'],
+			$code,
+			$notice['type']
 		);
 	}
 }

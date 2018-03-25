@@ -822,8 +822,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		//= @TODO make this a fetcher.
 		const setInflections = ( idPrefix ) => {
-			let inflectionHolder = getSubElementById( idPrefix, 'inflection_data' );
-
 			clearData( idPrefix, 'inflections' );
 
 			//= We can't retrieve these yet. Set current value and base value.
@@ -837,7 +835,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			words.push( keyword );
 			if ( keyword !== lexicalWord ) words.push( lexicalWord );
 
-			inflectionHolder.value = JSON.stringify( [ { 'inflections' : words } ] );
+			getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { 'inflections' : words } ] );
 
 			return $.Deferred().resolve();
 		}
@@ -845,18 +843,30 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let idPrefix = event.data.idPrefix,
 				$dfd = $.Deferred();
 			$.when( getSynonyms( idPrefix ) ).done( ( data ) => {
-				let synonymHolder = getSubElementById( idPrefix, 'synonym_data' );
-
 				clearData( idPrefix, 'definition' );
 				clearData( idPrefix, 'synonyms' );
 
 				lexicalSelector.dataset.prev = lexicalSelector.value;
-				synonymHolder.value = JSON.stringify( data.synonyms );
+				getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
 
 				$dfd.resolve();
-			} ).fail( () => {
-				setDefinition( lexicalSelector.dataset.prev || 0 );
-				$dfd.reject();
+			} ).fail( ( code ) => {
+				switch ( code ) {
+					case 1100202 :
+					case 1100205 :
+						clearData( idPrefix, 'definition' );
+						clearData( idPrefix, 'synonyms' );
+
+						lexicalSelector.dataset.prev = lexicalSelector.value;
+						getSubElementById( idPrefix, 'synonym_data' ).value = '';
+						$dfd.resolve();
+						break;
+
+					default :
+						setDefinition( lexicalSelector.dataset.prev || 0 );
+						$dfd.reject();
+						break;
+				}
 			} );
 			return $dfd.promise();
 		}
@@ -903,11 +913,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const populateDefinitionSelector = ( idPrefix ) => {
 		let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
 			definitionDropdown = getSubElementById( idPrefix, 'definition_dropdown' ),
-			definitionSelection = getSubElementById( idPrefix, 'definition_selection' ),
-			definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
+			definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
 
 		let definitionDropdownClone = definitionDropdown.cloneNode( true ),
-			synonyms = JSON.parse( synonymHolder.value );
+			synonyms = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
 
 		//= Removes all previous options.
 		for ( let _i = definitionDropdownClone.options.length; _i--; ) {
@@ -923,9 +932,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		definitionDropdown.innerHTML = definitionDropdownClone.innerHTML;
 		definitionDropdown.value = definitionSelection.value;
 		definitionDropdown.selectedIndex = +definitionSelection.value;
-		//= Make value visible.
-		$( document.querySelector( '[data-for="' + definitionDropdown.id + '"]' ) )
-			.trigger( 'set-tsfem-e-focus-definition' );
+
+		let definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
+		if ( definitionDropdown.options.length ) {
+			//= Make selected index show up.
+			$( document.querySelector( '[data-for="' + definitionDropdown.id + '"]' ) )
+				.trigger( 'set-tsfem-e-focus-definition' );
+			definitionSelector.style.display = null;
+		} else {
+			//= Hide definition selector if there's nothing to be selected.
+			definitionSelector.style.display = 'none';
+		}
 	}
 
 	/**
@@ -1246,7 +1263,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 
 			if ( tsfem_inpost.isPremium ) {
-				runLexicalFormSetter( idPrefix );
+				if ( l10n.languageSupported )
+					runLexicalFormSetter( idPrefix );
 			}
 
 			prepareWrapScoreElements( idPrefix );
@@ -1546,10 +1564,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			//?! There's always just one form of inflections in latin.
 			let availableInflections = inflectionHolder.value && JSON.parse( inflectionHolder.value ),
-				inflections = availableInflections && availableInflections[0].inflections;
+				inflections = availableInflections && availableInflections[0].inflections || {};
 
 			let availableSynonyms = synonymHolder.value && JSON.parse( synonymHolder.value ),
-				synonyms = availableSynonyms && availableSynonyms[ +definitionSelection.value ].synonyms;
+				synonyms = availableSynonyms && availableSynonyms[ +definitionSelection.value ].synonyms || {};
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity = 0;
@@ -1582,8 +1600,19 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 			synonymEntries.innerHTML = html;
 
-			tsfem_inpost.fadeIn( inflectionEntries );
-			tsfem_inpost.fadeIn( synonymEntries );
+			if ( inflections.length ) {
+				inflectionSection.style.display = null;
+				tsfem_inpost.fadeIn( inflectionEntries );
+			} else {
+				inflectionSection.style.display = 'none';
+			}
+
+			if ( synonyms.length ) {
+				synonymSection.style.display = null;
+				tsfem_inpost.fadeIn( synonymEntries );
+			} else {
+				synonymSection.style.display = 'none';
+			}
 
 			setActiveInflections( idPrefix );
 			setActiveSynonyms( idPrefix );
@@ -1876,11 +1905,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let scoresWrap = getSubElementById( idPrefix, 'scores' ),
 					subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
 				if ( subScores instanceof NodeList ) {
-					for ( let _i = subScores.length; _i--; ) {
-						tsfem_inpost.setIconClass( subScores[ _i ].querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
-						//= defer.
-						setTimeout( () => doCheck( subScores[ _i ] ), 150 );
-					}
+					tsfem_inpost.promiseLoop( subScores, ( item ) => {
+						tsfem_inpost.setIconClass( item.querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
+						doCheck( item );
+					}, 100 );
 				}
 			} else {
 				let _type;
@@ -1904,7 +1932,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const analysisChangeEvents = ( type ) => {
 		const events = [
-			'tsfem-e-focus.tsfem-e-focus-' + type, // Custom trigger.
+			'tsfem-e-focus.analysis-' + type, // Custom trigger.
 			'input.tsfem-e-focus-' + type,
 			'change.tsfem-e-focus-' + type
 		];
@@ -1912,7 +1940,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			switch ( what ) {
 				case 'names'   : return events.join( ' ' );
 				case 'trigger' : return events[0];
-				default : return events;
+				default        : return events;
 			}
 		} };
 	}

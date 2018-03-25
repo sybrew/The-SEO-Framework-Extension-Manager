@@ -149,9 +149,19 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				$results = $this->get_ajax_notice( false, 1100102 );
+				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+					case 'WORD_NOT_FOUND' :
+						$results = $this->get_ajax_notice( false, 1100102 );
+						break;
+
+					default :
+					case 'REMOTE_API_BODY_ERROR' :
+					case 'REMOTE_API_ERROR' :
+						$results = $this->get_ajax_notice( false, 1100103 );
+						break;
+				endswitch;
 			} elseif ( ! isset( $response->data ) ) {
-				$results = $this->get_ajax_notice( false, 1100103 );
+				$results = $this->get_ajax_notice( false, 1100104 );
 			} else {
 				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
@@ -159,15 +169,15 @@ final class Ajax {
 					$type = 'success';
 					$forms = $data->forms ?: [];
 					if ( empty( $forms ) ) {
-						$results = $this->get_ajax_notice( false, 1100104 );
+						$results = $this->get_ajax_notice( false, 1100105 );
 					} else {
-						$results = $this->get_ajax_notice( true, 1100105 );
+						$results = $this->get_ajax_notice( true, 1100106 );
 					}
 				} else {
 					if ( isset( $data->error ) )
 						$error = $data->error;
 
-					$results = $this->get_ajax_notice( false, 1100106 );
+					$results = $this->get_ajax_notice( false, 1100107 );
 				}
 			}
 		}
@@ -205,9 +215,19 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				$results = $this->get_ajax_notice( false, 1100202 );
+				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+					case 'WORD_NOT_FOUND' :
+						$results = $this->get_ajax_notice( false, 1100202 );
+						break;
+
+					default :
+					case 'REMOTE_API_BODY_ERROR' :
+					case 'REMOTE_API_ERROR' :
+						$results = $this->get_ajax_notice( false, 1100203 );
+						break;
+				endswitch;
 			} elseif ( ! isset( $response->data ) ) {
-				$results = $this->get_ajax_notice( false, 1100203 );
+				$results = $this->get_ajax_notice( false, 1100204 );
 			} else {
 				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
@@ -215,15 +235,15 @@ final class Ajax {
 					$type = 'success';
 					$synonyms = $data->synonyms ?: [];
 					if ( empty( $synonyms ) ) {
-						$results = $this->get_ajax_notice( false, 1100204 );
+						$results = $this->get_ajax_notice( false, 1100205 );
 					} else {
-						$results = $this->get_ajax_notice( true, 1100205 );
+						$results = $this->get_ajax_notice( true, 1100206 );
 					}
 				} else {
 					if ( isset( $data->error ) )
 						$error = $data->error;
 
-					$results = $this->get_ajax_notice( false, 1100206 );
+					$results = $this->get_ajax_notice( false, 1100207 );
 				}
 			}
 		}

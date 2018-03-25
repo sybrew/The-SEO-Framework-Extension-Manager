@@ -44,6 +44,7 @@ create_analysis_field :;
 						$template_cb, [
 							'supportive' => (bool) $i++, // true if 2nd or later iteration.
 							'is_premium' => $is_premium,
+							'language_supported' => $language_supported,
 							'has_keyword' => (bool) strlen( $values['keyword'] ),
 							'sub_scores' => [
 								'key' => $make_option_id( $id, 'scores' ),
