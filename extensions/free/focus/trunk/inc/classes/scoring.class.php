@@ -212,7 +212,7 @@ final class Scoring {
 		return \TSF_Extension_Manager\HTML::make_data_attributes( [
 			'scores' => \tsf_extension_manager()->filter_keys(
 				$this->get_template( $type ),
-				[ 'assessments', 'maxScore', 'minScore', 'phrasing', 'rating', 'scoring' ]
+				[ 'assessment', 'maxScore', 'minScore', 'phrasing', 'rating', 'scoring' ]
 			),
 			'assessmentType' => $type,
 		] );

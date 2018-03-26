@@ -508,8 +508,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	/**
 	 * Returns icon type based on rating.
 	 *
-	 * @TODO find new source after cleanup:
-	 * @source PHP TSF_Extension_Manager\Extension\Focus\Admin\Views\$_get_icon_class();
+	 * @source PHP TSF_Extension_Manager\Extension\Focus\Scoring\get_icon_class();
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -1914,11 +1913,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( idPrefix ) {
 				let scoresWrap = getSubElementById( idPrefix, 'scores' ),
 					subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
-				if ( subScores instanceof NodeList ) {
+				if ( subScores instanceof NodeList && subScores.length ) {
 					tsfem_inpost.promiseLoop( subScores, ( item ) => {
 						tsfem_inpost.setIconClass( item.querySelector( '.tsfem-e-focus-assessment-rating' ), 'loading' );
 						doCheck( item );
 					}, 100 );
+				} else {
+					setEvaluationVisuals( idPrefix ).to( 'error' );
 				}
 			} else {
 				let _type;

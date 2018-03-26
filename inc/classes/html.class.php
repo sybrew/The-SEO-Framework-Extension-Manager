@@ -176,13 +176,21 @@ final class HTML {
 			if ( is_array( $v ) ) {
 				$ret[] = sprintf(
 					'data-%s="%s"',
-					strtolower( preg_replace( '/([A-Z])/', '-$1', \esc_attr( $k ) ) ), // dash case.
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
 					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
 				);
 			} else {
 				$ret[] = sprintf(
 					'data-%s="%s"',
-					strtolower( preg_replace( '/([A-Z])/', '-$1', \esc_attr( $k ) ) ), // dash case.
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
 					\esc_attr( $v )
 				);
 			}

@@ -99,13 +99,9 @@ final class InpostGUI {
 	 * @since 1.5.0
 	 * @param array $tabs The registered scripts.
 	 * @param array $templates The registered templates.
-	 * @param array $colors The registered colors.
-	 * @param array $color_deps The registered color dependencies.
 	 */
 	private static $scripts = [];
 	private static $templates = [];
-	private static $colors = [];
-	private static $color_dep_last;
 
 	/**
 	 * Prepares the class and loads constructor.
@@ -127,9 +123,6 @@ final class InpostGUI {
 		//= Scripts.
 		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
 		\add_action( 'admin_footer', [ $this, '_output_templates' ] );
-
-		\add_filter( 'the_seo_framework_admin_color_css', [ $this, '_add_colors' ], 10, 2 );
-		\add_action( 'admin_print_styles', [ $this, '_shift_color_deps' ] );
 
 		//= Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
@@ -243,11 +236,6 @@ final class InpostGUI {
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
 			'ver' => TSF_EXTENSION_MANAGER_VERSION,
 			'deps' => [ 'tsf' ],
-			// 'colors' => [
-			// 	'.tsfem-e-focus-content-loader-bar' => [
-			// 		'background:{{$color_accent}}',
-			// 	],
-			// ],
 		] );
 	}
 
@@ -266,13 +254,16 @@ final class InpostGUI {
 	 *   'name' => string The unique script name, which is also the file name,
 	 *   'deps' => array  Dependencies,
 	 *   'ver'  => string Script version,
-	 *   'l10n' => array : {
+	 *   'l10n' => array If type is 'js' : {
 	 *      'name' => string The JavaScript variable,
 	 *      'data' => mixed  The l10n properties,
 	 *   }
-	 *   'tmpl' => array Either multidimensional or single : {
+	 *   'tmpl' => array If type is 'js', either multidimensional or single : {
 	 *      'file' => string $file. The full file location,
 	 *      'args' => array $args. Optional,
+	 *    }
+	 *   'inline' => array If 'type' is CSS : {
+	 *      'selector' => array : { iterable => 'style' }
 	 *    }
 	 * }
 	 */
@@ -295,8 +286,8 @@ final class InpostGUI {
 			switch ( $s['type'] ) {
 				case 'css' :
 					\wp_register_style( $s['name'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
-					isset( $s['colors'] )
-						and $this->register_colors( $s['name'], $s['colors'] );
+					isset( $s['inline'] )
+						and \wp_add_inline_style( $s['name'], $this->get_inline_css( $s['inline'] ) );
 					break;
 				case 'js' :
 					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
@@ -323,99 +314,83 @@ final class InpostGUI {
 	}
 
 	/**
-	 * Registers colors for dynamic CSS based on admin color schemes.
+	 * Registers inline CSS.
+	 * Implements admin color support.
 	 *
-	 * Using the following strings will replace them with the scheme colors :
+	 * Use any of these values to get the corresponding admin color:
 	 * - {{$bg}}
 	 * - {{$bg_accent}}
 	 * - {{$color}}
 	 * - {{$color_accent}}
 	 *
 	 * @since 1.5.0
-	 * @uses static::$color_dep_last
-	 * @uses static::$colors
-	 * @todo add support for alt colors?
-	 * @see $this->_add_colors();
-	 * @NOTE Input must be escaped!
 	 *
-	 * @param string $name The script name handle.
-	 * @param array $colors, multi-dimensional : {
-	 *   string querySelector => incremental array : {
-	 *      string css
-	 *   }
-	 * }
-	 */
-	private function register_colors( $name, array $colors ) {
-		static::$color_dep_last = $name;
-		static::$colors = array_merge( static::$colors, $colors );
-	}
-
-	/**
-	 * Adds colors for CSS output.
-	 *
-	 * @since 1.5.0
-	 * @uses filter `the_seo_framework_admin_color_css`
-	 *       @since TSF 3.0.0
-	 *
-	 * @param array $css The current CSS adjustments.
-	 * @param array $scheme The current color scheme.
+	 * @param array $colors The color CSS.
 	 * @return array $css
 	 */
-	public function _add_colors( $css, $scheme ) {
+	private function get_inline_css( array $styles ) {
+		$out = '';
 
-		if ( empty( static::$colors ) )
-			return $css;
-
-		//= Index access is handled in `the_seo_framework()->get_admin_color_css()`
-		$_scheme = $GLOBALS['_wp_admin_css_colors'][ $scheme ]->colors;
-
-		$bg = $_scheme[0];
-		$bg_accent = $_scheme[1];
-		$color = $_scheme[2];
-		$color_accent = $_scheme[3];
-
-		$table = [
-			'{{$bg}}' => $bg,
-			'{{$bg_accent}}' => $bg_accent,
-			'{{$color}}' => $color,
-			'{{$color_accent}}' => $color_accent,
-		];
-
-		foreach ( static::$colors as $_selector => $_css ) {
-			$css[ $_selector ] = str_replace(
-				array_keys( $table ),
-				array_values( $table ),
-				$_css
-			);
+		foreach ( $styles as $selector => $css ) {
+			$out .= $selector . '{' . implode( ';', $this->convert_color_css( $css ) ) . '}';
 		}
 
-		return $css;
+		return $out;
 	}
 
 	/**
-	 * Shifts inline styles from The SEO Framework after the last dependency.
+	 * Converts color CSS.
 	 *
 	 * @since 1.5.0
-	 * @TODO this is hacky. It's best that each style has its own color handler.
+	 * @staticvar array $c_ck Color keys.
+	 * @staticvar array $c_cv Color values.
+	 *
+	 * @param array $css
+	 * @return array $css
 	 */
-	public function _shift_color_deps() {
+	private function convert_color_css( array $css ) {
 
-		if ( ! static::$color_dep_last )
-			return;
+		static $c_ck, $c_cv;
 
-		$wp_styles = \wp_styles();
-		$tsf_key = \the_seo_framework()->css_name;
-		$after = $wp_styles->get_data( $tsf_key, 'after' );
+		if ( ! isset( $c_ck, $c_cv ) ) {
+			//= Index access is handled in `the_seo_framework()->get_admin_color_css()`
+			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
+			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
-		if ( ! $after )
-			return;
+			if (
+			   ! isset( $_colors[ $_scheme ]->colors )
+			|| ! is_array( $_colors[ $_scheme ]->colors )
+			|| count( $_colors[ $_scheme ]->colors ) < 4
+			) {
+				//= Default 'fresh' table.
+				$_table = [
+					'{{$bg}}'           => '#222',
+					'{{$bg_accent}}'    => '#333',
+					'{{$color}}'        => '#0073aa',
+					'{{$color_accent}}' => '#00a0d2',
+				];
+				$c_ck = array_keys( $_table );
+				$c_cv = array_values( $_table );
+			} else {
+				$_colors = $_colors[ $_scheme ]->colors;
 
-		$wp_styles->add_data( static::$color_dep_last, 'after', $after );
+				$_bg = $_colors[0];
+				$_bg_accent = $_colors[1];
+				$_color = $_colors[2];
+				$_color_accent = $_colors[3];
 
-		//! The hack part.
-		//* Clean up old vars. Not necessary because duplicated styles are OK.
-		isset( $wp_styles->registered['tsf']->extra )
-			and $wp_styles->registered['tsf']->extra = [];
+				$_table = [
+					'{{$bg}}'           => $_bg,
+					'{{$bg_accent}}'    => $_bg_accent,
+					'{{$color}}'        => $_color,
+					'{{$color_accent}}' => $_color_accent,
+				];
+				$c_ck = array_keys( $_table );
+				$c_cv = array_values( $_table );
+			}
+		}
+
+		return str_replace( $c_ck, $c_cv, $css );
 	}
 
 	/**
