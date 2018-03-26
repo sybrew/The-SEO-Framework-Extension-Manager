@@ -27,7 +27,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * Class TSF_Extension_Manager\Extension\Focus\Front
+ * Class TSF_Extension_Manager\Extension\Focus\Admin
  *
  * @since 1.0.0
  * @uses TSF_Extension_Manager\Traits

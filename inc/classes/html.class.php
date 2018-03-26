@@ -154,4 +154,40 @@ final class HTML {
 
 		return static::make_dropdown_option_list( $_options, $selected ?: 0 );
 	}
+
+	/**
+	 * Makes valid data attributes from input.
+	 *
+	 * Converts CamelCase to dash-case when needed.
+	 * Data value may be anything, and is JSON encoded. Use jQuery.data() to extract.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $data The data atributes to format : {
+	 *    string 'dataKey' => mixed 'data value'
+	 * }
+	 * @return string The formatted and escaped data attributes.
+	 */
+	static function make_data_attributes( array $data ) {
+
+		$ret = [];
+
+		foreach ( $data as $k => $v ) {
+			if ( is_array( $v ) ) {
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace( '/([A-Z])/', '-$1', \esc_attr( $k ) ) ), // dash case.
+					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+				);
+			} else {
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace( '/([A-Z])/', '-$1', \esc_attr( $k ) ) ), // dash case.
+					\esc_attr( $v )
+				);
+			}
+		}
+
+		return implode( ' ', $ret );
+	}
 }

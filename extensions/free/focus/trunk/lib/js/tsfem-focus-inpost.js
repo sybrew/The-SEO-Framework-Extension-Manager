@@ -130,7 +130,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @return {(Object)} The sorted map.
 	 */
 	const sortMap = ( obj ) => {
-		//?
 		Object.keys( obj ).sort( ( a, b ) => {
 			return Object.keys( a )[0] - Object.keys( b )[0];
 		} );
@@ -472,9 +471,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	}
 
 	/**
+	 * Finds the nearest index value of the array.
 	 *
-	 * @TODO find new source after cleanup:
-	 * @source PHP TSF_Extension_Manager\Extension\Focus\Admin\Views\$_get_nearest_numeric_index_value();
+	 * When the value isn't found, it returns the first index value.
+	 * @source PHP TSF_Extension_Manager\Extension\Focus\Scoring\get_nearest_numeric_index_value();
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @function
+	 * @param {(map|array|Object<number,?>)} $a The map with values. : {
+	 *   int index => mixed value
+	 * }
+	 * @param {number} $value The value to find nearest index of.
+	 * @return {?} The nearest index value.
 	 */
 	const getNearestNumericIndexValue = ( obj, value ) => {
 
