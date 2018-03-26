@@ -157,6 +157,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 							\esc_attr( $action_ids['definition_selector'] ),
 							sprintf(
 								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
+								//! It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
 								\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
 							),
 							sprintf(

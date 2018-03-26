@@ -137,6 +137,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 [tsfep-release time="-1"]
 
+* **Changed:** The street address can now have the number omitted.
 * **Improved:** The admin layout matches the new and modernized standard.
 
 ### 1.0.0

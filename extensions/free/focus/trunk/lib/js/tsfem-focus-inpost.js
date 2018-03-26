@@ -830,7 +830,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			lexicalSelector.selectedIndex = +value;
 		}
 		//= @TODO make this a fetcher.
-		const setInflections = ( idPrefix ) => {
+		const setInflections = () => {
 			clearData( idPrefix, 'inflections' );
 
 			//= We can't retrieve these yet. Set current value and base value.
@@ -849,13 +849,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			return $.Deferred().resolve();
 		}
 		const fetchSynonyms = () => {
-			let idPrefix = event.data.idPrefix,
-				$dfd = $.Deferred();
+			let $dfd = $.Deferred();
 			$.when( getSynonyms( idPrefix ) ).done( ( data ) => {
 				clearData( idPrefix, 'definition' );
 				clearData( idPrefix, 'synonyms' );
 
 				lexicalSelector.dataset.prev = lexicalSelector.value;
+
+				//! TODO: trim synonyms which (slightly) match the inflections.
+				//! BUG : Synonyms that match the inflection will be counted both ways.
+				//? Use ES6' startsWith? No IE11 support.
+				//? Do this on the API server instead, as a catch-all, when we get inflection data?
+
 				getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
 
 				$dfd.resolve();
@@ -890,7 +895,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					setDefinition( lexicalSelector.value );
 					if ( +lexicalSelector.value ) {
 						//? Button changes at prepareSynonyms
-						$.when( fetchSynonyms(), setInflections( idPrefix ) ).done( () => {
+						$.when( setInflections(), fetchSynonyms() ).done( () => {
 							populateDefinitionSelector( idPrefix );
 							refillSubjectSelection( idPrefix );
 							setEditButton( idPrefix ).to( 'enabled, edit, checked' );
