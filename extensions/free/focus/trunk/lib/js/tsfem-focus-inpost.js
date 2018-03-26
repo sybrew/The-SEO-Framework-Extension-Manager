@@ -314,7 +314,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		const countWords = ( word, contentMatch ) => {
 			let pReg,
-				sWord = tsfem_inpost.bewilderRegexNonWords( tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ) );
+				sWord = tsfem_inpost.bewilderRegexNonWords( tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ) );
 
 			//= Iterate over multiple regex scripts.
 			for ( let i = 0; i < regex.length; i++ ) {
@@ -336,7 +336,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const stripWord = ( word, contents ) =>
 			contents.replace(
 				new RegExp(
-					tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word ) ),
+					tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ),
 					'gi'
 				),
 				'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
@@ -1580,8 +1580,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let availableInflections = inflectionHolder.value && JSON.parse( inflectionHolder.value ),
 				inflections = availableInflections && availableInflections[0].inflections || {};
 
+			//?! A little bit trickier, because they might or might not be available.
 			let availableSynonyms = synonymHolder.value && JSON.parse( synonymHolder.value ),
-				synonyms = availableSynonyms && availableSynonyms[ +definitionSelection.value ].synonyms || {};
+				synonyms = availableSynonyms && availableSynonyms[ +definitionSelection.value ] && availableSynonyms[ +definitionSelection.value ].synonyms || {};
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity = 0;
