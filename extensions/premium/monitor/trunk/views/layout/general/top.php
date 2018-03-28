@@ -16,7 +16,7 @@ if ( $options ) {
 }
 
 ?>
-<div class="tsfem-title tsfem-title-centered tsfem-flex tsfem-flex-row">
+<div class="tsfem-title tsfem-flex tsfem-flex-row">
 	<header><h1>
 		<?php
 		$image = [

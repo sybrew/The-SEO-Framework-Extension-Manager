@@ -351,14 +351,11 @@ body.tsfem .wrap {
 	word-break: break-word;
 	font-size: 1.9em;
 	font-weight: 400;
+	line-height: 1em;
 	color: #0ebfe9;
 	margin: 0;
 	padding: 0;
 	display: inline;
-}
-
-.tsfem-top-wrap .tsfem-title-centered h1 {
-	line-height: 1em;
 }
 
 .tsfem-top-wrap .tsfem-title .tsfem-logo > svg {

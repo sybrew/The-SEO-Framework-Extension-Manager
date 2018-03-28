@@ -69,10 +69,12 @@
 }
 
 .tsfem-e-monitor-collapse-header:hover,
-.tsfem-e-monitor-collapse-header:focus {
+.tsfem-e-monitor-collapse > input:focus + .tsfem-e-monitor-collapse-header {
 	box-shadow: 0 .1em .5em .1em rgba(0,0,0,.25);
 }
 
+
+.tsfem-e-monitor-collapse > input:active + .tsfem-e-monitor-collapse-header,
 .tsfem-e-monitor-collapse-header:active {
 	box-shadow: 0 .1em .7em .3em rgba(0,0,0,.28);
 }
@@ -198,7 +200,7 @@
 	display: none;
 }
 
-@-webkit-keyframdes tsfem-e-monitor-fade-in {
+@-webkit-keyframes tsfem-e-monitor-fade-in {
 	from {
 		opacity: 0;
 	} to {

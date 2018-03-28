@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
 ?>
-<div class="tsfem-title tsfem-title-centered tsfem-flex tsfem-flex-row">
+<div class="tsfem-title tsfem-flex tsfem-flex-row">
 	<header><h1>
 		<?php
 		$image = [
