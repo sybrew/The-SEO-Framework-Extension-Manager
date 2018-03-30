@@ -254,6 +254,8 @@ final class Admin extends Core {
 	/**
 	 * Saves or deletes post meta on AJAX callbacks.
 	 *
+	 * Unused!
+	 *
 	 * @since 1.0.0
 	 * @see \TSF_Extension_Manager\InpostGUI::_verify_nonce()
 	 * @see action 'tsfem_inpostgui_verified_nonce'
@@ -301,6 +303,7 @@ final class Admin extends Core {
 				default :
 					break;
 			}
+			if ( is_null( $store[ $key ] ) ) unset( $store[ $key ] );
 		endforeach;
 
 		if ( empty( $store ) ) {
@@ -323,6 +326,10 @@ final class Admin extends Core {
 	private function sanitize_keyword_data( array $values ) {
 		$output = [];
 		foreach ( $values as $id => $items ) {
+			//= Don't store when no keyword is set.
+			if ( ! isset( $items['keyword'] ) || ! strlen( $items['keyword'] ) )
+				continue;
+
 			foreach ( (array) $items as $key => $value ) {
 				$out = $this->sanitize_keyword_data_by_type( $key, $value );
 				if ( isset( $out ) )
@@ -336,7 +343,7 @@ final class Admin extends Core {
 
 		//= Fills missing data to maintain consistency.
 		foreach ( [ 0, 1, 2 ] as $k ) {
-			if ( ! isset( $values[ $k ] ) ) {
+			if ( ! isset( $output[ $k ] ) ) {
 				$output[ $k ] = $this->pm_defaults['kw'][ $k ];
 			}
 		}
