@@ -16,7 +16,9 @@ This extension binds The SEO Framework to the AMP plugin for AMP supported artic
 
 The Accelerated Mobile Pages (AMP) project is an open-source initiative. Its primary goal is to create fast-loading pages, that are served directly from Google's servers.
 
-To integrate AMP into WordPress, Automattic has provisioned [a plugin](https://wordpress.org/plugins/amp/) to get you started.
+To integrate AMP into WordPress, use Automattic's [AMP plugin](https://wordpress.org/plugins/amp/) to get started.
+
+After the AMP plugin by Automattic is activated, you can start using the AMP extension.
 
 ### The AMP extension
 

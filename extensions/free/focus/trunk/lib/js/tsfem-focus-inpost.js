@@ -1715,10 +1715,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					ret.push( synonyms[ +i ] );
 				} );
 			}
-			if ( ! ret ) {
-				let kw = getSubElementById( idPrefix, 'keyword' ).value;
-				ret = kw && [ kw ] || false;
-			}
 			ret = ret || false;
 			cachedActiveWords[ idPrefix ].synonyms = ret;
 
