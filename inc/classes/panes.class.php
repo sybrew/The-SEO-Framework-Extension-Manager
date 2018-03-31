@@ -321,8 +321,10 @@ class Panes extends API {
 
 					if ( 'activate' === $case ) {
 						$results = $this->activate_extension( $options, true );
+						$type = 'success';
 					} elseif ( 'deactivate' === $case ) {
 						$results = $this->deactivate_extension( $options, true );
+						$type = 'success';
 					} else {
 						$results = $this->get_ajax_notice( false, 10101 );
 					}

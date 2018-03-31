@@ -97,7 +97,7 @@
 	font-size: 1em;
 	vertical-align: bottom;
 	content: "";
-	margin-right: 2px;
+	margin-left: 2px;
 }
 
 .tsfem-e-monitor-icon-good {
@@ -198,14 +198,6 @@
 
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked ~ .tsfem-e-monitor-collapse-content {
 	display: none;
-}
-
-@-webkit-keyframes tsfem-e-monitor-fade-in {
-	from {
-		opacity: 0;
-	} to {
-		opacity: 1;
-	}
 }
 
 @keyframes tsfem-e-monitor-fade-in {

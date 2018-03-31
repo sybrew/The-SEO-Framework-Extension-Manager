@@ -87,14 +87,6 @@
 	margin: .375em .1875em;
 }
 
-@-webkit-keyframes tsfem-e-focus-fade-in {
-	from {
-		opacity: 0;
-	} to {
-		opacity: 1;
-	}
-}
-
 @keyframes tsfem-e-focus-fade-in {
 	from {
 		opacity: 0;

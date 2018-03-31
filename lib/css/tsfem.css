@@ -37,7 +37,8 @@ body.tsfem #update-nag {
 }
 
 .tsfem-notice p {
-	margin: .5em 19px .5em 0;
+	margin: .5em 0;
+	margin-right: 19px;
 	padding: 2px;
 }
 
@@ -663,11 +664,17 @@ body.tsfem .wrap {
 }
 
 .tsfem-switch-button-container input[type=checkbox] {
+	position: absolute;
 	width: 0;
 	height: 0;
-	position: absolute;
-	left: -9001px;
-	overflow: hidden;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	z-index: -1;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
 
 .tsfem-switch-button-container label,
@@ -1092,7 +1099,9 @@ h4.tsfem-cp-title {
 
 /* Safari 9 ~ 9.1 flow fix */
 .tsfem-extension-entry-inner {
-	margin: 0 1.5em 1.5em 0;
+	margin: 0;
+	margin-right: 1.5em;
+	margin-bottom: 1.5em;
 }
 
 .tsfem-extension-entry {
@@ -1451,6 +1460,7 @@ h4.tsfem-cp-title {
 .tsfem-tooltip-wrap {
 	position: relative;
 	font-size: 13px;
+	display: inline-block;
 }
 
 .tsfem-tooltip-item {

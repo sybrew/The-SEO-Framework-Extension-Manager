@@ -163,14 +163,6 @@ a.tsfem-dismiss:hover {
 	animation: tsfem-inpost-spin 1.5s linear infinite;
 }
 
-@-webkit-keyframes tsfem-inpost-spin {
-	0% {
-		-webkit-transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
-}
 @keyframes tsfem-inpost-spin {
 	0% {
 		transform: rotate(0deg);
