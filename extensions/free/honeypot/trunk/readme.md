@@ -1,10 +1,6 @@
 # Honeypot
-Contributors:
 Location: https://theseoframework.com/extensions/honeypot/
 Tags: spam
-Requires at least: 4.4.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -112,7 +108,7 @@ If you still receive a bunch of spam, consider combining this extension with an 
 
 ### 1.1.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="March 31st, 2018"]
 
 * **Changed:** Filter `the_seo_framework_honeypot_nonce_scale` now passes a second "hardcore" boolean parameter.
 * **Fixed:** An off-by-one error has been resolved generating a random first alphabetic character.

@@ -1,10 +1,6 @@
 # Local SEO
-Contributors:
 Location: https://theseoframework.com/extensions/local/
 Tags: local, business
-Requires at least: 4.4.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -135,7 +131,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.0.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="March 31st, 2018"]
 
 * **Changed:** The street address can now have the number omitted.
 * **Improved:** The admin layout matches the new and modernized standard.

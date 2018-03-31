@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, the seo framework, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title
 Requires at least: 4.6.0
-Tested up to: 4.9.4
+Tested up to: 4.9.5
 Requires PHP: 5.5.21
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,19 +23,14 @@ This plugin provides an advanced WordPress administrative dashboard page where y
 **The following extensions are included:**
 
 * **[Local](https://theseoframework.com/extensions/local/):** The Local extension lets you set up important local business information for search engines to consume.
+* **[Focus](https://theseoframework.com/extensions/focus/):** The Focus extension guides you through the process of writing targetted content that ranks with focus keywords, their inflections, and their synonyms.
 * **[AMP](https://theseoframework.com/extensions/amp/):** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
 * **[Articles](https://theseoframework.com/extensions/articles/):** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
 * **[Monitor](https://theseoframework.com/extensions/monitor/):** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
 * **[Incognito](https://theseoframework.com/extensions/incognito/):** The Incognito extension removes all front-end branding from The SEO Framework.
-* **[Title Fix](https://theseoframework.com/extensions/title-fix/):** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
 * **[Honeypot](https://theseoframework.com/extensions/honeypot/):** The Honeypot extension catches comment spammers in four lightweight yet powerful ways.
 * **[Origin](https://theseoframework.com/extensions/origin/):** The Origin extension redirects attachment-page visitors back to the parent post.
-
-= Upcoming Extensions =
-
-**These extensions are being worked on:**
-
-* **Transporter:** It allows you to export and import your SEO settings from site to site.
+* **[Title Fix](https://theseoframework.com/extensions/title-fix/):** The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
 
 = How it works =
 
@@ -59,7 +54,7 @@ When the subscription is active, you're allowed to use all premium extensions. I
 * PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
 * WordPress 4.6 or later. For improved AJAX and meta support.
 * [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.8 or later. Or it will stay dormant.
-* Internet Explorer 11 or later for the best admin experience.
+* Edge 13, Safari 10, better or equivalent for the best admin experience.
 * For improved performance and more available options, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
 
 = Installation instructions: =
@@ -137,7 +132,7 @@ For some services, we retrieve the user input and website's language; e.g. for r
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
-No X.y updates (2.0, 3.0, etc.) are planned as of now. We plan to release a new extension every (other) month.
+No X.y updates (2.0, 3.0, etc.) are planned as of now.
 
 = I've received an error code, what now? =
 Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
@@ -177,67 +172,70 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.5.0 - Impeccable SEO =
 
-* **Release date:**
-	/
-	* TODO
+**Release date:**
+
+* March 31st, 2018
 
 **New Extensions:**
 
-* **Focus:** This free extension guides you through the process of writing quality content with focus keywords, inflections, and synonyms.
+* **[Focus](https://theseoframework.com/extensions/focus/):** This free extension guides you through the process of writing quality content with focus keywords, inflections, and synonyms.
 
 **Important notes:**
 
 1. This plugin now requires WordPress 4.6 or later, or it will deactivate itself.
 2. This plugin now requires The SEO Framework 2.8 or later, or it will stay dormant.
+3. This plugin no longer supports IE11 and Safari 9, or earlier.
 
-* **Plugin Improvements:**
-	* **Added:** Extensions no longer load when they're deemed incompatible due to WordPress' environmental changes to ensure stability.
-	* **Added:** Extensions can now add in-post options in predefined tabs (Structure, Audit, and Advanced).
-	* **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
-	* **Added:** The plugin and extensions can now abstractly tell time, like AI human would.
-	* **Added:** The plugin and extensions can now prevent memory exhaustion prior executing heavy tasks.
-	* **Added:** Enhanced Microsoft Edge, IE11, and iOS touch support, like momentum scrolling.
-	* **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean, expects value of `current_user_can()`.
-	* **Changed:** The extension manager pages have been modernized, standardized, and now have vastly improved rendering time. No more screen detection is required through the magic of flex.
-	* **Changed:** Form iterations now have 10 seconds to load, instead of 5. This means more Local SEO departments can be loaded at once and timeouts should occur less often.
-	* **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
-	* **Improved:** External links (e.g. to Google and TSF sites) are no longer traceable.
-	* **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
-	* **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
-	* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, faster, and easier to maintain.
-	* **Improved:** The extension option database entries will now be deleted when no indexes are present.
-	* **Improved:** Various UI elements now fit more neatly on some screens.
-	* **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
-	* **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented, and improved further upon.
-	* **Improved:** Reduced floating operations required on various browser painting operations, for a smoother experience.
-	* **Improved:** Added various accessibility improvements, like focus highlighting.
-	* **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
-	* **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly, and caused several PHP warnings instead.
-		* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
-		* No action is required from the user.
-	* **Fixed:** When you're requesting for geocoding services too rapidly (e.g. in Local SEO), you're now correctly notified.
-	* **Fixed:** Various browser rendering glitches have been ironed out, like changing borders on "missile switch cover"-buttons.
+**Plugin Improvements:**
 
-* **API:**
-	* **External:**
-		* We now provide lexical services.
-		* Our Geocoding services now accepts street entries without numbers, the effectiveness might vary based on secondary input.
+* **Added:** Extensions no longer load when they're deemed incompatible due to WordPress' environmental changes to ensure stability.
+* **Added:** Extensions can now add in-post options in predefined tabs (Structure, Audit, and Advanced).
+* **Added:** The plugin and extensions can now upgrade their database for future improvements when necessary.
+* **Added:** The plugin and extensions can now abstractly tell time, like AI human would.
+* **Added:** The plugin and extensions can now prevent memory exhaustion prior executing heavy tasks.
+* **Added:** Enhanced Microsoft Edge and iOS touch support, like momentum scrolling.
+* **Added:** Filter `tsf_extension_manager_can_manage_options`, boolean, expects value of `current_user_can()`.
+* **Changed:** The extension manager pages have been modernized, standardized, and now have vastly improved rendering time. No more screen detection is required through the magic of flex.
+* **Changed:** Form iterations now have 10 seconds to load, instead of 5. This means more Local SEO departments can be loaded at once and timeouts should occur less often.
+* **Improved:** Users can now reactivate their account after migrating sites or changing security keys without a hassle.
+* **Improved:** External links (e.g. to Google and TSF sites) are no longer traceable.
+* **Improved:** Suppressed AJAX error messages now display at least the intended error code for support.
+* **Improved:** The plugin can now deactivate itself on activation when running PHP 5.2, rather than WordPress doing it for us.
+* **Improved:** The plugin's bootstrap has been rewritten to be more efficient, faster, and easier to maintain.
+* **Improved:** The extension option database entries will now be deleted when no indexes are present.
+* **Improved:** Various UI elements now fit more neatly on some screens.
+* **Improved:** When an extension's class autoloader can't be registered, the extension in question fails safely.
+* **Improved:** The new-and-improved tooltip generation of TSF 3.0 has been implemented and improved further upon.
+* **Improved:** Reduced floating operations required on various browser painting operations, for a smoother experience.
+* **Improved:** Added various accessibility improvements, like focus highlighting.
+* **Fixed:** When domains mismatch on switching sites, you're now correctly informed again.
+* **Fixed:** Some array to object conversions in the schema packer caused invalid input data from Local SEO not to be parsed through conditions correctly and caused several PHP warnings instead.
+	* Because the affected condition checking happens through conditional HTML5 input fields and JavaScript for improved UX, this didn't cause unexpected output because the user couldn't save anyway.
+	* No action is required from the user.
+* **Fixed:** When you're requesting for geocoding services too rapidly (e.g. in Local SEO), you're now correctly notified.
+* **Fixed:** Various browser rendering glitches have been ironed out, like changing borders on "missile switch cover"-buttons.
+* **Removed:** Legacy browser support. Supporting less than 1% of the users is no excuse for hindering the other 99%.
 
-* **Updated Extensions:**
-	/
-	* Local SEO
-	* TODO AMP
-	* Articles
-	* Monitor
-	* Title Fix
-	* Honeypot
-/
-* TODO Fix Monitor Jetpack sitemap recognition.
+**API changes:**
+
+* **External:**
+	* We now provide lexical services.
+	* Our Geocoding services now accepts street entries without numbers, the effectiveness might vary based on secondary input.
+
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [AMP](https://theseoframework.com/extensions/amp/#changelog)
+* [Articles](https://theseoframework.com/extensions/articles/#changelog)
+* [Monitor](https://theseoframework.com/extensions/monitor/#changelog)
+* [Title Fix](https://theseoframework.com/extensions/title-fix/#changelog)
+* [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 1.4.0 - Extricated SEO =
 
-* **Release date:**
-	* November 10th, 2017
+**Release date:**
+
+* November 10th, 2017
 
 **New Extension:**
 
@@ -278,8 +276,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.3.0 - Secular SEO =
 
-* **Release date:**
-	* August 22nd, 2017
+**Release date:**
+
+* August 22nd, 2017
 
 **New Extension:**
 
@@ -356,8 +355,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.2.0 - Aptitudinal SEO =
 
-* **Release date:**
-	* May 15th, 2017
+**Release date:**
+
+* May 15th, 2017
 
 **New Extension:**
 
@@ -422,8 +422,9 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 
 = 1.1.0 - Articulated SEO =
 
-* **Release date:**
-	* February 17th, 2017
+**Release date:**
+
+* February 17th, 2017
 
 **New Extensions:**
 
@@ -476,8 +477,9 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 
 = 1.0.0 - Amplified SEO =
 
-* **Release date:**
-	* January 1st, 2017
+**Release date:**
+
+* January 1st, 2017
 
 **Changelog:**
 

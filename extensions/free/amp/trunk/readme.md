@@ -1,10 +1,6 @@
 # AMP
-Contributors:
 Location: https://theseoframework.com/extensions/amp/
 Tags: general
-Requires at least: 4.4.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.8.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

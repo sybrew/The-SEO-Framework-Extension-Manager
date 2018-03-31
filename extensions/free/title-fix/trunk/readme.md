@@ -1,10 +1,6 @@
 # Title Fix
-Contributors:
 Location: https://theseoframework.com/extensions/title-fix/
 Tags: theme
-Requires at least: 4.4.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -67,11 +63,11 @@ To force a fix of the title, add the following filter to your theme's `functions
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="March 31st, 2018"]
 
 * **Removed:** filter `the_seo_framework_force_title_fix`.
 	* In preparation for TSF 3.1.
-	* This was added to add multisite support for the plugin, but as this now an extension it automatically has support.
+	* This was added to include multisite support for the plugin, but as this now an extension it's automatically supported.
 
 ### 1.0.3
 

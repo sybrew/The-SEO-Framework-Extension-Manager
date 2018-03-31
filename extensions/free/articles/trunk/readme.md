@@ -1,10 +1,6 @@
 # Articles
-Contributors:
 Location: https://theseoframework.com/extensions/articles/
 Tags: blogging, news
-Requires at least: 4.4.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.9.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -178,7 +174,7 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 
 ### 1.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="March 31st, 2018"]
 
 * **Added:** Article Type selection is now available on every post.
 	* You can select **"Article"**, **"NewsArticle"** and **"BlogPosting"**.

@@ -1,14 +1,10 @@
 # Focus
-Contributors:
 Location: https://theseoframework.com/extensions/focus/
 Tags: audit, content, keywords
-Requires at least: 4.7.0
-Required PHP: 5.5.21 or 5.6.5
-Tested up to: 4.9.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension guides you through the process of writing targetted content that ranks with focus keywords, their inflections, and their synonyms.
+This extension guides you through the process of writing targeted content that ranks with focus keywords, their inflections, and their synonyms.
 
 ## Overview
 
@@ -17,7 +13,7 @@ This extension guides you through the process of writing targetted content that 
 With over 1 billion competing websites, your pages barely stand a chance ranking on the first page of Google.
 So, writing quality content that ranks well in search engines isn't easy. This is where Focus comes in.
 
-This extension helps you to focus your content to a few well targetted search phrases, greatly increasing your chances to rank on the first page.
+This extension helps you to focus your content to a few well targeted search phrases, greatly increasing your chances to rank on the first page.
 
 ### Your personal guide
 
@@ -100,7 +96,7 @@ If you haven't used a synonym in your content yet, consider using it as it'll in
 
 The ratings tell you what should be improved in your content.
 
-Use these ratings as guidelines for focussed contennt.
+Use these ratings as guidelines for focused content.
 You shouldn't ruin your content just to get a better rating.
 
 #### Meta vs Page Title
@@ -162,6 +158,6 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ### 1.0.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="March 31st, 2018"]
 
 * Initial extension release.
