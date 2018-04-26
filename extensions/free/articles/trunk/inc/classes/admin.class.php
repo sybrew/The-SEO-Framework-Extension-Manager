@@ -69,6 +69,7 @@ final class Admin extends Core {
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {
+		global $current_screen;
 
 		//= Only output on Single/Post.
 		if ( ! isset( $current_screen->base ) || 'post' !== $current_screen->base )
