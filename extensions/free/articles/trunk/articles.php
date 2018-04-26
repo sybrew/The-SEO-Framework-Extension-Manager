@@ -104,7 +104,7 @@ function _articles_init() {
 	if ( \is_admin() ) {
 		new Admin;
 		$loaded = true;
-	} elseif ( \the_seo_framework()->is_single() && 'post' === get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
+	} elseif ( \the_seo_framework()->is_single() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
 		new Front;
 		$loaded = true;
 	}
