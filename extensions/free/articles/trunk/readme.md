@@ -150,17 +150,17 @@ This information is mainly used to bind authors, organizations and dates to the 
 
 This helps search engines tailor displayed search results for its users. So, you increase likelihood to get returning visitors, thus increasing engagement.
 
-## Development
+## Developers
 
 ### Filters
 
 Here you can find the available filters for Articles.
 
-### Adjust default post meta
+#### Adjust default post meta
 
-Specifically the article type.
+Specifically, the article type.
 
-```
+```php
 add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 
 	// Change 'type' default from 'Article' to 'NewsArticle'

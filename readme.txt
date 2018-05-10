@@ -23,7 +23,7 @@ This plugin provides an advanced WordPress administrative dashboard page where y
 **The following extensions are included:**
 
 * **[Local](https://theseoframework.com/extensions/local/):** The Local extension lets you set up important local business information for search engines to consume.
-* **[Focus](https://theseoframework.com/extensions/focus/):** The Focus extension guides you through the process of writing targetted content that ranks with focus keywords, their inflections, and their synonyms.
+* **[Focus](https://theseoframework.com/extensions/focus/):** The Focus extension guides you through the process of writing targeted content that ranks with focus keywords, their inflections, and their synonyms.
 * **[AMP](https://theseoframework.com/extensions/amp/):** The AMP extension binds The SEO Framework to the AMP plugin for AMP supported articles and pages.
 * **[Articles](https://theseoframework.com/extensions/articles/):** The Articles extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
 * **[Monitor](https://theseoframework.com/extensions/monitor/):** The Monitor extension keeps track of your website’s SEO, optimization, uptime and statistics.
@@ -169,6 +169,10 @@ If it doesn't, it will tell you why. Otherwise, you're good to go! All known iss
 If you were to get a plugin activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable and secure version.
 
 == Changelog ==
+
+= 1.5.1 =
+
+* **Fixed:** Notices can remove themselves again. This happens when notices are invoked via AJAX, and when more than three are to be present.
 
 = 1.5.0 - Impeccable SEO =
 

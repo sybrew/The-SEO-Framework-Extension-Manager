@@ -31,12 +31,8 @@ Otherwise, this extension won't have any effect.
 
 The SEO Framework can detect incorrect usage of the title output. It tries to resolve this automatically, but sometimes that isn't enough.
 
-When The SEO Framework detects incorrect usage, it will set up a flag. This extension looks for this flag before it operates.
-
-When the flag is found, this extension will look for the title tag in the source.
-When found, it will overwrite the title tag with a correct version.
-
-All this happens before it's being sent to the page visitor or crawler in less than 2 milliseconds.
+When the extension is active, it automatically looks for the title in your page's source and overwrites it when found.
+All this happens before your pages are sent to the page visitor or crawler, in less than 2 milliseconds.
 
 ## Usage
 
@@ -49,15 +45,6 @@ All you'll need to do is activate the Title Fix extension.
 There is no setup required and no options are available.
 
 [tsfep-image id="1"]
-
-### Still not fixed?
-
-In unlikely occasions, the wrong title detection flag might not be set up.
-
-To force a fix of the title, add the following filter to your theme's `functions.php` file:
-
-`add_filter( 'the_seo_framework_force_title_fix', '__return_true' );
-`
 
 ## Changelog
 
