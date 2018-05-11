@@ -543,7 +543,7 @@ class Panes extends API {
 		if ( $this->is_premium_user() ) {
 			$note = sprintf(
 				'<div class=tsfem-description>%s</div>',
-				\esc_html__( 'Your key can be used on another website after deactivation.', 'the-seo-framework-extension-manager' )
+				\esc_html__( 'Your key can be used on another website after disconnecting.', 'the-seo-framework-extension-manager' )
 			);
 		}
 

@@ -278,8 +278,10 @@ trait Extensions_Layout {
 	 * account type. Also initializes nonces for those buttons.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.1 Now checks for options validity.
 	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
+	 * @uses object tsf_extension_manager()
 	 *
 	 * @param array $extension The extension to make button from.
 	 * @return string HTML extension button with nonce.
@@ -288,14 +290,16 @@ trait Extensions_Layout {
 
 		$buttons = [];
 
+		$disabled = ! \tsf_extension_manager()->are_options_valid();
+
 		if ( static::is_extension_active( $extension ) ) {
 			$buttons[] = [
 				'type' => 'deactivate',
-				'disabled' => false,
+				'disabled' => $disabled,
 			];
 		} else {
 			//* Disable if: Extension is not compatible || User isn't premium and extension is.
-			$disabled = static::is_extension_compatible( $extension ) === -1 || ( ! self::is_premium_user() && static::is_extension_premium( $extension ) );
+			$disabled = $disabled || static::is_extension_compatible( $extension ) === -1 || ( ! self::is_premium_user() && static::is_extension_premium( $extension ) );
 			$buttons[] = [
 				'type' => 'activate',
 				'disabled' => $disabled,

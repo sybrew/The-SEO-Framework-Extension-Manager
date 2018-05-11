@@ -320,11 +320,7 @@ trait Error {
 				break;
 
 			case 401 :
-				$message = sprintf(
-					/* translators: %s = My Account */
-					\esc_html__( 'An error occured while validating settings. Login to the %s page to manage your keys and try again.', 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
-				);
+				$message = \esc_html__( 'An error occured while validating the settings. Please try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
@@ -426,7 +422,7 @@ trait Error {
 			case 2001 :
 			case 7001 :
 			case 7002 :
-				$message = \esc_html__( 'An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 

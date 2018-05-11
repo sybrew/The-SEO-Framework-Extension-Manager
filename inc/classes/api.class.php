@@ -287,7 +287,7 @@ class API extends Core {
 			if ( 'activation' === $type ) :
 				$_response = $this->handle_premium_activation( $results );
 			elseif ( 'deactivation' === $type ) :
-				$_response = $this->handle_premium_deactivation( $results );
+				$_response = $this->handle_premium_disconnection( $results );
 			endif;
 		} else {
 			$_response = $results;

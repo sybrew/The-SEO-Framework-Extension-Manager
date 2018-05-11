@@ -173,7 +173,10 @@ If you were to get a plugin activation error, either open a support ticket [here
 = 1.5.1 =
 
 * **Improved:** Same-context notices no longer duplicate themselves in the database, preventing a recurring notice stack that might affect performance.
+* **Improved:** Linguistic verbatim regarding account connections and option validation.
 * **Fixed:** Notices can remove themselves again. This happens when notices are invoked via AJAX, and when more than three are to be present.
+* **Fixed:** Users with sites on PHP for Windows installations can now load extension assets on in-post edit screens, like from Focus.
+* **GDPR notice:** We looked into it, and we likely won't have to change anything in this plugin to adhere to this regulation. However, when needed, a GDPR-focused update will be released duly.
 
 = 1.5.0 - Impeccable SEO =
 

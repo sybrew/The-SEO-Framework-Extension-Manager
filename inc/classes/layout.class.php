@@ -213,21 +213,20 @@ final class Layout extends Secure_Abstract {
 			return '';
 		}
 
-		$account = self::$account;
+		$valid_options = \tsf_extension_manager()->are_options_valid();
 
-		$i18n_unknown = \__( 'Unknown', 'the-seo-framework-extension-manager' );
-		$i18n_decoupled = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
+		$account = self::$account;
 
 		$email = isset( $account['email'] ) ? $account['email'] : '';
 		$data = isset( $account['data'] ) ? $account['data'] : '';
-		$level = ! empty( $account['level'] ) ? $account['level'] : $i18n_unknown;
+		$level = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
 		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 		$end_date = '';
 		$payment_date = '';
 
 		if ( $data ) {
 			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
-				$level = $i18n_decoupled;
+				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
 				//* UTC.
 				$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
@@ -246,12 +245,12 @@ final class Layout extends Secure_Abstract {
 		switch ( $level ) :
 			case 'Premium' :
 				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
-				$_class[] = 'tsfem-success';
+				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			case 'Free' :
 				$_level = \__( 'Free', 'the-seo-framework-extension-manager' );
-				$_class[] = 'tsfem-success';
+				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			default :
@@ -287,7 +286,7 @@ final class Layout extends Secure_Abstract {
 
 		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
 
-		if ( $domain ) {
+		if ( $valid_options && $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
 			$_domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 			$_warning = '';

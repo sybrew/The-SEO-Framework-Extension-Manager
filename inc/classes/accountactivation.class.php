@@ -157,15 +157,15 @@ class AccountActivation extends Panes {
 	}
 
 	/**
-	 * Handles deactivation and returns status.
+	 * Handles disconnection and returns status.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.0 : Can now also deactivate decoupled websites.
+	 * @since 1.1.0 : Can now also disconnect decoupled websites.
 	 *
-	 * @param array $results The deactivation response.
+	 * @param array $results The disconnection response.
 	 * @return bool|null True on success, false on failure. Null on invalid request.
 	 */
-	protected function handle_premium_deactivation( $results ) {
+	protected function handle_premium_disconnection( $results ) {
 
 		if ( isset( $results['deactivated'] ) ) {
 			//* If option has once been registered, deregister options and return activation status.
@@ -175,9 +175,9 @@ class AccountActivation extends Panes {
 				$success = $this->do_deactivation();
 
 				$remaining = isset( $results['activations_remaining'] ) ? ' ' . \esc_html( $results['activations_remaining'] ) . '.' : '';
-				$message = \esc_html__( 'API Key deactivated.', 'the-seo-framework-extension-manager' ) . $remaining;
+				$message = \esc_html__( 'API Key disconnected.', 'the-seo-framework-extension-manager' ) . $remaining;
 				if ( ! $success )
-					$message .= \esc_html__( 'However, something went wrong with the deactivation on this website.', 'the-seo-framework-extension-manager' );
+					$message .= \esc_html__( 'However, something went wrong with the disconnection on this website.', 'the-seo-framework-extension-manager' );
 
 				$this->set_error_notice( [ 501 => $message ] );
 				return true;
@@ -187,7 +187,7 @@ class AccountActivation extends Panes {
 			return false;
 		}
 
-		//* API server down... TODO consider still handling deactivation?
+		//* API server down... TODO consider still handling disconnection?
 		$this->set_error_notice( [ 503 => '' ] );
 		return null;
 	}
@@ -314,14 +314,14 @@ class AccountActivation extends Panes {
 				break;
 
 			case 2 :
-				//= Set 1 day timeout. Administrator has already been notified to fix this ASAP.
+				//= Set 3 day timeout. Administrator has already been notified to fix this ASAP.
 				$this->do_deactivation( true );
 				// @TODO notify of timeout?
 				$this->set_error_notice( [ 902 => '' ] );
 				break;
 
 			case 3 :
-				//= Everything's OK. User gets notified through CP pane.
+				//= Everything's OK. User gets notified via the CP pane and may not access private data.
 				break;
 
 			case 4 :
