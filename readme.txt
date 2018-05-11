@@ -172,6 +172,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.5.1 =
 
+* **Improved:** Same-context notices no longer duplicate themselves in the database, preventing a recurring notice stack that might affect performance.
 * **Fixed:** Notices can remove themselves again. This happens when notices are invoked via AJAX, and when more than three are to be present.
 
 = 1.5.0 - Impeccable SEO =

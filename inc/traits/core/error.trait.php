@@ -97,11 +97,13 @@ trait Error {
 	 * @since 1.0.0
 	 * @since 1.5.0 : 1. Now stores multiple notices.
 	 *                2. Added a new parameter to clear previous notices.
+	 * @since 1.5.1 : Added an exact-match check to prevent duplicated entries.
 	 *
 	 * @param array $notice The notice. : {
 	 *    0 => int    key,
 	 *    1 => string additional message
 	 * }
+	 * @param bool $clear_old When true, it removes all previous notices.
 	 * @return void
 	 */
 	final protected function set_error_notice( $notice = [], $clear_old = false ) {
@@ -114,7 +116,16 @@ trait Error {
 		if ( empty( $notices ) ) {
 			$notices = [ $notice ];
 		} else {
-			array_push( $notices, $notice );
+			//! This checks if the notice is already stored.
+			//# This prevents adding timestamps preemptively in the future.
+			//? We could form a timestamp collection per notice, separately.
+			//# But, that would cause performance issues.
+			if ( in_array( $notice, $notices, true ) ) {
+				//= We already have the notice stored in cache.
+				return;
+			} else {
+				array_push( $notices, $notice );
+			}
 		}
 
 		\update_option( $this->error_notice_option, $notices, 'yes' );
