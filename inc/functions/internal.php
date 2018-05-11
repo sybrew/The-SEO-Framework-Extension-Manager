@@ -68,6 +68,7 @@ function extension_dir_path( $file ) {
  * Extracts the directory URL of an extension from its file location.
  *
  * @since 1.0.0
+ * @since 1.5.1 No longer generates links using directory separators on Windows.
  *
  * @param string $file The extension file path.
  * @return string The extension URL path.
@@ -75,7 +76,8 @@ function extension_dir_path( $file ) {
 function extension_dir_url( $file ) {
 
 	$path = dirname( \TSF_Extension_Manager\extension_basename( $file ) );
-	$path = str_replace( '/', DIRECTORY_SEPARATOR, $path );
+	//= Convert Windows/Unix paths to URL paths.
+	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
 	$url = TSF_EXTENSION_MANAGER_DIR_URL;
 	$url .= trim( $path, '/ ' ) . '/';
@@ -123,7 +125,7 @@ function load_upgrader() {
 }
 
 /**
- * Builds error notice.
+ * Builds AJAX error notice and returns it.
  *
  * @since 1.5.0
  *

@@ -271,7 +271,7 @@ trait Extensions_Properties {
 	}
 
 	/**
-	 * Generates asset URL or path for extensions.
+	 * Generates expected asset URL or path for extensions.
 	 *
 	 * @since 1.0.0
 	 *
@@ -297,7 +297,7 @@ trait Extensions_Properties {
 	}
 
 	/**
-	 * Generates trunk path for extensions. If they're found.
+	 * Generates expected trunk path for extensions. If they're found.
 	 *
 	 * @since 1.0.0
 	 * @staticvar array $cache The trunk paths cache.
@@ -316,7 +316,7 @@ trait Extensions_Properties {
 	}
 
 	/**
-	 * Generates extension directory path relative to the plugin home directory.
+	 * Generates expected extension directory path relative to the plugin home directory.
 	 *
 	 * @since 1.0.0
 	 *
@@ -971,9 +971,9 @@ trait Extensions_Actions {
 
 		if ( 0 === $val ) {
 			//* Also disable WP_DEBUG functions used by The SEO Framework.
-			\add_action( 'doing_it_wrong_trigger_error', '__return_false' );
-			\add_action( 'deprecated_function_trigger_error', '__return_false' );
-			\add_action( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
+			\add_action( 'doing_it_wrong_trigger_error', '\\__return_false' );
+			\add_action( 'deprecated_function_trigger_error', '\\__return_false' );
+			\add_action( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '\\__return_false' );
 		}
 	}
 
