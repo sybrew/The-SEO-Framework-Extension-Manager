@@ -422,6 +422,7 @@ trait Error {
 			case 2001 :
 			case 7001 :
 			case 7002 :
+			case 7101 :
 				$message = \esc_html__( 'An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;

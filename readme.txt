@@ -302,7 +302,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Main:**
 	* **Improvement:** The extension autoloader now uses namespaces rather than class names.
 		* This changes all extensions' base structure.
-		* This speeds up autoloading twofold, because it no longer has to manipulate the class name.
+		* This speeds up auto-loading twofold, because it no longer has to manipulate the class name.
 	* **Improvement:** The layout no longer is a massive stack of repaintable flexboxes, but is now split up instead on scroll-point.
 		* This fixes a layout performance issue, most prominently seen in Google Chrome. Because it no longer has to repaint 20+ full-screen flexboxes on miniscule height variation changes when scrolling.
 	* **Improvement:** This plugin has now been tested against xDebug to eliminate common errors, performance culprits, and resource hogs.
@@ -381,7 +381,7 @@ View the [changeset on GitHub](https://github.com/sybrew/The-SEO-Framework-Exten
 * **Main:**
 	* Performance: Instance verification key options are now correctly deleted upon account deactivation.
 	* Performance: Error notice option is now no longer deleted on sight, preventing incremental option ID pollution.
-	* Performance: Error notice option is now no longer autoloaded when unset.
+	* Performance: Error notice option is now no longer auto-loaded when unset.
 	* Performance: Trends Feed's links no longer bind to your browser's used threads when followed. [Learn more](https://developers.google.com/web/tools/lighthouse/audits/noopener).
 	* Improvement: Added useful AJAX error reporting, like for when timeouts happen.
 	* Improvement: Buttons' texts are now more readable across different browsers.

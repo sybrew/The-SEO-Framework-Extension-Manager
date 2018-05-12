@@ -151,8 +151,10 @@ trait Options {
 		$this->initialize_option_update_instance( $type );
 
 		//? TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
-		if ( empty( $options['_instance'] ) && '_instance' !== $option )
+		if ( empty( $options['_instance'] ) && '_instance' !== $option ) {
 			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
+			return false;
+		}
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
@@ -204,11 +206,13 @@ trait Options {
 		if ( $run ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
 			\wp_die();
+			return false;
 		}
 
 		if ( $this->has_run_update_option() ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' ) );
 			\wp_die();
+			return false;
 		}
 
 		//* This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
@@ -217,15 +221,17 @@ trait Options {
 
 		$this->initialize_option_update_instance( $type );
 
-		if ( empty( $options['_instance'] ) )
-			\wp_die( 'Error 7009: Supply an instance key before updating other options.' );
+		if ( empty( $options['_instance'] ) ) {
+			\wp_die( 'Error 7108: Supply an instance key before updating other options.' );
+			return false;
+		}
 
 		$this->set_options_instance( $options, $options['_instance'] );
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( [ 7002 => '' ] );
+			$this->set_error_notice( [ 7101 => '' ] );
 
 			//* Revert option.
 			if ( false === $kill )
