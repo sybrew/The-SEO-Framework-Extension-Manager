@@ -346,11 +346,10 @@ trait Options {
 		}
 
 		$this->get_verification_codes( $_instance, $bits );
-		\TSF_Extension_Manager\SecureOption::initialize( $type, $_instance, $bits );
+		SecureOption::initialize( $type, $_instance, $bits );
 
 		$this->get_verification_codes( $_instance, $bits );
-		\TSF_Extension_Manager\SecureOption::set_update_instance( $_instance, $bits );
-
+		SecureOption::set_update_instance( $_instance, $bits );
 	}
 
 	/**
@@ -367,12 +366,12 @@ trait Options {
 		if ( $this->_has_died() )
 			return false;
 
-		$verified = \TSF_Extension_Manager\SecureOption::verified_option_update();
+		$verified = SecureOption::verified_option_update();
 
 		if ( $kill && false === $verified )
 			$this->kill_options();
 
-		\TSF_Extension_Manager\SecureOption::reset();
+		SecureOption::reset();
 
 		return $verified;
 	}

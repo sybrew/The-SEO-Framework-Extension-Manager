@@ -823,7 +823,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
-	 * @link http://theprime.site/
+	 * @link https://theprime.site/
 	 * @staticvar int $_bit : $bits[0]
 	 * @staticvar int $bit  : $bits[1]
 	 *

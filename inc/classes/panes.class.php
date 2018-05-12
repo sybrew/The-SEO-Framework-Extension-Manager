@@ -312,6 +312,7 @@ class Panes extends API {
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
 					$slug = isset( $_data['slug'] ) ? $this->s_ajax_string( $_data['slug'] ) : '';
 					$case = isset( $_data['case'] ) ? $this->s_ajax_string( $_data['case'] ) : '';
+					unset( $_data );
 				}
 
 				if ( $case && $slug ) {

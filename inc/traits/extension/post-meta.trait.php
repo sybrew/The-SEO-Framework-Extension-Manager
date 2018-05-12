@@ -196,13 +196,13 @@ trait Extension_Post_Meta {
 
 		if ( ! $this->pm_initialized ) $this->reset_extension_post_meta_id();
 
-		$meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
 		if ( isset( $meta[ $this->pm_index ] ) ) {
 			return $meta[ $this->pm_index ];
 		} else {
 			empty( $this->pm_index )
-				and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>TSF_Extension_Manager\Extension_Post_Meta::$pm_index</code>.' );
+				and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Post_Meta::$pm_index</code>.' );
 		}
 
 		return [];
@@ -265,14 +265,14 @@ trait Extension_Post_Meta {
 		$meta[ $key ] = $value;
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
+			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
 		return $success;
@@ -302,14 +302,14 @@ trait Extension_Post_Meta {
 		unset( $meta[ $key ] );
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
+			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
 		return $success;
@@ -330,7 +330,7 @@ trait Extension_Post_Meta {
 		if ( ! $this->pm_initialized ) $this->reset_extension_post_meta_id();
 
 		//* Prepare meta cache.
-		$c_meta = \TSF_Extension_Manager\Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
 		//* If index is non existent, return true.
 		if ( ! isset( $c_meta[ $this->pm_index ] ) )
@@ -346,7 +346,7 @@ trait Extension_Post_Meta {
 
 		if ( $success ) {
 			//* Update meta cache on success.
-			\TSF_Extension_Manager\Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, null, true );
+			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, null, true );
 		}
 
 		return $success;

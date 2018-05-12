@@ -128,7 +128,8 @@ final class Admin extends Core {
 
 		$store = [];
 		/**
-		 * @TODO add meta sanitation filters.
+		 * @TODO add meta sanitation filters schema.
+		 * i.e. "option key => expected value(s) (types)"
 		 */
 		foreach ( $data[ $this->pm_index ] as $key => $value ) :
 			switch ( $key ) {

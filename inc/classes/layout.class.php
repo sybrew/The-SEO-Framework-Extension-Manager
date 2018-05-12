@@ -271,6 +271,7 @@ final class Layout extends Secure_Abstract {
 
 			if ( $next_check_min > 0 ) {
 				$level_desc = sprintf(
+					/* translators: %u = minutes number */
 					\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
 					$next_check_min
 				);
@@ -341,6 +342,7 @@ final class Layout extends Secure_Abstract {
 			} elseif ( $difference < MONTH_IN_SECONDS * 2 ) {
 				$expires_in = \__( 'Less than two months', 'the-seo-framework-extension-manager' );
 			} else {
+				/* translators: %d = months number */
 				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
@@ -377,6 +379,7 @@ final class Layout extends Secure_Abstract {
 				$payment_in = \__( 'Less than two weeks', 'the-seo-framework-extension-manager' );
 			} else {
 				$n = round( $difference / MONTH_IN_SECONDS );
+				/* translators: %d = months number */
 				$payment_in = sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
 			}
 

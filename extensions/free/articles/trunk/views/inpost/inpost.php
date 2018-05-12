@@ -13,10 +13,6 @@ use \TSF_Extension_Manager\InpostHTML as InpostHTML;
 
 defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 
-/**
- * @TODO move what's below to a framework.
- */
-
 create_type_field :;
 	$type_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['type']['label']['title'] );
 	$type_info = sprintf( '<div>%s</div>', \the_seo_framework()->make_info(

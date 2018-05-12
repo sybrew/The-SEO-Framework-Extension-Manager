@@ -306,12 +306,12 @@ trait Extension_Options {
 	 */
 	final protected function get_extension_options() {
 
-		$options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
+		$options = Extensions_Options_Cache::_get_options_cache();
 
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
 		} else {
-			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->o_index.' );
+			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property \TSF_Extension_Manager\Extension_Options->o_index.' );
 		}
 
 		return [];
@@ -400,14 +400,14 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
+		$c_options = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -435,14 +435,14 @@ trait Extension_Options {
 		unset( $options[ $option ] );
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
+		$c_options = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -461,7 +461,7 @@ trait Extension_Options {
 			return false;
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Extensions_Options_Cache::_get_options_cache();
+		$c_options = Extensions_Options_Cache::_get_options_cache();
 
 		//* If index is non existent, return true.
 		if ( ! isset( $c_options[ $this->o_index ] ) )
@@ -477,7 +477,7 @@ trait Extension_Options {
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
+			Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 
 		return $success;
@@ -493,12 +493,12 @@ trait Extension_Options {
 	 */
 	final protected function get_stale_extension_options() {
 
-		$options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
+		$options = Stale_Extensions_Options_Cache::_get_options_cache();
 
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
 		} else {
-			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property TSF_Extension_Manager\Extension_Options->o_index.' );
+			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Options->o_index</code>.' );
 		}
 
 		return [];
@@ -601,14 +601,14 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
+		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -636,7 +636,7 @@ trait Extension_Options {
 		unset( $options[ $option ] );
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
+		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		if ( [] === $c_options ) {
@@ -647,7 +647,7 @@ trait Extension_Options {
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
+			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
 		return $success;
@@ -666,7 +666,7 @@ trait Extension_Options {
 			return false;
 
 		//* Prepare options cache.
-		$c_options = \TSF_Extension_Manager\Stale_Extensions_Options_Cache::_get_options_cache();
+		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
 
 		//* If index is non existent, return true.
 		if ( ! isset( $c_options[ $this->o_index ] ) )
@@ -678,7 +678,7 @@ trait Extension_Options {
 
 		if ( $success ) {
 			//* Update options cache on success.
-			\TSF_Extension_Manager\Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
+			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 
 		return $success;
