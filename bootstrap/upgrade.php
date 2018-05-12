@@ -25,7 +25,7 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 \TSF_Extension_Manager\load_upgrader();
 
-\add_action( 'tsfem_prepare_critical_upgrade', __NAMESPACE__ . '\_do_critical_core_upgrade', 0, 1 );
+\add_action( 'tsfem_prepare_critical_upgrade', __NAMESPACE__ . '\\_do_critical_core_upgrade', 0, 1 );
 /**
  * Upgrades the core plugin database before the plugin runs.
  *
@@ -39,11 +39,10 @@ function _do_critical_core_upgrade( Upgrader $upgrader ) {
 
 	$version = $upgrader->get_current_version( 'core' );
 
-	//= Placeholder as example.
+	// Example:
 	// if ( $version < 1500 ) {
-	// 	//= Initial upgrade version.
-	// 	$upgrader->_register_upgrade( 'core', '1500', '\__return_true' );
+	// 	$upgrader->_register_upgrade( 'core', '1500', function( $version ) { return true; } );
 	// }
 
-	$upgrader->_register_upgrade( 'core', TSF_EXTENSION_MANAGER_DB_VERSION, '\__return_true' );
+	$upgrader->_register_upgrade( 'core', TSF_EXTENSION_MANAGER_DB_VERSION, '\\__return_true' );
 }

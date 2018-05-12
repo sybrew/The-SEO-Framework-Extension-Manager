@@ -146,11 +146,12 @@ final class Upgrader {
 	 * Returns the previous database version of $member.
 	 *
 	 * @since 1.5.0
+	 * @since 1.5.1 Now no longer always returns '0'.
 	 *
 	 * @return string
 	 */
 	public function get_previous_version( $member ) {
-		$version = $this->previous_db_versions;
+		$versions = $this->previous_db_versions;
 		return isset( $versions[ $member ] ) ? $versions[ $member ] : '0';
 	}
 
@@ -158,11 +159,12 @@ final class Upgrader {
 	 * Returns the current database version of $member.
 	 *
 	 * @since 1.5.0
+	 * @since 1.5.1 Now no longer always returns '0'.
 	 *
 	 * @return string
 	 */
 	public function get_current_version( $member ) {
-		$version = $this->current_db_versions;
+		$versions = $this->current_db_versions;
 		return isset( $versions[ $member ] ) ? $versions[ $member ] : '0';
 	}
 

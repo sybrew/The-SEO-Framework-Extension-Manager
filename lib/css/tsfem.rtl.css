@@ -628,6 +628,11 @@ body.tsfem .wrap {
 	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset; /* 1,2: transition positioning */
 	filter: none;
 	transition: box-shadow .25s;
+	padding: .4em 1em .5em;
+}
+
+.tsfem-button-small.tsfem-button-flat {
+	padding: .5em 1em;
 }
 
 .tsfem-button-flat:hover,
