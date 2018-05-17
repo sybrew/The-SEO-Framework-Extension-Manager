@@ -881,6 +881,7 @@ final class LoadAdmin extends AdminPages {
 	 * Activates extension based on form input.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.1 Added "already activated" tests to prevent "x was already defined" errors.
 	 *
 	 * @param array $options The form/request input options.
 	 * @param bool $ajax Whether this is an AJAX request.
@@ -939,12 +940,14 @@ final class LoadAdmin extends AdminPages {
 
 			$test = $this->test_extension( $slug, $ajax );
 
-			if ( 4 !== $test || $this->_has_died() ) {
-				$ajax or $this->set_error_notice( [ 10005 => '' ] );
+			//= 5 means it's already activated. 4 means it passed all tests.
+			if ( ! in_array( $test, [ 4, 5 ], true ) || $this->_has_died() ) {
+				$ajax or $this->set_error_notice( [ 10005 => $test ] );
 				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 
-			$success = $this->enable_extension( $slug );
+			//= 5 means it's already activated. Enable it otherwise.
+			$success = 5 === $test || $this->enable_extension( $slug );
 
 			if ( false === $success ) {
 				$ajax or $this->set_error_notice( [ 10006 => '' ] );
@@ -973,6 +976,11 @@ final class LoadAdmin extends AdminPages {
 				$code = 10010;
 				break;
 
+			case 5 :
+				//* Was already active.
+				$code = 10012;
+				break;
+
 			default :
 				//* Unknown case.
 				$code = 10011;
@@ -998,6 +1006,14 @@ final class LoadAdmin extends AdminPages {
 		if ( empty( $options['extension'] ) )
 			return false;
 
+		/**
+		 * We don't check for its previous activation state; we just deactivate regardless.
+		 * This is because we can't check (via our API) whether it was active without
+		 * introducing further failure points.
+		 * Users whom deactivate an extension might do so because of contraints, like PHP errors;
+		 * adding additional inconsequential actions isn't beneficial for the user.
+		 * Checking it after this point will result in inconsitent data.
+		 */
 		$slug = \sanitize_key( $options['extension'] );
 		$success = $this->disable_extension( $slug );
 

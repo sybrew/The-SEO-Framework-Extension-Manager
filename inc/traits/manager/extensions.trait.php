@@ -91,7 +91,7 @@ trait Extensions_Properties {
 				'requires' => '4.7.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'focus' => [
 				'slug' => 'focus',
@@ -105,7 +105,7 @@ trait Extensions_Properties {
 				'requires' => '4.8.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '3.0.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'amp' => [
 				'slug' => 'amp',
@@ -119,7 +119,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'articles' => [
 				'slug' => 'articles',
@@ -133,7 +133,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'monitor' => [
 				'slug' => 'monitor',
@@ -147,7 +147,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'incognito' => [
 				'slug' => 'incognito',
@@ -161,7 +161,7 @@ trait Extensions_Properties {
 				'requires' => '3.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'honeypot' => [
 				'slug' => 'honeypot',
@@ -175,7 +175,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'origin' => [
 				'slug' => 'origin',
@@ -189,7 +189,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			'title-fix' => [
 				'slug' => 'title-fix',
@@ -203,7 +203,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '4.9.5',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.5',
+				'tested_tsf' => '3.0.6',
 			],
 			// 'transporter' => [
 			// 	'slug' => 'transporter',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'd4998673d4861f9095f3fc0c52a2256b23aae0b894aed1c1e248b66e1e98ea54',
-			'sha1'   => '755cc207712f1a5064cd0f00c516b604680a42eb',
-			'md5'    => 'ced2ec1883227284f78dc67b852eaf92',
+			'sha256' => 'a0720f3ce90bb0ebee3a5eefa64346ce3dfa45c6c07b0c434c9e3be22775dfbc',
+			'sha1'   => 'b06234b377d522e8af500ebfa813cab6f4d54dbb',
+			'md5'    => '727e075937d1f53c74e764ea598b66b9',
 		];
 	}
 
@@ -518,6 +518,7 @@ trait Extensions_Actions {
 	 * Validates extension activation.
 	 *
 	 * @since 1.0.0
+	 * @since 1.5.1 Now tests for extension prior-activation.
 	 *
 	 * @return array : {
 	 *    'success' => bool Whether the activation can proceed.
@@ -538,6 +539,9 @@ trait Extensions_Actions {
 
 		if ( empty( $extension ) )
 			return [ 'success' => false, 'case' => 1 ];
+
+		if ( static::is_extension_active( $extension ) )
+			return [ 'success' => true, 'case' => 5 ];
 
 		if ( static::is_extension_premium( $extension ) ) {
 			if ( self::is_premium_user() ) {
@@ -757,6 +761,7 @@ trait Extensions_Actions {
 	 *    2 => Extension header file is invalid. (Invalid extension)
 	 *    3 => Inclusion failed.
 	 *    4 => Success.
+	 *    5 => Extension's already active.
 	 *    void => Fatal error.
 	 * }
 	 */
@@ -769,6 +774,11 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 
 			$val = -1;
+			goto tick;
+		}
+
+		if ( static::is_extension_active( $slug ) ) {
+			$val = 5;
 			goto tick;
 		}
 

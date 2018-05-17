@@ -459,6 +459,11 @@ trait Error {
 				$type = 'updated';
 				break;
 
+			case 10012 :
+				$message = \esc_html__( 'Extension was already activated in another browser instance.', 'the-seo-framework-extension-manager' );
+				$type = 'updated';
+				break;
+
 			case 10009 :
 			case 10102 :
 				$message = \esc_html__( "Can't touch this.", 'the-seo-framework-extension-manager' );
