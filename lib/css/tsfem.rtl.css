@@ -14,16 +14,11 @@ body.tsfem #update-nag {
 
 /* ## Notices: Core + self.
 /*--------------------------------------*/
- /* "margin: .7% 0" Edge/Firefox inline margins issue */
+/* "margin: 1.2% 0 0" Edge/Firefox inline margins issue */
 .wrap.tsfem .notice,
 .tsfem-notice {
-	margin: .6vw 0;
+	margin: 1.2vw 0 0;
 	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
-}
-
-/* "margin-bottom: -.7%" Edge/Firefox inline margins issue */
-.tsfem-notice-wrap > *:last-child {
-	margin-bottom: -.6vw;
 }
 
 /* ### Notices: Self.
@@ -262,12 +257,12 @@ body.tsfem .wrap {
 	flex: 1 1 auto;
 }
 
-/* "margin: .7%" Edge/Firefox inline margins issue */
+/* "margin: .6%" Edge/Firefox inline margins issue */
 .tsfem-panes-wrap {
 	margin: .6vw;
 }
 
-/* "margin: 1.4%" Edge/Firefox inline margins issue */
+/* "margin: 1.2%" Edge/Firefox inline margins issue */
 .tsfem-connect-wrap {
 	margin: 1.2vw;
 }
@@ -825,7 +820,7 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 
 /* "flex-basis: 48.6%" Edge/Firefox inline margins issue */
-/* "margin: .7%" Edge/Firefox inline margins issue */
+/* "margin: .6%" Edge/Firefox inline margins issue */
 .tsfem-pane-half,
 .tsfem-pane-full {
 	-webkit-flex-basis: calc( 50% - 1.2vw );
