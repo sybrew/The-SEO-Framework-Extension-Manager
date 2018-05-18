@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the The SEO Framework - Extension Manager package.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework - Extension Manager 1.5.0\n"
+"Project-Id-Version: The SEO Framework - Extension Manager 1.5.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework-extension-manager\n"
-"POT-Creation-Date: 2018-03-31 08:36:10+00:00\n"
+"POT-Creation-Date: 2018-05-18 14:43:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2988,11 +2988,11 @@ msgid "Statistics"
 msgstr ""
 
 #: inc/classes/accountactivation.class.php:178
-msgid "API Key deactivated."
+msgid "API Key disconnected."
 msgstr ""
 
 #: inc/classes/accountactivation.class.php:180
-msgid "However, something went wrong with the deactivation on this website."
+msgid "However, something went wrong with the disconnection on this website."
 msgstr ""
 
 #: inc/classes/adminpages.class.php:124
@@ -3071,27 +3071,29 @@ msgstr ""
 msgid "Disconnect account?"
 msgstr ""
 
-#: inc/classes/layout.class.php:218
+#: inc/classes/layout.class.php:222
 msgid "Unknown"
 msgstr ""
 
-#: inc/classes/layout.class.php:219
+#: inc/classes/layout.class.php:229
 msgid "Decoupled"
 msgstr ""
 
-#: inc/classes/layout.class.php:242
+#: inc/classes/layout.class.php:241
 msgid "Account email:"
 msgstr ""
 
-#: inc/classes/layout.class.php:248
+#: inc/classes/layout.class.php:247
 #: inc/traits/manager/extensions-layout.trait.php:51
 msgid "Premium"
 msgstr ""
 
-#: inc/classes/layout.class.php:253
+#: inc/classes/layout.class.php:252
 #: inc/traits/manager/extensions-layout.trait.php:50
 msgid "Free"
 msgstr ""
+
+#. translators: %u = minutes number
 
 #: inc/classes/layout.class.php:275
 msgid "Next check is scheduled in %u minute."
@@ -3117,11 +3119,11 @@ msgstr ""
 msgid "Account expired"
 msgstr ""
 
-#: inc/classes/layout.class.php:333 inc/classes/layout.class.php:376
+#: inc/classes/layout.class.php:333 inc/classes/layout.class.php:377
 msgid "Less than a week"
 msgstr ""
 
-#: inc/classes/layout.class.php:336 inc/classes/layout.class.php:378
+#: inc/classes/layout.class.php:336 inc/classes/layout.class.php:379
 msgid "Less than two weeks"
 msgstr ""
 
@@ -3137,33 +3139,37 @@ msgstr ""
 msgid "Less than two months"
 msgstr ""
 
-#: inc/classes/layout.class.php:345
+#. translators: %d = months number
+
+#: inc/classes/layout.class.php:346
 msgid "About %d months"
 msgstr ""
 
-#: inc/classes/layout.class.php:360
+#: inc/classes/layout.class.php:361
 msgid "Expires in:"
 msgstr ""
 
-#: inc/classes/layout.class.php:373
+#: inc/classes/layout.class.php:374
 msgid "Payment processing"
 msgstr ""
 
-#: inc/classes/layout.class.php:381
+#. translators: %d = months number
+
+#: inc/classes/layout.class.php:383
 msgid "About %d month"
 msgid_plural "About %d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/classes/layout.class.php:396
+#: inc/classes/layout.class.php:398
 msgid "Payment due in:"
 msgstr ""
 
-#: inc/classes/layout.class.php:438 views/forms/key.php:9
+#: inc/classes/layout.class.php:440 views/forms/key.php:9
 msgid "License key"
 msgstr ""
 
-#: inc/classes/layout.class.php:442 views/forms/key.php:10
+#: inc/classes/layout.class.php:444 views/forms/key.php:10
 msgid "License email"
 msgstr ""
 
@@ -3215,7 +3221,7 @@ msgstr ""
 
 #. translators: %s = extension slug
 
-#: inc/classes/loadadmin.class.php:1024
+#: inc/classes/loadadmin.class.php:1040
 msgid "Extension slug: %s"
 msgstr ""
 
@@ -3255,39 +3261,39 @@ msgstr ""
 msgid "Enable feed?"
 msgstr ""
 
-#: inc/classes/panes.class.php:481
+#: inc/classes/panes.class.php:482
 msgid "Account information"
 msgstr ""
 
-#: inc/classes/panes.class.php:514
+#: inc/classes/panes.class.php:515
 msgid "Upgrade your account"
 msgstr ""
 
-#: inc/classes/panes.class.php:541
+#: inc/classes/panes.class.php:542
 msgid "This will deactivate all extensions."
 msgstr ""
 
-#: inc/classes/panes.class.php:542
+#: inc/classes/panes.class.php:543
 msgid "No options from extensions will be lost."
 msgstr ""
 
-#: inc/classes/panes.class.php:546
-msgid "Your key can be used on another website after deactivation."
+#: inc/classes/panes.class.php:547
+msgid "Your key can be used on another website after disconnecting."
 msgstr ""
 
-#: inc/classes/panes.class.php:552
+#: inc/classes/panes.class.php:553
 msgid "Disconnect account"
 msgstr ""
 
-#: inc/classes/panes.class.php:579
+#: inc/classes/panes.class.php:580
 msgid "Questions about all free extensions and using the Extension Manager can be asked through Free Support."
 msgstr ""
 
-#: inc/classes/panes.class.php:582
+#: inc/classes/panes.class.php:583
 msgid "Any question about a premium extensions or your account should be asked through Premium Support."
 msgstr ""
 
-#: inc/classes/panes.class.php:586
+#: inc/classes/panes.class.php:587
 msgid "Get support"
 msgstr ""
 
@@ -3295,266 +3301,268 @@ msgstr ""
 msgid "Options have been altered outside of this plugin's scope. Please deactivate your account and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:213
+#: inc/traits/core/error.trait.php:224
 msgid "Error code:"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:217
+#: inc/traits/core/error.trait.php:228
 msgid "Notice code:"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:222
+#: inc/traits/core/error.trait.php:233
 msgid "Status code:"
 msgstr ""
 
 #. translators: 1: 'Error code:', 2: The error code.
 
-#: inc/traits/core/error.trait.php:227
+#: inc/traits/core/error.trait.php:238
 msgid "%1$s %2$s"
 msgstr ""
 
 #. translators: %s = Error code
 
-#: inc/traits/core/error.trait.php:230
+#: inc/traits/core/error.trait.php:241
 msgid "<strong>%s</strong> &mdash;"
 msgstr ""
 
 #. translators: 1: Error code, 2: Error message, 3: Additional info
 
-#: inc/traits/core/error.trait.php:233
+#: inc/traits/core/error.trait.php:244
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:268
+#: inc/traits/core/error.trait.php:279
 msgid "No valid license key was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:273
+#: inc/traits/core/error.trait.php:284
 msgid "No valid license email was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:282
+#: inc/traits/core/error.trait.php:293
 msgid "Invalid API request type."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:290
+#: inc/traits/core/error.trait.php:301
 msgid "An incomplete API request was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:295
+#: inc/traits/core/error.trait.php:306
 msgid "No response received from the API server. Please try again later. If this error keeps coming back, contact your hosting provider."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:307
+#: inc/traits/core/error.trait.php:318
 msgid "An error occurred while contacting the API server. Please try again later."
 msgstr ""
 
-#. translators: %s = My Account
-
-#: inc/traits/core/error.trait.php:314
-msgid "An error occured while validating settings. Login to the %s page to manage your keys and try again."
+#: inc/traits/core/error.trait.php:323
+msgid "An error occured while validating the settings. Please try again."
 msgstr ""
 
 #. translators: %s = My Account
 
-#: inc/traits/core/error.trait.php:324
+#: inc/traits/core/error.trait.php:331
 msgid "Invalid API license key. Login to the %s page to find a valid API License Key."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:337
+#: inc/traits/core/error.trait.php:344
 msgid "Remote software API error."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:351
+#: inc/traits/core/error.trait.php:358
 msgid "Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
 #. translators: %s = My Account
 
-#: inc/traits/core/error.trait.php:358
+#: inc/traits/core/error.trait.php:365
 msgid "Exceeded maximum number of activations. Login to the %s page to manage your sites."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:365
+#: inc/traits/core/error.trait.php:372
 msgid "Invalid instance ID. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:371
+#: inc/traits/core/error.trait.php:378
 msgid "Your subscription is not active or has expired."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:376
+#: inc/traits/core/error.trait.php:383
 msgid "Your account has been successfully authorized to be used on this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:382
+#: inc/traits/core/error.trait.php:389
 msgid "Your account has been successfully deauthorized from this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:387
+#: inc/traits/core/error.trait.php:394
 msgid "Enjoy your free extensions!"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:392
+#: inc/traits/core/error.trait.php:399
 msgid "The feed has been enabled."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:397
+#: inc/traits/core/error.trait.php:404
 msgid "Successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:402
+#: inc/traits/core/error.trait.php:409
 msgid "Your subscription has expired or has been deactivated remotely."
 msgstr ""
 
 #. translators: %s = My Account
 
-#: inc/traits/core/error.trait.php:409
+#: inc/traits/core/error.trait.php:416
 msgid "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:418
-msgid "An error occured while verifying the options. If this error keeps coming back, please deactivate your account and try again."
+#: inc/traits/core/error.trait.php:426
+msgid "An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:432
+#: inc/traits/core/error.trait.php:440
 msgid "User verification failed. Please try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:439
+#: inc/traits/core/error.trait.php:447
 msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:444
-#: inc/traits/manager/extensions.trait.php:1022
+#: inc/traits/core/error.trait.php:452
+#: inc/traits/manager/extensions.trait.php:1032
 msgid "Extension is not compatible with your server configuration."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:450
+#: inc/traits/core/error.trait.php:458
 msgid "Extension has been successfully activated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:456
+#: inc/traits/core/error.trait.php:463
+msgid "Extension was already activated in another browser instance."
+msgstr ""
+
+#: inc/traits/core/error.trait.php:469
 msgid "Can't touch this."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:461
+#: inc/traits/core/error.trait.php:474
 msgid "Extension has been successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:466
+#: inc/traits/core/error.trait.php:479
 msgid "Your website has been successfully connected to the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:471
+#: inc/traits/core/error.trait.php:484
 msgid "Your site has been successfully disconnected from the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:478
+#: inc/traits/core/error.trait.php:491
 msgid "The Monitor API server does not recognize your instance. Request a fix."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:485
+#: inc/traits/core/error.trait.php:498
 msgid "Your website has been marked as inactive by the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:490
+#: inc/traits/core/error.trait.php:503
 msgid "Crawl request is still in queue. Please try again later."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:495
+#: inc/traits/core/error.trait.php:508
 msgid "Crawl request has just been submitted."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:500
+#: inc/traits/core/error.trait.php:513
 msgid "Data has just been updated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:506
+#: inc/traits/core/error.trait.php:519
 msgid "Crawl has been requested successfully. It can take up to three minutes to be processed."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:511
+#: inc/traits/core/error.trait.php:524
 msgid "The latest Monitor data has been recieved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:516
+#: inc/traits/core/error.trait.php:529
 msgid "Monitor has updated your site settings, but your site is now out of sync. You should fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:521
+#: inc/traits/core/error.trait.php:534
 msgid "Monitor has updated your site settings."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:526
+#: inc/traits/core/error.trait.php:539
 msgid "The SEO settings couldn't be converted to file."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:531
+#: inc/traits/core/error.trait.php:544
 msgid "An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:536
+#: inc/traits/core/error.trait.php:549
 msgid "Download will start shortly."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:542
+#: inc/traits/core/error.trait.php:555
 msgid "Invalid data was sent to the server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:552
+#: inc/traits/core/error.trait.php:565
 msgid "Settings are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:559
+#: inc/traits/core/error.trait.php:572
 msgid "Unable to verify if settings are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:564
+#: inc/traits/core/error.trait.php:577
 msgid "Unable to propagate request. Are you running the latest version?"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:569
+#: inc/traits/core/error.trait.php:582
 msgid "Couldn't fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:574
+#: inc/traits/core/error.trait.php:587
 msgid "Unable to create markup. Inspect your fields for errors or contact support."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:581
+#: inc/traits/core/error.trait.php:594
 msgid "Unable to fetch geocoding data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:587
+#: inc/traits/core/error.trait.php:600
 msgid "No results found. Inspect your current input."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:601
+#: inc/traits/core/error.trait.php:614
 msgid "Please wait a few seconds before making another request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:606
+#: inc/traits/core/error.trait.php:619
 msgid "Too many requests in the last period. Limit will be lifted soon."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:611
+#: inc/traits/core/error.trait.php:624
 msgid "Geocoding data received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:617
+#: inc/traits/core/error.trait.php:630
 msgid "No definitions found. Check your spelling."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:623
+#: inc/traits/core/error.trait.php:636
 msgid "No synonyms found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:629
+#: inc/traits/core/error.trait.php:642
 msgid "Lexical information received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:656
+#: inc/traits/core/error.trait.php:669
 msgid "An unknown error occurred. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
@@ -3803,33 +3811,33 @@ msgstr ""
 msgid "Visit the extension menu page"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:508
+#: inc/traits/manager/extensions-layout.trait.php:512
 msgid "Compatible with the current versions of WordPress and The SEO Framework."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:519
+#: inc/traits/manager/extensions-layout.trait.php:523
 msgid "The SEO Framework version is higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:522
+#: inc/traits/manager/extensions-layout.trait.php:526
 msgid "WordPress version is higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:525
+#: inc/traits/manager/extensions-layout.trait.php:529
 msgid "WordPress and The SEO Framework versions are higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:528
+#: inc/traits/manager/extensions-layout.trait.php:532
 msgid "The extension will always be tested for errors before activation."
 msgstr ""
 
 #. translators: 1: Version number, 2: Version number
 
-#: inc/traits/manager/extensions-layout.trait.php:536
+#: inc/traits/manager/extensions-layout.trait.php:540
 msgid "WordPress %1$s and The SEO Framework %2$s are required."
 msgstr ""
 
-#: inc/traits/manager/extensions.trait.php:1035
+#: inc/traits/manager/extensions.trait.php:1045
 msgid "Extension has not been activated."
 msgstr ""
 
