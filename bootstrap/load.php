@@ -42,7 +42,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			basename( __DIR__ ) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR
+			TSF_EXTENSION_MANAGER_DIR_PATH . 'language' . DIRECTORY_SEPARATOR
 		);
 	}
 }
@@ -197,7 +197,7 @@ function _register_autoloader() {
  * Applies filters 'tsf_extension_manager_enabled' : boolean
  *
  * @since 1.0.0
- * @since 1.5.0 Now requires TSF 2.8 to load.
+ * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @staticvar bool $can_load
  * @uses the_seo_framework_version() which returns null if plugin is inactive.
  *

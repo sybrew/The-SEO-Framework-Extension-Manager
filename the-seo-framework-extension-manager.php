@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.5.1
+ * Version: 1.5.2-dev-2018.06.07.0
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -28,6 +28,11 @@ defined( 'ABSPATH' ) or die;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
+ *       Which is PHP 5.2.
  */
 
 /**
@@ -61,7 +66,8 @@ define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( __FILE__ ) . DIRECTORY_
 if ( get_option( 'tsfem_tested_environment_version' ) < TSF_EXTENSION_MANAGER_DB_VERSION ) {
 	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'envtest.php';
 
-	if ( get_option( 'tsfem_tested_environment_version' ) < TSF_EXTENSION_MANAGER_DB_VERSION )
+	//= This check is for the front-end. The back-end performs wp_die() when false to notify the admin.
+	if ( get_option( 'tsfem_tested_environment_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION )
 		tsf_extension_manager_boot();
 } else {
 	tsf_extension_manager_boot();

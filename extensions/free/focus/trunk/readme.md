@@ -34,7 +34,7 @@ Each keyword makes up for a new subject. Focus rates each subject separately.
 There are many ways to write in a language. And with a Premium subscription you can embrace all Focus has to offer.
 
 So, after you fill in a keyword, Focus will connect to our API services and will provide you with related synonyms and inflections.
-With those, Focus is able to more accurately rate your content.
+With those, Focus is able to rate your content more accurately.
 
 The synonyms provided make up for great writing suggestions. Utilizing those synonyms will increase your chances to be found, too.
 

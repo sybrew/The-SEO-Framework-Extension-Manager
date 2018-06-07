@@ -112,8 +112,8 @@ final class FormGenerator {
 	 *   string 'o_key'    : The pre-assigned option key. Great for when working
 	 *                       with multiple option fields.
 	 *   int 'level_depth' : Set how many levels the options can traverse.
-	 *                       e.g. 5 depth @ 64 bits => 12 bits =>> 12 bits === 4096 iterations.
-	 *                       e.g. 5 depth @ 32 bits =>  6 bits =>>  6 bits ===   64 iterations.
+	 *                       e.g. 5 depth @ 64 bits => 12.8 bits =>> 12 bits === 4096 iterations.
+	 *                       e.g. 5 depth @ 32 bits =>  6.4 bits =>>  6 bits ===   64 iterations.
 	 *   int 'architecture' : The amount of bits to work with. If unassigned, it will autodetermine.
 	 * }
 	 * @return string|bool The called iterator name. False otherwise.

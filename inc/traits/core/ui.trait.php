@@ -630,7 +630,7 @@ trait UI {
 	}
 
 	/**
-	 * Checks ajax referred set by set_js_nonces based on capability.
+	 * Checks media upload AJAX referred.
 	 *
 	 * @since 1.3.0
 	 * @access private

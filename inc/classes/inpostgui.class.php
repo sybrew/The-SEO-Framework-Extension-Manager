@@ -97,7 +97,7 @@ final class InpostGUI {
 
 	/**
 	 * @since 1.5.0
-	 * @param array $tabs The registered scripts.
+	 * @param array $scripts   The registered scripts.
 	 * @param array $templates The registered templates.
 	 */
 	private static $scripts = [];
@@ -329,8 +329,8 @@ final class InpostGUI {
 	 * @return array $css
 	 */
 	private function get_inline_css( array $styles ) {
-		$out = '';
 
+		$out = '';
 		foreach ( $styles as $selector => $css ) {
 			$out .= $selector . '{' . implode( ';', $this->convert_color_css( $css ) ) . '}';
 		}
@@ -353,7 +353,6 @@ final class InpostGUI {
 		static $c_ck, $c_cv;
 
 		if ( ! isset( $c_ck, $c_cv ) ) {
-			//= Index access is handled in `the_seo_framework()->get_admin_color_css()`
 			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
 			$_colors = $GLOBALS['_wp_admin_css_colors'];
 
@@ -374,9 +373,9 @@ final class InpostGUI {
 			} else {
 				$_colors = $_colors[ $_scheme ]->colors;
 
-				$_bg = $_colors[0];
-				$_bg_accent = $_colors[1];
-				$_color = $_colors[2];
+				$_bg           = $_colors[0];
+				$_bg_accent    = $_colors[1];
+				$_color        = $_colors[2];
 				$_color_accent = $_colors[3];
 
 				$_table = [
@@ -439,7 +438,7 @@ final class InpostGUI {
 	 * @param array $type Either 'js' or 'css'.
 	 * @return string The file URL.
 	 */
-	final private function generate_file_url( array $script, $type = 'js' ) {
+	private function generate_file_url( array $script, $type = 'js' ) {
 
 		static $min, $rtl;
 
@@ -603,7 +602,7 @@ final class InpostGUI {
 	}
 
 	/**
-	 * Outputs tab view, whilst trying to prevent 3rd party interference on views.
+	 * Outputs tab or template view, whilst trying to prevent 3rd party interference on views.
 	 *
 	 * There's a secret key generated on each tab load. This key can be accessed
 	 * in the view through `$_secret`, and be sent back to this class.

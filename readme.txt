@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, the seo framework, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title
 Requires at least: 4.6.0
-Tested up to: 4.9.5
+Tested up to: 4.9.6
 Requires PHP: 5.5.21
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -169,6 +169,11 @@ If it doesn't, it will tell you why. Otherwise, you're good to go! All known iss
 If you were to get a plugin activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable and secure version.
 
 == Changelog ==
+
+= 1.5.2 =
+
+* **Fixed:** TODO: See https://wordpress.org/support/topic/notice-from-wp-debug/ -- means that 1 single character is set, instead of something serialized.
+* **Fixed:** The translation folder is now correctly assigned for manual translation files.
 
 = 1.5.1 =
 

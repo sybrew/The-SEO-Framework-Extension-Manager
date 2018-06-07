@@ -58,7 +58,7 @@ final class Extensions_Post_Meta_Cache {
 	 */
 	private static function init_meta_cache( $id ) {
 		static::$meta[ $id ] = (array) unserialize(
-			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( [] ) )
+			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] )
 		);
 	}
 

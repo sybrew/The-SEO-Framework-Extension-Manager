@@ -22,6 +22,11 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
+ *       Which is PHP 5.2.
+ */
+
 tsf_extension_manager_pre_boot_test();
 /**
  * Tests plugin upgrade.
@@ -37,7 +42,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 	$ms = is_multisite();
 
-	if ( $ms && class_exists( 'WP_Network', false ) ) {
+	if ( $ms && function_exists( 'get_network' ) ) {
 		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
@@ -46,6 +51,8 @@ function tsf_extension_manager_pre_boot_test() {
 				return;
 			}
 		}
+		//= Free memory.
+		unset( $nw );
 	}
 
 	$_req = array(
@@ -79,7 +86,7 @@ function tsf_extension_manager_pre_boot_test() {
 	if ( ! function_exists( 'deactivate_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-	$admin = is_admin();
+	$admin  = is_admin();
 	$silent = ! $admin;
 
 	deactivate_plugins( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, $silent, $network_mode );
