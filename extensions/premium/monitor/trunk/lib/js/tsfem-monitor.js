@@ -367,7 +367,7 @@ window.tsfem_e_monitor = {
 	 * @function
 	 * @return {undefined}
 	 */
-	setSettingsLoader() {
+	setSettingsLoader: function() {
 		let settingElements = document.querySelectorAll( '.tsfem-e-monitor-edit' );
 		for ( let i = 0; i < settingElements.length; i++ ) {
 			settingElements[ i ].classList.remove( 'tsfem-edit' );
@@ -676,7 +676,7 @@ window.tsfem_e_monitor = {
 	 * @param {jQuery.event} event
 	 */
 	a11yEditSetting: function( event ) {
-		if ( event.which == 32 ) {
+		if ( event.which == 32 ) { // spacebar
 			event.preventDefault();
 			tsfem_e_monitor.editSetting( event );
 		}

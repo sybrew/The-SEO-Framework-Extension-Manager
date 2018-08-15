@@ -199,7 +199,7 @@ final class Scoring {
 			}
 		}
 
-		return isset( $ret ) ? $ret : array_values( $array )[0];
+		return isset( $ret ) ? $ret : array_values( $a )[0];
 	}
 
 	/**
@@ -332,7 +332,7 @@ Scoring::get_instance()->template = [
 			'content' => 'pageContent',
 			'regex' => [
 				'/[^>]+(?=<|$|^)/gi', // 1: All but tags.
-				'/{{kw}}/gi',        // 2: Match words.
+				'/{{kw}}/gi',         // 2: Match words.
 			],
 		],
 		'maxScore' => 800,
@@ -367,17 +367,8 @@ Scoring::get_instance()->template = [
 		'title' => \esc_html__( 'Linking:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageContent',
-			// Magic. Get all hyperlinks with title, href or contents with a matching keyword. LAGGY!!
-			// OPTIMIZE:
-			/* 'regex' => '/(?=.*?href=)<a\\s.*?(((href|title)=(((["\']).*?{{kw}}[^=\'"]*\6)|({{kw}}[^=\'"])))|(.*?>.*?{{kw}})).*?<\/a>/giu', */
-			// A dumber version that doesn't care about semantics and expects "loose standards":
-			'regex' => '/<a\\s.*?((href|title)=(["\'].*?{{kw}}.*?["\']))|(.*?>.*?{{kw}}).*?<\/a>/gi',
-			/*[
-				// 1: Get all hyperlinks with keywords attached.
-				'(?=.*{{kw}})<a\\b[^>]*href=[^>]*>.*?<\\/a>',
-				// 2: Get title, href and contents with a matching keyword.
-				'((href|title)=["\']?((?:.(?!["\']?\\s+(?:\\S+)=|[>"\']))+.){{kw}}["\']?)|((?=>|(.|\\s)){{kw}}[^>]+(?=<))',
-			],*/
+			// Magic. Get all hyperlinks with the title or href matching, or content matching while href is present.
+			'regex' => '/<a[^>]+\\b(((href|title)\\s*=["\'].*?{{kw}}.*?["\'][^<]+)|(href=[^>]*>[^<]*{{kw}}.*?))<\/a>/gi',
 		],
 		'maxScore' => 200,
 		'minScore' => 0,

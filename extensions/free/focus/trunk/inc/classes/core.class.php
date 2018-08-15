@@ -80,16 +80,16 @@ class Core {
 		$this->pm_defaults = [
 			//= Fills 3 sequential array keys with these values.
 			'kw' => array_fill( 0, 3, [
-				'keyword' => '',
-				'lexical_form' => '',
-				'lexical_data' => $this->default_lexical_form,
+				'keyword'              => '',
+				'lexical_form'         => '',
+				'lexical_data'         => $this->default_lexical_form,
 				'definition_selection' => '',
-				'inflection_data' => [],
-				'synonym_data' => [],
-				'active_inflections' => '',
-				'active_synonyms' => '',
-				'score' => 0,
-				'scores' => [],
+				'inflection_data'      => [],
+				'synonym_data'         => [],
+				'active_inflections'   => '',
+				'active_synonyms'      => '',
+				'score'                => 0,
+				'scores'               => [],
 			] ),
 		];
 

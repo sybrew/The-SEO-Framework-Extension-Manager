@@ -47,6 +47,13 @@ The premium extensions communicate with The SEO Framework's API server to provid
 
 When the subscription is active, you're allowed to use all premium extensions. If the subscription is expired or deactivated, the premium extensions will no longer be accessible.
 
+= Privacy =
+
+View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation).
+
+* In short: This plugin can send API requests to our sites when you use a Premium license.
+* Questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
+
 == Installation ==
 
 = This plugin requires: =
@@ -70,12 +77,6 @@ When the subscription is active, you're allowed to use all premium extensions. I
 3. That's it! Feel free to activate any extension available.
 
 The extensions test themselves upon activation. So, if any extension doesn't work on your site it will let you know why.
-
-= Privacy =
-
-* This plugin can send API requests to "https://premium.theseoframework.com/" and our other sites.
-* Read our [privacy policy](https://theseoframework.com/privacy/), it states that we respect your privacy.
-* Questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
@@ -162,7 +163,7 @@ They're planned! However, there's still a lot to be done before this is even pos
 
 = What happens when I deactivate my account? =
 All plugin settings will be deleted, this includes which extensions were enabled.
-Each extension handles its own options (if any); those settings won't be lost, not even upon re-activation of the extension afterwards.
+Each extension handles its own options (if any); those settings won't be lost, not even upon reactivation of the extension afterwards.
 
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
@@ -172,8 +173,27 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.5.2 =
 
-* **Fixed:** TODO: See https://wordpress.org/support/topic/notice-from-wp-debug/ -- means that 1 single character is set, instead of something serialized.
+* **Added:** TODO: Added admin warning when extensions won't load for any reason whatsoever, it'll tell you to go to the Extension Manager page when for details.
+* **Added:** TODO: You can now define a constant for auto-activating extensions (PHP7+).
+* **Added:** TODO: You can now define a constant for blocking extensions (this hides the extensions and the admin can't forge requests updating it, but the extensions can still be auto-activated) (PHP7+).
+* **Added:** TODO: You can now define a constant for your API connection key (PHP7+).
+* **Added:** TODO: You can now define a constant to hide the admin interface of the extension manager (any supported PHP).
+* **Changed:** The plugin now handles illegal calls (bypassing early API protection) gracefully with errors, instead of abruptly halting code execution.
+* **Fixed:** A PHP notice when obtaining fresh post meta with Focus after saving with Articles enabled before (or vice versa).
 * **Fixed:** The translation folder is now correctly assigned for manual translation files.
+* **Fixed:** Tooltip items with links now show the correct pointer on hover.
+* **Fixed:** The plugin now loads the very first time after activating or upgrading, instead of waiting for a second request.
+* TODO Focus: https://wordpress.org/support/topic/keyword-feild/#post-10459889
+* TODO Focus: Add tooltips on Pencil (click here).
+* TODO **Fixed:** The plugin page top bar's whitespace padding now aligns with the body.
+
+**Updated Extensions:**
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
+* [AMP](https://theseoframework.com/extensions/amp/#changelog)
+* [Articles](https://theseoframework.com/extensions/articles/#changelog)
+* [Monitor](https://theseoframework.com/extensions/monitor/#changelog)
+* [Title Fix](https://theseoframework.com/extensions/title-fix/#changelog)
 
 = 1.5.1 =
 

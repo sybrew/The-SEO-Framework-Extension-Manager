@@ -61,10 +61,10 @@ final class InpostGUI {
 	 * @param string JS_NONCE_ACTION The JS nonce action.
 	 * @param string JS_NONCE_NAME   The JS nonce name.
 	 */
-	const NONCE_ACTION = 'tsfem-save-inpost-nonce';
-	const NONCE_NAME = 'tsfem-inpost-settings';
+	const NONCE_ACTION    = 'tsfem-save-inpost-nonce';
+	const NONCE_NAME      = 'tsfem-inpost-settings';
 	const JS_NONCE_ACTION = 'tsfem-ajax-save-inpost-nonce';
-	const JS_NONCE_NAME = 'nonce';
+	const JS_NONCE_NAME   = 'nonce';
 
 	/**
 	 * @since 1.5.0
@@ -91,16 +91,16 @@ final class InpostGUI {
 	 * @param array $active_tab_keys The activate tab keys of static::$tabs
 	 * @param array $views The registered view files for the tabs.
 	 */
-	private static $tabs = [];
+	private static $tabs            = [];
 	private static $active_tab_keys = [];
-	private static $views = [];
+	private static $views           = [];
 
 	/**
 	 * @since 1.5.0
 	 * @param array $scripts   The registered scripts.
 	 * @param array $templates The registered templates.
 	 */
-	private static $scripts = [];
+	private static $scripts   = [];
 	private static $templates = [];
 
 	/**
@@ -144,22 +144,22 @@ final class InpostGUI {
 	private function register_tabs() {
 		static::$tabs = [
 			'structure' => [
-				'name' => \__( 'Structure', 'the-seo-framework-extension-manager' ),
+				'name'     => \__( 'Structure', 'the-seo-framework-extension-manager' ),
 				'callback' => [ $this, '_output_tab_content' ],
 				'dashicon' => 'layout',
-				'args' => [ 'structure' ],
+				'args'     => [ 'structure' ],
 			],
 			'audit' => [
-				'name' => \__( 'Audit', 'the-seo-framework-extension-manager' ),
+				'name'     => \__( 'Audit', 'the-seo-framework-extension-manager' ),
 				'callback' => [ $this, '_output_tab_content' ],
 				'dashicon' => 'analytics',
-				'args' => [ 'audit' ],
+				'args'     => [ 'audit' ],
 			],
 			'advanced' => [
-				'name' => \__( 'Advanced', 'the-seo-framework-extension-manager' ),
+				'name'     => \__( 'Advanced', 'the-seo-framework-extension-manager' ),
 				'callback' => [ $this, '_output_tab_content' ],
 				'dashicon' => 'list-view',
-				'args' => [ 'advanced' ],
+				'args'     => [ 'advanced' ],
 			],
 		];
 	}

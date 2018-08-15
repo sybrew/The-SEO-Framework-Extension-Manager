@@ -117,6 +117,12 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.0-beta-5
+
+[tsfep-release time="-1"]
+
+* **Added:** TSF v3.1 support.
+
 ### 1.1.0-beta-5
 
 [tsfep-release time="March 31st, 2018"]

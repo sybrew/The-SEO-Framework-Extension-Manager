@@ -49,7 +49,33 @@ For more information, please visit:
 
 [tsfep-image id="2"]
 
+## Developers
+
+### Filters
+
+Here you can find the available filters for AMP.
+
+#### Add meta content
+
+Add your own meta data, with either `the_seo_framework_amp_pre` (before) or `the_seo_framework_amp_pro` (after).
+
+```php
+add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
+
+	// Add your own meta tags. Don't overwrite $output!
+	$output .= '<meta name="author" content="John Doe">' . PHP_EOL;
+
+	return $output;
+} );
+```
+
 ## Changelog
+
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* **Improved:** Now uses AMP v0.5+ endpoint detection when available.
 
 ### 1.0.2
 
@@ -58,6 +84,7 @@ For more information, please visit:
 * **Added:** Output filters, respectively before and after:
 	* `(string) the_seo_framework_amp_pre`
 	* `(string) the_seo_framework_amp_pro`
+	* Documented at [developers](#developers).
 
 ### 1.0.1
 

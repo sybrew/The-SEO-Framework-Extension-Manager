@@ -102,7 +102,97 @@ These settings can be found at **Settings -> Discussion**.
 
 ### Gotta catch 'em all
 
-If you still receive a bunch of spam, consider combining this extension with an authoritative comment plugin, like [Akismet](https://wordpress.org/plugins/akismet/).
+With Honeypot, you can be certain that each comment that comes through is written by a human.
+
+But, if even those comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). This plugin tracks the user's comment activity on multiple sites.
+
+## Developers
+
+### Filters
+
+Here you can find the available filters for Honeypot.
+
+#### Change input field accessibility sentences
+
+When JavaScript is disabled on the visitor's browser, the hidden input field isn't removed and cleared.
+
+Most robots don't know that they need to clear this field. Real visitors should.
+
+The fields are self-explanatory, translatable, and you're free to change them.
+
+```php
+add_filter( 'the_seo_framework_honeypot_label', function( $text = '' ) {
+	// Text disabled above the input, as a label.
+	return __( 'Comments for robots', 'the-seo-framework-extension-manager' );
+} );
+```
+
+```php
+add_filter( 'the_seo_framework_honeypot_input', function( $text = '' ) {
+	// Text displayed that asks the visitor to clear the field.
+	return __( "Please remove this comment to prove you're human.", 'the-seo-framework-extension-manager' );
+} );
+```
+
+```php
+add_filter( 'the_seo_framework_honeypot_placeholder', function( $text = '' ) {
+	// Text displayed when the visitor clears the field.
+	return __( 'You are human!', 'the-seo-framework-extension-manager' );
+} );
+```
+
+#### Adjust hardcore mode
+
+Honeypot autodetermines whether hardcore mode is available based on your site's caching settings.
+
+When hardcore mode is enabled, field names and values are rotated more often. This catches even the smartest bots.
+
+These values have been carefully tuned and shouldn't have to be changed.
+
+```php
+add_filter( 'the_seo_framework_honeypot_hardcore', function( $hardcore = true ) {
+	// Toggle hardcore mode. Below is the default value.
+	return ! WP_CACHE;
+} );
+```
+
+```php
+add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) {
+	/**
+	 * This is the minimum time a visitor has to submit an illegal comment on your site.
+	 * The maximum time is twice the value returned.
+	 *
+	 * When this time passes, the submitted comment bypasses some spam checks.
+	 *
+	 * Lower than 300 seconds (total 600 i.e. 10 minutes) is not recommended,
+	 * as some bots enqueue their targets.
+	 *
+	 * Below are the default values.
+	 */
+	return 60 * MINUTE_IN_SECONDS;
+} );
+```
+
+```php
+add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, $hardcore = true ) {
+	/**
+	 * This is the minimum time a visitor has to submit a comment on your site.
+	 * The maximum time is twice the value returned.
+	 *
+	 * When this time passes, the submitted comment is automatically rejected.
+	 *
+	 * Lower than 3600 seconds (total 7200 i.e. 2 hours) is not recommended,
+	 * as some users might generously wait to comment (closing laptop and such).
+	 *
+	 * Below are the default values.
+	 */
+	if ( $hardcore ) {
+		return 12 * HOUR_IN_SECONDS;
+	} else {
+		return 5 * DAY_IN_SECONDS;
+	}
+}, 10, 2 );
+```
 
 ## Changelog
 
@@ -111,6 +201,7 @@ If you still receive a bunch of spam, consider combining this extension with an 
 [tsfep-release time="March 31st, 2018"]
 
 * **Changed:** Filter `the_seo_framework_honeypot_nonce_scale` now passes a second "hardcore" boolean parameter.
+	* Documented at [developers](#developers).
 * **Fixed:** An off-by-one error has been resolved generating a random first alphabetic character.
 
 ### 1.1.0

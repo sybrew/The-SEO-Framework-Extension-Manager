@@ -62,7 +62,7 @@ final class Front extends Core {
 	private function construct() {
 
 		$this->is_json_valid = [
-			'amp' => true,
+			'amp'    => true,
 			'nonamp' => true,
 		];
 
@@ -208,7 +208,7 @@ final class Front extends Core {
 
 		$functions[] = [
 			'callback' => [ $this, '_get_articles_json_output' ],
-			'args' => [],
+			'args'     => [],
 		];
 
 		return $functions;
@@ -301,7 +301,7 @@ final class Front extends Core {
 	 * @return array The Article context.
 	 */
 	private function get_article_context() {
-		return [ '@context' => 'http://schema.org' ];
+		return [ '@context' => 'https://schema.org' ];
 	}
 
 	/**
@@ -327,7 +327,7 @@ final class Front extends Core {
 	 * Returns the Article Main Entity of Page.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.0 Added TSF 3.0 compat.
+	 * @since 1.1.0 Added TSF v3.0 compat.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -354,7 +354,7 @@ final class Front extends Core {
 		return [
 			'mainEntityOfPage' => [
 				'@type' => 'WebPage',
-				'@id' => $url,
+				'@id'   => $url,
 			],
 		];
 	}
@@ -367,6 +367,7 @@ final class Front extends Core {
 	 *   'nonamp' => Will return empty.
 	 * }
 	 * @since 1.0.0
+	 * @since 1.3.0 Added TSF v3.1 compat.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema Never
@@ -377,9 +378,15 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$id = $this->get_current_id();
-		$title = \the_seo_framework()->post_title_from_ID( $id ) ?: \the_seo_framework()->title_from_custom_field( '', false, $id );
-		$title = trim( \the_seo_framework()->s_title_raw( $title ) );
+		$id  = $this->get_current_id();
+		$tsf = \the_seo_framework();
+
+		if ( method_exists( $tsf, 'get_raw_generated_title' ) ) {
+			$title = $tsf->get_raw_generated_title( [ 'id' => $id ] );
+		} else {
+			$title = $tsf->post_title_from_ID( $id ) ?: $tsf->title_from_custom_field( '', false, $id );
+			$title = trim( $tsf->s_title_raw( $title ) );
+		}
 
 		if ( ! $title || mb_strlen( $title ) > 110 ) {
 			$this->invalidate( 'amp' );
@@ -387,7 +394,7 @@ final class Front extends Core {
 		}
 
 		return [
-			'headline' => \the_seo_framework()->escape_title( $title ),
+			'headline' => $tsf->escape_title( $title ),
 		];
 	}
 
@@ -419,10 +426,10 @@ final class Front extends Core {
 
 		return [
 			'image' => [
-				'@type' => 'ImageObject',
-				'url' => \esc_url( $image['url'], [ 'http', 'https' ] ),
+				'@type'  => 'ImageObject',
+				'url'    => \esc_url( $image['url'], [ 'http', 'https' ] ),
 				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
-				'width' => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
+				'width'  => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
 			],
 		];
 	}
@@ -437,7 +444,7 @@ final class Front extends Core {
 	private function get_article_image_params() {
 
 		$id = $this->get_current_id();
-		$w = $h = 0;
+		$w  = $h = 0;
 
 		if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
 
@@ -459,7 +466,7 @@ final class Front extends Core {
 
 			$_src = \wp_get_attachment_image_src( $_img_id, 'full', false );
 
-			if ( count( $_src ) >= 3 ) {
+			if ( is_array( $_src ) && count( $_src ) >= 3 ) {
 				$url = $_src[0];
 				$w   = $_src[1];
 				$h   = $_src[2];
@@ -476,8 +483,8 @@ final class Front extends Core {
 		retvals :;
 
 		return [
-			'url' => $url,
-			'width' => $w,
+			'url'    => $url,
+			'width'  => $w,
 			'height' => $h,
 		];
 	}
@@ -557,12 +564,17 @@ final class Front extends Core {
 		}
 
 		$author = \get_userdata( $post->post_author );
-		$name = $author->display_name;
+		$name   = isset( $author->display_name ) ? $author->display_name : '';
+
+		if ( ! $name ) {
+			$this->invalidate( 'amp' );
+			return [];
+		}
 
 		return [
 			'author' => [
 				'@type' => 'Person',
-				'name' => \esc_attr( $name ),
+				'name'  => \esc_attr( $name ),
 			],
 		];
 	}
@@ -608,7 +620,7 @@ final class Front extends Core {
 		$resize = false;
 
 		if ( $_default_img_id === $_img_id ) {
-			$size = $this->image_size_name;
+			$size   = $this->image_size_name;
 			$resize = true;
 		} else {
 			$size = 'full';
@@ -621,7 +633,7 @@ final class Front extends Core {
 				$_src = \wp_get_attachment_image_src( $_img_id, $size );
 		}
 
-		if ( count( $_src ) >= 3 ) {
+		if ( is_array( $_src ) && count( $_src ) >= 3 ) {
 			$url = $_src[0];
 			$w   = $_src[1];
 			$h   = $_src[2];
@@ -635,11 +647,11 @@ final class Front extends Core {
 		return [
 			'publisher' => [
 				'@type' => 'Organization',
-				'name' => \esc_attr( $name ),
-				'logo' => [
-					'@type' => 'ImageObject',
-					'url' => \esc_url( $url, [ 'http', 'https' ] ),
-					'width' => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
+				'name'  => \esc_attr( $name ),
+				'logo'  => [
+					'@type'  => 'ImageObject',
+					'url'    => \esc_url( $url, [ 'http', 'https' ] ),
+					'width'  => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
 					'height' => abs( filter_var( $h, FILTER_SANITIZE_NUMBER_INT ) ),
 				],
 			],
@@ -653,6 +665,7 @@ final class Front extends Core {
 	 * @since 1.0.0-gamma-2: Changed excerpt length to 155, from 400.
 	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
 	 *                2. Now takes description from cache.
+	 * @since 1.3.0 Added TSF v3.1 compat.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -663,8 +676,16 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
+		$tsf = \the_seo_framework();
+
+		if ( method_exists( $tsf, 'get_description' ) ) {
+			$description = $tsf->get_description( $this->get_current_id() );
+		} else {
+			$description = $tsf->description_from_cache();
+		}
+
 		return [
-			'description' => \esc_attr( \the_seo_framework()->description_from_cache() ),
+			'description' => \esc_attr( $description ),
 		];
 	}
 
@@ -681,6 +702,7 @@ final class Front extends Core {
 	private function make_amp_logo( $attachment_id ) {
 
 		$success = false;
+
 		$size = \wp_get_additional_image_sizes()[ $this->image_size_name ];
 
 		$_file = \get_attached_file( $attachment_id );
@@ -688,7 +710,7 @@ final class Front extends Core {
 
 		if ( $_resized_file ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
-			$_data = \wp_generate_attachment_metadata( $attachment_id, $_file );
+			$_data   = \wp_generate_attachment_metadata( $attachment_id, $_file );
 			$success = (bool) \wp_update_attachment_metadata( $attachment_id, $_data );
 		}
 

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Title_Fix;
  * Extension Name: Title Fix
  * Extension URI: https://theseoframework.com/extensions/title-fix/
  * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
- * Extension Version: 1.1.0
+ * Extension Version: 1.2.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -40,7 +40,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 define( 'TSFEM_E_TITLE_FIX', true );
 
 //* Define version, for future things.
-define( 'TSFEM_E_TITLE_FIX_VERSION', '1.0.3' );
+define( 'TSFEM_E_TITLE_FIX_VERSION', '1.2.0' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\title_fix_init', 11 );
 /**
@@ -303,8 +303,7 @@ final class Core {
 			}
 		}
 
-		//* Can't be escaped, as content is unknown.
-		echo $content;
+		echo $content; // xss OK, esque. The content is unknown.
 
 	}
 
@@ -312,6 +311,7 @@ final class Core {
 	 * Replaces the title tag.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Added TSF v3.1 compat.
 	 *
 	 * @param string $title_tag the Title tag with the title
 	 * @param string $content The content containing the $title_tag
@@ -319,14 +319,20 @@ final class Core {
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
 
-		$new_title = '<title>' . \the_seo_framework()->title_from_cache( '', '' , '', true ) . '</title>' . $this->indicator();
+		$tsf = \the_seo_framework();
+
+		if ( method_exists( $tsf, 'get_title' ) ) {
+			$title = $tsf->get_title();
+		} else {
+			$title = $tsf->title_from_cache( '', '' , '', true );
+		}
+		$new_title = '<title>' . $title . '</title>' . $this->indicator();
 
 		//* Replace the title tag within the header.
 		//* TODO substr_replace to prevent multiple replacements?
 		$content = str_replace( $title_tag, $new_title, $content );
 
-		//* Can't be escaped, as content is unknown.
-		echo $content;
+		echo $content; // xss OK, esque. The content is unknown. Replaced content is great.
 
 	}
 

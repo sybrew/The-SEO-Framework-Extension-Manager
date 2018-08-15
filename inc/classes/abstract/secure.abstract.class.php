@@ -173,7 +173,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final public static function set_nonces( $type, $value ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return;
 
 		switch ( $type ) :
 			case 'nonce_name' :
@@ -197,7 +197,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final public static function set_account( $account ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return;
 
 		self::set( 'account', $account );
 
@@ -267,7 +267,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The instance may not be left active between WordPress action hooks. Reset or initialize this instance first.' );
 		} elseif ( empty( self::$_type ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must first use initialize class and set property <code>$_type</code>.' );
-		} else {
+		} elseif ( ! \tsf_extension_manager()->_has_died() ) {
 			$verified = true;
 		}
 

@@ -114,13 +114,14 @@ class AdminPages extends AccountActivation {
 	 * SEO Framework SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses \the_seo_framework()->page_id variable.
+	 * @since 1.5.2 Added TSF v3.1 compat.
+	 * @uses \the_seo_framework()->seo_settings_page_slug
 	 * @access private
 	 */
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \the_seo_framework_options_page_slug(),
+			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',

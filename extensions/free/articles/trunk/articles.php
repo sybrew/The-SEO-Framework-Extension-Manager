@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  * Extension Name: Articles
  * Extension URI: https://theseoframework.com/extensions/articles/
  * Extension Description: The Articles extension enhances your published posts by automatically adding [both AMP and non-AMP Structured Data](https://developers.google.com/search/docs/data-types/articles).
- * Extension Version: 1.1.0
+ * Extension Version: 1.3.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -36,8 +36,9 @@ defined( 'ABSPATH' ) or die;
 /**
  * The extension version.
  * @since 1.0.0
+ * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.2.0' );
+define( 'TSFEM_E_ARTICLES_VERSION', '1.3.0' );
 
 /**
  * The extension file, absolute unix path.
@@ -47,9 +48,9 @@ define( 'TSFEM_E_ARTICLES_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
- * @since 1.2.0
+ * @since ???
  */
-//define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_ARTICLES_BASE_FILE ) );
+// define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_ARTICLES_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
@@ -104,7 +105,7 @@ function _articles_init() {
 	if ( \is_admin() ) {
 		new Admin;
 		$loaded = true;
-	} elseif ( \the_seo_framework()->is_single() && 'post' === get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
+	} elseif ( \the_seo_framework()->is_single() && 'post' === \get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
 		new Front;
 		$loaded = true;
 	}

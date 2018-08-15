@@ -136,7 +136,7 @@ final class Extensions extends Secure_Abstract {
 	 */
 	public static function get( $type = '', $slug = '' ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return;
 
 		if ( empty( $type ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
@@ -168,7 +168,7 @@ final class Extensions extends Secure_Abstract {
 				return static::get_extension_description_footer( static::get_extension( $slug ), false );
 				break;
 
-			default :
+			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
 		endswitch;
@@ -185,7 +185,7 @@ final class Extensions extends Secure_Abstract {
 	 */
 	public static function set_instance_extension_slug( $slug ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return;
 
 		switch ( self::get_property( '_type' ) ) :
 			case 'activation' :
@@ -193,7 +193,7 @@ final class Extensions extends Secure_Abstract {
 				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}

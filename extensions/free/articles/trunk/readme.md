@@ -109,7 +109,7 @@ These fields aren't required for non-AMP, but they are recommended.
 * **Image:** This image needs to be set in the in-post SEO social settings.
 	* Alternatively, you can use the Featured Image.
 * **Publisher:** The website must represent an Organization and it must include a logo.
-	* The logo is taken from **"SEO Settings -> Schema Settings -> Presence -> Website logo"**.  
+	* The logo is taken from **"SEO Settings -> Schema Settings -> Presence -> Website logo"**.
 	* Alternatively, you can set a site icon in Customizer, this requires theme support.
 
 ### Types
@@ -172,6 +172,14 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 
 ## Changelog
 
+### 1.3.0
+
+[tsfep-release time="-1"]
+
+* **Added:** TSF v3.1 support.
+* **Fixed:** A PHP notice that happens when a registered image is missing.
+* **Other:** The correct version of this extension is now displayed in the dashboard.
+
 ### 1.2.0
 
 [tsfep-release time="March 31st, 2018"]
@@ -179,7 +187,7 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 * **Added:** Article Type selection is now available on every post.
 	* You can select **"Article"**, **"NewsArticle"** and **"BlogPosting"**.
 * **Added:** New filter: `the_seo_framework_articles_default_meta`.
-	* Documented at [development](#development).
+	* Documented at [developers](#developers).
 
 ### 1.1.0
 

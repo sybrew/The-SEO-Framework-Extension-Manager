@@ -42,7 +42,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			TSF_EXTENSION_MANAGER_DIR_PATH . 'language' . DIRECTORY_SEPARATOR
+			TSF_EXTENSION_MANAGER_DIR_PATH . 'language'
 		);
 	}
 }
@@ -199,7 +199,6 @@ function _register_autoloader() {
  * @since 1.0.0
  * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @staticvar bool $can_load
- * @uses the_seo_framework_version() which returns null if plugin is inactive.
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */
@@ -210,8 +209,15 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( function_exists( 'the_seo_framework_version' ) && version_compare( \the_seo_framework_version(), '2.8', '>=' ) )
-		return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
+	if ( function_exists( 'the_seo_framework' ) ) {
+		$tsf = \the_seo_framework();
+		$loaded = isset( $tsf->loaded ) ? $tsf->loaded : (
+			function_exists( 'the_seo_framework_active' ) ? \the_seo_framework_active() : false
+		);
+
+		if ( $loaded && version_compare( THE_SEO_FRAMEWORK_VERSION, '2.8', '>=' ) )
+			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
+	}
 
 	return $can_load = false;
 }

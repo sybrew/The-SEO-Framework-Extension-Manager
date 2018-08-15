@@ -813,6 +813,8 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.2.0
 	 * @access private
+	 * @uses \the_seo_framework()->seo_settings_page_slug
+	 * @uses \the_seo_framework()->add_menu_link()
 	 * @staticvar bool $parent_set
 	 * @staticvar array $slug_set
 	 *
@@ -842,7 +844,7 @@ final class LoadAdmin extends AdminPages {
 
 		//* Add arbitrary menu contents to known menu slug.
 		$menu = [
-			'parent_slug' => \the_seo_framework_options_page_slug(),
+			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => '1',
 			'menu_title'  => '1',
 			'capability'  => $capability,

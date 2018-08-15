@@ -431,8 +431,6 @@ final class Core {
 	 */
 	private function set_hardcore() {
 		/**
-		 * Applies filters 'the_seo_framework_honeypot_hardcore'
-		 *
 		 * Determines whether the hashing is randomized, or otherwise static.
 		 * Set this to true if you don't use caching and still get spam through.
 		 *
@@ -526,10 +524,7 @@ final class Core {
 		switch ( $what ) :
 			case 'js_placeholder' :
 				/**
-				 * Applies filters 'the_seo_framework_honeypot_placeholder'
-				 *
 				 * @since 1.0.0
-				 *
 				 * @param string $text The placeholder text shown to non-JS users.
 				 */
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_placeholder', \__( 'You are human!', 'the-seo-framework-extension-manager' ) );
@@ -537,10 +532,7 @@ final class Core {
 
 			case 'js_input' :
 				/**
-				 * Applies filters 'the_seo_framework_honeypot_input'
-				 *
 				 * @since 1.0.0
-				 *
 				 * @param string $text The input field text that needs to be removed shown to non-JS users.
 				 */
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_input', \__( "Please remove this comment to prove you're human.", 'the-seo-framework-extension-manager' ) );
@@ -548,10 +540,7 @@ final class Core {
 
 			case 'js_label' :
 				/**
-				 * Applies filters 'the_seo_framework_honeypot_label'
-				 *
 				 * @since 1.0.0
-				 *
 				 * @param string $text The input label title shown to non-JS users.
 				 */
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_label', \__( 'Comments for robots', 'the-seo-framework-extension-manager' ) );
@@ -590,15 +579,12 @@ final class Core {
 
 			if ( $this->hardcore ) {
 				/**
-				 * Applies filters 'the_seo_framework_honeypot_field_scale'
-				 *
 				 * Set this lower if you are a prominent spam target.
 				 * Lower than 300 seconds (total 600 i.e. 10 minutes) is not recommended,
 				 * as some bots purposely wait.
 				 * If you're using page caching whilst in hardcore mode, set this higher.
 				 *
 				 * @since 1.0.0
-				 *
 				 * @param int $scale The time in seconds on how fast the check works.
 				 *            Note that this value is doubled for the fallback check.
 				 */
@@ -676,8 +662,6 @@ final class Core {
 			$time = $this->hardcore ? 12 * HOUR_IN_SECONDS : 5 * DAY_IN_SECONDS;
 
 			/**
-			 * Applies filters 'the_seo_framework_honeypot_nonce_scale'
-			 *
 			 * Set this lower if you are a prominent spam target.
 			 * Lower than 3600 seconds (total 7200 i.e. 2 hours) is not recommended,
 			 * as some users generously wait to comment (closing laptop and such).

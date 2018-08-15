@@ -59,9 +59,7 @@ trait Extensions_Properties {
 	private static function get_extensions() {
 		/**
 		 * @access private
-		 * Please note, if I catch any prominent tutorial on how to alter this list,
-		 * for better or for worse: I'll add an external checksum validator with TLS
-		 * and HMAC together with large blocks of code to be altered henceforth.
+		 * Don't hijack this <3
 		 *
 		 * Please stay on a moral highground and let everyone keep and have the
 		 * best of the best. I (Sybre Waaijer) try my hardest to keep everything up
@@ -84,70 +82,70 @@ trait Extensions_Properties {
 				'network' => '0',
 				'type' => 'premium',
 				'area' => 'business',
-				'version' => '1.0.1',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1522203600',
+				'last_updated' => '1534366523',
 				'requires' => '4.7.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'focus' => [
 				'slug' => 'focus',
 				'network' => '0',
 				'type' => 'free+premium',
 				'area' => 'audit, content, keywords',
-				'version' => '1.0.0',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1522484552',
+				'last_updated' => '1534366523',
 				'requires' => '4.8.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '3.0.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'amp' => [
 				'slug' => 'amp',
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'general',
-				'version' => '1.0.2',
+				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1515109560',
+				'last_updated' => '1534366523',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'articles' => [
 				'slug' => 'articles',
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'blogging, news',
-				'version' => '1.2.0',
+				'version' => '1.3.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1521996660',
+				'last_updated' => '1534366523',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'monitor' => [
 				'slug' => 'monitor',
 				'network' => '0',
 				'type' => 'premium',
 				'area' => 'uptime, syntax',
-				'version' => '1.1.0',
+				'version' => '1.2.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1522203600',
+				'last_updated' => '1534366523',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'incognito' => [
 				'slug' => 'incognito',
@@ -159,9 +157,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1515109560',
 				'requires' => '3.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'honeypot' => [
 				'slug' => 'honeypot',
@@ -171,11 +169,11 @@ trait Extensions_Properties {
 				'version' => '1.1.1',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1520550120',
+				'last_updated' => '1534366523',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'origin' => [
 				'slug' => 'origin',
@@ -187,23 +185,23 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1515109560',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			'title-fix' => [
 				'slug' => 'title-fix',
 				'network' => '0',
 				'type' => 'free',
 				'area' => 'theme',
-				'version' => '1.1.0',
+				'version' => '1.2.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1517058960',
+				'last_updated' => '1534366523',
 				'requires' => '4.6.0',
-				'tested' => '4.9.6',
+				'tested' => '4.9.8',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.0.6',
+				'tested_tsf' => '3.1.0',
 			],
 			// 'transporter' => [
 			// 	'slug' => 'transporter',
@@ -235,9 +233,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '31f502f3db79e5fe3ee43163e7f727d84e59ab88053cbd94585ef8c83c963dd5',
-			'sha1'   => '85614de5b02e9c697c72691673c5e673d9ae948b',
-			'md5'    => '332aacdd26f0b04b1f8873f50ec25869',
+			'sha256' => '7c10d85930125693c33a9ca2e2d5dff4f423a413a95c4ef1c30cf37b6c343c91',
+			'sha1'   => '00c8bc9b945053dee18dfd3c27e021b8ad6c6049',
+			'md5'    => 'd32da1cdd65dfeaf15a31af3292058ea',
 		];
 	}
 
@@ -406,7 +404,6 @@ trait Extensions_Properties {
 	}
 }
 
-
 /**
  * Holds extensions activation functions for class TSF_Extension_Manager\Extensions.
  *
@@ -527,7 +524,9 @@ trait Extensions_Actions {
 	 */
 	public static function validate_extension_activation() {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) {
+			return [ 'success' => false, 'case' => 0 ];
+		}
 
 		if ( 'activation' !== self::get_property( '_type' ) ) {
 			self::reset();
@@ -728,12 +727,12 @@ trait Extensions_Actions {
 			'wp' => 0,
 		];
 
-		$tsf_version = \the_seo_framework_version();
-		$_wp_version = $wp_version;
+		$_tsf_version = THE_SEO_FRAMEWORK_VERSION;
+		$_wp_version  = $wp_version;
 
-		if ( version_compare( $tsf_version, $extension['tested_tsf'], '>' ) ) {
+		if ( version_compare( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
 			$compatibility['tsf'] = 1;
-		} elseif ( version_compare( $tsf_version, $extension['requires_tsf'], '>=' ) ) {
+		} elseif ( version_compare( $_tsf_version, $extension['requires_tsf'], '>=' ) ) {
 			$compatibility['tsf'] = 2;
 		}
 
@@ -767,7 +766,12 @@ trait Extensions_Actions {
 	 */
 	public static function test_extension( $slug, $ajax, $_instance, $bits ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) {
+			self::reset();
+
+			$val = -1;
+			goto tick;
+		}
 
 		if ( 'load' !== self::get_property( '_type' ) ) {
 			self::reset();
@@ -1096,7 +1100,7 @@ trait Extensions_Actions {
 	 */
 	public static function load_extension( $slug, &$_instance, &$bits ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return false;
 
 		if ( 'load' !== self::get_property( '_type' ) ) {
 			self::reset();

@@ -313,7 +313,7 @@ trait UI {
 		$this->main_css = [
 			'name' => 'tsfem',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
 		\wp_register_style(
@@ -350,7 +350,7 @@ trait UI {
 		$this->main_js = [
 			'name' => 'tsfem',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
 		\wp_register_script(
@@ -515,13 +515,13 @@ trait UI {
 		$this->additional_css[] = [
 			'name' => 'tsfem-form',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
 		$this->additional_js[] = [
 			'name' => 'tsfem-form',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
 		$this->additional_l10n[] = [
@@ -582,7 +582,7 @@ trait UI {
 		$this->additional_js[] = [
 			'name' => 'tsfem-media',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 		];
 
 		$this->register_media_l10n();
@@ -601,8 +601,8 @@ trait UI {
 
 		$this->additional_l10n[] = [
 			'dependency' => 'tsfem-media',
-			'name' => 'tsfemMediaData',
-			'strings' => [
+			'name'       => 'tsfemMediaData',
+			'strings'    => [
 				'nonce'          => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
 				'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
 				'imgSelectTitle' => \esc_attr_x( 'Select image', 'Button hover', 'the-seo-framework-extension-manager' ),

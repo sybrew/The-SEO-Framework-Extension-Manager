@@ -39,6 +39,7 @@ defined( 'ABSPATH' ) or die;
 /**
  * The extension version.
  * @since 1.0.0
+ * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
 define( 'TSFEM_E_TRANSPORTER_VERSION', '1.0.0' );
 

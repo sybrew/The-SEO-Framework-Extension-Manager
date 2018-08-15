@@ -122,11 +122,11 @@ final class Admin extends Core {
 				],
 				'seoTitle' => [
 					'#autodescription_title' => 'dominate', //= backwards compatibility.
-					'#tsf-title-reference' => 'dominate', //! TSF 3.0.4+
+					'#tsf-title-reference'   => 'dominate', //! TSF 3.0.4+
 				],
 				'seoDescription' => [
 					'#autodescription_description' => 'dominate', //= backwards compatibility.
-					'#tsf-description-reference' => 'dominate', //! TSF 3.0.4+
+					'#tsf-description-reference'   => 'dominate', //! TSF 3.0.4+
 				],
 			],
 		] );
@@ -158,15 +158,15 @@ final class Admin extends Core {
 			'type' => 'js',
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
-			'ver' => TSFEM_E_FOCUS_VERSION,
+			'ver'  => TSFEM_E_FOCUS_VERSION,
 			'deps' => [ 'jquery', 'tsf', 'tsfem-inpost' ],
 			'l10n' => [
 				'name' => 'tsfem_e_focusInpostL10n',
 				'data' => [
-					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
-					'focusElements' => $this->get_focus_elements(),
+					'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
+					'focusElements'      => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
-					'languageSupported' => $this->is_language_supported(),
+					'languageSupported'  => $this->is_language_supported(),
 				],
 			],
 			'tmpl' => [
@@ -174,11 +174,11 @@ final class Admin extends Core {
 			],
 		] );
 		$inpostgui::register_script( [
-			'type' => 'css',
-			'name' => 'tsfem-focus-inpost',
-			'base' => TSFEM_E_FOCUS_DIR_URL,
-			'ver' => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'tsf', 'tsfem-inpost' ],
+			'type'   => 'css',
+			'name'   => 'tsfem-focus-inpost',
+			'base'   => TSFEM_E_FOCUS_DIR_URL,
+			'ver'    => TSFEM_E_FOCUS_VERSION,
+			'deps'   => [ 'tsf', 'tsfem-inpost' ],
 			'inline' => [
 				'.tsfem-e-focus-content-loader-bar' => [
 					'background:{{$color_accent}}',
@@ -206,15 +206,15 @@ final class Admin extends Core {
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
-			'post_id' => \the_seo_framework()->get_the_real_ID(),
-			'kw' => [
-				'label' => [
+			'post_id'  => \the_seo_framework()->get_the_real_ID(),
+			'kw'       => [
+				'label'        => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),
-					'desc' => \__( 'Set subjects and learn how you can improve their focus.', 'the-seo-framework-extension-manager' ),
-					'link' => 'https://theseoframework.com/extensions/focus/#usage',
+					'desc'  => \__( 'Set subjects and learn how you can improve their focus.', 'the-seo-framework-extension-manager' ),
+					'link'  => 'https://theseoframework.com/extensions/focus/#usage',
 				],
 				//! Don't set default, it's already pre-populated.
-				'values' => $this->get_post_meta( 'kw', null ),
+				'values'       => $this->get_post_meta( 'kw', null ),
 				'option_index' => 'kw',
 			],
 		];
@@ -222,10 +222,10 @@ final class Admin extends Core {
 		\TSF_Extension_Manager\InpostGUI::register_view(
 			$this->get_view_location( 'inpost/inpost' ),
 			[
-				'post_meta' => $post_meta,
-				'defaults' => $this->pm_defaults,
-				'template_cb' => [ $this, '_output_focus_template' ],
-				'is_premium' => \tsf_extension_manager()->is_premium_user(),
+				'post_meta'          => $post_meta,
+				'defaults'           => $this->pm_defaults,
+				'template_cb'        => [ $this, '_output_focus_template' ],
+				'is_premium'         => \tsf_extension_manager()->is_premium_user(),
 				'language_supported' => $this->is_language_supported(),
 			],
 			'audit'
@@ -296,11 +296,11 @@ final class Admin extends Core {
 		$store = [];
 		foreach ( $data[ $this->pm_index ] as $key => $value ) :
 			switch ( $key ) {
-				case 'kw' :
+				case 'kw':
 					$store[ $key ] = $this->sanitize_keyword_data( (array) $value );
 					break;
 
-				default :
+				default:
 					break;
 			}
 			if ( is_null( $store[ $key ] ) ) unset( $store[ $key ] );
@@ -361,18 +361,18 @@ final class Admin extends Core {
 	 */
 	private function sanitize_keyword_data_by_type( $type, $value ) {
 		switch ( $type ) :
-			case 'keyword' :
+			case 'keyword':
 				$value = \sanitize_text_field( $value );
 				break;
 
-			case 'lexical_form' :
-			case 'definition_selection' :
+			case 'lexical_form':
+			case 'definition_selection':
 				$value = (string) \absint( $value );
 				break;
 
-			case 'lexical_data' :
-			case 'inflection_data' :
-			case 'synonym_data' :
+			case 'lexical_data':
+			case 'inflection_data':
+			case 'synonym_data':
 				//= Decode and encode the values. An empty array will be returned on failure.
 				$value = json_decode(
 					json_encode(
@@ -382,7 +382,7 @@ final class Admin extends Core {
 				);
 				break;
 
-			case 'scores' :
+			case 'scores':
 				if ( ! is_array( $value ) ) {
 					$value = [];
 				} else {
@@ -393,8 +393,8 @@ final class Admin extends Core {
 				}
 				break;
 
-			case 'active_inflections' :
-			case 'active_synonyms' :
+			case 'active_inflections':
+			case 'active_synonyms':
 				$patterns = [
 					'/[^0-9,]+/', // Remove everything but "0-9,"
 					'/(?=(,,)),|,[^0-9]?+$/', // Fix ",,,"->"," and remove trailing ","
@@ -402,7 +402,7 @@ final class Admin extends Core {
 				$value = preg_replace( $patterns, '', $value );
 				break;
 
-			default :
+			default:
 				unset( $value );
 				break;
 		endswitch;

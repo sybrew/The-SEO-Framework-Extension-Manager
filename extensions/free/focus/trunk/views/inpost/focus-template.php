@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 <div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
 	<?php
 	printf(
-		'<input type=checkbox id=%s value="1" checked class=tsfem-e-focus-collapse-checkbox>',
+		'<input type=checkbox id=%s value="1" checked class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
 		\esc_attr( $action_ids['collapser'] )
 	);
 	?>
@@ -49,8 +49,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				as $hidden_input
 			) {
 				printf(
-					'<input type=hidden id=%s name=%s value="%s">',
-					$is_premium ? \esc_attr( $hidden_input['id'] ) : '""',
+					'<input type=hidden id="%s" name=%s value="%s">',
+					$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
 					\esc_attr( $hidden_input['id'] ),
 					\esc_attr( json_encode( $hidden_input['value'] ) )
 				);
@@ -60,8 +60,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				as $hidden_input
 			) {
 				printf(
-					'<input type=hidden id=%s name=%s value="%s">',
-					$is_premium ? \esc_attr( $hidden_input['id'] ) : '""',
+					'<input type=hidden id="%s" name=%s value="%s">',
+					$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
 					\esc_attr( $hidden_input['id'] ),
 					\esc_attr( $hidden_input['value'] )
 				);
@@ -87,7 +87,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 						[
 							sprintf(
-								'<input type=checkbox id=%s class=tsfem-e-focus-edit-subject-checkbox value="1" disabled>',
+								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox tsf-input-not-saved" value="1" disabled>',
 								\esc_attr( $action_ids['subject_edit'] )
 							),
 							\esc_attr( $action_ids['subject_edit'] ),
@@ -119,7 +119,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			// 		'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 			// 		[
 			// 			sprintf(
-			// 				'<input type=checkbox id=%s class=tsfem-e-focus-highlight-subject-checkbox value="1" disabled>',
+			// 				'<input type=checkbox id=%s class="tsfem-e-focus-highlight-subject-checkbox tsf-input-not-saved" value="1" disabled>',
 			// 				\esc_attr( $action_ids['highlighter'] )
 			// 			),
 			// 			\esc_attr( $action_ids['highlighter'] ),

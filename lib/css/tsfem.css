@@ -1468,7 +1468,7 @@ h4.tsfem-cp-title {
 }
 
 a.tsfem-tooltip-item {
-	cursor: auto;
+	cursor: pointer;
 }
 
 .tsfem-tooltip {

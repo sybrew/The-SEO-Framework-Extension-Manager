@@ -76,11 +76,11 @@ final class Layout extends Secure_Abstract {
 	 * @since 1.0.0
 	 *
 	 * @param string $type Required. Determines what to get.
-	 * @return string
+	 * @return string|bool|void
 	 */
 	public static function get( $type = '' ) {
 
-		self::verify_instance() or die;
+		if ( ! self::verify_instance() ) return;
 
 		if ( empty( $type ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );

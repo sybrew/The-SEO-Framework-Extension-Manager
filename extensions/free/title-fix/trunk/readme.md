@@ -48,6 +48,12 @@ There is no setup required and no options are available.
 
 ## Changelog
 
+### 1.2.0
+
+[tsfep-release time="-1"]
+
+* **Added:** TSF v3.1 support.
+
 ### 1.1.0
 
 [tsfep-release time="March 31st, 2018"]

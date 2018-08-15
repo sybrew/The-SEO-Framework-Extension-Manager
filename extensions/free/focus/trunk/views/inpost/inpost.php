@@ -37,7 +37,6 @@ create_analysis_field :;
 				InpostHTML::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
 				foreach ( $keyword_meta as $id => $values ) :
-
 					//= TEMP: PHP 7 null coalescing.
 					$get_value = function( $id ) use ( $values ) {
 						return isset( $values[ $id ] ) ? $values[ $id ] : '';

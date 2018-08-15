@@ -394,10 +394,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		//= Calculate scores when done.
 		const showScore = () => {
 			let scoring = data.scoring,
-				maxScore = data.maxScore,
+				// maxScore = data.maxScore,
 				density = 0,
-				realScore = 0,
-				endScore = 0;
+				realScore = 0;
+				// endScore = 0;
 
 			/**
 			 * Returns the value if not higher than max. Otherwise it returns max.
@@ -412,7 +412,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			 */
 			const calcDensity = ( charCount, sChars ) => ( sChars / charCount ) * 100;
 			const calcRealDensityScore = ( scoring, density ) => density / scoring.threshold * data.maxScore;
-			const calcEndDensityScore = ( score, max, min, penalty ) => getMaxIfOver( max, Math.max( min, max - ( score - max ) * penalty ) );
+			// const calcEndDensityScore = ( score, max, min, penalty ) => getMaxIfOver( max, Math.max( min, max - ( score - max ) * penalty ) );
 
 			switch ( scoring.type ) {
 				case 'n' :
@@ -630,6 +630,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * Clears data of all fields corresponding to the "what" parameter.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 clearLexical now sets lexicalData.value to the default.
 	 * @access private
 	 *
 	 * @function
@@ -646,7 +647,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lexicalFormField.value = '';
 			}
 			if ( lexicalData instanceof HTMLInputElement ) {
-				lexicalData.value = '';
+				lexicalData.value = l10n.defaultLexicalForm;
 			}
 			if ( lexicalSelector instanceof HTMLSelectElement ) {
 				lexicalSelector.disabled = true;
@@ -2054,6 +2055,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * Should run before loading other methods.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Now no longer reenables an empty lexical_selector
 	 * @access private
 	 *
 	 * @function
@@ -2072,7 +2074,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					//= Prepare lexical selector values.
 					let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 					lexicalSelector.dataset.prev = lexicalSelector.value;
-					setLexicalFormSelectionListener( idPrefix ).to( 'enabled' );
+					//? Enable it if there's more than 1 option. Option 0 is disabled.
+					if ( lexicalSelector.length > 1 ) {
+						setLexicalFormSelectionListener( idPrefix ).to( 'enabled' );
+					} else {
+						clearData( idPrefix, 'lexical' );
+					}
 					if ( +lexicalSelector.value ) {
 						//= Prepare edit button.
 						setEditButton( idPrefix ).to( 'enabled' );

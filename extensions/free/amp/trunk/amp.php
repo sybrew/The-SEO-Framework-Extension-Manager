@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\AMP;
  * Extension Name: AMP
  * Extension URI: https://theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.0.2
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -41,13 +41,14 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @since 1.0.0
  * @param string
  */
-define( 'TSFEM_E_AMP_VERSION', '1.0.0' );
+define( 'TSFEM_E_AMP_VERSION', '1.1.0' );
 
 \add_action( 'wp', __NAMESPACE__ . '\\_amp_init', 11 );
 /**
  * Initializes the extension. Runs after AMP plugin action 'amp_init'.
  *
  * @since 1.0.0
+ * @since 1.1.0 Now uses WP-AMP's new API.
  * @action 'wp'
  * @priority 11
  * @access private
@@ -56,14 +57,17 @@ define( 'TSFEM_E_AMP_VERSION', '1.0.0' );
  */
 function _amp_init() {
 
-	if ( false === defined( 'AMP_QUERY_VAR' ) )
-		return false;
-
 	if ( \is_admin() ) {
 		//* Bail on admin. No admin dashboard yet.
 		return false;
 	} else {
-		$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		$is_amp = false;
+
+		if ( function_exists( '\\is_amp_endpoint' ) ) {
+			$is_amp = \is_amp_endpoint();
+		} elseif ( defined( 'AMP_QUERY_VAR' ) ) {
+			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		}
 
 		if ( $is_amp ) {
 			new Front;
@@ -92,8 +96,10 @@ final class Front {
 		\add_action( 'amp_post_template_head', [ $this, 'do_output_hook' ], 11 );
 
 		/**
-		 * Applies filters 'the_seo_framework_remove_amp_articles' : bool
+		 * Removes the default AMP articles metadata output.
 		 * @since 1.0.0
+		 * @link https://theseoframework.com/extensions/articles/
+		 * @param bool $remove
 		 */
 		if ( \apply_filters( 'the_seo_framework_remove_amp_articles', false ) )
 			$this->remove_amp_articles();
@@ -124,8 +130,7 @@ final class Front {
 					. \the_seo_framework()->get_plugin_indicator( 'after', $output_start );
 		}
 
-		//* Already escaped.
-		echo $output;
+		echo PHP_EOL . $output; // xss OK, already escaped.
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 
@@ -166,9 +171,9 @@ final class Front {
 		$tsf = \the_seo_framework();
 
 		/**
-		 * Applies filters 'the_seo_framework_amp_pre' : string
 		 * Adds content before the output.
 		 * @since 1.0.2
+		 * @param string $before
 		 */
 		$before = (string) \apply_filters( 'the_seo_framework_amp_pre', '' );
 
@@ -192,9 +197,9 @@ final class Front {
 				. $tsf->twitter_image();
 
 		/**
-		 * Applies filters 'the_seo_framework_amp_pro' : string
-		 * Adds content afters the output.
+		 * Adds content after the output.
 		 * @since 1.0.2
+		 * @param string $after
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_amp_pro', '' );
 

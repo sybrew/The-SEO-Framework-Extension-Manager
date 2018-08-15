@@ -66,7 +66,7 @@ final class Ajax {
 	 */
 	public static function _init( Admin $_admin ) {
 
-		$instance = new static;
+		$instance = new static();
 
 		/**
 		 * Set error notice option.
@@ -138,7 +138,7 @@ final class Ajax {
 		$tsfem = \tsf_extension_manager();
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
-		$keyword = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
+		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
 
 		if ( ! strlen( $keyword ) || ! $language ) {
@@ -150,13 +150,13 @@ final class Ajax {
 
 			if ( empty( $response->success ) ) {
 				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
-					case 'WORD_NOT_FOUND' :
+					case 'WORD_NOT_FOUND':
 						$results = $this->get_ajax_notice( false, 1100102 );
 						break;
 
-					default :
-					case 'REMOTE_API_BODY_ERROR' :
-					case 'REMOTE_API_ERROR' :
+					default:
+					case 'REMOTE_API_BODY_ERROR':
+					case 'REMOTE_API_ERROR':
 						$results = $this->get_ajax_notice( false, 1100103 );
 						break;
 				endswitch;
@@ -202,7 +202,8 @@ final class Ajax {
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$form_keys = [ 'category', 'value' ];
-		$form = isset( $_args['form'] ) ? \map_deep( $_args['form'], [ $tsfem, 's_ajax_string' ] ) : '';
+
+		$form     = isset( $_args['form'] ) ? \map_deep( $_args['form'], [ $tsfem, 's_ajax_string' ] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
 
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
@@ -216,13 +217,13 @@ final class Ajax {
 
 			if ( empty( $response->success ) ) {
 				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
-					case 'WORD_NOT_FOUND' :
+					case 'WORD_NOT_FOUND':
 						$results = $this->get_ajax_notice( false, 1100202 );
 						break;
 
-					default :
-					case 'REMOTE_API_BODY_ERROR' :
-					case 'REMOTE_API_ERROR' :
+					default:
+					case 'REMOTE_API_BODY_ERROR':
+					case 'REMOTE_API_ERROR':
 						$results = $this->get_ajax_notice( false, 1100203 );
 						break;
 				endswitch;

@@ -156,6 +156,15 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ## Changelog
 
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* **Added:** TSF v3.1 support.
+* **Improved:** Links are now matched at least 900 times quicker and more accurately; so, there's no more notable lag when editing large texts.
+* **Fixed:** When using TSF v3.1, interacting with this extensions' UI elements won't trigger an "unsaved changes" warning when leaving the post-edit screen.
+* **Fixed:** Empty or unmatched lexical form selectors are no longer cleared and auto-activated on save.
+
 ### 1.0.0
 
 [tsfep-release time="March 31st, 2018"]

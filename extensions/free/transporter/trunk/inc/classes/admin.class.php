@@ -196,13 +196,13 @@ final class Admin {
 	 * Framework SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses the_seo_framework_options_page_slug().
+	 * @uses \the_seo_framework()->seo_settings_page_slug.
 	 * @access private
 	 */
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \the_seo_framework_options_page_slug(),
+			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => \esc_html__( 'SEO Transporter', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Transporter', 'the-seo-framework-extension-manager' ),
 			'capability'  => 'manage_options',

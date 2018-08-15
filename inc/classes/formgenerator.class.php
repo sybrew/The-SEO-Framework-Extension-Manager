@@ -313,10 +313,10 @@ final class FormGenerator {
 		empty( $args['o_index'] ) and \wp_die( __METHOD__ . ': Assign o_index.' );
 
 		$defaults = [
-			'o_index' => '',
-			'o_key' => '',
-			'use_stale' => false,
-			'levels' => 5,
+			'o_index'      => '',
+			'o_key'        => '',
+			'use_stale'    => false,
+			'levels'       => 5,
 			'architecture' => null,
 		];
 		$args = array_merge( $defaults, $args );
@@ -514,7 +514,7 @@ final class FormGenerator {
 	/**
 	 * Sanitizeses ID. Mainly removing spaces and coding characters.
 	 *
-	 * Unlike sanitize_key(), it doens't alter the case nor applies filters.
+	 * Unlike sanitize_key(), it doesn't alter the case nor applies filters.
 	 * It also maintains the '@' character.
 	 *
 	 * @see WordPress Core sanitize_key()
