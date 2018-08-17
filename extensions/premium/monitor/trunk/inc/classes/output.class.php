@@ -136,7 +136,7 @@ final class Output {
 
 		if ( $content ) {
 			switch ( $type ) :
-				case 'issues' :
+				case 'issues':
 					$title = $this->get_entry_title( $key, $type );
 					$prefix = $this->get_entry_state_icon( $key, $type );
 
@@ -145,8 +145,8 @@ final class Output {
 					return $this->build_collapsable_entry( $title, $content, $key, $this->get_entry_state( $key, $type ) );
 					break;
 
-				case 'stats' :
-				default :
+				case 'stats':
+				default:
 					return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
 					break;
 			endswitch;
@@ -365,14 +365,14 @@ final class Output {
 	protected function parse_defined_icon_state( $state = '' ) {
 
 		switch ( $state ) :
-			case 'good' :
-			case 'okay' :
-			case 'warning' :
-			case 'bad' :
-			case 'error' :
+			case 'good':
+			case 'okay':
+			case 'warning':
+			case 'bad':
+			case 'error':
 				break;
 
-			default :
+			default:
 				$state = 'unknown';
 				break;
 		endswitch;
@@ -394,41 +394,41 @@ final class Output {
 		switch ( $type ) :
 			case 'issues' :
 				switch ( $key ) :
-					case 'title' :
+					case 'title':
 						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'https' :
+					case 'https':
 						$title = \__( 'Scheme', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'php' :
+					case 'php':
 						$title = \__( 'PHP errors', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'sitemap' :
+					case 'sitemap':
 						$title = \__( 'Sitemap output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'robots' :
+					case 'robots':
 						$title = \__( 'Robots.txt output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'favicon' :
+					case 'favicon':
 						$title = \__( 'Favicon output', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					case 'moresoon' :
+					case 'moresoon':
 						$title = \__( 'More coming soon!', 'the-seo-framework-extension-manager' );
 						break 2;
 
-					default :
+					default:
 						//* Falls back to underlying default.
 						break 1;
 				endswitch;
 				//= No break to fall back to default.
 
-			default :
+			default:
 				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );
 				break 1;
 		endswitch;
@@ -451,15 +451,15 @@ final class Output {
 		$content = '';
 
 		switch ( $type ) :
-			case 'issues' :
+			case 'issues':
 				$content = $this->parse_issues_content( $key, $value );
 				break;
 
-			case 'stats' :
+			case 'stats':
 				$content = $this->parse_stats_content( $key, $value );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -564,9 +564,10 @@ final class Output {
 	}
 
 	/**
-	 * Fetches The SEO Framework debugging properties.
+	 * Fetches and returns The SEO Framework default debugging properties.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Added TSF v3.1 compat, by adding a condition to `$debug[2]`.
 	 * @staticvar array $debug
 	 *
 	 * @return array The debug values.
@@ -577,8 +578,9 @@ final class Output {
 
 		if ( null === $debug ) {
 			$debug = [];
-			$debug[1] = \the_seo_framework()->the_seo_framework_debug;
-			$debug[2] = \the_seo_framework()->the_seo_framework_debug_hidden;
+			$tsf = \the_seo_framework();
+			$debug[1] = $tsf->the_seo_framework_debug;
+			$debug[2] = isset( $tsf->the_seo_framework_debug_hidden ) ? $tsf->the_seo_framework_debug_hidden : false;
 		}
 
 		return $debug;

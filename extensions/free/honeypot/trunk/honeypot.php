@@ -180,23 +180,23 @@ final class Core {
 		$i = 0;
 		do {
 			switch ( ++$i ) :
-				case 1 :
+				case 1:
 					$this->check_css_field( $approved );
 					break;
 
-				case 2 :
+				case 2:
 					$this->check_css_rotation_fields( $approved );
 					break;
 
-				case 3 :
+				case 3:
 					$this->check_js_field( $approved );
 					break;
 
-				case 4 :
+				case 4:
 					$this->check_nonce_rotation_field( $approved );
 					break;
 
-				default :
+				default:
 					break 2;
 			endswitch;
 		} while ( 'spam' !== $approved );
@@ -300,7 +300,7 @@ final class Core {
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ) ?: false;
+		$set = ! empty( $_POST[ $_field ] ) ?: false; // CSRF ok. This check is validation only.
 
 		if ( $set ) {
 			// Empty check failed.
@@ -325,7 +325,8 @@ final class Core {
 		], '\\esc_attr' );
 
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
-		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 ) ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;
+		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )
+			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;  // CSRF ok. This check is validation only.
 
 		if ( $field ) {
 			// Empty check failed.
@@ -347,7 +348,7 @@ final class Core {
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] );
+		$set = ! empty( $_POST[ $_field ] ); // CSRF ok. This check is validation only.
 
 		if ( $set ) {
 			// Empty check failed.
@@ -369,7 +370,7 @@ final class Core {
 
 		$_field = $this->hp_properties['nonce_input_name'];
 
-		if ( empty( $_POST[ $_field ] ) ) {
+		if ( empty( $_POST[ $_field ] ) ) { // CSRF ok. This check is validation only.
 			$approved = 'spam';
 			return;
 		}
@@ -381,7 +382,7 @@ final class Core {
 		], '\\esc_attr' );
 
 		$_tick = 0;
-		$_input = $_POST[ $_field ];
+		$_input = $_POST[ $_field ]; // Sanitization, CSRF ok. This check is validation only.
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
@@ -522,7 +523,7 @@ final class Core {
 	private function get_text( $what = '' ) {
 
 		switch ( $what ) :
-			case 'js_placeholder' :
+			case 'js_placeholder':
 				/**
 				 * @since 1.0.0
 				 * @param string $text The placeholder text shown to non-JS users.
@@ -530,7 +531,7 @@ final class Core {
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_placeholder', \__( 'You are human!', 'the-seo-framework-extension-manager' ) );
 				break;
 
-			case 'js_input' :
+			case 'js_input':
 				/**
 				 * @since 1.0.0
 				 * @param string $text The input field text that needs to be removed shown to non-JS users.
@@ -538,7 +539,7 @@ final class Core {
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_input', \__( "Please remove this comment to prove you're human.", 'the-seo-framework-extension-manager' ) );
 				break;
 
-			case 'js_label' :
+			case 'js_label':
 				/**
 				 * @since 1.0.0
 				 * @param string $text The input label title shown to non-JS users.
@@ -546,7 +547,7 @@ final class Core {
 				$text = (string) \apply_filters( 'the_seo_framework_honeypot_label', \__( 'Comments for robots', 'the-seo-framework-extension-manager' ) );
 				break;
 
-			default :
+			default:
 				$text = '';
 				break;
 		endswitch;

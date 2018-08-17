@@ -114,7 +114,7 @@ Here you can find the available filters for Honeypot.
 
 #### Change input field accessibility sentences
 
-When JavaScript is disabled on the visitor's browser, the hidden input field isn't removed and cleared.
+When JavaScript is disabled on the visitor's browser, the hidden input field isn't automatically removed and cleared.
 
 Most robots don't know that they need to clear this field. Real visitors should.
 
@@ -122,7 +122,7 @@ The fields are self-explanatory, translatable, and you're free to change them.
 
 ```php
 add_filter( 'the_seo_framework_honeypot_label', function( $text = '' ) {
-	// Text disabled above the input, as a label.
+	// Text displayed above the input, as a label.
 	return __( 'Comments for robots', 'the-seo-framework-extension-manager' );
 } );
 ```
@@ -159,6 +159,9 @@ add_filter( 'the_seo_framework_honeypot_hardcore', function( $hardcore = true ) 
 ```php
 add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) {
 	/**
+	 * This filter only works when hardcore mode is enabled. Otherwise, unique
+	 * IDs are created on a per-page basis, which are used indefinitely.
+	 *
 	 * This is the minimum time a visitor has to submit an illegal comment on your site.
 	 * The maximum time is twice the value returned.
 	 *

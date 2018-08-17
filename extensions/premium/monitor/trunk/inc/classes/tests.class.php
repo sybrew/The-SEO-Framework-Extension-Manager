@@ -139,6 +139,7 @@ final class Tests {
 	 * Determines if the Title is correctly output.
 	 *
 	 * @since 1.1.0
+	 * @since 1.2.0 Added TSF v3.1 compat.
 	 * @access private
 	 *
 	 * @param array $data The input data.
@@ -166,12 +167,20 @@ final class Tests {
 			preg_match( '/(?:<title.*?>)(.*)?(?:<\/title>)/is', $data['value'], $matches );
 			$first_found_title = isset( $matches[1] ) ? trim( $matches[1] ) : '';
 
-			if ( '' === $first_found_title ) {
+			if ( ! $first_found_title ) {
 				$content .= $this->wrap_info( \esc_html__( 'The homepage title tag is empty.', 'the-seo-framework-extension-manager' ) );
 				$state = 'error';
 				$consult_theme_author = true;
 			} else {
-				$_expected_title = \the_seo_framework()->build_title( '', '', [ 'page_on_front' => true ] );
+
+				$tsf = \the_seo_framework();
+
+				if ( method_exists( $tsf, 'build_title' ) ) {
+					$_expected_title = $tsf->build_title( '', '', [ 'page_on_front' => true ] );
+				} else {
+					$_expected_title = $tsf->get_title( [ 'id' => $tsf->get_the_front_page_ID() ] );
+				}
+
 				if ( $_expected_title !== $first_found_title ) {
 					$content = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
 					$state = 'bad';
@@ -214,7 +223,7 @@ final class Tests {
 		end :;
 		return [
 			'content' => $content,
-			'state' => $state,
+			'state'   => $state,
 		];
 	}
 
@@ -276,7 +285,7 @@ final class Tests {
 		end :;
 		return [
 			'content' => $content,
-			'state' => $state,
+			'state'   => $state,
 		];
 	}
 
@@ -369,7 +378,7 @@ final class Tests {
 
 		return [
 			'content' => $content,
-			'state' => $state,
+			'state'   => $state,
 		];
 	}
 
@@ -419,7 +428,7 @@ final class Tests {
 		end :;
 		return [
 			'content' => $content,
-			'state' => $state,
+			'state'   => $state,
 		];
 	}
 
@@ -443,7 +452,7 @@ final class Tests {
 		}
 
 		switch ( $data['https_type'] ) :
-			case 1 :
+			case 1:
 				// Forced HTTPS
 				$content .= $this->wrap_info(
 					\esc_html__( 'Your website forces HTTPS through the server configuration. That is great!', 'the-seo-framework-extension-manager' )
@@ -452,7 +461,7 @@ final class Tests {
 				$_expected_scheme = 'https';
 				break;
 
-			case 2 :
+			case 2:
 				// Could do HTTPS
 				$content .= $this->wrap_info(
 					\esc_html__( 'Your website is accessible on both HTTPS as HTTP.', 'the-seo-framework-extension-manager' )
@@ -462,9 +471,9 @@ final class Tests {
 				$_expected_scheme = 'https';
 				break;
 
-			default :
-			case 3 :
-			case 0 :
+			default:
+			case 3:
+			case 0:
 				// Forced HTTP or error on HTTPS.
 				$content .= $this->wrap_info(
 					\esc_html__( 'Your website is only accessible on HTTP.', 'the-seo-framework-extension-manager' )
@@ -551,7 +560,7 @@ final class Tests {
 		end :;
 		return [
 			'content' => $content,
-			'state' => $state,
+			'state'   => $state,
 		];
 	}
 
@@ -566,7 +575,7 @@ final class Tests {
 	public function issue_moresoon( $data ) {
 		return [
 			'content' => $this->wrap_info( \esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
-			'state' => 'unknown',
+			'state'   => 'unknown',
 		];
 	}
 

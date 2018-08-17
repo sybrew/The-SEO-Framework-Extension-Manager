@@ -63,7 +63,7 @@ Add your own meta data, with either `the_seo_framework_amp_pre` (before) or `the
 add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
 
 	// Add your own meta tags. Don't overwrite $output!
-	$output .= '<meta name="author" content="John Doe">' . PHP_EOL;
+	$output .= '&amp;lt;meta name="author" content="John Doe" /&amp;gt;' . PHP_EOL;
 
 	return $output;
 } );
