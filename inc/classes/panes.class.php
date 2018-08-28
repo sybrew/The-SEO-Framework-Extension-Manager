@@ -235,11 +235,11 @@ class Panes extends API {
 
 		$nonce_action = $this->_get_nonce_action_field( $this->request_name['enable-feed'] );
 		$nonce = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary" value="%s">', \esc_attr( $enable ) );
+		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary tsfem-button-flat" value="%s">', \esc_attr( $enable ) );
 		$form = $nonce_action . $nonce . $submit;
 
-		$nojs = sprintf( '<form action="%s" method="post" id="tsfem-enable-feeds-form" class="hide-if-js">%s</form>', \esc_url( $this->get_admin_page_url() ), $form );
-		$js = '<a id="tsfem-enable-feeds" class="tsfem-button tsfem-button-primary hide-if-no-js">' . \esc_html( $enable ) . '</a>';
+		$nojs = sprintf( '<form action="%s" method=post id=tsfem-enable-feeds-form class=hide-if-js>%s</form>', \esc_url( $this->get_admin_page_url() ), $form );
+		$js = '<p class=hide-if-no-js><a id=tsfem-enable-feeds class="tsfem-button tsfem-button-primary tsfem-button-flat">' . \esc_html( $enable ) . '</a></p>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
 	}
