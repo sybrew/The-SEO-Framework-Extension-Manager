@@ -792,7 +792,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		/**
 		 * AJAX handler.
 		 */
-		const getSynonyms = ( idPrefix ) => {
+		const getSynonyms = () => {
 			let forms = JSON.parse( lexicalDataField.value ),
 				form = forms[ lexicalFormField.value ];
 
@@ -851,7 +851,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		const fetchSynonyms = () => {
 			let $dfd = $.Deferred();
-			$.when( getSynonyms( idPrefix ) ).done( ( data ) => {
+			$.when( getSynonyms() ).done( ( data ) => {
 				clearData( idPrefix, 'definition' );
 				clearData( idPrefix, 'synonyms' );
 
@@ -1398,7 +1398,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				$( clicker ).fadeIn( 300 );
 			}
 			const onChange = ( event ) => {
-				let _target = event.target;
 				setVals( event.target );
 				+newVal === +lastVal && reset() || doChange();
 			}
@@ -1729,17 +1728,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			switch ( what ) {
 				case 'inflections' :
 					return getActiveInflections();
-					break;
 				case 'synonyms' :
 					return getActiveSynonyms();
-					break;
-
 				default :
 					return {
 						'inflections': getActiveInflections(),
 						'synonyms': getActiveSynonyms()
 					};
-					break;
 			}
 		}
 
@@ -2115,9 +2110,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		//= There's nothing to focus on.  Stop plugin and show why.
 		//?! The monkeyPatch is still running...
 		if ( 0 === Object.keys( activeFocusAreas ).length ) {
-			let el = document.getElementById( 'tsfem-e-focus-analysis-wrap' ).querySelector( '.tsf-flex-setting-input' );
-			if ( el instanceof Element )
-				el.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
+			let el = document.getElementById( 'tsfem-e-focus-analysis-wrap' );
+			if ( el instanceof Element ) {
+				let _el = el.querySelector( '.tsf-flex-setting-input' );
+				if ( _el instanceof Element )
+					_el.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
+			}
 			return;
 		}
 

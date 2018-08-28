@@ -272,7 +272,7 @@ body.tsfem .wrap {
 	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
 	width: 100%;
 	margin: 0;
-	padding: 1em 2em;
+	padding: 1em 1.2vw;
 }
 
 /* "padding: 0 0 1.4%" Edge/Firefox inline margins issue */

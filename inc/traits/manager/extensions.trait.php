@@ -99,7 +99,7 @@ trait Extensions_Properties {
 				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1534366523',
+				'last_updated' => '1535478196',
 				'requires' => '4.8.0',
 				'tested' => '4.9.8',
 				'requires_tsf' => '3.0.0',
@@ -233,9 +233,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'bdee9149f2882b0c2b9c36883259b68412c1445ee6734c55e7e12860c5471f17',
-			'sha1'   => '2a7fb48503a7c3015ed6e5920ea50b8fb156b809',
-			'md5'    => 'b9114cc1d1a3d0f77a7d2836944b1fef',
+			'sha256' => '57ef55519aca127c959c43f90e3a9caf87b830acbb88c6af8c6759d9bbd64595',
+			'sha1'   => '2ce122de5033817b65bc89b85d90bbdaeed000a3',
+			'md5'    => 'df09a5cc3a21d984bfa3b458c8e3c804',
 		];
 	}
 

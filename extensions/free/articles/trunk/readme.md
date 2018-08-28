@@ -161,9 +161,9 @@ Here you can find the available filters for Articles.
 Specifically, the article type.
 
 ```php
-add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
+add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 
-	// Change 'type' default from 'Article' to 'NewsArticle'
+	// Change default 'type' setting from 'Article' to 'NewsArticle'
 	$meta['type'] = 'NewsArticle';
 
 	return $meta;
@@ -174,10 +174,10 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta ) {
 
 ### 1.3.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Added:** TSF v3.1 support.
-* **Fixed:** A PHP notice that happens when a registered image is missing.
+* **Fixed:** A PHP notice no longer occurs when the registered article image is missing.
 * **Other:** The correct version of this extension is now displayed in the dashboard.
 
 ### 1.2.0

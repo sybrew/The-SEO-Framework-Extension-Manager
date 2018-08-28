@@ -119,7 +119,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.0-beta-5
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Added:** TSF v3.1 support.
 

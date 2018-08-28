@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://wordpress.org/plugins/the-seo-framework-extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 1.5.2-dev-2018.08.17.0
+ * Version: 1.5.2
  * Author: Sybre Waaijer
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -48,16 +48,22 @@ define( 'TSF_EXTENSION_MANAGER_VERSION', '1.5.2' );
 define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '1500' );
 
 /**
+ * The plugin file, absolute unix path.
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', __FILE__ );
+
+/**
  * The plugin basename relative to the plugins directory.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) );
 
 /**
  * The plugin's bootstrap folder location.
  * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
+define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
 /**
  * Checks whether to start plugin or test server first.
@@ -85,9 +91,7 @@ function tsf_extension_manager_boot() {
 	 * Defines environental constants.
 	 * @since 1.5.0
 	 */
-	$__file = __FILE__;
 	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'define.php';
-	unset( $__file );
 
 	/**
 	 * Load plugin API file.

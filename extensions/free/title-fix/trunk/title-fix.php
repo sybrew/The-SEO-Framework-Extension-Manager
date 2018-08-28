@@ -66,7 +66,7 @@ function title_fix_init() {
 	if ( class_exists( 'The_SEO_Framework_Title_Fix', false ) )
 		return $loaded = false;
 
-	//* Backwards compatibility
+	//* Backward compatibility
 	define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 
 	new Core;
@@ -173,7 +173,7 @@ final class Core {
 		$_sequence++;
 
 		switch ( $_sequence ) :
-			case 1 :
+			case 1:
 				/**
 				 * First run.
 				 * Start at HTTP header.
@@ -183,7 +183,7 @@ final class Core {
 				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 0 );
 				break;
 
-			case 2 :
+			case 2:
 				/**
 				 * Second run. Capture WP head.
 				 * Scenario: \add_action( 'wp_head', 'wp_title' );.. or another callback.
@@ -194,7 +194,7 @@ final class Core {
 				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 9999 );
 				break;
 
-			case 3 :
+			case 3:
 				/**
 				 * Third run. Capture the page.
 				 * Start at where wp_head has ended (last run left off),
@@ -205,7 +205,7 @@ final class Core {
 				\add_action( 'get_footer', [ $this, 'maybe_rewrite_title' ], -1 );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -266,7 +266,7 @@ final class Core {
 	 * Maybe rewrite the title, if not rewritten yet.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.3 : Now initiates loader loop.
+	 * @since 1.0.3 Now initiates loader loop.
 	 */
 	public function maybe_rewrite_title() {
 
@@ -285,7 +285,7 @@ final class Core {
 	 * Finds the title tag and replaces it if found; will echo content from buffer otherwise.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.2: Always echos $content.
+	 * @since 1.0.2 Always echos $content.
 	 *
 	 * @param string $content The content with possible title tag.
 	 * @return void When title is found.
@@ -324,7 +324,7 @@ final class Core {
 		if ( method_exists( $tsf, 'get_title' ) ) {
 			$title = $tsf->get_title();
 		} else {
-			$title = $tsf->title_from_cache( '', '' , '', true );
+			$title = $tsf->title_from_cache( '', '', '', true );
 		}
 		$new_title = '<title>' . $title . '</title>' . $this->indicator();
 
@@ -340,24 +340,13 @@ final class Core {
 	 * Checks a theme's support for title-tag.
 	 *
 	 * @since 1.0.0
-	 * @global array $_wp_theme_features
-	 * @staticvar bool $_supports
+	 * @since 1.2.0 Removed caching.
 	 *
 	 * @return bool True if the theme supports the title tag, false otherwise.
 	 */
 	public function current_theme_supports_title_tag() {
-
-		static $_supports = null;
-
-		if ( isset( $_supports ) )
-			return $_supports;
-
 		global $_wp_theme_features;
-
-		if ( false === empty( $_wp_theme_features['title-tag'] ) )
-			return $_supports = true;
-
-		return $_supports = false;
+		return ! empty( $_wp_theme_features['title-tag'] );
 	}
 
 	/**

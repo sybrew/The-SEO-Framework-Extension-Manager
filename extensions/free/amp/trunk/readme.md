@@ -73,7 +73,7 @@ add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Improved:** Now uses AMP v0.5+ endpoint detection when available.
 

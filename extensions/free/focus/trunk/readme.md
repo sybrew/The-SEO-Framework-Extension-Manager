@@ -158,7 +158,7 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Added:** TSF v3.1 support.
 * **Improved:** Links are now matched at least 900 times quicker and more accurately; so, there's no more notable lag when editing large texts.

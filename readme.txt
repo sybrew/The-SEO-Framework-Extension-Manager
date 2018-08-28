@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
-Tags: seo, the seo framework, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title
+Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.6.0
-Tested up to: 4.9.6
+Tested up to: 4.9.8
 Requires PHP: 5.5.21
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -52,7 +52,7 @@ When the subscription is active, you're allowed to use all premium extensions. I
 View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation).
 
 * In short: This plugin can send API requests to our sites when you use a Premium license.
-* Questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
+* Have questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
 == Installation ==
 
@@ -102,8 +102,8 @@ This is to enhance the plugin security, stability, and overall performance. Plea
 
 == Screenshots ==
 
-1. The activation page. You can choose both premium and free subscriptions.
-2. The SEO Extensions overview page, running on a Multisite.
+1. The activation page. You can choose both a premium and a free activation.
+2. The SEO Extensions overview page, running on a multisite network.
 
 == Frequently Asked Questions ==
 
@@ -114,22 +114,17 @@ The Extension Manager for The SEO Framework allows you to enable various extensi
 A free SEO plugin, for everyone! Download it [from WordPress.org](https://wordpress.org/plugins/autodescription/).
 
 = What is an extension? =
-An extension is like a plugin, and can be activated and deactivated on demand. All available extensions, both free and premium, are included in this plugin package.
+An extension is like a plugin, and it can be activated and deactivated on demand. All available extensions, both free and premium, are included in the plugin package.
 
 = Do I need to activate all extensions? =
-No. The extensions are tailored for very specific types of websites. Incorrect usage of certain extensions could even harm your website's SERP rankings.
-Each extension has included carefully crafted documentation, which are linked on the extensions activation page.
+No. The extensions are tailored for very specific types of websites. Each extension includes carefully crafted documentation, which are linked to on the extensions activation page.
 
 = Do I need to register an account? =
 Not at all! This extension manager provides up to date free extensions, without requiring an API connection.
 
-= Are there advertisements? =
-Nope. This plugin only shows which extensions are available on the activation page. It will show both free and premium ones.
-Some buttons, like on the extension activation page, can lead you to the site where you can purchase a license, but only if you choose to do so.
-
 = Does this plugin track my usage? =
 Absolutely not! This plugin does not include any user tracking software. We completely rely on your feedback to know what you require.
-For some services, we retrieve the user input and website's language; e.g. for reverse geocoding or keyword lookups.
+View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation) for more information.
 
 = What's the release cycle of extensions? =
 Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
@@ -148,20 +143,20 @@ Both free and premium extensions are provided within the plugin package acquired
 = Does the Extension Manager need to stay activated to run the extensions? =
 Yes. The Extension Manager supplies its own extension activation management system apart from WordPress'.
 Deactivating the Extension Manager will also deactivate all extensions.
-Most extensions use in-house frameworks embedded in the extension manager, too.
+Most extensions use in-house frameworks embedded in the extension manager, too, like form builders.
 
 = When my subscription expires, what happens? =
 When your premium subscription expires, the premium extensions will automatically deactivate.
-A margin of error is allowed, so you don't have to worry for if the activation server is down.
+A margin of error is allowed, so you don't have to worry for when the activation server goes down for an update.
 
 = Does this plugin work on Multisite Networks? =
 Absolutely. This plugin can be network activated while The SEO Framework base plugin is activated site-by-site without issues.
-Alternatively, this plugin can be activated per site while The SEO Framework is network activated. Any other combination is possible too.
+Alternatively, this plugin can be activated per site while The SEO Framework is network activated. Any other combination is possible, too.
 
 = Are there WordPress Multisite network specific SEO extensions? =
 They're planned! However, there's still a lot to be done before this is even possible.
 
-= What happens when I deactivate my account? =
+= What happens when I disconnect my account? =
 All plugin settings will be deleted, this includes which extensions were enabled.
 Each extension handles its own options (if any); those settings won't be lost, not even upon reactivation of the extension afterwards.
 
@@ -173,21 +168,18 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 1.5.2 =
 
-* **Added:** TODO: Added admin warning when extensions won't load for any reason whatsoever, it'll tell you to go to the Extension Manager page when for details.
-* **Added:** TODO: You can now define a constant for auto-activating extensions (PHP7+).
-* **Added:** TODO: You can now define a constant for blocking extensions (this hides the extensions and the admin can't forge requests updating it, but the extensions can still be auto-activated) (PHP7+).
-* **Added:** TODO: You can now define a constant for your API connection key (PHP7+).
-* **Added:** TODO: You can now define a constant to hide the admin interface of the extension manager (any supported PHP).
-* **Changed:** The plugin now handles illegal calls (bypassing early API protection) gracefully with errors, instead of abruptly halting code execution.
-* **Fixed:** A PHP notice when obtaining fresh post meta with Focus after saving with Articles enabled before (or vice versa).
+**Plugin Improvements:**
+
+* **Added:** The SEO Framework v3.1 compatibility. We recommend updating this plugin before The SEO Framework.
+* **Changed:** The plugin now handles unsolicited API calls gracefully with errors, instead of abruptly halting all code execution.
+* **Fixed:** A PHP notice no longer occurs when obtaining fresh post meta with Focus after saving with Articles enabled before (or vice versa).
 * **Fixed:** The translation folder is now correctly assigned for manual translation files.
 * **Fixed:** Tooltip items with links now show the correct pointer on hover.
 * **Fixed:** The plugin now loads the very first time after activating or upgrading, instead of waiting for a second request.
-* TODO Focus: https://wordpress.org/support/topic/keyword-feild/#post-10459889
-* TODO Focus: Add tooltips on Pencil (click here).
-* TODO **Fixed:** The plugin page top bar's whitespace padding now aligns with the body.
+* **Fixed:** The plugin page top bar's whitespace padding now aligns with the body.
 
 **Updated Extensions:**
+
 * [Local](https://theseoframework.com/extensions/local/#changelog)
 * [Focus](https://theseoframework.com/extensions/focus/#changelog)
 * [AMP](https://theseoframework.com/extensions/amp/#changelog)

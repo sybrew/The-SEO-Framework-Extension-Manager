@@ -376,7 +376,9 @@ final class Admin extends Api {
 			}
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] )
+				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+				: false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -646,13 +648,13 @@ final class Admin extends Api {
 		$this->additional_css[] = [
 			'name' => 'tsfem-monitor',
 			'base' => TSFEM_E_MONITOR_DIR_URL,
-			'ver' => TSFEM_E_MONITOR_VERSION,
+			'ver'  => TSFEM_E_MONITOR_VERSION,
 		];
 
 		$this->additional_js[] = [
 			'name' => 'tsfem-monitor',
 			'base' => TSFEM_E_MONITOR_DIR_URL,
-			'ver' => TSFEM_E_MONITOR_VERSION,
+			'ver'  => TSFEM_E_MONITOR_VERSION,
 		];
 
 		$this->additional_l10n[] = [

@@ -131,7 +131,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Added:** TSF v3.1 support.
 

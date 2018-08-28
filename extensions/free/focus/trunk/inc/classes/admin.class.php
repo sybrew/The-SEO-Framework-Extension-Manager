@@ -113,12 +113,15 @@ final class Admin extends Core {
 			[
 				'pageTitle' => [
 					'#titlewrap > input' => 'append',
+					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'pageUrl' => [
 					'#sample-permalink' => 'dominate',
+					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'pageContent' => [
 					'#content' => 'append',
+					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'seoTitle' => [
 					'#autodescription_title' => 'dominate', //= backwards compatibility.

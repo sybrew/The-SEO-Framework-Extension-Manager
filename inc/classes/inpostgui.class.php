@@ -637,7 +637,7 @@ final class InpostGUI {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function verify( $secret ) {
-		return static::$include_secret === $secret;
+		return $secret && static::$include_secret === $secret;
 	}
 
 	/**

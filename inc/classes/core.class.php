@@ -620,7 +620,7 @@ class Core {
 			$this->_has_died( true );
 
 			if ( $message ) {
-				debug_print_backtrace();
+				// debug_print_backtrace(); debugging...
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );

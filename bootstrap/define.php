@@ -3,8 +3,7 @@
  * @package TSF_Extension_Manager/Bootstrap
  */
 
-//! NOTE $__file should be defined as the plugin base file.
-defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) and isset( $__file ) or die;
+defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -24,22 +23,16 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) and isset( $__file ) or die;
  */
 
 /**
- * The plugin file, absolute unix path.
- * @since 1.0.0
- */
-define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE', $__file );
-
-/**
  * The plugin map URL. Used for calling browser files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( $__file ) );
+define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) );
 
 /**
  * The plugin map absolute path. Used for calling php files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_PATH', dirname( $__file ) . DIRECTORY_SEPARATOR );
+define( 'TSF_EXTENSION_MANAGER_DIR_PATH', dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin class map absolute path.

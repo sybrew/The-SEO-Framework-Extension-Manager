@@ -50,7 +50,7 @@ There is no setup required and no options are available.
 
 ### 1.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 28th, 2018"]
 
 * **Added:** TSF v3.1 support.
 
