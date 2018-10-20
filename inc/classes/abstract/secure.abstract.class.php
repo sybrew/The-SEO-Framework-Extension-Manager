@@ -145,15 +145,15 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	final protected static function set( $type, $value = '' ) {
 
 		switch ( $type ) :
-			case '_wpaction' :
+			case '_wpaction':
 				self::$_wpaction = \current_action();
 				break;
 
-			case '_type' :
-			case 'nonce_name' :
-			case 'request_name' :
-			case 'nonce_action' :
-			case 'account' :
+			case '_type':
+			case 'nonce_name':
+			case 'request_name':
+			case 'nonce_action':
+			case 'account':
 				self::$$type = $value;
 				break;
 
@@ -176,9 +176,9 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		if ( ! self::verify_instance() ) return;
 
 		switch ( $type ) :
-			case 'nonce_name' :
-			case 'request_name' :
-			case 'nonce_action' :
+			case 'nonce_name':
+			case 'request_name':
+			case 'nonce_action':
 				self::set( $type, $value );
 				break;
 
@@ -207,6 +207,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Determines whether the account level is premium.
 	 *
 	 * @since 1.0.0
+	 * @staticvar bool $is_premium
 	 *
 	 * @return bool Whether the current account is premium.
 	 */
@@ -220,6 +221,26 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
 
 		return $is_premium = 'Premium' === $level;
+	}
+
+	/**
+	 * Determines whether the account level is premium or essential.
+	 *
+	 * @since 2.0.0
+	 * @staticvar bool $is_connected
+	 *
+	 * @return bool Whether the current account is API connected.
+	 */
+	final protected static function is_connected_user() {
+
+		static $is_connected = null;
+
+		if ( isset( $is_connected ) )
+			return $is_connected;
+
+		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
+
+		return $is_connected = in_array( $level, [ 'Premium', 'Essentials' ], true );
 	}
 
 	/**

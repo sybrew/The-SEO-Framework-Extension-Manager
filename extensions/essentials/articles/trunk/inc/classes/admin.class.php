@@ -81,16 +81,16 @@ final class Admin extends Core {
 			'type' => [
 				'label' => [
 					'title' => \__( 'Article type', 'the-seo-framework-extension-manager' ),
-					'desc' => \__( 'Set the article type.', 'the-seo-framework-extension-manager' ),
-					'link' => 'https://theseoframework.com/extensions/articles/#usage/types',
+					'desc'  => \__( 'Set the article type.', 'the-seo-framework-extension-manager' ),
+					'link'  => 'https://theseoframework.com/extensions/articles/#usage/types',
 				],
 				'option' => [
-					'name' => 'type',
-					'input' => 'select',
+					'name'    => 'type',
+					'input'   => 'select',
 					'default' => $this->pm_defaults['type'],
-					'value' => $this->get_post_meta( 'type' ),
+					'value'   => $this->get_post_meta( 'type' ),
 					'select_values' => [
-						'Article' => \__( 'Article', 'the-seo-framework-extension-manager' ),
+						'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
 						'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
 						'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
 					],
@@ -133,13 +133,13 @@ final class Admin extends Core {
 		 */
 		foreach ( $data[ $this->pm_index ] as $key => $value ) :
 			switch ( $key ) {
-				case 'type' :
+				case 'type':
 					if ( in_array( $value, [ 'Article', 'NewsArticle', 'BlogPosting' ], true ) ) {
 						$store[ $key ] = $value;
 					}
 					break;
 
-				default :
+				default:
 					break;
 			}
 		endforeach;

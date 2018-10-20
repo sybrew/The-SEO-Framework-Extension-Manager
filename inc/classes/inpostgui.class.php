@@ -196,6 +196,7 @@ final class InpostGUI {
 	 * Registers default inpost scripts.
 	 *
 	 * @since 1.5.0
+	 * @since 2.0.0 Added isConnected and userLocale
 	 * @uses static::register_script
 	 */
 	private function register_default_scripts() {
@@ -204,17 +205,19 @@ final class InpostGUI {
 			'autoload' => false,
 			'name' => 'tsfem-inpost',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 			'deps' => [ 'jquery', 'tsf' ],
 			'l10n' => [
 				'name' => 'tsfem_inpostL10n',
 				'data' => [
-					'post_ID' => $GLOBALS['post']->ID,
-					'nonce' => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
-					'isPremium' => \tsf_extension_manager()->is_premium_user(),
-					'locale' => \get_locale(),
-					'debug' => (bool) WP_DEBUG,
-					'rtl' => (bool) \is_rtl(),
+					'post_ID'     => (int) $GLOBALS['post']->ID,
+					'nonce'       => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
+					'isPremium'   => \tsf_extension_manager()->is_premium_user(),
+					'isConnected' => \tsf_extension_manager()->is_connected_user(),
+					'locale'      => \get_locale(),
+					'userLocale'  => function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+					'debug'       => (bool) WP_DEBUG,
+					'rtl'  => (bool) \is_rtl(),
 					'i18n' => [
 						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
@@ -234,7 +237,7 @@ final class InpostGUI {
 			'autoload' => false,
 			'name' => 'tsfem-inpost',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver' => TSF_EXTENSION_MANAGER_VERSION,
+			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 			'deps' => [ 'tsf' ],
 		] );
 	}
@@ -284,12 +287,12 @@ final class InpostGUI {
 		//= Register them first to accomodate for dependencies.
 		foreach ( static::$scripts as $s ) {
 			switch ( $s['type'] ) {
-				case 'css' :
+				case 'css':
 					\wp_register_style( $s['name'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
 					isset( $s['inline'] )
 						and \wp_add_inline_style( $s['name'], $this->get_inline_css( $s['inline'] ) );
 					break;
-				case 'js' :
+				case 'js':
 					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
 					isset( $s['l10n'] )
 						and \wp_localize_script( $s['name'], $s['l10n']['name'], $s['l10n']['data'] );
@@ -302,10 +305,10 @@ final class InpostGUI {
 		foreach ( static::$scripts as $s ) {
 			if ( ! isset( $s['autoload'] ) || $s['autoload'] ) {
 				switch ( $s['type'] ) {
-					case 'css' :
+					case 'css':
 						\wp_enqueue_style( $s['name'] );
 						break;
-					case 'js' :
+					case 'js':
 						\wp_enqueue_script( $s['name'] );
 						break;
 				}
@@ -496,8 +499,8 @@ final class InpostGUI {
 	 */
 	public static function _verify_nonce( $post_id, $post ) {
 
-		if ( ( empty( $_POST[ static::NONCE_NAME ] ) )
-		|| ( ! \wp_verify_nonce( \wp_unslash( $_POST[ static::NONCE_NAME ] ), static::NONCE_ACTION ) )
+		if ( ( empty( $_POST[ static::NONCE_NAME ] ) ) // Input var OK.
+		|| ( ! \wp_verify_nonce( \wp_unslash( $_POST[ static::NONCE_NAME ] ), static::NONCE_ACTION ) ) // Input var, sanitization OK.
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
 		   ) return;
 
@@ -510,7 +513,7 @@ final class InpostGUI {
 		if ( ! defined( 'DOING_CRON' ) || ! DOING_CRON )
 			static::$save_access_state |= 0b1000;
 
-		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? $_POST[ static::META_PREFIX ] : null;
+		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? $_POST[ static::META_PREFIX ] : null; // Input var, sanitization OK.
 
 		/**
 		 * Runs after nonce and possibly interfering actions have been verified.

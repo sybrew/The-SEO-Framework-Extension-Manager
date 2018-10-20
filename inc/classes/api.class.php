@@ -42,6 +42,17 @@ class API extends Core {
 	private function construct() { }
 
 	/**
+	 * Determines whether the plugin's set to be auto-activated.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool
+	 */
+	final public function is_auto_activated() {
+		return (bool) TSF_EXTENSION_MANAGER_API_INFORMATION;
+	}
+
+	/**
 	 * Fetches status API request and returns response data.
 	 *
 	 * @since 1.0.0
@@ -56,7 +67,7 @@ class API extends Core {
 	 *    Activation/Status: Reponse data.
 	 * }
 	 */
-	protected function handle_request( $type = 'status', $args = [] ) {
+	final protected function handle_request( $type = 'status', $args = [] ) {
 
 		if ( empty( $args['licence_key'] ) ) {
 			$this->set_error_notice( [ 101 => '' ] );
@@ -68,28 +79,28 @@ class API extends Core {
 			return false;
 		}
 
-		$this->activation_key = trim( $args['licence_key'] );
+		$this->activation_key   = trim( $args['licence_key'] );
 		$this->activation_email = \sanitize_email( $args['activation_email'] );
 
 		switch ( $type ) :
-			case 'status' :
-			case 'activation' :
+			case 'status':
+			case 'activation':
 				break;
 
-			case 'deactivation' :
+			case 'deactivation':
 				if ( false === $this->is_plugin_activated() ) {
 					$this->kill_options();
 					$this->set_error_notice( [ 103 => '' ] );
 					return false;
 				}
 
-				if ( false === $this->is_premium_user() ) {
+				if ( false === $this->is_connected_user() ) {
 					return $this->do_free_deactivation();
 				}
-				//* Premium deactivation propagates through API, so nothing happens here.
+				//* Premium/Essential deactivation propagates through API, so nothing happens here.
 				break;
 
-			default :
+			default:
 				$this->set_error_notice( [ 104 => '' ] );
 				return false;
 				break;
@@ -120,7 +131,7 @@ class API extends Core {
 	 *
 	 * @return string Domain Host.
 	 */
-	protected function get_activation_site_domain() {
+	final protected function get_activation_site_domain() {
 		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 	}
 
@@ -133,7 +144,7 @@ class API extends Core {
 	 *             for when you're going to save it later.
 	 * @return string Instance key.
 	 */
-	protected function get_activation_instance( $save_option = true ) {
+	final protected function get_activation_instance( $save_option = true ) {
 
 		static $instance = null;
 
@@ -160,8 +171,8 @@ class API extends Core {
 	 * @param string $path The URL Path.
 	 * @return string
 	 */
-	protected function get_activation_url( $path = '' ) {
-		return 'https://premium.theseoframework.com/' . ltrim( $path, ' \\/' );
+	final protected function get_activation_url( $path = '' ) {
+		return TSF_EXTENSION_MANAGER_PREMIUM_URI . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -174,7 +185,7 @@ class API extends Core {
 	 * @param array $args The API query parameters.
 	 * @return string The escaped API URL with parameters.
 	 */
-	protected function get_api_url( $args = [] ) {
+	final protected function get_api_url( $args = [] ) {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
@@ -194,7 +205,7 @@ class API extends Core {
 	 * @param int $bit The verification instance bit. Passed by reference.
 	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
 	 */
-	public function _get_api_response( array $args, &$_instance, &$bits ) {
+	final public function _get_api_response( array $args, &$_instance, &$bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) )
 			return $this->get_api_response( $args, false );
@@ -212,7 +223,7 @@ class API extends Core {
 	 * @param bool  $internal Whether the API call is for $this object.
 	 * @return string Response body. Empty string if no body or incorrect parameter given.
 	 */
-	protected function get_api_response( array $args, $internal = true ) {
+	final protected function get_api_response( array $args, $internal = true ) {
 
 		$defaults = [
 			'request'     => '',
@@ -220,6 +231,7 @@ class API extends Core {
 			'licence_key' => '',
 			'instance'    => $this->get_activation_instance( false ),
 			'platform'    => $this->get_activation_site_domain(),
+			'tsfemv2'     => 'yes', // var_dump() TEMP?
 		];
 
 		$args = \wp_parse_args( $args, $defaults );
@@ -230,6 +242,7 @@ class API extends Core {
 		}
 
 		$target_url = $this->get_api_url( $args );
+
 		$http_args = [
 			/**
 			 * Applies filters 'tsf_extension_manager_request_timeout' : int
@@ -237,7 +250,7 @@ class API extends Core {
 			 * @param int $timeout 7 seconds should be more than sufficient and equals
 			 *                     the API server keep_alive_timeout. WP default is 5.
 			 */
-			'timeout' => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
+			'timeout'     => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
 			/**
 			 * Applies filters 'tsf_extension_manager_http_request_version' : string
 			 * @since 1.0.0
@@ -265,10 +278,10 @@ class API extends Core {
 	 *
 	 * @param string $type The request type.
 	 * @param string $response The obtained response body.
-	 * @param bool $explain Whether to show additional info in error messages.
+	 * @param bool   $explain Whether to show additional info in error messages.
 	 * @return bool True on successful response, false on failure.
 	 */
-	protected function handle_response( $type = 'status', $response = '', $explain = false ) {
+	final protected function handle_response( $type = 'status', $response = '', $explain = false ) {
 
 		if ( empty( $response ) ) {
 			$this->set_error_notice( [ 301 => '' ] );
@@ -277,11 +290,11 @@ class API extends Core {
 
 		$results = json_decode( $response, true );
 
-		$_response = '';
+		$_response       = '';
 		$additional_info = '';
 
 		//* If the user's already using a free account, don't deactivate.
-		$registered_free = $this->is_plugin_activated() && false === $this->is_premium_user();
+		$registered_free = $this->is_plugin_activated() && false === $this->is_connected_user();
 
 		if ( 'status' !== $type ) {
 			if ( 'activation' === $type ) :
@@ -295,42 +308,42 @@ class API extends Core {
 
 		if ( isset( $results['code'] ) ) :
 			switch ( $results['code'] ) :
-				case '100' :
+				case '100':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 302 => $additional_info ] );
-					$registered_free or $this->do_deactivation( true );
+					$registered_free or $this->do_deactivation( true, true );
 					break;
-				case '101' :
+				case '101':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 303 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				case '102' :
+				case '102':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 304 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				case '103' :
+				case '103':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 305 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				case '104' :
+				case '104':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 306 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				case '105' :
+				case '105':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 307 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				case '106' :
+				case '106':
 					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 308 => $additional_info ] );
-					$registered_free or $this->do_deactivation();
+					$registered_free or $this->do_deactivation( false, true );
 					break;
-				default :
+				default:
 					break;
 			endswitch;
 		endif;
@@ -381,6 +394,7 @@ class API extends Core {
 			return false;
 
 		$subscription = $this->get_subscription_status();
+
 		$args = array_merge( $args, [
 			'email'       => $subscription['email'],
 			'licence_key' => $subscription['key'],

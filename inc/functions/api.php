@@ -71,13 +71,39 @@ namespace TSF_Extension_Manager {
 		static $cache = null;
 
 		/**
-		 * Applies filters 'tsf_extension_manager_can_manage_options'
+		 * Allows for conditionally adjusting the "can do settings" role.
+		 *
+		 * @NOTE:
+		 * We don't recommend conditioning this lower, as some functionality may appear broken.
+		 * This should be set to a role that also implies 'manage_options'.
+		 * @NOTE WANRING:
+		 * Conditioning this higher might impose 'security' risks, where admins, still with
+		 * 'manage_options' capabilities, may perform certain actions, regardless of this state.
+		 *
+		 * We could alleviate these issues by dynamically fetching roles when this is true,
+		 * but that'll create unpredictable behavior, which we won't allow.
+		 *
+		 * @NOTE: Don't try to act smart by always returning true. This function is used
+		 * where can_do_manager_settings() isn't.
+		 *
 		 * @since 1.5.0
-		 * @param bool $capability Current user's administrative capability.
+		 * @param bool $can_do_settings Whether the user can access and modify settings.
 		 */
 		return isset( $cache )
-		     ? $cache
-		     : $cache = \apply_filters( 'tsf_extension_manager_can_manage_options', \current_user_can( 'manage_options' ) );
+			? $cache
+			: $cache = \apply_filters( 'tsf_extension_manager_can_manage_options', \current_user_can( 'manage_options' ) );
+	}
+
+	/**
+	 * Returns the minimum role required to adjust and access the main settings.
+	 *
+	 * @since 2.0.0
+	 * @uses \TSF_Extension_Manager\can_do_settings() This must pass, too.
+	 *
+	 * @return bool
+	 */
+	function can_do_manager_settings() {
+		return can_do_settings() && \current_user_can( TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE );
 	}
 
 	/**
@@ -101,7 +127,7 @@ namespace TSF_Extension_Manager {
 
 		$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
 
-		return $loaded[ $file ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php' );
+		return $loaded[ $file ] = (bool) require TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php';
 	}
 
 	/**
@@ -133,6 +159,6 @@ namespace TSF_Extension_Manager {
 		if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
 			return $loaded[ $version ] = true;
 
-		return $loaded[ $version ] = (bool) require( TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php' );
+		return $loaded[ $version ] = (bool) require TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php';
 	}
 }

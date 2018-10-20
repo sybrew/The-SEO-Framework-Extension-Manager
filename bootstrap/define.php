@@ -22,6 +22,43 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @NOTE The definable constants should be defined in `wp-config.php`.
+// Alternatively, you may define them conditionally in a mu-plugin.
+// These constants may fail to work as intended when defined in a regular plugin. The plugin load sequence affects this behavior.
+// These constants won't work in a theme.
+
+/**
+ * The forced plugin license information.
+ * @since 2.0.0
+ * @param bool|array : [ 'email' => '', 'key' => '' ]
+ */
+defined( 'TSF_EXTENSION_MANAGER_API_INFORMATION' )
+	or define( 'TSF_EXTENSION_MANAGER_API_INFORMATION', false );
+
+/**
+ * The forced activated extensions.
+ * @since 2.0.0
+ * @param bool|array : [ ...'extension_slug' => bool ]
+ */
+defined( 'TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS' )
+	or define( 'TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS', false );
+
+/**
+ * The hidden extensions, only activatable via THE_SEO_FRAMEWORK_FORCED_EXTENSIONS.
+ * @since 2.0.0
+ * @param bool|array : [ ...'extension_slug' ]
+ */
+defined( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS' )
+	or define( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS', false );
+
+/**
+ * The user role required to access the extension overview page.
+ * @since 2.0.0
+ * @param string
+ */
+defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
+	or define( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE', 'manage_options' );
+
 /**
  * The plugin map URL. Used for calling browser files.
  * @since 1.0.0
@@ -95,3 +132,27 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSION_TERM_META', '_tsfem-extension-term-meta
  * @since 1.3.0
  */
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS', 'tsf-extension-manager-extension-s-settings' );
+
+/**
+ * The expected plugin slug.
+ * @since 2.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PLUGIN_SLUG', 'the-seo-framework-extension-manager' );
+
+/**
+ * The updater cache key.
+ * @since 2.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_UPDATER_CACHE', 'tsfem-updater-cache' );
+
+/**
+ * The DL URI.
+ * @since 2.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_DL_URI', 'https://dl.theseoframework.com/' );
+
+/**
+ * The Premium URI.
+ * @since 2.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PREMIUM_URI', 'https://premium.theseoframework.com/' );

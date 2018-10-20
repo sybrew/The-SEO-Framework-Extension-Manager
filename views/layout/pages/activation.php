@@ -4,6 +4,7 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 // Todo do something with network mode here. Remove backslashes (preventing POT generation).
 //$type = $this->is_plugin_in_network_mode() ? _\_( 'network', 'the-seo-framework-extension-manager' ) : _\_( 'website', 'the-seo-framework-extension-manager' );
 
+if ( ! $this->is_auto_activated() ) :
 ?>
 <div class=tsfem-connect-option>
 	<div class="tsfem-connect-row tsfem-flex tsfem-flex-row">
@@ -63,7 +64,9 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 		</div>
 	</div>
 </div>
-
+<?php
+endif; // End if ( ! $this->is_auto_activated() )
+?>
 <div class=tsfem-connect-option>
 	<div class="tsfem-connect-row tsfem-flex tsfem-flex-row">
 		<div class="tsfem-connect-text tsfem-flex">

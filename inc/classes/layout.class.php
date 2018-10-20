@@ -55,14 +55,14 @@ final class Layout extends Secure_Abstract {
 			self::set( '_wpaction' );
 
 			switch ( $type ) :
-				case 'form' :
-				case 'link' :
-				case 'list' :
+				case 'form':
+				case 'link':
+				case 'list':
 					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
-				default :
+				default:
 					self::reset();
 					self::invoke_invalid_type( __METHOD__ );
 					break;
@@ -88,27 +88,27 @@ final class Layout extends Secure_Abstract {
 		}
 
 		switch ( $type ) :
-			case 'disconnect-button' :
+			case 'disconnect-button':
 				return static::get_disconnect_button();
 				break;
 
-			case 'free-support-button' :
-				return static::get_free_support_button();
+			case 'public-support-button':
+				return static::get_public_support_button();
 				break;
 
-			case 'premium-support-button' :
+			case 'premium-support-button':
 				return static::get_premium_support_button();
 				break;
 
-			case 'account-information' :
+			case 'account-information':
 				return static::get_account_info();
 				break;
 
-			case 'account-upgrade' :
+			case 'account-upgrade':
 				return static::get_account_upgrade_form();
 				break;
 
-			default :
+			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
 		endswitch;
@@ -166,18 +166,18 @@ final class Layout extends Secure_Abstract {
 	}
 
 	/**
-	 * Outputs free support button.
+	 * Outputs public support button.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string The free support button link.
 	 */
-	private static function get_free_support_button() {
+	private static function get_public_support_button() {
 
 		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsf_extension_manager()->get_support_link( 'free' );
+			return \tsf_extension_manager()->get_support_link( 'public' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The free support button only supports the link type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The public support button only supports the link type.' );
 			return '';
 		}
 	}
@@ -243,17 +243,22 @@ final class Layout extends Secure_Abstract {
 		$_class = [ 'tsfem-dashicon' ];
 
 		switch ( $level ) :
-			case 'Premium' :
+			case 'Premium':
 				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
-			case 'Free' :
+			case 'Essentials':
+				$_level = \__( 'Essentials', 'the-seo-framework-extension-manager' );
+				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
+				break;
+
+			case 'Free':
 				$_level = \__( 'Free', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
-			default :
+			default:
 				$_level = $level;
 				$_class[] = 'tsfem-error';
 				break;
@@ -346,8 +351,8 @@ final class Layout extends Secure_Abstract {
 				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
-			$end_date = isset( $end_date ) ? date( 'Y-m-d', strtotime( $end_date ) ) : '';
-			$end_date_i18n = $end_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $end_date ) ) : '';
+			$end_date = date( 'Y-m-d', $date_until );
+			$end_date_i18n = \date_i18n( 'F j, Y, g:i A', $date_until );
 			$expires_in = HTML::wrap_inline_tooltip( vsprintf(
 				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
 				[
@@ -383,14 +388,13 @@ final class Layout extends Secure_Abstract {
 				$payment_in = sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
 			}
 
-			$payment_date = isset( $payment_date ) ? date( 'Y-m-d', strtotime( $payment_date ) ) : '';
-			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', strtotime( $payment_date ) ) : '';
+			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', $date_until ) : '';
 			$payment_in = HTML::wrap_inline_tooltip( vsprintf(
 				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
 				[
 					\esc_attr( $_class ),
 					\esc_attr( $end_date_i18n ),
-					\esc_attr( $payment_date ),
+					\esc_attr( date( 'Y-m-d', $date_until ) ),
 					\esc_html( $payment_in ),
 				]
 			) );

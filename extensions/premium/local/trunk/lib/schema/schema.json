@@ -8,7 +8,7 @@
 			"_data" : {
 				"_type" : "single",
 				"_from" : "default",
-				"_value" : "http://schema.org"
+				"_value" : "https://schema.org"
 			},
 			"_handlers" : {
 				"_condition" : {

@@ -67,6 +67,60 @@ final class LoadAdmin extends AdminPages {
 
 		//* Listener for updates.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
+
+		$this->is_auto_activated()
+			and \add_action( 'admin_init', [ $this, '_check_constant_activation' ] );
+	}
+
+	/**
+	 * Tries activating the account via a contstant.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 */
+	public function _check_constant_activation() {
+
+		// Store in $var for PHP<7 compiling compat.
+		$data = TSF_EXTENSION_MANAGER_API_INFORMATION;
+		$data = [
+			'email' => \sanitize_email( $data['email'] ),
+			'key'   => trim( $data['key'] ),
+		];
+
+		if ( $this->is_connected_user() ) {
+			$current = $this->get_subscription_status();
+			$equals  = array_intersect_assoc( $current, $data );
+
+			if ( isset( $equals['email'], $equals['key'] ) ) return;
+
+			$args = [
+				'activation_email' => $current['email'],
+				'licence_key'      => $current['key'],
+			];
+			$this->handle_request( 'deactivation', $args );
+
+			if ( $this->is_tsf_extension_manager_page( false ) ) {
+				// Reload dashboard.
+				\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+				exit;
+			}
+		} else {
+			$timeout = \get_transient( 'tsf-extension-manager-auto-activate-timeout' );
+			if ( $timeout ) return;
+			\set_transient( 'tsf-extension-manager-auto-activate-timeout', 1, MINUTE_IN_SECONDS * 5 );
+
+			$args = [
+				'activation_email' => $data['email'],
+				'licence_key'      => $data['key'],
+			];
+			$this->handle_request( 'activation', $args );
+
+			if ( $this->is_tsf_extension_manager_page( false ) ) {
+				// Reload dashboard.
+				\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+				exit;
+			}
+		}
 	}
 
 	/**
@@ -77,15 +131,15 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function check_external_blocking() {
 
-		if ( false === $this->is_tsf_extension_manager_page() || false === $this->can_do_settings() )
+		if ( ! $this->is_tsf_extension_manager_page() || ! $this->can_do_settings() )
 			return;
 
 		if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
 
-			$parsed_url = \wp_parse_url( $this->get_activation_url() );
-			$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+			$act_url = \wp_parse_url( $this->get_activation_url() );
+			$host    = isset( $act_url['host'] ) ? $act_url['host'] : '';
 
-			if ( false === defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
+			if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
 				$notice = $this->convert_markdown(
 					sprintf(
 						/* translators: Markdown. %s = API URL */
@@ -118,7 +172,7 @@ final class LoadAdmin extends AdminPages {
 					$notice_data = $this->build_ajax_dismissible_notice();
 				}
 
-				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $_type, 'failure' ) );
+				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $notice_data['type'], 'failure' ) );
 			endif;
 		endif;
 
@@ -143,7 +197,7 @@ final class LoadAdmin extends AdminPages {
 					$notice_data = $this->build_ajax_dismissible_notice();
 				}
 
-				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $_type, 'failure' ) );
+				$this->send_json( $this->coalesce_var( $notice_data, [] ), $this->coalesce_var( $notice_data['type'], 'failure' ) );
 			endif;
 		endif;
 
@@ -159,23 +213,22 @@ final class LoadAdmin extends AdminPages {
 	 */
 	final protected function build_ajax_dismissible_notice() {
 
-		$key = $this->coalesce_var( $_POST['tsfem-notice-key'], false );
-		$key = intval( $key );
+		$data['key'] = (int) $this->coalesce_var( $_POST['tsfem-notice-key'], false ); // CSRF, input var, sanitization ok
 
-		if ( $key ) {
-			$_notice = $this->get_error_notice( $key );
+		if ( $data['key'] ) {
+			$notice = $this->get_error_notice( $data['key'] );
 
-			if ( is_array( $_notice ) ) {
+			if ( is_array( $notice ) ) {
 				//= If it has a custom message (already stored in browser), then don't output the notice message.
-				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $_notice['before'] : $_notice['message'];
-				$type = $_notice['type'];
+				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message']; // CSRF, input var ok
 
-				$notice = $this->get_dismissible_notice( $msg, $type, true, false );
-				$_type = $notice ? 'success' : 'failure';
+				$data['notice'] = $this->get_dismissible_notice( $msg, $notice['type'], true, false );
+				$data['type'] = $notice['type'];
+				// $_type  = $data['notice'] ? 'success' : 'failure';
 			}
 		}
 
-		return compact( 'type', 'notice', 'key' );
+		return $data;
 	}
 
 	/**
@@ -257,21 +310,24 @@ final class LoadAdmin extends AdminPages {
 			if ( $this->can_do_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 
-					//= Input gets forwarded to secure location. Sanitation happens externally.
-					$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
+					$send = [];
+
+					//= Input gets forwarded to secure location. Sanitization happens externally.
+					$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : ''; // CSRF, sanitization & input var ok
 
 					if ( ! $input || ! is_object( $input ) ) {
-						$results = $this->get_ajax_notice( false, 17000 );
+						$send['results'] = $this->get_ajax_notice( false, 17000 );
 					} else {
 						$subscription = $this->get_subscription_status();
+
 						$args = [
 							'request'     => 'geocoding/get',
 							'email'       => $subscription['email'],
 							'licence_key' => $subscription['key'],
-							'data' => [
+							'data'        => [
 								'geodata' => json_encode( $input ),
 								//= get_user_locale() is WP 4.7+
-								'locale' => function_exists( '\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+								'locale'  => function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
 							],
 						];
 
@@ -279,71 +335,72 @@ final class LoadAdmin extends AdminPages {
 						$response = json_decode( $response );
 
 						if ( ! isset( $response->success ) ) {
-							$results = $this->get_ajax_notice( false, 17001 );
+							$send['results'] = $this->get_ajax_notice( false, 17001 );
 						} else {
 							if ( ! isset( $response->data ) ) {
-								$results = $this->get_ajax_notice( false, 17002 );
+								$send['results'] = $this->get_ajax_notice( false, 17002 );
 							} else {
 								$data = json_decode( $response->data, true );
 
 								if ( ! $data ) {
-									$results = $this->get_ajax_notice( false, 17003 );
+									$send['results'] = $this->get_ajax_notice( false, 17003 );
 								} else {
 									$this->coalesce_var( $data['status'] );
 
 									if ( 'OK' !== $data['status'] ) {
 										switch ( $data['status'] ) :
 											//* @link https://developers.google.com/maps/documentation/geocoding/intro#reverse-response
-											case 'ZERO_RESULTS' :
-												$results = $this->get_ajax_notice( false, 17004 );
+											case 'ZERO_RESULTS':
+												$send['results'] = $this->get_ajax_notice( false, 17004 );
 												break;
 
-											case 'OVER_QUERY_LIMIT' :
+											case 'OVER_QUERY_LIMIT':
 												// This should never be invoked.
-												$results = $this->get_ajax_notice( false, 17005 );
+												$send['results'] = $this->get_ajax_notice( false, 17005 );
 												break;
 
-											case 'REQUEST_DENIED' :
+											case 'REQUEST_DENIED':
 												// This should never be invoked.
-												$results = $this->get_ajax_notice( false, 17006 );
+												$send['results'] = $this->get_ajax_notice( false, 17006 );
 												break;
 
-											case 'INVALID_REQUEST' :
+											case 'INVALID_REQUEST':
 												//= Data is missing.
-												$results = $this->get_ajax_notice( false, 17007 );
+												$send['results'] = $this->get_ajax_notice( false, 17007 );
 												break;
 
-											case 'UNKNOWN_ERROR' :
+											case 'UNKNOWN_ERROR':
 												//= Remote Geocoding API error. Try again...
-												$results = $this->get_ajax_notice( false, 17008 );
+												$send['results'] = $this->get_ajax_notice( false, 17008 );
 												break;
 
-											case 'TIMEOUT' :
+											case 'TIMEOUT':
 												//= Too many consecutive requests.
-												$results = $this->get_ajax_notice( false, 17009 );
+												$send['results'] = $this->get_ajax_notice( false, 17009 );
 												break;
 
-											case 'RATE_LIMIT' :
+											case 'RATE_LIMIT':
 												//= Too many requests in the last period.
-												$results = $this->get_ajax_notice( false, 17010 );
+												$send['results'] = $this->get_ajax_notice( false, 17010 );
 												break;
 
-											default :
-												//= ??
-												$results = $this->get_ajax_notice( false, 17011 );
+											case 'LICENSE_TOO_LOW':
+											default:
+												//= Undefined error.
+												$send['results'] = $this->get_ajax_notice( false, 17011 );
 												break;
 										endswitch;
 									} else {
-										$results = $this->get_ajax_notice( false, 17012 );
-										$geodata =& $data;
-										$_type = 'success';
+										$send['results'] = $this->get_ajax_notice( false, 17012 );
+										$send['geodata'] = $data;
+										$_type           = 'success';
 									}
 								}
 							}
 						}
 					}
 
-					$this->send_json( compact( 'results', 'geodata' ), \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
+					$this->send_json( $send, \tsf_extension_manager()->coalesce_var( $_type, 'failure' ) );
 					exit;
 				}
 			endif;
@@ -365,65 +422,67 @@ final class LoadAdmin extends AdminPages {
 	final public function _handle_update_post() {
 
 		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
-			return;
+			return; // CSRF & input var ok
 
 		//* Post is taken and will be validated directly below.
-		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
+		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]; // CSRF, input var & sanitization ok
 
 		//* Options exist. There's no need to check again them.
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
 		switch ( $options['nonce-action'] ) :
-			case $this->request_name['activate-key'] :
+			case $this->request_name['activate-key']:
+				if ( $this->is_auto_activated() ) break;
 				$args = [
-					'licence_key' => trim( $options['key'] ),
+					'licence_key'      => trim( $options['key'] ),
 					'activation_email' => \sanitize_email( $options['email'] ),
 				];
 
 				$this->handle_request( 'activation', $args );
 				break;
 
-			case $this->request_name['activate-free'] :
+			case $this->request_name['activate-free']:
 				$this->do_free_activation();
 				break;
 
-			case $this->request_name['activate-external'] :
+			case $this->request_name['activate-external']:
+				if ( $this->is_auto_activated() ) break;
 				$this->get_remote_activation_listener_response();
 				break;
 
-			case $this->request_name['deactivate'] :
+			case $this->request_name['deactivate']:
+				if ( $this->is_auto_activated() ) break;
 				if ( false === $this->is_plugin_activated() ) {
 					$this->set_error_notice( [ 701 => '' ] );
 					break;
-				} elseif ( false === $this->is_premium_user() || false === $this->are_options_valid() ) {
+				} elseif ( false === $this->is_connected_user() || false === $this->are_options_valid() ) {
 					$this->do_free_deactivation();
 					break;
 				}
 
 				$args = [
-					'licence_key' => trim( $this->get_option( 'api_key' ) ),
-					'activation_email' => sanitize_email( $this->get_option( 'activation_email' ) ),
+					'licence_key'      => trim( $this->get_option( 'api_key' ) ),
+					'activation_email' => \sanitize_email( $this->get_option( 'activation_email' ) ),
 				];
 
 				$this->handle_request( 'deactivation', $args );
 				break;
 
-			case $this->request_name['enable-feed'] :
+			case $this->request_name['enable-feed']:
 				$success = $this->update_option( '_enable_feed', true, 'regular', false );
-				$code = $success ? 702 : 703;
-				$this->set_error_notice( [ $code => '' ] );
+				$this->set_error_notice( [ $success ? 702 : 703 => '' ] );
 				break;
 
-			case $this->request_name['activate-ext'] :
+			case $this->request_name['activate-ext']:
 				$success = $this->activate_extension( $options );
 				break;
 
-			case $this->request_name['deactivate-ext'] :
+			case $this->request_name['deactivate-ext']:
 				$success = $this->deactivate_extension( $options );
 				break;
 
-			default :
+			default:
 				$this->set_error_notice( [ 708 => '' ] );
 				break;
 		endswitch;
@@ -460,15 +519,16 @@ final class LoadAdmin extends AdminPages {
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
-			/**
-			 * If this page doesn't parse the site options,
-			 * there's no need to check them on each request.
-			 */
-			if ( empty( $_POST ) || ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) || ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+			//* If this page doesn't parse the site options, there's no need to check them on each request.
+			if ( empty( $_POST ) // input var ok
+			|| ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) // input var ok
+			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) ) // CSRF & input var ok
 				return $validated[ $key ] = false;
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( stripslashes( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] )
+				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+				: false; // input var & sanitization ok
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -491,11 +551,12 @@ final class LoadAdmin extends AdminPages {
 		if ( $this->is_plugin_activated() || false === $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
-		$text = \__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
-		$url = $this->get_admin_page_url();
+		$text  = \__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
+		$url   = $this->get_admin_page_url();
 		$title = \__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
 
 		$notice_link = '<a href="' . \esc_url( $url ) . '" title="' . \esc_attr( $title ) . '" target=_self>' . \esc_html( $title ) . '</a>';
+
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		//* No a11y icon. Already escaped. Use TSF as it loads styles.
@@ -607,18 +668,23 @@ final class LoadAdmin extends AdminPages {
 			return '';
 
 		$defaults = [
-			'url'     => '',
-			'target'  => '_self',
-			'rel' => 'nofollow noopener noreferrer',
-			'class'   => '',
-			'id'      => '',
-			'title'   => '',
-			'content' => '',
+			'url'      => '',
+			'target'   => '_self',
+			'rel'      => 'nofollow noreferrer',
+			'class'    => '',
+			'id'       => '',
+			'title'    => '',
+			'content'  => '',
 			'download' => false,
 			'filename' => '',
-			'data' => [],
+			'data'     => [],
 		];
+
 		$args = array_filter( array_merge( $defaults, $args ) );
+
+		if ( '_blank' === $args['target'] ) {
+			$args['rel'] .= ' noopener';
+		}
 
 		if ( empty( $args['url'] ) ) {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
@@ -631,23 +697,23 @@ final class LoadAdmin extends AdminPages {
 
 		foreach ( $args as $type => $value ) :
 			switch ( $type ) :
-				case 'class' :
-				case 'title' :
-				case 'rel' :
+				case 'class':
+				case 'title':
+				case 'rel':
 					$parts[] = $type . '="' . \esc_attr( $value ) . '"';
 					break;
 
-				case 'id' :
-				case 'target' :
+				case 'id':
+				case 'target':
 					$parts[] = $type . '=' . \esc_attr( $value );
 					break;
 
-				case 'url' :
+				case 'url':
 					if ( '#' !== $value )
 						$parts[] = 'href="' . $value . '"';
 					break;
 
-				case 'download' :
+				case 'download':
 					if ( isset( $args['filename'] ) ) {
 						$parts[] = 'download="' . \esc_attr( $args['filename'] ) . '"';
 					} else {
@@ -656,13 +722,13 @@ final class LoadAdmin extends AdminPages {
 					unset( $args['filename'] );
 					break;
 
-				case 'data' :
+				case 'data':
 					foreach ( $value as $k => $v ) {
 						$parts[] = sprintf( 'data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
 					}
 					break;
 
-				default :
+				default:
 					break;
 			endswitch;
 		endforeach;
@@ -681,14 +747,14 @@ final class LoadAdmin extends AdminPages {
 	final public function get_download_link( array $args = [] ) {
 
 		$defaults = [
-			'url'     => '',
-			'target'  => '_self',
-			'class'   => '',
-			'title'   => '',
-			'content' => '',
+			'url'      => '',
+			'target'   => '_self',
+			'class'    => '',
+			'title'    => '',
+			'content'  => '',
 			'download' => true,
 			'filename' => '',
-			'data' => [],
+			'data'     => [],
 		];
 
 		return $this->get_link( \wp_parse_args( $args, $defaults ) );
@@ -703,10 +769,10 @@ final class LoadAdmin extends AdminPages {
 	 */
 	final protected function get_my_account_link() {
 		return $this->get_link( [
-			'url' => $this->get_activation_url( 'my-account/' ),
-			'target' => '_blank',
-			'class' => '',
-			'title' => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+			'url'     => $this->get_activation_url( 'my-account/' ),
+			'target'  => '_blank',
+			'class'   => '',
+			'title'   => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
 			'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
 		] );
 	}
@@ -725,26 +791,27 @@ final class LoadAdmin extends AdminPages {
 		if ( 'premium' === $type ) {
 			$url = 'https://premium.theseoframework.com/support/';
 
-			$title = \__( 'Get support for premium extensions', 'the-seo-framework-extension-manager' );
-			$text = \__( 'Premium Support', 'the-seo-framework-extension-manager' );
+			$title = \__( 'Get support via mail', 'the-seo-framework-extension-manager' );
+			$text  = \__( 'Private Support', 'the-seo-framework-extension-manager' );
 
-			$class = 'tsfem-button-primary tsfem-button-flat tsfem-button-primary-bright';
+			// $class  = 'tsfem-button-primary tsfem-button-flat tsfem-button-primary-bright';
+			$class  = 'tsfem-button-primary tsfem-button-flat';
 			$class .= $icon ? ' tsfem-button-star' : '';
 		} else {
-			$url = 'https://wordpress.org/support/plugin/the-seo-framework-extension-manager';
+			$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
 
-			$title = \__( 'Get support for free extensions', 'the-seo-framework-extension-manager' );
-			$text = \__( 'Free Support', 'the-seo-framework-extension-manager' );
+			$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
+			$text  = \__( 'Public Support', 'the-seo-framework-extension-manager' );
 
-			$class = 'tsfem-button-primary tsfem-button-flat';
+			$class  = 'tsfem-button-primary tsfem-button-flat tsfem-button-primary-bright';
 			$class .= $icon ? ' tsfem-button-love' : '';
 		}
 
 		return $this->get_link( [
-			'url' => $url,
-			'target' => '_blank',
-			'class' => $class,
-			'title' => $title,
+			'url'     => $url,
+			'target'  => '_blank',
+			'class'   => $class,
+			'title'   => $title,
 			'content' => $text,
 		] );
 	}
@@ -764,27 +831,27 @@ final class LoadAdmin extends AdminPages {
 	final public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
 
 		switch ( $type ) :
-			case 'success' :
-			case 'updated' :
+			case 'success':
+			case 'updated':
 				$type = 'tsfem-notice-success';
 				break;
 
-			case 'warning' :
+			case 'warning':
 				$type = 'tsfem-notice-warning';
 				break;
 
-			case 'error' :
+			case 'error':
 				$type = 'tsfem-notice-error';
 				break;
 
-			default :
+			default:
 				$type = '';
 				break;
 		endswitch;
 
 		$a11y = $a11y ? ' tsfem-show-icon' : '';
 
-		$notice = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
+		$notice  = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
 		$notice .= '<a class="hide-if-no-js tsfem-dismiss" title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
 		$notice .= $escape ? \esc_html( $message ) : $message;
 		$notice .= '</p></div>';
@@ -832,7 +899,7 @@ final class LoadAdmin extends AdminPages {
 		}
 
 		static $parent_set = false;
-		static $set = [];
+		static $set        = [];
 
 		if ( false === $parent_set && ( $parent_set = true ) ) {
 			//* Set parent slug.
@@ -884,6 +951,7 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.1 Added "already activated" tests to prevent "x was already defined" errors.
+	 * @since 2.0.0 Now checks for the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
 	 * @param array $options The form/request input options.
 	 * @param bool $ajax Whether this is an AJAX request.
@@ -897,6 +965,16 @@ final class LoadAdmin extends AdminPages {
 
 		$slug = \sanitize_key( $options['extension'] );
 
+		//? PHP 7 please.
+		if ( array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+			$ajax or $this->register_extension_state_change_notice( 10013, $slug );
+			return $ajax ? $this->get_ajax_notice( false, 10013 ) : false;
+		}
+		if ( in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+			$ajax or $this->register_extension_state_change_notice( 10014, $slug );
+			return $ajax ? $this->get_ajax_notice( false, 10014 ) : false;
+		}
+
 		$this->get_verification_codes( $_instance, $bits );
 
 		Extensions::initialize( 'activation', $_instance, $bits );
@@ -904,23 +982,23 @@ final class LoadAdmin extends AdminPages {
 		Extensions::set_instance_extension_slug( $slug );
 
 		$checksum = Extensions::get( 'extensions_checksum' );
-		$result = $this->validate_extensions_checksum( $checksum );
+		$result   = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
 			switch ( $result ) :
-				case -1 :
+				case -1:
 					//* No checksum found.
 					$ajax or $this->set_error_notice( [ 10001 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
 					break;
 
-				case -2 :
+				case -2:
 					//* Checksum mismatch.
 					$ajax or $this->set_error_notice( [ 10002 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
 					break;
 
-				default :
+				default:
 					//* Method mismatch error. Unknown error.
 					$ajax or $this->set_error_notice( [ 10003 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
@@ -958,32 +1036,32 @@ final class LoadAdmin extends AdminPages {
 		endif;
 
 		switch ( $status['case'] ) :
-			case 1 :
+			case 1:
 				//* No slug set.
 				$code = 10007;
 				break;
 
-			case 2 :
-				//* Premium activated.
+			case 2:
+				//* Premium/Essentials activated.
 				$code = 10008;
 				break;
 
-			case 3 :
-				//* Premium failed: User not premium.
+			case 3:
+				//* Premium/Essentials failed: User not connected.
 				$code = 10009;
 				break;
 
-			case 4 :
+			case 4:
 				//* Free activated.
 				$code = 10010;
 				break;
 
-			case 5 :
+			case 5:
 				//* Was already active.
 				$code = 10012;
 				break;
 
-			default :
+			default:
 				//* Unknown case.
 				$code = 10011;
 				break;
@@ -998,6 +1076,7 @@ final class LoadAdmin extends AdminPages {
 	 * Deactivates extension based on form input.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 Now checks for the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
 	 * @param array $options The form input options.
 	 * @param bool $ajax Whether this is an AJAX request.
@@ -1017,6 +1096,17 @@ final class LoadAdmin extends AdminPages {
 		 * Checking it after this point will result in inconsitent data.
 		 */
 		$slug = \sanitize_key( $options['extension'] );
+
+		//? PHP 7 please.
+		if ( array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+			$ajax or $this->register_extension_state_change_notice( 11003, $slug );
+			return $ajax ? $this->get_ajax_notice( false, 11003 ) : false;
+		}
+		if ( in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+			$ajax or $this->register_extension_state_change_notice( 11004, $slug );
+			return $ajax ? $this->get_ajax_notice( false, 11004 ) : false;
+		}
+
 		$success = $this->disable_extension( $slug );
 
 		$code = $success ? 11001 : 11002;
@@ -1113,6 +1203,7 @@ final class LoadAdmin extends AdminPages {
 	final protected function update_extension( $slug, $enable = false ) {
 
 		$extensions = $this->get_option( 'active_extensions', [] );
+
 		$extensions[ $slug ] = (bool) $enable;
 
 		//* Kill options on failure when enabling.

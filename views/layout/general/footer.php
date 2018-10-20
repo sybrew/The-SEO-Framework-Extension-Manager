@@ -3,12 +3,14 @@ defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance,
 
 if ( $this->is_plugin_activated() ) {
 	if ( $this->is_premium_user() ) {
-		$more_mottos = [ 'premium' ];
+		$more_mottos = [ 'premium', 'essential' ];
+	} elseif ( $this->is_connected_user() ) {
+		$more_mottos = [ 'essential' ];
 	} else {
 		$more_mottos = [ 'free' ];
 	}
 } else {
-	$more_mottos = [ 'free', 'premium' ];
+	$more_mottos = [ 'free', 'essential', 'premium' ];
 }
 
 /**
@@ -36,13 +38,12 @@ $mottos = [
 ];
 $mottos = array_merge( $mottos, $more_mottos );
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
-$motto = 'A ' . $mottos[ $motto_key ] . ' Initiative';
 
 ?>
 <p class="tsfem-footer-title">
 	The SEO Framework Extension Manager
 </p>
 <p class="tsfem-footer-motto">
-	<?php echo \esc_html( $motto ); ?>
+	<?php echo \esc_html( "A {$mottos[ $motto_key ]} Initiative" ); ?>
 </p>
 <?php

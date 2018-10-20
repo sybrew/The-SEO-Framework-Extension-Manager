@@ -49,7 +49,7 @@ create_analysis_field :;
 							'language_supported' => $language_supported,
 							'has_keyword' => (bool) strlen( $values['keyword'] ),
 							'sub_scores' => [
-								'key' => $make_option_id( $id, 'scores' ),
+								'key'    => $make_option_id( $id, 'scores' ),
 								'values' => $values['scores'],
 							],
 							'wrap_ids' => [
@@ -71,41 +71,41 @@ create_analysis_field :;
 							],
 							'post_input' => [
 								'keyword' => [
-									'id' => $make_option_id( $id, 'keyword' ),
+									'id'    => $make_option_id( $id, 'keyword' ),
 									'value' => $get_value( 'keyword' ),
 								],
 								'lexical_form' => [
-									'id' => $make_option_id( $id, 'lexical_form' ),
+									'id'    => $make_option_id( $id, 'lexical_form' ),
 									'selector_id' => $make_option_id( $id, 'lexical_selector' ),
 									'value' => $get_value( 'lexical_form' ),
 								],
 								'lexical_data' => [
-									'id' => $make_option_id( $id, 'lexical_data' ),
+									'id'    => $make_option_id( $id, 'lexical_data' ),
 									'value' => $get_value( 'lexical_data' ) ?: [],
 								],
 								'active_inflections' => [
-									'id' => $make_option_id( $id, 'active_inflections' ),
+									'id'    => $make_option_id( $id, 'active_inflections' ),
 									'value' => $get_value( 'active_inflections' ),
 								],
 								'active_synonyms' => [
-									'id' => $make_option_id( $id, 'active_synonyms' ),
+									'id'    => $make_option_id( $id, 'active_synonyms' ),
 									'value' => $get_value( 'active_synonyms' ),
 								],
 								'definition_selection' => [
-									'id' => $make_option_id( $id, 'definition_selection' ),
+									'id'    => $make_option_id( $id, 'definition_selection' ),
 									'selector_id' => $make_option_id( $id, 'definition_dropdown' ),
 									'value' => $get_value( 'definition_selection' ),
 								],
 								'inflection_data' => [
-									'id' => $make_option_id( $id, 'inflection_data' ),
+									'id'    => $make_option_id( $id, 'inflection_data' ),
 									'value' => $get_value( 'inflection_data' ) ?: [],
 								],
 								'synonym_data' => [
-									'id' => $make_option_id( $id, 'synonym_data' ),
+									'id'    => $make_option_id( $id, 'synonym_data' ),
 									'value' => $get_value( 'synonym_data' ) ?: [],
 								],
 								'score' => [
-									'id' => $make_option_id( $id, 'score' ),
+									'id'    => $make_option_id( $id, 'score' ),
 									'value' => $get_value( 'score' ) ?: [],
 								],
 							],

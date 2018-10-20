@@ -1002,7 +1002,10 @@ final class FormGenerator {
 		$wrap_id = $this->get_field_id();
 
 		//* Already escaped.
-		$defer and printf( '<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>', $wrap_id );
+		$defer and printf(
+			'<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>',
+			$wrap_id
+		);
 
 		//* Already escaped.
 		printf(
@@ -1018,9 +1021,9 @@ final class FormGenerator {
 			$this->iterate();
 
 			$collapse_args = [
-				'title' => $_title,
+				'title'     => $_title,
 				'dyn_title' => $args['_iterator_title_dynamic'],
-				'id' => $this->get_field_id(),
+				'id'        => $this->get_field_id(),
 			];
 
 			//* Already escaped.
@@ -1755,9 +1758,19 @@ final class FormGenerator {
 				//* Level up.
 				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
 				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
-					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf(
+						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
+						$this->get_field_id(),
+						$args[0],
+						$args[1]
+					);
 				} else {
-					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf(
+						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>',
+						$this->get_field_id(),
+						$args[0],
+						$args[1]
+					);
 				}
 				yield '<li>';
 				//* Level continue.
@@ -1766,9 +1779,19 @@ final class FormGenerator {
 				yield '</li>';
 			} else {
 				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
-					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf(
+						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
+						$this->get_field_id(),
+						$args[0],
+						$args[1]
+					);
 				} else {
-					yield sprintf( '<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>', $this->get_field_id(), $args[0], $args[1] );
+					yield sprintf(
+						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>',
+						$this->get_field_id(),
+						$args[0],
+						$args[1]
+					);
 				}
 			}
 		endforeach;

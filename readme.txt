@@ -166,6 +166,32 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.0 - Divine SEO =
+
+**Plugin Improvements:**
+
+* **Added:** The plugin now supports PHP 7.3.
+* **Added:** We integrated our own updating services.
+* **Added:** We added a new "Essential" extension tier. These extensions don't require our API actively, but give powerful SEO improvements regardless.
+* **Added:** This plugin can now handle license upgrades and downgrades. It's just that our shop can't, yet.
+* **Added:** Various constants that allow you to easily manage multisite networks and customer websites.
+* **Improved:** When the class stops for any reason, it creates aliases to prevent crashing.
+* **Improved:** A deactivation from a connected state now brings you back to the Free tier, without losing your extension activation data.
+	* Reconnect to reactivate the made-unavailable extensions automatically.
+* **Removed:** Integrated fonts for pixel recognition tests. It was planned to be integrated for PHP-style pixel calculations, but was aborted for performance reasons.
+* **Removed:** More legacy browser support.
+* **Fixed:** The human time is now correctly told in facing certain circumstances.
+* **Fixed:** TODO The AJAX notification no longer starts fading before it's processed. (we're used to servers that respond instantly...)
+	* Test this with throttled connections in Chrome...
+
+* **Extension changes: TODO move this to their respective changelogs**
+
+* **Origin:**
+	* **Added:** Attachment pages that don't have a parent now get redirected to the attachment itself.
+		* TODO document.
+		* TODO set to version 1.1.0
+
+
 = 1.5.2 =
 
 **Plugin Improvements:**

@@ -36,7 +36,10 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 						'tsfem-e-focus-enable-if-js',
 						'tsfem-e-focus-requires-javascript',
 					] ) ),
-					\TSF_Extension_Manager\HTML::make_sequential_dropdown_option_list( $post_input['lexical_data']['value'], $post_input['lexical_form']['value'] ?: '' )
+					\TSF_Extension_Manager\HTML::make_sequential_dropdown_option_list(
+						$post_input['lexical_data']['value'],
+						$post_input['lexical_form']['value'] ?: ''
+					)
 				);
 			}
 			/**
@@ -48,22 +51,26 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
 				as $hidden_input
 			) {
-				printf(
+				vprintf(
 					'<input type=hidden id="%s" name=%s value="%s">',
-					$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
-					\esc_attr( $hidden_input['id'] ),
-					\esc_attr( json_encode( $hidden_input['value'] ) )
+					[
+						$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
+						\esc_attr( $hidden_input['id'] ),
+						\esc_attr( json_encode( $hidden_input['value'] ) ),
+					]
 				);
 			}
 			foreach (
 				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
 				as $hidden_input
 			) {
-				printf(
+				vprintf(
 					'<input type=hidden id="%s" name=%s value="%s">',
-					$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
-					\esc_attr( $hidden_input['id'] ),
-					\esc_attr( $hidden_input['value'] )
+					[
+						$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
+						\esc_attr( $hidden_input['id'] ),
+						\esc_attr( $hidden_input['value'] ),
+					]
 				);
 			}
 			?>
@@ -145,9 +152,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 	<div class=tsfem-e-focus-collapse-content-wrap id=<?php echo \esc_attr( $wrap_ids['content'] ); ?>>
 		<div class=tsfem-e-focus-content-loader><div class=tsfem-e-focus-content-loader-bar></div></div>
 		<div class=tsfem-e-focus-collapse-content>
-			<?php
-			if ( $is_premium ) :
-			?>
+			<?php if ( $is_premium ) : ?>
 			<div class=tsfem-e-focus-subject id=<?php echo \esc_attr( $wrap_ids['edit'] ); ?> style=display:none>
 				<?php
 				printf(
@@ -180,12 +185,10 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					<div class=tsfem-e-focus-subject-selection></div>
 				</div>
 			</div>
-			<?php
-			endif;
-			?>
+			<?php endif; ?>
 			<div class=tsfem-e-focus-evaluation id=<?php echo \esc_attr( $wrap_ids['evaluate'] ); ?>>
 				<?php
-				$this->output_score_template( compact( 'is_premium', 'is_active', 'has_keyword', 'sub_scores' ) );
+				$this->output_score_template( compact( 'is_premium', 'has_keyword', 'sub_scores' ) );
 				?>
 			</div>
 		</div>

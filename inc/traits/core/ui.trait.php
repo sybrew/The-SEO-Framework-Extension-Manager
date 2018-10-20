@@ -500,6 +500,7 @@ trait UI {
 	 * Registers form CSS.
 	 *
 	 * @since 1.3.0
+	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_settings() for nonce creation.
 	 * @staticvar $set Wehther the dependency has been set.
 	 * @access protected
 	 *
@@ -528,10 +529,10 @@ trait UI {
 			'dependency' => 'tsfem-form',
 			'name' => 'tsfemFormL10n',
 			'strings' => [
-				'nonce' => \current_user_can( 'manage_options' ) ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
+				'nonce' => \TSF_Extension_Manager\can_do_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
 				'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 				'i18n' => [
-					//* TODO categorize + maybe put correctly into externs.
+					//* TODO categorize
 
 					// Validation.
 					'requiredSelectAny' => \esc_html__( 'Please select any of the fields to proceed.', 'the-seo-framework-extension-manager' ),

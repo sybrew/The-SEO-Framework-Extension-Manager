@@ -94,7 +94,7 @@ trait Extensions_Properties {
 			'focus' => [
 				'slug' => 'focus',
 				'network' => '0',
-				'type' => 'free+premium',
+				'type' => 'essentials+',
 				'area' => 'audit, content, keywords',
 				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
@@ -122,7 +122,7 @@ trait Extensions_Properties {
 			'articles' => [
 				'slug' => 'articles',
 				'network' => '0',
-				'type' => 'free',
+				'type' => 'essentials',
 				'area' => 'blogging, news',
 				'version' => '1.3.0',
 				'author' => 'Sybre Waaijer',
@@ -150,7 +150,7 @@ trait Extensions_Properties {
 			'incognito' => [
 				'slug' => 'incognito',
 				'network' => '0',
-				'type' => 'free',
+				'type' => 'essentials',
 				'area' => 'general',
 				'version' => '1.1.0',
 				'author' => 'Sybre Waaijer',
@@ -164,7 +164,7 @@ trait Extensions_Properties {
 			'honeypot' => [
 				'slug' => 'honeypot',
 				'network' => '0',
-				'type' => 'free',
+				'type' => 'essentials',
 				'area' => 'anti-spam',
 				'version' => '1.1.1',
 				'author' => 'Sybre Waaijer',
@@ -178,7 +178,7 @@ trait Extensions_Properties {
 			'origin' => [
 				'slug' => 'origin',
 				'network' => '0',
-				'type' => 'free',
+				'type' => 'essentials',
 				'area' => 'media',
 				'version' => '1.0.0',
 				'author' => 'Sybre Waaijer',
@@ -233,9 +233,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '57ef55519aca127c959c43f90e3a9caf87b830acbb88c6af8c6759d9bbd64595',
-			'sha1'   => '2ce122de5033817b65bc89b85d90bbdaeed000a3',
-			'md5'    => 'df09a5cc3a21d984bfa3b458c8e3c804',
+			'sha256' => '799bc425f15bcd9e1b902a5b0875df41c07a4b5c81262c58ee4750b74cf5c34a',
+			'sha1'   => 'a1ff939513b219adf038ecd9eb9411d783999463',
+			'md5'    => '67c5d81aec8e9860e4579fceb76806d3',
 		];
 	}
 
@@ -333,14 +333,15 @@ trait Extensions_Properties {
 		if ( empty( $extension ) )
 			return '';
 
-		$network = static::is_extension_network( $extension );
-		$premium = static::is_extension_premium( $extension );
+		// $network = static::is_extension_network( $extension );
+		$premium    = static::is_extension_premium( $extension );
+		$essentials = static::is_extension_essentials( $extension );
 
 		$path[ $slug ] = '';
 
 		$path[ $slug ] .= 'extensions/';
-		$path[ $slug ] .= $network ? 'network/' : '';
-		$path[ $slug ] .= $premium ? 'premium/' : 'free/';
+		// $path[ $slug ] .= $network ? 'network/' : '';
+		$path[ $slug ] .= $premium ? 'premium/' : ( $essentials ? 'essentials/' : 'free/' );
 		$path[ $slug ] .= $slug . '/';
 
 		$path[ $slug ] = str_replace( '/', DIRECTORY_SEPARATOR, $path[ $slug ] );
@@ -482,6 +483,7 @@ trait Extensions_Actions {
 	 * Returns a list of active extension slugs.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 * @staticvar array $cache
 	 *
 	 * @param array $placeholder Unused.
@@ -496,12 +498,19 @@ trait Extensions_Actions {
 		if ( false !== $cache )
 			return $cache;
 
-		$options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
-		$extensions = isset( $options['active_extensions'] ) ? array_filter( $options['active_extensions'] ) : [];
-		$is_free_user = ! self::is_premium_user();
+		$options    = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+		$extensions = isset( $options['active_extensions'] ) ? $options['active_extensions'] : [];
+
+		$is_premium_user   = self::is_premium_user();
+		$is_connected_user = self::is_connected_user();
+
+		if ( TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS )
+			$extensions = array_merge( $extensions, TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		foreach ( $extensions as $_extension => $_active ) {
-			if ( ( $is_free_user && static::is_extension_premium( $_extension ) )
+			if ( ! $_active
+			|| ! $is_premium_user && static::is_extension_premium( $_extension )
+			|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
 			|| ( -1 === static::is_extension_compatible( $_extension ) )
 			   ) {
 				unset( $extensions[ $_extension ] );
@@ -516,6 +525,7 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.1 Now tests for extension prior-activation.
+	 * @since 2.0.0 Now tests essentials.
 	 *
 	 * @return array : {
 	 *    'success' => bool Whether the activation can proceed.
@@ -533,8 +543,7 @@ trait Extensions_Actions {
 			self::invoke_invalid_type( __METHOD__ );
 		}
 
-		$slug = static::$current_slug;
-		$extension = static::get_extension( $slug );
+		$extension = static::get_extension( static::$current_slug );
 
 		if ( empty( $extension ) )
 			return [ 'success' => false, 'case' => 1 ];
@@ -544,6 +553,12 @@ trait Extensions_Actions {
 
 		if ( static::is_extension_premium( $extension ) ) {
 			if ( self::is_premium_user() ) {
+				return [ 'success' => true, 'case' => 2 ];
+			} else {
+				return [ 'success' => false, 'case' => 3 ];
+			}
+		} elseif ( static::is_extension_essentials( $extension ) ) {
+			if ( self::is_connected_user() ) {
 				return [ 'success' => true, 'case' => 2 ];
 			} else {
 				return [ 'success' => false, 'case' => 3 ];
@@ -567,6 +582,22 @@ trait Extensions_Actions {
 			$extension = static::get_extension( $extension );
 
 		return 'premium' === $extension['type'];
+	}
+
+	/**
+	 * Determines whether the input extension is essentials.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array|string $extension The extension to check.
+	 * @return bool Whether the extension is essentials.
+	 */
+	private static function is_extension_essentials( $extension ) {
+
+		if ( is_string( $extension ) )
+			$extension = static::get_extension( $extension );
+
+		return false !== strpos( $extension['type'], 'essentials' );
 	}
 
 	/**
@@ -724,7 +755,7 @@ trait Extensions_Actions {
 		 */
 		$compatibility = [
 			'tsf' => 0,
-			'wp' => 0,
+			'wp'  => 0,
 		];
 
 		$_tsf_version = THE_SEO_FRAMEWORK_VERSION;
@@ -925,11 +956,11 @@ trait Extensions_Actions {
 			$_instance = $verification['instance'];
 
 			switch ( $yield_count ) :
-				case 0 :
+				case 0:
 					$success[] = static::include_extension( $file, $_instance, $bits );
 					//= Continue to default for counting.
 
-				default :
+				default:
 					$yield_count++;
 					break;
 			endswitch;
@@ -1015,18 +1046,18 @@ trait Extensions_Actions {
 		$error_type = '';
 
 		switch ( $error['type'] ) :
-			case E_ERROR :
-			case E_CORE_ERROR :
-			case E_COMPILE_ERROR :
-			case E_USER_ERROR :
+			case E_ERROR:
+			case E_CORE_ERROR:
+			case E_COMPILE_ERROR:
+			case E_USER_ERROR:
 				$error_type = 'Fatal error.';
 				break;
 
-			case E_PARSE :
+			case E_PARSE:
 				$error_type = 'Parse error.';
 				break;
 
-			default :
+			default:
 				$error_type = 'Type ' . $error['type'] . ' error.';
 				break;
 		endswitch;
@@ -1036,21 +1067,17 @@ trait Extensions_Actions {
 		$error_notice = $error_type . ' ' . \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
 		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
-		if ( defined( 'DOING_AJAX' ) ) {
-			$results = \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 );
-			$fatal_error = sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice );
-
-			/**
-			 * @TODO set slug.
-			 */
-			\tsf_extension_manager()->send_json( compact( 'results', 'fatal_error' ), 'failure' );
-			exit;
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			// TODO send slug?
+			\tsf_extension_manager()->send_json( [
+				'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
+				'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
+			], 'failure' );
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 			$error_notice .= '<p><strong>Error message:</strong> <br>' . $advanced_error_notice . '</p>';
 
-			//* Already escaped.
-			\wp_die( $error_notice, 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] );
+			\wp_die( $error_notice, 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] ); // xss ok.
 		}
 	}
 
@@ -1109,9 +1136,8 @@ trait Extensions_Actions {
 
 		$file = static::get_extension_header_file_location( $slug );
 
-		if ( $file && static::validate_file( $file ) ) {
+		if ( $file && static::validate_file( $file ) )
 			return static::include_extension( $file, $_instance, $bits );
-		}
 
 		//* Tick the instance on failure.
 		\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );

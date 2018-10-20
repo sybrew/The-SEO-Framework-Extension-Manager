@@ -136,6 +136,7 @@ final class SecureOption extends Secure_Abstract {
 		if ( empty( self::$_instance ) || empty( $type ) ) {
 			self::reset();
 			\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
+			return;
 		}
 
 		$instance = self::$_instance;
@@ -145,6 +146,7 @@ final class SecureOption extends Secure_Abstract {
 		} else {
 			self::reset();
 			\wp_die( 'Instance verification could not be done on option update.' );
+			return;
 		}
 
 		static $verified = false;
@@ -168,7 +170,7 @@ final class SecureOption extends Secure_Abstract {
 						);
 
 						$results = \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 );
-						$type = 'failure';
+						$type    = 'failure';
 
 						\tsf_extension_manager()->send_json( compact( 'results' ), $type );
 
@@ -176,6 +178,7 @@ final class SecureOption extends Secure_Abstract {
 						$value = $old_value;
 
 						\wp_die();
+						return;
 					} else {
 						$value = $old_value;
 					}

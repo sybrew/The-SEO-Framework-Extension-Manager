@@ -46,9 +46,7 @@ The synonyms provided make up for great writing suggestions. Utilizing those syn
 
 ### Activate Focus
 
-First, you'll need to activate Focus. That's it!
-
-[tsfep-image id="3"]
+First, you'll need to activate Focus via the Extension Manager's interface.
 
 ### Using Focus
 

@@ -38,6 +38,8 @@ We present you an advanced and leading Local SEO solution, excelling other exist
 The output of your business information is fully automated through Schema.org header scripts.
 This means there's no signup required at Google or Bing. This also leads to higher exposure for search engines and visitors alike.
 
+[tsfep-image id="2"]
+
 ### Is Local SEO for your business?
 
 **This extension is for your business, if:**
@@ -75,8 +77,6 @@ That link will direct you to the Local SEO settings page.
 
 On the Local SEO settings page, you'll find a brief introductory, and right below that you'll find the number of departments options.
 
-[tsfep-image id="2"]
-
 ### Set number of departments
 
 When your business has one physical location, leave this option set as `1`.
@@ -103,8 +103,6 @@ All fields are checked as you fill them in. If they're red, you need to fix the 
 
 If you are in need for any information regarding a field, hover your mouse over the nearby question mark.
 
-[tsfep-image id="5"]
-
 ### View markup
 
 If you wish to test out your markup first, you can do so through the **See Markup** button found at the bottom.
@@ -117,7 +115,7 @@ When the input is compatible with Google's previewer, you can preview the markup
 
 *Note: The preview button might not always be available, depending on the data filled in or your current location.*
 
-[tsfep-image id="6"]
+[tsfep-image id="5"]
 
 ### Saving the data
 

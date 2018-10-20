@@ -560,7 +560,7 @@ final class Output {
 		$debug = $this->get_tsf_debug_states();
 
 		$debug[1] and \the_seo_framework()->the_seo_framework_debug = false;
-		$debug[2] and \the_seo_framework()->the_seo_framework_debug_hidden = false;
+		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = false;
 	}
 
 	/**
@@ -568,6 +568,7 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added TSF v3.1 compat, by adding a condition to `$debug[2]`.
+	 * @since 1.3.0 Now only uses TSF 3.1+ debugging states, nullifying the 1.2.0 changes.
 	 * @staticvar array $debug
 	 *
 	 * @return array The debug values.
@@ -580,7 +581,7 @@ final class Output {
 			$debug = [];
 			$tsf = \the_seo_framework();
 			$debug[1] = $tsf->the_seo_framework_debug;
-			$debug[2] = isset( $tsf->the_seo_framework_debug_hidden ) ? $tsf->the_seo_framework_debug_hidden : false;
+			$debug[2] = $debug[1] ? \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug : false;
 		}
 
 		return $debug;
@@ -590,12 +591,13 @@ final class Output {
 	 * Resets The SEO Framework debugging properties to previous values.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.0 Now only uses TSF 3.1+ debugging states.
 	 */
 	protected function reset_tsf_debugging() {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \the_seo_framework()->the_seo_framework_debug = $debug[1];
-		$debug[2] and \the_seo_framework()->the_seo_framework_debug_hidden = $debug[2];
+		$debug[1] and \the_seo_framework()->the_seo_framework_debug  = $debug[1];
+		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = $debug[2];
 	}
 }

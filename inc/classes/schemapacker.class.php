@@ -49,7 +49,7 @@ final class SchemaPacker {
 	 * @var int $max_it
 	 */
 	private $bits,
-	        $max_it;
+			$max_it;
 
 	/**
 	 * Maintains the reiteration level and the iteration within.
@@ -66,7 +66,7 @@ final class SchemaPacker {
 	 * @var int $it
 	 */
 	private $level = 0,
-	        $it = 0;
+			$it    = 0;
 
 	/**
 	 * Maintains data and corresponding data.
@@ -77,7 +77,7 @@ final class SchemaPacker {
 	 * @var object $schema
 	 */
 	private $data,
-	        $schema;
+			$schema;
 
 	/**
 	 * Maintains output.
@@ -291,16 +291,16 @@ final class SchemaPacker {
 
 		foreach ( $this->generate_data( $schema ) as $key => $data ) {
 			switch ( $this->get_condition( $key ) ) {
-				case 'kill_pack' :
+				case 'kill_pack':
 					return null;
 
-				case 'kill_sub' :
+				case 'kill_sub':
 					break 2;
 
-				case 'kill_this' :
+				case 'kill_this':
 					continue 2;
 
-				default :
+				default:
 					break;
 			}
 
@@ -338,15 +338,15 @@ final class SchemaPacker {
 	private function get_value( $key, \stdClass $schema ) {
 
 		switch ( $schema->_data->_type ) {
-			case 'single' :
+			case 'single':
 				$value = $this->make_data( $schema );
 				break;
 
-			case 'object' :
+			case 'object':
 				$value = $this->pack( $schema->_data->_config );
 				break;
 
-			case 'iterate' :
+			case 'iterate':
 				$value = $this->make_iteration( $schema );
 				break;
 		}
@@ -409,23 +409,23 @@ final class SchemaPacker {
 	private function make_data( \stdClass $schema ) {
 
 		switch ( $schema->_data->_from ) {
-			case 'default' :
+			case 'default':
 				$value = $schema->_data->_value;
 				break;
 
-			case 'data' :
+			case 'data':
 				$value = $this->access_data( $schema->_data->_access );
 				break;
 
-			case 'bloginfo' :
+			case 'bloginfo':
 				$value = \get_bloginfo( $schema->_data->_access );
 				break;
 
-			case 'concat' :
+			case 'concat':
 				$value = $this->concat( $schema->_data->_config );
 				break;
 
-			default :
+			default:
 				return null;
 				break;
 		}
@@ -504,17 +504,17 @@ final class SchemaPacker {
 		}
 
 		switch ( $how ) :
-			case 'sanitize_key' :
+			case 'sanitize_key':
 				return \sanitize_key( $value );
 
-			case 'convert_to_host' :
+			case 'convert_to_host':
 				return parse_url( $value, PHP_URL_HOST ) ?: '';
 
-			case 'esc_url_raw' :
+			case 'esc_url_raw':
 				return \esc_url_raw( $value, [ 'http', 'https' ] );
 
-			default :
-			case 'sanitize_text_field' :
+			default:
+			case 'sanitize_text_field':
 				return \sanitize_text_field( $value );
 		endswitch;
 	}
@@ -582,44 +582,44 @@ final class SchemaPacker {
 		$c = is_array( $what ) ? (object) current( $what ) : $what;
 
 		switch ( $c->_if ) {
-			case 'this' :
+			case 'this':
 				$v =& $value;
 				break;
 
-			case 'data' :
+			case 'data':
 				$v = $this->access_data( $c->_access );
 				break;
 
-			default :
+			default:
 				return $value;
 		}
 
 		switch ( $c->_op ) {
-			case '==' :
+			case '==':
 				$action = $v == $c->_value;
 				break;
 
-			case '===' :
+			case '===':
 				$action = $v === $c->_value;
 				break;
 
-			case '!=' :
+			case '!=':
 				$action = $v != $c->_value;
 				break;
 
-			case '!==' :
+			case '!==':
 				$action = $v !== $c->_value;
 				break;
 
-			case '>' :
+			case '>':
 				$action = $v > $c->_value;
 				break;
 
-			case 'empty' :
+			case 'empty':
 				$action = empty( $v );
 				break;
 
-			case 'count' :
+			case 'count':
 				// $v can be NULL or string.
 				if ( ! $v ) {
 					$action = 0 === $c->_value;
@@ -632,7 +632,7 @@ final class SchemaPacker {
 				}
 				break;
 
-			case 'count_gt' :
+			case 'count_gt':
 				// $v can be NULL or string.
 				if ( ! $v ) {
 					$action = 0 > $c->_value;
@@ -645,15 +645,15 @@ final class SchemaPacker {
 				}
 				break;
 
-			case 'type_is' :
+			case 'type_is':
 				$action = gettype( $v ) === $c->_value;
 				break;
 
-			case 'type_not' :
+			case 'type_not':
 				$action = gettype( $v ) !== $c->_value;
 				break;
 
-			default :
+			default:
 				$action = false;
 				break;
 		}
@@ -662,25 +662,25 @@ final class SchemaPacker {
 			return $value;
 
 		switch ( $c->_do ) {
-			case 'kill_this' :
-			case 'kill_sub' :
-			case 'kill_pack' :
+			case 'kill_this':
+			case 'kill_sub':
+			case 'kill_pack':
 				$this->condition[ $key ][] = $c->_do;
 				return null;
 
-			case 'set' :
+			case 'set':
 				return $c->_to;
 
-			case 'current' :
+			case 'current':
 				return current( $value );
 
-			case 'round' :
+			case 'round':
 				return (float) number_format( (float) $value, $c->_to );
 
-			case 'convert' :
+			case 'convert':
 				return $this->convert( $value, $c->_to );
 
-			default :
+			default:
 				return $value;
 		}
 	}
@@ -697,25 +697,25 @@ final class SchemaPacker {
 	private function convert( $value, $to ) {
 
 		switch ( $to ) :
-			case 'string' :
+			case 'string':
 				return (string) $value;
 
-			case 'boolean' :
+			case 'boolean':
 				return (bool) $value;
 
-			case 'integer' :
+			case 'integer':
 				return (int) $value;
 
-			case 'float' :
+			case 'float':
 				return (float) $value;
 
-			case 'array' :
+			case 'array':
 				return array_values( (array) $value ) ?: [];
 
-			case 'object' :
+			case 'object':
 				return (object) $value;
 
-			default :
+			default:
 				return $value;
 		endswitch;
 	}

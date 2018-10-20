@@ -103,7 +103,6 @@ final class Front {
 		 */
 		if ( \apply_filters( 'the_seo_framework_remove_amp_articles', false ) )
 			$this->remove_amp_articles();
-
 	}
 
 	/**
@@ -133,7 +132,6 @@ final class Front {
 		echo PHP_EOL . $output; // xss OK, already escaped.
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
-
 	}
 
 	/**

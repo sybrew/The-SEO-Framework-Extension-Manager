@@ -205,9 +205,9 @@ final class Tests {
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
 				$_dev = \tsf_extension_manager()->get_link( [
-					'url' => $_theme_contact,
+					'url'     => $_theme_contact,
 					'content' => \__( 'theme developer', 'the-seo-framework-extension-manager' ),
-					'target' => '_blank',
+					'target'  => '_blank',
 				] );
 			} else {
 				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
@@ -242,7 +242,7 @@ final class Tests {
 		$state = 'unknown';
 
 		if ( ! is_array( $data ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
 		}
@@ -254,9 +254,10 @@ final class Tests {
 				$id = isset( $value['post_id'] ) ? (int) $value['post_id'] : false;
 
 				if ( false !== $id ) {
-					$home = isset( $value['home'] ) && $value['home'];
+					// $home = isset( $value['home'] ) && $value['home'];
 					$post = \get_post( $id );
-					$url = \get_permalink( $post );
+
+					$url   = \get_permalink( $post );
 					$title = \get_the_title( $post );
 
 					$links[] = sprintf( '<a href="%s" target="_blank" rel="noopener">%s</a>', $url, $title );
@@ -299,14 +300,14 @@ final class Tests {
 	 */
 	public function issue_robots( $data ) {
 
+		$state   = 'unknown';
 		$content = '';
-		$state = 'unknown';
 
 		if ( ! isset( $data['located'] ) )
 			goto end;
 
 		if ( ! $data['located'] ) {
-			$state = 'error';
+			$state   = 'error';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
@@ -326,7 +327,7 @@ final class Tests {
 		}
 
 		if ( ! isset( $data['value'] ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
 		}
@@ -339,7 +340,7 @@ final class Tests {
 		$data['value'] = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $data['value'] ) ) );
 
 		if ( $sample_tsf === $data['value'] ) {
-			$state = 'good';
+			$state   = 'good';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
@@ -351,7 +352,7 @@ final class Tests {
 		}
 
 		if ( ! file_exists( \get_home_path() . 'robots.txt' ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
@@ -363,7 +364,7 @@ final class Tests {
 		}
 
 		static_file : {
-			$state = 'okay';
+			$state   = 'okay';
 			$content = $this->wrap_info(
 				\tsf_extension_manager()->convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
@@ -374,7 +375,7 @@ final class Tests {
 			goto end;
 		}
 
-		end :;
+		end:;
 
 		return [
 			'content' => $content,
@@ -392,14 +393,14 @@ final class Tests {
 	 */
 	public function issue_sitemap( $data ) {
 
+		$state   = 'unknown';
 		$content = '';
-		$state = 'unknown';
 
 		if ( ! isset( $data['located'] ) )
 			goto end;
 
 		if ( ! $data['located'] ) {
-			$state = 'error';
+			$state   = 'error';
 			$content = $this->wrap_info( \esc_html__( 'No sitemap file could be found. Enable the sitemap or check your server configuration.', 'the-seo-framework-extension-manager' ) );
 			goto end;
 		}
@@ -408,7 +409,7 @@ final class Tests {
 
 		//* 10 MB, not 10 MiB
 		if ( isset( $data['size'] ) && $data['size'] > 10000000 ) {
-			$state = 'bad';
+			$state    = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
 		}
 
@@ -417,7 +418,7 @@ final class Tests {
 		}
 
 		if ( isset( $data['valid'] ) && ! $data['valid'] ) {
-			$state = 'bad';
+			$state    = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this.', 'the-seo-framework-extension-manager' ) );
 		}
 
@@ -442,8 +443,9 @@ final class Tests {
 	 */
 	public function issue_https( $data ) {
 
+		$state   = 'unknown';
 		$content = '';
-		$state = 'unknown';
+
 		$_test_alt = false;
 
 		if ( ! isset( $data['https_type'] ) || $data['https_type'] < 0 || $data['https_type'] > 3 ) {
@@ -484,7 +486,7 @@ final class Tests {
 		endswitch;
 
 		if ( empty( $data['canonical_url'] ) ) :
-			$state = 'warning';
+			$state    = 'warning';
 			$content .= $this->wrap_info(
 				\esc_html__( 'No canonical URL is found.', 'the-seo-framework-extension-manager' )
 			);
@@ -547,15 +549,14 @@ final class Tests {
 				}
 			endif;
 		else :
-			$state = 'warning';
+			$state    = 'warning';
 			$content .= $this->wrap_info(
 				\esc_html__( 'The canonical URL does not seem to have a set scheme. The active theme, another plugin or an external service might be interfering.', 'the-seo-framework-extension-manager' )
 			);
 		endif;
 
-		if ( empty( $content ) ) {
+		if ( empty( $content ) )
 			$content = $this->wrap_info( $this->no_issue_found() );
-		}
 
 		end :;
 		return [

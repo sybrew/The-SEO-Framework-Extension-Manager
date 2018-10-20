@@ -64,15 +64,6 @@ class Core {
 	protected $nonce_action = [];
 
 	/**
-	 * Returns an array of active extensions real path.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var array List of active extensions real path.
-	 */
-	protected $active_extensions = [];
-
-	/**
 	 * Constructor, initializes actions and sets up variables.
 	 *
 	 * @since 1.0.0
@@ -83,7 +74,7 @@ class Core {
 		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFront' );
 		$this instanceof $that or \wp_die( -1 );
 
-		$this->nonce_name = 'tsf_extension_manager_nonce_name';
+		$this->nonce_name   = 'tsf_extension_manager_nonce_name';
 		$this->request_name = [
 			//* Reference convenience.
 			'default'           => 'default',
@@ -171,16 +162,16 @@ class Core {
 		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
 
 		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
-		$result = $this->validate_extensions_checksum( $checksum );
+		$result   = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
 			switch ( $result ) {
-				case -2 :
+				case -2:
 					//* Failed checksum.
 					$this->set_error_notice( [ 2002 => '' ] );
 					break;
 
-				case -1 :
+				case -1:
 					//* No extensions have ever been active...
 					break;
 			}
@@ -244,13 +235,13 @@ class Core {
 	 * @access private
 	 *
 	 * @return int (bitwise) : {
-	 *    0 = 0000 : Did nothing.
-	 *    1 = 0001 : Cleared PHP output buffer.
-	 *    2 = 0010 : Cleared HTTP headers.
-	 *    3 = 0011 : Did 1 and 2.
+	 *    0 = 00 : Did nothing.
+	 *    1 = 01 : Cleared PHP output buffer.
+	 *    2 = 10 : Cleared HTTP headers.
+	 *    3 = 11 : Did 1 and 2.
 	 * }
 	 */
-	final public function _clean_reponse_header() {
+	final public function _clean_response_header() {
 
 		$retval = 0;
 		// PHP 5.6+ //= $i = 0;
@@ -259,7 +250,7 @@ class Core {
 			while ( $level-- ) {
 				ob_end_clean();
 			}
-			$retval = $retval | 1; //= 2 ** $i
+			$retval |= 1; //= 2 ** $i
 		}
 
 		// PHP 5.6+ //= $i++;
@@ -267,7 +258,7 @@ class Core {
 		//* wp_ajax sets required headers early.
 		if ( ! headers_sent() ) {
 			header_remove();
-			$retval = $retval | 2; //= 2 ** $i
+			$retval |= 2; //= 2 ** $i
 		}
 
 		return $retval;
@@ -285,12 +276,12 @@ class Core {
 	final public function set_status_header( $code = 200, $type = '' ) {
 
 		switch ( $type ) :
-			case 'json' :
+			case 'json':
 				header( 'Content-Type: application/json; charset=' . \get_option( 'blog_charset' ) );
 				break;
 
-			case 'html' :
-			default :
+			case 'html':
+			default:
 				header( 'Content-Type: text/html; charset=' . \get_option( 'blog_charset' ) );
 				break;
 		endswitch;
@@ -313,8 +304,9 @@ class Core {
 	 */
 	final public function send_json( $data, $type = 'success' ) {
 
-		$r = $this->_clean_reponse_header();
 		$json = -1;
+
+		$r = $this->_clean_response_header();
 
 		if ( $r & 2 ) {
 			$this->set_status_header( 200, 'json' );
@@ -324,8 +316,7 @@ class Core {
 		}
 
 		echo json_encode( compact( 'data', 'type', 'json' ) );
-
-		die;
+		exit;
 	}
 
 	/**
@@ -338,7 +329,7 @@ class Core {
 	 */
 	final public function send_html( $html, $type = 'success' ) {
 
-		$r = $this->_clean_reponse_header();
+		$r = $this->_clean_response_header();
 
 		if ( $r & 2 ) {
 			$this->set_status_header( 200, 'html' );
@@ -346,10 +337,8 @@ class Core {
 			$this->set_status_header( null, 'html' );
 		}
 
-		//* Must be escaped prior to call.
-		echo $html;
-
-		die;
+		echo $html; // xss questionable. Check raw input!
+		exit;
 	}
 
 	/**
@@ -395,21 +384,23 @@ class Core {
 		if ( ! $url )
 			return false;
 
-		$args['options_key'] = \sanitize_key( $args['options_key'] );
-		$args['options_index'] = \sanitize_key( $args['options_index'] );
-		$args['nonce_name'] = \sanitize_key( $args['nonce_name'] );
+		$args = [
+			'options_key'   => \sanitize_key( $args['options_key'] ),
+			'options_index' => \sanitize_key( $args['options_index'] ),
+			'nonce_name'    => \sanitize_key( $args['nonce_name'] ),
+		];
 
 		$post = [
-			'url' => $url,
+			'url'    => $url,
 			'method' => 'post',
-			'data' => [
+			'data'   => [
 				$args['options_key'] => [
 					$args['options_index'] => [
 						'nonce-action' => $args['request_name'],
 					],
 				],
-				$args['nonce_name'] => \wp_create_nonce( $args['nonce_action'] ),
-				'_wp_http_referer' => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ),
+				$args['nonce_name']  => \wp_create_nonce( $args['nonce_action'] ),
+				'_wp_http_referer'   => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ), // input var & sanitization ok.
 			],
 		];
 
@@ -447,7 +438,7 @@ class Core {
 		if ( is_array( $value ) ) {
 
 			$index = key( $value );
-			$last = $item = $value[ $index ];
+			$last = $item = reset( $value );
 
 			if ( is_array( $item ) ) {
 				if ( 1 === $i ) {
@@ -530,7 +521,6 @@ class Core {
 			$last = array_shift( $a );
 
 			if ( $a ) {
-				$r = [];
 				$r[ $last ] = $this->satoma( $a );
 			} else {
 				$r = $last;
@@ -612,7 +602,7 @@ class Core {
 			\remove_all_filters( 'wp_die_handler' );
 
 			\wp_die( \esc_html( $message ) );
-	 	}
+		}
 
 		//* Don't spam error log.
 		if ( false === $this->_has_died() ) {
@@ -620,7 +610,7 @@ class Core {
 			$this->_has_died( true );
 
 			if ( $message ) {
-				// debug_print_backtrace(); debugging...
+				// Use debug_print_backtrace() to debug.
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
 				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
@@ -674,8 +664,8 @@ class Core {
 	 */
 	final protected function stop_class_filters( $current_filter, $key ) {
 
-		$_key = key( $current_filter );
-		$filter = isset( $current_filter[ $_key ] ) and reset( $current_filter[ $_key ] );
+		$_key   = key( $current_filter );
+		$filter = reset( $current_filter );
 
 		static $_this = null;
 
@@ -918,13 +908,12 @@ class Core {
 	 */
 	final public function _get_uid_hash( $uid ) {
 
-		if ( empty( $uid ) )
-			return '';
+		if ( empty( $uid ) ) return '';
 
-		$a = (string) $uid;
-		$b = strrev( $a );
+		$a   = (string) $uid;
+		$b   = strrev( $a );
 		$len = strlen( $a );
-		$r = '';
+		$r   = '';
 
 		for ( $i = 0; $i < $len; $i++ ) {
 			$r .= ord( $a[ $i ] ) . $b[ $i ];
@@ -953,8 +942,8 @@ class Core {
 		if ( empty( $uid ) || empty( $length ) )
 			return '';
 
-		$_time = time();
-		$_end = $end ?: $_time;
+		$_time  = time();
+		$_end   = $end ?: $_time;
 		$_delta = $_end > $_time ? $_end - $_time : $_time - $_end;
 
 		$now_x = floor( ( $_time - $_delta ) / $length );
@@ -1268,8 +1257,12 @@ class Core {
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
+			if ( $this->_has_died() ) {
+				$this->create_class_alias( $class );
+				return false;
+			}
 
+			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
 			$this->get_verification_codes( $_instance, $bits );
 
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
@@ -1306,6 +1299,17 @@ class Core {
 	}
 
 	/**
+	 * Creates a class alias to prevent fatal errors.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $class The class name to create.
+	 */
+	final protected function create_class_alias( $class ) {
+		class_alias( __NAMESPACE__ . '\\Alias', $class, true ); // autoload ..\Alias.
+	}
+
+	/**
 	 * Converts pixels to points.
 	 *
 	 * @since 1.0.0
@@ -1331,11 +1335,21 @@ class Core {
 	/**
 	 * Determines whether the plugin's use is premium.
 	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool True if the plugin is connected to the Premium or Essential API handler.
+	 */
+	final public function is_connected_user() {
+		return in_array( $this->get_option( '_activation_level' ), [ 'Premium', 'Essentials' ], true );
+	}
+
+	/**
+	 * Determines whether the plugin's use is premium.
+	 *
 	 * @since 1.0.0
 	 * @since 1.5.0 Now public. Enjoy.
-	 * @staticvar bool $cache
 	 *
-	 * @return bool True if the plugin is connected to the API handler.
+	 * @return bool True if the plugin is connected to the Premium API handler.
 	 */
 	final public function is_premium_user() {
 		return 'Premium' === $this->get_option( '_activation_level' );
@@ -1453,16 +1467,16 @@ class Core {
 		 * The conversion list's keys are per reference only.
 		 */
 		$conversions = [
-			'**'   => 'strong',
-			'*'    => 'em',
-			'`'    => 'code',
-			'[]()' => 'a',
-			'======'  => 'h6',
+			'**'     => 'strong',
+			'*'      => 'em',
+			'`'      => 'code',
+			'[]()'   => 'a',
+			'======' => 'h6',
 			'====='  => 'h5',
-			'===='  => 'h4',
-			'==='  => 'h3',
-			'=='   => 'h2',
-			'='    => 'h1',
+			'===='   => 'h4',
+			'==='    => 'h3',
+			'=='     => 'h2',
+			'='      => 'h1',
 		];
 
 		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
@@ -1481,7 +1495,7 @@ class Core {
 
 		foreach ( $md_types as $type ) :
 			switch ( $type ) :
-				case 'strong' :
+				case 'strong':
 					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -1493,7 +1507,7 @@ class Core {
 					}
 					break;
 
-				case 'em' :
+				case 'em':
 					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -1505,7 +1519,7 @@ class Core {
 					}
 					break;
 
-				case 'code' :
+				case 'code':
 					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -1517,12 +1531,12 @@ class Core {
 					}
 					break;
 
-				case 'h6' :
-				case 'h5' :
-				case 'h4' :
-				case 'h3' :
-				case 'h2' :
-				case 'h1' :
+				case 'h6':
+				case 'h5':
+				case 'h4':
+				case 'h3':
+				case 'h2':
+				case 'h1':
 					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
 					//* Considers word non-boundary. @TODO consider removing this?
 					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
@@ -1537,7 +1551,7 @@ class Core {
 					}
 					break;
 
-				case 'a' :
+				case 'a':
 					$count = preg_match_all( '/(?:(?:\[{1})([^\]{1}]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
 
 					for ( $i = 0; $i < $count; $i++ ) {
@@ -1553,7 +1567,7 @@ class Core {
 					}
 					break;
 
-				default :
+				default:
 					break;
 			endswitch;
 		endforeach;

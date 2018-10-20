@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 //* So fancy.
-$color = $this->is_premium_user() || false === $this->is_plugin_activated() ? '#0ebfe9' : '#00cd98';
+$color = $this->is_connected_user() || false === $this->is_plugin_activated() ? '#0ebfe9' : '#00cd98';
 
 ?>
 <meta name="theme-color" content="<?php echo \esc_attr( $color ); ?>" />

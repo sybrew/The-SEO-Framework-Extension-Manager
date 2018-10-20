@@ -63,7 +63,7 @@ trait Secure_Post {
 			'default' => 'default',
 
 			//* Update options.
-			'update' => 'update',
+			'update'  => 'update',
 		];
 
 		$this->nonce_action = [
@@ -71,7 +71,7 @@ trait Secure_Post {
 			'default' => 'tsfem_e_local_nonce_action',
 
 			//* Update options.
-			'update' => 'tsfem_e_local_nonce_action_local_update',
+			'update'  => 'tsfem_e_local_nonce_action_local_update',
 		];
 	}
 
@@ -137,9 +137,11 @@ trait Secure_Post {
 	 */
 	public function _do_ajax_form_save() {
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : ''; // CSRF, sanitization, input var ok.
 
 		parse_str( $post_data, $data );
+
+		$send = [];
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -149,8 +151,8 @@ trait Secure_Post {
 		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		) {
-			$type = 'failure';
-			$results = $this->get_ajax_notice( false, 1070100 );
+			$type            = 'failure';
+			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
 
 			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
@@ -158,16 +160,16 @@ trait Secure_Post {
 			$this->process_all_stored_data();
 
 			if ( ! $success ) {
-				$type = 'failure';
-				$results = $this->get_ajax_notice( false, 1070101 );
+				$type            = 'failure';
+				$send['results'] = $this->get_ajax_notice( false, 1070101 );
 			} else {
-				$type = 'success';
-				$results = $this->get_ajax_notice( true, 1070102 );
-				$sdata = $this->get_stale_option( key( $options ) );
+				$type            = 'success';
+				$send['results'] = $this->get_ajax_notice( true, 1070102 );
+				$send['sdata']   = $this->get_stale_option( key( $options ) );
 			}
 		}
 
-		\tsf_extension_manager()->send_json( compact( 'results', 'sdata' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
 	}
 
 	/**
@@ -213,7 +215,7 @@ trait Secure_Post {
 	 */
 	private function get_registered_iterator_callbacks() {
 		return [
-			'department' => 'get_departments_fields',
+			'department'   => 'get_departments_fields',
 			'openingHours' => 'get_opening_hours_fields',
 		];
 	}
@@ -253,9 +255,11 @@ trait Secure_Post {
 	 */
 	private function send_ajax_form_json_validation() {
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : ''; // CSRF, sanitization, input var ok.
 
 		parse_str( $post_data, $data );
+
+		$send = [];
 
 		/**
 		 * If this page doesn't parse the site options,
@@ -265,23 +269,23 @@ trait Secure_Post {
 		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		) {
-			$type = 'failure';
-			$results = $this->get_ajax_notice( false, 1070200 );
+			$type            = 'failure';
+			$send['results'] = $this->get_ajax_notice( false, 1070200 );
 		} else {
 
 			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 			$data = $this->pack_data( $options, true );
 
 			if ( ! $data ) {
-				$type = 'failure';
-				$results = $this->get_ajax_notice( false, 1070201 );
+				$type            = 'failure';
+				$send['results'] = $this->get_ajax_notice( false, 1070201 );
 			} else {
-				$type = 'success';
-				$results = $this->get_ajax_notice( true, 1070202 );
-				$tdata = '<script type="application/ld+json">' . PHP_EOL . $data . PHP_EOL . '</script>';
+				$type            = 'success';
+				$send['results'] = $this->get_ajax_notice( true, 1070202 );
+				$send['tdata']   = '<script type="application/ld+json">' . PHP_EOL . $data . PHP_EOL . '</script>';
 			}
 		}
 
-		\tsf_extension_manager()->send_json( compact( 'results', 'tdata' ), \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
 	}
 }

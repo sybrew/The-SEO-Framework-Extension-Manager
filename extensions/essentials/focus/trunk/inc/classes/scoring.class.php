@@ -71,7 +71,7 @@ final class Scoring {
 	 * @param int $max_score     The maximum score.
 	 */
 	public $current_score = 0;
-	public $max_score = 0;
+	public $max_score     = 0;
 
 	/**
 	 * Returns complete template, or part thereof.

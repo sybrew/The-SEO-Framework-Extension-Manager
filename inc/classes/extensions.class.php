@@ -69,15 +69,15 @@ final class Extensions extends Secure_Abstract {
 	private static function set_up_variables() {
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'overview' :
-			case 'activation' :
-			case 'list' :
-			case 'load' :
-			case 'ajax_layout' :
+			case 'overview':
+			case 'activation':
+			case 'list':
+			case 'load':
+			case 'ajax_layout':
 				static::$extensions = static::get_extensions();
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -104,21 +104,21 @@ final class Extensions extends Secure_Abstract {
 		self::set( '_wpaction' );
 
 		switch ( $type ) :
-			case 'overview' :
-			case 'activation' :
-			case 'list' :
-			case 'load' :
-			case 'ajax_layout' :
+			case 'overview':
+			case 'activation':
+			case 'list':
+			case 'load':
+			case 'ajax_layout':
 				\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die();
 				self::set( '_type', $type );
 				static::set_up_variables();
 				break;
 
-			case 'reset' :
+			case 'reset':
 				self::reset();
 				break;
 
-			default :
+			default:
 				self::reset();
 				self::invoke_invalid_type( __METHOD__ );
 				break;
@@ -144,27 +144,27 @@ final class Extensions extends Secure_Abstract {
 		}
 
 		switch ( $type ) :
-			case 'layout_content' :
+			case 'layout_content':
 				return static::get_layout_content();
 				break;
 
-			case 'extensions_checksum' :
+			case 'extensions_checksum':
 				return static::get_extensions_checksum();
 				break;
 
-			case 'extensions_list' :
+			case 'extensions_list':
 				return static::get_extensions();
 				break;
 
-			case 'active_extensions_list' :
+			case 'active_extensions_list':
 				return static::get_active_extensions();
 				break;
 
-			case 'ajax_get_extension_header' :
+			case 'ajax_get_extension_header':
 				return static::get_extension_header( $slug );
 				break;
 
-			case 'ajax_get_extension_desc_footer' :
+			case 'ajax_get_extension_desc_footer':
 				return static::get_extension_description_footer( static::get_extension( $slug ), false );
 				break;
 
@@ -188,8 +188,8 @@ final class Extensions extends Secure_Abstract {
 		if ( ! self::verify_instance() ) return;
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'activation' :
-			case 'ajax' :
+			case 'activation':
+			case 'ajax':
 				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
 				break;
 

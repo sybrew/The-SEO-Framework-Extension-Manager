@@ -146,7 +146,7 @@ Unlike News Articles, blog postings won't be displayed within carousels.
 
 The blog entry can be based on either fact, or be an opinionated piece.
 
-This information is mainly used to bind authors, organizations and dates to the content. By doing so, you add relevance to your content.
+This information is mainly used to bind authors, organizations, and dates to the content. By doing so, you add relevance to your content.
 
 This helps search engines tailor displayed search results for its users. So, you increase likelihood to get returning visitors, thus increasing engagement.
 

@@ -108,7 +108,7 @@ final class Ajax {
 	 */
 	private function verify_api_access() {
 
-		$tsfem = \tsf_extension_manager();
+		$tsfem   = \tsf_extension_manager();
 		$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
 
 		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) {
@@ -141,9 +141,11 @@ final class Ajax {
 		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
 
+		$send = [];
+
 		if ( ! strlen( $keyword ) || ! $language ) {
 			//= How in the...
-			$results = $this->get_ajax_notice( false, 1100101 );
+			$send['results'] = $this->get_ajax_notice( false, 1100101 );
 		} else {
 			$response = $this->get_api_response( 'lexicalform', compact( 'keyword', 'language' ) );
 			$response = json_decode( $response );
@@ -151,40 +153,40 @@ final class Ajax {
 			if ( empty( $response->success ) ) {
 				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
 					case 'WORD_NOT_FOUND':
-						$results = $this->get_ajax_notice( false, 1100102 );
+						$send['results'] = $this->get_ajax_notice( false, 1100102 );
 						break;
 
 					default:
+					case 'LICENSE_TOO_LOW':
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
-						$results = $this->get_ajax_notice( false, 1100103 );
+						$send['results'] = $this->get_ajax_notice( false, 1100103 );
 						break;
 				endswitch;
 			} elseif ( ! isset( $response->data ) ) {
-				$results = $this->get_ajax_notice( false, 1100104 );
+				$send['results'] = $this->get_ajax_notice( false, 1100104 );
 			} else {
-				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
-				if ( isset( $data->forms ) ) {
-					$type = 'success';
-					$forms = $data->forms ?: [];
-					if ( empty( $forms ) ) {
-						$results = $this->get_ajax_notice( false, 1100105 );
+				if ( isset( $_data->forms ) ) {
+					$type = 'success'; // The API responded as intended, although the data may not be useful.
+					$send['data']['forms'] = $_data->forms ?: [];
+					if ( ! $send['data']['forms'] ) {
+						$send['results'] = $this->get_ajax_notice( false, 1100105 );
 					} else {
-						$results = $this->get_ajax_notice( true, 1100106 );
+						$send['results'] = $this->get_ajax_notice( true, 1100106 );
 					}
 				} else {
-					if ( isset( $data->error ) )
-						$error = $data->error;
+					if ( isset( $_data->error ) )
+						$send['data']['error'] = $_data->error;
 
-					$results = $this->get_ajax_notice( false, 1100107 );
+					$send['results'] = $this->get_ajax_notice( false, 1100107 );
 				}
 			}
 		}
 
-		$data = compact( 'forms', 'error' );
+		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
 
-		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
 	}
 
 	/**
@@ -199,16 +201,18 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsf_extension_manager();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : []; // input var, sanitization ok.
 
 		$form_keys = [ 'category', 'value' ];
 
 		$form     = isset( $_args['form'] ) ? \map_deep( $_args['form'], [ $tsfem, 's_ajax_string' ] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
 
+		$send = [];
+
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
 			//= How in the...
-			$results = $this->get_ajax_notice( false, 1100201 );
+			$send['results'] = $this->get_ajax_notice( false, 1100201 );
 		} else {
 			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
 
@@ -218,39 +222,38 @@ final class Ajax {
 			if ( empty( $response->success ) ) {
 				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
 					case 'WORD_NOT_FOUND':
-						$results = $this->get_ajax_notice( false, 1100202 );
+						$send['results'] = $this->get_ajax_notice( false, 1100202 );
 						break;
 
 					default:
+					case 'LICENSE_TOO_LOW':
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
-						$results = $this->get_ajax_notice( false, 1100203 );
+						$send['results'] = $this->get_ajax_notice( false, 1100203 );
 						break;
 				endswitch;
 			} elseif ( ! isset( $response->data ) ) {
-				$results = $this->get_ajax_notice( false, 1100204 );
+				$send['results'] = $this->get_ajax_notice( false, 1100204 );
 			} else {
-				$data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
-				if ( isset( $data->synonyms ) ) {
-					$type = 'success';
-					$synonyms = $data->synonyms ?: [];
-					if ( empty( $synonyms ) ) {
-						$results = $this->get_ajax_notice( false, 1100205 );
+				if ( isset( $_data->synonyms ) ) {
+					$type = 'success'; // The API responded as intended, although the data may not be useful.
+					$send['data']['synonyms'] = $_data->synonyms ?: [];
+					if ( ! $send['data']['synonyms'] ) {
+						$send['results'] = $this->get_ajax_notice( false, 1100205 );
 					} else {
-						$results = $this->get_ajax_notice( true, 1100206 );
+						$send['results'] = $this->get_ajax_notice( true, 1100206 );
 					}
 				} else {
-					if ( isset( $data->error ) )
-						$error = $data->error;
+					if ( isset( $_data->error ) )
+						$send['data']['error'] = $_data->error;
 
-					$results = $this->get_ajax_notice( false, 1100207 );
+					$send['results'] = $this->get_ajax_notice( false, 1100207 );
 				}
 			}
 		}
 
-		$data = compact( 'synonyms', 'error' );
-
-		$tsfem->send_json( compact( 'results', 'data' ), $tsfem->coalesce_var( $type, 'failure' ) );
+		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
 	}
 }

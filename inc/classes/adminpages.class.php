@@ -88,14 +88,15 @@ class AdminPages extends AccountActivation {
 	 * Initializes extension manager menu.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_manager_settings()
 	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
 	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
 	 */
-	public function _init_menu() {
+	final public function _init_menu() {
 
-		if ( ! $this->can_do_settings() )
+		if ( ! \TSF_Extension_Manager\can_do_manager_settings() )
 			return;
 
 		$network_mode = $this->is_plugin_in_network_mode();
@@ -118,13 +119,13 @@ class AdminPages extends AccountActivation {
 	 * @uses \the_seo_framework()->seo_settings_page_slug
 	 * @access private
 	 */
-	public function _add_menu_link() {
+	final public function _add_menu_link() {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => \esc_html__( 'SEO Extensions', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
-			'capability'  => 'manage_options',
+			'capability'  => TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE,
 			'menu_slug'   => $this->seo_extensions_page_slug,
 			'callback'    => [ $this, '_init_extension_manager_page' ],
 		];
@@ -146,7 +147,7 @@ class AdminPages extends AccountActivation {
 	 * @uses $this->seo_extensions_menu_page_hook variable.
 	 * @access private
 	 */
-	public function _load_tsfem_admin_actions() {
+	final public function _load_tsfem_admin_actions() {
 		\add_action( 'load-' . $this->seo_extensions_menu_page_hook, [ $this, '_do_tsfem_admin_actions' ] );
 	}
 
@@ -160,7 +161,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @return bool True on actions loaded, false on second load.
 	 */
-	public function _do_tsfem_admin_actions() {
+	final public function _do_tsfem_admin_actions() {
 
 		if ( false === $this->is_tsf_extension_manager_page() )
 			return;
@@ -193,7 +194,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 */
-	protected function init_tsfem_ui() {
+	final protected function init_tsfem_ui() {
 
 		$this->ui_hook = $this->seo_extensions_menu_page_hook;
 
@@ -321,7 +322,7 @@ class AdminPages extends AccountActivation {
 	 * }
 	 * @param string $extra Extra header output placed between the title and ajax loader.
 	 */
-	public function _do_pane_wrap_callable( $title = '', $callable = '', $args = [], $extra = '' ) {
+	final public function _do_pane_wrap_callable( $title = '', $callable = '', $args = [], $extra = '' ) {
 
 		$defaults = [
 			'full' => true,
@@ -351,7 +352,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $name Field name base
 	 * @return string Full field name
 	 */
-	public function _get_field_name( $name ) {
+	final public function _get_field_name( $name ) {
 		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $name );
 	}
 
@@ -364,7 +365,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @param string $name Field name base
 	 */
-	public function _field_name( $name ) {
+	final public function _field_name( $name ) {
 		echo \esc_attr( $this->_get_field_name( $name ) );
 	}
 
@@ -377,7 +378,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $id Field id base
 	 * @return string Full field id
 	 */
-	public function _get_field_id( $id ) {
+	final public function _get_field_id( $id ) {
 		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $id );
 	}
 
@@ -392,7 +393,7 @@ class AdminPages extends AccountActivation {
 	 * @param boolean $echo echo or return
 	 * @return string Full field id
 	 */
-	public function _field_id( $id, $echo = true ) {
+	final public function _field_id( $id, $echo = true ) {
 
 		if ( $echo ) {
 			echo \esc_attr( $this->_get_field_id( $id ) );
@@ -409,7 +410,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @param string $key The action key.
 	 */
-	public function _nonce_action_field( $key ) {
+	final public function _nonce_action_field( $key ) {
 		//* Already escaped.
 		echo $this->_get_nonce_action_field( $key );
 	}
@@ -422,7 +423,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @param string $key The action key.
 	 */
-	public function _get_nonce_action_field( $key ) {
+	final public function _get_nonce_action_field( $key ) {
 		return '<input type="hidden" name="' . \esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . \esc_attr( $key ) . '">';
 	}
 }

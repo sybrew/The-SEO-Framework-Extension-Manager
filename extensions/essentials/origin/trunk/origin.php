@@ -41,6 +41,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Redirects visitor on an attachment page back to the parent post.
  *
  * @since 1.0.0
+ * @since 1.1.0 Now redirects to the attachment when no parent is found.
  * @global \WP_Post $post The current post object.
  *
  * @return void
@@ -48,8 +49,16 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 function _go() {
 	global $post;
 
-	if ( \is_attachment() && ! empty( $post->post_parent ) ) {
-		\wp_safe_redirect( \get_permalink( $post->post_parent ), 301 );
-		exit;
+	if ( $post && \is_attachment() ) {
+		if ( ! empty( $post->post_parent ) ) {
+			\wp_safe_redirect( \get_permalink( $post->post_parent ), 301 );
+			exit;
+		} else {
+			$url = \wp_get_attachment_url( $post->ID );
+			if ( $url ) {
+				\wp_safe_redirect( $url, 301 );
+				exit;
+			}
+		}
 	}
 }

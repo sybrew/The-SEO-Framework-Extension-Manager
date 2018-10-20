@@ -82,11 +82,11 @@ class Api extends Data {
 			$_instance = $verification['instance'];
 
 			switch ( $count ) :
-				case 1 :
+				case 1:
 					$subscription = \tsf_extension_manager()->_get_subscription_status( $_instance, $bits );
 					break;
 
-				case 2 :
+				case 2:
 					if ( is_array( $subscription ) ) {
 						$args = array_merge( $args, [
 							'request'     => 'extension/monitor/' . $type,
@@ -101,7 +101,7 @@ class Api extends Data {
 					}
 					break;
 
-				default :
+				default:
 					\tsf_extension_manager()->_verify_instance( $instance, $bits );
 					break;
 			endswitch;
@@ -129,7 +129,7 @@ class Api extends Data {
 
 		return [
 			'success' => true,
-			'data' => $data,
+			'data'    => $data,
 		];
 	}
 

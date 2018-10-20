@@ -35,6 +35,7 @@ trait Time {
 	 * Returns i18n time relative to now from since.
 	 *
 	 * @since 1.5.0
+	 * @since 1.6.0 Now correctly denotes time.
 	 *
 	 * @param int $since The UNIX timestamp in the past.
 	 * @return string The time ago.
@@ -52,9 +53,9 @@ trait Time {
 		}
 
 		$minute = 60;
-		$hour = $minute * 60;
-		$day = $hour * 24;
-		$week = $day * 7;
+		$hour   = $minute * 60;
+		$day    = $hour * 24;
+		$week   = $day * 7;
 
 		if ( $ago < $minute ) {
 			$ago_i18n = \__( 'Just now', 'the-seo-framework-extension-manager' );
@@ -76,13 +77,13 @@ trait Time {
 			goto ret;
 
 		$month = $week * 4;
-		$year = $week * 52;
+		$year  = $week * 52;
 
 		//= A more accurate representation. It annotates the beginning of X.
 		//* e.g. last week can be up to 13 days ago; last month 60 days ago, etc.
-		$last_week = strtotime( 'last week', $now );
-		$last_month = strtotime( 'last month', $now );
-		$last_year = strtotime( 'last year', $now ); //= '12 months ago'
+		$last_week  = $now - strtotime( 'last week', $now );
+		$last_month = $now - strtotime( 'last month', $now );
+		$last_year  = $now - strtotime( 'last year', $now ); //= '12 months ago'
 
 		if ( $ago < $last_week ) {
 			$ago_i18n = \__( 'Last week', 'the-seo-framework-extension-manager' );
@@ -181,27 +182,27 @@ trait Time {
 			return $this->_upscale_time( $x, $x_scale, $scales, $precise );
 
 		switch ( $x_scale ) :
-			case 'seconds' :
+			case 'seconds':
 				/* translators: %d = seconds */
 				$time_i18n = sprintf( \_n( '%d second', '%d seconds', $x, 'the-seo-framework-extension-manager' ), $x );
 				break;
 
-			case 'minutes' :
+			case 'minutes':
 				/* translators: %d = minutes */
 				$time_i18n = sprintf( \_n( '%d minute', '%d minutes', $x, 'the-seo-framework-extension-manager' ), $x );
 				break;
 
-			case 'hours' :
+			case 'hours':
 				/* translators: %d = hours */
 				$time_i18n = sprintf( \_n( '%d hour', '%d hours', $x, 'the-seo-framework-extension-manager' ), $x );
 				break;
 
-			case 'days' :
+			case 'days':
 				/* translators: %d = days */
 				$time_i18n = sprintf( \_n( '%d day', '%d days', $x, 'the-seo-framework-extension-manager' ), $x );
 				break;
 
-			case 'weeks' :
+			case 'weeks':
 				/* translators: %d = weeks */
 				$time_i18n = sprintf( \_n( '%d week', '%d weeks', $x, 'the-seo-framework-extension-manager' ), $x );
 				break;
@@ -236,9 +237,9 @@ trait Time {
 		$scale_table = [
 			'seconds' => [ 60, 'minutes' ],
 			'minutes' => [ 60, 'hours' ],
-			'hours' => [ 24, 'days' ],
-			'days' => [ 7, 'weeks' ],
-			'weeks' => [ PHP_INT_MAX, 'eternity' ],
+			'hours'   => [ 24, 'days' ],
+			'days'    => [ 7, 'weeks' ],
+			'weeks'   => [ PHP_INT_MAX, 'eternity' ],
 			// Months and years are too variable for the static purpose of this method.
 		];
 

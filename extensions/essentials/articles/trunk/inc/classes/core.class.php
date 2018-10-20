@@ -61,7 +61,7 @@ class Core {
 		 * Set meta index and defaults.
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
-		$this->pm_index = 'articles';
+		$this->pm_index    = 'articles';
 		$this->pm_defaults = [
 			'type' => 'Article',
 		];

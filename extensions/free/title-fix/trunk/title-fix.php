@@ -341,6 +341,7 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Removed caching.
+	 * @global $_wp_theme_features
 	 *
 	 * @return bool True if the theme supports the title tag, false otherwise.
 	 */

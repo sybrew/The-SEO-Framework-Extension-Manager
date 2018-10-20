@@ -125,10 +125,7 @@ trait Options {
 	 */
 	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
 
-		if ( ! $option )
-			return false;
-
-		if ( $this->killed_options )
+		if ( ! $option || $this->killed_options )
 			return false;
 
 		$_options = $this->get_all_options();

@@ -26,83 +26,83 @@ defined( 'ABSPATH' ) or die;
 /**
  * Legend/Definitions:
  *
- *	- Facade Legend/Definitions:
- *		Choose one per trait.
+ * - Facade Legend/Definitions:
+ *      Choose one per trait.
  *
- *		- Core: Final instance.
- *			- No parents.
- *			- Maybe children.
- *			- All methods are protected.
+ *      - Core: Final instance.
+ *         - No parents.
+ *         - Maybe children.
+ *         - All methods are protected.
  *
- * 		- Master: First instance of facade. Calls all the shots.
- *			- Expects parent class.
- *			- Has no child class.
- *			- All methods are public.
- *				- Except for subconstructor.
- *			- Expects class to be labelled "final".
+ *      - Master: First instance of facade. Calls all the shots.
+ *         - Expects parent class.
+ *         - Has no child class.
+ *         - All methods are public.
+ *            - Except for subconstructor.
+ *         - Expects class to be labelled "final".
  *
- * 		- Sub: Sub instance.
- *			- Expects child class.
- *			- Expects parent class.
+ *      - Sub: Sub instance.
+ *         - Expects child class.
+ *         - Expects parent class.
  *
- * 		- Child: Child instance.
- *			- Synonymous to "static".
- *			- Expects parent class.
- *			- Could have child class.
- *			- Prevents object calling.
+ *      - Child: Child instance.
+ *         - Synonymous to "static".
+ *         - Expects parent class.
+ *         - Could have child class.
+ *         - Prevents object calling.
  *
- *		- Stray: Expects nothing.
- *			- Maybe child.
- *			- Maybe parent.
+ *      - Stray: Expects nothing.
+ *         - Maybe child.
+ *         - Maybe parent.
  *
- *	- Visibility Legend/Definitions:
- *		These can be combined.
+ * - Visibility Legend/Definitions:
+ *      These can be combined.
  *
- * 		- Final: Final instance.
- *			- Expects children classes not to contain same methods.
- *			- All methods are labelled "final".
- *			- Expects class to be labelled "final".
+ *      - Final: Final instance.
+ *         - Expects children classes not to contain same methods.
+ *         - All methods are labelled "final".
+ *         - Expects class to be labelled "final".
  *
- * 		- Solo: Single object.
- *			- Expects no parents.
- *			- Expects no children.
- *			- All methods are labelled "final".
- *			- Expects class to be labelled "final".
- *			- Prevents facade pattern.
- *			- All methods could be public.
+ *      - Solo: Single object.
+ *         - Expects no parents.
+ *         - Expects no children.
+ *         - All methods are labelled "final".
+ *         - Expects class to be labelled "final".
+ *         - Prevents facade pattern.
+ *         - All methods could be public.
  *
- * 		- Static: Expects class not to be initiated.
- *			- Synonymous to "child".
- *			- Prevents object calling.
- *			- All public methods are static.
+ *      - Static: Expects class not to be initiated.
+ *         - Synonymous to "child".
+ *         - Prevents object calling.
+ *         - All public methods are static.
  *
- * 		- Once: Expects class to be called at most once.
- *			- Caches method calls.
- *			- Exits PHP on second call.
+ *      - Once: Expects class to be called at most once.
+ *         - Caches method calls.
+ *         - Exits PHP on second call.
  *
- *		- Interface: Contains abstract methods.
+ *      - Interface: Contains abstract methods.
  *
- *		- Private: All methods are private.
+ *      - Private: All methods are private.
  *
- *		- <No keyword>: Expects nothing.
- *			- All methods are "protected".
+ *      - <No keyword>: Expects nothing.
+ *         - All methods are "protected".
  *
- *		- Public: All methods are public.
+ *      - Public: All methods are public.
  *
  * - Type Legend/Definitions:
- *		Choose one per trait.
+ *      Choose one per trait.
  *
- *		- Enclose: Prevents common hacking methods through magic method nullification.
+ *      - Enclose: Prevents common hacking methods through magic method nullification.
  *
- *		- Construct: Holds constructor.
- *			- When interface: Holds subsconstructor.
- *				- Make sure the subconstructor is private. Otherwise late static binding will kick in.
+ *      - Construct: Holds constructor.
+ *         - When interface: Holds subsconstructor.
+ *            - Make sure the subconstructor is private. Otherwise late static binding will kick in.
  *
- *		- Destruct: Holds destructor and keeps track of destruct calling.
+ *      - Destruct: Holds destructor and keeps track of destruct calling.
  *
- *		- Ignore_Properties_Core_Public_Final: Ignores invalid property calling. Prevents PHP warning messages.
+ *      - Ignore_Properties_Core_Public_Final: Ignores invalid property calling. Prevents PHP warning messages.
  *
- *		- <No keyword>: Should not exist.
+ *      - <No keyword>: Should not exist.
  */
 
 /**

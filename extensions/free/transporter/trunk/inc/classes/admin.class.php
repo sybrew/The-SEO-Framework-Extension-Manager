@@ -336,14 +336,16 @@ final class Admin {
 			 * there's no need to check them on each request.
 			 */
 			if ( empty( $_POST )
-			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) // input var, CSRF ok.
+			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) // input var, CSRF ok.
 			) {
 				return $validated[ $key ] = false;
 			}
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) ? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) : false;
+		$result = isset( $_POST[ $this->nonce_name ] ) // input var ok.
+				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) // input var, sanitization ok.
+				: false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -366,11 +368,11 @@ final class Admin {
 
 		$steps_instance = Steps::get_instance();
 		$steps_instance->_set_instance_properties( [
-			'nonce_name' => $this->nonce_name,
+			'nonce_name'   => $this->nonce_name,
 			'request_name' => $this->request_name,
 			'nonce_action' => $this->nonce_action,
 			'transporter_page_slug' => $this->transporter_page_slug,
-			'o_index' => $this->o_index,
+			'o_index'      => $this->o_index,
 		] );
 
 		return $steps_instance;
@@ -418,6 +420,7 @@ final class Admin {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
+				// TODO fix php 7.3 compact.....
 
 				if ( \check_ajax_referer( 'tsfem-e-transporter-ajax-nonce', 'nonce', false ) ) {
 					$results = $this->wp_ajax_test_seo_settings_file();
@@ -514,7 +517,7 @@ final class Admin {
 		 * If this is NULL, then it will return an empty file. This is fine.
 		 * However, we want to inform the cause to the user.
 		 */
-		$content = static::get_the_seo_framework_options_export_data( true );
+		$content  = static::get_the_seo_framework_options_export_data( true );
 		$filesize = \tsf_extension_manager()->get_filesize( $content );
 
 		if ( 0 === $filesize ) {
@@ -523,7 +526,7 @@ final class Admin {
 		}
 
 		//* Arbitrary header cleanup test.
-		\tsf_extension_manager()->_clean_reponse_header();
+		\tsf_extension_manager()->_clean_response_header();
 
 		if ( headers_sent() ) {
 			$ajax or $this->set_error_notice( [ 1060302 => '' ] );

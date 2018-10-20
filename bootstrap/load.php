@@ -1,7 +1,7 @@
 <?php
 /**
-* @package TSF_Extension_Manager/Bootstrap
-*/
+ * @package TSF_Extension_Manager/Bootstrap
+ */
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
@@ -258,6 +258,7 @@ function _autoload_classes( $class ) {
 
 	if ( strpos( $class, '_abstract' ) ) {
 		$class = str_replace( '_abstract', '.abstract', $class );
+
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
 	} else {
 		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
