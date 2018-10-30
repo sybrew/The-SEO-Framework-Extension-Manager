@@ -433,7 +433,14 @@ class Panes extends API {
 
 		$output  = '';
 		$output .= $this->get_account_information();
-		$output .= $this->get_support_buttons();
+		if ( ! $this->is_auto_activated() ) {
+			if ( ! $this->is_connected_user() && $this->are_options_valid() ) {
+				$output .= $this->get_account_upgrade_form();
+			} else {
+				//* TODO make this happen (on request/modal?).
+				//	$output .= $this->get_account_extend_form();
+			}
+		}
 
 		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
 	}
@@ -448,14 +455,8 @@ class Panes extends API {
 	protected function get_actions_right_output() {
 
 		$output = '';
+		$output .= $this->get_support_buttons();
 		if ( ! $this->is_auto_activated() ) {
-			if ( ! $this->is_connected_user() || ! $this->are_options_valid() ) {
-				$output .= $this->get_account_upgrade_form();
-			} else {
-				//* TODO make this happen (on request/modal?).
-				//	$output .= $this->get_account_extend_form();
-			}
-
 			$output .= $this->get_disconnect_button();
 		}
 
@@ -485,7 +486,15 @@ class Panes extends API {
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Account information', 'the-seo-framework-extension-manager' ) );
+		$infos = [];
+		if ( $this->is_connected_user() )
+			$infos[] = \esc_html__( 'This information is updated every few minutes, infrequently.', 'the-seo-framework-extension-manager' );
+
+		$title = sprintf(
+			'<h4 class="tsfem-info-title">%s %s</h4>',
+			\esc_html__( 'Account information', 'the-seo-framework-extension-manager' ),
+			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
+		);
 
 		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );
 	}
@@ -579,7 +588,7 @@ class Panes extends API {
 		$buttons[1] = Layout::get( 'public-support-button' );
 		$description[1] = \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' );
 
-		$buttons[2] = Layout::get( 'premium-support-button' );
+		$buttons[2] = Layout::get( 'private-support-button' );
 		$description[2] = \__( 'Questions about your account should be inquired via Premium Support.', 'the-seo-framework-extension-manager' );
 
 		Layout::reset();

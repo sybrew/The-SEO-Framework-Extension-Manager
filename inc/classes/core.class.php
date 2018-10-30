@@ -1333,18 +1333,18 @@ class Core {
 	}
 
 	/**
-	 * Determines whether the plugin's use is premium.
+	 * Determines whether the plugin's use is connected.
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return bool True if the plugin is connected to the Premium or Essential API handler.
+	 * @return bool True if the plugin is connected to the Enterprise, Premium, or Essential API handler.
 	 */
 	final public function is_connected_user() {
-		return in_array( $this->get_option( '_activation_level' ), [ 'Premium', 'Essentials' ], true );
+		return in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium', 'Essentials' ], true );
 	}
 
 	/**
-	 * Determines whether the plugin's use is premium.
+	 * Determines whether the plugin's use is Premium.
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.0 Now public. Enjoy.
@@ -1352,7 +1352,18 @@ class Core {
 	 * @return bool True if the plugin is connected to the Premium API handler.
 	 */
 	final public function is_premium_user() {
-		return 'Premium' === $this->get_option( '_activation_level' );
+		return in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium' ], true );
+	}
+
+	/**
+	 * Determines whether the plugin's use is Enterprise.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool True if the plugin is connected to the Premium API handler and is of level Enterprise.
+	 */
+	final public function is_enterprise_user() {
+		return 'Enterprise' === $this->get_option( '_activation_level' );
 	}
 
 	/**

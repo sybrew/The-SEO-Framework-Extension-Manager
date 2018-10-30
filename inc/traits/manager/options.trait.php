@@ -161,7 +161,7 @@ trait Options {
 		}
 
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( [ 7001 => '' ] );
+			$this->set_error_notice( [ 6001 => '' ] );
 
 			//* Options have already been reverted.
 

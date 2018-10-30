@@ -258,7 +258,12 @@ class Api extends Data {
 
 		$response = $response['data'];
 
-		if ( 'failure' === $response['status'] ) {
+		if ( 'REQUEST_LIMIT_REACHED' === $response['status'] ) {
+			$this->set_remote_crawl_timeout();
+			$ajax or $this->set_error_notice( [ 1010509 => '' ] );
+			return $ajax ? $this->get_ajax_notice( false, 1010508 ) : false;
+		}
+		if ( in_array( $response['status'], [ 'failure', 'LICENSE_TOO_LOW' ], true ) ) {
 			$ajax or $this->set_error_notice( [ 1010501 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
 		}

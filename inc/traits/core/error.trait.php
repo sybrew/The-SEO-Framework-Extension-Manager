@@ -359,6 +359,14 @@ trait Error {
 				$type = 'error';
 				break;
 
+			case 17013:
+			case 1100108:
+			case 1100208:
+			case 1010508:
+				$message = \esc_html__( 'Exceeded maximum number of monthly request. Upgrade your license or check back in next month.', 'the-seo-framework-extension-manager' );
+				$type = 'error';
+				break;
+
 			case 305:
 				$message = sprintf(
 					/* translators: %s = My Account */
@@ -436,6 +444,7 @@ trait Error {
 				break;
 
 			case 2001:
+			case 6001:
 			case 7001:
 			case 7002:
 			case 7101:

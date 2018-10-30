@@ -384,6 +384,11 @@ final class LoadAdmin extends AdminPages {
 												$send['results'] = $this->get_ajax_notice( false, 17010 );
 												break;
 
+											case 'REQUEST_LIMIT_REACHED':
+												//= License request limit reached.
+												$send['results'] = $this->get_ajax_notice( false, 17013 );
+												break;
+
 											case 'LICENSE_TOO_LOW':
 											default:
 												//= Undefined error.
@@ -778,17 +783,18 @@ final class LoadAdmin extends AdminPages {
 	}
 
 	/**
-	 * Generates support link for both Free and Premium.
+	 * Generates support link for both Public and Private.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 Now goes by Private/Public
 	 *
-	 * @param string $type The support link type. Accepts 'premium' or anything else for free.
+	 * @param string $type The support link type. Accepts 'privte' or anything else for public.
 	 * @param bool $icon Whether to show a heart/star after the button text.
 	 * @return string The Support Link.
 	 */
-	final public function get_support_link( $type = 'free', $icon = true ) {
+	final public function get_support_link( $type = 'public', $icon = true ) {
 
-		if ( 'premium' === $type ) {
+		if ( 'private' === $type ) {
 			$url = 'https://premium.theseoframework.com/support/';
 
 			$title = \__( 'Get support via mail', 'the-seo-framework-extension-manager' );

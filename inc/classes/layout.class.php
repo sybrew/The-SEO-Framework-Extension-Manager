@@ -96,8 +96,8 @@ final class Layout extends Secure_Abstract {
 				return static::get_public_support_button();
 				break;
 
-			case 'premium-support-button':
-				return static::get_premium_support_button();
+			case 'private-support-button':
+				return static::get_private_support_button();
 				break;
 
 			case 'account-information':
@@ -170,7 +170,7 @@ final class Layout extends Secure_Abstract {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return string The free support button link.
+	 * @return string The public support button link.
 	 */
 	private static function get_public_support_button() {
 
@@ -183,18 +183,18 @@ final class Layout extends Secure_Abstract {
 	}
 
 	/**
-	 * Outputs premium support button.
+	 * Outputs private support button.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
-	 * @return string The premium support button link.
+	 * @return string The private support button link.
 	 */
-	private static function get_premium_support_button() {
+	private static function get_private_support_button() {
 
 		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsf_extension_manager()->get_support_link( 'premium' );
+			return \tsf_extension_manager()->get_support_link( 'private' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium support button only supports the link type.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The private support button only supports the link type.' );
 			return '';
 		}
 	}
@@ -223,15 +223,17 @@ final class Layout extends Secure_Abstract {
 		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
 		$end_date = '';
 		$payment_date = '';
+		$requests_remaining = '';
 
 		if ( $data ) {
 			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
 				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
 				//* UTC.
-				$end_date = isset( $data['status']['status_extra']['end_date'] ) ? $data['status']['status_extra']['end_date'] : '';
-				$payment_date = isset( $data['status']['status_extra']['payment_date'] ) ? $data['status']['status_extra']['payment_date'] : '';
-				$domain = isset( $data['status']['status_extra']['activation_domain'] ) ? $data['status']['status_extra']['activation_domain'] : '';
+				$end_date           = isset( $data['status']['end_date'] ) ? $data['status']['end_date'] : '';
+				$payment_date       = isset( $data['status']['payment_date'] ) ? $data['status']['payment_date'] : '';
+				$domain             = isset( $data['status']['activation_domain'] ) ? $data['status']['activation_domain'] : '';
+				$requests_remaining = isset( $data['status']['requests_remaining'] ) ? $data['status']['requests_remaining'] : '';
 			}
 		}
 
@@ -243,6 +245,11 @@ final class Layout extends Secure_Abstract {
 		$_class = [ 'tsfem-dashicon' ];
 
 		switch ( $level ) :
+			case 'Enterprise':
+				$_level = \__( 'Enterprise', 'the-seo-framework-extension-manager' );
+				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
+				break;
+
 			case 'Premium':
 				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
@@ -283,14 +290,39 @@ final class Layout extends Secure_Abstract {
 			}
 		}
 
-		$level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+		$_level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 			$level,
 			tsf_extension_manager()->coalesce_var( $level_desc, '' ),
 			'',
 			$_class
 		) );
 
-		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $level, false );
+		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $_level, false );
+
+		if ( is_int( $requests_remaining ) ) {
+			$_notice = '';
+			$_classes = [ 'tsfem-dashicon' ];
+
+			if ( $requests_remaining > 100 ) {
+				$_notice = \esc_html__( 'Number of API requests left this month.', 'the-seo-framework-extension-manager' );
+				$_classes[] = 'tsfem-success';
+			} elseif ( $requests_remaining > 0 ) {
+				$_notice = \esc_html__( 'Only a few requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
+				$_classes[] = 'tsfem-warning';
+			} else {
+				$_notice = \esc_html__( 'No requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
+				$_classes[] = 'tsfem-error';
+			}
+
+			//= Not necessarily this domain.
+			$_requests_remaining = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+				(int) $requests_remaining,
+				$_notice,
+				'',
+				$_classes
+			) );
+			$output .= static::wrap_row_content( \esc_html__( 'Requests remaining:', 'the-seo-framework-extension-manager' ), $_requests_remaining, false );
+		}
 
 		if ( $valid_options && $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
@@ -330,6 +362,7 @@ final class Layout extends Secure_Abstract {
 			$_class = 'tsfem-success';
 			$expires_in = '';
 
+			// Move to time.trait?
 			if ( $difference < 0 ) {
 				//* Expired.
 				$expires_in = \__( 'Account expired', 'the-seo-framework-extension-manager' );
@@ -374,7 +407,10 @@ final class Layout extends Secure_Abstract {
 			$_class = 'tsfem-success';
 			$payment_in = '';
 
-			if ( $difference < 0 ) {
+			if ( $difference < -5184000 ) {
+				// Probably a permanent subscription. Let's not bother my friends.
+				goto end;
+			} elseif ( $difference < 0 ) {
 				//* Processing.
 				$payment_in = \__( 'Payment processing', 'the-seo-framework-extension-manager' );
 				$_class = 'tsfem-warning';
@@ -401,6 +437,8 @@ final class Layout extends Secure_Abstract {
 
 			$output .= static::wrap_row_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
 		endif;
+
+		end:;
 
 		//= Wrap tooltips here.
 		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );

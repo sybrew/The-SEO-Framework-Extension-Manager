@@ -156,6 +156,10 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100102 );
 						break;
 
+					case 'REQUEST_LIMIT_REACHED':
+						$send['results'] = $this->get_ajax_notice( false, 1100108 );
+						break;
+
 					default:
 					case 'LICENSE_TOO_LOW':
 					case 'REMOTE_API_BODY_ERROR':
@@ -223,6 +227,10 @@ final class Ajax {
 				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100202 );
+						break;
+
+					case 'REQUEST_LIMIT_REACHED':
+						$send['results'] = $this->get_ajax_notice( false, 1100208 );
 						break;
 
 					default:

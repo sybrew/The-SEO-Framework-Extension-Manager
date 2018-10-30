@@ -220,7 +220,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
 
-		return $is_premium = 'Premium' === $level;
+		return $is_premium = in_array( $level, [ 'Enterprise', 'Premium' ], true );
 	}
 
 	/**
@@ -240,7 +240,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
 
-		return $is_connected = in_array( $level, [ 'Premium', 'Essentials' ], true );
+		return $is_connected = in_array( $level, [ 'Enterprise', 'Premium', 'Essentials' ], true );
 	}
 
 	/**

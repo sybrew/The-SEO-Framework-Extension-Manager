@@ -346,9 +346,16 @@ class AccountActivation extends Panes {
 				break;
 
 			case 5:
-				//= Everything's premium.
+				//= Everything's Premium.
 				( $this->get_option( '_activation_level' ) !== 'Premium' )
 					and $this->update_option( '_activation_level', 'Premium' )
+						and $this->set_error_notice( [ 905 => '' ] );
+				break;
+
+			case 6:
+				//= Everything's Enterprise.
+				( $this->get_option( '_activation_level' ) !== 'Enterprise' )
+					and $this->update_option( '_activation_level', 'Enterprise' )
 						and $this->set_error_notice( [ 905 => '' ] );
 				break;
 		endswitch;
@@ -361,6 +368,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 1.3.0 Now returns an integer.
+	 * @since 2.0.0 Our API no longer uses 'extra'.
 	 *
 	 * @return int : {
 	 *   0 : Not subscribed / API failure.
@@ -369,6 +377,7 @@ class AccountActivation extends Panes {
 	 *   3 : Local connected user. Remote connected User. Instance verified.
 	 *   4 : Local connected user. Remote connected User. Instance verified. Domain verified.
 	 *   5 : Local connected user. Remote connected User. Instance verified. Domain verified. Premium verified.
+	 *   6 : Local connected user. Remote connected User. Instance verified. Domain verified. Enterprise verified.
 	 * }
 	 */
 	protected function validate_remote_subscription_license() {
@@ -376,19 +385,24 @@ class AccountActivation extends Panes {
 		$response = $this->get_remote_subscription_status();
 
 		$status = 0;
-		$extra  = $this->coalesce_var( $response['status_extra'], [] );
 
 		while ( true ) {
 			if ( ! isset( $response['status_check'] ) ) break;
 			++$status;
 			if ( 'active' !== $response['status_check'] ) break;
 			++$status;
-			if ( $this->get_activation_instance() !== $this->coalesce_var( $extra['instance'], -1 ) ) break;
+			if ( $this->get_activation_instance() !== $this->coalesce_var( $response['_instance'], -1 ) ) break;
 			++$status;
-			if ( $this->get_activation_site_domain() !== $this->coalesce_var( $extra['activation_domain'], -1 ) ) break;
+			if ( $this->get_activation_site_domain() !== $this->coalesce_var( $response['activation_domain'], -1 ) ) break;
 			++$status;
-			if ( 'Premium' !== $this->coalesce_var( $response['_activation_level'], 'Essentials' ) ) break;
-			++$status;
+
+			$this->coalesce_var( $response['_activation_level'], '' );
+
+			if ( 'Premium' === $response['_activation_level'] ) {
+				$status += 1;
+			} elseif ( 'Enterprise' === $response['_activation_level'] ) {
+				$status += 2;
+			}
 			break;
 		}
 

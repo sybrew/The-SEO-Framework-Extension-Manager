@@ -128,6 +128,7 @@ class API extends Core {
 	 * but their activation still uses the original scheme.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.0 Now uses the site URL instead of the home URL.
 	 *
 	 * @return string Domain Host.
 	 */
@@ -231,7 +232,7 @@ class API extends Core {
 			'licence_key' => '',
 			'instance'    => $this->get_activation_instance( false ),
 			'platform'    => $this->get_activation_site_domain(),
-			'tsfemv2'     => 'yes', // var_dump() TEMP?
+			'version'     => '2.0',
 		];
 
 		$args = \wp_parse_args( $args, $defaults );

@@ -172,14 +172,17 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * **Added:** The plugin now supports PHP 7.3.
 * **Added:** We integrated our own updating services.
+* **Added:** This plugin now connects to our improved API services.
+* **Added:** The interface now updates you (in irregular intervals) on the remaining API requests for the month.
 * **Added:** We added a new "Essential" extension tier. These extensions don't require our API actively, but give powerful SEO improvements regardless.
-* **Added:** This plugin can now handle license upgrades and downgrades. It's just that our shop can't, yet.
+* **Added:** This plugin can now handle license upgrades and downgrades. It's just that our shop can't without handing over a new key, yet.
 * **Added:** Various constants that allow you to easily manage multisite networks and customer websites.
 * **Improved:** When the class stops for any reason, it creates aliases to prevent crashing.
 * **Improved:** A deactivation from a connected state now brings you back to the Free tier, without losing your extension activation data.
 	* Reconnect to reactivate the made-unavailable extensions automatically.
+	* Privacy-intensive extensions, like Monitor, might require you to revalidate.
 * **Removed:** Integrated fonts for pixel recognition tests. It was planned to be integrated for PHP-style pixel calculations, but was aborted for performance reasons.
-* **Removed:** More legacy browser support.
+* **Removed:** More legacy browser support. Stop using IE11.
 * **Fixed:** The human time is now correctly told in facing certain circumstances.
 * **Fixed:** TODO The AJAX notification no longer starts fading before it's processed. (we're used to servers that respond instantly...)
 	* Test this with throttled connections in Chrome...

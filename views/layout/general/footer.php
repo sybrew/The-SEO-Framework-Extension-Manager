@@ -2,15 +2,17 @@
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 if ( $this->is_plugin_activated() ) {
-	if ( $this->is_premium_user() ) {
-		$more_mottos = [ 'premium', 'essential' ];
+	if ( $this->is_enterprise_user() ) {
+		$more_mottos = [ 'An enterprise', 'A premium', 'An essential' ];
+	} elseif ( $this->is_premium_user() ) {
+		$more_mottos = [ 'A premium', 'An essential' ];
 	} elseif ( $this->is_connected_user() ) {
-		$more_mottos = [ 'essential' ];
+		$more_mottos = [ 'An essential' ];
 	} else {
-		$more_mottos = [ 'free' ];
+		$more_mottos = [ 'A free' ];
 	}
 } else {
-	$more_mottos = [ 'free', 'essential', 'premium' ];
+	$more_mottos = [ 'A free', 'An essential', 'A premium', 'An enterprise' ];
 }
 
 /**
@@ -22,19 +24,19 @@ if ( $this->is_plugin_activated() ) {
  * c) we stray away from what the footer is about: recognition and branding.
  */
 $mottos = [
-	'better',
-	'fair',
-	'supreme',
-	'clean',
-	'future',
-	'prospective',
-	'stronger',
-	'sustainable',
-	'state of the art',
-	'social',
-	'fast',
-	'secure',
-	'logical',
+	'A better',
+	'A fair',
+	'A supreme',
+	'A clean',
+	'A future',
+	'A prospective',
+	'A stronger',
+	'A sustainable',
+	'A state of the art',
+	'A social',
+	'A fast',
+	'A secure',
+	'A logical',
 ];
 $mottos = array_merge( $mottos, $more_mottos );
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
@@ -44,6 +46,6 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 	The SEO Framework Extension Manager
 </p>
 <p class="tsfem-footer-motto">
-	<?php echo \esc_html( "A {$mottos[ $motto_key ]} Initiative" ); ?>
+	<?php echo \esc_html( "{$mottos[ $motto_key ]} Initiative" ); ?>
 </p>
 <?php

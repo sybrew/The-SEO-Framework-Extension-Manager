@@ -48,7 +48,6 @@ trait Extensions_I18n {
 
 		return $i18n = [
 			'free'            => \__( 'Free', 'the-seo-framework-extension-manager' ),
-			'free+'           => \__( 'Free+', 'the-seo-framework-extension-manager' ),
 			'essentials'      => \__( 'Essentials', 'the-seo-framework-extension-manager' ),
 			'essentials+'     => \__( 'Essentials+', 'the-seo-framework-extension-manager' ),
 			'premium'         => \__( 'Premium', 'the-seo-framework-extension-manager' ),
