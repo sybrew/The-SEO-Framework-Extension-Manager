@@ -1,6 +1,5 @@
 # Honeypot
 Location: https://theseoframework.com/extensions/honeypot/
-Tags: spam
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -198,6 +197,12 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 ```
 
 ## Changelog
+
+### 1.1.2
+
+[tsfep-release time="-1"]
+
+* **Changed:** This is now an Essentials extension.
 
 ### 1.1.1
 

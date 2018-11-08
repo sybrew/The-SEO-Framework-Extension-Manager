@@ -74,7 +74,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 
 	$http_args = [
 		'timeout'    => 15,
-		'user-agent' => 'WordPress/' . $wp_version . '; ' . \home_url( '/' ),
+		'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 		'body'       => [
 			'action'  => $action,
 			'request' => serialize( $args ),
@@ -99,7 +99,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 			$res = new WP_Error( 'plugins_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
-					\__( 'An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href="%s">contact us</a>.' ),
+					\__( 'An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href="%s">contact us</a>.', 'the-seo-framework-extension-manager' ),
 					'https://theseoframework.com/contact/'
 				),
 				\wp_remote_retrieve_body( $request )
@@ -162,7 +162,7 @@ function _push_update( $value, $transient ) {
 
 		$http_args = [
 			'timeout'    => 4,
-			'user-agent' => 'WordPress/' . $wp_version . '; ' . \home_url( '/' ),
+			'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 			'body'       => [
 				'plugins' => [
 					TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin,

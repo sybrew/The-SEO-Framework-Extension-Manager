@@ -304,7 +304,7 @@ final class Layout extends Secure_Abstract {
 			$_classes = [ 'tsfem-dashicon' ];
 
 			if ( $requests_remaining > 100 ) {
-				$_notice = \esc_html__( 'Number of API requests left this month.', 'the-seo-framework-extension-manager' );
+				$_notice = \esc_html__( 'Number of API requests left for this month.', 'the-seo-framework-extension-manager' );
 				$_classes[] = 'tsfem-success';
 			} elseif ( $requests_remaining > 0 ) {
 				$_notice = \esc_html__( 'Only a few requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );

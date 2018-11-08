@@ -941,7 +941,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		for ( let _i = 0; _i < synonyms.length; _i++ ) {
 			_option = _option.cloneNode();
 			_option.value = _i;
-			_option.innerHTML = tsfem_inpost.escapeStr( synonyms[ _i ].example );
+			_option.innerHTML = tsfem_inpost.escapeStr( synonyms[ _i ].example || l10n.i18n.noExampleAvailable );
 			definitionDropdownClone.appendChild( _option );
 		}
 		definitionDropdown.innerHTML = definitionDropdownClone.innerHTML;

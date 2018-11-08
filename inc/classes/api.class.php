@@ -246,14 +246,12 @@ class API extends Core {
 
 		$http_args = [
 			/**
-			 * Applies filters 'tsf_extension_manager_request_timeout' : int
 			 * @since 1.0.0
 			 * @param int $timeout 7 seconds should be more than sufficient and equals
 			 *                     the API server keep_alive_timeout. WP default is 5.
 			 */
 			'timeout'     => \apply_filters( 'tsf_extension_manager_request_timeout', 7 ),
 			/**
-			 * Applies filters 'tsf_extension_manager_http_request_version' : string
 			 * @since 1.0.0
 			 * @param string $httpversion HTTP 1.1 is used for improved performance.
 			 *                            WP default is '1.0'

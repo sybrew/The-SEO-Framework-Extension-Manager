@@ -562,6 +562,7 @@ final class SchemaPacker {
 	 * Conditions $value for $key based on schema $what.
 	 *
 	 * @since 1.3.0
+	 * @since 2.0.0 Added level ($level) and iteration ($it) access in the 'set' _do->_to action.
 	 * @todo implement self-resolving staticvar that breaks the loop?
 	 *
 	 * @param string $key   The value's key
@@ -669,7 +670,12 @@ final class SchemaPacker {
 				return null;
 
 			case 'set':
-				return $c->_to;
+				if ( '$it' === $c->_to ) :
+					return $this->it;
+				elseif ( '$level' === $c->_to ) :
+					return $this->level;
+				endif;
+				return $c->to;
 
 			case 'current':
 				return current( $value );

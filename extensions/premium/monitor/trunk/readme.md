@@ -1,6 +1,5 @@
 # Monitor
 Location: https://theseoframework.com/extensions/monitor/
-Tags: spam
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

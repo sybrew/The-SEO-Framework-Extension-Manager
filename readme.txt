@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.6.0
-Tested up to: 4.9.8
+Tested up to: 5.0.0
 Requires PHP: 5.5.21
-Stable tag: 1.5.2
+Stable tag: 2.0.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,7 +16,7 @@ Add more powerful SEO features to The SEO Framework right from your WordPress da
 **Advanced and powerful SEO.**
 **Delivered through extension for [The SEO Framework](https://wordpress.org/plugins/autodescription/).**
 
-This plugin provides an advanced WordPress administrative dashboard page where you can activate the latest free and premium extensions.
+The Extension Manager is a WordPress plugin that gives access to more advanced and powerful SEO for The SEO Framework via extensions.
 
 = Included Extensions =
 
@@ -34,25 +34,18 @@ This plugin provides an advanced WordPress administrative dashboard page where y
 
 = How it works =
 
-This plugin offers a lightweight dashboard wherein you can activate and deactivate extensions.
-Only the activated extensions are loaded. Other extensions are dormant and the files of those aren't even touched.
+This plugin provides a beautiful and advanced WordPress administrative dashboard page wherein you can activate the latest Free, Essentials, and Premium extensions.
 
-Some of the extensions are completely free to use, others are premium and are connected to our servers.
+Only the activated extensions are loaded. Other extensions are dormant and the files of those aren’t even touched.
 
-= About Premium =
-
-A premium subscription will allow you to activate all premium extensions for one single subscription price.
-
-The premium extensions communicate with The SEO Framework's API server to provide extra functionality. This added functionality is optional and its usage differs per extension.
-
-When the subscription is active, you're allowed to use all premium extensions. If the subscription is expired or deactivated, the premium extensions will no longer be accessible.
+The Premium and Essentials+ extensions can make use of our API services.
+The Essentials and Free extensions are completely self-sufficient.
 
 = Privacy =
 
 View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation).
 
-* In short: This plugin can send API requests to our sites when you use a Premium license.
-* Have questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
+Do you have questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
 == Installation ==
 
@@ -66,9 +59,13 @@ View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-po
 
 = Installation instructions: =
 
-1. Install "The SEO Framework - Extension Manager" either via the WordPress.org plugin directory or by uploading the files to your server.
-1. Either Network Activate this plugin or activate it on a single site.
-1. That's it!
+1. Download the [latest ZIP file from here](https://dl.theseoframework.com/get/plugin/latest/).
+1. Login to your WordPress Dashboard.
+1. Go to Plugins > Add New.
+1. Click "Upload Plugin" at the top.
+1. Upload the `the-seo-framework-extension-manager.zip` file.
+1. Either network-activate this plugin or activate it on a single site.
+1. That’s it! The plugin will guide you from here.
 
 = This plugin will then guide you through an activation process: =
 
@@ -80,13 +77,13 @@ The extensions test themselves upon activation. So, if any extension doesn't wor
 
 > <strong>The premium software is Open Source:</strong><br>
 > This plugin and all extensions within are open source. This means they can be easily altered and shared.<br>
-> If you've acquired extensions for The SEO Framework from outside your WordPress Dashboard or WordPress.org, they could contain malware.
+> If you've acquired extensions for The SEO Framework from outside theseoframework.com, they could contain malware.
 >
 > This also accounts for any other premium software acquired for free. Please, be careful.
 
 = Are you a developer? =
 And do you wish to add your own extension to the extension manager? Please contact the plugin author on [Slack](https://wordpress.slack.com/messages/@cybr/) about your ideas.
-A full code review will take place prior to releasing it. The code must pass at least all the WordPress.org plugin standards and all code must be licensed under GPLv3.
+A full code review will take place prior to releasing it. The code must pass at least all the WordPress.org plugin guidelines and all code must be licensed under GPLv3.
 Feedback and points for improvement will be always given. No monetized nor premium extensions are being accepted, API connections aren't allowed either.
 
 = For developers: Security =
@@ -127,18 +124,16 @@ Absolutely not! This plugin does not include any user tracking software. We comp
 View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-policy/#pluginprivacyinformation) for more information.
 
 = What's the release cycle of extensions? =
-Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions.
-No X.y updates (2.0, 3.0, etc.) are planned as of now.
+Every y.X update (1.1, 1.2, 1.3, etc.) will include a new extension. Every y.y.X update (1.0.1, 1.0.2, etc.) fixes bugs and/or adds new functionality to existing extensions. X.y updates (1.0, 2.0, 3.0, etc.) change the plugin's API significantly.
 
 = I've received an error code, what now? =
-Follow the steps provided next to the error code, if any. If the error keeps coming back, let us know through on the support forums.
-Note that Premium Extensions aren't supported within the WordPress.org support forums; you'll have to [contact us directly](https://theseoframework.com/contact/).
+Follow the steps provided next to the error code, if any. If the error keeps coming back, feel free to [send in an issue](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose).
 
 = Which users can activate extensions? =
 By default, only users who can manage options can interact with this plugin.
 
 = Where are the extensions acquired from? =
-Both free and premium extensions are provided within the plugin package acquired from WordPress.org.
+Both free and premium extensions are provided within the plugin package acquired from theseoframework.com.
 
 = Does the Extension Manager need to stay activated to run the extensions? =
 Yes. The Extension Manager supplies its own extension activation management system apart from WordPress'.
@@ -162,7 +157,7 @@ Each extension handles its own options (if any); those settings won't be lost, n
 
 = Does my website support this plugin? =
 If it doesn't, it will tell you why. Otherwise, you're good to go! All known issues are correctly labeled with an identification number.
-If you were to get a plugin activation error, either open a support ticket [here](https://wordpress.org/support/plugin/the-seo-framework-extension-manager) or contact your host and ask them to upgrade PHP to a stable and secure version.
+If you were to get a plugin activation error, either open a support ticket [here](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose) or contact your host and ask them to upgrade PHP to a stable and secure version.
 
 == Changelog ==
 
@@ -182,18 +177,16 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* Reconnect to reactivate the made-unavailable extensions automatically.
 	* Privacy-intensive extensions, like Monitor, might require you to revalidate.
 * **Removed:** Integrated fonts for pixel recognition tests. It was planned to be integrated for PHP-style pixel calculations, but was aborted for performance reasons.
-* **Removed:** More legacy browser support. Stop using IE11.
+* **Removed:** More legacy browser support.
 * **Fixed:** The human time is now correctly told in facing certain circumstances.
-* **Fixed:** TODO The AJAX notification no longer starts fading before it's processed. (we're used to servers that respond instantly...)
-	* Test this with throttled connections in Chrome...
 
-* **Extension changes: TODO move this to their respective changelogs**
+**Updated Extensions:**
 
-* **Origin:**
-	* **Added:** Attachment pages that don't have a parent now get redirected to the attachment itself.
-		* TODO document.
-		* TODO set to version 1.1.0
-
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
+* [Articles](https://theseoframework.com/extensions/articles/#changelog)
+* [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Origin](https://theseoframework.com/extensions/origin/#changelog)
 
 = 1.5.2 =
 

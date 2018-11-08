@@ -22,10 +22,14 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @NOTE The definable constants should be defined in `wp-config.php`.
-// Alternatively, you may define them conditionally in a mu-plugin.
-// These constants may fail to work as intended when defined in a regular plugin. The plugin load sequence affects this behavior.
-// These constants won't work in a theme.
+/**
+ * NOTE:
+ * The definable constants should be defined in `wp-config.php`.
+ * Alternatively, you may define them conditionally in a mu-plugin.
+ *
+ * These constants may fail to work as intended when defined in a regular plugin. The plugin load sequence affects this behavior.
+ * These constants won't work in a theme, this file is loaded before themes are.
+ */
 
 /**
  * The forced plugin license information.
@@ -63,7 +67,7 @@ defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
  * The plugin map URL. Used for calling browser files.
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_DIR_URL', \plugin_dir_url( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) );
+define( 'TSF_EXTENSION_MANAGER_DIR_URL', plugin_dir_url( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) );
 
 /**
  * The plugin map absolute path. Used for calling php files.
@@ -114,14 +118,14 @@ define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' )
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS', 'tsf-extension-manager-extension-settings' );
 
 /**
- * The extension options base name.
+ * The extension post meta options base name.
  * Has an underscore to hide it from custom fields.
  * @since 1.5.0
  */
 define( 'TSF_EXTENSION_MANAGER_EXTENSION_POST_META', '_tsfem-extension-post-meta' );
 
 /**
- * The extension options base name.
+ * The extension term meta options base name.
  * Has an underscore to conform to TSF_EXTENSION_MANAGER_EXTENSION_POST_META.
  * @since 1.5.0
  */

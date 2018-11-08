@@ -173,13 +173,13 @@ trait Time {
 	 */
 	protected function scale_time( $x, $x_scale = 'seconds', $scales = 2, $precise = false ) {
 
-		$time_i18n = '';
-
 		$x = round( $x );
 
 		//= Can't upscale 0.
 		if ( $scales && $x )
 			return $this->_upscale_time( $x, $x_scale, $scales, $precise );
+
+		$time_i18n = '';
 
 		switch ( $x_scale ) :
 			case 'seconds':
@@ -245,7 +245,7 @@ trait Time {
 
 		while ( $x_remaining ) :
 			$_threshold = $scale_table[ $x_scale ][0];
-			if ( $x_remaining >= $_threshold                        // > vs >= is 24 hours vs 1 day.
+			if ( $x_remaining >= $_threshold                       // > vs >= is 24 hours vs 1 day.
 			&& ( ! $precise || ( count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
 			   ) {
 				if ( $x_remaining % $_threshold ) {
@@ -371,7 +371,7 @@ trait Time {
 			$tzstring = '';
 
 		if ( $guess && empty( $tzstring ) ) {
-			$offset = \get_option( 'gmt_offset' );
+			$offset   = \get_option( 'gmt_offset' );
 			$tzstring = $this->get_tzstring_from_offset( $offset );
 		}
 

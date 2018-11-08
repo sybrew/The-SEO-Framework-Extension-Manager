@@ -525,7 +525,7 @@ final class Admin {
 			return $ajax ? $this->get_ajax_notice( false, 1060301 ) : false;
 		}
 
-		//* Arbitrary header cleanup test.
+		//* Arbitrary header cleanup.
 		\tsf_extension_manager()->_clean_response_header();
 
 		if ( headers_sent() ) {

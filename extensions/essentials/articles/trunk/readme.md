@@ -1,6 +1,5 @@
 # Articles
 Location: https://theseoframework.com/extensions/articles/
-Tags: blogging, news
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -171,6 +170,12 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 ```
 
 ## Changelog
+
+### 1.3.1
+
+[tsfep-release time="-1"]
+
+* **Changed:** This is now an Essentials extension.
 
 ### 1.3.0
 

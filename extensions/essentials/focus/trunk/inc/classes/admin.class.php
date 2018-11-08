@@ -170,6 +170,9 @@ final class Admin extends Core {
 					'focusElements'      => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
 					'languageSupported'  => $this->is_language_supported(),
+					'i18n' => [
+						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
+					],
 				],
 			],
 			'tmpl' => [

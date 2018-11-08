@@ -1,6 +1,5 @@
 # Origin
 Location: https://theseoframework.com/extensions/origin/
-Tags: Uptime, syntax
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -34,6 +33,12 @@ There is no setup required and no options are available.
 For an attachment page to redirect, it must be uploaded through the post edit screen. The assigned post must also exist.
 
 ## Changelog
+
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* **Added:** Attachment pages that don't have a parent now get redirected to the attachment itself.
 
 ### 1.0.0
 

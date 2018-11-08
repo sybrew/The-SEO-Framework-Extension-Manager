@@ -77,11 +77,19 @@
 						},
 						"_handlers" : {
 							"_escape" : "sanitize_key",
-							"_condition" : {
-								"_if" : "this",
-								"_op" : "empty",
-								"_do" : "kill_pack"
-							},
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "empty",
+									"_do" : "set",
+									"_to" : "$it"
+								},
+								{
+									"_if" : "this",
+									"_op" : "empty",
+									"_do" : "kill_pack"
+								}
+							],
 							"_out" : "string"
 						}
 					},

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Origin;
  * Extension Name: Origin
  * Extension URI: https://theseoframework.com/extensions/origin/
  * Extension Description: The Origin extension redirects attachment-page visitors back to the parent post.
- * Extension Version: 1.0.0
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3

@@ -98,6 +98,11 @@ final class Trends {
 
 		$http_args = [
 			'timeout' => 7,
+			/**
+			 * @since 1.0.0
+			 * @param string $httpversion HTTP 1.1 is used for improved performance.
+			 *                            WP default is '1.0'
+			 */
 			'httpversion' => \apply_filters( 'tsf_extension_manager_http_request_version', '1.1' ),
 		];
 

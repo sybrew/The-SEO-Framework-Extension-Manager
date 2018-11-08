@@ -1,6 +1,5 @@
 # Focus
 Location: https://theseoframework.com/extensions/focus/
-Tags: audit, content, keywords
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -153,6 +152,13 @@ The API currently supports English only. Support for other languages will be add
 We're currently working on inflection lookups. When it's ready, an update will be sent out.
 
 ## Changelog
+
+### 1.1.1
+
+[tsfep-release time="-1"]
+
+* **Improved:** When no homonymous example can be found, the option now displays "No example available.".
+* **Changed:** This is now an Essentials+ extension.
 
 ### 1.1.0
 

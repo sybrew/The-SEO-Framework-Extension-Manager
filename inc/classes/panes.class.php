@@ -493,7 +493,7 @@ class Panes extends API {
 		$title = sprintf(
 			'<h4 class="tsfem-info-title">%s %s</h4>',
 			\esc_html__( 'Account information', 'the-seo-framework-extension-manager' ),
-			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
+			( $infos ? HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) ) : '' )
 		);
 
 		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );

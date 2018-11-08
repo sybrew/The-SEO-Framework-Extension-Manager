@@ -460,6 +460,7 @@ body.tsfem .wrap {
 	-moz-transition: filter 0.15s, color 0.15s;
 	-o-transition: -webkit-filter 0.15s, color 0.15s;
 	transition: filter 0.15s, color 0.15s;*/
+	border-radius: 3px;
 }
 
 .tsfem-button-small,

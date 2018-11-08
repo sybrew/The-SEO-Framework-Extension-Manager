@@ -1,6 +1,5 @@
 # Title Fix
 Location: https://theseoframework.com/extensions/title-fix/
-Tags: theme
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
