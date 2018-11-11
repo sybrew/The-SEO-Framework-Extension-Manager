@@ -173,7 +173,7 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 
 ### 1.3.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 9th, 2018"]
 
 * **Changed:** This is now an Essentials extension.
 

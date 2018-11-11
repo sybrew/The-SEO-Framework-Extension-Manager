@@ -443,6 +443,14 @@ trait Error {
 				$type = 'updated';
 				break;
 
+			case 906:
+				$message = sprintf(
+					\esc_html__( "Your account level has been set to Enterprise. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
+					$this->get_my_account_link()
+				);
+				$type = 'updated';
+				break;
+
 			case 2001:
 			case 6001:
 			case 7001:

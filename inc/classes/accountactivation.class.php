@@ -356,7 +356,7 @@ class AccountActivation extends Panes {
 				//= Everything's Enterprise.
 				( $this->get_option( '_activation_level' ) !== 'Enterprise' )
 					and $this->update_option( '_activation_level', 'Enterprise' )
-						and $this->set_error_notice( [ 905 => '' ] );
+						and $this->set_error_notice( [ 906 => '' ] );
 				break;
 		endswitch;
 

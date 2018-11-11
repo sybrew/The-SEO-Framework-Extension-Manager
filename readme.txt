@@ -163,6 +163,10 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 = 2.0.0 - Divine SEO =
 
+**Release date:**
+
+* November 9th, 2018
+
 **Plugin Improvements:**
 
 * **Added:** The plugin now supports PHP 7.3.

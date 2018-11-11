@@ -36,7 +36,7 @@ For an attachment page to redirect, it must be uploaded through the post edit sc
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 9th, 2018"]
 
 * **Added:** Attachment pages that don't have a parent now get redirected to the attachment itself.
 

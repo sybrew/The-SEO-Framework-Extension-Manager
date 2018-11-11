@@ -155,7 +155,7 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ### 1.1.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 9th, 2018"]
 
 * **Improved:** When no homonymous example can be found, the option now displays "No example available.".
 * **Changed:** This is now an Essentials+ extension.

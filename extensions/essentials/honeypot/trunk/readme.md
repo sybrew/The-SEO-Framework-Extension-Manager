@@ -11,27 +11,22 @@ This extension catches comment spammers through four lightweight yet powerful me
 
 WordPress allows visitors to easily interact with your website. Unfortunately, it's too easy.
 
-Because WordPress' comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks.
+Because WordPress' comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
 
-Websites with spammy content are rendered as low-quality by users and search engines alike.
-
-To reduce comment spam, you could manually moderate the comments, but this is very time consuming.
-
-The Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
+To reduce comment spam, you could manually moderate the comments, but this is very time consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
 
 ### A non-intrusive extension
 
-Honeypot is for catching robots. Visitors shouldn't notice its presence.
+Honeypot is for catching robots, not humans. So, visitors shouldn't notice its presence.
+
+This extension protects all themes and plugins that use the default WordPress comment forms. This includes WooCommerce product reviews.
 
 Apart from other anti-spam techniques, like captcha or an answer field, a honeypot is hidden from visitors.
-This means the visitors doesn't need to interact with the anti-spam technique, improving user experience.
+This means the visitors doesn't need to interact with the anti-spam technique, improving user experience. In short, your site is protected from spam in the background.
 
-In short, your site is protected from spam in the background.
+This extension also has an unmeasurably low server memory and CPU footprint, and it only adds roughly 160 bytes to your page's source. So, there's no performance difference with or without the extension.
 
-This extension also has an unmeasurably low server memory and CPU footprint, and it only adds roughly 160 bytes to your page's source.
-In other words: there's no performance difference with or without the extension.
-
-All this makes the Honeypot extension favorable to other solutions.
+All this makes the Honeypot extension more favorable to other solutions.
 
 ### Four methods
 
@@ -103,7 +98,7 @@ These settings can be found at **Settings -> Discussion**.
 
 With Honeypot, you can be certain that each comment that comes through is written by a human.
 
-But, if even those comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). This plugin tracks the user's comment activity on multiple sites.
+But, if even those comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity on multiple sites.
 
 ## Developers
 
@@ -200,7 +195,7 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 
 ### 1.1.2
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 9th, 2018"]
 
 * **Changed:** This is now an Essentials extension.
 
