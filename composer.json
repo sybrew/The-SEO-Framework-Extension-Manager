@@ -1,20 +1,28 @@
 {
 	"name": "sybrew/the-seo-framework-extension-manager",
-	"type": "wordpress-plugin",
-	"license": "GPLv3",
 	"description": "A WordPress.org plugin that allows you to manage extensions for The SEO Framework.",
+	"keywords": [
+		"seo",
+		"wordpress", 
+		"plugin"
+	],
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0-only",
 	"homepage": "https://theseoframework.com/extension-manager/",
 	"authors": [
 		{
-			"name": "Sybre Waaijer"
+			"name": "Sybre Waaijer",
+			"email": "sybre@theseoframework.com",
+			"homepage": "https://cyberwire.nl/",
+			"role": "Developer"
 		}
 	],
-	"keywords": ["wordpress", "seo"],
+	"require": {
+		"php": "~5.5.21 || >=5.6.5",
+		"composer/installers": "^1.0"
+	},
 	"support": {
 		"issues": "https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose",
 		"source": "https://github.com/sybrew/The-SEO-Framework-Extension-Manager"
-	},
-	"require": {
-		"php": "~5.5.21 || >=5.6.5"
 	}
 }
