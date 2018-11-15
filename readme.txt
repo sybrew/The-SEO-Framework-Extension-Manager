@@ -161,6 +161,14 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.1 =
+
+** Release date:**
+
+* TODO, 2018
+
+* Fixed: The translations are now correctly loaded for new users.
+
 = 2.0.0 - Divine SEO =
 
 **Release date:**

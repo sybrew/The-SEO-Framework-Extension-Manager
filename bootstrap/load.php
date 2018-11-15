@@ -42,7 +42,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			TSF_EXTENSION_MANAGER_DIR_PATH . 'language'
+			dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . DIRECTORY_SEPARATOR . 'language'
 		);
 	}
 }
