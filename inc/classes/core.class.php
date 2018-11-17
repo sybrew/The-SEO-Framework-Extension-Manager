@@ -158,10 +158,10 @@ class Core {
 				$this->ajax_is_tsf_extension_manager_page( true );
 		}
 
-		\TSF_Extension_Manager\Extensions::initialize( 'list', $_instance, $bits );
-		\TSF_Extension_Manager\Extensions::set_account( $this->get_subscription_status() );
+		Extensions::initialize( 'list', $_instance, $bits );
+		Extensions::set_account( $this->get_subscription_status() );
 
-		$checksum = \TSF_Extension_Manager\Extensions::get( 'extensions_checksum' );
+		$checksum = Extensions::get( 'extensions_checksum' );
 		$result   = $this->validate_extensions_checksum( $checksum );
 
 		if ( true !== $result ) :
@@ -176,28 +176,28 @@ class Core {
 					break;
 			}
 
-			\TSF_Extension_Manager\Extensions::reset();
+			Extensions::reset();
 			return $loaded = false;
 		endif;
 
-		$extensions = \TSF_Extension_Manager\Extensions::get( 'active_extensions_list' );
+		$extensions = Extensions::get( 'active_extensions_list' );
 
-		\TSF_Extension_Manager\Extensions::reset();
+		Extensions::reset();
 
 		if ( empty( $extensions ) )
 			return $loaded = false;
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		\TSF_Extension_Manager\Extensions::initialize( 'load', $_instance, $bits );
+		Extensions::initialize( 'load', $_instance, $bits );
 
 		foreach ( $extensions as $slug => $active ) {
 			$this->get_verification_codes( $_instance, $bits );
 
-			\TSF_Extension_Manager\Extensions::load_extension( $slug, $_instance, $bits );
+			Extensions::load_extension( $slug, $_instance, $bits );
 		}
 
-		\TSF_Extension_Manager\Extensions::reset();
+		Extensions::reset();
 
 		return $loaded = true;
 	}

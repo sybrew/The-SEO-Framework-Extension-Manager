@@ -17,7 +17,7 @@ Not every web developer likes these annotations. If you're one of those develope
 
 ### How it works
 
-Unlike other SEO plugins, The SEO Framework allows you to remove the aforementioned annotations easily through filters.
+Unlike other SEO plugins, The SEO Framework allows you to remove the annotations mentioned above easily through filters.
 
 This extension uses those filters to disable the annotations. That's all there's to it.
 
@@ -36,18 +36,16 @@ For this reason, this extension won't affect performance when enabled.
 
 ### Activate Incognito
 
-All you'll need to do is activate the Incognito extension.
+All you must to do is activate the Incognito extension.
 
-There is no setup required and no options are available.
-
-[tsfep-image id="1"]
+There is no setup required, and no options are available.
 
 ### Page and Browser Caching
 
 If you're using a page caching solution, you might need to refresh the cache before the in-page annotations are removed.
 
 The sitemap's stylesheet is cached in the browser for 30 minutes.
-To see results, you could either wait for it to expire, or perform a [forced refresh](http://refreshyourcache.com/en/cache/).
+To see results, you could either wait for it to expire or perform a [forced refresh](https://refreshyourcache.com/en/cache/).
 
 ## Changelog
 

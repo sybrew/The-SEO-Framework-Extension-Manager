@@ -10,11 +10,11 @@ This extension redirects attachment-page visitors back to the parent post.
 ### Clean up the web
 
 Within WordPress, you can easily upload and manage your media.
-This media, like an image, is often placed inside post content.
+This media, for example, an image, is often placed inside post content.
 
-WordPress creates a new page as a placeholder for each attachment. This it not beneficial for most websites, because your visitors on those pages won't see the originally intended context.
+WordPress creates a new page as a placeholder for each attachment. These pages are not beneficial for most websites, because your visitors won't see the initially intended context. These pages are also harmful to SEO, as there's often no content attached.
 
-With Origin, visitors of the attachment pages are sent to the respective post or page.
+With Origin, all attachment pages will redirect your visitors to the best page available. Albeit the original content, or the plain attachment itself.
 
 ## Usage
 
@@ -22,15 +22,17 @@ With Origin, visitors of the attachment pages are sent to the respective post or
 
 ### Activate Origin
 
-All you'll need to do is activate the Origin extension.
+All you will need to do is activate the Origin extension.
 
-There is no setup required and no options are available.
+There is no setup required, and no options are available.
 
 [tsfep-image id="1"]
 
-### Not all attachments are affected
+### Not all attachments are affected the same way
 
-For an attachment page to redirect, it must be uploaded through the post edit screen. The assigned post must also exist.
+For an attachment page to redirect a visitor to its respective page, the attachment must be uploaded via the post edit screen.
+
+If the assigned page no longer exists or has never existed, Origin will then redirect the visitor to the attachment itself.
 
 ## Changelog
 
@@ -38,7 +40,7 @@ For an attachment page to redirect, it must be uploaded through the post edit sc
 
 [tsfep-release time="November 9th, 2018"]
 
-* **Added:** Attachment pages that don't have a parent now get redirected to the attachment itself.
+* **Added:** Attachment pages that don't have a parent now get redirected to the attachment's location itself.
 
 ### 1.0.0
 

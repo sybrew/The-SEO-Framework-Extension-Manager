@@ -13,29 +13,29 @@ WordPress allows visitors to easily interact with your website. Unfortunately, i
 
 Because WordPress' comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
 
-To reduce comment spam, you could manually moderate the comments, but this is very time consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
+To reduce comment spam, you could manually moderate the comments, but this is very time-consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
 
 ### A non-intrusive extension
 
-Honeypot is for catching robots, not humans. So, visitors shouldn't notice its presence.
+The Honeypot extension is for catching robots, not humans. So, visitors shouldn't notice its presence.
 
 This extension protects all themes and plugins that use the default WordPress comment forms. This includes WooCommerce product reviews.
 
 Apart from other anti-spam techniques, like captcha or an answer field, a honeypot is hidden from visitors.
-This means the visitors doesn't need to interact with the anti-spam technique, improving user experience. In short, your site is protected from spam in the background.
+This means the visitors don't need to interact with the anti-spam technique, improving the user experience. In short, your site is protected from spam in the background.
 
 This extension also has an unmeasurably low server memory and CPU footprint, and it only adds roughly 160 bytes to your page's source. So, there's no performance difference with or without the extension.
 
 All this makes the Honeypot extension more favorable to other solutions.
 
-### Four methods
+### How it works: Four methods
 
 Robots that leave spammy comments use different techniques leaving comments.
 To counter various techniques, four powerful blockades will be implemented on your site when you activate the Honeypot extension.
 
 All methods include randomization, they prevent robots programmatically bypassing the checks.
 
-All four methods combined block a wide overlapping spectrum of robot spamming techniques. Therefore, Honeypot has a **99.98% catch-rate**.
+All four methods combined block a broad overlapping spectrum of robot spamming techniques. Therefore, Honeypot has a **99.98% catch-rate**.
 
 #### First method: Static CSS
 
@@ -53,12 +53,12 @@ Because of its rotation, robots can't be taught what to target, which makes this
 
 #### Third method: JS
 
-The JS honeypot uses a combination unique ID rotation, forced entry and JavaScript.
+The JS honeypot uses a combination of unique ID rotation, forced entry, and JavaScript.
 
-Most robots do not enable JavaScript for improved spamming rate, making this form field very effective.
+Most robots do not enable JavaScript for an increased spamming rate, which makes this form field very useful.
 
 Like the second method, the unique ID rotation prevents robots from learning what to target.
-It also outputs a "textarea" field which must be emptied. This field is automatically emptied and hidden when the visitor uses a JavaScript-enabled browser.
+It also outputs a "textarea" field which must be emptied by the user. However, this field is emptied and hidden automatically when the visitor uses a JavaScript-enabled browser.
 
 If the user doesn't have a JavaScript-enabled browser, these fields will be shown:
 
@@ -73,7 +73,7 @@ A nonce is a number that may only be used once. For this field, it may be used m
 The Nonce honeypot is a form field that is automatically filled in by Honeypot. The nonce must unaffectedly be presented when the comment is sent.
 This prevents robots from using HTTP POST injection, which would otherwise allow them bypassing all other checks.
 
-This field is unique per page, and is valid for 24 hours. When a caching plugin is used, this field stays valid for 10 days.
+This field is unique per page and is valid for 24 hours. When a caching plugin is used, this field stays valid for 10 days.
 To prevent expired keys, a new key will be generated in half of the allotted time, so a visitor can always comment within at least 12 hours.
 
 ## Usage
@@ -84,7 +84,7 @@ To prevent expired keys, a new key will be generated in half of the allotted tim
 
 All you'll need to do is activate the Honeypot extension.
 
-There is no setup required and no options are available.
+There is no setup required, and no options are available.
 
 [tsfep-image id="2"]
 
@@ -96,9 +96,9 @@ These settings can be found at **Settings -> Discussion**.
 
 ### Gotta catch 'em all
 
-With Honeypot, you can be certain that each comment that comes through is written by a human.
+With Honeypot, you can be confident that each comment that comes through is written by a human.
 
-But, if even those comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity on multiple sites.
+But, if even those human comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity over many websites.
 
 ## Developers
 
@@ -137,9 +137,9 @@ add_filter( 'the_seo_framework_honeypot_placeholder', function( $text = '' ) {
 
 #### Adjust hardcore mode
 
-Honeypot autodetermines whether hardcore mode is available based on your site's caching settings.
+Honeypot automatically determines whether the "hardcore"-mode is available based on your site's caching settings.
 
-When hardcore mode is enabled, field names and values are rotated more often. This catches even the smartest bots.
+When the "hardcore"-mode is enabled, field names and values are rotated more often. This catches even the smartest bots.
 
 These values have been carefully tuned and shouldn't have to be changed.
 
@@ -153,15 +153,15 @@ add_filter( 'the_seo_framework_honeypot_hardcore', function( $hardcore = true ) 
 ```php
 add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) {
 	/**
-	 * This filter only works when hardcore mode is enabled. Otherwise, unique
-	 * IDs are created on a per-page basis, which are used indefinitely.
+	 * This filter only works when hardcore-mode is enabled. Otherwise, unique
+	 * IDs are created on a per-page basis, which is used indefinitely.
 	 *
 	 * This is the minimum time a visitor has to submit an illegal comment on your site.
 	 * The maximum time is twice the value returned.
 	 *
 	 * When this time passes, the submitted comment bypasses some spam checks.
 	 *
-	 * Lower than 300 seconds (total 600 i.e. 10 minutes) is not recommended,
+	 * Lower than 300 seconds (total 600, i.e. 10 minutes) is not recommended,
 	 * as some bots enqueue their targets.
 	 *
 	 * Below are the default values.
@@ -178,7 +178,7 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 	 *
 	 * When this time passes, the submitted comment is automatically rejected.
 	 *
-	 * Lower than 3600 seconds (total 7200 i.e. 2 hours) is not recommended,
+	 * Lower than 3600 seconds (total 7200, i.e. 2 hours) is not recommended,
 	 * as some users might generously wait to comment (closing laptop and such).
 	 *
 	 * Below are the default values.
@@ -192,6 +192,12 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 ```
 
 ## Changelog
+
+### 1.1.3
+
+[tsfep-release time="-1"]
+
+* **Fixed:** The textarea no longer has an invalid tag, and its label is now more accessible.
 
 ### 1.1.2
 

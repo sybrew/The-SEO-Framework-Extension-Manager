@@ -9,14 +9,14 @@ This extension makes sure your title output is as configured. Even if your theme
 
 ### Broken WordPress standards
 
-WordPress themes have final control of the title. Quite often, some theme authors opted in for "pretty" titles, rather than semantic titles.
+WordPress themes have final control of the title. Far too often, theme authors opted in for "pretty" titles, rather than semantic titles.
 
 This created various issues.
 
 Firstly, titles shouldn't be pretty; they should be unique. This is a fundamental part of SEO as it creates distinction.
 Secondly, the way WordPress used to handle titles was vague at best. This prevents plugins, among The SEO Framework, from altering the title correctly.
 
-To prevent these issues from happening, new WordPress themes in the WordPress.org repository must follow [a newer standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/).
+To prevent these issues from happening, new WordPress themes in the WordPress.org repository must follow [a more modern standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/).
 
 Not all themes have been updated accordingly, and the Title Fix extension will solve that for you.
 
@@ -41,7 +41,7 @@ All this happens before your pages are sent to the page visitor or crawler, in l
 
 All you'll need to do is activate the Title Fix extension.
 
-There is no setup required and no options are available.
+There is no setup required, and no options are available.
 
 [tsfep-image id="1"]
 
@@ -51,7 +51,7 @@ There is no setup required and no options are available.
 
 [tsfep-release time="August 28th, 2018"]
 
-* **Added:** TSF v3.1 support.
+* **Added:** TSF v3.1 title-fetching support.
 
 ### 1.1.0
 

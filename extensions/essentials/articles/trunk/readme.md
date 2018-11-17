@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/articles/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension enhances your published posts by automatically adding both AMP and non-AMP Structured Data.
+This extension automatically enhances your published posts by adding essential Structured Data.
 
 ## Overview
 
@@ -71,7 +71,7 @@ Every WordPress post, if the rendered data is valid, will have Articles data out
 
 1. Don't use HTML code in your post titles. The theme, through CSS, should render titles correctly.
 2. Do set featured images for posts.
-3. Don't forget to set up basic information at the global SEO Schema settings.
+3. Don't forget to set up the necessary information at the global SEO Schema settings.
 4. Don't forget to set up a Site Icon at the global SEO Schema settings or within Customizer.
 
 ### Automated output
@@ -86,7 +86,7 @@ The data used for output is fetched automatically from your post's structure.
 * **Images:** The images set for the article. This defaults to the post's SEO settings image, and will fall back to the "Featured Image".
 * **Published date:** The date the article was published.
 * **Modified date:** The date the article was last modified.
-* **Author:** The article's author, set in the "Author" meta box. Defaults to the author's display name.
+* **Author:** The article's author, set in the "Author" meta box. This defaults to the author's display name.
 * **Publisher:** The organization, which defaults to the "Schema.org" settings within The SEO Framework.
 * **Description:** The article's description, which is the same as the description output by The SEO Framework.
 
@@ -102,12 +102,12 @@ This is because there are two different requirement standards for AMP and non-AM
 
 #### Special attention for AMP
 
-For valid AMP output, you need to make sure the following two fields are available.
+For correct AMP output, you need to make sure the following two fields are available.
 These fields aren't required for non-AMP, but they are recommended.
 
 * **Image:** This image needs to be set in the in-post SEO social settings.
 	* Alternatively, you can use the Featured Image.
-* **Publisher:** The website must represent an Organization and it must include a logo.
+* **Publisher:** The website must represent an Organization, and it must include a logo.
 	* The logo is taken from **"SEO Settings -> Schema Settings -> Presence -> Website logo"**.
 	* Alternatively, you can set a site icon in Customizer, this requires theme support.
 
@@ -123,7 +123,7 @@ The general article type covers all types.
 
 **These types are covered by General articles:**
 
-* A piece of investigative report.
+* A piece of an investigative report.
 * A news articles.
 * A blog posting.
 
@@ -135,7 +135,7 @@ When the article information is annotated as news, and when your website is auth
 
 These articles mustn't be opinionated pieces, but they must display fact.
 
-This carousel is time sensitize, which means that fresh news entries are much more likely to be displayed here.
+This carousel is time sensitize, which means that recent news entries are much more likely to be displayed here.
 
 [tsfep-image id="2"]
 
@@ -143,11 +143,11 @@ This carousel is time sensitize, which means that fresh news entries are much mo
 
 Unlike News Articles, blog postings won't be displayed within carousels.
 
-The blog entry can be based on either fact, or be an opinionated piece.
+The blog entry can be based on either fact or be an opinionated piece.
 
 This information is mainly used to bind authors, organizations, and dates to the content. By doing so, you add relevance to your content.
 
-This helps search engines tailor displayed search results for its users. So, you increase likelihood to get returning visitors, thus increasing engagement.
+This helps search engines tailor displayed search results for its users. So, you increase the likelihood to get returning visitors, thus increasing engagement.
 
 ## Developers
 
@@ -206,17 +206,17 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 
 [tsfep-release time="August 22nd, 2017"]
 
-* **Changed:** Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the output is overlooked. So:
+* **Changed:** Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the data is overlooked. So:
 	* Published date is now also outputted on non-AMP.
 	* Modified date is now also outputted on non-AMP.
 	* Post Author is now also outputted on non-AMP.
 	* Publisher (Organization name) is now also outputted on non-AMP.
 	* Description is now also outputted on non-AMP.
 	* **Note:** The data may still be marked invalid by the [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool), although far less likely.
-		* The data will always be checked for validity on both AMP and non-AMP, while adhering to Google's guidelines.
+		* The data will always be checked for validity on both AMP and non-AMP while adhering to Google's guidelines.
 		* The data should never be marked invalid on the AMP version.
-* **Improved:** The description is now taken from cache, rather than being regenerated.
-	* This can yield a large beneficial performance effect when parsing large texts.
+* **Improved:** The description is now taken from the cache, rather than being regenerated.
+	* This can yield a sizeable beneficial performance effect when parsing large texts.
 
 ### 1.0.0-gamma
 

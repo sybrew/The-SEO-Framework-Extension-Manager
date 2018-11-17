@@ -19,7 +19,7 @@ After the AMP plugin by Automattic is activated, you can start using the AMP ext
 
 Because AMP pages don't act like regular WordPress pages, many plugins, including The SEO Framework, don't work there by default.
 
-This extension takes important SEO data from The SEO Framework, and outputs them on AMP pages.
+This extension takes important SEO data from The SEO Framework and outputs them on AMP pages.
 
 ### The Articles extension
 
@@ -33,7 +33,7 @@ The [tsfep-extension name="articles"] also outputs its data on AMP pages when th
 
 To use the AMP extension, all you'll need to do is activate this extension.
 
-There is no setup required and no options are available.
+There is no setup required, and no options are available.
 
 Before this extension does anything useful, AMP pages must be set up through Automattic's AMP plugin.
 

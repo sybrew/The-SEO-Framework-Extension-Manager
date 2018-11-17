@@ -9,29 +9,28 @@ This extension keeps track of your website's SEO, optimization, uptime, and stat
 
 ### Let us look
 
-Maintaining a WordPress website isn't easy.
-Before you start, you must find a suitable theme, good plugins, and then set them all up.
+Maintaining a WordPress website isn't easy. Before you start, you must find a suitable theme, useful plugins, and then set them all up.
 
-You might not be wary of your website's issues, its performance, and sometimes plugins conflict with the theme or eachother.
+You might not be wary of your website's issues, its performance, and sometimes plugins conflict with the theme or each other.
 
 This is where our Monitor services come in handy.
-Monitor looks at your website as a real visitor would. Directly from our servers.
+The Monitor extension looks at your website as a real visitor would. Directly from our servers.
 Without WordPress' obstruction, it checks if all the basics have correctly been set up.
 
 ### An inspection for WordPress
 
 Like other web inspectors, Monitor looks for basic website errors.
-Unlike other web inspectors, it compares found data to your WordPress environment, through a two-phase check.
+Unlike other web inspectors, it compares found data to your WordPress environment, with a two-phase check.
 
 The first phase happens on our servers, where we crawl several URLs on your website to find common issues. All information we find is sent back to the Monitor extension.
 
-The second phase happens in your dashboard, where the information is compared to your WordPress environement, like SEO settings.
+The second phase happens in your dashboard, where the information is compared to your WordPress environment, like SEO settings.
 
-This cooperation creates personalized information, like no other inspector could.
+This cooperation creates personalized information like no other inspector could.
 
 ### Statistical data, bundled with your license
 
-*N.B. These features are under construction. ETA early 2018.*
+*N.B. These features are under construction. ETA late 2019.*
 
 Website statistics, like uptime and performance, can cost you unnecessarily amounts.
 
@@ -47,18 +46,18 @@ Thus increasing your website's bounce rate.
 Increased bounce rate indicates to search engines that your content wasn't relevant to the search query.
 When this happens more often than not, your website will fall in search ranking position.
 
-Monitor will, in set intervals, check your website's performance.
+The Monitor extension will, in set intervals, check your website's performance.
 
 #### High uptime
 
 Website uptime is another ranking factor. This one is directly measured.
 
 Naturally, a website that cannot be reached won't sell anything and will miss out on user engagement.
-A website that's down will also increase bounce rate. As described earlier, your website will then fall in search ranking position.
+A website that's down will also increase bounce rate. As described earlier, your site will then fall in search ranking position.
 
 When a website is down often, a page can be seen as missing. This can eventually deindex your pages from the search results.
 
-Monitor will, also in set intervals, check your website's uptime. So you can be certain that your website is available.
+Monitor will, also in set intervals, check your website's uptime. So you can be confident that your site is available.
 
 ### Privacy first
 
@@ -98,7 +97,7 @@ Your website will also automatically be enqueued for a crawl.
 
 Crawling a website from our servers can take from a few seconds up to three minutes.
 
-This is done in scheduled one-minute intervals. When many sites are in the queue, some might be moved upfront at the next interval.
+This is done in scheduled one-minute intervals. When many sites are in the queue, some might be moved up front at the next interval.
 
 If you wish to enqueue a crawl, click on the "Request Crawl" button in the Control Panel.
 
@@ -195,14 +194,14 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 [tsfep-release time="February 17th, 2017"]
 
 * **Extension:**
-	* **Improved:** The "invalid sitemap" notification now suggest you contacting premium support, rather than stating the inconvinient obvious.
-	* **Fixed:** The robots.txt file got marked as static whilst being dynamic when another plugin or theme affects the output.
+	* **Improved:** The "invalid sitemap" notification now suggest you contacting premium support, rather than stating the inconvenient obvious.
+	* **Fixed:** The robots.txt file got marked as static while being dynamic when another plugin or theme affects the output.
 	* **Fixed:** Requesting a crawl through AJAX now works correctly when debugging is disabled.
 	* **Fixed:** Updating data through AJAX now works correctly when debugging is disabled.
 * **API - Extension:**
 	* **Fixed:** A PHP warning was output when making the first connection.
 	* **Fixed:** The disconnection button on decoupled sites now works.
-	* **Fixed:** When the site has been decoupled from the API server, the notices are now more in-line with events.
+	* **Fixed:** When your website has been decoupled from the API server, the notices are now more in-line with events.
 	* **Fixed:** When the site has been decoupled from the API server, the remote data will be removed from view.
 * **API - Our servers:**
 	* **Improved:** The API server has been moved to a dedicated server instance. This allows for more accurate measurements for upcoming features.

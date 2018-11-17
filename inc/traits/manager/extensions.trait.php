@@ -429,8 +429,8 @@ trait Extensions_Actions {
 		$hash = hash( $type, serialize( static::$extensions ) );
 
 		return $checksum = [
-			'hash' => $hash,
-			'type' => $type,
+			'hash'    => $hash,
+			'type'    => $type,
 			'matches' => static::get_external_extensions_checksum(),
 		];
 	}
