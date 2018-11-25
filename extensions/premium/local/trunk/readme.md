@@ -126,6 +126,26 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.2
+
+[tsfep-release time="-1"]
+
+* **Added:** This extension will try reparsing the values in the admin area to fix the openinghours specification issues below, only once.
+* **Updated:** The department type list is updated with these items:
+	* **Now with verified support:**
+		* MedicalBusiness
+		* MedicalClinic
+		* Optician
+		* Distillery
+	* **Newly added:**
+		* ProfessionalService
+			* Note that subtypes including Dentist, Accounting Service, Attorney, Notary, Electrician, House Painter, etc., etc., are also available.
+			* Due to great diversity the types above are not listed as subtypes.
+* **Changed:** You can now specify up to 21 opening hours per department, instead of 7.
+	* This change most prominently adds support for siestas.
+* **Fixed:** The openinghours specification is now correctly set when the department is closed or open all day.
+* **Fixed:** The openinghours specification now correctly purges when the values are incorrect.
+
 ### 1.1.1
 
 [tsfep-release time="November 9th, 2018"]

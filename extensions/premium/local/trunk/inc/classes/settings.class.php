@@ -140,8 +140,11 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 * @return void Early on second call.
 	 */
 	private function _init_main() {
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
 		/**
 		 * Set options index.
@@ -261,7 +264,7 @@ final class Settings {
 		$this->additional_js[] = [
 			'name' => 'tsfem-local',
 			'base' => TSFEM_E_LOCAL_DIR_URL,
-			'ver' => TSFEM_E_LOCAL_VERSION,
+			'ver'  => TSFEM_E_LOCAL_VERSION,
 		];
 
 		/**
@@ -270,11 +273,11 @@ final class Settings {
 		 */
 		$this->additional_l10n[] = [
 			'dependency' => 'tsfem-local',
-			'name' => 'tsfem_e_localL10n',
-			'strings' => [
+			'name'       => 'tsfem_e_localL10n',
+			'strings'    => [
 				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
-				'i18n' => [
-					'fixForm' => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
+				'i18n'  => [
+					'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
 					'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
 				],
 			],
@@ -413,6 +416,18 @@ final class Settings {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Reprocesses stored data.
+	 *
+	 * Warning: Heavy.
+	 *
+	 * @since 1.1.2
+	 */
+	public function _reprocess_all_stored_data() {
+		$this->_init_main();
+		$this->process_all_stored_data();
 	}
 
 	/**

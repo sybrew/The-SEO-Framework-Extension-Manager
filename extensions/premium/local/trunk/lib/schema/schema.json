@@ -540,8 +540,7 @@
 								},
 								{
 									"_if" : "this",
-									"_op" : "===",
-									"_value" : "",
+									"_op" : "empty",
 									"_do" : "kill_pack"
 								}
 							],
@@ -598,8 +597,7 @@
 								},
 								{
 									"_if" : "this",
-									"_op" : "===",
-									"_value" : "",
+									"_op" : "empty",
 									"_do" : "kill_pack"
 								}
 							],

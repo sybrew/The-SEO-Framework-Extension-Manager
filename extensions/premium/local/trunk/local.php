@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Local;
  * Extension Name: Local
  * Extension URI: https://theseoframework.com/extensions/local/
  * Extension Description: The Local extension lets you set up important local business information for search engines to consume.
- * Extension Version: 1.1.1
+ * Extension Version: 1.1.2
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -39,7 +39,13 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_LOCAL_VERSION', '1.1.1' );
+define( 'TSFEM_E_LOCAL_VERSION', '1.1.2' );
+
+/**
+ * The extension database version.
+ * @since 1.1.2
+ */
+define( 'TSFEM_E_LOCAL_DB_VERSION', '1100' );
 
 /**
  * The extension file, absolute unix path.
@@ -78,7 +84,12 @@ define( 'TSFEM_E_LOCAL_PATH_TRAIT', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_S
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
 	return;
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\_local_init', 11 );
+
+if ( TSFEM_E_LOCAL_DB_VERSION > \tsf_extension_manager_db_version( 'local' ) ) {
+	require TSFEM_E_LOCAL_DIR_PATH . 'upgrade.php';
+}
+
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_local_init', 11 );
 /**
  * Initializes the extension.
  *
@@ -150,5 +161,5 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
 
-	return $loaded[ $file ] = (bool) require( TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php' );
+	return $loaded[ $file ] = (bool) require TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php';
 }

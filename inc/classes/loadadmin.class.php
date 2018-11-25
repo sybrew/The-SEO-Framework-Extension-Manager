@@ -858,7 +858,7 @@ final class LoadAdmin extends AdminPages {
 		$a11y = $a11y ? ' tsfem-show-icon' : '';
 
 		$notice  = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
-		$notice .= '<a class="hide-if-no-js tsfem-dismiss" title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
+		$notice .= '<a class="hide-if-no-js tsfem-dismiss" href=javascript:; title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
 		$notice .= $escape ? \esc_html( $message ) : $message;
 		$notice .= '</p></div>';
 

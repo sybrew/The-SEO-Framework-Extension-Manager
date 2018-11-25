@@ -1182,12 +1182,11 @@ final class Admin extends Api {
 		$marked_inactive = $this->get_option( 'site_marked_inactive' );
 
 		if ( $requires_fix || $marked_inactive ) {
+			$title = \esc_html__( 'Reconnect site', 'the-seo-framework-extension-manager' );
 			if ( $marked_inactive ) {
 				//* Inactive is marked more severely, and most likely $requires_fix would also be true.
-				$title = \esc_html__( 'Reconnect site', 'the-seo-framework-extension-manager' );
 				$description = \esc_html__( 'Your website has been marked inactive.', 'the-seo-framework-extension-manager' );
 			} else {
-				$title = \esc_html__( 'Fix site', 'the-seo-framework-extension-manager' );
 				$description = \esc_html__( 'The instance ID of your site does not match the remote server.', 'the-seo-framework-extension-manager' );
 			}
 

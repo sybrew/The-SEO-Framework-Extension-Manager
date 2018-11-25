@@ -675,7 +675,7 @@ final class SchemaPacker {
 				elseif ( '$level' === $c->_to ) :
 					return $this->level;
 				endif;
-				return $c->to;
+				return $c->_to;
 
 			case 'current':
 				return current( $value );

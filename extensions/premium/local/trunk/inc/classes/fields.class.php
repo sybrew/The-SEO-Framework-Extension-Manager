@@ -549,7 +549,7 @@ final class Fields {
 						],
 						'_range' => [
 							0,
-							7,
+							21,
 							1,
 						],
 					],
@@ -564,6 +564,9 @@ final class Fields {
 				'_fields' => $this->get_opening_hours_action_fields(),
 			],
 		];
+	}
+
+	public function get_image_fields() {
 	}
 
 	/**
@@ -1661,7 +1664,7 @@ final class Fields {
 			],
 			[
 				'MedicalBusiness',
-				\__( 'Medical business', 'the-seo-framework-extension-manager' ) . ' *',
+				\__( 'Medical business', 'the-seo-framework-extension-manager' ),
 				[
 					//= Names with asterisk are still under review by Schema.org and are currently Extensions...
 					[
@@ -1694,7 +1697,7 @@ final class Fields {
 					],
 					[
 						'MedicalClinic',
-						\__( 'Medical clinic', 'the-seo-framework-extension-manager' ) . ' *',
+						\__( 'Medical clinic', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Midwifery',
@@ -1714,7 +1717,7 @@ final class Fields {
 					],
 					[
 						'Optician',
-						\__( 'Optician', 'the-seo-framework-extension-manager' ) . ' *',
+						\__( 'Optician', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Optometric',
@@ -1884,7 +1887,7 @@ final class Fields {
 					],
 					[
 						'Distillery',
-						\__( 'Distillery', 'the-seo-framework-extension-manager' ) . ' *',
+						\__( 'Distillery', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
@@ -2020,6 +2023,11 @@ final class Fields {
 						\__( 'Resort', 'the-seo-framework-extension-manager' ),
 					],
 				],
+			],
+			[
+				'ProfessionalService',
+				\__( 'Professional service', 'the-seo-framework-extension-manager' ),
+				[],
 			],
 			[
 				'RadioStation',

@@ -190,7 +190,7 @@ trait Schema_Packer {
 					 */
 					$_data = $packer->_pack();
 					if ( isset( $_data ) )
-			 			$_collection->department[] = $_data;
+						$_collection->department[] = $_data;
 				}
 				if ( [] === $_collection->department )
 					unset( $_collection->department );

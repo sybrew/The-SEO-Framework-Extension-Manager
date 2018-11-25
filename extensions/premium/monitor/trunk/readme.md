@@ -115,6 +115,15 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.1-beta-5
+
+[tsfep-release time="-1"]
+
+* **Extension**:
+	* **Changed:** The scheme warning is now more severe, because Firefox and Chrome display warnings that are off-putting.
+	* **Changed:** The `favicon.ico` test is now always displayed, regardless of the site icon settings.
+	* **Fixed:** Keyboard accessibility issues.
+
 ### 1.2.0-beta-5
 
 [tsfep-release time="August 28th, 2018"]

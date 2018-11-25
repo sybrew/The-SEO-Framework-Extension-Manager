@@ -130,12 +130,12 @@ final class Upgrader {
 	 */
 	public function get( $what ) {
 		switch ( $what ) :
-			case 'previous_db_versions' :
-			case 'current_db_versions' :
+			case 'previous_db_versions':
+			case 'current_db_versions':
 				$val = $this->{$what};
 				break;
 
-			default :
+			default:
 				$val = '';
 		endswitch;
 

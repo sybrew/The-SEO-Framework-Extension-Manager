@@ -144,8 +144,8 @@ function load_upgrader() {
 function get_ajax_notice( $success = false, $notice = '', $code = -1, $type = '' ) {
 	return [
 		'success' => $success,
-		'notice' => $notice,
-		'code' => intval( $code ),
-		'type' => $type ?: ( $success ? 'success' : 'error' ),
+		'notice'  => $notice,
+		'code'    => intval( $code ),
+		'type'    => $type ?: ( $success ? 'success' : 'error' ),
 	];
 }

@@ -33,7 +33,7 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  * Each called function will upgrade the plugin's database version by its iteration.
  *
  * @since 1.5.0
- * @param Upgrader $updater The TSF_Extension_Manager\Upgrader instance.
+ * @param Upgrader $upgrader The TSF_Extension_Manager\Upgrader instance.
  */
 function _do_critical_core_upgrade( Upgrader $upgrader ) {
 

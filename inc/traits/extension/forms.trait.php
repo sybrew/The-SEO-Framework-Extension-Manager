@@ -264,7 +264,7 @@ trait Extension_Forms {
 			}
 
 			$output .= sprintf(
-				'<form action="%s" method=post id="%s" class="hide-if-js %s">%s</form>',
+				'<form action="%s" method=post id=%s class="hide-if-js %s">%s</form>',
 				\esc_url( $url, [ 'http', 'https' ] ),
 				\esc_attr( $items['id'] ),
 				\esc_attr( $items['class'] ),
@@ -272,7 +272,7 @@ trait Extension_Forms {
 			);
 
 			$button = sprintf(
-				'<a id="%s" class="hide-if-no-js %s" title="%s">%s</a>',
+				'<a id=%s class="hide-if-no-js %s" href=javascript:; title="%s">%s</a>',
 				\esc_attr( $items['ajax-id'] ),
 				\esc_attr( $items['ajax-class'] ),
 				\esc_attr( $items['ajax-title'] ),

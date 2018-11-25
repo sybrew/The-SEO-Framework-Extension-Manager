@@ -18,7 +18,7 @@ body.tsfem #update-nag {
 .wrap.tsfem .notice,
 .tsfem-notice {
 	margin: 1.2vw 0 0;
-	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
+	box-shadow: 0 .4em .8em rgba(0,0,0,.18);
 }
 
 /* ### Notices: Self.
@@ -269,7 +269,7 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap {
 	background-color: #fff;
-	box-shadow: 0 .4em 1em rgba(0,0,0,.18);
+	box-shadow: 0 .4em .8em rgba(0,0,0,.18);
 	width: 100%;
 	margin: 0;
 	padding: 1em 1.2vw;
@@ -436,7 +436,7 @@ body.tsfem .wrap {
 	background: #eee;
 	font-size: 1em;
 	border: 0;
-	box-shadow: 0 0.2em 0 #cacaca;
+	box-shadow: 0 .2em 0 #cacaca;
 	color: #666;
 	text-shadow: 0 -1px 1px #efefef, 1px 0 1px #efefef, 0 1px 1px #efefef, -1px 0 1px #efefef;
 	font-size: 1em;
@@ -486,10 +486,18 @@ body.tsfem .wrap {
 	text-shadow: 0 -1px 1px #0078a2,1px 0 1px #0078a2,0 1px 1px #0078a2,-1px 0 1px #0078a2;
 }
 
-.tsfem-button-green,
-.tsfem-button-green:focus,
+.tsfem-button-primary-dark,
+.tsfem-button-primary-dark:focus,
 .tsfem-button-extension-activate,
 .tsfem-button-extension-activate:focus {
+	color: #fff;
+	background: #535353;
+	box-shadow: 0 .2em 0 #202020;
+	text-shadow: 1px 0 1px rgba(0,0,0,.18), -1px 0 1px rgba(0,0,0,.18);
+}
+
+.tsfem-button-green,
+.tsfem-button-green:focus {
 	color: #fff;
 	background: #00cd98;
 	box-shadow: 0 .2em 0 #008964;
@@ -621,7 +629,7 @@ body.tsfem .wrap {
 .tsfem-button-flat:active,
 .tsfem-button-flat:focus {
 	margin: 0;
-	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset; /* 1,2: transition positioning */
+	box-shadow: 0 0 .3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset; /* 1,2: transition positioning */
 	filter: none;
 	transition: box-shadow .25s;
 	padding: .4em 1em .5em;
@@ -639,7 +647,7 @@ body.tsfem .wrap {
 
 .tsfem-button-flat:active {
 	margin: 0;
-	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 .1em .7em .2em rgba(0,0,0,.3) inset; /* 1: transition positioning */
+	box-shadow: 0 0 .3em rgba(0,0,0,0), 0 .1em .7em .2em rgba(0,0,0,.3) inset; /* 1: transition positioning */
 	transition-duration: .15s;
 }
 
@@ -688,8 +696,12 @@ body.tsfem .wrap {
 	z-index: 1;
 	width: 100%;
 	display: block;
-	width:  140px;
-	box-sizing:  border-box;
+	width: 140px;
+	box-sizing: border-box;
+}
+
+.tsfem-switch-button-container input[type=checkbox] ~ button {
+	visibility: hidden;
 }
 
 .tsfem-switch-button-container input[type=checkbox] + label {
@@ -700,6 +712,12 @@ body.tsfem .wrap {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.tsfem-switch-button-container input[type=checkbox]:focus + label {
+	color: #777;
+	-webkit-filter: brightness(0.925);
+	filter: brightness(0.925);
 }
 
 .tsfem-switch-button-container button {
@@ -725,6 +743,7 @@ body.tsfem .wrap {
 	opacity: 1;
 	z-index: 2;
 	transition: transform 1s, opacity .5s;
+	visibility: visible;
 }
 
 /* ## Disabled Buttons.
@@ -734,6 +753,9 @@ body.tsfem .wrap {
 .tsfem-button-disabled:hover,
 .tsfem-button-disabled:active,
 .tsfem-button-disabled:focus {
+	background: #ccc;
+	color: #666;
+	text-shadow: 0 -1px 1px #efefef, 1px 0 1px #efefef, 0 1px 1px #efefef, -1px 0 1px #efefef;
 	-webkit-filter: grayscale(1);
 	filter: grayscale(1);
 	cursor: not-allowed;
@@ -754,7 +776,7 @@ body.tsfem .wrap {
 	max-width: 690px;
 	padding: 1em 1.5em;
 	margin: 0 auto 1.2vw;
-	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
+	box-shadow: 0 .3em .6em rgba(0,0,0,.18);
 	background: #fff;
 	box-sizing: border-box;
 }
@@ -827,7 +849,7 @@ body.tsfem .wrap {
 	-webkit-flex-basis: calc( 50% - 1.2vw );
 	flex-basis: calc( 50% - 1.2vw );
 	background: #fff;
-	box-shadow: 0 .3em 1em rgba(0,0,0,.18);
+	box-shadow: 0 .3em .6em rgba(0,0,0,.18);
 	margin: .6vw;
 	padding: 0;
 	min-height: 300px;
@@ -878,7 +900,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-header {
-	box-shadow: 0 .2em .75em rgba(0,0,0,.18);
+	box-shadow: 0 .2em .4em rgba(0,0,0,.18);
 	z-index: 5;
 }
 
@@ -1068,7 +1090,7 @@ h4.tsfem-cp-title {
 }
 
 .tsfem-description {
-	font-size: 0.93em;
+	font-size: .93em;
 	font-style: oblique;
 	text-indent: .5em;
 }
@@ -1109,13 +1131,18 @@ h4.tsfem-cp-title {
 	margin: 0;
 	padding: .33em;
 	min-height: 122px;
-	border-radius: .5em 0 0 .5em;
-	box-shadow: 0 .1em .5em .1em rgba(0,0,0,.18) inset;
+	border-radius: 6px;
+	box-shadow: 0 .1em .4em 0 rgba(0,0,0,.3), 0 0 0 0 transparent inset;
 	background: #fff;
 	-webkit-align-self: auto;
 	align-self: auto;
 	-webkit-justify-content: center;
 	justify-content: center;
+	transition: box-shadow .2s ease-out;
+}
+
+.tsfem-extension-entry.tsfem-extension-activated {
+	box-shadow: 0 0 0 0 transparent, 0 .1em .4em 0 rgba(0,0,0,.4) inset;
 }
 
 .tsfem-extension-entry > * {
@@ -1173,6 +1200,19 @@ h4.tsfem-cp-title {
 	flex: 0 1 0%; */
 }
 
+.tsfem-extension-entry .tsfem-extension-title:after {
+	content: "\2022\00fe0e";
+	margin-left: 7px;
+	font-weight: 400;
+	font-size: 1em;
+	color: transparent;
+	transition: color .5s;
+}
+
+.tsfem-extension-entry.tsfem-extension-activated .tsfem-extension-title:after {
+	color: currentColor;
+}
+
 .tsfem-extension-title {
 	min-width: 120px;
 	font-size: 1.33em;
@@ -1186,11 +1226,11 @@ h4.tsfem-cp-title {
 .tsfem-extension-type {
 	margin: 0;
 	padding: 0;
-	font-size: 0.83em;
+	font-size: .83em;
 }
 
 .tsfem-extension-subheader {
-	padding: 0.667em 0;
+	padding: .667em 0;
 }
 
 .tsfem-extension-action > *,
@@ -1282,7 +1322,7 @@ h4.tsfem-cp-title {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	word-spacing: -1px;
-	font-size: 0.9em;
+	font-size: .9em;
 	margin: 0 7px;
 	padding: 0;
 	font-style: oblique;
@@ -1370,12 +1410,11 @@ h4.tsfem-cp-title {
 
 .tsfem-ajax:after {
 	font-size: 1.225em;
-	line-height: 0.816em; /* 1:1.225, needs this correction for flex */
+	line-height: .816em; /* 1:1.225, needs this correction for flex */
 }
 
 .tsfem-dashicon:after {
 	font-size: 1.2em;
-	vertical-align: middle;
 	vertical-align: text-bottom;
 	margin-right: 2px;
 }
@@ -1595,8 +1634,8 @@ a.tsfem-tooltip-item {
 
 .tsfem-flip-hide-down,
 .tsfem-flip-hide-up {
-	-webkit-transform: rotateX(90deg) translateY(0.5em);
-	transform: rotateX(90deg) translateY(0.5em);
+	-webkit-transform: rotateX(90deg) translateY(.5em);
+	transform: rotateX(90deg) translateY(.5em);
 	-webkit-transform-origin: 0 100% 0;
 	transform-origin: 0 100% 0;
 	opacity: 0;

@@ -117,22 +117,24 @@ final class Tests {
 
 		$state = 'good';
 
-		if ( isset( $data['meta'] ) && $data['meta'] ) {
-			$content = $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-			goto end;
+		if ( empty( $data['meta'] ) ) {
+			$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer to add extra support for mobile devices.', 'the-seo-framework-extension-manager' ) );
+			$state = 'warning';
+		} else {
+			$content .= $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
 		}
 
 		if ( empty( $data['static'] ) ) {
-			$content = $this->wrap_info( \esc_html__( 'No favicon has been found.', 'the-seo-framework-extension-manager' ) );
-			$state = 'bad';
+			$content .= $this->wrap_info( \tsf_extension_manager()->convert_markdown(
+				/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+				\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. You should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
+				[ 'code' ]
+			) );
+			$state = 'warning';
 		}
-		$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer.', 'the-seo-framework-extension-manager' ) );
 
 		end :;
-		return [
-			'content' => $content,
-			'state' => $state,
-		];
+		return compact( 'content', 'state' );
 	}
 
 	/**
@@ -480,7 +482,7 @@ final class Tests {
 				$content .= $this->wrap_info(
 					\esc_html__( 'Your website is only accessible on HTTP.', 'the-seo-framework-extension-manager' )
 				);
-				$state = 'okay';
+				$state = 'warning';
 				$_expected_scheme = 'http';
 				break;
 		endswitch;

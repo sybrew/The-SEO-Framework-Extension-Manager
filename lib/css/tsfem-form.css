@@ -45,7 +45,7 @@
 	width: 100%;
 	background: #fefefe;
 	color: #23282d;
-	box-shadow: 0 .1em 0.6em rgba(0,0,0,.18);
+	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.18);
 	-webkit-align-items: center;
 	align-items: center;
 	cursor: pointer;
@@ -67,12 +67,12 @@
 
 .tsfem-form-collapse-header:hover,
 .tsfem-form-collapse > input[type="checkbox"]:focus + .tsfem-form-collapse-header {
-	box-shadow: 0 .1em .5em .1em rgba(0,0,0,.25);
+	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.3);
 }
 
 .tsfem-form-collapse > input[type="checkbox"]:active + .tsfem-form-collapse-header,
 .tsfem-forum-collapse-header:active {
-	box-shadow: 0 .1em .7em .3em rgba(0,0,0,.28);
+	box-shadow: 0 0em 0em .1em rgba(0,0,0,.18);
 }
 
 .tsfem-form-collapse-title-wrap {

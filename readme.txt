@@ -167,7 +167,18 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * TODO, 2018
 
-* Fixed: The translations are now correctly loaded for new users.
+**Plugin Improvements:**
+
+* **Improved:** The extension activation visuals are now more accessible.
+* **Fixed:** Various AJAX buttons can now be used with a keyboard.
+* **Fixed:** The deactivation button can now be used with a keyboard.
+* **Fixed:** The translations are now correctly loaded for new plugin users.
+
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Monitor](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.0.0 - Divine SEO =
 
