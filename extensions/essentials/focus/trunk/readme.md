@@ -153,6 +153,18 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ## Changelog
 
+### 1.2.0
+
+[tsfep-release time="-1"]
+
+* **Added:** The new WordPress 5.0 editor (Gutenberg) support. However, for this to function, you must update to The SEO Framework 3.2.0 or greater.
+* **Changed:** The first paragraph lookup's logic is vastly improved in both performance and accuracy.
+	* With this, it's now dubbed "introduction".
+	* It can now grab more than just the first paragraph when the parser deems the content useless.
+* **Improved:** General parsing performance by simplifying HTML tag exclusions.
+* **Fixed:** On the classic editor, the old slug is no longer considered for page URL ratings.
+* **Fixed:** On the classic editor, updating the slug more than once will no longer block assessing of it.
+
 ### 1.1.1
 
 [tsfep-release time="November 9th, 2018"]

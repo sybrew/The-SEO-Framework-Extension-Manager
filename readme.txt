@@ -177,6 +177,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 **Updated Extensions:**
 
 * [Local](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
 * [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
 * [Monitor](https://theseoframework.com/extensions/honeypot/#changelog)
 

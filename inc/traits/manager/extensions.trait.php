@@ -97,7 +97,7 @@ trait Extensions_Properties {
 				'area' => 'audit, content, keywords',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1541599562',
+				'last_updated' => '1543391912',
 				'requires' => '4.8.0',
 				'tested' => '4.9.8',
 				'requires_tsf' => '3.0.0',
@@ -223,9 +223,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'e3dcd3581e8a9f638d238a4313e4929e27d6fbe4cdb804e94872178baff3487d',
-			'sha1'   => '597cad9be7f4017eded04fc1914ff6b66d20b3cf',
-			'md5'    => '2d7d273866e0b7f5847825dd49783c76',
+			'sha256' => '444bcf23c5933c21b815a58dff075f93c7bbc073fb99720dae7e1392853b169e',
+			'sha1'   => '6b647bd4ba5730b7fa58cbc9e6e2b4f0d0518c61',
+			'md5'    => '71960f98c9e67c268cceb9b441fb5d09',
 		];
 	}
 

@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  * Extension Name: Focus
  * Extension URI: https://theseoframework.com/extensions/focus/
  * Extension Description: The Focus extension guides you through the process of writing targeted content that ranks with focus keywords, and for Premium users also their inflections and synonyms.
- * Extension Version: 1.1.1
+ * Extension Version: 1.2.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_FOCUS_VERSION', '1.1.1' );
+define( 'TSFEM_E_FOCUS_VERSION', '1.2.0' );
 
 /**
  * The extension file, absolute unix path.

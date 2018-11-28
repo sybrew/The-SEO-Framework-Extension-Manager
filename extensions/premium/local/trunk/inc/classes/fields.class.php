@@ -566,9 +566,6 @@ final class Fields {
 		];
 	}
 
-	public function get_image_fields() {
-	}
-
 	/**
 	 * Returns the ISO 3166-1-Alpha-2 country list items.
 	 *

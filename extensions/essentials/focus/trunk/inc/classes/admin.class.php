@@ -73,6 +73,22 @@ final class Admin extends Core {
 	}
 
 	/**
+	 * Checks whether we're using the new WordPress 5.0 editor.
+	 *
+	 * @since 1.2.0
+	 * @return bool
+	 */
+	private function is_gutenberg_page() {
+		if ( function_exists( '\\use_block_editor_for_post' ) )
+			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
+
+		if ( function_exists( '\\is_gutenberg_page' ) )
+			return \is_gutenberg_page();
+
+		return false;
+	}
+
+	/**
 	 * Returns active focus elements.
 	 *
 	 * @since 1.0.0
@@ -104,6 +120,7 @@ final class Admin extends Core {
 		 * @see PHP `array_push()`
 		 * @see PHP `array_unshift()`
 		 * @since 1.0.0
+		 * @NOTE: No longer reliably works with Gutenberg.
 		 *
 		 * @param array $elements : { 'type' => [
 		 *    'querySelector' => string 'append|dominate'.
@@ -112,15 +129,18 @@ final class Admin extends Core {
 		return \apply_filters_ref_array( 'the_seo_framework_focus_elements', [
 			[
 				'pageTitle' => [
-					'#titlewrap > input' => 'append',
+					'#titlewrap > input'     => 'append',
+					'#tsfem-focus-gbc-title' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'pageUrl' => [
-					'#sample-permalink' => 'dominate',
+					'#sample-permalink'     => 'dominate',
+					'#tsfem-focus-gbc-link' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'pageContent' => [
-					'#content' => 'append',
+					'#content'                 => 'append',
+					'#tsfem-focus-gbc-content' => 'append',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
 				'seoTitle' => [
@@ -150,6 +170,7 @@ final class Admin extends Core {
 	 * Enqueues in-post scripts, dependencies, colors, etc.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Now passes the isGutenbergPage data property.
 	 * @access private
 	 * @uses \TSF_Extension_Manager\InpostGUI
 	 * Callback via \TSF_Extension_Manager\InpostGUI
@@ -173,6 +194,7 @@ final class Admin extends Core {
 					'i18n' => [
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
 					],
+					'isGutenbergPage'    => $this->is_gutenberg_page(),
 				],
 			],
 			'tmpl' => [

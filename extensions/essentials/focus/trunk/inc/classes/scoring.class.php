@@ -288,23 +288,23 @@ Scoring::get_instance()->template = [
 			],
 		],
 	],
-	'firstParagraph' => [
-		'title' => \esc_html__( 'First paragraph:', 'the-seo-framework-extension-manager' ),
+	'introduction' => [
+		'title' => \esc_html__( 'Introduction:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageContent',
 			'regex' => [
 				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
-				'/^(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/gi', // 1: Match first paragraph
-				'/[^>]+(?=<|$|^)/gi',                   // 2: All but tags.
-				'/{{kw}}/gi',                           // 3: Match words.
+				'/(?!>)[^<>]+(?=<|$)/gi',                             // 1: All but tags.
+				'/^(.|\\s){0,200}(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/gi', // 2: Match first paragraph, or, when it's less than 200 character, the next paragraph(s).
+				'/{{kw}}/gi',                                         // 3: Match words.
 			],
 		],
 		'maxScore' => 100,
 		'minScore' => 0,
 		'phrasing' => [
-			66  => \esc_html__( 'The subject is found a few times in the first paragraph, this is good.', 'the-seo-framework-extension-manager' ),
-			50  => \esc_html__( 'The subject is found in the first paragraph, consider highlighting it a bit more.', 'the-seo-framework-extension-manager' ),
-			0   => \esc_html__( 'The subject is not found in the first paragraph, you should write an introduction on it.', 'the-seo-framework-extension-manager' ),
+			66  => \esc_html__( 'The subject is found a few times in the introduction, this is good.', 'the-seo-framework-extension-manager' ),
+			50  => \esc_html__( 'The subject is found in the introduction, consider highlighting it a bit more.', 'the-seo-framework-extension-manager' ),
+			0   => \esc_html__( 'The subject is not found in the introduction, you should highlight it.', 'the-seo-framework-extension-manager' ),
 		],
 		'rating' => [
 			100 => 4,
@@ -331,8 +331,8 @@ Scoring::get_instance()->template = [
 		'assessment' => [
 			'content' => 'pageContent',
 			'regex' => [
-				'/[^>]+(?=<|$|^)/gi', // 1: All but tags.
-				'/{{kw}}/gi',         // 2: Match words.
+				'/(?!>)[^<>]+(?=<|$)/gi', // 1: All but tags.
+				'/{{kw}}/gi',             // 2: Match words.
 			],
 		],
 		'maxScore' => 800,
@@ -433,7 +433,10 @@ Scoring::get_instance()->template = [
 		'title' => \esc_html__( 'Page URL:', 'the-seo-framework-extension-manager' ),
 		'assessment' => [
 			'content' => 'pageUrl',
-			'regex' => '/{{kw}}/gi',
+			'regex' => [
+				'/(?!>)[^<>]+(?=<|$)/gi', // 1: All but tags.
+				'/{{kw}}/gi',             // 2: Match words.
+			],
 		],
 		'maxScore' => 125,
 		'minScore' => 0,

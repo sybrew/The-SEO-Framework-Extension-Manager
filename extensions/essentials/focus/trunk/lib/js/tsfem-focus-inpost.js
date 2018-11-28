@@ -180,9 +180,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 				//= Test if entries exist.
 				if ( set ) {
-					// let values = Object.values( registry[ area ][ type ] );
+					let values = Object.values( registry[ area ][ type ] );
 					//= IE11 replacement for Object.values. <https://stackoverflow.com/a/42830295>
-					let values = Object.keys( registry[ area ][ type ] ).map( e => registry[ area ][ type ][ e ] );
+					// let values = Object.keys( registry[ area ][ type ] ).map( e => registry[ area ][ type ][ e ] );
 					if ( values.indexOf( selector ) > -1 ) continue;
 					registry[ area ][ type ].push( selector );
 				} else {
@@ -308,7 +308,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		const countChars = ( contents ) => {
 			// Strip all XML tags first.
-			contents = contents.match( /[^>]+(?=<|$|^)/gi );
+			contents = contents.match( /(?!>)[^<>]+(?=<|$)/gi );
 			return contents && contents.join( '' ).length || 0;
 		}
 
@@ -370,7 +370,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		const checkElement = ( element ) => {
 			let selector = document.querySelector( element ),
-		 		$dfd = $.Deferred();
+				 $dfd = $.Deferred();
 
 			content = typeof selector.value !== 'undefined' ? selector.value : '';
 			// if ( ! content.length ) content = selector.placeholder;
@@ -559,7 +559,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let _forms = JSON.parse( l10n.defaultLexicalForm );
 
 			//? IE11 replacement for Object.values( _forms ).
-			_forms = Object.keys( _forms ).map( e => _forms[ e ] );
+			// _forms = Object.keys( _forms ).map( e => _forms[ e ] );
+			_forms = Object.values( _forms );
 
 			if ( entries.length ) {
 				entries.forEach( ( entry ) => {
@@ -1175,14 +1176,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					case 'enabled' :
 						editToggle.disabled = false;
 						//= Simulate toggle(*,false) IE11.
-						editWrap.classList.add( disabledClass );
-						editWrap.classList.remove( disabledClass );
+						// editWrap.classList.add( disabledClass );
+						// editWrap.classList.remove( disabledClass );
+						editWrap.classList.toggle( disabledClass, false );
 						break;
 					case 'disabled' :
 						editToggle.disabled = true;
 						//= Simulate toggle(*,true) IE11.
-						editWrap.classList.remove( disabledClass );
-						editWrap.classList.add( disabledClass );
+						// editWrap.classList.remove( disabledClass );
+						// editWrap.classList.add( disabledClass );
+						editWrap.classList.toggle( disabledClass, true );
 						break;
 
 					default:break;
@@ -1870,21 +1873,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				.off( changeEventName )
 				.on( changeEventName, { 'type' : type }, listener );
 		}
-		const unset = ( type ) => {
-			let changeEventName = analysisChangeEvents( type ).get( 'names' );
-			$( activeFocusAreas[ type ].join( ', ' ) ).off( changeEventName );
-		}
 
 		if ( type ) {
-			if ( typeof activeFocusAreas[ type ] === 'undefined' ) {
-				unset( type );
-			} else {
+			if ( typeof activeFocusAreas[ type ] !== 'undefined' ) {
 				reset( type );
 			}
 		} else {
-			let _type;
-			for ( _type in activeFocusAreas ) {
-				reset( _type );
+			for ( let _type in activeFocusAreas ) {
+				if ( typeof activeFocusAreas[ _type ] !== 'undefined' ) {
+					reset( _type );
+				}
 			}
 		}
 	}
@@ -1955,14 +1953,119 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	}
 
 	/**
-	 * Applies analysis listeners to elements that can't have default JS listeners.
+	 * Applies analysis listeners to elements that can't have default JS listeners
+	 * for the new Gutenberg Editor.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 * @access private
 	 *
 	 * @function
 	 */
-	const monkeyPatch = () => {
+	const patchNewEditor = () => {
+
+		let $document = $( document ),
+			holder = document.getElementById( 'tsf-gutenberg-data-holder' );
+
+		if ( ! holder ) return;
+
+		const getId = type => `tsfem-focus-gbc-${type}`;
+		const getElement = type => document.getElementById( getId( type ) );
+
+		/**
+		 * @param {string} type
+		 * @param {string} assessment
+		 */
+		const setup = ( type, assessment ) => {
+			createStore( type );
+			// Wait for store to be written, defer:
+			setTimeout( () => {
+				updateActiveFocusAreas( assessment );
+				resetAnalysisChangeListeners( assessment );
+			} );
+			$document.trigger( `tsfem-focus-gutenberg-${type}-store-set` );
+		}
+
+		/**
+		 * @param {string} type
+		 */
+		const createStore = type => {
+			if ( getElement( type ) ) return;
+			let store = document.createElement( 'div' );
+			store.id = getId( type );
+			store.style.display = 'none';
+			holder.appendChild( store );
+		};
+
+		/**
+		 * @param {string} type
+		 */
+		const emptyStore = type => {
+			getElement( type ).innerHTML = null;
+		};
+
+		/**
+		 * @note: Setting data takes time.
+		 * @param {string} type
+		 * @param {string} data
+	 	 * @return {jQuery.Deferred|Promise} The promise object.
+		 */
+		const fillStore = ( type, data ) => {
+			// Security: WordPress (or React) escapes the data.
+			getElement( type ).innerHTML = data;
+		};
+
+		/**
+		 * @param {string} type
+		 * @param {string} assessment
+		 */
+		const triggerRead = ( type, assessment ) => {
+			$( '#' + getId( type ) ).trigger( analysisChangeEvents( assessment ).get( 'trigger' ) );
+		}
+
+		$document.on( 'tsf-updated-gutenberg-title', ( event, title ) => {
+			fillStore( 'title', title );
+			triggerRead( 'title', 'pageTitle' );
+		} );
+		setup( 'title', 'pageTitle' );
+
+		$document.on( 'tsf-updated-gutenberg-link', ( event, link ) => {
+			fillStore( 'link', link );
+			triggerRead( 'link', 'pageUrl' );
+		} );
+		setup( 'link', 'pageUrl' );
+
+		/**
+		 * Debounced function, as the content is heavy, and we want to read typing states.
+		 * @param {string} content
+		 */
+		const updateContent = content => {
+			fillStore( 'content', content );
+			triggerRead( 'content', 'pageContent' );
+		}
+		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
+			let debouncer = lodash.debounce( updateContent, 500 );
+			if ( wp.data.select( 'core/editor' ).isTyping() ) {
+				// Don't process and lag when typing, just show that the data is invalidated.
+				setAllRatersOf( 'pageContent', 'unknown' );
+				debouncer( content );
+			} else {
+				debouncer.cancel(); // Cancel original debouncer.
+				updateContent( content ); // Set content immediately.
+			}
+		} );
+		setup( 'content', 'pageContent' );
+	}
+
+	/**
+	 * Applies analysis listeners to elements that can't have default JS listeners
+	 * for the Classic Editor.
+	 *
+	 * @since 1.2.0
+	 * @access private
+	 *
+	 * @function
+	 */
+	const patchClassicEditor = () => {
 
 		const MutationObserver =
 			   window.MutationObserver
@@ -1995,6 +2098,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			new MutationObserver( mutationsList => {
 				updatePageUrlRegistry();
+				resetAnalysisChangeListeners( 'pageUrl' );
 				$( '#sample-permalink' ).trigger( analysisChangeEvents( 'pageUrl' ).get( 'trigger' ) );
 			} ).observe( listenNode, { 'childList': true, 'subtree' : true } );
 		})();
@@ -2043,6 +2147,23 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				} );
 			} );
 		})();
+	}
+
+	/**
+	 * Applies analysis listeners to elements that can't have default JS listeners.
+	 *
+	 * @since 1.0.0
+	 * @since 1.2.0 Now checks for isGutenbergPage
+	 * @access private
+	 *
+	 * @function
+	 */
+	const monkeyPatch = () => {
+		if ( l10n.isGutenbergPage ) {
+			patchNewEditor();
+		} else {
+			patchClassicEditor();
+		}
 	}
 
 	/**
