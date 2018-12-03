@@ -59,6 +59,15 @@ trait UI {
 	private $js_name;
 
 	/**
+	 * The UI wrap type.
+	 *
+	 * @since 2.0.1
+	 *
+	 * @var string The UI wrap type. Accepts 'column' and 'row'.
+	 */
+	private $wrap_type = 'column';
+
+	/**
 	 * Main JS script to be loaded.
 	 *
 	 * @since 1.3.0
@@ -129,7 +138,7 @@ trait UI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param $type The type of main content. Accepts 'panes', 'connect'.
+	 * @param $type The type of main content. Accepts 'panes' and 'connect'.
 	 */
 	final protected function ui_wrap( $type = 'panes' ) {
 		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
@@ -181,9 +190,15 @@ trait UI {
 	 * Outputs panes wrap and does callback.
 	 *
 	 * @since 1.5.0
+	 * @since 2.0.1 Now listens to $this->wrap_type
+	 *
+	 * @param string $type The pane wrap type. Accepts 'column' or 'row'.
 	 */
 	final public function panes_wrap() {
-		echo '<main class="tsfem-panes-wrap tsfem-flex tsfem-flex-column">';
+		printf(
+			'<main class="tsfem-panes-wrap tsfem-flex tsfem-flex-%s">',
+			in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
+		); // XSS ok.
 		\do_action( 'tsfem_content' );
 		echo '</main>';
 	}

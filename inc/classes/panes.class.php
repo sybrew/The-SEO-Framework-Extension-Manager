@@ -415,52 +415,10 @@ class Panes extends API {
 	 * @return string The actions pane output.
 	 */
 	protected function get_actions_output() {
-
-		$left  = $this->get_actions_left_output();
-		$right = $this->get_actions_right_output();
-
-		return sprintf( '<div class="tsfem-actions tsfem-flex tsfem-flex-row">%s</div>', $left . $right );
-	}
-
-	/**
-	 * Wraps and outputs the left side of the Actions pane.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The Actions pane left side output.
-	 */
-	protected function get_actions_left_output() {
-
-		$output  = '';
-		$output .= $this->get_account_information();
-		if ( ! $this->is_auto_activated() ) {
-			if ( ! $this->is_connected_user() && $this->are_options_valid() ) {
-				$output .= $this->get_account_upgrade_form();
-			} else {
-				//* TODO make this happen (on request/modal?).
-				//	$output .= $this->get_account_extend_form();
-			}
-		}
-
-		return sprintf( '<div class="tsfem-actions-left-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
-	}
-
-	/**
-	 * Wraps and outputs the right side of the Actions pane.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The Actions pane right side output.
-	 */
-	protected function get_actions_right_output() {
-
-		$output = '';
-		$output .= $this->get_support_buttons();
-		if ( ! $this->is_auto_activated() ) {
-			$output .= $this->get_disconnect_button();
-		}
-
-		return sprintf( '<div class="tsfem-actions-right-wrap tsfem-flex tsfem-flex-nowrap">%s</div>', $output );
+		return sprintf(
+			'<div class="tsfem-actions tsfem-flex">%s</div>',
+			$this->get_account_information() . $this->get_account_upgrade_form() . $this->get_support_buttons() . $this->get_disconnect_button()
+		);
 	}
 
 	/**
@@ -496,7 +454,7 @@ class Panes extends API {
 			( $infos ? HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) ) : '' )
 		);
 
-		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $output );
+		return sprintf( '<div class="tsfem-account-info tsfem-pane-section">%s%s</div>', $title, $output );
 	}
 
 	/**
@@ -512,6 +470,9 @@ class Panes extends API {
 	 * @return string The account upgrade form wrap.
 	 */
 	protected function get_account_upgrade_form() {
+
+		if ( $this->is_auto_activated() ) return '';
+		if ( $this->is_connected_user() || ! $this->are_options_valid() ) return '';
 
 		$this->get_verification_codes( $_instance, $bits );
 
@@ -529,7 +490,7 @@ class Panes extends API {
 
 		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-upgrade">%s%s</div>', $title, $form );
+		return sprintf( '<div class="tsfem-account-upgrade tsfem-pane-section">%s%s</div>', $title, $form );
 	}
 
 	/**
@@ -540,6 +501,8 @@ class Panes extends API {
 	 * @return string The disconnect button.
 	 */
 	protected function get_disconnect_button() {
+
+		if ( $this->is_auto_activated() ) return '';
 
 		$this->get_verification_codes( $_instance, $bits );
 
@@ -567,7 +530,7 @@ class Panes extends API {
 		);
 
 		return sprintf(
-			'<div class="tsfem-account-disconnect">%s</div>',
+			'<div class="tsfem-account-disconnect tsfem-pane-section">%s</div>',
 			implode( '', compact( 'title', 'button' ) )
 		);
 	}
@@ -589,7 +552,7 @@ class Panes extends API {
 		$description[1] = \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' );
 
 		$buttons[2] = Layout::get( 'private-support-button' );
-		$description[2] = \__( 'Questions about your account should be inquired via Premium Support.', 'the-seo-framework-extension-manager' );
+		$description[2] = \__( 'Questions about your account should be inquired via Private Support.', 'the-seo-framework-extension-manager' );
 
 		Layout::reset();
 
@@ -604,7 +567,7 @@ class Panes extends API {
 			);
 		}
 
-		return sprintf( '<div class="tsfem-account-support">%s%s</div>', $title, $content );
+		return sprintf( '<div class="tsfem-account-support tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -627,7 +590,7 @@ class Panes extends API {
 		Extensions::set_account( $this->get_subscription_status() );
 
 		$content = Extensions::get( 'layout_content' );
-		$content = sprintf( '<div class="tsfem-extensions-overview-content tsfem-flex tsfem-flex-row tsfem-flex-space">%s</div>', $content );
+		$content = sprintf( '<div class="tsfem-extensions-overview-content">%s</div>', $content );
 
 		Extensions::reset();
 

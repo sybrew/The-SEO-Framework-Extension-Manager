@@ -140,17 +140,21 @@ window.tsfem_e_monitor = {
 					tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
 
 				let status = data.status['type'],
+					code   = data.status['code'],
 					notice = data.status['notice'];
 
 				if ( 'success' === status ) {
-					tsfem.updatedResponse( loader, 1, notice, 0 );
+					tsfem.updatedResponse( loader, 1, '', 0 );
+					tsfem.setTopNotice( code, notice );
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {
 					tsfem_e_monitor.addRequiresFix( data.status['requires_fix'] );
-					tsfem.updatedResponse( loader, 0, notice, 0 );
+					tsfem.updatedResponse( loader, 0, '', 0 );
+					tsfem.setTopNotice( code, notice );
 				} else {
-					tsfem.updatedResponse( loader, 0, notice, 0 );
+					tsfem.updatedResponse( loader, 0, '', 0 );
+					tsfem.setTopNotice( code, notice );
 				}
 			}
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
@@ -226,9 +230,10 @@ window.tsfem_e_monitor = {
 				if ( 'undefined' !== typeof data.status['timeout'] )
 					tsfem_e_monitor.rDataTimeout = data.status['timeout'];
 
-				let status = data.status['type'],
+				let status  = data.status['type'],
 					content = data.status['content'],
-					notice = data.status['notice'];
+					code    = data.status['code'],
+					notice  = data.status['notice'];
 
 				if ( 'success' === status ) {
 					let issues = content['issues'],
@@ -290,9 +295,11 @@ window.tsfem_e_monitor = {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {
 					tsfem_e_monitor.addRequiresFix();
-					tsfem.updatedResponse( loader, 0, notice, 0 );
+					tsfem.updatedResponse( loader, 0, '', 0 );
+					tsfem.setTopNotice( code, notice );
 				} else {
-					tsfem.updatedResponse( loader, 0, notice, 0 );
+					tsfem.updatedResponse( loader, 0, '', 0 );
+					tsfem.setTopNotice( code, notice );
 				}
 			}
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
@@ -571,21 +578,21 @@ window.tsfem_e_monitor = {
 					}
 
 					switch ( rCode ) {
-						case 1010805 : // updated.
+						case 1010805: // updated.
 							status = 1;
 							break;
 
-						case 1010804 : // Settings didn't save. Suggest Fetch Data.
+						case 1010804: // Settings didn't save. Suggest Fetch Data.
 							topNoticeCode = rCode;
 							status = 2;
 							break;
 
-						default :
-						case 1010801 : // Remote error.
-						case 1010802 : // Subscription expired.
-						case 1010803 : // Site marked inactive by Monitor.
-						case 1019002 : // No access.
-						case 1010702 : // No option sent.
+						default:
+						case 1010801: // Remote error.
+						case 1010802: // Instance mismatch.
+						case 1010803: // Site marked inactive by Monitor.
+						case 1019002: // No access.
+						case 1010702: // No option sent.
 							loaderText = tsfem.i18n['UnknownError'];
 							topNoticeCode = rCode || false;
 							status = 0;

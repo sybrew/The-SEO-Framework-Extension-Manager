@@ -9,27 +9,28 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
 <?php
 	\tsf_extension_manager()->_do_pane_wrap(
-		\__( 'Issues', 'the-seo-framework-extension-manager' ),
-		$this->get_issues_overview(),
-		[
-			'full' => false,
-			'collapse' => true,
-			'move' => false,
-			'pane_id' => 'tsfem-e-monitor-issues-pane',
-			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-issues-ajax',
-		]
-	);
-	\tsf_extension_manager()->_do_pane_wrap(
 		\__( 'Control Panel', 'the-seo-framework-extension-manager' ),
 		$this->get_cp_overview(),
 		[
-			'full' => false,
+			'full'     => false,
 			'collapse' => true,
-			'move' => false,
-			'pane_id' => 'tsfem-e-monitor-cp-pane',
-			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-cp-ajax',
+			'move'     => false,
+			'pane_id'  => 'tsfem-e-monitor-cp-pane',
+			'ajax'     => true,
+			'ajax_id'  => 'tsfem-e-monitor-cp-ajax',
+		]
+	);
+	\tsf_extension_manager()->_do_pane_wrap(
+		\__( 'Issues', 'the-seo-framework-extension-manager' ),
+		$this->get_issues_overview(),
+		[
+			'full'     => false,
+			'collapse' => true,
+			'move'     => false,
+			'push'     => true,
+			'pane_id'  => 'tsfem-e-monitor-issues-pane',
+			'ajax'     => true,
+			'ajax_id'  => 'tsfem-e-monitor-issues-ajax',
 		]
 	);
 ?>
@@ -40,12 +41,12 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 		\__( 'Statistics', 'the-seo-framework-extension-manager' ),
 		$this->get_stats_overview(),
 		[
-			'full' => true,
+			'full'     => true,
 			'collapse' => true,
-			'move' => false,
-			'pane_id' => 'tsfem-e-monitor-stats-pane',
-			'ajax' => true,
-			'ajax_id' => 'tsfem-e-monitor-stats-ajax',
+			'move'     => false,
+			'pane_id'  => 'tsfem-e-monitor-stats-pane',
+			'ajax'     => true,
+			'ajax_id'  => 'tsfem-e-monitor-stats-ajax',
 		]
 	);
 ?>

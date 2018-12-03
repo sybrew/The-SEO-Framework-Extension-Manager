@@ -234,7 +234,7 @@ final class Fields {
 						\__( 'If this URL matches a page on this website, then this department data will be outputted there.', 'the-seo-framework-extension-manager' ),
 						\__( 'Leave empty if no assigned page exists.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'For example, the contact page or home page. It must be a working link and the department location must be described accurately on there.', 'the-seo-framework-extension-manager' ),
+					\__( 'For example, the contact page or homepage. It must be a working link and the department location must be described accurately on there.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'address' => [

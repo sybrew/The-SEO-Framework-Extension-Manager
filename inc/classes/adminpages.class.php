@@ -212,7 +212,14 @@ class AdminPages extends AccountActivation {
 		\add_action( 'tsfem_content', [ $this, '_output_em_content' ] );
 		\add_action( 'tsfem_footer', [ $this, '_output_em_footer' ] );
 
-		$type = $this->is_plugin_activated() ? 'panes' : 'connect';
+		if ( $this->is_plugin_activated() ) {
+			$this->wrap_type = 'row';
+			$type            = 'panes';
+		} else {
+			$this->wrap_type = 'column';
+			$type            = 'connect';
+		}
+
 		$this->ui_wrap( $type );
 	}
 
@@ -270,6 +277,7 @@ class AdminPages extends AccountActivation {
 	 * Echos a pane wrap.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.1: Added the push argumnet.
 	 * @access private
 	 *
 	 * @param string $title The pane title.
@@ -278,6 +286,7 @@ class AdminPages extends AccountActivation {
 	 *   'full'     bool   : Whether to output a half or full pane.
 	 *   'collapse' bool   : Whether able to collapse the pane.
 	 *   'move'     bool   : Whether to be able to move the pane.
+	 *   'push'     bool   : Whether to push other panes away in flexibility.
 	 *   'pane_id'  string : The pane div ID.
 	 *   'ajax'     bool   : Whether to use ajax.
 	 *   'ajax_id'  string : The AJAX div ID.
@@ -286,16 +295,15 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _do_pane_wrap( $title = '', $content = '', $args = [], $extra = '' ) {
 
-		$defaults = [
-			'full' => true,
+		$args = array_merge( [
+			'full'     => true,
 			'collapse' => true,
-			'move' => false,
-			'pane_id' => '',
-			'ajax' => false,
-			'ajax_id' => '',
-		];
-		$args = \wp_parse_args( $args, $defaults );
-		unset( $defaults );
+			'move'     => false,
+			'push'     => false,
+			'pane_id'  => '',
+			'ajax'     => false,
+			'ajax_id'  => '',
+		], $args );
 
 		$this->get_view( 'layout/general/pane', get_defined_vars() );
 	}
@@ -312,6 +320,7 @@ class AdminPages extends AccountActivation {
 	 *   'full'       bool     : Whether to output a half or full pane.
 	 *   'collapse'   bool     : Whether able to collapse the pane.
 	 *   'move'       bool     : Whether to be able to move the pane.
+	 *   'push'       bool     : Whether to push other panes away in flexibility.
 	 *   'pane_id'    string   : The pane div ID.
 	 *   'ajax'       bool     : Whether to use ajax.
 	 *   'ajax_id'    string   : The AJAX div ID.
@@ -324,18 +333,17 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _do_pane_wrap_callable( $title = '', $callable = '', $args = [], $extra = '' ) {
 
-		$defaults = [
-			'full' => true,
-			'collapse' => true,
-			'move' => false,
-			'pane_id' => '',
-			'ajax' => false,
-			'ajax_id' => '',
+		$args = array_merge( [
+			'full'       => true,
+			'collapse'   => true,
+			'move'       => false,
+			'push'       => false,
+			'pane_id'    => '',
+			'ajax'       => false,
+			'ajax_id'    => '',
 			'secure_obj' => false,
-			'footer' => null,
-		];
-		$args = \wp_parse_args( $args, $defaults );
-		unset( $defaults );
+			'footer'     => null,
+		], $args );
 
 		$this->get_view( 'layout/general/pane', get_defined_vars() );
 	}

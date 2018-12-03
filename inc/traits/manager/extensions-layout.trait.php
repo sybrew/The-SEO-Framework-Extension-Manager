@@ -140,11 +140,11 @@ trait Extensions_Layout {
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
 			$entry = sprintf(
-				'<div class="tsfem-extension-entry-inner tsfem-flex"><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
+				'<div class="tsfem-extension-entry-inner"><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
 				$class, \esc_attr( $id . '-extension-entry' ), $wrap
 			);
 
-			$output .= sprintf( '<div class="tsfem-extension-entry-wrap tsfem-flex tsfem-flex-space">%s</div>', $entry );
+			$output .= sprintf( '<div class="tsfem-extension-entry-wrap">%s</div>', $entry );
 		}
 
 		return $output;

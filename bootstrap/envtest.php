@@ -60,7 +60,7 @@ function tsf_extension_manager_pre_boot_test() {
 			'5.5' => 50521,
 			'5.6' => 50605,
 		),
-		'wp' => '37965',
+		'wp'  => '37965',
 	);
 
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $test = 1
@@ -96,24 +96,24 @@ function tsf_extension_manager_pre_boot_test() {
 		return;
 
 	switch ( $test ) :
-		case 1 :
-		case 2 :
+		case 1:
+		case 2:
 			//* PHP requirements not met, always count up to encourage best standards.
 			$requirement = 1 === $test ? 'PHP 5.5.21 or later' : 'PHP 5.6.5 or later';
-			$issue = 'PHP version';
-			$version = phpversion();
-			$subtitle = 'Server Requirements';
+			$issue       = 'PHP version';
+			$version     = phpversion();
+			$subtitle    = 'Server Requirements';
 			break;
 
-		case 3 :
+		case 3:
 			//* WordPress requirements not met.
 			$requirement = 'WordPress 4.6 or later';
-			$issue = 'WordPress version';
-			$version = $GLOBALS['wp_version'];
-			$subtitle = 'WordPress Requirements';
+			$issue       = 'WordPress version';
+			$version     = $GLOBALS['wp_version'];
+			$subtitle    = 'WordPress Requirements';
 			break;
 
-		default :
+		default:
 			wp_die();
 	endswitch;
 

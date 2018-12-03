@@ -487,6 +487,7 @@ final class Admin extends Api {
 							],
 							'type'    => $type,
 							'notice'  => $api['notice'],
+							'code'    => $api['code'],
 							//* Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_data_timeout(),
 						];
@@ -570,6 +571,7 @@ final class Admin extends Api {
 
 						$status = [
 							'type'    => $type,
+							'code'    => $api['code'],
 							'notice'  => $api['notice'],
 							'timeout' => $current_timeout,
 						];
@@ -700,6 +702,7 @@ final class Admin extends Api {
 
 		if ( $this->is_api_connected() ) {
 			$this->prepare_data();
+			$this->wrap_type = 'row';
 			$this->ui_wrap( 'panes' );
 		} else {
 			$this->ui_wrap( 'connect' );
@@ -831,39 +834,8 @@ final class Admin extends Api {
 	 */
 	protected function get_cp_output() {
 		return sprintf(
-			'<div class="tsfem-e-monitor-cp tsfem-pane-split tsfem-flex tsfem-flex-row">%s%s</div>',
-			$this->get_cp_left_output(),
-			$this->get_cp_right_output()
-		);
-	}
-
-	/**
-	 * Wraps the left side of the Control Panel pane.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The Control Panel pane left side output.
-	 */
-	protected function get_cp_left_output() {
-		return sprintf(
-			'<div class="tsfem-e-monitor-cp-left-wrap tsfem-flex tsfem-flex-nowrap">%s%s</div>',
-			$this->get_account_information(),
-			$this->get_site_actions_view()
-		);
-	}
-
-	/**
-	 * Wraps and outputs the left side of the Control Panel pane.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The Control Panel pane left side output.
-	 */
-	protected function get_cp_right_output() {
-		return sprintf(
-			'<div class="tsfem-e-monitor-cp-right-wrap tsfem-flex tsfem-flex-nowrap">%s%s</div>',
-			$this->get_site_settings_view(),
-			$this->get_disconnect_site_view()
+			'<div class="tsfem-e-monitor-cp tsfem-flex">%s</div>',
+			$this->get_account_information() . $this->get_site_actions_view() . $this->get_site_settings_view() . $this->get_disconnect_site_view()
 		);
 	}
 
@@ -887,7 +859,7 @@ final class Admin extends Api {
 			$content .= sprintf( '<div class="tsfem-cp-buttons">%s</div>', $button );
 		}
 
-		return sprintf( '<div class="tsfem-e-monitor-cp-actions">%s%s</div>', $title, $content );
+		return sprintf( '<div class="tsfem-e-monitor-cp-actions tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -903,6 +875,11 @@ final class Admin extends Api {
 
 		$content = '';
 		$form_id = 'tsfem-e-monitor-update-settings';
+
+		$content .= sprintf(
+			'<p><small>%s</small></p>',
+			\esc_html__( 'These settings are in development. Enable these to participate in the beta tests.', 'the-seo-framework-extension-manager' )
+		);
 
 		fields : {
 			$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
@@ -1015,7 +992,7 @@ final class Admin extends Api {
 			);
 		}
 
-		return sprintf( '<div class="tsfem-e-monitor-cp-settings">%s%s</div>', $title, $content );
+		return sprintf( '<div class="tsfem-e-monitor-cp-settings tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -1095,12 +1072,7 @@ final class Admin extends Api {
 	 * @return string The Monitor account information wrap.
 	 */
 	protected function get_account_information() {
-
-		$output = '';
-		$output .= $this->get_site_fix_fields();
-		$output .= $this->get_account_data_fields();
-
-		return $output;
+		return $this->get_account_data_fields() . $this->get_site_fix_fields();
 	}
 
 	/**
@@ -1140,7 +1112,7 @@ final class Admin extends Api {
 
 		$content = sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $content );
 
-		return sprintf( '<div class="tsfem-account-info">%s%s</div>', $title, $content );
+		return sprintf( '<div class="tsfem-account-info tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -1196,7 +1168,7 @@ final class Admin extends Api {
 			$output .= sprintf( '<p class="tsfem-description">%s</p>', $description );
 			$output .= $this->get_fix_button();
 
-			return sprintf( '<div class="tsfem-account-fix">%s%s</div>', $title, $output );
+			return sprintf( '<div class="tsfem-account-fix tsfem-pane-section">%s%s</div>', $title, $output );
 		}
 
 		return '';
@@ -1279,7 +1251,7 @@ final class Admin extends Api {
 
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-disconnect">%s%s</div>', $title, $button );
+		return sprintf( '<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>', $title, $button );
 	}
 
 	/**

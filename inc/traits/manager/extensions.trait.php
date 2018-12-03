@@ -149,7 +149,7 @@ trait Extensions_Properties {
 				'area' => 'uptime, syntax',
 				'author' => 'Sybre Waaijer',
 				'party' => 'first',
-				'last_updated' => '1543184325',
+				'last_updated' => '1543830546 ',
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.7.0',
@@ -223,9 +223,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '444bcf23c5933c21b815a58dff075f93c7bbc073fb99720dae7e1392853b169e',
-			'sha1'   => '6b647bd4ba5730b7fa58cbc9e6e2b4f0d0518c61',
-			'md5'    => '71960f98c9e67c268cceb9b441fb5d09',
+			'sha256' => '52a5ac757419501fb0ef133e8b2f073be55f25c48e7bb533b020f6bb10005be3',
+			'sha1'   => 'b732edbac1d510265b9c86a516c0bd993b9d856f',
+			'md5'    => '06324b3635212383fdec1e56a107f934',
 		];
 	}
 

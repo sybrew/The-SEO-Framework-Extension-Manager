@@ -13,9 +13,10 @@ if ( $args['ajax'] ) {
 
 $pane_id = $args['pane_id'];
 
-$pane_class = $args['full'] ? 'tsfem-pane-full' : 'tsfem-pane-half';
+$pane_class  = $args['full'] ? 'tsfem-pane-full' : 'tsfem-pane-half';
 $pane_class .= $args['move'] ? ' tsfem-pane-move' : '';
 $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
+$pane_class .= $args['push'] ? ' tsfem-pane-push' : '';
 
 ?>
 <section class="<?php echo \esc_attr( $pane_class ); ?> tsfem-flex" id="<?php echo \esc_attr( $pane_id ); ?>">
@@ -24,9 +25,8 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 		printf(
 			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>',
 			\esc_html( $title ),
-			//= Already escaped.
 			$ajax
-		);
+		); // XSS ok.
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
 			<div class="tsfem-pane-content tsfem-tooltip-boundary tsfem-flex tsfem-flex-row tsfem-flex-nowrap">
@@ -39,8 +39,7 @@ $pane_class .= $args['collapse'] ? ' tsfem-pane-collapse' : '';
 					call_user_func( $callable );
 				}
 			} elseif ( isset( $content ) ) {
-				//= Unknown $content. Ought to be escaped.
-				echo $content;
+				echo $content; // XSS ok... ought to be escaped.
 			}
 			?>
 			</div>

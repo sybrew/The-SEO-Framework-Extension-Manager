@@ -119,16 +119,28 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 [tsfep-release time="-1"]
 
-* **Extension**:
+* **Extension:**
+	* **Added:** The plugin now shows description meta tag information.
 	* **Changed:** The scheme warning is now more severe, because Firefox and Chrome display warnings that are off-putting.
+	* **Changed:** When the canonical URL isn't found, or is deemed invalid, an error now shows.
 	* **Changed:** The `favicon.ico` test is now always displayed, regardless of the site icon settings.
-	* **Fixed:** Keyboard accessibility issues.
+	* **Changed:** Crawling status notifications are now displayed at the top of the page.
+	* **Fixed:** Various keyboard accessibility issues.
+* **API - Our servers:**
+	* **December 3rd, 2018:**
+		* The server is now allowed to communicate with v1.2.1.
+		* Added description meta tag tests.
+		* Reduced false negatives of canonical URL detection.
+		* Reduced false negatives of embedded icon detection.
+		* A favicon.ico redirect can now be followed.
+		* The server now purges all website data older than 90 days automatically.
 
 ### 1.2.0-beta-5
 
 [tsfep-release time="August 28th, 2018"]
 
-* **Added:** TSF v3.1 support.
+* **Extension:**
+	* **Added:** TSF v3.1 support.
 
 ### 1.1.0-beta-5
 

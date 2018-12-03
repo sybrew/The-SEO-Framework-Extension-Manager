@@ -1,9 +1,9 @@
 {
 	"name": "sybrew/the-seo-framework-extension-manager",
-	"description": "A WordPress.org plugin that allows you to manage extensions for The SEO Framework.",
+	"description": "A WordPress plugin that allows you to manage extensions for The SEO Framework.",
 	"keywords": [
 		"seo",
-		"wordpress", 
+		"wordpress",
 		"plugin"
 	],
 	"type": "wordpress-plugin",

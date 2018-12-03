@@ -2875,7 +2875,7 @@ msgid "Department address"
 msgstr "Dirección del apartamento"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:237
-msgid "For example, the contact page or home page. It must be a working link and the department location must be described accurately on there."
+msgid "For example, the contact page or homepage. It must be a working link and the department location must be described accurately on there."
 msgstr "Por ejemplo, la página de contacto o la página de inicio. Debe ser un enlace que funciona y la ubicación del departamento debe describirse con precisión allí."
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:235

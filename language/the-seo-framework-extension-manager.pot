@@ -426,7 +426,7 @@ msgid "Leave empty if no assigned page exists."
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:237
-msgid "For example, the contact page or home page. It must be a working link and the department location must be described accurately on there."
+msgid "For example, the contact page or homepage. It must be a working link and the department location must be described accurately on there."
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:247

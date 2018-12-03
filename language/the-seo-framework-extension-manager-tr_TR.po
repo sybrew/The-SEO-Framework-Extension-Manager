@@ -2875,7 +2875,7 @@ msgid "Department address"
 msgstr "Şube adresi"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:237
-msgid "For example, the contact page or home page. It must be a working link and the department location must be described accurately on there."
+msgid "For example, the contact page or homepage. It must be a working link and the department location must be described accurately on there."
 msgstr "Örneğin, iletişim sayfası veya ana sayfa. Bir çalışan bağlantı olmalı ve şubenin yeri tam olarak açıklanmalıdır."
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:235

@@ -107,10 +107,10 @@ final class Tests {
 	public function issue_favicon( $data ) {
 
 		$content = '';
-		$state = 'unknown';
+		$state   = 'unknown';
 
 		if ( ! isset( $data['meta'], $data['static'] ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
 		}
@@ -119,7 +119,7 @@ final class Tests {
 
 		if ( empty( $data['meta'] ) ) {
 			$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer to add extra support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-			$state = 'warning';
+			$state   = 'warning';
 		} else {
 			$content .= $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
 		}
@@ -127,10 +127,15 @@ final class Tests {
 		if ( empty( $data['static'] ) ) {
 			$content .= $this->wrap_info( \tsf_extension_manager()->convert_markdown(
 				/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-				\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. You should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
+				\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
 				[ 'code' ]
 			) );
 			$state = 'warning';
+		} else {
+			$content .= $this->wrap_info( \tsf_extension_manager()->convert_markdown(
+				\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
+				[ 'code' ]
+			) );
 		}
 
 		end :;
@@ -218,6 +223,74 @@ final class Tests {
 			$content .= $this->wrap_info( sprintf(
 				/* translators: %s = theme developer */
 				\esc_html__( 'Please consult with your %s to fix the title.', 'the-seo-framework-extension-manager' ),
+				$_dev
+			) );
+		}
+
+		end :;
+		return [
+			'content' => $content,
+			'state'   => $state,
+		];
+	}
+
+	/**
+	 * Determines if the description is correctly output.
+	 *
+	 * @since 1.2.1
+	 * @access private
+	 *
+	 * @param array $data The input data.
+	 * @return string The evaluated data.
+	 */
+	public function issue_description( $data ) {
+
+		$content = '';
+		$state = 'unknown';
+
+		if ( ! isset( $data['located'] ) ) {
+			$state = 'unknown';
+			$content = $this->no_data_found();
+			goto end;
+		}
+
+		$state = 'good';
+		$content = '';
+		$consult_theme_author_on_duplicate = false;
+
+		if ( ! $data['located'] ) {
+			$state = 'warning';
+			$content = $this->wrap_info( \esc_html__( 'No description meta tags are found on the homepage.', 'the-seo-framework-extension-manager' ) );
+		} else {
+			$content = $this->wrap_info( \esc_html__( 'A description meta tag is found on the homepage.', 'the-seo-framework-extension-manager' ) );
+		}
+
+		if ( isset( $data['count'] ) && $data['count'] > 1 ) {
+			$content .= $this->wrap_info( sprintf(
+				/* translators: %d = Always the number "2" or greater */
+				\esc_html__( '%d description meta tags are found on the homepage.', 'the-seo-framework-extension-manager' ),
+				$data['count']
+			) );
+			$state = 'bad';
+			$consult_theme_author_on_duplicate = true;
+		}
+
+		if ( $consult_theme_author_on_duplicate ) {
+			$_theme = \wp_get_theme();
+			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
+			if ( $_theme_contact ) {
+				$_dev = \tsf_extension_manager()->get_link( [
+					'url'     => $_theme_contact,
+					'content' => \__( 'theme developer', 'the-seo-framework-extension-manager' ),
+					'target'  => '_blank',
+				] );
+			} else {
+				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
+			}
+
+			$content .= $this->wrap_info( sprintf(
+				/* translators: %s = theme developer */
+				\esc_html__( 'Please consult with your %s to fix the duplicated description meta tags.', 'the-seo-framework-extension-manager' ),
 				$_dev
 			) );
 		}
@@ -551,9 +624,9 @@ final class Tests {
 				}
 			endif;
 		else :
-			$state    = 'warning';
+			$state    = 'bad';
 			$content .= $this->wrap_info(
-				\esc_html__( 'The canonical URL does not seem to have a set scheme. The active theme, another plugin or an external service might be interfering.', 'the-seo-framework-extension-manager' )
+				\esc_html__( 'The canonical URL does not seem to have a set scheme; so, the URL is invalid. The active theme, another plugin or an external service might be interfering.', 'the-seo-framework-extension-manager' )
 			);
 		endif;
 

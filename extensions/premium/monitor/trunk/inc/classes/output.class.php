@@ -137,7 +137,7 @@ final class Output {
 		if ( $content ) {
 			switch ( $type ) :
 				case 'issues':
-					$title = $this->get_entry_title( $key, $type );
+					$title  = $this->get_entry_title( $key, $type );
 					$prefix = $this->get_entry_state_icon( $key, $type );
 
 					$title = $prefix . $title;
@@ -237,10 +237,10 @@ final class Output {
 		$output = $this->parse_content( $key, $value, $type );
 
 		if ( $output ) {
-			$title = $this->get_entry_title( $key, $type );
+			$title  = $this->get_entry_title( $key, $type );
 			$prefix = $this->get_entry_state_icon( $key, $type );
 
-			$title = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
+			$title  = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
 			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
 
 			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', \esc_attr( $key ), $title, $output );
@@ -398,8 +398,12 @@ final class Output {
 						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
 						break 2;
 
+					case 'description':
+						$title = \__( 'Descriptions', 'the-seo-framework-extension-manager' );
+						break 2;
+
 					case 'https':
-						$title = \__( 'Scheme', 'the-seo-framework-extension-manager' );
+						$title = \__( 'Scheme and canonical URLs', 'the-seo-framework-extension-manager' );
 						break 2;
 
 					case 'php':
