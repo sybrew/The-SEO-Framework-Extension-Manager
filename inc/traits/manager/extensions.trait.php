@@ -88,7 +88,7 @@ trait Extensions_Properties {
 				'requires' => '4.7.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'focus' => [
 				'slug' => 'focus',
@@ -99,9 +99,9 @@ trait Extensions_Properties {
 				'party' => 'first',
 				'last_updated' => '1543391912',
 				'requires' => '4.8.0',
-				'tested' => '4.9.8',
+				'tested' => '5.0.0',
 				'requires_tsf' => '3.0.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'articles' => [
 				'slug' => 'articles',
@@ -114,7 +114,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'honeypot' => [
 				'slug' => 'honeypot',
@@ -127,7 +127,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'amp' => [
 				'slug' => 'amp',
@@ -140,7 +140,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'monitor' => [
 				'slug' => 'monitor',
@@ -153,7 +153,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'incognito' => [
 				'slug' => 'incognito',
@@ -166,7 +166,7 @@ trait Extensions_Properties {
 				'requires' => '3.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'origin' => [
 				'slug' => 'origin',
@@ -179,7 +179,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			'title-fix' => [
 				'slug' => 'title-fix',
@@ -192,7 +192,7 @@ trait Extensions_Properties {
 				'requires' => '4.6.0',
 				'tested' => '5.0.0',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf' => '3.1.5',
+				'tested_tsf' => '3.2.0',
 			],
 			// 'transporter' => [
 			// 	'slug' => 'transporter',
@@ -223,9 +223,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '52a5ac757419501fb0ef133e8b2f073be55f25c48e7bb533b020f6bb10005be3',
-			'sha1'   => 'b732edbac1d510265b9c86a516c0bd993b9d856f',
-			'md5'    => '06324b3635212383fdec1e56a107f934',
+			'sha256' => '645ba20fa2987928297001b9e184a91f864a6f3c64ad1cb684d90ed7fd90d7f7',
+			'sha1'   => '03c139c65e44a2af375b8f9f18766f982d29fa95',
+			'md5'    => '776eb17f2ed188720c4b31499880c2f3',
 		];
 	}
 

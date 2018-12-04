@@ -5,7 +5,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 4.6.0
 Tested up to: 5.0.0
 Requires PHP: 5.5.21
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
