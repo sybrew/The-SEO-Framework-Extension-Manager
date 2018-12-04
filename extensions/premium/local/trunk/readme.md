@@ -128,7 +128,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.2
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 4th, 2018"]
 
 * **Added:** This extension will try reparsing the values in the admin area to fix the openinghours specification issues below, only once.
 * **Updated:** The department type list is updated with these items:

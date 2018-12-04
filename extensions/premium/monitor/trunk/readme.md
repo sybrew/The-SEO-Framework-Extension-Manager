@@ -117,7 +117,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.1-beta-5
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 4th, 2018"]
 
 * **Extension:**
 	* **Added:** The plugin now shows description meta tag information.

@@ -155,7 +155,7 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ### 1.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 4th, 2018"]
 
 * **Added:** The new WordPress 5.0 editor (Gutenberg) support. However, for this to function, you must update to The SEO Framework 3.2.0 or greater.
 * **Changed:** The first paragraph lookup's logic is vastly improved in both performance and accuracy.

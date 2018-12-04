@@ -165,7 +165,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 ** Release date:**
 
-* TODO, 2018
+* December 4th, 2018
 
 **Plugin Improvements:**
 

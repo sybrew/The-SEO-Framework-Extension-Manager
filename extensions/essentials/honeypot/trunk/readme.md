@@ -195,7 +195,7 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 
 ### 1.1.3
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 4th, 2018"]
 
 * **Fixed:** The textarea no longer has an invalid tag, and its label is now more accessible.
 
