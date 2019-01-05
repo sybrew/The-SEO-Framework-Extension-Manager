@@ -107,18 +107,6 @@ final class Settings {
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
-
-		/**
-		 * Registers form scripts.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->register_form_scripts();
-
-		/**
-		 * Registers media scripts.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->register_media_scripts();
 	}
 
 	/**
@@ -236,7 +224,6 @@ final class Settings {
 		$this->get_view( 'layout/general/footer' );
 	}
 
-
 	/**
 	 * Initializes user interface styles, scripts and footer.
 	 *
@@ -245,51 +232,7 @@ final class Settings {
 	 */
 	private function init_tsfem_ui() {
 
-		/**
-		 * Set additional CSS file calls.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		/*
-		$this->additional_css[] = [
-			'name' => 'tsfem-local',
-			'base' => TSFEM_E_LOCAL_DIR_URL,
-			'ver' => TSFEM_E_LOCAL_VERSION,
-		];
-		*/
-
-		/**
-		 * Set additional JS file calls.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->additional_js[] = [
-			'name' => 'tsfem-local',
-			'base' => TSFEM_E_LOCAL_DIR_URL,
-			'ver'  => TSFEM_E_LOCAL_VERSION,
-		];
-
-		/**
-		 * Set additional l10n.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->additional_l10n[] = [
-			'dependency' => 'tsfem-local',
-			'name'       => 'tsfem_e_localL10n',
-			'strings'    => [
-				'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
-				'i18n'  => [
-					'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
-					'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
-				],
-			],
-		];
-
-		/**
-		 * Register media scripts.
-		 *
-		 * @uses trait TSF_Extension_Manager\UI
-		 * @package TSF_Extension_Manager\Traits
-		 */
-		$this->register_media_scripts();
+		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_local_scripts' ] );
 
 		//* Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
@@ -299,6 +242,56 @@ final class Settings {
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_ui();
+	}
+
+	/**
+	 * Registers default TSFEM Local admin scripts.
+	 * Also registers TSF scripts, for TT (tooltip) support.
+	 *
+	 * @since 1.1.3
+	 * @access private
+	 * @internal
+	 * @staticvar bool $registered : Prevents Re-registering of the script.
+	 *
+	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 */
+	public function _register_local_scripts( $scripts ) {
+		static $registered = false;
+		if ( $registered ) return;
+		/**
+		 * Registers form scripts.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
+		$this->register_form_scripts();
+
+		/**
+		 * Registers media scripts.
+		 * @see trait TSF_Extension_Manager\UI
+		 */
+		$this->register_media_scripts();
+
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-local',
+				'type'     => 'js',
+				'deps'     => [ 'wp-util', 'tsf-tt', 'tsfem-form', 'tsfem-media' ],
+				'autoload' => true,
+				'name'     => 'tsfem-local',
+				'base'     => TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
+				'ver'      => TSFEM_E_LOCAL_VERSION,
+				'l10n'     => [
+					'name' => 'tsfem_e_localL10n',
+					'data' => [
+						'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
+						'i18n'  => [
+							'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
+							'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
+						],
+					],
+				],
+			],
+		] );
+		$registered = true;
 	}
 
 	/**

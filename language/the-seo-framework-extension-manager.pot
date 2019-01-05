@@ -4034,7 +4034,7 @@ msgid "The SEO Framework - Extension Manager"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
+msgid "https://theseoframework.com/extension-manager/"
 msgstr ""
 
 #. Description of the plugin/theme

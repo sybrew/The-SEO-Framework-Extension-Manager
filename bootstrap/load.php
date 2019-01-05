@@ -198,6 +198,7 @@ function _register_autoloader() {
  *
  * @since 1.0.0
  * @since 1.5.0 Now requires TSF 2.8+ to load.
+ * @since 2.0.2 Now requires TSF 3.1+ to load.
  * @staticvar bool $can_load
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
@@ -215,7 +216,7 @@ function can_load_class() {
 			function_exists( 'the_seo_framework_active' ) ? \the_seo_framework_active() : false
 		);
 
-		if ( $loaded && version_compare( THE_SEO_FRAMEWORK_VERSION, '2.8', '>=' ) )
+		if ( $loaded && version_compare( THE_SEO_FRAMEWORK_VERSION, '3.1', '>=' ) )
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
 	}
 

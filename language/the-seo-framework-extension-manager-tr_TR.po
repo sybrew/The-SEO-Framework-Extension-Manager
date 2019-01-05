@@ -3166,8 +3166,8 @@ msgid "Add more powerful SEO features to The SEO Framework right from your WordP
 msgstr "WordPress Panonuzdan SEO Framework'e daha güçlü SEO özellikleri ekleyin."
 
 #. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
-msgstr "https://wordpress.org/plugins/the-seo-framework-extension-manager/"
+msgid "https://theseoframework.com/extension-manager/"
+msgstr "https://theseoframework.com/extension-manager/"
 
 #. Plugin Name of the plugin/theme
 msgid "The SEO Framework - Extension Manager"

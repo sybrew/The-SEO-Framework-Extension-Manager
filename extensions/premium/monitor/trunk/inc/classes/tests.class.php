@@ -182,6 +182,21 @@ final class Tests {
 
 				$tsf = \the_seo_framework();
 
+				/**
+				 * HACK: Override cache.
+				 * @see <https://github.com/sybrew/the-seo-framework/issues/373>
+				 *
+				 * Workaround?:
+				 * $tsf->engage_simulated_front_page_query()
+				 * ...code...
+				 * $tsf->disengage_simulated_front_page_query()
+				 */
+				$tsf->set_query_cache(
+					'The_SEO_Framework\Query::is_front_page_by_id',
+					true,
+					$tsf->get_the_front_page_ID()
+				);
+
 				if ( method_exists( $tsf, 'build_title' ) ) {
 					$_expected_title = $tsf->build_title( '', '', [ 'page_on_front' => true ] );
 				} else {

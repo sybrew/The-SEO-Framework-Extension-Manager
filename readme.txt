@@ -3,9 +3,9 @@ Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.6.0
-Tested up to: 5.0.0
+Tested up to: 5.0.3
 Requires PHP: 5.5.21
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -53,7 +53,7 @@ Do you have questions about privacy? Feel free to [contact us](https://theseofra
 
 * PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
 * WordPress 4.6 or later. For improved AJAX and meta support.
-* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 2.8 or later. Or it will stay dormant.
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/) 3.1 or later. Or it will stay dormant.
 * Edge 13, Safari 10, better or equivalent for the best admin experience.
 * For improved performance and more available options, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
 
@@ -161,9 +161,24 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.2 =
+
+**Release date:**
+
+* TODO
+
+**Plugin Improvements:**
+
+* **Changed:** This plugin now requires The SEO Framework 3.1.0 or later.
+* **Changed:** This plugin now uses The SEO Framework's tooltip handler.
+* **Changed:** This plugin now uses The SEO Framework's script handler.
+* **Improved:** The plugin now caches the update request in PHP runtime, instead of just transients.
+	* Some caching plugins invoked a DDoS attack to the update services. This improvement alleviates that.
+* **Fixed:** Next to plain notices, errors and warnings from other plugins and themes are now styled correctly on this plugin's pages too.
+
 = 2.0.1 =
 
-** Release date:**
+**Release date:**
 
 * December 4th, 2018
 

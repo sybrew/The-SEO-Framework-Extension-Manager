@@ -183,7 +183,7 @@ final class Admin extends Core {
 			'name' => 'tsfem-focus-inpost',
 			'base' => TSFEM_E_FOCUS_DIR_URL,
 			'ver'  => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'jquery', 'tsf', 'tsfem-inpost' ],
+			'deps' => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 			'l10n' => [
 				'name' => 'tsfem_e_focusInpostL10n',
 				'data' => [
@@ -206,7 +206,7 @@ final class Admin extends Core {
 			'name'   => 'tsfem-focus-inpost',
 			'base'   => TSFEM_E_FOCUS_DIR_URL,
 			'ver'    => TSFEM_E_FOCUS_VERSION,
-			'deps'   => [ 'tsf', 'tsfem-inpost' ],
+			'deps'   => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 			'inline' => [
 				'.tsfem-e-focus-content-loader-bar' => [
 					'background:{{$color_accent}}',

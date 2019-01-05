@@ -44,9 +44,10 @@ final class HTML {
 	 * Wraps tooltip item in wrapper.
 	 *
 	 * @since 1.5.0
+	 * @since 2.0.2 Now uses tsfTT compatible classes.
 	 */
 	static function wrap_inline_tooltip( $content, array $classes = [] ) {
-		$classes[] = 'tsfem-tooltip-wrap';
+		$classes[] = 'tsf-tooltip-wrap';
 		return vsprintf(
 			'<span class="%s">%s</span>',
 			[
@@ -77,6 +78,7 @@ final class HTML {
 	 * Makes tooltip item when titles exists.
 	 *
 	 * @since 1.5.0
+	 * @since 2.0.2 Now uses tsfTT compatible classes.
 	 *
 	 * @param string $content    The content within the wrap. Must be escaped.
 	 * @param string $title      The title displayed when JS is disabled.
@@ -91,7 +93,7 @@ final class HTML {
 		$title_html = $title_html ? sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
 
 		strlen( $title . $title_html )
-			and $classes[] = 'tsfem-tooltip-item';
+			and $classes[] = 'tsf-tooltip-item';
 
 		return vsprintf(
 			'<span class="%s" title="%s" %s>%s</span>',

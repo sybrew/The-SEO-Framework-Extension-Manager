@@ -126,6 +126,13 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.3
+
+[tsfep-release time="-1"]
+
+* **Changed:**
+	* This extension now uses TSF's script loader.
+
 ### 1.1.2
 
 [tsfep-release time="December 4th, 2018"]

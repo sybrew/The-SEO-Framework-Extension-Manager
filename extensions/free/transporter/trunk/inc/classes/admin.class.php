@@ -603,19 +603,19 @@ final class Admin {
 		$this->additional_css[] = [
 			'name' => 'tsfem-transporter',
 			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-			'ver' => TSFEM_E_TRANSPORTER_VERSION,
+			'ver'  => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
 		$this->additional_js[] = [
 			'name' => 'tsfem-transporter',
 			'base' => TSFEM_E_TRANSPORTER_DIR_URL,
-			'ver' => TSFEM_E_TRANSPORTER_VERSION,
+			'ver'  => TSFEM_E_TRANSPORTER_VERSION,
 		];
 
 		$this->additional_l10n[] = [
 			'dependency' => 'tsfem-transporter',
-			'name' => 'tsfem_e_transporterL10n',
-			'strings' => [
+			'name'       => 'tsfem_e_transporterL10n',
+			'strings'    => [
 				'nonce' => \wp_create_nonce( 'tsfem-e-transporter-ajax-nonce' ),
 			],
 		];

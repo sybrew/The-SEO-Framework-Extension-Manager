@@ -3,7 +3,7 @@
  * Serve JavaScript as an addition, not as an ends or means.
  *
  * @author Sybre Waaijer https://cyberwire.nl/
- * @pluginURI https://wordpress.org/plugins/the-seo-framework-extension-manager/
+ * @pluginURI https://theseoframework.com/extension-manager/
  */
 
 /**

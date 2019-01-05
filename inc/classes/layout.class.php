@@ -387,7 +387,7 @@ final class Layout extends Secure_Abstract {
 			$end_date = date( 'Y-m-d', $date_until );
 			$end_date_i18n = \date_i18n( 'F j, Y, g:i A', $date_until );
 			$expires_in = HTML::wrap_inline_tooltip( vsprintf(
-				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
+				'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',
 				[
 					\esc_attr( $_class ),
 					\esc_attr( $end_date_i18n ),
@@ -426,7 +426,7 @@ final class Layout extends Secure_Abstract {
 
 			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', $date_until ) : '';
 			$payment_in = HTML::wrap_inline_tooltip( vsprintf(
-				'<time class="tsfem-dashicon tsfem-tooltip-item %s" title="%s" datetime="%s">%s</time>',
+				'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',
 				[
 					\esc_attr( $_class ),
 					\esc_attr( $end_date_i18n ),

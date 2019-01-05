@@ -15,7 +15,8 @@ defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 $tsfem = tsf_extension_manager();
 
 $message_5xx = \esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
-$a11y = true;
+
+$a11y   = true;
 $escape = false;
 
 ?>
@@ -32,7 +33,7 @@ $escape = false;
 <?php
 
 foreach ( [ 'success', 'warning', 'error' ] as $type ) :
-?>
+	?>
 <script type=text/html id=tmpl-tsfem-inpost-notice-<?php echo esc_attr( $type ); ?>>
 	<?php
 	$tsfem->do_dismissible_notice(
@@ -43,5 +44,5 @@ foreach ( [ 'success', 'warning', 'error' ] as $type ) :
 	);
 	?>
 </script>
-<?php
+	<?php
 endforeach;

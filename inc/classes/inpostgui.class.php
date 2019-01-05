@@ -206,7 +206,7 @@ final class InpostGUI {
 			'name' => 'tsfem-inpost',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
 			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
-			'deps' => [ 'jquery', 'tsf' ],
+			'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
 			'l10n' => [
 				'name' => 'tsfem_inpostL10n',
 				'data' => [
@@ -238,7 +238,7 @@ final class InpostGUI {
 			'name' => 'tsfem-inpost',
 			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
 			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
-			'deps' => [ 'tsf' ],
+			'deps' => [ 'tsf', 'tsf-tt' ],
 		] );
 	}
 

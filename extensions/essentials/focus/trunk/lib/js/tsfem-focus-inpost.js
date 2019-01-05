@@ -4,7 +4,7 @@
  * Alas, there's no other way here.
  *
  * @author Sybre Waaijer <https://cyberwire.nl/>
- * @link <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
+ * @link <https://theseoframework.com/extension-manager/>
  */
 
 

@@ -3,7 +3,7 @@
  * Serve JavaScript as an addition, not as an ends or means.
  *
  * @author Sybre Waaijer <https://cyberwire.nl/>
- * @pluginURI <https://wordpress.org/plugins/the-seo-framework-extension-manager/>
+ * @pluginURI <https://theseoframework.com/extension-manager/>
  */
 
 /**
@@ -290,7 +290,7 @@ window.tsfem_e_monitor = {
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 
 					//* Update hover cache.
-					jQuery( window ).trigger( 'tsfem-reset-tooltips' );
+					tsfTT.triggerReset();
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice, 0 );
 				} else if ( 'requires_fix' === status ) {

@@ -2,16 +2,15 @@
 /**
  * Fall-Back Top Notice.
  */
-defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 
-//* This file can be called through public functions; destroy as much as possible.
-unset( $bits, $file, $key, $val );
+$tsfem = \tsf_extension_manager();
 
 $message = \esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
-$notice = $this->format_error_notice(
+$notice  = $tsfem->format_error_notice(
 	'{{data.code}}',
 	[
-		'type' => 'error',
+		'type'    => 'error',
 		'message' => '',
 	]
 );
@@ -19,20 +18,20 @@ $notice = $this->format_error_notice(
 ?>
 <script type=text/html id=tmpl-tsfem-fbtopnotice>
 	<?php
-	$this->do_dismissible_notice(
+	$tsfem->do_dismissible_notice(
 		$notice['before'] . ' ' . $message,
 		'error',
-		$a11y = true,
+		$a11y   = true,
 		$escape = false
 	);
 	?>
 </script>
 <script type=text/html id=tmpl-tsfem-fbtopnotice-msg>
 	<?php
-	$this->do_dismissible_notice(
+	$tsfem->do_dismissible_notice(
 		$notice['before'] . ' ' . '{{{data.msg}}}',
 		'error',
-		$a11y = true,
+		$a11y   = true,
 		$escape = false
 	);
 	?>

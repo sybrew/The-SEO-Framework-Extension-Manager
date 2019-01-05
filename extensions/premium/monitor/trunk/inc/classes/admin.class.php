@@ -648,29 +648,56 @@ final class Admin extends Api {
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
-		$this->additional_css[] = [
-			'name' => 'tsfem-monitor',
-			'base' => TSFEM_E_MONITOR_DIR_URL,
-			'ver'  => TSFEM_E_MONITOR_VERSION,
-		];
-
-		$this->additional_js[] = [
-			'name' => 'tsfem-monitor',
-			'base' => TSFEM_E_MONITOR_DIR_URL,
-			'ver'  => TSFEM_E_MONITOR_VERSION,
-		];
-
-		$this->additional_l10n[] = [
-			'dependency' => 'tsfem-monitor',
-			'name'       => 'tsfem_e_monitorL10n',
-			'strings'    => [
-				'nonce'                => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
-				'remote_data_timeout'  => $this->get_remote_data_timeout(),
-				'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
-			],
-		];
+		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_monitor_scripts' ] );
 
 		$this->init_ui();
+	}
+
+	/**
+	 * Registers default TSFEM Monitor admin scripts.
+	 * Also registers TSF scripts, for TT (tooltip) support.
+	 *
+	 * @since 1.1.3
+	 * @access private
+	 * @internal
+	 * @staticvar bool $registered : Prevents Re-registering of the script.
+	 *
+	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 */
+	public function _register_monitor_scripts( $scripts ) {
+		static $registered = false;
+		if ( $registered ) return;
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-monitor',
+				'type'     => 'css',
+				'deps'     => [ 'tsf-tt', 'tsfem' ],
+				'autoload' => true,
+				'hasrtl'   => true,
+				'name'     => 'tsfem-monitor',
+				'base'     => TSFEM_E_MONITOR_DIR_URL . 'lib/css/',
+				'ver'      => TSFEM_E_MONITOR_VERSION,
+				'inline'   => null,
+			],
+			[
+				'id'       => 'tsfem-monitor',
+				'type'     => 'js',
+				'deps'     => [ 'tsf-tt', 'tsfem' ],
+				'autoload' => true,
+				'name'     => 'tsfem-monitor',
+				'base'     => TSFEM_E_MONITOR_DIR_URL . 'lib/js/',
+				'ver'      => TSFEM_E_MONITOR_VERSION,
+				'l10n'     => [
+					'name' => 'tsfem_e_monitorL10n',
+					'data' => [
+						'nonce'                => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
+						'remote_data_timeout'  => $this->get_remote_data_timeout(),
+						'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
+					],
+				],
+			],
+		] );
+		$registered = true;
 	}
 
 	/**
@@ -1133,7 +1160,7 @@ final class Admin extends Api {
 			   : \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
 
 		return sprintf(
-			'<time class="tsfem-dashicon tsfem-tooltip-item %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s">%s</time>',
+			'<time class="tsfem-dashicon tsf-tooltip-item %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s">%s</time>',
 			\esc_attr( $class ),
 			\esc_attr( $this->get_rectified_date( 'c', $last_crawl ) ),
 			\esc_attr( $title ),

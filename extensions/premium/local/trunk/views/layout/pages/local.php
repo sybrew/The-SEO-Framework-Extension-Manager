@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 
 ?>
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
-<?php
+	<?php
 	\tsf_extension_manager()->_do_pane_wrap_callable(
 		\__( 'Local SEO Settings', 'the-seo-framework-extension-manager' ),
 		[ $this, '_get_local_settings_overview' ],
@@ -22,6 +22,6 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 			'footer'     => [ $this, '_get_local_settings_bottom_wrap' ],
 		]
 	);
-?>
+	?>
 </div>
 <?php
