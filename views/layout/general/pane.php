@@ -29,7 +29,7 @@ $pane_class .= $args['push'] ? ' tsfem-pane-push' : '';
 		); // XSS ok.
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
-			<div class="tsfem-pane-content tsf-tooltip-boundary tsfem-flex tsfem-flex-row tsfem-flex-nowrap">
+			<div class="tsfem-pane-content tsfem-flex tsfem-flex-row tsfem-flex-nowrap">
 			<?php
 			if ( isset( $callable ) ) {
 				//* If secure, pass object.
