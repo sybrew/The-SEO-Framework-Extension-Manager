@@ -177,6 +177,8 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Fixed:** Next to plain notices, errors and warnings from other plugins and themes are now styled correctly on this plugin's pages too.
 * **Fixed:** In Firefox and Edge, the tooltips no longer cause a horizontal pane overflow.
 	* ...In combination with TSF 3.2.2 or later.
+* **Fixed:** Extension-related post meta with special HTML characters entered will no longer cause the extension metadata to corrupt on save.
+	* This issue was found during a security checkup (which passed). Luckily, it's yet unlikely that users would encounter this issue.
 
 = 2.0.1 =
 

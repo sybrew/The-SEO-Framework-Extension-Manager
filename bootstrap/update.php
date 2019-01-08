@@ -70,16 +70,16 @@ function _hook_plugins_api( $res, $action, $args ) {
 	// include an unmodified $wp_version
 	include ABSPATH . WPINC . '/version.php';
 
-	$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
-
+	$url       = TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
 	$http_args = [
 		'timeout'    => 15,
 		'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 		'body'       => [
 			'action'  => $action,
-			'request' => serialize( $args ),
+			'request' => serialize( $args ), // phpcs:ignore -- Object injection is mitigated at the request server.
 		],
 	];
+
 	$request = \wp_remote_post( $url, $http_args );
 
 	if ( \is_wp_error( $request ) ) {
@@ -94,7 +94,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 			$request->get_error_message() // $data
 		);
 	} else {
-		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) );
+		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) ); // phpcs:ignore -- No objects are sent.
 		if ( ! is_object( $res ) && ! is_array( $res ) ) {
 			$res = new WP_Error( 'plugins_api_failed',
 				sprintf(

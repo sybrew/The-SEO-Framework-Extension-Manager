@@ -491,6 +491,7 @@ final class InpostGUI {
 	 * Verifies nonce on POST and writes the class $save_access_state variable.
 	 *
 	 * @since 1.5.0
+	 * @since 2.0.2 : Added \wp_unslash to POST data.
 	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
@@ -500,7 +501,7 @@ final class InpostGUI {
 	public static function _verify_nonce( $post_id, $post ) {
 
 		if ( ( empty( $_POST[ static::NONCE_NAME ] ) ) // Input var OK.
-		|| ( ! \wp_verify_nonce( \wp_unslash( $_POST[ static::NONCE_NAME ] ), static::NONCE_ACTION ) ) // Input var, sanitization OK.
+		|| ( ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION ) ) // Input var, sanitization OK.
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
 		   ) return;
 
@@ -513,7 +514,7 @@ final class InpostGUI {
 		if ( ! defined( 'DOING_CRON' ) || ! DOING_CRON )
 			static::$save_access_state |= 0b1000;
 
-		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? $_POST[ static::META_PREFIX ] : null; // Input var, sanitization OK.
+		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? \wp_unslash( $_POST[ static::META_PREFIX ] ) : null; // Input var, sanitization OK.
 
 		/**
 		 * Runs after nonce and possibly interfering actions have been verified.

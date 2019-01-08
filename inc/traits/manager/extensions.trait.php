@@ -426,6 +426,7 @@ trait Extensions_Actions {
 			return $checksum;
 
 		$type = \tsf_extension_manager()->get_hash_type();
+		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		$hash = hash( $type, serialize( static::$extensions ) );
 
 		return $checksum = [

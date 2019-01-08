@@ -228,7 +228,7 @@ final class FormGenerator {
 	/**
 	 * Prepares the current iteration and option levels and names.
 	 *
-	 * Performs sanitation on items.
+	 * Performs sanitization on items.
 	 *
 	 * @since 1.3.0
 	 * @iterator

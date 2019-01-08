@@ -296,7 +296,7 @@ final class Core {
 	 */
 	private function check_css_field( &$approved ) {
 
-		//* Perform same sanitation as displayed.
+		//* Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
 		//* Check if input is set.
@@ -318,7 +318,7 @@ final class Core {
 	 */
 	private function check_css_rotation_fields( &$approved ) {
 
-		//* Perform same sanitation as displayed.
+		//* Perform same sanitization as displayed.
 		$_fields = \map_deep( [
 			$this->hp_properties['css_rotate_input_name'],
 			$this->hp_properties['css_rotate_input_name_previous'],
@@ -344,7 +344,7 @@ final class Core {
 	 */
 	private function check_js_field( &$approved ) {
 
-		//* Perform same sanitation as displayed.
+		//* Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
 		//* Check if input is set.
@@ -375,7 +375,7 @@ final class Core {
 			return;
 		}
 
-		//* Perform same sanitation as displayed.
+		//* Perform same sanitization as displayed.
 		$_nonces = \map_deep( [
 			$this->hp_properties['nonce_rotated_input_value'],
 			$this->hp_properties['nonce_rotated_input_value_previous'],

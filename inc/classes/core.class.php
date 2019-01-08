@@ -218,6 +218,7 @@ class Core {
 		if ( isset( $cache ) )
 			return $cache;
 
+		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		return $cache = $this->verify_options_hash( serialize( $this->get_all_options() ) );
 	}
 

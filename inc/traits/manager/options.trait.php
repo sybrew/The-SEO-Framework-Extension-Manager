@@ -197,6 +197,7 @@ trait Options {
 		$_options = $this->get_all_options();
 
 		//* If options are unchanged, return true.
+		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		if ( serialize( $options ) === serialize( $_options ) )
 			return true;
 
@@ -300,6 +301,7 @@ trait Options {
 		if ( empty( $options['_instance'] ) )
 			return false;
 
+		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		$hash = $this->hash( serialize( $options ), 'auth' );
 
 		if ( $hash ) {

@@ -57,8 +57,8 @@ final class Extensions_Post_Meta_Cache {
 	 * @return void
 	 */
 	private static function init_meta_cache( $id ) {
-		static::$meta[ $id ] = (array) unserialize(
-			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] )
+		static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
+			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
 		);
 	}
 
@@ -265,7 +265,7 @@ trait Extension_Post_Meta {
 		$meta[ $key ] = $value;
 
 		//* Prepare meta cache.
-		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
@@ -302,7 +302,7 @@ trait Extension_Post_Meta {
 		unset( $meta[ $key ] );
 
 		//* Prepare meta cache.
-		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
+		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );

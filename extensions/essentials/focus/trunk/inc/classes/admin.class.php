@@ -128,28 +128,26 @@ final class Admin extends Core {
 		 */
 		return \apply_filters_ref_array( 'the_seo_framework_focus_elements', [
 			[
-				'pageTitle' => [
+				'pageTitle'      => [
 					'#titlewrap > input'     => 'append',
 					'#tsfem-focus-gbc-title' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'pageUrl' => [
+				'pageUrl'        => [
 					'#sample-permalink'     => 'dominate',
 					'#tsfem-focus-gbc-link' => 'dominate',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'pageContent' => [
+				'pageContent'    => [
 					'#content'                 => 'append',
 					'#tsfem-focus-gbc-content' => 'append',
 					// NOTE: Can't reliably fetch Gutenberg's from DOM.
 				],
-				'seoTitle' => [
-					'#autodescription_title' => 'dominate', //= backwards compatibility.
-					'#tsf-title-reference'   => 'dominate', //! TSF 3.0.4+
+				'seoTitle'       => [
+					'#tsf-title-reference' => 'dominate',
 				],
 				'seoDescription' => [
-					'#autodescription_description' => 'dominate', //= backwards compatibility.
-					'#tsf-description-reference'   => 'dominate', //! TSF 3.0.4+
+					'#tsf-description-reference' => 'dominate',
 				],
 			],
 		] );
@@ -191,7 +189,7 @@ final class Admin extends Core {
 					'focusElements'      => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
 					'languageSupported'  => $this->is_language_supported(),
-					'i18n' => [
+					'i18n'               => [
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
 					],
 					'isGutenbergPage'    => $this->is_gutenberg_page(),
@@ -360,6 +358,7 @@ final class Admin extends Core {
 
 			foreach ( (array) $items as $key => $value ) {
 				$out = $this->sanitize_keyword_data_by_type( $key, $value );
+
 				if ( isset( $out ) )
 					$output[ $id ][ $key ] = $out;
 			}
@@ -401,13 +400,8 @@ final class Admin extends Core {
 			case 'lexical_data':
 			case 'inflection_data':
 			case 'synonym_data':
-				//= Decode and encode the values. An empty array will be returned on failure.
-				$value = json_decode(
-					json_encode(
-						json_decode( stripslashes( $value ) ) ?: [],
-						JSON_UNESCAPED_UNICODE
-					), true
-				);
+				//= An empty array will be returned on failure. This will be refilled in the UI.
+				$value = json_decode( $value, true ) ?: [];
 				break;
 
 			case 'scores':
@@ -427,6 +421,7 @@ final class Admin extends Core {
 					'/[^0-9,]+/', // Remove everything but "0-9,"
 					'/(?=(,,)),|,[^0-9]?+$/', // Fix ",,,"->"," and remove trailing ","
 				];
+
 				$value = preg_replace( $patterns, '', $value );
 				break;
 
