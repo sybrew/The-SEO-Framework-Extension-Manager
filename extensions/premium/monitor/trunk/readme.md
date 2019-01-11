@@ -122,8 +122,6 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 * **Extension:**
 	* **Changed:**
 		* This extension now uses TSF's script loader.
-	* **Fixed:** When the home page is a blog, its title can now be parsed and checked for correctly again.
-		* This fix only works when using The SEO Framework v3.2.2 or later.
 
 ### 1.2.1-beta-5
 

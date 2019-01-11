@@ -182,14 +182,7 @@ final class Tests {
 
 				$tsf = \the_seo_framework();
 
-				$_can_engage = method_exists( $tsf, 'engage_0_is_front_page_request' );
-				if ( $_can_engage )
-					$tsf->engage_0_is_front_page_request();
-
 				$_expected_title = $tsf->get_title( [ 'id' => $tsf->get_the_front_page_ID() ] );
-
-				if ( $_can_engage )
-					$tsf->disengage_0_is_front_page_request();
 
 				if ( $_expected_title !== $first_found_title ) {
 					$content = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
