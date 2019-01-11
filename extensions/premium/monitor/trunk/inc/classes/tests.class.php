@@ -154,8 +154,8 @@ final class Tests {
 	 */
 	public function issue_title( $data ) {
 
-		$content = '';
 		$state = 'unknown';
+		$content = '';
 
 		if ( ! isset( $data['located'] ) ) {
 			$state = 'unknown';
@@ -182,26 +182,14 @@ final class Tests {
 
 				$tsf = \the_seo_framework();
 
-				/**
-				 * HACK: Override cache.
-				 * @see <https://github.com/sybrew/the-seo-framework/issues/373>
-				 *
-				 * Workaround?:
-				 * $tsf->engage_simulated_front_page_query()
-				 * ...code...
-				 * $tsf->disengage_simulated_front_page_query()
-				 */
-				$tsf->set_query_cache(
-					'The_SEO_Framework\Query::is_front_page_by_id',
-					true,
-					$tsf->get_the_front_page_ID()
-				);
+				$_can_engage = method_exists( $tsf, 'engage_0_is_front_page_request' );
+				if ( $_can_engage )
+					$tsf->engage_0_is_front_page_request();
 
-				if ( method_exists( $tsf, 'build_title' ) ) {
-					$_expected_title = $tsf->build_title( '', '', [ 'page_on_front' => true ] );
-				} else {
-					$_expected_title = $tsf->get_title( [ 'id' => $tsf->get_the_front_page_ID() ] );
-				}
+				$_expected_title = $tsf->get_title( [ 'id' => $tsf->get_the_front_page_ID() ] );
+
+				if ( $_can_engage )
+					$tsf->disengage_0_is_front_page_request();
 
 				if ( $_expected_title !== $first_found_title ) {
 					$content = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
