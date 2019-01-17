@@ -294,7 +294,7 @@ Scoring::get_instance()->template = [
 			'content' => 'pageContent',
 			'regex' => [
 				// To simulate the `s` modifier (no webkit support), we use `.|\s`.
-				'/(?=([^<>]+))\\1(?=<|$)/gi',                         // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
+				'/(?=([^<>]+))\\1(?=<|$)/gi',                          // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
 				'/^(.|\\s){0,200}(.|\\s)*?(?=\\r?\\n(\\r?\\n)|$)/gi', // 2: Match first paragraph, or, when it's less than 200 character, the next paragraph(s).
 				'/{{kw}}/gi',                                         // 3: Match words.
 			],
@@ -332,7 +332,7 @@ Scoring::get_instance()->template = [
 			'content' => 'pageContent',
 			'regex' => [
 				'/(?=([^<>]+))\\1(?=<|$)/gi', // 1: All but tags. JS equiv. of `[^<>]++(?=<|$)`
-				'/{{kw}}/gi',                 // 2: Match words.
+				'/{{kw}}/gi',                // 2: Match words.
 			],
 		],
 		'maxScore' => 800,

@@ -52,15 +52,15 @@ final class Trends {
 		\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 
 		switch ( $type ) :
-			case 'feed' :
+			case 'feed':
 				return static::prototype_trends();
 				break;
 
-			case 'ajax_feed' :
+			case 'ajax_feed':
 				return static::prototype_trends( true );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -97,7 +97,7 @@ final class Trends {
 		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
 		$http_args = [
-			'timeout' => 7,
+			'timeout'     => 7,
 			/**
 			 * @since 1.0.0
 			 * @param string $httpversion HTTP 1.1 is used for improved performance.

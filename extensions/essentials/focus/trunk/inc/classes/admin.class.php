@@ -191,8 +191,12 @@ final class Admin extends Core {
 					'languageSupported'  => $this->is_language_supported(),
 					'i18n'               => [
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
+						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
 					],
 					'isGutenbergPage'    => $this->is_gutenberg_page(),
+					'scripts'            => [
+						'parserWorker' => $this->get_worker_file_location(),
+					],
 				],
 			],
 			'tmpl' => [
@@ -214,6 +218,20 @@ final class Admin extends Core {
 				],
 			],
 		] );
+	}
+
+	/**
+	 * Returns the Focus Parser worker file location.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return string
+	 */
+	private function get_worker_file_location() {
+
+		$min = \the_seo_framework()->script_debug ? '' : '.min';
+
+		return \esc_url( \set_url_scheme( TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
 	}
 
 	/**

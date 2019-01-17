@@ -153,6 +153,18 @@ We're currently working on inflection lookups. When it's ready, an update will b
 
 ## Changelog
 
+### 1.3.0
+
+[tsfep-release time="-1"]
+
+* **Added:** The rater now spawns a new processing thread to calculate scores asynchronously.
+	* This means you can write more content uninterrupted as the parser is caclulating its scores.
+	* This also means that the thread isn't interfering with tedious and heavy content painting, as such, the performance increased tremendously.
+* **Added:** The plugin now tests for and informs on parsing failures.
+	* **Note:** A failure fires automatically if the rater is stuck for longer than 30 seconds. This allows your OS to allocate a better core affinity when reattempting.
+* **Improved:** General parsing performance by refactoring HTML tag exclusions, you'll now get results up to ten times quicker, relatively.
+* **Improved:** Upgraded the JS version requirements, and as such, all known unicode punctuation can be excluded correctly.
+
 ### 1.2.0
 
 [tsfep-release time="December 4th, 2018"]

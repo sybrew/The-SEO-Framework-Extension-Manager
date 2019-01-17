@@ -284,14 +284,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const doCheck = ( rater ) => {
 
-		let data                = $( rater ).data( 'scores' ),
-			inflectionCount     = 0,
-			synonymCount        = 0,
+		let data = $( rater ).data( 'scores' ),
+			inflectionCount = 0,
+			synonymCount = 0,
 			inflectionCharCount = 0,
-			synonymCharCount    = 0,
-			contentCharCount    = 0,
+			synonymCharCount = 0,
+			contentCharCount = 0,
 			content,
-			regex               = data.assessment.regex;
+			regex = data.assessment.regex;
 
 		//= Convert regex to object if it isn't already.
 		if ( regex !== Object( regex ) ) {
@@ -302,42 +302,102 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @param {(boolean|object<number,string>|array)} inflections
 		 * @param {boolean|object<number,string>|array)} synonyms
 		 */
-		let idPrefix    = getSubIdPrefix( rater.id ),
+		let idPrefix = getSubIdPrefix( rater.id ),
 			inflections = activeWords( idPrefix ).get( 'inflections' ),
-			synonyms    = activeWords( idPrefix ).get( 'synonyms' ),
-			workerId    = 'e_focus_pw_' + $( rater ).data( 'assessment-type' ) + '_' + idPrefix;
+			synonyms = activeWords( idPrefix ).get( 'synonyms' );
+
+		const countChars = ( contents ) => {
+			// Strip all XML tags first.
+			contents = contents.match( /(?=([^<>]+))\1(?=<|$)/gi );
+			return contents && contents.join( '' ).length || 0;
+		}
+		const countWords = ( word, contentMatch ) => {
+			let pReg,
+				sWord = tsfem_inpost.bewilderRegexNonWords( tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ) );
+
+			//= Iterate over multiple regex scripts.
+			for ( let i = 0; i < regex.length; i++ ) {
+				pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
+				contentMatch = contentMatch.match( new RegExp(
+					pReg[1].replace( /\{\{kw\}\}/g, sWord ),
+					pReg[2]
+				) );
+
+				//= Stop if there's no content, or when this is the last iteration.
+				if ( ! contentMatch || i === regex.length - 1 ) break;
+
+				//= Join content as this is a recursive regexp.
+				contentMatch = contentMatch.join( ' ' );
+			}
+			// Return the number of matches found.
+			return contentMatch && contentMatch.length || 0;
+		}
+		const stripWord = ( word, contents ) =>
+			contents.replace(
+				new RegExp(
+					tsfem_inpost.escapeRegex( tsfem_inpost.escapeStr( word, true ) ),
+					'gi'
+				),
+				'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
+			);
+
+		const countCharacters = ( content ) => {
+			let $dfd = $.Deferred();
+
+			setTimeout( () => {
+				contentCharCount += countChars( content );
+				$dfd.resolve();
+			}, 5 );
+
+			return $dfd.promise();
+		}
+		const countInflections = ( content ) => {
+			let _inflections = inflections,
+				_content = content;
+			_inflections.length && _inflections.sort( ( a, b ) => b.length - a.length );
+
+			return tsfem_inpost.promiseLoop( _inflections, ( inflection ) => {
+				let count = countWords( inflection, _content );
+				inflectionCount += count;
+				inflectionCharCount += inflection.length * count;
+				_content = stripWord( inflection, _content );
+			}, 5, 500 );
+		}
+		const countSynonyms = ( content ) => {
+			let _synonyms = synonyms,
+				_content = content;
+
+			_synonyms.length && _synonyms.sort( ( a, b ) => b.length - a.length );
+
+			return tsfem_inpost.promiseLoop( _synonyms, ( synonym ) => {
+				let count = countWords( synonym, _content );
+				synonymCount += count;
+				synonymCharCount += synonym.length * count;
+				_content = stripWord( synonym, _content );
+			}, 5, 500 );
+		}
 
 		const checkElement = ( element ) => {
 			let selector = document.querySelector( element ),
-				$dfd     = $.Deferred();
+				$dfd = $.Deferred();
 
 			content = typeof selector.value !== 'undefined' ? selector.value : '';
 			// if ( ! content.length ) content = selector.placeholder;
 			if ( ! content.length ) content = selector.innerHTML;
 
 			if ( ! content.length ) return $dfd.resolve();
+			content = tsfem_inpost.normalizeSpacing( content ).trim();
+			if ( ! content.length ) return $dfd.resolve();
 
 			setTimeout( () => {
 				$.when(
-					tsfem_inpost.getWorker( workerId ) || tsfem_inpost.spawnWorker( l10n.scripts.parserWorker, workerId ),
-					tsfem_inpost.tellWorker( workerId, {
-						regex:       regex,
-						inflections: inflections,
-						synonyms:    synonyms,
-						content:     content,
-					} )
-				).done( ( worker, data ) => {
-					inflectionCount     = data.inflectionCount;
-					synonymCount        = data.synonymCount;
-					inflectionCharCount = data.inflectionCharCount;
-					synonymCharCount    = data.synonymCharCount;
-					contentCharCount    = data.contentCharCount;
-
+					countCharacters( content ),
+					countInflections( content ),
+					countSynonyms( content )
+				).done( () => {
 					$dfd.resolve();
-				} ).fail( ( worker, message ) => {
+				} ).fail( () => {
 					$dfd.reject();
-					// Worker likely got stuck. Let's despawn it.
-					tsfem_inpost.despawnWorker( workerId );
 				} );
 			} );
 
@@ -450,17 +510,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		//= Run over element asynchronously and sequentially, when done, resolve function promise.
-		$.when(
-			tsfem_inpost.promiseLoop(
-				activeFocusAreas[ data.assessment.content ],
-				checkElement,
-				150,
-				30000 // fail at 30s
-			)
-		).done( showScore ).fail( () => {
-			tsfem_inpost.despawnWorker( workerId );
-			showFailure();
-		} );
+		$.when( tsfem_inpost.promiseLoop( activeFocusAreas[ data.assessment.content ], checkElement, 5 ) ).done( showScore ).fail( showFailure );
 	}
 
 	/**
@@ -1835,7 +1885,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				let el = document.getElementById( id ),
 					rater = el.querySelector( '.tsfem-e-focus-assessment-rating' );
 
-				tsfem_inpost.setIconClass( rater, 'loading' );
 				setTimeout( () => {
 					tsfem_inpost.setIconClass( rater, 'loading' );
 					doCheck( el );
