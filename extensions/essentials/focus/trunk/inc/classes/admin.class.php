@@ -197,6 +197,9 @@ final class Admin extends Core {
 					'scripts'            => [
 						'parserWorker' => $this->get_worker_file_location(),
 					],
+					'settings'           => [
+						'analysisInterval' => 45000, // 45 seconds, set this to 4999 or lower (preferred: -1) to disable this feature.
+					],
 				],
 			],
 			'tmpl' => [

@@ -24,11 +24,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-let inflectionCount = 0,
-	synonymCount = 0,
+let workerId = '';
+
+let inflectionCount     = 0,
+	synonymCount        = 0,
 	inflectionCharCount = 0,
-	synonymCharCount = 0,
-	contentCharCount = 0;
+	synonymCharCount    = 0,
+	contentCharCount    = 0;
 
 let regex,
 	synonyms,
@@ -42,13 +44,14 @@ let regex,
  * @function
  */
 const reset = () => {
-	inflectionCount = 0;
-	synonymCount = 0;
+	inflectionCount     = 0;
+	synonymCount        = 0;
 	inflectionCharCount = 0;
-	synonymCharCount = 0;
-	contentCharCount = 0;
-	regex = void 0;
-	synonyms = void 0;
+	synonymCharCount    = 0;
+	contentCharCount    = 0;
+
+	regex       = void 0;
+	synonyms    = void 0;
 	inflections = void 0;
 }
 
@@ -79,6 +82,10 @@ const escapeRegex = str => str.replace( /[\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\
 
 /**
  * Makes any non-word character in a regular expression a non-word character boundary.
+ * Strips (accidental) non-word character boundaries at the start and end of the expression, afterwards, too.
+ *
+ * Example: "Something. Here." will become: Something\W+Here
+ * The \W+ isn't found at the end, as it's also trimmed.
  *
  * Ref:
  * [\u0020-\u002F\u003A-\u003F] - Latin punctuation.
@@ -97,7 +104,7 @@ const escapeRegex = str => str.replace( /[\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\
  * @param {string} str
  * @return {string}
  */
-const bewilderRegexNonWords = str => str.replace( /\W+/gu, '\\W+' );
+const bewilderRegexNonWords = str => /^(\\W\+)*(.*?)(\\W\+)*$/.exec( str.replace( /\W+/gu, '\\W+' ) )[2];
 
 /**
  * Escapes HTML input.
@@ -141,7 +148,6 @@ const escapeStr = ( str, noquotes ) => {
  * @source tsfem-inpost.js
  *
  * @function
- * @async
  * @param {(array|object<number,?>)} iterable The items to loop over.
  * @param {function}                 cb       The callback function returning a Promise.
  * @param {number|undefined}         timeout  The iteration timeout. Optional. Defaults to 0.
@@ -169,58 +175,65 @@ const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise(
 			}, stopAt );
 		}
 
-		looper = setTimeout( () => {
-			return new Promise( ( _resolve, _reject ) => {
-				try {
-					cb( iterable[ it ] );
-					_resolve();
-				} catch ( e ) {
-					_reject();
-				}
-			} ).then( () => {
-				if ( stopAt ) {
-					clearTimeout( stopper );
-					// If the rejector is enqueued, see if there are still items to loop over.
-					if ( rejector ) {
-						if ( it < its ) {
-							// There are still items... Don't propagate loop, and let the rejector do its thing.
-							return;
-						} else {
-							// End of loop, nothing to reject: cancel rejection.
-							clearTimeout( rejector );
-						}
+		looper = setTimeout( () => new Promise( ( _resolve, _reject ) => {
+			try {
+				cb( iterable[ it ] );
+				_resolve();
+			} catch ( e ) {
+				_reject();
+			}
+		} ).then( () => {
+			if ( stopAt ) {
+				clearTimeout( stopper );
+				// If the rejector is enqueued, see if there are still items to loop over.
+				if ( rejector ) {
+					if ( it < its ) {
+						// There are still items... Don't propagate loop, and let the rejector do its thing.
+						return;
+					} else {
+						// End of loop, nothing to reject: cancel rejection.
+						clearTimeout( rejector );
 					}
 				}
-
-				if ( ++it === its ) {
-					resolve();
-				} else {
-					looper = null;
-					loop( it );
-				}
-			} ).catch( () => {
-				reject();
-			} );
-		}, timeout );
+			}
+			if ( ++it === its ) {
+				resolve();
+			} else {
+				looper = null;
+				loop( it );
+			}
+		} ).catch( () => {
+			reject();
+		} ), timeout );
 	}
 	loop( 0 );
 } );
 
-const countChars = ( contents ) => {
+const countChars = ( str ) => {
 	// Strip all XML tags first.
-	contents = contents.match( /(?=([^<>]+))\1(?=<|$)/gi );
-	return contents && contents.join( '' ).length || 0;
+	str = str.match( /(?=([^<>]+))\1(?=<|$)/gi );
+	str = str && str.join( ' ' ) || '';
+	// Strip duplicated spaces.
+	str = str.replace( /\s+/giu, ' ' );
+	return +str.length || 0;
 }
 const countWords = ( word, contentMatch ) => {
-	let pReg,
-		sWord = bewilderRegexNonWords( escapeRegex( escapeStr( word, true ) ) );
+	// pReg = prepared Regex.
+	let pReg;
+	// sWord = sanitized Word
+	let sWord = bewilderRegexNonWords( escapeRegex( escapeStr( word, true ) ) );
+
+	// If nothing comes from sanitization, return 0 (nothing found).
+	if ( ! sWord ) return 0;
 
 	//= Iterate over multiple regex scripts.
 	for ( let i = 0; i < regex.length; i++ ) {
+		// Split Regex's flags from the expression.
 		pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
+
 		contentMatch = contentMatch.match( new RegExp(
-			pReg[1].replace( /\{\{kw\}\}/g, sWord ),
-			pReg[2]
+			pReg[1].replace( /\{\{kw\}\}/g, sWord ), // Replace {{kww}} with the keyword, if any.
+			pReg[2]                                  // flag.
 		) );
 
 		//= Stop if there's no content, or when this is the last iteration.
@@ -232,14 +245,13 @@ const countWords = ( word, contentMatch ) => {
 	// Return the number of matches found.
 	return contentMatch && contentMatch.length || 0;
 }
-const stripWord = ( word, contents ) =>
-	contents.replace(
-		new RegExp(
-			escapeRegex( escapeStr( word, true ) ),
-			'gi'
-		),
-		'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
-	);
+const stripWord = ( word, str ) => str.replace(
+	new RegExp(
+		escapeRegex( escapeStr( word, true ) ),
+		'gi'
+	),
+	'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
+);
 
 const countCharacters = ( content ) => new Promise( ( resolve, reject ) => {
 	setTimeout( () => {
@@ -274,14 +286,15 @@ const countSynonyms = ( content ) => {
 	}, 5, 10000 );
 }
 
-onmessage = ( _data ) => {
+onmessage = message => {
+	workerId = message.data.id;
 
 	// Reset worker data.
 	reset();
 
-	let data = _data.data;
+	let data    = message.data.data,
+		content = normalizeSpacing( data.content );
 
-	content     = normalizeSpacing( data.content );
 	regex       = data.regex;
 	inflections = data.inflections;
 	synonyms    = data.synonyms;
@@ -290,7 +303,7 @@ onmessage = ( _data ) => {
 		postMessage( void 0 );
 	} else {
 		Promise.all( [
-			countCharacters( content ),
+			data.assess.getCharCount && countCharacters( content ),
 			countInflections( content ),
 			countSynonyms( content ),
 		] ).then( () => {
@@ -302,11 +315,11 @@ onmessage = ( _data ) => {
 				contentCharCount,
 			} );
 		} ).catch( ( error ) => {
-			postMessage( { error } );
+			postMessage( { workerId, error } );
 		} );
 	}
 }
 
 onerror = ( msg, url, lineNo, columnNo, error ) => {
-	postMessage( { error } );
+	postMessage( { workerId, error } );
 }

@@ -30,12 +30,12 @@ Each keyword makes up for a new subject. Focus rates each subject separately.
 
 ### It comes with a dictionary
 
-There are many ways to write in a language. And with a Premium subscription, you can embrace all Focus has to offer.
+There are many ways to write in a language. With a Premium subscription, you can embrace all Focus has to offer.
 
-So, after you fill in a keyword, Focus will connect to our API services and will provide you with related synonyms and inflections.
-With those, Focus is able to rate your content more accurately.
+So, after you fill in a keyword, Focus connects to our API services and provides you with related synonyms and inflections.
+With those, Focus can rate your content more accurately.
 
-The synonyms provided make up for great writing suggestions. Utilizing those synonyms will increase your chances to be found, too.
+The synonyms provided make up for great writing suggestions. Utilizing those synonyms increases your chances to be found, too.
 
 [tsfep-image id="2"]
 
@@ -63,7 +63,7 @@ After you fill in a keyword, Focus starts rating your content.
 
 If your keyword matches an entry in our dictionary, you can select a lexical form.
 
-You should select the form that describes your subject most, these forms are automatically sorted from frequent to infrequent usage.
+You should select the form that describes your subject most. The lexical forms are sorted automatically from frequent to infrequent usage.
 So, choosing the first form is often correct.
 
 [tsfep-image id="4"]
@@ -93,8 +93,7 @@ If you haven't used a synonym in your content yet, consider using it as it will 
 
 The ratings tell you what should be improved in your content.
 
-Use these ratings as guidelines for focused content.
-You shouldn't ruin your content just to get a better rating.
+You should never ruin your content just to get a better rating. So, use these ratings as guidelines for focused content.
 
 #### Meta vs Page Title
 
@@ -104,12 +103,14 @@ You can change this at the top of your content editor.
 The meta title is what's displayed to a potential visitor on Google.
 You can change this under the General tab of the page's SEO settings.
 
-#### First Paragraph
+#### Introduction
 
-The first paragraph is the first block of text found in your content editor.
-In writing, the first paragraph is used to annotate what your content is about.
+The introduction is often the first few paragraphs of text found in your content editor.
+In writing, the first few paragraphs should be used to annotate what your content is about.
 
-It's the best place to use your focus keyword.
+It's the best place to use your focus keyword, so users know they've landed on the right page.
+
+A good introduction drastically improves user retention, which indirectly signals that the content is of high quality to search engines.
 
 #### Subject Density
 
@@ -151,6 +152,12 @@ The API currently supports English only. Support for other languages will be add
 
 We're currently working on inflection lookups. When it's ready, an update will be sent out.
 
+# "A parsing failure occurred", what does this mean?
+
+When the content parser experiences any error, the rater shows this generic message.
+Most likely, your computer may be restraint in processing power in combination with page builders.
+This issue resolves automatically, as the parser reassesses its data every 45 seconds, or whenever the related content is updated.
+
 ## Changelog
 
 ### 1.3.0
@@ -158,12 +165,15 @@ We're currently working on inflection lookups. When it's ready, an update will b
 [tsfep-release time="-1"]
 
 * **Added:** The rater now spawns a new processing thread to calculate scores asynchronously.
-	* This means you can write more content uninterrupted as the parser is caclulating its scores.
+	* This means you can write more content uninterrupted as the parser is calculating its scores.
 	* This also means that the thread isn't interfering with tedious and heavy content painting, as such, the performance increased tremendously.
 * **Added:** The plugin now tests for and informs on parsing failures.
-	* **Note:** A failure fires automatically if the rater is stuck for longer than 30 seconds. This allows your OS to allocate a better core affinity when reattempting.
+	* **Note:** A failure fires automatically if the rater is stuck for longer than 30 seconds; this allows your computer to allocate a better core affinity when reattempting. For more information, see the [FAQ](#faq).
 * **Improved:** General parsing performance by refactoring HTML tag exclusions, you'll now get results up to ten times quicker, relatively.
-* **Improved:** Upgraded the JS version requirements, and as such, all known unicode punctuation can be excluded correctly.
+* **Improved:** The JS version requirements are upgraded, and as such, all known Unicode punctuation can be excluded correctly.
+* **Improved:** The subject density rater is now more accurate, as it removes more redundant information than before.
+* **Fixed:** Purposeless keywords are no longer (incorrectly) parsed, like an emoji or a dot.
+* **Fixed:** The rater is no longer affected by race conditions, which might cause it to display old information.
 
 ### 1.2.0
 
