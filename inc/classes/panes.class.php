@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -243,11 +243,19 @@ class Panes extends API {
 		$enable = \__( 'Enable feed?', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( $this->request_name['enable-feed'] );
-		$nonce = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
-		$submit = sprintf( '<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary tsfem-button-flat" value="%s">', \esc_attr( $enable ) );
+		$nonce        = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
+		$submit       = sprintf(
+			'<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary tsfem-button-flat" value="%s">',
+			\esc_attr( $enable )
+		);
+
 		$form = $nonce_action . $nonce . $submit;
 
-		$nojs = sprintf( '<form action="%s" method=post id=tsfem-enable-feeds-form class=hide-if-js>%s</form>', \esc_url( $this->get_admin_page_url() ), $form );
+		$nojs = sprintf(
+			'<form action="%s" method=post id=tsfem-enable-feeds-form class=hide-if-js>%s</form>',
+			\esc_url( $this->get_admin_page_url() ),
+			$form
+		);
 		$js = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button tsfem-button-primary tsfem-button-flat">' . \esc_html( $enable ) . '</a></p>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
@@ -310,12 +318,9 @@ class Panes extends API {
 				$slug = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					$_data = $_POST;
-
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
-					$slug = isset( $_data['slug'] ) ? $this->s_ajax_string( $_data['slug'] ) : '';
-					$case = isset( $_data['case'] ) ? $this->s_ajax_string( $_data['case'] ) : '';
-					unset( $_data );
+					$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
+					$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
 				}
 
 				if ( $case && $slug ) {
@@ -363,11 +368,9 @@ class Panes extends API {
 				$case = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					$_data = $_POST;
-
 					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
-					$slug = isset( $_data['slug'] ) ? $this->s_ajax_string( $_data['slug'] ) : '';
-					$case = isset( $_data['case'] ) ? $this->s_ajax_string( $_data['case'] ) : '';
+					$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
+					$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
 				}
 
 				if ( $slug && $case ) :
@@ -548,10 +551,10 @@ class Panes extends API {
 
 		Layout::initialize( 'link', $_instance, $bits );
 
-		$buttons[1] = Layout::get( 'public-support-button' );
+		$buttons[1]     = Layout::get( 'public-support-button' );
 		$description[1] = \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' );
 
-		$buttons[2] = Layout::get( 'private-support-button' );
+		$buttons[2]     = Layout::get( 'private-support-button' );
 		$description[2] = \__( 'Questions about your account should be inquired via Private Support.', 'the-seo-framework-extension-manager' );
 
 		Layout::reset();

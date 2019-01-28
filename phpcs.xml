@@ -41,7 +41,7 @@
 		<properties>
 			<!-- Custom list of functions which escape values for output. -->
 			<!-- sanitize_key is better than most escaping functions... -->
-			<property name="customEscapingFunctions" type="array" value="sanitize_key"/>
+			<property name="customEscapingFunctions" type="array" value="sanitize_key,s_ajax_string"/>
 			<!-- Custom list of functions whose return values are pre-escaped for output. -->
 			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,get_data_attributes,PHP_EOL"/>
 			<!-- Custom list of functions which escape values for output. -->

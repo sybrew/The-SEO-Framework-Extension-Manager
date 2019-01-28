@@ -21,7 +21,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Honeypot extension for The SEO Framework
- * Copyright (C) 2017-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -300,12 +300,12 @@ final class Core {
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ) ?: false; // CSRF ok. This check is validation only.
+		$set = ! empty( $_POST[ $_field ] ) ?: false; // Input var, CSRF ok. This check is validation only.
 
 		if ( $set ) {
 			// Empty check failed.
 			$approved = 'spam';
-			unset( $_POST[ $_field ] );
+			unset( $_POST[ $_field ] ); // Input var OK.
 		}
 	}
 
@@ -325,13 +325,14 @@ final class Core {
 		], '\\esc_attr' );
 
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
-		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )
-			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;  // CSRF ok. This check is validation only.
+		// This check is validation only, the $_POST data isn't stored or processed further.
+		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )           // Input var ok.
+			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;  // Input var, CSRF, precision alignment ok.
 
 		if ( $field ) {
 			// Empty check failed.
 			$approved = 'spam';
-			unset( $_POST[ $_fields[ $k ] ] );
+			unset( $_POST[ $_fields[ $k ] ] ); // Input var OK.
 		}
 	}
 
@@ -348,12 +349,12 @@ final class Core {
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ); // CSRF ok. This check is validation only.
+		$set = ! empty( $_POST[ $_field ] ); // CSRF, input var ok. This check is validation only.
 
 		if ( $set ) {
 			// Empty check failed.
 			$approved = 'spam';
-			unset( $_POST[ $_field ] );
+			unset( $_POST[ $_field ] ); // Input var OK.
 		}
 	}
 
@@ -370,7 +371,7 @@ final class Core {
 
 		$_field = $this->hp_properties['nonce_input_name'];
 
-		if ( empty( $_POST[ $_field ] ) ) { // CSRF ok. This check is validation only.
+		if ( empty( $_POST[ $_field ] ) ) { // CSRF, input var ok. This check is validation only.
 			$approved = 'spam';
 			return;
 		}
@@ -382,7 +383,7 @@ final class Core {
 		], '\\esc_attr' );
 
 		$_tick = 0;
-		$_input = $_POST[ $_field ]; // Sanitization, CSRF ok. This check is validation only.
+		$_input = $_POST[ $_field ]; // Input var, sanitization, CSRF ok. This check is validation only.
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
@@ -392,7 +393,7 @@ final class Core {
 
 		if ( $_tick < 1 ) {
 			$approved = 'spam';
-			unset( $_POST[ $_field ] );
+			unset( $_POST[ $_field ] ); // Input var OK.
 		}
 	}
 

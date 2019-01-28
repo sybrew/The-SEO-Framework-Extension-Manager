@@ -19,7 +19,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -136,7 +136,7 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsf_extension_manager();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : []; // Sanitization, input var OK.
 
 		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';

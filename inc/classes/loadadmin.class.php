@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -213,7 +213,7 @@ final class LoadAdmin extends AdminPages {
 	 */
 	final protected function build_ajax_dismissible_notice() {
 
-		$data['key'] = (int) $this->coalesce_var( $_POST['tsfem-notice-key'], false ); // CSRF, input var, sanitization ok
+		$data['key'] = (int) $this->coalesce_var( $_POST['tsfem-notice-key'], false ); // phpcs:ignore -- Sanitization, input var OK.
 
 		if ( $data['key'] ) {
 			$notice = $this->get_error_notice( $data['key'] );
@@ -223,7 +223,7 @@ final class LoadAdmin extends AdminPages {
 				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message']; // CSRF, input var ok
 
 				$data['notice'] = $this->get_dismissible_notice( $msg, $notice['type'], true, false );
-				$data['type'] = $notice['type'];
+				$data['type']   = $notice['type'];
 				// $_type  = $data['notice'] ? 'success' : 'failure';
 			}
 		}

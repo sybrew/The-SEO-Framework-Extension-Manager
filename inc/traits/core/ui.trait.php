@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -429,13 +429,13 @@ trait UI {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
 			if ( $this->can_do_settings() ) :
 
-				if ( ! $this->_is_media_nonce_verified() )
+				if ( ! $this->_is_media_nonce_verified() ) // This doesn't register correctly to phpcs...
 					\wp_send_json_error();
 
-				$attachment_id = \absint( $_POST['id'] ); // input var ok
+				$attachment_id = \absint( $_POST['id'] ); // phpcs:ignore -- Sanitization, input var OK.
 
-				$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // input var ok
-				$data    = array_map( 'absint', $_POST['cropDetails'] ); // input var ok
+				$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // phpcs:ignore -- Sanitization, input var OK.
+				$data    = array_map( 'absint', $_POST['cropDetails'] );                // phpcs:ignore -- Input var, input var OK.
 				$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 				if ( ! $cropped || \is_wp_error( $cropped ) )

@@ -1,4 +1,4 @@
-# Copyright (C) 2018 The SEO Framework - Extension Manager
+# Copyright (C) 2019 The SEO Framework - Extension Manager
 # This file is distributed under the same license as the The SEO Framework - Extension Manager package.
 msgid ""
 msgstr ""

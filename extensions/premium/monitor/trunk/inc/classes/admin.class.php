@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2018 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -368,16 +368,15 @@ final class Admin extends Api {
 			 * If this page doesn't parse the site options,
 			 * there's no need to check them on each request.
 			 */
-			if ( empty( $_POST )
-			|| ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			|| ( ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+			if ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )  // Input var ok.
+			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) // Input var, CSRF ok.
 			) {
 				return $validated[ $key ] = false;
 			}
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] )
-				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+		$result = isset( $_POST[ $this->nonce_name ] ) // Input var OK.
+				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) // Input var, sanitization ok.
 				: false;
 
 		if ( false === $result ) {
@@ -404,11 +403,9 @@ final class Admin extends Api {
 				$option = '';
 				$send = [];
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$_data = $_POST;
-
 					//= Option is cleaned and requires unpacking.
-					$option = isset( $_data['option'] ) ? $tsfem->s_ajax_string( $_data['option'] ) : '';
-					$value = isset( $_data['value'] ) ? \absint( $_data['value'] ) : 0;
+					$option = isset( $_POST['option'] ) ? $tsfem->s_ajax_string( $_POST['option'] ) : ''; // Sanitization, input var OK.
+					$value  = isset( $_POST['value'] ) ? \absint( $_POST['value'] ) : 0;                  // Input var OK.
 				} else {
 					$send['results'] = $this->get_ajax_notice( false, 1019002 );
 				}
@@ -419,6 +416,7 @@ final class Admin extends Api {
 					$options = [
 						$_option => $value,
 					];
+
 					$response = $this->api_update_remote_settings( $options, true );
 
 					//= Get new options, regardless of response.
@@ -453,7 +451,7 @@ final class Admin extends Api {
 				$timeout = null;
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0;
+					$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0; // Input var OK.
 
 					$current_timeout = $this->get_remote_data_timeout();
 				}
@@ -541,7 +539,7 @@ final class Admin extends Api {
 				$timeout = null;
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0;
+					$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0; // Input var OK.
 
 					$current_timeout = $this->get_remote_crawl_timeout();
 				}
@@ -1032,14 +1030,14 @@ final class Admin extends Api {
 	 */
 	protected function get_fetch_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-green tsfem-button-flat tsfem-button-cloud';
-		$name  = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
-		$title = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
+		$class          = 'tsfem-button-primary tsfem-button-green tsfem-button-flat tsfem-button-cloud';
+		$name           = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
+		$title          = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'fetch' );
-		$nonce  = $this->_get_nonce_field( 'fetch' );
-		$submit = $this->_get_submit_button( $name, $title, $class );
+		$nonce        = $this->_get_nonce_field( 'fetch' );
+		$submit       = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [
 			'id'         => 'tsfem-e-monitor-fetch-form',
@@ -1066,14 +1064,14 @@ final class Admin extends Api {
 	 */
 	protected function get_crawl_button() {
 
-		$class = 'tsfem-button tsfem-button-flat tsfem-button-cloud';
-		$name  = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
-		$title = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
+		$class          = 'tsfem-button tsfem-button-flat tsfem-button-cloud';
+		$name           = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
+		$title          = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'crawl' );
-		$nonce  = $this->_get_nonce_field( 'crawl' );
-		$submit = $this->_get_submit_button( $name, $title, $class );
+		$nonce        = $this->_get_nonce_field( 'crawl' );
+		$submit       = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [
 			'id'         => 'tsfem-e-monitor-crawl-form',
