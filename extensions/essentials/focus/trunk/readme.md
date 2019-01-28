@@ -181,7 +181,7 @@ We're working on an update to improve accuracy for the affected page builders.
 
 ### 1.3.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="January 28th, 2019"]
 
 * **Added:** The rater now spawns a new processing thread to calculate scores asynchronously.
 	* This means you can write more content uninterrupted as the parser is calculating its scores.

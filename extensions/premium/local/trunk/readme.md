@@ -128,7 +128,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.3
 
-[tsfep-release time="-1"]
+[tsfep-release time="January 28th, 2019"]
 
 * **Changed:**
 	* This extension now uses TSF's script loader.

@@ -174,6 +174,12 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * January 28th, 2019
 
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
+* [Monitor](https://theseoframework.com/extensions/monitor/#changelog)
+
 **Plugin Improvements:**
 
 * **Changed:** This plugin now requires The SEO Framework 3.1.0 or higher.
@@ -191,12 +197,6 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * Russian. Thank you [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)!
 * Portuguese (Brasil). Thank you [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)!
-
-**Updated Extensions:**
-
-* [Local](https://theseoframework.com/extensions/honeypot/#changelog)
-* [Focus](https://theseoframework.com/extensions/focus/#changelog)
-* [Monitor](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.0.1 =
 
