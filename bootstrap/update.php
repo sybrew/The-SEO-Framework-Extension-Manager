@@ -138,8 +138,8 @@ function _clear_update_cache() {
  * @see WP Core wp_update_plugins()
  * @staticvar $runtimecache.
  *
- * @param mixed  $value      Site transient value.
- * @param string $transient  Transient name.
+ * @param mixed  $value     Site transient value.
+ * @param string $transient Transient name.
  * @return mixed $value
  */
 function _push_update( $value, $transient ) {
@@ -181,7 +181,9 @@ function _push_update( $value, $transient ) {
 
 			$raw_response = \wp_remote_post( $url, $http_args );
 
-			if ( \is_wp_error( $raw_response ) || 200 != \wp_remote_retrieve_response_code( $raw_response ) ) {
+			if ( \is_wp_error( $raw_response )
+			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // loose comparison ok.
+			) {
 				return $value;
 			}
 

@@ -140,23 +140,42 @@ You can change your page URL right above the content editor.
 
 ## FAQ
 
-# Which languages are supported?
+### Which languages are supported?
 
 All languages have the requisite support for ratings.
 
-# Which languages are supported by the dictionary API?
+### Which languages are supported by the dictionary API?
 
 The API currently supports English only. Support for other languages will be added over time.
 
-# Why are there only one or two inflections available?
+### Why are there only one or two inflections available?
 
 We're currently working on inflection lookups. When it's ready, an update will be sent out.
 
-# "A parsing failure occurred", what does this mean?
+### "A parsing failure occurred", what does this mean?
 
 When the content parser experiences any error, the rater shows this generic message.
 Most likely, your computer may be restraint in processing power in combination with page builders.
 This issue resolves automatically, as the parser reassesses its data every 45 seconds, or whenever the related content is updated.
+
+### Are page builders supported?
+Focus supports most page builders. However, page builders that rely on shortcodes may give incorrect assessments for the "introduction" and "subject density" ratings.
+This is because shortcodes are parsed as readable content, instead of HMTL constructors; the parser is yet unable to discern the shortcode's behavior without context.
+
+These page builders may be affected by this issue:
+
+- Divi Builder
+- WPBakery Page Builder (Visual Composer)
+
+These builders work as intended:
+
+- Beaver Builder
+- Elementor
+- Page Builder by SiteOrigin
+- Gutenberg
+- WordPress 5.0+ Block Editor
+
+We're working on an update to improve accuracy for the affected page builders.
 
 ## Changelog
 

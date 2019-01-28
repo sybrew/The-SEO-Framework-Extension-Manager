@@ -434,7 +434,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		const showFailure = () => {
-			//= Store realScore in input for saving.
+			//= Store realScore in input for saving (which is 0).
 			let input = document.querySelector( 'input[name="' + rater.id + '"]' );
 			if ( input ) input.value = 0;
 

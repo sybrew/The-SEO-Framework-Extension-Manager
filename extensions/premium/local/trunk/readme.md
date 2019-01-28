@@ -147,7 +147,7 @@ Also, when department URLs are filled in, then each specific department's data w
 	* **Newly added:**
 		* ProfessionalService
 			* Note that subtypes including Dentist, Accounting Service, Attorney, Notary, Electrician, House Painter, etc., etc., are also available.
-			* Due to great diversity the types above are not listed as subtypes.
+			* Due to great diversity, the types above are not listed as subtypes.
 * **Changed:** You can now specify up to 21 opening hours per department, instead of 7.
 	* This change most prominently adds support for siestas.
 * **Fixed:** The openinghours specification is now correctly set when the department is closed or open all day.

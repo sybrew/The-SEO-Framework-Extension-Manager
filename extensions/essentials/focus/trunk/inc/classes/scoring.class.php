@@ -347,9 +347,9 @@ Scoring::get_instance()->template = [
 		'rating' => [
 			1200 => 1, // threshold 6%
 			801  => 2, // threshold 4%
-			400  => 4,
-			200  => 2,
-			0    => 1,
+			400  => 4, // = 2%
+			200  => 2, // = 1%
+			0    => 1, // = 0%
 		],
 		'scoring' => [
 			'type' => 'p',

@@ -47,6 +47,13 @@ View our detailed [Plugin Privacy Policy](https://theseoframework.com/privacy-po
 
 Do you have questions about privacy? Feel free to [contact us](https://theseoframework.com/contact/).
 
+= Translation credits =
+
+* Portuguese (Brasil): [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)
+* Russian: [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)
+* Spanish: [Manuel Ballesta Ruiz](https://profiles.wordpress.org/mbrsolution/)
+* Turkish: [Mehmet Genç](https://profiles.wordpress.org/gncmhmt/)
+
 == Installation ==
 
 = This plugin requires: =
@@ -165,20 +172,31 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **Release date:**
 
-* TODO
+* January 28th, 2019
 
 **Plugin Improvements:**
 
-* **Changed:** This plugin now requires The SEO Framework 3.1.0 or later.
+* **Changed:** This plugin now requires The SEO Framework 3.1.0 or higher.
 * **Changed:** This plugin now uses The SEO Framework's tooltip handler.
 * **Changed:** This plugin now uses The SEO Framework's script handler.
-* **Improved:** The plugin now caches the update request in PHP runtime, instead of just in transients.
+* **Improved:** The plugin now caches the update request in PHP runtime, instead of just in database transients.
 	* Some caching plugins invoked a DDoS attack to the update services. This improvement alleviates that.
 * **Fixed:** Next to plain notices, errors and warnings from other plugins and themes are now styled correctly on this plugin's pages too.
 * **Fixed:** In Firefox and Edge, the tooltips no longer cause a horizontal pane overflow.
-	* ...In combination with TSF 3.2.2 or later.
+	* ...In combination with The SEO Framework 3.2.2 or higher.
 * **Fixed:** Extension-related post meta with special HTML characters entered will no longer cause the extension metadata to corrupt on save.
 	* This issue was found during a security checkup (which passed). Luckily, it's yet unlikely that users would encounter this issue.
+
+**Added Translations:**
+
+* Russian. Thank you [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)!
+* Portuguese (Brasil). Thank you [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)!
+
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Focus](https://theseoframework.com/extensions/focus/#changelog)
+* [Monitor](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.0.1 =
 
