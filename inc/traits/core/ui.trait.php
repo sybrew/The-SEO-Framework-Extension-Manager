@@ -171,7 +171,10 @@ trait UI {
 	 * @param string $hook The current page hook.
 	 */
 	final protected function enqueue_admin_scripts() {
-		\the_seo_framework()->Scripts()::prepare();
+
+		// PHP < 7.0 compat: set class name in variable...
+		$scripts = \the_seo_framework()->Scripts();
+		$scripts::prepare();
 
 		//* Enqueue default scripts.
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
@@ -215,6 +218,8 @@ trait UI {
 
 		\the_seo_framework()->init_admin_scripts();
 
+		// PHP < 7.0 compat: set class name in variable...
+		$scripts = \the_seo_framework()->Scripts();
 		$scripts::register( [
 			[
 				'id'       => 'tsfem',
@@ -276,7 +281,9 @@ trait UI {
 	final protected function register_form_scripts() {
 		static $registered = false;
 		if ( $registered ) return;
-		\the_seo_framework()->Scripts()::register( [
+		// PHP < 7.0 compat: set class name in variable...
+		$scripts = \the_seo_framework()->Scripts();
+		$scripts::register( [
 			[
 				'id'       => 'tsfem-form',
 				'type'     => 'css',
@@ -351,7 +358,9 @@ trait UI {
 	final protected function register_media_scripts() {
 		static $registered = false;
 		if ( $registered ) return;
-		\the_seo_framework()->Scripts()::register( [
+		// PHP < 7.0 compat: set class name in variable...
+		$scripts = \the_seo_framework()->Scripts();
+		$scripts::register( [
 			[
 				'id'       => 'tsfem-media',
 				'type'     => 'js',

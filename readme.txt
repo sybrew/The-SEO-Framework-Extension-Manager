@@ -168,6 +168,16 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.3 =
+
+**Release date:**
+
+* January 28th, 2019
+
+**Plugin Improvements:**
+
+* **Fixed:** The plugin no longer causes an error in the WordPress administrative dashboard on PHP 5.6 or below.
+
 = 2.0.2 =
 
 **Release date:**
@@ -192,6 +202,10 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* ...In combination with The SEO Framework 3.2.2 or higher.
 * **Fixed:** Extension-related post meta with special HTML characters entered will no longer cause the extension metadata to corrupt on save.
 	* This issue was found during a security checkup (which passed). Luckily, it's yet unlikely that users would encounter this issue.
+
+**In 2.0.2a:**
+
+* **Fixed:** PHP 5.5~5.6 no longer encounter errors in the admin area.
 
 **Added Translations:**
 

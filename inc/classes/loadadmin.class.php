@@ -520,7 +520,7 @@ final class LoadAdmin extends AdminPages {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( false === $this->is_tsf_extension_manager_page() && false === $this->can_do_settings() )
+		if ( ! $this->is_tsf_extension_manager_page() || ! $this->can_do_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
@@ -553,7 +553,7 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function do_activation_notice() {
 
-		if ( $this->is_plugin_activated() || false === $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
+		if ( $this->is_plugin_activated() || ! $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
 		$text  = \__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
