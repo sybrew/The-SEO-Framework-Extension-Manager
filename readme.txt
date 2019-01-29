@@ -168,6 +168,16 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
+= 2.0.4 =
+
+**Release date:**
+
+* January 29th, 2019
+
+**Plugin Improvements:**
+
+* **Fixed:** Settings that don't use AJAX can now be processed again, like for activating or deactivating your license key.
+
 = 2.0.3 =
 
 **Release date:**

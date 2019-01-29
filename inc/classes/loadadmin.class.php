@@ -520,7 +520,7 @@ final class LoadAdmin extends AdminPages {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( ! $this->is_tsf_extension_manager_page() || ! $this->can_do_settings() )
+		if ( ! $this->can_do_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {

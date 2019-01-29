@@ -82,8 +82,8 @@ trait Secure_Post {
 	 */
 	protected function init_post_checks() {
 
-		//* Update POST listener.
-		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
+		// AJAX only, not registered. Also, this method AFTER admin_init, so it went by unnoticed.
+		// \add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			$this->init_ajax_post_checks();

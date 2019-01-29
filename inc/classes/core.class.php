@@ -1637,6 +1637,7 @@ class Core {
 	 * Determines whether we're on the SEO extension manager settings page.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.4 No longer caches invalid requests.
 	 * @staticvar bool $cache
 	 *
 	 * @param bool $secure Whether to prevent insecure checks.
@@ -1654,7 +1655,12 @@ class Core {
 
 		if ( $secure ) {
 			//* Don't load from $_GET request if secure.
-			return $cache = \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+			if ( \did_action( 'current_screen' ) ) {
+				return $cache = \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+			} else {
+				// current_screen isn't set up.
+				return false;
+			}
 		} else {
 			//* Don't cache if insecure.
 			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {

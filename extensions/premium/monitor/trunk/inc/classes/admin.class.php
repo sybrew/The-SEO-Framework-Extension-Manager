@@ -360,7 +360,7 @@ final class Admin extends Api {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( false === $this->is_monitor_page() && false === \tsf_extension_manager()->can_do_settings() )
+		if ( ! \tsf_extension_manager()->can_do_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
