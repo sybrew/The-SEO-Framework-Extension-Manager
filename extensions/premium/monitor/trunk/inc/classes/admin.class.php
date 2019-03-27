@@ -222,8 +222,8 @@ final class Admin extends Api {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
-			'page_title'  => \esc_html__( 'SEO Monitor', 'the-seo-framework-extension-manager' ),
-			'menu_title'  => \esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ),
+			'page_title'  => 'SEO Monitor',
+			'menu_title'  => 'Monitor',
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->monitor_page_slug,
 			'callback'    => [ $this, '_init_monitor_page' ],

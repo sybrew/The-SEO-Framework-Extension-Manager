@@ -52,14 +52,14 @@ $_load_upgrader_class = function() {
  * @access private
  * @uses trait \TSF_Extension_Manager\Enclose_Stray_Private
  * @uses trait \TSF_Extension_Manager\Construct_Core_Once_Interface
- * @see package \TSF_Extension_Manager\Overload
+ * @see @package TSF_Extension_Manager\Overload
  * @uses trait \TSF_Extension_Manager\Memory
- * @see package \TSF_Extension_Manager\Factory
+ * @see @package TSF_Extension_Manager\Factory
  */
 final class Upgrader {
 	use Enclose_Stray_Private,
-	    Construct_Core_Once_Interface,
-	    Memory;
+		Construct_Core_Once_Interface,
+		Memory;
 
 	/**
 	 * The db revision option key.
@@ -114,10 +114,10 @@ final class Upgrader {
 	 * @since 1.5.0
 	 */
 	private function set_defaults() {
-		$this->upgrades = new \stdClass;
+		$this->upgrades             = new \stdClass;
 		$this->previous_db_versions = \get_option( static::O, [] );
-		$this->current_db_versions = $this->previous_db_versions;
-		$this->active_callbacks = [];
+		$this->current_db_versions  = $this->previous_db_versions;
+		$this->active_callbacks     = [];
 	}
 
 	/**

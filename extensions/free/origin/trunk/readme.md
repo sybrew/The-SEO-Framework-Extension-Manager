@@ -28,7 +28,7 @@ There is no setup required, and no options are available.
 
 [tsfep-image id="1"]
 
-### Not all attachments are affected the same way
+### Not all attachments are affected in the same way
 
 For an attachment page to redirect a visitor to its respective page, the attachment must be uploaded via the post edit screen.
 

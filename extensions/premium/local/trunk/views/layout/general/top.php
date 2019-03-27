@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		$size = '1em';
 
 		printf(
-			\esc_html_x( '%1$s %2$s', '1: Local, 2: SEO', 'the-seo-framework-extension-manager' ),
+			'%s %s',
 			sprintf(
 				'<span class="tsfem-logo">%s%s</span>',
 				sprintf(
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 						\esc_attr( $size )
 					)
 				),
-				\esc_html__( 'Local', 'the-seo-framework-extension-manager' )
+				'Local'
 			),
 			'SEO'
 		);

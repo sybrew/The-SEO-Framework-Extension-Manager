@@ -1,10 +1,10 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: "\U0001F680 Feature request"
+about: "Suggest a new feature for the Extension Manager."
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
-For increased exposure, features requests should be sent to the main project:
-https://github.com/sybrew/the-seo-framework/issues/new
-
-Feature requests here will be closed.
+<!-- We'd love to know what we can add! Please elaborate why you think this feature is useful. -->

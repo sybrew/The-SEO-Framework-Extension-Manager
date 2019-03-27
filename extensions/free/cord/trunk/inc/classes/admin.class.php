@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Local\Admin
+ * @package TSF_Extension_Manager\Extension\Cord\Admin
  */
-namespace TSF_Extension_Manager\Extension\Local;
+namespace TSF_Extension_Manager\Extension\Cord;
 
 defined( 'ABSPATH' ) or die;
 
@@ -10,8 +10,8 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Cord extension for The SEO Framework
+ * Copyright (C) 2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -27,13 +27,13 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * Class TSF_Extension_Manager\Extension\Local\Admin
+ * Class TSF_Extension_Manager\Extension\Cord\Admin
  *
  * Holds extension admin page methods.
  *
  * @since 1.0.0
  * @access private
- * @errorval 107xxxx
+ * @errorval 109xxxx
  * @uses TSF_Extension_Manager\Traits
  * @final
  */
@@ -48,7 +48,7 @@ final class Admin extends Core {
 	 *
 	 * @var string Page hook.
 	 */
-	protected $local_menu_page_hook;
+	protected $cord_menu_page_hook;
 
 	/**
 	 * The extension page ID/slug.
@@ -57,7 +57,7 @@ final class Admin extends Core {
 	 *
 	 * @var string Page ID/Slug
 	 */
-	protected $local_page_slug;
+	protected $cord_page_slug;
 
 	/**
 	 * Constructor, initializes WordPress actions.
@@ -66,8 +66,8 @@ final class Admin extends Core {
 	 */
 	private function construct() {
 
-		//* Sets local page slug.
-		$this->local_page_slug = 'theseoframework-local';
+		//* Sets Cord's page slug.
+		$this->cord_page_slug = 'theseoframework-cord';
 
 		//* Load admin actions.
 		$this->load_admin_actions();
@@ -83,8 +83,8 @@ final class Admin extends Core {
 		//* Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
-		//* Initialize Local page actions. Requires $this->local_menu_page_hook to be set.
-		\add_action( 'admin_init', [ $this, '_load_local_admin_actions' ], 10 );
+		//* Initialize Cord page actions. Requires $this->cord_menu_page_hook to be set.
+		\add_action( 'admin_init', [ $this, '_load_cord_admin_actions' ], 10 );
 	}
 
 	/**
@@ -102,11 +102,10 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Adds menu link for Local SEO, when possible, underneath The SEO Framework
+	 * Adds menu link for Cord, when possible, underneath The SEO Framework
 	 * SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.0 Added TSF v3.1 compat.
 	 * @uses \the_seo_framework()->seo_settings_page_slug.
 	 * @access private
 	 */
@@ -114,14 +113,14 @@ final class Admin extends Core {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
-			'page_title'  => 'Local SEO',
-			'menu_title'  => 'Local',
+			'page_title'  => 'Cord',
+			'menu_title'  => 'Cord',
 			'capability'  => 'manage_options',
-			'menu_slug'   => $this->local_page_slug,
-			'callback'    => [ $this, '_output_local_settings_page' ],
+			'menu_slug'   => $this->cord_page_slug,
+			'callback'    => [ $this, '_output_cord_settings_page' ],
 		];
 
-		$this->local_menu_page_hook = \add_submenu_page(
+		$this->cord_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
 			$menu['page_title'],
 			$menu['menu_title'],
@@ -132,33 +131,33 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Outputs Local SEO settings page.
+	 * Outputs Cord's settings page.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 */
-	public function _output_local_settings_page() {
-		$this->get_local_settings_instance()->_output_settings_page( $this );
+	public function _output_cord_settings_page() {
+		$this->get_cord_settings_instance()->_output_settings_page( $this );
 	}
 
 	/**
 	 * Hooks admin actions into the TSF Extension Manager pagehook.
 	 *
 	 * @since 1.0.0
-	 * @uses $this->local_menu_page_hook variable.
+	 * @uses $this->cord_menu_page_hook variable.
 	 * @access private
 	 */
-	public function _load_local_admin_actions() {
+	public function _load_cord_admin_actions() {
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			$this->do_settings_page_ajax_actions();
 		} else {
-			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
+			\add_action( 'load-' . $this->cord_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
 		}
 	}
 
 	/**
-	 * Hooks admin actions into the Local SEO pagehook.
+	 * Hooks admin actions into the Cord pagehook.
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
@@ -168,19 +167,19 @@ final class Admin extends Core {
 	 */
 	public function _do_settings_page_actions() {
 
-		if ( false === $this->is_local_page() )
+		if ( false === $this->is_cord_page() )
 			return false;
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
-		$this->get_local_settings_instance()->_init( $this, $this->local_page_slug, $this->local_menu_page_hook, $this->o_index );
+		$this->get_cord_settings_instance()->_init( $this, $this->cord_page_slug, $this->cord_menu_page_hook, $this->o_index );
 
 		return true;
 	}
 
 	/**
-	 * Hooks admin AJAX actions into the Local SEO pagehook.
+	 * Hooks admin AJAX actions into the Cord pagehook.
 	 *
 	 * @since 1.0.0
 	 *
@@ -191,13 +190,13 @@ final class Admin extends Core {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
 			return false;
 
-		$this->get_local_settings_instance()->_init_ajax( $this, $this->o_index );
+		$this->get_cord_settings_instance()->_init_ajax( $this, $this->o_index );
 
 		return true;
 	}
 
 	/**
-	 * Determines whether we're on the Local overview page.
+	 * Determines whether we're on the Cord overview page.
 	 *
 	 * @since 1.0.0
 	 * @staticvar bool $cache
@@ -205,22 +204,22 @@ final class Admin extends Core {
 	 *
 	 * @return bool
 	 */
-	public function is_local_page() {
+	public function is_cord_page() {
 
 		static $cache;
 
 		//* Don't load from $_GET request.
-		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->local_menu_page_hook );
+		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->cord_menu_page_hook );
 	}
 
 	/**
-	 * Sets up and returns \TSF_Extension_Manager\Extension\Local\Settings.
+	 * Sets up and returns \TSF_Extension_Manager\Extension\Cord\Settings.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return object \TSF_Extension_Manager\Extension\Local\Settings
+	 * @return object \TSF_Extension_Manager\Extension\Cord\Settings
 	 */
-	protected function get_local_settings_instance() {
-		return \TSF_Extension_Manager\Extension\Local\Settings::get_instance();
+	protected function get_cord_settings_instance() {
+		return \TSF_Extension_Manager\Extension\Cord\Settings::get_instance();
 	}
 }

@@ -420,6 +420,7 @@ class API extends Core {
 	 * Generates API access keys.
 	 *
 	 * @since 1.5.0
+	 * @since 2.1.0 Enabled entropy to prevent system sleep.
 	 *
 	 * @param string|bool $class The class name. If false, no key is generated.
 	 * @return array $keys, the storage keys. Passed by reference.
@@ -429,7 +430,7 @@ class API extends Core {
 		static $keys = [];
 
 		if ( false !== $class )
-			$keys[ $class ] = mt_rand() . uniqid();
+			$keys[ $class ] = mt_rand() . uniqid( '', true );
 
 		return $keys;
 	}

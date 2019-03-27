@@ -78,7 +78,7 @@ class Api extends Data {
 		\tsf_extension_manager()->_request_premium_extension_verification_instance( $this, $_instance, $bits );
 		$count = 1;
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-			$bits = $verification['bits'];
+			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
 
 			switch ( $count ) :

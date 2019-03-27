@@ -27,21 +27,17 @@ if ( $options ) {
 		$size = '1em';
 
 		printf(
-			\esc_html_x( '%1$s %2$s', '1: SEO, 2: Monitor', 'the-seo-framework-extension-manager' ),
+			'<span class="tsfem-logo">%sMonitor <em>&beta;</em></span>',
 			sprintf(
-				'<span class="tsfem-logo">%sSEO</span>',
+				'<svg width="%1$s" height="%1$s">%2$s</svg>',
+				\esc_attr( $size ),
 				sprintf(
-					'<svg width="%1$s" height="%1$s">%2$s</svg>',
-					\esc_attr( $size ),
-					sprintf(
-						'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-						\esc_url( $image['svg'], [ 'http', 'https' ] ),
-						\esc_url( $image['1x'], [ 'http', 'https' ] ),
-						\esc_attr( $size )
-					)
+					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+					\esc_url( $image['svg'], [ 'http', 'https' ] ),
+					\esc_url( $image['1x'], [ 'http', 'https' ] ),
+					\esc_attr( $size )
 				)
-			),
-			\esc_html__( 'Monitor', 'the-seo-framework-extension-manager' ) . ' <em>beta</em>'
+			)
 		);
 		?>
 	</h1></header>

@@ -5,7 +5,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 4.6.0
 Tested up to: 5.0.3
 Requires PHP: 5.5.21
-Stable tag: 2.0.2
+Stable tag: 2.0.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,6 +167,20 @@ If it doesn't, it will tell you why. Otherwise, you're good to go! All known iss
 If you were to get a plugin activation error, either open a support ticket [here](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose) or contact your host and ask them to upgrade PHP to a stable and secure version.
 
 == Changelog ==
+
+= 2.1.0 =
+
+**Release date:**
+
+* Month nth, 2019
+
+**Plugin improvements:**
+
+* **Changed:** TODO The plugin now communicates with `tsfcloud.net` (or .com?), instead of `dl.theseoframework.com` and `premium.theseoframework.com`.
+* **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
+* **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
+
+* TODO reinstate tsfem-button-pulse class. -> hue rotate?
 
 = 2.0.4 =
 

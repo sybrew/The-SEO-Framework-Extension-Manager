@@ -584,17 +584,19 @@ trait Error {
 				break;
 
 			case 1070100:
-			case 1070701:
+			case 1090100:
 				$message = \esc_html__( 'Invalid data was sent to the server.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
 			case 1070101:
-				$message = \esc_url__( "Settings aren't saved", 'the-seo-framework-extension-manager' );
+			case 1090101:
+				$message = \esc_url__( "A database error occurred. Settings aren't saved.", 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 
 			case 1070102:
+			case 1090102:
 				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
 				$type = 'success';
 				break;
@@ -602,7 +604,7 @@ trait Error {
 			case 1011700:
 			case 1071100:
 			case 1071101:
-				$message = \esc_html__( 'Unable to verify if settings are saved.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Unable to verify if settings are saved. Refresh this page to manually verify.', 'the-seo-framework-extension-manager' );
 				$type = 'error';
 				break;
 

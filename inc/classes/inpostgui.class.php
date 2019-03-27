@@ -613,6 +613,7 @@ final class InpostGUI {
 	 * @see \TSF_Extension_Manager\InpostGUI::verify( $secret )
 	 *
 	 * @since 1.5.0
+	 * @since 2.1.0 Enabled entropy to prevent system sleep.
 	 * @uses static::$include_secret
 	 *
 	 * @param string $file The file location.
@@ -625,7 +626,7 @@ final class InpostGUI {
 		unset( $_key, $_val, $args );
 
 		//= Prevent private includes hijacking.
-		static::$include_secret = $_secret = mt_rand() . uniqid();
+		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;
 		static::$include_secret = null;
 	}

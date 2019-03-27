@@ -299,7 +299,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		/**
 		 * @param {(boolean|object<number,string>|array)} inflections
-		 * @param {boolean|object<number,string>|array)} synonyms
+		 * @param {(boolean|object<number,string>|array)} synonyms
 		 */
 		let inflections = activeWords( idPrefix ).get( 'inflections' ),
 			synonyms    = activeWords( idPrefix ).get( 'synonyms' );

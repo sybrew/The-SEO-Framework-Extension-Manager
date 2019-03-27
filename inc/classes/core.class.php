@@ -695,7 +695,7 @@ class Core {
 	 * @access private
 	 *
 	 * @param string $instance The verification instance key. Passed by reference.
-	 * @param int $bit The verification instance bit. Passed by reference.
+	 * @param int    $bit      The verification instance bit. Passed by reference.
 	 * @return bool True if verified.
 	 */
 	final public function _verify_instance( &$instance, &$bit ) {
@@ -711,9 +711,9 @@ class Core {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param int $count The amount of instances to loop for.
+	 * @param int    $count    The amount of instances to loop for.
 	 * @param string $instance The verification instance key. Passed by reference.
-	 * @param array $bits The verification instance bits. Passed by reference.
+	 * @param array  $bits     The verification instance bits. Passed by reference.
 	 * @yield array Generator : {
 	 *    $instance string The verification instance key
 	 *    $bits array The verification instance bits
@@ -740,7 +740,7 @@ class Core {
 	 * @param array $bits The verification bits. Passed by reference.
 	 */
 	final protected function get_verification_codes( &$instance = null, &$bits = null ) {
-		$bits = $this->get_bits();
+		$bits     = $this->get_bits();
 		$instance = $this->get_verification_instance( $bits[1] );
 	}
 
@@ -781,7 +781,7 @@ class Core {
 			}
 
 			//* Set retval and empty to prevent recursive timing attacks.
-			$_retval = $instance[ $bit ];
+			$_retval  = $instance[ $bit ];
 			$instance = [];
 
 			return $_retval;
@@ -1089,9 +1089,9 @@ class Core {
 	 * @see $this->_yield_verification_instance() for faster looping instances.
 	 * @access private
 	 *
-	 * @param object $object The class object. Passed by reference.
+	 * @param object $object    The class object. Passed by reference.
 	 * @param string $_instance The verification instance. Passed by reference.
-	 * @param array $bits The verification bits. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return bool True on success, false on failure.
 	 */
 	final public function _request_premium_extension_verification_instance( &$object, &$_instance, &$bits ) {
@@ -1253,7 +1253,7 @@ class Core {
 			return $loaded[ $class ];
 
 		$_class = str_replace( '\\TSF_Extension_Manager\\Extension\\', '', $class );
-		$_ns = substr( $_class, 0, strpos( $_class, '\\' ) );
+		$_ns    = substr( $_class, 0, strpos( $_class, '\\' ) );
 
 		$_path = $this->get_extension_autload_path( $_ns );
 
@@ -1269,9 +1269,11 @@ class Core {
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
 			return $loaded[ $class ] = require_once $_path . $_file . '.class.php';
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
 
-			//* Most likely, a fatal error will now occur.
+			//* Prevent fatal errors.
+			$this->create_class_alias( $class );
+
 			return $loaded[ $class ] = false;
 		}
 	}

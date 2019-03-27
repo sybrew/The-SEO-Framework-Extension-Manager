@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 
 ?>
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
-<?php
+	<?php
 	\tsf_extension_manager()->_do_pane_wrap(
 		\__( 'Control Panel', 'the-seo-framework-extension-manager' ),
 		$this->get_cp_overview(),
@@ -33,10 +33,10 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 			'ajax_id'  => 'tsfem-e-monitor-issues-ajax',
 		]
 	);
-?>
+	?>
 </div>
 <div class="tsfem-panes-row tsfem-flex tsfem-flex-row">
-<?php
+	<?php
 	\tsf_extension_manager()->_do_pane_wrap(
 		\__( 'Statistics', 'the-seo-framework-extension-manager' ),
 		$this->get_stats_overview(),
@@ -49,6 +49,6 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 			'ajax_id'  => 'tsfem-e-monitor-stats-ajax',
 		]
 	);
-?>
+	?>
 </div>
 <?php

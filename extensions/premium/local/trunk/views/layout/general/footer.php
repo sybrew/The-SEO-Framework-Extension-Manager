@@ -16,7 +16,7 @@ $mottos = [
 	'diligent',
 ];
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
-$motto = 'A ' . $mottos[ $motto_key ] . ' Solution';
+$motto     = 'A ' . $mottos[ $motto_key ] . ' Solution';
 
 ?>
 <p class="tsfem-footer-title">

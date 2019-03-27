@@ -47,8 +47,6 @@ if ( $options ) {
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . \esc_html( $info ) . '</div></div>';
 }
 
-$extensions_i18n = \__( 'Extensions', 'the-seo-framework-extension-manager' );
-
 /**
  * Test for GD library functionality upon logo.
  *
@@ -89,10 +87,9 @@ $extensions_i18n = \__( 'Extensions', 'the-seo-framework-extension-manager' );
 		$size = '1em';
 
 		printf(
-			/* translators: %1$s = SEO, %2$s = Extensions */
-			\esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ),
+			'%s %s',
 			sprintf(
-				'<span class="tsfem-logo">%sSEO</span>',
+				'<span class="tsfem-logo">%sExtension</span>',
 				sprintf(
 					'<svg width="%1$s" height="%1$s">%2$s</svg>',
 					\esc_attr( $size ),
@@ -104,7 +101,7 @@ $extensions_i18n = \__( 'Extensions', 'the-seo-framework-extension-manager' );
 					)
 				)
 			),
-			\esc_html( $extensions_i18n )
+			'Manager'
 		);
 		?>
 	</h1></header>

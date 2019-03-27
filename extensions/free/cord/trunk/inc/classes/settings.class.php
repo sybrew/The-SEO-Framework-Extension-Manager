@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Local\Settings
+ * @package TSF_Extension_Manager\Extension\Cord\Settings
  */
-namespace TSF_Extension_Manager\Extension\Local;
+namespace TSF_Extension_Manager\Extension\Cord;
 
 defined( 'ABSPATH' ) or die;
 
@@ -10,8 +10,8 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Cord extension for The SEO Framework
+ * Copyright (C) 2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -39,25 +39,19 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 \TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
- * Require Local POST handling trait.
+ * Require Cord POST handling trait.
  * @since 1.0.0
  */
-\TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
+\TSF_Extension_Manager\Extension\Cord\_load_trait( 'secure-post' );
 
 /**
- * Require Local Schema Data Packer trait.
- * @since 1.0.0
- */
-\TSF_Extension_Manager\Extension\Local\_load_trait( 'schema-packer' );
-
-/**
- * Class TSF_Extension_Manager\Extension\Local\Settings
+ * Class TSF_Extension_Manager\Extension\Cord\Settings
  *
  * Holds extension settings methods.
  *
  * @since 1.0.0
  * @access private
- * @errorval 107xxxx
+ * @errorval 109xxxx
  */
 final class Settings {
 	use \TSF_Extension_Manager\Enclose_Core_Final,
@@ -65,8 +59,7 @@ final class Settings {
 		\TSF_Extension_Manager\UI,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
-		Secure_Post,
-		Schema_Packer;
+		Secure_Post;
 
 	/**
 	 * The settings page slug.
@@ -83,7 +76,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core
 	 *                        Used for integrity.
 	 * @param string $slug    The menu slug.
 	 * @param string $hook    The menu hook.
@@ -123,7 +116,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core
 	 *                        Used for integrity.
 	 * @param string $o_index The options index.
 	 */
@@ -167,7 +160,7 @@ final class Settings {
 		 * Set error notice option.
 		 * @see trait TSF_Extension_Manager\Error
 		 */
-		$this->error_notice_option = 'tsfem_e_local_error_notice_option';
+		$this->error_notice_option = 'tsfem_e_cord_error_notice_option';
 
 		/**
 		 * Initialize error interface.
@@ -177,13 +170,13 @@ final class Settings {
 
 		/**
 		 * Sets nonces.
-		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
+		 * @see trait TSF_Extension_Manager\Extension\Cord\Secure_Post
 		 */
 		$this->set_nonces();
 
 		/**
 		 * Initialize POST data checks.
-		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
+		 * @see trait TSF_Extension_Manager\Extension\Cord\Secure_Post
 		 */
 		$this->init_post_checks();
 	}
@@ -194,43 +187,44 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core Used for integrity.
 	 */
 	public function _output_settings_page( Core $_core ) {
-		\add_action( 'tsfem_header', [ $this, '_output_local_header' ] );
-		\add_action( 'tsfem_content', [ $this, '_output_local_content' ] );
-		\add_action( 'tsfem_footer', [ $this, '_output_local_footer' ] );
+		\add_action( 'tsfem_header', [ $this, '_output_cord_header' ] );
+		\add_action( 'tsfem_content', [ $this, '_output_cord_content' ] );
+		\add_action( 'tsfem_footer', [ $this, '_output_cord_footer' ] );
 
+		$this->wrap_type = 'row';
 		$this->ui_wrap( 'panes' );
 	}
 
 	/**
 	 * Outputs monitor header.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.0
 	 * @access private
 	 */
-	final public function _output_local_header() {
+	final public function _output_cord_header() {
 		$this->get_view( 'layout/general/top' );
 	}
 
 	/**
 	 * Outputs monitor content.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.0
 	 * @access private
 	 */
-	final public function _output_local_content() {
-		$this->get_view( 'layout/pages/local' );
+	final public function _output_cord_content() {
+		$this->get_view( 'layout/pages/cord' );
 	}
 
 	/**
 	 * Outputs monitor footer.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.0
 	 * @access private
 	 */
-	final public function _output_local_footer() {
+	final public function _output_cord_footer() {
 		$this->get_view( 'layout/general/footer' );
 	}
 
@@ -242,7 +236,7 @@ final class Settings {
 	 */
 	private function init_tsfem_ui() {
 
-		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_local_scripts' ] );
+		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_cord_scripts' ] );
 
 		//* Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
@@ -255,7 +249,7 @@ final class Settings {
 	}
 
 	/**
-	 * Registers default TSFEM Local admin scripts.
+	 * Registers default TSFEM Cord admin scripts.
 	 * Also registers TSF scripts, for TT (tooltip) support.
 	 *
 	 * @since 1.1.3
@@ -265,14 +259,9 @@ final class Settings {
 	 *
 	 * @param \The_SEO_Framework\Builders\Scripts $scripts
 	 */
-	public function _register_local_scripts( $scripts ) {
+	public function _register_cord_scripts( $scripts ) {
 		static $registered = false;
 		if ( $registered ) return;
-		/**
-		 * Registers form scripts.
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->register_form_scripts();
 
 		/**
 		 * Registers media scripts.
@@ -282,21 +271,18 @@ final class Settings {
 
 		$scripts::register( [
 			[
-				'id'       => 'tsfem-local',
+				'id'       => 'tsfem-cord',
 				'type'     => 'js',
 				'deps'     => [ 'wp-util', 'tsf-tt', 'tsfem-form', 'tsfem-media' ],
 				'autoload' => true,
-				'name'     => 'tsfem-local',
-				'base'     => TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
-				'ver'      => TSFEM_E_LOCAL_VERSION,
+				'name'     => 'tsfem-cord',
+				'base'     => TSFEM_E_CORD_DIR_URL . 'lib/js/',
+				'ver'      => TSFEM_E_CORD_VERSION,
 				'l10n'     => [
-					'name' => 'tsfem_e_localL10n',
+					'name' => 'tsfem_e_cordL10n',
 					'data' => [
-						'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
-						'i18n'  => [
-							'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
-							'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
-						],
+						'nonce' => \wp_create_nonce( 'tsfem-e-cord-ajax-nonce' ),
+						'i18n'  => [],
 					],
 				],
 			],
@@ -305,26 +291,69 @@ final class Settings {
 	}
 
 	/**
-	 * Outputs Settings Panel overview for Local SEO settings.
+	 * Outputs Settings Panel overview for Cord settings.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
 	 */
-	public function _get_local_settings_overview( self $_s ) {
+	public function _get_cord_settings_overview( self $_s ) {
 		$this->get_view( 'layout/pages/settings' );
 	}
 
 	/**
-	 * Outputs Settings bottom wrap for Local SEO Settings.
+	 * Outputs Statistics Panel overview for Cord stats.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
 	 */
-	public function _get_local_settings_bottom_wrap( self $_s ) {
-		//* Already escaped.
-		echo $this->get_bottom_wrap_items();
+	public function _get_cord_stats_overview( self $_s ) {
+		$this->get_view( 'layout/pages/stats' );
+	}
+
+	/**
+	 * Outputs Logs Panel overview for Cord logs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 */
+	public function _get_cord_logs_overview( self $_s ) {
+		$this->get_view( 'layout/pages/logs' );
+	}
+
+	/**
+	 * Outputs bottom wrap for Cord Settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 */
+	public function _get_cord_settings_bottom_wrap( self $_s ) {
+		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Save</button>';
+	}
+
+	/**
+	 * Outputs bottom wrap for Cord Stats.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 */
+	public function _get_cord_stats_bottom_wrap( self $_s ) {
+		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Refresh</button>';
+	}
+
+	/**
+	 * Outputs bottom wrap for Cord Logs.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 */
+	public function _get_cord_logs_bottom_wrap( self $_s ) {
+		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Refresh</button>';
 	}
 
 	/**
@@ -336,101 +365,6 @@ final class Settings {
 	 */
 	public function _output_theme_color_meta() {
 		$this->get_view( 'layout/general/meta' );
-	}
-
-	/**
-	 * Outputs department fields and floating buttons.
-	 *
-	 * @since 1.0.0
-	 * @uses \TSF_Extension_Manager\Extension\Local\Fields
-	 * @uses \TSF_Extension_Manager\FormGenerator
-	 *
-	 * @return void
-	 */
-	private function output_department_fields() {
-
-		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
-
-		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
-		$f->_fields( Fields::get_instance()->get_departments_fields() );
-		$f->_form_wrap( 'end' );
-
-		$this->set_bottom_wrap_items( $this->get_test_button() );
-		$this->set_bottom_wrap_items(
-			$f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
-		);
-
-		//* Destruct class.
-		$f = null;
-	}
-
-	/**
-	 * Returns test button.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The validation button.
-	 */
-	private function get_test_button() {
-		return sprintf(
-			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
-			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
-			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external tsfem-button-flat',
-			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
-		);
-	}
-
-	/**
-	 * Sets form bottom wrap items. In order.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $cache
-	 *
-	 * @param string $item The bottom wrap item.
-	 * @param bool   $get  Whether to retrieve or store $item.
-	 * @return void|array Void if $get is false. The stores items otherwise.
-	 */
-	private function set_bottom_wrap_items( $item = null, $get = false ) {
-
-		static $cache = [];
-
-		if ( $get )
-			return $cache;
-
-		if ( isset( $item ) )
-			$cache[] = $item;
-	}
-
-	/**
-	 * Returns the form bottom wrap items.
-	 *
-	 * @since 1.0.0
-	 * @uses $this->set_bottom_wrap_items() The stored items.
-	 *
-	 * @return string The bottom wrap items.
-	 */
-	private function get_bottom_wrap_items() {
-
-		$items = $this->set_bottom_wrap_items( null, true );
-
-		$retval = '';
-		foreach ( $items as $item ) {
-			$retval .= $item;
-		}
-
-		return $retval;
-	}
-
-	/**
-	 * Reprocesses stored data.
-	 *
-	 * Warning: Heavy.
-	 *
-	 * @since 1.1.2
-	 */
-	public function _reprocess_all_stored_data() {
-		$this->_init_main();
-		$this->process_all_stored_data();
 	}
 
 	/**
@@ -449,6 +383,6 @@ final class Settings {
 			$$key = $val;
 		}
 
-		include TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		include TSFEM_E_CORD_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 	}
 }

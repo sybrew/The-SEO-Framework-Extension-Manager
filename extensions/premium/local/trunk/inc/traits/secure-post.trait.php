@@ -274,7 +274,7 @@ trait Secure_Post {
 		} else {
 
 			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
-			$data = $this->pack_data( $options, true );
+			$data    = $this->pack_data( $options, true );
 
 			if ( ! $data ) {
 				$type            = 'failure';

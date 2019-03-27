@@ -40,11 +40,11 @@ final class Layout extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type.
-	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param int $bit Required. The instance bit. Passed by reference.
+	 * @param string $type     Required. The instance type.
+	 * @param string $instance Required. The verification instance key. Passed by reference.
+	 * @param array  $bits     Required. The verification instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
+	public static function initialize( $type = '', &$instance = '', &$bits = [] ) {
 
 		self::reset();
 
@@ -129,14 +129,16 @@ final class Layout extends Secure_Abstract {
 
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['deactivate'] );
-			$nonce = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
+			$nonce        = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
 			$field_id = 'disconnect-switcher';
+
 			$deactivate_i18n = \__( 'Disconnect', 'the-seo-framework-extension-manager' );
-			$ays_i18n = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
-			$da_i18n = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
+			$ays_i18n        = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
+			$da_i18n         = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
 
 			$button_class = 'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning';
+
 			$button = vsprintf(
 				'<button type=submit title="%s" class="%s">%s</button>',
 				[
@@ -146,8 +148,9 @@ final class Layout extends Secure_Abstract {
 				]
 			);
 
-			$switcher_class = 'tsfem-button-flag tsfem-button';
+			$switcher_class  = 'tsfem-button-flag tsfem-button';
 			$switcher_class .= \tsf_extension_manager()->are_options_valid() ? '' : ' tsfem-button-pulse';
+
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type=checkbox id="' . $field_id . '-action" value="1" />'
 							. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="' . $switcher_class . '">' . \esc_html( $deactivate_i18n ) . '</label>'
@@ -246,27 +249,27 @@ final class Layout extends Secure_Abstract {
 
 		switch ( $level ) :
 			case 'Enterprise':
-				$_level = \__( 'Enterprise', 'the-seo-framework-extension-manager' );
+				$_level   = \__( 'Enterprise', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			case 'Premium':
-				$_level = \__( 'Premium', 'the-seo-framework-extension-manager' );
+				$_level   = \__( 'Premium', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			case 'Essentials':
-				$_level = \__( 'Essentials', 'the-seo-framework-extension-manager' );
+				$_level   = \__( 'Essentials', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			case 'Free':
-				$_level = \__( 'Free', 'the-seo-framework-extension-manager' );
+				$_level   = \__( 'Free', 'the-seo-framework-extension-manager' );
 				$_class[] = $valid_options ? 'tsfem-success' : 'tsfem-error';
 				break;
 
 			default:
-				$_level = $level;
+				$_level   = $level;
 				$_class[] = 'tsfem-error';
 				break;
 		endswitch;

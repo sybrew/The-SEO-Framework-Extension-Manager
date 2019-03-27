@@ -104,7 +104,7 @@ trait Schema_Packer {
 
 		if ( $this->should_change_precision() && $this->can_change_precision() ) {
 			if ( $reset ) {
-				$prev && ini_set( 'serialize_precision', $prev );
+				isset( $prev ) and ini_set( 'serialize_precision', $prev );
 			} else {
 				$prev = ini_get( 'serialize_precision' );
 				ini_set( 'serialize_precision', '-1' );
@@ -143,7 +143,7 @@ trait Schema_Packer {
 	protected function get_schema() {
 
 		$schema_file = TSFEM_E_LOCAL_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'schema.json';
-		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
+		$timeout     = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
 
 		return json_decode( file_get_contents( $schema_file, false, $timeout ) );
 	}
@@ -203,7 +203,7 @@ trait Schema_Packer {
 			goto reset;
 		}
 
-		$options = JSON_UNESCAPED_SLASHES;
+		$options  = JSON_UNESCAPED_SLASHES;
 		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
 
 		$output = json_encode( $_data, $options );
@@ -230,14 +230,14 @@ trait Schema_Packer {
 	 */
 	protected function process_all_stored_data() {
 
-		$data = $this->get_stale_extension_options();
+		$data   = $this->get_stale_extension_options();
 		$schema = $this->get_schema();
 
 		$this->correct_precision();
 
 		$packer = new \TSF_Extension_Manager\SchemaPacker( $data, $schema );
 
-		$count = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
+		$count    = isset( $data['department']['count'] ) ? $data['department']['count'] : 0;
 		$main_url = isset( $data['department'][1]['url'] ) ? $this->remove_scheme( $data['department'][1]['url'] ) : 1;
 
 		$json_options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
