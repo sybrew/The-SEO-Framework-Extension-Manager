@@ -91,8 +91,8 @@ final class SchemaPacker {
 	/**
 	 * Constructor. Sets up class main variables.
 	 *
-	 * @param array  $data   The data to iterate over.
-	 * @param object $schema The JSON decoded schema to use. {
+	 * @param array     $data   The data to iterate over.
+	 * @param \stdClass $schema The JSON decoded schema to use. {
 	 *    object '_OPTIONS' : Any processing options attached.
 	 *    object '_MAIN'    : The main data to iterate over.
 	 * }
@@ -282,7 +282,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema
 	 * @return object The packed data.
 	 */
 	private function pack( \stdClass $schema ) {
@@ -316,7 +316,7 @@ final class SchemaPacker {
 	 * @since 1.3.0
 	 * @generator
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema
 	 * @yield array { string $key => mixed $value }
 	 */
 	private function generate_data( \stdClass $schema ) {
@@ -331,8 +331,8 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $key
-	 * @param object $schema
+	 * @param string    $key
+	 * @param \stdClass $schema
 	 * @return mixed The key's value.
 	 */
 	private function get_value( $key, \stdClass $schema ) {
@@ -370,7 +370,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema
 	 * @return mixed The packed iteration data, if successful.
 	 */
 	private function make_iteration( \stdClass $schema ) {
@@ -403,7 +403,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema
 	 * @return mixed The expected data.
 	 */
 	private function make_data( \stdClass $schema ) {
@@ -438,7 +438,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param object $schema
+	 * @param \stdClass $schema
 	 * @return mixed The concatenated data.
 	 */
 	private function concat( \stdClass $schema ) {
@@ -490,7 +490,7 @@ final class SchemaPacker {
 	 * @todo implement this function in $this->condition() for conditional escape.
 	 * @since 1.3.0
 	 *
-	 * @param mixed $value The value to escape. $keys The $this->data access keys.
+	 * @param mixed  $value The value to escape. $keys The $this->data access keys.
 	 * @param string $how The how-to escape $value.
 	 * @return mixed The escaped data.
 	 */
@@ -565,8 +565,8 @@ final class SchemaPacker {
 	 * @since 2.0.0 Added level ($level) and iteration ($it) access in the 'set' _do->_to action.
 	 * @todo implement self-resolving staticvar that breaks the loop?
 	 *
-	 * @param string $key   The value's key
-	 * @param mixed  $value The value to be conditioned.
+	 * @param string       $key   The value's key
+	 * @param mixed        $value The value to be conditioned.
 	 * @param array|object $what The conditional parameters. Can and must loop
 	 *                     over all conditions that apply, in order.
 	 * @return mixed The likely conditioned value.
@@ -696,7 +696,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @param string $to
 	 * @return mixed The probable converted value.
 	 */

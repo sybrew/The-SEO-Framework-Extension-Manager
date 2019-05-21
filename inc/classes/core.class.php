@@ -272,7 +272,7 @@ class Core {
 	 * @uses status_header(): https://developer.wordpress.org/reference/functions/status_header/
 	 *
 	 * @param string $type The header type.
-	 * @param bool $code The status code.
+	 * @param bool   $code The status code.
 	 */
 	final public function set_status_header( $code = 200, $type = '' ) {
 
@@ -300,7 +300,7 @@ class Core {
 	 * @since 1.2.0
 	 * @TODO set a standard for $data, i.e. [ 'results'=>[],'html'=>"", etc. ];
 	 *
-	 * @param mixed $data The data that needs to be send.
+	 * @param mixed  $data The data that needs to be send.
 	 * @param string $type The status type.
 	 */
 	final public function send_json( $data, $type = 'success' ) {
@@ -325,7 +325,7 @@ class Core {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param mixed $html The HTML that needs to be send. Must be escaped.
+	 * @param mixed  $html The HTML that needs to be send. Must be escaped.
 	 * @param string $type The status type.
 	 */
 	final public function send_html( $html, $type = 'success' ) {
@@ -425,8 +425,8 @@ class Core {
 	 * @staticvar string $last The last value;
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @param int $i The iteration count. This shouldn't be filled in.
-	 * @param bool $get Whether to return the value. This shouldn't be filled in.
+	 * @param int          $i     The iteration count. This shouldn't be filled in.
+	 * @param bool         $get   Whether to return the value. This shouldn't be filled in.
 	 * @return array|false The iterated array to string. False if input isn't array.
 	 */
 	final public function matosa( $value, $i = 0, $get = true ) {
@@ -532,14 +532,14 @@ class Core {
 	}
 
 	/**
-	 * Returns last value.
+	 * Returns last value of an array.
 	 *
 	 * I should get a nobel prize for this.
 	 *
 	 * @since 1.3.0
 	 * @see $this->umatosa() Which created a need for this.
 	 *
-	 * @param array $a
+	 * @param array $a The array to get the last value from.
 	 * @return string The last array value.
 	 */
 	final public function get_last_value( array $a ) {
@@ -659,8 +659,8 @@ class Core {
 	 * @since 1.0.0
 	 * @since 1.2.0 Now uses instanceof comparison
 	 *
-	 * @param array $current_filter The filter to walk.
-	 * @param string $key The current array key.
+	 * @param array  $current_filter The filter to walk.
+	 * @param string $key            The current array key.
 	 * @return bool true
 	 */
 	final protected function stop_class_filters( $current_filter, $key ) {
@@ -737,7 +737,7 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $instance The verification instance. Passed by reference.
-	 * @param array $bits The verification bits. Passed by reference.
+	 * @param array  $bits The verification bits. Passed by reference.
 	 */
 	final protected function get_verification_codes( &$instance = null, &$bits = null ) {
 		$bits     = $this->get_bits();
@@ -933,9 +933,9 @@ class Core {
 	 * @since 1.2.0
 	 * @access private
 	 *
-	 * @param string $uid   The unique ID for the hash. A good choice would be the method name.
-	 * @param int    $scale The time scale in seconds.
-	 * @param int    $end   UNIX timestamp where the hash invalidates. Defaults to now.
+	 * @param string $uid    The unique ID for the hash. A good choice would be the method name.
+	 * @param int    $length The time length in seconds.
+	 * @param int    $end    UNIX timestamp where the hash invalidates. Defaults to now.
 	 * @return string The timed hash that will always return the same.
 	 */
 	final public function _get_timed_hash( $uid, $length = 3600, $end = 0 ) {
@@ -1189,7 +1189,7 @@ class Core {
 	 * @staticvar array $registered The registered classes.
 	 *
 	 * @param string|null $path      The extension path to look for.
-	 * @param string|null $class     The $class name including namespace.
+	 * @param string|null $namespace The class name including namespace.
 	 * @param string|null $get       The namespace path to get from cache.
 	 * @return void|bool|string : {
 	 *    false  : The extension namespace wasn't set when $get is true.
@@ -1377,7 +1377,7 @@ class Core {
 	 * @access private
 	 *
 	 * @param string $_instance The verification instance key. Passed by reference.
-	 * @param int $bit The verification instance bit. Passed by reference.
+	 * @param array  $bits      The verification instance bits. Passed by reference.
 	 * @return array|boolean Current subscription status. False on failed instance verification.
 	 */
 	final public function _get_subscription_status( &$_instance, &$bits ) {
@@ -1420,7 +1420,7 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $font The font name, should include .ttf.
-	 * @param bool $url Whether to return a path or URL.
+	 * @param bool   $url  Whether to return a path or URL.
 	 * @return string The font URL or path. Not escaped.
 	 */
 	final public function get_font_file_location( $font = '', $url = false ) {
@@ -1437,7 +1437,7 @@ class Core {
 	 * @since 1.0.0
 	 *
 	 * @param string $image The image name, should include .jpg, .png, etc..
-	 * @param bool $url Whether to return a path or URL.
+	 * @param bool   $url   Whether to return a path or URL.
 	 * @return string The image URL or path. Not escaped.
 	 */
 	final public function get_image_file_location( $image = '', $url = false ) {
@@ -1462,8 +1462,8 @@ class Core {
 	 * @link https://wordpress.org/plugins/about/readme.txt
 	 *
 	 * @param string $text The text that might contain markdown. Expected to be escaped.
-	 * @param array $convert The markdown style types wished to be converted.
-	 *              If left empty, it will convert all.
+	 * @param array  $convert The markdown style types wished to be converted.
+	 *               If left empty, it will convert all.
 	 * @return string The markdown converted text.
 	 */
 	final public function convert_markdown( $text, $convert = [] ) {
@@ -1596,7 +1596,7 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @param string The content to calculate size from.
+	 * @param string $content The content to calculate size from.
 	 * @return int The filesize in bytes/octets.
 	 */
 	final public function get_filesize( $content = '' ) {

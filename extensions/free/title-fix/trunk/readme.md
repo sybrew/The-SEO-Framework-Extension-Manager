@@ -59,7 +59,7 @@ There is no setup required, and no options are available.
 
 * **Removed:** filter `the_seo_framework_force_title_fix`.
 	* In preparation for TSF 3.1.
-	* This was added to include multisite support for the plugin, but as this now an extension it's automatically supported.
+	* This was added to include multisite support for the plugin; but, as this is now an extension, it's automatically supported.
 
 ### 1.0.3
 
