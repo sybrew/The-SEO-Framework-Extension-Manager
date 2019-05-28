@@ -385,7 +385,7 @@ final class Admin {
 	 */
 	final public function _wp_ajax_request_settings_export() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 
 				if ( \check_ajax_referer( 'tsfem-e-transporter-ajax-nonce', 'nonce', false ) ) {
@@ -417,7 +417,7 @@ final class Admin {
 
 	final public function _wp_ajax_request_settings_download() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 				// TODO fix php 7.3 compact.....
 

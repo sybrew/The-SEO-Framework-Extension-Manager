@@ -271,7 +271,7 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_enable_feeds() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \TSF_Extension_Manager\can_do_manager_settings() ) :
 
 				\check_ajax_referer( 'tsfem-ajax-nonce', 'nonce' );
@@ -311,7 +311,7 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_tsfem_update_extension() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \TSF_Extension_Manager\can_do_manager_settings() ) :
 
 				$case = '';
@@ -361,7 +361,7 @@ class Panes extends API {
 	 */
 	final public function _wp_ajax_tsfem_update_extension_desc_footer() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \TSF_Extension_Manager\can_do_manager_settings() ) :
 
 				$slug = '';

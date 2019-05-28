@@ -41,7 +41,7 @@ final class Extensions_Options_Cache {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $options
+	 * @var array $options
 	 */
 	private static $options = null;
 
@@ -82,11 +82,11 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param string|int $index The option index that has to be changed.
+	 * @param string|int $index       The option index that has to be changed.
 	 * @param null|array $new_options The new options to set.
-	 *        Should not have changed options from outside the current extension's scope.
-	 * @param bool $delete If $new_options aren't set, but this is true, then
-	 *        it will delete the current options $index from cache.
+	 *                                Should not have changed options from outside the current extension's scope.
+	 * @param bool       $delete      If $new_options aren't set, but this is true, then
+	 *                                it will delete the current options $index from cache.
 	 * @return array The current extension options.
 	 */
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
@@ -122,7 +122,7 @@ final class Stale_Extensions_Options_Cache {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $options
+	 * @var array $options
 	 */
 	private static $options = null;
 
@@ -163,11 +163,11 @@ final class Stale_Extensions_Options_Cache {
 	 * @since 1.3.0
 	 * @access private
 	 *
-	 * @param string|int $index The option index that has to be changed.
+	 * @param string|int $index       The option index that has to be changed.
 	 * @param null|array $new_options The new options to set.
-	 *        Should not have changed options from outside the current extension's scope.
-	 * @param bool $delete If $new_options aren't set, but this is true, then
-	 *        it will delete the current options $index from cache.
+	 *                                Should not have changed options from outside the current extension's scope.
+	 * @param bool       $delete      If $new_options aren't set, but this is true, then
+	 *                                it will delete the current options $index from cache.
 	 * @return array The current extension options.
 	 */
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
@@ -199,9 +199,10 @@ trait Extension_Options {
 	 * @NOTE: Always set this directly in the constructor of the class.
 	 *        Traits do not share class properties and thus properties hold their
 	 *        value as if it were its user's class.
+	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $o_index The current extension settings base index field.
+	 * @var string $o_index The current extension settings base index field.
 	 */
 	protected $o_index = '';
 
@@ -210,9 +211,10 @@ trait Extension_Options {
 	 *
 	 * If option key's value is not null, it will fall back to set option when
 	 * $this->get_option()'s second parameter is not null either.
+	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $o_defaults The default options.
+	 * @var array $o_defaults The default options.
 	 */
 	protected $o_defaults = [];
 
@@ -221,9 +223,10 @@ trait Extension_Options {
 	 *
 	 * If option key's value is not null, it will fall back to set option when
 	 * $this->get_option()'s second parameter is not null either.
+	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $o_stale_defaults The default options.
+	 * @var array $o_stale_defaults The default options.
 	 */
 	protected $o_stale_defaults = [];
 
@@ -260,7 +263,7 @@ trait Extension_Options {
 	/**
 	 * Converts a single or sequential|associative array into a multidimensional array.
 	 *
-	 * satoma: "Single Array to Multidimensional Array"
+	 * SATOMA: "Single Array to Multidimensional Array"
 	 *
 	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
 	 * Becomes: [ a => [ b => [ c ] ];
@@ -323,8 +326,8 @@ trait Extension_Options {
 	 * @since 1.0.0
 	 * @since 1.2.0 : Now listens to $this->o_defaults.
 	 *
-	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist. Defaults to $this->o_defaults[ $option ].
+	 * @param string $option  The Option name.
+	 * @param mixed  $default The fallback value if the option doesn't exist. Defaults to $this->o_defaults[ $option ].
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_option( $option, $default = null ) {
@@ -351,7 +354,7 @@ trait Extension_Options {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $key The key that should collapse with the option.
+	 * @param array $key     The key that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
 	 *                       Defaults to the corrolated $this->o_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
@@ -383,7 +386,7 @@ trait Extension_Options {
 	 * @since 1.0.0
 	 *
 	 * @param string $option The option name.
-	 * @param mixed $value The option value.
+	 * @param mixed  $value  The option value.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	final protected function update_option( $option, $value ) {
@@ -509,8 +512,9 @@ trait Extension_Options {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist. Defaults to $this->o_stale_defaults[ $option ].
+	 * @param string $option  The Option name.
+	 * @param mixed  $default The fallback value if the option doesn't exist.
+	 *                        Defaults to $this->o_stale_defaults[ $option ].
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_stale_option( $option, $default = null ) {
@@ -537,7 +541,7 @@ trait Extension_Options {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $key The key that should collapse with the option.
+	 * @param array $key     The key that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
 	 *                       Defaults to the corrolated $this->o_stale_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
@@ -584,7 +588,7 @@ trait Extension_Options {
 	 * @since 1.3.0
 	 *
 	 * @param string $option The option name.
-	 * @param mixed $value The option value.
+	 * @param mixed  $value  The option value.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	final protected function update_stale_option( $option, $value ) {

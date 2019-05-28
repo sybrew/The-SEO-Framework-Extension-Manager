@@ -37,17 +37,6 @@ class AccountActivation extends Panes {
 	use Enclose_Stray_Private, Construct_Child_Interface;
 
 	/**
-	 * Holds activation input key and email.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string The activation key.
-	 * @var string The activation email.
-	 */
-	protected $activation_key   = '';
-	protected $activation_email = '';
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -113,21 +102,25 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Added multilevel support.
+	 * @since 2.1.0 Added the $args parameter.
 	 *
+	 * @param array $args : {
+	 *    'request'          => string The request type.
+	 *    'licence_key'      => string The license key used.
+	 *    'activation_email' => string The activation email used.
+	 * }
 	 * @param array $results The activation response.
 	 * @return bool|null True on success, false on failure. Null on invalid request.
 	 */
-	protected function handle_premium_activation( $results ) {
+	protected function handle_premium_activation( $args, $results ) {
 
 		if ( ! empty( $results['activated'] ) && ! empty( $results['_activation_level'] ) ) {
 
-			$args = [
-				'api_key'           => $this->activation_key,
-				'activation_email'  => $this->activation_email,
+			$success = $this->do_premium_activation( [
+				'licence_key'       => $args['licence_key'],
+				'activation_email'  => $args['activation_email'],
 				'_activation_level' => $results['_activation_level'],
-			];
-
-			$success = $this->do_premium_activation( $args );
+			] );
 
 			if ( ! $success ) {
 				$this->do_deactivation( false, true );
@@ -162,11 +155,17 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 1.1.0 : Can now also disconnect decoupled websites.
+	 * @since 2.1.0 Added the $args parameter.
 	 *
+	 * @param array $args : {
+	 *    'request'          => string The request type.
+	 *    'licence_key'      => string The license key used.
+	 *    'activation_email' => string The activation email used.
+	 * }
 	 * @param array $results The disconnection response.
 	 * @return bool|null True on success, false on failure. Null on invalid request.
 	 */
-	protected function handle_premium_disconnection( $results ) {
+	protected function handle_premium_disconnection( $args, $results ) {
 
 		if ( isset( $results['deactivated'] ) ) {
 			//* If option has once been registered, deregister options and return activation status.
@@ -248,7 +247,11 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args The activation arguments.
+	 * @param array $args : {
+	 *    'licence_key'       => string The license key used.
+	 *    'activation_email'  => string The activation email used.
+	 *    '_activation_level' => string The activation email used.
+	 * }
 	 * @return bool True on success. False on failure.
 	 */
 	protected function do_premium_activation( $args ) {
@@ -256,13 +259,13 @@ class AccountActivation extends Panes {
 		$success = [];
 
 		$success[] = $this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true );
-		$success[] = $this->update_option( 'api_key', $args['api_key'], 'instance', true );
+		$success[] = $this->update_option( 'api_key', $args['licence_key'], 'instance', true );
 		$success[] = $this->update_option( 'activation_email', $args['activation_email'], 'instance', true );
 		$success[] = $this->update_option( '_activation_level', $args['_activation_level'], 'instance', true );
 		$success[] = $this->update_option( '_activated', 'Activated', 'instance', true );
 
 		//* Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
-		$success[] = $this->set_remote_subscription_status( true );
+		$success[] = $this->set_remote_subscription_status( $args );
 
 		return ! in_array( false, $success, true );
 	}
@@ -415,24 +418,31 @@ class AccountActivation extends Panes {
 	 * @since 1.0.0
 	 * @see $this->get_remote_subscription_status()
 	 *
-	 * @param bool $doing_activation Whether the activation process is running.
+	 * @param array|null $args : {
+	 *    'licence_key'      => string The license key used.
+	 *    'activation_email' => string The activation email used.
+	 * }
 	 * @return bool True on success, false on failure.
 	 */
-	protected function set_remote_subscription_status( $doing_activation = false ) {
-		return false !== $this->get_remote_subscription_status( $doing_activation );
+	protected function set_remote_subscription_status( $args = null ) {
+		return false !== $this->get_remote_subscription_status( $args );
 	}
 
 	/**
 	 * Fetches remote subscription status. Use this scarcely.
 	 *
 	 * @since 1.0.0
+	 * @since 2.1.0 The first parameter now accepts arguments.
 	 *
-	 * @param bool $doing_activation Whether the activation process is running.
+	 * @param array|null $args : Should only be set during activation {
+	 *    'licence_key'      => string The license key used.
+	 *    'activation_email' => string The activation email used.
+	 * }
 	 * @return bool|array False on failure. Array subscription status on success.
 	 */
-	protected function get_remote_subscription_status( $doing_activation = false ) {
+	protected function get_remote_subscription_status( $args = null ) {
 
-		if ( false === $doing_activation && ! $this->is_connected_user() )
+		if ( null === $args && ! $this->is_connected_user() )
 			return false;
 
 		static $response = null;
@@ -454,18 +464,13 @@ class AccountActivation extends Panes {
 		$timestamp = (int) ceil( time() / $divider );
 
 		//* Return cached status within 2 hours.
-		if ( ! $doing_activation && $timestamp === $status['timestamp'] )
+		if ( null === $args && $timestamp === $status['timestamp'] )
 			return $response = $status['status'];
 
-		if ( $doing_activation ) {
-			//* Wait 0.0625 seconds as a second request is following up (1~20x load time server).
+		if ( null !== $args ) {
+			//* $args should only be supplied when doing activation.
+			// So, wait 0.0625 seconds as a second request is following up (1~20x load time server).
 			usleep( 62500 );
-
-			//* Fetch data from POST variables. As the options are cached and tainted already at this point.
-			$args = [
-				'licence_key'      => $this->activation_key,
-				'activation_email' => $this->activation_email,
-			];
 		} else {
 			$args = [
 				'licence_key'      => $this->get_option( 'api_key' ),

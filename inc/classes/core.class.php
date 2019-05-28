@@ -153,7 +153,7 @@ class Core {
 		$this->get_verification_codes( $_instance, $bits );
 
 		//* Some AJAX functions require Extension layout traits to be loaded.
-		if ( \is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \is_admin() && \wp_doing_ajax() ) {
 			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
 				$this->ajax_is_tsf_extension_manager_page( true );
 		}
@@ -883,7 +883,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $data The data to hash.
+	 * @param mixed  $data   The data to hash.
 	 * @param string $scheme Authentication scheme ( 'instance', 'auth', 'secure_auth', 'nonce' ).
 	 *                       Default 'instance'.
 	 * @return string Hash of $data.
@@ -1665,7 +1665,7 @@ class Core {
 			}
 		} else {
 			//* Don't cache if insecure.
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( \wp_doing_ajax() ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
 				return \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );

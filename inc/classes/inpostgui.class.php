@@ -491,7 +491,8 @@ final class InpostGUI {
 	 * Verifies nonce on POST and writes the class $save_access_state variable.
 	 *
 	 * @since 1.5.0
-	 * @since 2.0.2 : Added \wp_unslash to POST data.
+	 * @since 2.0.2 Added \wp_unslash to POST data.
+	 * @since 2.1.0 Now tests for post revision.
 	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
@@ -505,14 +506,16 @@ final class InpostGUI {
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
 		   ) return;
 
-		static::$save_access_state = 0b0001;
+		static::$save_access_state = TSFEM_INPOST_IS_SECURE;
 
-		if ( ! defined( 'DOING_AUTOSAVE' ) || ! DOING_AUTOSAVE )
-			static::$save_access_state |= 0b0010;
-		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX )
-			static::$save_access_state |= 0b0100;
-		if ( ! defined( 'DOING_CRON' ) || ! DOING_CRON )
-			static::$save_access_state |= 0b1000;
+		if ( ! \wp_is_post_autosave( $post ) )
+			static::$save_access_state |= TSFEM_INPOST_NO_AUTOSAVE;
+		if ( ! \wp_doing_ajax() )
+			static::$save_access_state |= TSFEM_INPOST_NO_AJAX;
+		if ( ! \wp_doing_cron() )
+			static::$save_access_state |= TSFEM_INPOST_NO_CRON;
+		if ( ! \wp_is_post_revision( $post ) )
+			static::$save_access_state |= TSFEM_INPOST_NO_REVISION;
 
 		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? \wp_unslash( $_POST[ static::META_PREFIX ] ) : null; // Input var, sanitization OK.
 
@@ -525,12 +528,13 @@ final class InpostGUI {
 		 * @param array|null    $data              The meta data, set through `pm_index` keys.
 		 * @param int (bitwise) $save_access_state The state the save is in.
 		 *    Any combination of : {
-		 *      1 = 0001 : Passed nonce and capability checks. Always set at this point.
-		 *      2 = 0010 : Not doing autosave.
-		 *      4 = 0100 : Not doing AJAX.
-		 *      8 = 1000 : Not doing WP Cron.
+		 *      1  = 00001 : Passed nonce and capability checks. Always set at this point.
+		 *      2  = 00010 : Not doing autosave.
+		 *      4  = 00100 : Not doing AJAX.
+		 *      8  = 01000 : Not doing WP Cron.
+		 *      16 = 10000 : Not creating a post revision.
 		 *      |
-		 *     15 = 1111 : Post is manually published or updated.
+		 *      31 = 11111 : Post is manually and securely published or updated.
 		 *    }
 		 */
 		\do_action_ref_array( 'tsfem_inpostgui_verified_nonce', [ $post, $data, static::$save_access_state ] );
@@ -540,11 +544,25 @@ final class InpostGUI {
 	 * Determines whether POST data can be safely written.
 	 *
 	 * @since 1.5.0
+	 * @since 2.1.0 Now tests for post revision.
 	 *
 	 * @return bool True if user verification passed, and not doing autosave, cron, or ajax.
 	 */
 	public static function can_safely_write() {
-		return ! ( static::$save_access_state ^ 0b1111 );
+		return static::is_state_safe( static::$save_access_state );
+	}
+
+	/**
+	 * Determines whether input state is safe.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @return bool True if user verification passed, and not doing autosave, cron, or ajax.
+	 */
+	public static function is_state_safe( $state ) {
+		return (bool) ( $state & (
+			TSFEM_INPOST_IS_SECURE | TSFEM_INPOST_NO_AUTOSAVE | TSFEM_INPOST_NO_AJAX | TSFEM_INPOST_NO_CRON | TSFEM_INPOST_NO_REVISION
+		) );
 	}
 
 	/**

@@ -32,6 +32,7 @@ tsf_extension_manager_pre_boot_test();
  * Tests plugin upgrade.
  *
  * @since 1.5.0
+ * @since 2.1.0 Now requires WordPress 4.8+, from 4.7+
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
@@ -60,7 +61,7 @@ function tsf_extension_manager_pre_boot_test() {
 			'5.5' => 50521,
 			'5.6' => 50605,
 		),
-		'wp'  => '37965',
+		'wp'  => '38590',
 	);
 
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $test = 1
@@ -107,7 +108,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 		case 3:
 			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.6 or later';
+			$requirement = 'WordPress 4.8 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

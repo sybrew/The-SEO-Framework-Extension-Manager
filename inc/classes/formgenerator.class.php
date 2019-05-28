@@ -58,10 +58,11 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @var int $bits
-	 * @var int $max_it
+	 * @var string $o_key
+	 * @var bool   $has_o_key
+	 * @var bool   $use_stale
 	 */
-	private $o_key = '',
+	private $o_key     = '',
 	        $has_o_key = false,
 	        $use_stale = false;
 
@@ -105,8 +106,8 @@ final class FormGenerator {
 	 * @static
 	 * @staticvar bool $found Prevents further callback matching to improve performance.
 	 *
-	 * @param string $class The caller class.
-	 * @param array $args : The form arguments {
+	 * @param string $class  The caller class.
+	 * @param array  $args : The form arguments {
 	 *   string 'caller'   : Required. The calling class. Checks for "doing it right" iteration listeners.
 	 *   string 'o_index'  : Required. The option index field for storing extension options.
 	 *   string 'o_key'    : The pre-assigned option key. Great for when working
@@ -128,7 +129,7 @@ final class FormGenerator {
 		if ( static::is_ajax_callee( $class ) ) {
 			$found = true;
 			static::$cur_ajax_caller = $class;
-			static::$ajax_it_args = $args;
+			static::$ajax_it_args    = $args;
 
 			/**
 			 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
@@ -216,13 +217,10 @@ final class FormGenerator {
 	 * @uses $this->_fields()
 	 */
 	public static function _output_ajax_form_its() {
-
 		$o = new static( static::$ajax_it_args );
 		$o->prepare_ajax_iteration();
 		$o->prepare_ajax_iteration_fields();
 		$o->_fields( static::$ajax_it_fields );
-
-		exit;
 	}
 
 	/**
@@ -349,13 +347,13 @@ final class FormGenerator {
 	 */
 	public function get( $what = '' ) {
 		switch ( $what ) :
-			case 'bits' :
+			case 'bits':
 				return $this->bits;
 
-			case 'max_it' :
+			case 'max_it':
 				return $this->max_it;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -393,7 +391,7 @@ final class FormGenerator {
 	private function get_form_wrap( $what, $url, $validator ) {
 
 		switch ( $what ) :
-			case 'start' :
+			case 'start':
 				return vsprintf(
 					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s">',
 					[
@@ -403,10 +401,10 @@ final class FormGenerator {
 					]
 				);
 
-			case 'end' :
+			case 'end':
 				return '</form>';
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -442,7 +440,7 @@ final class FormGenerator {
 	private function get_form_button( $what, $name ) {
 
 		switch ( $what ) :
-			case 'submit' :
+			case 'submit':
 				return vsprintf(
 					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload tsfem-button-flat">%2$s</button>',
 					[
@@ -452,7 +450,7 @@ final class FormGenerator {
 				);
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 	}
@@ -462,8 +460,8 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array  $fields. Passed by reference for performance.
-	 * @param string $type. Accepts 'get' and 'echo'.
+	 * @param array  $fields Passed by reference for performance.
+	 * @param string $type   Accepts 'get' and 'echo'.
 	 * @return string|void $_fields. Void if $type is echo.
 	 */
 	public function _fields( array $fields, $type = 'echo' ) {
@@ -481,7 +479,7 @@ final class FormGenerator {
 	 * @see http://php.net/manual/en/language.references.return.php
 	 * @uses $this->generate_fields()
 	 *
-	 * @param array $fields. Passed by reference for performance.
+	 * @param array $fields Passed by reference for performance.
 	 * @return string $_fields.
 	 */
 	private function get_fields( array &$fields ) {
@@ -502,7 +500,7 @@ final class FormGenerator {
 	 * @see http://php.net/manual/en/language.references.return.php
 	 * @uses $this->generate_fields()
 	 *
-	 * @param array $fields. Passed by reference for performance.
+	 * @param array $fields Passed by reference for performance.
 	 */
 	private function output_fields( array &$fields ) {
 		foreach ( $this->generate_fields( $fields ) as $field ) {
@@ -665,7 +663,7 @@ final class FormGenerator {
 	 */
 	private function get_raw_sub_field_id( $key, $what = 'full' ) {
 
-		$id = $this->get_raw_field_id( $what );
+		$id   = $this->get_raw_field_id( $what );
 		$id[] = $key;
 
 		return $id;
@@ -798,68 +796,68 @@ final class FormGenerator {
 		$this->clean_desc_index( $args['_desc'] );
 
 		switch ( $args['_type'] ) :
-			case 'multi' :
+			case 'multi':
 				return $this->create_fields_multi( $args );
 				break;
 
-			case 'iterate_main' :
+			case 'iterate_main':
 				//= Can only be used on main output field. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'echo' );
 				break;
 
-			case 'iterate_ajax' :
+			case 'iterate_ajax':
 				//= Can only be used in AJAX. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'ajax' );
 				break;
 
-			case 'iterate' :
+			case 'iterate':
 				return $this->fields_iterator( $args, 'get' );
 				break;
 
-			case 'select' :
-			case 'selectmulti' :
+			case 'select':
+			case 'selectmulti':
 				return $this->create_select_field( $args );
 				break;
 
-			case 'selectmultia11y' :
+			case 'selectmultia11y':
 				//= Select field, but then through checkboxes.
 				return $this->create_select_multi_a11y_field( $args );
 				break;
 
-			case 'text' :
-			case 'password' :
-			case 'tel' :
-			case 'url' :
-			case 'search' :
-			case 'time' :
-			case 'week' :
-			case 'month' :
-			case 'datetime-local' :
-			case 'date' :
-			case 'number' :
-			case 'range' :
-			case 'color' :
-			case 'hidden' :
+			case 'text':
+			case 'password':
+			case 'tel':
+			case 'url':
+			case 'search':
+			case 'time':
+			case 'week':
+			case 'month':
+			case 'datetime-local':
+			case 'date':
+			case 'number':
+			case 'range':
+			case 'color':
+			case 'hidden':
 				return $this->create_input_field_by_type( $args );
 				break;
 
-			case 'textarea' :
+			case 'textarea':
 				return $this->create_textarea_field( $args );
 				break;
 
-			case 'checkbox' :
+			case 'checkbox':
 				return $this->create_checkbox_field( $args );
 				break;
 
-			case 'radio' :
+			case 'radio':
 				return $this->create_radio_field( $args );
 				break;
 
-			case 'image' :
+			case 'image':
 				return $this->create_image_field( $args );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -932,15 +930,15 @@ final class FormGenerator {
 		$o = '';
 
 		switch ( $type ) :
-			case 'echo' :
+			case 'echo':
 				$this->output_fields_iterator( $args );
 				break;
 
-			case 'ajax' :
+			case 'ajax':
 				$this->output_ajax_fields_iterator( $args );
 				break;
 
-			case 'get' :
+			case 'get':
 				$o = $this->get_fields_iterator( $args );
 				break;
 
@@ -961,10 +959,8 @@ final class FormGenerator {
 	 * @param int <unsigned> (R>0) $max The maximum value. Passed by reference.
 	 */
 	private function set_max_iterations( &$max ) {
-
-		if ( $max < 1 || $max > $this->max_it ) {
+		if ( $max < 1 || $max > $this->max_it )
 			$max = $this->max_it;
-		}
 	}
 
 	/**
@@ -1156,7 +1152,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 *
 	 * @param string $what Whether to 'start' or 'end' the wrap.
-	 * @param array $args The collapse wrap arguments.
+	 * @param array  $args The collapse wrap arguments.
 	 * @return string
 	 */
 	private function get_collapse_wrap( $what, array $args = [] ) {
@@ -1394,9 +1390,9 @@ final class FormGenerator {
 	private function create_input_field_by_type( array $args ) {
 
 		switch ( $args['_type'] ) :
-			case 'date' :
-			case 'number' :
-			case 'range' :
+			case 'date':
+			case 'number':
+			case 'range':
 				$this->clean_range_index( $args['_range'] );
 
 				$s_range = '';
@@ -1407,27 +1403,27 @@ final class FormGenerator {
 				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 
-			case 'color' :
+			case 'color':
 				// TODO
 				break;
 
-			case 'tel' :
+			case 'tel':
 				$s_pattern = $this->get_fields_pattern(
 					$args['_pattern'],
 					'(\+|00)(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$'
 				);
 				break;
 
-			default :
-			case 'text' :
-			case 'password' :
-			case 'url' :
-			case 'search' :
-			case 'time' :
-			case 'week' :
-			case 'month' :
-			case 'datetime-local' :
-			case 'hidden' :
+			default:
+			case 'text':
+			case 'password':
+			case 'url':
+			case 'search':
+			case 'time':
+			case 'week':
+			case 'month':
+			case 'datetime-local':
+			case 'hidden':
 				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
 				break;
 		endswitch;

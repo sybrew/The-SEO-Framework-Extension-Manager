@@ -34,9 +34,9 @@ defined( 'ABSPATH' ) or die;
 function extension_basename( $path ) {
 
 	$path = \wp_normalize_path( $path );
-	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
-
 	$path = trim( $path, DIRECTORY_SEPARATOR );
+
+	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
 	$extension_dir = trim( $extension_dir, DIRECTORY_SEPARATOR );
 
 	/**
@@ -79,7 +79,7 @@ function extension_dir_url( $file ) {
 	//= Convert Windows/Unix paths to URL paths.
 	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-	$url = TSF_EXTENSION_MANAGER_DIR_URL;
+	$url  = TSF_EXTENSION_MANAGER_DIR_URL;
 	$url .= trim( $path, '/ ' ) . '/';
 
 	return $url;

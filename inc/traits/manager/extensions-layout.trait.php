@@ -297,7 +297,7 @@ trait Extensions_Layout {
 		} else {
 			//* Disable if: Extension is not compatible || User isn't premium/connected and extension is.
 			$disabled = $disabled
-				|| static::is_extension_compatible( $extension ) === -1
+				|| ! static::is_extension_compatible( $extension )
 				|| ( ! self::is_premium_user() && static::is_extension_premium( $extension ) )
 				|| ( ! self::is_connected_user() && static::is_extension_essentials( $extension ) );
 
@@ -503,51 +503,47 @@ trait Extensions_Layout {
 	 * Returns description footer compatibility item.
 	 *
 	 * @since 1.0.0
+	 * @since 2.1.0 Now uses bitwise operators.
 	 *
 	 * @param array $extension The extension entry.
 	 * @return string The escaped extension compatibility item.
 	 */
 	private static function get_extension_desc_compat_item( $extension ) {
 
-		$is_compatible = static::is_extension_compatible( $extension );
+		$incompatibility = static::determine_extension_incompatibility( $extension );
 
-		switch ( $is_compatible ) :
-			case 0:
-				$compat_class  = 'tsfem-success';
-				$compat_notice = \__( 'Compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
-				$compat_name   = static::get_i18n( 'compatible' );
-				break;
+		if ( $incompatibility & ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE ) ) {
+			$compat_class = 'tsfem-error';
+			$compat_notice = sprintf(
+				/* translators: 1: Version number, 2: Version number */
+				\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
+				$extension['requires'],
+				$extension['requires_tsf']
+			);
+			$compat_name = static::get_i18n( 'incompatible' );
+		} elseif ( $incompatibility & ( TSFEM_EXTENSION_TSF_UNTESTED | TSFEM_EXTENSION_WP_UNTESTED ) ) {
+			switch ( $incompatibility ) :
+				case TSFEM_EXTENSION_TSF_UNTESTED:
+					$compat_notice = \__( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
+					break;
 
-			case 1:
-			case 2:
-			case 3:
-				$compat_class = 'tsfem-unknown';
-				$compat_name  = static::get_i18n( 'compatible' );
-				switch ( $is_compatible ) :
-					case 1:
-						$compat_notice = \__( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
-						break;
-					case 2:
-						$compat_notice = \__( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
-						break;
-					case 3:
-						$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
-						break;
-				endswitch;
-				$compat_notice .= ' <br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
-				break;
+				case TSFEM_EXTENSION_WP_UNTESTED:
+					$compat_notice = \__( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
+					break;
 
-			default:
-			case -1:
-				$compat_class = 'tsfem-error';
-				$compat_notice = sprintf(
-					/* translators: 1: Version number, 2: Version number */
-					\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
-					$extension['requires'], $extension['requires_tsf']
-				);
-				$compat_name = static::get_i18n( 'incompatible' );
-				break;
-		endswitch;
+				default:
+					$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
+					break;
+			endswitch;
+
+			$compat_class = 'tsfem-unknown';
+			$compat_name  = static::get_i18n( 'compatible' );
+			$compat_notice .= ' <br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
+		} else {
+			$compat_class  = 'tsfem-success';
+			$compat_notice = \__( 'Compatible with the current versions of WordPress and The SEO Framework.', 'the-seo-framework-extension-manager' );
+			$compat_name   = static::get_i18n( 'compatible' );
+		}
 
 		$classes = [
 			'tsfem-extension-description-compat',
@@ -568,7 +564,7 @@ trait Extensions_Layout {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $extension The extension entry.
+	 * @param string $slug The extension menu slug.
 	 * @return string The escaped extension compatibility item.
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {

@@ -696,8 +696,8 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param mixed  $value
-	 * @param string $to
+	 * @param mixed  $value The value to convert.
+	 * @param string $to    The type to convert the value to.
 	 * @return mixed The probable converted value.
 	 */
 	private function convert( $value, $to ) {

@@ -27,8 +27,10 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  * The definable constants should be defined in `wp-config.php`.
  * Alternatively, you may define them conditionally in a mu-plugin.
  *
- * These constants may fail to work as intended when defined in a regular plugin. The plugin load sequence affects this behavior.
- * These constants won't work in a theme, this file is loaded before themes are.
+ * These constants may fail to work as intended when defined in a regular plugin.
+ * The plugin load sequence affects this behavior, over which we take no control.
+ *
+ * These constants won't work in a theme; this file is loaded before themes are.
  */
 
 /**
@@ -62,6 +64,22 @@ defined( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS' )
  */
 defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
 	or define( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE', 'manage_options' );
+
+/**
+ * The API version to use.
+ * @since 2.1.0
+ * @param string
+ */
+defined( 'TSF_EXTENSION_MANAGER_API_VERSION' )
+	or define( 'TSF_EXTENSION_MANAGER_API_VERSION', '2.0' );
+
+/**
+ * The development API secret key.
+ * @since 2.1.0
+ * @param bool|string Secret key
+ */
+defined( 'TSF_EXTENSION_MANAGER_DEV_API' )
+	or define( 'TSF_EXTENSION_MANAGER_DEV_API', false );
 
 /**
  * The plugin map URL. Used for calling browser files.
@@ -160,3 +178,30 @@ define( 'TSF_EXTENSION_MANAGER_DL_URI', 'https://dl.theseoframework.com/' );
  * @since 2.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_PREMIUM_URI', 'https://premium.theseoframework.com/' );
+
+/**
+ * The Premium URI.
+ * @since 2.1.0
+ */
+define( 'TSF_EXTENSION_MANAGER_PREMIUM_EU_URI', 'https://eu.theseoframework.com/' );
+
+/**
+ * The extension compatibility testing values.
+ * @since 2.1.0
+ * @todo move this to the class?
+ */
+define( 'TSFEM_EXTENSION_TSF_UNTESTED',     0b0001 );
+define( 'TSFEM_EXTENSION_TSF_INCOMPATIBLE', 0b0010 );
+define( 'TSFEM_EXTENSION_WP_UNTESTED',      0b0100 );
+define( 'TSFEM_EXTENSION_WP_INCOMPATIBLE',  0b1000 );
+
+/**
+ * The inpost saving state values.
+ * @since 2.1.0
+ * @todo move this to the class?
+ */
+define( 'TSFEM_INPOST_IS_SECURE',   0b00001 );
+define( 'TSFEM_INPOST_NO_AUTOSAVE', 0b00010 );
+define( 'TSFEM_INPOST_NO_AJAX',     0b00100 );
+define( 'TSFEM_INPOST_NO_CRON',     0b01000 );
+define( 'TSFEM_INPOST_NO_REVISION', 0b10000 );

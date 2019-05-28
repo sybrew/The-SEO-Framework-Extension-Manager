@@ -49,9 +49,9 @@ final class SecureOption extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type Required. The instance type. Passed by reference.
+	 * @param string $type     Required. The instance type.
 	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param array $bits Required. The instance bits.
+	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
 	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
 
@@ -62,17 +62,17 @@ final class SecureOption extends Secure_Abstract {
 		} else {
 
 			switch ( $type ) :
-				case 'update_option' :
-				case 'update_option_instance' :
+				case 'update_option':
+				case 'update_option_instance':
 					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
-				case 'reset' :
+				case 'reset':
 					self::reset();
 					break;
 
-				default :
+				default:
 					self::reset();
 					self::invoke_invalid_type( __METHOD__ );
 					break;
@@ -102,13 +102,13 @@ final class SecureOption extends Secure_Abstract {
 	public static function set_update_instance( $instance, $bits ) {
 
 		switch ( self::get_property( '_type' ) ) :
-			case 'update_option' :
-			case 'update_option_instance' :
+			case 'update_option':
+			case 'update_option_instance':
 				static::$_instance = [ $instance, $bits ];
 				return true;
 				break;
 
-			default :
+			default:
 				self::reset();
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
 				break;
@@ -164,7 +164,7 @@ final class SecureOption extends Secure_Abstract {
 					self::reset();
 					$verified = false;
 
-					if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+					if ( \wp_doing_ajax() ) {
 						$notice = \esc_html__(
 							"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
 							'the-seo-framework-extension-manager'

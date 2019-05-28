@@ -118,9 +118,9 @@ trait Options {
 	 *              so the verification key no longers gets out of sync.
 	 *
 	 * @param string $option The option name.
-	 * @param mixed $value The option value.
+	 * @param mixed  $value The option value.
 	 * @param string $type The option update type, accepts 'instance' and 'regular'.
-	 * @param bool $kill Whether to kill the plugin on invalid instance.
+	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
 	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
@@ -176,12 +176,12 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $options : {
+	 * @param array  $options : {
 	 *    $option_name => $value,
 	 *    ...
 	 * }
 	 * @param string $type The option update type, accepts 'instance' and 'regular'.
-	 * @param bool $kill Whether to kill the plugin on invalid instance.
+	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
 	final protected function update_option_multi( array $options = [], $type = 'instance', $kill = false ) {
@@ -292,8 +292,8 @@ trait Options {
 	 * @since 1.0.0
 	 * @since 1.2.0 Improved hashing algorithm.
 	 *
-	 * @param array $options The options to hash.
-	 * @param string $key The instance key, needs to be supplied on plugin activation.
+	 * @param array  $options The options to hash.
+	 * @param string $key     The instance key, needs to be supplied on plugin activation.
 	 * @return bool True on success, false on failure.
 	 */
 	final protected function set_options_instance( $options, $key = '' ) {

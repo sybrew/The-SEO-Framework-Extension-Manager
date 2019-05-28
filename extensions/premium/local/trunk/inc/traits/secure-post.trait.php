@@ -85,7 +85,7 @@ trait Secure_Post {
 		// AJAX only, not registered. Also, this method AFTER admin_init, so it went by unnoticed.
 		// \add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			$this->init_ajax_post_checks();
 		}
 	}
@@ -229,7 +229,7 @@ trait Secure_Post {
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
 					$this->send_ajax_form_json_validation();

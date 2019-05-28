@@ -118,7 +118,7 @@ final class Admin extends Core {
 	 */
 	public function _save_meta( $post, $data, $save_access_state ) {
 
-		if ( $save_access_state ^ 0b1111 )
+		if ( ! \TSF_Extension_Manager\InpostGUI::is_state_safe( $save_access_state ) )
 			return;
 
 		if ( empty( $data[ $this->pm_index ] ) )

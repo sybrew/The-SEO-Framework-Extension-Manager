@@ -17,17 +17,17 @@ if ( ! $this->is_auto_activated() ) :
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
 			<?php
-			//* TODO activation listener. Version 2.x
+			//* TODO activation listener. Version 3.x
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button', 'tsfem-button-primary' ] ] );
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => \__( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button' ] ] );
 			// $this->get_remote_activation_listener();
 
 			//* Already escaped.
 			echo $this->get_link( [
-				'url' => $this->get_activation_url( 'shop/' ),
-				'target' => '_blank',
-				'class' => 'tsfem-button-primary tsfem-button-flat',
-				'title' => '',
+				'url'     => $this->get_activation_url( 'shop/' ),
+				'target'  => '_blank',
+				'class'   => 'tsfem-button-primary tsfem-button-flat',
+				'title'   => '',
 				'content' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ),
 			] );
 			?>

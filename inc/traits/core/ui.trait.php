@@ -435,7 +435,7 @@ trait UI {
 	 */
 	final public function _wp_ajax_crop_image() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( $this->can_do_settings() ) :
 
 				if ( ! $this->_is_media_nonce_verified() ) // This doesn't register correctly to phpcs...

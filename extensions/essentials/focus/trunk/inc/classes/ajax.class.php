@@ -89,7 +89,7 @@ final class Ajax {
 	 * @return bool|void True on success. Void and exit on failure.
 	 */
 	private function get_api_response( $type, $data ) {
-		return \tsf_extension_manager()->_get_extension_api_response(
+		return \tsf_extension_manager()->_get_protected_api_response(
 			$this,
 			TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY,
 			[
@@ -190,7 +190,6 @@ final class Ajax {
 		}
 
 		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
-
 	}
 
 	/**

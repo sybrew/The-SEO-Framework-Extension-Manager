@@ -82,10 +82,10 @@ trait Secure_Post {
 	 */
 	protected function init_post_checks() {
 
-		// AJAX only, not registered. Also, this method AFTER admin_init, so it went by unnoticed.
+		// AJAX only, not registered. Also, this method fires AFTER admin_init, so it went by unnoticed.
 		// \add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			$this->init_ajax_post_checks();
 		} else {
 			$this->init_default_post_checks();

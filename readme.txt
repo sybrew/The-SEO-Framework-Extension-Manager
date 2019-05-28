@@ -2,8 +2,8 @@
 Contributors: Cybr
 Donate link: https://theseoframework.com/donate/
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 4.6.0
-Tested up to: 5.0.3
+Requires at least: 4.8.0
+Tested up to: 5.2
 Requires PHP: 5.5.21
 Stable tag: 2.0.4
 License: GPLv3
@@ -59,7 +59,7 @@ Do you have questions about privacy? Feel free to [contact us](https://theseofra
 = This plugin requires: =
 
 * PHP 5.5.21, 5.6.5, or later. For security and structural reasons.
-* WordPress 4.6 or later. For improved AJAX and meta support.
+* WordPress 4.8 or later. For improved AJAX and meta support.
 * [The SEO Framework](https://wordpress.org/plugins/autodescription/) 3.1 or later. Or it will stay dormant.
 * Edge 13, Safari 10, better or equivalent for the best admin experience.
 * For improved performance and more available options, your PHP handler should use a 64 bits architecture. 32 bits is also supported.
@@ -176,9 +176,30 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **Plugin improvements:**
 
+* **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Next to a global endpoint, we have an European endpoint now.
+	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
+* **Added:** You can now see to which API endpoint you're connected.
+* **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
+* **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
 * **Changed:** TODO The plugin now communicates with `tsfcloud.net` (or .com?), instead of `dl.theseoframework.com` and `premium.theseoframework.com`.
+	* TODO: Consider the overhead... it already showed an impact switching from premium.x.x to eu.x.x...
+* **Improved:** Your email address is now partially obfuscated and possibly unrecognizable by length in the admin dashboard.
 * **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
 * **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
+* **Fixed:** Although unlikely, post revisions can't accidentally set the extension's post metadata.
+* **Info:** We added undocumented constants, for development use.
+	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. This will always be set to the current version.
+	* `TSF_EXTENSION_MANAGER_DEV_API`. The value of it must match our system's, otherwise it'll fall back to the default API version.
+* **Info:** We added undocumented constants, for internal use only.
+	* `TSFEM_EXTENSION_TSF_UNTESTED`
+	* `TSFEM_EXTENSION_TSF_INCOMPATIBLE`
+	* `TSFEM_EXTENSION_WP_UNTESTED`
+	* `TSFEM_EXTENSION_WP_INCOMPATIBLE`
+	* `TSFEM_INPOST_IS_SECURE`
+	* `TSFEM_INPOST_NO_AUTOSAVE`
+	* `TSFEM_INPOST_NO_AJAX`
+	* `TSFEM_INPOST_NO_CRON`
+	* `TSFEM_INPOST_NO_REVISION`
 
 * TODO reinstate tsfem-button-pulse class. -> hue rotate?
 

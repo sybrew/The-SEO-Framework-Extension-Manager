@@ -221,6 +221,7 @@ final class Layout extends Secure_Abstract {
 		$account = self::$account;
 
 		$email = isset( $account['email'] ) ? $account['email'] : '';
+		$key = isset( $account['key'] ) ? $account['key'] : '';
 		$data = isset( $account['data'] ) ? $account['data'] : '';
 		$level = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
 		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
@@ -243,7 +244,16 @@ final class Layout extends Secure_Abstract {
 		$output = '';
 
 		if ( $email )
-			$output .= static::wrap_row_content( \__( 'Account email:', 'the-seo-framework-extension-manager' ), $email );
+			$output .= static::wrap_row_content(
+				\__( 'Account email:', 'the-seo-framework-extension-manager' ),
+				preg_replace( '/(^.{0,3})(.*?)(.{0,2}\@.)([^.]{0,}?)(.{0,2}\..*?$)/', '$1**$3**$5', $email )
+			);
+
+		if ( $key )
+			$output .= static::wrap_row_content(
+				\__( 'License key:', 'the-seo-framework-extension-manager' ),
+				'***' . substr( $key, -4 )
+			);
 
 		$_class = [ 'tsfem-dashicon' ];
 
@@ -295,12 +305,31 @@ final class Layout extends Secure_Abstract {
 
 		$_level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 			$level,
-			tsf_extension_manager()->coalesce_var( $level_desc, '' ),
+			\tsf_extension_manager()->coalesce_var( $level_desc, '' ),
 			'',
 			$_class
 		) );
 
 		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $_level, false );
+
+		switch ( \tsf_extension_manager()->get_api_endpoint_type() ) :
+			case 'eu':
+				$_ep = \__( 'TSF Europe', 'the-seo-framework-extension-manager' );
+				break;
+
+			default:
+			case 'global':
+				$_ep = \__( 'TSF global', 'the-seo-framework-extension-manager' );
+				break;
+		endswitch;
+
+		$_ep_html = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+			$_ep,
+			\esc_html__( 'Outbound API connections will prefer this endpoint.', 'the-seo-framework-extension-manager' ),
+			'',
+			[ 'tsfem-dashicon', 'tsfem-success' ]
+		) );
+		$output .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
 
 		if ( is_int( $requests_remaining ) ) {
 			$_notice = '';

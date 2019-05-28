@@ -579,7 +579,7 @@ final class Tests {
 					else :
 						$state = 'bad';
 						//* Cache safe.
-						defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+						\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 						$content .= $this->wrap_info(
 							\tsf_extension_manager()->convert_markdown(
 								sprintf(
@@ -606,7 +606,7 @@ final class Tests {
 				} else {
 					$state = 'bad';
 					//* Cache safe.
-					defined( 'DOING_AJAX' ) and DOING_AJAX and \the_seo_framework()->add_menu_link();
+					\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 					$content .= $this->wrap_info(
 						\tsf_extension_manager()->convert_markdown(
 							sprintf(

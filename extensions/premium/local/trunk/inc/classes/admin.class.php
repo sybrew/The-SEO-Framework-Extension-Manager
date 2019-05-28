@@ -150,7 +150,7 @@ final class Admin extends Core {
 	 */
 	public function _load_local_admin_actions() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			$this->do_settings_page_ajax_actions();
 		} else {
 			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );

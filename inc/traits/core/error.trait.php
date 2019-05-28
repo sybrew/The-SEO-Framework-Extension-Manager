@@ -99,11 +99,11 @@ trait Error {
 	 *                2. Added a new parameter to clear previous notices.
 	 * @since 1.5.1 : Added an exact-match check to prevent duplicated entries.
 	 *
-	 * @param array $notice The notice. : {
+	 * @param array $notice    The notice. : {
 	 *    0 => int    key,
 	 *    1 => string additional message
 	 * }
-	 * @param bool $clear_old When true, it removes all previous notices.
+	 * @param bool  $clear_old When true, it removes all previous notices.
 	 * @return void
 	 */
 	final protected function set_error_notice( $notice = [], $clear_old = false ) {
@@ -138,8 +138,6 @@ trait Error {
 	 * @since 1.2.0 1. No longer deletes option, but instead overwrites it.
 	 *              2. Now removes the option from autoload.
 	 * @since 1.5.0 No longer called `unset_error_notice()`
-	 *
-	 * @param array $notice The notice.
 	 */
 	final protected function unset_error_notice_option() {
 		$this->error_notice_option and \update_option( $this->error_notice_option, null, 'no' );
@@ -260,9 +258,10 @@ trait Error {
 	 * Fetches notices by option and returns type.
 	 *
 	 * Not final. Can be overwritten.
+	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $key The error key.
+	 * @param int  $key The error key.
 	 * @param bool $get_type Whether to fetch the error type as well.
 	 * @return array|string The escaped notice. When $get_type is true, an array is returned.
 	 */
@@ -720,7 +719,7 @@ trait Error {
 	 * @since 1.5.0 Now appends notice type.
 	 *
 	 * @param mixed $success The success status, either boolean, int, or other.
-	 * @param int $code The error code.
+	 * @param int   $code    The error code.
 	 * @return array {
 	 *    'success' => mixed $success,
 	 *    'notice'  => string $notice,

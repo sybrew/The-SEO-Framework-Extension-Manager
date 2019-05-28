@@ -397,7 +397,7 @@ final class Admin extends Api {
 	 */
 	final public function _wp_ajax_update_settings() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			$tsfem = \tsf_extension_manager();
 			if ( $tsfem->can_do_settings() ) :
 				$option = '';
@@ -445,7 +445,7 @@ final class Admin extends Api {
 	 */
 	final public function _wp_ajax_fetch_data() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 
 				$timeout = null;
@@ -533,7 +533,7 @@ final class Admin extends Api {
 	 */
 	final public function _wp_ajax_request_crawl() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) :
+		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
 
 				$timeout = null;
@@ -614,7 +614,7 @@ final class Admin extends Api {
 	 */
 	final public function _wp_ajax_get_requires_fix() {
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		if ( \wp_doing_ajax() ) {
 			if ( \tsf_extension_manager()->can_do_settings() ) {
 
 				$send = [];

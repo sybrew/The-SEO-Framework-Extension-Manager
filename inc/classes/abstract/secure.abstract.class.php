@@ -39,7 +39,7 @@ interface Secure_Static_Abstracts {
 	 *
 	 * @param string $type     Required. The instance type.
 	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param int    $bit      Required. The instance bit. Passed by reference.
+	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
 	public static function initialize( $type = '', &$instance = null, &$bits = null );
 
@@ -95,8 +95,8 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var array The validation request name.
-	 * @var array The validation nonce action.
+	 * @var array  The validation request name.
+	 * @var array  The validation nonce action.
 	 */
 	protected static $nonce_name;
 	protected static $request_name = [];
@@ -110,6 +110,15 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * @var array $account The account information.
 	 */
 	protected static $account = [];
+
+	/**
+	 * Holds the secret API key, bound to the parent's instance.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @var string
+	 */
+	protected static $secret_api_key;
 
 	/**
 	 * Resets current instance.
@@ -139,8 +148,8 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Sets class variables.
 	 *
 	 * @since 1.0.0
-	 * @param string $type Required. The property you wish to set.
-	 * @param mixed $value Required|Optional. The value the property needs to be set.
+	 * @param string $type  Required. The property you wish to set.
+	 * @param mixed  $value Required|Optional. The value the property needs to be set.
 	 */
 	final protected static function set( $type, $value = '' ) {
 
@@ -154,6 +163,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 			case 'request_name':
 			case 'nonce_action':
 			case 'account':
+			case 'secret_api_key':
 				self::$$type = $value;
 				break;
 
@@ -161,15 +171,14 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 				static::invoke_invalid_type( __METHOD__ );
 				break;
 		endswitch;
-
 	}
 
 	/**
 	 * Sets parent class nonce variables.
 	 *
 	 * @since 1.0.0
-	 * @param $type Required. The property you wish to set.
-	 * @param $value Required|Optional. The value the property needs to be set.
+	 * @param string $type  Required. The property you wish to set.
+	 * @param mixed  $value Required|Optional. The value the property needs to be set.
 	 */
 	final public static function set_nonces( $type, $value ) {
 
@@ -186,21 +195,33 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 				static::invoke_invalid_type( __METHOD__ );
 				break;
 		endswitch;
-
 	}
 
 	/**
 	 * Sets parent class nonce variables.
 	 *
 	 * @since 1.0.0
-	 * @param $account Required. The user's account.
+	 * @param array $account Required. The user's account.
 	 */
 	final public static function set_account( $account ) {
 
 		if ( ! self::verify_instance() ) return;
 
 		self::set( 'account', $account );
+	}
 
+	/**
+	 * Sets secret API key.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $api_key The secret API key.
+	 */
+	final public static function set_secret_api_key( $api_key ) {
+
+		if ( ! self::verify_instance() ) return;
+
+		self::set( 'secret_api_key', $api_key );
 	}
 
 	/**
@@ -247,8 +268,8 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Gets class property.
 	 *
 	 * @since 1.0.0
-	 * @param $name Required. The property to acquire.
-	 * @param $value Required|Optional. The value the type needs to be set.
+	 *
+	 * @param string $name Required. The property to acquire.
 	 * @return mixed The property value.
 	 */
 	final protected static function get_property( $name ) {

@@ -292,7 +292,7 @@ final class Admin extends Core {
 	 */
 	public function _save_meta( $post, $data, $save_access_state ) {
 
-		if ( $save_access_state ^ 0b1111 )
+		if ( ! \TSF_Extension_Manager\InpostGUI::is_state_safe( $save_access_state ) )
 			return;
 
 		$this->process_meta( $post, $data );
@@ -317,8 +317,8 @@ final class Admin extends Core {
 		if ( ! $save_access_state )
 			return;
 
-		//= If doing more than just AJAX, stop.
-		if ( $save_access_state ^ 0b1111 ^ 0b0100 )
+		//= If not doing AJAX, stop.
+		if ( ! ( $save_access_state & TSFEM_INPOST_NO_AJAX ) )
 			return;
 
 		$this->process_meta( $post, $data );

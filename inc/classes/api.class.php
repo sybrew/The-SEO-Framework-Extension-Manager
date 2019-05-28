@@ -32,14 +32,17 @@ defined( 'ABSPATH' ) or die;
  * @access private
  */
 class API extends Core {
-	use Enclose_Stray_Private, Construct_Child_Interface;
+	use Enclose_Stray_Private,
+		Construct_Child_Interface;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 */
-	private function construct() { }
+	private function construct() {
+		$this->set_api_endpoint_type();
+	}
 
 	/**
 	 * Determines whether the plugin's set to be auto-activated.
@@ -57,7 +60,8 @@ class API extends Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $args : {
+	 * @param string $type The request type.
+	 * @param array  $args : {
 	 *    'licence_key'      => string The license key.
 	 *    'activation_email' => string The activation email.
 	 * }
@@ -78,9 +82,6 @@ class API extends Core {
 			$this->set_error_notice( [ 102 => '' ] );
 			return false;
 		}
-
-		$this->activation_key   = trim( $args['licence_key'] );
-		$this->activation_email = \sanitize_email( $args['activation_email'] );
 
 		switch ( $type ) :
 			case 'status':
@@ -106,14 +107,22 @@ class API extends Core {
 				break;
 		endswitch;
 
-		$request = [
-			'request'     => $type,
-			'licence_key' => $this->activation_key,
-			'email'       => $this->activation_email,
-		];
+		$key   = trim( $args['licence_key'] );
+		$email = \sanitize_email( $args['activation_email'] );
 
-		$response = $this->get_api_response( $request );
-		$response = $this->handle_response( $type, $response, WP_DEBUG );
+		$response = $this->handle_response(
+			[
+				'request'          => $type,
+				'licence_key'      => $key,
+				'activation_email' => $email,
+			],
+			$this->get_api_response( [
+				'request'     => $type,
+				'licence_key' => $key,
+				'email'       => $email,
+			] ),
+			WP_DEBUG
+		);
 
 		return $response;
 	}
@@ -165,15 +174,74 @@ class API extends Core {
 	}
 
 	/**
+	 * Determines the API key origin.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $key The API key.
+	 * @return string The endpoint origin.
+	 */
+	final protected function get_key_endpoint_origin( $key ) {
+		return false !== stripos( $key, 'tsfeu_' ) ? 'eu' : 'global';
+	}
+
+	/**
+	 * Returns the API endpoint type.
+	 *
+	 * @since 2.1.0
+	 * @staticvar string $type Default 'global'.
+	 *
+	 * @return string $type The endpoint type. Passed by reference.
+	 */
+	final public function &get_api_endpoint_type() {
+		static $type = 'global';
+		return $type;
+	}
+
+	/**
+	 * Sets the endpoint type.
+	 *
+	 * @since 2.1.0
+	 * @uses $this->get_api_endpoint_type()
+	 *
+	 * @param string|null $type Set to null to autodetermine. Accepts 'eu' and 'global'.
+	 */
+	final protected function set_api_endpoint_type( $type = null ) {
+
+		$endpoint = &$this->get_api_endpoint_type();
+
+		if ( $type ) {
+			$endpoint = in_array( $type, [ 'eu', 'global' ], true ) ? $type : 'global';
+		} elseif ( $this->is_connected_user() ) {
+			$endpoint = $this->get_key_endpoint_origin( $this->get_subscription_status()['key'] );
+		} else {
+			$endpoint = 'global';
+		}
+	}
+
+	/**
 	 * Returns activation domain URL.
 	 *
 	 * @since 1.0.0
+	 * @since 2.1.0 Now considers EU endpoint.
 	 *
 	 * @param string $path The URL Path.
 	 * @return string
 	 */
 	final protected function get_activation_url( $path = '' ) {
-		return TSF_EXTENSION_MANAGER_PREMIUM_URI . ltrim( $path, ' \\/' );
+
+		switch ( $this->get_api_endpoint_type() ) {
+			case 'eu':
+				$uri = TSF_EXTENSION_MANAGER_PREMIUM_EU_URI;
+				break;
+
+			case 'global':
+			default:
+				$uri = TSF_EXTENSION_MANAGER_PREMIUM_URI;
+				break;
+		}
+
+		return $uri . ltrim( $path, ' \\/' );
 	}
 
 	/**
@@ -201,9 +269,9 @@ class API extends Core {
 	 * @access private
 	 * @see $this->get_api_response();
 	 *
-	 * @param array $args The API query parameters.
-	 * @param string $instance The verification instance key. Passed by reference.
-	 * @param int $bit The verification instance bit. Passed by reference.
+	 * @param array  $args      The API query parameters.
+	 * @param string $_instance The verification instance key. Passed by reference.
+	 * @param int    $bits      The verification instance bit. Passed by reference.
 	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
 	 */
 	final public function _get_api_response( array $args, &$_instance, &$bits ) {
@@ -218,6 +286,7 @@ class API extends Core {
 	 * Connects to the main plugin API handler.
 	 *
 	 * @since 1.0.0
+	 * @since 2.1.0 Now listens to the `TSF_EXTENSION_MANAGER_API_VERSION` and `TSF_EXTENSION_MANAGER_DEV_API` constants.
 	 * @see $this->handle_request() The request validation wrapper.
 	 *
 	 * @param array $args     The API query parameters.
@@ -232,8 +301,11 @@ class API extends Core {
 			'licence_key' => '',
 			'instance'    => $this->get_activation_instance( false ),
 			'platform'    => $this->get_activation_site_domain(),
-			'version'     => '2.0',
+			'version'     => TSF_EXTENSION_MANAGER_API_VERSION,
 		];
+
+		if ( TSF_EXTENSION_MANAGER_DEV_API )
+			$args['dev'] = TSF_EXTENSION_MANAGER_DEV_API;
 
 		$args = \wp_parse_args( $args, $defaults );
 
@@ -241,6 +313,8 @@ class API extends Core {
 			$internal && $this->set_error_notice( [ 201 => '' ] );
 			return false;
 		}
+
+		$this->set_api_endpoint_type( $this->get_key_endpoint_origin( $args['licence_key'] ) );
 
 		$target_url = $this->get_api_url( $args );
 
@@ -275,12 +349,16 @@ class API extends Core {
 	 * @since 1.0.0
 	 * @see $this->handle_request() The request validation wrapper.
 	 *
-	 * @param string $type The request type.
+	 * @param array  $args : {
+	 *    'request'          => string The request type.
+	 *    'licence_key'      => string The license key used.
+	 *    'activation_email' => string The activation email used.
+	 * }
 	 * @param string $response The obtained response body.
-	 * @param bool   $explain Whether to show additional info in error messages.
+	 * @param bool   $explain  Whether to show additional info in error messages.
 	 * @return bool True on successful response, false on failure.
 	 */
-	final protected function handle_response( $type = 'status', $response = '', $explain = false ) {
+	final protected function handle_response( $args, $response = '', $explain = false ) {
 
 		if ( empty( $response ) ) {
 			$this->set_error_notice( [ 301 => '' ] );
@@ -295,11 +373,11 @@ class API extends Core {
 		//* If the user's already using a free account, don't deactivate.
 		$registered_free = $this->is_plugin_activated() && false === $this->is_connected_user();
 
-		if ( 'status' !== $type ) {
-			if ( 'activation' === $type ) :
-				$_response = $this->handle_premium_activation( $results );
-			elseif ( 'deactivation' === $type ) :
-				$_response = $this->handle_premium_disconnection( $results );
+		if ( 'status' !== $args['request'] ) {
+			if ( 'activation' === $args['request'] ) :
+				$_response = $this->handle_premium_activation( $args, $results );
+			elseif ( 'deactivation' === $args['request'] ) :
+				$_response = $this->handle_premium_disconnection( $args, $results );
 			endif;
 		} else {
 			$_response = $results;
@@ -353,12 +431,17 @@ class API extends Core {
 	/**
 	 * Returns API secret for a final static class.
 	 *
-	 * The final static class shouldn't be instanced.
+	 * @REVIEW: This key MUST only given to objects that can make API calls privately.
+	 * The final static class mustn't be instanced.
 	 *
 	 * @since 1.5.0
-	 * @param string $class The class instance name.
+	 * @internal
+	 * @access private
+	 *
+	 * @param string $class     The class instance name.
 	 * @param string $_instance The verification instance. Passed by reference.
-	 * @param array $bits The verification bits. Passed by reference.
+	 * @param array  $bits      The verification bits. Passed by reference.
+	 * @return string The storage key.
 	 */
 	final public function _init_final_static_extension_api_access( $class, &$_instance, &$bits ) {
 
@@ -371,6 +454,22 @@ class API extends Core {
 		if ( false === $class )
 			return false;
 
+		return $this->_create_protected_api_access_key( $class );
+	}
+
+	/**
+	 * Generates an internal API access key.
+	 *
+	 * @REVIEW: This key MUST only given to objects that can make API calls privately.
+	 * The final static class mustn't be instanced, or it must be bound to Secure_Abstract.
+	 *
+	 * @since 2.1.0
+	 * @internal
+	 *
+	 * @param string $class The class instance name.
+	 * @return string The storage key.
+	 */
+	final protected function _create_protected_api_access_key( $class ) {
 		return $this->generate_api_access_key( $class )[ $class ];
 	}
 
@@ -378,16 +477,18 @@ class API extends Core {
 	 * Gets API response for extension.
 	 *
 	 * @since 1.5.0
+	 * @internal
+	 * @access private
 	 *
-	 * @param object $object The caller class.
+	 * @param object $object The caller object. The object must match the key.
 	 * @param string $key    The API access key for $object.
-	 * @param array $args : {
+	 * @param array  $args : {
 	 *   'request' => string The request type.
 	 *    ...      => mixed  Additional parameters.
 	 * }
 	 * @return bool|string False on failure. JSON/HTML response otherwise.
 	 */
-	final public function _get_extension_api_response( $object, $key, $args ) {
+	final public function _get_protected_api_response( $object, $key, $args ) {
 
 		if ( ! $this->_verify_api_access( $object, $key ) )
 			return false;

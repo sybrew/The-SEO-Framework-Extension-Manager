@@ -39,6 +39,9 @@
 		<!-- Goto is bad when doing it Assembly-style (jumping through loops), but not outside in modern structure. Stop being numinous. -->
 		<!-- Besides, PHP errors out when jumping through loops with goto -->
 		<exclude name="Generic.PHP.DiscourageGoto"/>
+
+		<!-- Tokenization and syntax coloring takes proper care of this. Redundant. -->
+		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis"/>
 	</rule>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress-Extra"/>
