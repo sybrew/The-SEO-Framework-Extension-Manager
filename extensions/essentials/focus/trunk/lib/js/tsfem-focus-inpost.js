@@ -606,7 +606,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					'post_ID' : tsfem_inpost.postID,
 					'args' : {
 						'keyword': keyword,
-						'language': 'en' // language || 'en', // TODO
+						'language': 'en' // language || 'en' // TODO this accepts: 'en', and a few other languages. No 'en-us', 'en-gb', etc. however.
 					},
 				},
 				timeout: 15000,
@@ -814,7 +814,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					'post_ID' : tsfem_inpost.postID,
 					'args' : {
 						'form': form,
-						'language': 'en' // language || 'en', // TODO
+						'language': 'en' // language || 'en' // TODO this accepts: 'en', 'en-gb', 'en-us', but nothing else...!
 					},
 				},
 				timeout: 15000,

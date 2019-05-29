@@ -173,7 +173,7 @@ final class Admin extends Core {
 	 * @uses \TSF_Extension_Manager\InpostGUI
 	 * Callback via \TSF_Extension_Manager\InpostGUI
 	 *
-	 * @param string Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
+	 * @param string $inpostgui Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
 	 */
 	public function _enqueue_inpost_scripts( $inpostgui ) {
 		$inpostgui::register_script( [

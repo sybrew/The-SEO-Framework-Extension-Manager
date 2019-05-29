@@ -246,13 +246,13 @@ final class Layout extends Secure_Abstract {
 		if ( $email )
 			$output .= static::wrap_row_content(
 				\__( 'Account email:', 'the-seo-framework-extension-manager' ),
-				preg_replace( '/(^.{0,3})(.*?)(.{0,2}\@.)([^.]{0,}?)(.{0,2}\..*?$)/', '$1**$3**$5', $email )
+				str_replace( '*', '&bull;', preg_replace( '/(^.{0,2})(.*?)(.{0,1}\@.)([^.]{0,}?)(.{0,2}\..*?$)/', '$1**$3**$5', $email ) )
 			);
 
 		if ( $key )
 			$output .= static::wrap_row_content(
 				\__( 'License key:', 'the-seo-framework-extension-manager' ),
-				'***' . substr( $key, -4 )
+				str_repeat( '&bull;', 5 ) . substr( $key, -4 )
 			);
 
 		$_class = [ 'tsfem-dashicon' ];

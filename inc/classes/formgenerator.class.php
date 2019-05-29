@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @TODO The AJAX part will be put in another class when PHP 5.6 will be the requirement.
  *       We miss variadic functionality for proper static propagated construction.
- *       Note to self: The static caller needs to moved.
+ *       Note to self: The static caller needs to be moved.
  *
  * Not according to DRY standards for improved performance.
  *
@@ -89,13 +89,22 @@ final class FormGenerator {
 	 * @var array $level_names
 	 * @var int   $it
 	 */
-	private $level = 0,
+	private $level       = 0,
 	        $level_names = [],
-	        $it = 0;
+	        $it          = 0;
 
+	/**
+	 * Holds AJAX calling settings.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var string $cur_ajax_caller
+	 * @var array  $ajax_it_fields
+	 * @var array  $ajax_it_args
+	 */
 	private static $cur_ajax_caller = '',
-	               $ajax_it_fields = [],
-	               $ajax_it_args = [];
+	               $ajax_it_fields  = [],
+	               $ajax_it_args    = [];
 
 	/**
 	 * Determines and initializes AJAX iteration listener.
