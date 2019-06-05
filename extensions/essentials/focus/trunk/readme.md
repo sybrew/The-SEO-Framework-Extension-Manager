@@ -179,6 +179,13 @@ We're working on an update to improve accuracy for the affected page builders.
 
 ## Changelog
 
+### 1.4.0
+
+[tsfep-release time="-1"]
+
+* **API changes:**
+	* *June 1st, 2019*: The API has been updated to be more performant and secure. Although unlikely, you may see different dictionary results henceforth.
+
 ### 1.3.0
 
 [tsfep-release time="January 28th, 2019"]

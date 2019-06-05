@@ -660,7 +660,7 @@ final class Admin extends Api {
 	 * @internal
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
-	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 * @param string $scripts The scripts builder class name.
 	 */
 	public function _register_monitor_scripts( $scripts ) {
 		static $registered = false;

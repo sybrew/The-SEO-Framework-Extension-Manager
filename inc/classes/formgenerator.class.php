@@ -1373,7 +1373,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 *
 	 * @param string $pattern The field's pattern.
-	 *              Passed by reference to circumvent coalescing key requirements.
+	 *               Passed by reference to circumvent coalescing key requirements.
 	 * @param string $fallback The fallback pattern.
 	 * @return string The field's pattern.
 	 */

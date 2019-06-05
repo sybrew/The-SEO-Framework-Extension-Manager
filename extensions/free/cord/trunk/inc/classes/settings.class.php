@@ -257,7 +257,7 @@ final class Settings {
 	 * @internal
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
-	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 * @param string $scripts The scripts builder class name.
 	 */
 	public function _register_cord_scripts( $scripts ) {
 		static $registered = false;
@@ -267,7 +267,7 @@ final class Settings {
 		 * Registers media scripts.
 		 * @see trait TSF_Extension_Manager\UI
 		 */
-		$this->register_media_scripts();
+		$this->register_media_scripts( $scripts );
 
 		$scripts::register( [
 			[

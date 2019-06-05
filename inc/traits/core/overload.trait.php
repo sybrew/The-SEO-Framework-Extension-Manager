@@ -435,8 +435,8 @@ trait Ignore_Properties_Core_Public_Final {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $name The inexisting property name.
-	 * @param $value The propertie value that ought to be set.
+	 * @param string $name The inexisting property name.
+	 * @param mixed  $value The propertie value that ought to be set.
 	 */
 	final public function __set( $name = '', $val = null ) {
 		\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
@@ -447,7 +447,7 @@ trait Ignore_Properties_Core_Public_Final {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $name The inexisting property name.
+	 * @param string $name The inexisting property name.
 	 * @return null.
 	 */
 	final public function __get( $name = '' ) {

@@ -167,14 +167,10 @@ trait UI {
 	 * Enqueues styles and scripts in the admin area on the extension manager page.
 	 *
 	 * @since 2.0.2
-	 *
-	 * @param string $hook The current page hook.
 	 */
 	final protected function enqueue_admin_scripts() {
 
-		// PHP < 7.0 compat: set class name in variable...
-		$scripts = \the_seo_framework()->Scripts();
-		$scripts::prepare();
+		\The_SEO_Framework\Builders\Scripts::prepare();
 
 		//* Enqueue default scripts.
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
@@ -196,9 +192,9 @@ trait UI {
 	final public function _load_admin_scripts() {
 		/**
 		 * @since 2.0.2
-		 * @param \The_SEO_Framework\Builders\Scripts $scripts
+		 * @param string $scripts The scripts builder class name.
 		 */
-		\do_action( 'tsfem_before_enqueue_scripts', \the_seo_framework()->Scripts() );
+		\do_action( 'tsfem_before_enqueue_scripts', \The_SEO_Framework\Builders\Scripts::class );
 	}
 
 	/**
@@ -210,7 +206,7 @@ trait UI {
 	 * @internal
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
-	 * @param \The_SEO_Framework\Builders\Scripts $scripts
+	 * @param string $scripts The scripts builder class name.
 	 */
 	final public function _register_default_scripts( $scripts ) {
 		static $registered = false;
@@ -218,8 +214,6 @@ trait UI {
 
 		\the_seo_framework()->init_admin_scripts();
 
-		// PHP < 7.0 compat: set class name in variable...
-		$scripts = \the_seo_framework()->Scripts();
 		$scripts::register( [
 			[
 				'id'       => 'tsfem',
@@ -277,12 +271,12 @@ trait UI {
 	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 * @access protected
 	 * @internal
+	 *
+	 * @param string $scripts The scripts builder class name.
 	 */
-	final protected function register_form_scripts() {
+	final protected function register_form_scripts( $scripts ) {
 		static $registered = false;
 		if ( $registered ) return;
-		// PHP < 7.0 compat: set class name in variable...
-		$scripts = \the_seo_framework()->Scripts();
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-form',
@@ -354,12 +348,12 @@ trait UI {
 	 *                2. Now returns void
 	 * @access protected
 	 * @internal
+	 *
+	 * @param string $scripts The scripts builder class name.
 	 */
-	final protected function register_media_scripts() {
+	final protected function register_media_scripts( $scripts ) {
 		static $registered = false;
 		if ( $registered ) return;
-		// PHP < 7.0 compat: set class name in variable...
-		$scripts = \the_seo_framework()->Scripts();
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-media',

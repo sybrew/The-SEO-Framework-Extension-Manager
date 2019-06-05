@@ -110,14 +110,13 @@ final class Output {
 	 * @uses TSF_Extension_Manager\Extension\Monitor\Output->make_slab_info_entry()
 	 * @generator
 	 *
-	 * @param array $data The fetched data.
+	 * @param array  $data The fetched data.
 	 * @param string $type The pane-date type.
 	 * @yields Interpreted data from array for the information slab.
 	 */
 	protected function generate_pane_info_list( $data = [], $type = '' ) {
-		foreach ( $data as $key => $value ) :
+		foreach ( $data as $key => $value )
 			yield $this->make_slab_info_entry( $key, $value, $type );
-		endforeach;
 	}
 
 	/**
@@ -125,9 +124,9 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
-	 * @param mixed $value The array value attached to $key.
-	 * @param string $type The pane-data type.
+	 * @param string $key   The array key.
+	 * @param mixed  $value The array value attached to $key.
+	 * @param string $type  The pane-data type.
 	 * @return string The HTML formed data if content could be generated. Otherwise empty string.
 	 */
 	protected function make_slab_info_entry( $key, $value, $type ) {
@@ -162,9 +161,9 @@ final class Output {
 	 * @since 1.0.0
 	 * @staticvar int $count Couples label and checkbox IDs.
 	 *
-	 * @param string $title The entry title. Must be escaped.
-	 * @param string $content The entry content. Must be escaped.
-	 * @param string $id The entry ID. Optional.
+	 * @param string $title      The entry title. Must be escaped.
+	 * @param string $content    The entry content. Must be escaped.
+	 * @param string $id         The entry ID. Optional.
 	 * @param string $icon_state The icon state color. Leave empty for 'unknown' (blue).
 	 * @return string The HTML formed collapsable entry.
 	 */
@@ -195,7 +194,7 @@ final class Output {
 	 * @access private
 	 * @TODO unused?
 	 *
-	 * @param array $data The pane data to parse.
+	 * @param array  $data The pane data to parse.
 	 * @param string $type The pane data type.
 	 * @return string The pane graph overview.
 	 */
@@ -218,7 +217,7 @@ final class Output {
 	 * @generator
 	 * @TODO unused?
 	 *
-	 * @param array $data The fetched data.
+	 * @param array  $data The fetched data.
 	 * @param string $type The data type.
 	 * @yields Interpreted data from array for the information slab.
 	 */
@@ -255,7 +254,7 @@ final class Output {
 	 * @since 1.0.0
 	 * @staticvar array $cache Maintains the titles cache.
 	 *
-	 * @param string $key The array key.
+	 * @param string $key  The array key.
 	 * @param string $type The pane-data type.
 	 * @return string The escaped $type $key title.
 	 */
@@ -276,8 +275,8 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
+	 * @param string $key   The array key.
+	 * @param string $type  The pane-data type.
 	 * @param string $state The pane-data entry state.
 	 * @return string The entry $state if set; Empty string otherwise.
 	 */
@@ -295,9 +294,9 @@ final class Output {
 	 * @since 1.0.0
 	 * @staticvar array $cache Maintains state strings for $key and $type.
 	 *
-	 * @param string $key The array key.
-	 * @param string $type The pane-data type.
-	 * @param string|null $set The pane-data entry state.
+	 * @param string      $key  The array key.
+	 * @param string      $type The pane-data type.
+	 * @param string|null $set  The pane-data entry state.
 	 * @return string The entry $state if set; Null otherwise.
 	 */
 	protected function get_entry_state( $key, $type, $set = null ) {
@@ -318,7 +317,7 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
+	 * @param string $key  The array key.
 	 * @param string $type The pane-data type.
 	 * @return string The HTML formed entry state icon.
 	 */
@@ -346,7 +345,7 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
+	 * @param string $key  The array key.
 	 * @param string $type The pane-data type.
 	 * @return string The known entry state name.
 	 */
@@ -385,7 +384,7 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
+	 * @param string $key  The array key.
 	 * @param string $type The pane-data type.
 	 * @return string The $type $key title.
 	 */
@@ -445,9 +444,9 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
-	 * @param mixed $value The array value attached to $key.
-	 * @param string $type The pane-data type.
+	 * @param string $key   The array key.
+	 * @param mixed  $value The array value attached to $key.
+	 * @param string $type  The pane-data type.
 	 * @return string The HTML formed data, or empty string if data is incompatible.
 	 */
 	protected function parse_content( $key, $value, $type ) {
@@ -475,8 +474,8 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
-	 * @param mixed $value The array value attached to $key.
+	 * @param string $key   The array key.
+	 * @param mixed  $value The array value attached to $key.
 	 * @return string The issue data content.
 	 */
 	protected function parse_issues_content( $key, $value ) {
@@ -512,8 +511,8 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The array key.
-	 * @param mixed $value The array value attached to $key.
+	 * @param string $key   The array key.
+	 * @param mixed  $value The array value attached to $key.
 	 * @return string The statistics data content.
 	 */
 	protected function parse_stats_content( $key, $value ) {

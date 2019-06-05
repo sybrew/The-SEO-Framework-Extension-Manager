@@ -180,6 +180,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
 * **Added:** You can now see to which API endpoint you're connected.
 * **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
+* **Updated:** Script API support for The SEO Framework v3.3.
 * **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
 * **Changed:** TODO The plugin now communicates with `tsfcloud.net` (or .com?), instead of `dl.theseoframework.com` and `premium.theseoframework.com`.
 	* TODO: Consider the overhead... it already showed an impact switching from premium.x.x to eu.x.x...
@@ -187,9 +188,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
 * **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
 * **Fixed:** Although unlikely, post revisions can't accidentally set the extension's post metadata.
-* **Info:** We added undocumented constants, for development use.
+* **Info:** We added undocumented constants, for development use only.
 	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. This will always be set to the current version.
-	* `TSF_EXTENSION_MANAGER_DEV_API`. The value of it must match our system's, otherwise it'll fall back to the default API version.
+	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's, otherwise it'll fall back to the default API version.
 * **Info:** We added undocumented constants, for internal use only.
 	* `TSFEM_EXTENSION_TSF_UNTESTED`
 	* `TSFEM_EXTENSION_TSF_INCOMPATIBLE`
@@ -202,6 +203,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* `TSFEM_INPOST_NO_REVISION`
 
 * TODO reinstate tsfem-button-pulse class. -> hue rotate?
+* TODO "To opt-in, simply adjust the settings above." -> it's no longer always "above".
 
 = 2.0.4 =
 

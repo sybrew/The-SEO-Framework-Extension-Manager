@@ -44,7 +44,7 @@ final class Trends {
 	 *
 	 * @param string $type Determines what to get.
 	 * @param string $instance Required. The instance key.
-	 * @param int $bits Required. The instance bits.
+	 * @param int    $bits Required. The instance bits.
 	 * @return mixed The trends output.
 	 */
 	public static function get( $type, $instance, $bits ) {
@@ -61,10 +61,9 @@ final class Trends {
 				break;
 
 			default:
+				return '';
 				break;
 		endswitch;
-
-		return '';
 	}
 
 	/**
