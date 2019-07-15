@@ -155,6 +155,18 @@ This helps search engines tailor displayed search results for its users. So, you
 
 Here you can find the available filters for Articles.
 
+#### Set supported post types
+
+```php
+add_filter( 'the_seo_framework_articles_supported_post_types', function( $post_types ) {
+
+	// Add another post type the list.
+	$post_types[] = 'my_post_type';
+
+	return $post_types;
+} );
+```
+
 #### Adjust default post meta
 
 Specifically, the article type.
@@ -170,6 +182,16 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 ```
 
 ## Changelog
+
+### 1.3.2
+
+[tsfep-release time="-1"]
+
+* **Added:** TSF v3.3 support.
+* **Added:** New filter: `the_seo_framework_articles_supported_post_types`.
+	* Documented at [developers](#developers).
+* **Changed:** Image width requirements went up from to 1200 from 696 pixels.
+* **Changed:** This extension now requires TSF v3.1 or later.
 
 ### 1.3.1
 

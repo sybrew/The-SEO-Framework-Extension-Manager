@@ -66,13 +66,14 @@ final class Admin extends Core {
 	 * Defered because we need to access meta.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.2 Now uses a new filter to determine support.
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {
 
-		//= Only output on Single/Post.
-		if ( ! \the_seo_framework()->is_single_admin() )
-			return;
+		$tsf = \the_seo_framework();
+
+		if ( ! in_array( $tsf->get_admin_post_type(), $this->supported_post_types, true ) ) return;
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 

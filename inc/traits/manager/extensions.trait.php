@@ -86,9 +86,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1546685158',
 				'requires'     => '4.7.0',
-				'tested'       => '5.0.3',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '3.1.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'focus' => [
 				'slug'         => 'focus',
@@ -99,9 +99,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1547763663',
 				'requires'     => '4.8.0',
-				'tested'       => '5.0.3',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '3.1.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'articles' => [
 				'slug'         => 'articles',
@@ -110,11 +110,11 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1541599634',
+				'last_updated' => '1563195209',
 				'requires'     => '4.6.0',
-				'tested'       => '5.0.3',
-				'requires_tsf' => '2.8.2',
-				'tested_tsf'   => '3.2.3',
+				'tested'       => '5.2.2',
+				'requires_tsf' => '3.1.0',
+				'tested_tsf'   => '3.3.0',
 			],
 			'honeypot' => [
 				'slug'         => 'honeypot',
@@ -125,9 +125,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1542470700',
 				'requires'     => '4.6.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			// 'cord' => [
 			// 	'slug'         => 'cord',
@@ -151,9 +151,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1534366523',
 				'requires'     => '4.6.0',
-				'tested'       => '5.0.3',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '2.8.2',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'monitor' => [
 				'slug'         => 'monitor',
@@ -164,9 +164,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1546666851',
 				'requires'     => '4.6.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '3.1.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -177,9 +177,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '3.6.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '2.2.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'origin' => [
 				'slug'         => 'origin',
@@ -190,9 +190,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '4.6.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -203,9 +203,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1534366523',
 				'requires'     => '4.6.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.2.2',
 				'requires_tsf' => '2.7.0',
-				'tested_tsf'   => '3.2.3',
+				'tested_tsf'   => '3.3.0',
 			],
 			// 'transporter' => [
 			// 	'slug'         => 'transporter',
@@ -236,9 +236,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'db2a53ca76e1c367324fddfe663388145206e8c7247350d3f4b62a1fca89eeaa',
-			'sha1'   => '578225b718c66b65a944b398f6dbb9d59005f6ce',
-			'md5'    => '63762091e66237ffc12feac67d491cb6',
+			'sha256' => '2fe1a94a91a6f079837ba3f51bb964e28f0bc0d1ddf902e01bcbd82231adacb9',
+			'sha1'   => '50f3fea5c6eb47cd6a5f96dcb0aad0080436e615',
+			'md5'    => 'cb34ad3830566cc1b31fe728f6f40463',
 		];
 	}
 

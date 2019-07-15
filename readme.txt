@@ -201,7 +201,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* `TSFEM_INPOST_NO_AJAX`
 	* `TSFEM_INPOST_NO_CRON`
 	* `TSFEM_INPOST_NO_REVISION`
+* **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc instead.
 
+* TODO fix homonymous example select overflow on (gutenberg-)sidebar
 * TODO reinstate tsfem-button-pulse class. -> hue rotate?
 * TODO "To opt-in, simply adjust the settings above." -> it's no longer always "above".
 

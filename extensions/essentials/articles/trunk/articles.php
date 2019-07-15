@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  * Extension Name: Articles
  * Extension URI: https://theseoframework.com/extensions/articles/
  * Extension Description: The Articles extension enhances your published posts by automatically adding important [Structured Data](https://developers.google.com/search/docs/data-types/articles).
- * Extension Version: 1.3.1
+ * Extension Version: 1.3.2
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.3.1' );
+define( 'TSFEM_E_ARTICLES_VERSION', '1.3.2' );
 
 /**
  * The extension file, absolute unix path.
@@ -86,6 +86,7 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  *
  * @since 1.0.0
  * @since 1.2.0 Now also loads Admin class.
+ * @since 1.3.2 Now always loads when the knowledge type is organization.
  * @staticvar bool $loaded True when loaded.
  * @action 'the_seo_framework_do_before_output'
  * @action 'the_seo_framework_do_before_amp_output'
@@ -102,10 +103,15 @@ function _articles_init() {
 	if ( isset( $loaded ) )
 		return $loaded;
 
+	$tsf = \the_seo_framework();
+
+	if ( 'organization' !== $tsf->get_option( 'knowledge_type' ) )
+		return $loaded = false;
+
 	if ( \is_admin() ) {
 		new Admin;
 		$loaded = true;
-	} elseif ( \the_seo_framework()->is_single() && 'post' === \get_post_type() && 'organization' === \the_seo_framework()->get_option( 'knowledge_type' ) ) {
+	} else {
 		new Front;
 		$loaded = true;
 	}

@@ -67,8 +67,15 @@ class Core {
 		];
 
 		/**
-		 * Applies filter 'the_seo_framework_articles_default_meta'
-		 *
+		 * @since 1.3.2
+		 * @param array $post_types The supported post types.
+		 */
+		$this->supported_post_types = \apply_filters(
+			'the_seo_framework_articles_supported_post_types',
+			[ 'post' ]
+		);
+
+		/**
 		 * @since 1.2.0
 		 * @param array $pm_defaults The default post meta settings.
 		 */

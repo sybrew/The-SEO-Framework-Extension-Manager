@@ -199,12 +199,16 @@ final class Front extends Core {
 	 * This allows output object caching.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Now uses a new filter to determine support.
 	 * @access private
 	 *
 	 * @param array $functions The hooked functions.
 	 * @return array The hooked functions.
 	 */
 	public function _articles_hook_output( $functions = [] ) {
+
+		if ( ! in_array( \get_post_type(), $this->supported_post_types, true ) )
+			return $functions;
 
 		$functions[] = [
 			'callback' => [ $this, '_get_articles_json_output' ],
@@ -428,8 +432,8 @@ final class Front extends Core {
 			'image' => [
 				'@type'  => 'ImageObject',
 				'url'    => \esc_url( $image['url'], [ 'http', 'https' ] ),
-				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
 				'width'  => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
+				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
 			],
 		];
 	}
@@ -438,6 +442,7 @@ final class Front extends Core {
 	 * Returns image parameters for Article image.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Now uses the new image generator.
 	 *
 	 * @return array The article image parameters. Unescaped.
 	 */
@@ -446,33 +451,47 @@ final class Front extends Core {
 		$id = $this->get_current_id();
 		$w  = $h = 0;
 
-		if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3.0', '>=' ) ) {
+			$image_details = \the_seo_framework()->get_safe_schema_image( null, true );
 
-			//* TSF 2.9+
-			$dimensions = \the_seo_framework()->image_dimensions;
+			if ( $image_details ) {
 
-			$d = ! empty( $dimensions[ $id ] ) ? $dimensions[ $id ] : false;
-			if ( $d ) {
-				$w = $d['width'];
-				$h = $d['height'];
+				$url = $image_details['url'];
+				$w   = $image_details['width'];
+				$h   = $image_details['height'];
+
+				if ( $w >= 1200 )
+					goto retvals;
+			}
+		} else {
+			if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
+
+				//* TSF 2.9+
+				$dimensions = \the_seo_framework()->image_dimensions;
+
+				$d = ! empty( $dimensions[ $id ] ) ? $dimensions[ $id ] : false;
+				if ( $d ) {
+					$w = $d['width'];
+					$h = $d['height'];
+				}
+
+				if ( $w >= 1200 )
+					goto retvals;
 			}
 
-			if ( $w >= 696 )
-				goto retvals;
-		}
+			//* Don't use `\the_seo_framework()->get_image_from_post_thumbnail` because it will overwrite vars.
+			if ( $_img_id = \get_post_thumbnail_id( $id ) ) {
 
-		//* Don't use `\the_seo_framework()->get_image_from_post_thumbnail` because it will overwrite vars.
-		if ( $_img_id = \get_post_thumbnail_id( $id ) ) {
+				$_src = \wp_get_attachment_image_src( $_img_id, 'full', false );
 
-			$_src = \wp_get_attachment_image_src( $_img_id, 'full', false );
+				if ( is_array( $_src ) && count( $_src ) >= 3 ) {
+					$url = $_src[0];
+					$w   = $_src[1];
+					$h   = $_src[2];
 
-			if ( is_array( $_src ) && count( $_src ) >= 3 ) {
-				$url = $_src[0];
-				$w   = $_src[1];
-				$h   = $_src[2];
-
-				if ( $w >= 696 )
-					goto retvals;
+					if ( $w >= 696 )
+						goto retvals;
+				}
 			}
 		}
 

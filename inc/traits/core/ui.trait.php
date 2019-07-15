@@ -127,8 +127,6 @@ trait UI {
 	 *
 	 * @since 1.5.0
 	 * @since 2.0.1 Now listens to $this->wrap_type
-	 *
-	 * @param string $type The pane wrap type. Accepts 'column' or 'row'.
 	 */
 	final public function panes_wrap() {
 		printf(
