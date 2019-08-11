@@ -188,6 +188,8 @@ define( 'TSF_EXTENSION_MANAGER_PREMIUM_EU_URI', 'https://eu.theseoframework.com/
 /**
  * The extension compatibility testing values.
  * @since 2.1.0
+ * @access private
+ * @internal
  * @todo move this to the class?
  */
 define( 'TSFEM_EXTENSION_TSF_UNTESTED',     0b0001 );
@@ -198,6 +200,8 @@ define( 'TSFEM_EXTENSION_WP_INCOMPATIBLE',  0b1000 );
 /**
  * The inpost saving state values.
  * @since 2.1.0
+ * @access private
+ * @internal
  * @todo move this to the class?
  */
 define( 'TSFEM_INPOST_IS_SECURE',   0b00001 );

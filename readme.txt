@@ -180,14 +180,15 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
 * **Added:** You can now see to which API endpoint you're connected.
 * **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
+* **Added:** When notices are awaiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
+	* N.B. This check will add an extra database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
 * **Updated:** Script API support for The SEO Framework v3.3.
+* **Updated:** The Spanish translation file. Thanks [Manuel](https://mbrsolution.com/)!
 * **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
-* **Changed:** TODO The plugin now communicates with `tsfcloud.net` (or .com?), instead of `dl.theseoframework.com` and `premium.theseoframework.com`.
-	* TODO: Consider the overhead... it already showed an impact switching from premium.x.x to eu.x.x...
 * **Improved:** Your email address is now partially obfuscated and possibly unrecognizable by length in the admin dashboard.
 * **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
 * **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
-* **Fixed:** Although unlikely, post revisions can't accidentally set the extension's post metadata.
+* **Fixed:** Although unlikely, saving a post revisions now can't accidentally overwrite the extension metadata for the post.
 * **Info:** We added undocumented constants, for development use only.
 	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. This will always be set to the current version.
 	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's, otherwise it'll fall back to the default API version.
@@ -203,9 +204,13 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* `TSFEM_INPOST_NO_REVISION`
 * **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc instead.
 
-* TODO fix homonymous example select overflow on (gutenberg-)sidebar
+**Updated Extensions:**
+
+* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [Articles](https://theseoframework.com/extensions/articles/#changelog)
+
+* TODO Add JSON data filter for Articles.
 * TODO reinstate tsfem-button-pulse class. -> hue rotate?
-* TODO "To opt-in, simply adjust the settings above." -> it's no longer always "above".
 
 = 2.0.4 =
 

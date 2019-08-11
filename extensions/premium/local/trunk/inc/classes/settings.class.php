@@ -83,8 +83,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core
-	 *                        Used for integrity.
+	 * @param Core $_core     Used for integrity.
 	 * @param string $slug    The menu slug.
 	 * @param string $hook    The menu hook.
 	 * @param string $o_index The options index.
@@ -123,8 +122,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core
-	 *                        Used for integrity.
+	 * @param Core $_core Used for integrity.
 	 * @param string $o_index The options index.
 	 */
 	public function _init_ajax( Core $_core, $o_index ) {
@@ -194,7 +192,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Core $_core Used for integrity.
+	 * @param Core $_core Used for integrity.
 	 */
 	public function _output_settings_page( Core $_core ) {
 		\add_action( 'tsfem_header', [ $this, '_output_local_header' ] );
@@ -309,7 +307,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_local_settings_overview( self $_s ) {
 		$this->get_view( 'layout/pages/settings' );
@@ -320,7 +318,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Local\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_local_settings_bottom_wrap( self $_s ) {
 		//* Already escaped.

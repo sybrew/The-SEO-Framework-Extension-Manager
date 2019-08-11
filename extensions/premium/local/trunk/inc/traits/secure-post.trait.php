@@ -131,6 +131,7 @@ trait Secure_Post {
 	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.4 Now strips slashes from POST.
 	 * @uses trait \TSF_Extension_Manager\Extension_Options
 	 * @uses trait \TSF_Extension_Manager\Error
 	 * @uses class \TSF_Extension_Manager\Extension\Local\Options
@@ -155,7 +156,7 @@ trait Secure_Post {
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
 
-			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$success = $this->update_stale_options_array_by_key( $options );
 			$this->process_all_stored_data();
 
@@ -250,6 +251,7 @@ trait Secure_Post {
 	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.4 Now strips slashes from POST.
 	 * @see $this->send_ajax_form_json_validation()
 	 * @access private
 	 */
@@ -273,7 +275,7 @@ trait Secure_Post {
 			$send['results'] = $this->get_ajax_notice( false, 1070200 );
 		} else {
 
-			$options = $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
+			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$data    = $this->pack_data( $options, true );
 
 			if ( ! $data ) {

@@ -271,8 +271,8 @@ class Core {
 	 * @since 1.2.0
 	 * @uses status_header(): https://developer.wordpress.org/reference/functions/status_header/
 	 *
-	 * @param string $type The header type.
 	 * @param bool   $code The status code.
+	 * @param string $type The header type.
 	 */
 	final public function set_status_header( $code = 200, $type = '' ) {
 

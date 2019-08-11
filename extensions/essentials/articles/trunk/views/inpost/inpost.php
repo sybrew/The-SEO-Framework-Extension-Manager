@@ -15,14 +15,14 @@ defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
 
 create_type_field :;
 	$type_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['type']['label']['title'] );
-	$type_info = sprintf( '<div>%s</div>', \the_seo_framework()->make_info(
+	$type_info  = sprintf( '<div>%s</div>', \the_seo_framework()->make_info(
 		$post_meta['type']['label']['desc'],
 		$post_meta['type']['label']['link'],
 		false
 	) );
 	$type_label = $type_title . $type_info;
 
-	$type_option_key = InpostGUI::get_option_key( $post_meta['type']['option']['name'], $post_meta['pm_index'] );
+	$type_option_key   = InpostGUI::get_option_key( $post_meta['type']['option']['name'], $post_meta['pm_index'] );
 	$type_option_value = $post_meta['type']['option']['value'];
 
 	$type_select_fields = '';

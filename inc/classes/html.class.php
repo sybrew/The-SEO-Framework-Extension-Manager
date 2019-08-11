@@ -158,24 +158,24 @@ final class HTML {
 	}
 
 	/**
-	 * Makes valid data attributes from input.
+	 * Makes either simple or JSON-encoded data-* attributes for HTML elements.
 	 *
 	 * Converts CamelCase to dash-case when needed.
 	 * Data value may be anything, and is JSON encoded. Use jQuery.data() to extract.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $data The data atributes to format : {
-	 *    string 'dataKey' => mixed 'data value'
+	 * @param array $data : {
+	 *    string $k => mixed $v
 	 * }
-	 * @return string The formatted and escaped data attributes.
+	 * @return string The HTML data attributes, with added space to the start.
 	 */
 	static function make_data_attributes( array $data ) {
 
 		$ret = [];
 
 		foreach ( $data as $k => $v ) {
-			if ( is_array( $v ) ) {
+			if ( ! is_scalar( $v ) ) {
 				$ret[] = sprintf(
 					'data-%s="%s"',
 					strtolower( preg_replace(
@@ -198,6 +198,6 @@ final class HTML {
 			}
 		}
 
-		return implode( ' ', $ret );
+		return ' ' . implode( ' ', $ret );
 	}
 }

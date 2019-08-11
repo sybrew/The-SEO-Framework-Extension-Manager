@@ -62,7 +62,7 @@ final class Ajax {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Focus\Admin $_admin Used for integrity.
+	 * @param Admin $_admin Used for integrity.
 	 */
 	public static function _init( Admin $_admin ) {
 

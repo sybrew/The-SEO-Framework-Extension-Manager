@@ -76,8 +76,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core
-	 *                        Used for integrity.
+	 * @param Core $_core     Used for integrity.
 	 * @param string $slug    The menu slug.
 	 * @param string $hook    The menu hook.
 	 * @param string $o_index The options index.
@@ -116,8 +115,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core
-	 *                        Used for integrity.
+	 * @param Core $_core     Used for integrity.
 	 * @param string $o_index The options index.
 	 */
 	public function _init_ajax( Core $_core, $o_index ) {
@@ -187,7 +185,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Core $_core Used for integrity.
+	 * @param Core $_core Used for integrity.
 	 */
 	public function _output_settings_page( Core $_core ) {
 		\add_action( 'tsfem_header', [ $this, '_output_cord_header' ] );
@@ -295,7 +293,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_settings_overview( self $_s ) {
 		$this->get_view( 'layout/pages/settings' );
@@ -306,7 +304,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_stats_overview( self $_s ) {
 		$this->get_view( 'layout/pages/stats' );
@@ -317,7 +315,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_logs_overview( self $_s ) {
 		$this->get_view( 'layout/pages/logs' );
@@ -328,7 +326,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_settings_bottom_wrap( self $_s ) {
 		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Save</button>';
@@ -339,7 +337,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_stats_bottom_wrap( self $_s ) {
 		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Refresh</button>';
@@ -350,7 +348,7 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object \TSF_Extension_Manager\Extension\Cord\Settings $_s Used for integrity.
+	 * @param self $_s Used for integrity.
 	 */
 	public function _get_cord_logs_bottom_wrap( self $_s ) {
 		echo '<button class="tsfem-button tsfem-button-primary tsfem-button-flat">Refresh</button>';
@@ -374,8 +372,8 @@ final class Settings {
 	 * @since 1.0.0
 	 *
 	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *        Each array key is converted to a variable with its value attached.
+	 * @param array  $args The arguments to be supplied within the file name.
+	 *                     Each array key is converted to a variable with its value attached.
 	 */
 	private function get_view( $view, array $args = [] ) {
 

@@ -48,7 +48,7 @@ final class InpostHTML {
 	 * @param string $id The notification area ID.
 	 */
 	public static function notification_area( $id ) {
-		printf( '<div class=tsfem-flex-settings-notification-area id=%s></div>', esc_attr( $id ) );
+		printf( '<div class=tsfem-flex-settings-notification-area id=%s></div>', \esc_attr( $id ) );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class InpostHTML {
 	 *               'content'      : Same as 'input'.
 	 *               'checkbox'     : Wraps a checkbox and its label.
 	 * @param string $content The content to wrap. Should be escaped.
-	 * @param string $id      The wrap ID.
+	 * @param string $id      The wrap ID. Should be escaped.
 	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
 	public static function construct_flex_wrap( $what, $content, $id = '', $for = '' ) {
@@ -130,11 +130,11 @@ final class InpostHTML {
 		$id = $id ? "id=$id" : '';
 
 		switch ( $what ) :
-			case 'block' :
+			case 'block':
 				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
-			case 'label' :
+			case 'label':
 				$content = sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
@@ -148,7 +148,7 @@ final class InpostHTML {
 				);
 				break;
 
-			case 'label-input' :
+			case 'label-input':
 				$for or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
 				$content = sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex" %s>
@@ -164,32 +164,32 @@ final class InpostHTML {
 				);
 				break;
 
-			case 'input' :
-			case 'content' :
+			case 'input':
+			case 'content':
 				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
-			case 'block-open' :
+			case 'block-open':
 				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s', $id, $content );
 				break;
 
-			case 'input-open' :
-			case 'content-open' :
+			case 'input-open':
+			case 'content-open':
 				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s', $id, $content );
 				break;
 
-			case 'block-close' :
-			case 'input-close' :
-			case 'content-close' :
+			case 'block-close':
+			case 'input-close':
+			case 'content-close':
 				$content = '</div>';
 				break;
 
 			//! Not used.
-			// case 'checkbox' :
+			// case 'checkbox':
 			// 	$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
 			// 	break;
 
-			default :
+			default:
 				break;
 		endswitch;
 

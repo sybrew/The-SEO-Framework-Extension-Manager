@@ -236,6 +236,7 @@ final class AJAX extends Secure_Abstract {
 		}
 		/**
 		 * Allows callers to save POST data.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 * @access protected
 		 */

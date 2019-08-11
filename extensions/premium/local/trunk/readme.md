@@ -126,6 +126,12 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.4
+
+[tsfep-release time="-1"]
+
+* **Fixed:** Apostropes entered in the settings no longer get backslashed on save or preview. However, sequential backslashes are now unpaired (this is consistent with the rest of WordPress).
+
 ### 1.1.3
 
 [tsfep-release time="January 28th, 2019"]

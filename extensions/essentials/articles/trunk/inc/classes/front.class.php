@@ -131,7 +131,7 @@ final class Front extends Core {
 	 * @see $this->is_json_valid
 	 * @see $this->is_json_valid()
 	 *
-	 * @param string $what
+	 * @param string $what What to invalidate.
 	 */
 	private function invalidate( $what = 'both' ) {
 
@@ -279,8 +279,8 @@ final class Front extends Core {
 	 * @staticvar $data The generated data.
 	 * @see $this->build_article_data()
 	 *
-	 * @param bool $get Whether to return the accumulated data.
-	 * @param array $array The input element
+	 * @param bool  $get   Whether to return the accumulated data.
+	 * @param array $entry The input element
 	 * @return array The article data.
 	 */
 	private function get_article_data( $get = true, array $entry = [] ) {
@@ -618,8 +618,8 @@ final class Front extends Core {
 		$tsf = \the_seo_framework();
 
 		/**
-		 * Applies filters the_seo_framework_articles_name : string
 		 * @since 1.0.0
+		 * @param string $name The articles name.
 		 */
 		$name = (string) \apply_filters( 'the_seo_framework_articles_name', $tsf->get_option( 'knowledge_name' ) ) ?: $tsf->get_blogname();
 
@@ -724,7 +724,7 @@ final class Front extends Core {
 
 		$size = \wp_get_additional_image_sizes()[ $this->image_size_name ];
 
-		$_file = \get_attached_file( $attachment_id );
+		$_file         = \get_attached_file( $attachment_id );
 		$_resized_file = \image_make_intermediate_size( $_file, $size['width'], $size['height'], false );
 
 		if ( $_resized_file ) {

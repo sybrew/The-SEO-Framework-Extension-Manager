@@ -177,7 +177,7 @@ final class Core {
 				/**
 				 * First run.
 				 * Start at HTTP header.
-				 * Stop right at where wp_head is run.
+				 * Stop right at where wp_head is running.
 				 */
 				\add_action( 'get_header', [ $this, 'start_ob' ], 0 );
 				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 0 );
@@ -315,7 +315,6 @@ final class Core {
 	 *
 	 * @param string $title_tag the Title tag with the title
 	 * @param string $content The content containing the $title_tag
-	 * @return string the content with replaced title tag.
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
 
@@ -360,7 +359,6 @@ final class Core {
 	public function indicator() {
 
 		/**
-		 * Applies filters 'the_seo_framework_title_fixed_indicator'
 		 * @since 1.0.1
 		 * @param bool Whether to output an indicator or not.
 		 */

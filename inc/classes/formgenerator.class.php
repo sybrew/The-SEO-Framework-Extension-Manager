@@ -158,7 +158,6 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @param string $caller The caller.
 	 * @return bool True if matched, false otherwise.
@@ -174,7 +173,6 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return string|bool The called iterator name. False otherwise.
 	 */
@@ -192,7 +190,6 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return int <unsigned> (R>0) $i The previous iteration value. 1 if $_POST value not set.
 	 */
@@ -207,13 +204,12 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @global object $_POST
 	 *
 	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
 		//* Referer check OK.
-		return  \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
+		return \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
 	}
 
 	/**
@@ -335,10 +331,10 @@ final class FormGenerator {
 
 		$args['architecture'] = $args['architecture'] ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
 
-		$this->bits = floor( $args['architecture'] / $args['levels'] );
+		$this->bits   = floor( $args['architecture'] / $args['levels'] );
 		$this->max_it = pow( 2, $this->bits );
 
-		$this->o_key = $args['o_key'] = $this->sanitize_id( $args['o_key'] );
+		$this->o_key     = $args['o_key'] = $this->sanitize_id( $args['o_key'] );
 		$this->has_o_key = (bool) $this->o_key;
 
 		$this->use_stale = (bool) $args['use_stale'];
@@ -1348,23 +1344,40 @@ final class FormGenerator {
 	 * Creates fields data based on input.
 	 *
 	 * @since 1.3.0
+	 * @since 2.1.0 Now accepts mixed quotes as values.
 	 *
 	 * @param array $data The field's data.
 	 * @return string The field's data.
 	 */
 	private function get_fields_data( array $data ) {
 
-		$ret = '';
+		$ret = [];
+
 		foreach ( $data as $k => $v ) {
-			if ( is_array( $v ) ) {
-				//* NOTE: Using single quotes.
-				$ret .= sprintf( " data-%s='%s'", $k, json_encode( $v, JSON_UNESCAPED_SLASHES ) );
+			if ( ! is_scalar( $v ) ) {
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+				);
 			} else {
-				$ret .= sprintf( ' data-%s="%s"', $k, $v );
+				$ret[] = sprintf(
+					'data-%s="%s"',
+					strtolower( preg_replace(
+						'/([A-Z])/',
+						'-$1',
+						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
+					) ), // dash case.
+					\esc_attr( $v )
+				);
 			}
 		}
 
-		return $ret;
+		return ' ' . implode( ' ', $ret );
 	}
 
 	/**

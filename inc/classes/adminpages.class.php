@@ -130,6 +130,30 @@ class AdminPages extends AccountActivation {
 			'callback'    => [ $this, '_init_extension_manager_page' ],
 		];
 
+		$notice_count = count( \get_option( $this->error_notice_option, false ) ?: [] );
+
+		if ( $notice_count ) {
+			/**
+			 * TODO Update these when clearing them via JS.
+			 * @see /wp-admin/menu.php @ $awaiting_mod & edit-comments.js' updateCountText & updateInModerationText
+			 */
+			$notice_i18n = number_format_i18n( $notice_count );
+			$notice_text = sprintf(
+				/* translators: %s: number of notices waiting */
+				_n( '%s notice waiting', '%s notices waiting', $notice_count, 'the-seo-framework-extension-manager' ),
+				$notice_i18n
+			);
+
+			$menu['menu_title'] .= ' ' . sprintf(
+				'<span class="tsfem-menu-notice tsfem-menu-errors count-%d"><span class="tsfem-error-count" aria-hidden="true">%s</span><span class="tsfem-error-count-text screen-reader-text">%s</span></span>',
+				$notice_count,
+				$notice_i18n,
+				$notice_text
+			);
+
+			$this->load_menu_notice_styles();
+		}
+
 		$this->seo_extensions_menu_page_hook = \add_submenu_page(
 			$menu['parent_slug'],
 			$menu['page_title'],
@@ -138,6 +162,42 @@ class AdminPages extends AccountActivation {
 			$menu['menu_slug'],
 			$menu['callback']
 		);
+	}
+
+	/**
+	 * Loads the menu notice script, via TSF's v3.1 script handler.
+	 *
+	 * @since 2.1.0
+	 */
+	final public function load_menu_notice_styles() {
+
+		$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
+		/**
+		 * This is inaccurate, because WordPress is combobulating these colors.
+		 * We're more WordPress than WordPress.
+		 *
+		 * As such, we do not process this on the 'fresh', 'light', and 'blue' schemes.
+		 * 'midnight' should also be excluded, but that's messed up on another level.
+		 * Let's just say we got this mildly accurate on 6 out of 8 schemes.
+		 */
+		$inline = in_array( $_scheme, [ 'fresh', 'light', 'blue' ], true ) ? null : [
+			'#adminmenu .tsfem-menu-notice' => [
+				'background-color:{{$color_accent}}',
+				'color:{{$rel_color_accent}}',
+			],
+		];
+
+		\The_SEO_Framework\Builders\Scripts::register( [
+			'id'       => 'tsfem-menu-notice',
+			'type'     => 'css',
+			'deps'     => [ 'admin-menu' ],
+			'autoload' => true,
+			'hasrtl'   => false,
+			'name'     => 'tsfem-menu-notice',
+			'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+			'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+			'inline'   => $inline,
+		] );
 	}
 
 	/**

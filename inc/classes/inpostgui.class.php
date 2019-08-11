@@ -149,13 +149,13 @@ final class InpostGUI {
 				'dashicon' => 'layout',
 				'args'     => [ 'structure' ],
 			],
-			'audit' => [
+			'audit'     => [
 				'name'     => \__( 'Audit', 'the-seo-framework-extension-manager' ),
 				'callback' => [ $this, '_output_tab_content' ],
 				'dashicon' => 'analytics',
 				'args'     => [ 'audit' ],
 			],
-			'advanced' => [
+			'advanced'  => [
 				'name'     => \__( 'Advanced', 'the-seo-framework-extension-manager' ),
 				'callback' => [ $this, '_output_tab_content' ],
 				'dashicon' => 'list-view',
@@ -217,8 +217,8 @@ final class InpostGUI {
 					'locale'      => \get_locale(),
 					'userLocale'  => function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
 					'debug'       => (bool) WP_DEBUG,
-					'rtl'  => (bool) \is_rtl(),
-					'i18n' => [
+					'rtl'         => (bool) \is_rtl(),
+					'i18n'        => [
 						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
 						'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
@@ -328,7 +328,7 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $colors The color CSS.
+	 * @param array $styles The styles, with possible colors.
 	 * @return array $css
 	 */
 	private function get_inline_css( array $styles ) {
@@ -402,7 +402,7 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $templates, single or multi-dimensional : {
+	 * @param array $templates single or multi-dimensional : {
 	 *   'file' => string $file. The full file location,
 	 *   'args' => array $args. Optional,
 	 * }
@@ -557,6 +557,7 @@ final class InpostGUI {
 	 *
 	 * @since 2.1.0
 	 *
+	 * @param int $state (bitwise) The state to test.
 	 * @return bool True if user verification passed, and not doing autosave, cron, or ajax.
 	 */
 	public static function is_state_safe( $state ) {
@@ -569,37 +570,23 @@ final class InpostGUI {
 	 * Adds registered active tabs to The SEO Framework inpost metabox.
 	 *
 	 * @since 1.5.0
+	 * @since 2.1.0 Removed second parameter.
 	 * @access private
 	 *
-	 * @param array  $tabs  The registered tabs.
-	 * @param string $label The post type label.
+	 * @param array $tabs The registered tabs.
 	 * @return array $tabs The SEO Framework's tabs.
 	 */
-	public function _load_tabs( array $tabs, $label ) {
+	public function _load_tabs( array $tabs ) {
 
 		$registered_tabs = static::$tabs;
 		$active_tab_keys = static::$active_tab_keys;
 
 		foreach ( $registered_tabs as $index => $args ) :
 			empty( $active_tab_keys[ $index ] ) or
-				$tabs[ $index ] = $this->append_type_arg( $args, $label );
+				$tabs[ $index ] = $args;
 		endforeach;
 
 		return $tabs;
-	}
-
-	/**
-	 * Appends post type label argument to the tab arguments.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array  $tab_args The current tab arguments.
-	 * @param string $label    The post type label.
-	 * @return array The extended tab arguments.
-	 */
-	private function append_type_arg( array $tab_args, $label ) {
-		$tab_args['args'] += [ 'post_type_label' => $label ];
-		return $tab_args;
 	}
 
 	/**
@@ -677,8 +664,8 @@ final class InpostGUI {
 	 * @param string $tab The tab to activate.
 	 *               Either 'structure', 'audit' or 'advanced'.
 	 */
-	public static function activate_tab( $key ) {
-		static::$active_tab_keys[ $key ] = true;
+	public static function activate_tab( $tab ) {
+		static::$active_tab_keys[ $tab ] = true;
 	}
 
 	/**
@@ -688,10 +675,10 @@ final class InpostGUI {
 	 * @see static::activate_tab();
 	 * @uses static::$views
 	 *
-	 * @param string $file The file to include.
-	 * @param array  $args The arguments to pass to the file. Each array index is
-	 *               converted to a respectively named variable.
-	 * @param string $tab  The tab the view is outputted in.
+	 * @param string    $file The file to include.
+	 * @param array     $args The arguments to pass to the file. Each array index is
+	 *                        converted to a respectively named variable.
+	 * @param string    $tab  The tab the view is outputted in.
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
 	public static function register_view( $file, array $args = [], $tab = 'advanced', $priority = 10 ) {

@@ -366,7 +366,7 @@ trait Extension_Options {
 			$key = $this->satoma( $key );
 		}
 
-		$_ = $this->get_extension_options();
+		$_     = $this->get_extension_options();
 		$value = $this->get_mda_value( $key, $_ ) ?: $default;
 
 		if ( isset( $value ) )
@@ -403,7 +403,7 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
+		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
@@ -438,7 +438,7 @@ trait Extension_Options {
 		unset( $options[ $option ] );
 
 		//* Prepare options cache.
-		$c_options = Extensions_Options_Cache::_get_options_cache();
+		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
@@ -553,7 +553,7 @@ trait Extension_Options {
 			$key = $this->satoma( $key );
 		}
 
-		$_ = $this->get_stale_extension_options();
+		$_     = $this->get_stale_extension_options();
 		$value = $this->get_mda_value( $key, $_ ) ?: $default;
 
 		if ( isset( $value ) )
@@ -605,7 +605,7 @@ trait Extension_Options {
 		$options[ $option ] = $value;
 
 		//* Prepare options cache.
-		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
+		$c_options                   = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
@@ -640,7 +640,7 @@ trait Extension_Options {
 		unset( $options[ $option ] );
 
 		//* Prepare options cache.
-		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
+		$c_options                   = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		if ( [] === $c_options ) {

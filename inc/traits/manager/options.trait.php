@@ -72,8 +72,8 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $option The Option name.
-	 * @param mixed $default The fallback value if the option doesn't exist.
+	 * @param string $option  The Option name.
+	 * @param mixed  $default The fallback value if the option doesn't exist.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_option( $option, $default = null ) {
