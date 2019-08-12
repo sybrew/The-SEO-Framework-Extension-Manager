@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\AMP;
  * Extension Name: AMP
  * Extension URI: https://theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.1.0
+ * Extension Version: 1.2.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -122,6 +122,7 @@ final class Front {
 
 		$output .= $this->get_general_metadata();
 		$output .= $this->get_social_metadata();
+		$output .= $this->get_structured_metadata();
 
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '2.9.2', '>=' ) ) {
 			$output = \the_seo_framework()->get_plugin_indicator( 'before' )
@@ -202,5 +203,17 @@ final class Front {
 		$after = (string) \apply_filters( 'the_seo_framework_amp_pro', '' );
 
 		return $before . $output . $after;
+	}
+
+	/**
+	 * Returns structured metadata in the AMP HTML head.
+	 * Data is taken from The SEO Framework.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string The structured metadata.
+	 */
+	protected function get_structured_metadata() {
+		return \the_seo_framework()->ld_json();
 	}
 }

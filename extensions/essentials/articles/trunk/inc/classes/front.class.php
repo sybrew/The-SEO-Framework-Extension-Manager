@@ -73,8 +73,14 @@ final class Front extends Core {
 	 * Initializes hooks.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Now tests for post type conditions prior executing.
 	 */
 	private function init() {
+
+		if ( ! \the_seo_framework()->is_singular() ) return;
+
+		if ( ! in_array( \get_post_type(), $this->supported_post_types, true ) )
+			return;
 
 		if ( $this->is_amp() ) {
 			//* Initialize output in The SEO Framework's front-end AMP meta object.
@@ -98,19 +104,28 @@ final class Front extends Core {
 	 * Determines if the current page is AMP supported.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.2 Now supports AMP v0.5+ endpoints.
 	 * @uses const AMP_QUERY_VAR
-	 * @staticvar bool $cache
+	 * @staticvar bool $is_amp
 	 *
 	 * @return bool True if AMP is enabled.
 	 */
 	private function is_amp() {
 
-		static $cache;
+		static $is_amp;
 
-		if ( isset( $cache ) )
-			return $cache;
+		if ( isset( $is_amp ) )
+			return $is_amp;
 
-		return $cache = defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		if ( function_exists( '\\is_amp_endpoint' ) ) {
+			$is_amp = \is_amp_endpoint();
+		} elseif ( defined( 'AMP_QUERY_VAR' ) ) {
+			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		} else {
+			$is_amp = false;
+		}
+
+		return $is_amp;
 	}
 
 	/**
@@ -199,16 +214,12 @@ final class Front extends Core {
 	 * This allows output object caching.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now uses a new filter to determine support.
 	 * @access private
 	 *
 	 * @param array $functions The hooked functions.
 	 * @return array The hooked functions.
 	 */
 	public function _articles_hook_output( $functions = [] ) {
-
-		if ( ! in_array( \get_post_type(), $this->supported_post_types, true ) )
-			return $functions;
 
 		$functions[] = [
 			'callback' => [ $this, '_get_articles_json_output' ],
@@ -250,9 +261,17 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return '';
 
-		//* Build data, and fetch it.
+		//* Build data, fetch it later.
 		array_filter( array_filter( $data ), [ $this, 'build_article_data' ] );
-		$data = $this->get_article_data();
+
+		/**
+		 * @since 1.3.2
+		 * @param array $data The Articles schema data.
+		 */
+		$data = \apply_filters(
+			'the_seo_framework_articles_data',
+			$this->get_article_data()
+		);
 
 		if ( ! empty( $data ) )
 			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, JSON_UNESCAPED_SLASHES ) ) . PHP_EOL;
@@ -421,20 +440,22 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$image = $this->get_article_image_params();
+		/**
+		 * @since 1.3.2
+		 * @param array|string $images The URL of an image, an imageObject, or a array of each or both.
+		 */
+		$images = \apply_filters(
+			'the_seo_framework_articles_images',
+			$this->get_article_image_params()
+		);
 
-		if ( empty( $image['url'] ) ) {
+		if ( ! $images ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}
 
 		return [
-			'image' => [
-				'@type'  => 'ImageObject',
-				'url'    => \esc_url( $image['url'], [ 'http', 'https' ] ),
-				'width'  => abs( filter_var( $image['width'], FILTER_SANITIZE_NUMBER_INT ) ),
-				'height' => abs( filter_var( $image['height'], FILTER_SANITIZE_NUMBER_INT ) ),
-			],
+			'image' => $images,
 		];
 	}
 
@@ -442,27 +463,35 @@ final class Front extends Core {
 	 * Returns image parameters for Article image.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now uses the new image generator.
+	 * @since 1.3.2 Now uses the new image generatorm, and now returns multiple image objects.
 	 *
 	 * @return array The article image parameters. Unescaped.
 	 */
 	private function get_article_image_params() {
 
 		$id = $this->get_current_id();
-		$w  = $h = 0;
 
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3.0', '>=' ) ) {
-			$image_details = \the_seo_framework()->get_safe_schema_image( null, true );
 
-			if ( $image_details ) {
+			$images = [];
 
-				$url = $image_details['url'];
-				$w   = $image_details['width'];
-				$h   = $image_details['height'];
+			foreach ( \the_seo_framework()->get_image_details( null, false, 'schema', true ) as $image ) {
 
-				if ( $w >= 1200 )
-					goto retvals;
+				if ( ! $image['url'] ) continue;
+
+				if ( $image['width'] && $image['width'] > 1200 ) {
+					$images[] = [
+						'@type'  => 'ImageObject',
+						'url'    => $image['url'],
+						'width'  => $image['width'],
+						'height' => $image['height'],
+					];
+				} else {
+					$images[] = $image['url'];
+				}
 			}
+
+			return count( $images ) > 1 ? $images : reset( $images );
 		} else {
 			if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
 
@@ -473,10 +502,21 @@ final class Front extends Core {
 				if ( $d ) {
 					$w = $d['width'];
 					$h = $d['height'];
+				} else {
+					$w = 0;
+					$h = 0;
 				}
 
-				if ( $w >= 1200 )
-					goto retvals;
+				if ( ! $w ) {
+					return $url;
+				} elseif ( $w >= 1200 ) {
+					return [
+						'@type'  => 'ImageObject',
+						'url'    => $url,
+						'width'  => $w,
+						'height' => $h,
+					];
+				}
 			}
 
 			//* Don't use `\the_seo_framework()->get_image_from_post_thumbnail` because it will overwrite vars.
@@ -489,23 +529,18 @@ final class Front extends Core {
 					$w   = $_src[1];
 					$h   = $_src[2];
 
-					if ( $w >= 696 )
-						goto retvals;
+					if ( $w >= 1200 )
+						return [
+							'@type'  => 'ImageObject',
+							'url'    => $url,
+							'width'  => $w,
+							'height' => $h,
+						];
 				}
 			}
 		}
 
-		retempty :;
-
 		return [];
-
-		retvals :;
-
-		return [
-			'url'    => $url,
-			'width'  => $w,
-			'height' => $h,
-		];
 	}
 
 	/**
@@ -625,8 +660,8 @@ final class Front extends Core {
 
 		$_default_img_id = (int) $tsf->get_option( 'knowledge_logo_id' ) ?: \get_option( 'site_icon' );
 		/**
-		 * Applies filters the_seo_framework_articles_logo_id : int
 		 * @since 1.0.0
+		 * @param int $img_id The image ID to use for the logo.
 		 */
 		$_img_id = (int) \apply_filters( 'the_seo_framework_articles_logo_id', 0 ) ?: $_default_img_id;
 

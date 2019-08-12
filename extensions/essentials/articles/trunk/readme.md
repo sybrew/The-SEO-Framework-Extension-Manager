@@ -181,17 +181,71 @@ add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
 } );
 ```
 
+#### Adjust the output data
+
+```php
+add_filter( 'the_seo_framework_articles_data', function( $data ) {
+
+	// Overwrite the author input.
+	$data['author'] = [
+		'@type' => 'Organization',
+		'name'  => 'The SEO Framework',
+	];
+
+	// Remove the description input.
+	unset( $data['description'] );
+
+	return $data;
+} );
+```
+
+#### Adjust the image data
+
+*Note that images are required for AMP.*
+
+```php
+add_filter( 'the_seo_framework_articles_images', function( $images ) {
+
+	// Add an image. Make sure it's an array first!
+	$images   = (array) $images;
+	$images[] = 'https://example.com/path/to/image.jpg';
+
+	// Or, only use a single image.
+	$images = 'https://example.com/path/to/image.jpg';
+
+	// Or, define an array of images.
+	$images = [
+		[
+			'@type'  => 'ImageObject',
+			'url'    => 'https://example.com/path/to/complex-image.jpg',
+			'width'  => 1920,
+			'height' => 1080,
+		],
+		'https://example.com/path/to/image.jpg',
+	];
+
+	return $images;
+} );
+```
+
 ## Changelog
 
 ### 1.3.2
 
 [tsfep-release time="-1"]
 
-* **Added:** TSF v3.3 support.
+* **Added:** TSF v4.0 support.
 * **Added:** New filter: `the_seo_framework_articles_supported_post_types`.
 	* Documented at [developers](#developers).
+* **Added:** New filter: `the_seo_framework_articles_data`.
+	* Documented at [developers](#developers).
+* **Added:** New filter: `the_seo_framework_articles_images`.
+	* Documented at [developers](#developers).
+* **Added:** Multiple valid images are now used.
 * **Changed:** Image width requirements went up from to 1200 from 696 pixels.
 * **Changed:** This extension now requires TSF v3.1 or later.
+* **Fixed:** Structured data is no longer appended to archives that are of the `post` post type.
+* **Fixed:** Now uses AMP v0.5+ endpoint detection when available.
 
 ### 1.3.1
 

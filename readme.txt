@@ -174,6 +174,10 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * Month nth, 2019
 
+**Major release, but no new extension:**
+
+* We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/master/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
+
 **Plugin improvements:**
 
 * **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Next to a global endpoint, we have an European endpoint now.
@@ -182,7 +186,8 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
 * **Added:** When notices are awaiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
 	* N.B. This check will add an extra database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
-* **Updated:** Script API support for The SEO Framework v3.3.
+* **Added:** You can now use keyboard navigation to access informational tooltips. Note that The SEO Framework v4.0 or later is required to utilize this.
+* **Updated:** Script API support for The SEO Framework v4.0.
 * **Updated:** The Spanish translation file. Thanks [Manuel](https://mbrsolution.com/)!
 * **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
 * **Improved:** Your email address is now partially obfuscated and possibly unrecognizable by length in the admin dashboard.
@@ -206,11 +211,9 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **Updated Extensions:**
 
-* [Local](https://theseoframework.com/extensions/local/#changelog)
+* [AMP](https://theseoframework.com/extensions/amp/#changelog)
 * [Articles](https://theseoframework.com/extensions/articles/#changelog)
-
-* TODO Add JSON data filter for Articles.
-* TODO reinstate tsfem-button-pulse class. -> hue rotate?
+* [Local](https://theseoframework.com/extensions/local/#changelog)
 
 = 2.0.4 =
 

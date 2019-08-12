@@ -725,7 +725,7 @@ msgstr "Seçilen görseli kaldır"
 
 #: extensions/premium/monitor/trunk/views/layout/pages/connect.php:20
 msgid "This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s)."
-msgstr "Bu, gizlilik politikamızın tanıtımından küçük bir alıntıdır. Tüm ayrıntılar için [Gizlilik Politikası] 'na (%s) bakın."
+msgstr "Bu, gizlilik politikamızın tanıtımından küçük bir alıntıdır. Tüm ayrıntılar için [Gizlilik Politikası](%s) 'na bakın."
 
 #: extensions/premium/local/trunk/views/layout/pages/settings.php:21
 msgid "All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in."
@@ -3004,7 +3004,7 @@ msgstr "Kanonik URL'nin ayarlanmış bir şeması yok gibi görünüyor. Aktif t
 #. translators: URLs are in markdown. %s = SEO Settings page admin URL.
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:541
 msgid "The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s)."
-msgstr "Kanonik URL düzeni yanlış ayarlanmış. [Genel SEO ayarları] 'nda (%s) otomatik olarak algılanacak tercih edilen düzeni ayarlayın."
+msgstr "Kanonik URL düzeni yanlış ayarlanmış. [Genel SEO ayarları](%s) 'nda otomatik olarak algılanacak tercih edilen düzeni ayarlayın."
 
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:531
 msgid "The canonical URL scheme matches the expected scheme."
@@ -3017,7 +3017,7 @@ msgstr "Sitenizin HTTPS sürümünde kanonik URL bulunamadı."
 #. translators: URLs are in markdown. %s = SEO Settings page admin URL.
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:514
 msgid "The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s)."
-msgstr "Kanonik URL şeması otomatik olarak belirlenir. Tercih edilen şemayı [Genel SEO ayarları] 'nda (%s) HTTP veya HTTPS olarak ayarlayın."
+msgstr "Kanonik URL şeması otomatik olarak belirlenir. Tercih edilen şemayı [Genel SEO ayarları](%s) 'nda HTTP veya HTTPS olarak ayarlayın."
 
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:503
 msgid "Both versions of your site point to the insecure version. Is this intended?"

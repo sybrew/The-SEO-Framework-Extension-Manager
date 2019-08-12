@@ -174,8 +174,8 @@ function _push_update( $value, $transient ) {
 					'plugins' => [
 						TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin,
 					],
-					// 'translations' => [], // maybe later.
-					// 'locale' => [], // maybe later.
+					// 'translations' => [], // maybe sooner.
+					// 'locale' => [], // maybe sooner.
 				],
 			];
 

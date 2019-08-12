@@ -46,7 +46,7 @@ final class HTML {
 	 * @since 1.5.0
 	 * @since 2.0.2 Now uses tsfTT compatible classes.
 	 */
-	static function wrap_inline_tooltip( $content, array $classes = [] ) {
+	public static function wrap_inline_tooltip( $content, array $classes = [] ) {
 		$classes[] = 'tsf-tooltip-wrap';
 		return vsprintf(
 			'<span class="%s">%s</span>',
@@ -68,7 +68,7 @@ final class HTML {
 	 *                           is omitted.
 	 * @param string $title_html The definite tooltip, may contain HTML. Optional.
 	 */
-	static function make_inline_question_tooltip( $title, $title_html = '' ) {
+	public static function make_inline_question_tooltip( $title, $title_html = '' ) {
 		return static::wrap_inline_tooltip(
 			static::make_inline_tooltip( '', $title, $title_html, [ 'tsfem-dashicon', 'tsfem-unknown' ] )
 		);
@@ -79,6 +79,7 @@ final class HTML {
 	 *
 	 * @since 1.5.0
 	 * @since 2.0.2 Now uses tsfTT compatible classes.
+	 * @since 2.1.0 Now added a tabindex for keyboard navigation.
 	 *
 	 * @param string $content    The content within the wrap. Must be escaped.
 	 * @param string $title      The title displayed when JS is disabled.
@@ -87,7 +88,7 @@ final class HTML {
 	 * @param string $title_html The definite tooltip, may contain HTML. Optional.
 	 * @param array  $classes    The additional tooltip classes.
 	 */
-	static function make_inline_tooltip( $content, $title, $title_html = '', array $classes = [] ) {
+	public static function make_inline_tooltip( $content, $title, $title_html = '', array $classes = [] ) {
 
 		$title = \esc_attr( \wp_strip_all_tags( $title ) );
 		$title_html = $title_html ? sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
@@ -96,7 +97,7 @@ final class HTML {
 			and $classes[] = 'tsf-tooltip-item';
 
 		return vsprintf(
-			'<span class="%s" title="%s" %s>%s</span>',
+			'<span class="%s" title="%s" %s tabindex=0>%s</span>',
 			[
 				implode( ' ', $classes ),
 				$title,
@@ -118,7 +119,7 @@ final class HTML {
 	 * @param string $selected The currently selected value.
 	 * @return string The formatted options list.
 	 */
-	static function make_dropdown_option_list( array $options, $selected = '' ) {
+	public static function make_dropdown_option_list( array $options, $selected = '' ) {
 		$out = '';
 		$selected = (string) $selected;
 		foreach ( $options as $entry ) {
@@ -144,7 +145,7 @@ final class HTML {
 	 * @param  int $selected The currently selected value.
 	 * @return string The formatted options list.
 	 */
-	static function make_sequential_dropdown_option_list( array $options, $selected = 0 ) {
+	public static function make_sequential_dropdown_option_list( array $options, $selected = 0 ) {
 
 		$_options = [];
 		$i = 0;
@@ -170,7 +171,7 @@ final class HTML {
 	 * }
 	 * @return string The HTML data attributes, with added space to the start.
 	 */
-	static function make_data_attributes( array $data ) {
+	public static function make_data_attributes( array $data ) {
 
 		$ret = [];
 
