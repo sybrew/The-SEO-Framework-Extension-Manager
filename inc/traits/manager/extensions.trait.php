@@ -129,19 +129,6 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.7.0',
 				'tested_tsf'   => '4.0.0',
 			],
-			// 'cord' => [
-			// 	'slug'         => 'cord',
-			// 	'network'      => '0',
-			// 	'type'         => 'free',
-			// 	'area'         => 'indexing',
-			// 	'author'       => 'Sybre Waaijer',
-			// 	'party'        => 'first',
-			// 	'last_updated' => '1551428730',
-			// 	'requires'     => '4.9.0',
-			// 	'tested'       => '5.1.0',
-			// 	'requires_tsf' => '3.2.0',
-			// 	'tested_tsf'   => '3.2.3',
-			// ],
 			'amp' => [
 				'slug'         => 'amp',
 				'network'      => '0',
@@ -207,19 +194,6 @@ trait Extensions_Properties {
 				'requires_tsf' => '2.7.0',
 				'tested_tsf'   => '4.0.0',
 			],
-			// 'transporter' => [
-			// 	'slug'         => 'transporter',
-			// 	'network'      => '0',
-			// 	'type'         => 'free',
-			// 	'area'         => 'media',
-			// 	'author'       => 'Sybre Waaijer',
-			// 	'party'        => 'first',
-			// 	'last_updated' => '1510175308',
-			// 	'requires'     => '4.4.0',
-			// 	'tested'       => '4.9.0',
-			// 	'requires_tsf' => '2.7.0',
-			// 	'tested_tsf'   => '3.0.0',
-			// ],
 		];
 	}
 

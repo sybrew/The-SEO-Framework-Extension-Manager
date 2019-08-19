@@ -176,7 +176,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **A major release without a new extension:**
 
-* We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/master/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
+* We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/cord-transporter/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
 
 **Plugin improvements:**
 
