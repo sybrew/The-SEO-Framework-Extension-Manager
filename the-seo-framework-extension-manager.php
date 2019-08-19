@@ -4,7 +4,7 @@
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
  * Version: 2.1.0-dev
- * Author: Sybre Waaijer
+ * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: the-seo-framework-extension-manager

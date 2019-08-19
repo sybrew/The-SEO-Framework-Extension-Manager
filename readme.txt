@@ -174,18 +174,18 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * Month nth, 2019
 
-**Major release, but no new extension:**
+**A major release without a new extension:**
 
 * We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/master/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
 
 **Plugin improvements:**
 
-* **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Next to a global endpoint, we have an European endpoint now.
+* **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Aside from to a global endpoint, we have a European endpoint now.
 	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
 * **Added:** You can now see to which API endpoint you're connected.
 * **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
-* **Added:** When notices are awaiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
-	* N.B. This check will add an extra database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
+* **Added:** When notices are waiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
+	* N.B. This check will add a database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
 * **Added:** You can now use keyboard navigation to access informational tooltips. Note that The SEO Framework v4.0 or later is required to utilize this.
 * **Updated:** Script API support for The SEO Framework v4.0.
 * **Updated:** The Spanish translation file. Thanks [Manuel](https://mbrsolution.com/)!
@@ -195,8 +195,8 @@ If you were to get a plugin activation error, either open a support ticket [here
 * **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
 * **Fixed:** Although unlikely, saving a post revisions now can't accidentally overwrite the extension metadata for the post.
 * **Info:** We added undocumented constants, for development use only.
-	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. This will always be set to the current version.
-	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's, otherwise it'll fall back to the default API version.
+	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. We will always set this to the current version.
+	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's, otherwise our API will fall back to the current public API version.
 * **Info:** We added undocumented constants, for internal use only.
 	* `TSFEM_EXTENSION_TSF_UNTESTED`
 	* `TSFEM_EXTENSION_TSF_INCOMPATIBLE`
@@ -207,7 +207,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* `TSFEM_INPOST_NO_AJAX`
 	* `TSFEM_INPOST_NO_CRON`
 	* `TSFEM_INPOST_NO_REVISION`
-* **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc instead.
+* **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc and Babel instead.
 
 **Updated Extensions:**
 

@@ -463,7 +463,7 @@ final class Front extends Core {
 	 * Returns image parameters for Article image.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now uses the new image generatorm, and now returns multiple image objects.
+	 * @since 1.3.2 Now uses the new image generator, and now returns multiple image objects.
 	 *
 	 * @return array The article image parameters. Unescaped.
 	 */

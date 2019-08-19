@@ -130,7 +130,9 @@ Also, when department URLs are filled in, then each specific department's data w
 
 [tsfep-release time="-1"]
 
-* **Fixed:** Apostropes entered in the settings no longer get backslashed on save or preview. However, sequential backslashes are now unpaired (this is consistent with the rest of WordPress).
+* **Fixed:** Apostrophes entered in the settings no longer get backslashed on save or preview. However, sequential backslashes are now unpaired.
+	* It means that `&#39;` no longer becomes `&#92;&#39;`.
+	* However, it also means that `&#92;&#92;&#92;` becomes `&#92;&#92;`, and then `&#92;`, and then stays `&#92;`. This is consistent with the rest of WordPress.
 
 ### 1.1.3
 
