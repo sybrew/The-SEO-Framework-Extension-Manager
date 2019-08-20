@@ -175,9 +175,10 @@ class AccountActivation extends Panes {
 				$success = $this->do_deactivation( false, true );
 
 				$remaining = isset( $results['activations_remaining'] ) ? ' ' . \esc_html( $results['activations_remaining'] ) . '.' : '';
-				$message = \esc_html__( 'API Key disconnected.', 'the-seo-framework-extension-manager' ) . $remaining;
+				$message   = \esc_html__( 'API Key disconnected.', 'the-seo-framework-extension-manager' ) . $remaining;
+
 				if ( ! $success )
-					$message .= \esc_html__( 'However, something went wrong with the disconnection on this website.', 'the-seo-framework-extension-manager' );
+					$message .= ' ' . \esc_html__( 'However, something went wrong with the disconnection on this website.', 'the-seo-framework-extension-manager' );
 
 				$this->set_error_notice( [ 501 => $message ] );
 				return true;
@@ -187,7 +188,7 @@ class AccountActivation extends Panes {
 			return false;
 		}
 
-		//* API server down... TODO consider still handling disconnection?
+		//* API server down... TODO consider still handling disconnection locally?
 		$this->set_error_notice( [ 503 => '' ] );
 		return null;
 	}
@@ -301,6 +302,7 @@ class AccountActivation extends Panes {
 			$success[] = $this->update_option( 'activation_email', '', 'regular', true );
 			$success[] = $this->update_option( '_activation_level', 'Free', 'instance', true );
 			$success[] = $this->update_option( '_remote_subscription_status', false, 'instance', true );
+
 			return ! in_array( false, $success, true );
 		}
 

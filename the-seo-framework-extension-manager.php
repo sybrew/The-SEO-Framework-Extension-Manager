@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework right from your WordPress Dashboard.
- * Version: 2.1.0-dev
+ * Version: 2.1.0
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -33,6 +33,8 @@ defined( 'ABSPATH' ) or die;
 /**
  * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
  *       Which is PHP 5.2.
+ * When we only support WordPress 5.2+, it'll be PHP 5.6.
+ * When we only support WordPress 5.4?+, it'll be PHP 7.1.
  */
 
 /**

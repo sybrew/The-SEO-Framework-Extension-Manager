@@ -313,9 +313,9 @@ trait Schema_Packer {
 	 * @see $this->store_packed_data();
 	 * @staticvar array $_d The stored data.
 	 *
-	 * @param string|int $id Either the URL or ID.
+	 * @param string|int $id   Either the URL or ID.
 	 * @param object     $data The data to store.
-	 * @param bool      $save Whether to store save the stored output.
+	 * @param bool       $save Whether to store save the stored output.
 	 * @return bool|void : {
 	 *   Saving:  True on success, false on failure.
 	 *   Storing: void.

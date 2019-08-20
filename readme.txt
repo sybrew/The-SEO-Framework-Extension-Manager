@@ -5,7 +5,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 4.8.0
 Tested up to: 5.2
 Requires PHP: 5.5.21
-Stable tag: 2.0.4
+Stable tag: 2.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -172,7 +172,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **Release date:**
 
-* Month nth, 2019
+* August 20th, 2019
 
 **A major release without a new extension:**
 
@@ -180,23 +180,23 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 **Plugin improvements:**
 
+* **Added:** You can now see to which API endpoint you're connected.
 * **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Aside from to a global endpoint, we have a European endpoint now.
 	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
-* **Added:** You can now see to which API endpoint you're connected.
-* **Added:** You can now see the last four symbols of your API key, this will ease managing mixed connections from our site.
+* **Added:** You can now see the last four characters of your API key, this will help ease managing mixed connections from our site.
 * **Added:** When notices are waiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
 	* N.B. This check will add a database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
 * **Added:** You can now use keyboard navigation to access informational tooltips. Note that The SEO Framework v4.0 or later is required to utilize this.
-* **Updated:** Script API support for The SEO Framework v4.0.
+* **Updated:** Script and other API support for The SEO Framework v4.0.
 * **Updated:** The Spanish translation file. Thanks [Manuel](https://mbrsolution.com/)!
 * **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
-* **Improved:** Your email address is now partially obfuscated and possibly unrecognizable by length in the admin dashboard.
+* **Improved:** Your API email address is now partially obfuscated and possibly unrecognizable by its length in the admin dashboard.
 * **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
 * **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
-* **Fixed:** Although unlikely, saving a post revisions now can't accidentally overwrite the extension metadata for the post.
+* **Fixed:** Although unlikely, saving post revisions now can't accidentally overwrite the extension metadata for the post.
 * **Info:** We added undocumented constants, for development use only.
-	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant you can choose our API version. We will always set this to the current version.
-	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's, otherwise our API will fall back to the current public API version.
+	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant, you can choose our API version. We will always set this to the current version.
+	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's; when the value doesn't match, our API will fall back to the current public API version.
 * **Info:** We added undocumented constants, for internal use only.
 	* `TSFEM_EXTENSION_TSF_UNTESTED`
 	* `TSFEM_EXTENSION_TSF_INCOMPATIBLE`
@@ -208,88 +208,13 @@ If you were to get a plugin activation error, either open a support ticket [here
 	* `TSFEM_INPOST_NO_CRON`
 	* `TSFEM_INPOST_NO_REVISION`
 * **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc and Babel instead.
+* **Info:** We removed unusued extension files.
 
 **Updated Extensions:**
 
 * [AMP](https://theseoframework.com/extensions/amp/#changelog)
 * [Articles](https://theseoframework.com/extensions/articles/#changelog)
 * [Local](https://theseoframework.com/extensions/local/#changelog)
-
-= 2.0.4 =
-
-**Release date:**
-
-* January 29th, 2019
-
-**Plugin Improvements:**
-
-* **Fixed:** Settings that don't use AJAX can now be processed again, like for activating or deactivating your license key.
-
-= 2.0.3 =
-
-**Release date:**
-
-* January 28th, 2019
-
-**Plugin Improvements:**
-
-* **Fixed:** The plugin no longer causes an error in the WordPress administrative dashboard on PHP 5.6 or below.
-
-= 2.0.2 =
-
-**Release date:**
-
-* January 28th, 2019
-
-**Updated Extensions:**
-
-* [Local](https://theseoframework.com/extensions/local/#changelog)
-* [Focus](https://theseoframework.com/extensions/focus/#changelog)
-* [Monitor](https://theseoframework.com/extensions/monitor/#changelog)
-
-**Plugin Improvements:**
-
-* **Changed:** This plugin now requires The SEO Framework 3.1.0 or higher.
-* **Changed:** This plugin now uses The SEO Framework's tooltip handler.
-* **Changed:** This plugin now uses The SEO Framework's script handler.
-* **Improved:** The plugin now caches the update request in PHP runtime, instead of just in database transients.
-	* Some caching plugins invoked a DDoS attack to the update services. This improvement alleviates that.
-* **Fixed:** Next to plain notices, errors and warnings from other plugins and themes are now styled correctly on this plugin's pages too.
-* **Fixed:** In Firefox and Edge, the tooltips no longer cause a horizontal pane overflow.
-	* ...In combination with The SEO Framework 3.2.2 or higher.
-* **Fixed:** Extension-related post meta with special HTML characters entered will no longer cause the extension metadata to corrupt on save.
-	* This issue was found during a security checkup (which passed). Luckily, it's yet unlikely that users would encounter this issue.
-
-**In 2.0.2a:**
-
-* **Fixed:** PHP 5.5~5.6 no longer encounter errors in the admin area.
-
-**Added Translations:**
-
-* Russian. Thank you [Vitaliy Ralle](https://profiles.wordpress.org/vit-1/)!
-* Portuguese (Brasil). Thank you [Douglas Ferraz](https://profiles.wordpress.org/douglasferraz89/)!
-
-= 2.0.1 =
-
-**Release date:**
-
-* December 4th, 2018
-
-**Plugin Improvements:**
-
-* **Improved:** The extension activation visuals are now more accessible.
-* **Changed:** The administrative layout now feels less compacted, and is now tall and graceful.
-* **Fixed:** Various shadow rendering glitches with Webkit have been resolved... by removing them.
-* **Fixed:** Various AJAX buttons can now be used with a keyboard.
-* **Fixed:** The deactivation button can now be used with a keyboard.
-* **Fixed:** The translations are now correctly loaded for new plugin users.
-
-**Updated Extensions:**
-
-* [Local](https://theseoframework.com/extensions/honeypot/#changelog)
-* [Focus](https://theseoframework.com/extensions/focus/#changelog)
-* [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
-* [Monitor](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.0.0 - Divine SEO =
 

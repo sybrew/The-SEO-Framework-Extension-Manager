@@ -299,32 +299,6 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Saves or deletes post meta on AJAX callbacks.
-	 *
-	 * Unused!
-	 *
-	 * @since 1.0.0
-	 * @see \TSF_Extension_Manager\InpostGUI::_verify_nonce()
-	 * @see action 'tsfem_inpostgui_verified_nonce'
-	 *
-	 * @param \WP_Post      $post              The post object.
-	 * @param array|null    $data              The meta data.
-	 * @param int (bitwise) $save_access_state The state the save is in.
-	 */
-	public function _wp_ajax_save_meta( $post, $data, $save_access_state ) {
-
-		//= Nonce check failed. Show notice?
-		if ( ! $save_access_state )
-			return;
-
-		//= If not doing AJAX, stop.
-		if ( ! ( $save_access_state & TSFEM_INPOST_NO_AJAX ) )
-			return;
-
-		$this->process_meta( $post, $data );
-	}
-
-	/**
 	 * Processes post metdata after validation.
 	 *
 	 * @since 1.0.0
