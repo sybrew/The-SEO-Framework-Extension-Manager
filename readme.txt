@@ -168,7 +168,7 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 == Changelog ==
 
-= 2.1.0 =
+= 2.1.0 - Lucid SEO =
 
 **Release date:**
 
@@ -178,80 +178,32 @@ If you were to get a plugin activation error, either open a support ticket [here
 
 * We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/cord-transporter/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
 
-**Plugin improvements:**
+**Feature highlights:**
 
-* **Added:** You can now see to which API endpoint you're connected.
-* **Added:** constant `TSF_EXTENSION_MANAGER_PREMIUM_EU_URI`. Aside from to a global endpoint, we have a European endpoint now.
-	* If you've set `WP_HTTP_BLOCK_EXTERNAL`, you'll be urged to add both endpoints to `WP_ACCESSIBLE_HOSTS`.
-* **Added:** You can now see the last four characters of your API key, this will help ease managing mixed connections from our site.
-* **Added:** When notices are waiting, you'll now see the count thereof next to the Extensions' admin sub-menu.
-	* N.B. This check will add a database request in the admin dashboard. We're OK with this for now, but we may make the errors autoload in a future update, where we'll combine all error notices a single option, instead of having each extension its own.
-* **Added:** You can now use keyboard navigation to access informational tooltips. Note that The SEO Framework v4.0 or later is required to utilize this.
-* **Updated:** Script and other API support for The SEO Framework v4.0.
-* **Updated:** The Spanish translation file. Thanks [Manuel](https://mbrsolution.com/)!
-* **Changed:** This plugin and all its extensions now strictly require WordPress 4.8 or later.
-* **Improved:** Your API email address is now partially obfuscated and possibly unrecognizable by its length in the admin dashboard.
-* **Improved:** When an extension object is incorrectly registered, the plugin will now prevent a crash.
-* **Improved:** The plugin's now lag-free on virtual machines running Windows Server, as it no longer has to wait for precision timers when creating communication keys.
-* **Fixed:** Although unlikely, saving post revisions now can't accidentally overwrite the extension metadata for the post.
-* **Info:** We added undocumented constants, for development use only.
-	* `TSF_EXTENSION_MANAGER_API_VERSION`. With this constant, you can choose our API version. We will always set this to the current version.
-	* `TSF_EXTENSION_MANAGER_DEV_API`. The (secret) value of it must match our system's; when the value doesn't match, our API will fall back to the current public API version.
-* **Info:** We added undocumented constants, for internal use only.
-	* `TSFEM_EXTENSION_TSF_UNTESTED`
-	* `TSFEM_EXTENSION_TSF_INCOMPATIBLE`
-	* `TSFEM_EXTENSION_WP_UNTESTED`
-	* `TSFEM_EXTENSION_WP_INCOMPATIBLE`
-	* `TSFEM_INPOST_IS_SECURE`
-	* `TSFEM_INPOST_NO_AUTOSAVE`
-	* `TSFEM_INPOST_NO_AJAX`
-	* `TSFEM_INPOST_NO_CRON`
-	* `TSFEM_INPOST_NO_REVISION`
-* **Info:** We removed the JS externs files, as we no longer rely on closure compiler and use JSDoc and Babel instead.
-* **Info:** We removed unusued extension files.
+* Support for the upcoming TSF v4.0 release has been added.
+* Requests to the new European API are no longer rerouted via our global API.
+* Improved performance, especially on IIS-powered servers.
+* Several QOL-improvements, like better accessibility, extended API, etc. have been added.
 
-**Updated Extensions:**
+**Updated extensions:**
 
 * [AMP](https://theseoframework.com/extensions/amp/#changelog)
 * [Articles](https://theseoframework.com/extensions/articles/#changelog)
 * [Local](https://theseoframework.com/extensions/local/#changelog)
 
-= 2.0.0 - Divine SEO =
+**Detailed log:**
 
-**Release date:**
-
-* November 9th, 2018
-
-**Plugin Improvements:**
-
-* **Added:** The plugin now supports PHP 7.3.
-* **Added:** We integrated our own updating services.
-* **Added:** This plugin now connects to our improved API services.
-* **Added:** The interface now updates you (in irregular intervals) on the remaining API requests for the month.
-* **Added:** We added a new "Essential" extension tier. These extensions don't require our API actively, but give powerful SEO improvements regardless.
-* **Added:** This plugin can now handle license upgrades and downgrades. It's just that our shop can't without handing over a new key, yet.
-* **Added:** Various constants that allow you to easily manage multisite networks and customer websites.
-* **Improved:** When the class stops for any reason, it creates aliases to prevent crashing.
-* **Improved:** A deactivation from a connected state now brings you back to the Free tier, without losing your extension activation data.
-	* Reconnect to reactivate the made-unavailable extensions automatically.
-	* Privacy-intensive extensions, like Monitor, might require you to revalidate.
-* **Removed:** Integrated fonts for pixel recognition tests. It was planned to be integrated for PHP-style pixel calculations, but was aborted for performance reasons.
-* **Removed:** More legacy browser support.
-* **Fixed:** The human time is now correctly told in facing certain circumstances.
-
-**Updated Extensions:**
-
-* [Local](https://theseoframework.com/extensions/local/#changelog)
-* [Focus](https://theseoframework.com/extensions/focus/#changelog)
-* [Articles](https://theseoframework.com/extensions/articles/#changelog)
-* [Honeypot](https://theseoframework.com/extensions/honeypot/#changelog)
-* [Origin](https://theseoframework.com/extensions/origin/#changelog)
+View the [detailed v2.1.0 changelog](https://theseoframework.com/?p=3236).
 
 = Full changelog =
 
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
+
+= 2.1.0 =
+
+This plugin now requires WordPress 4.8 or higher.
 
 = 1.5.0 =
 

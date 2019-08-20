@@ -73,7 +73,7 @@ final class Front extends Core {
 	 * Initializes hooks.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now tests for post type conditions prior executing.
+	 * @since 1.4.0 Now tests for post type conditions prior executing.
 	 */
 	private function init() {
 
@@ -104,7 +104,7 @@ final class Front extends Core {
 	 * Determines if the current page is AMP supported.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now supports AMP v0.5+ endpoints.
+	 * @since 1.4.0 Now supports AMP v0.5+ endpoints.
 	 * @uses const AMP_QUERY_VAR
 	 * @staticvar bool $is_amp
 	 *
@@ -265,7 +265,7 @@ final class Front extends Core {
 		array_filter( array_filter( $data ), [ $this, 'build_article_data' ] );
 
 		/**
-		 * @since 1.3.2
+		 * @since 1.4.0
 		 * @param array $data The Articles schema data.
 		 */
 		$data = \apply_filters(
@@ -441,7 +441,7 @@ final class Front extends Core {
 			return [];
 
 		/**
-		 * @since 1.3.2
+		 * @since 1.4.0
 		 * @param array|string $images The URL of an image, an imageObject, or a array of each or both.
 		 */
 		$images = \apply_filters(
@@ -463,7 +463,7 @@ final class Front extends Core {
 	 * Returns image parameters for Article image.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.2 Now uses the new image generator, and now returns multiple image objects.
+	 * @since 1.4.0 Now uses the new image generator, and now returns multiple image objects.
 	 *
 	 * @return array The article image parameters. Unescaped.
 	 */

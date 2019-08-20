@@ -230,9 +230,9 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
-### 1.3.2
+### 1.4.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 20th, 2019"]
 
 * **Added:** TSF v4.0 support.
 * **Added:** New filter: `the_seo_framework_articles_supported_post_types`.

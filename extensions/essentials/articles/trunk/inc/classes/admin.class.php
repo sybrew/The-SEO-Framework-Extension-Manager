@@ -66,7 +66,7 @@ final class Admin extends Core {
 	 * Defered because we need to access meta.
 	 *
 	 * @since 1.2.0
-	 * @since 1.3.2 Now uses a new filter to determine support.
+	 * @since 1.4.0 Now uses a new filter to determine support.
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {

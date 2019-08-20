@@ -72,7 +72,7 @@ add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
 
 ### 1.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 20th, 2019"]
 
 * **Added:** Structured data from The SEO Framework is now appended to the page.
 

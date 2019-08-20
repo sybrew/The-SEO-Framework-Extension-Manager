@@ -67,7 +67,7 @@ class Core {
 		];
 
 		/**
-		 * @since 1.3.2
+		 * @since 1.4.0
 		 * @param array $post_types The supported post types.
 		 */
 		$this->supported_post_types = \apply_filters(

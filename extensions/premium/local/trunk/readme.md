@@ -128,7 +128,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.4
 
-[tsfep-release time="-1"]
+[tsfep-release time="August 20th, 2019"]
 
 * **Fixed:** Apostrophes entered in the settings no longer get backslashed on save or preview. However, sequential backslashes are now unpaired.
 	* It means that `&#39;` no longer becomes `&#92;&#39;`.
