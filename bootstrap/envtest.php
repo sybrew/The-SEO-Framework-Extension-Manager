@@ -33,6 +33,7 @@ tsf_extension_manager_pre_boot_test();
  *
  * @since 1.5.0
  * @since 2.1.0 Now requires WordPress 4.8+, from 4.7+
+ * @since 2.1.1 Now requires WordPress 4.9+, from 4.7+
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
@@ -61,7 +62,7 @@ function tsf_extension_manager_pre_boot_test() {
 			'5.5' => 50521,
 			'5.6' => 50605,
 		),
-		'wp'  => '38590',
+		'wp'  => 38590,
 	);
 
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $_req['php']['5.5'] and $test = 1
@@ -78,7 +79,7 @@ function tsf_extension_manager_pre_boot_test() {
 	//= Not good. Deactivate plugin and output notification in admin.
 
 	if ( $ms ) {
-		$plugins = get_site_option( 'active_sitewide_plugins' );
+		$plugins      = get_site_option( 'active_sitewide_plugins' );
 		$network_mode = isset( $plugins[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 	} else {
 		$network_mode = false;

@@ -403,8 +403,8 @@ msgid "Transport SEO Settings"
 msgstr "Ajustes de Transporte de SEO"
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:117
-msgid "Local SEO"
-msgstr "SEO local"
+msgid "Local"
+msgstr "Local"
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:118
 #: extensions/premium/local/trunk/views/layout/general/top.php:33
@@ -2670,8 +2670,8 @@ msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #: extensions/premium/local/trunk/views/layout/pages/local.php:12
-msgid "Local SEO Settings"
-msgstr "Ajustes local de SEO"
+msgid "Local Settings"
+msgstr "Ajustes Local"
 
 #: extensions/premium/local/trunk/views/layout/pages/settings.php:12
 msgid "JavaScript required"

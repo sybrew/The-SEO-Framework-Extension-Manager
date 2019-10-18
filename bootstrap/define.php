@@ -174,13 +174,13 @@ define( 'TSF_EXTENSION_MANAGER_UPDATER_CACHE', 'tsfem-updater-cache' );
 define( 'TSF_EXTENSION_MANAGER_DL_URI', 'https://dl.theseoframework.com/' );
 
 /**
- * The Premium URI.
+ * The Premium URI (global).
  * @since 2.0.0
  */
 define( 'TSF_EXTENSION_MANAGER_PREMIUM_URI', 'https://premium.theseoframework.com/' );
 
 /**
- * The Premium URI.
+ * The Premium URI (EU).
  * @since 2.1.0
  */
 define( 'TSF_EXTENSION_MANAGER_PREMIUM_EU_URI', 'https://eu.theseoframework.com/' );

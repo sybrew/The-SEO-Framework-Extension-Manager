@@ -222,7 +222,7 @@ final class Admin extends Api {
 
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
-			'page_title'  => 'SEO Monitor',
+			'page_title'  => 'Monitor',
 			'menu_title'  => 'Monitor',
 			'capability'  => 'manage_options',
 			'menu_slug'   => $this->monitor_page_slug,
@@ -658,13 +658,13 @@ final class Admin extends Api {
 	 * @since 1.1.3
 	 * @access private
 	 * @internal
-	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
 	 * @param string $scripts The scripts builder class name.
 	 */
 	public function _register_monitor_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
+
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-monitor',
@@ -695,7 +695,6 @@ final class Admin extends Api {
 				],
 			],
 		] );
-		$registered = true;
 	}
 
 	/**

@@ -134,7 +134,7 @@ trait Schema_Packer {
 	}
 
 	/**
-	 * Returns the current Local SEO schema.
+	 * Returns the current Local schema.
 	 *
 	 * @since 1.0.0
 	 *

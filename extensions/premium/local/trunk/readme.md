@@ -1,4 +1,4 @@
-# Local SEO
+# Local
 Location: https://theseoframework.com/extensions/local/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -14,7 +14,7 @@ Therefore, for many businesses, local listings are a must.
 
 A local listing within Google will also be placed upfront and sometimes above all other search results.
 
-With the Local SEO extension, you can rank your different local business departments higher in Google and other search engines.
+With the Local extension, you can rank your different local business departments higher in Google and other search engines.
 So, your business will be found better by your local customers.
 
 All the above also accounts for users who add locations in their search query.
@@ -23,7 +23,7 @@ All the above also accounts for users who add locations in their search query.
 
 ### An advanced SEO solution
 
-We present you an advanced and leading Local SEO solution, excelling other existing similar solutions, for a lower price.
+We present you an advanced and leading Local solution, excelling other existing similar solutions, for a lower price.
 
 **This software package includes:**
 
@@ -39,7 +39,7 @@ This means there's no signup required at Google or Bing. This also leads to high
 
 [tsfep-image id="2"]
 
-### Is Local SEO for your business?
+### Is Local for your business?
 
 **This extension is for your business, if:**
 
@@ -50,14 +50,14 @@ This means there's no signup required at Google or Bing. This also leads to high
 
 ### How does Local SEO work?
 
-After you've filled in all required information (and saved it), Local SEO will automatically output all that information through Schema.org scripts in your website's header.
+After you've filled in all required information (and saved it), Local will automatically output all that information through Schema.org scripts in your website's header.
 These scripts aren't seen on your website by general visitors, but search engine crawlers can interpret this information naturally.
 
 Schema.org is a standard set through joint efforts of Google, Bing, Yahoo! and Yandex.
 
 ### Fully automated, no sign-up required
 
-When you've acquired a premium subscription for the Extension Manager, the Local SEO extension can connect to our services in the admin area.
+When you've acquired a premium subscription for the Extension Manager, the Local extension can connect to our services in the admin area.
 
 We took care of all the API connections with geocoding services and packaged it within the user interface for a smooth admin experience.
 
@@ -67,14 +67,14 @@ In the end, this saves you a lot of time.
 
 [tsfep-bundled]
 
-### Activate Local SEO
+### Activate Local
 
 First, you'll need to activate the extension.
 
 After activating the extension, you'll find a menu link displayed next to the activation button.
-That link will direct you to the Local SEO settings page.
+That link will direct you to the Local settings page.
 
-On the Local SEO settings page, you'll find a brief introductory, and right below that, you'll see the number of departments options.
+On the Local settings page, you'll find a brief introductory, and right below that, you'll see the number of departments options.
 
 ### Set the number of departments
 

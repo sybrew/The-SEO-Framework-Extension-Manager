@@ -259,13 +259,13 @@ final class Settings {
 	 * @since 1.1.3
 	 * @access private
 	 * @internal
-	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
 	 * @param string $scripts The scripts builder class name.
 	 */
 	public function _register_local_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
+
 		/**
 		 * Registers form scripts.
 		 * @see trait TSF_Extension_Manager\UI
@@ -299,11 +299,10 @@ final class Settings {
 				],
 			],
 		] );
-		$registered = true;
 	}
 
 	/**
-	 * Outputs Settings Panel overview for Local SEO settings.
+	 * Outputs Settings Panel overview for Local settings.
 	 *
 	 * @since 1.0.0
 	 *
@@ -314,7 +313,7 @@ final class Settings {
 	}
 
 	/**
-	 * Outputs Settings bottom wrap for Local SEO Settings.
+	 * Outputs Settings bottom wrap for Local Settings.
 	 *
 	 * @since 1.0.0
 	 *

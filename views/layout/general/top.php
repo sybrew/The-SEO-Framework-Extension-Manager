@@ -47,34 +47,7 @@ if ( $options ) {
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . \esc_html( $info ) . '</div></div>';
 }
 
-/**
- * Test for GD library functionality upon logo.
- *
- * Only runs on activation page.
- *
- * This is the first step towards "true" Google pixel guidelines character count testing.
- * Let's see how this works out :).
- */
-// if ( false === $this->is_plugin_activated() && extension_loaded( 'gd' ) && function_exists( 'imageftbbox' ) ) :
-// 	$font = $this->get_font_file_location( 'LiberationSans-Regular.ttf' );
-// 	if ( file_exists( $font ) ) :
-// 		//* Calculate text-width. 1.9em @ 13px body. Verdana is 1.0884x Arial (LiberationSans) size.
-// 		$tim = imageftbbox( $this->pixels_to_points( 1.9 * 13 * 1.0884 ), 0, $font, $extensions_i18n );
-
-// 		$width_top = isset( $tim[2] ) ? $tim[2] : 0;
-// 		$width_bot = isset( $tim[4] ) ? $tim[4] : 0;
-// 		//* Get largest offset.
-// 		$width = $width_top >= $width_bot ? $width_top : $width_bot;
-
-// 		//* 10px margin of error.
-// 		if ( $width ) {
-// 			$flex_basis = sprintf( '%upx', $width + 10 );
-// 		}
-// 	endif;
-// endif;
-
 //* Print style.
-// isset( $flex_basis ) and printf( '<style>.tsfem-top-wrap .tsfem-title{-webkit-flex-basis:%1$s;flex-basis:%1$s}</style>', \esc_html( $flex_basis ) );
 ?>
 <div class="tsfem-title tsfem-flex tsfem-flex-row">
 	<header><h1>
@@ -87,21 +60,17 @@ if ( $options ) {
 		$size = '1em';
 
 		printf(
-			'%s %s',
+			'<span class="tsfem-logo">%sExtension Manager</span>',
 			sprintf(
-				'<span class="tsfem-logo">%sExtension</span>',
+				'<svg width="%1$s" height="%1$s">%2$s</svg>',
+				\esc_attr( $size ),
 				sprintf(
-					'<svg width="%1$s" height="%1$s">%2$s</svg>',
-					\esc_attr( $size ),
-					sprintf(
-						'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-						\esc_url( $image['svg'], [ 'http', 'https' ] ),
-						\esc_url( $image['1x'], [ 'http', 'https' ] ),
-						\esc_attr( $size )
-					)
+					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+					\esc_url( $image['svg'], [ 'http', 'https' ] ),
+					\esc_url( $image['1x'], [ 'http', 'https' ] ),
+					\esc_attr( $size )
 				)
-			),
-			'Manager'
+			)
 		);
 		?>
 	</h1></header>

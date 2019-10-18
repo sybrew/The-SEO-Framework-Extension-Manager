@@ -177,12 +177,34 @@ These builders work as intended:
 
 We're working on an update to improve accuracy for the affected page builders.
 
+## Developers
+
+### Filters
+
+Here you can find the available filters for Focus.
+
+#### Set supported post types
+
+```php
+add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
+
+	// Add an overriding (dominating) check for pageTitle.
+	$elements['pageTitle'] = [ '#my-element > input' => 'dominate' ];
+
+	// Add extra (appending) pageContent for parsing.
+	$elements['pageContent'] = [ '#my-element > input' => 'append' ];
+
+	return $elements;
+} );
+```
+
 ## Changelog
 
 ### 1.4.0
 
 [tsfep-release time="-1"]
 
+* **Improved:** Addressed Gutenberg 9.4 (WP 5.3) changes (by fixing `wp.data.select( 'core/editor' ).isTyping` deprecation).
 * **API changes:**
 	* *June 1st, 2019*: The API has been updated to be more performant and secure. Although unlikely, you may see different dictionary results henceforth.
 

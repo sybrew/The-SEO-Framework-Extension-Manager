@@ -752,8 +752,8 @@ msgid "JavaScript required"
 msgstr "JavaScript gerekmektedir"
 
 #: extensions/premium/local/trunk/views/layout/pages/local.php:12
-msgid "Local SEO Settings"
-msgstr "Local SEO Ayarları"
+msgid "Local Settings"
+msgstr "Local Ayarları"
 
 #: extensions/premium/local/trunk/views/layout/general/top.php:20
 msgctxt "1: Local, 2: SEO"
@@ -2957,8 +2957,8 @@ msgid "Local"
 msgstr "Local"
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:117
-msgid "Local SEO"
-msgstr "Local SEO"
+msgid "Local"
+msgstr "Local"
 
 #. Author URI of the plugin/theme
 msgid "https://theseoframework.com/"

@@ -282,8 +282,7 @@ final class AJAX extends Secure_Abstract {
 				'licence_key' => $account['key'],
 				'data'        => [
 					'geodata' => json_encode( $input ),
-					//= get_user_locale() is WP 4.7+
-					'locale'  => function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+					'locale'  => \get_user_locale(),
 				],
 			];
 

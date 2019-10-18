@@ -20,7 +20,7 @@ $motto     = 'A ' . $mottos[ $motto_key ] . ' Solution';
 
 ?>
 <p class="tsfem-footer-title">
-	Local SEO - The SEO Framework
+	Local - The SEO Framework
 </p>
 <p class="tsfem-footer-motto">
 	<?php echo \esc_html( $motto ); ?>

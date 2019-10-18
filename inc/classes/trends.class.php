@@ -54,15 +54,12 @@ final class Trends {
 		switch ( $type ) :
 			case 'feed':
 				return static::prototype_trends();
-				break;
 
 			case 'ajax_feed':
 				return static::prototype_trends( true );
-				break;
 
 			default:
 				return '';
-				break;
 		endswitch;
 	}
 

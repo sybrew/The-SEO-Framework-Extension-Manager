@@ -11,6 +11,12 @@
 		<exclude name="WordPress.WP.AlternativeFunctions.json_encode_json_encode"/>
 		<exclude name="WordPress.WP.AlternativeFunctions.parse_url_parse_url"/>
 
+		<!-- No. mt_rand() is perfectly fine. -->
+		<exclude name="WordPress.WP.AlternativeFunctions.rand_mt_rand"/>
+
+		<!-- We don't need to clutter code. -->
+		<exclude name="WordPress.Classes.ClassInstantiation.MissingParenthesis"/>
+
 		<!-- Limiting rule is limiting. Learn elementary PHP instead... -->
 		<exclude name="Squiz.Operators.ValidLogicalOperators"/>
 
@@ -47,6 +53,12 @@
 	<rule ref="WordPress-Extra"/>
 	<rule ref="VariableAnalysis"/>
 
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="the-seo-framework-extension-manager,default" />
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.Security.EscapeOutput">
 		<!-- TODO: Report issue that T_THIS should be ignored when there's a pointer attached.
 			Now, I added: "if ( '$this' === $this->tokens[ $i ]['content'] ) return;"
@@ -59,7 +71,7 @@
 			<!-- Custom list of functions whose return values are pre-escaped for output. -->
 			<property name="customAutoEscapedFunctions" type="array" value="convert_markdown,get_data_attributes"/>
 			<!-- Custom list of functions which print output incorporating the passed values. -->
-			<property name="customPrintingFunctions" type="array" value=""/>
+			<!-- <property name="customPrintingFunctions" type="array" value=""/> -->
 		</properties>
 	</rule>
 
@@ -69,15 +81,19 @@
 		</properties>
 	</rule>
 
-	<rule ref="WordPress.WP.I18n">
+	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
 		<properties>
-			<property name="text_domain" type="array" value="the-seo-framework-extension-manager,default" />
+			<!-- Discrepancy. Separation by \s+ -->
+			<property name="validUndefinedVariableNames" type="string" value="this _instance bits"/>
 		</properties>
 	</rule>
 
 	<!-- Exclude minified scripts. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>*.min.css</exclude-pattern>
+
+	<!-- Exclude index.php files. They are inert in plugins unless directly included/called. -->
+	<exclude-pattern>index.php</exclude-pattern>
 
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>

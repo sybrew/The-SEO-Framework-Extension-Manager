@@ -40,15 +40,6 @@ This script will be outputted in the header, for search engines to consume.
 
 When the script is found by search engines, it will be used for their search results.
 
-## AMP supported
-
-When the [tsfep-extension name="amp"] is active, this extension will replace default Articles output with an improved and tailored version.
-
-The data outputted is the same as on the non-AMP pages. However, requires more fields to be present.
-This is because Google wants to conform to a stricter standard for AMP pages.
-
-Most prominently, an image and the publisher needs to be present. Read more on these fields at [usage](#usage).
-
 ## Usage
 
 [tsfep-bundled]
@@ -101,6 +92,8 @@ Google's [Structured Data Testing Tool](https://search.google.com/structured-dat
 This is because there are two different requirement standards for AMP and non-AMP pages. The testing tool enforces the AMP standard.
 
 #### Special attention for AMP
+
+When the [tsfep-extension name="amp"] is active, this extension will replace default Articles output with an improved and tailored version.
 
 For correct AMP output, you need to make sure the following two fields are available.
 These fields aren't required for non-AMP, but they are recommended.
@@ -230,6 +223,20 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
+### 1.5.0
+
+[tsfep-release time="-1"]
+
+* TODO **Added:** A news sitemap. When you mark pages as `NewsArticle`, they'll be included.
+	* The query limit from The SEO Framework will apply.
+	* The SEO Framework v4.0 or later is required for this feature.
+* TODO **Added:** Sites that represent a `Person` are now supported for Article markup.
+	* Ref: <https://github.com/sybrew/the-seo-framework/issues/193>
+* TODO **Added:** Bulk-and quick editing options.
+	* The SEO Framework v4.0 or later is required for this feature.
+* TODO **Added:** The SEO Bar (or post state) now hints the Article type.
+* TODO **Added:** Defaults options panel, which is integrated in the new global-defaults options pane.
+
 ### 1.4.0
 
 [tsfep-release time="August 20th, 2019"]
@@ -242,7 +249,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 * **Added:** New filter: `the_seo_framework_articles_images`.
 	* Documented at [developers](#developers).
 * **Added:** Multiple valid images are now used.
-* **Changed:** Image width requirements went up from to 1200 from 696 pixels.
+* **Changed:** Image width requirements went up to 1200 from 696 pixels.
 * **Changed:** This extension now requires TSF v3.1 or later.
 * **Fixed:** Structured data is no longer appended to archives that are of the `post` post type.
 * **Fixed:** Now uses AMP v0.5+ endpoint detection when available.

@@ -18,7 +18,6 @@
 /* # Start Issues.
 /*----------------------------------------------------------------------------*/
 .tsfem-e-monitor-issues-wrap {
-	-webkit-align-items: flex-start;
 	align-items: flex-start;
 	padding: .5em;
 }
@@ -60,7 +59,6 @@
 	padding: 1em;
 	background: #fefefe;
 	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.18);
-	-webkit-align-items: center;
 	align-items: center;
 	cursor: pointer;
 	z-index: 1;
@@ -165,22 +163,18 @@
 }
 
 .tsfem-e-monitor-collapse-icon:before {
-	-webkit-transform: rotate(-45deg);
 	transform: rotate(-45deg);
 }
 
 .tsfem-e-monitor-collapse-icon:after {
-	-webkit-transform: translate(4px, 0) rotate(45deg);
 	transform: translate(4px, 0) rotate(45deg);
 }
 
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:before {
-	-webkit-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:after {
-	-webkit-transform: translate(4px, 0) rotate(-45deg);
 	transform: translate(4px, 0) rotate(-45deg);
 }
 
@@ -190,7 +184,6 @@
 	padding: 1.5em 2.5em;
 	overflow: hidden;
 	display: block;
-	-webkit-animation: tsfem-e-monitor-fade-in .25s;
 	animation: tsfem-e-monitor-fade-in .25s;
 }
 

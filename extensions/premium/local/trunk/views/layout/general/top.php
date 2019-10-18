@@ -17,22 +17,17 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		$size = '1em';
 
 		printf(
-			'%s %s',
+			'<span class="tsfem-logo">%sLocal</span>',
 			sprintf(
-				'<span class="tsfem-logo">%s%s</span>',
+				'<svg width="%1$s" height="%1$s">%2$s</svg>',
+				\esc_attr( $size ),
 				sprintf(
-					'<svg width="%1$s" height="%1$s">%2$s</svg>',
-					\esc_attr( $size ),
-					sprintf(
-						'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-						\esc_url( $image['svg'], [ 'http', 'https' ] ),
-						\esc_url( $image['1x'], [ 'http', 'https' ] ),
-						\esc_attr( $size )
-					)
-				),
-				'Local'
-			),
-			'SEO'
+					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+					\esc_url( $image['svg'], [ 'http', 'https' ] ),
+					\esc_url( $image['1x'], [ 'http', 'https' ] ),
+					\esc_attr( $size )
+				)
+			)
 		);
 		?>
 	</h1></header>

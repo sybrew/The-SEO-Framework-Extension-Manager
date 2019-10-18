@@ -464,7 +464,7 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int|null $post_id
+	 * @param int|null $post_id The post ID to test.
 	 * @return bool True if user has acces. False otherwise.
 	 */
 	public static function current_user_can_edit_post( $post_id = null ) {

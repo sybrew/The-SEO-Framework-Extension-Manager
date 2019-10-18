@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/incognito/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension removes all front-end branding from The SEO Framework.
+This extension removes all development-comments from The SEO Framework.
 
 ## Overview
 

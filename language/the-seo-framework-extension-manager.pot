@@ -347,7 +347,7 @@ msgid "Transport SEO Settings"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:117
-msgid "Local SEO"
+msgid "Local"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/admin.class.php:118
@@ -2563,7 +2563,7 @@ msgid "%1$s %2$s"
 msgstr ""
 
 #: extensions/premium/local/trunk/views/layout/pages/local.php:12
-msgid "Local SEO Settings"
+msgid "Local Settings"
 msgstr ""
 
 #: extensions/premium/local/trunk/views/layout/pages/settings.php:12

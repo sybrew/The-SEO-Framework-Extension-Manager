@@ -20,7 +20,7 @@ body.rtl #adminmenu .tsfem-menu-notice {
 }
 
 /**
- * Notices are now being displayed, there's no need to highlight this here still.
+ * When notices are being displayed, there's no need to highlight this still.
  * We can't safely assume the number of notices shouldn't be appended, because this
  * is added right before the page is created. So, we just hide that via CSS instead.
  */

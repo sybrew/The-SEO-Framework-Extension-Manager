@@ -74,7 +74,7 @@ trait UI {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param $type The type of main content. Accepts 'panes' and 'connect'.
+	 * @param string $type The type of main content. Accepts 'panes' and 'connect'.
 	 */
 	final protected function ui_wrap( $type = 'panes' ) {
 		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
@@ -104,7 +104,7 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final public function header_wrap() {
-		echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap tsfem-flex-space">';
+		echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
 		\do_action( 'tsfem_header' );
 		echo '</section>';
 	}
@@ -202,13 +202,12 @@ trait UI {
 	 * @since 2.0.2
 	 * @access private
 	 * @internal
-	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 *
 	 * @param string $scripts The scripts builder class name.
 	 */
 	final public function _register_default_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( has_run( __METHOD__ ) ) return;
 
 		\the_seo_framework()->init_admin_scripts();
 
@@ -255,8 +254,6 @@ trait UI {
 				],
 			],
 		] );
-
-		$registered = true;
 	}
 
 	/**
@@ -266,15 +263,15 @@ trait UI {
 	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_settings() for nonce creation.
 	 * @since 2.0.2 : 1. Now uses TSF's Scripts module.
 	 *                2. Now returns void
-	 * @staticvar bool $registered : Prevents Re-registering of the script.
 	 * @access protected
 	 * @internal
 	 *
 	 * @param string $scripts The scripts builder class name.
 	 */
 	final protected function register_form_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( has_run( __METHOD__ ) ) return;
+
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-form',
@@ -334,7 +331,6 @@ trait UI {
 				],
 			],
 		] );
-		$registered = true;
 	}
 
 	/**
@@ -350,8 +346,9 @@ trait UI {
 	 * @param string $scripts The scripts builder class name.
 	 */
 	final protected function register_media_scripts( $scripts ) {
-		static $registered = false;
-		if ( $registered ) return;
+
+		if ( has_run( __METHOD__ ) ) return;
+
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-media',
@@ -379,8 +376,6 @@ trait UI {
 		] );
 
 		\wp_enqueue_media();
-
-		$registered = true;
 	}
 
 	/**

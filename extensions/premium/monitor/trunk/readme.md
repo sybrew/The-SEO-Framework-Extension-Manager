@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/monitor/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension keeps track of your website's SEO, optimization, uptime, and statistics.
+This extension keeps track of your website's SEO optimizations and statistics.
 
 ## Overview
 

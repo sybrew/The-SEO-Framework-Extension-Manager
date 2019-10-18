@@ -2089,7 +2089,15 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
 			let debouncer = lodash.debounce( updateContent, 500 );
-			if ( wp.data.select( 'core/editor' ).isTyping() ) {
+
+			let isTyping = false,
+				editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
+
+			if ( 'function' === typeof editor.isTyping ) {
+				isTyping = editor.isTyping();
+			}
+
+			if ( isTyping ) {
 				// Don't process and lag when typing, just show that the data is invalidated.
 				setAllRatersOf( 'pageContent', 'unknown' );
 				debouncer( content );
