@@ -245,7 +245,7 @@ class Panes extends API {
 		$nonce_action = $this->_get_nonce_action_field( $this->request_name['enable-feed'] );
 		$nonce        = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
 		$submit       = sprintf(
-			'<input type="submit" name="submit" id="submit" class="tsfem-button tsfem-button-primary tsfem-button-flat" value="%s">',
+			'<input type="submit" name="submit" id="submit" class="tsfem-button-primary" value="%s">',
 			\esc_attr( $enable )
 		);
 
@@ -256,7 +256,7 @@ class Panes extends API {
 			\esc_url( $this->get_admin_page_url() ),
 			$form
 		);
-		$js = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button tsfem-button-primary tsfem-button-flat">' . \esc_html( $enable ) . '</a></p>';
+		$js = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
 	}

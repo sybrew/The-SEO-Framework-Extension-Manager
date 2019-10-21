@@ -58,7 +58,7 @@ local/externs/index.php:
  */
 
 
-= 2.1.1 =
+= 2.2.0 =
 
 **Release date:**
 
@@ -66,25 +66,52 @@ local/externs/index.php:
 
 **Feature highlights:**
 
-TODO
+* We had to concede on the user interface: It was not acccessible, and the browser couldn't handle it well. Far too often we got requests on "how do I do this" while it was only a matter of scrolling down inside an element. We also found that, for example in Focus (when working with over 100,000 input fields), the user interface became unresponsive. So, we reworked the interface:
+	* The base interface no longer relies on flexbox, but on grid.
+	* The base interface no longer tries to fit its contents, but expands automatically outward. It now relies on body-scrolling, instead of element-scrolling.
+	* To still allow easily-accessible actions, we implemented a sticky header that goes down when you scroll.
+		* Therein, we added saving/previewing actions for Focus.
+		* The actionable notifications now recide within the sticky header. They can cover up a part of the page.
+* We dropped support for The SEO Framework v3.2.4 and below. TSF v3.3 and higher is now required.
+* We dropped support for WordPress v4.8. WP v4.9 and higher are now required.
+* We dropped support for IE11 and all other browsers of that era. A modern browser is now required to use the plugin's interface as intended.
+* We rewrote the buttons to make them more accessible and in line with the WordPress interface.
 
 **Detailed log:**
 
-* Fixed vertical alignment on various elements for Chromium v77. Most prominently affecting Chrome v77+.
-* Fixed vertical alignment on select elements for WordPress v5.3. Most prominently affecting, again, Chrome v77+.
-* We sacrificed some eye-candy in favor for accessibility and coherency with the updated WordPress v5.3 interface.
+* TODO **Added:** We added a new options-interface, which can be populated by extensions.
+* **Improved:** The interface has been rewritten to use grid instead of flexbox.
+* **Improved:** The interface no longer tries to find UI boundaries, improving the performance greatly--especially with Focus.
+* **Improved:** The interface buttons are now more accessible. For instance, keyboard navigational hints are easier to identify, and we added a border to support high-contrast display.
+* **Improved:** The top header is now sticky.
+* **Improved:** The header-notifications are now also sticky, and have a backdrop so to easily discern them from the content.
+* **Improved:** We repackaged all JS files via Babel, whereras before we used Google's Closure Compiler.
+* **Improved:** Tabindexing-hooks no longer occur on items that don't have a tooltip, improving accessibility.
+* **Improved:** The form validator now tries to align your scrolling position to 1/3rd of the screen.
+* **Changed:** We sacrificed some eye-candy in favor for accessibility and coherency with the updated WordPress v5.3 interface.
+* **Fixed:** vertical alignment on various elements for Chromium v77. Most prominently affecting Chrome v77+.
+* **Fixed:** vertical alignment on select elements for WordPress v5.3. Most prominently affecting, again, Chrome v77+.
+* **Fixed:** The image cropper works again for images above 4096 pixels in either width or height.
+* **Fixed:** The trends now work with the updated RSS feed.
+* **Removed:** Support for all archaic browser vendor prefixes from the CSS files, so to reduce the stylesheet payload.
+* **Other:** The SEO Framework v3.3 or later is now required (from v3.1).
+* **Other:** WordPress v4.9 is now required (from v4.8).
+* **Other:** We now use a new engine for minifying the JS files. See https://github.com/sybrew/babel-tsf.
+* **Other:** We cleaned up some code.
+
 * TODO We added the Extension Manager and extension-loader boot-time to the new "HTML boot-time" indicator of The SEO Framework v4.0.
-* We removed all archaic browser vendor prefixes from the CSS files, so to reduce the stylesheet payload.
-* We repackaged all JS files via Babel, whereras before we used Google's Closure Compiler.
-* The SEO Framework v3.3 or later is now required (from v3.1).
-* WP v4.9 is now required (from v4.8).
-* TODO Local seems to have received a hard pentaly in script-performance since Chrome v77... (hold/type key filling in department name, etc.)... assess why and fix (non-minified is also affected).
-* TODO Fixed: Post-Revision metadata can now be processed, just like in TSF v4.0+.
+
+* TODO See why there's a serialization error on `[message] => Notice (8): unserialize(): Error at offset 66 of 1873 bytes in [/public/wp-content/plugins/the-seo-framework-extension-manager/inc/traits/extension/post-meta.trait.php, line 61]`
+* TODO Fixed: Post-Revision metadata can now be processed, just like in TSF v4.0+. Is ^this^ related?
+
+* TODO Regression: The top bar now bounces when more than 2 notices are showing, and one gets replaced, while being at `scrollTop=0`.
+	* The fix: Lock the height when a notification gets replaced... this may be tricky with mixed-height notiications.
 
 **Updated extensions:**
 
 * TODO Articles
-* TODO (script cleanup only) Focus
+* TODO Focus
+	* 1. To improve support for the admin new interface, we added a replica of the actionable buttons in the header.
 * TODO (script cleanup only) Monitor
 
 = 2.1.0 - Lucid SEO =

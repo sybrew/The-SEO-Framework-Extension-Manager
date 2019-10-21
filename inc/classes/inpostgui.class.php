@@ -628,6 +628,7 @@ final class InpostGUI {
 	 * @param array  $args The registered view arguments.
 	 */
 	private function output_view( $file, array $args ) {
+
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;
 

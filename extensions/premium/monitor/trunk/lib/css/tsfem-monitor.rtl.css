@@ -86,7 +86,7 @@
 .tsfem-e-monitor-title-icon:before {
 	display: inline-block;
 	width: 19px;
-	line-height: 1;
+	line-height: inherit;
 	font-family: dashicons;
 	font-style: normal;
 	font-weight: 400;

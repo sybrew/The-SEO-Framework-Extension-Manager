@@ -26,7 +26,7 @@ if ( ! $this->is_auto_activated() ) :
 			echo $this->get_link( [
 				'url'     => $this->get_activation_url( 'shop/' ),
 				'target'  => '_blank',
-				'class'   => 'tsfem-button-primary tsfem-button-flat',
+				'class'   => 'tsfem-button-primary',
 				'title'   => '',
 				'content' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ),
 			] );
@@ -50,9 +50,7 @@ if ( ! $this->is_auto_activated() ) :
 				'name' => $this->request_name['activate-key'],
 				'id' => 'input-activation',
 				'classes' => [
-					'tsfem-button',
 					'tsfem-button-primary',
-					'tsfem-button-flat',
 				],
 				'classes_form' => [
 					'tsfem-flex',

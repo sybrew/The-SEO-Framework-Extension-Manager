@@ -352,7 +352,7 @@ trait Extensions_Layout {
 		$disabled = $disabled || array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-flat tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
+			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
 
 			static $cache = [];
@@ -373,7 +373,7 @@ trait Extensions_Layout {
 					$s_slug
 				);
 				$submit = sprintf(
-					'<input type="submit" name="submit" id="submit" class="tsfem-button-primary tsfem-button-flat %s" value="%s">',
+					'<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">',
 					$s_class,
 					\esc_attr( $text )
 				);
@@ -386,7 +386,7 @@ trait Extensions_Layout {
 
 			js:;
 				$js = sprintf(
-					'<button type=button id="tsfem-activate[%s]" class="tsfem-button-primary tsfem-button-flat hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
+					'<button type=button id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
 					$s_slug,
 					$s_class,
 					$s_slug,

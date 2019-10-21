@@ -90,18 +90,23 @@ final class HTML {
 	 */
 	public static function make_inline_tooltip( $content, $title, $title_html = '', array $classes = [] ) {
 
-		$title = \esc_attr( \wp_strip_all_tags( $title ) );
+		$title      = \esc_attr( \wp_strip_all_tags( $title ) );
 		$title_html = $title_html ? sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
 
-		strlen( $title . $title_html )
-			and $classes[] = 'tsf-tooltip-item';
+		$tabindex = false;
+
+		if ( strlen( $title . $title_html ) ) {
+			$classes[] = 'tsf-tooltip-item';
+			$tabindex  = true;
+		}
 
 		return vsprintf(
-			'<span class="%s" title="%s" %s tabindex=0>%s</span>',
+			'<span class="%s" title="%s" %s %s>%s</span>',
 			[
 				implode( ' ', $classes ),
 				$title,
 				$title_html,
+				$tabindex ? 'tabindex=0' : '',
 				$content,
 			]
 		);

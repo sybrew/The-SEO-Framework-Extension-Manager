@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
 ?>
-<div class="tsfem-title tsfem-flex tsfem-flex-row">
+<div class="tsfem-title">
 	<header><h1>
 		<?php
 		$image = [
@@ -31,5 +31,11 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_la
 		);
 		?>
 	</h1></header>
+</div>
+<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">
+	<?php
+	echo $this->get_test_button();
+	echo $this->get_form()->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
+	?>
 </div>
 <?php

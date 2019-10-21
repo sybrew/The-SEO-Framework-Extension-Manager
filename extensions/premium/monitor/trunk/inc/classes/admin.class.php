@@ -1005,7 +1005,7 @@ final class Admin extends Api {
 			$submit = $this->_get_submit_button(
 				\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
 				'',
-				'tsfem-button-primary tsfem-button-flat tsfem-button-cloud'
+				'tsfem-button-primary tsfem-button-cloud'
 			);
 			$content .= sprintf(
 				'<form action=%s method=post id=%s class="%s">%s</form>',
@@ -1029,7 +1029,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fetch_button() {
 
-		$class          = 'tsfem-button-primary tsfem-button-green tsfem-button-flat tsfem-button-cloud';
+		$class          = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
 		$name           = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title          = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );
@@ -1063,7 +1063,7 @@ final class Admin extends Api {
 	 */
 	protected function get_crawl_button() {
 
-		$class          = 'tsfem-button tsfem-button-flat tsfem-button-cloud';
+		$class          = 'tsfem-button tsfem-button-cloud';
 		$name           = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title          = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
@@ -1208,7 +1208,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fix_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-flat tsfem-button-cloud';
+		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-cloud';
 		$name = \__( 'Request Reactivation', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to reconnect your website', 'the-seo-framework-extension-manager' );
 

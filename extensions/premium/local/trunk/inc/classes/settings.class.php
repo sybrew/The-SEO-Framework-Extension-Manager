@@ -187,6 +187,27 @@ final class Settings {
 	}
 
 	/**
+	 * Prepares form object.
+	 *
+	 * @since 1.2.0
+	 */
+	private function prepare_form() {
+		$this->get_form();
+	}
+
+	/**
+	 * Returns form object by reference.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return \TSF_Extension_Manager\FormGenerator Passed by reference.
+	 */
+	private function &get_form() {
+		static $form;
+		return $form ?: $form = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
+	}
+
+	/**
 	 * Initializes and outputs Settings page.
 	 *
 	 * @since 1.0.0
@@ -195,6 +216,9 @@ final class Settings {
 	 * @param Core $_core Used for integrity.
 	 */
 	public function _output_settings_page( Core $_core ) {
+
+		$this->prepare_form();
+
 		\add_action( 'tsfem_header', [ $this, '_output_local_header' ] );
 		\add_action( 'tsfem_content', [ $this, '_output_local_content' ] );
 		\add_action( 'tsfem_footer', [ $this, '_output_local_footer' ] );
@@ -208,7 +232,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_header() {
+	public function _output_local_header() {
 		$this->get_view( 'layout/general/top' );
 	}
 
@@ -218,7 +242,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_content() {
+	public function _output_local_content() {
 		$this->get_view( 'layout/pages/local' );
 	}
 
@@ -228,7 +252,7 @@ final class Settings {
 	 * @since 1.0.1
 	 * @access private
 	 */
-	final public function _output_local_footer() {
+	public function _output_local_footer() {
 		$this->get_view( 'layout/general/footer' );
 	}
 
@@ -320,7 +344,7 @@ final class Settings {
 	 * @param self $_s Used for integrity.
 	 */
 	public function _get_local_settings_bottom_wrap( self $_s ) {
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escapes.
 		echo $this->get_bottom_wrap_items();
 	}
 
@@ -346,7 +370,7 @@ final class Settings {
 	 */
 	private function output_department_fields() {
 
-		$f = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
+		$f = &$this->get_form();
 
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
 		$f->_fields( Fields::get_instance()->get_departments_fields() );
@@ -356,9 +380,6 @@ final class Settings {
 		$this->set_bottom_wrap_items(
 			$f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
 		);
-
-		//* Destruct class.
-		$f = null;
 	}
 
 	/**
@@ -372,7 +393,7 @@ final class Settings {
 		return sprintf(
 			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
 			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
-			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external tsfem-button-flat',
+			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);
 	}

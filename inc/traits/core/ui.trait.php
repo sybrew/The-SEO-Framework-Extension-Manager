@@ -78,7 +78,7 @@ trait UI {
 	 */
 	final protected function ui_wrap( $type = 'panes' ) {
 		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
-		\add_action( 'tsfem_page', [ $this, 'notice_wrap' ], 50 );
+		// \add_action( 'tsfem_page', [ $this, 'notice_wrap' ], 50 );
 		\add_action( 'tsfem_page', [ $this, $type . '_wrap' ], 100 );
 		\add_action( 'tsfem_page', [ $this, 'footer_wrap' ], 200 );
 
@@ -93,7 +93,7 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final protected function page_wrap() {
-		echo '<div class="wrap tsfem tsfem-flex tsfem-flex-nowrap tsfem-flex-nogrowshrink">';
+		echo '<div class="wrap tsfem">';
 		\do_action( 'tsfem_page' );
 		echo '</div>';
 	}
@@ -104,9 +104,12 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final public function header_wrap() {
-		echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
-		\do_action( 'tsfem_header' );
-		echo '</section>';
+		echo '<div class="tsfem-sticky-top">';
+			echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
+				\do_action( 'tsfem_header' );
+			echo '</section>';
+			$this->notice_wrap();
+		echo '</div>';
 	}
 
 	/**
@@ -127,12 +130,14 @@ trait UI {
 	 *
 	 * @since 1.5.0
 	 * @since 2.0.1 Now listens to $this->wrap_type
+	 * @since 2.2.0 Is no longer a tsfem-flex-item.
 	 */
 	final public function panes_wrap() {
 		printf(
-			'<main class="tsfem-panes-wrap tsfem-flex tsfem-flex-%s">',
+			'<main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
 			in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
-		); // XSS ok.
+		);
 		\do_action( 'tsfem_content' );
 		echo '</main>';
 	}
@@ -389,121 +394,5 @@ trait UI {
 	 */
 	final public function _add_admin_body_class( $classes = '' ) {
 		return trim( $classes ) . ' tsfem ';
-	}
-
-	/**
-	 * Checks media upload AJAX referred.
-	 *
-	 * @since 1.3.0
-	 * @access private
-	 * @uses WP Core check_ajax_referer()
-	 * @see @link https://developer.wordpress.org/reference/functions/check_ajax_referer/
-	 *
-	 * @return false|int False if the nonce is invalid, 1 if the nonce is valid
-	 *                   and generated between 0-12 hours ago, 2 if the nonce is
-	 *                   valid and generated between 12-24 hours ago.
-	 */
-	final public function _is_media_nonce_verified() {
-		return \check_ajax_referer( 'tsfem-media-nonce', 'nonce', false );
-	}
-
-	/**
-	 * Handles cropping of images on AJAX request.
-	 *
-	 * Copied from WordPress Core wp_ajax_crop_image.
-	 * Adjusted: 1. It accepts capability 'upload_files', instead of 'customize'.
-	 *           2. It now only accepts TSF own AJAX nonces.
-	 *           3. It now only accepts context 'tsf-image'
-	 *           4. It no longer accepts a default context.
-	 *
-	 * @since 1.3.0
-	 * @access private
-	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
-	 */
-	final public function _wp_ajax_crop_image() {
-
-		if ( \wp_doing_ajax() ) :
-			if ( $this->can_do_settings() ) :
-
-				if ( ! $this->_is_media_nonce_verified() ) // This doesn't register correctly to phpcs...
-					\wp_send_json_error();
-
-				$attachment_id = \absint( $_POST['id'] ); // phpcs:ignore -- Sanitization, input var OK.
-
-				$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // phpcs:ignore -- Sanitization, input var OK.
-				$data    = array_map( 'absint', $_POST['cropDetails'] );                // phpcs:ignore -- Input var, input var OK.
-				$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
-
-				if ( ! $cropped || \is_wp_error( $cropped ) )
-					\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
-
-				switch ( $context ) :
-					case 'tsfem-image':
-						/**
-						 * Fires before a cropped image is saved.
-						 *
-						 * Allows to add filters to modify the way a cropped image is saved.
-						 *
-						 * @since 4.3.0 WordPress Core
-						 *
-						 * @param string $context       The Customizer control requesting the cropped image.
-						 * @param int    $attachment_id The attachment ID of the original image.
-						 * @param string $cropped       Path to the cropped image file.
-						 */
-						\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
-
-						/** This filter is documented in wp-admin/custom-header.php */
-						$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
-
-						$parent_url = \wp_get_attachment_url( $attachment_id );
-						$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
-
-						$size       = @getimagesize( $cropped );
-						$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
-
-						$object = [
-							'post_title'     => basename( $cropped ),
-							'post_content'   => $url,
-							'post_mime_type' => $image_type,
-							'guid'           => $url,
-							'context'        => $context,
-						];
-
-						$attachment_id = \wp_insert_attachment( $object, $cropped );
-						$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
-
-						/**
-						 * Filters the cropped image attachment metadata.
-						 *
-						 * @since 4.3.0 WordPress Core
-						 *
-						 * @see wp_generate_attachment_metadata()
-						 *
-						 * @param array $metadata Attachment metadata.
-						 */
-						$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
-						\wp_update_attachment_metadata( $attachment_id, $metadata );
-
-						/**
-						 * Filters the attachment ID for a cropped image.
-						 *
-						 * @since 4.3.0 WordPress Core
-						 *
-						 * @param int    $attachment_id The attachment ID of the cropped image.
-						 * @param string $context       The Customizer control requesting the cropped image.
-						 */
-						$attachment_id = \apply_filters( 'wp_ajax_cropped_attachment_id', $attachment_id, $context );
-						break;
-
-					default:
-						\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
-						break;
-				endswitch;
-
-				\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
-			endif;
-		endif;
-
-		exit;
 	}
 }

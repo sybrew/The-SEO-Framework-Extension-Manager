@@ -447,7 +447,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'submit':
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload tsfem-button-flat">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),
@@ -1824,7 +1824,7 @@ final class FormGenerator {
 	 * Requires media scripts to be registered.
 	 * @see TSF_Extension_Manager\Traits\UI
 	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
-	 * @see method TSF_Extension_Manager\Traits\UI\_wp_ajax_crop_image() The AJAX cropper callback.
+	 * @see method TSF_Extension_Manager\AJAX\_wp_ajax_crop_image() The AJAX cropper callback.
 	 * @uses \get_upload_iframe_src()
 	 *
 	 * @since 1.3.0
@@ -1856,7 +1856,7 @@ final class FormGenerator {
 			)
 		);
 		$s_required = isset( $args['_req'] ) ? 'required' : '';
-		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$s_url_readonly = $s_remove_button = '';
 

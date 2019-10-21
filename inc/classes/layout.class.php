@@ -148,8 +148,8 @@ final class Layout extends Secure_Abstract {
 				]
 			);
 
-			$switcher_class  = 'tsfem-button-flag tsfem-button';
-			$switcher_class .= \tsf_extension_manager()->are_options_valid() ? '' : ' tsfem-button-pulse';
+			$switcher_class = 'tsfem-button-flag tsfem-button';
+			// $switcher_class .= \tsf_extension_manager()->are_options_valid() ? '' : ' tsfem-button-pulse';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type=checkbox id="' . $field_id . '-action" value="1" />'
@@ -383,6 +383,7 @@ final class Layout extends Secure_Abstract {
 				'',
 				$_classes
 			) );
+
 			$output .= static::wrap_row_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
 		}
 
@@ -522,14 +523,14 @@ final class Layout extends Secure_Abstract {
 			$nonce = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
-				'<input type=submit name=submit id=submit class="tsfem-button tsfem-button-flat tsfem-button-primary" value="%s">',
+				'<input type=submit name=submit id=submit class="tsfem-button-primary" value="%s">',
 				\esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 
 			$form = $input . $nonce_action . $nonce . $submit;
 
 			return sprintf(
-				'<form name="%s" action="%s" method="post" id="%s" class="%s">%s</form>',
+				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method="post" id="%s" class="%s">%s</form>',
 				\esc_attr( self::$request_name['activate-key'] ),
 				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
 				'input-activation',
