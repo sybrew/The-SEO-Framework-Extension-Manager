@@ -199,10 +199,11 @@ final class Settings {
 	 * Returns form object by reference.
 	 *
 	 * @since 1.2.0
+	 * @staticvar \TSF_Extension_Manager\FormGenerator $form The form object.
 	 *
 	 * @return \TSF_Extension_Manager\FormGenerator Passed by reference.
 	 */
-	private function &get_form() {
+	private function get_form() {
 		static $form;
 		return $form ?: $form = new \TSF_Extension_Manager\FormGenerator( $this->form_args );
 	}
@@ -370,7 +371,7 @@ final class Settings {
 	 */
 	private function output_department_fields() {
 
-		$f = &$this->get_form();
+		$f = $this->get_form();
 
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
 		$f->_fields( Fields::get_instance()->get_departments_fields() );

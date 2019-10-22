@@ -978,7 +978,7 @@ final class FormGenerator {
 	 */
 	private function output_fields_iterator( array $args ) {
 
-		echo '<div class="tsfem-form-iterator-setting tsfem-flex">';
+		echo '<div class="tsfem-form-iterator-setting">';
 
 		$it_option_key = key( $args['_iterate_selector'] );
 		//* Set maximum iterations based on option depth if left unassigned.
@@ -1136,7 +1136,7 @@ final class FormGenerator {
 		}
 
 		return vsprintf(
-			'<div class="tsfem-form-iterator-setting tsfem-flex">%s%s</div>',
+			'<div class="tsfem-form-iterator-setting">%s%s</div>',
 			[
 				sprintf(
 					'<div class="tsfem-form-iterator-selector-wrap tsfem-flex tsfem-flex-noshrink">%s</div>',

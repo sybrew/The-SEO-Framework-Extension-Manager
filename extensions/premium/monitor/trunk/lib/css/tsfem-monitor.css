@@ -31,7 +31,8 @@
 	width: 100%;
 	padding: 0;
 	margin: .5em;
-	box-shadow: 0 0 0.6em rgba(0,0,0,.18) inset;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset;
+	border-radius: 4px;
 }
 
 .tsfem-e-monitor-collapse > input[type="checkbox"] {
@@ -56,23 +57,29 @@
 
 .tsfem-e-monitor-collapse-header {
 	position: relative;
+	width: 100%;
 	padding: 1em;
-	background: #fefefe;
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.18);
+	background: #fff;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 	align-items: center;
 	cursor: pointer;
 	z-index: 1;
 	transition: box-shadow .33s;
+	border-radius: 4px;
 }
 
 .tsfem-e-monitor-collapse-header:hover,
 .tsfem-e-monitor-collapse > input:focus + .tsfem-e-monitor-collapse-header {
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.3);
+	box-shadow: 0 0 4px 1px rgba(0,0,0,.3), 0 0 1px 0 rgba(0,0,0,.3) inset;
 }
 
 .tsfem-e-monitor-collapse > input:active + .tsfem-e-monitor-collapse-header,
 .tsfem-e-monitor-collapse-header:active {
-	box-shadow: 0 0em 0em .1em rgba(0,0,0,.18);
+	box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 0 2px 1px rgba(0,0,0,.18) inset;
+}
+
+.tsfem-e-monitor-collapse > input:focus:not(:checked):not(:hover) + .tsfem-e-monitor-collapse-header {
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 }
 
 .tsfem-e-monitor-collapse-title {
@@ -153,7 +160,7 @@
 	content: "";
 	position: absolute;
 	width: 6px;
-	right: 0;
+	right: .5em;
 	top: 0;
 	height: 1px;
 	border: 1px solid;

@@ -423,6 +423,7 @@ body.tsfem .wrap {
 	transition: box-shadow .25s;
 	padding: .4em 1em .5em;
 	font-size: 1em;
+	font-weight: 600;
 	line-height: 1em;
 	text-decoration: none;
 	text-align: center;
@@ -1000,14 +1001,14 @@ h4.tsfem-cp-title {
 	padding: .33em;
 	min-height: 122px;
 	border-radius: 6px;
-	box-shadow: 0 .1em .4em 0 rgba(0,0,0,.3), 0 0 0 0 transparent inset;
+	box-shadow: 0 1px 3px 0 rgba(0,0,0,.3), 0 0 0 0 transparent inset;
 	align-self: auto;
 	justify-content: center;
 	transition: box-shadow .2s ease-out;
 }
 
 .tsfem-extension-entry.tsfem-extension-activated {
-	box-shadow: 0 0 0 0 transparent, 0 .1em .4em 0 rgba(0,0,0,.4) inset;
+	box-shadow: 0 0 0 0 transparent, 0 1px 3px 0 rgba(0,0,0,.4) inset;
 }
 
 .tsfem-extension-entry > * {

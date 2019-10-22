@@ -5,22 +5,25 @@
 .tsfem-form-collapse {
 	position: relative;
 	width: 100%;
-	padding: 0 20px 20px;
+	margin: 0;
+	padding: 0;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18) inset;
+	border-radius: 4px;
 }
 
 .tsfem-form-collapse-sub-wrap {
-	padding-top: 15px;
+	margin-top: calc( 1em + .6vw );
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse {
-	padding: 0 0 15px;
+	margin-bottom: calc( 1em + .6vw );
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse:last-of-type {
-	padding: 0;
+	margin-bottom: 0;
 }
 
-.tsfem-form-collapse > input[type="checkbox"] {
+.tsfem-form-collapse > input {
 	position: absolute;
 	width: 0;
 	height: 0;
@@ -33,7 +36,7 @@
 	appearance: none;
 }
 
-.tsfem-form-collapse > input[type=checkbox]:checked:before {
+.tsfem-form-collapse > input:checked:before {
 	content: none;
 	float: none;
 	margin: 0;
@@ -43,13 +46,14 @@
 .tsfem-form-collapse-header {
 	position: relative;
 	width: 100%;
-	background: #fefefe;
-	color: #23282d;
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.18);
+	padding: 1em;
+	background: #fff;
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 	align-items: center;
 	cursor: pointer;
-	transition: box-shadow .33s;
 	z-index: 1;
+	transition: box-shadow .33s;
+	border-radius: 4px;
 }
 
 .tsfem-form-collapse-header-good .tsfem-form-collapse-icon {
@@ -60,26 +64,26 @@
 	color: #dd3811;
 }
 
-.tsfem-form-collapse:nth-of-type(2n-1) > .tsfem-form-collapse-header {
-	background: #f9f9f9;
-}
-
 .tsfem-form-collapse-header:hover,
-.tsfem-form-collapse > input[type="checkbox"]:focus + .tsfem-form-collapse-header {
-	box-shadow: 0 .1em .3em .1em rgba(0,0,0,.3);
+.tsfem-form-collapse > input:focus + .tsfem-form-collapse-header {
+	box-shadow: 0 0 4px 1px rgba(0,0,0,.3), 0 0 1px 0 rgba(0,0,0,.3) inset;
 }
 
-.tsfem-form-collapse > input[type="checkbox"]:active + .tsfem-form-collapse-header,
+.tsfem-form-collapse > input:active + .tsfem-form-collapse-header,
 .tsfem-forum-collapse-header:active {
-	box-shadow: 0 0em 0em .1em rgba(0,0,0,.18);
+	box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 0 2px 1px rgba(0,0,0,.18) inset;
+}
+
+.tsfem-form-collapse > input:focus:not(:checked):not(:hover) + .tsfem-form-collapse-header {
+	box-shadow: 0 0 0 1px rgba(0,0,0,.18), 0 0 0 0 rgba(0,0,0,.18) inset;
 }
 
 .tsfem-form-collapse-title-wrap {
 	line-height: 1.15em;
 	font-size: 1.15em;
+	padding: 0;
+	margin: 0;
 	vertical-align: middle;
-	padding: 14px 0;
-	margin: 0 2.3em 0 14px;
 }
 
 .tsfem-form-title-icon:before {
@@ -136,7 +140,7 @@
 	content: "";
 	position: absolute;
 	width: 6px;
-	right: 20px;
+	right: .5em;
 	top: 0;
 	height: 1px;
 	border: 1px solid;
@@ -153,23 +157,20 @@
 	transform: translate(2px, 0) rotate(45deg);
 }
 
-/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:before {
 	transform: translate(-2px, 0) rotate(45deg);
 }
 
-/* TODO might be a performance hit: */
 .tsfem-form-collapse > input[type="checkbox"]:checked + .tsfem-form-collapse-header .tsfem-form-collapse-icon:after {
 	transform: translate(2px, 0) rotate(-45deg);
 }
 
 .tsfem-form-collapse-content {
 	display: block;
-	position: relative;
-	margin: 0;
-	padding: 0;
-	box-shadow: 0 2px 3px 1px #ccc;
-	width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding: calc( 1em + .6vw );
+	overflow: hidden;
 	animation: tsfemForm-fade-in .25s;
 }
 
