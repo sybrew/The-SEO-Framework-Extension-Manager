@@ -224,6 +224,7 @@ final class AJAX extends Secure_Abstract {
 	 * Propagate FormGenerator class AJAX save calls.
 	 *
 	 * @since 1.3.0
+	 * @since 2.2.0 Now handles basic invalid POST data checks, so extensions don't have to.
 	 * @uses class TSF_Extension_Manager\FormGenerator
 	 * @access private
 	 */
@@ -234,6 +235,12 @@ final class AJAX extends Secure_Abstract {
 			static::$tsfem->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9003 ) ], 'failure' );
 			exit;
 		}
+
+		if ( empty( $_POST['data'] ) ) {
+			static::$tsfem->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 17100 ) ], 'failure' );
+			exit;
+		}
+
 		/**
 		 * Allows callers to save POST data.
 		 *

@@ -231,75 +231,6 @@ trait Extension_Options {
 	protected $o_stale_defaults = [];
 
 	/**
-	 * Loops through multidimensional keys and values to find the corresponding one.
-	 *
-	 * Expected not to go beyond 10 key depth.
-	 * CAUTION: 2nd parameter is passed by reference and it will be annihilated.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param array|string $keys  The keys that collapse with $value. For performance
-	 *                            benefits, the last value should be a string.
-	 * @param array|string $value The values that might contain $keys' value.
-	 *                            Passed by reference for huge performance improvement.
-	 * @return mixed|null Null if not found. Value otherwise.
-	 */
-	final protected function get_mda_value( $keys, &$value ) {
-
-		//= Because it's cast to array, the return will always be inside this loop.
-		foreach ( (array) $keys as $k => $v ) {
-			if ( is_array( $v ) ) {
-				return isset( $value[ $k ] ) ? $this->get_mda_value( $v, $value[ $k ] ) : null;
-			} else {
-				if ( $k ) {
-					return isset( $value[ $k ][ $v ] ) ? $value[ $k ][ $v ] : null;
-				}
-
-				return isset( $value[ $v ] ) ? $value[ $v ] : null;
-			}
-		}
-	}
-
-	/**
-	 * Converts a single or sequential|associative array into a multidimensional array.
-	 *
-	 * SATOMA: "Single Array to Multidimensional Array"
-	 *
-	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
-	 * Becomes: [ a => [ b => [ c ] ];
-	 *
-	 * This function can also be found in class \TSF_Extension_Manager\Core.
-	 *
-	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
-	 *       Their values will be used as keys. Arrays can't be keys.
-	 *
-	 * @since 1.3.0
-	 * @staticvar array $_b Maintains iteration and depth.
-	 *
-	 * @param array $a The single dimensional array.
-	 * @return array Multidimensional array, where the values are the dimensional keys.
-	 */
-	final protected function satoma( array $a ) {
-
-		static $_b;
-
-		$_b = $a;
-
-		if ( $_b ) {
-			$last = array_shift( $a );
-
-			if ( $a ) {
-				$r = [];
-				$r[ $last ] = $this->satoma( $a );
-			} else {
-				$r = $last;
-			}
-		}
-
-		return $r;
-	}
-
-	/**
 	 * Returns current extension options array based upon $o_index;
 	 *
 	 * @since 1.0.0
@@ -354,27 +285,27 @@ trait Extension_Options {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $key     The key that should collapse with the option.
+	 * @param array $keys    The keys that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
 	 *                       Defaults to the corrolated $this->o_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	final protected function get_option_by_mda_key( array $key, $default = null ) {
+	final protected function get_option_by_mda_key( array $keys, $default = null ) {
 
 		//= If the array is sequential, convert it to a multidimensional array.
-		if ( array_values( $key ) === $key ) {
-			$key = $this->satoma( $key );
+		if ( array_values( $keys ) === $keys ) {
+			$keys = $this->satoma( $keys );
 		}
 
 		$_     = $this->get_extension_options();
-		$value = $this->get_mda_value( $key, $_ ) ?: $default;
+		$value = $this->get_mda_value( $keys, $_ ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
 		if ( isset( $this->o_defaults ) ) {
 			$_ = $this->o_defaults;
-			return $this->get_mda_value( $key, $_ );
+			return $this->get_mda_value( $keys, $_ );
 		}
 
 		return null;
@@ -541,27 +472,27 @@ trait Extension_Options {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param array $key     The key that should collapse with the option.
+	 * @param array $keys    The keys that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
 	 *                       Defaults to the corrolated $this->o_stale_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	final protected function get_stale_option_by_mda_key( array $key, $default = null ) {
+	final protected function get_stale_option_by_mda_key( array $keys, $default = null ) {
 
 		//= If the array is sequential, convert it to a multidimensional array.
-		if ( array_values( $key ) === $key ) {
-			$key = $this->satoma( $key );
+		if ( array_values( $keys ) === $keys ) {
+			$keys = $this->satoma( $keys );
 		}
 
 		$_     = $this->get_stale_extension_options();
-		$value = $this->get_mda_value( $key, $_ ) ?: $default;
+		$value = $this->get_mda_value( $keys, $_ ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
 		if ( isset( $this->o_stale_defaults ) ) {
 			$_ = $this->o_stale_defaults;
-			return $this->get_mda_value( $key, $_ );
+			return $this->get_mda_value( $keys, $_ );
 		}
 
 		return null;
@@ -686,5 +617,119 @@ trait Extension_Options {
 		}
 
 		return $success;
+	}
+
+	/**
+	 * Loops through multidimensional keys and values to find the corresponding one.
+	 *
+	 * Expected not to go beyond 10 key depth.
+	 * CAUTION: 2nd parameter is passed by reference and it will be annihilated.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array|string $keys  The keys that collapse with $value. For performance
+	 *                            benefits, the last value should be a string.
+	 * @param array|string $value The values that might contain $keys' value.
+	 *                            Passed by reference for huge performance improvement.
+	 * @return mixed|null Null if not found. Value otherwise.
+	 */
+	final protected function get_mda_value( $keys, &$value ) {
+
+		//= Because it's cast to array, the return will always be inside this loop.
+		foreach ( (array) $keys as $k => $v ) {
+			if ( is_array( $v ) ) {
+				return isset( $value[ $k ] ) ? $this->get_mda_value( $v, $value[ $k ] ) : null;
+			} else {
+				if ( $k ) {
+					return isset( $value[ $k ][ $v ] ) ? $value[ $k ][ $v ] : null;
+				}
+
+				return isset( $value[ $v ] ) ? $value[ $v ] : null;
+			}
+		}
+	}
+
+	/**
+	 * Converts single dimensional strings from matosa to a multidimensional array.
+	 *
+	 * Great for parsing form array keys.
+	 * umatosa: "Undo Multidimensional Array TO Single Array"
+	 *
+	 * Direct matosa to umatosa:
+	 * Example: '1[2][3]=value';
+	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
+	 *
+	 * From form key:
+	 * Example: '1[2][3][value]';
+	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
+	 *
+	 * @since 2.2.0
+	 * @see parse_str() You might wish to use that instead.
+	 *
+	 * @param string|array $value The array or string to loop. First call must be array.
+	 * @return array The iterated string to array.
+	 */
+	final protected function umatosa( $value ) {
+
+		$items = [];
+		if ( ']' === substr( $value, -1 ) ) {
+			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
+			return $this->satoma( $items );
+		}
+
+		parse_str( $value, $items );
+
+		return $items;
+	}
+
+	/**
+	 * Returns last value of an array.
+	 *
+	 * I should get a nobel prize for this.
+	 *
+	 * @since 1.3.0
+	 * @see $this->umatosa() Which created a need for this.
+	 *
+	 * @param array $a The array to get the last value from.
+	 * @return string The last array value.
+	 */
+	final protected function get_last_value( array $a ) {
+
+		while ( is_array( $a = end( $a ) ) );
+
+		return $a;
+	}
+
+	/**
+	 * Converts a single or sequential|associative array into a multidimensional array.
+	 *
+	 * SAtoMA: "Single Array to Multidimensional Array"
+	 *
+	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
+	 * Becomes: [ a => [ b => [ c ] ];
+	 *
+	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
+	 *       Their values will be used as keys. Arrays can't be keys.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param array $a The single dimensional array.
+	 * @return array Multidimensional array, where the values are the dimensional keys.
+	 */
+	final protected function satoma( array $a ) {
+
+		$r = [];
+
+		if ( $a ) {
+			$last = array_shift( $a );
+
+			if ( $a ) {
+				$r[ $last ] = $this->satoma( $a );
+			} else {
+				$r = $last;
+			}
+		}
+
+		return $r;
 	}
 }

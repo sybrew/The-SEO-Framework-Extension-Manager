@@ -62,7 +62,7 @@ trait Extensions_I18n {
 			'overview'        => \__( 'Overview', 'the-seo-framework-extension-manager' ),
 			'compatible'      => \__( 'Compatible', 'the-seo-framework-extension-manager' ),
 			'incompatible'    => \__( 'Incompatible', 'the-seo-framework-extension-manager' ),
-			'menupage'        => \__( 'Menu Page', 'the-seo-framework-extension-manager' ),
+			'settings'        => \__( 'Settings', 'the-seo-framework-extension-manager' ),
 			'visit-menupage'  => \__( 'Visit the extension menu page', 'the-seo-framework-extension-manager' ),
 		];
 	}
@@ -188,22 +188,22 @@ trait Extensions_Layout {
 		if ( $items['svg'] ) {
 			$image = sprintf(
 				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-				\esc_url( $items['svg'], [ 'http', 'https' ] ),
-				\esc_url( $items['1x'], [ 'http', 'https' ] ),
+				\esc_url( $items['svg'], [ 'https', 'http' ] ),
+				\esc_url( $items['1x'], [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
 			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', \esc_attr( $size ), $image );
 		} elseif ( $items['2x'] ) {
 			$image = sprintf(
 				'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">',
-				\esc_url( $items['1x'], [ 'http', 'https' ] ),
-				\esc_url( $items['2x'], [ 'http', 'https' ] ),
+				\esc_url( $items['1x'], [ 'https', 'http' ] ),
+				\esc_url( $items['2x'], [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
 		} elseif ( $items['1x'] ) {
 			$image = sprintf(
 				'<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">',
-				\esc_url( $items['1x'], [ 'http', 'https' ] ),
+				\esc_url( $items['1x'], [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
 		}
@@ -359,7 +359,7 @@ trait Extensions_Layout {
 
 			if ( empty( $cache ) ) {
 				$cache['input_name'] = \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) );
-				$cache['admin_url']   = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'http', 'https' ] );
+				$cache['admin_url']   = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'https', 'http' ] );
 			}
 
 			$s_slug = \sanitize_key( $slug );
@@ -447,7 +447,7 @@ trait Extensions_Layout {
 		//* Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'http', 'https' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
 		//* Make extension version element.
 		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
@@ -575,7 +575,7 @@ trait Extensions_Layout {
 
 		return \tsf_extension_manager()->get_link( [
 			'url'     => $url,
-			'content' => static::get_i18n( 'menupage' ),
+			'content' => static::get_i18n( 'settings' ),
 			'title'   => static::get_i18n( 'visit-menupage' ),
 			'class'   => 'tsfem-extension-description-menuslug',
 			'target'  => '_self',

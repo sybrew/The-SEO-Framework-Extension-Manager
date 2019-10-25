@@ -220,13 +220,13 @@ final class Layout extends Secure_Abstract {
 
 		$account = self::$account;
 
-		$email = isset( $account['email'] ) ? $account['email'] : '';
-		$key = isset( $account['key'] ) ? $account['key'] : '';
-		$data = isset( $account['data'] ) ? $account['data'] : '';
-		$level = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
-		$domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
-		$end_date = '';
-		$payment_date = '';
+		$email              = isset( $account['email'] ) ? $account['email'] : '';
+		$key                = isset( $account['key'] ) ? $account['key'] : '';
+		$data               = isset( $account['data'] ) ? $account['data'] : '';
+		$level              = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
+		$domain             = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
+		$end_date           = '';
+		$payment_date       = '';
 		$requests_remaining = '';
 
 		if ( $data ) {
@@ -243,17 +243,19 @@ final class Layout extends Secure_Abstract {
 
 		$output = '';
 
-		if ( $email )
+		if ( $email ) {
 			$output .= static::wrap_row_content(
 				\__( 'Account email:', 'the-seo-framework-extension-manager' ),
 				str_replace( '*', '&bull;', preg_replace( '/(^.{0,2})(.*?)(.{0,1}\@.)([^.]{0,}?)(.{0,2}\..*?$)/', '$1**$3**$5', $email ) )
 			);
+		}
 
-		if ( $key )
+		if ( $key ) {
 			$output .= static::wrap_row_content(
 				\__( 'License key:', 'the-seo-framework-extension-manager' ),
 				str_repeat( '&bull;', 5 ) . substr( $key, -4 )
 			);
+		}
 
 		$_class = [ 'tsfem-dashicon' ];
 
@@ -331,34 +333,36 @@ final class Layout extends Secure_Abstract {
 		) );
 		$output .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
 
+
 		if ( is_int( $requests_remaining ) ) {
-			$_notice = '';
+			$_notice  = '';
 			$_classes = [ 'tsfem-dashicon' ];
 
 			if ( $requests_remaining > 100 ) {
-				$_notice = \esc_html__( 'Number of API requests left for this month.', 'the-seo-framework-extension-manager' );
+				$_notice    = \esc_html__( 'Number of API requests left for this month.', 'the-seo-framework-extension-manager' );
 				$_classes[] = 'tsfem-success';
 			} elseif ( $requests_remaining > 0 ) {
-				$_notice = \esc_html__( 'Only a few requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
+				$_notice    = \esc_html__( 'Only a few requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
 				$_classes[] = 'tsfem-warning';
 			} else {
-				$_notice = \esc_html__( 'No requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
+				$_notice    = \esc_html__( 'No requests left for this month. Consider upgrading your account.', 'the-seo-framework-extension-manager' );
 				$_classes[] = 'tsfem-error';
 			}
-
-			//= Not necessarily this domain.
-			$_requests_remaining = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-				(int) $requests_remaining,
-				$_notice,
-				'',
-				$_classes
-			) );
-			$output .= static::wrap_row_content( \esc_html__( 'Requests remaining:', 'the-seo-framework-extension-manager' ), $_requests_remaining, false );
+			$output .= static::wrap_row_content(
+				\esc_html__( 'Requests remaining:', 'the-seo-framework-extension-manager' ),
+				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+					(int) $requests_remaining,
+					$_notice,
+					'',
+					$_classes
+				) ),
+				false
+			);
 		}
 
 		if ( $valid_options && $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-			$_domain = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
+			$_domain = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 			$_warning = '';
 			$_classes = [ 'tsfem-dashicon' ];
 
@@ -376,15 +380,17 @@ final class Layout extends Secure_Abstract {
 				$_classes[] = 'tsfem-error';
 			}
 
-			//= Not necessarily this domain.
-			$that_domain = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-				$domain,
-				$_warning,
-				'',
-				$_classes
-			) );
-
-			$output .= static::wrap_row_content( \esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ), $that_domain, false );
+			$output .= static::wrap_row_content(
+				\esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ),
+				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+					//= Not necessarily this domain.
+					$domain,
+					$_warning,
+					'',
+					$_classes
+				) ),
+				false
+			);
 		}
 
 		if ( $end_date ) :
@@ -392,20 +398,20 @@ final class Layout extends Secure_Abstract {
 			$now = time();
 
 			$difference = $date_until - $now;
-			$_class = 'tsfem-success';
+			$_class     = 'tsfem-success';
 			$expires_in = '';
 
 			// Move to time.trait?
 			if ( $difference < 0 ) {
 				//* Expired.
 				$expires_in = \__( 'Account expired', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-error';
+				$_class     = 'tsfem-error';
 			} elseif ( $difference < WEEK_IN_SECONDS ) {
 				$expires_in = \__( 'Less than a week', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-warning';
+				$_class     = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
 				$expires_in = \__( 'Less than two weeks', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-warning';
+				$_class     = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS * 3 ) {
 				$expires_in = \__( 'Less than three weeks', 'the-seo-framework-extension-manager' );
 			} elseif ( $difference < MONTH_IN_SECONDS ) {
@@ -417,19 +423,22 @@ final class Layout extends Secure_Abstract {
 				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
-			$end_date = date( 'Y-m-d', $date_until );
+			$end_date      = date( 'Y-m-d', $date_until );
 			$end_date_i18n = \date_i18n( 'F j, Y, g:i A', $date_until );
-			$expires_in = HTML::wrap_inline_tooltip( vsprintf(
-				'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',
-				[
-					\esc_attr( $_class ),
-					\esc_attr( $end_date_i18n ),
-					\esc_attr( $end_date ),
-					\esc_html( $expires_in ),
-				]
-			) );
 
-			$output .= static::wrap_row_content( \esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ), $expires_in, false );
+			$output .= static::wrap_row_content(
+				\esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ),
+				HTML::wrap_inline_tooltip( vsprintf(
+					'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',
+					[
+						\esc_attr( $_class ),
+						\esc_attr( $end_date_i18n ),
+						\esc_attr( $end_date ),
+						\esc_html( $expires_in ),
+					]
+				) ),
+				false
+			);
 		endif;
 
 		if ( $payment_date ) :

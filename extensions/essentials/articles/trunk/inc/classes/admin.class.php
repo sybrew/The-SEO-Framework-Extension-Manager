@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Articles\Classes
  */
+
 namespace TSF_Extension_Manager\Extension\Articles;
 
 defined( 'ABSPATH' ) or die;
@@ -42,6 +43,244 @@ final class Admin extends Core {
 	 */
 	private function construct() {
 		$this->prepare_inpostgui();
+		$this->prepare_settings();
+	}
+
+	/**
+	 * Prepares settings GUI.
+	 *
+	 * @since 2.0.0
+	 */
+	private function prepare_settings() {
+
+		\TSF_Extension_Manager\ExtensionSettings::prepare();
+
+		\add_action( 'tsfem_register_settings_fields', [ $this, '_register_settings' ] );
+		\add_action( 'tsfem_register_settings_sanitization', [ $this, '_register_sanitization' ] );
+	}
+
+	/**
+	 * Registers settings for Articles.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param string $settings \TSF_Extension_Manager\ExtensionSettings
+	 */
+	public function _register_settings( $settings ) {
+
+		if ( ! \has_filter( 'the_seo_framework_articles_supported_post_types' )
+		|| \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
+			\add_action( 'tsfem_notices', [ $this, '_do_filter_upgrade_notice' ] );
+		}
+
+		$settings::register_settings(
+			$this->o_index,
+			[
+				'title'    => 'Articles',
+				'before'   => '',
+				'after'    => '',
+				'pane'     => [],
+				'settings' => [
+					'post_types'   => $this->generate_post_type_settings(),
+					'news_sitemap' => [
+						'_default' => null,
+						'_edit'    => true,
+						'_ret'     => 's',
+						'_req'     => false,
+						'_type'    => 'checkbox',
+						'_desc'    => [
+							\__( 'News Sitemap', 'the-seo-framework-extension-manager' ),
+							'',
+							\__( 'The news sitemap will list all news articles and annotate them accordingly for news aggregators.', 'the-seo-framework-extension-manager' ),
+						],
+						'_check'   => [
+							\__( 'Enable news sitemap?', 'the-seo-framework-extension-manager' ),
+						],
+					],
+				],
+			]
+		);
+
+		$settings::register_defaults( $this->o_index, $this->o_defaults );
+	}
+
+	/**
+	 * Returns the post type related settings.
+	 *
+	 * @since 2.0.0
+	 * @see $this->_register_settings()
+	 *
+	 * @return array The post type settings.
+	 */
+	private function generate_post_type_settings() {
+
+		$fields = [
+			'enabled' => [
+				'_default' => null,
+				'_edit'    => true,
+				'_ret'     => 's',
+				'_req'     => false,
+				'_type'    => 'checkbox',
+				'_desc'    => [
+					\__( 'Enable Post Type', 'the-seo-framework-extension-manager' ),
+					'',
+					'',
+				],
+				'_check'   => [
+					\__( 'Enable article markup?', 'the-seo-framework-extension-manager' ),
+				],
+			],
+			'default_type' => [
+				'_default' => null,
+				'_edit'    => true,
+				'_ret'     => 's',
+				'_req'     => true,
+				'_type'    => 'select',
+				'_desc'    => [
+					\__( 'Default Article Type', 'the-seo-framework-extension-manager' ),
+					'',
+					\__( 'This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already set.', 'the-seo-framework-extension-manager' ),
+				],
+				'_select' => [
+					[
+						'Article',
+						\__( 'Article', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'NewsArticle',
+						\__( 'News Article', 'the-seo-framework-extension-manager' ),
+					],
+					[
+						'BlogPosting',
+						\__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+					],
+				],
+			],
+		];
+
+		$tsf        = \the_seo_framework();
+		$post_types = $tsf->get_supported_post_types();
+
+		$settings = [];
+
+		foreach ( $post_types as $post_type ) {
+
+			// This is definitely not an Article type.
+			if ( 'attachment' === $post_type ) continue;
+
+			$pto             = \get_post_type_object( $post_type );
+			$post_type_label = isset( $pto->labels->name ) ? $pto->labels->name : $tsf->get_post_type_label( $post_type );
+
+			$settings[ $post_type ] = [
+				'_default' => null,
+				'_edit'    => true,
+				'_ret'     => '',
+				'_req'     => false,
+				'_type'    => 'multi',
+				'_desc'    => [
+					$post_type_label,
+					\__( 'Adjust article settings for this post type.', 'the-seo-framework-extension-manager' ),
+				],
+				'_fields'  => $fields,
+			];
+		}
+
+		return [
+			'_default' => null,
+			'_edit'    => true,
+			'_ret'     => '',
+			'_req'     => false,
+			'_type'    => 'multi',
+			'_desc'    => [
+				'Post Type Settings',
+				\__( 'Article markup should only be applied to content that is ephemeral. Timeless content, such as delivered with pages, should not have article markup; they may be recognized as irrelevant and expired content.', 'the-seo-framework-extension-manager' ),
+				\__( 'Be mindful about the post types you enable. For instance, a product page, app page, recipe page, or an event page are not always recognized as articles.', 'the-seo-framework-extension-manager' ),
+			],
+			'_fields'  => $settings,
+		];
+	}
+
+	/**
+	 * Adds settings page warning for Articles.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 */
+	public function _do_filter_upgrade_notice() {
+
+		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' ) ) {
+			\tsf_extension_manager()->do_dismissible_notice( 'Filter <code>the_seo_framework_articles_supported_post_types</code> is deprecated. Please remove it and use the settings below instead.', 'error', true, false );
+		}
+		if ( \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
+			\tsf_extension_manager()->do_dismissible_notice( 'Filter <code>the_seo_framework_articles_default_meta</code> is deprecated. Please remove it and use the settings below instead.', 'error', true, false );
+		}
+	}
+
+	/**
+	 * Registers sanitization callbacks for Articles.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $settings \TSF_Extension_Manager\ExtensionSettings
+	 */
+	public function _register_sanitization( $settings ) {
+		$settings::register_sanitization(
+			$this->o_index,
+			[
+				'post_types'   => static::class . '::_sanitize_option_post_type',
+				'news_sitemap' => static::class . '::_sanitize_option_one_zero',
+			]
+		);
+	}
+
+	/**
+	 * Sanitizes the post type options.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param string $value The input value.
+	 * @return string The sanitized input value.
+	 */
+	public static function _sanitize_option_post_type( $value ) {
+
+		if ( ! is_array( $value ) )
+			$value = [];
+
+		$post_types = \the_seo_framework()->get_supported_post_types();
+
+		// Only sanitize known post types.
+		foreach ( $post_types as $type ) {
+			if ( ! isset( $value[ $type ] ) ) continue;
+
+			// This is definitely not an Article type.
+			if ( 'attachment' === $type ) continue;
+
+			if ( ! isset( $value[ $type ]['enabled'] ) )
+				$value[ $type ]['enabled'] = 0;
+
+			$value[ $type ]['enabled']      = static::_sanitize_option_one_zero( $value[ $type ]['enabled'] );
+			$value[ $type ]['default_type'] =
+				in_array( $value[ $type ]['default_type'], [ 'Article', 'NewsArticle', 'BlogPosting' ], true )
+				? $value[ $type ]['default_type']
+				: 'Article';
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Sanitizes option to only contain one and zero values.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param string $value The input value.
+	 * @return int The sanitized input value. Either 1 or 0.
+	 */
+	public static function _sanitize_option_one_zero( $value ) {
+		return (int) (bool) $value;
 	}
 
 	/**
@@ -73,9 +312,14 @@ final class Admin extends Core {
 
 		$tsf = \the_seo_framework();
 
-		if ( ! in_array( $tsf->get_admin_post_type(), $this->supported_post_types, true ) ) return;
+		$post_type = $tsf->get_admin_post_type();
+		$settings  = $this->get_option( 'post_types' );
+
+		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
+
+		$_default = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
@@ -86,10 +330,10 @@ final class Admin extends Core {
 					'link'  => 'https://theseoframework.com/extensions/articles/#usage/types',
 				],
 				'option' => [
-					'name'    => 'type',
-					'input'   => 'select',
-					'default' => $this->pm_defaults['type'],
-					'value'   => $this->get_post_meta( 'type' ),
+					'name'          => 'type',
+					'input'         => 'select',
+					'default'       => $_default,
+					'value'         => $this->get_post_meta( 'type', $_default ),
 					'select_values' => [
 						'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
 						'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),

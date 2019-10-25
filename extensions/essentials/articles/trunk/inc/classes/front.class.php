@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Articles\Classes
  */
+
 namespace TSF_Extension_Manager\Extension\Articles;
 
 defined( 'ABSPATH' ) or die;
@@ -44,7 +45,10 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 * @var array $is_json_valid : { key => bool }
 	 */
-	private $is_json_valid = [];
+	private $is_json_valid = [
+		'amp'    => true,
+		'nonamp' => true,
+	];
 
 	/**
 	 * Registers the image size name.
@@ -60,27 +64,23 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-
-		$this->is_json_valid = [
-			'amp'    => true,
-			'nonamp' => true,
-		];
-
-		$this->init();
+		\add_action( 'the_seo_framework_do_before_output', [ $this, '_init_articles_output' ], 10 );
+		\add_action( 'the_seo_framework_do_before_amp_output', [ $this, '_init_articles_output' ], 10 );
 	}
 
 	/**
-	 * Initializes hooks.
+	 * Initializes Articles output.
 	 *
-	 * @since 1.0.0
-	 * @since 1.4.0 Now tests for post type conditions prior executing.
+	 * @since 2.0.0
 	 */
-	private function init() {
+	public function _init_articles_output() {
 
 		if ( ! \the_seo_framework()->is_singular() ) return;
 
-		if ( ! in_array( \get_post_type(), $this->supported_post_types, true ) )
-			return;
+		$post_type = \get_post_type();
+		$settings  = $this->get_option( 'post_types' );
+
+		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
 
 		if ( $this->is_amp() ) {
 			//* Initialize output in The SEO Framework's front-end AMP meta object.
@@ -241,8 +241,11 @@ final class Front extends Core {
 	 */
 	public function _get_articles_json_output() {
 
-		\the_seo_framework()->set_timezone();
+		$tsf = \the_seo_framework();
 
+		$tsf->set_timezone();
+
+		// Should've used a generator... TODO? => Wait for TSF v4.1?
 		$data = [
 			$this->get_article_context(),
 			$this->get_article_type(),
@@ -256,7 +259,7 @@ final class Front extends Core {
 			$this->get_article_description(),
 		];
 
-		\the_seo_framework()->reset_timezone();
+		$tsf->reset_timezone();
 
 		if ( ! $this->is_json_valid() )
 			return '';
@@ -343,7 +346,13 @@ final class Front extends Core {
 	 * @return array The Article type.
 	 */
 	private function get_article_type() {
-		return [ '@type' => $this->get_post_meta( 'type' ) ];
+
+		// We can collapse these 3 lines into one using PHP 7+...
+		$settings  = $this->get_option( 'post_types' );
+		$post_type = \get_post_type();
+		$_default  = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
+
+		return [ '@type' => $this->get_post_meta( 'type', $_default ) ];
 	}
 
 	/**
@@ -361,13 +370,7 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$tsf = \the_seo_framework();
-
-		if ( method_exists( $tsf, 'get_current_permalink' ) ) {
-			$url = $tsf->get_current_permalink();
-		} else {
-			$url = $tsf->the_url_from_cache();
-		}
+		$url = \the_seo_framework()->get_current_permalink();
 
 		if ( ! $url ) {
 			$this->invalidate( 'amp' );
@@ -391,6 +394,7 @@ final class Front extends Core {
 	 * }
 	 * @since 1.0.0
 	 * @since 1.3.0 Added TSF v3.1 compat.
+	 * @since 2.0.0 Now trims the title to 110 characters.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema Never
@@ -404,15 +408,14 @@ final class Front extends Core {
 		$id  = $this->get_current_id();
 		$tsf = \the_seo_framework();
 
-		if ( method_exists( $tsf, 'get_raw_generated_title' ) ) {
-			$title = $tsf->get_raw_generated_title( [ 'id' => $id ] );
-		} else {
-			$title = $tsf->post_title_from_ID( $id ) ?: $tsf->title_from_custom_field( '', false, $id );
-			$title = trim( $tsf->s_title_raw( $title ) );
+		$title = $tsf->get_raw_generated_title( [ 'id' => $id ] );
+
+		if ( strlen( $title ) > 110 ) {
+			$title = $tsf->trim_excerpt( $title, 0, 110 );
 		}
 
-		if ( ! $title || mb_strlen( $title ) > 110 ) {
-			$this->invalidate( 'amp' );
+		if ( ! $title ) {
+			$this->invalidate( 'both' );
 			return [];
 		}
 
@@ -639,7 +642,8 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
 	 *                2. Now only invalidates AMP when something's wrong.
-	 * @since 1.1.0 : Now fetches TSF 3.0 logo ID.
+	 * @since 1.1.0 Now fetches TSF 3.0 logo ID.
+	 * @since 2.0.0 Now tests for the knowledge type.
 	 *
 	 * @requiredSchema AMP
 	 * @ignoredSchema nonAMP
@@ -651,6 +655,11 @@ final class Front extends Core {
 			return [];
 
 		$tsf = \the_seo_framework();
+
+		if ( 'organization' !== $tsf->get_option( 'knowledge_type' ) ) {
+			$this->invalidate( 'amp' );
+			return [];
+		}
 
 		/**
 		 * @since 1.0.0
@@ -704,7 +713,7 @@ final class Front extends Core {
 				'name'  => \esc_attr( $name ),
 				'logo'  => [
 					'@type'  => 'ImageObject',
-					'url'    => \esc_url( $url, [ 'http', 'https' ] ),
+					'url'    => \esc_url( $url, [ 'https', 'http' ] ),
 					'width'  => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
 					'height' => abs( filter_var( $h, FILTER_SANITIZE_NUMBER_INT ) ),
 				],
@@ -732,10 +741,11 @@ final class Front extends Core {
 
 		$tsf = \the_seo_framework();
 
-		if ( method_exists( $tsf, 'get_description' ) ) {
-			$description = $tsf->get_description( $this->get_current_id() );
-		} else {
-			$description = $tsf->description_from_cache();
+		$description = \esc_attr( $tsf->get_description( $this->get_current_id() ) );
+
+		if ( ! $description ) {
+			// Optional.
+			return [];
 		}
 
 		return [

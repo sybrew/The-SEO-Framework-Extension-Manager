@@ -152,7 +152,7 @@ The API currently supports English only. Support for other languages will be add
 
 We're currently working on inflection lookups. When it's ready, an update will be sent out.
 
-### "A parsing failure occurred", what does this mean?
+### "A parsing failure occurred." What does this mean?
 
 When the content parser experiences any error, the rater shows this generic message.
 Most likely, your computer may be restraint in processing power in combination with page builders.

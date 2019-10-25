@@ -462,94 +462,6 @@ class Core {
 	}
 
 	/**
-	 * Converts single dimensional strings from matosa to a multidimensional array.
-	 *
-	 * Great for parsing form array keys.
-	 * umatosa: "Undo Multidimensional Array TO Single Array"
-	 *
-	 * Direct matosa to umatosa:
-	 * Example: '1[2][3]=value';
-	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
-	 *
-	 * From form key:
-	 * Example: '1[2][3][value]';
-	 * Becomes: [ 1 => [ 2 => [ 3 => [ 'value' ] ] ] ];
-	 *
-	 * @since 1.3.0
-	 * @todo improve readability. It's very hackesque.
-	 * @see parse_str() You might wish to use that instead.
-	 *
-	 * @param string|array $value The array or string to loop. First call must be array.
-	 * @return array The iterated string to array.
-	 */
-	final public function umatosa( $value ) {
-
-		$items = [];
-		if ( ']' === substr( $value, -1 ) ) {
-			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
-			return $this->satoma( $items );
-		}
-
-		parse_str( $value, $items );
-
-		return $items;
-	}
-
-	/**
-	 * Converts a single or sequential|associative array into a multidimensional array.
-	 *
-	 * satoma: "Single Array to Multidimensional Array"
-	 *
-	 * Example: '[ 0 => a, 1 => b, 3 => c ]';
-	 * Becomes: [ a => [ b => [ c ] ];
-	 *
-	 * @NOTE Do not pass multidimensional arrays, as they will cause PHP errors.
-	 *       Their values will be used as keys. Arrays can't be keys.
-	 *
-	 * @since 1.3.0
-	 * @staticvar array $_b Maintains iteration and depth.
-	 *
-	 * @param array $a The single dimensional array.
-	 * @return array Multidimensional array, where the values are the dimensional keys.
-	 */
-	final public function satoma( array $a ) {
-
-		static $_b;
-
-		$_b = $a;
-
-		if ( $_b ) {
-			$last = array_shift( $a );
-
-			if ( $a ) {
-				$r[ $last ] = $this->satoma( $a );
-			} else {
-				$r = $last;
-			}
-		}
-
-		return $r;
-	}
-
-	/**
-	 * Returns last value of an array.
-	 *
-	 * I should get a nobel prize for this.
-	 *
-	 * @since 1.3.0
-	 * @see $this->umatosa() Which created a need for this.
-	 *
-	 * @param array $a The array to get the last value from.
-	 * @return string The last array value.
-	 */
-	final public function get_last_value( array $a ) {
-
-		while ( is_array( $a = end( $a ) ) );
-
-		return $a;
-	}
-
-	/**
 	 * Determines if all required keys are set in $input.
 	 *
 	 * @since 1.2.0
@@ -775,7 +687,7 @@ class Core {
 			//* Don't use hash_equals(). This is already safe.
 			if ( empty( $instance[ $bit ] ) || $instance[ $n_bit ] !== $instance[ $bit ] ) {
 				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
-				$this->_maybe_die( 'Error -1: The SEO Framework Extension Manager instance verification failed.' );
+				$this->_maybe_die( 'Error -1: The SEO Framework - Extension Manager instance verification failed.' );
 				$instance = [];
 				return '';
 			}
@@ -1573,7 +1485,7 @@ class Core {
 							$matches[0][ $i ],
 							sprintf(
 								'<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>',
-								\esc_url( $matches[2][ $i ], [ 'http', 'https' ] ),
+								\esc_url( $matches[2][ $i ], [ 'https', 'http' ] ),
 								\esc_html( $matches[1][ $i ] )
 							),
 							$text

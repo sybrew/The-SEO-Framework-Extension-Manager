@@ -137,12 +137,14 @@ final class FormGenerator {
 
 		if ( static::is_ajax_callee( $class ) ) {
 			$found = true;
+
 			static::$cur_ajax_caller = $class;
 			static::$ajax_it_args    = $args;
 
 			/**
 			 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
 			 * It has already checked referrer and capability.
+			 *
 			 * @see \TSF_Extension_Manager\LoadAdmin
 			 */
 			\add_action( 'tsfem_form_do_ajax_iterations', __CLASS__ . '::_output_ajax_form_its', PHP_INT_MIN );
@@ -180,7 +182,7 @@ final class FormGenerator {
 
 		//* Referer check OK.
 		if ( isset( $_POST['args']['caller'] ) )
-			return \tsf_extension_manager()->get_last_value( \tsf_extension_manager()->umatosa( $_POST['args']['caller'] ) );
+			return $this->get_last_value( $this->umatosa( $_POST['args']['caller'] ) );
 
 		return false;
 	}
@@ -317,6 +319,7 @@ final class FormGenerator {
 
 		$defaults = [
 			'o_index'      => '',
+			'o_defaults'   => [],
 			'o_key'        => '',
 			'use_stale'    => false,
 			'levels'       => 5,
@@ -327,7 +330,8 @@ final class FormGenerator {
 		/**
 		 * @see trait \TSF_Extension_Manager\Extension_Options
 		 */
-		$this->o_index = $args['o_index'];
+		$this->o_index    = $args['o_index'];
+		$this->o_defaults = $args['o_defaults'];
 
 		$args['architecture'] = $args['architecture'] ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
 
@@ -437,6 +441,7 @@ final class FormGenerator {
 	 * Returns the form button.
 	 *
 	 * @since 1.3.0
+	 * @since 2.2.0 Added hide-if-no-js class.
 	 *
 	 * @param string $what What to get. Currently only supports 'submit'.
 	 * @param string $name The form name where the button is for.
@@ -447,7 +452,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'submit':
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload hide-if-no-js">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),
@@ -803,31 +808,25 @@ final class FormGenerator {
 		switch ( $args['_type'] ) :
 			case 'multi':
 				return $this->create_fields_multi( $args );
-				break;
 
 			case 'iterate_main':
 				//= Can only be used on main output field. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'echo' );
-				break;
 
 			case 'iterate_ajax':
 				//= Can only be used in AJAX. Will echo. Will try to defer.
 				return $this->fields_iterator( $args, 'ajax' );
-				break;
 
 			case 'iterate':
 				return $this->fields_iterator( $args, 'get' );
-				break;
 
 			case 'select':
 			case 'selectmulti':
 				return $this->create_select_field( $args );
-				break;
 
 			case 'selectmultia11y':
 				//= Select field, but then through checkboxes.
 				return $this->create_select_multi_a11y_field( $args );
-				break;
 
 			case 'text':
 			case 'password':
@@ -844,26 +843,21 @@ final class FormGenerator {
 			case 'color':
 			case 'hidden':
 				return $this->create_input_field_by_type( $args );
-				break;
 
 			case 'textarea':
 				return $this->create_textarea_field( $args );
-				break;
 
 			case 'checkbox':
 				return $this->create_checkbox_field( $args );
-				break;
 
 			case 'radio':
 				return $this->create_radio_field( $args );
-				break;
 
 			case 'image':
 				return $this->create_image_field( $args );
-				break;
 
 			default:
-				break;
+				return '';
 		endswitch;
 
 		return '';
@@ -926,7 +920,7 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 * @see $this->create_field()
 	 *
-	 * @param array $args The iterator fields arguments.
+	 * @param array  $args The iterator fields arguments.
 	 * @param string $type Determines whether to output, output for AJAX or return.
 	 * @return string HTML on return. Empty string on echo.
 	 */
@@ -947,7 +941,7 @@ final class FormGenerator {
 				$o = $this->get_fields_iterator( $args );
 				break;
 
-			default :
+			default:
 				break;
 		endswitch;
 
@@ -1059,7 +1053,7 @@ final class FormGenerator {
 		//* Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
-		$start = (int) $args['_ajax_it_start'];
+		$start  = (int) $args['_ajax_it_start'];
 		$amount = (int) $args['_ajax_it_new'];
 		// $count = $amount + $start - 1; // (that's nice, dear.)
 
@@ -1167,7 +1161,7 @@ final class FormGenerator {
 			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
 
 			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
-			$checkbox = sprintf( '<input type="checkbox" id="%s" class="tsfem-form-collapse-checkbox" checked>', $checkbox_id );
+			$checkbox    = sprintf( '<input type=checkbox id="%s" class="tsfem-form-collapse-checkbox" checked>', $checkbox_id );
 
 			$dyn_title_type = key( $args['dyn_title'] );
 			$dyn_title_key = reset( $args['dyn_title'] );
@@ -1453,14 +1447,14 @@ final class FormGenerator {
 		//= Not escaped.
 		$title = $args['_desc'][0];
 
-		//= Escaped.
-		$s_type = \esc_attr( $args['_type'] );
-		$s_name = $s_id = $this->get_field_id();
-		$s_ph   = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-		$s_range = isset( $s_range ) ? $s_range : '';
-		$s_pattern = isset( $s_pattern ) ? $s_pattern : '';
+		//= s = Escaped.
+		$s_type     = \esc_attr( $args['_type'] );
+		$s_name     = $s_id = $this->get_field_id();
+		$s_ph       = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_range    = isset( $s_range ) ? $s_range : '';
+		$s_pattern  = isset( $s_pattern ) ? $s_pattern : '';
 		$s_required = $args['_req'] ? 'required' : '';
 
 		return vsprintf(
@@ -1518,12 +1512,11 @@ final class FormGenerator {
 		//* Not escaped.
 		$title = $args['_desc'][0];
 
-		$s_name = $s_id = $this->get_field_id();
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_name     = $s_id = $this->get_field_id();
+		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 		$s_required = $args['_req'] ? 'required' : '';
-
-		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$multiple = 'selectmulti' === $args['_type'];
 
@@ -1596,8 +1589,9 @@ final class FormGenerator {
 	 * It will clean up $selected if it is found. Unless $multiple is true.
 	 *
 	 * Heavily optimized for performance. Therefore, not according to DRY standards.
-	 * @generator
+	 *
 	 * @since 1.3.0
+	 * @generator
 	 *
 	 * @param array        $select   The select fields.
 	 * @param string|array $selected The default or currently selected field.
@@ -1608,7 +1602,7 @@ final class FormGenerator {
 
 		static $_level = 0;
 
-		if ( '' !== $selected && [] !== $selected ) :
+		if ( null !== $selected && '' !== $selected && [] !== $selected ) :
 
 			//= Convert $selected to array.
 			$a_selected = (array) $selected;
@@ -1679,11 +1673,12 @@ final class FormGenerator {
 		//* Not escaped.
 		$title = $args['_desc'][0];
 
+		//= s = escaped
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
-
-		$_data_required = ! empty( $args['_req'] ) ? 'data-required=1' : '';
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
+		$s_data_required = ! empty( $args['_req'] ) ? 'data-required=1' : '';
 
 		return vsprintf(
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
@@ -1712,7 +1707,7 @@ final class FormGenerator {
 						[
 							isset( $args['_display'] ) && 'row' === $args['_display'] ? 'tsfem-form-multi-select-wrap-row' : '',
 							$this->get_field_id(),
-							$_data_required,
+							$s_data_required,
 							$this->get_select_multi_a11y_options( $args['_select'], $this->get_field_value( $args['_default'] ), true ),
 						]
 					)
@@ -1728,8 +1723,8 @@ final class FormGenerator {
 	 * Propagates to an iterator. That's why it can reiterate.
 	 * It loops back to itself to generate more fields.
 	 *
-	 * @iterator Careful: it can and will reset current iteration count.
 	 * @since 1.3.0
+	 * @iterator Careful: it can and will reset current iteration count.
 	 *
 	 * @param array $select   The select fields.
 	 * @param array $selected The default or currently selected fields.
@@ -1758,9 +1753,10 @@ final class FormGenerator {
 	 * For this reason, the POST return value will differ from regular select fields.
 	 *
 	 * Heavily optimized for performance. Therefore, not according to DRY standards.
+	 *
+	 * @since 1.3.0
 	 * @generator
 	 * @iterator
-	 * @since 1.3.0
 	 *
 	 * @param array $select   The select fields.
 	 * @param array $selected The default or currently selected fields.
@@ -1837,26 +1833,26 @@ final class FormGenerator {
 		//= Not escaped.
 		$title = $args['_desc'][0];
 
-		//= Escaped.
-		$s_url_name = $s_url_id = $this->get_sub_field_id( 'url' );
-		$s_id_name = $s_id_id = $this->get_sub_field_id( 'id' );
-		$s_url_ph = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		//= s = Escaped.
+		$s_url_name  = $s_url_id = $this->get_sub_field_id( 'url' );
+		$s_id_name   = $s_id_id = $this->get_sub_field_id( 'id' );
+		$s_url_ph    = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_desc      = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more      = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'url', 'associative' ),
 				$args['_default']['url']
 			)
 		);
-		$s_id_value = \absint(
+		$s_id_value  = \absint(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'id', 'associative' ),
 				$args['_default']['id']
 			)
 		);
-		$s_required = isset( $args['_req'] ) ? 'required' : '';
-		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+		$s_required  = isset( $args['_req'] ) ? 'required' : '';
+		$s_data      = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$s_url_readonly = $s_remove_button = '';
 
@@ -1939,6 +1935,65 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Creates a checkbox field.
+	 *
+	 * @since 1.3.0 Instated.
+	 * @since 2.2.0 Populated.
+	 *
+	 * @param array $args The field generation arguments.
+	 * @return string The checkbox field.
+	 */
+	private function create_checkbox_field( array $args ) {
+
+		//* Not escaped.
+		$title   = $args['_desc'][0];
+		$checked = $this->get_field_value( $args['_default'] );
+
+		$s_name     = $s_id = $this->get_field_id();
+		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_required = $args['_req'] ? 'required' : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
+
+		return vsprintf(
+			'<div class="tsfem-checkbox-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
+			[
+				sprintf(
+					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
+					vsprintf(
+						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+						[
+							vsprintf(
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								[
+									$s_id,
+									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+								]
+							),
+							$s_desc,
+						]
+					)
+				),
+				sprintf(
+					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
+					vsprintf(
+						'<label class=tsfem-form-checkbox-settings-content-label><input type=checkbox id="%s" name=%s value=1 %s %s %s /> %s</label>',
+						[
+							$s_id,
+							$s_name,
+							$checked ? 'checked' : '',
+							$s_required,
+							$s_data,
+							\esc_html( $args['_check'][0] ),
+						]
+					)
+				),
+			]
+		);
+	}
+
+	/**
 	 * These methods are acting as a placeholder for future implementation.
 	 * Will be built when required.
 	 *
@@ -1947,7 +2002,6 @@ final class FormGenerator {
 	 * @param array $args The field generation arguments.
 	 * @return void
 	 */
-	private function create_checkbox_field( array $args ) {}
 	private function create_radio_field( array $args ) {}
 	private function create_textarea_field( array $args ) {}
 }

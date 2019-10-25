@@ -33,8 +33,8 @@ if ( $options ) {
 				\esc_attr( $size ),
 				sprintf(
 					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
-					\esc_url( $image['svg'], [ 'http', 'https' ] ),
-					\esc_url( $image['1x'], [ 'http', 'https' ] ),
+					\esc_url( $image['svg'], [ 'https', 'http' ] ),
+					\esc_url( $image['1x'], [ 'https', 'http' ] ),
 					\esc_attr( $size )
 				)
 			)

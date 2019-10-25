@@ -73,12 +73,12 @@ trait UI {
 	 * Outputs default UI wrap in logical order.
 	 *
 	 * @since 1.5.0
+	 * @since 2.2.0 Moved notice wrap into header_wrap.
 	 *
 	 * @param string $type The type of main content. Accepts 'panes' and 'connect'.
 	 */
 	final protected function ui_wrap( $type = 'panes' ) {
 		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
-		// \add_action( 'tsfem_page', [ $this, 'notice_wrap' ], 50 );
 		\add_action( 'tsfem_page', [ $this, $type . '_wrap' ], 100 );
 		\add_action( 'tsfem_page', [ $this, 'footer_wrap' ], 200 );
 

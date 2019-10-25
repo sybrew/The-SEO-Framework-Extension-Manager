@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Fields
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;

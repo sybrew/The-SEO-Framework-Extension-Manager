@@ -16,7 +16,7 @@ $pane_id = $args['pane_id'];
 
 $pane_classes[] = 'tsfem-pane';
 $_classes       = [
-	'full'     => 'tsfem-pane-full',
+	'full'     => 'tsfem-pane-full', // TODO we now have wide and tall options available.
 	'move'     => 'tsfem-pane-move',
 	'collapse' => 'tsfem-pane-collapse',
 	'push'     => 'tsfem-pane-push',
@@ -41,9 +41,9 @@ foreach ( $_classes as $_arg => $_class ) {
 				if ( isset( $callable ) ) {
 					//* If secure, pass object.
 					if ( $args['secure_obj'] ) {
-						call_user_func( $callable, $callable[0] );
+						call_user_func( $callable, $callable[0], ...$args['cbargs'] );
 					} else {
-						call_user_func( $callable );
+						call_user_func( $callable, ...$args['cbargs'] );
 					}
 				} elseif ( isset( $content ) ) {
 					echo $content; // XSS ok... ought to be escaped.
@@ -59,9 +59,9 @@ foreach ( $_classes as $_arg => $_class ) {
 			<footer class="tsfem-pane-footer-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-end">
 				<?php
 				if ( $args['secure_obj'] ) {
-					call_user_func( $args['footer'], $args['footer'][0] );
+					call_user_func( $args['footer'], $args['footer'][0], ...$args['fcbargs'] );
 				} else {
-					call_user_func( $args['footer'] );
+					call_user_func( $args['footer'], ...$args['fcbargs'] );
 				}
 				?>
 			</footer>

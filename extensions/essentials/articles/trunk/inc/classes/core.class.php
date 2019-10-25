@@ -29,9 +29,17 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Require extension options trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'extension/post-meta' );
+
+/**
+ * Require extension settings trait.
+ *
+ * @since 2.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/options' );
 
 /**
  * Class TSF_Extension_Manager\Extension\Articles\Core
@@ -43,9 +51,10 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @uses TSF_Extension_Manager\Traits
  */
 class Core {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Core_Interface,
-		\TSF_Extension_Manager\Extension_Post_Meta;
+	use \TSF_Extension_Manager\Extension_Options,
+		\TSF_Extension_Manager\Extension_Post_Meta,
+		\TSF_Extension_Manager\Enclose_Stray_Private,
+		\TSF_Extension_Manager\Construct_Core_Interface;
 
 	/**
 	 * Child constructor.
@@ -58,27 +67,50 @@ class Core {
 		$this instanceof $that or \wp_die( -1 );
 
 		/**
-		 * Set meta index and defaults.
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
-		$this->pm_index    = 'articles';
-		$this->pm_defaults = [
-			'type' => 'Article',
-		];
-
+		$this->pm_index = 'articles';
 		/**
-		 * @since 1.4.0
-		 * @param array $post_types The supported post types.
+		 * @since 1.2.0
+		 * @since 2.0.0 Deprecated
+		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
+		 * @deprecated
+		 * @param array $pm_defaults The default post meta settings.
 		 */
-		$this->supported_post_types = \apply_filters(
-			'the_seo_framework_articles_supported_post_types',
-			[ 'post' ]
+		$this->pm_defaults = \apply_filters(
+			'the_seo_framework_articles_default_meta',
+			[
+				'type' => 'Article',
+			]
 		);
 
 		/**
-		 * @since 1.2.0
-		 * @param array $pm_defaults The default post meta settings.
+		 * @since 1.4.0
+		 * @since 2.0.0 Deprecated
+		 * @deprecated
+		 * @param array $post_types The supported post types.
 		 */
-		$this->pm_defaults = \apply_filters_ref_array( 'the_seo_framework_articles_default_meta', [ $this->pm_defaults ] );
+		$filtered_post_types = \apply_filters(
+			'the_seo_framework_articles_supported_post_types',
+			[ 'post' ]
+		);
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
+		 */
+		$this->o_index    = 'articles';
+		$this->o_defaults = [
+			'news_sitemap' => 1,
+			'post_types'   => [],
+		];
+
+		foreach ( $filtered_post_types as $post_type ) {
+			$this->o_defaults['post_types'][ $post_type ] = [
+				'enabled'      => 1,
+				'default_type' => $this->pm_defaults['type'],
+			];
+		}
+
+		// Deprecated. Unset.
+		unset( $this->pm_defaults['type'] );
 	}
 }

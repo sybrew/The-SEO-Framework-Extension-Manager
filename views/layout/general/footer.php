@@ -1,4 +1,5 @@
 <?php
+
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 if ( $this->is_plugin_activated() ) {
@@ -43,7 +44,7 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 
 ?>
 <p class="tsfem-footer-title">
-	The SEO Framework Extension Manager
+	The SEO Framework &ndash; Extension Manager
 </p>
 <p class="tsfem-footer-motto">
 	<?php echo \esc_html( "{$mottos[ $motto_key ]} Initiative" ); ?>

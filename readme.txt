@@ -43,11 +43,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 TODO repurpose these for the new settings interface?
 monitor/externs/index.php:
-/**
- * The true university of these days is a collection of books.
- *
- * - Thomas Carlyle
- */
 
 local/externs/index.php:
 /**
@@ -75,11 +70,13 @@ local/externs/index.php:
 * We dropped support for The SEO Framework v3.2.4 and below. TSF v3.3 and higher is now required.
 * We dropped support for WordPress v4.8. WP v4.9 and higher are now required.
 * We dropped support for IE11 and all other browsers of that era. A modern browser is now required to use the plugin's interface as intended.
-* We rewrote the buttons to make them more accessible and in line with the WordPress interface.
+* We dropped support for PHP 5.5. PHP 5.6 or higher is now required.
 
 **Detailed log:**
 
-* TODO **Added:** We added a new options-interface, which can be populated by extensions.
+* **Added:** We added a new options-interface, which can be populated by extensions on demand.
+* TODO **Added:** The plugin now nags you that it requires The SEO Framework, with an installation/activation button.
+	* https://github.com/sybrew/the-seo-framework/issues/302
 * **Improved:** The interface has been rewritten to use grid instead of flexbox.
 * **Improved:** The interface no longer tries to find UI boundaries, improving the performance greatly--especially with Focus.
 * **Improved:** The interface buttons are now more accessible. For instance, keyboard navigational hints are easier to identify, and we added a border to support high-contrast display.
@@ -88,6 +85,7 @@ local/externs/index.php:
 * **Improved:** We repackaged all JS files via Babel, whereras before we used Google's Closure Compiler.
 * **Improved:** Tabindexing-hooks no longer occur on items that don't have a tooltip, improving accessibility.
 * **Improved:** The form validator now tries to align your scrolling position to 1/3rd of the screen.
+* **Performance:** The sanitization of all (administrative) links now check for HTTPS prior to HTTP.
 * **Changed:** We sacrificed some eye-candy in favor for accessibility and coherency with the updated WordPress v5.3 interface.
 * **Fixed:** vertical alignment on various elements for Chromium v77. Most prominently affecting Chrome v77+.
 * **Fixed:** vertical alignment on select elements for WordPress v5.3. Most prominently affecting, again, Chrome v77+.
@@ -96,8 +94,18 @@ local/externs/index.php:
 * **Removed:** Support for all archaic browser vendor prefixes from the CSS files, so to reduce the stylesheet payload.
 * **Other:** The SEO Framework v3.3 or later is now required (from v3.1).
 * **Other:** WordPress v4.9 is now required (from v4.8).
+* **Other:** PHP v5.6.5 is now required (from v5.5.21).
 * **Other:** We now use a new engine for minifying the JS files. See https://github.com/sybrew/babel-tsf.
 * **Other:** We cleaned up some code.
+
+* **Added:** New extension settings page, class, and callbacks. These apply to all settings found on the new Extension Settings page.
+	* **New filters:**
+		* `tsf_extension_manager_register_extension_settings`.
+		* `tsf_extension_manager_register_extension_settings_defaults`
+		* `tsf_extension_manager_register_extension_settings_sanitization`.
+	* **New actions:**
+		* `tsfem_register_settings_sanitization`
+		* `tsfem_register_settings_fields`
 
 * TODO We added the Extension Manager and extension-loader boot-time to the new "HTML boot-time" indicator of The SEO Framework v4.0.
 

@@ -378,6 +378,68 @@ trait Construct_Core_Static_Final_Instance {
 }
 
 /**
+ * Forces the classes to be treated as a single static. In essence, classes that
+ * use this trait can't be used with a 'new' keyword. They may have public functions that
+ * can kick off private instantiation.
+ *
+ * This is great together with Enclose_Stray_Private.
+ * Does not load parent.
+ * Does load private instance methods and properties.
+ *
+ * This trait applies nicely with the following design patterns:
+ * - Builder Pattern.
+ * - Prototype Pattern.
+ *
+ * @since 2.2.0
+ * @access private
+ */
+trait Construct_Core_Static_Stray_Private_Instance {
+
+	private function __construct() {}
+
+	/**
+	 * The object instance.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @var object|null This object instance.
+	 */
+	private static $instance = null;
+
+	/**
+	 * Sets the class instance.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 * @static
+	 */
+	private static function set_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::$instance = new static();
+		}
+	}
+
+	/**
+	 * Gets the class instance. It's set when it's null.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 * @static
+	 *
+	 * @return object The current instance.
+	 */
+	private static function get_instance() {
+
+		if ( is_null( static::$instance ) ) {
+			static::set_instance();
+		}
+
+		return static::$instance;
+	}
+}
+
+/**
  * Holds private magic constructor method.
  *
  * Does not load parent.

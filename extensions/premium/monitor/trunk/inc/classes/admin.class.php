@@ -206,7 +206,7 @@ final class Admin extends Api {
 	public function _init_menu() {
 
 		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
-			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 100 );
 	}
 
 	/**
@@ -353,7 +353,7 @@ final class Admin extends Api {
 	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
-	final protected function handle_update_nonce( $key = 'default', $check_post = true ) {
+	protected function handle_update_nonce( $key = 'default', $check_post = true ) {
 
 		static $validated = [];
 
@@ -395,7 +395,7 @@ final class Admin extends Api {
 	 * @since 1.1.0
 	 * @access private
 	 */
-	final public function _wp_ajax_update_settings() {
+	public function _wp_ajax_update_settings() {
 
 		if ( \wp_doing_ajax() ) :
 			$tsfem = \tsf_extension_manager();
@@ -412,7 +412,7 @@ final class Admin extends Api {
 
 				if ( $option ) {
 					//= Unpack option.
-					$_option = $tsfem->get_last_value( $tsfem->umatosa( $option ) );
+					$_option = $this->get_last_value( $this->umatosa( $option ) );
 					$options = [
 						$_option => $value,
 					];
@@ -443,7 +443,7 @@ final class Admin extends Api {
 	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
-	final public function _wp_ajax_fetch_data() {
+	public function _wp_ajax_fetch_data() {
 
 		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
@@ -531,7 +531,7 @@ final class Admin extends Api {
 	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
-	final public function _wp_ajax_request_crawl() {
+	public function _wp_ajax_request_crawl() {
 
 		if ( \wp_doing_ajax() ) :
 			if ( \tsf_extension_manager()->can_do_settings() ) :
@@ -612,7 +612,7 @@ final class Admin extends Api {
 	 * @since 1.0.0
 	 * @access private
 	 */
-	final public function _wp_ajax_get_requires_fix() {
+	public function _wp_ajax_get_requires_fix() {
 
 		if ( \wp_doing_ajax() ) {
 			if ( \tsf_extension_manager()->can_do_settings() ) {
@@ -739,7 +739,7 @@ final class Admin extends Api {
 	 * @since 1.1.0
 	 * @access private
 	 */
-	final public function _output_monitor_header() {
+	public function _output_monitor_header() {
 		$this->get_view(
 			'layout/general/top',
 			[
@@ -754,7 +754,7 @@ final class Admin extends Api {
 	 * @since 1.1.0
 	 * @access private
 	 */
-	final public function _output_monitor_content() {
+	public function _output_monitor_content() {
 		if ( $this->is_api_connected() ) {
 			$this->get_view( 'layout/pages/monitor' );
 		} else {
@@ -768,7 +768,7 @@ final class Admin extends Api {
 	 * @since 1.1.0
 	 * @access private
 	 */
-	final public function _output_monitor_footer() {
+	public function _output_monitor_footer() {
 		$this->get_view( 'layout/general/footer' );
 	}
 
@@ -1009,7 +1009,7 @@ final class Admin extends Api {
 			);
 			$content .= sprintf(
 				'<form action=%s method=post id=%s class="%s">%s</form>',
-				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'http', 'https' ] ),
+				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 				$form_id,
 				'hide-if-js',
 				$nonce_action . $nonce . $submit
@@ -1114,7 +1114,7 @@ final class Admin extends Api {
 		$content = '';
 
 		domain : {
-			$domain  = str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
+			$domain  = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 			$_domain = $this->get_expected_domain();
 			$class   = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 			$domain  = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
@@ -1269,7 +1269,7 @@ final class Admin extends Api {
 
 		$button = sprintf(
 			'<form name=deactivate action="%s" method=post id="tsfem-e-monitor-disconnect-form">%s</form>',
-			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'http', 'https' ] ),
+			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 			$nonce_action . $nonce . $switcher
 		);
 

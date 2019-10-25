@@ -148,32 +148,6 @@ This helps search engines tailor displayed search results for its users. So, you
 
 Here you can find the available filters for Articles.
 
-#### Set supported post types
-
-```php
-add_filter( 'the_seo_framework_articles_supported_post_types', function( $post_types ) {
-
-	// Add another post type the list.
-	$post_types[] = 'my_post_type';
-
-	return $post_types;
-} );
-```
-
-#### Adjust default post meta
-
-Specifically, the article type.
-
-```php
-add_filter( 'the_seo_framework_articles_default_meta', function( $meta = [] ) {
-
-	// Change default 'type' setting from 'Article' to 'NewsArticle'
-	$meta['type'] = 'NewsArticle';
-
-	return $meta;
-} );
-```
-
 #### Adjust the output data
 
 ```php
@@ -223,19 +197,23 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
-### 1.5.0
+### 2.0.0
 
 [tsfep-release time="-1"]
 
+* **Added:** A brand-new defaults options panel, which is integrated in the new global extension-options page.
+	* Herein, you can set the supported post types, and their default article types, as well.
 * TODO **Added:** A news sitemap. When you mark pages as `NewsArticle`, they'll be included.
 	* The query limit from The SEO Framework will apply.
 	* The SEO Framework v4.0 or later is required for this feature.
-* TODO **Added:** Sites that represent a `Person` are now supported for Article markup.
-	* Ref: <https://github.com/sybrew/the-seo-framework/issues/193>
+* **Added:** Sites that represent a `Person` are now supported for Article markup.
 * TODO **Added:** Bulk-and quick editing options.
 	* The SEO Framework v4.0 or later is required for this feature.
 * TODO **Added:** The SEO Bar (or post state) now hints the Article type.
-* TODO **Added:** Defaults options panel, which is integrated in the new global-defaults options pane.
+* **Deprecated:**
+	* These has been converted to the new options, somewhat gracefully. You should remove these filter from your site if you have it installed. Use the options, instead.
+		* `the_seo_framework_articles_supported_post_types`.
+		* `the_seo_framework_articles_default_meta`.
 
 ### 1.4.0
 

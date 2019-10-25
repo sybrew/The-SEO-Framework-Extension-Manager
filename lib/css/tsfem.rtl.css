@@ -330,7 +330,7 @@ body.tsfem .wrap {
 	white-space: pre;
 }
 
-.tsfem-top-actions > *:nth-of-type(-n+1) {
+.tsfem-top-actions > *:nth-last-child(n+2) {
 	margin-left: 1em;
 }
 
@@ -792,8 +792,7 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 
 .tsfem-pane {
-	height: 100%;
-	height: max-content; /* Novel idea... may become ugly in practice? */
+	height: max-content;
 	background: #fff;
 	box-shadow: 0 0.1em 0.4em rgba(0,0,0,.18);
 	padding: 0;
@@ -825,7 +824,6 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-wrap {
-	overflow: hidden;
 	width: 100%;
 	min-height: 100%;
 }
@@ -889,8 +887,6 @@ body.tsfem .wrap {
 	height: auto;
 	max-height: 100%;
 	width: 100%;
-	overflow: auto;
-	overflow-x: hidden; /* Fixes tooltip container-height bounce */
 	border-radius: 4px;
 }
 
@@ -915,7 +911,7 @@ body.tsfem .wrap {
 	z-index: 5;
 }
 
-.tsfem-pane-footer-wrap > *:nth-of-type(-n+1) {
+.tsfem-pane-footer-wrap > *:nth-last-child(n+2) {
 	margin-right: 1em;
 }
 
@@ -1048,6 +1044,20 @@ h4.tsfem-cp-title {
 	white-space: pre-line;
 }
 
+.tsfem-extension-title {
+	font-size: 1.33em;
+	word-break: break-word;
+	font-weight: 600;
+	margin: 0;
+	margin-left: .4em;
+	padding: 0;
+	transition: color .5s;
+}
+
+.tsfem-extension-activated .tsfem-extension-title {
+	color: #0ebfe9;
+}
+
 .tsfem-extension-entry .tsfem-extension-title:after {
 	content: "\2022\00fe0e";
 	margin-right: .5em;
@@ -1059,16 +1069,6 @@ h4.tsfem-cp-title {
 
 .tsfem-extension-entry.tsfem-extension-activated .tsfem-extension-title:after {
 	color: currentColor;
-}
-
-.tsfem-extension-title {
-	font-size: 1.33em;
-	word-break: break-word;
-	font-weight: 600;
-	color: #0ebfe9;
-	margin: 0;
-	margin-right: 7px;
-	padding: 0;
 }
 
 .tsfem-extension-type {

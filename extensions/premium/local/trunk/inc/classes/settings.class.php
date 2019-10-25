@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local\Settings
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
@@ -28,24 +29,28 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
 * Require user interface trait.
+
 * @since 1.0.0
 */
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require error trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/error' );
 
 /**
  * Require Local POST handling trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'secure-post' );
 
 /**
  * Require Local Schema Data Packer trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'schema-packer' );
@@ -83,7 +88,7 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param Core $_core     Used for integrity.
+	 * @param Core   $_core   Used for integrity.
 	 * @param string $slug    The menu slug.
 	 * @param string $hook    The menu hook.
 	 * @param string $o_index The options index.
@@ -92,6 +97,7 @@ final class Settings {
 
 		/**
 		 * Set options index.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$this->o_index = $o_index;
@@ -105,12 +111,14 @@ final class Settings {
 
 		/**
 		 * Set UI hook.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->ui_hook = $hook;
 
 		/**
 		 * Initialize user interface.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
@@ -163,24 +171,28 @@ final class Settings {
 
 		/**
 		 * Set error notice option.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->error_notice_option = 'tsfem_e_local_error_notice_option';
 
 		/**
 		 * Initialize error interface.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->init_errors();
 
 		/**
 		 * Sets nonces.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
 		 */
 		$this->set_nonces();
 
 		/**
 		 * Initialize POST data checks.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension\Local\Secure_Post
 		 */
 		$this->init_post_checks();
@@ -272,6 +284,7 @@ final class Settings {
 
 		/**
 		 * Initialize UI calls.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_ui();
@@ -293,12 +306,14 @@ final class Settings {
 
 		/**
 		 * Registers form scripts.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->register_form_scripts( $scripts );
 
 		/**
 		 * Registers media scripts.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->register_media_scripts( $scripts );
@@ -345,8 +360,10 @@ final class Settings {
 	 * @param self $_s Used for integrity.
 	 */
 	public function _get_local_settings_bottom_wrap( self $_s ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escapes.
-		echo $this->get_bottom_wrap_items();
+		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
+		echo $this->get_test_button();
+		echo $this->get_form()->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
+		// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -376,11 +393,6 @@ final class Settings {
 		$f->_form_wrap( 'start', \tsf_extension_manager()->get_admin_page_url( $this->slug ), true );
 		$f->_fields( Fields::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
-
-		$this->set_bottom_wrap_items( $this->get_test_button() );
-		$this->set_bottom_wrap_items(
-			$f->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
-		);
 	}
 
 	/**
@@ -397,47 +409,6 @@ final class Settings {
 			'hide-if-no-js tsfem-button-primary tsfem-button-green tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);
-	}
-
-	/**
-	 * Sets form bottom wrap items. In order.
-	 *
-	 * @since 1.0.0
-	 * @staticvar array $cache
-	 *
-	 * @param string $item The bottom wrap item.
-	 * @param bool   $get  Whether to retrieve or store $item.
-	 * @return void|array Void if $get is false. The stores items otherwise.
-	 */
-	private function set_bottom_wrap_items( $item = null, $get = false ) {
-
-		static $cache = [];
-
-		if ( $get )
-			return $cache;
-
-		if ( isset( $item ) )
-			$cache[] = $item;
-	}
-
-	/**
-	 * Returns the form bottom wrap items.
-	 *
-	 * @since 1.0.0
-	 * @uses $this->set_bottom_wrap_items() The stored items.
-	 *
-	 * @return string The bottom wrap items.
-	 */
-	private function get_bottom_wrap_items() {
-
-		$items = $this->set_bottom_wrap_items( null, true );
-
-		$retval = '';
-		foreach ( $items as $item ) {
-			$retval .= $item;
-		}
-
-		return $retval;
 	}
 
 	/**
@@ -459,8 +430,8 @@ final class Settings {
 	 * @since 1.0.0
 	 *
 	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *        Each array key is converted to a variable with its value attached.
+	 * @param array  $args The arguments to be supplied within the file name.
+	 *                     Each array key is converted to a variable with its value attached.
 	 */
 	private function get_view( $view, array $args = [] ) {
 

@@ -142,7 +142,7 @@ class API extends Core {
 	 * @return string Domain Host.
 	 */
 	final protected function get_activation_site_domain() {
-		return str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) );
+		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 	}
 
 	/**
@@ -258,7 +258,7 @@ class API extends Core {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
-		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', PHP_QUERY_RFC1738 ), [ 'http', 'https' ] );
+		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', PHP_QUERY_RFC1738 ), [ 'https', 'http' ] );
 	}
 
 	/**

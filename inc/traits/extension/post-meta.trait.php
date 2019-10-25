@@ -171,7 +171,7 @@ trait Extension_Post_Meta {
 	 * @param int $id The ID.
 	 */
 	final protected function set_extension_post_meta_id( $id ) {
-		$this->pm_id = $id;
+		$this->pm_id          = $id;
 		$this->pm_initialized = true;
 	}
 
@@ -213,8 +213,8 @@ trait Extension_Post_Meta {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $key The meta name.
-	 * @param mixed $default The fallback value if the meta doesn't exist. Defaults to $this->pm_defaults[ $meta ].
+	 * @param string $key     The meta name.
+	 * @param mixed  $default The fallback value if the meta doesn't exist. Defaults to $this->pm_defaults[ $meta ].
 	 * @return mixed The meta value if exists. Otherwise $default.
 	 */
 	final protected function get_post_meta( $key, $default = null ) {

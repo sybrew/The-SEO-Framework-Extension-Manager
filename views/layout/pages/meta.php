@@ -1,4 +1,5 @@
 <?php
+
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 //* So fancy.

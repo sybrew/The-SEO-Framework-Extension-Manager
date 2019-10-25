@@ -511,7 +511,7 @@ final class SchemaPacker {
 				return parse_url( $value, PHP_URL_HOST ) ?: '';
 
 			case 'esc_url_raw':
-				return \esc_url_raw( $value, [ 'http', 'https' ] );
+				return \esc_url_raw( $value, [ 'https', 'http' ] );
 
 			default:
 			case 'sanitize_text_field':

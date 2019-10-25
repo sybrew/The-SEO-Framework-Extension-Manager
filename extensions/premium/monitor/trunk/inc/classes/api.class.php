@@ -161,7 +161,7 @@ class Api extends Data {
 		}
 
 		$success = [];
-		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'http://', 'https://' ], '', \esc_url( \get_home_url(), [ 'http', 'https' ] ) ) );
+		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
 		if ( in_array( false, $success, true ) ) {

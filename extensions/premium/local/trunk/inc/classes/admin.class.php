@@ -96,9 +96,8 @@ final class Admin extends Core {
 	 * @access private
 	 */
 	public function _init_menu() {
-
 		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
-			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 20 );
 	}
 
 	/**

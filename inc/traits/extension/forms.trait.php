@@ -265,7 +265,7 @@ trait Extension_Forms {
 
 			$output .= sprintf(
 				'<form action="%s" method=post id=%s class="hide-if-js %s">%s</form>',
-				\esc_url( $url, [ 'http', 'https' ] ),
+				\esc_url( $url, [ 'https', 'http' ] ),
 				\esc_attr( $items['id'] ),
 				\esc_attr( $items['class'] ),
 				$form
@@ -282,7 +282,7 @@ trait Extension_Forms {
 		} else {
 			$output .= sprintf(
 				'<form action="%s" method=post id="%s" class="%s">%s</form>',
-				\esc_url( $url, [ 'http', 'https' ] ),
+				\esc_url( $url, [ 'https', 'http' ] ),
 				\esc_attr( $items['id'] ),
 				\esc_attr( $items['class'] ),
 				$form
