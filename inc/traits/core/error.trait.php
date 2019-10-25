@@ -111,7 +111,7 @@ trait Error {
 		if ( ! \is_admin() || ! $this->error_notice_option )
 			return;
 
-		$notices = $clear_old ? [] : \get_option( $this->error_notice_option ) ?: [];
+		$notices = ( $clear_old ? null : \get_option( $this->error_notice_option ) ) ?: [];
 
 		if ( empty( $notices ) ) {
 			$notices = [ $notice ];

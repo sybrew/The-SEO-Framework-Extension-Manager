@@ -246,6 +246,9 @@ class AdminPages extends AccountActivation {
 		//* Add something special for Vivaldi and Android.
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
+		//* We don't want other plugins crashing this... Output early.
+		\add_action( 'tsfem_content', [ $this, '_output_symbols' ], 0 );
+
 		return $run = true;
 	}
 
@@ -334,16 +337,30 @@ class AdminPages extends AccountActivation {
 	}
 
 	/**
+	 * Outputs symbols and icons for use in browser.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 */
+	final public function _output_symbols() {
+		$this->get_view( 'layout/pages/symbols' );
+	}
+
+	/**
 	 * Echos a pane wrap.
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.1 Added the push argument.
+	 * @since 2.2.0 Added the logo, wide, tall, and fcbargs arguments.
 	 * @access private
 	 *
 	 * @param string $title   The pane title.
 	 * @param string $content The escaped pane content.
 	 * @param array  $args    The output arguments : {
-	 *   'full'       bool     : Whether to output a half or full pane.
+	 *   'logo'       array    : An array with svg, 1x, and 2x logo links. 1x is required. svg is preferred.
+	 *   'full'       bool     : Whether to output a two wide and high pane.
+	 *   'wide'       bool     : Whether to output a two wide pane.
+	 *   'tall'       bool     : Whether to output a two tall pane. Quite useless and ugly.
 	 *   'collapse'   bool     : Whether able to collapse the pane.
 	 *   'move'       bool     : Whether to be able to move the pane.
 	 *   'push'       bool     : Whether to push other panes away in flexibility.
@@ -361,7 +378,10 @@ class AdminPages extends AccountActivation {
 
 		$args = array_merge(
 			[
+				'logo'     => [],
 				'full'     => true,
+				'wide'     => false,
+				'tall'     => false,
 				'collapse' => true,
 				'move'     => false,
 				'push'     => false,
@@ -382,13 +402,16 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.3.0
 	 * @since 2.0.1 Added the push argument.
-	 * @since 2.2.0 Added the cbargs and fcbargs arguments.
+	 * @since 2.2.0 Added the logo, wide, tall, cbargs, and fcbargs arguments.
 	 * @access private
 	 *
 	 * @param string $title    The pane title.
 	 * @param string $callable The callable function or method that echos content.
 	 * @param array  $args     The output arguments : {
-	 *   'full'       bool     : Whether to output a half or full pane.
+	 *   'logo'       array    : An array with svg, 1x, and 2x logo links. 1x is required. svg is preferred.
+	 *   'full'       bool     : Whether to output a two wide and high pane.
+	 *   'wide'       bool     : Whether to output a two wide pane.
+	 *   'tall'       bool     : Whether to output a two tall pane. Quite useless and ugly.
 	 *   'collapse'   bool     : Whether able to collapse the pane.
 	 *   'move'       bool     : Whether to be able to move the pane.
 	 *   'push'       bool     : Whether to push other panes away in flexibility.
@@ -408,7 +431,10 @@ class AdminPages extends AccountActivation {
 
 		$args = array_merge(
 			[
+				'logo'       => [],
 				'full'       => true,
+				'wide'       => false,
+				'tall'       => false,
 				'collapse'   => true,
 				'move'       => false,
 				'push'       => false,

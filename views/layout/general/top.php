@@ -17,7 +17,7 @@ if ( $options ) {
 		if ( isset( $status['end_date'] ) ) {
 			//* UTC.
 			$then = strtotime( $status['end_date'] );
-			$in_four_weeks = strtotime( '+4 week' );
+			$in_four_weeks = strtotime( '+6 week' );
 			$about_to_expire = $then < $in_four_weeks;
 
 			if ( $about_to_expire ) {
@@ -47,7 +47,6 @@ if ( $options ) {
 	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . \esc_html( $info ) . '</div></div>';
 }
 
-//* Print style.
 ?>
 <div class="tsfem-title">
 	<header><h1>
@@ -65,7 +64,7 @@ if ( $options ) {
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				\esc_attr( $size ),
 				sprintf(
-					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s"></image>',
 					\esc_url( $image['svg'], [ 'https', 'http' ] ),
 					\esc_url( $image['1x'], [ 'https', 'http' ] ),
 					\esc_attr( $size )

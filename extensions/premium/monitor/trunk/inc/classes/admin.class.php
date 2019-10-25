@@ -1029,7 +1029,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fetch_button() {
 
-		$class          = 'tsfem-button-primary tsfem-button-green tsfem-button-cloud';
+		$class          = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-cloud';
 		$name           = \__( 'Fetch Data', 'the-seo-framework-extension-manager' );
 		$title          = \__( 'Request Monitor to send you the latest data', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'Get the latest data of your website from Monitor.', 'the-seo-framework-extension-manager' );

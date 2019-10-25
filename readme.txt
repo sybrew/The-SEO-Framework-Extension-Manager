@@ -77,6 +77,7 @@ local/externs/index.php:
 * **Added:** We added a new options-interface, which can be populated by extensions on demand.
 * TODO **Added:** The plugin now nags you that it requires The SEO Framework, with an installation/activation button.
 	* https://github.com/sybrew/the-seo-framework/issues/302
+* **Added:** New extension logos. They're now luminous.
 * **Improved:** The interface has been rewritten to use grid instead of flexbox.
 * **Improved:** The interface no longer tries to find UI boundaries, improving the performance greatly--especially with Focus.
 * **Improved:** The interface buttons are now more accessible. For instance, keyboard navigational hints are easier to identify, and we added a border to support high-contrast display.
@@ -108,6 +109,7 @@ local/externs/index.php:
 		* `tsfem_register_settings_fields`
 
 * TODO We added the Extension Manager and extension-loader boot-time to the new "HTML boot-time" indicator of The SEO Framework v4.0.
+* TODO change occurrences of tsfem-button-green to tsfem-button-primary-bright?
 
 * TODO See why there's a serialization error on `[message] => Notice (8): unserialize(): Error at offset 66 of 1873 bytes in [/public/wp-content/plugins/the-seo-framework-extension-manager/inc/traits/extension/post-meta.trait.php, line 61]`
 * TODO Fixed: Post-Revision metadata can now be processed, just like in TSF v4.0+. Is ^this^ related?

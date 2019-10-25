@@ -84,7 +84,6 @@ final class Trends {
 
 		$transient_name = 'tsfem_latest_seo_feed';
 		$output         = \get_transient( $transient_name );
-		$output = false;
 
 		//* Bypass cache on AJAX as multi-admin can interfere.
 		if ( false === $ajax && false !== $output )

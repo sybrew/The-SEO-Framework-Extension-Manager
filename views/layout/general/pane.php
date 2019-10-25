@@ -16,7 +16,9 @@ $pane_id = $args['pane_id'];
 
 $pane_classes[] = 'tsfem-pane';
 $_classes       = [
-	'full'     => 'tsfem-pane-full', // TODO we now have wide and tall options available.
+	'full'     => 'tsfem-pane-full',
+	'wide'     => 'tsfem-pane-wide',
+	'tall'     => 'tsfem-pane-tall',
 	'move'     => 'tsfem-pane-move',
 	'collapse' => 'tsfem-pane-collapse',
 	'push'     => 'tsfem-pane-push',
@@ -25,15 +27,45 @@ foreach ( $_classes as $_arg => $_class ) {
 	$args[ $_arg ] and $pane_classes[] = $_class;
 }
 
+if ( $args['logo'] ) {
+	$logo_size = '1.4em';
+
+	if ( isset( $args['logo']['svg'] ) ) {
+		$logo = sprintf(
+			'<svg width="%1$s" height="%1$s">%2$s</svg>',
+			\esc_attr( $logo_size ),
+			sprintf(
+				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s"></image>',
+				\esc_url( $args['logo']['svg'], [ 'https', 'http' ] ),
+				\esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
+				\esc_attr( $logo_size )
+			)
+		);
+	} else {
+		$logo = sprintf(
+			'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" height="%3$s" width="%3$s">',
+			\esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
+			isset( $args['logo']['2x'] ) ? \esc_url( $args['logo']['2x'], [ 'https', 'http' ] ) : '',
+			\esc_attr( $logo_size )
+		);
+	}
+} else {
+	$logo = '';
+}
+
 ?>
 <section class="<?php echo \esc_attr( implode( ' ', $pane_classes ) ); ?>" id="<?php echo \esc_attr( $pane_id ); ?>">
 	<div class="tsfem-pane-wrap">
 		<?php
 		printf(
 			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>',
-			\esc_html( $title ),
+			sprintf(
+				\is_rtl() ? '%2$s%1$s' : '%1$s%2$s',
+				$logo,
+				\esc_html( $title )
+			),
 			$ajax
-		); // XSS ok.
+		);
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
 			<div class="tsfem-pane-content">
@@ -46,7 +78,8 @@ foreach ( $_classes as $_arg => $_class ) {
 						call_user_func( $callable, ...$args['cbargs'] );
 					}
 				} elseif ( isset( $content ) ) {
-					echo $content; // XSS ok... ought to be escaped.
+					// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- ...ought to be escaped.
+					echo $content;
 				}
 				?>
 			</div>

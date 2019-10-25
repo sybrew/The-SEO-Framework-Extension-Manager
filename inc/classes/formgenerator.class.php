@@ -621,7 +621,7 @@ final class FormGenerator {
 			$k[] = $this->o_key;
 
 		//= Correct the length of bits, split them and put them in the right order.
-		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
 		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;

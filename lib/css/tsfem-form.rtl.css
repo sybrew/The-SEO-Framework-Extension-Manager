@@ -170,7 +170,6 @@
 	margin: 0 auto;
 	box-sizing: border-box;
 	padding: calc( 1em + .6vw );
-	overflow: hidden;
 	animation: tsfemForm-fade-in .25s;
 }
 

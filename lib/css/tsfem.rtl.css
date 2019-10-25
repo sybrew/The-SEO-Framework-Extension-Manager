@@ -367,7 +367,7 @@ body.tsfem .wrap {
 	font-size: 1.9em;
 	font-weight: 400;
 	line-height: 1.1em;
-	color: #0ebfe9;
+	color: #333;
 	margin: 0;
 	padding: 0;
 }
@@ -874,6 +874,11 @@ body.tsfem .wrap {
 	flex-basis: 200px;
 }
 
+.tsfem-pane-header svg,
+.tsfem-pane-header img {
+	margin-left: .333em;
+}
+
 .tsfem-pane-content h4.tsfem-status-title,
 .tsfem-pane-content h5.tsfem-status-title,
 .tsfem-pane-content h6.tsfem-status-title {
@@ -1023,12 +1028,23 @@ h4.tsfem-cp-title {
 	flex-grow: 0;
 	flex-basis: 120px;
 	align-self: center;
+	padding: 1em;
+}
+
+.tsfem-extension-entry-icon {
+	fill: #333;
+	color: #333;
+	transition: color .5s;
+}
+
+.tsfem-extension-activated .tsfem-extension-entry-icon {
+	color: #0ebfe9;
 }
 
 .tsfem-extension-about-wrap {
 	flex-direction: column;
 	justify-content: space-around;
-	padding: 10px 15px;
+	padding: .667em 1em;
 	flex-grow: 1;
 	flex-basis: 170px;
 }

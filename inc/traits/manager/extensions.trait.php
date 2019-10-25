@@ -256,6 +256,7 @@ trait Extensions_Properties {
 	 * Generates expected asset URL or path for extensions.
 	 *
 	 * @since 1.0.0
+	 * @todo Reintroduce using this?
 	 *
 	 * @param string $slug The extension slug.
 	 * @param string $file The file to generate URL or path from.

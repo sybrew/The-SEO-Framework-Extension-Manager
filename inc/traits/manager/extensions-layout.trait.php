@@ -154,61 +154,37 @@ trait Extensions_Layout {
 	 * Builds extension image icon tag. Images must be square.
 	 *
 	 * @since 1.0.0
+	 * @since 2.2.0 1. Changed the default size from 120 to 100.
+	 *              2. Now returns a href, instead of the actual file output.
+	 * @TODO see if xlink:href can be exchanged for just href.
 	 *
 	 * @param array $extension The extension to make icon from.
 	 * @param array $size The icon height and width.
 	 * @return string HTML image.
 	 */
-	private static function make_extension_list_icon( $extension, $size = '120' ) {
-
-		$one = $two = $svg = null;
+	private static function make_extension_list_icon( $extension, $size = '100' ) {
 
 		if ( ! empty( $extension['slug'] ) ) {
-			$svg = static::get_extension_asset_location( $extension['slug'], 'icon.svg' );
-			$two = static::get_extension_asset_location( $extension['slug'], 'icon-240x240px.png' );
-			$one = static::get_extension_asset_location( $extension['slug'], 'icon-120x120px.png' );
+			$icon = sprintf(
+				'<svg class=tsfem-extension-entry-icon alt="extension icon" width=%1$s height=%1$s><use xlink:href=#tsfem-logo-%2$s></use></svg>',
+				\esc_attr( $size ),
+				\esc_attr( $extension['slug'] )
+			);
+		} else {
+			$items = [
+				'svg' => \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true ),
+				'1x'  => \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true ),
+			];
 
-			$svg = file_exists( $svg ) ? static::get_extension_asset_location( $extension['slug'], 'icon.svg', true ) : '';
-			$two = file_exists( $two ) ? static::get_extension_asset_location( $extension['slug'], 'icon-240x240px.png', true ) : '';
-			$one = file_exists( $one ) ? static::get_extension_asset_location( $extension['slug'], 'icon-120x120px.png', true ) : '';
-		}
-
-		if ( empty( $svg | $two | $one ) ) {
-			$svg = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true );
-			$two = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-240x240px.png', true );
-			$one = \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true );
-		}
-
-		$items = [
-			'svg' => $svg,
-			'2x' => $two,
-			'1x' => $one,
-		];
-
-		if ( $items['svg'] ) {
-			$image = sprintf(
-				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension-icon"></image>',
+			$icon = sprintf(
+				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension fallback icon"></image>',
 				\esc_url( $items['svg'], [ 'https', 'http' ] ),
 				\esc_url( $items['1x'], [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
-			$image = sprintf( '<svg width="%1$s" height="%1$s">%2$s</svg>', \esc_attr( $size ), $image );
-		} elseif ( $items['2x'] ) {
-			$image = sprintf(
-				'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" alt="extension-icon" height="%3$s" width="%3$s">',
-				\esc_url( $items['1x'], [ 'https', 'http' ] ),
-				\esc_url( $items['2x'], [ 'https', 'http' ] ),
-				\esc_attr( $size )
-			);
-		} elseif ( $items['1x'] ) {
-			$image = sprintf(
-				'<img src="%1$s" alt="extension-icon" height="%2$s" width="%2$s">',
-				\esc_url( $items['1x'], [ 'https', 'http' ] ),
-				\esc_attr( $size )
-			);
 		}
 
-		return $image;
+		return $icon;
 	}
 
 	/**

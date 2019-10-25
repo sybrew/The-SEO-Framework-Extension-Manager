@@ -11,7 +11,10 @@ foreach ( static::$settings as $index => $params ) {
 		$params['title'],
 		static::class . '::_output_pane_settings',
 		[
-			'full'     => false, // TODO use $params['pane']
+			'logo'     => $params['logo'],
+			'full'     => in_array( 'full', $params['pane'], true ),
+			'wide'     => in_array( 'wide', $params['pane'], true ),
+			'tall'     => in_array( 'tall', $params['pane'], true ),
 			'collapse' => true,
 			'move'     => true,
 			'pane_id'  => 'tsfem-extension-settings-pane-' . $index,
