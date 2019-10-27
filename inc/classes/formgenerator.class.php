@@ -165,8 +165,8 @@ final class FormGenerator {
 	 * @return bool True if matched, false otherwise.
 	 */
 	private static function is_ajax_callee( $caller ) {
-		//* Referer check OK.
 		//= Stripslashes is required, as `\WP_Scripts::localize` adds them.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
 		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
 	}
 
@@ -180,9 +180,10 @@ final class FormGenerator {
 	 */
 	private static function get_ajax_target_id() {
 
-		//* Referer check OK.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		if ( isset( $_POST['args']['caller'] ) )
-			return $this->get_last_value( $this->umatosa( $_POST['args']['caller'] ) );
+			return FormFieldParser::get_last_value( FormFieldParser::umatosa( $_POST['args']['caller'] ) );
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 
 		return false;
 	}
@@ -196,8 +197,8 @@ final class FormGenerator {
 	 * @return int <unsigned> (R>0) $i The previous iteration value. 1 if $_POST value not set.
 	 */
 	private static function get_ajax_iteration_start() {
-		//* Referer check OK.
 		//= Careful, smart logic. Will return 1 if not set.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
 	}
 
@@ -210,7 +211,7 @@ final class FormGenerator {
 	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
-		//* Referer check OK.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		return \absint( isset( $_POST['args']['newIt'] ) ? $_POST['args']['newIt'] : 0 );
 	}
 
@@ -242,7 +243,7 @@ final class FormGenerator {
 
 		//* Referer check OK.
 		$caller = $_POST['args']['caller'];
-		$items = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
+		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
 		//* Unset the option indexes.
 		$unset_count = $this->has_o_key ? 3 : 2;
@@ -287,9 +288,9 @@ final class FormGenerator {
 		//* TODO Move this into method parameter so we can loop?
 		$k = key( static::$ajax_it_fields );
 
-		static::$ajax_it_fields[ $k ]['_type'] = 'iterate_ajax';
+		static::$ajax_it_fields[ $k ]['_type']          = 'iterate_ajax';
 		static::$ajax_it_fields[ $k ]['_ajax_it_start'] = static::get_ajax_iteration_start();
-		static::$ajax_it_fields[ $k ]['_ajax_it_new'] = static::get_ajax_iteration_amount();
+		static::$ajax_it_fields[ $k ]['_ajax_it_new']   = static::get_ajax_iteration_amount();
 	}
 
 	/**
@@ -894,10 +895,10 @@ final class FormGenerator {
 						'<div class="tsfem-form-multi-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1467,11 +1468,11 @@ final class FormGenerator {
 						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
 								[
 									$s_id,
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1530,11 +1531,11 @@ final class FormGenerator {
 						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
 								[
 									$s_id,
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1690,10 +1691,10 @@ final class FormGenerator {
 						'<div class="tsfem-form-select-multi-a11y-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<div class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></div>',
+								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1879,14 +1880,14 @@ final class FormGenerator {
 						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
 								[
 									$s_url_id,
 									sprintf(
 										'tsfem-form-option-title%s',
 										( $s_desc ? ' tsfem-form-option-has-description' : '' )
 									),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1964,11 +1965,11 @@ final class FormGenerator {
 						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
 						[
 							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><div class="%s">%s</div></label>',
+								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
 								[
 									$s_id,
 									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong>%s', \esc_html( $title ), $s_more ),
+									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
@@ -1978,7 +1979,7 @@ final class FormGenerator {
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
-						'<label class=tsfem-form-checkbox-settings-content-label><input type=checkbox id="%s" name=%s value=1 %s %s %s /> %s</label>',
+						'<label class=tsfem-form-checkbox-settings-content-label><input type=checkbox id="%s" name=%s value=1 %s %s %s> %s</label>',
 						[
 							$s_id,
 							$s_name,

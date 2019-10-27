@@ -121,7 +121,7 @@ final class Admin extends Core {
 	private function generate_post_type_settings() {
 
 		$fields = [
-			'enabled' => [
+			'enabled'      => [
 				'_default' => null,
 				'_edit'    => true,
 				'_ret'     => 's',
@@ -140,7 +140,7 @@ final class Admin extends Core {
 				'_default' => null,
 				'_edit'    => true,
 				'_ret'     => 's',
-				'_req'     => true,
+				'_req'     => false, // required _must_ have an empty select-option value. This is redundant.
 				'_type'    => 'select',
 				'_desc'    => [
 					\__( 'Default Article Type', 'the-seo-framework-extension-manager' ),

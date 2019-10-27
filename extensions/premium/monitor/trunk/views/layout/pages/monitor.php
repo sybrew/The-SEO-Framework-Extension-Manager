@@ -34,7 +34,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 	\__( 'Statistics', 'the-seo-framework-extension-manager' ),
 	$this->get_stats_overview(),
 	[
-		'full'     => true,
+		'full'     => false,
+		'wide'     => true,
 		'collapse' => true,
 		'move'     => false,
 		'pane_id'  => 'tsfem-e-monitor-stats-pane',

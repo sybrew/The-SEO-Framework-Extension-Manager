@@ -391,12 +391,11 @@ trait Options {
 	 */
 	final protected function kill_options() {
 
-		$success = [];
-		$success[] = $this->delete_options_instance();
-		$success[] = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		$success = [
+			$this->delete_options_instance(),
+			\delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS )
+		];
 
-		$this->killed_options = ! in_array( false, $success, true );
-
-		return $this->killed_options;
+		return $this->killed_options = ! in_array( false, $success, true );
 	}
 }

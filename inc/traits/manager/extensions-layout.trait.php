@@ -313,12 +313,12 @@ trait Extensions_Layout {
 			case 'activate':
 				$nonce_key = 'activate-ext';
 				$text      = static::get_i18n( 'activate' );
-				$s_class   = 'tsfem-button-extension-activate';
+				$s_class   = 'tsfem-button tsfem-button-extension-activate';
 				break;
 			case 'deactivate':
 				$nonce_key = 'deactivate-ext';
 				$text      = static::get_i18n( 'deactivate' );
-				$s_class   = 'tsfem-button-extension-deactivate';
+				$s_class   = 'tsfem-button-primary tsfem-button-primary-dark tsfem-button-extension-deactivate';
 				break;
 			default:
 				return '';
@@ -328,14 +328,14 @@ trait Extensions_Layout {
 		$disabled = $disabled || array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="tsfem-button-primary %s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
+			$button = sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
 
 			static $cache = [];
 
 			if ( empty( $cache ) ) {
 				$cache['input_name'] = \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) );
-				$cache['admin_url']   = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'https', 'http' ] );
+				$cache['admin_url']  = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'https', 'http' ] );
 			}
 
 			$s_slug = \sanitize_key( $slug );
@@ -349,7 +349,7 @@ trait Extensions_Layout {
 					$s_slug
 				);
 				$submit = sprintf(
-					'<input type="submit" name="submit" id="submit" class="tsfem-button-primary %s" value="%s">',
+					'<input type="submit" name="submit" id="submit" class="%s" value="%s">',
 					$s_class,
 					\esc_attr( $text )
 				);
@@ -362,7 +362,7 @@ trait Extensions_Layout {
 
 			js:;
 				$js = sprintf(
-					'<button type=button id="tsfem-activate[%s]" class="tsfem-button-primary hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
+					'<button type=button id="tsfem-activate[%s]" class="hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
 					$s_slug,
 					$s_class,
 					$s_slug,

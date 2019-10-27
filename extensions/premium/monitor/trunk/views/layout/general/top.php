@@ -12,7 +12,7 @@ if ( $options ) {
 	//* TODO
 } else {
 	$info = \__( 'Let SEO Monitor help you improve your website. Your privacy is respected, read how below.', 'the-seo-framework-extension-manager' );
-	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . \esc_html( $info ) . '</div></div>';
+	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row tsfem-flex-nowrap"><div>' . \esc_html( $info ) . '</div></div>';
 }
 
 ?>

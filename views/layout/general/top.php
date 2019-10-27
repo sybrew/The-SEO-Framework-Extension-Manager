@@ -9,33 +9,33 @@ if ( $options ) {
 
 		$status = $this->get_subscription_status();
 
-		$account_url = $this->get_activation_url( 'my-account/' );
-		$account_button_class = 'tsfem-button-primary-bright tsfem-button-star';
-		$account_text = \__( 'My Account', 'the-seo-framework-extension-manager' );
-		$account_title = \__( 'View account', 'the-seo-framework-extension-manager' );
+		$account_url          = $this->get_activation_url( 'my-account/' );
+		$account_button_class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-external';
+		$account_text         = \__( 'My Account', 'the-seo-framework-extension-manager' );
+		$account_title        = \__( 'View account', 'the-seo-framework-extension-manager' );
 
 		if ( isset( $status['end_date'] ) ) {
 			//* UTC.
-			$then = strtotime( $status['end_date'] );
-			$in_four_weeks = strtotime( '+6 week' );
+			$then            = strtotime( $status['end_date'] );
+			$in_four_weeks   = strtotime( '+6 week' );
 			$about_to_expire = $then < $in_four_weeks;
 
 			if ( $about_to_expire ) {
-				$account_button_class = 'tsfem-button-red tsfem-button-warning';
-				$account_title = \__( 'Extend license', 'the-seo-framework-extension-manager' );
+				$account_button_class = 'tsfem-button tsfem-button-red tsfem-button-warning';
+				$account_title        = \__( 'Extend license', 'the-seo-framework-extension-manager' );
 			}
 		}
 	} else {
 		$account_url = $this->get_activation_url( 'shop/' );
-		$account_button_class = 'tsfem-button-green tsfem-button-love';
-		$account_title = \__( 'Get license', 'the-seo-framework-extension-manager' );
-		$account_text  = \__( 'Go Premium', 'the-seo-framework-extension-manager' );
+		$account_button_class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-external';
+		$account_title = '';
+		$account_text  = \__( 'Get license', 'the-seo-framework-extension-manager' );
 	}
 
 	$account_link = $this->get_link( [
 		'url'     => $account_url,
 		'target'  => '_blank',
-		'class'   => 'tsfem-button-primary ' . $account_button_class,
+		'class'   => $account_button_class,
 		'title'   => $account_title,
 		'content' => $account_text,
 	] );
@@ -44,7 +44,7 @@ if ( $options ) {
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
 } else {
 	$info = \__( 'Add more powerful SEO features to your website. To get started, use one of the options below.', 'the-seo-framework-extension-manager' );
-	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row"><div>' . \esc_html( $info ) . '</div></div>';
+	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row tsfem-flex-nowrap"><div>' . \esc_html( $info ) . '</div></div>';
 }
 
 ?>

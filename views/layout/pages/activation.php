@@ -22,14 +22,15 @@ if ( ! $this->is_auto_activated() ) :
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => \__( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button' ] ] );
 			// $this->get_remote_activation_listener();
 
-			//* Already escaped.
+			// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- get_link() escapes
 			echo $this->get_link( [
 				'url'     => $this->get_activation_url( 'shop/' ),
 				'target'  => '_blank',
-				'class'   => 'tsfem-button-primary',
+				'class'   => 'tsfem-button-primary tsfem-button-external',
 				'title'   => '',
 				'content' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ),
 			] );
+			// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
 	</div>
@@ -47,16 +48,16 @@ if ( ! $this->is_auto_activated() ) :
 		<div class="tsfem-connect-action tsfem-flex">
 			<?php
 			$this->get_view( 'forms/key', [
-				'name' => $this->request_name['activate-key'],
-				'id' => 'input-activation',
-				'classes' => [
-					'tsfem-button-primary',
+				'name'         => $this->request_name['activate-key'],
+				'id'           => 'input-activation',
+				'classes'      => [
+					'tsfem-button',
 				],
 				'classes_form' => [
 					'tsfem-flex',
 					'tsfem-flex-nowrap',
 				],
-				'text' => \__( 'Use this key', 'the-seo-framework-extension-manager' ),
+				'text'         => \__( 'Use this key', 'the-seo-framework-extension-manager' ),
 			] );
 			?>
 		</div>

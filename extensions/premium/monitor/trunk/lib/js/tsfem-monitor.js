@@ -334,7 +334,7 @@ window.tsfem_e_monitor = {
 				'action' : 'tsfem_e_monitor_get_requires_fix',
 				'nonce' : tsfem_e_monitor.nonce,
 			},
-			timeout: 3000,
+			timeout: 7000,
 			async: true,
 		} ).done( function( response ) {
 

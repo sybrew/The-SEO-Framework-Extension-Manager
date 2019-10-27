@@ -520,7 +520,7 @@ trait Error {
 			case 1010502:
 			case 1010602:
 			case 1010802:
-				$message = \esc_html__( 'The Monitor API server does not recognize your instance. Request a fix.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "The Monitor API server does not recognize your website's instance. Request reactivation.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 

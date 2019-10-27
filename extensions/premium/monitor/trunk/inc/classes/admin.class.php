@@ -412,7 +412,7 @@ final class Admin extends Api {
 
 				if ( $option ) {
 					//= Unpack option.
-					$_option = $this->get_last_value( $this->umatosa( $option ) );
+					$_option = \TSF_Extension_Manager\FormFieldParser::get_last_value( \TSF_Extension_Manager\FormFieldParser::umatosa( $option ) );
 					$options = [
 						$_option => $value,
 					];
@@ -1063,7 +1063,7 @@ final class Admin extends Api {
 	 */
 	protected function get_crawl_button() {
 
-		$class          = 'tsfem-button tsfem-button-cloud';
+		$class          = 'tsfem-button-primary tsfem-button-cloud';
 		$name           = \__( 'Request Crawl', 'the-seo-framework-extension-manager' );
 		$title          = \__( 'Request Monitor to re-crawl this website', 'the-seo-framework-extension-manager' );
 		$question_title = \__( 'If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes.', 'the-seo-framework-extension-manager' );
@@ -1208,7 +1208,7 @@ final class Admin extends Api {
 	 */
 	protected function get_fix_button() {
 
-		$class = 'tsfem-button-primary tsfem-button-red tsfem-button-cloud';
+		$class = 'tsfem-button tsfem-button-red tsfem-button-cloud';
 		$name = \__( 'Request Reactivation', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to reconnect your website', 'the-seo-framework-extension-manager' );
 
@@ -1261,7 +1261,7 @@ final class Admin extends Api {
 							[
 								$s_field_id,
 								\esc_attr( $i18n['ays'] ),
-								'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning',
+								'tsfem-switcher-button tsfem-button tsfem-button-red tsfem-button-warning',
 								\esc_html( $i18n['disconnect'] ),
 							]
 						)

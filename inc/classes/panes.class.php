@@ -564,7 +564,7 @@ class Panes extends API {
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
 			$content .= sprintf(
-				'<div class="tsfem-support-buttons">%s%s</div>',
+				'<div class="tsfem-support-buttons">%s %s</div>',
 				$button,
 				HTML::make_inline_question_tooltip( $description[ $key ] )
 			);

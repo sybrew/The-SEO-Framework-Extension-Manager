@@ -72,6 +72,11 @@ local/externs/index.php:
 * We dropped support for IE11 and all other browsers of that era. A modern browser is now required to use the plugin's interface as intended.
 * We dropped support for PHP 5.5. PHP 5.6 or higher is now required.
 
+* **NOTE:** Firefox v70 (October 22, 2019) or later is now required. Chrome v77 (September 10, 2019) or later is now required.
+	* If the layout looks blatantly wrong (that is, items overlapping), go to "Menu -> About -> About Firefox/Chrome" and an update should be available.
+	* Note that Microsoft Edge is supported; however, the layout doesn't render as neatly as intended.
+	* All hope for IE11 is lost.
+
 **Detailed log:**
 
 * **Added:** We added a new options-interface, which can be populated by extensions on demand.

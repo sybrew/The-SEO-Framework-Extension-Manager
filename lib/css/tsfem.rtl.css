@@ -231,9 +231,13 @@ body.tsfem .wrap {
 	margin-left: -20px;
 }
 
-/* "margin: 0 1.4%" Edge/Firefox inline margins issue */
 .tsfem-notice-wrap {
-	margin: 0 1.2vw;
+	margin: 1.2vw;
+	margin-bottom: 0;
+}
+
+.tsfem-notice-wrap:empty {
+	margin: 0;
 }
 
 /* Stretches content over the page, pushing footer down. */
@@ -243,7 +247,9 @@ body.tsfem .wrap {
 }
 
 .tsfem-sticky-top {
+	position: -webkit-sticky;
 	position: sticky;
+	margin-bottom: 1.2vw;
 	top: 32px;
 	z-index: 9980; /* Admin sidebar is 9990 */
 	background: linear-gradient( to bottom, rgba(0,0,0,.25), rgba(241,241,241,0 ) );
@@ -267,7 +273,7 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap {
 	background-color: #fff;
-	box-shadow: 0 .1em .4em rgba(0,0,0,.18);
+	border-bottom: 1px solid #ccd0d4;
 	width: 100%;
 	margin: 0;
 	padding: 0 1.2vw;
@@ -280,7 +286,7 @@ body.tsfem .wrap {
 /* "padding: 0 0 1.4%" Edge/Firefox inline margins issue */
 /* "margin: 0 1.4%;" Edge/Firefox inline margins issue */
 .tsfem-footer-wrap {
-	padding: 1.2vw 0;
+	padding: calc( 1em + .6vw ) 0;
 	margin: 0 1.2vw;
 	overflow: hidden;
 	white-space: nowrap;
@@ -420,15 +426,18 @@ body.tsfem .wrap {
 	display: inline-block;
 	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset;
 	filter: none;
-	transition: box-shadow .25s;
+	transition: box-shadow .25s, color .25s .125s, background .125s .25s;
 	padding: .4em 1em .5em;
 	font-size: 1em;
-	font-weight: 600;
+	font-weight: 400;
 	line-height: 1em;
 	text-decoration: none;
 	text-align: center;
 	cursor: pointer;
 	outline: 0;
+	color: #444;
+	background: #f6f8f9;
+	border: 1px solid currentColor;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -445,9 +454,13 @@ body.tsfem .wrap {
 .tsfem-button:hover,
 .tsfem-button:active,
 .tsfem-button:focus {
-	background: #eee;
 	color: #666;
-	border: 1px solid #aaa;
+}
+
+.tsfem-button-red,
+.tsfem-button-red:hover,
+.tsfem-button-red:focus {
+	color: #dd3811;
 }
 
 .tsfem-button-primary,
@@ -456,20 +469,18 @@ body.tsfem .wrap {
 .tsfem-button-primary:focus {
 	background: #05809e;
 	color: #fff;
-	border: 1px solid #fff;
-	text-shadow: 1px 0 1px rgba(0,0,0,.18), -1px 0 1px rgba(0,0,0,.18);
 }
 
 .tsfem-button:hover,
 .tsfem-button:focus,
 .tsfem-button-primary:hover,
 .tsfem-button-primary:focus {
-	box-shadow: 0 .2em 1em rgba(0,0,0,.3), 0 0 0 rgba(0,0,0,0) inset; /* 2: transition positioning */
+	box-shadow: 0 .1em .5em rgba(0,0,0,.3), 0 0 0 rgba(0,0,0,0) inset; /* 2: transition positioning */
 }
 
 .tsfem-button:active,
 .tsfem-button-primary:active {
-	box-shadow: 0 0 .3em rgba(0,0,0,0), 0 .1em .7em .2em rgba(0,0,0,.3) inset; /* 1: transition positioning */
+	box-shadow: 0 0 .3em rgba(0,0,0,0), 0 0 .3em 0 rgba(0,0,0,.3) inset; /* 1: transition positioning */
 	transition-duration: .15s;
 }
 
@@ -483,32 +494,14 @@ body.tsfem .wrap {
 
 .tsfem-button-primary-bright,
 .tsfem-button-primary-bright:hover,
-.tsfem-button-primary-bright:focus,
-.tsfem-button-extension-deactivate,
-.tsfem-button-extension-deactivate:hover,
-.tsfem-button-extension-deactivate:focus {
+.tsfem-button-primary-bright:focus {
 	background: #0ebfe9;
 }
 
 .tsfem-button-primary-dark,
 .tsfem-button-primary-dark:hover,
-.tsfem-button-primary-dark:focus,
-.tsfem-button-extension-activate,
-.tsfem-button-extension-activate:hover,
-.tsfem-button-extension-activate:focus {
+.tsfem-button-primary-dark:focus {
 	background: #535353;
-}
-
-.tsfem-button-green,
-.tsfem-button-green:hover,
-.tsfem-button-green:focus {
-	background: #00cd98;
-}
-
-.tsfem-button-red,
-.tsfem-button-red:hover,
-.tsfem-button-red:focus {
-	background: #dd3811;
 }
 
 .tsfem-button-star:after,
@@ -698,9 +691,9 @@ body.tsfem .wrap {
 .tsfem-button-disabled:disabled:hover,
 .tsfem-button-disabled:disabled:active {
 	background: #ddd;
-	color: #888;
+	color: #aaa;
 	text-shadow: none;
-	filter: grayscale(1);
+	box-shadow: none;
 	cursor: not-allowed;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -771,9 +764,10 @@ body.tsfem .wrap {
 /* "margin: .6%" Edge/Firefox inline margins issue */
 .tsfem-panes-wrap {
 	padding: 0;
-	margin: 1.2vw 1.2vw 0;
+	margin: 0 1.2vw;
 	display: grid;
-	grid-template: repeat( auto-fit, minmax( auto, 310px ) ) / repeat( auto-fit, minmax( 310px, 1fr ) );
+	grid-template: repeat( auto-fit, minmax( auto, 310px ) ) / repeat( auto-fit, minmax( 310px, 1fr ) ); /* Edge compatible... Chrome intent */
+	grid-template: repeat( auto-fit, minmax( max-content, 310px ) ) / repeat( auto-fit, minmax( 310px, 1fr ) ); /* Firefox compatible... Chrome intent */
 	grid-gap: 1.2vw;
 	grid-auto-flow: row dense;
 	align-self: flex-start;
@@ -792,9 +786,10 @@ body.tsfem .wrap {
 /*--------------------------------------*/
 
 .tsfem-pane {
+	height: 100%;
 	height: max-content;
 	background: #fff;
-	box-shadow: 0 0.1em 0.4em rgba(0,0,0,.18);
+	border: 1px solid #ccd0d4;
 	padding: 0;
 	border-radius: 4px;
 }
@@ -825,7 +820,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-wrap {
 	width: 100%;
-	min-height: 100%;
+	height: max-content;
 }
 
 .tsfem-pane-header {
@@ -1002,14 +997,9 @@ h4.tsfem-cp-title {
 	padding: .33em;
 	min-height: 122px;
 	border-radius: 6px;
-	box-shadow: 0 1px 3px 0 rgba(0,0,0,.3), 0 0 0 0 transparent inset;
+	border: 1px solid #ccd0d4;
 	align-self: auto;
 	justify-content: center;
-	transition: box-shadow .2s ease-out;
-}
-
-.tsfem-extension-entry.tsfem-extension-activated {
-	box-shadow: 0 0 0 0 transparent, 0 1px 3px 0 rgba(0,0,0,.4) inset;
 }
 
 .tsfem-extension-entry > * {

@@ -2013,7 +2013,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		if ( ! holder ) return;
 
-		const getId = type => `tsfem-focus-gbc-${type}`;
+		const getId      = type => `tsfem-focus-gbc-${type}`;
 		const getElement = type => document.getElementById( getId( type ) );
 
 		/**

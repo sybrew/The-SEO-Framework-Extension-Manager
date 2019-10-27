@@ -90,23 +90,18 @@ final class Layout extends Secure_Abstract {
 		switch ( $type ) :
 			case 'disconnect-button':
 				return static::get_disconnect_button();
-				break;
 
 			case 'public-support-button':
 				return static::get_public_support_button();
-				break;
 
 			case 'private-support-button':
 				return static::get_private_support_button();
-				break;
 
 			case 'account-information':
 				return static::get_account_info();
-				break;
 
 			case 'account-upgrade':
 				return static::get_account_upgrade_form();
-				break;
 
 			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
@@ -128,7 +123,9 @@ final class Layout extends Secure_Abstract {
 		$output = '';
 
 		if ( 'form' === self::get_property( '_type' ) ) {
-			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['deactivate'] );
+			$tsfem = \tsf_extension_manager();
+
+			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['deactivate'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
 			$field_id = 'disconnect-switcher';
@@ -137,7 +134,7 @@ final class Layout extends Secure_Abstract {
 			$ays_i18n        = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n         = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
 
-			$button_class = 'tsfem-switcher-button tsfem-button-primary tsfem-button-red tsfem-button-warning';
+			$button_class = 'tsfem-switcher-button tsfem-button tsfem-button-red tsfem-button-warning';
 
 			$button = vsprintf(
 				'<button type=submit title="%s" class="%s">%s</button>',
@@ -149,7 +146,7 @@ final class Layout extends Secure_Abstract {
 			);
 
 			$switcher_class = 'tsfem-button-flag tsfem-button';
-			// $switcher_class .= \tsf_extension_manager()->are_options_valid() ? '' : ' tsfem-button-pulse';
+			// $switcher_class .= $tsfem->are_options_valid() ? '' : ' tsfem-button-pulse';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
 							. '<input type=checkbox id="' . $field_id . '-action" value="1" />'
@@ -158,7 +155,7 @@ final class Layout extends Secure_Abstract {
 						. '</div></div>';
 
 			$output = sprintf( '<form name=deactivate action="%s" method=post id="tsfem-deactivation-form">%s</form>',
-				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
+				\esc_url( $tsfem->get_admin_page_url() ),
 				$nonce_action . $nonce . $switcher
 			);
 		} else {

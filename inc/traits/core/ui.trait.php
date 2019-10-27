@@ -331,9 +331,10 @@ trait UI {
 						],
 					],
 				],
-				'tmpl'     => [
-					'file' => \tsf_extension_manager()->get_template_location( 'fbtopnotice' ),
-				],
+				// Inherits from 'tsfem'
+				// 'tmpl'     => [
+				// 	'file' => \tsf_extension_manager()->get_template_location( 'fbtopnotice' ),
+				// ],
 			],
 		] );
 	}

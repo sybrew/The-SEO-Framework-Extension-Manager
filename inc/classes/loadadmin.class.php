@@ -579,8 +579,7 @@ final class LoadAdmin extends AdminPages {
 			$title = \__( 'Get support via mail', 'the-seo-framework-extension-manager' );
 			$text  = \__( 'Private Support', 'the-seo-framework-extension-manager' );
 
-			// $class  = 'tsfem-button-primary tsfem-button-primary-bright';
-			$class  = 'tsfem-button-primary';
+			$class  = 'tsfem-button';
 			$class .= $icon ? ' tsfem-button-star' : '';
 		} else {
 			$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
@@ -588,7 +587,7 @@ final class LoadAdmin extends AdminPages {
 			$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
 			$text  = \__( 'Public Support', 'the-seo-framework-extension-manager' );
 
-			$class  = 'tsfem-button-primary tsfem-button-primary-bright';
+			$class  = 'tsfem-button';
 			$class .= $icon ? ' tsfem-button-love' : '';
 		}
 
