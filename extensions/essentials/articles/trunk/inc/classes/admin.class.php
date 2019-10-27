@@ -95,12 +95,20 @@ final class Admin extends Core {
 						'_req'     => false,
 						'_type'    => 'checkbox',
 						'_desc'    => [
-							\__( 'News Sitemap', 'the-seo-framework-extension-manager' ),
-							'',
-							\__( 'The news sitemap will list all news articles and annotate them accordingly for news aggregators.', 'the-seo-framework-extension-manager' ),
+							\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
+							// TODO we can't post HTML... Infer that all data sent is escaped as it reaches the generator?
+							// \tsf_extension_manager()->convert_markdown(
+							// 	sprintf(
+							// 		\esc_html__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
+							// 		'https://theseoframework.com/extensions/articles/#faq'
+							// 	),
+							// 	[ 'a' ]
+							// ),
+							\__( 'For more information, please refer to the Articles FAQ.', 'the-seo-framework-extension-manager' ),
+							\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
 						],
 						'_check'   => [
-							\__( 'Enable news sitemap?', 'the-seo-framework-extension-manager' ),
+							\__( 'Enable Google News sitemap?', 'the-seo-framework-extension-manager' ),
 						],
 					],
 				],
@@ -266,10 +274,7 @@ final class Admin extends Core {
 				$value[ $type ]['enabled'] = 0;
 
 			$value[ $type ]['enabled']      = static::_sanitize_option_one_zero( $value[ $type ]['enabled'] );
-			$value[ $type ]['default_type'] =
-				in_array( $value[ $type ]['default_type'], [ 'Article', 'NewsArticle', 'BlogPosting' ], true )
-				? $value[ $type ]['default_type']
-				: 'Article';
+			$value[ $type ]['default_type'] = static::_sanitize_option_article_type( $value[ $type ]['default_type'] );
 		}
 
 		return $value;
@@ -286,6 +291,22 @@ final class Admin extends Core {
 	 */
 	public static function _sanitize_option_one_zero( $value ) {
 		return (int) (bool) $value;
+	}
+
+	/**
+	 * Sanitizes the article type option.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 * @todo allow filtering the types?
+	 *
+	 * @param string $type The input value.
+	 * @return int The sanitized input value. Either 'Article', 'NewsArticle', or 'BlogPosting'.
+	 */
+	public static function _sanitize_option_article_type( $type ) {
+		return in_array( $type, [ 'Article', 'NewsArticle', 'BlogPosting' ], true )
+			? $type
+			: 'Article';
 	}
 
 	/**
@@ -377,16 +398,10 @@ final class Admin extends Core {
 		$this->set_extension_post_meta_id( $post->ID );
 
 		$store = [];
-		/**
-		 * @TODO add meta sanitization filters schema.
-		 * i.e. "option key => expected value(s) (types)"
-		 */
 		foreach ( $data[ $this->pm_index ] as $key => $value ) :
 			switch ( $key ) {
 				case 'type':
-					if ( in_array( $value, [ 'Article', 'NewsArticle', 'BlogPosting' ], true ) ) {
-						$store[ $key ] = $value;
-					}
+					$store[ $key ] = static::_sanitize_option_article_type( $value );
 					break;
 
 				default:
@@ -412,7 +427,7 @@ final class Admin extends Core {
 	 * @param string $view The relative file location and name without '.php'.
 	 * @return string The view file location.
 	 */
-	private function get_view_location( $view ) {
+	protected function get_view_location( $view ) {
 		return TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
 	}
 }

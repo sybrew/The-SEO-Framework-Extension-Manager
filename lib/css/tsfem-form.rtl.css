@@ -238,7 +238,7 @@ h4.tsfem-form-multi-title {
 	align-content: flex-start;
 }
 
-.tsfem-form-setting-label-inner-wrap {
+.tsfem-form-iterator-selector-wrap .tsfem-form-setting-label-inner-wrap {
 	will-change: contents;
 }
 

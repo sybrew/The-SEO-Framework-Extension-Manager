@@ -113,7 +113,11 @@ final class ExtensionSettings {
 	 */
 	public static function register_settings( $extension_slug, $settings ) {
 		/**
+		 * This filter only affects the options for display.
+		 * It does NOT affect the options elsewhere, unless saved.
+		 *
 		 * @since 2.2.0
+		 * @see $this->register_sanitization()
 		 *
 		 * @param array  $settings       The registered settings.
 		 * @param string $extension_slug The extension slug that's registering settings.
@@ -138,6 +142,9 @@ final class ExtensionSettings {
 	 */
 	public static function register_defaults( $extension_slug, $defaults ) {
 		/**
+		 * This filter only affects the default option for display.
+		 * It does NOT affect the default option elsewhere.
+		 *
 		 * @since 2.2.0
 		 *
 		 * @param array  $settings       The registered settings.

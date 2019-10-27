@@ -142,6 +142,22 @@ This information is mainly used to bind authors, organizations, and dates to the
 
 This helps search engines tailor displayed search results for its users. So, you increase the likelihood to get returning visitors, thus increasing engagement.
 
+## FAQ
+
+### Where can I find the Google News sitemap?
+
+When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`.
+Please note that your site must be verified before using the sitemap. You can get started at the [Google News Publishing Center](https://news.google.com/publisher).
+
+### Where do I submit a Google News sitemap?
+
+You can submit your Google News sitemap via Google Search Console. For more information, please see Google's publisher documentation on the [Google News Sitemaps](https://support.google.com/news/publisher-center/answer/74288).
+Please note that your site must be approved for news publishing by Google.
+
+### Does Bing support the Google News sitemap?
+
+No. Please visit the [Bing News PubHub](https://pubhub.bing.com/) for more information.
+
 ## Developers
 
 ### Filters
@@ -203,15 +219,15 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 * **Added:** A brand-new defaults options panel, which is integrated in the new global extension-options page.
 	* Herein, you can set the supported post types, and their default article types, as well.
-* TODO **Added:** A news sitemap. When you mark pages as `NewsArticle`, they'll be included.
+* **Added:** A Google News sitemap. When you mark pages as `NewsArticle`, they'll be included.
 	* The query limit from The SEO Framework will apply.
-	* The SEO Framework v4.0 or later is required for this feature.
+		* At most, 1000 news articles will be included in the sitemap.
 * **Added:** Sites that represent a `Person` are now supported for Article markup.
 * TODO **Added:** Bulk-and quick editing options.
-	* The SEO Framework v4.0 or later is required for this feature.
 * TODO **Added:** The SEO Bar (or post state) now hints the Article type.
+* **Changed:** This extension now requires TSF v4.0.2 or higher.
 * **Deprecated:**
-	* These has been converted to the new options, somewhat gracefully. You should remove these filter from your site if you have it installed. Use the options, instead.
+	* These has been converted to the new options, somewhat gracefully. You should remove these filters from your site if you have it installed. Use the options, instead.
 		* `the_seo_framework_articles_supported_post_types`.
 		* `the_seo_framework_articles_default_meta`.
 

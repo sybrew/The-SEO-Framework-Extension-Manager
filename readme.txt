@@ -85,6 +85,7 @@ local/externs/index.php:
 * **Added:** New extension logos. They're now luminous.
 * **Improved:** The interface has been rewritten to use grid instead of flexbox.
 * **Improved:** The interface no longer tries to find UI boundaries, improving the performance greatly--especially with Focus.
+* **Improved:** The interface is now in line with WordPress 5.3.
 * **Improved:** The interface buttons are now more accessible. For instance, keyboard navigational hints are easier to identify, and we added a border to support high-contrast display.
 * **Improved:** The top header is now sticky.
 * **Improved:** The header-notifications are now also sticky, and have a backdrop so to easily discern them from the content.
@@ -125,6 +126,7 @@ local/externs/index.php:
 **Updated extensions:**
 
 * TODO Articles
+	* Now requires TSF v4.0.2 or later.
 * TODO Focus
 	* 1. To improve support for the admin new interface, we added a replica of the actionable buttons in the header.
 * TODO (script cleanup only) Monitor

@@ -110,10 +110,10 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1565628724',
+				'last_updated' => '1572172720',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.2',
 				'tested_tsf'   => '4.0.3',
 			],
 			'honeypot' => [
@@ -210,9 +210,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'f191684554a44d5cc68cc354dd17bddb1351712c01b62b18eeb0fb47bf6203df',
-			'sha1'   => 'b523778c621d89c69b009f9579ff59bea1bee2f2',
-			'md5'    => 'ccc829cd6614196d33dd89100d162c0d',
+			'sha256' => '08c5a3b25246b44d641a6121d92e6c6b60940a22c4ef77cb4562a65f887e749e',
+			'sha1'   => 'ba75c6afe963722d6a81d793fbeffb06c2b3c5ff',
+			'md5'    => '2d0bea5e00d7c9670c3e6547ea88d346',
 		];
 	}
 

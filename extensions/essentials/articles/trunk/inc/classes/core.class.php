@@ -3,6 +3,7 @@
  * @package TSF_Extension_Manager\Extension\Articles\Admin
  * @package TSF_Extension_Manager\Extension\Articles\Front
  */
+
 namespace TSF_Extension_Manager\Extension\Articles;
 
 defined( 'ABSPATH' ) or die;
@@ -63,9 +64,6 @@ class Core {
 	 */
 	private function construct() {
 
-		$that = __NAMESPACE__ . ( \is_admin() ? '\\Admin' : '\\Front' );
-		$this instanceof $that or \wp_die( -1 );
-
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
@@ -99,7 +97,7 @@ class Core {
 		 */
 		$this->o_index    = 'articles';
 		$this->o_defaults = [
-			'news_sitemap' => 1,
+			'news_sitemap' => 0,  // Google's requirements need to be met first.
 			'post_types'   => [],
 		];
 

@@ -32,6 +32,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  *
  * @since 1.2.0
  * @uses TSF_Extension_Manager\Traits
+ * @access private
  * @final
  */
 final class Front extends Core {
@@ -338,8 +339,6 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now listens to post meta.
-	 * @todo TSF allow selection of article/news/blogpost.
-	 * @todo Maybe extension? i.e. News SEO.
 	 *
 	 * @requiredSchema Always
 	 * @ignoredSchema Never
@@ -663,7 +662,7 @@ final class Front extends Core {
 
 		/**
 		 * @since 1.0.0
-		 * @param string $name The articles name.
+		 * @param string $name The articles publisher name.
 		 */
 		$name = (string) \apply_filters( 'the_seo_framework_articles_name', $tsf->get_option( 'knowledge_name' ) ) ?: $tsf->get_blogname();
 
