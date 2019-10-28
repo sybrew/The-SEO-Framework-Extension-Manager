@@ -99,6 +99,10 @@ class Core {
 		$this->o_defaults = [
 			'news_sitemap' => 0,  // Google's requirements need to be met first.
 			'post_types'   => [],
+			'logo'         => [
+				'url' => '',
+				'id'  => 0,
+			],
 		];
 
 		foreach ( $filtered_post_types as $post_type ) {

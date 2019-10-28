@@ -350,7 +350,6 @@ final class ExtensionSettings {
 		if ( ! \the_seo_framework()->is_menu_page( $this->ui_hook ) ) return;
 
 		/**
-		 * Initialize error interface.
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->init_errors();

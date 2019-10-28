@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
@@ -162,7 +163,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( ! $show_notice ) return;
 
-		$notice = $this->convert_markdown(
+		$notice = \the_seo_framework()->convert_markdown(
 			sprintf(
 				/* translators: Markdown. %s = API URL */
 				\esc_html__(
@@ -654,6 +655,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param bool   $escape  Whether to escape the whole output.
 	 */
 	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $this->get_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
 	}
 
@@ -675,12 +677,11 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
 
-		if ( ( ! $slug = \sanitize_key( $slug ) )
-		|| ( ! $capability = \sanitize_key( $capability ) )
-		|| ! \current_user_can( $capability )
-		) {
+		$slug       = \sanitize_key( $slug );
+		$capability = \sanitize_key( $capability );
+
+		if ( ! $slug || ! \current_user_can( $capability ) )
 			return false;
-		}
 
 		static $parent_set = false;
 		static $set        = [];

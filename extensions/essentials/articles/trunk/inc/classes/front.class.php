@@ -55,9 +55,10 @@ final class Front extends Core {
 	 * Registers the image size name.
 	 *
 	 * @since 1.1.0
+	 * @since 2.0.0 Value changed from 'tsfem-e-articles-logo'.
 	 * @var string $image_size_name
 	 */
-	private $image_size_name = 'tsfem-e-articles-logo';
+	private $image_size_name = 'tsfem-e-articles-logo-rect';
 
 	/**
 	 * The constructor, initialize plugin.
@@ -95,10 +96,14 @@ final class Front extends Core {
 	/**
 	 * Registers logo image size in WordPress.
 	 *
+	 * Note that it takes an initial render before the URL is available in WordPress;
+	 * their caches don't update as we process it.
+	 *
 	 * @since 1.1.0
+	 * @since 2.0.0 Updated the logo guidelines.
 	 */
 	private function register_logo_image_size() {
-		\add_image_size( $this->image_size_name, 60, 60, false );
+		\add_image_size( $this->image_size_name, 600, 60, false );
 	}
 
 	/**
@@ -235,7 +240,7 @@ final class Front extends Core {
 	 * Runs at 'the_seo_framework_after_output' filter.
 	 *
 	 * @since 1.0.0
-	 * @link https://developers.google.com/search/docs/data-types/articles
+	 * @link https://developers.google.com/search/docs/data-types/article
 	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article scripts.
@@ -409,8 +414,11 @@ final class Front extends Core {
 
 		$title = $tsf->get_raw_generated_title( [ 'id' => $id ] );
 
+		// Does not consider UTF-8 support. However, the regex does.
 		if ( strlen( $title ) > 110 ) {
-			$title = $tsf->trim_excerpt( $title, 0, 110 );
+			preg_match( '/.{0,110}([^\P{Po}\'\"]|\p{Z}|$){1}/su', trim( $title ), $matches );
+			$title = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
+			$title = trim( $title );
 		}
 
 		if ( ! $title ) {
@@ -666,7 +674,7 @@ final class Front extends Core {
 		 */
 		$name = (string) \apply_filters( 'the_seo_framework_articles_name', $tsf->get_option( 'knowledge_name' ) ) ?: $tsf->get_blogname();
 
-		$_default_img_id = (int) $tsf->get_option( 'knowledge_logo_id' ) ?: \get_option( 'site_icon' );
+		$_default_img_id = (int) $this->get_option( 'logo' )['id'] ?: (int) $tsf->get_option( 'knowledge_logo_id' ) ?: \get_option( 'site_icon' );
 		/**
 		 * @since 1.0.0
 		 * @param int $img_id The image ID to use for the logo.

@@ -120,8 +120,7 @@ local/externs/index.php:
 * TODO See why there's a serialization error on `[message] => Notice (8): unserialize(): Error at offset 66 of 1873 bytes in [/public/wp-content/plugins/the-seo-framework-extension-manager/inc/traits/extension/post-meta.trait.php, line 61]`
 * TODO Fixed: Post-Revision metadata can now be processed, just like in TSF v4.0+. Is ^this^ related?
 
-* TODO Regression: The top bar now bounces when more than 2 notices are showing, and one gets replaced, while being at `scrollTop=0`.
-	* The fix: Lock the height when a notification gets replaced... this may be tricky with mixed-height notiications.
+* TODO See if we can remove settings when the site does not represent an organization, but a person instead.
 
 **Updated extensions:**
 

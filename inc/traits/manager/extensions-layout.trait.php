@@ -133,7 +133,7 @@ trait Extensions_Layout {
 			if ( false === static::get_extension_header( $extension['slug'] ) )
 				continue;
 
-			$wrap = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink">' . static::make_extension_list_icon( $extension ) . '</div>';
+			$wrap  = '<div class="tsfem-extension-icon-wrap tsfem-flex-nogrowshrink">' . static::make_extension_list_icon( $extension ) . '</div>';
 			$wrap .= '<div class="tsfem-extension-about-wrap tsfem-flex tsfem-flex-grow">' . static::make_extension_list_about( $extension ) . '</div>';
 			$wrap .= '<div class="tsfem-extension-description-wrap tsfem-flex tsfem-flex-space">' . static::make_extension_list_description( $extension ) . '</div>';
 
@@ -216,7 +216,7 @@ trait Extensions_Layout {
 
 		$title = sprintf(
 			'<h4 class="tsfem-extension-title">%s</h4>',
-			\tsf_extension_manager()->convert_markdown(
+			\the_seo_framework()->convert_markdown(
 				\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
 				[ 'strong', 'em' ]
 			)
@@ -301,9 +301,9 @@ trait Extensions_Layout {
 	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 *
-	 * @param string $slug The extension slug.
-	 * @param string $type The button type.
-	 * @param bool $disabled Whether the button is disabled and holds no action.
+	 * @param string $slug     The extension slug.
+	 * @param string $type     The button type.
+	 * @param bool   $disabled Whether the button is disabled and holds no action.
 	 * @return string The button form.
 	 */
 	private static function get_extension_button_form( $slug = '', $type = '', $disabled = false ) {
@@ -390,12 +390,12 @@ trait Extensions_Layout {
 	private static function make_extension_list_description( $extension ) {
 
 		$description = static::get_extension_header( $extension['slug'] )['Description'];
-		$description = \tsf_extension_manager()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
+		$description = \the_seo_framework()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
 
 		$footer = static::get_extension_description_footer( $extension );
 
 		//* Put it all together.
-		$content = sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
+		$content  = sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
 		$content .= $footer;
 
 		$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
@@ -428,7 +428,7 @@ trait Extensions_Layout {
 		//* Make extension version element.
 		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
-			\tsf_extension_manager()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
+			\the_seo_framework()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
 
 		//* Make extension compatibility element.

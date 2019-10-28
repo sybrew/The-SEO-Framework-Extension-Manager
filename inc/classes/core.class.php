@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
@@ -25,12 +26,14 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Require option trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'manager/options' );
 
 /**
  * Require error trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/error' );
@@ -51,16 +54,24 @@ class Core {
 		Error;
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation request name.
+	 */
 	protected $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce action.
+	 */
 	protected $nonce_action = [];
 
 	/**
@@ -106,7 +117,6 @@ class Core {
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		];
 		/**
-		 * Set error notice option.
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->error_notice_option = 'tsfem_error_notice_option';
@@ -479,12 +489,13 @@ class Core {
 	 * Checks whether the variable is set and passes it back.
 	 * If the value isn't set, it will set it to the fallback variable.
 	 *
+	 * Basically, a PHP < 7 wrapper for null coalescing.
+	 *
 	 * It will also return the value so it can be used in a return statement.
 	 *
 	 * Example: `$v ?? $f` becomes `coalesce_var( $v, $f )`
 	 * The fallback value must always be set, so performance benefits thereof aren't present.
 	 *
-	 * PHP < 7 wrapper for null coalescing.
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
 	 * @since 1.2.0
 	 *
@@ -733,6 +744,7 @@ class Core {
 	 * @return array The verification bits.
 	 */
 	final protected function get_bits() {
+		// phpcs:disable, Generic.WhiteSpace.DisallowSpaceIndent
 
 		static $_bit, $bit;
 
@@ -784,10 +796,11 @@ class Core {
 			    $bit  = $_bit <= 0 ? ~$bit | ~$_bit-- : ~$bit | ~$_bit++
 			and $bit  = $bit++ & $_bit--
 			and $_bit = $_bit < 0 ? $_bit : ~$_bit
-			and $bit  = ~$_bit++ + 1;
+			and $bit  = ( ~$_bit++ ) + 1;
 		}
 
 		return [ $_bit, $bit ];
+		// phpcs:enable, Generic.WhiteSpace.DisallowSpaceIndent
 	}
 
 	/**
@@ -870,8 +883,8 @@ class Core {
 	 * Generates salt from WordPress defined constants.
 	 *
 	 * Taken from WordPress core function `wp_salt()` and adjusted accordingly.
-	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 *
+	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 * @since 1.0.0
 	 * @staticvar array $cached_salts Contains cached salts based on $scheme input.
 	 * @staticvar string $instance_scheme Random scheme for instance verification. Determined at runtime.
@@ -1358,147 +1371,6 @@ class Core {
 		} else {
 			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
 		}
-	}
-
-	/**
-	 * Converts markdown text into HMTL.
-	 *
-	 * Does not support list or block elements. Only inline statements.
-	 * Expects input to be escaped: For added security, the converted strings are escaped once more.
-	 *
-	 * @since 1.0.0
-	 * @since 1.1.0 Can now convert stacked strong/em correctly.
-	 * @since 1.2.0 : 1. Removed word boundary requirement for strong.
-	 *                2. Now accepts regex count their numeric values in string.
-	 *                3. Fixed header 1~6 calculation.
-	 * @link https://wordpress.org/plugins/about/readme.txt
-	 *
-	 * @param string $text The text that might contain markdown. Expected to be escaped.
-	 * @param array  $convert The markdown style types wished to be converted.
-	 *               If left empty, it will convert all.
-	 * @return string The markdown converted text.
-	 */
-	final public function convert_markdown( $text, $convert = [] ) {
-
-		preprocess : {
-			$text = str_replace( "\r\n", "\n", $text );
-			$text = str_replace( "\t", ' ', $text );
-			$text = trim( $text );
-		}
-
-		if ( '' === $text )
-			return '';
-
-		/**
-		 * The conversion list's keys are per reference only.
-		 */
-		$conversions = [
-			'**'     => 'strong',
-			'*'      => 'em',
-			'`'      => 'code',
-			'[]()'   => 'a',
-			'======' => 'h6',
-			'====='  => 'h5',
-			'===='   => 'h4',
-			'==='    => 'h3',
-			'=='     => 'h2',
-			'='      => 'h1',
-		];
-
-		$md_types = empty( $convert ) ? $conversions : array_intersect( $conversions, $convert );
-
-		if ( 2 === count( array_intersect( $md_types, [ 'em', 'strong' ] ) ) ) :
-			$count = preg_match_all( '/(?:\*{3})([^\*{\3}]+)(?:\*{3})/', $text, $matches, PREG_PATTERN_ORDER );
-
-			for ( $i = 0; $i < $count; $i++ ) {
-				$text = str_replace(
-					$matches[0][ $i ],
-					sprintf( '<strong><em>%s</em></strong>', \esc_html( $matches[1][ $i ] ) ),
-					$text
-				);
-			}
-		endif;
-
-		foreach ( $md_types as $type ) :
-			switch ( $type ) :
-				case 'strong':
-					$count = preg_match_all( '/(?:\*{2})([^\*{\2}]+)(?:\*{2})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<strong>%s</strong>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'em':
-					$count = preg_match_all( '/(?:\*{1})([^\*{\1}]+)(?:\*{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<em>%s</em>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'code':
-					$count = preg_match_all( '/(?:`{1})([^`{\1}]+)(?:`{1})/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<code>%s</code>', \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'h6':
-				case 'h5':
-				case 'h4':
-				case 'h3':
-				case 'h2':
-				case 'h1':
-					$amount = filter_var( $type, FILTER_SANITIZE_NUMBER_INT );
-					//* Considers word non-boundary. @TODO consider removing this?
-					$expression = sprintf( '/(?:\={%1$s})\B([^\={\%1$s}]+)\B(?:\={%1$s})/', $amount );
-					$count = preg_match_all( $expression, $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf( '<%1$s>%2$s</%1$s>', \esc_attr( $type ), \esc_html( $matches[1][ $i ] ) ),
-							$text
-						);
-					}
-					break;
-
-				case 'a':
-					$count = preg_match_all( '/(?:(?:\[{1})([^\]]+)(?:\]{1})(?:\({1})([^\)\(]+)(?:\){1}))/', $text, $matches, PREG_PATTERN_ORDER );
-
-					for ( $i = 0; $i < $count; $i++ ) {
-						$text = str_replace(
-							$matches[0][ $i ],
-							sprintf(
-								'<a href="%s" target="_blank" rel="nofollow noreferrer noopener">%s</a>',
-								\esc_url( $matches[2][ $i ], [ 'https', 'http' ] ),
-								\esc_html( $matches[1][ $i ] )
-							),
-							$text
-						);
-					}
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
-
-		return $text;
 	}
 
 	/**

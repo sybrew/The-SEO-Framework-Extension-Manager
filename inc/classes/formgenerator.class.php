@@ -579,7 +579,7 @@ final class FormGenerator {
 		}
 
 		//= Correct the length of bits, split them and put them in the right order.
-		$_f = sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
 		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;
@@ -792,6 +792,43 @@ final class FormGenerator {
 	}
 
 	/**
+	 * Creates a field description.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param array  $args The field arguments.
+	 * @param string $id   The field ID.
+	 * @return string
+	 */
+	private function create_field_description( array $args, $id ) {
+
+		// Not escaped.
+		$title = $args['_desc'][0];
+
+		// Escaped
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+
+		return sprintf(
+			'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
+			vsprintf(
+				'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
+				[
+					vsprintf(
+						'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
+						[
+							$id,
+							sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+							sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+						]
+					),
+					$s_desc,
+				]
+			)
+		);
+	}
+
+	/**
 	 * Creates option field.
 	 *
 	 * @since 1.3.0
@@ -879,7 +916,7 @@ final class FormGenerator {
 		$title = $args['_desc'][0];
 		$desc  = $args['_desc'][1];
 
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
@@ -1243,21 +1280,23 @@ final class FormGenerator {
 	 * descriptions fed through array,
 	 *
 	 * @since 1.3.0
+	 * @since 2.2.0 Added $use_markdown.
 	 *
-	 * @param mixed $description The description field(s).
+	 * @param mixed $description  The description field(s).
+	 * @param bool  $use_markdown Whether to use markdown parsing.
 	 * @return string The escaped flex HTML description output.
 	 */
-	private function create_fields_description( $description ) {
+	private function create_fields_description( $description, $use_markdown ) {
 
 		if ( is_scalar( $description ) ) {
 			return sprintf(
 				'<span class="tsfem-form-option-description">%s</span>',
-				\esc_html( $description )
+				$use_markdown ? \the_seo_framework()->convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
 			);
 		} else {
 			$ret = '';
 			foreach ( $description as $desc ) {
-				$ret .= $this->create_fields_description( $desc );
+				$ret .= $this->create_fields_description( $desc, $use_markdown );
 			}
 			return $ret;
 		}
@@ -1445,15 +1484,10 @@ final class FormGenerator {
 				break;
 		endswitch;
 
-		//= Not escaped.
-		$title = $args['_desc'][0];
-
 		//= s = Escaped.
 		$s_type     = \esc_attr( $args['_type'] );
 		$s_name     = $s_id = $this->get_field_id();
 		$s_ph       = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_range    = isset( $s_range ) ? $s_range : '';
 		$s_pattern  = isset( $s_pattern ) ? $s_pattern : '';
 		$s_required = $args['_req'] ? 'required' : '';
@@ -1462,23 +1496,7 @@ final class FormGenerator {
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$s_type,
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
-								[
-									$s_id,
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_id ),
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
@@ -1510,12 +1528,8 @@ final class FormGenerator {
 	 */
 	private function create_select_field( array $args ) {
 
-		//* Not escaped.
-		$title = $args['_desc'][0];
-
+		//= s = Escaped.
 		$s_name     = $s_id = $this->get_field_id();
-		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 		$s_required = $args['_req'] ? 'required' : '';
 
@@ -1525,23 +1539,7 @@ final class FormGenerator {
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$args['_type'], //= Doesn't need escaping.
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
-								[
-									$s_id,
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_id ),
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
@@ -1671,15 +1669,15 @@ final class FormGenerator {
 	 */
 	private function create_select_multi_a11y_field( array $args ) {
 
-		//* Not escaped.
+		// Not escaped.
 		$title = $args['_desc'][0];
 
 		//= s = escaped
-		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
+		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
-		$s_data_required = ! empty( $args['_req'] ) ? 'data-required=1' : '';
+		$s_data_required = $args['_req'] ? 'data-required=1' : '';
 
 		return vsprintf(
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
@@ -1831,15 +1829,10 @@ final class FormGenerator {
 	 */
 	private function create_image_field( array $args ) {
 
-		//= Not escaped.
-		$title = $args['_desc'][0];
-
 		//= s = Escaped.
 		$s_url_name  = $s_url_id = $this->get_sub_field_id( 'url' );
 		$s_id_name   = $s_id_id = $this->get_sub_field_id( 'id' );
 		$s_url_ph    = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_desc      = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more      = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'url', 'associative' ),
@@ -1852,13 +1845,21 @@ final class FormGenerator {
 				$args['_default']['id']
 			)
 		);
-		$s_required  = isset( $args['_req'] ) ? 'required' : '';
-		$s_data      = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
-		$s_url_readonly = $s_remove_button = '';
+		$s_remove_button = '';
+
+		$url_readonly = false;
+
+		if ( ! empty( $args['_readonly'] ) ) {
+			$args['_data']['readonly'] = true;
+			$url_readonly              = true;
+		}
+
+		$s_required = $args['_req'] ? 'required' : '';
+		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		if ( $s_id_value ) {
-			$s_url_readonly = ' readonly';
+			$url_readonly    = true;
 			$s_remove_button = vsprintf(
 				'<button type=button class="%1$s" title="%2$s" id="%3$s-remove" data-input-url="%3$s" data-input-id="%4$s">%5$s</button>',
 				[
@@ -1874,26 +1875,7 @@ final class FormGenerator {
 		return vsprintf(
 			'<div class="tsfem-image-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
-								[
-									$s_url_id,
-									sprintf(
-										'tsfem-form-option-title%s',
-										( $s_desc ? ' tsfem-form-option-has-description' : '' )
-									),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_url_id ),
 				vsprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s%s</div></div>',
 					[
@@ -1905,7 +1887,7 @@ final class FormGenerator {
 								$s_url_value,
 								$s_required,
 								$s_url_ph,
-								$s_url_readonly,
+								$url_readonly ? ' readonly' : '',
 								$s_data,
 							]
 						),
@@ -1946,36 +1928,15 @@ final class FormGenerator {
 	 */
 	private function create_checkbox_field( array $args ) {
 
-		//* Not escaped.
-		$title   = $args['_desc'][0];
-		$checked = $this->get_field_value( $args['_default'] );
-
+		//= s = Escaped.
 		$s_name     = $s_id = $this->get_field_id();
-		$s_desc     = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1] ) : '';
-		$s_more     = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
 		$s_required = $args['_req'] ? 'required' : '';
 		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		return vsprintf(
 			'<div class="tsfem-checkbox-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
-				sprintf(
-					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
-					vsprintf(
-						'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
-						[
-							vsprintf(
-								'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
-								[
-									$s_id,
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
-								]
-							),
-							$s_desc,
-						]
-					)
-				),
+				$this->create_field_description( $args, $s_id ),
 				sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
@@ -1983,7 +1944,7 @@ final class FormGenerator {
 						[
 							$s_id,
 							$s_name,
-							$checked ? 'checked' : '',
+							$this->get_field_value( $args['_default'] ) ? 'checked' : '',
 							$s_required,
 							$s_data,
 							\esc_html( $args['_check'][0] ),

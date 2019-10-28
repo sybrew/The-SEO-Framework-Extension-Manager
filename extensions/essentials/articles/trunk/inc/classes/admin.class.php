@@ -42,8 +42,67 @@ final class Admin extends Core {
 	 * Constructor.
 	 */
 	private function construct() {
+
 		$this->prepare_inpostgui();
 		$this->prepare_settings();
+
+		\add_action( 'current_screen', [ $this, '_prepare_post_state' ] );
+	}
+
+	/**
+	 * Prepares post states.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param \WP_Screen $screen The current screen.
+	 * @return void Early when the post type isn't supported.
+	 */
+	public function _prepare_post_state( $screen ) {
+
+		$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
+
+		if ( ! $post_type ) return;
+		// `static::generate_post_type_settings()` also checks this via `the_seo_framework()->get_supported_post_types()`
+		if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) ) return;
+
+		$settings = $this->get_option( 'post_types' );
+
+		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
+
+		\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 9, 2 );
+	}
+
+	/**
+	 * Adds post states for the post/page edit.php query.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param array    $states The current post states array
+	 * @param \WP_Post $post The Post Object.
+	 * @return array Adjusted $states
+	 */
+	public function _add_post_state( $states = [], $post ) {
+
+		static $default = null;
+		if ( ! $default ) {
+			$settings  = $this->get_option( 'post_types' );
+			$post_type = \the_seo_framework()->get_admin_post_type();
+			$default   = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
+		}
+
+		$type_i18n = [
+			'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
+			'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
+			'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+		];
+
+		$this->set_extension_post_meta_id( $post->ID );
+
+		$states[] = $type_i18n[ $this->get_post_meta( 'type', $default ) ];
+
+		return $states;
 	}
 
 	/**
@@ -91,25 +150,43 @@ final class Admin extends Core {
 					'news_sitemap' => [
 						'_default' => null,
 						'_edit'    => true,
-						'_ret'     => 's',
+						'_ret'     => 'bool',
 						'_req'     => false,
 						'_type'    => 'checkbox',
 						'_desc'    => [
 							\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
-							// TODO we can't post HTML... Infer that all data sent is escaped as it reaches the generator?
-							// \tsf_extension_manager()->convert_markdown(
-							// 	sprintf(
-							// 		\esc_html__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
-							// 		'https://theseoframework.com/extensions/articles/#faq'
-							// 	),
-							// 	[ 'a' ]
-							// ),
-							\__( 'For more information, please refer to the Articles FAQ.', 'the-seo-framework-extension-manager' ),
+							sprintf(
+								/* translators: %s = Articles FAQ link. Markdown. */
+								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
+								'https://theseoframework.com/extensions/articles/#faq'
+							),
 							\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
 						],
+						'_md'      => true,
 						'_check'   => [
 							\__( 'Enable Google News sitemap?', 'the-seo-framework-extension-manager' ),
 						],
+					],
+					'logo'         => [
+						'_default'  => [
+							'url' => '',
+							'id'  => '',
+						],
+						'_ph'       => \the_seo_framework()->get_option( 'knowledge_logo_url' ) ?: '',
+						'_edit'     => true,
+						'_ret'      => 'image',
+						'_req'      => false,
+						'_type'     => 'image',
+						'_readonly' => true,
+						'_desc'     => [
+							\__( 'Publisher Logo', 'the-seo-framework-extension-manager' ),
+							sprintf(
+								/* translators: %s = Logo guidelines link. Markdown. */
+								\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
+								'https://developers.google.com/search/docs/data-types/article#logo-guidelines'
+							),
+						],
+						'_md'       => true,
 					],
 				],
 			]
@@ -155,7 +232,7 @@ final class Admin extends Core {
 					'',
 					\__( 'This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already set.', 'the-seo-framework-extension-manager' ),
 				],
-				'_select' => [
+				'_select'  => [
 					[
 						'Article',
 						\__( 'Article', 'the-seo-framework-extension-manager' ),
@@ -243,6 +320,7 @@ final class Admin extends Core {
 			[
 				'post_types'   => static::class . '::_sanitize_option_post_type',
 				'news_sitemap' => static::class . '::_sanitize_option_one_zero',
+				'logo'         => static::class . '::_sanitize_option_logo',
 			]
 		);
 	}
@@ -291,6 +369,31 @@ final class Admin extends Core {
 	 */
 	public static function _sanitize_option_one_zero( $value ) {
 		return (int) (bool) $value;
+	}
+
+	/**
+	 * Sanitizes option to contain correct URL values.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 *
+	 * @param array $values The input values.
+	 * @return array The sanitized option
+	 */
+	public static function _sanitize_option_logo( $values ) {
+
+		$url = isset( $values['url'] ) ? \esc_url_raw( $values['url'] ) : '';
+		$id  = isset( $values['id'] ) ? \absint( $values['id'] ) : 0;
+
+		if ( ! $url || ! $id ) {
+			$url = '';
+			$id  = 0;
+		}
+
+		return [
+			'url' => $url,
+			'id'  => $id,
+		];
 	}
 
 	/**

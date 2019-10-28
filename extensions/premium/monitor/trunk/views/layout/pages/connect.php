@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 			<div class="hide-if-js" id="tsfem-e-monitor-privacy-readmore-content">
 				<p><?php
 					//* Already escaped.
-					echo \tsf_extension_manager()->convert_markdown(
+					echo \the_seo_framework()->convert_markdown(
 						sprintf(
 							\esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),
 							'https://theseoframework.com/privacy/'

@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
@@ -330,7 +331,6 @@ final class Layout extends Secure_Abstract {
 		) );
 		$output .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
 
-
 		if ( is_int( $requests_remaining ) ) {
 			$_notice  = '';
 			$_classes = [ 'tsfem-dashicon' ];
@@ -359,14 +359,14 @@ final class Layout extends Secure_Abstract {
 
 		if ( $valid_options && $domain ) {
 			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
-			$_domain = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
+			$_domain  = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 			$_warning = '';
 			$_classes = [ 'tsfem-dashicon' ];
 
 			if ( $_domain === $domain ) {
 				$_classes[] = 'tsfem-success';
 			} else {
-				$_warning = \tsf_extension_manager()->convert_markdown(
+				$_warning = \the_seo_framework()->convert_markdown(
 					sprintf(
 						/* translators: `%s` = domain with markdown backtics */
 						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again.', 'the-seo-framework-extension-manager' ),
@@ -452,7 +452,7 @@ final class Layout extends Secure_Abstract {
 			} elseif ( $difference < 0 ) {
 				//* Processing.
 				$payment_in = \__( 'Payment processing', 'the-seo-framework-extension-manager' );
-				$_class = 'tsfem-warning';
+				$_class     = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS ) {
 				$payment_in = \__( 'Less than a week', 'the-seo-framework-extension-manager' );
 			} elseif ( $difference < WEEK_IN_SECONDS * 2 ) {
@@ -489,15 +489,15 @@ final class Layout extends Secure_Abstract {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $title The title.
+	 * @param string $title   The title.
 	 * @param string $content The content.
-	 * @param bool $escape Whether to escape the output.
+	 * @param bool   $escape  Whether to escape the output.
 	 * @return string The Title/Content wrap.
 	 */
 	public static function wrap_row_content( $title, $content, $escape = true ) {
 
 		if ( $escape ) {
-			$title = \esc_html( $title );
+			$title   = \esc_html( $title );
 			$content = \esc_html( $content );
 		}
 
@@ -518,15 +518,20 @@ final class Layout extends Secure_Abstract {
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$input = sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'key' ), \tsf_extension_manager()->_get_field_name( 'key' ), \esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
+				\tsf_extension_manager()->_get_field_id( 'key' ),
+				\tsf_extension_manager()->_get_field_name( 'key' ),
+				\esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
+
 			$input .= sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'email' ), \tsf_extension_manager()->_get_field_name( 'email' ), \esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
+				\tsf_extension_manager()->_get_field_id( 'email' ),
+				\tsf_extension_manager()->_get_field_name( 'email' ),
+				\esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
 			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['activate-key'] );
-			$nonce = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
+			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
 				'<input type=submit name=submit id=submit class="tsfem-button-primary" value="%s">',

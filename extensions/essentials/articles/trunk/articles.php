@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 /**
  * Extension Name: Articles
  * Extension URI: https://theseoframework.com/extensions/articles/
- * Extension Description: The Articles extension enhances your published posts by automatically adding important [Structured Data](https://developers.google.com/search/docs/data-types/articles). Great for bloggers, news publishers, and scientific pieces. It comes with a Google News sitemap, as well.
+ * Extension Description: The Articles extension enhances your published posts by automatically adding important [Structured Data](https://developers.google.com/search/docs/data-types/article). Great for bloggers, news publishers, and scientific pieces. It comes with a Google News sitemap, as well.
  * Extension Version: 2.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/

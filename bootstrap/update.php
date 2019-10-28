@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager/Bootstrap
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
@@ -21,10 +22,10 @@ function _check_external_blocking() {
 	if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
 
 		$parsed_url = \wp_parse_url( TSF_EXTENSION_MANAGER_DL_URI );
-		$host = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+		$host       = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
 		if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
-			$notice = \tsf_extension_manager()->convert_markdown(
+			$notice = \the_seo_framework()->convert_markdown(
 				sprintf(
 					/* translators: Markdown. %s = Update API URL */
 					\esc_html__(
@@ -35,7 +36,6 @@ function _check_external_blocking() {
 				),
 				[ 'code' ]
 			);
-			//* Already escaped.
 			\the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
 		}
 	}

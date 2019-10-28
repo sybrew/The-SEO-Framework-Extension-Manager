@@ -228,6 +228,7 @@ h4.tsfem-form-multi-title {
 	flex-direction: row;
 	justify-content: space-between;
 	flex-grow: 0;
+    max-width: max-content; /* does not work on Edge... it's fine */
 }
 
 .tsfem-form-multi-setting-input,
@@ -235,7 +236,6 @@ h4.tsfem-form-multi-title {
 .tsfem-form-setting-input,
 .tsfem-form-setting-label-inner-wrap {
 	justify-content: center;
-	align-content: flex-start;
 }
 
 .tsfem-form-iterator-selector-wrap .tsfem-form-setting-label-inner-wrap {

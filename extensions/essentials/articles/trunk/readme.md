@@ -11,34 +11,31 @@ This extension automatically enhances your published posts by adding essential S
 
 With the Articles extension, your posts are understood better by search engines.
 
-For news articles, it allows them to be displayed prominently within Google's search carousel.
+For news articles, Articles allows them to be displayed prominently within Google's search carousel.
 
-For blog postings or investigative reports, it improves search presence for recurring visitors.
+For blog postings and investigational reports, Articles improves search presence for recurring visitors.
 
-This is all achieved through Structured Data with Articles.
+All this is achieved via structured data with Articles, without a hassle.
 
 [tsfep-image id="1"]
 
 ### Structured Data
 
-Structured Data helps search engines understand how your website and its content are set up.
-It tells search engines what current page and website is generally or specifically about.
+Structured data helps search engines understand how your website and your content are set up. It removes the guesswork they usually conduct when parsing a plain webpage.
 
-When the information is found and processed, this information can be used for the Search Engine Results Page (SERP).
-So, search engines (Google in particular) use this information to annotate your page's information within their search results.
-
-Potential visitors then know more about your pages before visiting them. When correctly set up, this will increase visitor engagement.
+When the structured data is found and processed, search engines can annotate your page's information within their search results. This helps your pages stand out, and it can significantly increase their exposure.
 
 ### How it works
 
-The Articles extension works for all WordPress posts.
-It also works for AMP posts, if the [tsfep-extension name="amp"] is enabled.
+The Articles extension works for all your public WordPress pages. It also works for AMP posts when the [tsfep-extension name="amp"] is enabled.
 
-When a post is being displayed, this extension will fetch all data required from various SEO settings.
-Then, if the data is evaluated as valid, it will be compressed into a Schema.org JSON-LD script.
-This script will be outputted in the header, for search engines to consume.
+Articles automatically fetches all inferred information from your pages and outputs the structured data in a hidden machine-readable script on your page. When search engines find this script, they'll process it.
 
-When the script is found by search engines, it will be used for their search results.
+### It comes with a Google News Sitemap
+
+Get your news articles indexed ASAP with the Google News sitemap brought by Articles. This sitemap populates automatically, and whenever you publish a new article, Articles automatically notifies Google News.
+
+To get started, visit the [Google News Publishing Center](https://news.google.com/publisher).
 
 ## Usage
 
@@ -46,13 +43,19 @@ When the script is found by search engines, it will be used for their search res
 
 ### Activate Articles
 
-All you'll need to do is activate the Articles extension.
+First, you'll need to activate the Articles extension.
 
-There is no additional setup required.
+### Extension Settings
 
-On every post, you can set the Article Type under the Structure tab.
+Underneath the extension description, you should see a settings-link appear. You can also find this link under "SEO" in the admin sidebar, but you may need to refresh the page first.
 
-Every WordPress post, if the rendered data is valid, will have Articles data outputted in the header through a JSON-LD script.
+On the Extension Settings page, you can assign which post types should support the Articles markup, and what the default Articles type should be.
+
+Moreover, you can enable the Google News sitemap. Restrictions apply. For more information, see the [Articles FAQ](#faq).
+
+### Post Settings
+
+On every supported post type edit-screen, you can set the Article Type under the Structure tab.
 
 [tsfep-image id="3"]
 
@@ -61,88 +64,74 @@ Every WordPress post, if the rendered data is valid, will have Articles data out
 **For Articles to render correct data, keep the following in mind:**
 
 1. Don't use HTML code in your post titles. The theme, through CSS, should render titles correctly.
-2. Do set featured images for posts.
+2. Do set a featured image. Alternatively, set a social image via the SEO settings for the page.
 3. Don't forget to set up the necessary information at the global SEO Schema settings.
-4. Don't forget to set up a Site Icon at the global SEO Schema settings or within Customizer.
+4. Don't forget to set up a logo via the Extension Settings.
 
 ### Automated output
 
-The data used for output is fetched automatically from your post's structure.
+The data used for Articles' output is fetched automatically from your post's structure.
 
 **These fields are evaluated:**
 
-* **Type:** The type of the article, either "Article", "Blog Posting" or "News Article".
+* **Type:** The type of the article, either "Article," "Blog Posting," or "News Article."
 * **Main Entity:** The article URL.
-* **Headline:** The title, this defaults to the post title. It will fall back to the SEO title.
-* **Images:** The images set for the article. This defaults to the post's SEO settings image, and will fall back to the "Featured Image".
+* **Headline:** The title, this defaults to the post title. It may be trimmed to 110 characters when it exceeds that limit.
+* **Images:** The images set for the article. It defaults to the post's SEO settings image, and can fall back to the "Featured Image."
 * **Published date:** The date the article was published.
 * **Modified date:** The date the article was last modified.
 * **Author:** The article's author, set in the "Author" meta box. This defaults to the author's display name.
-* **Publisher:** The organization, which defaults to the "Schema.org" settings within The SEO Framework.
+* **Publisher:** When applicable, the organization. This defaults to the "Schema.org" settings from The SEO Framework.
 * **Description:** The article's description, which is the same as the description output by The SEO Framework.
 
-### Required fields
-
-Most of the fields above are required before the Article type data is outputted.
+#### Testing the structured data
 
 In general, you shouldn't have to worry about the output with Articles.
 The extension automatically checks whether the output is valid.
 
-Google's [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool) might annotate the Articles data as invalid.
-This is because there are two different requirement standards for AMP and non-AMP pages. The testing tool enforces the AMP standard.
+Google's [Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool) might annotate the Articles data as invalid. This is because there are two different requirement standards for AMP and non-AMP pages. The testing tool enforces the AMP standard.
 
 #### Special attention for AMP
 
 When the [tsfep-extension name="amp"] is active, this extension will replace default Articles output with an improved and tailored version.
 
-For correct AMP output, you need to make sure the following two fields are available.
-These fields aren't required for non-AMP, but they are recommended.
-
-* **Image:** This image needs to be set in the in-post SEO social settings.
-	* Alternatively, you can use the Featured Image.
-* **Publisher:** The website must represent an Organization, and it must include a logo.
-	* The logo is taken from **"SEO Settings -> Schema Settings -> Presence -> Website logo"**.
-	* Alternatively, you can set a site icon in Customizer, this requires theme support.
+For the correct AMP output, you need to make sure the post contains an image, and the site must represent an organization with a defined logo.
 
 ### Types
 
 Articles can be defined through various types.
 
-Google supports generic Articles, Blog Postings and News Articles.
+Google supports generic Articles, Blog Postings, and News Articles.
 
 #### Articles (generic)
 
-The general article type covers all types.
+The generic article type covers all types.
 
-**These types are covered by General articles:**
+**These types are covered by generic articles:**
 
 * A piece of an investigative report.
-* A news articles.
-* A blog posting.
+* News articles.
+* Blog posting.
 
-So, News Articles and Blog Postings are covered by General Articles. But, they can also be defined more specifically.
+So, generic Articles cover News Articles and Blog Postings. But you might want to be more specific.
 
 #### News Articles
 
-When the article information is annotated as news, and when your website is authorized as a news publisher, Google can display it in a featured carousel.
-
-These articles mustn't be opinionated pieces, but they must display fact.
-
-This carousel is time sensitize, which means that recent news entries are much more likely to be displayed here.
+When you annotate a page as a News Article, and when your website is verified as a news publisher, Google can display it in a featured carousel. This carousel is time-sensitive, which means that recent news entries are much more likely to be displayed here. These articles mustn't be opinionated pieces, but they must display fact and adhere by [Google News' content policies](https://support.google.com/news/publisher-center/answer/6204050).
 
 [tsfep-image id="2"]
 
 #### Blog Postings
 
-Unlike News Articles, blog postings won't be displayed within carousels.
+Unlike News Articles, Blog Postings won't be displayed within carousels. The blog entry can be based on either fact or be an opinionated piece.
 
-The blog entry can be based on either fact or be an opinionated piece.
-
-This information is mainly used to bind authors, organizations, and dates to the content. By doing so, you add relevance to your content.
-
-This helps search engines tailor displayed search results for its users. So, you increase the likelihood to get returning visitors, thus increasing engagement.
+This article type is mainly used to bind authors, organizations, and dates to the content. This adds recognition to your content, which helps search engines tailor the search results for their users. So, you increase the likelihood to get returning visitors, thus increasing engagement.
 
 ## FAQ
+
+### Which type is best for my posts?
+
+Please consult the [Articles types reference](#usage/types).
 
 ### Where can I find the Google News sitemap?
 
@@ -151,8 +140,7 @@ Please note that your site must be verified before using the sitemap. You can ge
 
 ### Where do I submit a Google News sitemap?
 
-You can submit your Google News sitemap via Google Search Console. For more information, please see Google's publisher documentation on the [Google News Sitemaps](https://support.google.com/news/publisher-center/answer/74288).
-Please note that your site must be approved for news publishing by Google.
+You can submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://support.google.com/news/publisher-center/answer/74288).
 
 ### Does Bing support the Google News sitemap?
 
@@ -217,17 +205,19 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 [tsfep-release time="-1"]
 
-* **Added:** A brand-new defaults options panel, which is integrated in the new global extension-options page.
-	* Herein, you can set the supported post types, and their default article types, as well.
+* **Added:** A brand-new default-options panel, which is integrated into the new global extension-options page.
+	* You can set the supported post types and their default article types, as well.
+	* You can enable a Google News sitemap.
+	* You can set a custom publisher logo.
 * **Added:** A Google News sitemap. When you mark pages as `NewsArticle`, they'll be included.
-	* The query limit from The SEO Framework will apply.
-		* At most, 1000 news articles will be included in the sitemap.
-* **Added:** Sites that represent a `Person` are now supported for Article markup.
-* TODO **Added:** Bulk-and quick editing options.
-* TODO **Added:** The SEO Bar (or post state) now hints the Article type.
+	* The query limit from The SEO Framework applies.
+		* At most, 1000 news articles are included in the sitemap.
+* **Added:** Sites that represent a `Person` are now supported for Articles markup.
+* **Added:** A Post State in the post overview, next to each post title, now hints the Articles type.
+* **Improved:** Articles now intelligently trims titles, instead of invalidating the output when a title is over 110 characters.
 * **Changed:** This extension now requires TSF v4.0.2 or higher.
 * **Deprecated:**
-	* These has been converted to the new options, somewhat gracefully. You should remove these filters from your site if you have it installed. Use the options, instead.
+	* These filters have been converted to the new options, somewhat gracefully. You should remove them from your site if you have it installed. Use the new options, instead.
 		* `the_seo_framework_articles_supported_post_types`.
 		* `the_seo_framework_articles_default_meta`.
 
@@ -277,13 +267,13 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 * **Added:** TSF 3.0 URL compatibility.
 * **Added:** http://schema.org/publisher output now uses the new TSF 3.0 logo. It is resized correctly on-the-fly for AMP, once.
-* **Changed:** This extension is now free and out of testing phase.
+* **Changed:** This extension is now free and out of the testing phase.
 
 ### 1.0.1-gamma
 
 [tsfep-release time="August 22nd, 2017"]
 
-* **Changed:** Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/articles), but that doesn't mean the data is overlooked. So:
+* **Changed:** Google states that [some output is ignored](https://developers.google.com/search/docs/data-types/article), but that doesn't mean the data is overlooked. So:
 	* Published date is now also outputted on non-AMP.
 	* Modified date is now also outputted on non-AMP.
 	* Post Author is now also outputted on non-AMP.

@@ -48,6 +48,14 @@ final class Sitemap extends Core {
 		\add_action( 'the_seo_framework_sitemap_schemas', [ $this, '_adjust_news_sitemap_schemas' ] );
 
 		\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_delete_news_sitemap_transient' ] );
+
+		// Don't use action `the_seo_framework_ping_search_engines`; News Sitemaps don't have a ping threshold.
+		// Don't discern the post. For the cron callback to work, that'd be unreliable.
+		if ( \the_seo_framework()->get_option( 'ping_use_cron' ) ) {
+			\add_action( 'tsf_sitemap_cron_hook', [ $this, '_ping_google_news' ] );
+		} else {
+			\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_ping_google_news' ] );
+		}
 	}
 
 	/**
@@ -76,7 +84,7 @@ final class Sitemap extends Core {
 	public function _register_news_sitemap_endpoint( $list = [] ) {
 
 		$list['news'] = [
-			'endpoint' => 'siteamp-news.xml',
+			'endpoint' => 'sitemap-news.xml',
 			'regex'    => '/^sitemap-news.xml/i',
 			'callback' => [ $this, '_output_news_sitemap' ],
 			'robots'   => true,
@@ -158,6 +166,19 @@ final class Sitemap extends Core {
 	 */
 	public function _delete_news_sitemap_transient() {
 		\delete_transient( $this->get_sitemap_transient_name() );
+	}
+
+	/**
+	 * Pings Google News whenever a post is updated. Albeit News Article or not.
+	 *
+	 * @since 2.0.0
+	 * @access private
+	 */
+	public function _ping_google_news() {
+		$pingurl = 'https://www.google.com/ping?sitemap=' . rawurlencode(
+			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( $this->sitemap_id )
+		);
+		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}
 
 	/**
