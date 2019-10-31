@@ -81,8 +81,8 @@ function _protect_options() {
  * @access private
  * @uses TSF_Extension_Manager\SecureOption::verify_option_instance()
  *
- * @param mixed $value The new, unserialized option value.
- * @param mixed $old_value The old option value.
+ * @param mixed  $value The new, unserialized option value.
+ * @param mixed  $old_value The old option value.
  * @param string $option The option name.
  * @return mixed $value on success.
  */
@@ -156,7 +156,7 @@ function _init_tsf_extension_manager() {
 		 * Runs after extensions are initialized
 		 * @since 1.5.0
 		 */
-		do_action( 'tsfem_extensions_initialized' );
+		\do_action( 'tsfem_extensions_initialized' );
 	}
 
 	return $tsf_extension_manager;
@@ -199,6 +199,7 @@ function _register_autoloader() {
  * @since 1.0.0
  * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @since 2.0.2 Now requires TSF 3.1+ to load.
+ * @since 2.2.0 Now requires TSF 3.3+ to load.
  * @staticvar bool $can_load
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
@@ -211,12 +212,7 @@ function can_load_class() {
 		return $can_load;
 
 	if ( function_exists( 'the_seo_framework' ) ) {
-		$tsf = \the_seo_framework();
-		$loaded = isset( $tsf->loaded ) ? $tsf->loaded : (
-			function_exists( 'the_seo_framework_active' ) ? \the_seo_framework_active() : false
-		);
-
-		if ( $loaded && version_compare( THE_SEO_FRAMEWORK_VERSION, '3.1', '>=' ) )
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3', '>=' ) && \the_seo_framework()->loaded )
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
 	}
 
@@ -255,6 +251,15 @@ function _autoload_classes( $class ) {
 			return;
 	}
 
+	static $_timenow = true;
+
+	if ( $_timenow ) {
+		$_bootstrap_timer = microtime( true );
+		$_timenow         = false;
+	} else {
+		$_bootstrap_timer = 0;
+	}
+
 	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
 
 	if ( strpos( $class, '_abstract' ) ) {
@@ -266,4 +271,9 @@ function _autoload_classes( $class ) {
 	}
 
 	require $path . $class . '.class.php';
+
+	if ( $_bootstrap_timer ) {
+		\The_SEO_Framework\_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+		$_timenow = true;
+	}
 }

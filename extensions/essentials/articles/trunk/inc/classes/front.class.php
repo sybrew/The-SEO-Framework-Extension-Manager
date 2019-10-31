@@ -356,7 +356,7 @@ final class Front extends Core {
 		$post_type = \get_post_type();
 		$_default  = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
 
-		return [ '@type' => $this->get_post_meta( 'type', $_default ) ];
+		return [ '@type' => static::filter_article_type( $this->get_post_meta( 'type', $_default ) ) ];
 	}
 
 	/**
@@ -481,7 +481,7 @@ final class Front extends Core {
 
 		$id = $this->get_current_id();
 
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3.0', '>=' ) ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.0.0', '>=' ) ) {
 
 			$images = [];
 
@@ -663,7 +663,7 @@ final class Front extends Core {
 
 		$tsf = \the_seo_framework();
 
-		if ( 'organization' !== $tsf->get_option( 'knowledge_type' ) ) {
+		if ( ! static::is_organization() ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}

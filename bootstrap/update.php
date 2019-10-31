@@ -158,8 +158,8 @@ function _push_update( $value, $transient ) {
 	if ( isset( $runtimecache ) ) {
 		$cache =& $runtimecache;
 	} else {
-		$cache_timeout = MINUTE_IN_SECONDS * 15;
-		$cache = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
+		$cache_timeout = MINUTE_IN_SECONDS * 20;
+		$cache         = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
 
 		if ( false === $cache ) {
 			// include an unmodified $wp_version

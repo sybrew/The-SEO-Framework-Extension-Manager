@@ -2,6 +2,8 @@
 
 defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
+// phpcs:disable, PHPCompatibility.Classes.NewLateStaticBinding.OutsideClassScope, VariableAnalysis.CodeAnalysis.VariableAnalysis.StaticOutsideClass -- We're stil in scope.
+
 if ( $this->is_plugin_activated() ) {
 	if ( $this->is_enterprise_user() ) {
 		$more_mottos = [ 'An enterprise', 'A premium', 'An essential' ];

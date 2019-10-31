@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
-// TODO When the time comes... set TSF v4.0 JS check instead.
+// TODO Set TSF v4.0 JS check instead.
 
 ?>
 <div class="tsfem-pane-inner-wrap tsfem-pane-inner-collapsable-settings-wrap tsfem-e-local-settings-wrap">

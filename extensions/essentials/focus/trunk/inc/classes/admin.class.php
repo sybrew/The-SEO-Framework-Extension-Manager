@@ -73,22 +73,6 @@ final class Admin extends Core {
 	}
 
 	/**
-	 * Checks whether we're using the new WordPress 5.0 editor.
-	 *
-	 * @since 1.2.0
-	 * @return bool
-	 */
-	private function is_gutenberg_page() {
-		if ( function_exists( '\\use_block_editor_for_post' ) )
-			return ! empty( $GLOBALS['post'] ) && \use_block_editor_for_post( $GLOBALS['post'] );
-
-		if ( function_exists( '\\is_gutenberg_page' ) )
-			return \is_gutenberg_page();
-
-		return false;
-	}
-
-	/**
 	 * Returns active focus elements.
 	 *
 	 * @since 1.0.0
@@ -193,7 +177,7 @@ final class Admin extends Core {
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
 						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
 					],
-					'isGutenbergPage'    => $this->is_gutenberg_page(),
+					'isGutenbergPage'    => \the_seo_framework()->is_gutenberg_page(),
 					'scripts'            => [
 						'parserWorker' => $this->get_worker_file_location(),
 					],

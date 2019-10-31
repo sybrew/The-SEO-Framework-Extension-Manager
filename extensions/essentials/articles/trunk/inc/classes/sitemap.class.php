@@ -41,7 +41,7 @@ final class Sitemap extends Core {
 	 */
 	private function construct() {
 
-		if ( ! $this->get_option( 'news_sitemap' ) ) return;
+		if ( ! $this->get_option( 'news_sitemap' ) || ! static::is_organization() ) return;
 
 		\add_filter( 'the_seo_framework_sitemap_endpoint_list', [ $this, '_register_news_sitemap_endpoint' ] );
 		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_do_news_sitemap_header' ] );
@@ -85,7 +85,7 @@ final class Sitemap extends Core {
 
 		$list['news'] = [
 			'endpoint' => 'sitemap-news.xml',
-			'regex'    => '/^sitemap-news.xml/i',
+			'regex'    => '/^sitemap-news\.xml/i',
 			'callback' => [ $this, '_output_news_sitemap' ],
 			'robots'   => true,
 		];

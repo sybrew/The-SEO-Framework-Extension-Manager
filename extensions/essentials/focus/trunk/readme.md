@@ -200,11 +200,12 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 ## Changelog
 
-### 1.4.0
+### 1.3.1
 
 [tsfep-release time="-1"]
 
-* **Improved:** Addressed Gutenberg 9.4 (WP 5.3) changes (by fixing `wp.data.select( 'core/editor' ).isTyping` deprecation).
+* **Improved:** Addressed Gutenberg 6.4 (WP 5.3) changes (by fixing `wp.data.select( 'core/editor' ).isTyping` deprecation).
+* **Updated:** Removed backward compatibility checks. The extension now requires TSF v4.0 and later.
 * **API changes:**
 	* *June 1st, 2019*: The API has been updated to be more performant and secure. Although unlikely, you may see different dictionary results henceforth.
 

@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_ARTICLES_VERSION', '1.4.0' );
+define( 'TSFEM_E_ARTICLES_VERSION', '2.0.0' );
 
 /**
  * The extension file, absolute unix path.

@@ -277,7 +277,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Added
-	 * @TODO lower margin of error if server maintains stable.
+	 * @TODO lower margin of error if server maintains stable. Well, we had a 99.991% uptime in 2018 =/
 	 *
 	 * @param bool $moe  Whether to allow a margin of error.
 	 *                   May happen once every 30 days for 3 days.

@@ -47,6 +47,12 @@ There is no setup required, and no options are available.
 
 ## Changelog
 
+### 1.2.1
+
+[tsfep-release time="-1"]
+
+* **Updated:** Removed backward compatibility checks. The extension now requires TSF v4.0 and later.
+
 ### 1.2.0
 
 [tsfep-release time="August 28th, 2018"]

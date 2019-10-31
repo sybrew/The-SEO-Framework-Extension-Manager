@@ -345,7 +345,7 @@ trait UI {
 	 *
 	 * @since 1.3.0
 	 * @since 2.0.2 : 1. Now uses TSF's Scripts module.
-	 *                2. Now returns void
+	 *                2. Now returns void.
 	 * @access protected
 	 * @internal
 	 *
@@ -355,6 +355,7 @@ trait UI {
 
 		if ( has_run( __METHOD__ ) ) return;
 
+		// TODO use TSF v4.0 media handler, instead.
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-media',

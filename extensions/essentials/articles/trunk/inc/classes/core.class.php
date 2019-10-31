@@ -108,11 +108,75 @@ class Core {
 		foreach ( $filtered_post_types as $post_type ) {
 			$this->o_defaults['post_types'][ $post_type ] = [
 				'enabled'      => 1,
-				'default_type' => $this->pm_defaults['type'],
+				'default_type' => static::filter_article_type( $this->pm_defaults['type'] ),
 			];
 		}
 
 		// Deprecated. Unset.
 		unset( $this->pm_defaults['type'] );
+	}
+
+	/**
+	 * Determines if the current site is representing an organization.
+	 *
+	 * @since 2.0.0
+	 * @staticvar bool $is
+	 *
+	 * @return bool
+	 */
+	protected static function is_organization() {
+		static $is;
+		return isset( $is ) ? $is : $is = 'organization' === \the_seo_framework()->get_option( 'knowledge_type' );
+	}
+
+	/**
+	 * Filters article type, so an available will return.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $type The selected Article type.
+	 * @return string The filtered Article type.
+	 */
+	protected static function filter_article_type( $type ) {
+
+		if ( ! in_array( $type, static::get_available_article_types(), true ) ) {
+			$type = 'Article';
+		}
+
+		return $type;
+	}
+
+	/**
+	 * Filters article type array, so an available list will return.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $items An array with Article types as keys.
+	 * @return string The filtered array.
+	 */
+	protected static function filter_article_keys( array $items ) {
+		return array_intersect_key(
+			$items,
+			array_flip( static::get_available_article_types() )
+		);
+	}
+
+	/**
+	 * Returns the available Article types.
+	 *
+	 * @since 2.0.0
+	 * @todo allow filtering the types?
+	 *
+	 * @return array
+	 */
+	protected static function get_available_article_types() {
+
+		if ( static::is_organization() ) {
+			$types = [ 'Article', 'NewsArticle', 'BlogPosting' ];
+		} else {
+			$types = [ 'Article', 'BlogPosting' ];
+		}
+
+		return $types;
 	}
 }

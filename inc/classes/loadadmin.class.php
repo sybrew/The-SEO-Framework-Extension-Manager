@@ -925,6 +925,8 @@ final class LoadAdmin extends AdminPages {
 	 * Test drives extension to see if an error occurs.
 	 *
 	 * @since 1.0.0
+	 * @since 2.2.0 1. Now bypasses the WP 5.2 fatal error handler on AJAX.
+	 *              2. Now clears the WP 5.2 fatal error hanlder message on non-AJAX.
 	 *
 	 * @param string $slug The extension slug to load.
 	 * @param bool   $ajax Whether this is an AJAX request.
@@ -939,6 +941,12 @@ final class LoadAdmin extends AdminPages {
 	 */
 	protected function test_extension( $slug, $ajax = false ) {
 
+		if ( $ajax ) {
+			\add_filter( 'wp_die_ajax_handler', [ $this, '_disable_wp_fatal_error_handler_cb' ], 9999 );
+		} else {
+			\add_filter( 'wp_php_error_message', [ $this, '_disable_wp_fatal_error_handler' ], 9999 );
+		}
+
 		$this->get_verification_codes( $_instance, $bits );
 		Extensions::initialize( 'load', $_instance, $bits );
 
@@ -947,8 +955,38 @@ final class LoadAdmin extends AdminPages {
 
 		Extensions::reset();
 
+		if ( $ajax ) {
+			\remove_filter( 'wp_die_ajax_handler', [ $this, '_disable_wp_fatal_error_handler_cb' ], 9999 );
+		} else {
+			\remove_filter( 'wp_php_error_message', [ $this, '_disable_wp_fatal_error_handler' ], 9999 );
+		}
+
 		return $result;
 	}
+
+	/**
+	 * Disables the WP fatal error handler callback, so ours works again; making error notices legible.
+	 * This is a separated private function because we must reset it after the extension activation failed.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 *
+	 * @return string
+	 */
+	public function _disable_wp_fatal_error_handler_cb() {
+		return '__return_empty_string';
+	}
+
+	/**
+	 * Disables the WP fatal error handler, so ours works again; making error notices legible.
+	 * This is a separated private function because we must reset it after the extension activation failed.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 *
+	 * @return void
+	 */
+	public function _disable_wp_fatal_error_handler() { }
 
 	/**
 	 * Enables extension through options.

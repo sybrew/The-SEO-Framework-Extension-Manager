@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager/Bootstrap
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
@@ -25,12 +26,14 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 /**
  * Load class overloading traits.
+ *
  * @since 1.5.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/overload' );
 
 /**
  * Require memory factory trait.
+ *
  * @since 1.5.0
  */
 \TSF_Extension_Manager\_load_trait( 'factory/memory' );
@@ -48,7 +51,7 @@ $_load_upgrader_class = function() {
  *
  * Upgrades plugin and extensions.
  *
- * @since 1.0.0
+ * @since 1.5.0
  * @access private
  * @uses trait \TSF_Extension_Manager\Enclose_Stray_Private
  * @uses trait \TSF_Extension_Manager\Construct_Core_Once_Interface
@@ -62,33 +65,34 @@ final class Upgrader {
 		Memory;
 
 	/**
-	 * The db revision option key.
-	 * @property string
+	 * @since 1.5.0
+	 * @property string The db revision option key.
 	 */
 	const O = 'tsfem_current_db_versions';
 
 	/**
-	 * The upgrade container.
-	 * @property \stdClass
+	 * @since 1.5.0
+	 * @var \stdClass The upgrade container.
 	 */
 	private $upgrades;
 
 	/**
-	 * The previous database revisions per member.
 	 * This value is reset upon critical upgrade for member 'core'.
-	 * @property array
+	 *
+	 * @since 1.5.0
+	 * @var array The previous database revisions per member.
 	 */
 	private $previous_db_versions;
 
 	/**
-	 * The upgraded database revisions per member.
-	 * @property array
+	 * @since 1.5.0
+	 * @var array The upgraded database revisions per member.
 	 */
 	private $current_db_versions;
 
 	/**
-	 * The currently active callbacks for member parsing.
-	 * @property array
+	 * @since 1.5.0
+	 * @var array The currently active callbacks for member parsing.
 	 */
 	private $active_callbacks;
 
@@ -148,6 +152,7 @@ final class Upgrader {
 	 * @since 1.5.0
 	 * @since 1.5.1 Now no longer always returns '0'.
 	 *
+	 * @param string $member The member of the upgrade, e.g. the extension slug.
 	 * @return string
 	 */
 	public function get_previous_version( $member ) {
@@ -161,6 +166,7 @@ final class Upgrader {
 	 * @since 1.5.0
 	 * @since 1.5.1 Now no longer always returns '0'.
 	 *
+	 * @param string $member The member of the upgrade, e.g. the extension slug.
 	 * @return string
 	 */
 	public function get_current_version( $member ) {
@@ -180,15 +186,16 @@ final class Upgrader {
 	 * @since 1.5.0
 	 * @factory
 	 *
-	 * @param string $member  The member of the upgrade, e.g. the extension slug.
-	 * @param string $version TSFEM's database version.
-	 * @param callable $callback
+	 * @param string   $member   The member of the upgrade, e.g. the extension slug.
+	 * @param string   $version  TSFEM's database version.
+	 * @param callable $callback The callback to perform for the upgrade.
 	 */
 	public function _register_upgrade( $member, $version, callable $callback ) {
 
 		$c = &$this->_upgrade_collector();
 
-		isset( $c->{$member} ) or $c->{$member} = new \stdClass;
+		// phpcs:ignore, WordPress.WhiteSpace.OperatorSpacing
+		isset( $c->{$member} )             or $c->{$member}             = new \stdClass;
 		isset( $c->{$member}->{$version} ) or $c->{$member}->{$version} = [];
 
 		$c->{$member}->{$version} = $callback;
@@ -352,6 +359,7 @@ final class Upgrader {
 	 *
 	 * @since 1.5.0
 	 *
+	 * @param \stdClass $upgrade The upgrade iterator object.
 	 * @yield array { $member => $version }
 	 */
 	private function yield_runs( \stdClass $upgrade ) {
@@ -363,8 +371,12 @@ final class Upgrader {
 	}
 
 	/**
-	 * @param string $version
-	 * @param callable $callback
+	 * Performs the upgrade.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string   $version  The version to upgrade to.
+	 * @param callable $callback The upgrader callback.
 	 * @return array {
 	 *   'success' => bool $success
 	 *   'version' => string $version
@@ -389,7 +401,9 @@ final class Upgrader {
 	private function update_member( $member, $version ) {
 
 		$_preset = $this->current_db_versions;
+
 		$this->current_db_versions[ $member ] = (string) $version;
+
 		$updated = (bool) \update_option( static::O, $this->current_db_versions );
 
 		$updated or $this->current_db_versions = $_preset;

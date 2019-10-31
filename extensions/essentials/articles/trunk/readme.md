@@ -51,7 +51,7 @@ Underneath the extension description, you should see a settings-link appear. You
 
 On the Extension Settings page, you can assign which post types should support the Articles markup, and what the default Articles type should be.
 
-Moreover, you can enable the Google News sitemap. Restrictions apply. For more information, see the [Articles FAQ](#faq).
+Moreover, you can enable the Google News sitemap and select a publisher logo. Restrictions apply. For more information, see the [Articles FAQ](#faq).
 
 ### Post Settings
 
@@ -117,6 +117,8 @@ So, generic Articles cover News Articles and Blog Postings. But you might want t
 
 #### News Articles
 
+_This type is unavailable when your website represent a person, instead of an organization._
+
 When you annotate a page as a News Article, and when your website is verified as a news publisher, Google can display it in a featured carousel. This carousel is time-sensitive, which means that recent news entries are much more likely to be displayed here. These articles mustn't be opinionated pieces, but they must display fact and adhere by [Google News' content policies](https://support.google.com/news/publisher-center/answer/6204050).
 
 [tsfep-image id="2"]
@@ -132,6 +134,10 @@ This article type is mainly used to bind authors, organizations, and dates to th
 ### Which type is best for my posts?
 
 Please consult the [Articles types reference](#usage/types).
+
+### I don't see all settings.
+
+Some settings are hidden when your website represents a person, instead of an organization. You can adjust this via The SEO Framework's Schema.org settings, under "Presence."
 
 ### Where can I find the Google News sitemap?
 
@@ -211,11 +217,12 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 	* You can set a custom publisher logo.
 * **Added:** A Google News sitemap. When you mark pages as `NewsArticle`, they'll be included.
 	* The query limit from The SEO Framework applies.
-		* At most, 1000 news articles are included in the sitemap.
+	* At most, 1000 news articles are included in the sitemap.
 * **Added:** Sites that represent a `Person` are now supported for Articles markup.
 * **Added:** A Post State in the post overview, next to each post title, now hints the Articles type.
 * **Improved:** Articles now intelligently trims titles, instead of invalidating the output when a title is over 110 characters.
 * **Changed:** This extension now requires TSF v4.0.2 or higher.
+* **Info:** Some post-meta and extension settings are hidden when the website represents a `Person`, instead of an `Organization`.
 * **Deprecated:**
 	* These filters have been converted to the new options, somewhat gracefully. You should remove them from your site if you have it installed. Use the new options, instead.
 		* `the_seo_framework_articles_supported_post_types`.

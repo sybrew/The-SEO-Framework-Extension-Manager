@@ -77,7 +77,7 @@ trait Extensions_Properties {
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return [
-			'local' => [
+			'local'     => [
 				'slug'         => 'local',
 				'network'      => '0',
 				'type'         => 'premium',
@@ -87,36 +87,36 @@ trait Extensions_Properties {
 				'last_updated' => '1565553458',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
-			'focus' => [
+			'focus'     => [
 				'slug'         => 'focus',
 				'network'      => '0',
 				'type'         => 'essentials+',
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1547763663',
+				'last_updated' => '1572498553',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
-			'articles' => [
+			'articles'  => [
 				'slug'         => 'articles',
 				'network'      => '0',
 				'type'         => 'essentials',
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1572172720',
+				'last_updated' => '1572496812',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.2',
 				'tested_tsf'   => '4.0.3',
 			],
-			'honeypot' => [
+			'honeypot'  => [
 				'slug'         => 'honeypot',
 				'network'      => '0',
 				'type'         => 'essentials',
@@ -126,10 +126,10 @@ trait Extensions_Properties {
 				'last_updated' => '1542470700',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
-			'amp' => [
+			'amp'       => [
 				'slug'         => 'amp',
 				'network'      => '0',
 				'type'         => 'free',
@@ -139,10 +139,10 @@ trait Extensions_Properties {
 				'last_updated' => '1565627638',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
-			'monitor' => [
+			'monitor'   => [
 				'slug'         => 'monitor',
 				'network'      => '0',
 				'type'         => 'premium',
@@ -152,7 +152,7 @@ trait Extensions_Properties {
 				'last_updated' => '1546666851',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
 			'incognito' => [
@@ -165,10 +165,10 @@ trait Extensions_Properties {
 				'last_updated' => '1515109560',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
-			'origin' => [
+			'origin'    => [
 				'slug'         => 'origin',
 				'network'      => '0',
 				'type'         => 'free',
@@ -178,7 +178,7 @@ trait Extensions_Properties {
 				'last_updated' => '1541601833',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
 			'title-fix' => [
@@ -188,10 +188,10 @@ trait Extensions_Properties {
 				'area'         => 'theme',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1534366523',
+				'last_updated' => '1572496812',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
-				'requires_tsf' => '3.3.0',
+				'requires_tsf' => '4.0.0',
 				'tested_tsf'   => '4.0.3',
 			],
 		];
@@ -210,9 +210,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '08c5a3b25246b44d641a6121d92e6c6b60940a22c4ef77cb4562a65f887e749e',
-			'sha1'   => 'ba75c6afe963722d6a81d793fbeffb06c2b3c5ff',
-			'md5'    => '2d0bea5e00d7c9670c3e6547ea88d346',
+			'sha256' => '9f274b2650fe28a243bd72989739c2a02f6ffb570d51040e7d21d61fba6afba1',
+			'sha1'   => '158f4545da69bd3ef48b3371ef6902da8098c894',
+			'md5'    => 'a5758402b9fd763722603a7259ea4eb8',
 		];
 	}
 
@@ -863,7 +863,7 @@ trait Extensions_Actions {
 		//* Get follow-up verification instance.
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
-			$bits = $verification['bits'];
+			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
 
 			switch ( $yield_count ) :
@@ -1061,6 +1061,7 @@ trait Extensions_Actions {
 	 * Also registers that the extension has been loaded.
 	 *
 	 * @since 1.0.0
+	 * @since 2.2.0 Now allows for persistent shared-class tests (thanks to _once).
 	 *
 	 * @param string $file      The extension file to include.
 	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
@@ -1068,7 +1069,7 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) {
-		return (bool) include $file;
+		return (bool) include_once $file;
 	}
 
 	/**

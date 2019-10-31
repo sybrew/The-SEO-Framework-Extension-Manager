@@ -60,12 +60,12 @@ function tsf_extension_manager_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 50605,
-		'wp'  => 38590,
+		'wp'  => '4.9-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 	   ! defined( 'PHP_VERSION_ID' ) || PHP_VERSION_ID < $requirements['php'] and $test = 1
-	or $GLOBALS['wp_db_version'] < $requirements['wp'] and $test = 2
+	or version_compare( $GLOBALS['wp_version'], $requirements['wp'], '<' ) and $test = 2
 	or $test = true;
 	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 

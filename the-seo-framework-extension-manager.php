@@ -109,7 +109,7 @@ function tsf_extension_manager_boot() {
 		require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrade.php';
 	}
 
-	if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+	if ( is_admin() || wp_doing_cron() ) {
 		require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'update.php';
 	}
 

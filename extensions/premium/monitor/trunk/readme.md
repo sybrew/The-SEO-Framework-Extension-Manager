@@ -115,6 +115,12 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.3-beta-5
+
+[tsfep-release time="-1"]
+
+* **Improved:** To honor the new Extension Manager interface, we restyled the non-default items.
+
 ### 1.2.2-beta-5
 
 [tsfep-release time="January 28th, 2019"]

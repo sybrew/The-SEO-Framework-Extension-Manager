@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  * Extension Name: Focus
  * Extension URI: https://theseoframework.com/extensions/focus/
  * Extension Description: The Focus extension guides you through the process of writing targeted content that ranks with focus keywords, and for Premium users also their inflections and synonyms.
- * Extension Version: 1.3.0
+ * Extension Version: 1.3.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -35,37 +35,43 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The extension version.
+ *
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_FOCUS_VERSION', '1.3.0' );
+define( 'TSFEM_E_FOCUS_VERSION', '1.3.1' );
 
 /**
  * The extension file, absolute unix path.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_FOCUS_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_FOCUS_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_FOCUS_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_FOCUS_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_FOCUS_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_FOCUS_PATH_CLASS', TSFEM_E_FOCUS_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
+ *
  * @since 1.0.0
  */
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_FOCUS_PATH_CLASS, 'Focus', $_instance, $bits ) )

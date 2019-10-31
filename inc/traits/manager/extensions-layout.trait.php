@@ -417,7 +417,7 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_description_footer( $extension, $wrap = true ) {
 
-		$data = static::get_extension_header( $extension['slug'] );
+		$data  = static::get_extension_header( $extension['slug'] );
 		$items = [];
 
 		//* Make extension author element. (move link to what's already shown?)

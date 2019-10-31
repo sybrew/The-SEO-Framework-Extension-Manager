@@ -1177,30 +1177,47 @@ class Core {
 		if ( isset( $loaded[ $class ] ) )
 			return $loaded[ $class ];
 
+		if ( $this->_has_died() ) {
+			$this->create_class_alias( $class );
+			return false;
+		}
+
+		static $_timenow = true;
+
+		if ( $_timenow ) {
+			$_bootstrap_timer = microtime( true );
+			$_timenow         = false;
+		} else {
+			$_bootstrap_timer = 0;
+		}
+
 		$_class = str_replace( '\\TSF_Extension_Manager\\Extension\\', '', $class );
 		$_ns    = substr( $_class, 0, strpos( $_class, '\\' ) );
 
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-			if ( $this->_has_died() ) {
-				$this->create_class_alias( $class );
-				return false;
-			}
 
 			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
 			$this->get_verification_codes( $_instance, $bits );
 
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
-			return $loaded[ $class ] = require_once $_path . $_file . '.class.php';
+			$loaded[ $class ] = require_once $_path . $_file . '.class.php';
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
 
 			//* Prevent fatal errors.
 			$this->create_class_alias( $class );
 
-			return $loaded[ $class ] = false;
+			$loaded[ $class ] = false;
 		}
+
+		if ( $_bootstrap_timer ) {
+			\The_SEO_Framework\_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+			$_timenow = true;
+		}
+
+		return $loaded[ $class ];
 	}
 
 	/**

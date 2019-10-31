@@ -89,18 +89,16 @@ final class Admin extends Core {
 		if ( ! $default ) {
 			$settings  = $this->get_option( 'post_types' );
 			$post_type = \the_seo_framework()->get_admin_post_type();
-			$default   = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
+			$default   = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 		}
 
-		$type_i18n = [
+		$type_i18n = static::filter_article_keys( [
 			'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
 			'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
 			'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
-		];
+		] );
 
-		$this->set_extension_post_meta_id( $post->ID );
-
-		$states[] = $type_i18n[ $this->get_post_meta( 'type', $default ) ];
+		$states[] = $type_i18n[ static::filter_article_type( $this->get_post_meta( 'type', $default ) ) ];
 
 		return $states;
 	}
@@ -133,6 +131,56 @@ final class Admin extends Core {
 			\add_action( 'tsfem_notices', [ $this, '_do_filter_upgrade_notice' ] );
 		}
 
+		$_settings = [
+			'post_types' => $this->generate_post_type_settings(),
+		];
+
+		if ( static::is_organization() ) {
+			$_settings += [
+				'news_sitemap' => [
+					'_default' => null,
+					'_edit'    => true,
+					'_ret'     => 'bool',
+					'_req'     => false,
+					'_type'    => 'checkbox',
+					'_desc'    => [
+						\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
+						sprintf(
+							/* translators: %s = Articles FAQ link. Markdown. */
+							\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
+							'https://theseoframework.com/extensions/articles/#faq'
+						),
+						\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
+					],
+					'_md'      => true,
+					'_check'   => [
+						\__( 'Enable Google News sitemap?', 'the-seo-framework-extension-manager' ),
+					],
+				],
+				'logo'         => [
+					'_default'  => [
+						'url' => '',
+						'id'  => '',
+					],
+					'_ph'       => \the_seo_framework()->get_option( 'knowledge_logo_url' ) ?: '',
+					'_edit'     => true,
+					'_ret'      => 'image',
+					'_req'      => false,
+					'_type'     => 'image',
+					'_readonly' => true,
+					'_desc'     => [
+						\__( 'Publisher Logo', 'the-seo-framework-extension-manager' ),
+						sprintf(
+							/* translators: %s = Logo guidelines link. Markdown. */
+							\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
+							'https://developers.google.com/search/docs/data-types/article#logo-guidelines'
+						),
+					],
+					'_md'       => true,
+				]
+				];
+		}
+
 		$settings::register_settings(
 			$this->o_index,
 			[
@@ -145,50 +193,7 @@ final class Admin extends Core {
 				'before'   => '',
 				'after'    => '',
 				'pane'     => [],
-				'settings' => [
-					'post_types'   => $this->generate_post_type_settings(),
-					'news_sitemap' => [
-						'_default' => null,
-						'_edit'    => true,
-						'_ret'     => 'bool',
-						'_req'     => false,
-						'_type'    => 'checkbox',
-						'_desc'    => [
-							\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
-							sprintf(
-								/* translators: %s = Articles FAQ link. Markdown. */
-								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
-								'https://theseoframework.com/extensions/articles/#faq'
-							),
-							\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
-						],
-						'_md'      => true,
-						'_check'   => [
-							\__( 'Enable Google News sitemap?', 'the-seo-framework-extension-manager' ),
-						],
-					],
-					'logo'         => [
-						'_default'  => [
-							'url' => '',
-							'id'  => '',
-						],
-						'_ph'       => \the_seo_framework()->get_option( 'knowledge_logo_url' ) ?: '',
-						'_edit'     => true,
-						'_ret'      => 'image',
-						'_req'      => false,
-						'_type'     => 'image',
-						'_readonly' => true,
-						'_desc'     => [
-							\__( 'Publisher Logo', 'the-seo-framework-extension-manager' ),
-							sprintf(
-								/* translators: %s = Logo guidelines link. Markdown. */
-								\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
-								'https://developers.google.com/search/docs/data-types/article#logo-guidelines'
-							),
-						],
-						'_md'       => true,
-					],
-				],
+				'settings' => $_settings,
 			]
 		);
 
@@ -230,24 +235,37 @@ final class Admin extends Core {
 				'_desc'    => [
 					\__( 'Default Article Type', 'the-seo-framework-extension-manager' ),
 					'',
-					\__( 'This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already set.', 'the-seo-framework-extension-manager' ),
+					\__( 'This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already stored.', 'the-seo-framework-extension-manager' ),
 				],
-				'_select'  => [
-					[
-						'Article',
-						\__( 'Article', 'the-seo-framework-extension-manager' ),
-					],
-					[
-						'NewsArticle',
-						\__( 'News Article', 'the-seo-framework-extension-manager' ),
-					],
-					[
-						'BlogPosting',
-						\__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
-					],
-				],
+				'_select'  => [],
 			],
 		];
+
+		foreach ( static::get_available_article_types() as $_type ) :
+			switch ( $_type ) :
+				case 'Article':
+					$_select_item = [
+						'Article',
+						\__( 'Article', 'the-seo-framework-extension-manager' ),
+					];
+					break;
+				case 'NewsArticle':
+					$_select_item = [
+						'NewsArticle',
+						\__( 'News Article', 'the-seo-framework-extension-manager' ),
+					];
+					break;
+				case 'BlogPosting':
+					$_select_item = [
+						'BlogPosting',
+						\__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+					];
+					break;
+				default:
+					break;
+			endswitch;
+			$fields['default_type']['_select'][] = $_select_item;
+		endforeach;
 
 		$tsf        = \the_seo_framework();
 		$post_types = $tsf->get_supported_post_types();
@@ -401,15 +419,12 @@ final class Admin extends Core {
 	 *
 	 * @since 2.0.0
 	 * @access private
-	 * @todo allow filtering the types?
 	 *
 	 * @param string $type The input value.
 	 * @return int The sanitized input value. Either 'Article', 'NewsArticle', or 'BlogPosting'.
 	 */
 	public static function _sanitize_option_article_type( $type ) {
-		return in_array( $type, [ 'Article', 'NewsArticle', 'BlogPosting' ], true )
-			? $type
-			: 'Article';
+		return static::filter_article_type( $type );
 	}
 
 	/**
@@ -435,6 +450,7 @@ final class Admin extends Core {
 	 *
 	 * @since 1.2.0
 	 * @since 1.4.0 Now uses a new filter to determine support.
+	 * @since 2.0.0 Now filters the available types.
 	 * @access private
 	 */
 	public function _prepare_inpost_views() {
@@ -448,7 +464,7 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 
-		$_default = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
+		$_default = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
@@ -462,12 +478,12 @@ final class Admin extends Core {
 					'name'          => 'type',
 					'input'         => 'select',
 					'default'       => $_default,
-					'value'         => $this->get_post_meta( 'type', $_default ),
-					'select_values' => [
+					'value'         => static::filter_article_type( $this->get_post_meta( 'type', $_default ) ),
+					'select_values' => static::filter_article_keys( [
 						'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
 						'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
 						'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
-					],
+					] ),
 				],
 			],
 		];

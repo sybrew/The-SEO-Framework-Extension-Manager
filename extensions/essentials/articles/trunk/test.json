@@ -6,6 +6,10 @@
 		"Admin" : [
 			"inc/classes/core.class.php",
 			"inc/classes/admin.class.php"
+		],
+		"Sitemap" : [
+			"inc/classes/core.class.php",
+			"inc/classes/sitemap.class.php"
 		]
 	}
 }

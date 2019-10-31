@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) and \TSF_Extension_Manager\ExtensionSettings::verify( $_sec
 
 $f = static::get_settings_form( $index );
 
-// TODO When the time comes... set TSF v4.0 JS check instead.
+// TODO Set TSF v4.0 JS check instead.
 
 ?>
 <div class="tsfem-pane-inner-wrap tsfem-pane-inner-collapsable-settings-wrap">

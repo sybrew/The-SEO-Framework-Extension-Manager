@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Title_Fix
  */
+
 namespace TSF_Extension_Manager\Extension\Title_Fix;
 
 /**
  * Extension Name: Title Fix
  * Extension URI: https://theseoframework.com/extensions/title-fix/
  * Extension Description: The Title Fix extension makes sure your title output is as configured. Even if your theme is doing it wrong.
- * Extension Version: 1.2.0
+ * Extension Version: 1.2.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -119,10 +120,8 @@ final class Core {
 	 * The constructor, initialize plugin.
 	 */
 	private function construct() {
-
 		//* Start the plugin at header, where theme support has just been initialized.
 		\add_action( 'get_header', [ $this, 'start_plugin' ], -1 );
-
 	}
 
 	/**
@@ -272,6 +271,7 @@ final class Core {
 
 		if ( $this->ob_started && false === $this->title_found_and_flushed ) {
 			$content = ob_get_clean();
+
 			$this->ob_started = false;
 
 			$this->find_title_tag( $content );
@@ -303,8 +303,8 @@ final class Core {
 			}
 		}
 
-		echo $content; // xss OK, esque. The content is unknown.
-
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Not our content.
+		echo $content;
 	}
 
 	/**
@@ -312,27 +312,21 @@ final class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added TSF v3.1 compat.
+	 * @since 1.2.1 Dropped TSF < v3.1 compat.
 	 *
 	 * @param string $title_tag the Title tag with the title
 	 * @param string $content The content containing the $title_tag
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
 
-		$tsf = \the_seo_framework();
-
-		if ( method_exists( $tsf, 'get_title' ) ) {
-			$title = $tsf->get_title();
-		} else {
-			$title = $tsf->title_from_cache( '', '', '', true );
-		}
-		$new_title = '<title>' . $title . '</title>' . $this->indicator();
+		$new_title = '<title>' . \the_seo_framework()->get_title() . '</title>' . $this->indicator();
 
 		//* Replace the title tag within the header.
-		//* TODO substr_replace to prevent multiple replacements?
+		//* TODO substr_replace to prevent multiple replacements? The DOM should contain only one title tag, though.
 		$content = str_replace( $title_tag, $new_title, $content );
 
-		echo $content; // xss OK, esque. The content is unknown. Replaced content is great.
-
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Not our content.
+		echo $content;
 	}
 
 	/**
@@ -345,8 +339,7 @@ final class Core {
 	 * @return bool True if the theme supports the title tag, false otherwise.
 	 */
 	public function current_theme_supports_title_tag() {
-		global $_wp_theme_features;
-		return ! empty( $_wp_theme_features['title-tag'] );
+		return ! empty( $GLOBALS['_wp_theme_features']['title-tag'] );
 	}
 
 	/**

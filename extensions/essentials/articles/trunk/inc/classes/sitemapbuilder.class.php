@@ -118,8 +118,8 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 		foreach ( $this->generate_url_item_values( $post_ids, $count ) as $_values ) {
 			// No more than 1000 complex items are allowed. (ref:https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd)
 			// Also stated here: https://support.google.com/news/publisher-center/answer/6075793
-			if ( $count > 1000 ) break;
 			$content .= $this->build_url_item( $_values );
+			if ( $count > 999 ) break;
 		}
 
 		return $content;
