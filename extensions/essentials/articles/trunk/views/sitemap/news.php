@@ -34,8 +34,8 @@ if ( false === $sitemap_content ) {
 	$sitemap_builder->shutdown_generation();
 	$sitemap_builder = null; // destroy class.
 
-	// Keep the sitemap for at most 1 week. Will expire during post actions.
-	$expiration = WEEK_IN_SECONDS;
+	// Keep the sitemap for at most 1 hour. Will expire during post actions.
+	$expiration = HOUR_IN_SECONDS;
 
 	if ( $tsf->get_option( 'cache_sitemap' ) )
 		\set_transient( $this->get_sitemap_transient_name(), $sitemap_content, $expiration );

@@ -175,10 +175,11 @@ final class Admin extends Core {
 							\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
 							'https://developers.google.com/search/docs/data-types/article#logo-guidelines'
 						),
+						\__( 'The logo must be a horizontally wide rectangle, not a square, and at least 60px high.', 'the-seo-framework-extension-manager' ),
 					],
 					'_md'       => true,
-				]
-				];
+				],
+			];
 		}
 
 		$settings::register_settings(

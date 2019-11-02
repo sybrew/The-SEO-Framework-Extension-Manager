@@ -154,9 +154,17 @@ function _init_tsf_extension_manager() {
 
 		/**
 		 * Runs after extensions are initialized
+		 *
 		 * @since 1.5.0
 		 */
 		\do_action( 'tsfem_extensions_initialized' );
+	} elseif ( ! function_exists( '\\the_seo_framework' ) ) {
+		/**
+		 * Nothing is loaded as this point; not even The SEO Framework.
+		 *
+		 * @since 2.2.0
+		 */
+		\do_action( 'tsfem_needs_the_seo_framework' );
 	}
 
 	return $tsf_extension_manager;
@@ -211,7 +219,7 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( function_exists( 'the_seo_framework' ) ) {
+	if ( function_exists( '\\the_seo_framework' ) ) {
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '3.3', '>=' ) && \the_seo_framework()->loaded )
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
 	}

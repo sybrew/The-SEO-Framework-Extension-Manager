@@ -85,8 +85,8 @@ TODO test RTL
 **Detailed log:**
 
 * **Added:** We added a new options-interface, which can be populated by extensions on demand.
-* TODO **Added:** The plugin now nags you that it requires The SEO Framework, with an installation/activation button.
-	* https://github.com/sybrew/the-seo-framework/issues/302
+* **Added:** When The SEO Framework plugin isn't found, the Extension Manager now nags you that it requires it.
+	* To learn more about the implementation details, see [this GitHub issue](https://github.com/sybrew/the-seo-framework/issues/302).
 * **Added:** New extension logos. They're now luminous.
 * **Added:** The Extension Manager and extension-loader boot-time are now added to the new "HTML boot-time" indicator of The SEO Framework v4.0.
 * **Improved:** The interface has been rewritten to use grid instead of flexbox.

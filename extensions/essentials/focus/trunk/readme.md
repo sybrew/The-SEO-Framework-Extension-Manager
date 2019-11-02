@@ -136,7 +136,7 @@ So, to prevent this from happening, Focus notifies you via this rating.
 
 One of the best ways to be found on a keyword is by placing it in the page URL. So, be sure to include it here.
 
-You can change your page URL right above the content editor.
+You can change your page URL in the sidebar under "Document > Permalink." On some WordPress setups you can find it above the content editor instead.
 
 ## FAQ
 

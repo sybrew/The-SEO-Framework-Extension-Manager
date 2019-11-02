@@ -188,9 +188,9 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 			// @see https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd
 			$_values['image'] = [
 				'loc' => isset( $image_details['url'] ) ? $image_details['url'] : '',
-				// caption in inferred from post description.
+				// caption in inferred from post description. Tested: this field is ignored.
 				// geo_location is inferred from publication.
-				// title is inferred from title.
+				// title is inferred from title. Tested: this field is ignored.
 				// license is implied.
 			];
 
