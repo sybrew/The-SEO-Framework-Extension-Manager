@@ -51,7 +51,7 @@ if ( ! $this->is_auto_activated() ) :
 				'name'         => $this->request_name['activate-key'],
 				'id'           => 'input-activation',
 				'classes'      => [
-					'tsfem-button',
+					'tsfem-button-primary',
 				],
 				'classes_form' => [
 					'tsfem-flex',

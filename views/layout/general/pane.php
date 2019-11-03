@@ -58,12 +58,9 @@ if ( $args['logo'] ) {
 	<div class="tsfem-pane-wrap">
 		<?php
 		printf(
-			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s</h3>%s</header>',
-			sprintf(
-				\is_rtl() ? '%2$s%1$s' : '%1$s%2$s',
-				$logo,
-				\esc_html( $title )
-			),
+			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s%s</h3>%s</header>',
+			$logo,
+			\esc_html( $title ),
 			$ajax
 		);
 		if ( isset( $callable ) || isset( $content ) ) {

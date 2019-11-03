@@ -24,10 +24,10 @@ $mottos = [
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 
 ?>
-<p class="tsfem-footer-title">
+<p class="tsfem-footer-title" dir=ltr>
 	The SEO Framework &ndash; Extension Settings
 </p>
-<p class="tsfem-footer-motto">
+<p class="tsfem-footer-motto" dir=ltr>
 	<?php echo \esc_html( "{$mottos[ $motto_key ]} Overview" ); ?>
 </p>
 <?php

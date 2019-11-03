@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager/Bootstrap
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
@@ -81,9 +82,9 @@ function _protect_options() {
  * @access private
  * @uses TSF_Extension_Manager\SecureOption::verify_option_instance()
  *
- * @param mixed  $value The new, unserialized option value.
+ * @param mixed  $new_value The new, unserialized option value.
  * @param mixed  $old_value The old option value.
- * @param string $option The option name.
+ * @param string $option    The option name.
  * @return mixed $value on success.
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
@@ -130,8 +131,10 @@ function _init_tsf_extension_manager() {
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
 
-	if ( false === \doing_action( 'plugins_loaded' ) )
+	if ( false === \doing_action( 'plugins_loaded' ) ) {
 		\wp_die( 'Use tsf_extension_manager() after action `plugins_loaded` priority 6.' );
+		exit;
+	}
 
 	if ( \TSF_Extension_Manager\can_load_class() ) {
 
@@ -160,7 +163,7 @@ function _init_tsf_extension_manager() {
 		\do_action( 'tsfem_extensions_initialized' );
 	} elseif ( ! function_exists( '\\the_seo_framework' ) ) {
 		/**
-		 * Nothing is loaded as this point; not even The SEO Framework.
+		 * Nothing is loaded at this point; not even The SEO Framework.
 		 *
 		 * @since 2.2.0
 		 */

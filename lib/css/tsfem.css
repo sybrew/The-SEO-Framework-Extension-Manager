@@ -595,7 +595,6 @@ body.tsfem .wrap {
 	/* EdgeHTML BUG. Causes subpixel font-rendering to fail. */
 	/* transform-style: preserve-3d; */
 	margin: 0;
-	margin-bottom: 1em;
 	width: 140px;
 	height: 2em;
 	padding: 0;
@@ -712,9 +711,9 @@ body.tsfem .wrap {
 	max-width: 690px;
 	padding: 1em 1.5em;
 	margin: 0 auto 1.2vw;
-	box-shadow: 0 .3em .6em rgba(0,0,0,.18);
-	background: #fff;
 	box-sizing: border-box;
+	background: #fff;
+	border: 1px solid #ccd0d4;
 	border-radius: 4px;
 }
 

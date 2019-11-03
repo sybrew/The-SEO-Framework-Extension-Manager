@@ -78,10 +78,6 @@ local/externs/index.php:
 	* Note that Microsoft Edge is supported; however, the layout doesn't render as neatly as intended. We addressed crucial interface failures, so it's completely usable.
 	* All hope for IE11 is lost.
 
-TODO update the extension parser (padding/margin) for new icons.
-	* Maybe: Use the icon view? (for the EM landing page--onhover stuff)
-TODO test RTL
-
 **Detailed log:**
 
 * **Added:** We added a new options-interface, which can be populated by extensions on demand.

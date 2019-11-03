@@ -19,10 +19,10 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto     = 'A ' . $mottos[ $motto_key ] . ' Solution';
 
 ?>
-<p class="tsfem-footer-title">
+<p class="tsfem-footer-title" dir=ltr>
 	Local &ndash; The SEO Framework
 </p>
-<p class="tsfem-footer-motto">
+<p class="tsfem-footer-motto" dir=ltr>
 	<?php echo \esc_html( $motto ); ?>
 </p>
 <?php
