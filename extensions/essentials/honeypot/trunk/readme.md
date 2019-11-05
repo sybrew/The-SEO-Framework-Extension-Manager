@@ -92,7 +92,7 @@ There is no setup required, and no options are available.
 
 WordPress has various discussion settings, through which you can fine-tune how comments are displayed and moderated.
 
-These settings can be found at **Settings -> Discussion**.
+These settings can be found at **Settings > Discussion**.
 
 ### Gotta catch 'em all
 

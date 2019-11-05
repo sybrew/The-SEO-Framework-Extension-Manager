@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
-Donate link: https://theseoframework.com/donate/
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.9.0
 Tested up to: 5.3
-Requires PHP: 5.5.21
-Stable tag: 2.1.0
+Requires PHP: 5.6.5
+Requires TSF: 4.0.0
+Stable tag: 2.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,83 +41,38 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-TODO repurpose these for the new settings interface?
-monitor/externs/index.php:
-
-local/externs/index.php:
-/**
- * The desire to annoy no one, to harm no one, can equally well be the sign
- * of a just as of an anxious disposition.
- *
- * - Friedrich Nietzsche
- */
-
-
-= 2.2.0 =
+= 2.2.0 - Adorned SEO =
 
 **Release date:**
 
-* TODO TBA
+* November 5th, 2019
 
 **Feature highlights:**
 
-* We had to concede on the user interface: It was not acccessible, and the browser couldn't handle it well. Far too often we got requests on "how do I do this" while it was only a matter of scrolling down inside an element. We also found that, for example in Focus (when working with over 100,000 input fields), the user interface became unresponsive. So, we reworked the interface:
-	* The interface is using bleeding-edge CSS technologies. Make sure your browser is up-to-date!
-	* The base interface no longer relies on flexbox, but on grid.
-	* The base interface no longer tries to fit its contents, but expands automatically outward. It now relies on body-scrolling, instead of element-scrolling.
-	* To still allow easily-accessible actions, we implemented a sticky header that goes down when you scroll.
-		* Therein, we added saving/previewing actions for Focus.
-		* The actionable notifications now recide within the sticky header. They can cover up a part of the page.
-* We dropped support for The SEO Framework v3.2.4 and below. TSF v4.0.0 and higher is now required.
-* We dropped support for WordPress v4.8. WP v4.9 and higher are now required.
-* We dropped support for IE11 and all other browsers of that era. A modern browser is now required to use the plugin's interface as intended.
-* We dropped support for PHP 5.5. PHP 5.6 or higher is now required.
+* A new extension settings overview has been added. The Articles extension is the first to support this.
+* The interface is now much cleaner, swifter, and far more accessible. It is also in line with the upcoming WordPress 5.3 update.
+* The plugin now requires:
+	* WP 4.9 or higher.
+	* TSF 4.0 or higher.
+	* PHP 5.6.5 or higher.
 
-* **NOTE:** Firefox v70 (October 22, 2019) or higher is now required. Chrome v77 (September 10, 2019) or higher is now required.
-	* If the layout looks blatantly wrong (that is, items overlapping), go to "Menu -> About -> About Firefox/Chrome" and an update should be available.
-	* Note that Microsoft Edge is supported; however, the layout doesn't render as neatly as intended. We addressed crucial interface failures, so it's completely usable.
-	* All hope for IE11 is lost.
+**A few notes on browser support:**
 
-**Detailed log:**
+The new interface now relies on bleeding-edge technology, which is an auto-fit grid with collapse and span-growth support. This technology isn't new, but until recently, no browser supported it well. To make sure everything works as intended:
 
-* **Added:** We added a new options-interface, which can be populated by extensions on demand.
-* **Added:** When The SEO Framework plugin isn't found, the Extension Manager now nags you that it requires it.
-	* To learn more about the implementation details, see [this GitHub issue](https://github.com/sybrew/the-seo-framework/issues/302).
-* **Added:** New extension logos. They're now luminous.
-* **Added:** The Extension Manager and extension-loader boot-time are now added to the new "HTML boot-time" indicator of The SEO Framework v4.0.
-* **Improved:** The interface has been rewritten to use grid instead of flexbox.
-* **Improved:** The interface no longer tries to find UI boundaries, improving the performance greatly--especially with Focus.
-* **Improved:** The interface is now in line with WordPress v5.3.
-* **Improved:** The interface buttons are now more accessible. For instance, keyboard navigational hints are easier to identify, and we added a border to support high-contrast display.
-* **Improved:** The top header is now sticky.
-* **Improved:** The header-notifications are now also sticky, and have a backdrop so to easily discern them from the content.
-* **Improved:** We repackaged all JS files via Babel, whereras before we used Google's Closure Compiler.
-* **Improved:** Tabindexing-hooks no longer occur on items that don't have a tooltip, improving accessibility.
-* **Improved:** The form validator now tries to align your scrolling position to 1/3rd of the screen.
-* **Performance:** The sanitization of all (administrative) links now check for HTTPS prior to HTTP.
-* **Changed:** We sacrificed some eye-candy in favor for accessibility and coherency with the updated WordPress v5.3 interface.
-* **Fixed:** vertical alignment on various elements for Chromium v77. Most prominently affecting Chrome v77+.
-* **Fixed:** vertical alignment on select elements for WordPress v5.3. Most prominently affecting, again, Chrome v77+.
-* **Fixed:** The image cropper works again for images above 4096 pixels in either width or height.
-* **Fixed:** The trends now work with the updated RSS feed.
-* **Fixed:** The extension tester instance is now compatible with WordPress v5.2's lock-out debugger.
-* **Removed:** Support for all archaic browser vendor prefixes from the CSS files, so to reduce the stylesheet payload.
-* **Other:** The SEO Framework v4.0 or later is now required (from v3.1).
-* **Other:** WordPress v4.9 is now required (from v4.8).
-* **Other:** PHP v5.6.5 is now required (from v5.5.21).
-* **Other:** We now use the markdown parser from The SEO Framework. It misses one check, which may make `strong` or `em` HTML tags appear as-is until that's addressed.
-* **Other:** We now use a new engine for minifying the JS files. See https://github.com/sybrew/babel-tsf.
-* **Other:** On upgrade, the plugin now tests for the WP version for compatibility, instead of the WP database version.
-* **Other:** Extensions can now have shared classes tested before an extension-activation becomes successful.
-* **Other:** We cleaned up some code.
-* **Dev:** There's a new extension settings page, class, and complementing callbacks. These additions apply to all settings found on the new Extension Settings page. Please refer to the documentation inside the code.
-	* **New filters:**
-		* `tsf_extension_manager_register_extension_settings`.
-		* `tsf_extension_manager_register_extension_settings_defaults`
-		* `tsf_extension_manager_register_extension_settings_sanitization`.
-	* **New actions:**
-		* `tsfem_register_settings_sanitization`
-		* `tsfem_register_settings_fields`
+* Chrome v77 (September 10th, 2019) equivalent or higher are now required.
+* Safari v13 (September 19th, 2019) or higher is now required.
+
+These browsers support the interface well enough, but may look slightly different from what's intended, because they don't support shrinking elements in grid yet:
+
+* Firefox v70 (October 22nd, 2019) equivalent or higher are now required.
+* Edge v44.18 (May 21st, 2019) or higher is now required.
+
+_All hope for Internet Explorer is lost._
+
+If the layout looks blatantly wrong on Chrome or Firefox (that is, items overlapping), go to "Menu -> Help -> About Firefox/Chrome," and an update should be available.
+
+Microsoft notoriously forces updates on us, so you should be fine with Edge. And Apple made their latest updates so attractive; we doubt you've skipped on those.
 
 **Updated extensions:**
 
@@ -127,32 +82,9 @@ local/externs/index.php:
 * [Local at version 1.1.5](https://theseoframework.com/extensions/local/#changelog)
 * [Title Fix at version 1.2.1](https://theseoframework.com/extensions/title-fix/#changelog)
 
-= 2.1.0 - Lucid SEO =
-
-**Release date:**
-
-* August 20th, 2019
-
-**A major release without a new extension:**
-
-* We had [one extension](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/tree/cord-transporter/extensions/free/cord/trunk) planned, but [Site Kit by Google](https://sitekit.withgoogle.com/) is already implementing most of the ideas we had. We're keeping an eye on Google's progression, and we may set up connections via their plugin instead.
-
-**Feature highlights:**
-
-* Support for the upcoming TSF v4.0 release has been added.
-* Requests to the new European API are no longer rerouted via our global API.
-* Improved performance, especially on IIS-powered servers.
-* Several QOL-improvements, like better accessibility, extended API, etc. have been added.
-
-**Updated extensions:**
-
-* [AMP](https://theseoframework.com/extensions/amp/#changelog)
-* [Articles](https://theseoframework.com/extensions/articles/#changelog)
-* [Local](https://theseoframework.com/extensions/local/#changelog)
-
 **Detailed log:**
 
-View the [detailed v2.1.0 changelog](https://theseoframework.com/?p=3236).
+View the [detailed v2.2.0 changelog](https://theseoframework.com/?p=3355).
 
 = Full changelog =
 

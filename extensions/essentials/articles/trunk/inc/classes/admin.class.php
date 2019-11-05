@@ -303,8 +303,8 @@ final class Admin extends Core {
 			'_type'    => 'multi',
 			'_desc'    => [
 				'Post Type Settings',
-				\__( 'Article markup should only be applied to content that is ephemeral. Timeless content, such as delivered with pages, should not have article markup; they may be recognized as irrelevant and expired content.', 'the-seo-framework-extension-manager' ),
-				\__( 'Be mindful about the post types you enable. For instance, a product page, app page, recipe page, or an event page are not always recognized as articles.', 'the-seo-framework-extension-manager' ),
+				\__( 'Article markup should only be applied to content that is ephemeral and may be subject to change, like an opinionated blog post, a news article, or a research document. Timeless content, such as a contact, product, or about page, should not have the article markup.', 'the-seo-framework-extension-manager' ),
+				\__( 'Be mindful of the post types you enable. For instance, a product, app, recipe, or an event page should not always be recognized as an article.', 'the-seo-framework-extension-manager' ),
 			],
 			'_fields'  => $settings,
 		];
