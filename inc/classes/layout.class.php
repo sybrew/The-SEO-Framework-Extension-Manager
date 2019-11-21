@@ -420,7 +420,7 @@ final class Layout extends Secure_Abstract {
 				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
-			$end_date      = date( 'Y-m-d', $date_until );
+			$end_date      = gmdate( 'Y-m-d', $date_until );
 			$end_date_i18n = \date_i18n( 'F j, Y, g:i A', $date_until );
 
 			$output .= static::wrap_row_content(
@@ -469,7 +469,7 @@ final class Layout extends Secure_Abstract {
 				[
 					\esc_attr( $_class ),
 					\esc_attr( $end_date_i18n ),
-					\esc_attr( date( 'Y-m-d', $date_until ) ),
+					\esc_attr( gmdate( 'Y-m-d', $date_until ) ),
 					\esc_html( $payment_in ),
 				]
 			) );

@@ -249,7 +249,7 @@ final class Front extends Core {
 
 		$tsf = \the_seo_framework();
 
-		$tsf->set_timezone();
+		$tsf->set_timezone( 'UTC' );
 
 		// Should've used a generator... TODO? => Wait for TSF v4.1?
 		$data = [
@@ -434,11 +434,6 @@ final class Front extends Core {
 	/**
 	 * Returns the Article Image.
 	 *
-	 * @NOTE If the image is smaller than 696 pixels width : {
-	 *   'amp'    => Will invalidate output.
-	 *   'nonamp' => Will return empty.
-	 * }
-	 *
 	 * @since 1.0.0
 	 *
 	 * @requiredSchema AMP
@@ -474,6 +469,7 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.4.0 Now uses the new image generator, and now returns multiple image objects.
+	 * @since 2.0.1 Now accepts images as small as 696px for non-AMP.
 	 *
 	 * @return array The article image parameters. Unescaped.
 	 */
@@ -481,15 +477,19 @@ final class Front extends Core {
 
 		$id = $this->get_current_id();
 
+		$min_width = $this->is_amp() ? 1200 : 696;
+
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.0.0', '>=' ) ) {
 
 			$images = [];
 
+			// TODO: Do we want to take images from the content? Users have complained about this...
+			// ... We'd have to implement (and revoke) a filter, however.
 			foreach ( \the_seo_framework()->get_image_details( null, false, 'schema', true ) as $image ) {
 
 				if ( ! $image['url'] ) continue;
 
-				if ( $image['width'] && $image['width'] > 1200 ) {
+				if ( $image['width'] && $image['width'] >= $min_width ) {
 					$images[] = [
 						'@type'  => 'ImageObject',
 						'url'    => $image['url'],
@@ -519,7 +519,7 @@ final class Front extends Core {
 
 				if ( ! $w ) {
 					return $url;
-				} elseif ( $w >= 1200 ) {
+				} elseif ( $w >= $min_width ) {
 					return [
 						'@type'  => 'ImageObject',
 						'url'    => $url,
@@ -539,7 +539,7 @@ final class Front extends Core {
 					$w   = $_src[1];
 					$h   = $_src[2];
 
-					if ( $w >= 1200 )
+					if ( $w >= $min_width )
 						return [
 							'@type'  => 'ImageObject',
 							'url'    => $url,
@@ -557,8 +557,10 @@ final class Front extends Core {
 	 * Returns the Article Published Date.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
-	 *                2. Now only invalidates AMP when something's wrong.
+	 * @since 1.0.1 1. Now also outputs on non-AMP.
+	 *              2. Now only invalidates AMP when something's wrong.
+	 * @since 2.0.1 1. Now uses gmdate instead of date, to account for the timezone change in TSF 4.0.4.
+	 *              2. Now uses the post gmt date.
 	 *
 	 * @requiredSchema AMP (docs)
 	 * @ignoredSchema nonAMP
@@ -574,10 +576,10 @@ final class Front extends Core {
 			return [];
 		}
 
-		$i = strtotime( $post->post_date );
+		$i = strtotime( $post->post_date_gmt );
 
 		return [
-			'datePublished' => \esc_attr( date( 'c', $i ) ),
+			'datePublished' => \esc_attr( gmdate( 'c', $i ) ),
 		];
 	}
 
@@ -585,7 +587,9 @@ final class Front extends Core {
 	 * Returns the Article Modified Date.
 	 *
 	 * @since 1.0.0
-	 * @since 1.0.1 : 1. Now also outputs on non-AMP.
+	 * @since 1.0.1 Now also outputs on non-AMP.
+	 * @since 2.0.1 1. Now uses gmdate instead of date, to account for the timezone change in TSF 4.0.4.
+	 *              2. Now uses the post gmt date.
 	 *
 	 * @requiredSchema Never
 	 * @ignoredSchema nonAMP
@@ -599,10 +603,10 @@ final class Front extends Core {
 		if ( ! ( $post = $this->get_current_post() ) )
 			return [];
 
-		$i = strtotime( $post->post_modified );
+		$i = strtotime( $post->post_modified_gmt );
 
 		return [
-			'dateModified' => \esc_attr( date( 'c', $i ) ),
+			'dateModified' => \esc_attr( gmdate( 'c', $i ) ),
 		];
 	}
 

@@ -88,7 +88,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'focus'     => [
 				'slug'         => 'focus',
@@ -101,7 +101,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -110,11 +110,11 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1572496812',
+				'last_updated' => '1574294812',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.2',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -127,7 +127,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -140,7 +140,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -153,7 +153,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -166,7 +166,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -179,7 +179,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -192,7 +192,7 @@ trait Extensions_Properties {
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.3',
+				'tested_tsf'   => '4.0.4',
 			],
 		];
 	}
@@ -210,9 +210,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '9f274b2650fe28a243bd72989739c2a02f6ffb570d51040e7d21d61fba6afba1',
-			'sha1'   => '158f4545da69bd3ef48b3371ef6902da8098c894',
-			'md5'    => 'a5758402b9fd763722603a7259ea4eb8',
+			'sha256' => '6b0f1aad12165cbe2c6c394fe062a507624e516fc255b2636ef6b0619f9f7711',
+			'sha1'   => '9126f413af474aca2ef59b3c588b6c4a1099b0ee',
+			'md5'    => '92a17f40ba80dfec5bcbfb6ceeaa57be',
 		];
 	}
 

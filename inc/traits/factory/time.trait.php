@@ -114,6 +114,7 @@ trait Time {
 	 * inserted timestamp.
 	 *
 	 * @since 1.5.0
+	 * @since 2.2.1 Now also rectifies the timezone.
 	 *
 	 * @param string   $format    The Datetime format.
 	 * @param int|null $timestamp The UNIX timestamp. When null it uses time().
@@ -124,10 +125,13 @@ trait Time {
 		is_null( $timestamp )
 			and $timestamp = time();
 
-		$offset = \get_option( 'gmt_offset' );
-		$seconds = round( $offset * HOUR_IN_SECONDS );
+		$tsf = \the_seo_framework();
 
-		return gmdate( $format, $timestamp + $seconds );
+		$tsf->set_timezone();
+		$date = date( $format, $timestamp );
+		$tsf->reset_timezone();
+
+		return $date;
 	}
 
 	/**
@@ -135,6 +139,7 @@ trait Time {
 	 * site's settings.
 	 *
 	 * @since 1.5.0
+	 * @since 2.2.1 Now enforces datetime via UTC offset, to accomodate for WP 5.3 changes to date_i18n().
 	 *
 	 * @param string   $format    The Datetime format.
 	 * @param int|null $timestamp The UNIX timestamp. When null it uses time().
@@ -145,12 +150,19 @@ trait Time {
 		is_null( $timestamp )
 			and $timestamp = time();
 
-		//= We don't want nor need to guess here.
-		$this->set_timezone( $this->get_timezone_string( false ) );
-		$out = \date_i18n( $format, $timestamp );
-		$this->reset_timezone();
+		$tsf = \the_seo_framework();
 
-		return $out;
+		// date_i18n() uses the WordPress timezone to send the real date.
+		// However, for accuracy, it relies on the dates being annotated with UTC.
+		$tsf->set_timezone( 'UTC' );
+
+		$offset = round( \get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+		// date_i18n() expects an offset, whereas wp_date (WP5.3+) expects a timezone.
+		$date = \date_i18n( $format, $timestamp + $offset );
+
+		$tsf->reset_timezone();
+
+		return $date;
 	}
 
 	/**
@@ -294,48 +306,6 @@ trait Time {
 			}
 		}
 		return $out;
-	}
-
-	/**
-	 * Sets and resets the timezone.
-	 *
-	 * @since 1.5.0
-	 * @source The SEO Framework 3.0
-	 *
-	 * @param string $tzstring Optional. The PHP Timezone string. Best to leave empty to always get a correct one.
-	 * @link http://php.net/manual/en/timezones.php
-	 * @param bool $reset Whether to reset to default. Ignoring first parameter.
-	 * @return bool True on success. False on failure.
-	 */
-	protected function set_timezone( $tzstring = '', $reset = false ) {
-
-		static $old_tz = null;
-
-		if ( is_null( $old_tz ) ) {
-			$old_tz = date_default_timezone_get();
-			if ( empty( $old_tz ) )
-				$old_tz = 'UTC';
-		}
-
-		if ( $reset )
-			return date_default_timezone_set( $old_tz );
-
-		if ( empty( $tzstring ) )
-			$tzstring = $this->get_timezone_string( true ) ?: $old_tz;
-
-		return date_default_timezone_set( $tzstring );
-	}
-
-	/**
-	 * Resets the timezone to default or UTC.
-	 *
-	 * @since 1.5.0
-	 * @source The SEO Framework 3.0
-	 *
-	 * @return bool True on success. False on failure.
-	 */
-	protected function reset_timezone() {
-		return $this->set_timezone( '', true );
 	}
 
 	/**

@@ -118,7 +118,7 @@ final class Graph {
 				reset( $data );
 
 				foreach ( $data as $x => $y ) {
-					$x = \the_seo_framework()->gmt2date( 'Y-m-d H:i', date( 'Y-m-d', $x ) ) . ' GMT';
+					$x = \the_seo_framework()->gmt2date( 'Y-m-d H:i', gmdate( 'Y-m-d', $x ) ) . ' GMT';
 					yield [ 'x' => $x, 'y' => $y ];
 				}
 				break;

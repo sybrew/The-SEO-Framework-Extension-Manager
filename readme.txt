@@ -41,6 +41,27 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.2.1 =
+
+**Release date:**
+
+* TODO
+
+**Feature highlights:**
+
+* In this update we work around a bug in WordPress 5.3 for Articles, where canonical URLs may point to a non-existing page.
+
+**Updated extensions:**
+
+* [Articles at version 2.0.1](https://theseoframework.com/extensions/articles/#changelog)
+
+**Detailed log:**
+
+View the [detailed v2.2.1 changelog](https://theseoframework.com/?p=TODO).
+
+* **Updated:** Spanish translations. Thank you for your continued support, [Manuel Ballesta Ruiz](https://profiles.wordpress.org/mbrsolution/)!
+* **Updated:** Normalized timezone handling, making the timestamps more accurate throughout the Extension Manager interface.
+
 = 2.2.0 - Adorned SEO =
 
 **Release date:**
@@ -91,6 +112,10 @@ View the [detailed v2.2.0 changelog](https://theseoframework.com/?p=3355).
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
+
+= 2.2.0 =
+
+This plugin now requires WordPress v4.9, PHP v5.6.5, and The SEO Framework v4.0 or higher.
 
 = 2.1.0 =
 
