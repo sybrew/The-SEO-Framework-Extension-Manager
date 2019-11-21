@@ -117,7 +117,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.3-beta-5
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 5th, 2019"]
 
 * **Improved:** To honor the new Extension Manager interface, we restyled the non-default items.
 

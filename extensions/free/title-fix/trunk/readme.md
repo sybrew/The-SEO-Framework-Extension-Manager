@@ -49,7 +49,7 @@ There is no setup required, and no options are available.
 
 ### 1.2.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 5th, 2019"]
 
 * **Updated:** Removed backward compatibility checks. The extension now requires TSF v4.0 and later.
 

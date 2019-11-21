@@ -128,7 +128,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.5
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 5th, 2019"]
 
 * **Improved:** To honor the new Extension Manager interface, for accessibility, the actionable buttons have been added to the header.
 

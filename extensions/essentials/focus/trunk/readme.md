@@ -202,7 +202,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 ### 1.3.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 5th, 2019"]
 
 * **Improved:** Addressed Gutenberg 6.4 (WP 5.3) changes (by fixing `wp.data.select( 'core/editor' ).isTyping` deprecation).
 * **Updated:** Removed backward compatibility checks. The extension now requires TSF v4.0 and later.
