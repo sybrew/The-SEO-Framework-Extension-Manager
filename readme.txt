@@ -5,7 +5,7 @@ Requires at least: 4.9.0
 Tested up to: 5.3
 Requires PHP: 5.6.5
 Requires TSF: 4.0.0
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -45,7 +45,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Release date:**
 
-* TODO
+* November 21st, 2019
 
 **Feature highlights:**
 
@@ -57,10 +57,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Detailed log:**
 
-View the [detailed v2.2.1 changelog](https://theseoframework.com/?p=TODO).
-
-* **Updated:** Spanish translations. Thank you for your continued support, [Manuel Ballesta Ruiz](https://profiles.wordpress.org/mbrsolution/)!
-* **Updated:** Normalized timezone handling, making the timestamps more accurate throughout the Extension Manager interface.
+View the [detailed v2.2.1 changelog](https://theseoframework.com/?p=3387).
 
 = 2.2.0 - Adorned SEO =
 

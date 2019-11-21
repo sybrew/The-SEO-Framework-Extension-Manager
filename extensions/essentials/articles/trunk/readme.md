@@ -209,7 +209,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ### 2.0.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 21st, 2019"]
 
 * **Improved:** Images smaller than 1200px are now allowed on non-AMP pages, for as low as 696px.
 * **Changed:** This extension now enforces UTC time to work around a permalink bug in WordPress 5.3.
