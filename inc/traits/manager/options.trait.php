@@ -324,7 +324,6 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Expanded hashing algorithm.
-	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param string $data The data to compare hash with.
 	 * @return bool True when hash passes, false on failure.

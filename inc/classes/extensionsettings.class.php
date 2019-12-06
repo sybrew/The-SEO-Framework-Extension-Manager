@@ -248,7 +248,8 @@ final class ExtensionSettings {
 	public function _load_admin_actions() {
 
 		if ( \wp_doing_ajax() ) {
-			\add_action( 'tsfem_form_do_ajax_save', [ $this, '_do_ajax_form_save' ] );
+			// Run after other extensions are done parsing. They must ignore empty indexes.
+			\add_action( 'tsfem_form_do_ajax_save', [ $this, '_do_ajax_form_save' ], 20 );
 		} else {
 			\add_action( 'load-' . $this->ui_hook, [ $this, '_do_settings_page_actions' ] );
 		}
@@ -313,6 +314,11 @@ final class ExtensionSettings {
 			}
 		}
 
+		$data = [
+			'success' => array_keys( $success, true, true ),
+			'failed'  => array_keys( $success, false, true ),
+		];
+
 		if ( in_array( false, $success, true ) ) {
 			if ( in_array( true, $success, true ) ) {
 				// Some data got saved.
@@ -320,22 +326,37 @@ final class ExtensionSettings {
 				\tsf_extension_manager()->send_json(
 					[
 						'results' => $this->get_ajax_notice( false, 18102 ),
-						'data'    => [
-							'success' => array_keys( $success, true, true ),
-							'failed'  => array_keys( $success, false, true ),
-						],
+						'data'    => $data,
 					],
 					'failure'
 				);
 			} else {
-				\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 18103 ) ], 'failure' );
+				\tsf_extension_manager()->send_json(
+					[
+						'results' => $this->get_ajax_notice( false, 18103 ),
+						'data'    => $data,
+					],
+					'failure'
+				);
 			}
 		}
 
 		if ( count( $success ) > 1 ) {
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( true, 18104 ) ], 'success' );
+			\tsf_extension_manager()->send_json(
+				[
+					'results' => $this->get_ajax_notice( true, 18104 ),
+					'data'    => $data,
+				],
+				'success'
+			);
 		} else {
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( true, 18105 ) ], 'success' );
+			\tsf_extension_manager()->send_json(
+				[
+					'results' => $this->get_ajax_notice( true, 18105 ),
+					'data'    => $data,
+				],
+				'success'
+			);
 		}
 	}
 

@@ -227,9 +227,9 @@ window.tsfem_e_monitor = {
 					notice  = data.status['notice'];
 
 				if ( 'success' === status ) {
-					let issues = content['issues'],
-						stats = content['stats'],
-						lc = content['lc'],
+					let issues   = content['issues'],
+						stats    = content['stats'],
+						lc       = content['lc'],
 						settings = content['settings'];
 
 					if ( 'undefined' !== typeof settings ) {

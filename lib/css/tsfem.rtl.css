@@ -45,6 +45,10 @@ body.tsfem #update-nag {
 	border-right-color: #00cd98;
 }
 
+.tsfem-notice-info {
+	border-right-color: #00a0d2;
+}
+
 .tsfem-notice-warning {
 	border-right-color: #ffa01b;
 }
@@ -72,6 +76,12 @@ body.tsfem #update-nag {
 	color: #00cd98;
 	font-size: 16px;
 	content: "\f147";
+}
+
+.tsfem-notice-info.tsfem-show-icon p:before {
+	color: #00a0d2;
+	font-size: 16px;
+	content: "\f223";
 }
 
 .tsfem-notice-warning.tsfem-notice.tsfem-show-icon p:before {
@@ -787,10 +797,7 @@ body.tsfem .wrap {
 .tsfem-pane {
 	height: 100%;
 	height: max-content;
-	background: #fff;
-	border: 1px solid #ccd0d4;
 	padding: 0;
-	border-radius: 4px;
 }
 
 /* (310=grid-template-column...) 660 = 310 * 2(columns) + ( 310 * 2 * 1.2vw * ( 1 * 3(gaps) + 2(sides) ) ) */
@@ -820,6 +827,9 @@ body.tsfem .wrap {
 .tsfem-pane-wrap {
 	width: 100%;
 	height: max-content;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
 }
 
 .tsfem-pane-header {

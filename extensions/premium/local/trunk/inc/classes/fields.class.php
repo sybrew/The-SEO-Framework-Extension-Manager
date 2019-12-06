@@ -105,6 +105,7 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'single' => 'name',
 				],
+				'_iterator_title_checked' => '',
 				'_fields' => $this->get_global_department_fields(),
 			],
 		];
@@ -562,6 +563,7 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'plural' => 'dayOfWeek',
 				],
+				'_iterator_title_checked' => '',
 				'_fields' => $this->get_opening_hours_action_fields(),
 			],
 		];

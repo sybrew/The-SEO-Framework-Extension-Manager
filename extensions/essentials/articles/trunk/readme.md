@@ -207,6 +207,14 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
+### 2.0.2
+
+[tsfep-release time="-1"]
+
+* **Fixed:** The filter deprecation notice now fires as intended when only the `the_seo_framework_articles_supported_post_types` filter is used on the site.
+	* This was an oversight as we flipped a bit for testing purposes.
+* **Other:** The JSON script is no longer minified when script debugging is enabled.
+
 ### 2.0.1
 
 [tsfep-release time="November 21st, 2019"]

@@ -20,6 +20,10 @@
 	border-right-color: #00cd98;
 }
 
+.tsfem-notice-info {
+	border-right-color: #00a0d2;
+}
+
 .tsfem-notice-warning {
 	border-right-color: #ffa01b;
 }
@@ -47,6 +51,12 @@
 	color: #00cd98;
 	font-size: 16px;
 	content: "\f147";
+}
+
+.tsfem-notice-info.tsfem-show-icon p:before {
+	color: #00a0d2;
+	font-size: 16px;
+	content: "\f223";
 }
 
 .tsfem-notice-warning.tsfem-notice.tsfem-show-icon p:before {

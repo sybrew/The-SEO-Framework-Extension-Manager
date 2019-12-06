@@ -33,8 +33,8 @@ tsf_extension_manager_pre_boot_test();
  *
  * @since 1.5.0
  * @since 2.1.0 Now requires WordPress 4.8+, from 4.7+.
- * @since 2.2.0: 1. Now requires WordPress 4.9+, from 4.7+.
- *               2. Now requires PHP 5.6+, from 5.5+.
+ * @since 2.2.0 1. Now requires WordPress 4.9+, from 4.7+.
+ *              2. Now requires PHP 5.6+, from 5.5+.
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions

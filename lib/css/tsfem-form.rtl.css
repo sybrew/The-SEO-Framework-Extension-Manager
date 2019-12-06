@@ -12,11 +12,15 @@
 }
 
 .tsfem-form-collapse-sub-wrap:not(:empty) {
-	margin-top: calc( 1em + .6vw );
+	margin-top: 1em;
+}
+
+.tsfem-form-collapse-sub-wrap.tsfem-form-multi-setting-input {
+	margin-top: 0;
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse {
-	margin-bottom: calc( 1em + .6vw );
+	margin-bottom: 1em;
 }
 
 .tsfem-form-collapse-sub-wrap .tsfem-form-collapse:last-of-type {
@@ -169,7 +173,7 @@
 	display: block;
 	margin: 0 auto;
 	box-sizing: border-box;
-	padding: calc( 1em + .6vw );
+	padding: 1em;
 	animation: tsfemForm-fade-in .25s;
 }
 
@@ -208,7 +212,7 @@ h4.tsfem-form-multi-title {
 .tsfem-form-setting-label,
 .tsfem-form-setting-input {
 	background-color: #fff;
-	padding: 15px 12px;
+	padding: 1em;
 	flex: 10 1 350px;
 	box-shadow: 0 0 0 1px #ccd0d4;
 }
@@ -217,7 +221,13 @@ h4.tsfem-form-multi-title {
 .tsfem-form-iterator-setting-label,
 .tsfem-form-setting-label {
 	background-color: #f9f9f9;
-	flex: 1 1 250px;
+	flex: 2 1 200px;
+	border-radius: 3px;
+}
+
+.tsfem-form-plain-settings-label {
+	margin-bottom: 1em;
+	flex: 1 1 100%;
 }
 
 .tsfem-form-multi-setting-label-item,
@@ -228,7 +238,7 @@ h4.tsfem-form-multi-title {
 	flex-direction: row;
 	justify-content: space-between;
 	flex-grow: 0;
-    max-width: max-content; /* does not work on Edge... it's fine */
+	max-width: max-content; /* does not work on Edge... it's fine */
 }
 
 .tsfem-form-multi-setting-input,
@@ -276,8 +286,12 @@ h4.tsfem-form-multi-title {
 	margin: .5em 0;
 }
 
-.tsfem-form-option-description:last-of-type {
-	margin: .5em 0 0;
+.tsfem-form-plain-settings-label .tsfem-form-option-description:first-of-type {
+	margin-top: 0;
+}
+
+.tsfem-form-plain-settings-label .tsfem-form-option-description:last-of-type {
+	margin-bottom: 0;
 }
 
 .tsfem-form-validate .tsfem-form-setting-input input[type=text],

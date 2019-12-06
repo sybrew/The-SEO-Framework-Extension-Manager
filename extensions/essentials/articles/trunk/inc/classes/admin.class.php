@@ -126,7 +126,7 @@ final class Admin extends Core {
 	 */
 	public function _register_settings( $settings ) {
 
-		if ( ! \has_filter( 'the_seo_framework_articles_supported_post_types' )
+		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' )
 		|| \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
 			\add_action( 'tsfem_notices', [ $this, '_do_filter_upgrade_notice' ] );
 		}
@@ -195,6 +195,8 @@ final class Admin extends Core {
 				'after'    => '',
 				'pane'     => [],
 				'settings' => $_settings,
+				// When we add more panes, we can order them by adding up to 9.9999 to this value.
+				'priority' => \tsf_extension_manager()->get_extension_order()['articles'],
 			]
 		);
 
@@ -226,6 +228,14 @@ final class Admin extends Core {
 				'_check'   => [
 					\__( 'Enable article markup?', 'the-seo-framework-extension-manager' ),
 				],
+				'_data' => [
+					'is-type-listener'     => '1',
+					'set-type-to-if-value' => [
+						'enabled'  => '1',
+						'disabled' => '0',
+					],
+					'showif-catcher'       => 'posttype.status',
+				],
 			],
 			'default_type' => [
 				'_default' => null,
@@ -239,6 +249,12 @@ final class Admin extends Core {
 					\__( 'This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already stored.', 'the-seo-framework-extension-manager' ),
 				],
 				'_select'  => [],
+				'_data'    => [
+					'is-showif-listener' => '1',
+					'showif'             => [
+						'posttype.status' => 'enabled',
+					],
+				],
 			],
 		];
 
@@ -286,7 +302,7 @@ final class Admin extends Core {
 				'_edit'    => true,
 				'_ret'     => '',
 				'_req'     => false,
-				'_type'    => 'multi',
+				'_type'    => 'multi_placeholder',
 				'_desc'    => [
 					$post_type_label,
 					\__( 'Adjust article settings for this post type.', 'the-seo-framework-extension-manager' ),
@@ -296,17 +312,21 @@ final class Admin extends Core {
 		}
 
 		return [
-			'_default' => null,
-			'_edit'    => true,
-			'_ret'     => '',
-			'_req'     => false,
-			'_type'    => 'multi',
-			'_desc'    => [
+			'_default'                => null,
+			'_edit'                   => true,
+			'_ret'                    => '',
+			'_req'                    => false,
+			'_type'                   => 'multi_dropdown',
+			'_desc'                   => [
 				'Post Type Settings',
 				\__( 'Article markup should only be applied to content that is ephemeral and may be subject to change, like an opinionated blog post, a news article, or a research document. Timeless content, such as a contact, product, or about page, should not have the article markup.', 'the-seo-framework-extension-manager' ),
 				\__( 'Be mindful of the post types you enable. For instance, a product, app, recipe, or an event page should not always be recognized as an article.', 'the-seo-framework-extension-manager' ),
 			],
-			'_fields'  => $settings,
+			'_fields'                 => $settings,
+			'_dropdown_title_dynamic' => [
+				'checkbox' => 'enabled',
+			],
+			'_dropdown_title_checked' => \__( 'Enabled', 'the-seo-framework-extension-manager' ),
 		];
 	}
 
@@ -337,9 +357,9 @@ final class Admin extends Core {
 		$settings::register_sanitization(
 			$this->o_index,
 			[
-				'post_types'   => static::class . '::_sanitize_option_post_type',
-				'news_sitemap' => static::class . '::_sanitize_option_one_zero',
-				'logo'         => static::class . '::_sanitize_option_logo',
+				'post_types'   => [ static::class, '_sanitize_option_post_type' ],
+				'news_sitemap' => [ static::class, '_sanitize_option_one_zero' ],
+				'logo'         => [ static::class, '_sanitize_option_logo' ],
 			]
 		);
 	}

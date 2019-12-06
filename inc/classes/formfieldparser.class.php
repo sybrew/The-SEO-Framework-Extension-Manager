@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;

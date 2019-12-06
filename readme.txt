@@ -41,6 +41,64 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.3.0 - TODO SEO =
+
+**Release date:**
+
+* TODO TBA
+
+**Feature highlights:**
+
+* TODO TBA
+
+**Detailed log:**
+
+* We added a new extension! Called [Cord](https://theseoframework.com/extensions/cord/).
+	* TODO explain what it does. TODO make readme, logo, etc.
+
+TODO remove extraneous favicon.ico check from TSFEM. Its use is being deprecated.
+
+* **Added:**
+	* A brand new extension, called Cord!
+	* The 'info' notice type. These are highlighted via a blue color, with a question mark at the side.
+* **Improved:**
+	* The extension settings fields now leave a little more space for the inputs, depending on the description size.
+	* The extension settings interface is much snappier, thanks to refactorization of old sluggish code.
+	* The extension settings collapsible items are now validated on-load, instead of when expanding the items.
+		* This has been done for improved accessibility. The trade off is that this will negatively affect browser-performance when loading in hundreds of Local departments.
+	* Various server-sided adjustments have been made which improve performance.
+	* TODO maybe: Overhaul of script loader, it now uses TSF 4.0 style script-loading, drastically improving performance.
+		* tsfemForm:
+			* tsfemForm
+			* tsfemFormCollapse
+			* tsfemFormValidator
+			* tsfemFormSave (submit, save, ajax?)
+			* tsfemFormGeo
+		* tsfem:
+			* tsfem
+			* tsfemAccount
+			* tsfemNotice
+			* tsfemDialog
+			* tsfemAys (currently not invoked anywhere)
+			* tsfemFader
+		* tsfemInpost:
+			* tsfemInpost
+			* tsfemAccount (see tsfem)
+			* tsfemFader (see tsfem)
+			* tsfemNotice (see tsfem)
+			* tsfemSanitize
+			* tsfemServiceWorker
+	* We found a workaround with the non-Webkit/Blink rendering of the shrinking gridboxes. Enjoy a neat interface on Edge and Firefox now, too!
+* **Changed:**
+	* The extensions are now autoloaded in the order they're presented, instead of the order in which they're activated.
+* **Other:**
+	* We expanded the form-generator, where it now accepts various plain and dropdown fields.
+	* The form-generator no longer parses the dropdown titles on the server. It now lets your browser take care of that.
+	* All WordPress Filter/Action/Dependency API callbacks to static methods are no longer concatenated, but are instead put in an array.
+* **Fixed:**
+	* The available PHP memory is now asserted correctly during upgrades. Before, upgrading went to the absolute limit before deferring, resulting in memory exhaustion.
+	* A browser memory leak and CPU job heaping after repeatedly adding extension settings form iterations.
+
 = 2.2.1 =
 
 **Release date:**

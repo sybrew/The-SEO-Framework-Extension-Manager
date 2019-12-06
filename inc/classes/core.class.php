@@ -1139,6 +1139,7 @@ class Core {
 			}
 		}
 
+		// phpcs:ignore, Squiz.PHP.NonExecutableCode.ReturnNotRequired -- readability.
 		return;
 	}
 
@@ -1224,7 +1225,6 @@ class Core {
 	 * Validates extensions option checksum.
 	 *
 	 * @since 1.0.0
-	 * @uses PHP 5.6 hash_equals : WordPress core has compat.
 	 *
 	 * @param array $checksum The extensions checksum.
 	 * @return int|bool, Negative int on failure, true on success.
@@ -1241,6 +1241,34 @@ class Core {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns a numeric order list for all extensions.
+	 *
+	 * @since 2.0.0
+	 * @staticvar array $order
+	 *
+	 * @return array { string Extension => int Order }
+	 */
+	final public function get_extension_order() {
+
+		static $order = [];
+
+		if ( $order ) return $order;
+
+		$this->get_verification_codes( $_instance, $bits );
+		Extensions::initialize( 'list', $_instance, $bits );
+
+		$last = 0;
+
+		foreach ( Extensions::get( 'extensions_list' ) as $slug => $data ) {
+			$order[ $slug ] = ( $last = $last + 10 );
+		}
+
+		Extensions::reset();
+
+		return $order;
 	}
 
 	/**

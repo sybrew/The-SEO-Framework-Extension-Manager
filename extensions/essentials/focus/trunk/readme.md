@@ -183,7 +183,7 @@ We're working on an update to improve accuracy for the affected page builders.
 
 Here you can find the available filters for Focus.
 
-#### Set supported post types
+#### Adjust supported focus elements
 
 ```php
 add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
@@ -191,7 +191,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 	// Add an overriding (dominating) check for pageTitle.
 	$elements['pageTitle'] = [ '#my-element > input' => 'dominate' ];
 
-	// Add extra (appending) pageContent for parsing.
+	// Add an extra (appending) pageContent for parsing.
 	$elements['pageContent'] = [ '#my-element > input' => 'append' ];
 
 	return $elements;

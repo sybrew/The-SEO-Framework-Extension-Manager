@@ -104,12 +104,12 @@ final class SchemaPacker {
 			return false;
 
 		$this->data =& $data;
-		$o = $schema->_OPTIONS;
+		$o          = $schema->_OPTIONS;
 
 		$architecture = $o->architecture ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
-		$levels = $o->levels ?: 5;
-		$this->bits = floor( $architecture / $levels );
-		$this->max_it = pow( 2, $this->bits );
+		$levels       = $o->levels ?: 5;
+		$this->bits   = floor( $architecture / $levels );
+		$this->max_it = 2 ** $this->bits;
 
 		$this->schema = $schema->_MAIN;
 
@@ -121,7 +121,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param int <unsigned> (R>0) $by
+	 * @param int <unsigned> (R>0) $by The base iterations.
 	 */
 	public function _iterate_base( $by = 1 ) {
 		$this->level or ++$this->level;
@@ -195,8 +195,8 @@ final class SchemaPacker {
 	 * @return int The current iteration of the current level.
 	 */
 	private function get_iteration_from_level( $l = 0 ) {
-		$bits_level = ( $l - 1 ) * $this->bits;
-		$written_bits = ( pow( 2, $this->bits ) - 1 );
+		$bits_level   = ( $l - 1 ) * $this->bits;
+		$written_bits = ( 2 ** $this->bits - 1 );
 		return ( $this->it >> $bits_level ) & $written_bits;
 	}
 
@@ -225,7 +225,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function delevel() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( --$this->level ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( --$this->level ) ) );
 	}
 
 	/**
@@ -272,7 +272,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function reiterate() {
-		$this->it &= ~( ( pow( 2, $this->bits ) - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
+		$this->it &= ~( ( 2 ** $this->bits - 1 ) << ( $this->bits * ( $this->level - 1 ) ) );
 		$this->iterate();
 	}
 
@@ -282,7 +282,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \stdClass $schema
+	 * @param \stdClass $schema The schema data to pack.
 	 * @return object The packed data.
 	 */
 	private function pack( \stdClass $schema ) {
@@ -316,7 +316,7 @@ final class SchemaPacker {
 	 * @since 1.3.0
 	 * @generator
 	 *
-	 * @param \stdClass $schema
+	 * @param \stdClass $schema The schema data to generate from.
 	 * @yield array { string $key => mixed $value }
 	 */
 	private function generate_data( \stdClass $schema ) {
@@ -331,8 +331,8 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param string    $key
-	 * @param \stdClass $schema
+	 * @param string    $key    The key to get the value of.
+	 * @param \stdClass $schema The schema data to get the value from.
 	 * @return mixed The key's value.
 	 */
 	private function get_value( $key, \stdClass $schema ) {
@@ -370,7 +370,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \stdClass $schema
+	 * @param \stdClass $schema The schema data to iterate.
 	 * @return mixed The packed iteration data, if successful.
 	 */
 	private function make_iteration( \stdClass $schema ) {
@@ -403,7 +403,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \stdClass $schema
+	 * @param \stdClass $schema The schema data to generate data from.
 	 * @return mixed The expected data.
 	 */
 	private function make_data( \stdClass $schema ) {
@@ -438,7 +438,7 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 *
-	 * @param \stdClass $schema
+	 * @param \stdClass $schema The schema data to pack and concatenate.
 	 * @return mixed The concatenated data.
 	 */
 	private function concat( \stdClass $schema ) {

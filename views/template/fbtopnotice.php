@@ -29,7 +29,7 @@ $notice  = $tsfem->format_error_notice(
 <script type=text/html id=tmpl-tsfem-fbtopnotice-msg>
 	<?php
 	$tsfem->do_dismissible_notice(
-		$notice['before'] . ' ' . '{{{data.msg}}}',
+		$notice['before'] . ' {{{data.msg}}}',
 		'error',
 		$a11y   = true,
 		$escape = false

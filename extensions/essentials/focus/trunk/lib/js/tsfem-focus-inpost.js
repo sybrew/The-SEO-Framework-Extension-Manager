@@ -555,7 +555,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} idPrefix
 	 */
 	const runLexicalFormSetter = ( idPrefix ) => {
-		let keyword = getSubElementById( idPrefix, 'keyword' ).value,
+		let keyword          = getSubElementById( idPrefix, 'keyword' ).value,
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' );
 
 		if ( ! lexicalFormField instanceof HTMLInputElement ) return;
@@ -573,9 +573,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				entries.forEach( ( entry ) => {
 					if ( entry.inflection && entry.category ) {
 						_forms.push( {
-							'value' : entry.inflection,
-							'category' : entry.category,
-							'name' : entry.category + ': ' + entry.inflection,
+							value:    entry.inflection,
+							category: entry.category,
+							name:     entry.category + ': ' + entry.inflection,
 						} );
 					}
 				} );
@@ -597,20 +597,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		const getLexicalForms = ( idPrefix, keyword ) => {
 			let ops = {
-				method: 'POST',
-				url: ajaxurl,
+				method:   'POST',
+				url:      ajaxurl,
 				dataType: 'json',
 				data: {
-					'action' : 'tsfem_e_focus_get_lexicalforms',
-					'nonce' : l10n.nonce,
-					'post_ID' : tsfem_inpost.postID,
-					'args' : {
-						'keyword': keyword,
-						'language': 'en' // language || 'en' // TODO this accepts: 'en', and a few other languages. No 'en-us', 'en-gb', etc. however.
+					action: 'tsfem_e_focus_get_lexicalforms',
+					nonce:   l10n.nonce,
+					post_ID: tsfem_inpost.postID,
+					args:    {
+						keyword: keyword,
+						language: 'en' // language || 'en' // TODO this accepts: 'en', and a few other languages. No 'en-us', 'en-gb', etc. however.
 					},
 				},
-				timeout: 15000,
-				async: true,
+				timeout:  15000,
+				async:    true,
 			};
 
 			let $dfd = $.Deferred();
@@ -1609,16 +1609,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			const idPrefix = data.idPrefix;
 			const
-				inflectionHolder = getSubElementById( idPrefix, 'inflection_data' ),
-				synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
+				inflectionHolder    = getSubElementById( idPrefix, 'inflection_data' ),
+				synonymHolder       = getSubElementById( idPrefix, 'synonym_data' ),
 
 				definitionSelection = getSubElementById( idPrefix, 'definition_selection' ),
 
-				inflectionSection = getSubElementById( idPrefix, 'inflections' ),
-				synonymSection = getSubElementById( idPrefix, 'synonyms' ),
+				inflectionSection   = getSubElementById( idPrefix, 'inflections' ),
+				synonymSection      = getSubElementById( idPrefix, 'synonyms' ),
 
-				inflectionEntries = inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
-				synonymEntries = synonymSection.querySelector( '.tsfem-e-focus-subject-selection' );
+				inflectionEntries   = inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
+				synonymEntries      = synonymSection.querySelector( '.tsfem-e-focus-subject-selection' );
 			const subjectTemplate = wp.template( 'tsfem-e-focus-subject-item' );
 
 			//?! There's always just one form of inflections in latin.
@@ -1633,17 +1633,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			synonymEntries.style.opacity = 0;
 
 			let activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
-				activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' );
+				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' );
 
 			let html = '',
 				prefix = createSubId( idPrefix, 'inflection' );
 			//= We need the keys... but they're sequential?
 			for ( let i in inflections ) {
 				html += subjectTemplate( {
-					'id': createSubId( prefix, i ),
-					'value': inflections[ i ],
-					'checked': !+i || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the first inflection.
-					'disabled': !+i ? 'disabled' : '' // Disable the first inflection.
+					id:       createSubId( prefix, i ),
+					value:    inflections[ i ],
+					checked:  !+i || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the first inflection.
+					disabled: !+i ? 'disabled' : '' // Disable the first inflection.
 				} );
 			}
 			inflectionEntries.innerHTML = html;
@@ -1653,9 +1653,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			//= We need the keys... but they're sequential?
 			for ( let i in synonyms ) {
 				html += subjectTemplate( {
-					'id': createSubId( prefix, i ),
-					'value': synonyms[ i ],
-					'checked': activeSynonyms.indexOf( String( i ) ) > -1 ? 'checked' : ''
+					id:      createSubId( prefix, i ),
+					value:   synonyms[ i ],
+					checked: activeSynonyms.indexOf( String( i ) ) > -1 ? 'checked' : ''
 				} );
 			}
 			synonymEntries.innerHTML = html;

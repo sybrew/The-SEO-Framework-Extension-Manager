@@ -152,7 +152,7 @@ final class Extensions extends Secure_Abstract {
 				break;
 
 			case 'extensions_list':
-				return static::get_extensions();
+				return static::$extensions;
 				break;
 
 			case 'active_extensions_list':

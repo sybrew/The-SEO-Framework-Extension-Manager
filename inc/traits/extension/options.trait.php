@@ -255,7 +255,8 @@ trait Extension_Options {
 	 * Fetches current extension options.
 	 *
 	 * @since 1.0.0
-	 * @since 1.2.0 : Now listens to $this->o_defaults.
+	 * @since 1.2.0 Now listens to $this->o_defaults.
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option  The Option name.
 	 * @param mixed  $default The fallback value if the option doesn't exist. Defaults to $this->o_defaults[ $option ].
@@ -263,9 +264,9 @@ trait Extension_Options {
 	 */
 	final protected function get_option( $option, $default = null ) {
 
-		if ( ! $option )
-			return null;
-
+		// Should this be `array_merge( $this->o_defaults, $this->get_extension_options() )`?
+		// Performance hit! Since this method handles the caches...
+		// TODO see if we need to forward the defaults to the cache handler.
 		$options = $this->get_extension_options();
 
 		if ( isset( $options[ $option ] ) )
@@ -274,7 +275,7 @@ trait Extension_Options {
 		if ( isset( $default ) )
 			return $default;
 
-		if ( isset( $this->o_defaults[ $option ] ) )
+		if ( ! $options && isset( $this->o_defaults[ $option ] ) )
 			return $this->o_defaults[ $option ];
 
 		return null;
@@ -284,6 +285,7 @@ trait Extension_Options {
 	 * Fetches current extension options from multidimensional array.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 No longer uses the registered defaults when the options are already stored.
 	 *
 	 * @param array $keys    The keys that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
@@ -297,13 +299,18 @@ trait Extension_Options {
 			$keys = FormFieldParser::satoma( $keys );
 		}
 
-		$_     = $this->get_extension_options();
-		$value = FormFieldParser::get_mda_value( $keys, $_ ) ?: $default;
+		// Should this be `array_merge( $this->o_defaults, $this->get_extension_options() )`?
+		$options = $this->get_extension_options();
+		$value   = FormFieldParser::get_mda_value( $keys, $options ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
-		if ( isset( $this->o_defaults ) )
+		// Only fall back when no options are set.
+		// TODO this isn't in line with get_option()--The use case thereof is different.
+		// TODO BUGFIX ME?
+		// Also assess stale versions.
+		if ( ! $options && isset( $this->o_defaults ) )
 			return FormFieldParser::get_mda_value( $keys, $this->o_defaults );
 
 		return null;
@@ -313,6 +320,7 @@ trait Extension_Options {
 	 * Updates TSFEM Extensions option.
 	 *
 	 * @since 1.0.0
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option The option name.
 	 * @param mixed  $value  The option value.
@@ -320,7 +328,7 @@ trait Extension_Options {
 	 */
 	final protected function update_option( $option, $value ) {
 
-		if ( ! $option || ! $this->o_index )
+		if ( ! $this->o_index )
 			return false;
 
 		$options = $this->get_extension_options();
@@ -349,13 +357,14 @@ trait Extension_Options {
 	 * Deletes current extension option.
 	 *
 	 * @since 1.0.0
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option The Option name to delete.
 	 * @return boolean True on success; false on failure.
 	 */
 	final protected function delete_option( $option ) {
 
-		if ( ! $option || ! $this->o_index )
+		if ( ! $this->o_index )
 			return false;
 
 		$options = $this->get_extension_options();
@@ -440,6 +449,7 @@ trait Extension_Options {
 	 * Fetches current stale extension options.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option  The Option name.
 	 * @param mixed  $default The fallback value if the option doesn't exist.
@@ -447,9 +457,6 @@ trait Extension_Options {
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
 	final protected function get_stale_option( $option, $default = null ) {
-
-		if ( ! $option )
-			return null;
 
 		$options = $this->get_stale_extension_options();
 
@@ -469,6 +476,7 @@ trait Extension_Options {
 	 * Fetches current stale extension options from multidimensional array.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 No longer uses the registered defaults when the options are already stored.
 	 *
 	 * @param array $keys    The keys that should collapse with the option.
 	 * @param mixed $default The fallback value if the option doesn't exist.
@@ -482,13 +490,13 @@ trait Extension_Options {
 			$keys = FormFieldParser::satoma( $keys );
 		}
 
-		$_     = $this->get_stale_extension_options();
-		$value = FormFieldParser::get_mda_value( $keys, $_ ) ?: $default;
+		$options = $this->get_stale_extension_options();
+		$value   = FormFieldParser::get_mda_value( $keys, $options ) ?: $default;
 
 		if ( isset( $value ) )
 			return $value;
 
-		if ( isset( $this->o_stale_defaults ) )
+		if ( ! $options && isset( $this->o_stale_defaults ) )
 			return FormFieldParser::get_mda_value( $keys, $this->o_stale_defaults );
 
 		return null;
@@ -513,6 +521,7 @@ trait Extension_Options {
 	 * Updates TSFEM stale Extensions option.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option The option name.
 	 * @param mixed  $value  The option value.
@@ -520,7 +529,7 @@ trait Extension_Options {
 	 */
 	final protected function update_stale_option( $option, $value ) {
 
-		if ( ! $option || ! $this->o_index )
+		if ( ! $this->o_index )
 			return false;
 
 		$options = $this->get_stale_extension_options();
@@ -549,13 +558,14 @@ trait Extension_Options {
 	 * Deletes current stale extension option.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 Removed redundant option name check.
 	 *
 	 * @param string $option The Option name to delete.
 	 * @return boolean True on success; false on failure.
 	 */
 	final protected function delete_stale_option( $option ) {
 
-		if ( ! $option || ! $this->o_index )
+		if ( ! $this->o_index )
 			return false;
 
 		$options = $this->get_stale_extension_options();

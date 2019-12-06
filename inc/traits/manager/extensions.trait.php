@@ -77,19 +77,6 @@ trait Extensions_Properties {
 		 * part of this awesome WordPress.org community :). Or build your own :D.
 		 */
 		return [
-			'local'     => [
-				'slug'         => 'local',
-				'network'      => '0',
-				'type'         => 'premium',
-				'area'         => 'business',
-				'author'       => 'Sybre Waaijer',
-				'party'        => 'first',
-				'last_updated' => '1565553458',
-				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
-				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
-			],
 			'focus'     => [
 				'slug'         => 'focus',
 				'network'      => '0',
@@ -110,7 +97,7 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1574294812',
+				'last_updated' => '1574553314',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.2',
@@ -124,6 +111,32 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1542470700',
+				'requires'     => '4.9.0',
+				'tested'       => '5.3.0',
+				'requires_tsf' => '4.0.0',
+				'tested_tsf'   => '4.0.4',
+			],
+			'cord'      => [
+				'slug'         => 'cord',
+				'network'      => '0',
+				'type'         => 'essentials',
+				'area'         => 'anlytics',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1574550583',
+				'requires'     => '4.9.0',
+				'tested'       => '5.1.0',
+				'requires_tsf' => '4.0.0',
+				'tested_tsf'   => '4.0.4',
+			],
+			'local'     => [
+				'slug'         => 'local',
+				'network'      => '0',
+				'type'         => 'premium',
+				'area'         => 'business',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1565553458',
 				'requires'     => '4.9.0',
 				'tested'       => '5.3.0',
 				'requires_tsf' => '4.0.0',
@@ -210,9 +223,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '6b0f1aad12165cbe2c6c394fe062a507624e516fc255b2636ef6b0619f9f7711',
-			'sha1'   => '9126f413af474aca2ef59b3c588b6c4a1099b0ee',
-			'md5'    => '92a17f40ba80dfec5bcbfb6ceeaa57be',
+			'sha256' => 'dd3ff24ac6fb75a2147a232e4522b4edb1ebca227efa8c248d6272f86b5a24a6',
+			'sha1'   => 'f22e9edd96afc7f9e0f64879fd061cfc8474680d',
+			'md5'    => '0bce2a3bf56d14d790435f1bf2bd2d29',
 		];
 	}
 
@@ -464,6 +477,8 @@ trait Extensions_Actions {
 
 	/**
 	 * Returns a list of active extension slugs.
+	 *
+	 * TODO enforce extension order?
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.

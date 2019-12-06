@@ -32,12 +32,12 @@ $escape = false;
 </script>
 <?php
 
-foreach ( [ 'success', 'warning', 'error' ] as $type ) :
+foreach ( [ 'updated', 'warning', 'error' ] as $type ) :
 	?>
 <script type=text/html id=tmpl-tsfem-inpost-notice-<?php echo esc_attr( $type ); ?>>
 	<?php
 	$tsfem->do_dismissible_notice(
-		$tsfem->format_error_notice( '{{data.code}}', [ 'type' => $type ] )['before'] . ' ' . '{{{data.msg}}}',
+		$tsfem->format_error_notice( '{{data.code}}', [ 'type' => $type ] )['before'] . ' {{{data.msg}}}',
 		$type,
 		$a11y,
 		$escape

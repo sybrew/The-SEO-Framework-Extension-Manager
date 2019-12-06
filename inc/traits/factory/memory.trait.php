@@ -39,7 +39,7 @@ class Memory_Cache {
 	 *
 	 * @return bool
 	 */
-	final static function increased_available_memory() {
+	final public static function increased_available_memory() {
 		return \TSF_Extension_Manager\has_run( __METHOD__ );
 	}
 
@@ -52,16 +52,16 @@ class Memory_Cache {
 	 *
 	 * @return int <bytes> memory limit.
 	 */
-	final static function get_memory_limit_in_bytes() {
+	final public static function get_memory_limit_in_bytes() {
 
 		static $limit = null;
 
 		if ( $limit )
 			return $limit;
 
-		$_limit = trim( ini_get( 'memory_limit' ) );
+		$_limit     = trim( ini_get( 'memory_limit' ) );
 		$quantifier = strtolower( $_limit[ strlen( $_limit ) - 1 ] );
-		$val = filter_var( $_limit, FILTER_SANITIZE_NUMBER_INT );
+		$val        = filter_var( $_limit, FILTER_SANITIZE_NUMBER_INT );
 
 		switch ( $quantifier ) {
 			case 'g':
@@ -72,6 +72,7 @@ class Memory_Cache {
 				// No break. Run next calculation.
 			case 'k':
 				$val *= 1024;
+				break;
 		}
 
 		return $limit = $val;
@@ -109,7 +110,7 @@ trait Memory {
 	 * @return int <bytes> memory limit.
 	 */
 	final protected function get_memory_limit_in_bytes() {
-		Memory_Cache::get_memory_limit_in_bytes();
+		return Memory_Cache::get_memory_limit_in_bytes();
 	}
 
 	/**
@@ -121,6 +122,6 @@ trait Memory {
 	 * @return bool
 	 */
 	final protected function has_free_memory( $bytes ) {
-		return memory_get_usage( true ) - $this->get_memory_limit_in_bytes() > $bytes;
+		return $this->get_memory_limit_in_bytes() - memory_get_usage( true ) > $bytes;
 	}
 }

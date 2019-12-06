@@ -227,6 +227,7 @@ trait Error {
 				break;
 
 			default:
+			case 'info':
 			case 'updated':
 				$status_i18n = \esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
 				break;
@@ -431,7 +432,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Essentials. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'updated';
+				$type    = 'info';
 				break;
 
 			case 905:
@@ -439,7 +440,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Premium. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'updated';
+				$type    = 'info';
 				break;
 
 			case 906:
@@ -447,7 +448,7 @@ trait Error {
 					\esc_html__( "Your account level has been set to Enterprise. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'updated';
+				$type    = 'info';
 				break;
 
 			case 2001:
@@ -579,7 +580,7 @@ trait Error {
 
 			case 1060401:
 				$message = \esc_html__( 'Download will start shortly.', 'the-seo-framework-extension-manager' );
-				$type    = 'success';
+				$type    = 'info';
 				break;
 
 			case 17100:
@@ -591,27 +592,31 @@ trait Error {
 				break;
 
 			case 18102:
-				$message = \esc_url__( "A database error occurred. Some settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "A database error occurred. Some settings aren't saved.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 
 			case 18103:
 			case 1070101:
 			case 1090101:
-				$message = \esc_url__( "A database error occurred. Settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "A database error occurred. Settings aren't saved.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 
 			case 18104:
 				$message = \esc_html__( 'All settings are saved.', 'the-seo-framework-extension-manager' );
-				$type    = 'success';
+				$type    = 'updated';
 				break;
 
 			case 18105:
+				$message = \esc_html__( 'Settings are saved for one extension.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
 			case 1070102:
 			case 1090102:
 				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
-				$type    = 'success';
+				$type    = 'updated';
 				break;
 
 			case 1011700:
@@ -670,7 +675,7 @@ trait Error {
 
 			case 17012:
 				$message = \esc_html__( 'Geocoding data received.', 'the-seo-framework-extension-manager' );
-				$type    = 'success';
+				$type    = 'updated';
 				break;
 
 			case 1100102:
@@ -688,7 +693,7 @@ trait Error {
 			case 1100106:
 			case 1100206:
 				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
-				$type    = 'success';
+				$type    = 'updated';
 				break;
 
 			// These errors shouldn't occur. Most likely WordPress Database/Option issues,

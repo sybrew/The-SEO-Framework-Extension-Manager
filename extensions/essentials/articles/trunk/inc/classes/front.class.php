@@ -240,6 +240,7 @@ final class Front extends Core {
 	 * Runs at 'the_seo_framework_after_output' filter.
 	 *
 	 * @since 1.0.0
+	 * @since 2.0.2 No longer minifies the script when script debugging is activated.
 	 * @link https://developers.google.com/search/docs/data-types/article
 	 * @access private
 	 *
@@ -282,8 +283,13 @@ final class Front extends Core {
 			$this->get_article_data()
 		);
 
-		if ( ! empty( $data ) )
-			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, JSON_UNESCAPED_SLASHES ) ) . PHP_EOL;
+		if ( ! empty( $data ) ) {
+			$options  = 0;
+			$options |= JSON_UNESCAPED_SLASHES;
+			$options |= \the_seo_framework()->script_debug ? JSON_PRETTY_PRINT : 0;
+
+			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, $options ) ) . PHP_EOL;
+		}
 
 		return '';
 	}

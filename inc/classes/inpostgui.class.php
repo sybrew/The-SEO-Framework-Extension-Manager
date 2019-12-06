@@ -129,7 +129,7 @@ final class InpostGUI {
 
 		//= Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
-		\add_action( 'save_post', static::class . '::_verify_nonce', 1, 2 );
+		\add_action( 'save_post', [ static::class, '_verify_nonce' ], 1, 2 );
 
 		//= Output.
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );

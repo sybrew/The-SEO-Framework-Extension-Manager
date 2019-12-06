@@ -606,9 +606,10 @@ final class LoadAdmin extends AdminPages {
 	 * Also loads scripts and styles if out of The SEO Framework's context.
 	 *
 	 * @since 1.3.0
+	 * @since 2.3.0 Added the info notice type. Removed support for the 'success' notice type.
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $type    The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param string $type    The notice type : 'updated', 'error', 'warning'.
 	 * @param bool   $a11y    Whether to add an accessibility icon.
 	 * @param bool   $escape  Whether to escape the whole output.
 	 * @return string The dismissible error notice.
@@ -616,9 +617,12 @@ final class LoadAdmin extends AdminPages {
 	public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
 
 		switch ( $type ) :
-			case 'success':
 			case 'updated':
 				$type = 'tsfem-notice-success';
+				break;
+
+			case 'info':
+				$type = 'tsfem-notice-info';
 				break;
 
 			case 'warning':
@@ -650,7 +654,7 @@ final class LoadAdmin extends AdminPages {
 	 * @since 1.3.0
 	 *
 	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $type    The notice type : 'updated', 'success', 'error', 'warning'.
+	 * @param string $type    The notice type : 'updated', 'info', 'error', 'warning'.
 	 * @param bool   $a11y    Whether to add an accessibility icon.
 	 * @param bool   $escape  Whether to escape the whole output.
 	 */

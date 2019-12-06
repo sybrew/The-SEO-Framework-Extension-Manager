@@ -71,34 +71,34 @@ class Core {
 		/**
 		 * @since 1.2.0
 		 * @since 2.0.0 Deprecated
+		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings.
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 * @deprecated
 		 * @param array $pm_defaults The default post meta settings.
 		 */
-		$this->pm_defaults = \apply_filters(
-			'the_seo_framework_articles_default_meta',
-			[
-				'type' => 'Article',
-			]
-		);
+		$this->pm_defaults = (array) \apply_filters( 'the_seo_framework_articles_default_meta', [] );
 
 		/**
 		 * @since 1.4.0
 		 * @since 2.0.0 Deprecated
+		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings.
 		 * @deprecated
 		 * @param array $post_types The supported post types.
 		 */
-		$filtered_post_types = \apply_filters(
-			'the_seo_framework_articles_supported_post_types',
-			[ 'post' ]
-		);
+		$filtered_post_types = (array) \apply_filters( 'the_seo_framework_articles_supported_post_types', [] );
+
 		/**
-		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
+		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$this->o_index    = 'articles';
 		$this->o_defaults = [
-			'news_sitemap' => 0,  // Google's requirements need to be met first.
-			'post_types'   => [],
+			'news_sitemap' => 0, // Google's requirements need to be met first.
+			'post_types'   => [
+				'post' => [
+					'enabled'      => 1,
+					'default_type' => 'Article',
+				],
+			],
 			'logo'         => [
 				'url' => '',
 				'id'  => 0,
@@ -108,7 +108,7 @@ class Core {
 		foreach ( $filtered_post_types as $post_type ) {
 			$this->o_defaults['post_types'][ $post_type ] = [
 				'enabled'      => 1,
-				'default_type' => static::filter_article_type( $this->pm_defaults['type'] ),
+				'default_type' => static::filter_article_type( \tsf_extension_manager()->coalesce_var( $this->pm_defaults['type'], 'Article' ) ),
 			];
 		}
 

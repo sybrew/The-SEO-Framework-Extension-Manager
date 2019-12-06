@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Functions
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
@@ -132,7 +133,7 @@ function load_upgrader() {
  * @param bool   $success The success status, either boolean, int, or other.
  * @param string $notice  The error notice displayed to the user.
  * @param int    $code    The error code. Defaults to -1 (undefined).
- * @param string $type    The notice type. Accepts 'success', 'warning', 'error'.
+ * @param string $type    The notice type. Accepts 'success', 'warning', 'info', 'error'.
  *                        Defaults to $success state: 'success'/'error'
  * @return array {
  *    'success' => mixed $success,
