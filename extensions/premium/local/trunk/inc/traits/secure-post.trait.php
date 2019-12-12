@@ -102,6 +102,7 @@ trait Secure_Post {
 
 		/**
 		 * Registers and checks form AJAX iteration callback listeners.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 *
 		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_iterate().
@@ -112,6 +113,7 @@ trait Secure_Post {
 
 		/**
 		 * Listens to AJAX form save.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 *
 		 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_save().

@@ -123,7 +123,7 @@ class AdminPages extends AccountActivation {
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => 'Extension Manager',
-			'menu_title'  => \esc_html__( 'Extensions', 'the-seo-framework-extension-manager' ),
+			'menu_title'  => 'Extension Manager',
 			'capability'  => TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE,
 			'menu_slug'   => $this->seo_extensions_page_slug,
 			'callback'    => [ $this, '_init_extension_manager_page' ],

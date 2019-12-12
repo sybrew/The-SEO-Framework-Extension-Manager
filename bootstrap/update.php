@@ -33,8 +33,8 @@ function _prepare_tsf_installer() {
 		'plugin-install',
 		'updates',
 	];
-	$scriptid   = 'installer';
-	$scriptname = 'installer';
+	$scriptid   = 'tsfinstaller';
+	$scriptname = 'tsfinstaller';
 	$suffix     = SCRIPT_DEBUG ? '' : '.min';
 
 	$strings = [

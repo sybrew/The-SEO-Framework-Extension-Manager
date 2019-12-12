@@ -167,7 +167,7 @@ final class FormGenerator {
 	private static function is_ajax_callee( $caller ) {
 		//= Stripslashes is required, as `\WP_Scripts::localize` adds them.
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
-		return isset( $_POST['args']['callee'] ) && $caller === stripslashes( $_POST['args']['callee'] );
+		return isset( $_POST['args']['callee'] ) && stripslashes( $_POST['args']['callee'] ) === $caller;
 	}
 
 	/**
@@ -241,7 +241,7 @@ final class FormGenerator {
 	 */
 	private function prepare_ajax_iteration() {
 
-		//* Referer check OK.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
 		$caller = $_POST['args']['caller'];
 		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
@@ -384,7 +384,7 @@ final class FormGenerator {
 		if ( 'get' === $type )
 			return $this->get_form_wrap( $what, $url, $validator );
 
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->get_form_wrap( $what, $url, $validator );
 	}
 
@@ -435,6 +435,7 @@ final class FormGenerator {
 		if ( 'get' === $type )
 			return $this->get_form_button( $what, $name );
 
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->get_form_button( $what, $name );
 	}
 
@@ -515,7 +516,7 @@ final class FormGenerator {
 	 */
 	private function output_fields( array &$fields ) {
 		foreach ( $this->generate_fields( $fields ) as $field ) {
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $field;
 		}
 	}
@@ -713,7 +714,8 @@ final class FormGenerator {
 
 		// 0 = base option index. 1 = extension index.
 		if ( 'full' !== $what ) {
-			$id = array_slice( $id, 2 );
+			$slice = $this->has_o_key ? 3 : 2;
+			$id    = array_slice( $id, $slice );
 		}
 
 		$id[] = $key;
@@ -1173,9 +1175,9 @@ final class FormGenerator {
 		//* Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
-		//= The selector. Already escaped.
 		printf(
 			'<div class="tsfem-form-iterator-selector-wrap tsfem-flex tsfem-flex-noshrink">%s</div>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$this->get_fields( $args['_iterate_selector'] )
 		);
 
@@ -1191,15 +1193,15 @@ final class FormGenerator {
 		//= Get wrap ID before iteration.
 		$wrap_id = $this->get_field_id();
 
-		//* Already escaped.
 		$defer and printf(
 			'<div class="tsfem-flex-status-loading tsfem-flex tsfem-flex-center" id="%s-loader" style=padding-top:4vh><span></span></div>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id
 		);
 
-		//* Already escaped.
 		printf(
 			'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s-wrapper"%s>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id,
 			( $defer ? ' style=display:none' : '' )
 		);
@@ -1217,18 +1219,18 @@ final class FormGenerator {
 				'id'                => $this->get_field_id(),
 			];
 
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
 		}
 
 		echo '</div>';
 
-		//* Already escaped.
 		$defer and printf(
 			'<script>window.onload=function(){var a=document.getElementById("%1$s-loader");a.parentNode.removeChild(a);document.getElementById("%1$s-wrapper").style=null;};</script>',
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			$wrap_id
 		);
 
@@ -1271,10 +1273,10 @@ final class FormGenerator {
 				'id'                => $this->get_field_id(),
 			];
 
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'start', $collapse_args );
 			$this->output_fields( $args['_fields'], $_title );
-			//* Already escaped.
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 			echo $this->get_collapse_wrap( 'end' );
 		}
 	}

@@ -5,7 +5,10 @@
 	<config name="minimum_supported_wp_version" value="4.9"/>
 	<config name="testVersion" value="5.6-"/>
 
-	<rule ref="PHPCompatibilityWP"/>
+	<rule ref="PHPCompatibilityWP">
+		<!-- We provide forward compatibility. -->
+		<exclude name="PHPCompatibility.Constants.NewConstants.php_int_minFound"/>
+	</rule>
 	<rule ref="WordPress-Core">
 		<!-- We don't require redundant PHP <5.4 support, nor do we limit depth. The UTF-8 failsafe for json_encode is edge-case on PHP<5.5 only. -->
 		<exclude name="WordPress.WP.AlternativeFunctions.json_encode_json_encode"/>

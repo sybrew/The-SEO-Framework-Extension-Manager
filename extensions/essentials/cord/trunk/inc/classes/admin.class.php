@@ -132,7 +132,7 @@ final class Admin extends Core {
 									sprintf(
 										/* translators: %s = Tracking ID documentation link. Markdown. */
 										\__( 'You can improve the accuracy of links clicked with [Enhanced Link Attribution](%s).', 'the-seo-framework-extension-manager' ),
-										'https://support.google.com/analytics/answer/7377126'
+										'https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-link-attribution'
 									),
 									\__( 'Use the "Page Analytics (by Google)" browser extension for Google Chrome to analyze the information collected. Custom theme development may be required to take full advantage of this feature.', 'the-seo-framework-extension-manager' ),
 								],

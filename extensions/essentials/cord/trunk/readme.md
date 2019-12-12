@@ -8,3 +8,6 @@ This extension helps you connect your website to third-party services, like Goog
 Filters (great for $_COOKIE consent -- TODO show examples using those):
 the_seo_framework_cord_ga_enabled
 the_seo_framework_cord_fbp_enabled
+
+Filters other (very advanced...):
+the_seo_framework_cord_ga_ela_id_levels

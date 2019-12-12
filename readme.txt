@@ -57,6 +57,9 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* TODO explain what it does. TODO make readme, logo, etc.
 
 TODO remove extraneous favicon.ico check from TSFEM. Its use is being deprecated.
+TODO remove focus lexical selectors when the language doesn't support it? It's wasted space...
+TODO bypass 1010401 (mismatch domain name in Monitor). See support request keywords: button error.
+	* To test: Augment the request to send "failure".
 
 * **Added:**
 	* A brand new extension, called Cord!
@@ -98,6 +101,7 @@ TODO remove extraneous favicon.ico check from TSFEM. Its use is being deprecated
 * **Fixed:**
 	* The available PHP memory is now asserted correctly during upgrades. Before, upgrading went to the absolute limit before deferring, resulting in memory exhaustion.
 	* A browser memory leak and CPU job heaping after repeatedly adding extension settings form iterations.
+	* The correct script is now called for installing The SEO Framework, making for a smoother experience. We changed the names during development leaving stale, non-existing versions.
 
 = 2.2.1 =
 

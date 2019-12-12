@@ -140,6 +140,13 @@ final class Front extends Core {
 		$tracking_id               = \esc_js( trim( $options['tracking_id'] ) );
 		$ip_anonymization          = (int) (bool) $options['ip_anonymization'];
 		$enhanced_link_attribution = (int) (bool) $options['enhanced_link_attribution'];
+		/**
+		 * @since 1.0.0
+		 * @param int $ela_id_levels The number of levels to look for an ID for Enhanced Link Attribution.
+		 *                           The higher the number, the slower your site. It does not necessarily mean more accurate.
+		 *                           The accuracy depends on how your theme is constructed. 5 is a nice balance for WordPress.
+		 */
+		$ela_id_levels = (int) \apply_filters( 'the_seo_framework_cord_ga_ela_id_levels', 5 );
 
 		// 'ga' expects itself to be registered globally in the window...
 		$script = <<<JS
@@ -149,7 +156,7 @@ final class Front extends Core {
 			ga.l =+ new Date;
 			ga( 'create', '{$tracking_id}', 'auto' );
 			{$ip_anonymization} && ga( 'set', 'anonymizeIp', true );
-			{$enhanced_link_attribution} && ga( 'require', 'linkid' );
+			{$enhanced_link_attribution} && ga( 'require', 'linkid', { levels: {$ela_id_levels} } );
 			'{$link}'.length ? ga( 'send', 'pageview', '{$link}' ) : ga( 'send', 'pageview' );
 JS;
 
@@ -239,7 +246,8 @@ NOJS;
 		// Get omni-spaced first!
 		$s_and_r = [
 			' ? '  => '?',
-			' : '  => ':',
+			' :'   => ':',
+			': '   => ':',
 			' = '  => '=',
 			' || ' => '||',
 			' && ' => '&&',
@@ -248,6 +256,8 @@ NOJS;
 			') '   => ')',
 			' ('   => '(',
 			'( '   => '(',
+			'{ '   => '{',
+			' }'   => '}',
 			', '   => ',',
 			'; '   => ';',
 		];
