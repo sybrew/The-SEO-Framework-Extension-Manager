@@ -115,6 +115,15 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.4-beta-5
+
+[tsfep-release time="-1"]
+
+* **Changed:** The favicon.ico check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
+* **API - Our servers:**
+	* **December 17th, 2019:**
+		* **Fixed:** You can now disconnect from the Monitor service after moving domains.
+
 ### 1.2.3-beta-5
 
 [tsfep-release time="November 5th, 2019"]

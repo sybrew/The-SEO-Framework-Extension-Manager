@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Tests
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -57,8 +58,10 @@ final class Tests {
 	 * Handles unapproachable invoked methods.
 	 * Silently ignores errors on this call.
 	 *
-	 * @param string $name
-	 * @param array $arguments
+	 * @since 1.0.0
+	 *
+	 * @param string $name      The method name.
+	 * @param array  $arguments The method arguments.
 	 * @return string Empty.
 	 */
 	public function __call( $name, $arguments ) {
@@ -119,23 +122,22 @@ final class Tests {
 
 		if ( empty( $data['meta'] ) ) {
 			$content .= $this->wrap_info( \esc_html__( 'You should add a site icon through the customizer to add extra support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-			$state   = 'warning';
+			$state    = 'warning';
+
+			if ( empty( $data['static'] ) ) {
+				$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
+					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+					\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
+					[ 'code' ]
+				) );
+			} else {
+				$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
+					\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
+					[ 'code' ]
+				) );
+			}
 		} else {
 			$content .= $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
-		}
-
-		if ( empty( $data['static'] ) ) {
-			$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
-				/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
-				\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
-				[ 'code' ]
-			) );
-			$state = 'warning';
-		} else {
-			$content .= $this->wrap_info( \the_seo_framework()->convert_markdown(
-				\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
-				[ 'code' ]
-			) );
 		}
 
 		end :;

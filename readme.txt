@@ -41,7 +41,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-= 2.3.0 - TODO SEO =
+= 2.3.0 - Unified SEO =
 
 **Release date:**
 
@@ -49,17 +49,18 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Feature highlights:**
 
-* TODO TBA
+* We added a new extension! Called [Cord](https://theseoframework.com/extensions/cord/). It helps you integrate Google Analytics and Facebook pixel.
+* The form generator has been refactored to make the settings page easier to work with.
+
+**Updated extensions:**
+
+* [Articles at version 2.0.2](https://theseoframework.com/extensions/articles/#changelog)
+* [Cord at version 1.0.0](https://theseoframework.com/extensions/articles/#changelog)
+* [Monitor at version 1.2.4-β-5](https://theseoframework.com/extensions/monitor/#changelog)
 
 **Detailed log:**
 
-* We added a new extension! Called [Cord](https://theseoframework.com/extensions/cord/).
-	* TODO explain what it does.
-
-TODO remove extraneous favicon.ico check from TSFEM. Its use is being deprecated.
 TODO remove focus lexical selectors when the language doesn't support it? It's wasted space...
-TODO bypass 1010401 (mismatch domain name in Monitor). See support request keywords: button error.
-	* To test: Augment the request to send "failure".
 
 * **Added:**
 	* A brand new extension, called Cord!
@@ -101,7 +102,8 @@ TODO bypass 1010401 (mismatch domain name in Monitor). See support request keywo
 * **Fixed:**
 	* The available PHP memory is now asserted correctly during upgrades. Before, upgrading went to the absolute limit before deferring, resulting in memory exhaustion.
 	* A browser memory leak and CPU job heaping after repeatedly adding extension settings form iterations.
-	* The correct script is now called for installing The SEO Framework, making for a smoother experience. We changed the names during development leaving stale, non-existing versions.
+	* The correct script is now called for the installation of The SEO Framework, making for the intended visualized experience. We changed the names during development that called stale scripts that weren't in the final version earlier.
+	* The default extension options are no longer repopulated erroneously in the form-generator when cleared.
 
 = 2.2.1 =
 
