@@ -1322,9 +1322,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				return;
 			}
 
-			if ( tsfem_inpost.isPremium ) {
-				if ( l10n.languageSupported )
-					runLexicalFormSetter( idPrefix );
+			if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
+				runLexicalFormSetter( idPrefix );
 			}
 
 			prepareWrapScoreElements( idPrefix );
@@ -1710,6 +1709,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @access private
 	 * @uses @var cachedActiveWords
 	 *
+	 * @FIXME: When the current language isn't supported, stale inflections and synonyms
+	 *         may still be used. The issue is that the current keyword is included in
+	 *         the list, so we can't easily filter it.
+	 *
 	 * @function
 	 * @param {string} idPrefix
 	 * @return {Object<string,function>} : {
@@ -1771,14 +1774,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				return cachedActiveWords[ idPrefix ][ what ];
 
 			switch ( what ) {
-				case 'inflections' :
+				case 'inflections':
 					return getActiveInflections();
-				case 'synonyms' :
+				case 'synonyms':
 					return getActiveSynonyms();
-				default :
+				default:
 					return {
-						'inflections': getActiveInflections(),
-						'synonyms': getActiveSynonyms()
+						inflections: getActiveInflections(),
+						synonyms:    getActiveSynonyms()
 					};
 			}
 		}
@@ -1792,7 +1795,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		return {
-			get: what => getActive( what ),
+			get:        what => getActive( what ),
 			clearCache: what => clear( what )
 		};
 	}
@@ -2239,7 +2242,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( kwEntry.value.length ) {
 				//= Prepare keyword value.
 				kwEntry.dataset.prev = kwEntry.value;
-				if ( tsfem_inpost.isPremium ) {
+				if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
 					//= Prepare lexical selector values.
 					let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 					lexicalSelector.dataset.prev = lexicalSelector.value;
@@ -2296,7 +2299,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		resetCollapserListeners();
 		resetKeywordEntryListeners();
 
-		if ( tsfem_inpost.isPremium ) {
+		if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
 			//= Prepare definition selector.
 			resetSubjectEditListeners();
 			resetSubjectFilterListeners();

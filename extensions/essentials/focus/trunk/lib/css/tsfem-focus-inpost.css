@@ -24,12 +24,11 @@
 	user-select: none;
 }
 
-/* Didn't care for the min-width, it's "too neat"--removing visual balance. */
 .tsfem-e-focus-collapse-header-row {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: safe center;
-	/* min-width: 50%; */
+	min-width: 46%; /* 50 also works (better), but it destroys the visually balanced center--the select objects are heavy to the eye */
 }
 
 .tsfem-e-focus-collapse-header-row > * {

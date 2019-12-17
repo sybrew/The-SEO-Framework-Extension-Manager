@@ -26,7 +26,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					? \esc_attr__( 'Supporting keyword...', 'the-seo-framework-extension-manager' )
 					: \esc_attr__( 'Keyword...', 'the-seo-framework-extension-manager' )
 			);
-			if ( $is_premium ) {
+			if ( $is_premium && $language_supported ) {
+				// This field isn't POSTed, so we can safely remove it.
 				printf(
 					'<select id=%s value="%s" class="%s" disabled>%s</select>',
 					\esc_attr( $post_input['lexical_form']['selector_id'] ),

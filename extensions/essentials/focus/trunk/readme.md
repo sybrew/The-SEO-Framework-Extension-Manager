@@ -201,6 +201,13 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 ## Changelog
 
+### 1.3.2
+
+[tsfep-release time="-1"]
+
+* **Improved:** The lexical selector is now hidden when the current language isn't supported for the API.
+* **Fixed:** The spacing of the keyword inputs is now less likely to misalign when the words differ in length.
+
 ### 1.3.1
 
 [tsfep-release time="November 5th, 2019"]
