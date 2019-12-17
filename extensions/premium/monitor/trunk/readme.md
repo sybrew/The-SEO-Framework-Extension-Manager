@@ -126,8 +126,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 [tsfep-release time="January 28th, 2019"]
 
 * **Extension:**
-	* **Changed:**
-		* This extension now uses TSF's script loader.
+	* **Changed:** This extension now uses TSF's script loader.
 
 ### 1.2.1-beta-5
 

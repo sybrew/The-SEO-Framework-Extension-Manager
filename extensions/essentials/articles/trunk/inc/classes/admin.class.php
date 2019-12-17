@@ -380,6 +380,7 @@ final class Admin extends Core {
 
 		$post_types = \the_seo_framework()->get_supported_post_types();
 
+		// TODO do we want to strip unknown entries from payload?
 		// Only sanitize known post types.
 		foreach ( $post_types as $type ) {
 			if ( ! isset( $value[ $type ] ) ) continue;

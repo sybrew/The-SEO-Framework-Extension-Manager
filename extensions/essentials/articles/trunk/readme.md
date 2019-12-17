@@ -19,7 +19,7 @@ All this is achieved via structured data with Articles, without a hassle.
 
 [tsfep-image id="1"]
 
-### Structured Data
+### Structured data
 
 Structured data helps search engines understand how your website and your content are set up. It removes the guesswork they usually conduct when parsing a plain webpage.
 
@@ -45,7 +45,7 @@ To get started, visit the [Google News Publishing Center](https://news.google.co
 
 First, you'll need to activate the Articles extension.
 
-### Extension Settings
+### Extension settings
 
 Underneath the extension description, you should see a settings-link appear. You can also find this link under "SEO" in the admin sidebar, but you may need to refresh the page first.
 
@@ -53,7 +53,7 @@ On the Extension Settings page, you can assign which post types should support t
 
 Moreover, you can enable the Google News sitemap and select a publisher logo. Restrictions apply. For more information, see the [Articles FAQ](#faq).
 
-### Post Settings
+### Post settings
 
 On every supported post type edit-screen, you can set the Article Type under the Structure tab.
 
@@ -115,7 +115,7 @@ The generic article type covers all types.
 
 So, generic Articles cover News Articles and Blog Postings. But you might want to be more specific.
 
-#### News Articles
+#### News articles
 
 _This type is unavailable when your website represent a person, instead of an organization._
 
@@ -123,7 +123,7 @@ When you annotate a page as a News Article, and when your website is verified as
 
 [tsfep-image id="2"]
 
-#### Blog Postings
+#### Blog postings
 
 Unlike News Articles, Blog Postings won't be displayed within carousels. The blog entry can be based on either fact or be an opinionated piece.
 

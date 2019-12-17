@@ -173,7 +173,7 @@ final class Admin extends Core {
 							\__( 'Facebook Pixel', 'the-seo-framework-extension-manager' ),
 							sprintf(
 								/* translators: %s = Tracking ID documentation link. Markdown. */
-								\__( 'Start tracking with [Facebook Pixel](%s) by filling in a Pixel ID.', 'the-seo-framework-extension-manager' ),
+								\__( 'Start tracking with [Facebook pixel](%s) by filling in a Pixel ID.', 'the-seo-framework-extension-manager' ),
 								'https://www.facebook.com/business/help/952192354843755'
 							),
 						],
@@ -253,9 +253,13 @@ final class Admin extends Core {
 		if ( ! is_array( $value ) )
 			$value = [];
 
+		// TODO do we want to strip unknown entries from payload?
 		// Yes, this is needlessly complex. It's built for future expansion...
-		$indexes = [ 'google_analytics' ];
-		foreach ( $indexes as $index ) :
+		$valid_indexes = [
+			'google_analytics',
+			'facebook_pixel',
+		];
+		foreach ( $valid_indexes as $index ) :
 			switch ( $index ) :
 				case 'google_analytics':
 					$keys = [

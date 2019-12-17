@@ -9,8 +9,7 @@ This extension guides you through the process of writing targeted content that r
 
 ### Focus your content
 
-With over 1 billion competing websites, your pages barely stand a chance ranking on the first page of Google.
-So, writing quality content that ranks well in search engines isn't easy. This is where Focus comes in.
+With over 1 billion competing websites, your pages barely stand a chance ranking on the first page of Google. So, writing quality content that ranks well in search engines isn't easy. This is where Focus comes in.
 
 This extension helps you to focus your content to a few well-targeted search phrases, significantly increasing your chances to rank on the first page.
 
@@ -144,19 +143,21 @@ You can change your page URL in the sidebar under "Document > Permalink." On som
 
 All languages have the requisite support for ratings.
 
+### What does "Essentials+" stand for?
+
+The Focus extension requires an Essentials subscription to use. The plus indicates that there's additional API support for our Premium subscribers. In the case of Focus, there's added dictionary API support for lexical lookup.
+
 ### Which languages are supported by the dictionary API?
 
-The API currently supports English only. Support for other languages will be added over time.
+The API currently supports English only. Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
 
 ### Why are there only one or two inflections available?
 
-We're currently working on inflection lookups. When it's ready, an update will be sent out.
+We're still waiting for our API partner to provide reverse inflection lookups. When it's ready, an update will be sent out.
 
 ### "A parsing failure occurred." What does this mean?
 
-When the content parser experiences any error, the rater shows this generic message.
-Most likely, your computer may be restraint in processing power in combination with page builders.
-This issue resolves automatically, as the parser reassesses its data every 45 seconds, or whenever the related content is updated.
+When the content parser experiences any error, the rater shows this generic message. Most likely, your computer may be restraint in processing power in combination with page builders. This issue resolves automatically, as the parser reassesses its data every 45 seconds, or whenever the related content is updated.
 
 ### Are page builders supported?
 Focus supports most page builders. However, page builders that rely on shortcodes may give incorrect assessments for the "introduction" and "subject density" ratings.

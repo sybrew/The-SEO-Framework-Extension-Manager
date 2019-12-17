@@ -78,7 +78,7 @@ final class Front extends Core {
 	}
 
 	/**
-	 * Prepares Facebook Pixel output.
+	 * Prepares Facebook pixel output.
 	 *
 	 * @since 1.0.0
 	 */
@@ -92,7 +92,7 @@ final class Front extends Core {
 		 * @param bool $enabled
 		 */
 		if ( \apply_filters( 'the_seo_framework_cord_fbp_enabled', true ) ) {
-			// Don't set preconnection. The Facebook Pixel script is based on a connection and cookie.
+			// Don't set preconnection. The Facebook pixel script is based on a connection and cookie.
 
 			// It must be outputted in the header, because the Facebook script needs to initialize itself before first paint.
 			\add_action( 'wp_head', [ $this, '_output_facebook_pixel_tracking' ], 99 );
@@ -169,7 +169,7 @@ JS;
 	}
 
 	/**
-	 * Outputs the Facebook Pixel scripts.
+	 * Outputs the Facebook pixel scripts.
 	 *
 	 * @since 1.0.0
 	 *

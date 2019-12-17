@@ -54,7 +54,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 **Detailed log:**
 
 * We added a new extension! Called [Cord](https://theseoframework.com/extensions/cord/).
-	* TODO explain what it does. TODO make readme, logo, etc.
+	* TODO explain what it does.
 
 TODO remove extraneous favicon.ico check from TSFEM. Its use is being deprecated.
 TODO remove focus lexical selectors when the language doesn't support it? It's wasted space...

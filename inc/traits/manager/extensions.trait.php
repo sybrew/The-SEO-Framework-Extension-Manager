@@ -86,9 +86,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1572498553',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -99,9 +99,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1574553314',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.2',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -112,22 +112,22 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1542470700',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'cord'      => [
 				'slug'         => 'cord',
 				'network'      => '0',
 				'type'         => 'essentials',
-				'area'         => 'anlytics',
+				'area'         => 'analytics',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1574550583',
+				'last_updated' => '1576470514',
 				'requires'     => '4.9.0',
-				'tested'       => '5.1.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'local'     => [
 				'slug'         => 'local',
@@ -138,9 +138,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1565553458',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -151,9 +151,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1565627638',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -164,9 +164,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1546666851',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -177,9 +177,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -190,9 +190,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -203,9 +203,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1572496812',
 				'requires'     => '4.9.0',
-				'tested'       => '5.3.0',
+				'tested'       => '5.3.1',
 				'requires_tsf' => '4.0.0',
-				'tested_tsf'   => '4.0.4',
+				'tested_tsf'   => '4.0.5',
 			],
 		];
 	}
@@ -223,9 +223,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'dd3ff24ac6fb75a2147a232e4522b4edb1ebca227efa8c248d6272f86b5a24a6',
-			'sha1'   => 'f22e9edd96afc7f9e0f64879fd061cfc8474680d',
-			'md5'    => '0bce2a3bf56d14d790435f1bf2bd2d29',
+			'sha256' => '9109e71426e542b7d030cdebdc9142fe2195eb2eae336fc826298cf192345dfc',
+			'sha1'   => '6b6e8f9c78c274ddcb1121fd628ca420c4c4dd17',
+			'md5'    => '5d14e66a3e6befc1b75ba53fd475b237',
 		];
 	}
 
