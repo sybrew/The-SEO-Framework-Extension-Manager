@@ -71,7 +71,7 @@ class Core {
 		/**
 		 * @since 1.2.0
 		 * @since 2.0.0 Deprecated
-		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings.
+		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings page.
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 * @deprecated
 		 * @param array $pm_defaults The default post meta settings.
@@ -81,7 +81,7 @@ class Core {
 		/**
 		 * @since 1.4.0
 		 * @since 2.0.0 Deprecated
-		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings.
+		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings page.
 		 * @deprecated
 		 * @param array $post_types The supported post types.
 		 */

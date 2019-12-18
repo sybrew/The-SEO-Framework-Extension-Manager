@@ -209,7 +209,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ### 2.0.2
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 18th, 2019"]
 
 * **Fixed:** The filter deprecation notice now fires as intended when only the `the_seo_framework_articles_supported_post_types` filter is used on the site.
 	* This was an oversight as we flipped a bit for testing purposes.

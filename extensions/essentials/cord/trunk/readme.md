@@ -168,6 +168,6 @@ add_filter( 'the_seo_framework_cord_ga_ela_id_levels', function( $levels = 5 ) {
 
 ### 1.0.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 18th, 2019"]
 
 * Initial extension release.

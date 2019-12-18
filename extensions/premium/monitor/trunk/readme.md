@@ -117,7 +117,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.4-beta-5
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 18th, 2019"]
 
 * **Changed:** The favicon.ico check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
 * **API - Our servers:**
