@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.9.0
-Tested up to: 5.3
+Tested up to: 5.3.2
 Requires PHP: 5.6.5
 Requires TSF: 4.0.0
 Stable tag: 2.3.0
