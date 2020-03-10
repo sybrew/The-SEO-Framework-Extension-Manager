@@ -492,7 +492,7 @@ final class Admin extends Core {
 			'pm_index' => $this->pm_index,
 			'type' => [
 				'label' => [
-					'title' => \__( 'Article type', 'the-seo-framework-extension-manager' ),
+					'title' => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
 					'desc'  => \__( 'Set the article type.', 'the-seo-framework-extension-manager' ),
 					'link'  => 'https://theseoframework.com/extensions/articles/#usage/types',
 				],

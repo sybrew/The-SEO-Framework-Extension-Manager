@@ -170,7 +170,9 @@ final class Tests {
 		$consult_theme_author = false;
 
 		if ( ! $data['located'] ) {
-			$state = 'error';
+			$content .= $this->wrap_info( \esc_html__( 'No title tag was found.', 'the-seo-framework-extension-manager' ) );
+			$state    = 'error';
+
 			$consult_theme_author = true;
 		} elseif ( isset( $data['value'] ) && $data['value'] ) {
 			preg_match( '/(?:<title.*?>)(.*)?(?:<\/title>)/is', $data['value'], $matches );
@@ -178,7 +180,7 @@ final class Tests {
 
 			if ( ! $first_found_title ) {
 				$content .= $this->wrap_info( \esc_html__( 'The homepage title tag is empty.', 'the-seo-framework-extension-manager' ) );
-				$state = 'error';
+				$state    = 'error';
 				$consult_theme_author = true;
 			} else {
 

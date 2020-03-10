@@ -144,7 +144,7 @@ msgid "Enabled"
 msgstr ""
 
 #: extensions/essentials/articles/trunk/inc/classes/admin.class.php:495
-msgid "Article type"
+msgid "Article Type"
 msgstr ""
 
 #: extensions/essentials/articles/trunk/inc/classes/admin.class.php:496

@@ -237,7 +237,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 			$locale = str_replace( '_', '-', \get_locale() );
 			$locale = preg_match( '/(zh-cn|zh-tw|[a-z]{2,3})/i', $locale, $matches ) ? $matches[1] : 'en';
 
-			$publication = $publication ?: [
+			$publication = [
 				'name'     => static::$tsf->escape_title( $name ),
 				'language' => strtolower( $locale ), // already escaped.
 			];
@@ -306,8 +306,9 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 
 		$type = $this->get_post_meta( 'type' );
 
+		// We can collapse these 5 lines into one using PHP 7+...
+		// $type = $type ?: ( ( $this->get_option( 'post_types' )[ \get_post_type( $post_id ) ] ?? [] )['default_type'] ?? 'Article' );
 		if ( ! $type ) {
-			// We can collapse these 3 lines into one using PHP 7+...
 			$post_type_options = $this->get_option( 'post_types' );
 			$post_type         = \get_post_type( $post_id );
 			$type = isset( $post_type_options[ $post_type ]['default_type'] ) ? $post_type_options[ $post_type ]['default_type'] : 'Article';

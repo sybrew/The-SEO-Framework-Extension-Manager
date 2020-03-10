@@ -160,7 +160,7 @@ class Api extends Data {
 			return false;
 		}
 
-		$success = [];
+		$success   = [];
 		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
@@ -170,7 +170,7 @@ class Api extends Data {
 			return false;
 		}
 
-		$success = [];
+		$success   = [];
 		$success[] = $this->set_remote_crawl_timeout();
 		$success[] = $this->update_option( 'site_requires_fix', false );
 		$success[] = $this->update_option( 'site_marked_inactive', false );

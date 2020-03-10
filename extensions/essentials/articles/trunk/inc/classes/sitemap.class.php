@@ -83,7 +83,7 @@ final class Sitemap extends Core {
 	 */
 	public function _register_news_sitemap_endpoint( $list = [] ) {
 
-		$list['news'] = [
+		$list[ $this->sitemap_id ] = [
 			'endpoint' => 'sitemap-news.xml',
 			'regex'    => '/^sitemap-news\.xml/i',
 			'callback' => [ $this, '_output_news_sitemap' ],

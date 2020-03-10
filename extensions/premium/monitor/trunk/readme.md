@@ -115,6 +115,16 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.5-beta-5
+
+[tsfep-release time="-1"]
+
+* **Improved:** When no title tag is found, a non-generic message is now shown.
+* **API - Our servers:**
+	* **February 12th, 2020:**
+		* **Fixed:** Nonconventional title tags are now recognized.
+		* **Fixed:** Non-header title tags are no longer detected as extraneous.
+
 ### 1.2.4-beta-5
 
 [tsfep-release time="December 18th, 2019"]
