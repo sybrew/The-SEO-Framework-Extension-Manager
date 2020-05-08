@@ -244,7 +244,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 		}
 
 		$data = [
-			'loc'       => $args['loc'],
+			'loc'       => $this->escape_xml_url_query( $args['loc'] ),
 			'news:news' => [
 				'news:publication'      => [
 					'news:name'     => $publication['name'],
@@ -258,7 +258,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 		$image = $args['image']['loc'] ? static::$tsf->s_url_relative_to_current_scheme( $args['image']['loc'] ) : '';
 		if ( $image ) {
 			$data['image:image'] = [
-				'image:loc' => $image,
+				'image:loc' => $this->escape_xml_url_query( $image ),
 			];
 		}
 
@@ -272,6 +272,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 	 *
 	 * @param array $data  The data to create an XML item from. Expected to be escaped!
 	 * @param int   $level The iteration level. Default 1 (one level in from urlset).
+	 *                     Affects non-mandatory tab indentation for readability.
 	 * @return string The XML data.
 	 */
 	private function create_xml( $data, $level = 1 ) {
@@ -288,6 +289,58 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 		}
 
 		return $out;
+	}
+
+	/**
+	 * Escapes URL queries for XML.
+	 *
+	 * @since 2.3.1
+	 *
+	 * @param mixed $url The URL to escape.
+	 * @return string A value that's safe for XML use.
+	 */
+	private function escape_xml_url_query( $url ) {
+
+		$q = parse_url( $url, PHP_URL_QUERY );
+
+		if ( $q ) {
+			parse_str( $q, $r );
+			// Don't replace. Tokenize. The query part might be part of the URL (in some alien environment).
+			$url = strtok( $url, '?' ) . '?' . http_build_query( $r, null, '&amp;', PHP_QUERY_RFC3986 );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Escapes XML entities.
+	 *
+	 * @since 2.3.1
+	 * @ignore Unused.
+	 * @link <https://www.w3.org/TR/xml/#syntax>
+	 * @link <https://www.w3.org/TR/REC-xml/#sec-external-ent>
+	 *
+	 * @param mixed $value The value to escape.
+	 * @return string A value that's safe for XML use.
+	 */
+	private function escape_xml_entities( $value ) {
+
+		// Cache to improve performance.
+		static $s, $r;
+		if ( ! isset( $s, $r ) ) {
+			$list = [
+				'"' => '%22',
+				'&' => '%26',
+				"'" => '%27',
+				'<' => '%3C',
+				'>' => '%3E',
+			];
+
+			$s = array_keys( $list );
+			$r = array_values( $list );
+		}
+
+		return str_replace( $s, $r, $value );
 	}
 
 	/**

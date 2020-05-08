@@ -2,10 +2,10 @@
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 4.9.0
-Tested up to: 5.3.2
+Tested up to: 5.4.1
 Requires PHP: 5.6.5
 Requires TSF: 4.0.0
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,6 +41,34 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.3.1 =
+
+**Release date:**
+
+* TODO
+
+**Detailed log:**
+
+* **Changed:**
+	* The version compatibility testing can now be done against major releases, instead of only minor.
+		* TODO Set software details on TSF site to add minor and major versions automagically based on currently available (or requested) version.
+* **Updated:** The Russian translation files. Thank you, [Vitaliy](https://profiles.wordpress.org/vit-1/)!
+* **Updated:** The Spanish translation files. Thank you, [Manuel](https://profiles.wordpress.org/mbrsolution/)!
+
+**Updated extensions:**
+
+* [Articles at version 2.0.3](https://theseoframework.com/extensions/articles/#changelog).
+	* TODO Added: The Article type can now be set via quick-edit and bulk-edit.
+		* This feature requires TSF 4.0.5. (`the_seo_framework_list_table_data`, `the_seo_framework_after_bulk_edit`, `the_seo_framework_after_quick_edit`).
+* [Monitor at version 1.2.5](https://theseoframework.com/extensions/monitor/#changelog). TODO
+	* TODO remove the statistics & beta part. It never came to fruition--the costs couldn't be managed.
+	* TODO prepare for per-post validation, instead.
+
+* TODO Local, fix these:
+	Sadunese -> Sudanese* // Should we convert this in the database? And if so, how?
+	Bralizian -> Brazilian* // Should we convert this in the database? And if so, how?
+	Centrafican -> Is this even a valid word? Wikipedia thinks so: https://en.wikipedia.org/wiki/List_of_African_cuisines
+
 = 2.3.0 - Unified SEO =
 
 **Release date:**
@@ -56,7 +84,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * [Focus at version 1.3.2](https://theseoframework.com/extensions/focus/#changelog)
 * [Articles at version 2.0.2](https://theseoframework.com/extensions/articles/#changelog)
-* [Cord at version 1.0.0](https://theseoframework.com/extensions/articles/#changelog)
+* [Cord at version 1.0.0](https://theseoframework.com/extensions/cord/#changelog)
 * [Monitor at version 1.2.4-β-5](https://theseoframework.com/extensions/monitor/#changelog)
 
 **Detailed log:**

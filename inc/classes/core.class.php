@@ -834,7 +834,7 @@ class Core {
 	 */
 	final public function _get_uid_hash( $uid ) {
 
-		if ( empty( $uid ) ) return '';
+		if ( ! $uid ) return '';
 
 		$a   = (string) $uid;
 		$b   = strrev( $a );
@@ -865,7 +865,7 @@ class Core {
 	 */
 	final public function _get_timed_hash( $uid, $length = 3600, $end = 0 ) {
 
-		if ( empty( $uid ) || empty( $length ) )
+		if ( ! $uid || ! $length )
 			return '';
 
 		$_time  = time();
@@ -910,7 +910,7 @@ class Core {
 		//* 'instance' picks a random key.
 		static $instance_scheme = null;
 		if ( null === $instance_scheme ) {
-			$_key = mt_rand( 0, count( $schemes ) - 1 );
+			$_key            = mt_rand( 0, count( $schemes ) - 1 );
 			$instance_scheme = $schemes[ $_key ];
 		}
 		$_scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
@@ -1291,7 +1291,7 @@ class Core {
 	 * @return int Points.
 	 */
 	final public function pixels_to_points( $px = 0 ) {
-		return intval( $px ) * 0.75;
+		return intval( $px ) * .75;
 	}
 
 	/**

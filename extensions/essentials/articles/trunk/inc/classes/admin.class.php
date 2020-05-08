@@ -98,6 +98,8 @@ final class Admin extends Core {
 			'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
 		] );
 
+		$this->set_extension_post_meta_id( $post->ID );
+
 		$states[] = $type_i18n[ static::filter_article_type( $this->get_post_meta( 'type', $default ) ) ];
 
 		return $states;
@@ -318,7 +320,7 @@ final class Admin extends Core {
 			'_req'                    => false,
 			'_type'                   => 'multi_dropdown',
 			'_desc'                   => [
-				'Post Type Settings',
+				\__( 'Post Type Settings', 'the-seo-framework-extension-manager' ),
 				\__( 'Article markup should only be applied to content that is ephemeral and may be subject to change, like an opinionated blog post, a news article, or a research document. Timeless content, such as a contact, product, or about page, should not have the article markup.', 'the-seo-framework-extension-manager' ),
 				\__( 'Be mindful of the post types you enable. For instance, a product, app, recipe, or an event page should not always be recognized as an article.', 'the-seo-framework-extension-manager' ),
 			],
