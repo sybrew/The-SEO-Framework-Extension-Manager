@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -30,6 +31,7 @@ defined( 'ABSPATH' ) or die;
  * All functions are publically accessible by default.
  *
  * Importing this class for clean code is recommended.
+ *
  * @see <http://php.net/manual/en/language.namespaces.importing.php>
  *
  * @since 1.5.0

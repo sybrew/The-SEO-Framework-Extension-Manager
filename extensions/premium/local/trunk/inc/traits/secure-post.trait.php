@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -38,16 +38,24 @@ defined( 'ABSPATH' ) or die;
 trait Secure_Post {
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation request name.
+	 */
 	protected $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce action.
+	 */
 	protected $nonce_action = [];
 
 	/**
@@ -188,7 +196,8 @@ trait Secure_Post {
 		$key = \TSF_Extension_Manager\FormGenerator::_parse_ajax_its_listener( __CLASS__, $this->form_args );
 
 		if ( $key ) {
-			if ( ( $method = $this->get_iterator_callback_by_key( $key ) ) ) {
+			$method = $this->get_iterator_callback_by_key( $key );
+			if ( $method ) {
 				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
 				$fields = Fields::get_instance()->{$method}();
 			}
@@ -260,7 +269,9 @@ trait Secure_Post {
 	 */
 	private function send_ajax_form_json_validation() {
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : ''; // CSRF, sanitization, input var ok.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
+
+		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
 
 		parse_str( $post_data, $data );
 
@@ -292,5 +303,7 @@ trait Secure_Post {
 		}
 
 		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 }

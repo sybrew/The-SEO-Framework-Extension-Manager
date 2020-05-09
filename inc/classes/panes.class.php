@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -117,9 +118,11 @@ class Panes extends API {
 
 		if ( -1 === $feed ) {
 			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
+
 			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
 		} elseif ( empty( $feed ) ) {
 			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
+
 			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
 		} else {
 			$output .= sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
@@ -133,7 +136,6 @@ class Panes extends API {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool @ajax Whether the return value is queried through AJAX.
 	 * @return array {
 	 *    'data' => array The feed items.
 	 *    'wrap' => string The feed items wrap.
@@ -146,14 +148,16 @@ class Panes extends API {
 
 		if ( -1 === $data ) {
 			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
-			$output = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output     = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+
 			$send = [
 				'status'       => 'parse_error',
 				'error_output' => sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output ),
 			];
 		} elseif ( empty( $data ) ) {
 			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
-			$output = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output     = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+
 			$send = [
 				'status'       => 'unknown_error',
 				'error_output' => sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output ),
@@ -208,7 +212,7 @@ class Panes extends API {
 			'target'  => '_blank',
 		] );
 		/* translators: %s = "Google Webmaster Central Blog" */
-		$acquiredfrom = sprintf( \esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
+		$acquiredfrom  = sprintf( \esc_html__( 'The feed is acquired from %s.', 'the-seo-framework-extension-manager' ), $googleblog );
 		$googleprivacy = $this->get_link( [
 			'url'     => 'https://www.google.com/policies/privacy/',
 			'content' => \__( "Google's Privacy Policy", 'the-seo-framework-extension-manager' ),
@@ -256,7 +260,7 @@ class Panes extends API {
 			\esc_url( $this->get_admin_page_url() ),
 			$form
 		);
-		$js = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
+		$js   = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
 	}
@@ -448,6 +452,7 @@ class Panes extends API {
 		Layout::reset();
 
 		$infos = [];
+
 		if ( $this->is_connected_user() )
 			$infos[] = \esc_html__( 'This information is updated every few minutes, infrequently.', 'the-seo-framework-extension-manager' );
 

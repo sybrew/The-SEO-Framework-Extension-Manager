@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -37,6 +37,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The extension version.
+ *
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
@@ -44,42 +45,49 @@ define( 'TSFEM_E_LOCAL_VERSION', '1.1.5' );
 
 /**
  * The extension database version.
+ *
  * @since 1.1.2
  */
 define( 'TSFEM_E_LOCAL_DB_VERSION', '1100' );
 
 /**
  * The extension file, absolute unix path.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_LOCAL_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_LOCAL_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_LOCAL_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_LOCAL_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_LOCAL_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_LOCAL_PATH_CLASS', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * The plugin trait map absolute path.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_LOCAL_PATH_TRAIT', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
+ *
  * @since 1.0.0
  */
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )

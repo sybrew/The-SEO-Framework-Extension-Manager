@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -408,6 +409,7 @@ trait Extensions_Properties {
  *
  * Warning: This trait holds front-end PHP security risks when mistreated. Always use
  * trait TSF_Extension_Manager\Enclose(_*) in pair with this trait.
+ *
  * @see /inc/traits/overload.trait.php
  *
  * @since 1.0.0
@@ -531,6 +533,7 @@ trait Extensions_Actions {
 	 * }
 	 */
 	public static function validate_extension_activation() {
+		// phpcs:disable, WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound -- condensed code
 
 		if ( ! self::verify_instance() ) {
 			return [ 'success' => false, 'case' => 0 ];
@@ -564,6 +567,7 @@ trait Extensions_Actions {
 		} else {
 			return [ 'success' => true, 'case' => 4 ];
 		}
+		// phpcs:enable, WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound
 	}
 
 	/**
@@ -870,11 +874,14 @@ trait Extensions_Actions {
 			goto end;
 
 		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- this is a local file call.
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
 		if ( empty( $json ) ) {
 			//* json file contents are invalid.
 			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
+
+			// This won't run, and that's OK.
 			$success[] = false;
 			goto end;
 		}
@@ -897,7 +904,7 @@ trait Extensions_Actions {
 			}
 
 			if ( $_class ) {
-				$class = $namespace . '\\' . $_class;
+				$class     = $namespace . '\\' . $_class;
 				$success[] = (bool) new $class;
 			}
 		}
@@ -919,7 +926,7 @@ trait Extensions_Actions {
 	private static function persist_include_extension( $file, &$_instance, &$bits ) {
 
 		$yield_count = 0;
-		$success = [];
+		$success     = [];
 
 		//* Get follow-up verification instance.
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
@@ -1014,7 +1021,7 @@ trait Extensions_Actions {
 			}
 		}
 
-		$error = error_get_last();
+		$error      = error_get_last();
 		$error_type = '';
 
 		switch ( $error['type'] ) :
@@ -1041,15 +1048,25 @@ trait Extensions_Actions {
 
 		if ( \wp_doing_ajax() ) {
 			// TODO send slug?
-			\tsf_extension_manager()->send_json( [
-				'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
-				'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
-			], 'failure' );
+			\tsf_extension_manager()->send_json(
+				[
+					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
+					'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
+				],
+				'failure'
+			);
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 			$error_notice .= '<p><strong>Error message:</strong> <br>' . $advanced_error_notice . '</p>';
 
-			\wp_die( $error_notice, 'Extension error', [ 'back_link' => true, 'text_direction' => 'ltr' ] ); // xss ok.
+			\wp_die(
+				$error_notice, // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it's escaped.
+				'Extension error',
+				[
+					'back_link'      => true,
+					'text_direction' => 'ltr',
+				]
+			);
 		}
 	}
 
@@ -1072,8 +1089,8 @@ trait Extensions_Actions {
 		//* Remove error location and line from message.
 		if ( ( $loc = stripos( $message, ' in /' ) ) ) {
 			$additions = '.php:' . $error['line'];
-			$loc_line = stripos( $message, $additions, $loc );
-			$offset = $loc_line - $loc + strlen( $additions );
+			$loc_line  = stripos( $message, $additions, $loc );
+			$offset    = $loc_line - $loc + strlen( $additions );
 
 			if ( $loc_line && ( $rem = substr( $message, $loc, $offset ) ) ) {
 				//* Continue only if there are no spaces.

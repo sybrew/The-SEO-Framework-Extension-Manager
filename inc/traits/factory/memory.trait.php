@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits\Factory
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -91,13 +92,12 @@ trait Memory {
 	 * Increases the memory limit to maximum allowed size.
 	 *
 	 * @since 1.5.0
+	 * @since 2.3.1 Now uses wp_raise_memory_limit()
 	 * @uses Memory_Cache::increased_available_memory()
 	 */
 	final protected function increase_available_memory() {
 		Memory_Cache::increased_available_memory()
-			or function_exists( '\wp_is_ini_value_changeable' )
-				and \wp_is_ini_value_changeable( 'memory_limit' )
-				and @ini_set( 'memory_limit', WP_MAX_MEMORY_LIMIT );
+			or \wp_raise_memory_limit( 'tsfem' );
 	}
 
 	/**

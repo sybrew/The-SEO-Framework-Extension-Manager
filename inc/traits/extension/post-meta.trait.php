@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -42,7 +43,7 @@ final class Extensions_Post_Meta_Cache {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $meta : {
+	 * @var array $meta : {
 	 *    'id' => [ 'key' => 'value' ],
 	 * }
 	 */
@@ -91,12 +92,12 @@ final class Extensions_Post_Meta_Cache {
 	 * @since 1.5.0
 	 * @access private
 	 *
-	 * @param int $id The Post ID.
-	 * @param string $index The meta index that has to be changed.
+	 * @param int        $id       The Post ID.
+	 * @param string     $index    The meta index that has to be changed.
 	 * @param null|array $new_meta The new meta to set.
-	 *        Should not have changed meta from outside the current extension's scope.
-	 * @param bool $delete If $new_meta aren't set, but this is true, then
-	 *        it will delete the current meta $index from cache.
+	 *                             Should not have changed meta from outside the current extension's scope.
+	 * @param bool       $delete   If $new_meta aren't set, but this is true, then
+	 *                             it will delete the current meta $index from cache.
 	 * @return array The updated extension meta for every extension for ID.
 	 */
 	public static function _set_meta_cache( $id, $index, $new_meta = null, $delete = false ) {
@@ -128,9 +129,9 @@ trait Extension_Post_Meta {
 	 * @NOTE: Always set this directly in the constructor of the class.
 	 *        Traits do not share class properties and thus properties hold their
 	 *        value as if it were its user's class.
-	 * @since 1.5.0
 	 *
-	 * @param string $pm_index The current extension meta base index field.
+	 * @since 1.5.0
+	 * @var string $pm_index The current extension meta base index field.
 	 */
 	protected $pm_index = '';
 
@@ -138,8 +139,7 @@ trait Extension_Post_Meta {
 	 * Holds the post ID.
 	 *
 	 * @since 1.5.0
-	 *
-	 * @param int|null $id
+	 * @var int|null $id
 	 */
 	protected $pm_id = null;
 
@@ -148,9 +148,9 @@ trait Extension_Post_Meta {
 	 *
 	 * If meta key's value is not null, it will fall back to set meta when
 	 * $this->get_post_meta()'s second parameter is not null either.
-	 * @since 1.5.0
 	 *
-	 * @param array $pm_defaults The default meta.
+	 * @since 1.5.0
+	 * @var array $pm_defaults The default meta.
 	 */
 	protected $pm_defaults = [];
 
@@ -158,8 +158,7 @@ trait Extension_Post_Meta {
 	 * Flag for initialization.
 	 *
 	 * @since 1.5.0
-	 *
-	 * @param bool $pm_initialized Whether the meta is initialized.
+	 * @var bool $pm_initialized Whether the meta is initialized.
 	 */
 	protected $pm_initialized = false;
 
@@ -245,8 +244,8 @@ trait Extension_Post_Meta {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $key The meta name.
-	 * @param mixed $value The meta value.
+	 * @param string $key   The meta name.
+	 * @param mixed  $value The meta value.
 	 * @return bool True on success or the meta is unchanged, false on failure.
 	 */
 	final protected function update_post_meta( $key, $value ) {
@@ -268,6 +267,7 @@ trait Extension_Post_Meta {
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
@@ -305,6 +305,7 @@ trait Extension_Post_Meta {
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 
 		if ( $success ) {
@@ -341,6 +342,7 @@ trait Extension_Post_Meta {
 		if ( [] === $c_meta ) {
 			$success = \delete_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		} else {
+			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
 		}
 

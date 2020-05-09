@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -106,7 +107,7 @@ trait Extension_Forms {
 	 * @param string $action_name Nonce action name.
 	 */
 	public function _nonce_field( $action_name ) {
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->_get_nonce_field( $action_name );
 	}
 
@@ -133,7 +134,7 @@ trait Extension_Forms {
 	 * @param string $request_name Nonce request name.
 	 */
 	public function _nonce_action_field( $request_name ) {
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->_get_nonce_action_field( $request_name );
 	}
 
@@ -148,7 +149,11 @@ trait Extension_Forms {
 	 * @return string Hidden form action input.
 	 */
 	public function _get_nonce_action_field( $request_name ) {
-		return '<input type=hidden name="' . $this->_get_field_name( 'nonce-action' ) . '" value="' . \esc_attr( $this->request_name[ $request_name ] ) . '">';
+		return sprintf(
+			'<input type=hidden name="%s" value="%s">',
+			$this->_get_field_name( 'nonce-action' ),
+			\esc_attr( $this->request_name[ $request_name ] )
+		);
 	}
 
 	/**
@@ -162,7 +167,7 @@ trait Extension_Forms {
 	 * @param string $class The submit button class. When empty it defaults to 'tsfem-button-primary'.
 	 */
 	public function _submit_button( $name, $title = '', $class = '' ) {
-		//* Already escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->_get_submit_button( $name, $title, $class );
 	}
 
@@ -191,8 +196,8 @@ trait Extension_Forms {
 	 * @since 1.5.0
 	 * @access private
 	 *
-	 * @param string $url The admin page action URL.
-	 * @param array $items The form items : {
+	 * @param string $url   The admin page action URL.
+	 * @param array  $items The form items : {
 	 *    'title'   => string The form button title.
 	 *    'class'   => string The form class.
 	 *    'id'      => string The form ID.
@@ -200,10 +205,9 @@ trait Extension_Forms {
 	 *    'ajax-id' => string The AJAX <a> button ID.
 	 *    'input'   => array The form input entry items.
 	 * }
-	 * @return string The input submit button.
 	 */
 	public function _action_button( $url = '', array $items = [] ) {
-		//* Should already be escaped before input.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- The input must be escaped.
 		echo $this->_get_action_button( $url, $items );
 	}
 
@@ -213,8 +217,8 @@ trait Extension_Forms {
 	 * @since 1.5.0
 	 * @access private
 	 *
-	 * @param string $url The admin page action URL.
-	 * @param array $items The form items : {
+	 * @param string $url   The admin page action URL.
+	 * @param array  $items The form items : {
 	 *    'class'        => string The form class.
 	 *    'id'           => string The form ID.
 	 *    'input'        => array The form input entry items.
@@ -239,14 +243,14 @@ trait Extension_Forms {
 		}
 
 		$defaults = [
-			'class'        => '',
-			'id'           => '',
-			'input'        => [],
-			'ajax'         => false,
-			'ajax-id'      => '',
-			'ajax-class'   => '',
-			'ajax-name'    => '',
-			'ajax-title'   => '',
+			'class'      => '',
+			'id'         => '',
+			'input'      => [],
+			'ajax'       => false,
+			'ajax-id'    => '',
+			'ajax-class' => '',
+			'ajax-name'  => '',
+			'ajax-title' => '',
 		];
 
 		$items = array_merge( $defaults, $items );
@@ -278,6 +282,7 @@ trait Extension_Forms {
 				\esc_attr( $items['ajax-title'] ),
 				\esc_html( $items['ajax-name'] )
 			);
+
 			$output .= $button;
 		} else {
 			$output .= sprintf(

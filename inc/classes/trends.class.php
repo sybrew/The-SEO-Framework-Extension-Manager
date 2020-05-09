@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -110,7 +111,7 @@ final class Trends {
 		$xml = \wp_remote_retrieve_body( $request );
 		//* Add bitwise operators.
 		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
-		$xml = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
+		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 		if ( empty( $xml->entry ) ) {
 			//* Retry in half an hour when server is down.
@@ -159,11 +160,11 @@ final class Trends {
 
 				$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
 				if ( 'text/html' === $type ) {
-
 					$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
 					if ( in_array( $rel, [ 'self', 'alternate' ], true ) ) {
 
 						$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
+
 						if ( $link )
 							$link = strtok( $link, '#' );
 

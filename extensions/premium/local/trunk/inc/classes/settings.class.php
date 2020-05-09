@@ -12,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -130,12 +130,13 @@ final class Settings {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param Core $_core Used for integrity.
+	 * @param Core   $_core Used for integrity.
 	 * @param string $o_index The options index.
 	 */
-	public function _init_ajax( Core $_core, $o_index ) {
+	public function _init_ajax( Core $_core, $o_index ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		/**
 		 * Set options index.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$this->o_index = $o_index;
@@ -158,6 +159,7 @@ final class Settings {
 
 		/**
 		 * Set form arguments.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 */
 		$this->form_args = [
@@ -228,7 +230,7 @@ final class Settings {
 	 *
 	 * @param Core $_core Used for integrity.
 	 */
-	public function _output_settings_page( Core $_core ) {
+	public function _output_settings_page( Core $_core ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 
 		$this->prepare_form();
 
@@ -348,7 +350,7 @@ final class Settings {
 	 *
 	 * @param self $_s Used for integrity.
 	 */
-	public function _get_local_settings_overview( self $_s ) {
+	public function _get_local_settings_overview( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$this->get_view( 'layout/pages/settings' );
 	}
 
@@ -359,7 +361,7 @@ final class Settings {
 	 *
 	 * @param self $_s Used for integrity.
 	 */
-	public function _get_local_settings_bottom_wrap( self $_s ) {
+	public function _get_local_settings_bottom_wrap( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
 		echo $this->get_test_button();
 		echo $this->get_form()->_form_button( 'submit', \__( 'Save', 'the-seo-framework-extension-manager' ), 'get' );

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits\Overload
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -104,6 +105,8 @@ defined( 'ABSPATH' ) or die;
  *
  *      - <No keyword>: Should not exist.
  */
+
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- Implied.
 
 /**
  * Holds private overloading functions to prevent injection or abstraction.

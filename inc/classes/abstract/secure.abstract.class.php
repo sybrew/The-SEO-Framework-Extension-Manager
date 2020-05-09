@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes\Abstract
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -72,34 +73,33 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		Ignore_Properties_Core_Public_Final;
 
 	/**
-	 * Holds the class instance type.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string $_type
+	 * @var string The class instance type.
 	 */
 	private static $_type = '';
 
 	/**
-	 * Holds the current WordPress admin action.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string $_wpaction
+	 * @var string The current WordPress admin action.
 	 */
 	private static $_wpaction = '';
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce name.
-	 * @var array  The validation request name.
-	 * @var array  The validation nonce action.
 	 */
 	protected static $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 * @var array The validation request name.
+	 */
 	protected static $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 * @var array The validation nonce action.
+	 */
 	protected static $nonce_action = [];
 
 	/**

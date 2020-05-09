@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Local
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'TSFEM_E_LOCAL_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

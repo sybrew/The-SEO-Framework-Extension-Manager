@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Admin
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -33,24 +34,28 @@ use \TSF_Extension_Manager\HTML as HTML;
 
 /**
  * Require user interface trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
  * Require extension options trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'extension/options' );
 
 /**
  * Require extension forms trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'extension/forms' );
 
 /**
  * Require time factory trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'factory/time' );
@@ -76,16 +81,24 @@ final class Admin extends Api {
 		\TSF_Extension_Manager\Error;
 
 	/**
-	 * The POST nonce validation name, action and name.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @var string The validation nonce name.
-	 * @var string The validation request name.
-	 * @var string The validation nonce action.
 	 */
 	protected $nonce_name;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation request name.
+	 */
 	protected $request_name = [];
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var string The validation nonce action.
+	 */
 	protected $nonce_action = [];
 
 	/**
@@ -114,6 +127,7 @@ final class Admin extends Api {
 	private function construct() {
 
 		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
+		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		$this->request_name = [
 			//* Reference convenience.
 			'default' => 'default',
@@ -158,17 +172,20 @@ final class Admin extends Api {
 			//* Fix instance.
 			'fix' => 'tsfem_e_monitor_nonce_action_remote_fix',
 		];
+		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 
 		$this->monitor_page_slug = 'theseoframework-monitor';
 
 		/**
 		 * Set error notice option.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->error_notice_option = 'tsfem_e_monitor_error_notice_option';
 
 		/**
 		 * Set options index.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$this->o_index = 'monitor';
@@ -269,12 +286,14 @@ final class Admin extends Api {
 
 		/**
 		 * Initialize user interface.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->init_tsfem_ui();
 
 		/**
 		 * Initialize error interface.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$this->init_errors();
@@ -295,10 +314,12 @@ final class Admin extends Api {
 	 */
 	public function _handle_update_post() {
 
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) ) // CSRF, input var ok.
+		// phpcs:disable, WordPress.Security.NonceVerification -- No data is processed in this method.
+
+		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]['nonce-action'] ) )
 			return;
 
-		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ]; // CSRF, sanitization, input var ok.
+		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
@@ -336,6 +357,8 @@ final class Admin extends Api {
 		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
 		exit;
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -349,8 +372,8 @@ final class Admin extends Api {
 	 * @since 1.0.0
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
-	 * @param string $key The nonce action used for caching.
-	 * @param bool $check_post Whether to check for POST variables containing TSFEM settings.
+	 * @param string $key        The nonce action used for caching.
+	 * @param bool   $check_post Whether to check for POST variables containing TSFEM settings.
 	 * @return bool True if verified and matches. False if can't verify.
 	 */
 	protected function handle_update_nonce( $key = 'default', $check_post = true ) {
@@ -368,15 +391,15 @@ final class Admin extends Api {
 			 * If this page doesn't parse the site options,
 			 * there's no need to check them on each request.
 			 */
-			if ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )  // Input var ok.
-			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) // Input var, CSRF ok.
+			if ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
 			) {
 				return $validated[ $key ] = false;
 			}
 		}
 
-		$result = isset( $_POST[ $this->nonce_name ] ) // Input var OK.
-				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] ) // Input var, sanitization ok.
+		$result = isset( $_POST[ $this->nonce_name ] )
+				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
 				: false;
 
 		if ( false === $result ) {
@@ -642,6 +665,7 @@ final class Admin extends Api {
 
 		/**
 		 * Set UI hook.
+		 *
 		 * @see trait TSF_Extension_Manager\UI
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
@@ -1350,8 +1374,8 @@ final class Admin extends Api {
 	 * @since 1.0.0
 	 *
 	 * @param string $view The file name.
-	 * @param array $args The arguments to be supplied within the file name.
-	 *        Each array key is converted to a variable with its value attached.
+	 * @param array  $args The arguments to be supplied within the file name.
+	 *                     Each array key is converted to a variable with its value attached.
 	 */
 	protected function get_view( $view, array $args = [] ) {
 

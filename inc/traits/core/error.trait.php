@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -163,7 +164,7 @@ trait Error {
 		if ( empty( $key ) )
 			return '';
 
-		$notice = $this->get_error_notice_by_key( $key, true );
+		$notice          = $this->get_error_notice_by_key( $key, true );
 		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
 
 		$args = [
@@ -180,7 +181,7 @@ trait Error {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $options
+	 * @param array $options The error notice keys.
 	 * @return array $notices
 	 */
 	final protected function get_error_notices( array $options = [] ) {

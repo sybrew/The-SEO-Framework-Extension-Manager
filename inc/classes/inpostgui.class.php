@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -26,6 +27,7 @@ defined( 'ABSPATH' ) or die;
 /**
  * Sets up class loader as file is loaded.
  * This is done asynchronously, because static calls are handled prior and after.
+ *
  * @see EOF. Because of the autoloader and trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
@@ -56,51 +58,75 @@ final class InpostGUI {
 
 	/**
 	 * @since 1.5.0
-	 * @param string NONCE_ACTION The nonce action.
-	 * @param string NONCE_NAME   The nonce name.
-	 * @param string JS_NONCE_ACTION The JS nonce action.
-	 * @param string JS_NONCE_NAME   The JS nonce name.
+	 * @var string NONCE_ACTION The nonce action.
 	 */
-	const NONCE_ACTION    = 'tsfem-save-inpost-nonce';
-	const NONCE_NAME      = 'tsfem-inpost-settings';
-	const JS_NONCE_ACTION = 'tsfem-ajax-save-inpost-nonce';
-	const JS_NONCE_NAME   = 'nonce';
+	const NONCE_ACTION = 'tsfem-save-inpost-nonce';
 
 	/**
 	 * @since 1.5.0
-	 * @param string META_PREFIX The meta prefix to be stored in the database.
+	 * @var string NONCE_NAME The nonce name.
+	 */
+	const NONCE_NAME = 'tsfem-inpost-settings';
+
+	/**
+	 * @since 1.5.0
+	 * @var string JS_NONCE_ACTION The JS nonce action.
+	 */
+	const JS_NONCE_ACTION = 'tsfem-ajax-save-inpost-nonce';
+
+	/**
+	 * @since 1.5.0
+	 * @var string JS_NONCE_NAME The JS nonce name.
+	 */
+	const JS_NONCE_NAME = 'nonce';
+
+	/**
+	 * @since 1.5.0
+	 * @var string META_PREFIX The meta prefix to be stored in the database.
 	 */
 	const META_PREFIX = 'tsfem-pm';
 
 	/**
 	 * @since 1.5.0
 	 * @see static::_verify_nonce()
-	 * @param string $save_access_state The state the save is in.
+	 * @var string $save_access_state The state the save is in.
 	 */
 	public static $save_access_state = 0;
 
 	/**
 	 * @since 1.5.0
-	 * @param string $include_secret The inclusion secret generated on tab load.
+	 * @var string $include_secret The inclusion secret generated on tab load.
 	 */
 	private static $include_secret;
 
 	/**
 	 * @since 1.5.0
-	 * @param array $tabs The registered tabs.
-	 * @param array $active_tab_keys The activate tab keys of static::$tabs
-	 * @param array $views The registered view files for the tabs.
+	 * @var array $tabs The registered tabs.
 	 */
-	private static $tabs            = [];
-	private static $active_tab_keys = [];
-	private static $views           = [];
+	private static $tabs = [];
 
 	/**
 	 * @since 1.5.0
-	 * @param array $scripts   The registered scripts.
-	 * @param array $templates The registered templates.
+	 * @var array $active_tab_keys The activate tab keys of static::$tabs
 	 */
-	private static $scripts   = [];
+	private static $active_tab_keys = [];
+
+	/**
+	 * @since 1.5.0
+	 * @var array $views The registered view files for the tabs.
+	 */
+	private static $views = [];
+
+	/**
+	 * @since 1.5.0
+	 * @var array $scripts The registered scripts.
+	 */
+	private static $scripts = [];
+
+	/**
+	 * @since 1.5.0
+	 * @var array $templates The registered templates.
+	 */
 	private static $templates = [];
 
 	/**
@@ -203,6 +229,7 @@ final class InpostGUI {
 	 * @uses static::register_script
 	 */
 	private function register_default_scripts() {
+		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
 		static::register_script( [
 			'type' => 'js',
 			'autoload' => false,
@@ -243,6 +270,7 @@ final class InpostGUI {
 			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
 			'deps' => [ 'tsf', 'tsf-tt' ],
 		] );
+		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
 	}
 
 	/**
@@ -351,7 +379,7 @@ final class InpostGUI {
 	 * @staticvar array $c_ck Color keys.
 	 * @staticvar array $c_cv Color values.
 	 *
-	 * @param array $css
+	 * @param array $css The CSS to convert colors for.
 	 * @return array $css
 	 */
 	private function convert_color_css( array $css ) {
@@ -374,6 +402,7 @@ final class InpostGUI {
 					'{{$color}}'        => '#0073aa',
 					'{{$color_accent}}' => '#00a0d2',
 				];
+
 				$c_ck = array_keys( $_table );
 				$c_cv = array_values( $_table );
 			} else {
@@ -390,6 +419,7 @@ final class InpostGUI {
 					'{{$color}}'        => $_color,
 					'{{$color_accent}}' => $_color_accent,
 				];
+
 				$c_ck = array_keys( $_table );
 				$c_cv = array_values( $_table );
 			}
@@ -423,9 +453,9 @@ final class InpostGUI {
 	 * Outputs template views.
 	 *
 	 * The loop will only run when templates are registered.
-	 * @see $this->enqueue_scripts()
 	 *
 	 * @since 1.5.0
+	 * @see $this->enqueue_scripts()
 	 */
 	public function _output_templates() {
 		foreach ( static::$templates as $template )
@@ -618,6 +648,7 @@ final class InpostGUI {
 	 *
 	 * There's a secret key generated on each tab load. This key can be accessed
 	 * in the view through `$_secret`, and be sent back to this class.
+	 *
 	 * @see \TSF_Extension_Manager\InpostGUI::verify( $secret )
 	 *
 	 * @since 1.5.0
@@ -691,6 +722,7 @@ final class InpostGUI {
 
 		if ( ! isset( $_views[ $tab ] ) )
 			$_views[ $tab ] = [];
+
 		if ( ! isset( $_views[ $tab ][ $priority ] ) )
 			$_views[ $tab ][ $priority ] = [];
 

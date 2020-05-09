@@ -1,7 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Cord\Admin
- * @package TSF_Extension_Manager\Extension\Cord\Front
+ * @package TSF_Extension_Manager\Extension\Cord
  */
 
 namespace TSF_Extension_Manager\Extension\Cord;
@@ -13,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Cord extension for The SEO Framework
- * Copyright (C) 2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2019-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits\Factory
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -44,6 +45,7 @@ trait Time {
 
 		$now = time();
 		$ago = $now - $since;
+
 		$ago_i18n = '';
 
 		if ( $ago < 0 || $ago > $now ) {
@@ -128,6 +130,7 @@ trait Time {
 		$tsf = \the_seo_framework();
 
 		$tsf->set_timezone();
+		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.date_date -- Rectified...
 		$date = date( $format, $timestamp );
 		$tsf->reset_timezone();
 
@@ -232,18 +235,23 @@ trait Time {
 	 * @since 1.5.0
 	 * @access private
 	 * @see $this->scale_time()
-	 * @documentation $this->scale_time();
 	 *
-	 * @param int <R> $x
-	 * @param string  $x_scale
-	 * @param int     $scales
-	 * @param bool    $precise
+	 * @param int <R> $x       The time to convert.
+	 * @param string  $x_scale The time scale $x is in.
+	 * @param int     $scales  When $precise is true:
+	 *                          How often to upscale the time when it's passing a
+	 *                          conventional threshold times its value.
+	 *                         When $precise is false:
+	 *                          The number of time iterations shown.
+	 * @param bool    $precise When true, the output maintains the exact offset value.
+	 *                         So at scale 2, "3666" seconds won't become "1 hour and 1 minute",
+	 *                         but instead it will return "61 minutes and 6 seconds".
 	 * @return string Scaled i18n time. Not escaped.
 	 */
 	protected function _upscale_time( $x, $x_scale, $scales, $precise ) {
 
 		$x_remaining = $x;
-		$times = [];
+		$times       = [];
 
 		//= type => [ threshold_for_next, next ];
 		$scale_table = [
@@ -257,23 +265,24 @@ trait Time {
 
 		while ( $x_remaining ) :
 			$_threshold = $scale_table[ $x_scale ][0];
+
 			if ( $x_remaining >= $_threshold                       // > vs >= is 24 hours vs 1 day.
 			&& ( ! $precise || ( count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
-			   ) {
+			) {
 				if ( $x_remaining % $_threshold ) {
 					// Calculate current and next time scale.
-					$_next_time = floor( $x_remaining / $_threshold );
+					$_next_time    = floor( $x_remaining / $_threshold );
 					$_current_time = round( $x_remaining - $_next_time * $_threshold );
 
 					// Found leftovers, use them.
 					$times[] = $this->scale_time( $_current_time, $x_scale, 0 );
 
 					$x_remaining = $_next_time;
-					$x_scale = $scale_table[ $x_scale ][1];
+					$x_scale     = $scale_table[ $x_scale ][1];
 				} else {
 					//= Rescale up.
 					$x_remaining = round( $x_remaining / $_threshold );
-					$x_scale = $scale_table[ $x_scale ][1];
+					$x_scale     = $scale_table[ $x_scale ][1];
 				}
 			} else {
 				//= Reached threshold through precision or time overlap.
@@ -284,6 +293,7 @@ trait Time {
 		endwhile;
 
 		$out = '';
+
 		$times = array_reverse( $times );
 		//= Don't return more items than the threshold.
 		$count = min( count( $times ), $scales );
@@ -295,13 +305,15 @@ trait Time {
 				$out = sprintf(
 					/* translators: 1: Greater time, 2: Smaller time */
 					\_x( '%1$s and %2$s', '5 minutes and 3 seconds', 'the-seo-framework-extension-manager' ),
-					$out, $times[ $i ]
+					$out,
+					$times[ $i ]
 				);
 			} else {
 				$out = sprintf(
 					/* translators: 1: Greater time, 2: Smaller time */
 					\_x( '%1$s, %2$s', '7 hours, 8 minutes [and...]', 'the-seo-framework-extension-manager' ),
-					$out, $times[ $i ]
+					$out,
+					$times[ $i ]
 				);
 			}
 		}

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager/Bootstrap
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -39,10 +40,14 @@ function _do_critical_core_upgrade( Upgrader $upgrader ) {
 
 	$version = $upgrader->get_current_version( 'core' );
 
+	// phpcs:disable
+
 	// Example:
 	// if ( $version < 1500 ) {
-	// 	$upgrader->_register_upgrade( 'core', '1500', function( $version ) { return true; } );
+	// 	$upgrader->_register_upgrade( 'core', '1500', function( $version ) { return (bool) $success; } );
 	// }
+
+	// phpcs:enable
 
 	$upgrader->_register_upgrade( 'core', TSF_EXTENSION_MANAGER_DB_VERSION, '\\__return_true' );
 }

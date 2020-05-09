@@ -8,8 +8,8 @@
  */
 
 /**
- * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Focus extension for The SEO Framework
+ * Copyright (C) 2019-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published

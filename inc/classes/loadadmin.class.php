@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -132,17 +132,18 @@ final class LoadAdmin extends AdminPages {
 			$wildcard_host = '*.theseoframework.com';
 			/**
 			 * This is an inconsiderate check, may we ever wish to change it.
+			 *
 			 * @TODO maintain this well, and don't recommend it to our users.
 			 */
 			if ( false !== stristr( WP_ACCESSIBLE_HOSTS, $wildcard_host ) )
 				return;
 		}
 
+		$hosts     = [];
 		$endpoints = [
 			TSF_EXTENSION_MANAGER_PREMIUM_URI,
 			TSF_EXTENSION_MANAGER_PREMIUM_EU_URI,
 		];
-		$hosts = [];
 
 		foreach ( $endpoints as $endpoint ) {
 			$hosts[] = parse_url( $endpoint, PHP_URL_HOST );
@@ -189,11 +190,13 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function _handle_update_post() {
 
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- handle_update_nonce does this.
 		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
-			return; // CSRF & input var ok
+			return;
 
 		//* Post is taken and will be validated directly below.
-		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]; // CSRF, input var & sanitization ok
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- handle_update_nonce does this.
+		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
 		//* Options exist. There's no need to check again them.
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
@@ -306,14 +309,14 @@ final class LoadAdmin extends AdminPages {
 		if ( $check_post ) {
 			//* If this page doesn't parse the site options, there's no need to check them on each request.
 			if ( empty( $_POST ) // input var ok
-			|| ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) // input var ok
-			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) ) // CSRF & input var ok
+			|| ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] )
+			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
 				return $validated[ $key ] = false;
 		}
 
 		$result = isset( $_POST[ $this->nonce_name ] )
 				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
-				: false; // input var & sanitization ok
+				: false;
 
 		if ( false === $result ) {
 			//* Nonce failed. Set error notice and reload.
@@ -690,9 +693,10 @@ final class LoadAdmin extends AdminPages {
 		static $parent_set = false;
 		static $set        = [];
 
-		if ( false === $parent_set && ( $parent_set = true ) ) {
+		if ( false === $parent_set ) {
 			//* Set parent slug.
 			\the_seo_framework()->add_menu_link();
+			$parent_set = true;
 		}
 
 		if ( isset( $set[ $slug ] ) )
@@ -779,19 +783,16 @@ final class LoadAdmin extends AdminPages {
 					//* No checksum found.
 					$ajax or $this->set_error_notice( [ 10001 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
-					break;
 
 				case -2:
 					//* Checksum mismatch.
 					$ajax or $this->set_error_notice( [ 10002 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
-					break;
 
 				default:
 					//* Method mismatch error. Unknown error.
 					$ajax or $this->set_error_notice( [ 10003 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
-					break;
 			endswitch;
 		endif;
 

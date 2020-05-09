@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Focus\Admin
- * @package TSF_Extension_Manager\Extension\Focus\Front
+ * @package TSF_Extension_Manager\Extension\Focus
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
 defined( 'ABSPATH' ) or die;
@@ -12,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -29,6 +29,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Require extension options trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'extension/post-meta' );
@@ -51,7 +52,7 @@ class Core {
 	 * Holds default lexical form value.
 	 *
 	 * @since 1.0.0
-	 * @param string Default lexical form value in JSON.
+	 * @var string Default lexical form value in JSON.
 	 */
 	protected $default_lexical_form;
 
@@ -74,24 +75,29 @@ class Core {
 
 		/**
 		 * Set meta index and defaults.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
 		$this->pm_index = 'focus';
 
 		$this->pm_defaults = [
 			//= Fills 3 sequential array keys with these values.
-			'kw' => array_fill( 0, 3, [
-				'keyword'              => '',
-				'lexical_form'         => '',
-				'lexical_data'         => $this->default_lexical_form,
-				'definition_selection' => '',
-				'inflection_data'      => [],
-				'synonym_data'         => [],
-				'active_inflections'   => '',
-				'active_synonyms'      => '',
-				'score'                => 0,
-				'scores'               => [],
-			] ),
+			'kw' => array_fill(
+				0,
+				3,
+				[
+					'keyword'              => '',
+					'lexical_form'         => '',
+					'lexical_data'         => $this->default_lexical_form,
+					'definition_selection' => '',
+					'inflection_data'      => [],
+					'synonym_data'         => [],
+					'active_inflections'   => '',
+					'active_synonyms'      => '',
+					'score'                => 0,
+					'scores'               => [],
+				]
+			),
 		];
 
 		/**

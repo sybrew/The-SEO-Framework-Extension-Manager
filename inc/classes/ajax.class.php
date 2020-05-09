@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2019-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -162,7 +163,7 @@ final class AJAX extends Secure_Abstract {
 	 * Send AJAX notices for inpost. If any.
 	 *
 	 * @since 1.5.0
-	 * @see static:;build_ajax_dismissible_notice()
+	 * @see static::build_ajax_dismissible_notice()
 	 * @package TSF_Extension_Manager\InpostGUI
 	 * @uses class InpostGUI
 	 * @access private
@@ -203,6 +204,7 @@ final class AJAX extends Secure_Abstract {
 
 		/**
 		 * Allows callers to prepare iteration class.
+		 *
 		 * @see class TSF_Extension_Manager\FormGenerator
 		 * @access protected
 		 */
@@ -276,7 +278,7 @@ final class AJAX extends Secure_Abstract {
 		$send = [];
 
 		//= Input gets forwarded to secure location. Sanitization happens externally.
-		$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : ''; // CSRF, sanitization & input var ok
+		$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
 
 		if ( ! $input || ! is_object( $input ) ) {
 			$send['results'] = static::$instance->get_ajax_notice( false, 17000 );
@@ -380,20 +382,24 @@ final class AJAX extends Secure_Abstract {
 	 */
 	private static function build_ajax_dismissible_notice() {
 
-		$data['key'] = (int) static::$tsfem->coalesce_var( $_POST['tsfem-notice-key'], false ); // phpcs:ignore -- Sanitization, input var OK.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
+
+		$data['key'] = (int) static::$tsfem->coalesce_var( $_POST['tsfem-notice-key'], false );
 
 		if ( $data['key'] ) {
 			$notice = static::$instance->get_error_notice( $data['key'] );
 
 			if ( is_array( $notice ) ) {
 				//= If it has a custom message (already stored in browser), then don't output the notice message.
-				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message']; // CSRF, input var ok
+				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
 
 				$data['notice'] = static::$tsfem->get_dismissible_notice( $msg, $notice['type'], true, false );
 				$data['type']   = $notice['type'];
 				// $_type  = $data['notice'] ? 'success' : 'failure';
 			}
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 
 		return $data;
 	}
@@ -463,7 +469,7 @@ final class AJAX extends Secure_Abstract {
 				];
 
 				$attachment_id = \wp_insert_attachment( $object, $cropped );
-				$metadata = \wp_generate_attachment_metadata( $attachment_id, $cropped );
+				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );
 
 				/**
 				 * Filters the cropped image attachment metadata.

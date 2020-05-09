@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -106,7 +107,6 @@ final class SecureOption extends Secure_Abstract {
 			case 'update_option_instance':
 				static::$_instance = [ $instance, $bits ];
 				return true;
-				break;
 
 			default:
 				self::reset();
@@ -124,9 +124,9 @@ final class SecureOption extends Secure_Abstract {
 	 * @since 1.0.0
 	 * @since 1.5.0 This now returns the old value instead of executing wp_die();
 	 *
-	 * @param mixed $value The new, unserialized option value.
-	 * @param mixed $old_value The old option value.
-	 * @param string $option The option name.
+	 * @param mixed  $value     The new, unserialized option value.
+	 * @param mixed  $old_value The old option value.
+	 * @param string $option    The option name.
 	 * @return mixed $value on success.
 	 */
 	public static function verify_option_instance( $value, $old_value, $option ) {

@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Honeypot
  */
+
 namespace TSF_Extension_Manager\Extension\Honeypot;
 
 /**
@@ -21,7 +22,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Honeypot extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -38,6 +39,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * The extension version.
+ *
  * @since 1.0.0
  */
 define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.3' );
@@ -296,17 +298,19 @@ final class Core {
 	 */
 	private function check_css_field( &$approved ) {
 
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+
 		//* Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ) ?: false; // Input var, CSRF ok. This check is validation only.
-
-		if ( $set ) {
+		if ( ! empty( $_POST[ $_field ] ) ) {
 			// Empty check failed.
 			$approved = 'spam';
 			unset( $_POST[ $_field ] ); // Input var OK.
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -318,22 +322,32 @@ final class Core {
 	 */
 	private function check_css_rotation_fields( &$approved ) {
 
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+
 		//* Perform same sanitization as displayed.
-		$_fields = \map_deep( [
-			$this->hp_properties['css_rotate_input_name'],
-			$this->hp_properties['css_rotate_input_name_previous'],
-		], '\\esc_attr' );
+		$_fields = \map_deep(
+			[
+				$this->hp_properties['css_rotate_input_name'],
+				$this->hp_properties['css_rotate_input_name_previous'],
+			],
+			'\\esc_attr'
+		);
 
 		//* This is a low-level check... transform to higher level i.e. array_intersect()?
 		// This check is validation only, the $_POST data isn't stored or processed further.
-		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )           // Input var ok.
-			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 ) ?: $k = false;  // Input var, CSRF, precision alignment ok.
+		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment, WordPress.CodeAnalysis.AssignmentInCondition
+		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )
+			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 )
+			  ?: ( $k = false );
+		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment, WordPress.CodeAnalysis.AssignmentInCondition
 
 		if ( $field ) {
 			// Empty check failed.
 			$approved = 'spam';
 			unset( $_POST[ $_fields[ $k ] ] ); // Input var OK.
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -345,17 +359,21 @@ final class Core {
 	 */
 	private function check_js_field( &$approved ) {
 
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+
 		//* Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
 		//* Check if input is set.
-		$set = ! empty( $_POST[ $_field ] ); // CSRF, input var ok. This check is validation only.
+		$set = ! empty( $_POST[ $_field ] );
 
 		if ( $set ) {
 			// Empty check failed.
 			$approved = 'spam';
-			unset( $_POST[ $_field ] ); // Input var OK.
+			unset( $_POST[ $_field ] );
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -369,21 +387,26 @@ final class Core {
 	 */
 	private function check_nonce_rotation_field( &$approved ) {
 
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+
 		$_field = $this->hp_properties['nonce_input_name'];
 
-		if ( empty( $_POST[ $_field ] ) ) { // CSRF, input var ok. This check is validation only.
+		if ( empty( $_POST[ $_field ] ) ) {
 			$approved = 'spam';
 			return;
 		}
 
 		//* Perform same sanitization as displayed.
-		$_nonces = \map_deep( [
-			$this->hp_properties['nonce_rotated_input_value'],
-			$this->hp_properties['nonce_rotated_input_value_previous'],
-		], '\\esc_attr' );
+		$_nonces = \map_deep(
+			[
+				$this->hp_properties['nonce_rotated_input_value'],
+				$this->hp_properties['nonce_rotated_input_value_previous'],
+			],
+			'\\esc_attr'
+		);
 
 		$_tick = 0;
-		$_input = $_POST[ $_field ]; // Input var, sanitization, CSRF ok. This check is validation only.
+		$_input = $_POST[ $_field ];
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
 			$_tick = 1;
@@ -393,8 +416,10 @@ final class Core {
 
 		if ( $_tick < 1 ) {
 			$approved = 'spam';
-			unset( $_POST[ $_field ] ); // Input var OK.
+			unset( $_POST[ $_field ] );
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -696,8 +721,8 @@ final class Core {
 	 * @since 1.0.2
 	 * @since 1.1.1 Fixed OB1 error.
 	 *
-	 * @param string $hash
-	 * @return string $hash
+	 * @param string $hash A hash with a possible numeric first character
+	 * @return string A hash with an alphabetical character first.
 	 */
 	private function alpha_first( $hash ) {
 

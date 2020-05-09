@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -104,7 +105,6 @@ class API extends Core {
 			default:
 				$this->set_error_notice( [ 104 => '' ] );
 				return false;
-				break;
 		endswitch;
 
 		$key   = trim( $args['licence_key'] );
@@ -495,10 +495,13 @@ class API extends Core {
 
 		$subscription = $this->get_subscription_status();
 
-		$args = array_merge( $args, [
-			'email'       => $subscription['email'],
-			'licence_key' => $subscription['key'],
-		] );
+		$args = array_merge(
+			$args,
+			[
+				'email'       => $subscription['email'],
+				'licence_key' => $subscription['key'],
+			]
+		);
 
 		return $this->get_api_response( $args, false );
 	}

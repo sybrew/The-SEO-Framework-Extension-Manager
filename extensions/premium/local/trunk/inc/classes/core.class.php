@@ -1,8 +1,8 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Extension\Local\Admin
- * @package TSF_Extension_Manager\Extension\Local\Front
+ * @package TSF_Extension_Manager\Extension\Local
  */
+
 namespace TSF_Extension_Manager\Extension\Local;
 
 defined( 'ABSPATH' ) or die;
@@ -12,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Local extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -29,6 +29,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Require extension options trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'extension/options' );
@@ -59,6 +60,7 @@ class Core {
 
 		/**
 		 * Set options index.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		$this->o_index = 'local';

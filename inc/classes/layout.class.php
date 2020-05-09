@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -329,7 +329,7 @@ final class Layout extends Secure_Abstract {
 			'',
 			[ 'tsfem-dashicon', 'tsfem-success' ]
 		) );
-		$output .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
+		$output  .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
 
 		if ( is_int( $requests_remaining ) ) {
 			$_notice  = '';
@@ -392,7 +392,7 @@ final class Layout extends Secure_Abstract {
 
 		if ( $end_date ) :
 			$date_until = strtotime( $end_date );
-			$now = time();
+			$now        = time();
 
 			$difference = $date_until - $now;
 			$_class     = 'tsfem-success';
@@ -440,10 +440,10 @@ final class Layout extends Secure_Abstract {
 
 		if ( $payment_date ) :
 			$date_until = strtotime( $payment_date );
-			$now = time();
+			$now        = time();
 
 			$difference = $date_until - $now;
-			$_class = 'tsfem-success';
+			$_class     = 'tsfem-success';
 			$payment_in = '';
 
 			if ( $difference < -5184000 ) {
@@ -464,6 +464,7 @@ final class Layout extends Secure_Abstract {
 			}
 
 			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', $date_until ) : '';
+
 			$payment_in = HTML::wrap_inline_tooltip( vsprintf(
 				'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',
 				[
@@ -535,7 +536,7 @@ final class Layout extends Secure_Abstract {
 
 			$submit = sprintf(
 				'<input type=submit name=submit id=submit class="tsfem-button-primary" value="%s">',
-				\esc_attr( 'Use this key', 'the-seo-framework-extension-manager' )
+				\esc_attr__( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 
 			$form = $input . $nonce_action . $nonce . $submit;

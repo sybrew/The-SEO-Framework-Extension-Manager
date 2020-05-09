@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -30,6 +31,7 @@ defined( 'ABSPATH' ) or die;
  * All functions are publically accessible by default.
  *
  * Importing this class for clean code is recommended.
+ *
  * @see <http://php.net/manual/en/language.namespaces.importing.php>
  *
  * @since 1.5.0
@@ -45,6 +47,9 @@ final class HTML {
 	 *
 	 * @since 1.5.0
 	 * @since 2.0.2 Now uses tsfTT compatible classes.
+	 *
+	 * @param string $content The content to wrap.
+	 * @param array  $classes The classes for the tooltip to have.
 	 */
 	public static function wrap_inline_tooltip( $content, array $classes = [] ) {
 		$classes[] = 'tsf-tooltip-wrap';
@@ -117,7 +122,7 @@ final class HTML {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $options : {
+	 * @param array  $options : {
 	 *    'value' (string) => The option value
 	 *    'name' (string)  => The option name,
 	 * }
@@ -125,17 +130,20 @@ final class HTML {
 	 * @return string The formatted options list.
 	 */
 	public static function make_dropdown_option_list( array $options, $selected = '' ) {
+
 		$out = '';
+
 		$selected = (string) $selected;
 		foreach ( $options as $entry ) {
 			$value = \esc_attr( $entry['value'] );
-			$out .= sprintf(
+			$out  .= sprintf(
 				'<option value="%s"%s>%s</option>',
 				$value,
 				$value === $selected ? ' selected' : '',
 				\esc_html( $entry['name'] )
 			);
 		}
+
 		return $out;
 	}
 
@@ -147,16 +155,17 @@ final class HTML {
 	 * @param array $options : sequential {
 	 *    'name' (string)  => The option name,
 	 * }
-	 * @param  int $selected The currently selected value.
+	 * @param int   $selected The currently selected value.
 	 * @return string The formatted options list.
 	 */
 	public static function make_sequential_dropdown_option_list( array $options, $selected = 0 ) {
 
 		$_options = [];
+
 		$i = 0;
 		foreach ( $options as $key => $entry ) {
 			$_options[ $key ]['value'] = $i;
-			$_options[ $key ]['name'] = $entry['name'];
+			$_options[ $key ]['name']  = $entry['name'];
 			$i++;
 		}
 

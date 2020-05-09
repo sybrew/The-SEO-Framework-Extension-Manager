@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Focus\Classes
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -42,7 +43,7 @@ final class Scoring {
 	 * The scoring template.
 	 *
 	 * @since 1.0.0
-	 * @param array The template to iterate over.
+	 * @var array The template to iterate over.
 	 */
 	public $template = [];
 
@@ -50,7 +51,7 @@ final class Scoring {
 	 * The current ID prefix key.
 	 *
 	 * @since 1.0.0
-	 * @param string $key
+	 * @var string $key
 	 */
 	public $key;
 
@@ -58,7 +59,7 @@ final class Scoring {
 	 * The current score values.
 	 *
 	 * @since 1.0.0
-	 * @param array $values
+	 * @var array $values
 	 */
 	public $values;
 
@@ -66,9 +67,11 @@ final class Scoring {
 	 * Not utilized.
 	 * Can be summed from $this->values[x]['endScore'] (not stored yet)
 	 * Can be summed from $this->template[x]['maxScore']-
+	 *
 	 * @since 1.0.0
-	 * @param int $current_score The current score.
-	 * @param int $max_score     The maximum score.
+	 * @ignore
+	 * @var int $current_score The current score.
+	 * @var int $max_score     The maximum score.
 	 */
 	public $current_score = 0;
 	public $max_score     = 0;
@@ -78,7 +81,7 @@ final class Scoring {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $part The template type part. Optional.
+	 * @param string $type The template type part. Optional.
 	 * @return array
 	 */
 	public function get_template( $type = '' ) {
@@ -161,7 +164,9 @@ final class Scoring {
 	 * @return string The assessment's icon class.
 	 */
 	public function get_icon_class( $type ) {
+
 		$index = $this->get_nearest_numeric_index_value( $this->get_template( $type )['rating'], $this->get_value( $type ) );
+
 		$classes = [
 			-1 => 'tsfem-e-inpost-icon-error', // reserved, unused.
 			0  => 'tsfem-e-inpost-icon-unknown',
@@ -170,6 +175,7 @@ final class Scoring {
 			3  => 'tsfem-e-inpost-icon-okay',
 			4  => 'tsfem-e-inpost-icon-good',
 		];
+
 		return isset( $classes[ $index ] ) ? $classes[ $index ] : $classes[0];
 	}
 
@@ -179,10 +185,10 @@ final class Scoring {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $a The array with values. : {
+	 * @param array $a     The array with values. : {
 	 *   int index => mixed value
 	 * }
-	 * @param int $value The value to find nearest index of.
+	 * @param int   $value The value to find nearest index of.
 	 * @return mixed The nearest index value.
 	 */
 	public function get_nearest_numeric_index_value( array $a, $value ) {
@@ -218,6 +224,8 @@ final class Scoring {
 		] );
 	}
 }
+
+// phpcs:disable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned, oh boy, this is a lot.
 
 //= Registers template.
 //= To register more templates, simply call the instance and merge arrays before output.
@@ -466,3 +474,5 @@ Scoring::get_instance()->template = [
 		],
 	],
 ];
+
+// phpcs:enable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned

@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -27,6 +28,7 @@ defined( 'ABSPATH' ) or die;
  * Holds settings generator functions for package TSF_Extension_Manager\Extension.
  *
  * The class maintains static functions as well as a constructor. They go hand-in-hand.
+ *
  * @see package TSF_Extension_Manager\Extension\Local\Settings for an example.
  *
  * @TODO The AJAX part will be put in another class when PHP 5.6 will be the requirement.
@@ -460,7 +462,6 @@ final class FormGenerator {
 						\esc_html( $name ),
 					]
 				);
-				break;
 
 			default:
 				break;
@@ -1607,7 +1608,7 @@ final class FormGenerator {
 			case 'range':
 				$this->clean_range_index( $args['_range'] );
 
-				$s_range = '';
+				$s_range  = '';
 				$s_range .= '' !== $args['_range'][0] ? sprintf( 'min=%s', $args['_range'][0] ) : '';
 				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
 				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
@@ -1973,12 +1974,12 @@ final class FormGenerator {
 	 * Adds dynamic buttons based on previous set value.
 	 *
 	 * Requires media scripts to be registered.
+	 *
+	 * @since 1.3.0
 	 * @see TSF_Extension_Manager\Traits\UI
 	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
 	 * @see method TSF_Extension_Manager\AJAX\_wp_ajax_crop_image() The AJAX cropper callback.
 	 * @uses \get_upload_iframe_src()
-	 *
-	 * @since 1.3.0
 	 *
 	 * @param array $args The field generation arguments.
 	 * @return string The image field input with buttons.

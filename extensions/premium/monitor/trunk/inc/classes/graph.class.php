@@ -4,6 +4,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Graph
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -242,7 +243,10 @@ final class Graph {
 		//* @TODO set class.
 		$canvas = sprintf(
 			'<canvas id="tsfem-graph-%s" style="border:1px solid #d3d3d3;">%s%s</canvas>',
-			\esc_attr( $id ), sprintf( '<p>%s</p>', \esc_html( $nosupport ) ), sprintf( '<noscript><p>%s</p></noscript>', \esc_html( $nojs ) )
+			\esc_attr( $id ),
+			sprintf( '<p>%s</p>',
+			\esc_html( $nosupport ) ),
+			sprintf( '<noscript><p>%s</p></noscript>', \esc_html( $nojs ) )
 		);
 
 		return $cdata . $canvas;

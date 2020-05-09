@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Classes
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -25,12 +26,14 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * Require extensions traits.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'manager/extensions' );
 
 /**
  * Require extensions layout traits depending on admin page type.
+ *
  * @since 1.0.0
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
@@ -145,27 +148,21 @@ final class Extensions extends Secure_Abstract {
 		switch ( $type ) :
 			case 'layout_content':
 				return static::get_layout_content();
-				break;
 
 			case 'extensions_checksum':
 				return static::get_extensions_checksum();
-				break;
 
 			case 'extensions_list':
 				return static::$extensions;
-				break;
 
 			case 'active_extensions_list':
 				return static::get_active_extensions();
-				break;
 
 			case 'ajax_get_extension_header':
 				return static::get_extension_header( $slug );
-				break;
 
 			case 'ajax_get_extension_desc_footer':
 				return static::get_extension_description_footer( static::get_extension( $slug ), false );
-				break;
 
 			default:
 				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
@@ -203,8 +200,8 @@ final class Extensions extends Secure_Abstract {
 	 * @since 1.0.0
 	 * @since 1.3.0 : Now uses its own sorting system, speeding it up by roughly 40 times.
 	 *
-	 * @param array $extensions The extension list.
-	 * @param string|array $what What to filter out of the list.
+	 * @param array        $extensions The extension list.
+	 * @param string|array $what       What to filter out of the list.
 	 * @return array The leftover extensions.
 	 */
 	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
@@ -236,7 +233,7 @@ final class Extensions extends Secure_Abstract {
 		}
 
 		$_extensions = [];
-		$_to_unset = [];
+		$_to_unset   = [];
 
 		foreach ( $filters as $k => $v ) {
 			$_test = array_column( $extensions, $k, 'slug' );

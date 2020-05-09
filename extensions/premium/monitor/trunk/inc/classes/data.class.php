@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\Monitor\Monitor\Data
  */
+
 namespace TSF_Extension_Manager\Extension\Monitor;
 
 defined( 'ABSPATH' ) or die;
@@ -11,7 +12,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * Monitor extension for The SEO Framework
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -69,8 +70,8 @@ class Data {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $type The monitor data type. Accepts 'issue' and 'stats'.
-	 * @param mixed $default The fallback data to return if no data is found.
+	 * @param string $type    The monitor data type. Accepts 'issue' and 'stats'.
+	 * @param mixed  $default The fallback data to return if no data is found.
 	 * @return array|mixed The found data.
 	 */
 	protected function get_data( $type, $default = null ) {
@@ -112,6 +113,7 @@ class Data {
 
 		/**
 		 * Option cache should be updated.
+		 *
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
 		return $this->get_option( $type, [] );

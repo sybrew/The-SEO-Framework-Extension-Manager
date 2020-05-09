@@ -2,13 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Traits
  */
+
 namespace TSF_Extension_Manager;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2016-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2016-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -72,6 +73,7 @@ trait Extensions_I18n {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $key The registered i18n key.
 	 * @return string The i18n data.
 	 */
 	private static function get_i18n( $key = '' ) {
@@ -141,7 +143,9 @@ trait Extensions_Layout {
 
 			$entry = sprintf(
 				'<div class="tsfem-extension-entry-inner"><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
-				$class, \esc_attr( $id . '-extension-entry' ), $wrap
+				$class,
+				\esc_attr( $id . '-extension-entry' ),
+				$wrap
 			);
 
 			$output .= sprintf( '<div class="tsfem-extension-entry-wrap">%s</div>', $entry );
@@ -224,7 +228,7 @@ trait Extensions_Layout {
 
 		$type = '<h5 class=tsfem-extension-type>' . \esc_html( static::get_i18n( $extension['type'] ) ) . '</h5>';
 
-		return  '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
+		return '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
 
 	/**
@@ -322,7 +326,6 @@ trait Extensions_Layout {
 				break;
 			default:
 				return '';
-				break;
 		endswitch;
 
 		$disabled = $disabled || array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );

@@ -2,6 +2,7 @@
 /**
  * @package TSF_Extension_Manager\Extension\AMP
  */
+
 namespace TSF_Extension_Manager\Extension\AMP;
 
 /**
@@ -21,7 +22,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * AMP extension for The SEO Framework
- * Copyright (C) 2017-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -38,6 +39,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 
 /**
  * The AMP extension version.
+ *
  * @since 1.0.0
  * @param string
  */
@@ -97,6 +99,7 @@ final class Front {
 
 		/**
 		 * Removes the default AMP articles metadata output.
+		 *
 		 * @since 1.0.0
 		 * @link https://theseoframework.com/extensions/articles/
 		 * @param bool $remove
@@ -171,6 +174,7 @@ final class Front {
 
 		/**
 		 * Adds content before the output.
+		 *
 		 * @since 1.0.2
 		 * @param string $before
 		 */
@@ -197,6 +201,7 @@ final class Front {
 
 		/**
 		 * Adds content after the output.
+		 *
 		 * @since 1.0.2
 		 * @param string $after
 		 */

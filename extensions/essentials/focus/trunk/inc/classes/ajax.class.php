@@ -2,12 +2,14 @@
 /**
  * @package TSF_Extension_Manager\Extension\Focus\Classes
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
 defined( 'ABSPATH' ) or die;
 
 /**
  * Verify integrity and sets up API secret.
+ *
  * @since 1.0.0
  */
 define(
@@ -19,7 +21,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018-2019 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -36,6 +38,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 
 /**
  * Require error trait.
+ *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/error' );
@@ -70,6 +73,7 @@ final class Ajax {
 
 		/**
 		 * Set error notice option.
+		 *
 		 * @see trait TSF_Extension_Manager\Error
 		 */
 		$instance->error_notice_option = 'tsfem_e_focus_ajax_error_notice_option';
@@ -133,10 +137,11 @@ final class Ajax {
 	 */
 	public function _get_lexicalforms() {
 
+		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
 		$this->verify_api_access();
 
 		$tsfem = \tsf_extension_manager();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : []; // Sanitization, input var OK.
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
@@ -190,6 +195,8 @@ final class Ajax {
 		}
 
 		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
 	/**
@@ -201,6 +208,7 @@ final class Ajax {
 	 */
 	public function _get_synonyms() {
 
+		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
 		$this->verify_api_access();
 
 		$tsfem = \tsf_extension_manager();
@@ -262,5 +270,7 @@ final class Ajax {
 		}
 
 		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }
