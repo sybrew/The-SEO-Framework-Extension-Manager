@@ -58,7 +58,7 @@ After you fill in a keyword, Focus starts rating your content.
 
 #### Select lexical form
 
-***(Premium only)***
+***(Dictionary API support required)***
 
 If your keyword matches an entry in our dictionary, you can select a lexical form.
 
@@ -69,7 +69,7 @@ So, choosing the first form is often correct.
 
 #### Select homonymous example
 
-***(Premium only)***
+***(Dictionary API support required)***
 
 Some words have more than one meaning. So, after selecting the lexical form, example sentences are formed.
 These sentences are also sorted in order of the most common form, and the most common phrase is automatically selected.
@@ -80,7 +80,7 @@ Change the example sentence that closely describes your subject, and you could g
 
 #### Select active inflections and synonyms
 
-***(Premium only)***
+***(Dictionary API support required)***
 
 After all synonyms and inflections are received, just click on the ones you'd like to use.
 
@@ -143,13 +143,13 @@ You can change your page URL in the sidebar under "Document > Permalink." On som
 
 All languages have the requisite support for ratings.
 
-### What does "Essentials+" stand for?
-
-The Focus extension requires an Essentials subscription to use. The plus indicates that there's additional API support for our Premium subscribers. In the case of Focus, there's added dictionary API support for lexical lookup.
-
 ### Which languages are supported by the dictionary API?
 
 The API currently supports English only. Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
+
+### What if my site's language doesn't support synonym lookup?
+
+That's OK, neither does Google for your language then. We use the same dictionary API they use to process natural language. Therefore, using synonyms won't be a benefit in your case.
 
 ### Why are there only one or two inflections available?
 
@@ -177,6 +177,10 @@ These builders work as intended:
 - WordPress 5.0+ Block Editor
 
 We're working on an update to improve accuracy for the affected page builders.
+
+### (Legacy) What does "Essentials+" stand for?
+
+The Focus extension requires an Essentials (legacy) subscription to use. The plus indicates that there's additional API support for our Premium (legacy, current) subscribers. In the case of Focus, there's added dictionary API support for lexical lookup.
 
 ## Developers
 

@@ -24,8 +24,6 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// phpcs:disable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- The data processed is from a JSON interpretation.
-
 /**
  * Packs Schema.org JSON-LD data from input with the help from a forged-through
  * Schema.org defined layout.

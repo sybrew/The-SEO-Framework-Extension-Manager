@@ -215,7 +215,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 * **Fixed:** Added missing translation for the post type settings header.
 * **Fixed:** Strict XML entities in URL queries are now escaped in the Google News sitemap `<loc>` and `<image:loc>` tags, so you won't face an "invalid" document with certain CDNs.
 	* We could not confirm whether Google sees the use of these entities as invalid prior this update.
-	* This was not a security issue--the XML document is dormant, and XML entity generation (via `&gt;` and `&lt;`, inferred from HTML escaping) was already properly mitigated.
+	* This was not a security issue--the XML document is dormant, and XML entity generation (via `<` and `>`) was already properly mitigated (inferred from HTML escaping).
 
 ### 2.0.2
 

@@ -47,7 +47,7 @@ final class Graph {
 	 * Silently ignores errors on this call.
 	 *
 	 * @param string $name
-	 * @param array $arguments
+	 * @param array  $arguments
 	 * @return string Empty.
 	 */
 	public function __call( $name, $arguments ) {

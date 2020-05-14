@@ -284,7 +284,9 @@ function _autoload_classes( $class ) {
 	require $path . $class . '.class.php';
 
 	if ( $_bootstrap_timer ) {
-		\The_SEO_Framework\_bootstrap_timer( microtime( true ) - $_bootstrap_timer );
+		$_t = microtime( true ) - $_bootstrap_timer;
+		\The_SEO_Framework\_bootstrap_timer( $_t );
+		\TSF_Extension_Manager\_bootstrap_timer( $_t );
 		$_timenow = true;
 	}
 }

@@ -161,4 +161,19 @@ namespace TSF_Extension_Manager {
 
 		return $loaded[ $version ] = (bool) require TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php';
 	}
+
+	/**
+	 * Adds and returns-to the bootstrap timer.
+	 *
+	 * @since 2.3.1
+	 * @access private
+	 * @staticvar $time The estimated total time for bootstrapping.
+	 *
+	 * @param int $add The time to add.
+	 * @return int The accumulated time, roughly.
+	 */
+	function _bootstrap_timer( $add = 0 ) {
+		static $time  = 0;
+		return $time += $add;
+	}
 }

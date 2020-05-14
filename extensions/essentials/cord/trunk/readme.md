@@ -47,7 +47,7 @@ To get started with Google Analytics, follow these steps:
 
 [tsfep-image id="1"]
 
-4. Copy that ID and paste it in Cord's corresponding field. Don't forget to hit save.
+4. Copy that ID and paste it in Cord's corresponding field on the Extension Settings page. Don't forget to hit save.
 
 [tsfep-image id="2"]
 
@@ -65,7 +65,7 @@ To get started with Facebook pixel, you first need a Facebook for Business accou
 
 [tsfep-image id="3"]
 
-6. Click on the ID to copy it, and paste it in Cord's corresponding field. Don't forget to hit save.
+6. Click on the ID to copy it, and paste it in Cord's corresponding field on the Extension Settings page. Don't forget to hit save.
 
 [tsfep-image id="4"]
 
