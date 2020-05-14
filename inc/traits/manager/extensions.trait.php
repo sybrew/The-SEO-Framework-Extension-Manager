@@ -137,7 +137,7 @@ trait Extensions_Properties {
 				'area'         => 'business',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1565553458',
+				'last_updated' => '1589479187',
 				'requires'     => '4.9',
 				'tested'       => '5.4',
 				'requires_tsf' => '4.0',
@@ -163,7 +163,7 @@ trait Extensions_Properties {
 				'area'         => 'uptime, syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1576562324',
+				'last_updated' => '1589479187',
 				'requires'     => '4.9',
 				'tested'       => '5.4',
 				'requires_tsf' => '4.0',
@@ -224,9 +224,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '203f87ee1653c9fcad6bdcdd067eeaec77835dbe680b48a7b4366ab76cb16fb0',
-			'sha1'   => 'cde9726b83aa81d6ba1bcacff9f36ad5d8d36ab0',
-			'md5'    => '8e1de851a62d4390e1f59e982d971bcd',
+			'sha256' => '46e6b45adacaed0d82ba637fb989389a83b592de0464b377427fce1333829eeb',
+			'sha1'   => '21023a84016ce56c6b254e617099aa420ed41374',
+			'md5'    => '625888d43c7c723328c042a9a5db4a99',
 		];
 	}
 

@@ -1645,7 +1645,7 @@ msgid "Colombian"
 msgstr "Kolombiya"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2765
-msgid "Bralizian"
+msgid "Brazilian"
 msgstr "Brezilya"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2761
@@ -2119,7 +2119,7 @@ msgid "Tunisian"
 msgstr "Tunus"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2271
-msgid "Sadunese"
+msgid "Sudanese"
 msgstr "Sudan"
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2267

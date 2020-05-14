@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager/Bootstrap
+ * @package TSF_Extension_Manager\Bootstrap
  */
 
 namespace TSF_Extension_Manager;
@@ -197,7 +197,7 @@ function _register_autoloader() {
 
 	/**
 	 * Register class autoload here.
-	 * This will make sure the website crashes when extensions try to bypass WordPress' loop.
+	 * This will make sure the website crashes when extensions try to bypass WordPress's loop.
 	 */
 	spl_autoload_register( __NAMESPACE__ . '\\_autoload_classes', true, true );
 }

@@ -144,7 +144,6 @@ final class Output {
 
 					return $this->build_collapsable_entry( $title, $content, $key, $this->get_entry_state( $key, $type ) );
 
-				case 'stats':
 				default:
 					return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
 			endswitch;
@@ -457,10 +456,6 @@ final class Output {
 				$content = $this->parse_issues_content( $key, $value );
 				break;
 
-			case 'stats':
-				$content = $this->parse_stats_content( $key, $value );
-				break;
-
 			default:
 				break;
 		endswitch;
@@ -501,38 +496,6 @@ final class Output {
 		}
 
 		$this->reset_tsf_debugging();
-
-		return $content;
-	}
-
-	/**
-	 * Parses statistics $key content's $value.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key   The array key.
-	 * @param mixed  $value The array value attached to $key.
-	 * @return string The statistics data content.
-	 */
-	protected function parse_stats_content( $key, $value ) {
-
-		static $graph = null;
-
-		if ( is_null( $graph ) )
-			$graph = Graph::get_instance();
-
-		$content = '';
-
-		if ( isset( $value['requires'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['requires'], '>=' ) ) {
-			if ( isset( $value['tested'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['tested'], '<=' ) ) {
-				$output = isset( $value['data'] ) ? $graph->{"stats_$key"}( $value['data'] ) : '';
-				if ( '' !== $output ) {
-					$content = $output['content'];
-				}
-			}
-		} else {
-			$content = $this->get_em_requires_update_notification();
-		}
 
 		return $content;
 	}

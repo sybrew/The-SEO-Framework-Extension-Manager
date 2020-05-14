@@ -371,7 +371,7 @@ class Api extends Data {
 		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'issues', 'stats', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
+			if ( in_array( $type, [ 'issues', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */

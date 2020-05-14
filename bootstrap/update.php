@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager/Bootstrap
+ * @package TSF_Extension_Manager\Bootstrap
  */
 
 namespace TSF_Extension_Manager;

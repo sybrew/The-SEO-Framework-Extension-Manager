@@ -51,23 +51,18 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * **Changed:**
 	* The version compatibility testing can now be done against major releases, instead of only minor.
-		* TODO Set software details on TSF site to add minor and major versions automagically based on currently available (or requested) version.
 * **Updated:** The Russian translation files. Thank you, [Vitaliy](https://profiles.wordpress.org/vit-1/)!
 * **Updated:** The Spanish translation files. Thank you, [Manuel](https://profiles.wordpress.org/mbrsolution/)!
+* **Fixed:** The plugin now gets rid of all extraneous admin footer texts on the Extension Manager setting pages.
 
 **Updated extensions:**
 
 * [Articles at version 2.0.3](https://theseoframework.com/extensions/articles/#changelog).
 	* TODO Added: The Article type can now be set via quick-edit and bulk-edit.
 		* This feature requires TSF 4.0.5. (`the_seo_framework_list_table_data`, `the_seo_framework_after_bulk_edit`, `the_seo_framework_after_quick_edit`).
-* [Monitor at version 1.2.5](https://theseoframework.com/extensions/monitor/#changelog). TODO
-	* TODO remove the statistics & beta part. It never came to fruition--the costs couldn't be managed.
-	* TODO prepare for per-post validation, instead.
-
-* TODO Local, fix these:
-	Sadunese -> Sudanese* // Should we convert this in the database? And if so, how?
-	Bralizian -> Brazilian* // Should we convert this in the database? And if so, how?
-	Centrafican -> Is this even a valid word? Wikipedia thinks so: https://en.wikipedia.org/wiki/List_of_African_cuisines
+* [Monitor at version 1.2.5](https://theseoframework.com/extensions/monitor/#changelog).
+	* TODO assert redirect and get page ID by URL -> test Description & Title tag?
+* [Local at version 1.1.6](https://theseoframework.com/extensions/local/#changelog).
 
 = 2.3.0 - Unified SEO =
 

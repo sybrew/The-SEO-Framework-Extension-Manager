@@ -2277,8 +2277,8 @@ final class Fields {
 								\__( 'Moroccan', 'the-seo-framework-extension-manager' ),
 							],
 							[
-								'Sadunese',
-								\__( 'Sadunese', 'the-seo-framework-extension-manager' ),
+								'Sudanese',
+								\__( 'Sudanese', 'the-seo-framework-extension-manager' ),
 							],
 							[
 								'Tunisian',
@@ -2771,8 +2771,8 @@ final class Fields {
 				\__( 'South American', 'the-seo-framework-extension-manager' ),
 				[
 					[
-						'Bralizian',
-						\__( 'Bralizian', 'the-seo-framework-extension-manager' ),
+						'Brazilian',
+						\__( 'Brazilian', 'the-seo-framework-extension-manager' ),
 					],
 					[
 						'Colombian',

@@ -1291,7 +1291,7 @@ msgid "Moroccan"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2279
-msgid "Sadunese"
+msgid "Sudanese"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2283
@@ -1765,7 +1765,7 @@ msgid "South American"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2773
-msgid "Bralizian"
+msgid "Brazilian"
 msgstr ""
 
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:2777

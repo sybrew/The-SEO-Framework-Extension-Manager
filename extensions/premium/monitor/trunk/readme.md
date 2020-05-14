@@ -11,15 +11,14 @@ This extension keeps track of your website's SEO optimizations and statistics.
 
 Maintaining a WordPress website isn't easy. Before you start, you must find a suitable theme, useful plugins, and then set them all up.
 
-You might not be wary of your website's issues, its performance, and sometimes plugins conflict with the theme or each other.
+Now, you might not be wary of your website's issues and plugins conflict with the theme or each other.
 
-This is where our Monitor services come in handy.
-The Monitor extension looks at your website as a real visitor would. Directly from our servers.
-Without WordPress' obstruction, it checks if all the basics have correctly been set up.
+This is where the Monitor services comes in. The Monitor extension looks at your website as a real visitor would--directly from our servers.
+Without WordPress's obstruction, it checks if all the basics have correctly been set up.
 
 ### An inspection for WordPress
 
-Like other web inspectors, Monitor looks for basic website errors.
+Like other web inspectors, Monitor looks for common website errors.
 Unlike other web inspectors, it compares found data to your WordPress environment, with a two-phase check.
 
 The first phase happens on our servers, where we crawl several URLs on your website to find common issues. All information we find is sent back to the Monitor extension.
@@ -27,37 +26,6 @@ The first phase happens on our servers, where we crawl several URLs on your webs
 The second phase happens in your dashboard, where the information is compared to your WordPress environment, like SEO settings.
 
 This cooperation creates personalized information like no other inspector could.
-
-### Statistical data, bundled with your license
-
-*N.B. These features are under construction. ETA late 2019.*
-
-Website statistics, like uptime and performance, can cost you unnecessarily amounts.
-
-With Monitor, it's included in your Premium license.
-
-#### A fast website
-
-Website performance is a ranking factor. Not directly, but eventually so.
-
-This is because us humans like responsive interaction. If a website is too slow, then we'll bounce back to the search results.
-Thus increasing your website's bounce rate.
-
-Increased bounce rate indicates to search engines that your content wasn't relevant to the search query.
-When this happens more often than not, your website will fall in search ranking position.
-
-The Monitor extension will, in set intervals, check your website's performance.
-
-#### High uptime
-
-Website uptime is another ranking factor. This one is directly measured.
-
-Naturally, a website that cannot be reached won't sell anything and will miss out on user engagement.
-A website that's down will also increase bounce rate. As described earlier, your site will then fall in search ranking position.
-
-When a website is down often, a page can be seen as missing. This can eventually deindex your pages from the search results.
-
-Monitor will, also in set intervals, check your website's uptime. So you can be confident that your site is available.
 
 ### Privacy first
 
@@ -115,21 +83,28 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
-### 1.2.5-beta-5
+### 1.2.5
 
 [tsfep-release time="-1"]
 
+* **Other:** This extension is now out of beta! We're now ready to expand to per-page reviews, which will follow in a future update.
 * **Improved:** When no title tag is found, a non-generic message is now shown.
+* **Changed:** Removed the "coming soon" statistics pane.
+* **Changed:** Removed the "coming soon" issue.
+* **Fixed:** The PHP error evaluation link now works for the homepage.
+* **Fixed:** The `robots.txt` asserter now recognizes and extrudes The SEO Framework v4.0.5 robots' validator.
 * **API - Our servers:**
 	* **February 12th, 2020:**
 		* **Fixed:** Nonconventional title tags are now recognized.
 		* **Fixed:** Non-header title tags are no longer detected as extraneous.
+	* **May 14th, 2020:**
+		* **Fixed:** 302 redirects are now honored correctly.
 
 ### 1.2.4-beta-5
 
 [tsfep-release time="December 18th, 2019"]
 
-* **Changed:** The favicon.ico check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
+* **Changed:** The `favicon.ico` check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
 * **API - Our servers:**
 	* **December 17th, 2019:**
 		* **Fixed:** You can now disconnect from the Monitor service after moving domains.

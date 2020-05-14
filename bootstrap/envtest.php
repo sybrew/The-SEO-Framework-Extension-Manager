@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager/Bootstrap
+ * @package TSF_Extension_Manager\Bootstrap
  */
 
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
@@ -23,7 +23,7 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  */
 
 /**
- * @NOTE This file MUST be written according to WordPress' minimum PHP requirements.
+ * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
  *       Which is PHP 5.2.
  */
 

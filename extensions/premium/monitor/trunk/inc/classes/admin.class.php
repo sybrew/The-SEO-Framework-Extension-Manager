@@ -495,11 +495,9 @@ final class Admin extends Api {
 								break;
 						endswitch;
 
-						//* @TODO make stats an specific beautfied AJAX fetcher.
 						$status = [
 							'content' => [
 								'issues'   => $this->ajax_get_issues_data(),
-								'stats'    => $this->ajax_get_stats_data(),
 								'lc'       => $this->get_last_crawled_field(),
 								'settings' => [
 									'uptime_setting'      => $this->get_option( 'uptime_setting', 0 ),
@@ -1300,48 +1298,6 @@ final class Admin extends Api {
 		$title = sprintf( '<h4 class="tsfem-info-title">%s</h4>', \esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
 
 		return sprintf( '<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>', $title, $button );
-	}
-
-	/**
-	 * Creates statistics overview for the statistics pane.
-	 *
-	 * @since 1.0.0
-	 * @todo Soon.
-	 *
-	 * @return string The HTMl parsed statistics data.
-	 */
-	protected function get_stats_overview() {
-		return sprintf(
-			'<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap">%s</div>',
-			$this->ajax_get_stats_data() // I know, this isn't ajax.
-		);
-
-		$stats = $this->get_data( 'stats', [] );
-
-		if ( empty( $stats ) ) {
-			$output = $this->get_string_no_data_found();
-		} else {
-			$output = Output::get_instance()->_get_data( $stats, 'stats' );
-		}
-
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-stats-wrap">%s</div>', $output );
-	}
-
-	/**
-	 * Returns AJAX statistics data for the statistics pane.
-	 *
-	 * @since 1.0.0
-	 * @todo Soon. @todo change output to array with data for each block.
-	 *
-	 * @return string The HTMl parsed statistics data.
-	 */
-	protected function ajax_get_stats_data() {
-		return sprintf(
-			'<h4 class="tsfem-status-title">%s</h4><p class="tsfem-description">%s</p><p class="tsfem-description">%s</p>',
-			$this->get_string_coming_soon(),
-			\esc_html__( 'Statistics will show you website uptime, performance and visitor count.', 'the-seo-framework-extension-manager' ),
-			\esc_html__( 'Your website can participate in the uptime and performance monitoring runtime testing stages. To opt-in, simply adjust the settings above.', 'the-seo-framework-extension-manager' )
-		);
 	}
 
 	/**

@@ -39,7 +39,7 @@ final class AJAX extends Secure_Abstract {
 
 	/**
 	 * We don't rely fully on Secure_Abstract, such as action verification;
-	 * this is in conflict of the abstract nature of WordPress' AJAX.
+	 * this is in conflict of the abstract nature of WordPress's AJAX.
 	 *
 	 * As such, we use this.
 	 *

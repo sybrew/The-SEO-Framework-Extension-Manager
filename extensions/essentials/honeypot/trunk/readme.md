@@ -11,7 +11,7 @@ This extension catches comment spammers with a 99.98% catch-rate through four li
 
 WordPress allows visitors to easily interact with your website. Unfortunately, it's too easy.
 
-Because WordPress' comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
+Because WordPress's comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
 
 To reduce comment spam, you could manually moderate the comments, but this is very time-consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
 

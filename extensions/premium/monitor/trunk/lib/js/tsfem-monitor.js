@@ -173,7 +173,7 @@ window.tsfem_e_monitor = {
 			return;
 
 		let loading = 'tsfem-button-disabled tsfem-button-loading',
-			loader = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax, #tsfem-e-monitor-stats-pane .tsfem-pane-header .tsfem-ajax';
+			loader = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax';
 
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );
@@ -228,7 +228,6 @@ window.tsfem_e_monitor = {
 
 				if ( 'success' === status ) {
 					let issues   = content['issues'],
-						stats    = content['stats'],
 						lc       = content['lc'],
 						settings = content['settings'];
 
@@ -274,10 +273,6 @@ window.tsfem_e_monitor = {
 						{ queue: true, duration: 1000 }
 					);
 
-					jQuery( '.tsfem-e-monitor-stats-wrap' ).empty().css( 'opacity', 0 ).append( stats ).animate(
-						{ 'opacity' : 1 },
-						{ queue: true, duration: 1000 }
-					);
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
 
 					//* Update hover cache.

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package TSF_Extension_Manager/Bootstrap
+ * @package TSF_Extension_Manager\Bootstrap
  */
 
 defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
