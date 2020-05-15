@@ -209,7 +209,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ### 2.0.3
 
-[tsfep-release time="-1"]
+[tsfep-release time="May 15th, 2020"]
 
 * **Fixed:** The post state declaration of the Article type now fetches the post data of each post correctly.
 * **Fixed:** Added missing translation for the post type settings header.

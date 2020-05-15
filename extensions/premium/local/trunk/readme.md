@@ -128,7 +128,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.6
 
-[tsfep-release time="-1"]
+[tsfep-release time="May 15th, 2020"]
 
 * **Fixed:** Two cuisines had typos in their name. Namely, Sudanese and Brazilian.
 	* If your restaurant offers these, be sure to reselect them and save the Local settings again.

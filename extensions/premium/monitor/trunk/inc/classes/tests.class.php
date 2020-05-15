@@ -413,8 +413,9 @@ final class Tests {
 		//* Cache safe.
 		$sample_tsf = \the_seo_framework()->robots_txt();
 
-		// TSF 4.0.5 compat, remove robots.txt warning
-		$sample_tsf = preg_replace( '/^\#.*?[\r\n]+\#.*?robots.txt[\r\n]+/', '', $sample_tsf );
+		// TSF 4.0.5 compat, remove robots.txt warning. This warning cannot be translated, so this is fine... for now.
+		// TODO see note at robots_txt() method in The SEO Framework, and adjust this for that.
+		$sample_tsf = preg_replace( '/^\#.*?[\r\n]+\#.*?robots\.txt[\r\n]+/', '', $sample_tsf );
 
 		//* Normalize.
 		$sample_tsf    = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $sample_tsf ) ) );

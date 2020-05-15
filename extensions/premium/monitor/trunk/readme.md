@@ -85,7 +85,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.5
 
-[tsfep-release time="-1"]
+[tsfep-release time="May 15th, 2020"]
 
 * **Other:** This extension is now out of beta! We're now ready to expand to per-page reviews, which will follow in a future update.
 * **Improved:** When no title tag is found, a non-generic message is now shown.

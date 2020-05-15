@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 					//* Already escaped.
 					echo \the_seo_framework()->convert_markdown(
 						sprintf(
+							/* translators: %s = URL to privacy policy */
 							\esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),
 							'https://theseoframework.com/privacy/'
 						),
