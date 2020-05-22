@@ -100,8 +100,8 @@ function _nag_install_tsf() {
 		\esc_html__( 'View plugin details', 'the-seo-framework-extension-manager' )
 	);
 	$nag = sprintf(
-		/* translators: 1 = Extension Manager, 2 = The SEO Framework, 2 = View plugin details. */
-		\esc_html__( 'The %1$s requires %2$s to function. %3$s.', 'the-seo-framework-extension-manager' ),
+		/* translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details. */
+		\esc_html__( '%1$s requires %2$s plugin to function. %3$s.', 'the-seo-framework-extension-manager' ),
 		sprintf( '<strong>%s</strong>', 'Extension Manager' ),
 		sprintf( '<strong>%s</strong>', \esc_html( $tsf_text ) ),
 		$tsf_details_link
@@ -132,7 +132,7 @@ function _nag_install_tsf() {
 		\esc_url( $install_nonce_url ),
 		\esc_attr( $plugin_slug ),
 		\esc_attr( $tsf_text ),
-		/* translators: %s: Extension Manager */
+		/* translators: %s: The SEO Framework */
 		\esc_attr( sprintf( __( 'Install %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
 		\esc_html__( 'Install Now', 'the-seo-framework-extension-manager' )
 	);
@@ -272,8 +272,9 @@ function _clear_update_cache() {
  *
  * @since 2.0.0
  * @since 2.0.2 Added more cache, because some sites disable transients completely...
+ * @since 2.3.2 Can now fetch required (and available) locale files.
  * @access private
- * @see WP Core wp_update_plugins()
+ * @see WP Core \wp_update_plugins()
  * @staticvar $runtimecache.
  *
  * @param mixed  $value     Site transient value.
@@ -282,12 +283,11 @@ function _clear_update_cache() {
  */
 function _push_update( $value, $transient ) {
 
-	// Check if it's still booting...
-	// if ( ! isset( $value->checked ) ) return $value;
-
-	unset( $value->checked[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
-	unset( $value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
-	unset( $value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
+	unset(
+		$value->checked[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ],
+		$value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ],
+		$value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ]
+	);
 
 	static $runtimecache = null;
 
@@ -303,24 +303,46 @@ function _push_update( $value, $transient ) {
 			// include an unmodified $wp_version
 			include ABSPATH . WPINC . '/version.php';
 
-			$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/update/1.0/';
+			$url = TSF_EXTENSION_MANAGER_DL_URI . 'get/update/1.1/';
+
+			$locales = array_values( \get_available_languages() );
+			/**
+			 * Filters the locales requested for plugin translations.
+			 *
+			 * @since WP Core 3.7.0
+			 * @since WP Core 4.5.0 The default value of the `$locales` parameter changed to include all locales.
+			 *
+			 * @param array $locales Plugin locales. Default is all available locales of the site.
+			 */
+			$locales = \apply_filters( 'plugins_update_check_locales', $locales );
+			$locales = array_unique( $locales );
+
+			$plugins      = [ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin ];
+			$translations = \wp_get_installed_translations( 'plugins' );
+
+			// This is set at the plugin's base PHP file plugin-header.
+			$text_domain = isset( $this_plugin['TextDomain'] ) ? $this_plugin['TextDomain'] : '';
+
+			if ( $text_domain && isset( $translations[ $text_domain ] ) ) {
+				$translations = array_intersect_key( $translations, array_flip( [ $text_domain ] ) );
+			} else {
+				$translations = [];
+			}
 
 			$http_args = [
-				'timeout'    => 7,
+				'timeout'    => 7, // WordPress sets 30 seconds when doing cron... why?
 				'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 				'body'       => [
-					'plugins' => [
-						TSF_EXTENSION_MANAGER_PLUGIN_BASENAME => $this_plugin,
-					],
-					// 'translations' => [], // maybe sooner.
-					// 'locale' => [], // maybe sooner.
+					'plugins'      => \wp_json_encode( $plugins ),
+					'translations' => \wp_json_encode( $translations ),
+					'locales'      => \wp_json_encode( $locales ),
 				],
 			];
 
 			$raw_response = \wp_remote_post( $url, $http_args );
 
 			if ( \is_wp_error( $raw_response )
-			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // loose comparison ok.
+			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 			) {
 				return $value;
 			}
@@ -351,10 +373,14 @@ function _push_update( $value, $transient ) {
 	//? We're only checking this plugin. This type of merge needs expansion in a bulk-updater.
 	$value->checked[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $this_plugin['Version'];
 	if ( isset( $cache['no_update'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
+		// TODO Core considers changing this. @see \wp_update_plugins().
 		$value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['no_update'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 	}
 	if ( isset( $cache['plugins'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
 		$value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['plugins'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
+	}
+	if ( ! empty( $cache['translations'] ) ) {
+		$value->translations = array_merge( $value->translations, $cache['translations'] );
 	}
 
 	return $value;

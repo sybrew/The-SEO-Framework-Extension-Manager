@@ -25,6 +25,13 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 /**
  * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
  *       Which is PHP 5.2.
+ *
+ * This file can be removed when we only support WordPress 5.2 or later. However, their
+ * onboarding message isn't as useful, informative, or even as friendly.
+ *
+ * To use that, we need to add these plugin headers in the plugin's main PHP file:
+ * Requires PHP: 5.6.5
+ * Requires at least: 4.9
  */
 
 tsf_extension_manager_pre_boot_test();

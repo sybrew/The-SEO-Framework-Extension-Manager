@@ -41,6 +41,31 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.3.2 =
+
+**Release date:**
+
+* TODO
+
+**Feature highlights:**
+
+* In this update we reduced the plugin package size by 30%. Thanks to offloading translation files elsewhere on our servers, this reduction saves you bandwidth and speeds up plugin installation.
+* During Extension Manager plugin update requests, your WordPress website may now download new and updated translation files independently. Which files are requested is based on your site's supported languages.
+
+TODO update privacy policy to reflect these changes (we now request your site's installed locale and installed translation file details of Extension Manager):
+Information TSFEM sends to Us: (3) The plugin (at version 2.0.0 or later) may request plugin updates from our servers. While succesfully doing so, it sends us your WordPress version number, the PHP version number, the installed TSFEM plugin version number, your website’s IP address, and your website’s home URL. We collect this data for aggregating usage statistics, and to provide your site with the latest compatible version. The aggregated statistics will always be anonymized.
+
+**Detailed log:**
+
+View the [detailed v2.3.1 changelog](https://theseoframework.com/?p=TODO).
+
+* **Changed:** The plugin updater now reaches our version 1.1 endpoint, from 1.0.
+* TODO **Updated:** Plugin translation POT file contains a few adjusted strings.
+* **Removed:** We no longer ship the pomo translation files with the plugin.
+	* However, the `/language/` folder still works as before, and manually inserted files therein supersede the update-service provided translations.
+
+TODO Prevent Articles from working on AQP (advanced query protection)-defended requests (see tag render output in TSF).
+
 = 2.3.1 =
 
 **Release date:**
