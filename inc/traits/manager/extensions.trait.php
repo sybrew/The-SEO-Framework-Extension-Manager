@@ -666,8 +666,8 @@ trait Extensions_Actions {
 	 * and The SEO Framework versions.
 	 *
 	 * @since 2.1.0
-	 * @since 2.3.1 Now compares liniently.
-	 * @uses static::version_compare_linient()
+	 * @since 2.3.1 Now compares leniently.
+	 * @uses static::version_compare_lenient()
 	 * @staticvar array $cache
 	 * @global string $wp_version
 	 *
@@ -692,15 +692,15 @@ trait Extensions_Actions {
 		$_tsf_version = THE_SEO_FRAMEWORK_VERSION;
 		$_wp_version  = $GLOBALS['wp_version'];
 
-		if ( static::version_compare_linient( $_tsf_version, $extension['requires_tsf'], '<' ) ) {
+		if ( static::version_compare_lenient( $_tsf_version, $extension['requires_tsf'], '<' ) ) {
 			$compatibility |= TSFEM_EXTENSION_TSF_INCOMPATIBLE;
-		} elseif ( static::version_compare_linient( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
+		} elseif ( static::version_compare_lenient( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
 			$compatibility |= TSFEM_EXTENSION_TSF_UNTESTED;
 		}
 
-		if ( static::version_compare_linient( $_wp_version, $extension['requires'], '<' ) ) {
+		if ( static::version_compare_lenient( $_wp_version, $extension['requires'], '<' ) ) {
 			$compatibility |= TSFEM_EXTENSION_WP_INCOMPATIBLE;
-		} elseif ( static::version_compare_linient( $_wp_version, $extension['tested'], '>' ) ) {
+		} elseif ( static::version_compare_lenient( $_wp_version, $extension['tested'], '>' ) ) {
 			$compatibility |= TSFEM_EXTENSION_WP_UNTESTED;
 		}
 
@@ -710,7 +710,7 @@ trait Extensions_Actions {
 	}
 
 	/**
-	 * Compares the versions liniently by restricting $version1 to $version2's length in a WP's major-release fashion.
+	 * Compares the versions leniently by restricting $version1 to $version2's length in a WP's major-release fashion.
 	 *
 	 * Major/minor/branch: M[...M].M.m-b
 	 * The second "Major" branch may only be of length 1. M.MM is therefore not allowed.
@@ -726,7 +726,7 @@ trait Extensions_Actions {
 	 *               When using the operator argument, return true if the relationship is the one specified by the
 	 *               operator, false otherwise. When an unsupported operator is given, NULL is returned.
 	 */
-	private static function version_compare_linient( $version1, $version2, $operator = null ) {
+	private static function version_compare_lenient( $version1, $version2, $operator = null ) {
 
 		// 1: major, 2: minor, 3: branch
 		$regex = '/^(\d+\.\d)(\.\d+)?(-.*)?$/';

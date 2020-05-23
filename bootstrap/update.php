@@ -133,7 +133,7 @@ function _nag_install_tsf() {
 		\esc_attr( $plugin_slug ),
 		\esc_attr( $tsf_text ),
 		/* translators: %s: The SEO Framework */
-		\esc_attr( sprintf( __( 'Install %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
+		\esc_attr( sprintf( \__( 'Install %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
 		\esc_html__( 'Install Now', 'the-seo-framework-extension-manager' )
 	);
 
@@ -380,7 +380,11 @@ function _push_update( $value, $transient ) {
 		$value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['plugins'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 	}
 	if ( ! empty( $cache['translations'] ) ) {
-		$value->translations = array_merge( $value->translations, $cache['translations'] );
+		if ( isset( $value->translations ) ) {
+			$value->translations = array_merge( $value->translations, $cache['translations'] );
+		} else {
+			$value->translations = $cache['translations'];
+		}
 	}
 
 	return $value;
