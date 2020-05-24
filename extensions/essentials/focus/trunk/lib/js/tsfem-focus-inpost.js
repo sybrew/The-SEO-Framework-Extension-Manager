@@ -866,7 +866,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lexicalSelector.dataset.prev = lexicalSelector.value;
 
 				//! TODO: trim synonyms which (slightly) match the inflections.
-				//! BUG : Synonyms that match the inflection will be counted both ways.
+				//! FIXME BUG : Synonyms that match the inflection will be counted both ways.
 				//? Use ES6' startsWith? No IE11 support.
 				//? Do this on the API server instead, as a catch-all, when we get inflection data?
 

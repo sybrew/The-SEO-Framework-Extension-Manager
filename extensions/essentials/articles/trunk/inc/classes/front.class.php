@@ -74,10 +74,15 @@ final class Front extends Core {
 	 * Initializes Articles output.
 	 *
 	 * @since 2.0.0
+	 * @since 2.0.4 No longer works when query is exploited.
+	 *
+	 * @return void Early when query is not supported.
 	 */
 	public function _init_articles_output() {
 
-		if ( ! \the_seo_framework()->is_singular() ) return;
+		$tsf = \the_seo_framework();
+
+		if ( ! $tsf->is_singular() || $tsf->is_query_exploited() ) return;
 
 		$post_type = \get_post_type();
 		$settings  = $this->get_option( 'post_types' );

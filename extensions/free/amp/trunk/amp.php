@@ -114,6 +114,7 @@ final class Front {
 	 * @since 1.0.0
 	 * @link https://www.ampproject.org/docs/reference/spec
 	 * @link https://github.com/ampproject/amphtml/tree/master/examples/metadata-examples
+	 * @TODO AMP sanitizer messes with the output... annoyingly.
 	 */
 	public function do_output_hook() {
 
@@ -127,13 +128,14 @@ final class Front {
 		$output .= $this->get_social_metadata();
 		$output .= $this->get_structured_metadata();
 
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '2.9.2', '>=' ) ) {
-			$output = \the_seo_framework()->get_plugin_indicator( 'before' )
-					. $output
-					. \the_seo_framework()->get_plugin_indicator( 'after', $output_start );
-		}
+		$tsf = \the_seo_framework();
 
-		echo PHP_EOL . $output; // xss OK, already escaped.
+		$output = $tsf->get_plugin_indicator( 'before' )
+				. $output
+				. $tsf->get_plugin_indicator( 'after', $output_start );
+
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
+		echo PHP_EOL . $output . PHP_EOL;
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 	}

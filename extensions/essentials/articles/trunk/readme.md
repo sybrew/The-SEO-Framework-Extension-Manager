@@ -207,6 +207,13 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
+### 2.0.4
+
+[tsfep-release time="-1"]
+
+* **Added:** Support for The SEO Framework's advanced query protection has been added, so that the output won't be erroneously shown.
+* **Changed:** This extension now requires TSF v4.0.5 or higher.
+
 ### 2.0.3
 
 [tsfep-release time="May 15th, 2020"]

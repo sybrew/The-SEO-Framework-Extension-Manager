@@ -64,7 +64,9 @@ View the [detailed v2.3.1 changelog](https://theseoframework.com/?p=TODO).
 * **Removed:** We no longer ship the pomo translation files with the plugin.
 	* However, the `/language/` folder still works as before, and manually inserted files therein supersede the update-service provided translations.
 
-TODO Prevent Articles from working on AQP (advanced query protection)-defended requests (see tag render output in TSF).
+**Updated extensions:**
+
+* [Articles at version 2.0.4](https://theseoframework.com/extensions/articles/#changelog)
 
 = 2.3.1 =
 
