@@ -57,16 +57,25 @@ Information TSFEM sends to Us: (3) The plugin (at version 2.0.0 or later) may re
 
 **Detailed log:**
 
-View the [detailed v2.3.1 changelog](https://theseoframework.com/?p=TODO).
+View the [detailed v2.3.2 changelog](https://theseoframework.com/?p=TODO).
 
-* **Changed:** The plugin updater now reaches our version 1.1 endpoint, from 1.0.
+* **Changed:** The plugin extension API now reaches our new version 2.1 endpoint, from 2.0.
+	* Version 2.0 will remain available for the unforeseeable future.
+* **Changed:** The plugin updater API now reaches our new version 1.1 endpoint, from 1.0.
+	* Version 1.0 will remain available for the unforeseeable future.
 * TODO **Updated:** Plugin translation POT file contains a few adjusted strings.
 * **Removed:** We no longer ship the pomo translation files with the plugin.
 	* However, the `/language/` folder still works as before, and manually inserted files therein supersede the update-service provided translations.
 
+* TODO update pricing page language support.
+
 **Updated extensions:**
 
 * [Articles at version 2.0.4](https://theseoframework.com/extensions/articles/#changelog)
+* [Focus at version 1.4.0](https://theseoframework.com/extensions/focus/#changelog)
+	* **Fixed:** TODO When parsing, synonyms now strip the content for future inflection lookups, and vice versa.
+		* This greatly affects performance on systems with more than 3 threads (80%+users?), since we must do this part of the parsing synchronously...
+	* **Added:** TODO (maybe later) Added a select-all button for inflections and synonyms.
 
 = 2.3.1 =
 

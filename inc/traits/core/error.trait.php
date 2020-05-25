@@ -299,6 +299,7 @@ trait Error {
 			case 1010201:
 			case 1100101:
 			case 1100201:
+			case 1100301:
 				$message = \esc_html__( 'An incomplete API request was supplied.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
@@ -342,6 +343,7 @@ trait Error {
 			case 1010204:
 			case 1100104:
 			case 1100204:
+			case 1100305:
 				$message = \esc_html__( 'Remote software API error.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
@@ -356,6 +358,8 @@ trait Error {
 			case 1100107:
 			case 1100203:
 			case 1100207:
+			case 1100304:
+			case 1100308:
 				$message = \esc_html__( 'Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
@@ -363,6 +367,7 @@ trait Error {
 			case 17013:
 			case 1100108:
 			case 1100208:
+			case 1100303:
 			case 1010508:
 				$message = \esc_html__( 'Exceeded maximum number of monthly request. Upgrade your license or check back in next month.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
@@ -685,6 +690,12 @@ trait Error {
 				$type    = 'warning';
 				break;
 
+			case 1100302:
+			case 1100306:
+				$message = \esc_html__( 'No inflections found.', 'the-seo-framework-extension-manager' );
+				$type    = 'warning';
+				break;
+
 			case 1100202:
 			case 1100205:
 				$message = \esc_html__( 'No synonyms found.', 'the-seo-framework-extension-manager' );
@@ -693,6 +704,7 @@ trait Error {
 
 			case 1100106:
 			case 1100206:
+			case 1100307:
 				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;

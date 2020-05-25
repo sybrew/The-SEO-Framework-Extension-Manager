@@ -76,7 +76,7 @@ defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
  * @param string
  */
 defined( 'TSF_EXTENSION_MANAGER_API_VERSION' )
-	or define( 'TSF_EXTENSION_MANAGER_API_VERSION', '2.0' );
+	or define( 'TSF_EXTENSION_MANAGER_API_VERSION', '2.1' );
 
 /**
  * The development API secret key.

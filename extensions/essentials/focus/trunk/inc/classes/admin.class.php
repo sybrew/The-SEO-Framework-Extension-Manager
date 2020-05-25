@@ -146,11 +146,24 @@ final class Admin extends Core {
 	 * Determines if the API supports the language.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.0 Added language support type selection.
 	 *
+	 * @param string $type The type of supoport, either 'any', 'synonyms', or 'inflections'.
 	 * @return bool True if supported, false otherwise.
 	 */
-	private function is_language_supported() {
-		return substr( \get_locale(), 0, 2 ) === 'en';
+	private function is_language_supported( $type ) {
+
+		$locale    = substr( \get_locale(), 0, 2 );
+		$supported = false;
+
+		if ( in_array( $type, [ 'any', 'synonyms' ], true ) ) {
+			$supported = 'en' === $locale;
+		}
+		if ( in_array( $type, [ 'any', 'inflections' ], true ) ) {
+			$supported = $supported || in_array( $locale, [ 'en', 'es', 'lv', 'hi', 'sw', 'ta', 'ro' ], true );
+		}
+
+		return $supported;
 	}
 
 	/**
@@ -177,7 +190,12 @@ final class Admin extends Core {
 					'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
 					'focusElements'      => $this->get_focus_elements(),
 					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
-					'languageSupported'  => $this->is_language_supported(),
+					'languageSupported'  => [
+						'any'         => $this->is_language_supported( 'any' ),
+						'inflections' => $this->is_language_supported( 'inflections' ),
+						'synonyms'    => $this->is_language_supported( 'synonyms' ),
+					],
+					'language'           => \get_locale(),
 					'i18n'               => [
 						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
 						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
@@ -262,7 +280,7 @@ final class Admin extends Core {
 				'defaults'           => $this->pm_defaults,
 				'template_cb'        => [ $this, '_output_focus_template' ],
 				'is_premium'         => \tsf_extension_manager()->is_premium_user(),
-				'language_supported' => $this->is_language_supported(),
+				'language_supported' => $this->is_language_supported( 'any' ),
 			],
 			'audit'
 		);

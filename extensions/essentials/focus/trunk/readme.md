@@ -69,7 +69,9 @@ So, choosing the first form is often correct.
 
 #### Select homonymous example
 
-***(Dictionary API support required)***
+***(Dictionary API (synonym) support required)***
+
+**Skip this step when no synonyms are available.**
 
 Some words have more than one meaning. So, after selecting the lexical form, example sentences are formed.
 These sentences are also sorted in order of the most common form, and the most common phrase is automatically selected.
@@ -80,10 +82,13 @@ Change the example sentence that closely describes your subject, and you could g
 
 #### Select active inflections and synonyms
 
-***(Dictionary API support required)***
+***(Dictionary API (inflection or synonym) support required)***
 
-After all synonyms and inflections are received, just click on the ones you'd like to use.
+**Skip this step when no synonyms or inflections are available.**
 
+After all synonyms or inflections are received, click on the ones you'd like to use.
+
+**When synonyms are available:**
 If you haven't used a synonym in your content yet, consider using it as it will increase your chances of being found.
 
 [tsfep-image id="6"]
@@ -145,7 +150,22 @@ All languages have the requisite support for ratings.
 
 ### Which languages are supported by the dictionary API?
 
-The API currently supports English only. Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
+The following languages are supported by the dictionary API for inflections:
+* English (US)
+* English (GB)
+* Spanish (Español) (ES)
+* Latvian (Latviešu)
+* Hindi (हिन्दी)
+* Swasili (Kiswahili)
+* Tamil (தமிழ்)
+* Romanian (Română) (RO)
+
+Non-US English dialects default to English (GB). For all other languages, if a dialect exists and is used, it'll default to the one listed above.
+
+The following languages are supported by the dictionary API for synonyms:
+* English (global)
+
+Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
 
 ### What if my site's language doesn't support synonym lookup?
 
@@ -204,6 +224,20 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 ```
 
 ## Changelog
+
+### 1.4.0
+
+[tsfep-release time="-1"]
+
+* **Added:** Finally, we're introducing reverse inflection lookup, which makes this the most accurate subject parser.
+	* **Supported languages:** English (US), English (GB), Spanish (Español) (ES), Latvian (Latviešu), Hindi (हिन्दी), Swasili (Kiswahili), Tamil (தமிழ்), Romanian (Română) (RO).
+	* Non-US or GB English language types default to English (GB).
+	* Non-ES Spanish language types default to Spanish (ES).
+	* **API request change:** When the word you enter is found in the dictionary, extra API requests will be consumed to fetch its inflections for each homonymous example.
+	* **Note:** Dictionary data stored before this update used on your pages isn't retroactively filled with inflections.
+		 * To parse old content with the new inflection lookup, you must first clear your old keyword, and then refill your selections.
+* **Fixed:** When a synonym matches an inflection, the synonym is now stripped.
+	* This works retroactively, so your old content parser is affected.
 
 ### 1.3.2
 

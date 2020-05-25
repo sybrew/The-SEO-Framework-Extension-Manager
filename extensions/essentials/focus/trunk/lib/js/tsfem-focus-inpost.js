@@ -605,8 +605,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					nonce:   l10n.nonce,
 					post_ID: tsfem_inpost.postID,
 					args:    {
-						keyword: keyword,
-						language: 'en' // language || 'en' // TODO this accepts: 'en', and a few other languages. No 'en-us', 'en-gb', etc. however.
+						keyword,
+						language: l10n.language,
 					},
 				},
 				timeout:  15000,
@@ -668,7 +668,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			//= Always calls clearDefinition!!
 		}
 		const clearDefinition = () => {
-			let definitionDropdown = getSubElementById( idPrefix, 'definition_dropdown' ),
+			let definitionDropdown  = getSubElementById( idPrefix, 'definition_dropdown' ),
 				definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
 			if ( definitionDropdown instanceof HTMLSelectElement ) {
 				definitionDropdown.selectedIndex = 0;
@@ -683,7 +683,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const clearInflections = () => {
 			let inflectionSection = getSubElementById( idPrefix, 'inflections' ),
 				inflectionEntries = inflectionSection && inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
-				inflectionData = getSubElementById( idPrefix, 'inflection_data' ),
+				inflectionData    = getSubElementById( idPrefix, 'inflection_data' ),
 				activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
 			if ( inflectionEntries instanceof Element ) {
@@ -701,7 +701,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const clearSynonyms = () => {
 			let synonymSection = getSubElementById( idPrefix, 'synonyms' ),
 				synonymEntries = synonymSection && synonymSection.querySelector( '.tsfem-e-focus-subject-selection' ),
-				synonymData = getSubElementById( idPrefix, 'synonym_data' ),
+				synonymData    = getSubElementById( idPrefix, 'synonym_data' ),
 				activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' );
 
 			if ( synonymEntries instanceof Element ) {
@@ -784,6 +784,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * Performs change actions on lexical selection update.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.0 Converted inflection setter to getter.
 	 * @access private
 	 * @uses @var lexicalFormSelectionBuffer
 	 *
@@ -792,101 +793,150 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *                              === idPrefix['lexical_selector']
 	 */
 	const lexicalSelectorChangeHandler = ( event ) => {
-		let idPrefix = event.data.idPrefix,
-			lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
+		let idPrefix         = event.data.idPrefix,
+			lexicalSelector  = getSubElementById( idPrefix, 'lexical_selector' ),
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
 			lexicalDataField = getSubElementById( idPrefix, 'lexical_data' );
 
-		/**
-		 * AJAX handler.
-		 */
-		const getSynonyms = () => {
-			let forms = JSON.parse( lexicalDataField.value ),
-				form = forms[ lexicalFormField.value ];
+		const apiHandler = ( type ) => {
+			let action,
+				$dfd = $.Deferred();
+
+			if ( 'inflections' === type ) {
+				action = 'tsfem_e_focus_get_inflections';
+			} else if ( 'synonyms' === type ) {
+				action = 'tsfem_e_focus_get_synonyms';
+			}
+
+			if ( ! action ) {
+				$dfd.reject();
+				return $dfd.promise();
+			}
 
 			let ops = {
 				method: 'POST',
 				url: ajaxurl,
 				dataType: 'json',
 				data: {
-					'action' : 'tsfem_e_focus_get_synonyms',
-					'nonce' : l10n.nonce,
-					'post_ID' : tsfem_inpost.postID,
-					'args' : {
-						'form': form,
-						'language': 'en' // language || 'en' // TODO this accepts: 'en', 'en-gb', 'en-us', but nothing else...!
+					action,
+					nonce: l10n.nonce,
+					post_ID: tsfem_inpost.postID,
+					args: {
+						form: JSON.parse( lexicalDataField.value )[ lexicalFormField.value ],
+						language: l10n.language,
 					},
 				},
 				timeout: 15000,
 				async: true,
 			};
 
-			let $dfd = $.Deferred();
-
 			tsfem_inpost.doAjax(
 				$dfd,
 				ops,
-				{ 'noticeArea': noticeArea, 'premium': true }
+				{
+					noticeArea,
+					premium: true
+				}
 			);
 
 			return $dfd.promise();
 		}
+		const getInflections = () => apiHandler( 'inflections' );
+		const getSynonyms    = () => apiHandler( 'synonyms' );
 
 		const setDefinition = ( value ) => {
 			//= Set static lexicalform field.
-			lexicalFormField.value = value;
-			lexicalSelector.value = value;
+			lexicalFormField.value        = value;
+			lexicalSelector.value         = value;
 			lexicalSelector.selectedIndex = +value;
 		}
-		//= @TODO make this a fetcher.
-		const setInflections = () => {
-			clearData( idPrefix, 'inflections' );
+		const fetchInflections = () => {
+			let $dfd = $.Deferred();
 
-			//= We can't retrieve these yet. Set current value and base value.
-			let keyword = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase(),
-				lexicalForm = lexicalFormField.value,
-				lexicalData = lexicalDataField.value,
-				lexicalWord = '',
-				words = [];
+			if ( ! l10n.languageSupported.inflections ) {
+				$dfd.reject();
+				return $dfd.promise();
+			}
 
-			lexicalWord = JSON.parse( lexicalData )[ lexicalForm ].value.toLowerCase();
-			words.push( keyword );
-			if ( keyword !== lexicalWord ) words.push( lexicalWord );
+			$.when( getInflections() ).done( ( data ) => {
+				clearData( idPrefix, 'inflections' );
 
-			getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { 'inflections' : words } ] );
+				getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: data.inflections } ] );
 
-			return $.Deferred().resolve();
+				$dfd.resolve();
+			} ).fail( ( code ) => {
+				switch ( code ) {
+					case 1100302: // Word not found
+					case 1100306: // Empty return value
+
+					case 1100303: // Request limit reached
+					case 1100304: // Remote API error
+					case 1100305: // Empty response.
+
+					case 1100308: // Sybre messed up and forgot to code in inflection response.
+						// Ignore.
+						break;
+
+					default:
+						// Don't forge the request, tyvm.
+						$dfd.reject();
+						return;
+				}
+
+				//= Let's try populate this anyway, with currently known data (input + lexical form).
+				let keyword     = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase(),
+					lexicalForm = lexicalFormField.value,
+					lexicalData = lexicalDataField.value,
+					lexicalWord = '',
+					words       = [];
+
+				// get Lexical form, push with keyword when the words don't match.
+				lexicalWord = JSON.parse( lexicalData )[ lexicalForm ].value.toLowerCase();
+				words.push( keyword );
+				if ( keyword !== lexicalWord ) {
+					words.push( lexicalWord );
+				} else {
+					// No new word to work with. Reject.
+					$dfd.reject();
+					return;
+				}
+
+				clearData( idPrefix, 'inflections' );
+				getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: words } ] );
+
+				// This is OK; we already have some form of inflection--hopefully.
+				$dfd.resolve();
+			} );
+
+			return $dfd.promise();
 		}
 		const fetchSynonyms = () => {
 			let $dfd = $.Deferred();
+
+			if ( ! l10n.languageSupported.synonyms ) {
+				$dfd.reject();
+				return $dfd.promise();
+			}
+
 			$.when( getSynonyms() ).done( ( data ) => {
 				clearData( idPrefix, 'definition' );
 				clearData( idPrefix, 'synonyms' );
-
-				lexicalSelector.dataset.prev = lexicalSelector.value;
-
-				//! TODO: trim synonyms which (slightly) match the inflections.
-				//! FIXME BUG : Synonyms that match the inflection will be counted both ways.
-				//? Use ES6' startsWith? No IE11 support.
-				//? Do this on the API server instead, as a catch-all, when we get inflection data?
 
 				getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
 
 				$dfd.resolve();
 			} ).fail( ( code ) => {
 				switch ( code ) {
-					case 1100202:
-					case 1100205:
+					case 1100202: // Word not found
+					case 1100205: // Empty return value
 						clearData( idPrefix, 'definition' );
 						clearData( idPrefix, 'synonyms' );
 
-						lexicalSelector.dataset.prev = lexicalSelector.value;
 						getSubElementById( idPrefix, 'synonym_data' ).value = '';
-						$dfd.resolve();
+						$dfd.reject();
 						break;
 
 					default:
-						setDefinition( lexicalSelector.dataset.prev || 0 );
 						$dfd.reject();
 						break;
 				}
@@ -903,14 +953,44 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				} else {
 					setDefinition( lexicalSelector.value );
 					if ( +lexicalSelector.value ) {
+						let $dfdInflection = void 0,
+							$dfdSynonym    = void 0;
+
+						let $dfdInflectionEnd = $.Deferred(),
+							$dfdSynonymEnd    = $.Deferred();
+
+						// FIXME: The user now gets spammed twice with notifications; find a way to combine them?
+						// We should either combine the query (and offload it to PHP), or resolve it by comparing the notices here.
+
+						// Workaround jQuery's promise limitations by offsetting the deferred object.
+						$.when( $dfdInflection = fetchInflections() ).always( () => $dfdInflectionEnd.resolve() );
+						// Don't bombard the user's server, wait a little.
+						setTimeout( () => {
+							$.when( $dfdSynonym = fetchSynonyms() ).always( () => $dfdSynonymEnd.resolve() );
+						}, 100 );
+
 						//? Button changes at prepareSynonyms
-						$.when( setInflections(), fetchSynonyms() ).done( () => {
-							populateDefinitionSelector( idPrefix );
-							refillSubjectSelection( idPrefix );
-							setEditButton( idPrefix ).to( 'enabled, edit, checked' );
-						} ).fail( () => {
-							setEditButton( idPrefix ).to( 'edit' );
-						})
+						$.when( $dfdInflectionEnd, $dfdSynonymEnd ).done( () => {
+							// jQuery's deferred isn't as neat as ECMA's, let's work around that.
+							if ( [ $dfdInflection.state(), $dfdSynonym.state() ].includes( 'resolved' ) ) {
+
+								lexicalSelector.dataset.prev = lexicalSelector.value;
+
+								if ( $dfdInflection.state() !== 'resolved' ) {
+									clearData( idPrefix, 'inflections' );
+								} else if ( $dfdSynonym.state() !== 'resolved' ) {
+									clearData( idPrefix, 'definition' );
+									clearData( idPrefix, 'synonyms' );
+								}
+
+								populateDefinitionSelector( idPrefix );
+								refillSubjectSelection( idPrefix );
+								setEditButton( idPrefix ).to( 'enabled, edit, checked' );
+							} else {
+								setDefinition( lexicalSelector.dataset.prev || 0 );
+								setEditButton( idPrefix ).to( 'edit' );
+							}
+						} );
 					} else {
 						lexicalSelector.dataset.prev = lexicalSelector.value;
 						setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
@@ -928,6 +1008,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * Populates definiton selection dynamic dropdown selection field.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.0 No longer populates when no synonyms are present.
 	 * @access private
 	 *
 	 * @function
@@ -935,11 +1016,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const populateDefinitionSelector = ( idPrefix ) => {
 		let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
-			definitionDropdown = getSubElementById( idPrefix, 'definition_dropdown' ),
-			definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
+			synonyms      = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
 
-		let definitionDropdownClone = definitionDropdown.cloneNode( true ),
-			synonyms = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
+		let definitionDropdown      = getSubElementById( idPrefix, 'definition_dropdown' ),
+			definitionSelection     = getSubElementById( idPrefix, 'definition_selection' ),
+			definitionDropdownClone = definitionDropdown.cloneNode( true );
 
 		//= Removes all previous options.
 		for ( let _i = definitionDropdownClone.options.length; _i--; ) {
@@ -1322,7 +1403,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				return;
 			}
 
-			if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
+			if ( tsfem_inpost.isPremium && l10n.languageSupported.any ) {
 				runLexicalFormSetter( idPrefix );
 			}
 
@@ -1387,16 +1468,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @return {boolean|undefined} False on error. Undefined otherwise.
 		 */
 		const editSubject = ( event ) => {
-			let clicker = event.target,
+			let clicker  = event.target,
 				selectId = void 0,
 				selector = void 0,
-				holder = void 0,
+				holder   = void 0,
 				idPrefix = void 0,
-				lastVal = 0,
+				lastVal  = 0,
 				lastText = '',
-				newVal = 0,
-				newText = '',
-				setNow = event.data && event.data.change || false;
+				newVal   = 0,
+				newText  = '',
+				setNow   = event.data && event.data.change || false;
 
 			if ( typeof clicker.dataset.for !== 'undefined' )
 				selectId = clicker.dataset.for;
@@ -1423,7 +1504,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				if ( +newVal !== +lastVal ) {
 					//= Refill selection.
 					getSubElementById( idPrefix, 'active_synonyms' ).value = '';
-					getSubElementById( idPrefix, 'active_inflections' ).value = '';
 					refillSubjectSelection( idPrefix );
 				}
 
@@ -1431,7 +1511,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 			const undoChanges = () => {
 				clicker.innerHTML = lastText;
-				selector.value = lastVal;
+				selector.value    = lastVal;
 			}
 			const showForm = () => {
 				$( clicker ).hide();
@@ -1489,8 +1569,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		const showSubjectEditor = ( event ) => {
-			let idPrefix = getSubIdPrefix( event.target.id ),
-				editor = getSubElementById( idPrefix, 'edit' ),
+			const idPrefix = getSubIdPrefix( event.target.id );
+
+			let editor    = getSubElementById( idPrefix, 'edit' ),
 				evaluator = getSubElementById( idPrefix, 'evaluate' );
 
 			let collapser = getSubElementById( idPrefix, 'collapser' );
@@ -1527,8 +1608,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
-		let subjectEditAction = 'click.tsfem-e-focus-definition-editor',
-			a11ySubjectEditAction = 'keypress.tsfem-e-focus-definition-editor',
+		let subjectEditAction       = 'click.tsfem-e-focus-definition-editor',
+			a11ySubjectEditAction   = 'keypress.tsfem-e-focus-definition-editor',
 			customSubjectEditAction = 'set-tsfem-e-focus-definition';
 		$( '.tsfem-e-focus-definition-editor' )
 			.off( subjectEditAction )
@@ -1560,8 +1641,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const getIterationFromId = id => ( /\[([0-9]+)\]$/.exec( id ) || '' )[1];
 		const setActiveInflections = ( idPrefix ) => {
 			let inflectionSection = getSubElementById( idPrefix, 'inflections' ),
-				selected = inflectionSection.querySelectorAll( 'input:checked' ),
-				values = [];
+				selected          = inflectionSection.querySelectorAll( 'input:checked' ),
+				values            = [];
 			selected.forEach( el => {
 				values.push( getIterationFromId( el.id ) );
 			} );
@@ -1571,8 +1652,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		const setActiveSynonyms = ( idPrefix ) => {
 			let synonymSection = getSubElementById( idPrefix, 'synonyms' ),
-				selected = synonymSection.querySelectorAll( 'input:checked' ),
-				values = [];
+				selected       = synonymSection.querySelectorAll( 'input:checked' ),
+				values         = [];
 			selected.forEach( el => {
 				values.push( getIterationFromId( el.id ) );
 			} );
@@ -1581,17 +1662,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			triggerAllAnalysis( idPrefix );
 		}
 		const updateActive = ( event ) => {
-			let idPrefix = event.data.idPrefix,
-				type = event.data.type,
-				bufferKey = idPrefix + type;
+			const idPrefix  = event.data.idPrefix,
+				  type      = event.data.type,
+				  bufferKey = idPrefix + type;
 
 			clearTimeout( subjectFilterBuffer[ bufferKey ] );
 			subjectFilterBuffer[ bufferKey ] = setTimeout( () => {
 				switch ( type ) {
-					case 'inflections' :
+					case 'inflections':
 						setActiveInflections( idPrefix );
 						break;
-					case 'synonyms' :
+					case 'synonyms':
 						setActiveSynonyms( idPrefix );
 						break;
 				}
@@ -1622,27 +1703,40 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			//?! There's always just one form of inflections in latin.
 			let availableInflections = inflectionHolder.value && JSON.parse( inflectionHolder.value ),
-				inflections = availableInflections && availableInflections[0].inflections || {};
+				inflections          =
+					availableInflections
+					&& availableInflections[0]
+					&& availableInflections[0].inflections
+					|| {};
 
 			//?! A little bit trickier, because they might or might not be available.
 			let availableSynonyms = synonymHolder.value && JSON.parse( synonymHolder.value ),
-				synonyms = availableSynonyms && availableSynonyms[ +definitionSelection.value ] && availableSynonyms[ +definitionSelection.value ].synonyms || {};
+				synonyms          = availableSynonyms
+					&& availableSynonyms[ +definitionSelection.value ]
+					&& availableSynonyms[ +definitionSelection.value ].synonyms
+					|| {};
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity = 0;
 
 			let activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
-				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' );
+				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' ),
+				kw                = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase();
+
+			// Can error; point of headache, let's forgo it.
+			// kw                = getSubElementById( idPrefix, 'keyword' ).value.toLocaleLowerCase( l10n.language );
 
 			let html = '',
-				prefix = createSubId( idPrefix, 'inflection' );
+				prefix = createSubId( idPrefix, 'inflection' ),
+				isKw = false;
 			//= We need the keys... but they're sequential?
 			for ( let i in inflections ) {
+				isKw = inflections[ i ] === kw;
 				html += subjectTemplate( {
 					id:       createSubId( prefix, i ),
 					value:    inflections[ i ],
-					checked:  !+i || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the first inflection.
-					disabled: !+i ? 'disabled' : '' // Disable the first inflection.
+					checked:  isKw || ( activeInflections.indexOf( String( i ) ) > -1 ) ? 'checked' : '', // Always enable the keyword-inflection.
+					disabled: isKw ? 'disabled' : ''  // Disable the keyword-inflection from altering.
 				} );
 			}
 			inflectionEntries.innerHTML = html;
@@ -1651,6 +1745,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			prefix = createSubId( idPrefix, 'synonym' );
 			//= We need the keys... but they're sequential?
 			for ( let i in synonyms ) {
+				if ( inflections.indexOf( synonyms[ i ] ) > -1 ) continue;
 				html += subjectTemplate( {
 					id:      createSubId( prefix, i ),
 					value:   synonyms[ i ],
@@ -1697,7 +1792,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const refillSubjectSelection = ( idPrefix ) => {
 		$( window ).trigger(
 			'tsfem-e-focus-updated-subject',
-			[ { 'idPrefix' : idPrefix } ]
+			[ { idPrefix } ]
 		);
 	}
 
@@ -1728,15 +1823,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		const getActiveInflections = () => {
-			let ret, inflections,
-				active = getSubElementById( idPrefix, 'active_inflections' );
+			let ret,
+				inflections;
 
-			if ( active instanceof HTMLInputElement && active.value ) {
+			const activeInflections = getSubElementById( idPrefix, 'active_inflections' );
+
+			if ( activeInflections instanceof HTMLInputElement && activeInflections.value ) {
 				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value;
 				inflections = JSON.parse( inflectionData )[0].inflections;
 
 				ret = [];
-				active.value.split( ',' ).forEach( i => {
+				activeInflections.value.split( ',' ).forEach( i => {
 					ret.push( inflections[ +i ] );
 				} );
 			}
@@ -1750,16 +1847,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			return ret;
 		}
 		const getActiveSynonyms = () => {
-			let ret, synonyms,
-				active = getSubElementById( idPrefix, 'active_synonyms' ),
-				selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
+			let ret,
+				synonyms;
 
-			if ( active instanceof HTMLInputElement && active.value ) {
+			const activeSynonyms     = getSubElementById( idPrefix, 'active_synonyms' ),
+				  selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
+
+			if ( activeSynonyms instanceof HTMLInputElement && activeSynonyms.value ) {
 				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value;
 				synonyms = JSON.parse( synonymData )[ +selectedDefinition.value ].synonyms;
 
 				ret = [];
-				active.value.split( ',' ).forEach( i => {
+				activeSynonyms.value.split( ',' ).forEach( i => {
 					ret.push( synonyms[ +i ] );
 				} );
 			}
@@ -2242,7 +2341,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( kwEntry.value.length ) {
 				//= Prepare keyword value.
 				kwEntry.dataset.prev = kwEntry.value;
-				if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
+				if ( tsfem_inpost.isPremium && l10n.languageSupported.any ) {
 					//= Prepare lexical selector values.
 					let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 					lexicalSelector.dataset.prev = lexicalSelector.value;
@@ -2299,7 +2398,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		resetCollapserListeners();
 		resetKeywordEntryListeners();
 
-		if ( tsfem_inpost.isPremium && l10n.languageSupported ) {
+		if ( tsfem_inpost.isPremium && l10n.languageSupported.any ) {
 			//= Prepare definition selector.
 			resetSubjectEditListeners();
 			resetSubjectFilterListeners();

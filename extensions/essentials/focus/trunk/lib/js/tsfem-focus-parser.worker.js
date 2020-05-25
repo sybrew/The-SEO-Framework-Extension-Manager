@@ -210,6 +210,7 @@ const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise(
 } );
 
 const countChars = ( str ) => {
+	// TODO does this stripping interfere with lone < (that become &lt;)?
 	// Strip all XML tags first.
 	str = str.match( /(?=([^<>]+))\1(?=<|$)/gi );
 	str = str && str.join( ' ' ) || '';
@@ -262,7 +263,7 @@ const countCharacters = ( content ) => new Promise( ( resolve, reject ) => {
 
 const countInflections = ( content ) => {
 	let _inflections = inflections,
-		_content = content;
+		_content     = content;
 	_inflections.length && _inflections.sort( ( a, b ) => b.length - a.length );
 
 	return promiseLoop( _inflections, ( inflection ) => {
@@ -274,7 +275,7 @@ const countInflections = ( content ) => {
 }
 const countSynonyms = ( content ) => {
 	let _synonyms = synonyms,
-		_content = content;
+		_content  = content;
 
 	_synonyms.length && _synonyms.sort( ( a, b ) => b.length - a.length );
 
@@ -304,7 +305,7 @@ onmessage = message => {
 	} else {
 		Promise.all( [
 			data.assess.getCharCount && countCharacters( content ),
-			countInflections( content ),
+			countInflections( content ), // FIXME we should reuse content (stripWord)... at the expense of performance and delay...
 			countSynonyms( content ),
 		] ).then( () => {
 			postMessage( {

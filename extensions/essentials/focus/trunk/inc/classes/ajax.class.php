@@ -63,6 +63,7 @@ final class Ajax {
 	 * Initializes and outputs Settings page.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.0 Added inflection-getter callback.
 	 * @access private
 	 *
 	 * @param Admin $_admin Used for integrity.
@@ -80,6 +81,7 @@ final class Ajax {
 
 		//* AJAX definition getter listener.
 		\add_action( 'wp_ajax_tsfem_e_focus_get_lexicalforms', [ $instance, '_get_lexicalforms' ] );
+		\add_action( 'wp_ajax_tsfem_e_focus_get_inflections', [ $instance, '_get_inflections' ] );
 		\add_action( 'wp_ajax_tsfem_e_focus_get_synonyms', [ $instance, '_get_synonyms' ] );
 	}
 
@@ -200,6 +202,81 @@ final class Ajax {
 	}
 
 	/**
+	 * Gets lexical form's inflections on AJAX request.
+	 *
+	 * @since 1.4.0
+	 * @uses $this->verify_api_access()
+	 * @uses $this->get_api_response()
+	 */
+	public function _get_inflections() {
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
+		$this->verify_api_access();
+
+		$tsfem = \tsf_extension_manager();
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+
+		$form_keys = [ 'category', 'value' ];
+
+		$form     = isset( $_args['form'] ) ? \map_deep( $_args['form'], [ $tsfem, 's_ajax_string' ] ) : '';
+		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
+
+		$send = [];
+
+		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
+			//= How in the...
+			$send['results'] = $this->get_ajax_notice( false, 1100301 );
+		} else {
+			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
+
+			$response = $this->get_api_response( 'inflections', compact( 'form', 'language' ) );
+			$response = json_decode( $response );
+
+			if ( empty( $response->success ) ) {
+				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+					case 'WORD_NOT_FOUND':
+						$send['results'] = $this->get_ajax_notice( false, 1100302 );
+						break;
+
+					case 'REQUEST_LIMIT_REACHED':
+						$send['results'] = $this->get_ajax_notice( false, 1100303 );
+						break;
+
+					default:
+					case 'LICENSE_TOO_LOW':
+					case 'REMOTE_API_BODY_ERROR':
+					case 'REMOTE_API_ERROR':
+						$send['results'] = $this->get_ajax_notice( false, 1100304 );
+						break;
+				endswitch;
+			} elseif ( ! isset( $response->data ) ) {
+				$send['results'] = $this->get_ajax_notice( false, 1100305 );
+			} else {
+				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+
+				if ( isset( $_data->inflections ) ) {
+					$type = 'success'; // The API responded as intended, although the data may not be useful.
+					$send['data']['inflections'] = $_data->inflections ?: [];
+					if ( ! $send['data']['inflections'] ) {
+						$send['results'] = $this->get_ajax_notice( false, 1100306 );
+					} else {
+						$send['results'] = $this->get_ajax_notice( true, 1100307 );
+					}
+				} else {
+					if ( isset( $_data->error ) )
+						$send['data']['error'] = $_data->error;
+
+					$send['results'] = $this->get_ajax_notice( false, 1100308 );
+				}
+			}
+		}
+
+		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+
+		// phpcs:enable, WordPress.Security.NonceVerification
+	}
+
+	/**
 	 * Gets lexical form's synonyms on AJAX request.
 	 *
 	 * @since 1.0.0
@@ -212,7 +289,7 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsf_extension_manager();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : []; // input var, sanitization ok.
+		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$form_keys = [ 'category', 'value' ];
 
