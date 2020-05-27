@@ -167,6 +167,10 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100108 );
 						break;
 
+					case 'LANGUAGE_SUPPORT_ERROR':
+						$send['results'] = $this->get_ajax_notice( false, 1100109 );
+						break;
+
 					default:
 					case 'LICENSE_TOO_LOW':
 					case 'REMOTE_API_BODY_ERROR':
@@ -242,6 +246,10 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100303 );
 						break;
 
+					case 'LANGUAGE_SUPPORT_ERROR':
+						$send['results'] = $this->get_ajax_notice( false, 1100309 );
+						break;
+
 					default:
 					case 'LICENSE_TOO_LOW':
 					case 'REMOTE_API_BODY_ERROR':
@@ -315,6 +323,10 @@ final class Ajax {
 
 					case 'REQUEST_LIMIT_REACHED':
 						$send['results'] = $this->get_ajax_notice( false, 1100208 );
+						break;
+
+					case 'LANGUAGE_SUPPORT_ERROR':
+						$send['results'] = $this->get_ajax_notice( false, 1100209 );
 						break;
 
 					default:

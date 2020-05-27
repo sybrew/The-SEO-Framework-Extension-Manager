@@ -373,6 +373,13 @@ trait Error {
 				$type    = 'error';
 				break;
 
+			case 1100109:
+			case 1100209:
+			case 1100309:
+				$message = \esc_html__( 'Site language is not supported for lexical lookup.', 'the-seo-framework-extension-manager' );
+				$type    = 'warning';
+				break;
+
 			case 305:
 				$message = sprintf(
 					/* translators: %s = My Account */
