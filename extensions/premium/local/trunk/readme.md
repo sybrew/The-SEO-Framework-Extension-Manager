@@ -126,6 +126,12 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.7
+
+[tsfep-release time="-1"]
+
+* **Changed:** This extension's admin access can now be controlled via the global constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`.
+
 ### 1.1.6
 
 [tsfep-release time="May 15th, 2020"]

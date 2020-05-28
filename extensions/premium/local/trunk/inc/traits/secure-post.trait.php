@@ -237,13 +237,14 @@ trait Secure_Post {
 	 * Prepares AJAX form validation checks.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.7 The extension access level is now controlled via another constant.
 	 * @see $this->send_ajax_form_json_validation()
 	 * @access private
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
 		if ( \wp_doing_ajax() ) :
-			if ( \tsf_extension_manager()->can_do_settings() ) :
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
 				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
 					$this->send_ajax_form_json_validation();
 				}

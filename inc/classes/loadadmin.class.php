@@ -121,7 +121,7 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function check_external_blocking() {
 
-		if ( ! $this->is_tsf_extension_manager_page() || ! $this->can_do_settings() )
+		if ( ! $this->is_tsf_extension_manager_page() || ! \TSF_Extension_Manager\can_do_manager_settings() )
 			return;
 
 		if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL )
@@ -303,7 +303,7 @@ final class LoadAdmin extends AdminPages {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( ! $this->can_do_settings() )
+		if ( ! \TSF_Extension_Manager\can_do_manager_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
@@ -336,7 +336,7 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function do_activation_notice() {
 
-		if ( $this->is_plugin_activated() || ! $this->can_do_settings() || $this->is_tsf_extension_manager_page() )
+		if ( $this->is_plugin_activated() || ! \TSF_Extension_Manager\can_do_manager_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
 		$text  = \__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );

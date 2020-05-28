@@ -208,7 +208,7 @@ final class ExtensionSettings {
 	 * @access private
 	 */
 	public function _init_menu() {
-		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 12 );
 	}
 
@@ -224,7 +224,7 @@ final class ExtensionSettings {
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
-			'capability'  => 'manage_options',
+			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
 			'menu_slug'   => static::$settings_page_slug,
 			'callback'    => [ $this, '_output_settings_page' ],
 		];

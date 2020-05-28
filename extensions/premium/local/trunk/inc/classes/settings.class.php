@@ -297,6 +297,7 @@ final class Settings {
 	 * Also registers TSF scripts, for TT (tooltip) support.
 	 *
 	 * @since 1.1.3
+	 * @since 1.1.7 The extension access level for nonce generation now controlled via another constant.
 	 * @access private
 	 * @internal
 	 *
@@ -332,7 +333,8 @@ final class Settings {
 				'l10n'     => [
 					'name' => 'tsfem_e_localL10n',
 					'data' => [
-						'nonce' => \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ),
+						// This won't ever run when the user can't. But, sanity.
+						'nonce' => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ) : '',
 						'i18n'  => [
 							'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
 							'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),

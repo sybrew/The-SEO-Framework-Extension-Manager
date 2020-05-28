@@ -90,15 +90,13 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_manager_settings()
+	 * @since 2.4.0 Removed security check, and offloads it to WordPress.
 	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
 	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
 	 */
 	final public function _init_menu() {
-
-		if ( ! \TSF_Extension_Manager\can_do_manager_settings() )
-			return;
 
 		if ( $this->is_plugin_in_network_mode() ) {
 			//* TODO.
@@ -115,6 +113,7 @@ class AdminPages extends AccountActivation {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.2 Added TSF v3.1 compat.
+	 * @since 2.4.0 Added menu access control check for notification display.
 	 * @uses \the_seo_framework()->seo_settings_page_slug
 	 * @access private
 	 */
@@ -129,7 +128,11 @@ class AdminPages extends AccountActivation {
 			'callback'    => [ $this, '_init_extension_manager_page' ],
 		];
 
-		$notice_count = count( \get_option( $this->error_notice_option, false ) ?: [] );
+		if ( \TSF_Extension_Manager\can_do_manager_settings() ) {
+			$notice_count = count( \get_option( $this->error_notice_option, false ) ?: [] );
+		} else {
+			$notice_count = 0;
+		}
 
 		if ( $notice_count ) {
 			/**

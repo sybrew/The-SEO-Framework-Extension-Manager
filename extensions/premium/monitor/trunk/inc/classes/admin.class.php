@@ -216,13 +216,14 @@ final class Admin extends Api {
 	 * Initializes extension menu.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
-	 * @uses \tsf_extension_manager()->can_do_settings()
+	 * @uses \TSF_Extension_Manager\can_do_extension_settings()
 	 * @access private
 	 */
 	public function _init_menu() {
 
-		if ( \tsf_extension_manager()->can_do_settings() && \the_seo_framework()->load_options )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 100 );
 	}
 
@@ -241,7 +242,7 @@ final class Admin extends Api {
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => 'Monitor',
 			'menu_title'  => 'Monitor',
-			'capability'  => 'manage_options',
+			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
 			'menu_slug'   => $this->monitor_page_slug,
 			'callback'    => [ $this, '_init_monitor_page' ],
 		];
@@ -370,6 +371,7 @@ final class Admin extends Api {
 	 * nonce can or has been been verified.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
 	 * @param string $key        The nonce action used for caching.
@@ -383,7 +385,7 @@ final class Admin extends Api {
 		if ( isset( $validated[ $key ] ) )
 			return $validated[ $key ];
 
-		if ( ! \tsf_extension_manager()->can_do_settings() )
+		if ( ! \TSF_Extension_Manager\can_do_extension_settings() )
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
@@ -416,15 +418,16 @@ final class Admin extends Api {
 	 * Updates settings.
 	 *
 	 * @since 1.1.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @access private
 	 */
 	public function _wp_ajax_update_settings() {
 
 		if ( \wp_doing_ajax() ) :
-			$tsfem = \tsf_extension_manager();
-			if ( $tsfem->can_do_settings() ) :
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
+				$tsfem  = \tsf_extension_manager();
 				$option = '';
-				$send = [];
+				$send   = [];
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					//= Option is cleaned and requires unpacking.
 					$option = isset( $_POST['option'] ) ? $tsfem->s_ajax_string( $_POST['option'] ) : ''; // Sanitization, input var OK.
@@ -463,13 +466,14 @@ final class Admin extends Api {
 	 * Fetches Monitor Data through AJAX and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	public function _wp_ajax_fetch_data() {
 
 		if ( \wp_doing_ajax() ) :
-			if ( \tsf_extension_manager()->can_do_settings() ) :
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
 
 				$timeout = null;
 
@@ -549,13 +553,14 @@ final class Admin extends Api {
 	 * Requests Monitor to crawl the site and echos the output through AJAX response.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	public function _wp_ajax_request_crawl() {
 
 		if ( \wp_doing_ajax() ) :
-			if ( \tsf_extension_manager()->can_do_settings() ) :
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
 
 				$timeout = null;
 
@@ -631,13 +636,13 @@ final class Admin extends Api {
 	 * Returns required fix fields through AJAX request.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 The extension access level is now controlled via another constant.
 	 * @access private
 	 */
 	public function _wp_ajax_get_requires_fix() {
 
 		if ( \wp_doing_ajax() ) {
-			if ( \tsf_extension_manager()->can_do_settings() ) {
-
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 				$send = [];
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					//* Initialize menu hooks.
@@ -710,7 +715,8 @@ final class Admin extends Api {
 				'l10n'     => [
 					'name' => 'tsfem_e_monitorL10n',
 					'data' => [
-						'nonce'                => \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ),
+						// This won't ever run when the user can't. But, sanity.
+						'nonce'                => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ) : '',
 						'remote_data_timeout'  => $this->get_remote_data_timeout(),
 						'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
 					],

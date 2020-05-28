@@ -83,6 +83,12 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.6
+
+[tsfep-release time="-1"]
+
+* **Changed:** This extension's admin access can now be controlled via the global constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`.
+
 ### 1.2.5
 
 [tsfep-release time="May 15th, 2020"]

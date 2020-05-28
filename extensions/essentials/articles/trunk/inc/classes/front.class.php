@@ -486,82 +486,29 @@ final class Front extends Core {
 	 */
 	private function get_article_image_params() {
 
-		$id = $this->get_current_id();
-
 		$min_width = $this->is_amp() ? 1200 : 696;
 
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.0.0', '>=' ) ) {
+		$images = [];
 
-			$images = [];
+		// TODO: Do we want to take images from the content? Users have complained about this...
+		// ... We'd have to implement (and revoke) a filter, however.
+		foreach ( \the_seo_framework()->get_image_details( null, false, 'schema', true ) as $image ) {
 
-			// TODO: Do we want to take images from the content? Users have complained about this...
-			// ... We'd have to implement (and revoke) a filter, however.
-			foreach ( \the_seo_framework()->get_image_details( null, false, 'schema', true ) as $image ) {
+			if ( ! $image['url'] ) continue;
 
-				if ( ! $image['url'] ) continue;
-
-				if ( $image['width'] && $image['width'] >= $min_width ) {
-					$images[] = [
-						'@type'  => 'ImageObject',
-						'url'    => $image['url'],
-						'width'  => $image['width'],
-						'height' => $image['height'],
-					];
-				} else {
-					$images[] = $image['url'];
-				}
-			}
-
-			return count( $images ) > 1 ? $images : reset( $images );
-		} else {
-			if ( $url = \the_seo_framework()->get_social_image_url_from_post_meta( $id, true ) ) {
-
-				//* TSF 2.9+
-				$dimensions = \the_seo_framework()->image_dimensions;
-
-				$d = ! empty( $dimensions[ $id ] ) ? $dimensions[ $id ] : false;
-				if ( $d ) {
-					$w = $d['width'];
-					$h = $d['height'];
-				} else {
-					$w = 0;
-					$h = 0;
-				}
-
-				if ( ! $w ) {
-					return $url;
-				} elseif ( $w >= $min_width ) {
-					return [
-						'@type'  => 'ImageObject',
-						'url'    => $url,
-						'width'  => $w,
-						'height' => $h,
-					];
-				}
-			}
-
-			//* Don't use `\the_seo_framework()->get_image_from_post_thumbnail` because it will overwrite vars.
-			if ( $_img_id = \get_post_thumbnail_id( $id ) ) {
-
-				$_src = \wp_get_attachment_image_src( $_img_id, 'full', false );
-
-				if ( is_array( $_src ) && count( $_src ) >= 3 ) {
-					$url = $_src[0];
-					$w   = $_src[1];
-					$h   = $_src[2];
-
-					if ( $w >= $min_width )
-						return [
-							'@type'  => 'ImageObject',
-							'url'    => $url,
-							'width'  => $w,
-							'height' => $h,
-						];
-				}
+			if ( $image['width'] && $image['width'] >= $min_width ) {
+				$images[] = [
+					'@type'  => 'ImageObject',
+					'url'    => $image['url'],
+					'width'  => $image['width'],
+					'height' => $image['height'],
+				];
+			} else {
+				$images[] = $image['url'];
 			}
 		}
 
-		return [];
+		return count( $images ) > 1 ? $images : reset( $images );
 	}
 
 	/**

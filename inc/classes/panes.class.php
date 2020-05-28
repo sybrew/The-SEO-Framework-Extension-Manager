@@ -390,7 +390,7 @@ class Panes extends API {
 						$header = Extensions::get( 'ajax_get_extension_header', $slug );
 
 						if ( ! empty( $header['MenuSlug'] ) ) {
-							$this->_set_ajax_menu_link( $header['MenuSlug'] );
+							$this->_set_ajax_menu_link( $header['MenuSlug'], TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
 						}
 					endif;
 

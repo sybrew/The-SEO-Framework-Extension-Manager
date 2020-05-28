@@ -164,7 +164,8 @@ class Core {
 
 		//* Some AJAX functions require Extension layout traits to be loaded.
 		if ( \is_admin() && \wp_doing_ajax() ) {
-			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
+			// This should not ever be a security issue. However, sanity.
+			if ( \TSF_Extension_Manager\can_do_manager_settings() && \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
 				$this->ajax_is_tsf_extension_manager_page( true );
 		}
 
@@ -363,7 +364,9 @@ class Core {
 	 * Note that the URL can't be generated if the menu pages aren't set.
 	 *
 	 * @since 1.2.0
+	 * @since 2.4.0 Added nonce capability requirement, extra sanity for when the caller fails to do so.
 	 * @access private
+	 * @ignore unused. Leftover from the never-released Transporter
 	 *
 	 * @param array $args - Required : {
 	 *    'options_key'   => string The extension options key,
@@ -372,6 +375,7 @@ class Core {
 	 *    'nonce_name'    => string The extension POST actions nonce name,
 	 *    'request_name'  => string The extension desired POST action request index key name,
 	 *    'nonce_action'  => string The extesnion desired POST action request full name,
+	 *    'capability'    => string The extesnion desired user capability,
 	 * }
 	 * @return array|bool False on failure; array containing the jQuery.post object.
 	 */
@@ -384,6 +388,7 @@ class Core {
 			'nonce_name',
 			'request_name',
 			'nonce_action',
+			'capability',
 		];
 
 		//* If the required keys aren't found, bail.
@@ -410,7 +415,7 @@ class Core {
 						'nonce-action' => $args['request_name'],
 					],
 				],
-				$args['nonce_name']  => \wp_create_nonce( $args['nonce_action'] ),
+				$args['nonce_name']  => \current_user_can( $required['capability'] ) ? \wp_create_nonce( $args['nonce_action'] ) : '',
 				'_wp_http_referer'   => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ), // input var & sanitization ok.
 			],
 		];
@@ -966,17 +971,6 @@ class Core {
 		}
 
 		return $type;
-	}
-
-	/**
-	 * Returns the minimum role required to adjust and access settings.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string The minimum required capability for extensions Settings.
-	 */
-	final public function can_do_settings() {
-		return \TSF_Extension_Manager\can_do_settings();
 	}
 
 	/**

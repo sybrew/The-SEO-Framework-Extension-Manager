@@ -272,7 +272,7 @@ function _clear_update_cache() {
  *
  * @since 2.0.0
  * @since 2.0.2 Added more cache, because some sites disable transients completely...
- * @since 2.3.2 Can now fetch required (and available) locale files.
+ * @since 2.4.0 Can now fetch required (and available) locale files.
  * @access private
  * @see WP Core \wp_update_plugins()
  * @staticvar $runtimecache.

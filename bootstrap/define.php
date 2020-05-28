@@ -63,11 +63,30 @@ defined( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS' )
 /**
  * The user role required to access the extension overview page.
  *
+ * == WARNING ==
+ * When this constant is used incorrectly, you can expose your site to
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * for example, in a WPMU environment. However, proceed with caution.
+ *
  * @since 2.0.0
  * @param string
  */
 defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
 	or define( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE', 'manage_options' );
+
+/**
+ * The user role required to access the extension settings.
+ *
+ * == WARNING ==
+ * When this constant is used incorrectly, you can expose your site to
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * for example, in a WPMU environment. However, proceed with caution.
+ *
+ * @since 2.4.0
+ * @param string
+ */
+defined( 'TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE' )
+	or define( 'TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE', 'manage_options' );
 
 /**
  * The API version to use.

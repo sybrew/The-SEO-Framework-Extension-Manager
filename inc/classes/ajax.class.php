@@ -96,17 +96,6 @@ final class AJAX extends Secure_Abstract {
 	}
 
 	/**
-	 * Determines if the current user can access settings.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @return bool
-	 */
-	private static function can_do_settings() {
-		return \tsf_extension_manager()->can_do_settings();
-	}
-
-	/**
 	 * Loads actions.
 	 *
 	 * @since 2.1.0
@@ -139,16 +128,21 @@ final class AJAX extends Secure_Abstract {
 	/**
 	 * Send AJAX notices. If any.
 	 *
+	 * WARNING: This method has WEAK access control. Do not store data!
+	 *
 	 * @since 1.3.0
-	 * @see static:;build_ajax_dismissible_notice()
+	 * @since 2.4.0 The access level is now controlled via an extra constant.
+	 * @see static::build_ajax_dismissible_notice()
 	 * @access private
 	 */
 	public static function _wp_ajax_get_dismissible_notice() {
 
 		if ( ! static::$_validated ) return;
-		if ( ! static::can_do_settings() ) return;
+		if (
+			! ( \TSF_Extension_Manager\can_do_manager_settings() || \TSF_Extension_Manager\can_do_extension_settings() )
+		) return;
 
-		if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
+		if ( \check_ajax_referer( 'tsfem-ajax-insecure-nonce', 'nonce', false ) ) {
 			$notice_data = static::build_ajax_dismissible_notice();
 		}
 
@@ -191,13 +185,14 @@ final class AJAX extends Secure_Abstract {
 	 * Exits when done.
 	 *
 	 * @since 1.3.0
+	 * @since 2.4.0 The extension access level is now controlled via another constant.
 	 * @uses class TSF_Extension_Manager\FormGenerator
 	 * @access private
 	 */
 	public static function _wp_ajax_tsfemForm_iterate() {
 
 		if ( ! static::$_validated ) return;
-		if ( ! static::can_do_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
+		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 			static::$tsfem->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9002 ) ], 'failure' );
 			exit;
 		}
@@ -227,13 +222,14 @@ final class AJAX extends Secure_Abstract {
 	 *
 	 * @since 1.3.0
 	 * @since 2.2.0 Now handles basic invalid POST data checks, so extensions don't have to.
+	 * @since 2.4.0 The extension access level is now controlled via another constant.
 	 * @uses class TSF_Extension_Manager\FormGenerator
 	 * @access private
 	 */
 	public static function _wp_ajax_tsfemForm_save() {
 
 		if ( ! static::$_validated ) return;
-		if ( ! static::can_do_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
+		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 			static::$tsfem->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9003 ) ], 'failure' );
 			exit;
 		}
@@ -258,6 +254,7 @@ final class AJAX extends Secure_Abstract {
 	 * On failure, it returns an AJAX error code.
 	 *
 	 * @since 1.3.0
+	 * @since 2.4.0 The extension access level is now controlled via another constant.
 	 * @see class TSF_Extension_Manager\FormGenerator
 	 * @access private
 	 */
@@ -265,13 +262,8 @@ final class AJAX extends Secure_Abstract {
 
 		if ( ! static::$_validated ) return;
 
-		if ( ! static::can_do_settings() ) {
+		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
 			static::$tsfem->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9004 ) ], 'failure' );
-			exit;
-		}
-
-		if ( ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
-			static::$tsfem->send_json( [], 'failure' );
 			exit;
 		}
 
@@ -376,6 +368,8 @@ final class AJAX extends Secure_Abstract {
 	/**
 	 * Builds AJAX notices.
 	 *
+	 * WARNING: This method has WEAK access control prior being called. Do not store data!
+	 *
 	 * @since 1.5.0
 	 * @uses trait TSF_Extension_Manager\Error
 	 * @access private
@@ -383,9 +377,9 @@ final class AJAX extends Secure_Abstract {
 	private static function build_ajax_dismissible_notice() {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
+		$data = [];
 
 		$data['key'] = (int) static::$tsfem->coalesce_var( $_POST['tsfem-notice-key'], false );
-
 		if ( $data['key'] ) {
 			$notice = static::$instance->get_error_notice( $data['key'] );
 

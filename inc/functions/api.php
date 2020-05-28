@@ -58,52 +58,49 @@ namespace {
 
 namespace TSF_Extension_Manager {
 	/**
-	 * Returns the minimum role required to adjust and access settings.
+	 * Returns true when the user can control extension options.
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.0 Added filter.
+	 * @since 2.4.0 1: Removed filter.
+	 *              2: Now uses constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`
+	 *
+	 * @staticvar bool $cache
+	 *
+	 * @return bool The minimum required capability for extension management.
+	 */
+	function can_do_extension_settings() {
+		return \current_user_can( TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
+	}
+
+	/**
+	 * Returns true when the user can control manager (main) settings.
+	 * - Extensions overview.
+	 * - Extension (de)activation.
+	 * - API connection management.
+	 * - Feed activation.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool
+	 */
+	function can_do_manager_settings() {
+		return \current_user_can( TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE );
+	}
+
+	/**
+	 * Returns the minimum role required to adjust and access general extension settings.
+	 *
+	 * @since 1.0.0
+	 * @since 1.5.0 Added filter.
+	 * @since 2.4.0 Deprecated without warning.
+	 * @deprecated
 	 * @staticvar bool $cache
 	 *
 	 * @return string The minimum required capability for extension installation.
 	 */
 	function can_do_settings() {
-
-		static $cache = null;
-
-		/**
-		 * Allows for conditionally adjusting the "can do settings" role.
-		 *
-		 * @NOTE:
-		 * We don't recommend conditioning this lower, as some functionality may appear broken.
-		 * This should be set to a role that also implies 'manage_options'.
-		 * @NOTE WANRING:
-		 * Conditioning this higher might impose 'security' risks, where admins, still with
-		 * 'manage_options' capabilities, may perform certain actions, regardless of this state.
-		 *
-		 * We could alleviate these issues by dynamically fetching roles when this is true,
-		 * but that'll create unpredictable behavior, which we won't allow.
-		 *
-		 * @NOTE: Don't try to act smart by always returning true. This function is used
-		 * where can_do_manager_settings() isn't.
-		 *
-		 * @since 1.5.0
-		 * @param bool $can_do_settings Whether the user can access and modify settings.
-		 */
-		return isset( $cache )
-			? $cache
-			: $cache = \apply_filters( 'tsf_extension_manager_can_manage_options', \current_user_can( 'manage_options' ) );
-	}
-
-	/**
-	 * Returns the minimum role required to adjust and access the main settings.
-	 *
-	 * @since 2.0.0
-	 * @uses \TSF_Extension_Manager\can_do_settings() This must pass, too.
-	 *
-	 * @return bool
-	 */
-	function can_do_manager_settings() {
-		return can_do_settings() && \current_user_can( TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE );
+		return can_do_manager_settings();
 	}
 
 	/**

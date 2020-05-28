@@ -41,7 +41,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-= 2.3.2 =
+= 2.4.0 =
 
 **Release date:**
 
@@ -49,16 +49,20 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Feature highlights:**
 
-* In this update we reduced the plugin package size by 30%. Thanks to offloading translation files elsewhere on our servers, this reduction saves you bandwidth and speeds up plugin installation.
+* In this update, we reduced the plugin package size by 30%. Thanks to offloading translation files elsewhere on our servers, this reduction saves you bandwidth and speeds up plugin installation.
 * During Extension Manager plugin update requests, your WordPress website may now download new and updated translation files independently. Which files are requested is based on your site's supported languages.
+* We upgraded the extension API endpoint, which allows for reverse inflection lookups via the Focus extension, for 7 languages!
+* We removed a filter that directed admin access control. We found that it wasn't secure enough (by our insane standards); so, use the new constant definition, instead. With that constant, you can now independently control extension and manager access.
 
 TODO update privacy policy to reflect these changes (we now request your site's installed locale and installed translation file details of Extension Manager):
 Information TSFEM sends to Us: (3) The plugin (at version 2.0.0 or later) may request plugin updates from our servers. While succesfully doing so, it sends us your WordPress version number, the PHP version number, the installed TSFEM plugin version number, your website’s IP address, and your website’s home URL. We collect this data for aggregating usage statistics, and to provide your site with the latest compatible version. The aggregated statistics will always be anonymized.
 
 **Detailed log:**
 
-View the [detailed v2.3.2 changelog](https://theseoframework.com/?p=TODO).
+View the [detailed v2.4.0 changelog](https://theseoframework.com/?p=TODO).
 
+* **Added:** New constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`, that allows you to modify the access level of the extension settings in `wp-config.php` or a mu-plugin.
+	* **Note:** Use `TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE` to control the role required for managing the extension activation and API connection options.
 * **Changed:** The plugin extension API now reaches our new version 2.1 endpoint, from 2.0.
 	* Version 2.0 will remain available for the unforeseeable future.
 * **Changed:** The plugin updater API now reaches our new version 1.1 endpoint, from 1.0.
@@ -66,16 +70,20 @@ View the [detailed v2.3.2 changelog](https://theseoframework.com/?p=TODO).
 * TODO **Updated:** Plugin translation POT file contains a few adjusted strings.
 * **Removed:** We no longer ship the pomo translation files with the plugin.
 	* However, the `/language/` folder still works as before, and manually inserted files therein supersede the update-service provided translations.
+* **Removed:** Filter `tsf_extension_manager_can_manage_options` has been removed as it superimposes a security issue due to its nature in discrepancy, incoherency, and inconsistency. Use the constants instead; they can be defined only once, alleviating these issues altoghether.
+* **Removed:** Method `tsf_extension_manager()->can_do_settings()`. Use the access control API functions, instead.
 
 * TODO update pricing page language support.
+* TODO update privacy policy (although not pressing, since we don't require any new person-identifying information).
 
 **Updated extensions:**
 
 * [Articles at version 2.0.4](https://theseoframework.com/extensions/articles/#changelog)
 * [Focus at version 1.4.0](https://theseoframework.com/extensions/focus/#changelog)
-	* **Fixed:** TODO When parsing, synonyms now strip the content for future inflection lookups, and vice versa.
-		* This greatly affects performance on systems with more than 3 threads (80%+users?), since we must do this part of the parsing synchronously...
-	* **Added:** TODO (maybe later) Added a select-all button for inflections and synonyms.
+* [Local at version 1.1.7](https://theseoframework.com/extensions/local/#changelog)
+* [Monitor at version 1.2.6](https://theseoframework.com/extensions/monitor/#changelog)
+	* TODO **Fixed:** when no current data can be processed (version discrepancy local vs from the server), a helpful message is now shown.
+		* This only happens in development, though....
 
 = 2.3.1 =
 

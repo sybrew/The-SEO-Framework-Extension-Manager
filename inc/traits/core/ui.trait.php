@@ -216,6 +216,7 @@ trait UI {
 		if ( has_run( __METHOD__ ) ) return;
 
 		\the_seo_framework()->init_admin_scripts();
+		$tsfem = \tsf_extension_manager();
 
 		$scripts::register( [
 			[
@@ -240,10 +241,11 @@ trait UI {
 				'l10n'     => [
 					'name' => 'tsfemL10n',
 					'data' => [
-						'nonce' => \wp_create_nonce( 'tsfem-ajax-nonce' ),
-						'debug' => (bool) WP_DEBUG,
-						'rtl'   => (bool) \is_rtl(),
-						'i18n'  => [
+						'nonce'         => \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-nonce' ) : '',
+						'insecureNonce' => \TSF_Extension_Manager\can_do_extension_settings() || \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-insecure-nonce' ) : '',
+						'debug'         => (bool) WP_DEBUG,
+						'rtl'           => (bool) \is_rtl(),
+						'i18n'          => [
 							'Activate'        => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
 							'Deactivate'      => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
@@ -256,7 +258,7 @@ trait UI {
 					],
 				],
 				'tmpl'     => [
-					'file' => \tsf_extension_manager()->get_template_location( 'fbtopnotice' ),
+					'file' => $tsfem->get_template_location( 'fbtopnotice' ),
 				],
 			],
 		] );
@@ -265,10 +267,12 @@ trait UI {
 	/**
 	 * Registers form scripts.
 	 *
+	 * Should only be used by extensions, not the manager!
+	 *
 	 * @since 1.3.0
-	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_settings() for nonce creation.
 	 * @since 2.0.2 : 1. Now uses TSF's Scripts module.
 	 *                2. Now returns void
+	 * @since 2.4.0 The access level for nonce generation now controlled via another constant.
 	 * @access protected
 	 * @internal
 	 *
@@ -301,7 +305,7 @@ trait UI {
 				'l10n'     => [
 					'name' => 'tsfemFormL10n',
 					'data' => [
-						'nonce'  => \TSF_Extension_Manager\can_do_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
+						'nonce'  => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
 						'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 						'i18n'   => [
 							//* TODO categorize
