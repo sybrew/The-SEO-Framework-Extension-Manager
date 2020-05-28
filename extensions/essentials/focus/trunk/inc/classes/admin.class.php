@@ -153,6 +153,7 @@ final class Admin extends Core {
 	 */
 	private function is_language_supported( $type ) {
 
+		// This works for now, but in the future, we may want to be more specific.
 		$locale    = substr( \get_locale(), 0, 2 );
 		$supported = false;
 

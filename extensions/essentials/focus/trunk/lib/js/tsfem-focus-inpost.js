@@ -324,13 +324,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			content = typeof selector.value !== 'undefined' ? selector.value : '';
 			// if ( ! content.length ) content = selector.placeholder;
-			if ( ! content.length ) content = selector.innerHTML;
-
+			if ( ! content.length )
+				content = selector.innerHTML;
 			if ( ! content.length ) return $dfd.resolve();
 
 			setTimeout( async () => {
 
-				await ( tsfem_inpost.getWorker( workerId ) || tsfem_inpost.spawnWorker( l10n.scripts.parserWorker, workerId ) );
+				await (
+					tsfem_inpost.getWorker( workerId )
+					|| tsfem_inpost.spawnWorker( l10n.scripts.parserWorker, workerId )
+				);
 
 				$.when(
 					tsfem_inpost.tellWorker( workerId, {
@@ -859,11 +862,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 
 			$.when( getInflections() ).done( ( data ) => {
-				clearData( idPrefix, 'inflections' );
-
-				getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: data.inflections } ] );
-
-				$dfd.resolve();
+				if ( data.inflections.length ) {
+					clearData( idPrefix, 'inflections' );
+					getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: data.inflections } ] );
+					$dfd.resolve();
+				} else {
+					$dfd.reject();
+				}
 			} ).fail( ( code ) => {
 				switch ( code ) {
 					case 1100302: // Word not found
@@ -919,20 +924,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 
 			$.when( getSynonyms() ).done( ( data ) => {
-				clearData( idPrefix, 'definition' );
-				clearData( idPrefix, 'synonyms' );
-
-				getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
-
-				$dfd.resolve();
+				if ( data.synonyms.length ) {
+					clearData( idPrefix, 'definition' );
+					clearData( idPrefix, 'synonyms' );
+					getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
+					$dfd.resolve();
+				} else {
+					$dfd.reject();
+				}
 			} ).fail( ( code ) => {
 				switch ( code ) {
 					case 1100202: // Word not found
 					case 1100205: // Empty return value
 						clearData( idPrefix, 'definition' );
 						clearData( idPrefix, 'synonyms' );
-
-						getSubElementById( idPrefix, 'synonym_data' ).value = '';
 						$dfd.reject();
 						break;
 
@@ -959,7 +964,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						let $dfdInflectionEnd = $.Deferred(),
 							$dfdSynonymEnd    = $.Deferred();
 
-						// FIXME: The user now gets spammed twice with notifications; find a way to combine them?
+						// FIXME: The user now gets spammed twice (or thrice) with notifications; find a way to combine them?
 						// We should either combine the query (and offload it to PHP), or resolve it by comparing the notices here.
 
 						// Workaround jQuery's promise limitations by offsetting the deferred object.
@@ -987,6 +992,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 								refillSubjectSelection( idPrefix );
 								setEditButton( idPrefix ).to( 'enabled, edit, checked' );
 							} else {
+								// FIXME: Notify user the query got reset to previous?... if dataset.prev is not 0?
 								setDefinition( lexicalSelector.dataset.prev || 0 );
 								setEditButton( idPrefix ).to( 'edit' );
 							}
@@ -1707,14 +1713,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					availableInflections
 					&& availableInflections[0]
 					&& availableInflections[0].inflections
-					|| {};
+					|| [];
 
 			//?! A little bit trickier, because they might or might not be available.
 			let availableSynonyms = synonymHolder.value && JSON.parse( synonymHolder.value ),
 				synonyms          = availableSynonyms
 					&& availableSynonyms[ +definitionSelection.value ]
 					&& availableSynonyms[ +definitionSelection.value ].synonyms
-					|| {};
+					|| [];
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity = 0;
@@ -1796,7 +1802,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		);
 	}
 
-	let cachedActiveWords = {}
+	let cachedActiveWords = {};
 	/**
 	 * Returns active keyword, inflections and listeners.
 	 *
@@ -1805,8 +1811,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @uses @var cachedActiveWords
 	 *
 	 * @FIXME: When the current language isn't supported, stale inflections and synonyms
-	 *         may still be used. The issue is that the current keyword is included in
-	 *         the list, so we can't easily filter it.
+	 *         from previous call may still be used. The issue is that the current keyword
+	 *         is included in the list, so we can't easily filter it.
 	 *
 	 * @function
 	 * @param {string} idPrefix
@@ -1816,60 +1822,53 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * }
 	 */
 	const activeWords = ( idPrefix ) => {
-		if ( ! activeWords.hasOwnProperty( idPrefix ) ) {
-			cachedActiveWords[ idPrefix ] = {};
-			cachedActiveWords[ idPrefix ].inflections = null;
-			cachedActiveWords[ idPrefix ].synonyms = null;
+		if ( ! cachedActiveWords.hasOwnProperty( idPrefix ) ) {
+			cachedActiveWords[ idPrefix ] = {
+				inflections: void 0,
+				synonyms: void 0,
+			};
 		}
 
 		const getActiveInflections = () => {
-			let ret,
-				inflections;
+			let ret = [],
+				kw  = getSubElementById( idPrefix, 'keyword' ).value;
 
 			const activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
 			if ( activeInflections instanceof HTMLInputElement && activeInflections.value ) {
-				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value;
-				inflections = JSON.parse( inflectionData )[0].inflections;
+				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value,
+					inflections    = JSON.parse( inflectionData )[0].inflections;
 
-				ret = [];
 				activeInflections.value.split( ',' ).forEach( i => {
 					ret.push( inflections[ +i ] );
 				} );
 			}
-			if ( ! ret ) {
-				let kw = getSubElementById( idPrefix, 'keyword' ).value;
-				ret = kw && [ kw ] || false;
-			}
-			ret = ret || false;
-			cachedActiveWords[ idPrefix ].inflections = ret;
+			// Always set kw as inflection (if not present).
+			if ( -1 === ret.indexOf( kw ) )
+				ret.push( kw );
 
-			return ret;
+			return cachedActiveWords[ idPrefix ].inflections = ret;
 		}
 		const getActiveSynonyms = () => {
-			let ret,
-				synonyms;
+			let ret = [];
 
 			const activeSynonyms     = getSubElementById( idPrefix, 'active_synonyms' ),
 				  selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
 
 			if ( activeSynonyms instanceof HTMLInputElement && activeSynonyms.value ) {
-				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value;
-				synonyms = JSON.parse( synonymData )[ +selectedDefinition.value ].synonyms;
+				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value,
+					synonyms    = JSON.parse( synonymData )[ +selectedDefinition.value ].synonyms;
 
-				ret = [];
 				activeSynonyms.value.split( ',' ).forEach( i => {
 					ret.push( synonyms[ +i ] );
 				} );
 			}
-			ret = ret || false;
-			cachedActiveWords[ idPrefix ].synonyms = ret;
 
-			return ret;
+			return cachedActiveWords[ idPrefix ].synonyms = ret;
 		}
 
 		const getActive = ( what ) => {
-			if ( null !== cachedActiveWords[ idPrefix ][ what ] )
+			if ( void 0 !== cachedActiveWords[ idPrefix ][ what ] )
 				return cachedActiveWords[ idPrefix ][ what ];
 
 			switch ( what ) {

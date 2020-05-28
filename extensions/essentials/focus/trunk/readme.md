@@ -11,12 +11,12 @@ This extension guides you through the process of writing targeted content that r
 
 With over 1 billion competing websites, your pages barely stand a chance ranking on the first page of Google. So, writing quality content that ranks well in search engines isn't easy. This is where Focus comes in.
 
-This extension helps you to focus your content to a few well-targeted search phrases, significantly increasing your chances to rank on the first page.
+This extension helps you to focus your content on a few well-targeted search phrases, significantly increasing your chances of ranking on the first page.
 
 ### Your personal guide
 
 After defining the subject of the page you're writing, Focus rates your page on various SEO principles. These principles include subject density, linking, and more.
-They help you to see how well you've increased your chances to be ranked higher.
+They help you to see how well you've increased your chances of being ranked higher.
 
 [tsfep-image id="1"]
 
@@ -25,7 +25,7 @@ They help you to see how well you've increased your chances to be ranked higher.
 When your page covers more topics, you should utilize more keywords.
 With Focus, you can use three keywords that form three subjects.
 
-Each keyword makes up for a new subject. Focus rates each subject separately.
+Each keyword makes up for a new subject--Focus rates each subject separately.
 
 ### It comes with a dictionary
 
@@ -89,13 +89,13 @@ Change the example sentence that closely describes your subject, and you could g
 After all synonyms or inflections are received, click on the ones you'd like to use.
 
 **When synonyms are available:**
-If you haven't used a synonym in your content yet, consider using it as it will increase your chances of being found.
+If you haven't used a synonym in your content yet, consider using it to increase your chances of being found on search engines.
 
 [tsfep-image id="6"]
 
 ### Ratings
 
-The ratings tell you what should be improved in your content.
+The ratings tell what you can improve in your content.
 
 You should never ruin your content just to get a better rating. So, use these ratings as guidelines for focused content.
 
@@ -110,7 +110,7 @@ You can change this under the General tab of the page's SEO settings.
 #### Introduction
 
 The introduction is often the first few paragraphs of text found in your content editor.
-In writing, the first few paragraphs should be used to annotate what your content is about.
+In most writing, you should use the first few paragraphs to annotate the subject of your content.
 
 It's the best place to use your focus keyword, so users know they've landed on the right page.
 
@@ -118,51 +118,53 @@ A good introduction drastically improves user retention, which indirectly signal
 
 #### Subject Density
 
-Annotating keywords, inflections, and synonyms more throughout your content is a signal for search engines what your content is about.
+When you annotate keywords, inflections, and synonyms more throughout your content, you'll prominently signal search engines the subject of your content.
 
-When your subject density is too high, your page might seem like spam.
+However, when your subject density is too high, your page might seem like spam. So, you should avoid that.
 
 #### Linking
 
-Linking to other pages related to a subject is a powerful signal to search engines which helps them distinguish homonyms.
+When you link to other pages related to your content, you help search engines "understand" the subject via relational connections. With that, they can distinguish homonyms better, like "apple" (fruit) from "Apple" (brand).
 So, consider adding one or two links related to the subject.
 
-The Focus extension will detect a link when a word is found in the URL, content, or title of an `<a>` tag.
+The Focus parser will detect a link when a word is found in the URL, content, or title of an `<a>` (hyperlink) tag.
 
 #### Meta description
 
-Meta descriptions don't help in ranking. However, they do help potential visitors to know if the content they're looking for is on your page.
+Meta descriptions don't help with ranking. However, they do help potential visitors to know if the content they're looking for is on your page.
 
-If the subject isn't found in the meta description, Google often tries to fill it in with an (often confusing) sentence from your content.
+Moreover, if the subject isn't found in the meta description, Google often tries to fill it in with an (often confusing) sentence from your content.
 So, to prevent this from happening, Focus notifies you via this rating.
 
 #### Page URL
 
 One of the best ways to be found on a keyword is by placing it in the page URL. So, be sure to include it here.
 
-You can change your page URL in the sidebar under "Document > Permalink." On some WordPress setups you can find it above the content editor instead.
+You can change your page URL in the sidebar under "Document > Permalink." On some WordPress setups, you can find it above the content editor instead.
 
 ## FAQ
 
 ### Which languages are supported?
 
-All languages have the requisite support for ratings.
+Focus supports all languages. We worked tirelessly on making this possible.
 
 ### Which languages are supported by the dictionary API?
 
-The following languages are supported by the dictionary API for inflections:
+The dictionary API supports the following languages for **inflections**:
+
 * English (US)
 * English (GB)
 * Spanish (Español) (ES)
 * Latvian (Latviešu)
 * Hindi (हिन्दी)
-* Swasili (Kiswahili)
+* Swahili (Kiswahili)
 * Tamil (தமிழ்)
 * Romanian (Română) (RO)
 
-Non-US English dialects default to English (GB). For all other languages, if a dialect exists and is used, it'll default to the one listed above.
+Non-US English dialects default to English (GB). For all other listed languages, if a dialect exists and is used, it'll default to its parent listed above.
 
-The following languages are supported by the dictionary API for synonyms:
+The dictionary API supports the following languages for **synonyms**:
+
 * English (global)
 
 Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
@@ -230,14 +232,18 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 [tsfep-release time="-1"]
 
 * **Added:** Finally, we're introducing reverse inflection lookup, which makes this the most accurate subject parser.
-	* **Supported languages:** English (US), English (GB), Spanish (Español) (ES), Latvian (Latviešu), Hindi (हिन्दी), Swasili (Kiswahili), Tamil (தமிழ்), Romanian (Română) (RO).
+	* **Supported languages:** English (US), English (GB), Spanish (Español) (ES), Latvian (Latviešu), Hindi (हिन्दी), Swahili (Kiswahili), Tamil (தமிழ்), Romanian (Română) (RO).
 	* Non-US or GB English language types default to English (GB).
 	* Non-ES Spanish language types default to Spanish (ES).
 	* **API request change:** When the word you enter is found in the dictionary, extra API requests will be consumed to fetch its inflections for each homonymous example.
 	* **Note:** Dictionary data stored before this update used on your pages isn't retroactively filled with inflections.
 		 * To parse old content with the new inflection lookup, you must first clear your old keyword, and then refill your selections.
+* **Added:** Broad Unicode support is now available.
+	* You can now use Focus with diacritic characters much more accurately, and almost all non-alphabetical characters are now recognized as well.
+	* We initially waited for browsers to catch up; alas, Firefox and Edge are still slacking behind. So, we've implemented a contemporary in-house solution.
 * **Fixed:** When a synonym matches an inflection, the synonym is now stripped.
 	* This works retroactively, so your old content parser is affected.
+* **Fixed:** The active word list cache is now functional. Now, your input values won't be reassessed more than once after making changes.
 
 ### 1.3.2
 
@@ -261,7 +267,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 * **Added:** The rater now spawns a new processing thread to calculate scores asynchronously.
 	* This means you can write more content uninterrupted as the parser is calculating its scores.
-	* This also means that the thread isn't interfering with tedious and heavy content painting, as such, the performance increased tremendously.
+	* This also means that the thread isn't interfering with tedious and heavy content painting; as such, the performance increased tremendously.
 * **Added:** The plugin now tests for and informs on parsing failures.
 	* **Note:** A failure fires automatically if the rater is stuck for longer than 30 seconds; this allows your computer to allocate a better core affinity when reattempting. For more information, see the [FAQ](#faq).
 * **Improved:** General parsing performance by refactoring HTML tag exclusions, you'll now get results up to ten times quicker, relatively.
@@ -295,7 +301,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 * **Added:** TSF v3.1 support.
 * **Improved:** Links are now matched at least 900 times quicker and more accurately; so, there's no more notable lag when editing large texts.
-* **Fixed:** When using TSF v3.1, interacting with this extensions' UI elements won't trigger an "unsaved changes" warning when leaving the post-edit screen.
+* **Fixed:** When using TSF v3.1, interacting with this extension's UI elements won't trigger an "unsaved changes" warning when leaving the post-edit screen.
 * **Fixed:** Empty or unmatched lexical form selectors are no longer cleared, or auto-activated on save.
 
 ### 1.0.0

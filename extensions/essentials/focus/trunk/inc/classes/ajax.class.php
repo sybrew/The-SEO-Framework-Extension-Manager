@@ -231,7 +231,8 @@ final class Ajax {
 			//= How in the...
 			$send['results'] = $this->get_ajax_notice( false, 1100301 );
 		} else {
-			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
+			$keyword = $form['value'];
+			$form    = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
 
 			$response = $this->get_api_response( 'inflections', compact( 'form', 'language' ) );
 			$response = json_decode( $response );
@@ -264,8 +265,14 @@ final class Ajax {
 
 				if ( isset( $_data->inflections ) ) {
 					$type = 'success'; // The API responded as intended, although the data may not be useful.
+
 					$send['data']['inflections'] = $_data->inflections ?: [];
-					if ( ! $send['data']['inflections'] ) {
+
+					// When no inflections are returned, or if the one returned is only of the same kind as the keyword, fail.
+					// NOTE: Uses weak non-UTF8 strtolower. Users are smart enough to ignore useless data.
+					if ( ! $send['data']['inflections']
+					|| count( $send['data']['inflections'] ) < 2
+					&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword ) ) {
 						$send['results'] = $this->get_ajax_notice( false, 1100306 );
 					} else {
 						$send['results'] = $this->get_ajax_notice( true, 1100307 );

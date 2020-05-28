@@ -311,6 +311,7 @@ function _push_update( $value, $transient ) {
 			 *
 			 * @since WP Core 3.7.0
 			 * @since WP Core 4.5.0 The default value of the `$locales` parameter changed to include all locales.
+			 * @source WP Core \wp_update_plugins()
 			 *
 			 * @param array $locales Plugin locales. Default is all available locales of the site.
 			 */
@@ -330,7 +331,7 @@ function _push_update( $value, $transient ) {
 			}
 
 			$http_args = [
-				'timeout'    => 7, // WordPress sets 30 seconds when doing cron... why?
+				'timeout'    => 7, // WordPress generously sets 30 seconds when doing cron to check all plugins, but we only check 1 plugin.
 				'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 				'body'       => [
 					'plugins'      => \wp_json_encode( $plugins ),
@@ -383,6 +384,7 @@ function _push_update( $value, $transient ) {
 		if ( isset( $value->translations ) ) {
 			$value->translations = array_merge( $value->translations, $cache['translations'] );
 		} else {
+			// Somehow, the API server sent back an empty response...? This shouldn't be possible, maybe a bug at api.w.org?
 			$value->translations = $cache['translations'];
 		}
 	}
