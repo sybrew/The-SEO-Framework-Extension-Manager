@@ -222,7 +222,6 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _init_menu() {
-
 		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 100 );
 	}
@@ -475,15 +474,17 @@ final class Admin extends Api {
 		if ( \wp_doing_ajax() ) :
 			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
 
-				$timeout = null;
-
-				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+				if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+					$status = [
+						'content' => null,
+						'type'    => 'unknown',
+						'notice'  => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
+					];
+				} else {
 					$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0; // Input var OK.
 
 					$current_timeout = $this->get_remote_data_timeout();
-				}
 
-				if ( isset( $timeout ) ) :
 					if ( $this->is_remote_data_expired() || ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout ) :
 						//* There's possibly new data found. This should certainly be true with statistics.
 						$api = $this->api_get_remote_data( true );
@@ -524,18 +525,15 @@ final class Admin extends Api {
 							'timeout' => $current_timeout,
 						];
 					endif;
-				else :
-					$status = [
-						'content' => null,
-						'type'    => 'unknown',
-						'notice'  => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					];
-				endif;
+				}
 
 				if ( WP_DEBUG ) {
 					$response = [
 						'status'   => $status,
-						'timeout'  => [ 'old' => $timeout, 'new' => $current_timeout ],
+						'timeout'  => [
+							'old' => isset( $timeout ) ? $timeout : null,
+							'new' => isset( $current_timeout ) ? $current_timeout : null,
+						],
 						'response' => isset( $api ) ? [ 'response' => $api ] : [],
 					];
 				} else {
@@ -564,13 +562,16 @@ final class Admin extends Api {
 
 				$timeout = null;
 
-				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+				if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+					$status = [
+						'type' => 'unknown',
+						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
+					];
+				} else {
 					$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0; // Input var OK.
 
 					$current_timeout = $this->get_remote_crawl_timeout();
-				}
 
-				if ( isset( $timeout ) ) :
 					if ( $this->can_request_next_crawl() || ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout ) :
 						//* Crawl can be requested.
 						$api = $this->api_request_crawl( true );
@@ -608,17 +609,15 @@ final class Admin extends Api {
 							'timeout' => $current_timeout,
 						];
 					endif;
-				else :
-					$status = [
-						'type' => 'unknown',
-						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-					];
-				endif;
+				}
 
 				if ( WP_DEBUG ) {
 					$response = [
 						'status'   => $status,
-						'timeout'  => [ 'old' => $timeout, 'new' => $current_timeout ],
+						'timeout'  => [
+							'old' => isset( $timeout ) ? $timeout : null,
+							'new' => isset( $current_timeout ) ? $current_timeout : null,
+						],
 						'response' => isset( $api ) ? [ 'response' => $api ] : [],
 					];
 				} else {
@@ -643,7 +642,9 @@ final class Admin extends Api {
 
 		if ( \wp_doing_ajax() ) {
 			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
+
 				$send = [];
+
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					//* Initialize menu hooks.
 					\the_seo_framework()->add_menu_link();
@@ -815,6 +816,7 @@ final class Admin extends Api {
 	 * Creates issues overview for the issues pane.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 Now outputs notice when no issues can be processed.
 	 *
 	 * @return string The parsed issues overview HTML data.
 	 */
@@ -823,13 +825,15 @@ final class Admin extends Api {
 		$output = '';
 		$issues = $this->get_data( 'issues', [] );
 
-		if ( empty( $issues ) ) {
+		if ( ! empty( $issues ) ) {
+			$output = Output::get_instance()->_get_data( $issues, 'issues' );
+		}
+
+		if ( ! $output ) {
 			$output = sprintf(
 				'<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>',
 				$this->get_string_no_data_found()
 			);
-		} else {
-			$output = Output::get_instance()->_get_data( $issues, 'issues' );
 		}
 
 		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">%s</div>', $output );
@@ -848,16 +852,18 @@ final class Admin extends Api {
 	protected function ajax_get_issues_data() {
 
 		$issues = $this->get_data( 'issues', [] );
+		$found = true;
 
-		if ( empty( $issues ) ) {
+		if ( ! empty( $issues ) ) {
+			$data = Output::get_instance()->_ajax_get_pane_data( $issues, 'issues' );
+		}
+
+		if ( empty( $data['info'] ) ) {
 			$found = false;
 			$data  = sprintf(
 				'<div class="tsfem-e-monitor-issues-wrap-line"><h4 class="tsfem-status-title">%s</h4></div>',
 				$this->get_string_no_data_found()
 			);
-		} else {
-			$found = true;
-			$data  = Output::get_instance()->_ajax_get_pane_data( $issues, 'issues' );
 		}
 
 		return [
@@ -1310,11 +1316,12 @@ final class Admin extends Api {
 	 * Returns no data found string.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 Now recommends fetching new data.
 	 *
 	 * @return string Translatable no data found string.
 	 */
 	protected function get_string_no_data_found() {
-		return \esc_html__( 'No data has been found as of yet.', 'the-seo-framework-extension-manager' );
+		return \esc_html__( 'No processable data was found. Try fetching new data.', 'the-seo-framework-extension-manager' );
 	}
 
 	/**

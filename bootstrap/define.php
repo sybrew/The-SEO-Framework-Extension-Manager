@@ -61,7 +61,7 @@ defined( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS' )
 	or define( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS', false );
 
 /**
- * The user role required to access the extension overview page.
+ * The user role (or rather, capability) required to access the extension overview page.
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to
@@ -75,7 +75,7 @@ defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
 	or define( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE', 'manage_options' );
 
 /**
- * The user role required to access the extension settings.
+ * The user role (or rather, capability) required to access the extension settings.
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to

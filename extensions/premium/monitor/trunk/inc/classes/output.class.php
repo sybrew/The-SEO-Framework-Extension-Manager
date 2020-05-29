@@ -58,10 +58,11 @@ final class Output {
 	 * Generates information pane data based on $data input and $type.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 Now outputs an empty string when the pane info list yields nothing.
 	 *
 	 * @param array  $data The pane data to parse.
 	 * @param string $type The pane data type.
-	 * @return string The HTML pane overview.
+	 * @return string The HTML pane overview. Empty string if unresolved.
 	 */
 	protected function get_pane_data( $data, $type ) {
 
@@ -71,7 +72,7 @@ final class Output {
 			$info .= $info_entry;
 		}
 
-		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
+		return $info ? sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info ) : '';
 	}
 
 	/**
@@ -79,12 +80,13 @@ final class Output {
 	 * For ajax.
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.6 Now returns an empty 'info' array when the pane info list yields nothing.
 	 * @access private
 	 *
 	 * @param array  $data The pane data to parse.
 	 * @param string $type The pane data type.
 	 * @return array : {
-	 *     'info' => array The HTML pane overview items,
+	 *     'info' => array The HTML pane overview items (if any),
 	 *     'wrap' => string The HTML items wrap,
 	 * }
 	 */
@@ -93,14 +95,13 @@ final class Output {
 		$info = [];
 
 		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry ) {
-			$info[] = $info_entry;
+			if ( $info_entry )
+				$info[] = $info_entry;
 		}
-
-		$wrap = '<div class="tsfem-flex tsfem-flex-row"></div>';
 
 		return [
 			'info' => $info,
-			'wrap' => $wrap,
+			'wrap' => '<div class="tsfem-flex tsfem-flex-row"></div>',
 		];
 	}
 

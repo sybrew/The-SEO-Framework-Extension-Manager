@@ -88,6 +88,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 [tsfep-release time="-1"]
 
 * **Changed:** This extension's admin access can now be controlled via the global constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`.
+* **Fixed:** When all data from our server stored on your site is outdated, Monitor will now inform you about it, instead of displaying a blank pane.
 
 ### 1.2.5
 

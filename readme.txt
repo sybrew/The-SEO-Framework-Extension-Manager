@@ -61,7 +61,7 @@ Information TSFEM sends to Us: (3) The plugin (at version 2.0.0 or later) may re
 
 View the [detailed v2.4.0 changelog](https://theseoframework.com/?p=TODO).
 
-* **Added:** New constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`, that allows you to modify the access level of the extension settings in `wp-config.php` or a mu-plugin.
+* **Added:** New constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`, that allows you to modify the access level (capability) of the extension settings in `wp-config.php` or a mu-plugin.
 	* **Note:** Use `TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE` to control the role required for managing the extension activation and API connection options.
 * **Changed:** The plugin extension API now reaches our new version 2.1 endpoint, from 2.0.
 	* Version 2.0 will remain available for the unforeseeable future.
@@ -82,8 +82,6 @@ View the [detailed v2.4.0 changelog](https://theseoframework.com/?p=TODO).
 * [Focus at version 1.4.0](https://theseoframework.com/extensions/focus/#changelog)
 * [Local at version 1.1.7](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.6](https://theseoframework.com/extensions/monitor/#changelog)
-	* TODO **Fixed:** when no current data can be processed (version discrepancy local vs from the server), a helpful message is now shown.
-		* This only happens in development, though....
 
 = 2.3.1 =
 

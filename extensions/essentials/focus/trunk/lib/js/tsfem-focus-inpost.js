@@ -1810,10 +1810,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @access private
 	 * @uses @var cachedActiveWords
 	 *
-	 * @FIXME: When the current language isn't supported, stale inflections and synonyms
-	 *         from previous call may still be used. The issue is that the current keyword
-	 *         is included in the list, so we can't easily filter it.
-	 *
 	 * @function
 	 * @param {string} idPrefix
 	 * @return {Object<string,function>} : {
