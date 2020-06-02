@@ -5,7 +5,7 @@ Requires at least: 4.9.0
 Tested up to: 5.4.1
 Requires PHP: 5.6.5
 Requires TSF: 4.0.0
-Stable tag: 2.3.1
+Stable tag: 2.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
