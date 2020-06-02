@@ -229,7 +229,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 
 ### 1.4.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="June 2nd, 2020"]
 
 * **Added:** Finally, we're introducing reverse inflection lookup, which makes this the most accurate subject parser.
 	* **Supported languages:** English (US), English (GB), Spanish (Español) (ES), Latvian (Latviešu), Hindi (हिन्दी), Swahili (Kiswahili), Tamil (தமிழ்), Romanian (Română) (RO).
@@ -242,7 +242,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 	* You can now use Focus with diacritic characters much more accurately, and almost all non-alphabetical characters are now recognized as well.
 	* We initially waited for browsers to catch up; alas, Firefox and Edge are still slacking behind. So, we've implemented a contemporary in-house solution.
 * **Fixed:** When a synonym matches an inflection, the synonym is now stripped.
-	* This works retroactively, so your old content parser is affected.
+	* This works retroactively, so your old content parser data will be affected.
 * **Fixed:** The active word list cache is now functional. Now, your input values won't be reassessed more than once after making changes.
 
 ### 1.3.2

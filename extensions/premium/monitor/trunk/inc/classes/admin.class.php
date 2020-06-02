@@ -852,7 +852,7 @@ final class Admin extends Api {
 	protected function ajax_get_issues_data() {
 
 		$issues = $this->get_data( 'issues', [] );
-		$found = true;
+		$found  = true;
 
 		if ( ! empty( $issues ) ) {
 			$data = Output::get_instance()->_ajax_get_pane_data( $issues, 'issues' );

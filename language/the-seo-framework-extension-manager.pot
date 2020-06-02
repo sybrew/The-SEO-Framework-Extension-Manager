@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the The SEO Framework - Extension Manager plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework - Extension Manager 2.3.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/the-seo-framework-extension-manager\n"
+"Project-Id-Version: The SEO Framework - Extension Manager 2.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/The-SEO-Framework-Extension-Manager\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-05-15T22:38:08+02:00\n"
+"POT-Creation-Date: 2020-06-02T02:45:48+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: the-seo-framework-extension-manager\n"
@@ -43,12 +43,12 @@ msgstr ""
 msgid "View plugin details"
 msgstr ""
 
-#. translators: 1 = Extension Manager, 2 = The SEO Framework, 2 = View plugin details.
+#. translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details.
 #: bootstrap/update.php:104
-msgid "The %1$s requires %2$s to function. %3$s."
+msgid "%1$s requires %2$s plugin to function. %3$s."
 msgstr ""
 
-#. translators: %s: Extension Manager
+#. translators: %s: The SEO Framework
 #: bootstrap/update.php:136
 msgid "Install %s"
 msgstr ""
@@ -239,19 +239,19 @@ msgstr ""
 msgid "Get your [Pixel ID](%s)."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:182
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:201
 msgid "No example available."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:183
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:202
 msgid "A parsing failure occurred."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:248
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:267
 msgid "Subject Analysis"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:249
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:268
 msgid "Set subjects and learn how you can improve their focus."
 msgstr ""
 
@@ -2630,21 +2630,21 @@ msgstr ""
 msgid "Delivery through download"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:337
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:339
 msgid "Please correct the form fields before validating the markup."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:338
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:340
 msgid "The markup tester will be opened in a new window."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:367
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:369
 #: extensions/premium/local/trunk/views/layout/general/top.php:38
 #: inc/classes/extensionsettings.class.php:528
 msgid "Save"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:412
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:414
 msgid "See Markup"
 msgstr ""
 
@@ -2678,136 +2678,136 @@ msgstr ""
 msgid "All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:527
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:609
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:481
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:568
 msgid "Something went wrong. Please reload the page."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:897
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:909
 msgid "Actions"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:920
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:932
 #: inc/traits/manager/extensions-layout.trait.php:66
 msgid "Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:927
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:939
 msgid "These settings are in development. Enable these to participate in the beta tests."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:931
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:943
 msgid "Disabled"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:934
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:946
 msgid "Uptime monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:935
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:947
 msgid "Set how often you want Monitor to test your website for availability."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:946
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:958
 msgid "Performance monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:947
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:959
 msgid "Set how often you want Monitor to test your website for performance."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1028
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1040
 msgid "Update Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1055
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1067
 msgid "Fetch Data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1056
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1068
 msgid "Request Monitor to send you the latest data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1057
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1069
 msgid "Get the latest data of your website from Monitor."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1089
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1101
 msgid "Request Crawl"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1090
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1102
 msgid "Request Monitor to re-crawl this website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1091
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1103
 msgid "If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1135
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1147
 #: inc/traits/manager/extensions-layout.trait.php:63
 msgid "Overview"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1145
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1157
 msgid "Connected site:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1153
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1165
 msgid "Last crawled:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1174
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1186
 msgid "Never"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1179
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1191
 msgid "No completed crawl has been recorded yet."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1203
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1215
 msgid "Reconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1206
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1218
 msgid "Your website has been marked inactive."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1208
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1220
 msgid "The instance ID of your site does not match the remote server."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1234
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1246
 msgid "Request Reactivation"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1235
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1247
 msgid "Request Monitor to reconnect your website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1265
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1277
 #: inc/classes/layout.class.php:134
 msgid "Disconnect"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1266
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1278
 #: inc/classes/layout.class.php:135
 msgid "Are you sure?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1267
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1279
 msgid "Disconnect site?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1298
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1310
 msgid "Disconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1311
-msgid "No data has been found as of yet."
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1324
+msgid "No processable data was found. Try fetching new data."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1323
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1336
 msgid "Coming soon!"
 msgstr ""
 
@@ -2818,39 +2818,39 @@ msgid_plural "Try again in %s seconds."
 msgstr[0] ""
 msgstr[1] ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:395
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:396
 msgid "Titles"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:399
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:400
 msgid "Descriptions"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:403
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:404
 msgid "Scheme and canonical URLs"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:407
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:408
 msgid "PHP errors"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:411
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:412
 msgid "Sitemap output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:415
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:416
 msgid "Robots.txt output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:419
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:420
 msgid "Favicon output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:423
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:424
 msgid "More coming soon!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:515
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:516
 msgid "The Extension Manager needs to be updated to interpret this data."
 msgstr ""
 
@@ -3108,14 +3108,14 @@ msgid "However, something went wrong with the disconnection on this website."
 msgstr ""
 
 #. translators: %s: number of notices waiting
-#: inc/classes/adminpages.class.php:143
+#: inc/classes/adminpages.class.php:146
 msgid "%s notice waiting"
 msgid_plural "%s notices waiting"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/classes/ajax.class.php:437
-#: inc/classes/ajax.class.php:498
+#: inc/classes/ajax.class.php:431
+#: inc/classes/ajax.class.php:492
 msgid "Image could not be processed."
 msgstr ""
 
@@ -3135,7 +3135,7 @@ msgid "Remove selected image"
 msgstr ""
 
 #: inc/classes/formgenerator.class.php:2027
-#: inc/traits/core/ui.trait.php:376
+#: inc/traits/core/ui.trait.php:380
 msgid "Remove Image"
 msgstr ""
 
@@ -3145,18 +3145,18 @@ msgid "Change image"
 msgstr ""
 
 #: inc/classes/formgenerator.class.php:2064
-#: inc/traits/core/ui.trait.php:374
+#: inc/traits/core/ui.trait.php:378
 msgctxt "Button hover"
 msgid "Select image"
 msgstr ""
 
 #: inc/classes/formgenerator.class.php:2067
-#: inc/traits/core/ui.trait.php:375
+#: inc/traits/core/ui.trait.php:379
 msgid "Change Image"
 msgstr ""
 
 #: inc/classes/formgenerator.class.php:2067
-#: inc/traits/core/ui.trait.php:373
+#: inc/traits/core/ui.trait.php:377
 msgid "Select Image"
 msgstr ""
 
@@ -3173,32 +3173,32 @@ msgid "Advanced"
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:252
-#: inc/traits/core/ui.trait.php:249
+#: inc/traits/core/ui.trait.php:251
 msgid "Received invalid AJAX response."
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:253
-#: inc/traits/core/ui.trait.php:250
+#: inc/traits/core/ui.trait.php:252
 msgid "An unknown error occurred."
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:254
-#: inc/traits/core/ui.trait.php:251
+#: inc/traits/core/ui.trait.php:253
 msgid "Timeout: Server took too long to respond."
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:255
-#: inc/traits/core/ui.trait.php:252
+#: inc/traits/core/ui.trait.php:254
 msgid "Bad request: The server can't handle the request."
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:256
-#: inc/traits/core/ui.trait.php:253
+#: inc/traits/core/ui.trait.php:255
 msgid "A fatal error occurred on the server."
 msgstr ""
 
 #: inc/classes/inpostgui.class.php:257
-#: inc/traits/core/ui.trait.php:254
+#: inc/traits/core/ui.trait.php:256
 msgid "A parsing error occurred in your browser."
 msgstr ""
 
@@ -3401,7 +3401,7 @@ msgid "Public Support"
 msgstr ""
 
 #: inc/classes/loadadmin.class.php:647
-#: inc/traits/core/ui.trait.php:316
+#: inc/traits/core/ui.trait.php:320
 msgid "Dismiss"
 msgstr ""
 
@@ -3529,330 +3529,338 @@ msgstr ""
 msgid "Invalid API request type."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:302
+#: inc/traits/core/error.trait.php:303
 msgid "An incomplete API request was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:307
+#: inc/traits/core/error.trait.php:308
 msgid "No response received from the API server. Please try again later. If this error keeps coming back, contact your hosting provider."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:319
+#: inc/traits/core/error.trait.php:320
 msgid "An error occurred while contacting the API server. Please try again later."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:324
+#: inc/traits/core/error.trait.php:325
 msgid "An error occured while validating the settings. Please try again."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:332
+#: inc/traits/core/error.trait.php:333
 msgid "Invalid API license key. Login to the %s page to find a valid API License Key."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:345
+#: inc/traits/core/error.trait.php:347
 msgid "Remote software API error."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:359
+#: inc/traits/core/error.trait.php:363
 msgid "Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:367
+#: inc/traits/core/error.trait.php:372
 msgid "Exceeded maximum number of monthly request. Upgrade your license or check back in next month."
 msgstr ""
 
+#: inc/traits/core/error.trait.php:379
+msgid "Site language is not supported for lexical lookup."
+msgstr ""
+
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:374
+#: inc/traits/core/error.trait.php:386
 msgid "Exceeded maximum number of activations. Login to the %s page to manage your sites."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:381
+#: inc/traits/core/error.trait.php:393
 msgid "Invalid instance ID. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:387
+#: inc/traits/core/error.trait.php:399
 msgid "Your subscription is not active or has expired."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:392
+#: inc/traits/core/error.trait.php:404
 msgid "Your account has been successfully authorized to be used on this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:398
+#: inc/traits/core/error.trait.php:410
 msgid "Your account has been successfully deauthorized from this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:403
+#: inc/traits/core/error.trait.php:415
 msgid "Enjoy your free extensions!"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:408
+#: inc/traits/core/error.trait.php:420
 msgid "The feed has been enabled."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:413
+#: inc/traits/core/error.trait.php:425
 msgid "Successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:418
+#: inc/traits/core/error.trait.php:430
 msgid "Your subscription has expired or has been deactivated remotely."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:425
+#: inc/traits/core/error.trait.php:437
 msgid "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:433
+#: inc/traits/core/error.trait.php:445
 msgid "Your account level has been set to Essentials. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:441
+#: inc/traits/core/error.trait.php:453
 msgid "Your account level has been set to Premium. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:449
+#: inc/traits/core/error.trait.php:461
 msgid "Your account level has been set to Enterprise. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:460
+#: inc/traits/core/error.trait.php:472
 msgid "An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:474
+#: inc/traits/core/error.trait.php:486
 msgid "User verification failed. Please try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:481
+#: inc/traits/core/error.trait.php:493
 msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:486
+#: inc/traits/core/error.trait.php:498
 #: inc/traits/manager/extensions.trait.php:1046
 msgid "Extension is not compatible with your server configuration."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:492
+#: inc/traits/core/error.trait.php:504
 msgid "Extension has been successfully activated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:497
+#: inc/traits/core/error.trait.php:509
 msgid "Extension was already activated in another browser instance."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:503
+#: inc/traits/core/error.trait.php:515
 msgid "Can't touch this."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:508
+#: inc/traits/core/error.trait.php:520
 msgid "Extension has been successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:513
+#: inc/traits/core/error.trait.php:525
 msgid "Your website has been successfully connected to the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:518
+#: inc/traits/core/error.trait.php:530
 msgid "Your site has been successfully disconnected from the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:525
+#: inc/traits/core/error.trait.php:537
 msgid "The Monitor API server does not recognize your website's instance. Request reactivation."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:532
+#: inc/traits/core/error.trait.php:544
 msgid "Your website has been marked as inactive by the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:537
+#: inc/traits/core/error.trait.php:549
 msgid "Crawl request is still in queue. Please try again later."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:542
+#: inc/traits/core/error.trait.php:554
 msgid "Crawl request has just been submitted."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:547
+#: inc/traits/core/error.trait.php:559
 msgid "Data has just been updated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:553
+#: inc/traits/core/error.trait.php:565
 msgid "Crawl has been requested successfully. It can take up to three minutes to be processed."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:558
+#: inc/traits/core/error.trait.php:570
 msgid "The latest Monitor data has been recieved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:563
+#: inc/traits/core/error.trait.php:575
 msgid "Monitor has updated your site settings, but your site is now out of sync. You should fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:568
+#: inc/traits/core/error.trait.php:580
 msgid "Monitor has updated your site settings."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:573
+#: inc/traits/core/error.trait.php:585
 msgid "The SEO settings couldn't be converted to file."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:578
+#: inc/traits/core/error.trait.php:590
 msgid "An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:583
+#: inc/traits/core/error.trait.php:595
 msgid "Download will start shortly."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:591
+#: inc/traits/core/error.trait.php:603
 msgid "Invalid data was sent to the server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:596
+#: inc/traits/core/error.trait.php:608
 msgid "A database error occurred. Some settings aren't saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:603
+#: inc/traits/core/error.trait.php:615
 msgid "A database error occurred. Settings aren't saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:608
+#: inc/traits/core/error.trait.php:620
 msgid "All settings are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:613
+#: inc/traits/core/error.trait.php:625
 msgid "Settings are saved for one extension."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:619
+#: inc/traits/core/error.trait.php:631
 msgid "Settings are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:626
+#: inc/traits/core/error.trait.php:638
 msgid "Unable to verify if settings are saved. Refresh this page to manually verify."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:631
+#: inc/traits/core/error.trait.php:643
 msgid "Unable to propagate request. Are you running the latest version?"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:636
+#: inc/traits/core/error.trait.php:648
 msgid "Couldn't fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:641
+#: inc/traits/core/error.trait.php:653
 msgid "Unable to create markup. Inspect your fields for errors or contact support."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:648
+#: inc/traits/core/error.trait.php:660
 msgid "Unable to fetch geocoding data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:654
+#: inc/traits/core/error.trait.php:666
 msgid "No results found. Inspect your current input."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:668
+#: inc/traits/core/error.trait.php:680
 msgid "Please wait a few seconds before making another request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:673
+#: inc/traits/core/error.trait.php:685
 msgid "Too many requests in the last period. Limit will be lifted soon."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:678
+#: inc/traits/core/error.trait.php:690
 msgid "Geocoding data received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:684
+#: inc/traits/core/error.trait.php:696
 msgid "No definitions found. Check your spelling."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:690
+#: inc/traits/core/error.trait.php:702
+msgid "No inflections found."
+msgstr ""
+
+#: inc/traits/core/error.trait.php:708
 msgid "No synonyms found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:696
+#: inc/traits/core/error.trait.php:715
 msgid "Lexical information received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:727
+#: inc/traits/core/error.trait.php:746
 msgid "An unknown error occurred. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:247
+#: inc/traits/core/ui.trait.php:249
 #: inc/traits/manager/extensions-layout.trait.php:55
 msgid "Activate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:248
+#: inc/traits/core/ui.trait.php:250
 #: inc/traits/manager/extensions-layout.trait.php:56
 msgid "Deactivate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:310
+#: inc/traits/core/ui.trait.php:314
 msgid "Please select any of the fields to proceed."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:313
+#: inc/traits/core/ui.trait.php:317
 msgid "Proceed"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:314
+#: inc/traits/core/ui.trait.php:318
 msgid "Select"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:315
+#: inc/traits/core/ui.trait.php:319
 msgid "Cancel"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:319
+#: inc/traits/core/ui.trait.php:323
 msgid "Performance warning"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:320
+#: inc/traits/core/ui.trait.php:324
 msgid "You're about to load a large number of elements. This might degredate browser performance."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:321
+#: inc/traits/core/ui.trait.php:325
 msgid "You're about to load a huge number of elements. This might crash your browser."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:322
+#: inc/traits/core/ui.trait.php:326
 msgid "Are you sure you want to proceed?"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:325
+#: inc/traits/core/ui.trait.php:329
 msgid "Please fix the required fields before saving."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:328
+#: inc/traits/core/ui.trait.php:332
 msgid "Validate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:329
+#: inc/traits/core/ui.trait.php:333
 msgid "Select address"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:330
+#: inc/traits/core/ui.trait.php:334
 msgid "Select an address below."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:331
+#: inc/traits/core/ui.trait.php:335
 msgid "Validation will be done only using Latitude and Longitude."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:377
+#: inc/traits/core/ui.trait.php:381
 msgid "Remove selected image"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:378
+#: inc/traits/core/ui.trait.php:382
 msgctxt "Frame title"
 msgid "Select Image"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:379
+#: inc/traits/core/ui.trait.php:383
 msgid "Use this image"
 msgstr ""
 

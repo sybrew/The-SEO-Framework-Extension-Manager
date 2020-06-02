@@ -74,7 +74,8 @@ final class Front extends Core {
 	 * Initializes Articles output.
 	 *
 	 * @since 2.0.0
-	 * @since 2.0.4 No longer works when query is exploited.
+	 * @since 2.0.4 1. No longer works when query is exploited.
+	 *              2. Now fetches the correct post type on singular archives.
 	 *
 	 * @return void Early when query is not supported.
 	 */
@@ -84,7 +85,7 @@ final class Front extends Core {
 
 		if ( ! $tsf->is_singular() || $tsf->is_query_exploited() ) return;
 
-		$post_type = \get_post_type();
+		$post_type = $tsf->get_post_type_real_ID();
 		$settings  = $this->get_option( 'post_types' );
 
 		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
