@@ -377,9 +377,11 @@ function _push_update( $value, $transient ) {
 		// TODO Core considers changing this. @see \wp_update_plugins().
 		$value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['no_update'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 	}
+	// This should be an "else" of "no_update"--but our server already mitigates that.
 	if ( isset( $cache['plugins'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
 		$value->response[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['plugins'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 	}
+
 	if ( ! empty( $cache['translations'] ) ) {
 		if ( isset( $value->translations ) ) {
 			$value->translations = array_merge( $value->translations, $cache['translations'] );

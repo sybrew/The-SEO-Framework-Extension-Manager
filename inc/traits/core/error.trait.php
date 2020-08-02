@@ -138,7 +138,7 @@ trait Error {
 	 * @since 1.0.0
 	 * @since 1.2.0 1. No longer deletes option, but instead overwrites it.
 	 *              2. Now removes the option from autoload.
-	 * @since 1.5.0 No longer called `unset_error_notice()`
+	 * @since 1.5.0 Renamed from `unset_error_notice()`
 	 */
 	final protected function unset_error_notice_option() {
 		$this->error_notice_option and \update_option( $this->error_notice_option, null, 'no' );

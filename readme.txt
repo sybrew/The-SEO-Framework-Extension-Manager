@@ -41,6 +41,22 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.4.1 =
+
+* **Fixed:** Resolved a race condition with the AJAX loader notifications.
+* **Fixed:** TODO Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
+
+**Updated extensions:**
+
+NOTE these version numbers are already correct.
+* [Articles at version 2.0.5](https://theseoframework.com/extensions/articles/#changelog)
+* [Focus at version 1.4.1](https://theseoframework.com/extensions/focus/#changelog)
+* [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
+* [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
+
+TODO consider only adding the last 2 days in Google News sitemap? Optional?
+TODO update images displayed for Local readme.
+
 = 2.4.0 - Linguistic SEO =
 
 **Release date:**

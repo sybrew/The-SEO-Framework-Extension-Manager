@@ -2366,9 +2366,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @access private
 	 *
 	 * @function
-	 * @param {!jQuery.event} event
 	 */
-	const onReady = ( event ) => {
+	const _onReady = () => {
 
 		monkeyPatch();
 
@@ -2402,8 +2401,23 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		refillData();
 	}
 
-	//? IE11 Object.assign() alternative.
-	return $.extend( {
+	/**
+	 * @since 1.4.1
+	 * @access private
+	 *
+	 * @function
+	 */
+	const _prepareUI = () => {
+		//= Reenable focus elements.
+		$( '.tsfem-e-focus-enable-if-js' ).removeAttr( 'disabled' );
+		//= Disable nojs placeholders.
+		$( '.tsfem-e-focus-disable-if-js' ).attr( 'disabled', 'disabled' );
+
+		//= Reenable highlighter.
+		$( '.tsfem-e-focus-requires-javascript' ).removeClass( 'tsfem-e-focus-requires-javascript' );
+	}
+
+	return Object.assign( {
 		/**
 		 * Initialises all aspects of the scripts.
 		 * You shouldn't call this.
@@ -2414,18 +2428,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @function
 		 * @return {undefined}
 		 */
-		load: function() {
-
-			//= Reenable focus elements.
-			$( '.tsfem-e-focus-enable-if-js' ).removeProp( 'disabled' );
-			//= Disable nojs placeholders.
-			$( '.tsfem-e-focus-disable-if-js' ).prop( 'disabled', 'disabled' );
-
-			//= Reenable highlighter.
-			$( '.tsfem-e-focus-requires-javascript' ).removeClass( 'tsfem-e-focus-requires-javascript' );
-
-			// Initialize image uploader button cache.
-			$( document.body ).ready( onReady );
+		load: () => {
+			document.body.addEventListener( 'tsf-onload', _prepareUI );
+			document.body.addEventListener( 'tsf-ready', _onReady );
 		}
 	}, {
 		/**
@@ -2433,6 +2438,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * Don't overwrite these.
 		 *
 		 * @since 1.0.0
+		 * @since 1.4.1 Made setAllRatersOf public.
 		 * @access public
 		 */
  		focusRegistry,
@@ -2445,7 +2451,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		analysisChangeEvents,
 		getSubIdPrefix,
 		getSubElementById,
+		setAllRatersOf,
 	} );
 }( jQuery );
-//= Run before jQuery.ready() === DOMContentLoaded
-jQuery( window.tsfem_e_focus_inpost.load );
+window.tsfem_e_focus_inpost.load();

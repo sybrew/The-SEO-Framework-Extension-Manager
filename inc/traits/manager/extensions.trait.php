@@ -85,7 +85,7 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1590706430',
+				'last_updated' => '1596406019',
 				'requires'     => '4.9',
 				'tested'       => '5.4',
 				'requires_tsf' => '4.0',
@@ -98,7 +98,7 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1590225674',
+				'last_updated' => '1596406019',
 				'requires'     => '4.9',
 				'tested'       => '5.4',
 				'requires_tsf' => '4.0.5',
@@ -163,7 +163,7 @@ trait Extensions_Properties {
 				'area'         => 'uptime, syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1590781980',
+				'last_updated' => '1596406019',
 				'requires'     => '4.9',
 				'tested'       => '5.4',
 				'requires_tsf' => '4.0',
@@ -224,9 +224,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'be04fa7d0826b74e90069fb2ab3d86169f875e932c07239acf6420b0d1f5ff68',
-			'sha1'   => 'a1a1b022e154663ac79c3aa3429f5ee148530586',
-			'md5'    => 'c1b4d12883a946fb745099cf9da70eda',
+			'sha256' => 'b8aed54f990d4e1f12d7c5e3c46227bd75172efa204af08f3b9717379cff72fc',
+			'sha1'   => '9ebb0f91e78e5f600c2dafc0221716261fb78f49',
+			'md5'    => '9769805d8d5fb9a900c21ad8d334cefd',
 		];
 	}
 

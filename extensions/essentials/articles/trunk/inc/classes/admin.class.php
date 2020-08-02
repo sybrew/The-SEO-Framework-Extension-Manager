@@ -78,6 +78,8 @@ final class Admin extends Core {
 	 *
 	 * @since 2.0.0
 	 * @access private
+	 * @staticvar string $default
+	 * @staticvar array $type_i18n
 	 *
 	 * @param array    $states The current post states array
 	 * @param \WP_Post $post The Post Object.
@@ -92,11 +94,14 @@ final class Admin extends Core {
 			$default   = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 		}
 
-		$type_i18n = static::filter_article_keys( [
-			'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
-			'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
-			'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
-		] );
+		static $type_i18n = null;
+		if ( ! $type_i18n ) {
+			$type_i18n = static::filter_article_keys( [
+				'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
+				'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
+				'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+			] );
+		}
 
 		$this->set_extension_post_meta_id( $post->ID );
 

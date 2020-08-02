@@ -329,6 +329,7 @@ onmessage = message => {
 	if ( ! content ) {
 		postMessage( void 0 );
 	} else {
+		// todo use allSettled? Will lead to faux data--let catch handle it.
 		Promise.all( [
 			data.assess.getCharCount && countCharacters( content ),
 			countInflections( content ), // FIXME we should reuse content (stripWord)... at the expense of performance and delay...

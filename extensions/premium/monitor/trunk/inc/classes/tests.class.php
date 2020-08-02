@@ -548,7 +548,7 @@ final class Tests {
 			case 2:
 				// Could do HTTPS
 				$content .= $this->wrap_info(
-					\esc_html__( 'Your website is accessible on both HTTPS as HTTP.', 'the-seo-framework-extension-manager' )
+					\esc_html__( 'Your website is accessible on both HTTPS and HTTP.', 'the-seo-framework-extension-manager' )
 				);
 				$state = 'good';
 				$_test_alt = true;

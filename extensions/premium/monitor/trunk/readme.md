@@ -83,6 +83,16 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.7
+
+[tsfep-release time="-1"]
+
+* **API - Our servers:**
+	* **July 5th, 2020:**
+		* **Fixed:** The HTTPS test no longer expects subsequent redirects when the site can be served from both HTTP and HTTPS.
+	* **July 7th, 2020:**
+		* **Fixed:** The mixed scheme test no longer defaults to mixed, but correctly tests both the HTTP and HTTPS versions of your site.
+
 ### 1.2.6
 
 [tsfep-release time="June 2nd, 2020"]

@@ -126,6 +126,12 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.8
+
+[tsfep-release time="-1"]
+
+* **Changed:** The markup preview button now leads to Google's new Rich Results Test platform, instead of their now deprecated Structured Data Testing Tool.
+
 ### 1.1.7
 
 [tsfep-release time="June 2nd, 2020"]

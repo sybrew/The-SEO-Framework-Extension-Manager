@@ -424,7 +424,10 @@ final class Front extends Core {
 		$id  = $this->get_current_id();
 		$tsf = \the_seo_framework();
 
-		$title = $tsf->get_raw_generated_title( [ 'id' => $id ] );
+		$title = $tsf->get_raw_generated_title( [
+			'id'       => $id,
+			'taxonomy' => '',
+		] );
 
 		// Does not consider UTF-8 support. However, the regex does.
 		if ( strlen( $title ) > 110 ) {

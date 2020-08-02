@@ -144,6 +144,35 @@ You can change your page URL in the sidebar under "Document > Permalink." On som
 
 ## FAQ
 
+### Are phrases supported?
+
+We can't stress this enough: You should not use the keyword-entry field as a keyphrase-entry field. Phrases should flow naturally from keywords.
+
+The parser looks for exact-matches only--when you provide a phrase, you'll likely face an incorrect analysis; so, we recommend sticking to simple or compound words only.
+
+Compound words are made up of simple words; yet, they yield a new meaning. You can safely use compound words as a keyword.
+
+Examples of simple words are (recommended):
+
+- Flower
+- Sun
+- Care
+- Child
+- Law
+- Son
+
+Examples of compound words are (recommended):
+
+- Sunflower
+- Child care
+- Son-in-law
+
+Examples of phrases are (do not use):
+
+- Improve growth of flowers -- Instead, use three separated keywords: "improve", "grow", "flower"
+- How to increase your child care's business -- Instead, use two separated keywords: "business", "child care"
+- Best gift for son-in-law -- Instead, use two separated keywords: "gift", "son-in-law"
+
 ### Which languages are supported?
 
 Focus supports all languages. We worked tirelessly on making this possible.
@@ -169,13 +198,11 @@ The dictionary API supports the following languages for **synonyms**:
 
 Support for other languages will be added over time. Processing a living language is difficult and time-consuming, so that can take a few years.
 
-### What if my site's language doesn't support synonym lookup?
+### What if my site's language doesn't support synonym or inflection lookup?
 
-That's OK, neither does Google for your language then. We use the same dictionary API they use to process natural language. Therefore, using synonyms won't be a benefit in your case.
+That's OK, neither does Google for your language then. We use the same dictionary API they use to process natural language. Therefore, using synonyms or inflections in an unsupported language won't bring a benefit.
 
-### Why are there only one or two inflections available?
-
-We're still waiting for our API partner to provide reverse inflection lookups. When it's ready, an update will be sent out.
+In this case, consider throwing an inflection into your content. Even though the parser won't always recognize that inflection, it'll increase the chances of your content being found on the search-engine-result-pages.
 
 ### "A parsing failure occurred." What does this mean?
 
@@ -225,7 +252,28 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 } );
 ```
 
+#### Adjust auto-parsing interval
+
+_Note: When you set this value lower than 5000, the auto-parser will be disabled._
+
+```php
+add_filter( 'the_seo_framework_focus_auto_interval', function( $interval ) {
+	return 10000; // Set to 10 seconds. Default is 45000 (ms).
+} );
+```
+
+Considering increasing the value when parser loaders spin indefinitely.
+
 ## Changelog
+
+### 1.4.1
+
+[tsfep-release time="-1"]
+
+* **Added:** Filter `the_seo_framework_focus_auto_interval`.
+	* Documented at [developers](#developers).
+* **Added:** (JavaScript) `tsfem_e_focus_inpost.setAllRatersOf()` is now public.
+* **Fixed:** Addressed various race condition issues with jQuery 3.5.1.
 
 ### 1.4.0
 

@@ -207,6 +207,12 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 
 ## Changelog
 
+### 2.0.5
+
+[tsfep-release time="-1"]
+
+* **Improved:** The headline attribute is now generated more quickly.
+
 ### 2.0.4
 
 [tsfep-release time="June 2nd, 2020"]

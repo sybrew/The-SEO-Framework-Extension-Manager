@@ -179,6 +179,14 @@ final class Admin extends Core {
 	 * @param string $inpostgui Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
 	 */
 	public function _enqueue_inpost_scripts( $inpostgui ) {
+
+		/**
+		 * @since 1.4.1
+		 * @param int $interval The auto-parsing interval in ms. Default 45 seconds.
+		 *                      Set this to 4999 or lower (preferred: -1) to disable this feature.
+		 */
+		$interval = (int) \apply_filters( 'the_seo_framework_focus_auto_interval', 45000 );
+
 		$inpostgui::register_script( [
 			'type' => 'js',
 			'name' => 'tsfem-focus-inpost',
@@ -206,7 +214,7 @@ final class Admin extends Core {
 						'parserWorker' => $this->get_worker_file_location(),
 					],
 					'settings'           => [
-						'analysisInterval' => 45000, // 45 seconds, set this to 4999 or lower (preferred: -1) to disable this feature.
+						'analysisInterval' => $interval,
 					],
 				],
 			],

@@ -2973,7 +2973,7 @@ msgid "Your website forces HTTPS through the server configuration. That is great
 msgstr ""
 
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:551
-msgid "Your website is accessible on both HTTPS as HTTP."
+msgid "Your website is accessible on both HTTPS and HTTP."
 msgstr ""
 
 #: extensions/premium/monitor/trunk/inc/classes/tests.class.php:563

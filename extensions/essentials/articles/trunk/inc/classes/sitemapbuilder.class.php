@@ -89,7 +89,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 		if ( ! $post_types ) return $content;
 
 		/**
-		 * @since 4.0.0
+		 * @since 2.0.0
 		 * @param array $args The query arguments.
 		 */
 		$_args = \apply_filters(
@@ -319,6 +319,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 	 * @ignore Unused.
 	 * @link <https://www.w3.org/TR/xml/#syntax>
 	 * @link <https://www.w3.org/TR/REC-xml/#sec-external-ent>
+	 * NOTE: WordPress 5.5.0 includes a new function: esc_xml().
 	 *
 	 * @param mixed $value The value to escape.
 	 * @return string A value that's safe for XML use.

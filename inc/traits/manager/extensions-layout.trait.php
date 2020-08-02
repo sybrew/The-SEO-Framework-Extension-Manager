@@ -352,7 +352,8 @@ trait Extensions_Layout {
 					$s_slug
 				);
 				$submit = sprintf(
-					'<input type="submit" name="submit" id="submit" class="%s" value="%s">',
+					'<input type="submit" name="submit" id="tsfem-activate-submit[%s]" class="%s" value="%s">',
+					$s_slug,
 					$s_class,
 					\esc_attr( $text )
 				);

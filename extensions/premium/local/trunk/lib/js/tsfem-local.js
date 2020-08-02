@@ -138,13 +138,13 @@ window.tsfem_e_local = {
 
 						if ( tdata ) {
 							let $form = jQuery( '<form>', {
-								action: 'https://search.google.com/structured-data/testing-tool',
+								action: 'https://search.google.com/test/rich-results?utm_medium=jsonld',
 								method: 'post',
 								target: _windowTarget
 							} );
 
 							//jQuery( '<input>' ).attr( 'type', 'submit' ).css( 'display', 'none' ).appendTo( $form );
-							jQuery( '<textarea>' ).attr( 'name', 'code' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
+							jQuery( '<textarea>' ).attr( 'name', 'code_snippet' ).css( 'display', 'none' ).text( tdata ).appendTo( $form );
 							$form.appendTo( 'body' ).submit();
 							$form.remove();
 							_window.focus();
