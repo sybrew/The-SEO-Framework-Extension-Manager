@@ -15,14 +15,14 @@ Because WordPress's comment system is open, it attracts unwanted comments. Such 
 
 To reduce comment spam, you could manually moderate the comments, but this is very time-consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
 
-### A non-intrusive extension
+### A non-intrusive, privacy-first extension
 
 The Honeypot extension is for catching robots, not humans. So, visitors shouldn't notice its presence.
 
-This extension protects all themes and plugins that use the default WordPress comment forms. This includes WooCommerce product reviews.
+This extension protects all themes and plugins that use the default WordPress comment forms, which includes WooCommerce product reviews, without sending any comment data to other services.
 
 Apart from other anti-spam techniques, like captcha or an answer field, a honeypot is hidden from visitors.
-This means the visitors don't need to interact with the anti-spam technique, improving the user experience. In short, your site is protected from spam in the background.
+This means the visitors don't need to interact with the anti-spam technique, which vastly improves the user experience. In short, your site is protected from spam in the background.
 
 This extension also has an unmeasurably low server memory and CPU footprint, and it only adds roughly 160 bytes to your page's source. So, there's no performance difference with or without the extension.
 
@@ -90,15 +90,11 @@ There is no setup required, and no options are available.
 
 ### More control
 
-WordPress has various discussion settings, through which you can fine-tune how comments are displayed and moderated.
-
-These settings can be found at **Settings > Discussion**.
+WordPress has various discussion settings, through which you can fine-tune how comments are displayed and moderated. You can find these settings at **Settings > Discussion**.
 
 ### Gotta catch 'em all
 
-With Honeypot, you can be confident that each comment that comes through is written by a human.
-
-But, if even those human comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity over many websites.
+With Honeypot, you can be confident that each comment that comes through is written by a human. But, if even those human comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity over many websites; but, using that might be unfavorable since it sends private user-data to third-parties.
 
 ## Developers
 

@@ -35,7 +35,7 @@ Articles automatically fetches all inferred information from your pages and outp
 
 Get your news articles indexed ASAP with the Google News sitemap brought by Articles. This sitemap populates automatically, and whenever you publish a new article, Articles automatically notifies Google News.
 
-To get started, visit the [Google News Publishing Center](https://news.google.com/publisher).
+To get started, visit the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
 ## Usage
 
@@ -142,7 +142,7 @@ Some settings are hidden when your website represents a person, instead of an or
 ### Where can I find the Google News sitemap?
 
 When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`.
-Please note that your site must be verified before using the sitemap. You can get started at the [Google News Publishing Center](https://news.google.com/publisher).
+Please note that your site must be verified before using the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
 ### Where do I submit a Google News sitemap?
 
@@ -205,13 +205,37 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 } );
 ```
 
+### Adjust the sitemap generation arguments
+
+*The `$args` parameter is an array that should be compatible with `WP_Query`. [View all parameters properties](https://developer.wordpress.org/reference/classes/wp_query/#parameters).*
+
+```php
+add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', function( $args ) {
+
+	// Remove the date query, forcing all posts to be considered, instead of just from the past 2.5 days.
+	unset( $args['date_query'] );
+
+	// Allow inclusion of password-protected posts.
+	$args['has_password'] = true;
+
+	return $args;
+} );
+```
+
 ## Changelog
 
-### 2.0.5
+### 2.1.0
 
 [tsfep-release time="-1"]
 
-* **Improved:** The headline attribute is now generated more quickly.
+* **Added:** You can now select a default 'disabled' Articles type for a post type. With that, you can enable support for Articles on a per-post basis.
+* **Added:** You can now select a 'disabled' Articles type on a per-post basis via the drop-down selection in the post-edit screen. With that, you can disable support for Articles on a per-post basis.
+* **Added:** You can now select an Articles type via the quick-and bulk-edit interface.
+* **Improved:** The Articles headline attribute is now generated faster.
+* **Changed:** The post type support label has changed from 'Enabled' to 'Supported', to avert confusion with the new 'disabled' article type selection.
+* **Changed:** The Google News sitemap now only shows posts published in the last two days (plus a half day, for some rounding leeway). This is according to [Google's Publishing guidelines](https://support.google.com/news/publisher-center/answer/9606710).
+	* The sitemap query can be modified; this is documented at [developers](#developers).
+* **Fixed:** Addressed an issue where after interacting with the quick-edit or bulk-edit UI, the post state declaration would disappear.
 
 ### 2.0.4
 

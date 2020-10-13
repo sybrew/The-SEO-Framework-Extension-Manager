@@ -81,7 +81,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			if ( $is_premium ) {
 				$_tooltip = $language_supported
 					? \__( 'Adjust subject inflections and synonyms.', 'the-seo-framework-extension-manager' )
-					: \__( 'Only the English language currently supports lexical adjustments.', 'the-seo-framework-extension-manager' );
+					: \__( 'The current site language has no support for lexical adjustments.', 'the-seo-framework-extension-manager' );
 
 				printf(
 					'<span class="%s">%s</span>',

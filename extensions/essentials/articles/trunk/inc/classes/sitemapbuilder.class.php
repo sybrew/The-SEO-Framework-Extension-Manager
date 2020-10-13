@@ -90,6 +90,8 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 
 		/**
 		 * @since 2.0.0
+		 * @since 2.1.0 Now filters by date query, according to guidelines (see link).
+		 * @link <https://support.google.com/news/publisher-center/answer/9606710>
 		 * @param array $args The query arguments.
 		 */
 		$_args = \apply_filters(
@@ -105,6 +107,11 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 				'cache_results'    => false,
 				'suppress_filters' => false,
 				'no_found_rows'    => true,
+				'date_query'       => [
+					'column' => 'post_date_gmt',
+					// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.date_date -- Already rectified by TSF: gmdate === date
+					'after'  => date( 'c', time() - ( DAY_IN_SECONDS * 2.5 ) ),
+				],
 			]
 		);
 

@@ -82,7 +82,7 @@ final class InpostGUI {
 
 	/**
 	 * @since 1.5.0
-	 * @var string META_PREFIX The meta prefix to be stored in the database.
+	 * @var string META_PREFIX The meta prefix to handle POST data.
 	 */
 	const META_PREFIX = 'tsfem-pm';
 
@@ -682,7 +682,7 @@ final class InpostGUI {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function verify( $secret ) {
-		return $secret && static::$include_secret === $secret;
+		return isset( $secret ) && static::$include_secret === $secret;
 	}
 
 	/**

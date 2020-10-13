@@ -28,7 +28,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 
 /**
- * Class TSF_Extension_Manager\Extension\Articles\Front
+ * Class TSF_Extension_Manager\Extension\Articles\Admin
  *
  * @since 1.2.0
  * @uses TSF_Extension_Manager\Traits
@@ -44,70 +44,44 @@ final class Admin extends Core {
 	private function construct() {
 
 		$this->prepare_inpostgui();
+		$this->prepare_listedit();
 		$this->prepare_settings();
-
-		\add_action( 'current_screen', [ $this, '_prepare_post_state' ] );
-	}
-
-	/**
-	 * Prepares post states.
-	 *
-	 * @since 2.0.0
-	 * @access private
-	 *
-	 * @param \WP_Screen $screen The current screen.
-	 * @return void Early when the post type isn't supported.
-	 */
-	public function _prepare_post_state( $screen ) {
-
-		$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
-
-		if ( ! $post_type ) return;
-		// `static::generate_post_type_settings()` also checks this via `the_seo_framework()->get_supported_post_types()`
-		if ( ! \the_seo_framework()->is_post_type_supported( $post_type ) ) return;
-
-		$settings = $this->get_option( 'post_types' );
-
-		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
 
 		\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 9, 2 );
 	}
 
 	/**
-	 * Adds post states for the post/page edit.php query.
+	 * Prepares inpost GUI.
 	 *
-	 * @since 2.0.0
-	 * @access private
-	 * @staticvar string $default
-	 * @staticvar array $type_i18n
-	 *
-	 * @param array    $states The current post states array
-	 * @param \WP_Post $post The Post Object.
-	 * @return array Adjusted $states
+	 * @since 1.2.0
 	 */
-	public function _add_post_state( $states = [], $post ) {
+	private function prepare_inpostgui() {
 
-		static $default = null;
-		if ( ! $default ) {
-			$settings  = $this->get_option( 'post_types' );
-			$post_type = \the_seo_framework()->get_admin_post_type();
-			$default   = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
-		}
+		//= Prepares InpostGUI's class for nonce checking.
+		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		static $type_i18n = null;
-		if ( ! $type_i18n ) {
-			$type_i18n = static::filter_article_keys( [
-				'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
-				'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
-				'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
-			] );
-		}
+		//= Called late because we need to access the meta object after current_screen.
+		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
-		$this->set_extension_post_meta_id( $post->ID );
+		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
+	}
 
-		$states[] = $type_i18n[ static::filter_article_type( $this->get_post_meta( 'type', $default ) ) ];
+	/**
+	 * Prepares list edit.
+	 *
+	 * @since 2.1.0
+	 */
+	private function prepare_listedit() {
 
-		return $states;
+		\TSF_Extension_Manager\ListEdit::prepare();
+
+		\add_action( 'the_seo_framework_before_quick_edit', [ $this, '_prepare_quick_views' ], 10, 2 );
+		\add_action( 'the_seo_framework_before_bulk_edit', [ $this, '_prepare_bulk_views' ], 10, 2 );
+
+		\add_filter( 'the_seo_framework_list_table_data', [ $this, '_add_list_table_data' ], 10, 2 );
+
+		\add_action( 'tsfem_quick_edit_verified_nonce', [ $this, '_save_meta_quick_edit' ], 10, 2 );
+		\add_action( 'tsfem_bulk_edit_verified_nonce', [ $this, '_save_meta_bulk_edit' ], 10, 2 );
 	}
 
 	/**
@@ -121,6 +95,48 @@ final class Admin extends Core {
 
 		\add_action( 'tsfem_register_settings_fields', [ $this, '_register_settings' ] );
 		\add_action( 'tsfem_register_settings_sanitization', [ $this, '_register_sanitization' ] );
+	}
+
+	/**
+	 * Adds post states for the post/page edit.php query.
+	 *
+	 * @since 2.0.0
+	 * @since 2.1.0 Added the disabled type. When used, it won't add the state.
+	 * @access private
+	 * @staticvar string $default
+	 * @staticvar array $type_i18n
+	 *
+	 * @param array    $states The current post states array
+	 * @param \WP_Post $post The Post Object.
+	 * @return array Adjusted $states
+	 */
+	public function _add_post_state( $states = [], $post ) {
+
+		if ( ! $this->is_post_type_supported( $post->post_type ) ) return $states;
+
+		static $default = null;
+		if ( ! $default ) {
+			$settings = $this->get_option( 'post_types' );
+			$default  = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post->post_type ]['default_type'], 'Article' ) );
+		}
+
+		static $type_i18n = null;
+		if ( ! $type_i18n ) {
+			$type_i18n = static::filter_article_keys( [
+				'disabled'    => false,
+				'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
+				'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
+				'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+			] );
+		}
+
+		$this->set_extension_post_meta_id( $post->ID );
+
+		$type     = $type_i18n[ static::filter_article_type( $this->get_post_meta( 'type', $default ) ) ]
+			and
+		$states[] = $type;
+
+		return $states;
 	}
 
 	/**
@@ -214,6 +230,7 @@ final class Admin extends Core {
 	 * Returns the post type related settings.
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.0 Added the 'disabled' default type.
 	 * @see $this->_register_settings()
 	 *
 	 * @return array The post type settings.
@@ -233,7 +250,7 @@ final class Admin extends Core {
 					'',
 				],
 				'_check'   => [
-					\__( 'Enable article markup?', 'the-seo-framework-extension-manager' ),
+					\__( 'Enable article markup support?', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-type-listener'     => '1',
@@ -267,6 +284,12 @@ final class Admin extends Core {
 
 		foreach ( static::get_available_article_types() as $_type ) :
 			switch ( $_type ) :
+				case 'disabled':
+					$_select_item = [
+						'disabled',
+						\__( '&mdash; Disabled &mdash;', 'the-seo-framework-extension-manager' ),
+					];
+					break;
 				case 'Article':
 					$_select_item = [
 						'Article',
@@ -333,7 +356,7 @@ final class Admin extends Core {
 			'_dropdown_title_dynamic' => [
 				'checkbox' => 'enabled',
 			],
-			'_dropdown_title_checked' => \__( 'Enabled', 'the-seo-framework-extension-manager' ),
+			'_dropdown_title_checked' => \__( 'Supported', 'the-seo-framework-extension-manager' ),
 		];
 	}
 
@@ -447,29 +470,36 @@ final class Admin extends Core {
 	 * Sanitizes the article type option.
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.0 Now sanitizes 'disabled'.
 	 * @access private
 	 *
 	 * @param string $type The input value.
-	 * @return int The sanitized input value. Either 'Article', 'NewsArticle', or 'BlogPosting'.
+	 * @return int The sanitized input value. Either 'disabled', 'Article', 'NewsArticle', or 'BlogPosting'.
 	 */
 	public static function _sanitize_option_article_type( $type ) {
 		return static::filter_article_type( $type );
 	}
 
 	/**
-	 * Prepares inpost GUI.
+	 * Tests whether post type is supported for the current request.
 	 *
-	 * @since 1.2.0
+	 * @since 2.1.0
+	 *
+	 * @param string $post_type The post type to validate.
+	 * @return bool
 	 */
-	private function prepare_inpostgui() {
+	private function is_post_type_supported( $post_type = '' ) {
 
-		//= Prepares InpostGUI's class for nonce checking.
-		\TSF_Extension_Manager\InpostGUI::prepare();
+		static $supported = null;
 
-		//= Called late because we need to access the meta object after current_screen.
-		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
+		if ( isset( $supported ) ) return $supported;
 
-		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
+		$tsf = \the_seo_framework();
+
+		$post_type = $post_type ?: $tsf->get_admin_post_type();
+		$settings  = $this->get_option( 'post_types' );
+
+		return $supported = ! empty( $settings[ $post_type ]['enabled'] ) && $tsf->is_post_type_supported( $post_type );
 	}
 
 	/**
@@ -484,21 +514,19 @@ final class Admin extends Core {
 	 */
 	public function _prepare_inpost_views() {
 
-		$tsf = \the_seo_framework();
-
-		$post_type = $tsf->get_admin_post_type();
-		$settings  = $this->get_option( 'post_types' );
-
-		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
+		if ( ! $this->is_post_type_supported() ) return;
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
+
+		$post_type = \the_seo_framework()->get_admin_post_type();
+		$settings  = $this->get_option( 'post_types' );
 
 		$_default = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
-			'type' => [
-				'label' => [
+			'type'     => [
+				'label'  => [
 					'title' => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
 					'desc'  => \__( 'Set the article type.', 'the-seo-framework-extension-manager' ),
 					'link'  => 'https://theseoframework.com/extensions/articles/#usage/types',
@@ -509,6 +537,7 @@ final class Admin extends Core {
 					'default'       => $_default,
 					'value'         => static::filter_article_type( $this->get_post_meta( 'type', $_default ) ),
 					'select_values' => static::filter_article_keys( [
+						'disabled'    => \__( '&mdash; Disabled &mdash;', 'the-seo-framework-extension-manager' ),
 						'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
 						'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
 						'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
@@ -519,9 +548,193 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\InpostGUI::register_view(
 			$this->get_view_location( 'inpost/inpost' ),
-			[ 'post_meta' => $post_meta ],
+			compact( 'post_meta' ),
 			'structure'
 		);
+	}
+
+	/**
+	 * Prepares quick-edit views.
+	 *
+	 * @since 2.1.0
+	 * @access private
+	 * @uses \TSF_Extension_Manager\ListEdit
+	 *
+	 * @param string $post_type The current post type.
+	 * @param string $taxonomy  The current taxonomy type (if any).
+	 */
+	public function _prepare_quick_views( $post_type, $taxonomy ) {
+
+		if ( $taxonomy ) return;
+		if ( ! $this->is_post_type_supported( $post_type ) ) return;
+
+		\TSF_Extension_Manager\ListEdit::activate_quick_section( 'structure' );
+
+		$pm_index = $this->pm_index;
+
+		$post_meta = [
+			'type' => [
+				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
+				'options' => static::filter_article_keys( [
+					'disabled'    => \__( '&mdash; Disabled &mdash;', 'the-seo-framework-extension-manager' ),
+					'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
+					'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
+					'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+				] ),
+			],
+		];
+
+		\TSF_Extension_Manager\ListEdit::register_quick_view(
+			$this->get_view_location( 'list/quickedit' ),
+			get_defined_vars(),
+			'structure',
+			10
+		);
+	}
+
+	/**
+	 * Prepares bulk-edit views.
+	 *
+	 * @since 2.1.0
+	 * @access private
+	 * @uses \TSF_Extension_Manager\ListEdit
+	 *
+	 * @param string $post_type The current post type.
+	 * @param string $taxonomy  The current taxonomy type (if any).
+	 */
+	public function _prepare_bulk_views( $post_type, $taxonomy ) {
+
+		if ( $taxonomy ) return;
+		if ( ! $this->is_post_type_supported( $post_type ) ) return;
+
+		\TSF_Extension_Manager\ListEdit::activate_bulk_section( 'structure' );
+
+		$pm_index = $this->pm_index;
+
+		$post_meta = [
+			'type' => [
+				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
+				'options' => [
+					'nochange'    => __( '&mdash; No Change &mdash;', 'default' ),
+				] + static::filter_article_keys( [
+					'disabled'    => \__( '&mdash; Disabled &mdash;', 'the-seo-framework-extension-manager' ),
+					'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),
+					'NewsArticle' => \__( 'News Article', 'the-seo-framework-extension-manager' ),
+					'BlogPosting' => \__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
+				] ),
+			],
+		];
+
+		\TSF_Extension_Manager\ListEdit::register_bulk_view(
+			$this->get_view_location( 'list/bulkedit' ),
+			get_defined_vars(),
+			'structure',
+			10
+		);
+	}
+
+	/**
+	 * Adds list table data, so that the quick-edit values are correctly preselected.
+	 *
+	 * @since 2.4.1
+	 *
+	 * @param array $data  The current LE data.
+	 * @param array $query The current item's query.
+	 */
+	public function _add_list_table_data( $data, $query ) {
+
+		// This should never happen...
+		if ( ! empty( $query['taxonomy'] ) ) return;
+
+		static $default = null;
+		if ( ! $default ) {
+			$post_type = \the_seo_framework()->get_admin_post_type();
+			$settings  = $this->get_option( 'post_types' );
+			$default   = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
+		}
+
+		$this->set_extension_post_meta_id( $query['id'] );
+
+		$data['tsfem'][ $this->pm_index ] = [
+			'type' => [
+				'value'    => static::filter_article_type( $this->get_post_meta( 'type', $default ) ),
+				'isSelect' => true,
+			],
+		];
+
+		return $data;
+	}
+
+	/**
+	 * Processes quick-edit data for Articles.
+	 *
+	 * Does NOT delete data on empty POST data.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param \WP_Post $post The post object
+	 * @param array    $data The quick-edit data.
+	 */
+	public function _save_meta_quick_edit( $post, $data ) {
+
+		$this->set_extension_post_meta_id( $post->ID );
+
+		$store = [];
+		foreach ( (array) $data[ $this->pm_index ] as $key => $value ) :
+			switch ( $key ) :
+				case 'type':
+					$store[ $key ] = static::_sanitize_option_article_type( $value );
+					break;
+
+				default:
+					break;
+			endswitch;
+		endforeach;
+
+		foreach ( $store as $key => $value ) {
+			$this->update_post_meta( $key, $value );
+		}
+	}
+
+	/**
+	 * Processes bulk-edit data for Articles.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param \WP_Post $post The post object
+	 * @param array    $data The quick-edit data.
+	 */
+	public function _save_meta_bulk_edit( $post, $data ) {
+
+		static $store = null;
+
+		if ( null === $store ) {
+			$store = [];
+
+			if ( empty( $data[ $this->pm_index ] ) ) return;
+
+			foreach ( (array) $data[ $this->pm_index ] as $key => $value ) :
+				switch ( $key ) :
+					case 'type':
+						if ( 'nochange' === $value ) continue 2;
+						$store[ $key ] = static::_sanitize_option_article_type( $value );
+						break;
+
+					default:
+						break;
+				endswitch;
+			endforeach;
+		}
+
+		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
+		// This is because we only update a portion of the meta.
+		if ( ! $store ) return;
+
+		$this->set_extension_post_meta_id( $post->ID );
+
+		foreach ( $store as $key => $value ) {
+			$this->update_post_meta( $key, $value );
+		}
 	}
 
 	/**

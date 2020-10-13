@@ -243,6 +243,7 @@ trait Extension_Post_Meta {
 	 * This data may not be JSON encoded; but if so, the quotes need to be escaped or slashed.
 	 *
 	 * @since 1.5.0
+	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @param string $key   The meta name.
 	 * @param mixed  $value The meta value.
@@ -268,7 +269,8 @@ trait Extension_Post_Meta {
 		$c_meta[ $this->pm_index ] = $meta;
 
 		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
+		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
+		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
@@ -282,6 +284,7 @@ trait Extension_Post_Meta {
 	 * Deletes current extension meta.
 	 *
 	 * @since 1.5.0
+	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @param string $key The meta name to delete.
 	 * @return boolean True on success; false on failure.
@@ -306,7 +309,8 @@ trait Extension_Post_Meta {
 		$c_meta[ $this->pm_index ] = $meta;
 
 		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
+		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
+		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
 			//* Update meta cache on success.
@@ -320,6 +324,7 @@ trait Extension_Post_Meta {
 	 * Deletes all of the current extension meta.
 	 *
 	 * @since 1.5.0
+	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @return boolean True on success; false on failure.
 	 */
@@ -343,7 +348,7 @@ trait Extension_Post_Meta {
 			$success = \delete_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		} else {
 			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
-			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, serialize( $c_meta ) );
+			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 		}
 
 		if ( $success ) {

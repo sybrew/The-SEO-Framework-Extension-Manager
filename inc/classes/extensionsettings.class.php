@@ -545,7 +545,7 @@ final class ExtensionSettings {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function verify( $secret ) {
-		return $secret && static::$include_secret === $secret;
+		return isset( $secret ) && static::$include_secret === $secret;
 	}
 
 	/**

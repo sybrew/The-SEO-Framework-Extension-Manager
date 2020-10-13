@@ -371,6 +371,19 @@ final class LoadAdmin extends AdminPages {
 	}
 
 	/**
+	 * Tests whether we're on the right administrative page.
+	 *
+	 * @since 2.4.1
+	 * @global string $pagenow
+	 *
+	 * @param string|array $pagenow A list of pagenow values, or a single one.
+	 * @return bool True if we're on that page, false if called too early or when we aren't.
+	 */
+	public function is_pagenow( $pagenow = '' ) {
+		return isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], (array) $pagenow, true );
+	}
+
+	/**
 	 * Fetches files based on input to reduce memory overhead.
 	 * Passes on input vars.
 	 *

@@ -356,6 +356,7 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now listens to post meta.
+	 * @since 2.1.0 Now stops generation when type is 'disbaled'.
 	 *
 	 * @requiredSchema Always
 	 * @ignoredSchema Never
@@ -368,7 +369,14 @@ final class Front extends Core {
 		$post_type = \get_post_type();
 		$_default  = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
 
-		return [ '@type' => static::filter_article_type( $this->get_post_meta( 'type', $_default ) ) ];
+		$type = static::filter_article_type( $this->get_post_meta( 'type', $_default ) );
+
+		if ( 'disabled' === $type ) {
+			$this->invalidate( 'both' );
+			return [];
+		}
+
+		return [ '@type' => $type ];
 	}
 
 	/**

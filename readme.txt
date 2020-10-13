@@ -4,7 +4,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 4.9.0
 Tested up to: 5.4.1
 Requires PHP: 5.6.5
-Requires TSF: 4.0.0
+Requires TSF: 4.0.5
 Stable tag: 2.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -43,19 +43,22 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.4.1 =
 
+* **Added:** This plugin now supports The SEO Framework's 4.0.5+ quick-and bulk-edit functionality for its extensions.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
 * **Fixed:** TODO Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
+* **Fixed:** Resolved an issue where quotes in metadata could cause serialization issues.
+* **Other:** The SEO Framework 4.0.5 or higher is now required, from 4.0.0.
 
 **Updated extensions:**
 
 NOTE these version numbers are already correct.
-* [Articles at version 2.0.5](https://theseoframework.com/extensions/articles/#changelog)
+* [Articles at version 2.1.0](https://theseoframework.com/extensions/articles/#changelog)
 * [Focus at version 1.4.1](https://theseoframework.com/extensions/focus/#changelog)
 * [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
 
-TODO consider only adding the last 2 days in Google News sitemap? Optional?
 TODO update images displayed for Local readme.
+TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
 
 = 2.4.0 - Linguistic SEO =
 

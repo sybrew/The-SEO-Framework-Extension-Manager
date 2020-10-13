@@ -113,6 +113,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @return {HTMLElement}
 	 */
 	const getSubElementById = ( idPrefix, type ) => {
+		// TODO store in Map?
 		return document.getElementById( idPrefix + '[' + type + ']' );
 	}
 
@@ -1330,7 +1331,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @function
 	 */
-	const resetCollapserListeners = () => {
+	const setCollapserListeners = () => {
 		const toggleCollapser = ( event ) => {
 			if ( tsfem_inpost.isActionableElement( event.target ) ) return;
 
@@ -1342,9 +1343,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		//= Make the whole collapse bar a double-clickable expander/retractor.
-		$( '.tsfem-e-focus-collapse-header' )
-			.off( 'dblclick.tsfem-e-focus' )
-			.on( 'dblclick.tsfem-e-focus', toggleCollapser );
+		document.querySelectorAll( '.tsfem-e-focus-collapse-header' ).forEach( el => {
+			el.addEventListener( 'dblclick', toggleCollapser );
+		} );
 	}
 
 	/**
@@ -1356,16 +1357,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @function
 	 */
-	const resetKeywordEntryListeners = () => {
+	const setKeywordEntryListeners = () => {
 
-		let keywordBuffer = {},
+		let keywordBuffer  = {},
 			keywordTimeout = 1500;
 
 		let barSmoothness = 3,
-			superSmooth = true,
-			barWidth = {},
-			barBuffer = {},
-			barTimeout = keywordTimeout / ( 100 * barSmoothness );
+			superSmooth   = true,
+			barWidth      = {},
+			barBuffer     = {},
+			barTimeout    = keywordTimeout / ( 100 * barSmoothness );
 
 		//= Add a little to make it visually "faster".
 		if ( superSmooth )
@@ -1375,16 +1376,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			bar.style.width = ++barWidth[ id ] / barSmoothness + '%';
 		}
 		const barStop = ( id, bar ) => {
-			barWidth[ id ] = 0;
+			barWidth[ id ]  = 0;
 			bar.style.width = '0%';
 		}
 
-		let $keywordEntries = $( '.tsfem-e-focus-keyword-entry' );
+		let keywordEntries = document.querySelectorAll( '.tsfem-e-focus-keyword-entry' );
 
 		const doKeywordEntry = ( event ) => {
 			let target = event.target,
-				val = target.value.trim().replace( /[\s\t\r\n]+/g, ' ' ) || '',
-				prev = target.dataset.prev || '';
+				val    = target.value.trim().replace( /[\s\t\r\n]+/g, ' ' ) || '',
+				prev   = target.dataset.prev || '';
 
 			// Feed back trimmed.
 			event.target.value = val;
@@ -1417,38 +1418,34 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// prepareHighlighter( event );
 		}
 
-		//= Set keyword entry listener
-		$keywordEntries
-			.off( 'input.tsfem-e-focus' )
-			.on( 'input.tsfem-e-focus', ( event ) => {
-				//= Vars must be registered here as it's asynchronous.
-				let idPrefix = getSubIdPrefix( event.target.id ),
-					bar = getSubElementById( idPrefix, 'content' ).querySelector( '.tsfem-e-focus-content-loader-bar' ),
-					collapser = getSubElementById( idPrefix, 'collapser' );
+		const setKeyword = ( event ) => {
+			//= Vars must be registered here as it's asynchronous.
+			let idPrefix  = getSubIdPrefix( event.target.id ),
+				bar       = getSubElementById( idPrefix, 'content' ).querySelector( '.tsfem-e-focus-content-loader-bar' ),
+				collapser = getSubElementById( idPrefix, 'collapser' );
 
-				if ( collapser.checked ) {
-					collapser.checked = false;
-					$( collapser ).trigger( 'change' );
-				}
-
-				clearInterval( barBuffer[ idPrefix ] );
-				clearTimeout( keywordBuffer[ idPrefix ] );
-				barStop( idPrefix, bar );
-
-				barBuffer[ idPrefix ] = setInterval( () => barGo( idPrefix, bar ), barTimeout );
-
-				keywordBuffer[ idPrefix ] = setTimeout( () => {
-					clearInterval( barBuffer[ idPrefix ] );
-					doKeywordEntry( event );
-					barStop( idPrefix, bar );
-				}, keywordTimeout );
-			} );
-
-		$keywordEntries.each( ( i, el ) => {
-			if ( ! el.value.length ) {
-				let idPrefix = getSubIdPrefix( el.id );
-				clearData( idPrefix );
+			if ( collapser.checked ) {
+				collapser.checked = false;
+				$( collapser ).trigger( 'change' );
 			}
+
+			clearInterval( barBuffer[ idPrefix ] );
+			clearTimeout( keywordBuffer[ idPrefix ] );
+			barStop( idPrefix, bar );
+
+			barBuffer[ idPrefix ] = setInterval( () => barGo( idPrefix, bar ), barTimeout );
+
+			keywordBuffer[ idPrefix ] = setTimeout( () => {
+				clearInterval( barBuffer[ idPrefix ] );
+				doKeywordEntry( event );
+				barStop( idPrefix, bar );
+			}, keywordTimeout );
+		}
+
+		keywordEntries.forEach( el => {
+			el.addEventListener( 'input', setKeyword );
+			// Clear data when no value is set for the keywordEntry.
+			el.value.length || clearData( getSubIdPrefix( el.id ) );
 		} );
 	}
 
@@ -2124,7 +2121,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				updateActiveFocusAreas( assessment );
 				resetAnalysisChangeListeners( assessment );
 			} );
-			$document.trigger( `tsfem-focus-gutenberg-${type}-store-set` );
+			document.dispatchEvent( new CustomEvent( `tsfem-focus-gutenberg-${type}-store-set` ) );
 		}
 
 		/**
@@ -2389,8 +2386,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			return;
 		}
 
-		resetCollapserListeners();
-		resetKeywordEntryListeners();
+		setCollapserListeners();
+		setKeywordEntryListeners();
 
 		if ( tsfem_inpost.isPremium && l10n.languageSupported.any ) {
 			//= Prepare definition selector.

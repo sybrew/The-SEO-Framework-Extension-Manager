@@ -132,6 +132,7 @@ class Core {
 	 * Filters article type, so an available will return.
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.0 Now filters 'disabled'.
 	 *
 	 * @param string $type The selected Article type.
 	 * @return string The filtered Article type.
@@ -164,6 +165,7 @@ class Core {
 	 * Returns the available Article types.
 	 *
 	 * @since 2.0.0
+	 * @since 2.1.0 Now supports the 'disabled' type.
 	 * @todo allow filtering the types?
 	 *
 	 * @return array
@@ -171,9 +173,9 @@ class Core {
 	protected static function get_available_article_types() {
 
 		if ( static::is_organization() ) {
-			$types = [ 'Article', 'NewsArticle', 'BlogPosting' ];
+			$types = [ 'disabled', 'Article', 'NewsArticle', 'BlogPosting' ];
 		} else {
-			$types = [ 'Article', 'BlogPosting' ];
+			$types = [ 'disabled', 'Article', 'BlogPosting' ];
 		}
 
 		return $types;

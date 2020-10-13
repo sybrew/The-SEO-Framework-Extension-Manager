@@ -979,7 +979,10 @@ final class FormGenerator {
 
 		$s_type = $plain ? 'tsfem-form-plain-settings' : 'tsfem-form-multi-setting';
 
-		return vsprintf(
+		$_halt_leveling = isset( $args['_nolevel'] ) && ! $args['_nolevel'];
+		$_halt_leveling && $this->delevel();
+
+		$ret = vsprintf(
 			'<div class="%s tsfem-form-setting tsfem-flex"%s>%s%s</div>',
 			[
 				$s_type,
@@ -1010,6 +1013,10 @@ final class FormGenerator {
 				),
 			]
 		);
+
+		$_halt_leveling && $this->level();
+
+		return $ret;
 	}
 
 	/**
@@ -1061,7 +1068,10 @@ final class FormGenerator {
 
 		$s_type = $plain ? 'tsfem-form-plain-settings' : 'tsfem-form-multi-setting';
 
-		return vsprintf(
+		$_halt_leveling = isset( $args['_nolevel'] ) && ! $args['_nolevel'];
+		$_halt_leveling && $this->delevel();
+
+		$ret = vsprintf(
 			'<div class="%s tsfem-form-setting tsfem-flex"%s>%s%s</div>',
 			[
 				$s_type,
@@ -1093,6 +1103,10 @@ final class FormGenerator {
 				),
 			]
 		);
+
+		$_halt_leveling && $this->level();
+
+		return $ret;
 	}
 
 	/**
