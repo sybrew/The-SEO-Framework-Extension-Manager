@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -285,7 +285,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final protected static function invoke_invalid_type( $method ) {
 
-		//* wp_die() can be filtered. Remove filters JIT.
+		// wp_die() can be filtered. Remove filters JIT.
 		\remove_all_filters( 'wp_die_ajax_handler' );
 		\remove_all_filters( 'wp_die_xmlrpc_handler' );
 		\remove_all_filters( 'wp_die_handler' );

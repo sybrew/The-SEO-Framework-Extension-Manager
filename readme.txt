@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 4.9.0
-Tested up to: 5.4.1
+Requires at least: 5.1.0
+Tested up to: 5.5.1
 Requires PHP: 5.6.5
 Requires TSF: 4.0.5
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,10 +44,15 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 = 2.4.1 =
 
 * **Added:** This plugin now supports The SEO Framework's 4.0.5+ quick-and bulk-edit functionality for its extensions.
+* **Improved:** TODO Akin to TSF v4.1.1, we also dropped most jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
-* **Fixed:** TODO Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
+* **Fixed:** Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
 * **Fixed:** Resolved an issue where quotes in metadata could cause serialization issues.
+* **Dev:** Constant `TSF_EXTENSION_MANAGER_PRESENT` is now available. It indicates that the plugin is activated by WordPress, but it does not necessarily indicate that it's running otherwise.
 * **Other:** The SEO Framework 4.0.5 or higher is now required, from 4.0.0.
+* **Other:** WordPress 5.1 or higher is now required, from 4.9.
+* **Other:** We now enforce [TSF coding standards](https://github.com/theseoframework/wpcs-tsf) for opcode performance, intercompatibility, and reliability.
+* **Other:** TODO This plugin is now compatible with PHP 8.0-RC1. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
 
 **Updated extensions:**
 
@@ -59,6 +64,7 @@ NOTE these version numbers are already correct.
 
 TODO update images displayed for Local readme.
 TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
+TODO consider refactoring Honeypot's readme? -> Later?
 
 = 2.4.0 - Linguistic SEO =
 

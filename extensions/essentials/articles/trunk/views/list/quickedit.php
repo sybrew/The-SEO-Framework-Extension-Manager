@@ -14,14 +14,14 @@ use \TSF_Extension_Manager\ListEdit as ListEdit;
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'ABSPATH' ) and ListEdit::verify( $_secret ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and ListEdit::verify( $_secret ) or die;
 
 // NOTE: 'type' is the option name, confusingly so.
 
 ?>
 <div class="inline-edit-group wp-clearfix">
 	<label class=clear>
-	<?php
+		<?php
 		// This is bad accessibility, but it's exactly as bad as WP is, and we don't want to stray away from their standards.
 		printf( '<span class=title>%s</span>', \esc_html( $post_meta['type']['label'] ) );
 		// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
@@ -32,6 +32,6 @@ defined( 'ABSPATH' ) and ListEdit::verify( $_secret ) or die;
 			'default' => '',
 		] );
 		// phpcs:enable, WordPress.Security.EscapeOutput
-	?>
+		?>
 </label>
 </div>

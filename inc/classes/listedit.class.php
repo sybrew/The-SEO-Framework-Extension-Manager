@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) or die;
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_listedit_class = function() {
-	new ListEdit();
+	new ListEdit(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 
 /**
@@ -206,7 +206,7 @@ final class ListEdit {
 	 */
 	public function _prepare_admin_scripts( $hook ) {
 
-		if ( ! in_array( $hook, [ 'edit.php', 'edit-tags.php' ], true ) )
+		if ( ! \in_array( $hook, [ 'edit.php', 'edit-tags.php' ], true ) )
 			return;
 
 		$this->register_default_scripts();
@@ -437,7 +437,7 @@ final class ListEdit {
 		unset( $_key, $_val, $args );
 
 		//= Prevent private includes hijacking.
-		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
+		static::$include_secret = $_secret = mt_rand() . uniqid( '', true ); // phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes
 		include $file;
 		static::$include_secret = null;
 	}

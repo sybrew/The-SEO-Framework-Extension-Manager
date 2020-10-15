@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -82,7 +82,7 @@ trait Time {
 		$year  = $week * 52;
 
 		//= A more accurate representation. It annotates the beginning of X.
-		//* e.g. last week can be up to 13 days ago; last month 60 days ago, etc.
+		// e.g. last week can be up to 13 days ago; last month 60 days ago, etc.
 		$last_week  = $now - strtotime( 'last week', $now );
 		$last_month = $now - strtotime( 'last month', $now );
 		$last_year  = $now - strtotime( 'last year', $now ); //= '12 months ago'

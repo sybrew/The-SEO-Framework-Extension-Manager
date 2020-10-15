@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -103,20 +103,20 @@ final class AJAX extends Secure_Abstract {
 	 */
 	private static function load_actions() {
 
-		//* Ajax listener for error notice catching.
+		// Ajax listener for error notice catching.
 		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ static::class, '_wp_ajax_get_dismissible_notice' ] );
 		\add_action( 'wp_ajax_tsfem_inpost_get_dismissible_notice', [ static::class, '_wp_ajax_inpost_get_dismissible_notice' ] );
 
-		//* AJAX listener for form iterations.
+		// AJAX listener for form iterations.
 		\add_action( 'wp_ajax_tsfemForm_iterate', [ static::class, '_wp_ajax_tsfemForm_iterate' ], 11 );
 
-		//* AJAX listener for form saving.
+		// AJAX listener for form saving.
 		\add_action( 'wp_ajax_tsfemForm_save', [ static::class, '_wp_ajax_tsfemForm_save' ], 11 );
 
-		//* AJAX listener for Geocoding.
+		// AJAX listener for Geocoding.
 		\add_action( 'wp_ajax_tsfemForm_get_geocode', [ static::class, '_wp_ajax_tsfemForm_get_geocode' ], 11 );
 
-		//* AJAX listener for image cropping.
+		// AJAX listener for image cropping.
 		\add_action( 'wp_ajax_tsfem_crop_image', [ static::class, '_wp_ajax_crop_image' ] );
 
 		/**
@@ -305,7 +305,7 @@ final class AJAX extends Secure_Abstract {
 
 						if ( 'OK' !== $data['status'] ) {
 							switch ( $data['status'] ) :
-								//* @link https://developers.google.com/maps/documentation/geocoding/intro#reverse-response
+								// @link https://developers.google.com/maps/documentation/geocoding/intro#reverse-response
 								case 'ZERO_RESULTS':
 									$send['results'] = static::$instance->get_ajax_notice( false, 17004 );
 									break;

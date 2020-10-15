@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Monitor;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -47,7 +47,7 @@ class Api extends Data {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-		//* Verify integrity.
+		// Verify integrity.
 		$that = __NAMESPACE__ . '\\Admin';
 		$this instanceof $that or \wp_die( -1 );
 	}
@@ -157,7 +157,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'register_site' );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice has already been set. No AJAX conformation here.
+			// Notice has already been set. No AJAX conformation here.
 			return false;
 		}
 
@@ -206,7 +206,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'remove_site' );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice has already been set. No AJAX conformation here.
+			// Notice has already been set. No AJAX conformation here.
 			return false;
 		}
 
@@ -243,7 +243,7 @@ class Api extends Data {
 	protected function api_request_crawl( $ajax = false ) {
 
 		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
-			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			// Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
 			if ( $this->get_option( 'site_requires_fix' ) ) {
 				return $ajax ? $this->get_ajax_notice( false, 1010502 ) : false;
 			} else {
@@ -260,7 +260,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'request_crawl', $ajax );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice has already been set.
+			// Notice has already been set.
 			return $ajax ? $response : false;
 		}
 
@@ -298,7 +298,7 @@ class Api extends Data {
 			return $ajax ? $this->get_ajax_notice( false, 1010505 ) : false;
 		}
 
-		//* Success.
+		// Success.
 		$ajax or $this->set_error_notice( [ 1010506 => '' ] );
 		return $ajax ? $this->get_ajax_notice( true, 1010506 ) : true;
 	}
@@ -318,7 +318,7 @@ class Api extends Data {
 	protected function api_get_remote_data( $ajax = false ) {
 
 		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
-			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			// Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
 			if ( $this->get_option( 'site_requires_fix' ) ) {
 				return $ajax ? $this->get_ajax_notice( false, 1010602 ) : false;
 			} else {
@@ -335,7 +335,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'get_data', $ajax );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice has already been set.
+			// Notice has already been set.
 			return $ajax ? $response : false;
 		}
 
@@ -402,7 +402,7 @@ class Api extends Data {
 	protected function api_update_remote_settings( array $settings, $ajax = false ) {
 
 		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
-			//* Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
+			// Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.
 			if ( $this->get_option( 'site_requires_fix' ) ) {
 				return $ajax ? $this->get_ajax_notice( false, 1010802 ) : false;
 			} else {
@@ -423,7 +423,7 @@ class Api extends Data {
 		$response = $this->get_monitor_api_response( 'update_site', $ajax, compact( 'settings' ) );
 
 		if ( empty( $response['success'] ) ) {
-			//* Notice has already been set in response.
+			// Notice has already been set in response.
 			return $ajax ? $response : false;
 		}
 

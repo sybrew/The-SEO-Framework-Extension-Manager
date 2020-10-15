@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Local extension for The SEO Framework
@@ -3728,9 +3728,9 @@ final class Fields {
 					\__( 'Form language', 'the-seo-framework-extension-manager' ),
 					\__( 'Specify the main language code of the form.', 'the-seo-framework-extension-manager' ),
 				],
-				//* This pattern is confusing for the user.
+				// This pattern is confusing for the user.
 				// '_pattern' => '^((?:en-GB-oed|i-(?:ami|bnn|default|enochian|hak|klingon|lux|mingo|navajo|pwn|t(?:a[oy]|su))|sgn-(?:BE-(?:FR|NL)|CH-DE))|(?:art-lojban|cel-gaulish|no-(?:bok|nyn)|zh-(?:guoyu|hakka|min(?:-nan)?|xiang)))|(?:((?:[A-Za-z]{2,3}(?:-([A-Za-z]{3}(?:-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}|[0-9]{3}))?(?:-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(?:-([0-9A-WY-Za-wy-z](?:-[A-Za-z0-9]{2,8})+))*)(?:-(x(?:-[A-Za-z0-9]{1,8})+))?$',
-				//* This pattern is quite restrictive, but will work with any language.
+				// This pattern is quite restrictive, but will work with any language.
 				'_pattern' => '^[a-zA-Z]{2,3}((-([a-zA-Z]{2,4})-([a-zA-Z]{2,3}))|(-[a-zA-Z]{2,3})|(-[0-9]{3}))?$',
 			],
 			/*== These platforms are not specified on Schema.org, Let's omit them for now until they figure out what to do with it.

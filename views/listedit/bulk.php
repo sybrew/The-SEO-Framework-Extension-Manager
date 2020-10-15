@@ -4,12 +4,15 @@
  * @subpackage TSF_Extension_Manager\Extensions
  */
 
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
 /**
  * @package TSF_Extension_Manager\Classes
  */
-use \TSF_Extension_Manager\ListEdit as ListEdit;
+use TSF_Extension_Manager\ListEdit as ListEdit;
 
-defined( 'ABSPATH' ) and ListEdit::verify( $_secret ) or die;
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and ListEdit::verify( $_secret ) or die;
 
 foreach ( $sections as $section ) {
 	?>

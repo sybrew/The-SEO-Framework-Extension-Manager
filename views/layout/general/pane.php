@@ -1,12 +1,18 @@
 <?php
+/**
+ * @package TSF_Extension_Manager\Core\Views\General
+ */
 
-defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-//* This file can be called through public functions; destroy as much as possible.
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+
+// This file can be called through public functions; destroy as much as possible.
 unset( $bits, $file, $key, $val );
 
 if ( $args['ajax'] ) {
-	$a_id = $args['ajax_id'] ? ' id="' . \esc_attr( $args['ajax_id'] ) . '"' : '';
+	$a_id = $args['ajax_id'] ? ' id="' . esc_attr( $args['ajax_id'] ) . '"' : '';
 	$ajax = '<div class="tsfem-ajax"' . $a_id . '></div>';
 } else {
 	$ajax = '';
@@ -33,20 +39,20 @@ if ( $args['logo'] ) {
 	if ( isset( $args['logo']['svg'] ) ) {
 		$logo = sprintf(
 			'<svg width="%1$s" height="%1$s">%2$s</svg>',
-			\esc_attr( $logo_size ),
+			esc_attr( $logo_size ),
 			sprintf(
 				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s"></image>',
-				\esc_url( $args['logo']['svg'], [ 'https', 'http' ] ),
-				\esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
-				\esc_attr( $logo_size )
+				esc_url( $args['logo']['svg'], [ 'https', 'http' ] ),
+				esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
+				esc_attr( $logo_size )
 			)
 		);
 	} else {
 		$logo = sprintf(
 			'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" height="%3$s" width="%3$s">',
-			\esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
-			isset( $args['logo']['2x'] ) ? \esc_url( $args['logo']['2x'], [ 'https', 'http' ] ) : '',
-			\esc_attr( $logo_size )
+			esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
+			isset( $args['logo']['2x'] ) ? esc_url( $args['logo']['2x'], [ 'https', 'http' ] ) : '',
+			esc_attr( $logo_size )
 		);
 	}
 } else {
@@ -54,21 +60,21 @@ if ( $args['logo'] ) {
 }
 
 ?>
-<section class="<?php echo \esc_attr( implode( ' ', $pane_classes ) ); ?>" id="<?php echo \esc_attr( $pane_id ); ?>">
+<section class="<?php echo esc_attr( implode( ' ', $pane_classes ) ); ?>" id="<?php echo esc_attr( $pane_id ); ?>">
 	<div class="tsfem-pane-wrap">
 		<?php
 		printf(
 			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s%s</h3>%s</header>',
-			$logo,
-			\esc_html( $title ),
-			$ajax
+			$logo, // phpcs:ignore, WordPress.Security.EscapeOutput -- already escaped.
+			esc_html( $title ),
+			$ajax // phpcs:ignore, WordPress.Security.EscapeOutput -- already escaped.
 		);
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
 			<div class="tsfem-pane-content">
 				<?php
 				if ( isset( $callable ) ) {
-					//* If secure, pass object.
+					// If secure, pass object.
 					if ( $args['secure_obj'] ) {
 						call_user_func( $callable, $callable[0], ...$args['cbargs'] );
 					} else {

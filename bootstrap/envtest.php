@@ -42,6 +42,7 @@ tsf_extension_manager_pre_boot_test();
  * @since 2.1.0 Now requires WordPress 4.8+, from 4.7+.
  * @since 2.2.0 1. Now requires WordPress 4.9+, from 4.7+.
  *              2. Now requires PHP 5.6+, from 5.5+.
+ * @since 2.4.1 Now requires WordPress 5.1+, from 4.9+.
  * @access private
  * @link http://php.net/eol.php
  * @link https://codex.wordpress.org/WordPress_Versions
@@ -67,7 +68,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 50605,
-		'wp'  => '4.9-dev',
+		'wp'  => '5.1-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
@@ -114,7 +115,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 		case 2:
 			//* WordPress requirements not met.
-			$requirement = 'WordPress 4.9 or later';
+			$requirement = 'WordPress 5.1 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

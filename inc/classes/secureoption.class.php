@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -43,7 +43,7 @@ final class SecureOption extends Secure_Abstract {
 	 *
 	 * @var array The instance array.
 	 */
-	private static $_instance = [];
+	private static $_instance = []; // phpcs:ignore, PSR2.Classes.PropertyDeclaration.Underscore -- confusing otherwise.
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -81,6 +81,7 @@ final class SecureOption extends Secure_Abstract {
 		}
 	}
 
+	// phpcs:disable
 	/**
 	 * Returns false, unused.
 	 *
@@ -92,12 +93,15 @@ final class SecureOption extends Secure_Abstract {
 	public static function get( $type = '' ) {
 		return false;
 	}
+	// phpcs:enable
 
 	/**
 	 * Sets up verification instance.
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param string $instance The update instance.
+	 * @param array  $bits     The 4-dimension validation bits.
 	 * @return bool True on success, false on failure;
 	 */
 	public static function set_update_instance( $instance, $bits ) {
@@ -152,7 +156,7 @@ final class SecureOption extends Secure_Abstract {
 		static $verified = false;
 
 		if ( false === $verified ) {
-			//* Always update instance before updating options when deactivating.
+			// Always update instance before updating options when deactivating.
 			if ( 'update_option_instance' === $type ) {
 				$verified = true;
 			} elseif ( 'update_option' === $type ) {

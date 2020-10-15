@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -99,7 +99,7 @@ class API extends Core {
 				if ( false === $this->is_connected_user() ) {
 					return $this->do_free_deactivation();
 				}
-				//* Premium/Essential deactivation propagates through API, so nothing happens here.
+				// Premium/Essential deactivation propagates through API, so nothing happens here.
 				break;
 
 			default:
@@ -370,7 +370,7 @@ class API extends Core {
 		$_response       = '';
 		$additional_info = '';
 
-		//* If the user's already using a free account, don't deactivate.
+		// If the user's already using a free account, don't deactivate.
 		$registered_free = $this->is_plugin_activated() && false === $this->is_connected_user();
 
 		if ( 'status' !== $args['request'] ) {

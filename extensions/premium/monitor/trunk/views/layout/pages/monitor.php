@@ -3,10 +3,13 @@
  * @package TSF_Extension_Manager\Extension\Monitor\Admin\Views
  */
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_active_class() and $this instanceof $_class or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-\tsf_extension_manager()->_do_pane_wrap(
-	\__( 'Common Issues', 'the-seo-framework-extension-manager' ),
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Monitor\get_active_class() and $this instanceof $_class or die;
+
+tsf_extension_manager()->_do_pane_wrap(
+	__( 'Common Issues', 'the-seo-framework-extension-manager' ),
 	$this->get_issues_overview(),
 	[
 		'full'     => false,
@@ -19,8 +22,8 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Monitor\get_
 		'ajax_id'  => 'tsfem-e-monitor-issues-ajax',
 	]
 );
-\tsf_extension_manager()->_do_pane_wrap(
-	\__( 'Control Panel', 'the-seo-framework-extension-manager' ),
+tsf_extension_manager()->_do_pane_wrap(
+	__( 'Control Panel', 'the-seo-framework-extension-manager' ),
 	$this->get_cp_overview(),
 	[
 		'full'     => false,

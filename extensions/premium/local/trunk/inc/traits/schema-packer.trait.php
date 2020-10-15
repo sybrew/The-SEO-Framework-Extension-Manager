@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Local extension for The SEO Framework

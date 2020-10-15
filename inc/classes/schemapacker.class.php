@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -271,7 +271,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function iterate( $c = 0 ) {
-		//* Add $c + 1 to current level. We normally count from 0.
+		// Add $c + 1 to current level. We normally count from 0.
 		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
@@ -287,7 +287,7 @@ final class SchemaPacker {
 	 * @return void
 	 */
 	private function deiterate( $c = 0 ) {
-		//* Subtract $c + 1 to current level. We normally count from 0.
+		// Subtract $c + 1 to current level. We normally count from 0.
 		$this->it -= ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
@@ -528,7 +528,7 @@ final class SchemaPacker {
 	 */
 	private function escape( $value, $how ) {
 
-		if ( is_array( $value ) ) {
+		if ( \is_array( $value ) ) {
 			foreach ( $value as $k => $v ) {
 				$value[ $k ] = $this->escape( $v, $how );
 			}
@@ -605,14 +605,14 @@ final class SchemaPacker {
 	 */
 	private function condition( $key, $value, $what ) {
 
-		if ( is_array( $what ) && count( $what ) > 1 ) {
+		if ( \is_array( $what ) && \count( $what ) > 1 ) {
 			foreach ( $what as $w ) {
 				$value = $this->condition( $key, $value, $w );
 			}
 			return $value;
 		}
 
-		$c = is_array( $what ) ? (object) current( $what ) : $what;
+		$c = \is_array( $what ) ? (object) current( $what ) : $what;
 
 		switch ( $c->_if ) {
 			case 'this':
@@ -659,10 +659,10 @@ final class SchemaPacker {
 				if ( ! $v ) {
 					$action = 0 === $c->_value;
 				} else {
-					if ( ! is_array( $v ) && ! is_object( $v ) ) {
+					if ( ! \is_array( $v ) && ! \is_object( $v ) ) {
 						$action = 1 === $c->_value;
 					} else {
-						$action = count( $v ) === $c->_value;
+						$action = \count( $v ) === $c->_value;
 					}
 				}
 				break;
@@ -672,20 +672,20 @@ final class SchemaPacker {
 				if ( ! $v ) {
 					$action = 0 > $c->_value;
 				} else {
-					if ( ! is_array( $v ) && ! is_object( $v ) ) {
+					if ( ! \is_array( $v ) && ! \is_object( $v ) ) {
 						$action = 1 > $c->_value;
 					} else {
-						$action = count( $v ) > $c->_value;
+						$action = \count( $v ) > $c->_value;
 					}
 				}
 				break;
 
 			case 'type_is':
-				$action = gettype( $v ) === $c->_value;
+				$action = \gettype( $v ) === $c->_value;
 				break;
 
 			case 'type_not':
-				$action = gettype( $v ) !== $c->_value;
+				$action = \gettype( $v ) !== $c->_value;
 				break;
 
 			default:

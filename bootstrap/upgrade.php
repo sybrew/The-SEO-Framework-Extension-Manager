@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -38,9 +38,8 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  */
 function _do_critical_core_upgrade( Upgrader $upgrader ) {
 
+	// phpcs:disable -- Example with unused variable.
 	$version = $upgrader->get_current_version( 'core' );
-
-	// phpcs:disable
 
 	// Example:
 	// if ( $version < 1500 ) {

@@ -3,6 +3,7 @@
  * @package TSF_Extension_Manager\Extension\Articles\Views
  * @subpackage TSF_Extension_Manager\Inpost\Structure;
  */
+
 namespace TSF_Extension_Manager\Extension\Articles;
 
 /**
@@ -11,7 +12,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 use \TSF_Extension_Manager\InpostGUI as InpostGUI;
 use \TSF_Extension_Manager\InpostHTML as InpostHTML;
 
-defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and InpostGUI::verify( $_secret ) or die;
 
 create_type_field :;
 	$type_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['type']['label']['title'] );

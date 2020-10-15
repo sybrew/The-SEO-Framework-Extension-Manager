@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -60,11 +60,11 @@ trait UI {
 
 		$this->ui_hook or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
-		//* Remove WordPress footer strings.
+		// Remove WordPress footer strings.
 		\add_action( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
 		\add_action( 'update_footer', '__return_empty_string', PHP_INT_MAX );
 
-		//* Add body class.
+		// Add body class.
 		\add_action( 'admin_body_class', [ $this, '_add_admin_body_class' ], 999, 1 );
 
 		$this->enqueue_admin_scripts();
@@ -176,13 +176,13 @@ trait UI {
 
 		\The_SEO_Framework\Builders\Scripts::prepare();
 
-		//* Enqueue default scripts.
+		// Enqueue default scripts.
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
 
-		//* Enqueue early styles & scripts.
+		// Enqueue early styles & scripts.
 		\add_action( 'admin_enqueue_scripts', [ $this, '_load_admin_scripts' ], 0 );
 
-		//* Enqueue late initialized styles & scripts.
+		// Enqueue late initialized styles & scripts.
 		\add_action( 'admin_footer', [ $this, '_load_admin_scripts' ], 0 );
 	}
 
@@ -308,7 +308,7 @@ trait UI {
 						'nonce'  => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
 						'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 						'i18n'   => [
-							//* TODO categorize
+							// TODO categorize
 
 							// Validation.
 							'requiredSelectAny' => \esc_html__( 'Please select any of the fields to proceed.', 'the-seo-framework-extension-manager' ),

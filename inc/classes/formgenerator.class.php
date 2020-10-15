@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -23,6 +23,8 @@ defined( 'ABSPATH' ) or die;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+// phpcs:disable, Squiz.Commenting.VariableComment.DuplicateVar, PSR2.Classes.PropertyDeclaration.Multiple -- @TODO later. This class is too complex.
 
 /**
  * Holds settings generator functions for package TSF_Extension_Manager\Extension.
@@ -92,8 +94,8 @@ final class FormGenerator {
 	 * @var int   $it
 	 */
 	private $level       = 0,
-	        $level_names = [],
-	        $it          = 0;
+			$level_names = [],
+			$it          = 0;
 
 	/**
 	 * Holds AJAX calling settings.
@@ -247,13 +249,13 @@ final class FormGenerator {
 		$caller = $_POST['args']['caller'];
 		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
-		//* Unset the option indexes.
+		// Unset the option indexes.
 		$unset_count = $this->has_o_key ? 3 : 2;
 		while ( $unset_count-- ) {
 			array_shift( $items );
 		}
 
-		//* Remove current item, as the iterator reintroduces it.
+		// Remove current item, as the iterator reintroduces it.
 		array_pop( $items );
 
 		foreach ( $items as $item ) {
@@ -287,7 +289,7 @@ final class FormGenerator {
 	 */
 	private function prepare_ajax_iteration_fields() {
 
-		//* TODO Move this into method parameter so we can loop?
+		// TODO Move this into method parameter so we can loop?
 		$k = key( static::$ajax_it_fields );
 
 		static::$ajax_it_fields[ $k ]['_type']          = 'iterate_ajax';
@@ -500,7 +502,7 @@ final class FormGenerator {
 		$_fields = '';
 
 		foreach ( $this->generate_fields( $fields ) as $field ) {
-			//* Already escaped.
+			// Already escaped.
 			$_fields .= $field;
 		}
 
@@ -716,7 +718,7 @@ final class FormGenerator {
 		// 0 = base option index. 1 = extension index.
 		if ( 'full' !== $what ) {
 			$slice = $this->has_o_key ? 3 : 2;
-			$id    = array_slice( $id, $slice );
+			$id    = \array_slice( $id, $slice );
 		}
 
 		$id[] = $key;
@@ -799,7 +801,7 @@ final class FormGenerator {
 	 * @return void
 	 */
 	private function iterate( $c = 0 ) {
-		//* Add $c + 1 to current level. We normally count from 0.
+		// Add $c + 1 to current level. We normally count from 0.
 		$this->it += ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
@@ -815,7 +817,7 @@ final class FormGenerator {
 	 * @return void
 	 */
 	private function deiterate( $c = 0 ) {
-		//* Subtract $c + 1 to current level. We normally count from 0.
+		// Subtract $c + 1 to current level. We normally count from 0.
 		$this->it -= ( ++$c << ( ( $this->level - 1 ) * $this->bits ) );
 	}
 
@@ -1187,7 +1189,7 @@ final class FormGenerator {
 		echo '<div class="tsfem-form-iterator-setting">';
 
 		$it_option_key = key( $args['_iterate_selector'] );
-		//* Set maximum iterations based on option depth if left unassigned.
+		// Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
 		printf(
@@ -1222,7 +1224,7 @@ final class FormGenerator {
 		);
 
 		for ( $it = 0; $it < $count; $it++ ) {
-			//* PHP automatically checks if sprintf is meaningful.
+			// PHP automatically checks if sprintf is meaningful.
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
@@ -1263,7 +1265,7 @@ final class FormGenerator {
 	private function output_ajax_fields_iterator( array $args ) {
 
 		$it_option_key = key( $args['_iterate_selector'] );
-		//* Set maximum iterations based on option depth if left unassigned.
+		// Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
 		$start  = (int) $args['_ajax_it_start'];
@@ -1276,7 +1278,7 @@ final class FormGenerator {
 		$this->iterate( $start - 1 );
 
 		for ( $it = $start; $it < $amount; $it++ ) {
-			//* PHP automatically checks if sprintf is meaningful.
+			// PHP automatically checks if sprintf is meaningful.
 			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
@@ -1309,7 +1311,7 @@ final class FormGenerator {
 
 		$it_option_key = key( $args['_iterate_selector'] );
 
-		//* Set maximum iterations based on option depth if left unassigned.
+		// Set maximum iterations based on option depth if left unassigned.
 		$this->set_max_iterations( $args['_iterate_selector'][ $it_option_key ]['_range'][1] );
 
 		$selector = $this->get_fields( $args['_iterate_selector'] );
@@ -1422,7 +1424,7 @@ final class FormGenerator {
 			return sprintf( '<div class="tsfem-form-collapse" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
 			; // Added to prevent breaking alternative if/elseif control.
 		elseif ( 'end' === $what ) :
-			//* ok.
+			// ok.
 			return '</div></div>';
 		endif;
 
@@ -1745,7 +1747,7 @@ final class FormGenerator {
 		$_fields = '';
 
 		foreach ( $this->generate_select_fields( $select, $selected, $multiple ) as $field ) {
-			//* Already escaped.
+			// Already escaped.
 			$_fields .= $field;
 		}
 
@@ -1780,17 +1782,17 @@ final class FormGenerator {
 			foreach ( $select as $args ) :
 
 				if ( $_level ) {
-					//* Multilevel isn't supported by Chrome, for instance, yet.
+					// Multilevel isn't supported by Chrome, for instance, yet.
 					// $args[1] = 1 === $_level ? '&nbsp;&nbsp;' . $args[1] : str_repeat( '&nbsp;&nbsp;', $_level ) . $args[1];
 					$args[1] = '&nbsp;&nbsp;' . $args[1];
 				}
 
-				$s_selected = in_array( $args[0], $a_selected, true ) ? ' selected' : '';
+				$s_selected = \in_array( $args[0], $a_selected, true ) ? ' selected' : '';
 				//= Prevent more lookups if found.
 				$_next = $s_selected && ! $multiple ? '' : $selected;
 
 				if ( isset( $args[2] ) ) {
-					//* Level up.
+					// Level up.
 					yield sprintf( '<optgroup label="%s">', $args[1] );
 					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 					++$_level;
@@ -1805,13 +1807,13 @@ final class FormGenerator {
 			foreach ( $select as $args ) :
 
 				if ( $_level ) {
-					//* Multilevel isn't supported by Chrome, for instance, yet.
+					// Multilevel isn't supported by Chrome, for instance, yet.
 					// $args[1] = 1 === $_level ? '&nbsp;&nbsp;' . $args[1] : str_repeat( '&nbsp;&nbsp;', $_level ) . $args[1];
 					$args[1] = '&nbsp;&nbsp;' . $args[1];
 				}
 
 				if ( isset( $args[2] ) ) {
-					//* Level up.
+					// Level up.
 					yield sprintf( '<optgroup label="%s">', $args[1] );
 					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
 					++$_level;
@@ -1906,7 +1908,7 @@ final class FormGenerator {
 		$_fields = '';
 
 		foreach ( $this->generate_select_multi_a11y_fields( $select, $selected ) as $field ) {
-			//* Already escaped.
+			// Already escaped.
 			$_fields .= $field;
 		}
 
@@ -1939,9 +1941,9 @@ final class FormGenerator {
 		foreach ( $select as $args ) :
 			$this->iterate();
 			if ( isset( $args[2] ) ) {
-				//* Level up.
+				// Level up.
 				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
-				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
+				if ( [] !== $selected && \in_array( $args[0], $selected, true ) ) {
 					yield sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
 						$this->get_field_id(),
@@ -1957,12 +1959,12 @@ final class FormGenerator {
 					);
 				}
 				yield '<li>';
-				//* Level continue.
+				// Level continue.
 				yield $this->get_select_multi_a11y_options( $args[2], $selected );
-				//* Level down.
+				// Level down.
 				yield '</li>';
 			} else {
-				if ( [] !== $selected && in_array( $args[0], $selected, true ) ) {
+				if ( [] !== $selected && \in_array( $args[0], $selected, true ) ) {
 					yield sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
 						$this->get_field_id(),

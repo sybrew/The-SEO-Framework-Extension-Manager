@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -334,20 +334,20 @@ trait Extension_Options {
 
 		$options = $this->get_extension_options();
 
-		//* If option is unchanged, return true.
+		// If option is unchanged, return true.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
 			return true;
 
 		$options[ $option ] = $value;
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
@@ -370,20 +370,20 @@ trait Extension_Options {
 
 		$options = $this->get_extension_options();
 
-		//* If option is non existent, return true.
+		// If option is non existent, return true.
 		if ( ! isset( $options[ $option ] ) )
 			return true;
 
 		unset( $options[ $option ] );
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
@@ -402,10 +402,10 @@ trait Extension_Options {
 		if ( ! $this->o_index )
 			return false;
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options = Extensions_Options_Cache::_get_options_cache();
 
-		//* If index is non existent, return true.
+		// If index is non existent, return true.
 		if ( ! isset( $c_options[ $this->o_index ] ) )
 			return true;
 
@@ -418,7 +418,7 @@ trait Extension_Options {
 		}
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 
@@ -535,20 +535,20 @@ trait Extension_Options {
 
 		$options = $this->get_stale_extension_options();
 
-		//* If option is unchanged, return true.
+		// If option is unchanged, return true.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
 			return true;
 
 		$options[ $option ] = $value;
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options                   = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
@@ -571,13 +571,13 @@ trait Extension_Options {
 
 		$options = $this->get_stale_extension_options();
 
-		//* If option is non existent, return true.
+		// If option is non existent, return true.
 		if ( ! isset( $options[ $option ] ) )
 			return true;
 
 		unset( $options[ $option ] );
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options                   = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
@@ -588,7 +588,7 @@ trait Extension_Options {
 		}
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, $options );
 		}
 
@@ -607,10 +607,10 @@ trait Extension_Options {
 		if ( ! $this->o_index )
 			return false;
 
-		//* Prepare options cache.
+		// Prepare options cache.
 		$c_options = Stale_Extensions_Options_Cache::_get_options_cache();
 
-		//* If index is non existent, return true.
+		// If index is non existent, return true.
 		if ( ! isset( $c_options[ $this->o_index ] ) )
 			return true;
 
@@ -619,7 +619,7 @@ trait Extension_Options {
 		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
 		if ( $success ) {
-			//* Update options cache on success.
+			// Update options cache on success.
 			Stale_Extensions_Options_Cache::_set_options_cache( $this->o_index, null, true );
 		}
 

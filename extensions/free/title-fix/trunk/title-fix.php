@@ -15,7 +15,7 @@ namespace TSF_Extension_Manager\Extension\Title_Fix;
  * Extension License: GPLv3
  */
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -37,11 +37,11 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//* Notify the existence of this extension through a lovely definition.
-define( 'TSFEM_E_TITLE_FIX', true );
+// Notify the existence of this extension through a lovely definition.
+\define( 'TSFEM_E_TITLE_FIX', true );
 
-//* Define version, for future things.
-define( 'TSFEM_E_TITLE_FIX_VERSION', '1.2.0' );
+// Define version, for future things.
+\define( 'TSFEM_E_TITLE_FIX_VERSION', '1.2.0' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\title_fix_init', 11 );
 /**
@@ -59,16 +59,16 @@ function title_fix_init() {
 
 	static $loaded = null;
 
-	//* Don't init the class twice.
+	// Don't init the class twice.
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	//* Don't load if the WordPress.org version is active.
-	if ( class_exists( 'The_SEO_Framework_Title_Fix', false ) )
+	// Don't load if the WordPress.org version is active.
+	if ( class_exists( 'The_SEO_Framework_Title_Fix', false ) ) // phpcs:ignore, TSF.Performance.Functions.PHP -- required, memoized.
 		return $loaded = false;
 
-	//* Backward compatibility
-	define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
+	// Backward compatibility
+	\define( 'THE_SEO_FRAMEWORK_TITLE_FIX', true );
 
 	new Core;
 
@@ -120,7 +120,7 @@ final class Core {
 	 * The constructor, initialize plugin.
 	 */
 	private function construct() {
-		//* Start the plugin at header, where theme support has just been initialized.
+		// Start the plugin at header, where theme support has just been initialized.
 		\add_action( 'get_header', [ $this, 'start_plugin' ], -1 );
 	}
 
@@ -143,7 +143,7 @@ final class Core {
 		 * Requires initial load after theme switch.
 		 */
 		if ( false === $this->current_theme_supports_title_tag() ) :
-			//* Start loader.
+			// Start loader.
 			$this->loader();
 
 			/**
@@ -242,7 +242,7 @@ final class Core {
 	 */
 	public function maybe_start_ob() {
 
-		//* Reset the output buffer if not found.
+		// Reset the output buffer if not found.
 		if ( false === $this->ob_started && false === $this->title_found_and_flushed ) {
 			$this->start_ob();
 		}
@@ -255,7 +255,7 @@ final class Core {
 	 */
 	public function maybe_stop_ob() {
 
-		//* Let's not buffer all the way down.
+		// Let's not buffer all the way down.
 		if ( $this->ob_started && $this->title_found_and_flushed ) {
 			$this->stop_ob();
 		}
@@ -292,7 +292,7 @@ final class Core {
 	 */
 	public function find_title_tag( $content ) {
 
-		//* Let's use regex.
+		// Let's use regex.
 		if ( 1 === preg_match( '/<title.*?<\/title>/is', $content, $matches ) ) {
 			$title_tag = isset( $matches[0] ) ? $matches[0] : null;
 
@@ -321,8 +321,8 @@ final class Core {
 
 		$new_title = '<title>' . \the_seo_framework()->get_title() . '</title>' . $this->indicator();
 
-		//* Replace the title tag within the header.
-		//* TODO substr_replace to prevent multiple replacements? The DOM should contain only one title tag, though.
+		// Replace the title tag within the header.
+		// TODO substr_replace to prevent multiple replacements? The DOM should contain only one title tag, though.
 		$content = str_replace( $title_tag, $new_title, $content );
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Not our content.

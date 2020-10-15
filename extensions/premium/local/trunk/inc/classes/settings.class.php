@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -281,7 +281,7 @@ final class Settings {
 
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_local_scripts' ] );
 
-		//* Add something special for Vivaldi
+		// Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		/**

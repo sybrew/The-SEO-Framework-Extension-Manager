@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -231,7 +231,7 @@ final class Layout extends Secure_Abstract {
 			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
 				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
-				//* UTC.
+				// UTC.
 				$end_date           = isset( $data['status']['end_date'] ) ? $data['status']['end_date'] : '';
 				$payment_date       = isset( $data['status']['payment_date'] ) ? $data['status']['payment_date'] : '';
 				$domain             = isset( $data['status']['activation_domain'] ) ? $data['status']['activation_domain'] : '';
@@ -358,7 +358,7 @@ final class Layout extends Secure_Abstract {
 		}
 
 		if ( $valid_options && $domain ) {
-			//* Check for domain mismatch. If they don't match no premium extensions can be activated.
+			// Check for domain mismatch. If they don't match no premium extensions can be activated.
 			$_domain  = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 			$_warning = '';
 			$_classes = [ 'tsfem-dashicon' ];
@@ -400,7 +400,7 @@ final class Layout extends Secure_Abstract {
 
 			// Move to time.trait?
 			if ( $difference < 0 ) {
-				//* Expired.
+				// Expired.
 				$expires_in = \__( 'Account expired', 'the-seo-framework-extension-manager' );
 				$_class     = 'tsfem-error';
 			} elseif ( $difference < WEEK_IN_SECONDS ) {
@@ -450,7 +450,7 @@ final class Layout extends Secure_Abstract {
 				// Probably a permanent subscription. Let's not bother my friends.
 				goto end;
 			} elseif ( $difference < 0 ) {
-				//* Processing.
+				// Processing.
 				$payment_in = \__( 'Payment processing', 'the-seo-framework-extension-manager' );
 				$_class     = 'tsfem-warning';
 			} elseif ( $difference < WEEK_IN_SECONDS ) {

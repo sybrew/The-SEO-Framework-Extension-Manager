@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'TSFEM_E_LOCAL_DB_VERSION' ) or die;
+\defined( 'TSFEM_E_LOCAL_DB_VERSION' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin

@@ -16,7 +16,7 @@ namespace TSF_Extension_Manager\Extension\Cord;
  * Extension Menu Slug: theseoframework-extension-settings
  */
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Cord extension for The SEO Framework
@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) or die;
  *
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_CORD_VERSION', '1.0.0' );
+\define( 'TSFEM_E_CORD_VERSION', '1.0.0' );
 
 /**
  * The extension database version.
@@ -50,35 +50,36 @@ define( 'TSFEM_E_CORD_VERSION', '1.0.0' );
  * @since ?.?.?
  * @ignore
  */
-// define( 'TSFEM_E_CORD_DB_VERSION', '1000' );
+// phpcs:ignore
+// \define( 'TSFEM_E_CORD_DB_VERSION', '1000' );
 
 /**
  * The extension file, absolute unix path.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_CORD_BASE_FILE', __FILE__ );
+\define( 'TSFEM_E_CORD_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_CORD_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_CORD_BASE_FILE ) );
+\define( 'TSFEM_E_CORD_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_CORD_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_CORD_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_CORD_BASE_FILE ) );
+\define( 'TSFEM_E_CORD_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_CORD_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_CORD_PATH_CLASS', TSFEM_E_CORD_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_CORD_PATH_CLASS', TSFEM_E_CORD_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
@@ -88,9 +89,11 @@ define( 'TSFEM_E_CORD_PATH_CLASS', TSFEM_E_CORD_DIR_PATH . 'inc' . DIRECTORY_SEP
 if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_CORD_PATH_CLASS, 'Cord', $_instance, $bits ) )
 	return;
 
+// phpcs:disable -- @ignore
 // if ( TSFEM_E_CORD_DB_VERSION > \tsf_extension_manager_db_version( 'cord' ) ) {
 // 	require TSFEM_E_CORD_DIR_PATH . 'upgrade.php';
 // }
+// phpcs:enable
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_cord_init', 11 );
 /**

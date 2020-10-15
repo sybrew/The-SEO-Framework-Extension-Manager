@@ -23,6 +23,13 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
  */
 
 /**
+ * Tells the world the plugin is present and to be used.
+ *
+ * @since 2.4.1
+ */
+define( 'TSF_EXTENSION_MANAGER_PRESENT', true );
+
+/**
  * NOTE:
  * The definable constants should be defined in `wp-config.php`.
  * Alternatively, you may define them conditionally in a mu-plugin.

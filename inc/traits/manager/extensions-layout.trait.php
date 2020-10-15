@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -275,7 +275,7 @@ trait Extensions_Layout {
 				'disabled' => $disabled,
 			];
 		} else {
-			//* Disable if: Extension is not compatible || User isn't premium/connected and extension is.
+			// Disable if: Extension is not compatible || User isn't premium/connected and extension is.
 			$disabled = $disabled
 				|| ! static::is_extension_compatible( $extension )
 				|| ( ! self::is_premium_user() && static::is_extension_premium( $extension ) )
@@ -312,7 +312,7 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_button_form( $slug = '', $type = '', $disabled = false ) {
 
-		//* This pattern can't be unseen. Let's just keep it this way until further notice.
+		// This pattern can't be unseen. Let's just keep it this way until further notice.
 		switch ( $type ) :
 			case 'activate':
 				$nonce_key = 'activate-ext';
@@ -344,8 +344,9 @@ trait Extensions_Layout {
 			$s_slug = \sanitize_key( $slug );
 
 			nojs:;
+				$nonce        = \tsf_extension_manager()->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
 				$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
-				$nonce = \wp_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true, false );
+
 				$extension = sprintf(
 					'<input type="hidden" name="%s" value="%s">',
 					$cache['input_name'],
@@ -398,7 +399,7 @@ trait Extensions_Layout {
 
 		$footer = static::get_extension_description_footer( $extension );
 
-		//* Put it all together.
+		// Put it all together.
 		$content  = sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
 		$content .= $footer;
 
@@ -424,21 +425,21 @@ trait Extensions_Layout {
 		$data  = static::get_extension_header( $extension['slug'] );
 		$items = [];
 
-		//* Make extension author element. (move link to what's already shown?)
+		// Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
 		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 
-		//* Make extension version element.
+		// Make extension version element.
 		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
 			\the_seo_framework()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
 
-		//* Make extension compatibility element.
+		// Make extension compatibility element.
 		$items['compatible'] = static::get_extension_desc_compat_item( $extension );
 
-		//* Make extension home element.
+		// Make extension home element.
 		if ( ! empty( $data['ExtensionURI'] ) ) {
 			$items['home'] = static::get_extension_desc_home_item( $data['ExtensionURI'] );
 		}

@@ -1,9 +1,15 @@
 <?php
+/**
+ * @package TSF_Extension_Manager\Core\Views\Pages
+ */
 
-defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 $this->_do_pane_wrap(
-	\__( 'Extensions', 'the-seo-framework-extension-manager' ),
+	__( 'Extensions', 'the-seo-framework-extension-manager' ),
 	$this->get_extension_overview(),
 	[
 		'full'     => true,
@@ -15,7 +21,7 @@ $this->_do_pane_wrap(
 	]
 );
 $this->_do_pane_wrap(
-	\__( 'Account and Actions', 'the-seo-framework-extension-manager' ),
+	__( 'Account and Actions', 'the-seo-framework-extension-manager' ),
 	$this->get_extensions_actions_overview(),
 	[
 		'full'     => false,
@@ -29,7 +35,7 @@ $this->_do_pane_wrap(
 
 if ( function_exists( 'simplexml_load_string' ) ) {
 	$this->_do_pane_wrap(
-		\__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
+		__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
 		$this->get_seo_trends_and_updates_overview(),
 		[
 			'full'     => false,

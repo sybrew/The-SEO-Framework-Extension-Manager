@@ -1,12 +1,19 @@
 <?php
 /**
+ * @package TSF_Extension_Manager\Core\Views\Template
+ */
+
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+/**
  * Fall-Back Top Notice.
  */
-defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
+defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 
-$tsfem = \tsf_extension_manager();
+$tsfem = tsf_extension_manager();
 
-$message = \esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
+$message = esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
 $notice  = $tsfem->format_error_notice(
 	'{{data.code}}',
 	[

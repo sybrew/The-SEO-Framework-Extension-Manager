@@ -3,13 +3,17 @@
  * @package TSF_Extension_Manager\Extension\Focus\Admin\Views
  * @subpackage TSF_Extension_Manager\Inpost\Audit;
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
 
 $scoring = Scoring::get_instance();
 
-$scoring->key = $sub_scores['key'];
+$scoring->key    = $sub_scores['key'];
 $scoring->values = $sub_scores['values'];
 
 printf(
@@ -19,7 +23,7 @@ printf(
 );
 printf(
 	'<span class="tsfem-e-focus-no-keyword-wrap hide-if-no-js attention" %s>%s</span>',
-	$has_keyword ? 'style=display:none' : '',
+	( $has_keyword ? 'style=display:none' : '' ),
 	\esc_html__( 'No keyword has been set, so no analysis can be made.', 'the-seo-framework-extension-manager' )
 );
 printf(
@@ -41,7 +45,7 @@ output_scores :;
 			[
 				\esc_attr( $scoring->get_id( $type ) ),
 				'tsfem-e-focus-assessment-wrap tsf-flex',
-				$scoring->get_data_attributes( $type ), // already escaped.
+				$scoring->get_data_attributes( $type ), // phpcs:ignore, WordPress.Security.EscapeOutput -- already escaped.
 				sprintf(
 					'<span class=tsfem-e-focus-assessment-title-wrap>%s%s</span>',
 					sprintf(

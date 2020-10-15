@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -133,17 +133,17 @@ class AccountActivation extends Panes {
 			return true;
 		} elseif ( ! $results ) {
 			if ( $this->get_option( '_activated' ) ) {
-				//* Upgrade request.
+				// Upgrade request.
 				$this->set_error_notice( [ 403 => '' ] );
 			} else {
-				//* Activation request.
+				// Activation request.
 				$this->do_deactivation( false, true );
 				$this->set_error_notice( [ 404 => '' ] );
 			}
 
 			return false;
 		} elseif ( isset( $results['code'] ) ) {
-			//* Probably duplicated local activation request. Will be handled later in response.
+			// Probably duplicated local activation request. Will be handled later in response.
 			return false;
 		}
 
@@ -169,7 +169,7 @@ class AccountActivation extends Panes {
 	protected function handle_premium_disconnection( $args, $results ) {
 
 		if ( isset( $results['deactivated'] ) ) {
-			//* If option has once been registered, deregister options and return activation status.
+			// If option has once been registered, deregister options and return activation status.
 			if ( $this->get_option( '_activated' )
 			&& ( $results['deactivated'] || ( isset( $results['activated'] ) && 'inactive' === $results['activated'] ) )
 			) {
@@ -189,7 +189,7 @@ class AccountActivation extends Panes {
 			return false;
 		}
 
-		//* API server down... TODO consider still handling disconnection locally?
+		// API server down... TODO consider still handling disconnection locally?
 		$this->set_error_notice( [ 503 => '' ] );
 		return null;
 	}
@@ -266,7 +266,7 @@ class AccountActivation extends Panes {
 		$success[] = $this->update_option( '_activation_level', $args['_activation_level'], 'instance', true );
 		$success[] = $this->update_option( '_activated', 'Activated', 'instance', true );
 
-		//* Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
+		// Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
 		$success[] = $this->set_remote_subscription_status( $args );
 
 		return ! in_array( false, $success, true );
@@ -456,22 +456,22 @@ class AccountActivation extends Panes {
 		$status = $this->get_option( '_remote_subscription_status', [ 'timestamp' => 0, 'status' => [] ] );
 
 		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
-			//* Updates at most every 1 minute.
+			// Updates at most every 1 minute.
 			$divider = MINUTE_IN_SECONDS;
 		} else {
-			//* Updates at most every 5 minutes.
+			// Updates at most every 5 minutes.
 			$divider = MINUTE_IN_SECONDS * 5;
 		}
 
-		//* In-house transient cache.
+		// In-house transient cache.
 		$timestamp = (int) ceil( time() / $divider );
 
-		//* Return cached status within 2 hours.
+		// Return cached status within 2 hours.
 		if ( null === $args && $timestamp === $status['timestamp'] )
 			return $response = $status['status'];
 
 		if ( null !== $args ) {
-			//* $args should only be supplied when doing activation.
+			// $args should only be supplied when doing activation.
 			// So, wait 0.0625 seconds as a second request is following up (1~20x load time server).
 			usleep( 62500 );
 		} else {

@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -44,19 +44,19 @@ final class LoadAdmin extends AdminPages {
 	 */
 	private function construct() {
 
-		//* Load activation notices.
+		// Load activation notices.
 		\add_action( 'admin_notices', [ $this, 'do_activation_notice' ] );
 
-		//* Check API blocking.
+		// Check API blocking.
 		\add_action( 'tsfem_notices', [ $this, 'check_external_blocking' ] );
 
 		$this->is_auto_activated()
 			and \add_action( 'admin_init', [ $this, '_check_constant_activation' ] );
 
-		//* Listener for updates.
+		// Listener for updates.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
-		//* Listener for AJAX.
+		// Listener for AJAX.
 		\add_action( 'admin_init', [ $this, '_prepare_admin_ajax' ] );
 	}
 
@@ -124,10 +124,10 @@ final class LoadAdmin extends AdminPages {
 		if ( ! $this->is_tsf_extension_manager_page() || ! \TSF_Extension_Manager\can_do_manager_settings() )
 			return;
 
-		if ( ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL )
+		if ( ! \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL )
 			return;
 
-		$show_notice = ! defined( 'WP_ACCESSIBLE_HOSTS' );
+		$show_notice = ! \defined( 'WP_ACCESSIBLE_HOSTS' );
 		if ( ! $show_notice ) {
 			$wildcard_host = '*.theseoframework.com';
 			/**
@@ -176,7 +176,7 @@ final class LoadAdmin extends AdminPages {
 			[ 'code' ]
 		);
 
-		//* Already escaped.
+		// Already escaped.
 		$this->do_dismissible_notice( $notice, 'error', true, false );
 	}
 
@@ -194,11 +194,11 @@ final class LoadAdmin extends AdminPages {
 		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
 
-		//* Post is taken and will be validated directly below.
+		// Post is taken and will be validated directly below.
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- handle_update_nonce does this.
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
-		//* Options exist. There's no need to check again them.
+		// Options exist. There's no need to check again them.
 		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
@@ -261,7 +261,7 @@ final class LoadAdmin extends AdminPages {
 				break;
 		endswitch;
 
-		//* Adds action to the URI. It's only used to visualize what has happened.
+		// Adds action to the URI. It's only used to visualize what has happened.
 		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
@@ -307,10 +307,10 @@ final class LoadAdmin extends AdminPages {
 			return $validated[ $key ] = false;
 
 		if ( $check_post ) {
-			//* If this page doesn't parse the site options, there's no need to check them on each request.
+			// If this page doesn't parse the site options, there's no need to check them on each request.
 			if ( empty( $_POST ) // input var ok
 			|| ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] )
-			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+			|| ! \is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
 				return $validated[ $key ] = false;
 		}
 
@@ -319,7 +319,7 @@ final class LoadAdmin extends AdminPages {
 				: false;
 
 		if ( false === $result ) {
-			//* Nonce failed. Set error notice and reload.
+			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 9001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
 			exit;
@@ -347,7 +347,7 @@ final class LoadAdmin extends AdminPages {
 
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
-		//* No a11y icon. Already escaped. Use TSF as it loads styles.
+		// No a11y icon. Already escaped. Use TSF as it loads styles.
 		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
 	}
 
@@ -380,7 +380,7 @@ final class LoadAdmin extends AdminPages {
 	 * @return bool True if we're on that page, false if called too early or when we aren't.
 	 */
 	public function is_pagenow( $pagenow = '' ) {
-		return isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], (array) $pagenow, true );
+		return isset( $GLOBALS['pagenow'] ) && \in_array( $GLOBALS['pagenow'], (array) $pagenow, true );
 	}
 
 	/**
@@ -707,7 +707,7 @@ final class LoadAdmin extends AdminPages {
 		static $set        = [];
 
 		if ( false === $parent_set ) {
-			//* Set parent slug.
+			// Set parent slug.
 			\the_seo_framework()->add_menu_link();
 			$parent_set = true;
 		}
@@ -715,7 +715,7 @@ final class LoadAdmin extends AdminPages {
 		if ( isset( $set[ $slug ] ) )
 			return $set[ $slug ];
 
-		//* Add arbitrary menu contents to known menu slug.
+		// Add arbitrary menu contents to known menu slug.
 		$menu = [
 			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
 			'page_title'  => '1',
@@ -772,11 +772,11 @@ final class LoadAdmin extends AdminPages {
 		$slug = \sanitize_key( $options['extension'] );
 
 		//? PHP 7 please.
-		if ( array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 10013, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 10013 ) : false;
 		}
-		if ( in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+		if ( \in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
 			$ajax or $this->register_extension_state_change_notice( 10014, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 10014 ) : false;
 		}
@@ -793,17 +793,17 @@ final class LoadAdmin extends AdminPages {
 		if ( true !== $result ) :
 			switch ( $result ) :
 				case -1:
-					//* No checksum found.
+					// No checksum found.
 					$ajax or $this->set_error_notice( [ 10001 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10001 ) : false;
 
 				case -2:
-					//* Checksum mismatch.
+					// Checksum mismatch.
 					$ajax or $this->set_error_notice( [ 10002 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10002 ) : false;
 
 				default:
-					//* Method mismatch error. Unknown error.
+					// Method mismatch error. Unknown error.
 					$ajax or $this->set_error_notice( [ 10003 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
 			endswitch;
@@ -824,7 +824,7 @@ final class LoadAdmin extends AdminPages {
 			$test = $this->test_extension( $slug, $ajax );
 
 			//= 5 means it's already activated. 4 means it passed all tests.
-			if ( ! in_array( $test, [ 4, 5 ], true ) || $this->_has_died() ) {
+			if ( ! \in_array( $test, [ 4, 5 ], true ) || $this->_has_died() ) {
 				$ajax or $this->set_error_notice( [ 10005 => $test ] );
 				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
@@ -840,32 +840,32 @@ final class LoadAdmin extends AdminPages {
 
 		switch ( $status['case'] ) :
 			case 1:
-				//* No slug set.
+				// No slug set.
 				$code = 10007;
 				break;
 
 			case 2:
-				//* Premium/Essentials activated.
+				// Premium/Essentials activated.
 				$code = 10008;
 				break;
 
 			case 3:
-				//* Premium/Essentials failed: User not connected.
+				// Premium/Essentials failed: User not connected.
 				$code = 10009;
 				break;
 
 			case 4:
-				//* Free activated.
+				// Free activated.
 				$code = 10010;
 				break;
 
 			case 5:
-				//* Was already active.
+				// Was already active.
 				$code = 10012;
 				break;
 
 			default:
-				//* Unknown case.
+				// Unknown case.
 				$code = 10011;
 				break;
 		endswitch;
@@ -901,11 +901,11 @@ final class LoadAdmin extends AdminPages {
 		$slug = \sanitize_key( $options['extension'] );
 
 		//? PHP 7 please.
-		if ( array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 11003, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 11003 ) : false;
 		}
-		if ( in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+		if ( \in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
 			$ajax or $this->register_extension_state_change_notice( 11004, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 11004 ) : false;
 		}
@@ -1047,7 +1047,7 @@ final class LoadAdmin extends AdminPages {
 
 		$extensions[ $slug ] = (bool) $enable;
 
-		//* Kill options on failure when enabling.
+		// Kill options on failure when enabling.
 		$kill = $enable;
 
 		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );

@@ -3,9 +3,13 @@
  * @package TSF_Extension_Manager\Extension\Focus\Admin\Views
  * @subpackage TSF_Extension_Manager\Inpost\Audit;
  */
+
 namespace TSF_Extension_Manager\Extension\Focus;
 
-defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes. (somehow, this file doesn't parse well...)
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
 
 ?>
 <div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
@@ -32,11 +36,14 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 					'<select id=%s value="%s" class="%s" disabled>%s</select>',
 					\esc_attr( $post_input['lexical_form']['selector_id'] ),
 					\esc_attr( $post_input['lexical_form']['value'] ),
-					\esc_attr( implode( ' ', [
-						'tsfem-e-focus-lexical-selector',
-						'tsfem-e-focus-enable-if-js',
-						'tsfem-e-focus-requires-javascript',
-					] ) ),
+					\esc_attr( implode(
+						' ',
+						[
+							'tsfem-e-focus-lexical-selector',
+							'tsfem-e-focus-enable-if-js',
+							'tsfem-e-focus-requires-javascript',
+						]
+					) ),
 					\TSF_Extension_Manager\HTML::make_sequential_dropdown_option_list(
 						$post_input['lexical_data']['value'],
 						$post_input['lexical_form']['value'] ?: ''
@@ -55,7 +62,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				vprintf(
 					'<input type=hidden id="%s" name=%s value="%s">',
 					[
-						$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
+						\esc_attr( $is_premium ? $hidden_input['id'] : '' ),
 						\esc_attr( $hidden_input['id'] ),
 						\esc_attr( json_encode( $hidden_input['value'] ) ),
 					]
@@ -68,7 +75,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				vprintf(
 					'<input type=hidden id="%s" name=%s value="%s">',
 					[
-						$is_premium ? \esc_attr( $hidden_input['id'] ) : '',
+						\esc_attr( $is_premium ? $hidden_input['id'] : '' ),
 						\esc_attr( $hidden_input['id'] ),
 						\esc_attr( $hidden_input['value'] ),
 					]
@@ -85,12 +92,15 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 
 				printf(
 					'<span class="%s">%s</span>',
-					\esc_attr( implode( ' ', [
-						'tsfem-e-focus-edit-subject-button-wrap',
-						'tsfem-e-focus-edit-subject-button-wrap-disabled',
-						'tsfem-e-focus-requires-javascript',
-						'tsf-tooltip-wrap',
-					] ) ),
+					\esc_attr( implode(
+						' ',
+						[
+							'tsfem-e-focus-edit-subject-button-wrap',
+							'tsfem-e-focus-edit-subject-button-wrap-disabled',
+							'tsfem-e-focus-requires-javascript',
+							'tsf-tooltip-wrap',
+						]
+					) ),
 					vsprintf(
 						'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 						[
@@ -99,12 +109,15 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 								\esc_attr( $action_ids['subject_edit'] )
 							),
 							\esc_attr( $action_ids['subject_edit'] ),
-							\esc_attr( implode( ' ', [
-								'tsfem-e-focus-edit-subject',
-								'tsfem-e-inpost-icon',
-								'tsfem-e-inpost-icon-edit',
-								'tsf-tooltip-item',
-							] ) ),
+							\esc_attr( implode(
+								' ',
+								[
+									'tsfem-e-focus-edit-subject',
+									'tsfem-e-inpost-icon',
+									'tsfem-e-inpost-icon-edit',
+									'tsf-tooltip-item',
+								]
+							) ),
 							\esc_attr__( 'Adjusting the subject requires JavaScript', 'the-seo-framework-extension-manager' ),
 							\esc_attr( $_tooltip ),
 						]
@@ -114,7 +127,7 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 				//= TEMP until highligher comes.
 				print '<span class=tsfem-e-focus-pusher></span>';
 			}
-			// TODO: upcoming version.
+			// phpcs:disable -- TODO: upcoming version.
 			// printf(
 			// 	'<span class="%s">%s</span>',
 			// 	\esc_attr( implode( ' ', [
@@ -141,9 +154,10 @@ defined( 'ABSPATH' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_ac
 			// 		]
 			// 	)
 			// );
+			// phpcs:enable
 			printf(
 				'<label class="tsfem-e-focus-arrow-label" for=%s title="%s">%s</label>',
-				\esc_attr( $action_ids['collapser'] ), //* @see first checkbox
+				\esc_attr( $action_ids['collapser'] ), // @see first checkbox
 				\esc_attr__( 'View analysis', 'the-seo-framework-extension-manager' ),
 				'<span class="tsf-tooltip-item tsfem-e-focus-arrow-item"></span>'
 			);

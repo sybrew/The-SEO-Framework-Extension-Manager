@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -86,8 +86,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1596406019',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -99,8 +99,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1602590757',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -112,8 +112,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1542470700',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -125,8 +125,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1576470514',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -138,8 +138,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1590706430',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -151,8 +151,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1565627638',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -164,8 +164,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1596406019',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -177,8 +177,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1515109560',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -190,8 +190,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1541601833',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -203,8 +203,8 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1572496812',
-				'requires'     => '4.9',
-				'tested'       => '5.4',
+				'requires'     => '5.1',
+				'tested'       => '5.5',
 				'requires_tsf' => '4.0.5',
 				'tested_tsf'   => '4.1',
 			],
@@ -224,9 +224,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '1a9fe995cea4aced53cc325395739bc04e017b42c2238319a1d9b4c567ca05f1',
-			'sha1'   => '2ef2de98dc2e51aa8be8298f790640085211743d',
-			'md5'    => '065af671021a6859248d0171e5be4331',
+			'sha256' => '21369e3887fabfbe4027cafe75037c476b77a2dda146fb80661d03ae5b472877',
+			'sha1'   => '3ad61c55a86abe702a4f7a84aab1bae7886ac159',
+			'md5'    => '6594ca9d7b4c5b454b70826c8a54cc3a',
 		];
 	}
 
@@ -241,7 +241,7 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension( $slug ) {
 
-		if ( is_array( $slug ) )
+		if ( \is_array( $slug ) )
 			$slug = key( $slug );
 
 		if ( $slug ) {
@@ -397,6 +397,7 @@ trait Extensions_Properties {
 
 		$file = static::get_extension_header_file_location( $slug );
 
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- required.
 		if ( file_exists( $file ) )
 			$data[ $slug ] = \get_file_data( $file, $default_headers, 'tsfem-extension' );
 
@@ -580,7 +581,7 @@ trait Extensions_Actions {
 	 */
 	private static function is_extension_premium( $extension ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		return 'premium' === $extension['type'];
@@ -596,7 +597,7 @@ trait Extensions_Actions {
 	 */
 	private static function is_extension_essentials( $extension ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		return false !== strpos( $extension['type'], 'essentials' );
@@ -612,7 +613,7 @@ trait Extensions_Actions {
 	 */
 	private static function is_extension_network( $extension ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		return '1' === $extension['network'];
@@ -628,7 +629,7 @@ trait Extensions_Actions {
 	 */
 	private static function is_extension_active( $extension ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		$active = static::get_active_extensions();
@@ -652,7 +653,7 @@ trait Extensions_Actions {
 	 */
 	private static function is_extension_compatible( $extension ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		if ( ! $extension ) return false;
@@ -677,7 +678,7 @@ trait Extensions_Actions {
 	 */
 	private static function determine_extension_incompatibility( $extension, $get_bits = false ) {
 
-		if ( is_string( $extension ) )
+		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
 		if ( ! $extension ) return null;
@@ -734,7 +735,7 @@ trait Extensions_Actions {
 		preg_match( $regex, $version1, $m_version1 );
 		preg_match( $regex, $version2, $m_version2 );
 
-		switch ( count( $m_version2 ) ) {
+		switch ( \count( $m_version2 ) ) {
 			case 4: // branch
 			case 3: // minor
 				if ( isset( $operator ) )
@@ -804,27 +805,27 @@ trait Extensions_Actions {
 			goto tick;
 		}
 
-		//* Goto tick is now forbidden. Use goto clean.
+		// Goto tick is now forbidden. Use goto clean.
 		unclean : {
 			ob_start();
 
-			define( '_TSFEM_TESTING_EXTENSION', true );
-			define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
+			\define( '_TSFEM_TESTING_EXTENSION', true );
+			\define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
-			//* We only want to catch a fatal/parse error.
+			// We only want to catch a fatal/parse error.
 			static::set_error_reporting( E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR );
 
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
 
 		basetest : {
-			//* Test base file.
+			// Test base file.
 			$success = static::persist_include_extension( $file, $_instance, $bits );
 		}
 
 		if ( $success ) {
 			jsontest : {
-				//* Test json file and contents.
+				// Test json file and contents.
 				$success = static::perform_extension_json_tests( $slug, $_instance, $bits );
 			}
 		}
@@ -836,12 +837,12 @@ trait Extensions_Actions {
 
 			static::reset_error_reporting();
 
-			//* No fatal error has occurred, pass and therefore nullify shutdown function.
-			define( '_TSFEM_TEST_EXT_PASS', true );
+			// No fatal error has occurred, pass and therefore nullify shutdown function.
+			\define( '_TSFEM_TEST_EXT_PASS', true );
 		}
 
 		tick : {
-			//* Tick the instance.
+			// Tick the instance.
 			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 		}
 
@@ -874,28 +875,29 @@ trait Extensions_Actions {
 			goto end;
 
 		$timeout = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- this is a local file call.
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions, TSF.Performance.Functions -- this is a local file call, required file get.
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
 		if ( empty( $json ) ) {
-			//* json file contents are invalid.
+			// json file contents are invalid.
 			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
 
-			// This won't run, and that's OK.
+			// phpcs:disable, Squiz.PHP.NonExecutableCode.Unreachable -- This won't run, and that's OK.
 			$success[] = false;
 			goto end;
+			// phpcs:enable, Squiz.PHP.NonExecutableCode.Unreachable
 		}
 
 		$namespace = empty( $json->namespace ) ? '' : $json->namespace;
 		$tests     = empty( $json->test ) ? [] : (array) $json->test;
 
 		foreach ( $tests as $_class => $_file ) {
-			//* Base file is already tested.
+			// Base file is already tested.
 			if ( '_base' === $_class )
 				continue;
 
-			if ( is_array( $_file ) ) {
-				//* Facade.
+			if ( \is_array( $_file ) ) {
+				// Facade.
 				foreach ( $_file as $f_file ) {
 					$success[] = static::persist_include_extension( $base_path . $f_file, $_instance, $bits );
 				}
@@ -910,7 +912,7 @@ trait Extensions_Actions {
 		}
 
 		end :;
-		return ! in_array( false, $success, true );
+		return ! \in_array( false, $success, true );
 	}
 
 	/**
@@ -928,7 +930,7 @@ trait Extensions_Actions {
 		$yield_count = 0;
 		$success     = [];
 
-		//* Get follow-up verification instance.
+		// Get follow-up verification instance.
 		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
 			$bits      = $verification['bits'];
@@ -945,7 +947,7 @@ trait Extensions_Actions {
 			endswitch;
 		endforeach;
 
-		return ! in_array( false, $success, true );
+		return ! \in_array( false, $success, true );
 	}
 
 	/**
@@ -975,18 +977,19 @@ trait Extensions_Actions {
 	 * @return void Early if $val is null.
 	 */
 	private static function set_error_reporting( $val = null ) {
+		// phpcs:disable, WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- Required catchables.
 
 		static $_prev_error_reporting = null;
 
 		if ( null === $val ) {
-			//* Reset error reporting, if set.
+			// Reset error reporting, if set.
 			if ( isset( $_prev_error_reporting ) )
 				error_reporting( $_prev_error_reporting );
 
 			return;
 		}
 
-		//* Cache previous error reporting.
+		// Cache previous error reporting.
 		if ( null === $_prev_error_reporting )
 			$_prev_error_reporting = error_reporting();
 
@@ -994,11 +997,13 @@ trait Extensions_Actions {
 			error_reporting( $val );
 
 		if ( 0 === $val ) {
-			//* Also disable WP_DEBUG functions used by The SEO Framework.
+			// Also disable WP_DEBUG functions used by The SEO Framework.
 			\add_action( 'doing_it_wrong_trigger_error', '\\__return_false' );
 			\add_action( 'deprecated_function_trigger_error', '\\__return_false' );
 			\add_action( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '\\__return_false' );
 		}
+
+		// phpcs:enable, WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions
 	}
 
 	/**
@@ -1011,10 +1016,10 @@ trait Extensions_Actions {
 	 */
 	public static function _shutdown_handle_test_extension_fatal_error() {
 
-		if ( defined( '_TSFEM_TEST_EXT_PASS' ) )
+		if ( \defined( '_TSFEM_TEST_EXT_PASS' ) )
 			return;
 
-		if ( $level = ob_get_level() ) {
+		if ( $level = ob_get_level() ) { // phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- this is fine.
 			while ( $level ) {
 				ob_end_clean();
 				$level--;
@@ -1082,18 +1087,18 @@ trait Extensions_Actions {
 	 */
 	private static function clean_error_message( $message = '', $error = [] ) {
 
-		//* Remove stack trace.
+		// Remove stack trace.
 		if ( false !== ( $stack_pos = stripos( $message, 'Stack trace:' ) ) )
 			$message = substr( $message, 0, $stack_pos );
 
-		//* Remove error location and line from message.
+		// Remove error location and line from message.
 		if ( ( $loc = stripos( $message, ' in /' ) ) ) {
 			$additions = '.php:' . $error['line'];
 			$loc_line  = stripos( $message, $additions, $loc );
-			$offset    = $loc_line - $loc + strlen( $additions );
+			$offset    = $loc_line - $loc + \strlen( $additions );
 
 			if ( $loc_line && ( $rem = substr( $message, $loc, $offset ) ) ) {
-				//* Continue only if there are no spaces.
+				// Continue only if there are no spaces.
 				$without_in = substr( $rem, 4 );
 				if ( false === strpos( $without_in, ' ' ) ) {
 					$message = trim( str_replace( $rem, '', $message ) );
@@ -1128,7 +1133,7 @@ trait Extensions_Actions {
 		if ( $file && static::validate_file( $file ) )
 			return static::include_extension( $file, $_instance, $bits );
 
-		//* Tick the instance on failure.
+		// Tick the instance on failure.
 		\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
 
 		return false;
@@ -1146,12 +1151,12 @@ trait Extensions_Actions {
 	 * @param array  $bits      The verification instance bits. Propagates to inclusion file. Passed by reference.
 	 * @return bool True on success, false on failure.
 	 */
-	private static function include_extension( $file, &$_instance, &$bits ) {
+	private static function include_extension( $file, &$_instance, &$bits ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes
 		return (bool) include_once $file;
 	}
 
 	/**
-	 * Validates extension PHP file.
+	 * Validates extension PHP file. Should not be used for anything else.
 	 *
 	 * @since 1.0.0
 	 *
@@ -1161,7 +1166,8 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file, $type = 'php' ) {
 
-		if ( ( '.' . $type ) === substr( $file, - ( strlen( $type ) + 1 ) ) && file_exists( $file ) ) {
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- necessary call.
+		if ( ( '.' . $type ) === substr( $file, - ( \strlen( $type ) + 1 ) ) && file_exists( $file ) ) {
 			$t = \validate_file( $file );
 
 			if ( 0 === $t )

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @package TSF_Extension_Manager\Core\Views\Extension
+ */
 
-defined( 'ABSPATH' ) and \TSF_Extension_Manager\ExtensionSettings::verify( $_secret ) or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSettings::verify( $_secret ) or die;
 
 /**
  * Because positivity.
@@ -21,6 +27,7 @@ $mottos = [
 	'A bonded',
 	'A joint',
 ];
+
 $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 
 ?>
@@ -28,6 +35,6 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 	The SEO Framework &ndash; Extension Settings
 </p>
 <p class="tsfem-footer-motto" dir=ltr>
-	<?php echo \esc_html( "{$mottos[ $motto_key ]} Overview" ); ?>
+	<?php echo esc_html( "{$mottos[ $motto_key ]} Overview" ); ?>
 </p>
 <?php

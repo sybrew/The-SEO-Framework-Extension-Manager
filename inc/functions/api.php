@@ -4,7 +4,7 @@
  */
 
 namespace {
-	defined( 'TSF_EXTENSION_MANAGER_DIR_PATH' ) or die;
+	defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 }
 
 /**
@@ -51,7 +51,7 @@ namespace {
 	 * @return string The database version. '0' if version isn't found.
 	 */
 	function tsf_extension_manager_db_version( $member = 'core' ) {
-		$versions = \get_option( 'tsfem_current_db_versions', [] );
+		$versions = get_option( 'tsfem_current_db_versions', [] );
 		return ! empty( $versions[ $member ] ) ? $versions[ $member ] : '0';
 	}
 }

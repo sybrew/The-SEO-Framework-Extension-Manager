@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -81,38 +81,38 @@ class Core {
 	 */
 	private function construct() {
 
-		//* Verify integrity.
+		// Verify integrity.
 		$that = __NAMESPACE__ . ( \is_admin() ? '\\LoadAdmin' : '\\LoadFront' );
 		$this instanceof $that or \wp_die( -1 );
 
 		$this->nonce_name   = 'tsf_extension_manager_nonce_name';
 		$this->request_name = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default'           => 'default',
 
-			//* Account activation and more.
+			// Account activation and more.
 			'activate-key'      => 'activate-key',
 			'activate-external' => 'activate-external',
 			'activate-free'     => 'activate-free',
 			'deactivate'        => 'deactivate',
 			'enable-feed'       => 'enable-feed',
 
-			//* Extensions.
+			// Extensions.
 			'activate-ext'      => 'activate-ext',
 			'deactivate-ext'    => 'deactivate-ext',
 		];
 		$this->nonce_action = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default'           => 'tsfem_nonce_action',
 
-			//* Account activation and more.
+			// Account activation and more.
 			'activate-free'     => 'tsfem_nonce_action_free_account',
 			'activate-key'      => 'tsfem_nonce_action_key_account',
 			'activate-external' => 'tsfem_nonce_action_external_account',
 			'deactivate'        => 'tsfem_nonce_action_deactivate_account',
 			'enable-feed'       => 'tsfem_nonce_action_feed',
 
-			//* Extensions.
+			// Extensions.
 			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
 			'deactivate-ext'    => 'tsfem_nonce_action_deactivate_ext',
 		];
@@ -132,7 +132,7 @@ class Core {
 	 * @return bool True if handler supports 64 bits, false otherwise (63 or lower).
 	 */
 	final public function is_64() {
-		return is_int( 9223372036854775807 );
+		return \is_int( 9223372036854775807 );
 	}
 
 	/**
@@ -155,14 +155,14 @@ class Core {
 			return $loaded = false;
 
 		if ( false === $this->are_options_valid() ) {
-			//* Failed options instance checksum.
+			// Failed options instance checksum.
 			$this->set_error_notice( [ 2001 => '' ] );
 			return $loaded = false;
 		}
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		//* Some AJAX functions require Extension layout traits to be loaded.
+		// Some AJAX functions require Extension layout traits to be loaded.
 		if ( \is_admin() && \wp_doing_ajax() ) {
 			// This should not ever be a security issue. However, sanity.
 			if ( \TSF_Extension_Manager\can_do_manager_settings() && \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
@@ -178,12 +178,12 @@ class Core {
 		if ( true !== $result ) :
 			switch ( $result ) {
 				case -2:
-					//* Failed checksum.
+					// Failed checksum.
 					$this->set_error_notice( [ 2002 => '' ] );
 					break;
 
 				case -1:
-					//* No extensions have ever been active...
+					// No extensions have ever been active...
 					break;
 			}
 
@@ -258,7 +258,7 @@ class Core {
 		$retval = 0;
 		// PHP 5.6+ //= $i = 0;
 
-		if ( $level = ob_get_level() ) {
+		if ( $level = ob_get_level() ) { // phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- this is fine.
 			while ( $level-- ) {
 				ob_end_clean();
 			}
@@ -267,7 +267,7 @@ class Core {
 
 		// PHP 5.6+ //= $i++;
 
-		//* wp_ajax sets required headers early.
+		// wp_ajax sets required headers early.
 		if ( ! headers_sent() ) {
 			header_remove();
 			$retval |= 2; //= 2 ** $i
@@ -349,7 +349,8 @@ class Core {
 			$this->set_status_header( null, 'html' );
 		}
 
-		echo $html; // xss questionable. Check raw input!
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- See method doc.
+		echo $html;
 		exit;
 	}
 
@@ -391,7 +392,7 @@ class Core {
 			'capability',
 		];
 
-		//* If the required keys aren't found, bail.
+		// If the required keys aren't found, bail.
 		if ( ! $this->has_required_array_keys( $args, $required ) )
 			return false;
 
@@ -451,12 +452,13 @@ class Core {
 
 		static $last = null;
 
-		if ( is_array( $value ) ) {
+		if ( \is_array( $value ) ) {
 
 			$index = key( $value );
+
 			$last = $item = reset( $value );
 
-			if ( is_array( $item ) ) {
+			if ( \is_array( $item ) ) {
 				if ( 1 === $i ) {
 					$output .= $index . $this->matosa( $item, $i, false );
 				} else {
@@ -464,7 +466,7 @@ class Core {
 				}
 			}
 		} elseif ( 1 === $i ) {
-			//* Input is scalar or object.
+			// Input is scalar or object.
 			$last = null;
 			return false;
 		}
@@ -525,7 +527,7 @@ class Core {
 	final public function _maybe_die( $message = '' ) {
 
 		if ( $this->is_tsf_extension_manager_page( false ) ) {
-			//* wp_die() can be filtered. Remove filters JIT.
+			// wp_die() can be filtered. Remove filters JIT.
 			\remove_all_filters( 'wp_die_ajax_handler' );
 			\remove_all_filters( 'wp_die_xmlrpc_handler' );
 			\remove_all_filters( 'wp_die_handler' );
@@ -533,7 +535,7 @@ class Core {
 			\wp_die( \esc_html( $message ) );
 		}
 
-		//* Don't spam error log.
+		// Don't spam error log.
 		if ( false === $this->_has_died() ) {
 
 			$this->_has_died( true );
@@ -563,13 +565,13 @@ class Core {
 	final protected function stop_class() {
 
 		$class_vars = get_class_vars( __CLASS__ );
-		$other_vars = get_class_vars( get_called_class() );
+		$other_vars = get_class_vars( \get_called_class() );
 
 		$properties = array_merge( $class_vars, $other_vars );
 
 		foreach ( $properties as $property => $value ) :
 			if ( isset( $this->$property ) )
-				$this->$property = is_array( $this->$property ) ? [] : null;
+				$this->$property = \is_array( $this->$property ) ? [] : null;
 		endforeach;
 
 		array_walk( $GLOBALS['wp_filter'], [ $this, 'stop_class_filters' ] );
@@ -599,12 +601,12 @@ class Core {
 		static $_this = null;
 
 		if ( null === $_this )
-			$_this = get_class( $this );
+			$_this = \get_class( $this );
 
 		if ( isset( $filter['function'] ) ) {
-			if ( is_array( $filter['function'] ) ) :
+			if ( \is_array( $filter['function'] ) ) :
 				foreach ( $filter['function'] as $k => $function ) :
-					if ( is_object( $function ) && $function instanceof $_this )
+					if ( \is_object( $function ) && $function instanceof $_this )
 						unset( $GLOBALS['wp_filter'][ $key ][ $_key ] );
 				endforeach;
 			endif;
@@ -696,19 +698,19 @@ class Core {
 
 		$n_bit = ~$_bit;
 
-		//* Timing-attack safe.
+		// Timing-attack safe.
 		if ( isset( $instance[ $n_bit ] ) ) {
 			//= Timing attack mitigated.
 
-			//* Don't use hash_equals(). This is already safe.
+			// Don't use hash_equals(). This is already safe.
 			if ( empty( $instance[ $bit ] ) || $instance[ $n_bit ] !== $instance[ $bit ] ) {
-				//* Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
+				// Only die on plugin settings page upon failure. Otherwise kill instance and all bindings.
 				$this->_maybe_die( 'Error -1: The SEO Framework - Extension Manager instance verification failed.' );
 				$instance = [];
 				return '';
 			}
 
-			//* Set retval and empty to prevent recursive timing attacks.
+			// Set retval and empty to prevent recursive timing attacks.
 			$_retval  = $instance[ $bit ];
 			$instance = [];
 
@@ -717,7 +719,7 @@ class Core {
 
 		static $timer = null;
 
-		//* It's over ninethousand! And also a prime.
+		// It's over ninethousand! And also a prime.
 		$_prime = 9001;
 
 		if ( null === $timer ) {
@@ -726,7 +728,7 @@ class Core {
 			$timer += $_prime;
 		}
 
-		//* This creates a unique salt for each bit.
+		// This creates a unique salt for each bit.
 		$hash = $this->hash( $_bit . '\\' . mt_rand( ~ $timer, $timer ) . '\\' . $bit, 'instance' );
 
 		return $instance[ $bit ] = $instance[ $n_bit ] = $hash;
@@ -776,15 +778,15 @@ class Core {
 			$_i = (int) $_i;
 
 			    $_i = $_i * $_prime
-			and is_int( $_i )
+			and \is_int( $_i )
 			and ( $_i + $_boundary ) < PHP_INT_MAX // if this fails, there's a precision error in PHP.
 			and $bit = $_bit = mt_rand( ~ $_i, $_i )
 			and $bit & 1
 			and $bit = $_bit++;
 		}
 
-		//* Hit 0 or is overflown on 32 bit. Retry.
-		if ( 0 === $bit || is_double( $bit ) ) {
+		// Hit 0 or is overflown on 32 bit. Retry.
+		if ( 0 === $bit || \is_double( $bit ) ) {
 			$_prime = array_rand( array_flip( [ 317539, 58171, 16417, 6997, 379, 109, 17 ] ) );
 			goto set;
 		}
@@ -843,11 +845,11 @@ class Core {
 
 		$a   = (string) $uid;
 		$b   = strrev( $a );
-		$len = strlen( $a );
+		$len = \strlen( $a );
 		$r   = '';
 
 		for ( $i = 0; $i < $len; $i++ ) {
-			$r .= ord( $a[ $i ] ) . $b[ $i ];
+			$r .= \ord( $a[ $i ] ) . $b[ $i ];
 		}
 
 		return $this->hash( $r, 'auth' );
@@ -912,19 +914,19 @@ class Core {
 
 		$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
 
-		//* 'instance' picks a random key.
+		// 'instance' picks a random key.
 		static $instance_scheme = null;
 		if ( null === $instance_scheme ) {
-			$_key            = mt_rand( 0, count( $schemes ) - 1 );
+			$_key            = mt_rand( 0, \count( $schemes ) - 1 );
 			$instance_scheme = $schemes[ $_key ];
 		}
 		$_scheme = 'instance' === $scheme ? $instance_scheme : $scheme;
 
-		if ( in_array( $_scheme, $schemes, true ) ) {
+		if ( \in_array( $_scheme, $schemes, true ) ) {
 			foreach ( [ 'key', 'salt' ] as $type ) :
 				$const = strtoupper( "{$_scheme}_{$type}" );
-				if ( defined( $const ) && constant( $const ) ) {
-					$values[ $type ] = constant( $const );
+				if ( \defined( $const ) && \constant( $const ) ) {
+					$values[ $type ] = \constant( $const );
 				} elseif ( empty( $values[ $type ] ) ) {
 					$values[ $type ] = \get_site_option( "{$_scheme}_{$type}" );
 					if ( ! $values[ $type ] ) {
@@ -962,9 +964,9 @@ class Core {
 
 		$algos = hash_algos();
 
-		if ( in_array( 'sha256', $algos, true ) ) {
+		if ( \in_array( 'sha256', $algos, true ) ) {
 			$type = 'sha256';
-		} elseif ( in_array( 'sha1', $algos, true ) ) {
+		} elseif ( \in_array( 'sha1', $algos, true ) ) {
 			$type = 'sha1';
 		} else {
 			$type = 'md5';
@@ -982,9 +984,9 @@ class Core {
 	 * @return bool Whether the plugin is active in network mode.
 	 */
 	final public function is_plugin_in_network_mode() {
-		//* TODO remove this! It now renders network mode as singular installations per site. This is NOT what I promised.
+		// TODO remove this! It now renders network mode as singular installations per site. This is NOT what I promised.
 		return false;
-
+		// phpcs:disable
 		static $network_mode = null;
 
 		if ( isset( $network_mode ) )
@@ -996,6 +998,7 @@ class Core {
 		$plugins = \get_site_option( 'active_sitewide_plugins' );
 
 		return $network_mode = isset( $plugins[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
+		// phpcs:enable
 	}
 
 	/**
@@ -1022,7 +1025,7 @@ class Core {
 			'TSF_Extension_Manager\\Extension\\Monitor\\Admin',
 		];
 
-		if ( in_array( get_class( $object ), $allowed_classes, true ) ) {
+		if ( \in_array( \get_class( $object ), $allowed_classes, true ) ) {
 			$this->get_verification_codes( $_instance, $bits );
 			return true;
 		}
@@ -1201,7 +1204,7 @@ class Core {
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
 
-			//* Prevent fatal errors.
+			// Prevent fatal errors.
 			$this->create_class_alias( $class );
 
 			$loaded[ $class ] = false;
@@ -1229,7 +1232,7 @@ class Core {
 
 		$required = [ 'hash', 'matches', 'type' ];
 
-		//* If the required keys aren't found, bail.
+		// If the required keys aren't found, bail.
 		if ( ! $this->has_required_array_keys( $checksum, $required ) ) {
 			return -1;
 		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
@@ -1287,7 +1290,7 @@ class Core {
 	 * @return int Points.
 	 */
 	final public function pixels_to_points( $px = 0 ) {
-		return intval( $px ) * .75;
+		return \intval( $px ) * .75;
 	}
 
 	/**
@@ -1309,7 +1312,7 @@ class Core {
 	 * @return bool True if the plugin is connected to the Enterprise, Premium, or Essential API handler.
 	 */
 	final public function is_connected_user() {
-		return in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium', 'Essentials' ], true );
+		return \in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium', 'Essentials' ], true );
 	}
 
 	/**
@@ -1321,7 +1324,7 @@ class Core {
 	 * @return bool True if the plugin is connected to the Premium API handler.
 	 */
 	final public function is_premium_user() {
-		return in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium' ], true );
+		return \in_array( $this->get_option( '_activation_level' ), [ 'Enterprise', 'Premium' ], true );
 	}
 
 	/**
@@ -1429,7 +1432,7 @@ class Core {
 		if ( '' === $content )
 			return 0;
 
-		return (int) strlen( $content );
+		return (int) \strlen( $content );
 	}
 
 	/**
@@ -1444,7 +1447,7 @@ class Core {
 	 * @return string $output The cleaned AJAX input string.
 	 */
 	final public function s_ajax_string( $input ) {
-		return trim( \esc_attr( \wp_kses_normalize_entities( strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
+		return trim( \esc_attr( \wp_kses_normalize_entities( \strval( \wp_kses_no_null( $input ) ) ) ), ' \\/#' );
 	}
 
 	/**
@@ -1481,7 +1484,7 @@ class Core {
 			return $cache = false;
 
 		if ( $secure ) {
-			//* Don't load from $_GET request if secure.
+			// Don't load from $_GET request if secure.
 			if ( \did_action( 'current_screen' ) ) {
 				return $cache = \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
 			} else {
@@ -1489,7 +1492,7 @@ class Core {
 				return false;
 			}
 		} else {
-			//* Don't cache if insecure.
+			// Don't cache if insecure.
 			if ( \wp_doing_ajax() ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {

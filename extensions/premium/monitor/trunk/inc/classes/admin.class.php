@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Monitor;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -129,47 +129,47 @@ final class Admin extends Api {
 		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 		$this->request_name = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default' => 'default',
 
-			//* Connect site to API.
+			// Connect site to API.
 			'connect' => 'connect',
 
-			//* Disconnect site from API.
+			// Disconnect site from API.
 			'disconnect' => 'disconnect',
 
-			//* Data fetch.
+			// Data fetch.
 			'fetch' => 'fetch',
 
-			//* Request crawl.
+			// Request crawl.
 			'crawl' => 'crawl',
 
-			//* Settings update.
+			// Settings update.
 			'update' => 'update',
 
-			//* Fix instance.
+			// Fix instance.
 			'fix' => 'fix',
 		];
 		$this->nonce_action = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default' => 'tsfem_e_monitor_nonce_action',
 
-			//* Connect site to API.
+			// Connect site to API.
 			'connect' => 'tsfem_e_monitor_nonce_action_connect_site',
 
-			//* Disconnect site from API.
+			// Disconnect site from API.
 			'disconnect' => 'tsfem_e_monitor_nonce_action_disconnect_site',
 
-			//* Data fetch.
+			// Data fetch.
 			'fetch' => 'tsfem_e_monitor_nonce_action_remote_fetch',
 
-			//* Request crawl.
+			// Request crawl.
 			'crawl' => 'tsfem_e_monitor_nonce_action_remote_crawl',
 
-			//* Settings update.
+			// Settings update.
 			'update' => 'tsfem_e_monitor_nonce_action_remote_update',
 
-			//* Fix instance.
+			// Fix instance.
 			'fix' => 'tsfem_e_monitor_nonce_action_remote_fix',
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
@@ -190,25 +190,25 @@ final class Admin extends Api {
 		 */
 		$this->o_index = 'monitor';
 
-		//* Initialize menu links
+		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
-		//* Initialize Monitor page actions.
+		// Initialize Monitor page actions.
 		\add_action( 'admin_init', [ $this, '_load_monitor_admin_actions' ] );
 
-		//* Update POST listener.
+		// Update POST listener.
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
-		//* AJAX update listener.
+		// AJAX update listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_update', [ $this, '_wp_ajax_update_settings' ] );
 
-		//* AJAX fetch listener.
+		// AJAX fetch listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_fetch', [ $this, '_wp_ajax_fetch_data' ] );
 
-		//* AJAX crawl listener.
+		// AJAX crawl listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_crawl', [ $this, '_wp_ajax_request_crawl' ] );
 
-		//* AJAX get required fix listener.
+		// AJAX get required fix listener.
 		\add_action( 'wp_ajax_tsfem_e_monitor_get_requires_fix', [ $this, '_wp_ajax_get_requires_fix' ] );
 	}
 
@@ -298,7 +298,7 @@ final class Admin extends Api {
 		 */
 		$this->init_errors();
 
-		//* Add something special for Vivaldi
+		// Add something special for Vivaldi
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
 		return true;
@@ -404,7 +404,7 @@ final class Admin extends Api {
 				: false;
 
 		if ( false === $result ) {
-			//* Nonce failed. Set error notice and reload.
+			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 1019001 => '' ] );
 			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
 			exit;
@@ -486,7 +486,7 @@ final class Admin extends Api {
 					$current_timeout = $this->get_remote_data_timeout();
 
 					if ( $this->is_remote_data_expired() || ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout ) :
-						//* There's possibly new data found. This should certainly be true with statistics.
+						// There's possibly new data found. This should certainly be true with statistics.
 						$api = $this->api_get_remote_data( true );
 
 						switch ( $api['code'] ) :
@@ -512,11 +512,11 @@ final class Admin extends Api {
 							'type'    => $type,
 							'notice'  => $api['notice'],
 							'code'    => $api['code'],
-							//* Get new timeout.
+							// Get new timeout.
 							'timeout' => $current_timeout = $this->get_remote_data_timeout(),
 						];
 					else :
-						//* No new data has been found.
+						// No new data has been found.
 						$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
 						$status = [
 							'content' => null,
@@ -573,7 +573,7 @@ final class Admin extends Api {
 					$current_timeout = $this->get_remote_crawl_timeout();
 
 					if ( $this->can_request_next_crawl() || ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout ) :
-						//* Crawl can be requested.
+						// Crawl can be requested.
 						$api = $this->api_request_crawl( true );
 
 						switch ( $api['code'] ) :
@@ -591,7 +591,7 @@ final class Admin extends Api {
 								break;
 						endswitch;
 
-						//* Get new timeout.
+						// Get new timeout.
 						$current_timeout = $this->get_remote_crawl_timeout();
 
 						$status = [
@@ -601,7 +601,7 @@ final class Admin extends Api {
 							'timeout' => $current_timeout,
 						];
 					else :
-						//* Crawl has already been requested recently.
+						// Crawl has already been requested recently.
 						$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
 						$status = [
 							'type'    => 'yield_unchanged',
@@ -646,7 +646,7 @@ final class Admin extends Api {
 				$send = [];
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					//* Initialize menu hooks.
+					// Initialize menu hooks.
 					\the_seo_framework()->add_menu_link();
 					$this->_add_menu_link();
 
@@ -738,7 +738,7 @@ final class Admin extends Api {
 
 		static $cache;
 
-		//* Don't load from $_GET request.
+		// Don't load from $_GET request.
 		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
 	}
 
@@ -1214,7 +1214,7 @@ final class Admin extends Api {
 		if ( $requires_fix || $marked_inactive ) {
 			$title = \esc_html__( 'Reconnect site', 'the-seo-framework-extension-manager' );
 			if ( $marked_inactive ) {
-				//* Inactive is marked more severely, and most likely $requires_fix would also be true.
+				// Inactive is marked more severely, and most likely $requires_fix would also be true.
 				$description = \esc_html__( 'Your website has been marked inactive.', 'the-seo-framework-extension-manager' );
 			} else {
 				$description = \esc_html__( 'The instance ID of your site does not match the remote server.', 'the-seo-framework-extension-manager' );

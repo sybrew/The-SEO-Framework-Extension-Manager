@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -66,7 +66,7 @@ function _init_locale( $ignore = false ) {
  */
 function _protect_options() {
 
-	defined( 'PHP_INT_MIN' ) or define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
+	\defined( 'PHP_INT_MIN' ) or \define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
 
 	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
@@ -125,7 +125,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  */
 function _init_tsf_extension_manager() {
 
-	//* Cache the class object. Do not run everything more than once.
+	// Cache the class object. Do not run everything more than once.
 	static $tsf_extension_manager = null;
 
 	if ( $tsf_extension_manager )
@@ -152,7 +152,7 @@ function _init_tsf_extension_manager() {
 			$tsf_extension_manager = new LoadFront;
 		}
 
-		//* Initialize extensions.
+		// Initialize extensions.
 		$tsf_extension_manager->_init_extensions();
 
 		/**
@@ -182,7 +182,7 @@ function _init_tsf_extension_manager() {
  */
 function _register_autoloader() {
 
-	//* Prevent overriding of security classes by checking their existence.
+	// Prevent overriding of security classes by checking their existence.
 	$integrity_classes = [
 		'\TSF_Extension_Manager\Core',
 		'\TSF_Extension_Manager\Secure_Abstract',

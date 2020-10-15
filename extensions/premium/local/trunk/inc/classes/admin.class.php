@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -67,10 +67,10 @@ final class Admin extends Core {
 	 */
 	private function construct() {
 
-		//* Sets local page slug.
+		// Sets local page slug.
 		$this->local_page_slug = 'theseoframework-local';
 
-		//* Load admin actions.
+		// Load admin actions.
 		$this->load_admin_actions();
 	}
 
@@ -81,10 +81,10 @@ final class Admin extends Core {
 	 */
 	private function load_admin_actions() {
 
-		//* Initialize menu links
+		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
-		//* Initialize Local page actions. Requires $this->local_menu_page_hook to be set.
+		// Initialize Local page actions. Requires $this->local_menu_page_hook to be set.
 		\add_action( 'admin_init', [ $this, '_load_local_admin_actions' ], 10 );
 	}
 
@@ -210,7 +210,7 @@ final class Admin extends Core {
 
 		static $cache;
 
-		//* Don't load from $_GET request.
+		// Don't load from $_GET request.
 		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->local_menu_page_hook );
 	}
 

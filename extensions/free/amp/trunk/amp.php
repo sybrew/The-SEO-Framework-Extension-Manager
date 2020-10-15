@@ -15,7 +15,7 @@ namespace TSF_Extension_Manager\Extension\AMP;
  * Extension License: GPLv3
  */
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -43,7 +43,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @since 1.0.0
  * @param string
  */
-define( 'TSFEM_E_AMP_VERSION', '1.1.0' );
+\define( 'TSFEM_E_AMP_VERSION', '1.1.0' );
 
 \add_action( 'wp', __NAMESPACE__ . '\\_amp_init', 11 );
 /**
@@ -60,14 +60,14 @@ define( 'TSFEM_E_AMP_VERSION', '1.1.0' );
 function _amp_init() {
 
 	if ( \is_admin() ) {
-		//* Bail on admin. No admin dashboard yet.
+		// Bail on admin. No admin dashboard yet.
 		return false;
 	} else {
 		$is_amp = false;
 
 		if ( function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
-		} elseif ( defined( 'AMP_QUERY_VAR' ) ) {
+		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
 			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
 		}
 

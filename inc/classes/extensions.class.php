@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) or die;
 if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
 	\TSF_Extension_Manager\_load_trait( 'manager/extensions-layout' );
 } else {
-	//* Empty dummy traits.
+	// Empty dummy traits.
 	trait Extensions_Layout { }
 	trait Extensions_I18n { }
 }
@@ -206,17 +206,17 @@ final class Extensions extends Secure_Abstract {
 	 */
 	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
 
-		//* Temporarily. Exchange for count( $what ) > 1
+		// Temporarily. Exchange for count( $what ) > 1
 		if ( is_array( $what ) ) {
 			foreach ( $what as $w ) {
-				//* Reassigns and retests itself until filtered.
+				// Reassigns and retests itself until filtered.
 				$extensions = static::filter_extensions( $extensions, $w );
 			}
 
 			return $extensions;
 		}
 
-		//* Temporarily check. Will be substituted by new functions that pass these as filters.
+		// Temporarily check. Will be substituted by new functions that pass these as filters.
 		if ( 'maybe_network' === $what ) {
 			$network_mode = \tsf_extension_manager()->is_plugin_in_network_mode();
 

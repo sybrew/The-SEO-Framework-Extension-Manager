@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -59,10 +59,10 @@ final class Front extends Core {
 	 */
 	public function _init() {
 		if ( $this->is_amp() ) {
-			//* Initialize output in The SEO Framework's front-end AMP meta object.
+			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
-			//* Initialize output in The SEO Framework's front-end meta object.
+			// Initialize output in The SEO Framework's front-end meta object.
 			\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
 		}
 	}
@@ -116,7 +116,7 @@ final class Front extends Core {
 		if ( isset( $cache ) )
 			return $cache;
 
-		return $cache = defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		return $cache = \defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
 	}
 
 	/**

@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Local;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Local extension for The SEO Framework
@@ -68,18 +68,18 @@ trait Secure_Post {
 		$this->nonce_name = 'tsfem_e_local_nonce_name';
 
 		$this->request_name = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default' => 'default',
 
-			//* Update options.
+			// Update options.
 			'update'  => 'update',
 		];
 
 		$this->nonce_action = [
-			//* Reference convenience.
+			// Reference convenience.
 			'default' => 'tsfem_e_local_nonce_action',
 
-			//* Update options.
+			// Update options.
 			'update'  => 'tsfem_e_local_nonce_action_local_update',
 		];
 	}

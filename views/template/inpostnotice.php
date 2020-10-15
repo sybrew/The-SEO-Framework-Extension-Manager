@@ -1,20 +1,17 @@
 <?php
 /**
- * @package TSF_Extension_Manager\Views
+ * @package TSF_Extension_Manager\Core\Views\Template
  * @subpackage TSF_Extension_Manager\InpostGUI\Views
  */
-namespace TSF_Extension_Manager;
 
-/**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\InpostGUI as InpostGUI;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'ABSPATH' ) and InpostGUI::verify( $_secret ) or die;
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\InpostGUI::verify( $_secret ) or die;
 
 $tsfem = tsf_extension_manager();
 
-$message_5xx = \esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
+$message_5xx = esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
 
 $a11y   = true;
 $escape = false;

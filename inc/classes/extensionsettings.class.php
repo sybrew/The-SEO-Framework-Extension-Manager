@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -290,7 +290,7 @@ final class ExtensionSettings {
 				continue;
 
 			foreach ( $sanitizations as $_key => $_cb ) {
-				$store[ $slug ][ $_key ] = call_user_func(
+				$store[ $slug ][ $_key ] = \call_user_func(
 					$_cb,
 					isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ] )
 						? $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ]
@@ -319,8 +319,8 @@ final class ExtensionSettings {
 			'failed'  => array_keys( $success, false, true ),
 		];
 
-		if ( in_array( false, $success, true ) ) {
-			if ( in_array( true, $success, true ) ) {
+		if ( \in_array( false, $success, true ) ) {
+			if ( \in_array( true, $success, true ) ) {
 				// Some data got saved.
 				// TODO do something with the failures (when we implement a save-all button).
 				\tsf_extension_manager()->send_json(
@@ -341,7 +341,7 @@ final class ExtensionSettings {
 			}
 		}
 
-		if ( count( $success ) > 1 ) {
+		if ( \count( $success ) > 1 ) {
 			\tsf_extension_manager()->send_json(
 				[
 					'results' => $this->get_ajax_notice( true, 18104 ),
@@ -379,8 +379,8 @@ final class ExtensionSettings {
 
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_scripts' ] );
 
-		//* Add something special for Vivaldi & Android.
-		\add_action( 'admin_head', [ tsf_extension_manager(), '_output_theme_color_meta' ], 0 );
+		// Add something special for Vivaldi & Android.
+		\add_action( 'admin_head', [ \tsf_extension_manager(), '_output_theme_color_meta' ], 0 );
 	}
 
 	/**
@@ -494,10 +494,12 @@ final class ExtensionSettings {
 	private function get_save_all_button() {
 		return '';
 		// TODO
+		// phpcs:disable
 		return sprintf(
 			'<button type="submit" name="tsf-extension-manager-extension-settings" form="tsf-extension-manager-extension-settings" class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-upload" onclick="tsfemForm.saveAll()">%s</button>',
 			\esc_html__( 'Save All', 'the-seo-framework-extension-manager' )
 		);
+		// phpcs:enable
 	}
 
 	/**
@@ -509,7 +511,7 @@ final class ExtensionSettings {
 	 * @param string $index    The options index.
 	 * @param array  $settings The settings fields compatible with the FormGenerator instance.
 	 */
-	public static function _output_pane_settings( $index, $settings ) {
+	public static function _output_pane_settings( $index, $settings ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- includes.
 		static::get_instance()->output_view( 'layout/extension/pane', get_defined_vars() );
 	}
 
@@ -539,7 +541,7 @@ final class ExtensionSettings {
 	 * @uses static::$include_secret
 	 *
 	 * @example template file header:
-	 * `defined( 'ABSPATH' ) and \TSF_Extension_Manager\ExtensionSettings::verify( $_secret ) or die;`
+	 * `\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and \TSF_Extension_Manager\ExtensionSettings::verify( $_secret ) or die;`
 	 *
 	 * @param string $secret The passed secret.
 	 * @return bool True on success, false on failure.

@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -80,17 +80,17 @@ final class Trends {
 	 */
 	private static function prototype_trends( $ajax = false ) {
 
-		if ( ! function_exists( 'simplexml_load_string' ) )
+		if ( ! \function_exists( 'simplexml_load_string' ) )
 			return -1;
 
 		$transient_name = 'tsfem_latest_seo_feed';
 		$output         = \get_transient( $transient_name );
 
-		//* Bypass cache on AJAX as multi-admin can interfere.
+		// Bypass cache on AJAX as multi-admin can interfere.
 		if ( false === $ajax && false !== $output )
 			return $output;
 
-		//* Google Webmasters official blog feed.
+		// Google Webmasters official blog feed.
 		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
 
 		$http_args = [
@@ -109,12 +109,12 @@ final class Trends {
 			return '';
 
 		$xml = \wp_remote_retrieve_body( $request );
-		//* Add bitwise operators.
+		// Add bitwise operators.
 		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
 		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 		if ( empty( $xml->entry ) ) {
-			//* Retry in half an hour when server is down.
+			// Retry in half an hour when server is down.
 			\set_transient( $transient_name, '', HOUR_IN_SECONDS / 2 );
 			return '';
 		}
@@ -132,17 +132,17 @@ final class Trends {
 			if ( $i >= $max )
 				break;
 
-			if ( ! isset( $object->category ) || ! is_object( $object->category ) )
+			if ( ! isset( $object->category ) || ! \is_object( $object->category ) )
 				continue;
 
 			$found = false;
-			//* Filter terms.
+			// Filter terms.
 			foreach ( $object->category as $category ) :
-				//* PHP7+ must convert to array...
+				// PHP7+ must convert to array...
 				$term = (array) $category;
 
 				$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
-				if ( $term && in_array( $term, [ 'search results', 'crawling and indexing', 'general tips' ], true ) ) {
+				if ( $term && \in_array( $term, [ 'search results', 'crawling and indexing', 'general tips' ], true ) ) {
 					$found = true;
 					break;
 				}
@@ -153,15 +153,15 @@ final class Trends {
 				continue;
 
 			$link = '';
-			//* Fetch link.
+			// Fetch link.
 			foreach ( $object->link as $link_object ) :
-				//* PHP7+ must convert to array...
+				// PHP7+ must convert to array...
 				$link_object = (array) $link_object;
 
 				$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
 				if ( 'text/html' === $type ) {
 					$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
-					if ( in_array( $rel, [ 'self', 'alternate' ], true ) ) {
+					if ( \in_array( $rel, [ 'self', 'alternate' ], true ) ) {
 
 						$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
 
@@ -176,7 +176,7 @@ final class Trends {
 			if ( empty( $link ) )
 				continue;
 
-			//* @note: $object->updated also exists.
+			// @note: $object->updated also exists.
 			$date = isset( $object->published ) ? $object->published->__toString() : '';
 			$date = $date ? '<time>' . \date_i18n( \get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
@@ -193,7 +193,7 @@ final class Trends {
 			$content = \the_seo_framework()->trim_excerpt( $content, 0, 300 );
 			$content = \the_seo_framework()->escape_description( $content );
 
-			//* No need for translations, it's English only.
+			// No need for translations, it's English only.
 			$title = sprintf(
 				'<h4><a href="%s" target="_blank" rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
 				\esc_url( $link, [ 'https', 'http' ] ),
@@ -207,9 +207,9 @@ final class Trends {
 				$content
 			);
 
-			//* Maintain full list for transient / non-AJAX.
+			// Maintain full list for transient / non-AJAX.
 			$output .= $_output;
-			//* Maintain list of output for AJAX.
+			// Maintain list of output for AJAX.
 			$ajax and $a_output[] = $_output;
 
 			unset( $_output );

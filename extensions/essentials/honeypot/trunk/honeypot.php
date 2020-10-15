@@ -15,7 +15,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
  * Extension License: GPLv3
  */
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -42,7 +42,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.3' );
+\define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.3' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -59,11 +59,11 @@ function honeypot_init() {
 
 	static $loaded = null;
 
-	//* Don't init the class twice.
+	// Don't init the class twice.
 	if ( isset( $loaded ) )
 		return $loaded;
 
-	//* Don't run on the admin side. This extension is front-end only. For now.
+	// Don't run on the admin side. This extension is front-end only. For now.
 	if ( \is_admin() )
 		return $loaded = false;
 
@@ -119,10 +119,10 @@ final class Core {
 
 		$this->setup = true;
 
-		//* Adds honeypot to comment fields.
+		// Adds honeypot to comment fields.
 		\add_action( 'comment_form_top', [ $this, '_add_honeypot' ] );
 
-		//* Checks honeypot existence before setting approval of a comment.
+		// Checks honeypot existence before setting approval of a comment.
 		\add_filter( 'pre_comment_approved', [ $this, '_check_honeypot' ], 0, 2 );
 	}
 
@@ -170,7 +170,7 @@ final class Core {
 		if ( 'spam' === $approved || 'trash' === $approved )
 			return $approved;
 
-		//* These checks only work if user is not logged in.
+		// These checks only work if user is not logged in.
 		if ( \is_user_logged_in() )
 			return $approved;
 
@@ -300,10 +300,10 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		//* Perform same sanitization as displayed.
+		// Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
-		//* Check if input is set.
+		// Check if input is set.
 		if ( ! empty( $_POST[ $_field ] ) ) {
 			// Empty check failed.
 			$approved = 'spam';
@@ -324,7 +324,7 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		//* Perform same sanitization as displayed.
+		// Perform same sanitization as displayed.
 		$_fields = \map_deep(
 			[
 				$this->hp_properties['css_rotate_input_name'],
@@ -333,7 +333,7 @@ final class Core {
 			'\\esc_attr'
 		);
 
-		//* This is a low-level check... transform to higher level i.e. array_intersect()?
+		// This is a low-level check... transform to higher level i.e. array_intersect()?
 		// This check is validation only, the $_POST data isn't stored or processed further.
 		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment, WordPress.CodeAnalysis.AssignmentInCondition
 		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )
@@ -361,10 +361,10 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		//* Perform same sanitization as displayed.
+		// Perform same sanitization as displayed.
 		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
 
-		//* Check if input is set.
+		// Check if input is set.
 		$set = ! empty( $_POST[ $_field ] );
 
 		if ( $set ) {
@@ -396,7 +396,7 @@ final class Core {
 			return;
 		}
 
-		//* Perform same sanitization as displayed.
+		// Perform same sanitization as displayed.
 		$_nonces = \map_deep(
 			[
 				$this->hp_properties['nonce_rotated_input_value'],
@@ -405,7 +405,7 @@ final class Core {
 			'\\esc_attr'
 		);
 
-		$_tick = 0;
+		$_tick  = 0;
 		$_input = $_POST[ $_field ];
 
 		if ( hash_equals( $_nonces[0], $_input ) ) :
@@ -482,6 +482,7 @@ final class Core {
 	private function setup_post_check_properties() {
 
 		if ( $this->setup ) {
+			// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- This is readable.
 			$this->hp_properties += [
 				/**
 				 * Preventing CSS-disabled bots.
@@ -505,6 +506,7 @@ final class Core {
 				'nonce_rotated_input_value'          => $this->get_rotated_hashed_nonce_value( 24, false ),
 				'nonce_rotated_input_value_previous' => $this->get_rotated_hashed_nonce_value( 24, false, true ),
 			];
+			// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 			return true;
 		}
 		return false;
@@ -622,7 +624,7 @@ final class Core {
 					'previous' => \tsf_extension_manager()->_get_timed_hash( $uid, $scale, time() - $scale ),
 				];
 			} else {
-				$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
+				$_hash   = \tsf_extension_manager()->_get_uid_hash( $uid );
 				$_hashes = [
 					'current'  => $_hash,
 					'previous' => $_hash,
@@ -652,7 +654,7 @@ final class Core {
 		static $_hash = [];
 
 		if ( empty( $_hash ) ) {
-			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+			$uid   = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
 			$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
 		}
 
@@ -735,6 +737,6 @@ final class Core {
 		//= We can't divide by 0.
 		$first_char = $first_char ?: 10;
 
-		return $table[ round( count( $table ) / $first_char ) - 1 ] . substr( $hash, 1 );
+		return $table[ round( \count( $table ) / $first_char ) - 1 ] . substr( $hash, 1 );
 	}
 }

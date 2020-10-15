@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -100,7 +100,7 @@ final class HTML {
 
 		$tabindex = false;
 
-		if ( strlen( $title . $title_html ) ) {
+		if ( \strlen( $title . $title_html ) ) {
 			$classes[] = 'tsf-tooltip-item';
 			$tabindex  = true;
 		}

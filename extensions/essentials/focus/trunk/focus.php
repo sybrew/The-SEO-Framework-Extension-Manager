@@ -15,7 +15,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  * Extension License: GPLv3
  */
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Focus extension for The SEO Framework
@@ -40,35 +40,35 @@ defined( 'ABSPATH' ) or die;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-define( 'TSFEM_E_FOCUS_VERSION', '1.4.0' );
+\define( 'TSFEM_E_FOCUS_VERSION', '1.4.0' );
 
 /**
  * The extension file, absolute unix path.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_FOCUS_BASE_FILE', __FILE__ );
+\define( 'TSFEM_E_FOCUS_BASE_FILE', __FILE__ );
 
 /**
  * The extension map URL. Used for calling browser files.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_FOCUS_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_FOCUS_BASE_FILE ) );
+\define( 'TSFEM_E_FOCUS_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_FOCUS_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_FOCUS_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_FOCUS_BASE_FILE ) );
+\define( 'TSFEM_E_FOCUS_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_FOCUS_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  *
  * @since 1.0.0
  */
-define( 'TSFEM_E_FOCUS_PATH_CLASS', TSFEM_E_FOCUS_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_FOCUS_PATH_CLASS', TSFEM_E_FOCUS_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @package TSF_Extension_Manager\Core\Views\Pages
+ */
 
-defined( 'ABSPATH' ) and \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
+// phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
+
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
 
 ?>
 <svg width="0" height="0" display="none" xmlns="http://www.w3.org/2000/svg">

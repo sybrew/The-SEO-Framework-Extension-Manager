@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -43,13 +43,13 @@ class Panes extends API {
 	 */
 	private function construct() {
 
-		//* Ajax listener for updating feed option.
+		// Ajax listener for updating feed option.
 		\add_action( 'wp_ajax_tsfem_enable_feeds', [ $this, '_wp_ajax_enable_feeds' ] );
 
-		//* Ajax listener for updating extension setting.
+		// Ajax listener for updating extension setting.
 		\add_action( 'wp_ajax_tsfem_update_extension', [ $this, '_wp_ajax_tsfem_update_extension' ] );
 
-		//* Ajax listener for after updating the extension setting.
+		// Ajax listener for after updating the extension setting.
 		\add_action( 'wp_ajax_tsfem_update_extension_desc_footer', [ $this, '_wp_ajax_tsfem_update_extension_desc_footer' ] );
 	}
 
@@ -221,7 +221,7 @@ class Panes extends API {
 		/* translators: %s = "Google's Privacy Policy" */
 		$privacystatement = sprintf( \esc_html__( 'Read %s.', 'the-seo-framework-extension-manager' ), $googleprivacy );
 
-		//* The feed is totally optional until it pulls from The SEO Framework premium. I.e. privacy.
+		// The feed is totally optional until it pulls from The SEO Framework premium. I.e. privacy.
 		$title = sprintf(
 			'<h4 class="tsfem-status-title">%s</h4>',
 			\esc_html__( 'The feed has been disabled to protect your privacy.', 'the-seo-framework-extension-manager' )
@@ -284,7 +284,7 @@ class Panes extends API {
 				$type = 'unknown';
 
 				if ( $this->get_option( '_enable_feed' ) ) {
-					//* Another admin has initialized this after the last page load.
+					// Another admin has initialized this after the last page load.
 					$type = 'success';
 					$data = [
 						'content' => $this->ajax_get_trends_output(),
@@ -322,7 +322,7 @@ class Panes extends API {
 				$slug = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
+					// As data is passed to UNIX/IIS for file existence, strip as much as possible.
 					$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
 					$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
 				}
@@ -372,13 +372,13 @@ class Panes extends API {
 				$case = '';
 
 				if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-					//* As data is passed to UNIX/IIS for file existence, strip as much as possible.
+					// As data is passed to UNIX/IIS for file existence, strip as much as possible.
 					$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
 					$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
 				}
 
 				if ( $slug && $case ) :
-					//* Tell the plugin we're on the correct page.
+					// Tell the plugin we're on the correct page.
 					$this->ajax_is_tsf_extension_manager_page( true );
 
 					$this->get_verification_codes( $_instance, $bits );
@@ -386,7 +386,7 @@ class Panes extends API {
 					Extensions::initialize( 'ajax_layout', $_instance, $bits );
 
 					if ( 'activate' === $case ) :
-						//* Check for menu slug in order to add it.
+						// Check for menu slug in order to add it.
 						$header = Extensions::get( 'ajax_get_extension_header', $slug );
 
 						if ( ! empty( $header['MenuSlug'] ) ) {
@@ -524,6 +524,8 @@ class Panes extends API {
 
 		Layout::reset();
 
+		$infos = [];
+
 		if ( $this->is_connected_user() ) {
 			$infos[] = \esc_html__( 'This will free up your site limit.', 'the-seo-framework-extension-manager' );
 		} else {
@@ -555,6 +557,9 @@ class Panes extends API {
 		$this->get_verification_codes( $_instance, $bits );
 
 		Layout::initialize( 'link', $_instance, $bits );
+
+		$buttons     = [];
+		$description = [];
 
 		$buttons[1]     = Layout::get( 'public-support-button' );
 		$description[1] = \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' );

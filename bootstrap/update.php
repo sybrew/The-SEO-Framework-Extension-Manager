@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
 
 \add_action( 'tsfem_needs_the_seo_framework', __NAMESPACE__ . '\\_prepare_tsf_installer' );
 /**
@@ -157,12 +157,12 @@ function _check_external_blocking() {
 
 	if ( ! \current_user_can( 'update_plugins' ) ) return;
 
-	if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
+	if ( \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
 
 		$parsed_url = \wp_parse_url( TSF_EXTENSION_MANAGER_DL_URI );
 		$host       = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
-		if ( ! defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
+		if ( ! \defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
 			$notice = \the_seo_framework()->convert_markdown(
 				sprintf(
 					/* translators: Markdown. %s = Update API URL */

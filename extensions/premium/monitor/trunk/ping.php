@@ -1,11 +1,11 @@
-<?php
+<?php // phpcs:disable -- Maybe later.
 /*
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-//* Remove WebEngine headers.
+// Remove WebEngine headers.
 @header_remove();
 
-//* Send 202 and cache control.
+// Send 202 and cache control.
 @http_response_code( 202 );
 
 // session_cache_limiter( 'nocache' ); :
@@ -14,9 +14,9 @@ defined( 'ABSPATH' ) or die;
 @header( 'Pragma: no-cache' );
 @header( 'Date: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 
-//* Deliver a little bit of content.
+// Deliver a little bit of content.
 echo "\n";
 
-//* Done.
+// Done.
 exit;
 */

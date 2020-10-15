@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Monitor;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -425,7 +425,7 @@ final class Output {
 						break 2;
 
 					default:
-						//* Falls back to underlying default.
+						// Falls back to underlying default.
 						break 1;
 				endswitch;
 				//= No break to fall back to default.

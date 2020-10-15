@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Monitor;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -343,7 +343,7 @@ final class Tests {
 			endif;
 		endforeach;
 
-		//* Links are filled in with erroneous pages.
+		// Links are filled in with erroneous pages.
 		if ( empty( $links ) ) {
 			$state   = 'good';
 			$content = $this->wrap_info( $this->no_issue_found() );
@@ -410,14 +410,14 @@ final class Tests {
 			goto end;
 		}
 
-		//* Cache safe.
+		// Cache safe.
 		$sample_tsf = \the_seo_framework()->robots_txt();
 
 		// TSF 4.0.5 compat, remove robots.txt warning. This warning cannot be translated, so this is fine... for now.
 		// TODO see note at robots_txt() method in The SEO Framework, and adjust this for that.
 		$sample_tsf = preg_replace( '/^\#.*?[\r\n]+\#.*?robots\.txt[\r\n]+/', '', $sample_tsf );
 
-		//* Normalize.
+		// Normalize.
 		$sample_tsf    = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $sample_tsf ) ) );
 		$data['value'] = \esc_html( str_replace( [ "\r\n", "\r", "\n" ], '', trim( $data['value'] ) ) );
 
@@ -489,7 +489,7 @@ final class Tests {
 
 		$state = 'good';
 
-		//* 10 MB, not 10 MiB. Although the real limit is 52428800 (50MiB), large files add weight to the server, and slows down cralwers.
+		// 10 MB, not 10 MiB. Although the real limit is 52428800 (50MiB), large files add weight to the server, and slows down cralwers.
 		if ( isset( $data['size'] ) && $data['size'] > 10000000 ) {
 			$state    = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
@@ -589,7 +589,7 @@ final class Tests {
 						}
 					else :
 						$state = 'bad';
-						//* Cache safe.
+						// Cache safe.
 						\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 						$content .= $this->wrap_info(
 							\the_seo_framework()->convert_markdown(
@@ -616,7 +616,7 @@ final class Tests {
 					);
 				} else {
 					$state = 'bad';
-					//* Cache safe.
+					// Cache safe.
 					\wp_doing_ajax() and \the_seo_framework()->add_menu_link();
 					$content .= $this->wrap_info(
 						\the_seo_framework()->convert_markdown(

@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -258,13 +258,13 @@ trait Extension_Post_Meta {
 
 		$meta = $this->get_extension_post_meta();
 
-		//* If meta is unchanged, return true.
+		// If meta is unchanged, return true.
 		if ( isset( $meta[ $key ] ) && $value === $meta[ $key ] )
 			return true;
 
 		$meta[ $key ] = $value;
 
-		//* Prepare meta cache.
+		// Prepare meta cache.
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
@@ -273,7 +273,7 @@ trait Extension_Post_Meta {
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
-			//* Update meta cache on success.
+			// Update meta cache on success.
 			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
@@ -298,13 +298,13 @@ trait Extension_Post_Meta {
 
 		$meta = $this->get_extension_post_meta();
 
-		//* If meta is non existent, return true.
+		// If meta is non existent, return true.
 		if ( ! isset( $meta[ $key ] ) )
 			return true;
 
 		unset( $meta[ $key ] );
 
-		//* Prepare meta cache.
+		// Prepare meta cache.
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
@@ -313,7 +313,7 @@ trait Extension_Post_Meta {
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
-			//* Update meta cache on success.
+			// Update meta cache on success.
 			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, $meta );
 		}
 
@@ -335,10 +335,10 @@ trait Extension_Post_Meta {
 
 		if ( ! $this->pm_initialized ) $this->reset_extension_post_meta_id();
 
-		//* Prepare meta cache.
+		// Prepare meta cache.
 		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
-		//* If index is non existent, return true.
+		// If index is non existent, return true.
 		if ( ! isset( $c_meta[ $this->pm_index ] ) )
 			return true;
 
@@ -352,7 +352,7 @@ trait Extension_Post_Meta {
 		}
 
 		if ( $success ) {
-			//* Update meta cache on success.
+			// Update meta cache on success.
 			Extensions_Post_Meta_Cache::_set_meta_cache( $this->pm_id, $this->pm_index, null, true );
 		}
 

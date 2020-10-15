@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) or die;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//* @TODO create error legend/index for codes.
+// @TODO create error legend/index for codes.
 
 /**
  * Holds Error handling functionality.
@@ -84,7 +84,7 @@ trait Error {
 				return;
 			}
 
-			//* Already escaped.
+			// Already escaped.
 			foreach ( $notices as $notice )
 				\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
 
@@ -473,7 +473,7 @@ trait Error {
 				$type    = 'error';
 				break;
 
-			//* IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
+			// IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
 			case 9001:
 			case 9002:
 			case 9003:

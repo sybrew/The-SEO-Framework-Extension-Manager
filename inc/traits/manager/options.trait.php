@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -131,19 +131,19 @@ trait Options {
 
 		$_options = $this->get_all_options();
 
-		//* Cache current options from loop. This is used for activation where _instance needs to be used.
+		// Cache current options from loop. This is used for activation where _instance needs to be used.
 		static $options = [];
 
 		if ( empty( $options ) )
 			$options = $_options;
 
-		//* If option is unchanged, return true.
+		// If option is unchanged, return true.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
 			return true;
 
 		$options[ $option ] = $value;
 
-		//* Set option update tick to prevent collision.
+		// Set option update tick to prevent collision.
 		$this->has_run_update_option();
 
 		$this->initialize_option_update_instance( $type );
@@ -164,7 +164,7 @@ trait Options {
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
 			$this->set_error_notice( [ 6001 => '' ] );
 
-			//* Options have already been reverted.
+			// Options have already been reverted.
 
 			return false;
 		}
@@ -197,7 +197,7 @@ trait Options {
 
 		$_options = $this->get_all_options();
 
-		//* If options are unchanged, return true.
+		// If options are unchanged, return true.
 		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		if ( serialize( $options ) === serialize( $_options ) )
 			return true;
@@ -214,7 +214,7 @@ trait Options {
 			return false;
 		}
 
-		//* This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
+		// This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
 		$options = \wp_parse_args( $options, $_options );
 		$run = true;
 
@@ -232,7 +232,7 @@ trait Options {
 		if ( false === $this->verify_option_update_instance( $kill ) ) {
 			$this->set_error_notice( [ 7101 => '' ] );
 
-			//* Revert option.
+			// Revert option.
 			if ( false === $kill )
 				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
 

@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager\Extension\Articles;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
 	return;
@@ -91,10 +91,10 @@ final class Front extends Core {
 		if ( empty( $settings[ $post_type ]['enabled'] ) ) return;
 
 		if ( $this->is_amp() ) {
-			//* Initialize output in The SEO Framework's front-end AMP meta object.
+			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
 		} else {
-			//* Initialize output in The SEO Framework's front-end meta object.
+			// Initialize output in The SEO Framework's front-end meta object.
 			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
 		}
 	}
@@ -131,7 +131,7 @@ final class Front extends Core {
 
 		if ( function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
-		} elseif ( defined( 'AMP_QUERY_VAR' ) ) {
+		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
 			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
 		} else {
 			$is_amp = false;
@@ -277,7 +277,7 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return '';
 
-		//* Build data, fetch it later.
+		// Build data, fetch it later.
 		array_filter( array_filter( $data ), [ $this, 'build_article_data' ] );
 
 		/**

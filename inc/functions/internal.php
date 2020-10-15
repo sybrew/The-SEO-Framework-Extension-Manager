@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -28,6 +28,8 @@ defined( 'ABSPATH' ) or die;
  * Extracts the basename of an extension from its file location.
  *
  * @since 1.0.0
+ * @since 2.4.1 Now only replaces the first occurence of the dir path, for rare instances
+ *              where extension names match the exact root path on a server.
  *
  * @param string $path The extension path.
  * @return string The normalized extension basename.
@@ -40,13 +42,7 @@ function extension_basename( $path ) {
 	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
 	$extension_dir = trim( $extension_dir, DIRECTORY_SEPARATOR );
 
-	/**
-	 * @TODO figure out why preg_replace is used in WP Core.
-	 * Isn't str_replace much more ideal, as we're simply replacing a known part?
-	 * ...
-	 */
-	//$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
-	$path = str_replace( $extension_dir, '', $path );
+	$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
 	$path = trim( $path, DIRECTORY_SEPARATOR );
 
 	return $path;
@@ -62,7 +58,7 @@ function extension_basename( $path ) {
  * @return string The extension directory path.
  */
 function extension_dir_path( $file ) {
-	return dirname( $file ) . DIRECTORY_SEPARATOR;
+	return \dirname( $file ) . DIRECTORY_SEPARATOR;
 }
 
 /**
@@ -76,7 +72,7 @@ function extension_dir_path( $file ) {
  */
 function extension_dir_url( $file ) {
 
-	$path = dirname( \TSF_Extension_Manager\extension_basename( $file ) );
+	$path = \dirname( \TSF_Extension_Manager\extension_basename( $file ) );
 	//= Convert Windows/Unix paths to URL paths.
 	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
@@ -146,7 +142,7 @@ function get_ajax_notice( $success = false, $notice = '', $code = -1, $type = ''
 	return [
 		'success' => $success,
 		'notice'  => $notice,
-		'code'    => intval( $code ),
+		'code'    => \intval( $code ),
 		'type'    => $type ?: ( $success ? 'success' : 'error' ),
 	];
 }

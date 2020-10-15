@@ -5,14 +5,14 @@
 
 namespace TSF_Extension_Manager\Extension\Focus;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * Verify integrity and sets up API secret.
  *
  * @since 1.0.0
  */
-define(
+\define(
 	'TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY',
 	\tsf_extension_manager()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Ajax', $_instance, $bits ) ?: false
 );
@@ -79,7 +79,7 @@ final class Ajax {
 		 */
 		$instance->error_notice_option = 'tsfem_e_focus_ajax_error_notice_option';
 
-		//* AJAX definition getter listener.
+		// AJAX definition getter listener.
 		\add_action( 'wp_ajax_tsfem_e_focus_get_lexicalforms', [ $instance, '_get_lexicalforms' ] );
 		\add_action( 'wp_ajax_tsfem_e_focus_get_inflections', [ $instance, '_get_inflections' ] );
 		\add_action( 'wp_ajax_tsfem_e_focus_get_synonyms', [ $instance, '_get_synonyms' ] );

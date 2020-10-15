@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-defined( 'ABSPATH' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -78,10 +78,10 @@ class AdminPages extends AccountActivation {
 	 */
 	private function construct() {
 
-		//* Initialize menu links. TODO add network menu.
+		// Initialize menu links. TODO add network menu.
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
-		//* Initialize TSF Extension Manager page actions.
+		// Initialize TSF Extension Manager page actions.
 		\add_action( 'admin_init', [ $this, '_load_tsfem_admin_actions' ] );
 	}
 
@@ -98,9 +98,10 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _init_menu() {
 
+		// phpcs:ignore, Generic.CodeAnalysis.EmptyStatement -- TODO?
 		if ( $this->is_plugin_in_network_mode() ) {
-			//* TODO.
-			//	\add_action( 'network_admin_menu', [ $this, 'add_network_menu_link' ], 11 );
+			// phpcs:ignore, Squiz.PHP.CommentedOutCode -- TODO?
+			// \add_action( 'network_admin_menu', [ $this, 'add_network_menu_link' ], 11 );
 		} else {
 			if ( \the_seo_framework()->load_options )
 				\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
@@ -234,10 +235,10 @@ class AdminPages extends AccountActivation {
 		if ( $run )
 			return false;
 
-		//* Initialize user interface.
+		// Initialize user interface.
 		$this->init_tsfem_ui();
 
-		//* Initialize error interface.
+		// Initialize error interface.
 		$this->init_errors();
 
 		/**
@@ -246,10 +247,10 @@ class AdminPages extends AccountActivation {
 		 */
 		$this->revalidate_subscription();
 
-		//* Add something special for Vivaldi and Android.
+		// Add something special for Vivaldi and Android.
 		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
 
-		//* We don't want other plugins crashing this... Output early.
+		// We don't want other plugins crashing this... Output early.
 		\add_action( 'tsfem_content', [ $this, '_output_symbols' ], 0 );
 
 		return $run = true;
@@ -540,5 +541,43 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _get_nonce_action_field( $key ) {
 		return '<input type="hidden" name="' . \esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . \esc_attr( $key ) . '">';
+	}
+
+	/**
+	 * Outputs nonce field, without a DOM ID.
+	 *
+	 * @since 2.4.1
+	 * @access private
+	 *
+	 * @param string $action  The action key.
+	 * @param string $name    The nonce name.
+	 * @param bool   $referer Whether to set the referer field for validation.
+	 */
+	final public function _nonce_field( $action, $name, $referer = true ) {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
+		echo $this->_get_nonce_field( $action, $name, $referer );
+	}
+
+	/**
+	 * Returns nonce field, without a DOM ID.
+	 *
+	 * @since 2.4.1
+	 * @access private
+	 * @source <https://developer.wordpress.org/reference/functions/wp_nonce_field/>
+	 *
+	 * @param string $action  The action key.
+	 * @param string $name    The nonce name.
+	 * @param bool   $referer Whether to set the referer field for validation.
+	 */
+	final public function _get_nonce_field( $action, $name, $referer = true ) {
+
+		$name        = \esc_attr( $name );
+		$nonce_field = '<input type="hidden" name="' . $name . '" value="' . \wp_create_nonce( $action ) . '" />';
+
+		if ( $referer ) {
+			$nonce_field .= \wp_referer_field( false );
+		}
+
+		return $nonce_field;
 	}
 }
