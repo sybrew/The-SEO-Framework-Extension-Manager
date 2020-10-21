@@ -43,7 +43,7 @@ namespace TSF_Extension_Manager;
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_upgrader_class = function() {
-	new Upgrader();
+	new Upgrader(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 
 /**
@@ -384,7 +384,7 @@ final class Upgrader {
 	 */
 	private function do_upgrade_cb( $version, callable $callback ) {
 		return [
-			'success' => (bool) call_user_func_array( $callback, [ $version ] ),
+			'success' => (bool) \call_user_func_array( $callback, [ $version ] ),
 			'version' => $version,
 		];
 	}

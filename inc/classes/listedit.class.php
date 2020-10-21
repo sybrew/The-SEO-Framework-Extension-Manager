@@ -138,7 +138,8 @@ final class ListEdit {
 
 		//= Saving.
 		\add_action( 'save_post', [ static::class, '_verify_nonce_post' ], 1, 2 );
-		// \add_action( 'edit_term', [ static::class, '_verify_nonce_term' ], 1, 3 ); // No extension supports this.
+		// phpcs:ignore -- No extension supports this.
+		// \add_action( 'edit_term', [ static::class, '_verify_nonce_term' ], 1, 3 );
 
 		//= Output.
 		\add_action( 'the_seo_framework_after_quick_edit', [ $this, '_load_quick_sections' ], 10, 2 );
@@ -240,7 +241,7 @@ final class ListEdit {
 				'name'     => 'tsfem-listedit',
 				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
 				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
-				'l10n' => [
+				'l10n'     => [
 					'name' => 'tsfem_listeditL10n',
 					'data' => [],
 				],

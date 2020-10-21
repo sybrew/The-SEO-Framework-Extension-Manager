@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Traits intertwine.
+
 /**
  * Holds i18n data functions for class TSF_Extension_Manager\Extensions.
  *
@@ -129,7 +131,7 @@ trait Extensions_Layout {
 			if ( ! isset( $extension['slug'], $extension['type'], $extension['area'] ) )
 				continue;
 
-			if ( in_array( $extension['slug'], (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) )
+			if ( \in_array( $extension['slug'], (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) )
 				continue;
 
 			if ( false === static::get_extension_header( $extension['slug'] ) )
@@ -244,7 +246,7 @@ trait Extensions_Layout {
 		$party_class = 'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon';
 		$party_title = 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' );
 
-		$party = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, \esc_attr( $party_title ) );
+		$party  = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, \esc_attr( $party_title ) );
 		$author = '<span class="tsfem-extension-author">' . \esc_html( static::get_extension_header( $extension['slug'] )['Author'] ) . '</span>';
 
 		return '<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $party . $author . '</div>';
@@ -328,7 +330,7 @@ trait Extensions_Layout {
 				return '';
 		endswitch;
 
-		$disabled = $disabled || array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
+		$disabled = $disabled || \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		if ( $disabled ) {
 			$button = sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
@@ -352,13 +354,13 @@ trait Extensions_Layout {
 					$cache['input_name'],
 					$s_slug
 				);
-				$submit = sprintf(
+				$submit    = sprintf(
 					'<input type="submit" name="submit" id="tsfem-activate-submit[%s]" class="%s" value="%s">',
 					$s_slug,
 					$s_class,
 					\esc_attr( $text )
 				);
-				$nojs = sprintf(
+				$nojs      = sprintf(
 					'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
 					$cache['admin_url'],
 					$s_slug,
@@ -425,10 +427,12 @@ trait Extensions_Layout {
 		$data  = static::get_extension_header( $extension['slug'] );
 		$items = [];
 
-		// Make extension author element. (move link to what's already shown?)
+		// phpcs:disable
+		// MAYBE: Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
 		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		// phpcs:enable
 
 		// Make extension version element.
 		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
@@ -494,7 +498,7 @@ trait Extensions_Layout {
 		$incompatibility = static::determine_extension_incompatibility( $extension );
 
 		if ( $incompatibility & ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE ) ) {
-			$compat_class = 'tsfem-error';
+			$compat_class  = 'tsfem-error';
 			$compat_notice = sprintf(
 				/* translators: 1: Version number, 2: Version number */
 				\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
@@ -517,8 +521,8 @@ trait Extensions_Layout {
 					break;
 			endswitch;
 
-			$compat_class = 'tsfem-unknown';
-			$compat_name  = static::get_i18n( 'compatible' );
+			$compat_class   = 'tsfem-unknown';
+			$compat_name    = static::get_i18n( 'compatible' );
 			$compat_notice .= ' <br>' . \__( 'The extension will always be tested for errors before activation.', 'the-seo-framework-extension-manager' );
 		} else {
 			$compat_class  = 'tsfem-success';

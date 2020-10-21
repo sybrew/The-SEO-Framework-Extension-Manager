@@ -51,7 +51,7 @@ trait Schema_Packer {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$precision = function_exists( 'ini_get' ) ? ini_get( 'serialize_precision' ) : null;
+		$precision = \function_exists( 'ini_get' ) ? ini_get( 'serialize_precision' ) : null;
 
 		//= -1 means it's optimized correctly. 7 to 14 would also do, actually.
 		if ( isset( $precision ) && -1 !== (int) $precision )
@@ -75,7 +75,7 @@ trait Schema_Packer {
 		if ( isset( $cache ) )
 			return $cache;
 
-		if ( ! function_exists( 'ini_get_all' ) )
+		if ( ! \function_exists( 'ini_get_all' ) )
 			return $cache = false;
 
 		$ini_all = ini_get_all();
@@ -151,7 +151,7 @@ trait Schema_Packer {
 		$schema_file = TSFEM_E_LOCAL_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'schema.json';
 		$timeout     = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
 
-		// phpcs:ignore, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- This isn't a remote call.
+		// phpcs:ignore, WordPress.WP.AlternativeFunctions, TSF.Performance.Functions -- This isn't a remote call; required.
 		return json_decode( file_get_contents( $schema_file, false, $timeout ) );
 	}
 
@@ -170,7 +170,7 @@ trait Schema_Packer {
 
 		$schema = $this->get_schema();
 
-		if ( ! is_object( $schema ) )
+		if ( ! \is_object( $schema ) )
 			return '';
 
 		$this->correct_precision();

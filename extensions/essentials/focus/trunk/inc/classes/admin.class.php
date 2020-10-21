@@ -157,11 +157,11 @@ final class Admin extends Core {
 		$locale    = substr( \get_locale(), 0, 2 );
 		$supported = false;
 
-		if ( in_array( $type, [ 'any', 'synonyms' ], true ) ) {
+		if ( \in_array( $type, [ 'any', 'synonyms' ], true ) ) {
 			$supported = 'en' === $locale;
 		}
-		if ( in_array( $type, [ 'any', 'inflections' ], true ) ) {
-			$supported = $supported || in_array( $locale, [ 'en', 'es', 'lv', 'hi', 'sw', 'ta', 'ro' ], true );
+		if ( \in_array( $type, [ 'any', 'inflections' ], true ) ) {
+			$supported = $supported || \in_array( $locale, [ 'en', 'es', 'lv', 'hi', 'sw', 'ta', 'ro' ], true );
 		}
 
 		return $supported;
@@ -340,7 +340,7 @@ final class Admin extends Core {
 				default:
 					break;
 			}
-			if ( is_null( $store[ $key ] ) ) unset( $store[ $key ] );
+			if ( \is_null( $store[ $key ] ) ) unset( $store[ $key ] );
 		endforeach;
 
 		if ( empty( $store ) ) {
@@ -364,7 +364,7 @@ final class Admin extends Core {
 		$output = [];
 		foreach ( $values as $id => $items ) {
 			//= Don't store when no keyword is set.
-			if ( ! isset( $items['keyword'] ) || ! strlen( $items['keyword'] ) )
+			if ( ! isset( $items['keyword'] ) || ! \strlen( $items['keyword'] ) )
 				continue;
 
 			foreach ( (array) $items as $key => $value ) {
@@ -416,7 +416,7 @@ final class Admin extends Core {
 				break;
 
 			case 'scores':
-				if ( ! is_array( $value ) ) {
+				if ( ! \is_array( $value ) ) {
 					$value = [];
 				} else {
 					foreach ( $value as $_t => $_v ) {

@@ -66,7 +66,7 @@ final class InpostHTML {
 	 * @param string $for     The input ID an input label is for. Should be escaped.
 	 */
 	public static function wrap_flex( $what, $content, $id = '', $for = '' ) {
-		//= Input should already be escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- See method docs
 		echo static::construct_flex_wrap( $what, $content, $id, $for );
 	}
 
@@ -85,7 +85,7 @@ final class InpostHTML {
 	 * @param string $id       The wrap ID.
 	 */
 	public static function wrap_flex_multi( $what, array $contents, $id = '' ) {
-		//= Input should already be escaped.
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- See method docs
 		echo static::contruct_flex_wrap_multi( $what, $contents, $id );
 	}
 
@@ -186,10 +186,12 @@ final class InpostHTML {
 				$content = '</div>';
 				break;
 
+			// phpcs:disable
 			//! Not used.
 			// case 'checkbox':
 			// 	$content = sprintf( '<div class="tsf-checkbox-wrapper">%s</div>', $content );
 			// 	break;
+			// phpcs:enable
 
 			default:
 				break;

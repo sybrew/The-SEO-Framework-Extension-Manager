@@ -65,7 +65,7 @@ function _amp_init() {
 	} else {
 		$is_amp = false;
 
-		if ( function_exists( '\\is_amp_endpoint' ) ) {
+		if ( \function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
 		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
 			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;

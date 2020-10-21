@@ -45,7 +45,7 @@ final class AJAX extends Secure_Abstract {
 	 *
 	 * @var bool Whether the instance is validated.
 	 */
-	private static $_validated = false;
+	private static $_validated = false; // phpcs:ignore -- internal
 
 	/**
 	 * @var null|AJAX The class instance.
@@ -272,7 +272,7 @@ final class AJAX extends Secure_Abstract {
 		//= Input gets forwarded to secure location. Sanitization happens externally.
 		$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
 
-		if ( ! $input || ! is_object( $input ) ) {
+		if ( ! $input || ! \is_object( $input ) ) {
 			$send['results'] = static::$instance->get_ajax_notice( false, 17000 );
 		} else {
 			$account = self::get_property( 'account' );
@@ -376,24 +376,23 @@ final class AJAX extends Secure_Abstract {
 	 */
 	private static function build_ajax_dismissible_notice() {
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
+		// phpcs:disable, WordPress.Security.NonceVerification -- Caller must check for this.
 		$data = [];
 
 		$data['key'] = (int) static::$tsfem->coalesce_var( $_POST['tsfem-notice-key'], false );
 		if ( $data['key'] ) {
 			$notice = static::$instance->get_error_notice( $data['key'] );
 
-			if ( is_array( $notice ) ) {
+			if ( \is_array( $notice ) ) {
 				//= If it has a custom message (already stored in browser), then don't output the notice message.
 				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
 
 				$data['notice'] = static::$tsfem->get_dismissible_notice( $msg, $notice['type'], true, false );
 				$data['type']   = $notice['type'];
-				// $_type  = $data['notice'] ? 'success' : 'failure';
 			}
 		}
 
-		// phpcs:enable, WordPress.Security.NonceVerification.Missing
+		// phpcs:enable, WordPress.Security.NonceVerification
 
 		return $data;
 	}

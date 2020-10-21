@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Classes intertwine for cache abstraction.
+
 /**
  * Class TSF_Extension_Manager\Extensions_Options_Cache.
  *
@@ -68,7 +70,7 @@ final class Extensions_Options_Cache {
 	 */
 	public static function _get_options_cache() {
 
-		if ( is_null( static::$options ) )
+		if ( \is_null( static::$options ) )
 			static::init_options_cache();
 
 		return static::$options;
@@ -92,7 +94,7 @@ final class Extensions_Options_Cache {
 	 */
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
 
-		if ( is_null( static::$options ) )
+		if ( \is_null( static::$options ) )
 			static::init_options_cache();
 
 		if ( isset( $new_options ) && $index ) {
@@ -149,7 +151,7 @@ final class Stale_Extensions_Options_Cache {
 	 */
 	public static function _get_options_cache() {
 
-		if ( is_null( static::$options ) )
+		if ( \is_null( static::$options ) )
 			static::init_options_cache();
 
 		return static::$options;
@@ -173,7 +175,7 @@ final class Stale_Extensions_Options_Cache {
 	 */
 	public static function _set_options_cache( $index = '', $new_options = null, $delete = false ) {
 
-		if ( is_null( static::$options ) )
+		if ( \is_null( static::$options ) )
 			static::init_options_cache();
 
 		if ( isset( $new_options ) && $index ) {

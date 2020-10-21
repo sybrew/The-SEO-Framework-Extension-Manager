@@ -1422,7 +1422,7 @@ final class FormGenerator {
 			$content_start = '<div class="tsfem-form-collapse-content">';
 
 			return sprintf( '<div class="tsfem-form-collapse" %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
-			; // Added to prevent breaking alternative if/elseif control.
+			; // phpcs:ignore -- Added to prevent breaking alternative if/elseif control. PHP bug?
 		elseif ( 'end' === $what ) :
 			// ok.
 			return '</div></div>';
@@ -2137,6 +2137,8 @@ final class FormGenerator {
 	 * @param array $args The field generation arguments.
 	 * @return void
 	 */
+	// phpcs:disable
 	private function create_radio_field( array $args ) {}
 	private function create_textarea_field( array $args ) {}
+	// phpcs:enable
 }

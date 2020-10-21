@@ -14,7 +14,6 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSe
 		<?php
 		$image = [
 			'svg' => tsf_extension_manager()->get_image_file_location( 'tsflogo.svg', true ),
-			// '2x' => tsf_extension_manager()->get_image_file_location( 'tsflogo-58x58px.png', true ),
 			'1x'  => tsf_extension_manager()->get_image_file_location( 'tsflogo-29x29px.png', true ),
 		];
 		$size  = '1em';

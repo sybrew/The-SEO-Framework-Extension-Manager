@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Traits intertwine.
+
 /**
  * Holds extension data check functions for class TSF_Extension_Manager\Extensions.
  *
@@ -332,6 +334,7 @@ trait Extensions_Properties {
 		if ( empty( $extension ) )
 			return '';
 
+		// phpcs:ignore -- No network support like this, yet.
 		// $network = static::is_extension_network( $extension );
 		$premium    = static::is_extension_premium( $extension );
 		$essentials = static::is_extension_essentials( $extension );
@@ -339,6 +342,7 @@ trait Extensions_Properties {
 		$path[ $slug ] = '';
 
 		$path[ $slug ] .= 'extensions/';
+		// phpcs:ignore -- No network support like this, yet.
 		// $path[ $slug ] .= $network ? 'network/' : '';
 		$path[ $slug ] .= $premium ? 'premium/' : ( $essentials ? 'essentials/' : 'free/' );
 		$path[ $slug ] .= $slug . '/';
@@ -358,10 +362,11 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_header_file_location( $slug ) {
 
-		if ( $path = static::get_extension_trunk_path( $slug ) )
-			return $path . $slug . '.php';
+		$path = static::get_extension_trunk_path( $slug );
 
-		return '';
+		if ( ! $path ) return '';
+
+		return $path . $slug . '.php';
 	}
 
 	/**
@@ -513,7 +518,7 @@ trait Extensions_Actions {
 			|| ! $is_premium_user && static::is_extension_premium( $_extension )
 			|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
 			|| ( ! static::is_extension_compatible( $_extension ) )
-			   ) {
+			) {
 				unset( $extensions[ $_extension ] );
 			}
 		}
@@ -1049,6 +1054,7 @@ trait Extensions_Actions {
 		$error['message'] = static::clean_error_message( $error['message'], $error );
 
 		$error_notice = $error_type . ' ' . \esc_html__( 'Extension is not compatible with your server configuration.', 'the-seo-framework-extension-manager' );
+
 		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
 		if ( \wp_doing_ajax() ) {
@@ -1087,6 +1093,8 @@ trait Extensions_Actions {
 	 */
 	private static function clean_error_message( $message = '', $error = [] ) {
 
+		// phpcs:disable, WordPress.CodeAnalysis.AssignmentInCondition
+
 		// Remove stack trace.
 		if ( false !== ( $stack_pos = stripos( $message, 'Stack trace:' ) ) )
 			$message = substr( $message, 0, $stack_pos );
@@ -1105,6 +1113,8 @@ trait Extensions_Actions {
 				}
 			}
 		}
+
+		// phpcs:enable, WordPress.CodeAnalysis.AssignmentInCondition
 
 		return $message;
 	}

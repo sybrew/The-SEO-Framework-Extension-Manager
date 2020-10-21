@@ -147,6 +147,7 @@ final class Layout extends Secure_Abstract {
 			);
 
 			$switcher_class = 'tsfem-button-flag tsfem-button';
+			// phpcs:ignore -- maybe later
 			// $switcher_class .= $tsfem->are_options_valid() ? '' : ' tsfem-button-pulse';
 
 			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
@@ -331,7 +332,7 @@ final class Layout extends Secure_Abstract {
 		) );
 		$output  .= static::wrap_row_content( \esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ), $_ep_html, false );
 
-		if ( is_int( $requests_remaining ) ) {
+		if ( \is_int( $requests_remaining ) ) {
 			$_notice  = '';
 			$_classes = [ 'tsfem-dashicon' ];
 

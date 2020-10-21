@@ -140,7 +140,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		foreach ( $class_vars as $property => $value ) :
 			if ( isset( self::$$property ) )
-				self::$$property = is_array( self::$$property ) ? [] : null;
+				self::$$property = \is_array( self::$$property ) ? [] : null;
 		endforeach;
 	}
 
@@ -241,7 +241,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
 
-		return $is_premium = in_array( $level, [ 'Enterprise', 'Premium' ], true );
+		return $is_premium = \in_array( $level, [ 'Enterprise', 'Premium' ], true );
 	}
 
 	/**
@@ -261,7 +261,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
 
-		return $is_connected = in_array( $level, [ 'Enterprise', 'Premium', 'Essentials' ], true );
+		return $is_connected = \in_array( $level, [ 'Enterprise', 'Premium', 'Essentials' ], true );
 	}
 
 	/**

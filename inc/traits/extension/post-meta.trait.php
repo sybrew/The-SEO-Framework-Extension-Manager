@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Class and trait intertwine for cache abstraction.
+
 /**
  * Class TSF_Extension_Manager\Extensions_Post_Meta_Cache.
  *
@@ -268,8 +270,8 @@ trait Extension_Post_Meta {
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
-		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
@@ -308,8 +310,8 @@ trait Extension_Post_Meta {
 		$c_meta                    = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 		$c_meta[ $this->pm_index ] = $meta;
 
-		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {

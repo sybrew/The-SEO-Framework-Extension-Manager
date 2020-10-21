@@ -145,7 +145,7 @@ namespace TSF_Extension_Manager {
 		if ( isset( $loaded[ $version ] ) )
 			return $loaded[ $version ];
 
-		if ( empty( $version ) || 3 !== strlen( $version ) ) {
+		if ( empty( $version ) || 3 !== \strlen( $version ) ) {
 			\the_seo_framework()->_doing_it_wrong( __FUNCTION__, 'You must tell the two-point required WordPress version.' );
 			return $loaded[ $version ] = false;
 		}

@@ -60,7 +60,6 @@ if ( $options ) {
 		<?php
 		$image = [
 			'svg' => $this->get_image_file_location( 'tsflogo.svg', true ),
-			// '2x' => $this->get_image_file_location( 'tsflogo-58x58px.png', true ),
 			'1x'  => $this->get_image_file_location( 'tsflogo-29x29px.png', true ),
 		];
 		$size  = '1em';

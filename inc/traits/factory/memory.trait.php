@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Class and trait intertwine for cache abstraction.
+
 /**
  * Holds memory cache for the Memory trait.
  * Ironically.
@@ -61,7 +63,7 @@ class Memory_Cache {
 			return $limit;
 
 		$_limit     = trim( ini_get( 'memory_limit' ) );
-		$quantifier = strtolower( $_limit[ strlen( $_limit ) - 1 ] );
+		$quantifier = strtolower( $_limit[ \strlen( $_limit ) - 1 ] );
 		$val        = filter_var( $_limit, FILTER_SANITIZE_NUMBER_INT );
 
 		switch ( $quantifier ) {

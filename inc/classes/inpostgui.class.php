@@ -32,7 +32,7 @@ namespace TSF_Extension_Manager;
  * @link https://bugs.php.net/bug.php?id=75771
  */
 $_load_inpostgui_class = function() {
-	new InpostGUI();
+	new InpostGUI(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 
 /**
@@ -202,7 +202,7 @@ final class InpostGUI {
 	 */
 	public function _prepare_admin_scripts( $hook ) {
 
-		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) )
+		if ( ! \in_array( $hook, [ 'post.php', 'post-new.php' ], true ) )
 			return;
 
 		$this->register_default_scripts();
@@ -245,7 +245,7 @@ final class InpostGUI {
 					'isPremium'   => \tsf_extension_manager()->is_premium_user(),
 					'isConnected' => \tsf_extension_manager()->is_connected_user(),
 					'locale'      => \get_locale(),
-					'userLocale'  => function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+					'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
 					'debug'       => (bool) WP_DEBUG,
 					'rtl'         => (bool) \is_rtl(),
 					'i18n'        => [
@@ -259,7 +259,7 @@ final class InpostGUI {
 				],
 			],
 			'tmpl' => [
-				'file' => tsf_extension_manager()->get_template_location( 'inpostnotice' ),
+				'file' => \tsf_extension_manager()->get_template_location( 'inpostnotice' ),
 			],
 		] );
 		static::register_script( [
@@ -392,8 +392,8 @@ final class InpostGUI {
 
 			if (
 			   ! isset( $_colors[ $_scheme ]->colors )
-			|| ! is_array( $_colors[ $_scheme ]->colors )
-			|| count( $_colors[ $_scheme ]->colors ) < 4
+			|| ! \is_array( $_colors[ $_scheme ]->colors )
+			|| \count( $_colors[ $_scheme ]->colors ) < 4
 			) {
 				//= Default 'fresh' table.
 				$_table = [
@@ -537,7 +537,7 @@ final class InpostGUI {
 		if ( ( empty( $_POST[ static::NONCE_NAME ] ) ) // Input var OK.
 		|| ( ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION ) ) // Input var, sanitization OK.
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
-		   ) return;
+		) return;
 
 		static::$save_access_state = TSFEM_INPOST_IS_SECURE;
 

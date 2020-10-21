@@ -43,7 +43,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . DIRECTORY_SEPARATOR . 'language'
+			\dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . DIRECTORY_SEPARATOR . 'language'
 		);
 	}
 }
@@ -89,6 +89,7 @@ function _protect_options() {
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 
+	// phpcs:ignore, TSF.Performance.Functions.PHP -- required
 	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) )
 		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 
@@ -161,7 +162,7 @@ function _init_tsf_extension_manager() {
 		 * @since 1.5.0
 		 */
 		\do_action( 'tsfem_extensions_initialized' );
-	} elseif ( ! function_exists( '\\the_seo_framework' ) ) {
+	} elseif ( ! \function_exists( '\\the_seo_framework' ) ) {
 		/**
 		 * Nothing is loaded at this point; not even The SEO Framework.
 		 *
@@ -192,7 +193,7 @@ function _register_autoloader() {
 	];
 
 	foreach ( $integrity_classes as $_class )
-		$iniquity = class_exists( $_class, false );
+		$iniquity = class_exists( $_class, false ); // phpcs:ignore, TSF.Performance.Functions.PHP -- required.
 	$iniquity and die;
 
 	/**
@@ -223,7 +224,7 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( function_exists( '\\the_seo_framework' ) ) {
+	if ( \function_exists( '\\the_seo_framework' ) ) {
 		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.0.5', '>=' ) && \the_seo_framework()->loaded )
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
 	}

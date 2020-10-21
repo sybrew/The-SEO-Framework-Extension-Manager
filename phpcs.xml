@@ -11,7 +11,7 @@
 	<rule ref="TSF.Performance.Opcodes">
 		<properties>
 			<!-- <property name="userNoopChecks" type="array" value="_can_load,_load_trait,_has_run,_bootstrap_timer,Load,Silencer"/> -->
-			<property name="userNoopChecks" type="array" value="_load_trait,has_run"/>
+			<property name="userNoopChecks" type="array" value="can_do_extension_settings,can_do_manager_settings,can_do_settings,_load_trait,_load_wp_compat,_bootstrap_timer,extension_basename,extension_dir_path,extension_dir_url,is_done,has_run,load_upgrader,get_ajax_notice"/>
 		</properties>
 	</rule>
 

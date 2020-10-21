@@ -250,7 +250,7 @@ final class Admin extends Core {
 	 */
 	public static function _sanitize_options_analytics( $value ) {
 
-		if ( ! is_array( $value ) )
+		if ( ! \is_array( $value ) )
 			$value = [];
 
 		// TODO do we want to strip unknown entries from payload?
@@ -291,6 +291,7 @@ final class Admin extends Core {
 
 				case 'facebook_pixel':
 					$key = 'pixel_id';
+
 					$value[ $index ][ $key ] = trim( \tsf_extension_manager()->coalesce_var( $value[ $index ][ $key ], '' ) );
 					if ( ! preg_match( '/^[0-9]+$/', $value[ $index ][ $key ] ) ) {
 						$value[ $index ][ $key ] = '';

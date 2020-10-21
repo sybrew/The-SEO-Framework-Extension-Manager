@@ -75,21 +75,22 @@ trait Error {
 	 */
 	final public function _do_error_notices() {
 
-		if ( $options = \get_option( $this->error_notice_option, false ) ) {
+		$options = \get_option( $this->error_notice_option, false );
 
-			$notices = $this->get_error_notices( $options );
+		if ( ! $options ) return;
 
-			if ( empty( $notices ) ) {
-				$this->unset_error_notice_option();
-				return;
-			}
+		$notices = $this->get_error_notices( $options );
 
-			// Already escaped.
-			foreach ( $notices as $notice )
-				\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
-
+		if ( empty( $notices ) ) {
 			$this->unset_error_notice_option();
+			return;
 		}
+
+		// Already escaped.
+		foreach ( $notices as $notice )
+			\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
+
+		$this->unset_error_notice_option();
 	}
 
 	/**
@@ -121,7 +122,7 @@ trait Error {
 			//# This prevents adding timestamps preemptively in the future.
 			//? We could form a timestamp collection per notice, separately.
 			//# But, that would cause performance issues.
-			if ( in_array( $notice, $notices, true ) ) {
+			if ( \in_array( $notice, $notices, true ) ) {
 				//= We already have the notice stored in cache.
 				return;
 			} else {
@@ -155,7 +156,7 @@ trait Error {
 	 */
 	final protected function get_error_notice( $option ) {
 
-		if ( is_array( $option ) ) {
+		if ( \is_array( $option ) ) {
 			$key = key( $option );
 		} elseif ( is_scalar( $option ) ) {
 			$key = $option;
@@ -165,7 +166,7 @@ trait Error {
 			return '';
 
 		$notice          = $this->get_error_notice_by_key( $key, true );
-		$additional_info = is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
+		$additional_info = \is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
 
 		$args = [
 			'type'            => $notice['type'],
@@ -333,7 +334,7 @@ trait Error {
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'error';
+				$type = 'error';
 				break;
 
 			case 304:
@@ -386,7 +387,7 @@ trait Error {
 					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'error';
+				$type = 'error';
 				break;
 
 			case 306:
@@ -437,7 +438,7 @@ trait Error {
 					\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link()
 				);
-				$type    = 'warning';
+				$type = 'warning';
 				break;
 
 			case 904:

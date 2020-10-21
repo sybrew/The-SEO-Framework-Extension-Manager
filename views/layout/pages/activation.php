@@ -24,10 +24,12 @@ if ( ! $this->is_auto_activated() ) :
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
 			<?php
+			// phpcs:disable
 			// TODO activation listener. Version 3.x
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'activate', 'text' => \__( 'Get your API key', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button', 'tsfem-button-primary' ] ] );
 			// $this->get_view( 'forms/get', [ 'name' => $this->request_name['activate-external'], 'action' => $this->get_activation_url( 'get/' ), 'redirect' => 'connect', 'text' => \__( 'Connect', 'the-seo-framework-extension-manager' ), 'classes' => [ 'tsfem-button' ] ] );
 			// $this->get_remote_activation_listener();
+			// phpcs:enable
 
 			// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- get_link() escapes
 			echo $this->get_link( [

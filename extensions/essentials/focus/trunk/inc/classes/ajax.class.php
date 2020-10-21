@@ -150,7 +150,7 @@ final class Ajax {
 
 		$send = [];
 
-		if ( ! strlen( $keyword ) || ! $language ) {
+		if ( ! \strlen( $keyword ) || ! $language ) {
 			//= How in the...
 			$send['results'] = $this->get_ajax_notice( false, 1100101 );
 		} else {
@@ -181,7 +181,7 @@ final class Ajax {
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100104 );
 			} else {
-				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->forms ) ) {
 					$type = 'success'; // The API responded as intended, although the data may not be useful.
@@ -261,7 +261,7 @@ final class Ajax {
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100305 );
 			} else {
-				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->inflections ) ) {
 					$type = 'success'; // The API responded as intended, although the data may not be useful.
@@ -271,7 +271,7 @@ final class Ajax {
 					// When no inflections are returned, or if the one returned is only of the same kind as the keyword, fail.
 					// NOTE: Uses weak non-UTF8 strtolower. Users are smart enough to ignore useless data.
 					if ( ! $send['data']['inflections']
-					|| count( $send['data']['inflections'] ) < 2
+					|| \count( $send['data']['inflections'] ) < 2
 					&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword ) ) {
 						$send['results'] = $this->get_ajax_notice( false, 1100306 );
 					} else {
@@ -346,7 +346,7 @@ final class Ajax {
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100204 );
 			} else {
-				$_data = is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
+				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->synonyms ) ) {
 					$type = 'success'; // The API responded as intended, although the data may not be useful.

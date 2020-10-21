@@ -163,7 +163,7 @@ trait Secure_Post {
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
+		if ( ! \is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
@@ -198,7 +198,7 @@ trait Secure_Post {
 		if ( $key ) {
 			$method = $this->get_iterator_callback_by_key( $key );
 			if ( $method ) {
-				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields();
+				$fields = &\TSF_Extension_Manager\FormGenerator::_collect_ajax_its_fields(); // phpcs:ignore -- collector, wrong assessment.
 				$fields = Fields::get_instance()->{$method}();
 			}
 		}
@@ -284,7 +284,7 @@ trait Secure_Post {
 		 */
 		if ( empty( $data )
 		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		|| ( ! is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		|| ( ! \is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070200 );

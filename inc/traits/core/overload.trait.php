@@ -24,6 +24,10 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- Collection, not auto-loaded nor class-mapped.
+// phpcs:disable, Generic.CodeAnalysis.UselessOverridingMethod.Found -- Enforced, not useless.
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- The trait doc explains it.
+
 /**
  * Legend/Definitions:
  *
@@ -105,8 +109,6 @@ namespace TSF_Extension_Manager;
  *
  *      - <No keyword>: Should not exist.
  */
-
-// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- Implied.
 
 /**
  * Holds private overloading functions to prevent injection or abstraction.
@@ -356,7 +358,7 @@ trait Construct_Core_Static_Final_Instance {
 	 */
 	final public static function set_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::$instance = new static();
 		}
 	}
@@ -372,7 +374,7 @@ trait Construct_Core_Static_Final_Instance {
 	 */
 	final public static function get_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::set_instance();
 		}
 
@@ -418,7 +420,7 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	 */
 	private static function set_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::$instance = new static();
 		}
 	}
@@ -434,7 +436,7 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	 */
 	private static function get_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( \is_null( static::$instance ) ) {
 			static::set_instance();
 		}
 
@@ -503,7 +505,7 @@ trait Ignore_Properties_Core_Public_Final {
 	 * @param string $name  The inexisting property name.
 	 * @param mixed  $value The propertie value that ought to be set.
 	 */
-	final public function __set( $name = '', $value = null ) {
+	final public function __set( $name = '', $value = null ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
 	}
 

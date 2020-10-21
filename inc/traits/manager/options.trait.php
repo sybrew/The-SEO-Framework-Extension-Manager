@@ -216,7 +216,7 @@ trait Options {
 
 		// This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
 		$options = \wp_parse_args( $options, $_options );
-		$run = true;
+		$run     = true;
 
 		$this->initialize_option_update_instance( $type );
 
@@ -393,9 +393,9 @@ trait Options {
 
 		$success = [
 			$this->delete_options_instance(),
-			\delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS )
+			\delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS ),
 		];
 
-		return $this->killed_options = ! in_array( false, $success, true );
+		return $this->killed_options = ! \in_array( false, $success, true );
 	}
 }

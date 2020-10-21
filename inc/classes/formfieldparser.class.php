@@ -58,7 +58,7 @@ final class FormFieldParser {
 
 		//= Because it's cast to array, the return will always be inside this loop.
 		foreach ( (array) $keys as $k => $v ) {
-			if ( is_array( $v ) ) {
+			if ( \is_array( $v ) ) {
 				return isset( $value[ $k ] ) ? static::get_mda_value( $v, $value[ $k ] ) : null;
 			} else {
 				if ( $k ) {
@@ -116,7 +116,8 @@ final class FormFieldParser {
 	 */
 	public static function get_last_value( array $a ) {
 
-		while ( is_array( $a = end( $a ) ) );
+		// phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- Don't fault my amazingness.
+		while ( \is_array( $a = end( $a ) ) );
 
 		return $a;
 	}

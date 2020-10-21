@@ -124,7 +124,7 @@ trait Time {
 	 */
 	protected function get_rectified_date( $format, $timestamp = null ) {
 
-		is_null( $timestamp )
+		\is_null( $timestamp )
 			and $timestamp = time();
 
 		$tsf = \the_seo_framework();
@@ -150,7 +150,7 @@ trait Time {
 	 */
 	protected function get_rectified_date_i18n( $format, $timestamp = null ) {
 
-		is_null( $timestamp )
+		\is_null( $timestamp )
 			and $timestamp = time();
 
 		$tsf = \the_seo_framework();
@@ -267,7 +267,7 @@ trait Time {
 			$_threshold = $scale_table[ $x_scale ][0];
 
 			if ( $x_remaining >= $_threshold                       // > vs >= is 24 hours vs 1 day.
-			&& ( ! $precise || ( count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
+			&& ( ! $precise || ( \count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
 			) {
 				if ( $x_remaining % $_threshold ) {
 					// Calculate current and next time scale.
@@ -296,7 +296,7 @@ trait Time {
 
 		$times = array_reverse( $times );
 		//= Don't return more items than the threshold.
-		$count = min( count( $times ), $scales );
+		$count = min( \count( $times ), $scales );
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			if ( 0 === $i ) {

@@ -252,7 +252,7 @@ final class Admin extends Core {
 				'_check'   => [
 					\__( 'Enable article markup support?', 'the-seo-framework-extension-manager' ),
 				],
-				'_data' => [
+				'_data'    => [
 					'is-type-listener'     => '1',
 					'set-type-to-if-value' => [
 						'enabled'  => '1',
@@ -405,7 +405,7 @@ final class Admin extends Core {
 	 */
 	public static function _sanitize_option_post_type( $value ) {
 
-		if ( ! is_array( $value ) )
+		if ( ! \is_array( $value ) )
 			$value = [];
 
 		$post_types = \the_seo_framework()->get_supported_post_types();
@@ -615,7 +615,7 @@ final class Admin extends Core {
 			'type' => [
 				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
 				'options' => [
-					'nochange'    => __( '&mdash; No Change &mdash;', 'default' ),
+					'nochange' => \__( '&mdash; No Change &mdash;', 'default' ),
 				] + static::filter_article_keys( [
 					'disabled'    => \__( '&mdash; Disabled &mdash;', 'the-seo-framework-extension-manager' ),
 					'Article'     => \__( 'Article', 'the-seo-framework-extension-manager' ),

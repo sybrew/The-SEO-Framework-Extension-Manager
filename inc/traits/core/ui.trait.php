@@ -137,7 +137,7 @@ trait UI {
 		printf(
 			'<main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-			in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
+			\in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
 		);
 		\do_action( 'tsfem_content' );
 		echo '</main>';
@@ -306,9 +306,10 @@ trait UI {
 					'name' => 'tsfemFormL10n',
 					'data' => [
 						'nonce'  => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
-						'callee' => get_class( $this ), //! Don't use __CLASS__, we require the core instance.
+						'callee' => \get_class( $this ), //! Don't use __CLASS__, we require the core instance.
 						'i18n'   => [
-							// TODO categorize
+							// TODO categorize in multidimensionals
+							// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- Alignment is fine.
 
 							// Validation.
 							'requiredSelectAny' => \esc_html__( 'Please select any of the fields to proceed.', 'the-seo-framework-extension-manager' ),
@@ -333,13 +334,16 @@ trait UI {
 							'selectAddressTitle' => \esc_html__( 'Select address', 'the-seo-framework-extension-manager' ),
 							'selectAddressText'  => \esc_html__( 'Select an address below.', 'the-seo-framework-extension-manager' ),
 							'reverseGeoWarning'  => \esc_html__( 'Validation will be done only using Latitude and Longitude.', 'the-seo-framework-extension-manager' ),
+							// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
 						],
 					],
 				],
+				// phpcs:disable
 				// Inherits from 'tsfem'
 				// 'tmpl'     => [
 				// 	'file' => \tsf_extension_manager()->get_template_location( 'fbtopnotice' ),
 				// ],
+				// phpcs:enable
 			],
 		] );
 	}
@@ -381,6 +385,7 @@ trait UI {
 						'imgRemoveTitle' => \esc_attr__( 'Remove selected image', 'the-seo-framework-extension-manager' ),
 						'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
 						'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
+						// phpcs:ignore -- redundant, maybe later.
 						// 'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
 					],
 				],

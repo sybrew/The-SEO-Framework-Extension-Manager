@@ -31,6 +31,8 @@ namespace TSF_Extension_Manager;
  */
 \TSF_Extension_Manager\_load_trait( 'manager/extensions' );
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile -- Initializes fallback dummy traits.
+
 /**
  * Require extensions layout traits depending on admin page type.
  *
@@ -207,7 +209,7 @@ final class Extensions extends Secure_Abstract {
 	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
 
 		// Temporarily. Exchange for count( $what ) > 1
-		if ( is_array( $what ) ) {
+		if ( \is_array( $what ) ) {
 			foreach ( $what as $w ) {
 				// Reassigns and retests itself until filtered.
 				$extensions = static::filter_extensions( $extensions, $w );

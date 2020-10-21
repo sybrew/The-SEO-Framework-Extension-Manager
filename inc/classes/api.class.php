@@ -208,10 +208,11 @@ class API extends Core {
 	 */
 	final protected function set_api_endpoint_type( $type = null ) {
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- parser doesn't recognize reference funcs.
 		$endpoint = &$this->get_api_endpoint_type();
 
 		if ( $type ) {
-			$endpoint = in_array( $type, [ 'eu', 'global' ], true ) ? $type : 'global';
+			$endpoint = \in_array( $type, [ 'eu', 'global' ], true ) ? $type : 'global';
 		} elseif ( $this->is_connected_user() ) {
 			$endpoint = $this->get_key_endpoint_origin( $this->get_subscription_status()['key'] );
 		} else {
@@ -517,7 +518,7 @@ class API extends Core {
 	 */
 	final private function _verify_api_access( $object, $key ) {
 		$keys = &$this->generate_api_access_key();
-		return $this->coalesce_var( $keys[ get_class( $object ) ], null ) === (string) $key;
+		return $this->coalesce_var( $keys[ \get_class( $object ) ], null ) === (string) $key;
 	}
 
 	/**

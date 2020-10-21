@@ -22,7 +22,7 @@ function _prepare_tsf_installer() {
 	if ( ! \current_user_can( 'install_plugins' ) ) return;
 	if ( 'update.php' === $GLOBALS['pagenow'] ) return;
 
-	if ( ! function_exists( '\\get_plugins' ) )
+	if ( ! \function_exists( '\\get_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	$plugins = \get_plugins();
@@ -96,7 +96,7 @@ function _nag_install_tsf() {
 		'<a href="%1$s" id=tsfem-tsf-tb class="thickbox open-plugin-details-modal" aria-label="%2$s">%3$s</a>',
 		\esc_url( $details_url ),
 		/* translators: %s: Plugin name */
-		\esc_attr( sprintf( __( 'Learn more about %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
+		\esc_attr( sprintf( \__( 'Learn more about %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
 		\esc_html__( 'View plugin details', 'the-seo-framework-extension-manager' )
 	);
 	$nag = sprintf(
@@ -227,14 +227,14 @@ function _hook_plugins_api( $res, $action, $args ) {
 			\esc_url( TSF_EXTENSION_MANAGER_DL_URI ),
 			'https://theseoframework.com/contact/'
 		);
-		$res = new WP_Error( 'plugins_api_failed',
+		$res = new \WP_Error( 'plugins_api_failed',
 			$error_message,
 			$request->get_error_message() // $data
 		);
 	} else {
 		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) ); // phpcs:ignore -- No objects are sent.
-		if ( ! is_object( $res ) && ! is_array( $res ) ) {
-			$res = new WP_Error( 'plugins_api_failed',
+		if ( ! \is_object( $res ) && ! \is_array( $res ) ) {
+			$res = new \WP_Error( 'plugins_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
 					\__( 'An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href="%s">contact us</a>.', 'the-seo-framework-extension-manager' ),
@@ -242,7 +242,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 				),
 				\wp_remote_retrieve_body( $request )
 			);
-		} elseif ( is_array( $res ) ) {
+		} elseif ( \is_array( $res ) ) {
 			$res = (object) $res;
 		}
 	}

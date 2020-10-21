@@ -24,7 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- Implied.
+// phpcs:disable, Squiz.Commenting.FunctionComment.Missing -- implied.
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- implicit.
 
 /**
  * Class TSF_Extension_Manager\Alias
@@ -44,7 +45,7 @@ final class Alias {
 	}
 
 	public function __set( $name, $value ) {
-		return;
+		return; // phpcs:ignore, Squiz.PHP.NonExecutableCode.ReturnNotRequired -- implicit
 	}
 
 	public function __isset( $name ) {
