@@ -119,7 +119,7 @@ window.tsfem_e_local = {
 				type = response && response.type || void 0;
 
 			if ( ! data || ! type ) {
-				//* Erroneous output.
+				// Erroneous output.
 				loaderText = tsfem.i18n['InvalidResponse'];
 			} else {
 				let rCode = data.results && data.results.code || void 0,
@@ -151,7 +151,7 @@ window.tsfem_e_local = {
 						}
 					}
 				} else {
-					//* Erroneous output.
+					// Erroneous output.
 					loaderText = tsfem.i18n['UnknownError'];
 					_window.close();
 					_currentWindow.focus();
@@ -190,7 +190,7 @@ window.tsfem_e_local = {
 	 */
 	ready: function( jQ ) {
 
-		//* Turn validate button into an AJAX pusher.
+		// Turn validate button into an AJAX pusher.
 		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).click( tsfem_e_local.validateFormJson );
 	}
 };

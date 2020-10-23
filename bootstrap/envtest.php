@@ -54,7 +54,7 @@ function tsf_extension_manager_pre_boot_test() {
 	$ms = is_multisite();
 
 	if ( $ms && function_exists( 'get_network' ) ) {
-		//* Try bypassing testing and deactivation gaming when the main blog has already been tested.
+		// Try bypassing testing and deactivation gaming when the main blog has already been tested.
 		$nw = get_network();
 		if ( $nw instanceof WP_Network ) {
 			if ( get_blog_option( $nw->site_id, 'tsfem_tested_environment_version' ) ) {
@@ -77,7 +77,7 @@ function tsf_extension_manager_pre_boot_test() {
 	or $test = true;
 	// phpcs:enable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
 
-	//* All good.
+	// All good.
 	if ( true === $test ) {
 		update_option( 'tsfem_tested_environment_version', TSF_EXTENSION_MANAGER_DB_VERSION );
 		return;
@@ -100,13 +100,13 @@ function tsf_extension_manager_pre_boot_test() {
 
 	deactivate_plugins( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME, $silent, $network_mode );
 
-	//* Don't die on front-end.
+	// Don't die on front-end.
 	if ( ! $admin )
 		return;
 
 	switch ( $test ) :
 		case 1:
-			//* PHP requirements not met, always count up to encourage best standards.
+			// PHP requirements not met, always count up to encourage best standards.
 			$requirement = 'PHP 5.6.5 or later';
 			$issue       = 'PHP version';
 			$version     = phpversion();
@@ -114,7 +114,7 @@ function tsf_extension_manager_pre_boot_test() {
 			break;
 
 		case 2:
-			//* WordPress requirements not met.
+			// WordPress requirements not met.
 			$requirement = 'WordPress 5.1 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
@@ -125,7 +125,7 @@ function tsf_extension_manager_pre_boot_test() {
 			wp_die();
 	endswitch;
 
-	//* network_admin_url() falls back to admin_url() on single. But networks can enable single too.
+	// network_admin_url() falls back to admin_url() on single. But networks can enable single too.
 	$pluginspage = $network_mode ? network_admin_url( 'plugins.php' ) : admin_url( 'plugins.php' );
 
 	wp_die(

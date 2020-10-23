@@ -417,7 +417,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				newDescription = getNearestNumericIndexValue( data.phrasing, realScore );
 
 			if ( description.innerHTML === newDescription ) {
-				//* Nothing changed.
+				// Nothing changed.
 				tsfem_inpost.setIconClass(
 					ratingIcon,
 					getIconType( data.rating, realScore )
@@ -447,7 +447,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				newDescription = l10n.i18n.parseFailure;
 
 			if ( description.innerHTML === newDescription ) {
-				//* Nothing changed.
+				// Nothing changed.
 				tsfem_inpost.setIconClass(
 					ratingIcon,
 					getIconType( -1, -1 )

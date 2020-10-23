@@ -64,8 +64,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
 
-TODO: //*\s -> //\s
-
 TODO require TSF 4.1.2 with:
 * `tsf-reset-image-editor` allows us to reset the media handler.
 TODO fix index.php todos

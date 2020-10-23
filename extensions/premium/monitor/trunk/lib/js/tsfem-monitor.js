@@ -97,10 +97,10 @@ window.tsfem_e_monitor = {
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );
 
-		//* Reset ajax loader
+		// Reset ajax loader
 		tsfem.resetAjaxLoader( loader );
 
-		//* Set ajax loader.
+		// Set ajax loader.
 		tsfem.setAjaxLoader( loader );
 
 		jQuery.ajax( {
@@ -124,7 +124,7 @@ window.tsfem_e_monitor = {
 				type = response && response.type || void 0;
 
 			if ( ! data ) {
-				//* Erroneous output.
+				// Erroneous output.
 				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'] );
 			} else {
 				if ( 'undefined' !== typeof data.status['timeout'] )
@@ -178,20 +178,20 @@ window.tsfem_e_monitor = {
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );
 
-		//* Reset ajax loader
+		// Reset ajax loader
 		tsfem.resetAjaxLoader( loader );
 
-		//* Set ajax loader.
+		// Set ajax loader.
 		tsfem.setAjaxLoader( loader );
 
-		//* Set lastCrawled ajax loader.
+		// Set lastCrawled ajax loader.
 		let lastCrawled = document.getElementById( 'tsfem-e-monitor-last-crawled' ),
 			lastCrawledClass = lastCrawled.classList.contains( 'tsfem-success' ) ? 'tsfem-success' : 'tsfem-error';
 		lastCrawled.classList.remove( 'tsfem-success' );
 		lastCrawled.classList.remove( 'tsfem-error' );
 		lastCrawled.classList.add( 'tsfem-loading' );
 
-		//* Set settings loader.
+		// Set settings loader.
 		tsfem_e_monitor.setSettingsLoader();
 
 		jQuery.ajax( {
@@ -215,7 +215,7 @@ window.tsfem_e_monitor = {
 				type = response && response.type || void 0;
 
 			if ( ! data || ! data.status ) {
-				//* Erroneous output.
+				// Erroneous output.
 				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'] );
 			} else {
 				if ( 'undefined' !== typeof data.status['timeout'] )
@@ -242,13 +242,13 @@ window.tsfem_e_monitor = {
 					}
 
 					if ( issues['found'] ) {
-						//* Expected to be inputting a single div.
+						// Expected to be inputting a single div.
 						jQuery( '.tsfem-e-monitor-issues-wrap' ).empty().css( 'opacity', 0 ).append( issues.data.wrap ).animate(
 							{ 'opacity' : 1 },
 							{ queue: true, duration: 250 }
 						);
 
-						//* Loop through each issue and slowly insert it.
+						// Loop through each issue and slowly insert it.
 						jQuery.each( issues.data.info, function( index, value ) {
 							setTimeout( function() {
 								jQuery( value ).appendTo( '.tsfem-e-monitor-issues-wrap > div' ).css( 'opacity', 0 ).animate(
@@ -273,7 +273,7 @@ window.tsfem_e_monitor = {
 
 					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice ); }, 1000 );
 
-					//* Update hover cache.
+					// Update hover cache.
 					tsfTT.triggerReset();
 				} else if ( 'yield_unchanged' === status ) {
 					tsfem.updatedResponse( loader, 2, notice );
@@ -338,11 +338,11 @@ window.tsfem_e_monitor = {
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
 
-			//* No error handling, as this is invoked automatically.
+			// No error handling, as this is invoked automatically.
 			if ( data && data.html )
 				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
-			//* No elaborate handling, as this function is invoked automatically.
+			// No elaborate handling, as this function is invoked automatically.
 			if ( tsf.l10n.states.isRTL ) {
 				console.log( jqXHR.responseText );
 				console.log( errorThrown );
@@ -511,13 +511,13 @@ window.tsfem_e_monitor = {
 				topNoticeCode = 0,
 				loaderText = '';
 
-			//* Reset ajax loader
+			// Reset ajax loader
 			tsfem.resetAjaxLoader( loader );
 
-			//* Set ajax loader.
+			// Set ajax loader.
 			tsfem.setAjaxLoader( loader );
 
-			//* Set settings Ajax loaders.
+			// Set settings Ajax loaders.
 			tsfem_e_monitor.setSettingsLoader();
 
 			//= Show new option...
@@ -545,7 +545,7 @@ window.tsfem_e_monitor = {
 					type = response && response.type || void 0;
 
 				if ( ! data || ! type ) {
-					//* Erroneous output.
+					// Erroneous output.
 					loaderText = tsfem.i18n['UnknownError'];
 					undoChanges();
 					showAjaxEditError();
