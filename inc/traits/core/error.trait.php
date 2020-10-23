@@ -86,9 +86,11 @@ trait Error {
 			return;
 		}
 
+		$tsf = \the_seo_framework();
+
 		// Already escaped.
 		foreach ( $notices as $notice )
-			\tsf_extension_manager()->do_dismissible_notice( $notice['message'], $notice['type'], true, false );
+			$tsf->do_dismissible_notice( $notice['message'], $notice['type'], true, false, true );
 
 		$this->unset_error_notice_option();
 	}
@@ -606,37 +608,37 @@ trait Error {
 				break;
 
 			case 18102:
-				$message = \esc_html__( "A database error occurred. Some settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "A database error occurred. Some changes aren't saved.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 
 			case 18103:
 			case 1070101:
 			case 1090101:
-				$message = \esc_html__( "A database error occurred. Settings aren't saved.", 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( "A database error occurred. Changes aren't saved.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 
 			case 18104:
-				$message = \esc_html__( 'All settings are saved.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'All changes are saved.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 
 			case 18105:
-				$message = \esc_html__( 'Settings are saved for one extension.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Changes are saved for one extension.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 
 			case 1070102:
 			case 1090102:
-				$message = \esc_html__( 'Settings are saved.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Changes are saved.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 
 			case 1011700:
 			case 1071100:
 			case 1071101:
-				$message = \esc_html__( 'Unable to verify if settings are saved. Refresh this page to manually verify.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Unable to verify if changes are saved. Refresh this page to manually verify.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 

@@ -200,7 +200,8 @@ function _hook_plugins_api( $res, $action, $args ) {
 	) return $res;
 
 	if ( ! \wp_http_supports( [ 'ssl' ] ) ) {
-		return new \WP_Error( 'plugins_api_failed',
+		return new \WP_Error(
+			'plugins_api_failed',
 			\__( 'This website does not support secure connections. This means "The SEO Framework - Extension Manager" can not be updated.', 'the-seo-framework-extension-manager' )
 		);
 	}

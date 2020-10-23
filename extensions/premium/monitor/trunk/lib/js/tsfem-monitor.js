@@ -116,16 +116,16 @@ window.tsfem_e_monitor = {
 			async: true,
 		} ).done( function( response ) {
 
-			response = tsfem.convertJSONResponse( response );
+			response = tsf.convertJSONResponse( response );
 
-			if ( tsfem.debug ) console.log( response );
+			if ( tsf.l10n.states.isRTL ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
 
 			if ( ! data ) {
 				//* Erroneous output.
-				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
+				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'] );
 			} else {
 				if ( 'undefined' !== typeof data.status['timeout'] )
 					tsfem_e_monitor.rCrawlTimeout = data.status['timeout'];
@@ -135,22 +135,22 @@ window.tsfem_e_monitor = {
 					notice = data.status['notice'];
 
 				if ( 'success' === status ) {
-					tsfem.updatedResponse( loader, 1, '', 0 );
-					tsfem.setTopNotice( code, notice );
+					tsfem.updatedResponse( loader, 1, '' );
+					tsfem_ui.setTopNotice( code, notice );
 				} else if ( 'yield_unchanged' === status ) {
-					tsfem.updatedResponse( loader, 2, notice, 0 );
+					tsfem.updatedResponse( loader, 2, notice );
 				} else if ( 'requires_fix' === status ) {
 					tsfem_e_monitor.addRequiresFix( data.status['requires_fix'] );
-					tsfem.updatedResponse( loader, 0, '', 0 );
-					tsfem.setTopNotice( code, notice );
+					tsfem.updatedResponse( loader, 0, '' );
+					tsfem_ui.setTopNotice( code, notice );
 				} else {
-					tsfem.updatedResponse( loader, 0, '', 0 );
-					tsfem.setTopNotice( code, notice );
+					tsfem.updatedResponse( loader, 0, '' );
+					tsfem_ui.setTopNotice( code, notice );
 				}
 			}
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
 			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
-			tsfem.updatedResponse( loader, 0, _error, 0 );
+			tsfem.updatedResponse( loader, 0, _error );
 		} ).always( function() {
 			$button.removeClass( loading );
 			$button.prop( 'disabled', false );
@@ -207,16 +207,16 @@ window.tsfem_e_monitor = {
 			async: true,
 		} ).done( function( response ) {
 
-			response = tsfem.convertJSONResponse( response );
+			response = tsf.convertJSONResponse( response );
 
-			if ( tsfem.debug ) console.log( response );
+			if ( tsf.l10n.states.isRTL ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
 
 			if ( ! data || ! data.status ) {
 				//* Erroneous output.
-				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'], 0 );
+				tsfem.updatedResponse( loader, 0, tsfem.i18n['InvalidResponse'] );
 			} else {
 				if ( 'undefined' !== typeof data.status['timeout'] )
 					tsfem_e_monitor.rDataTimeout = data.status['timeout'];
@@ -271,24 +271,24 @@ window.tsfem_e_monitor = {
 						{ queue: true, duration: 1000 }
 					);
 
-					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice, 0 ); }, 1000 );
+					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice ); }, 1000 );
 
 					//* Update hover cache.
 					tsfTT.triggerReset();
 				} else if ( 'yield_unchanged' === status ) {
-					tsfem.updatedResponse( loader, 2, notice, 0 );
+					tsfem.updatedResponse( loader, 2, notice );
 				} else if ( 'requires_fix' === status ) {
 					tsfem_e_monitor.addRequiresFix();
-					tsfem.updatedResponse( loader, 0, '', 0 );
-					tsfem.setTopNotice( code, notice );
+					tsfem.updatedResponse( loader, 0, '' );
+					tsfem_ui.setTopNotice( code, notice );
 				} else {
-					tsfem.updatedResponse( loader, 0, '', 0 );
-					tsfem.setTopNotice( code, notice );
+					tsfem.updatedResponse( loader, 0, '' );
+					tsfem_ui.setTopNotice( code, notice );
 				}
 			}
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
 			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
-			tsfem.updatedResponse( loader, 0, _error, 0 );
+			tsfem.updatedResponse( loader, 0, _error );
 		} ).always( function() {
 			/**
 			 * If the element isn't replaced, this will work as intended.
@@ -331,9 +331,9 @@ window.tsfem_e_monitor = {
 			async: true,
 		} ).done( function( response ) {
 
-			response = tsfem.convertJSONResponse( response );
+			response = tsf.convertJSONResponse( response );
 
-			if ( tsfem.debug ) console.log( response );
+			if ( tsf.l10n.states.isRTL ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
@@ -343,7 +343,7 @@ window.tsfem_e_monitor = {
 				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
 			//* No elaborate handling, as this function is invoked automatically.
-			if ( tsfem.debug ) {
+			if ( tsf.l10n.states.isRTL ) {
 				console.log( jqXHR.responseText );
 				console.log( errorThrown );
 			}
@@ -404,7 +404,7 @@ window.tsfem_e_monitor = {
 
 		if ( ! clicker ) {
 			// Clicker not found. Update your plugins message.
-			tsfem.setTopNotice( 1011800 );
+			tsfem_ui.setTopNotice( 1011800 );
 			return;
 		}
 
@@ -537,9 +537,9 @@ window.tsfem_e_monitor = {
 				async: true,
 			} ).done( function( response ) {
 
-				response = tsfem.convertJSONResponse( response );
+				response = tsf.convertJSONResponse( response );
 
-				tsfem.debug && console.log( response );
+				tsf.l10n.states.isRTL && console.log( response );
 
 				let data = response && response.data || void 0,
 					type = response && response.type || void 0;
@@ -602,12 +602,12 @@ window.tsfem_e_monitor = {
 				loaderText = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 
 				// Try to set top notices, regardless.
-				tsfem.setTopNotice( 1011700 ); // Notifies that there's an error saving.
-				errorThrown && tsfem.setTopNotice( -1, 'jQ error: ' + errorThrown );
+				tsfem_ui.setTopNotice( 1011700 ); // Notifies that there's an error saving.
+				errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
 			} ).always( function() {
-				tsfem.updatedResponse( loader, status, loaderText, 0 );
+				tsfem.updatedResponse( loader, status, loaderText );
 			 	if ( topNoticeCode ) {
-					tsfem.setTopNotice( topNoticeCode, topNotice );
+					tsfem_ui.setTopNotice( topNoticeCode, topNotice );
 				}
 				tsfem_e_monitor.unsetSettingsLoader();
 			} );

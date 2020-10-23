@@ -245,7 +245,7 @@ trait Extension_Post_Meta {
 	 * This data may not be JSON encoded; but if so, the quotes need to be escaped or slashed.
 	 *
 	 * @since 1.5.0
-	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
+	 * @since 2.5.0 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @param string $key   The meta name.
 	 * @param mixed  $value The meta value.
@@ -286,7 +286,7 @@ trait Extension_Post_Meta {
 	 * Deletes current extension meta.
 	 *
 	 * @since 1.5.0
-	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
+	 * @since 2.5.0 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @param string $key The meta name to delete.
 	 * @return boolean True on success; false on failure.
@@ -326,7 +326,7 @@ trait Extension_Post_Meta {
 	 * Deletes all of the current extension meta.
 	 *
 	 * @since 1.5.0
-	 * @since 2.4.1 No longer causes data loss during deserialization with quotes.
+	 * @since 2.5.0 No longer causes data loss during deserialization with quotes.
 	 *
 	 * @return boolean True on success; false on failure.
 	 */

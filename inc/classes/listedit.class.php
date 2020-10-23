@@ -44,7 +44,7 @@ $_load_listedit_class = function() {
  * The SEO Framework 4.0.5 or later is required. All earlier versions will let this
  * remain dormant.
  *
- * @since 2.4.1
+ * @since 2.5.0
  * @requires TSF 4.0.5||^
  * @access private
  * @uses trait TSF_Extension_Manager\Enclose_Core_Final
@@ -59,55 +59,55 @@ final class ListEdit {
 		Construct_Master_Once_Final_Interface;
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var string META_PREFIX_QUICK The meta prefix to handle POST data for quick-edit.
 	 */
 	const META_PREFIX_QUICK = 'tsfem-pm-quick';
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var string META_PREFIX_QUICK The meta prefix to handle POST data for quick-edit.
 	 */
 	const META_PREFIX_BULK = 'tsfem-pm-bulk';
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var string $include_secret The inclusion secret generated on section load.
 	 */
 	private static $include_secret;
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $quick_sections The registered quick-edit sections.
 	 */
 	private static $quick_sections = [];
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $bulk_sections The registered bulk-edit sections.
 	 */
 	private static $bulk_sections = [];
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $active_quick_section_keys The activate section keys of static::$quick_sections.
 	 */
 	private static $active_quick_section_keys = [];
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $active_bulk_section_keys The activate section keys of static::$bulk_sections.
 	 */
 	private static $active_bulk_section_keys = [];
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $quick_views The registered quick-edit view files for the sections.
 	 */
 	private static $quick_views = [];
 
 	/**
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @var array $bulk_views The registered bulk-edit view files for the sections.
 	 */
 	private static $bulk_views = [];
@@ -118,7 +118,7 @@ final class ListEdit {
 	 * Use this if the actions need to be registered early, but nothing else of
 	 * this class is needed yet.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 */
 	public static function prepare() {}
 
@@ -149,7 +149,7 @@ final class ListEdit {
 	/**
 	 * Registers available sections for quick-edit.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @uses static::$quick_sections The registered sections that are written.
 	 */
 	private function register_quick_sections() {
@@ -175,7 +175,7 @@ final class ListEdit {
 	/**
 	 * Registers available sections for bulk-edit.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @uses static::$bulk_sections The registered sections that are written.
 	 */
 	private function register_bulk_sections() {
@@ -201,7 +201,7 @@ final class ListEdit {
 	/**
 	 * Prepares scripts for output on post edit screens.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 *
 	 * @param string $hook The current admin hook.
 	 */
@@ -217,7 +217,7 @@ final class ListEdit {
 		 *
 		 * Use this hook to enqueue scripts on the post edit screens.
 		 *
-		 * @since 2.4.1
+		 * @since 2.5.0
 		 * @param string $class The static class caller name.
 		 * @param string $hook  The current page hook.
 		 */
@@ -227,9 +227,8 @@ final class ListEdit {
 	/**
 	 * Registers default inpost scripts.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @since 2.0.0 Added isConnected and userLocale
-	 * @uses static::register_script
 	 */
 	private function register_default_scripts() {
 		\The_SEO_Framework\Builders\Scripts::register(
@@ -252,7 +251,7 @@ final class ListEdit {
 	/**
 	 * Verifies nonces on POST for posts and evokes secured hooks.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param integer  $post_id Post ID.
@@ -276,7 +275,7 @@ final class ListEdit {
 			/**
 			 * Runs after nonce and possibly interfering actions have been verified.
 			 *
-			 * @since 2.4.1
+			 * @since 2.5.0
 			 *
 			 * @param \WP_Post   $post The post object.
 			 * @param array|null $data The meta data, set through `pm_index` keys.
@@ -299,7 +298,7 @@ final class ListEdit {
 			/**
 			 * Runs after nonce and possibly interfering actions have been verified.
 			 *
-			 * @since 2.4.1
+			 * @since 2.5.0
 			 *
 			 * @param \WP_Post   $post The post object.
 			 * @param array|null $data The meta data, set through `pm_index` keys.
@@ -311,7 +310,7 @@ final class ListEdit {
 	/**
 	 * Verifies nonces on POST for terms and evokes secured hooks.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 * @ignore unused
 	 *
@@ -327,7 +326,7 @@ final class ListEdit {
 	/**
 	 * Outputs registered active sections to The SEO Framework quick-edit fields.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param string $post_type The current post type.
@@ -352,7 +351,7 @@ final class ListEdit {
 	/**
 	 * Outputs registered active sections to The SEO Framework bulk-edit fields.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param string $post_type The current post type.
@@ -377,7 +376,7 @@ final class ListEdit {
 	 * Output sections content through loading registered quick-edit section views
 	 * in order of priority or registration time.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param string $section The section that invoked this method call.
@@ -399,7 +398,7 @@ final class ListEdit {
 	 * Output sections content through loading registered bulk-edit section views
 	 * in order of priority or registration time.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param string $section The section that invoked this method call.
@@ -424,7 +423,7 @@ final class ListEdit {
 	 *
 	 * @see \TSF_Extension_Manager\InpostGUI::verify( $secret )
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @uses static::$include_secret
 	 *
 	 * @param string $file The file location.
@@ -446,7 +445,7 @@ final class ListEdit {
 	/**
 	 * Verifies view inclusion secret.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see static::output_view()
 	 * @uses static::$include_secret
 	 *
@@ -464,7 +463,7 @@ final class ListEdit {
 	 * Audit:     Monitoring, reviewing content, analytics, etc.
 	 * Advanced:  Everything else.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see static::register_sections()
 	 * @uses static::$active_quick_section_keys
 	 *
@@ -482,7 +481,7 @@ final class ListEdit {
 	 * Audit:     Monitoring, reviewing content, analytics, etc.
 	 * Advanced:  Everything else.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see static::register_sections()
 	 * @uses static::$active_bulk_section_keys
 	 *
@@ -496,7 +495,7 @@ final class ListEdit {
 	/**
 	 * Registers view for quick edit section.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see static::activate_quick_section();
 	 * @uses static::$quick_views
 	 *
@@ -522,7 +521,7 @@ final class ListEdit {
 	/**
 	 * Registers view for bulk edit section.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see static::activate_bulk_section();
 	 * @uses static::$bulk_views
 	 *
@@ -548,7 +547,7 @@ final class ListEdit {
 	/**
 	 * Builds option key index for quick-edit, which can later be retrieved in POST.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see trait \TSF_Extension_Manager\Extension_Post_Meta
 	 * @see static::_verify_nonce_{post|term}();
 	 *
@@ -563,7 +562,7 @@ final class ListEdit {
 	/**
 	 * Builds option key index for bulk-edit, which can later be retrieved in POST.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @see trait \TSF_Extension_Manager\Extension_Post_Meta
 	 * @see static::_verify_nonce_{post|term}();
 	 *

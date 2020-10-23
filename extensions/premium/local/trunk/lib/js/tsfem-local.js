@@ -111,9 +111,9 @@ window.tsfem_e_local = {
 			async: true,
 		} ).done( function( response ) {
 
-			response = tsfem.convertJSONResponse( response );
+			response = tsf.convertJSONResponse( response );
 
-			if ( tsfem.debug ) console.log( response );
+			if ( tsf.l10n.states.isRTL ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
@@ -127,7 +127,7 @@ window.tsfem_e_local = {
 
 				if ( rCode ) {
 					if ( ! success ) {
-						tsfem.setTopNotice( rCode );
+						tsfem_ui.setTopNotice( rCode );
 						_window.close();
 						_currentWindow.focus();
 					} else {
@@ -164,10 +164,10 @@ window.tsfem_e_local = {
 			loaderText = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 
 			// Try to set top notices, regardless. First notifies that there's an error saving.
-			tsfem.setTopNotice( 1072100 );
-			errorThrown && tsfem.setTopNotice( -1, 'jQ error: ' + errorThrown );
+			tsfem_ui.setTopNotice( 1072100 );
+			errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
 		} ).always( function() {
-			tsfem.updatedResponse( $loader, status, loaderText, 0 );
+			tsfem.updatedResponse( $loader, status, loaderText );
 			tsfemForm.enableButton( button );
 		} );
 

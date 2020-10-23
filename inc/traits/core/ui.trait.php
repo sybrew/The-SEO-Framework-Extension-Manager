@@ -94,7 +94,7 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final protected function page_wrap() {
-		echo '<div class="wrap tsfem">';
+		echo '<div id=tsfem-page-wrap class=wrap>';
 		\do_action( 'tsfem_page' );
 		echo '</div>';
 	}
@@ -105,7 +105,7 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final public function header_wrap() {
-		echo '<div class="tsfem-sticky-top">';
+		echo '<div id=tsfem-sticky-top>';
 			echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
 				\do_action( 'tsfem_header' );
 			echo '</section>';
@@ -121,7 +121,7 @@ trait UI {
 	 * @since 1.3.0
 	 */
 	final public function notice_wrap() {
-		echo '<aside class="tsfem-notice-wrap">';
+		echo '<aside id=tsfem-notice-wrap>';
 		\do_action( 'tsfem_notices' );
 		echo '</aside>';
 	}
@@ -221,19 +221,8 @@ trait UI {
 		$scripts::register( [
 			[
 				'id'       => 'tsfem',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt' ],
-				'autoload' => true,
-				'hasrtl'   => true,
-				'name'     => 'tsfem',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
-				'inline'   => null,
-			],
-			[
-				'id'       => 'tsfem',
 				'type'     => 'js',
-				'deps'     => [ 'jquery', 'wp-util', 'tsf-tt' ],
+				'deps'     => [ 'jquery', 'wp-util', 'tsf', 'tsf-tt' ],
 				'autoload' => true,
 				'name'     => 'tsfem',
 				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
@@ -243,11 +232,7 @@ trait UI {
 					'data' => [
 						'nonce'         => \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-nonce' ) : '',
 						'insecureNonce' => \TSF_Extension_Manager\can_do_extension_settings() || \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-insecure-nonce' ) : '',
-						'debug'         => (bool) WP_DEBUG,
-						'rtl'           => (bool) \is_rtl(),
 						'i18n'          => [
-							'Activate'        => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
-							'Deactivate'      => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 							'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
 							'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
@@ -257,11 +242,72 @@ trait UI {
 						],
 					],
 				],
+			],
+		] );
+
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-ui',
+				'type'     => 'css',
+				'deps'     => [ 'tsf' ],
+				'autoload' => true,
+				'hasrtl'   => false,
+				'name'     => 'tsfem-ui',
+				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'inline'   => null,
+			],
+			[
+				'id'       => 'tsfem-ui',
+				'type'     => 'js',
+				'deps'     => [ 'tsfem', 'tsf' ],
+				'autoload' => true,
+				'name'     => 'tsfem-ui',
+				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'l10n'     => [
+					'name' => 'tsfemUIL10n',
+					'data' => [],
+				],
 				'tmpl'     => [
 					'file' => $tsfem->get_template_location( 'fbtopnotice' ),
 				],
 			],
 		] );
+
+		if ( $tsfem->is_tsf_extension_manager_page() ) {
+			$scripts::register( [
+				[
+					'id'       => 'tsfem-manager',
+					'type'     => 'css',
+					'deps'     => [ 'tsfem-ui' ],
+					'autoload' => true,
+					'hasrtl'   => false,
+					'name'     => 'tsfem-manager',
+					'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+					'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+					'inline'   => null,
+				],
+				[
+					'id'       => 'tsfem-manager',
+					'type'     => 'js',
+					'deps'     => [ 'tsfem-ui' ],
+					'autoload' => true,
+					'name'     => 'tsfem-manager',
+					'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+					'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+					'l10n'     => [
+						'name' => 'tsfemManagerL10n',
+						'data' => [
+							'i18n' => [
+								'Activate'   => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
+								'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
+							],
+						],
+					],
+				],
+			] );
+		}
 	}
 
 	/**
@@ -286,7 +332,7 @@ trait UI {
 			[
 				'id'       => 'tsfem-form',
 				'type'     => 'css',
-				'deps'     => [ 'tsfem', 'tsf-tt' ],
+				'deps'     => [ 'tsfem-ui', 'tsf-tt' ],
 				'autoload' => true,
 				'hasrtl'   => true,
 				'name'     => 'tsfem-form',
@@ -297,7 +343,7 @@ trait UI {
 			[
 				'id'       => 'tsfem-form',
 				'type'     => 'js',
-				'deps'     => [ 'tsfem', 'tsf-tt' ],
+				'deps'     => [ 'tsfem-ui', 'tsf-tt' ],
 				'autoload' => true,
 				'name'     => 'tsfem-form',
 				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',

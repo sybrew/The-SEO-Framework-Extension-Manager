@@ -5,7 +5,7 @@ Requires at least: 5.1.0
 Tested up to: 5.5.1
 Requires PHP: 5.6.5
 Requires TSF: 4.0.5
-Stable tag: 2.4.1
+Stable tag: 2.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,18 +41,41 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-= 2.4.1 =
+= 2.5.0 - TODO SEO =
 
-* **Added:** This plugin now supports The SEO Framework's 4.0.5+ quick-and bulk-edit functionality for its extensions.
-* **Improved:** TODO Akin to TSF v4.1.1, we also dropped most jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
+**Release date:**
+
+* November TODOnth, 2020
+
+* **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
+	* The first extension to make use of this is Articles.
+* **Improved:** TODO Akin to TSF v4.1.1, we also dropped many jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
+	* TODO Note to self: We already did... can we plan for more before PHP 8.0 launches?
+* **Improved:** Animations are now smoother by utilising modern browser APIs.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
 * **Fixed:** Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
-* **Fixed:** Resolved an issue where quotes in metadata could cause serialization issues.
+* **Fixed:** Resolved an issue where double-quotes in metadata could cause serialization issues, corrupting Extension Manager's extension-post-metadata.
 * **Dev:** Constant `TSF_EXTENSION_MANAGER_PRESENT` is now available. It indicates that the plugin is activated by WordPress, but it does not necessarily indicate that it's running otherwise.
-* **Other:** The SEO Framework 4.0.5 or higher is now required, from 4.0.0.
+* **Dev:** Script debugging will no longer occur with `WP_DEBUG` enabled, but with `SCRIPT_DEBUG` enabled, instead.
+* **Other:** The SEO Framework 4.1.2 or higher is now required, from 4.0.0.
 * **Other:** WordPress 5.1 or higher is now required, from 4.9.
 * **Other:** We now enforce [TSF coding standards](https://github.com/theseoframework/wpcs-tsf) for opcode performance, intercompatibility, and reliability.
-* **Other:** TODO This plugin is now compatible with PHP 8.0-RC1. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+* **Other:** TODO This plugin is now compatible with PHP 8.0-RCTODO. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+* **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
+	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
+
+TODO: //*\s -> //\s
+
+TODO require TSF 4.1.2 with:
+* `tsf-reset-image-editor` allows us to reset the media handler.
+TODO fix index.php todos
+TODO remove all images, and rely on SVG only?
+TODO remove feed? Our plans never came to fruition for it...
+TODO convert all JS objects to functions?
+TODO update images displayed for Local readme.
+TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
+TODO consider refactoring Honeypot's readme? -> Later?
+TODO for Focus, make it easy to extend and hook into? -> Open up more callbacks!?
 
 **Updated extensions:**
 
@@ -62,9 +85,6 @@ NOTE these version numbers are already correct.
 * [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
 
-TODO update images displayed for Local readme.
-TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
-TODO consider refactoring Honeypot's readme? -> Later?
 
 = 2.4.0 - Linguistic SEO =
 

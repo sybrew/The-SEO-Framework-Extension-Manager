@@ -65,7 +65,7 @@ final class Admin extends Core {
 		//= Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		\add_action( 'tsfem_inpostgui_enqueue_scripts', [ $this, '_enqueue_inpost_scripts' ] );
+		\add_action( 'tsfem_inpost_before_enqueue_scripts', [ $this, '_enqueue_inpost_scripts' ] );
 
 		//= Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
@@ -172,13 +172,15 @@ final class Admin extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now passes the isGutenbergPage data property.
+	 * @since 1.4.1 No longer passes isGutenbergPage property; rely on tsfPost instead.
 	 * @access private
-	 * @uses \TSF_Extension_Manager\InpostGUI
-	 * Callback via \TSF_Extension_Manager\InpostGUI
+	 * @uses The_SEO_Framework\Builders\Scripts
 	 *
-	 * @param string $inpostgui Static class name: \TSF_Extension_Manager\InpostGUI $inpostgui
+	 * @param string $scripts Static class name: The_SEO_Framework\Builders\Scripts
 	 */
-	public function _enqueue_inpost_scripts( $inpostgui ) {
+	public function _enqueue_inpost_scripts( $scripts ) {
+
+		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
 		/**
 		 * @since 1.4.1
@@ -187,53 +189,58 @@ final class Admin extends Core {
 		 */
 		$interval = (int) \apply_filters( 'the_seo_framework_focus_auto_interval', 45000 );
 
-		$inpostgui::register_script( [
-			'type' => 'js',
-			'name' => 'tsfem-focus-inpost',
-			'base' => TSFEM_E_FOCUS_DIR_URL,
-			'ver'  => TSFEM_E_FOCUS_VERSION,
-			'deps' => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost' ],
-			'l10n' => [
-				'name' => 'tsfem_e_focusInpostL10n',
-				'data' => [
-					'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
-					'focusElements'      => $this->get_focus_elements(),
-					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
-					'languageSupported'  => [
-						'any'         => $this->is_language_supported( 'any' ),
-						'inflections' => $this->is_language_supported( 'inflections' ),
-						'synonyms'    => $this->is_language_supported( 'synonyms' ),
-					],
-					'language'           => \get_locale(),
-					'i18n'               => [
-						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
-						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
-					],
-					'isGutenbergPage'    => \the_seo_framework()->is_gutenberg_page(),
-					'scripts'            => [
-						'parserWorker' => $this->get_worker_file_location(),
-					],
-					'settings'           => [
-						'analysisInterval' => $interval,
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-focus-inpost',
+				'type'     => 'js',
+				'name'     => 'tsfem-focus-inpost',
+				'base'     => TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
+				'ver'      => TSFEM_E_FOCUS_VERSION,
+				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost' ],
+				'autoload' => true,
+				'l10n'     => [
+					'name' => 'tsfem_e_focusInpostL10n',
+					'data' => [
+						'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
+						'focusElements'      => $this->get_focus_elements(),
+						'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
+						'languageSupported'  => [
+							'any'         => $this->is_language_supported( 'any' ),
+							'inflections' => $this->is_language_supported( 'inflections' ),
+							'synonyms'    => $this->is_language_supported( 'synonyms' ),
+						],
+						'language'           => \get_locale(),
+						'i18n'               => [
+							'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
+							'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
+						],
+						'scripts'            => [
+							'parserWorker' => $this->get_worker_file_location(),
+						],
+						'settings'           => [
+							'analysisInterval' => $interval,
+						],
 					],
 				],
-			],
-			'tmpl' => [
-				'file' => $this->get_view_location( 'inpost/js-templates' ),
-			],
-		] );
-		$inpostgui::register_script( [
-			'type'   => 'css',
-			'name'   => 'tsfem-focus-inpost',
-			'base'   => TSFEM_E_FOCUS_DIR_URL,
-			'ver'    => TSFEM_E_FOCUS_VERSION,
-			'deps'   => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
-			'inline' => [
-				'.tsfem-e-focus-content-loader-bar' => [
-					'background:{{$color_accent}}',
+				'tmpl'     => [
+					'file' => $this->get_view_location( 'inpost/js-templates' ),
 				],
-				'.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-item' => [
-					'color:{{$color}}',
+			],
+			[
+				'id'       => 'tsfem-focus-inpost',
+				'type'     => 'css',
+				'name'     => 'tsfem-focus-inpost',
+				'base'     => TSFEM_E_FOCUS_DIR_URL . 'lib/css/',
+				'ver'      => TSFEM_E_FOCUS_VERSION,
+				'deps'     => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
+				'autoload' => true,
+				'inline'   => [
+					'.tsfem-e-focus-content-loader-bar' => [
+						'background:{{$color_accent}}',
+					],
+					'.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-item' => [
+						'color:{{$color}}',
+					],
 				],
 			],
 		] );

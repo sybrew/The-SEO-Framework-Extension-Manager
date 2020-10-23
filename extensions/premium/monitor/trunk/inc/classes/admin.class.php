@@ -697,7 +697,7 @@ final class Admin extends Api {
 			[
 				'id'       => 'tsfem-monitor',
 				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsfem' ],
+				'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
 				'autoload' => true,
 				'hasrtl'   => true,
 				'name'     => 'tsfem-monitor',
@@ -708,7 +708,7 @@ final class Admin extends Api {
 			[
 				'id'       => 'tsfem-monitor',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-tt', 'tsfem' ],
+				'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
 				'autoload' => true,
 				'name'     => 'tsfem-monitor',
 				'base'     => TSFEM_E_MONITOR_DIR_URL . 'lib/js/',

@@ -187,7 +187,12 @@ trait Extension_Forms {
 		$title = $title ? sprintf( ' title="%s" ', \esc_attr( $title ) ) : '';
 		$class = $class ? sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class="tsfem-button-primary"';
 
-		return sprintf( '<button type="submit" name="submit" id="submit" %s%s>%s</button>', $class, $title, \esc_html( $name ) );
+		return sprintf(
+			'<button type=submit name=submit %s%s>%s</button>',
+			$class,
+			$title,
+			\esc_html( $name )
+		);
 	}
 
 	/**

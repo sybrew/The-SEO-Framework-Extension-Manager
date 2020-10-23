@@ -53,6 +53,11 @@ final class AJAX extends Secure_Abstract {
 	private static $instance = null;
 
 	/**
+	 * @var null|object TSF class object.
+	 */
+	private static $tsf;
+
+	/**
 	 * @var null|object TSF Extension Manager class object.
 	 */
 	private static $tsfem;
@@ -76,6 +81,8 @@ final class AJAX extends Secure_Abstract {
 
 		static::$tsfem = \tsf_extension_manager();
 		static::$tsfem->_verify_instance( $instance, $bits[1] ) or die;
+
+		static::$tsf = \the_seo_framework();
 
 		static::$_validated = true;
 		static::$instance   = new static;
@@ -385,13 +392,12 @@ final class AJAX extends Secure_Abstract {
 
 			if ( \is_array( $notice ) ) {
 				//= If it has a custom message (already stored in browser), then don't output the notice message.
-				$msg  = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
+				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
 
-				$data['notice'] = static::$tsfem->get_dismissible_notice( $msg, $notice['type'], true, false );
+				$data['notice'] = static::$tsf->generate_dismissible_notice( $msg, $notice['type'], true, false, true );
 				$data['type']   = $notice['type'];
 			}
 		}
-
 		// phpcs:enable, WordPress.Security.NonceVerification
 
 		return $data;
@@ -410,7 +416,7 @@ final class AJAX extends Secure_Abstract {
 	 * @access private
 	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
 	 */
-	public function _wp_ajax_crop_image() {
+	public static function _wp_ajax_crop_image() {
 
 		if ( ! static::$_validated ) return;
 

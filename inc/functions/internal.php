@@ -28,7 +28,7 @@ namespace TSF_Extension_Manager;
  * Extracts the basename of an extension from its file location.
  *
  * @since 1.0.0
- * @since 2.4.1 Now only replaces the first occurence of the dir path, for rare instances
+ * @since 2.5.0 Now only replaces the first occurence of the dir path, for rare instances
  *              where extension names match the exact root path on a server.
  *
  * @param string $path The extension path.

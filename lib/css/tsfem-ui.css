@@ -15,116 +15,12 @@ body.tsfem #update-nag {
 /* ## Notices: Core + self.
 /*--------------------------------------*/
 /* "margin: 1.2% 0 0" Edge/Firefox inline margins issue */
-.wrap.tsfem .notice,
-.wrap.tsfem .error,
-.wrap.tsfem .warning,
-.tsfem-notice {
+#tsfem-page-wrap .notice,
+#tsfem-page-wrap .error,
+#tsfem-page-wrap .warning,
+#tsfem-page-wrap .tsf-notice {
 	margin: 1.2vw 0 0;
 	box-shadow: 0 .1em .4em rgba(0,0,0,.18);
-}
-
-/* ### Notices: Self.
-/*--------------------------------------*/
-
-.tsfem-notice {
-	position: relative;
-	background: #fff;
-	border-right: 4px solid #fff;
-	padding: 1px 12px;
-	border-radius: 4px;
-}
-
-.tsfem-notice p {
-	margin: .5em 0;
-	margin-left: 19px;
-	padding: 2px;
-}
-
-.tsfem-notice,
-.tsfem-notice-success {
-	border-right-color: #00cd98;
-}
-
-.tsfem-notice-info {
-	border-right-color: #00a0d2;
-}
-
-.tsfem-notice-warning {
-	border-right-color: #ffa01b;
-}
-
-.tsfem-notice-error {
-	border-right-color: #dd3811;
-}
-
-.tsfem-notice.tsfem-show-icon p:before {
-	content: '';
-	margin-left: 12px;
-	background: 0 0;
-	display: inline-block;
-	font: 400 14px/16px dashicons;
-	speak: none;
-	height: 16px;
-	text-align: center;
-	vertical-align: middle;
-	width: 16px;
-	line-height: 14px;
-	-webkit-font-smoothing: antialiased;
-}
-
-.tsfem-notice-success.tsfem-show-icon p:before {
-	color: #00cd98;
-	font-size: 16px;
-	content: "\f147";
-}
-
-.tsfem-notice-info.tsfem-show-icon p:before {
-	color: #00a0d2;
-	font-size: 16px;
-	content: "\f223";
-}
-
-.tsfem-notice-warning.tsfem-notice.tsfem-show-icon p:before {
-	color: #ffa01b;
-	content: "\f227";
-}
-
-.tsfem-notice-error.tsfem-notice.tsfem-show-icon p:before {
-	color: #dd3811;
-	content: "\f534";
-}
-
-/* ### Dismissible notices.
-/*--------------------------------------*/
-a.tsfem-dismiss {
-	position: absolute;
-	top: 0;
-	left: 1px;
-	border: none;
-	margin: 0;
-	padding: 9px;
-	background: 0 0;
-	color: #b4b9be;
-	cursor: pointer;
-	text-decoration: none;
-	transition: color 0.15s;
-}
-
-a.tsfem-dismiss:before {
-	background: 0 0;
-	content: "\f153";
-	display: block;
-	font: 400 16px/20px dashicons;
-	speak: none;
-	height: 20px;
-	text-align: center;
-	width: 20px;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-a.tsfem-dismiss:hover {
-	color: #d14b44;
 }
 
 /* ## Loading...
@@ -238,15 +134,15 @@ body.tsfem .wrap {
 	min-height: calc( 100vh - 32px );
 	padding: 0;
 	margin: 0;
-	margin-right: -20px;
+	margin-left: -20px;
 }
 
-.tsfem-notice-wrap {
+#tsfem-notice-wrap {
 	margin: 1.2vw;
 	margin-bottom: 0;
 }
 
-.tsfem-notice-wrap:empty {
+#tsfem-notice-wrap:empty {
 	margin: 0;
 }
 
@@ -256,7 +152,7 @@ body.tsfem .wrap {
 	margin: 1.2vw;
 }
 
-.tsfem-sticky-top {
+#tsfem-sticky-top {
 	position: -webkit-sticky;
 	position: sticky;
 	margin-bottom: 1.2vw;
@@ -267,16 +163,16 @@ body.tsfem .wrap {
 
 @media screen and ( max-width: 782px ) {
 	body.tsfem .wrap {
-		margin-right: -10px;
+		margin-left: -10px;
 	}
 
-	.tsfem-sticky-top {
+	#tsfem-sticky-top {
 		top: 46px;
 	}
 }
 
 @media screen and ( max-width: 600px ) {
-	.tsfem-sticky-top {
+	#tsfem-sticky-top {
 		position: initial; /* unsticky */
 	}
 }
@@ -303,11 +199,6 @@ body.tsfem .wrap {
 	text-align: center;
 }
 
-.tsfem.connect-wrap {
-	max-width: 690px;
-	min-width: 275px;
-}
-
 .tsfem-flex-textarea-wrap {
 	/* This block fixes an overflow lag. */
 	flex-direction: row;
@@ -327,7 +218,7 @@ body.tsfem .wrap {
 .tsfem-top-actions,
 .tsfem-top-about,
 .tsfem-top-wrap .tsfem-title {
-	text-align: right;
+	text-align: left;
 	align-items: center;
 }
 
@@ -347,7 +238,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-top-actions > *:nth-last-child(n+2) {
-	margin-left: 1em;
+	margin-right: 1em;
 }
 
 .tsfem-top-about > div {
@@ -356,21 +247,6 @@ body.tsfem .wrap {
 	max-width: calc( 100% - 1.2em - 1em );
 	color: #333;
 	letter-spacing: .2px;
-}
-
-.tsfem-about-activation:before {
-	display: inline-block;
-	color: #0ebfe9;
-	content: "\f112";
-	font-size: 1.2em;
-	line-height: 1.2em;
-	font-family: dashicons;
-	text-decoration: inherit;
-	font-weight: 400;
-	font-style: normal;
-	margin: 0 7px;
-	vertical-align: baseline;
-	white-space: pre-wrap;
 }
 
 /* ## Title.
@@ -390,7 +266,7 @@ body.tsfem .wrap {
 
 .tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	padding: 0;
-	margin-left: 7px;
+	margin-right: 7px;
 	vertical-align: top;
 }
 
@@ -400,24 +276,24 @@ body.tsfem .wrap {
 /* ## Normalize input.
 /*--------------------------------------*/
 
-.tsfem input[type=text]:focus,
-.tsfem input[type=search]:focus,
-.tsfem input[type=radio]:focus,
-.tsfem input[type=tel]:focus,
-.tsfem input[type=time]:focus,
-.tsfem input[type=url]:focus,
-.tsfem input[type=week]:focus,
-.tsfem input[type=password]:focus,
-.tsfem input[type=checkbox]:focus,
-.tsfem input[type=color]:focus,
-.tsfem input[type=date]:focus,
-.tsfem input[type=datetime]:focus,
-.tsfem input[type=datetime-local]:focus,
-.tsfem input[type=email]:focus,
-.tsfem input[type=month]:focus,
-.tsfem input[type=number]:focus,
-.tsfem select:focus,
-.tsfem textarea:focus {
+#tsfem-page-wrap input[type=text]:focus,
+#tsfem-page-wrap input[type=search]:focus,
+#tsfem-page-wrap input[type=radio]:focus,
+#tsfem-page-wrap input[type=tel]:focus,
+#tsfem-page-wrap input[type=time]:focus,
+#tsfem-page-wrap input[type=url]:focus,
+#tsfem-page-wrap input[type=week]:focus,
+#tsfem-page-wrap input[type=password]:focus,
+#tsfem-page-wrap input[type=checkbox]:focus,
+#tsfem-page-wrap input[type=color]:focus,
+#tsfem-page-wrap input[type=date]:focus,
+#tsfem-page-wrap input[type=datetime]:focus,
+#tsfem-page-wrap input[type=datetime-local]:focus,
+#tsfem-page-wrap input[type=email]:focus,
+#tsfem-page-wrap input[type=month]:focus,
+#tsfem-page-wrap input[type=number]:focus,
+#tsfem-page-wrap select:focus,
+#tsfem-page-wrap textarea:focus {
 	border-color: #057f9c;
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
 }
@@ -537,7 +413,7 @@ body.tsfem .wrap {
 	font-weight: 400;
 	font-style: normal;
 	vertical-align: top;
-	margin-right: .5em;
+	margin-left: .5em;
 }
 
 .tsfem-button-small:after {
@@ -628,7 +504,7 @@ body.tsfem .wrap {
 .tsfem-switch-button-container label,
 .tsfem-switch-button-container button {
 	position: absolute;
-	right: 0;
+	left: 0;
 	top: 0;
 	text-align: center;
 	transition: transform 1s, opacity .5s;
@@ -701,7 +577,7 @@ body.tsfem .wrap {
 .tsfem-button-disabled:disabled:active {
 	background: #ddd;
 	color: #aaa;
-	text-shadow: none;
+	font-weight: 400;
 	box-shadow: none;
 	cursor: not-allowed;
 	-webkit-touch-callout: none;
@@ -712,8 +588,26 @@ body.tsfem .wrap {
 	user-select: none;
 }
 
-/* # Start Activation/Connect.
+/* # Start Panes.
 /*----------------------------------------------------------------------------*/
+
+/* # Start Activation/Connect panes.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-about-activation:before {
+	display: inline-block;
+	color: #0ebfe9;
+	content: "\f112";
+	font-size: 1.2em;
+	line-height: 1.2em;
+	font-family: dashicons;
+	text-decoration: inherit;
+	font-weight: 400;
+	font-style: normal;
+	margin: 0 7px;
+	vertical-align: baseline;
+	white-space: pre-wrap;
+}
 
 /* "margin: 0 auto 1.4%;" Edge/Firefox inline margins issue */
 .tsfem-connect-option {
@@ -764,9 +658,6 @@ body.tsfem .wrap {
 	color: #057f9c;
 	font-weight: 400;
 }
-
-/* # Start Panes.
-/*----------------------------------------------------------------------------*/
 
 /* # Global panes wrap.
 /*--------------------------------------*/
@@ -865,9 +756,9 @@ body.tsfem .wrap {
 	max-width: initial;
 	font-size: 1em;
 	word-break: break-word;
-	text-align: left;
+	text-align: right;
 	flex: 0 1 auto;
-	margin-right: .5em;
+	margin-left: .5em;
 }
 
 .tsfem-pane-header h3 {
@@ -880,7 +771,7 @@ body.tsfem .wrap {
 
 .tsfem-pane-header svg,
 .tsfem-pane-header img {
-	margin-left: .333em;
+	margin-right: .333em;
 }
 
 .tsfem-pane-content h4.tsfem-status-title,
@@ -921,7 +812,7 @@ body.tsfem .wrap {
 }
 
 .tsfem-pane-footer-wrap > *:nth-last-child(n+2) {
-	margin-left: 1em;
+	margin-right: 1em;
 }
 
 /* ### Actions pane.
@@ -985,261 +876,6 @@ h4.tsfem-cp-title {
 	text-indent: .5em;
 }
 
-/* ### Extensions pane.
-/*--------------------------------------*/
-.tsfem-extension-entry-wrap {
-	padding: 0;
-	margin: 0;
-	width: 100%;
-}
-
-.tsfem-extension-entry-wrap {
-	margin-bottom: 1.5em;
-}
-
-.tsfem-extension-entry-wrap:last-of-type {
-	margin-bottom: 0;
-}
-
-.tsfem-extension-entry {
-	margin: 0;
-	padding: .33em;
-	min-height: 122px;
-	border-radius: 6px;
-	border: 1px solid #ccd0d4;
-	align-self: auto;
-	justify-content: center;
-}
-
-.tsfem-extension-entry > * {
-	min-height: 100px;
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: column;
-	width: auto;
-	justify-content: flex-start;
-}
-
-.tsfem-extension-icon-wrap {
-	flex-grow: 0;
-	flex-basis: 120px;
-	align-self: center;
-	padding: 1em;
-}
-
-.tsfem-extension-entry-icon {
-	fill: #333;
-	color: #333;
-	transition: color .5s;
-}
-
-.tsfem-extension-activated .tsfem-extension-entry-icon {
-	color: #0ebfe9;
-}
-
-.tsfem-extension-about-wrap {
-	flex-direction: column;
-	justify-content: space-around;
-	padding: .667em 1em;
-	flex-grow: 1;
-	flex-basis: 170px;
-}
-
-.tsfem-extension-description-wrap {
-	flex-grow: 3;
-	flex-basis: 280px;
-}
-
-.tsfem-extension-description-footer {
-	display: block;
-	width: 100%;
-	white-space: pre-line;
-}
-
-.tsfem-extension-title {
-	font-size: 1.33em;
-	word-break: break-word;
-	font-weight: 600;
-	margin: 0;
-	margin-left: .4em;
-	padding: 0;
-	transition: color .5s;
-}
-
-.tsfem-extension-activated .tsfem-extension-title {
-	color: #0ebfe9;
-}
-
-.tsfem-extension-entry .tsfem-extension-title:after {
-	content: "\2022\00fe0e";
-	margin-right: .5em;
-	font-weight: 400;
-	font-size: 1em;
-	color: transparent;
-	transition: color .5s;
-}
-
-.tsfem-extension-entry.tsfem-extension-activated .tsfem-extension-title:after {
-	color: currentColor;
-}
-
-.tsfem-extension-type {
-	margin: 0;
-	padding: 0;
-	font-size: .83em;
-}
-
-.tsfem-extension-subheader {
-	padding: .667em 0;
-}
-
-.tsfem-extension-action > *,
-.tsfem-extension-action input {
-	width: 100%;
-	text-align: center;
-}
-
-.tsfem-extension-party:before {
-	display: inline-block;
-	width: 1em;
-	line-height: 1;
-	font-family: dashicons;
-	font-style: normal;
-	font-weight: 400;
-	font-size: 1.225em;
-	vertical-align: middle;
-	content: "";
-	margin-left: .333em;
-}
-
-.tsfem-extension-first-party-icon:before {
-	content: "\f338";
-}
-
-.tsfem-extension-third-party-icon:before {
-	content: "\f307";
-}
-
-.tsfem-extension-description {
-	padding: 1em;
-}
-
-.tsfem-extension-description-header {
-	padding-bottom: 1em;
-}
-
-/* ### Feed pane.
-/*--------------------------------------*/
-.tsfem-feed-wrap {
-	align-self: flex-start;
-}
-
-.tsfem-enable-feed-button {
-	flex-basis: 50%;
-	max-width: 300px;
-}
-
-.tsfem-feed-entry,
-.tsfem-feed-top {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-}
-
-.tsfem-feed-top,
-.tsfem-feed-content,
-.tsfem-feed-entry {
-	margin-bottom: 1em;
-}
-
-.tsfem-feed-top {
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	white-space: pre-wrap;
-	overflow-wrap: normal;
-	align-items: baseline;
-}
-
-.tsfem-feed-top h4 {
-	white-space: pre-wrap;
-	margin: 0;
-	padding: 0;
-}
-
-.tsfem-feed-top time {
-	white-space: pre;
-	white-space: nowrap;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	word-spacing: -1px;
-	font-size: .9em;
-	margin: 0 7px;
-	padding: 0;
-	font-style: oblique;
-}
-
-.tsfem-feed-entry {
-	border-bottom: 1px solid #dedede;
-	margin: 0 -1em 1em;
-	padding: 0 1em;
-}
-
-.tsfem-feed-entry:last-of-type,
-.tsfem-feed-entry:last-of-type .tsfem-feed-content {
-	margin-bottom: 0;
-	border-bottom: none;
-}
-
-/* # Start Activation Layout.
-/*----------------------------------------------------------------------------*/
-
-.tsfem #input-activation {
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.tsfem #input-activation input {
-	margin-left: 0;
-	margin-right: 0;
-	width: 100%;
-	font-size: 13px;
-}
-
-.tsfem #input-activation input {
-	margin: .2em 0;
-}
-
-.tsfem #input-activation input:first-child {
-	margin-top: 0;
-}
-
-/* # Start footer.
-/*----------------------------------------------------------------------------*/
-
-.tsfem #wpfooter {
-	z-index: -1;
-	padding: 0;
-}
-
-.tsfem-footer-wrap .tsfem-footer-title,
-.tsfem-footer-wrap .tsfem-footer-motto {
-	font-size: 1em;
-	margin: 0;
-	color: #646d78;
-	font-weight: 300;
-	cursor: default;
-}
-
-.tsfem-footer-wrap .tsfem-footer-title {
-	font-weight: 400;
-	color: #555d66;
-}
-
 /* # Start AJAX.
 /*----------------------------------------------------------------------------*/
 
@@ -1253,7 +889,7 @@ h4.tsfem-cp-title {
 	width: 1em;
 	vertical-align: baseline;
 	content: "";
-	margin-right: .333em;
+	margin-left: .333em;
 }
 
 .tsfem-ajax:after {
@@ -1264,7 +900,7 @@ h4.tsfem-cp-title {
 .tsfem-dashicon:after {
 	font-size: 1.2em;
 	vertical-align: text-bottom;
-	margin-right: 2px;
+	margin-left: 2px;
 }
 
 .tsfem-ajax.tsfem-loading:after {
@@ -1326,54 +962,26 @@ h4.tsfem-cp-title {
 	}
 }
 
-/* # Start JavaScript.
+/* # Start footer.
 /*----------------------------------------------------------------------------*/
 
-/* ## Flipping descriptions
-/*----------------------------------------------------------------------------*/
-
-.tsfem-flip-hide-down,
-.tsfem-flip-hide-up {
-	transform: rotateX(90deg) translateY(.5em);
-	transform-origin: 0 100% 0;
-	opacity: 0;
-	transition: transform .25s, opacity 0.25s;
+#tsfem-page-wrap #wpfooter {
+	z-index: -1;
+	padding: 0;
 }
 
-.tsfem-flip-hide-down {
-	transform: rotateX(-90deg) translateY(-2em);
+.tsfem-footer-wrap .tsfem-footer-title,
+.tsfem-footer-wrap .tsfem-footer-motto {
+	font-size: 1em;
+	margin: 0;
+	color: #646d78;
+	font-weight: 300;
+	cursor: default;
 }
 
-.tsfem-flip-show-down,
-.tsfem-flip-show-up {
-	transform: rotateX(0deg) translateY(0em);
-	opacity: 1;
-	transition: transform .25s, opacity .125s;
-}
-
-/* # Start override.
-/*----------------------------------------------------------------------------*/
-
-.tsfem-hidden {
-	display: none;
-}
-
-.tsfem-has-hover-balloon {
-	position: relative;
-	cursor: help;
-}
-
-.tsfem-ltr {
-	direction: ltr;
-}
-
-body.js .tsfem-flex-hide-if-js,
-.tsfem-flex-hide-if-no-js {
-	display: none;
-}
-
-body.js .tsfem-flex-hide-if-no-js {
-	display: flex;
+.tsfem-footer-wrap .tsfem-footer-title {
+	font-weight: 400;
+	color: #555d66;
 }
 
 /* ## Modal.
@@ -1546,13 +1154,18 @@ body.js .tsfem-flex-hide-if-no-js {
 }
 
 .tsfem-modal-buttons button:nth-child(n+2) {
+	margin-left: 1em;
+}
+
+body.rtl .tsfem-modal-buttons button:nth-child(n+2) {
+	margin-left: initial;
 	margin-right: 1em;
 }
 
 .tsfem-modal-dismiss {
 	position: absolute;
 	top: 0;
-	left: 0;
+	right: 0;
 	border: none;
 	margin: 7px;
 	padding: 7px;
@@ -1562,6 +1175,11 @@ body.js .tsfem-flex-hide-if-no-js {
 	text-decoration: none;
 	z-index: 6;
 	transition: color 0.15s;
+}
+
+body.rtl .tsfem-modal-dismiss {
+	right: initial;
+	left: 0;
 }
 
 .tsfem-modal-dismiss:hover {
@@ -1579,4 +1197,29 @@ body.js .tsfem-flex-hide-if-no-js {
 	width: 20px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+/* # Start override.
+/*----------------------------------------------------------------------------*/
+
+.tsfem-hidden {
+	display: none;
+}
+
+.tsfem-has-hover-balloon {
+	position: relative;
+	cursor: help;
+}
+
+.tsfem-ltr {
+	direction: ltr;
+}
+
+body.js .tsfem-flex-hide-if-js,
+.tsfem-flex-hide-if-no-js {
+	display: none;
+}
+
+body.js .tsfem-flex-hide-if-no-js {
+	display: flex;
 }

@@ -369,10 +369,22 @@ final class Admin extends Core {
 	public function _do_filter_upgrade_notice() {
 
 		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' ) ) {
-			\tsf_extension_manager()->do_dismissible_notice( 'Filter <code>the_seo_framework_articles_supported_post_types</code> is deprecated. Please remove it and use the settings below instead.', 'error', true, false );
+			\the_seo_framework()->do_dismissible_notice(
+				'Filter <code>the_seo_framework_articles_supported_post_types</code> is deprecated. Please remove it and use the settings below instead.',
+				'error',
+				true,
+				false,
+				true
+			);
 		}
 		if ( \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
-			\tsf_extension_manager()->do_dismissible_notice( 'Filter <code>the_seo_framework_articles_default_meta</code> is deprecated. Please remove it and use the settings below instead.', 'error', true, false );
+			\the_seo_framework()->do_dismissible_notice(
+				'Filter <code>the_seo_framework_articles_default_meta</code> is deprecated. Please remove it and use the settings below instead.',
+				'error',
+				true,
+				false,
+				true
+			);
 		}
 	}
 
@@ -636,7 +648,7 @@ final class Admin extends Core {
 	/**
 	 * Adds list table data, so that the quick-edit values are correctly preselected.
 	 *
-	 * @since 2.4.1
+	 * @since 2.1.0
 	 *
 	 * @param array $data  The current LE data.
 	 * @param array $query The current item's query.

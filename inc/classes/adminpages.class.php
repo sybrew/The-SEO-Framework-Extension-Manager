@@ -546,7 +546,7 @@ class AdminPages extends AccountActivation {
 	/**
 	 * Outputs nonce field, without a DOM ID.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 *
 	 * @param string $action  The action key.
@@ -561,7 +561,7 @@ class AdminPages extends AccountActivation {
 	/**
 	 * Returns nonce field, without a DOM ID.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @access private
 	 * @source <https://developer.wordpress.org/reference/functions/wp_nonce_field/>
 	 *

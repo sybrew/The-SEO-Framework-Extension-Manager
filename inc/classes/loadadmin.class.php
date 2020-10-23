@@ -164,20 +164,26 @@ final class LoadAdmin extends AdminPages {
 
 		if ( ! $show_notice ) return;
 
-		$notice = \the_seo_framework()->convert_markdown(
-			sprintf(
-				/* translators: Markdown. %s = API URL */
-				\esc_html__(
-					'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.',
-					'the-seo-framework-extension-manager'
-				),
-				\esc_html( implode( ',', $hosts ) )
-			),
-			[ 'code' ]
-		);
+		$tsf = \the_seo_framework();
 
 		// Already escaped.
-		$this->do_dismissible_notice( $notice, 'error', true, false );
+		$tsf->do_dismissible_notice(
+			$tsf->convert_markdown(
+				sprintf(
+					/* translators: Markdown. %s = API URL */
+					\esc_html__(
+						'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.',
+						'the-seo-framework-extension-manager'
+					),
+					\esc_html( implode( ',', $hosts ) )
+				),
+				[ 'code' ]
+			),
+			'error',
+			true,
+			false,
+			true
+		);
 	}
 
 	/**
@@ -348,7 +354,7 @@ final class LoadAdmin extends AdminPages {
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		// No a11y icon. Already escaped. Use TSF as it loads styles.
-		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false );
+		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false, false );
 	}
 
 	/**
@@ -373,7 +379,7 @@ final class LoadAdmin extends AdminPages {
 	/**
 	 * Tests whether we're on the right administrative page.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5.0
 	 * @global string $pagenow
 	 *
 	 * @param string|array $pagenow A list of pagenow values, or a single one.
@@ -615,68 +621,6 @@ final class LoadAdmin extends AdminPages {
 			'title'   => $title,
 			'content' => $text,
 		] );
-	}
-
-	/**
-	 * Generates dismissible notice.
-	 * Also loads scripts and styles if out of The SEO Framework's context.
-	 *
-	 * @since 1.3.0
-	 * @since 2.3.0 Added the info notice type. Removed support for the 'success' notice type.
-	 *
-	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $type    The notice type : 'updated', 'error', 'warning'.
-	 * @param bool   $a11y    Whether to add an accessibility icon.
-	 * @param bool   $escape  Whether to escape the whole output.
-	 * @return string The dismissible error notice.
-	 */
-	public function get_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-
-		switch ( $type ) :
-			case 'updated':
-				$type = 'tsfem-notice-success';
-				break;
-
-			case 'info':
-				$type = 'tsfem-notice-info';
-				break;
-
-			case 'warning':
-				$type = 'tsfem-notice-warning';
-				break;
-
-			case 'error':
-				$type = 'tsfem-notice-error';
-				break;
-
-			default:
-				$type = '';
-				break;
-		endswitch;
-
-		$a11y = $a11y ? ' tsfem-show-icon' : '';
-
-		$notice  = '<div class="tsfem-notice ' . \esc_attr( $type ) . $a11y . '"><p>';
-		$notice .= '<a class="hide-if-no-js tsfem-dismiss" href=javascript:; title="' . \esc_attr__( 'Dismiss', 'the-seo-framework-extension-manager' ) . '"></a>';
-		$notice .= $escape ? \esc_html( $message ) : $message;
-		$notice .= '</p></div>';
-
-		return $notice;
-	}
-
-	/**
-	 * Echos generated dismissible notice.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param string $message The notice message. Expected to be escaped if $escape is false.
-	 * @param string $type    The notice type : 'updated', 'info', 'error', 'warning'.
-	 * @param bool   $a11y    Whether to add an accessibility icon.
-	 * @param bool   $escape  Whether to escape the whole output.
-	 */
-	public function do_dismissible_notice( $message = '', $type = 'updated', $a11y = true, $escape = true ) {
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $this->get_dismissible_notice( $message, $type, (bool) $a11y, (bool) $escape );
 	}
 
 	/**

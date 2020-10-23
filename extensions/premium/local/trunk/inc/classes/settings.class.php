@@ -325,7 +325,7 @@ final class Settings {
 			[
 				'id'       => 'tsfem-local',
 				'type'     => 'js',
-				'deps'     => [ 'wp-util', 'tsf-tt', 'tsfem-form', 'tsfem-media' ],
+				'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsfem-ui', 'tsfem-form', 'tsfem-media' ],
 				'autoload' => true,
 				'name'     => 'tsfem-local',
 				'base'     => TSFEM_E_LOCAL_DIR_URL . 'lib/js/',

@@ -119,12 +119,6 @@ final class InpostGUI {
 
 	/**
 	 * @since 1.5.0
-	 * @var array $scripts The registered scripts.
-	 */
-	private static $scripts = [];
-
-	/**
-	 * @since 1.5.0
 	 * @var array $templates The registered templates.
 	 */
 	private static $templates = [];
@@ -150,8 +144,8 @@ final class InpostGUI {
 		$this->register_tabs();
 
 		//= Scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
-		\add_action( 'admin_footer', [ $this, '_output_templates' ] );
+		\add_action( 'load-post.php', [ $this, '_prepare_admin_scripts' ] );
+		\add_action( 'load-post-new.php', [ $this, '_prepare_admin_scripts' ] );
 
 		//= Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
@@ -197,28 +191,34 @@ final class InpostGUI {
 	 * Prepares scripts for output on post edit screens.
 	 *
 	 * @since 1.5.0
-	 *
-	 * @param string $hook The current admin hook.
 	 */
-	public function _prepare_admin_scripts( $hook ) {
+	public function _prepare_admin_scripts() {
 
-		if ( ! \in_array( $hook, [ 'post.php', 'post-new.php' ], true ) )
-			return;
+		\The_SEO_Framework\Builders\Scripts::prepare();
 
-		$this->register_default_scripts();
+		// Enqueue default scripts.
+		\add_action( 'tsfem_inpost_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
 
+		// Enqueue early styles & scripts.
+		\add_action( 'admin_enqueue_scripts', [ $this, '_load_admin_scripts' ], 0 );
+
+		// Enqueue late initialized styles & scripts.
+		\add_action( 'admin_footer', [ $this, '_load_admin_scripts' ], 0 );
+	}
+
+	/**
+	 * Registers admin scripts.
+	 *
+	 * @since 2.5.0
+	 * @access private
+	 * @internal
+	 */
+	public function _load_admin_scripts() {
 		/**
-		 * Does action 'tsfem_inpostgui_enqueue_scripts'
-		 *
-		 * Use this hook to enqueue scripts on the post edit screens.
-		 *
-		 * @since 1.5.0
-		 * @param string $class The static class caller name.
-		 * @param string $hook  The current page hook.
+		 * @since 2.0.2
+		 * @param string $scripts The scripts builder class name.
 		 */
-		\do_action_ref_array( 'tsfem_inpostgui_enqueue_scripts', [ static::class, $hook ] );
-
-		$this->enqueue_scripts();
+		\do_action( 'tsfem_inpost_before_enqueue_scripts', \The_SEO_Framework\Builders\Scripts::class );
 	}
 
 	/**
@@ -226,267 +226,60 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 * @since 2.0.0 Added isConnected and userLocale
-	 * @uses static::register_script
+	 * @since 2.5.0 : 1. Is now public, marked private.
+	 *                2. Now uses TSF's script loader.
+	 * @access private
+	 * @internal
+	 *
+	 * @param string $scripts Static class name: The_SEO_Framework\Builders\Scripts
 	 */
-	private function register_default_scripts() {
+	public function _register_default_scripts( $scripts ) {
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
-		static::register_script( [
-			'type' => 'js',
-			'autoload' => false,
-			'name' => 'tsfem-inpost',
-			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
-			'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
-			'l10n' => [
-				'name' => 'tsfem_inpostL10n',
-				'data' => [
-					'post_ID'     => (int) $GLOBALS['post']->ID,
-					'nonce'       => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
-					'isPremium'   => \tsf_extension_manager()->is_premium_user(),
-					'isConnected' => \tsf_extension_manager()->is_connected_user(),
-					'locale'      => \get_locale(),
-					'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
-					'debug'       => (bool) WP_DEBUG,
-					'rtl'         => (bool) \is_rtl(),
-					'i18n'        => [
-						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
-						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
-						'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
-						'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
-						'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
-						'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
+		$scripts::register( [
+			[
+				'id'   => 'tsfem-inpost',
+				'type' => 'js',
+				'autoload' => false,
+				'name' => 'tsfem-inpost',
+				'base' => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'  => TSF_EXTENSION_MANAGER_VERSION,
+				'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
+				'l10n' => [
+					'name' => 'tsfem_inpostL10n',
+					'data' => [
+						'post_ID'     => (int) $GLOBALS['post']->ID,
+						'nonce'       => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
+						'isPremium'   => \tsf_extension_manager()->is_premium_user(),
+						'isConnected' => \tsf_extension_manager()->is_connected_user(),
+						'locale'      => \get_locale(),
+						'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+						'debug'       => (bool) WP_DEBUG,
+						'rtl'         => (bool) \is_rtl(),
+						'i18n'        => [
+							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
+							'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
+							'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
+							'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
+							'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
+							'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
+						],
 					],
 				],
+				'tmpl' => [
+					'file' => \tsf_extension_manager()->get_template_location( 'inpostnotice' ),
+				],
 			],
-			'tmpl' => [
-				'file' => \tsf_extension_manager()->get_template_location( 'inpostnotice' ),
+			[
+				'id'   => 'tsfem-inpost',
+				'type' => 'css',
+				'autoload' => false,
+				'name' => 'tsfem-inpost',
+				'base' => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+				'ver'  => TSF_EXTENSION_MANAGER_VERSION,
+				'deps' => [ 'tsf', 'tsf-tt' ],
 			],
-		] );
-		static::register_script( [
-			'type' => 'css',
-			'autoload' => false,
-			'name' => 'tsfem-inpost',
-			'base' => TSF_EXTENSION_MANAGER_DIR_URL,
-			'ver'  => TSF_EXTENSION_MANAGER_VERSION,
-			'deps' => [ 'tsf', 'tsf-tt' ],
 		] );
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
-	}
-
-	/**
-	 * Registers script to be enqueued.
-	 *
-	 * @since 1.5.0
-	 * @uses static::$scripts
-	 * @see $this->enqueue_scripts()
-	 *
-	 * @param array $script The script : {
-	 *   'type' => string 'css|js',
-	 *   'autoload' => boolean|void If void|null|true, the script will be loaded.
-	 *                              If false, it'll only be registered for dependencies.
-	 *                              Templates are always outputted,
-	 *   'name' => string The unique script name, which is also the file name,
-	 *   'deps' => array  Dependencies,
-	 *   'ver'  => string Script version,
-	 *   'l10n' => array If type is 'js' : {
-	 *      'name' => string The JavaScript variable,
-	 *      'data' => mixed  The l10n properties,
-	 *   }
-	 *   'tmpl' => array If type is 'js', either multidimensional or single : {
-	 *      'file' => string $file. The full file location,
-	 *      'args' => array $args. Optional,
-	 *    }
-	 *   'inline' => array If 'type' is CSS : {
-	 *      'selector' => array : { iterable => 'style' }
-	 *    }
-	 * }
-	 */
-	public static function register_script( array $script ) {
-		static::$scripts[] = $script;
-	}
-
-	/**
-	 * Enqueues scripts, l10n and templates.
-	 *
-	 * @since 1.5.0
-	 * @uses static::$scripts
-	 * @uses $this->generate_file_url()
-	 * @uses $this->register_template()
-	 */
-	private function enqueue_scripts() {
-
-		//= Register them first to accomodate for dependencies.
-		foreach ( static::$scripts as $s ) {
-			switch ( $s['type'] ) {
-				case 'css':
-					\wp_register_style( $s['name'], $this->generate_file_url( $s, 'css' ), $s['deps'], $s['ver'], 'all' );
-					isset( $s['inline'] )
-						and \wp_add_inline_style( $s['name'], $this->get_inline_css( $s['inline'] ) );
-					break;
-				case 'js':
-					\wp_register_script( $s['name'], $this->generate_file_url( $s, 'js' ), $s['deps'], $s['ver'], true );
-					isset( $s['l10n'] )
-						and \wp_localize_script( $s['name'], $s['l10n']['name'], $s['l10n']['data'] );
-					isset( $s['tmpl'] )
-						and $this->register_template( $s['tmpl'] );
-					break;
-			}
-		}
-
-		foreach ( static::$scripts as $s ) {
-			if ( ! isset( $s['autoload'] ) || $s['autoload'] ) {
-				switch ( $s['type'] ) {
-					case 'css':
-						\wp_enqueue_style( $s['name'] );
-						break;
-					case 'js':
-						\wp_enqueue_script( $s['name'] );
-						break;
-				}
-			}
-		}
-	}
-
-	/**
-	 * Registers inline CSS.
-	 * Implements admin color support.
-	 *
-	 * Use any of these values to get the corresponding admin color:
-	 * - {{$bg}}
-	 * - {{$bg_accent}}
-	 * - {{$color}}
-	 * - {{$color_accent}}
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $styles The styles, with possible colors.
-	 * @return array $css
-	 */
-	private function get_inline_css( array $styles ) {
-
-		$out = '';
-		foreach ( $styles as $selector => $css ) {
-			$out .= $selector . '{' . implode( ';', $this->convert_color_css( $css ) ) . '}';
-		}
-
-		return $out;
-	}
-
-	/**
-	 * Converts color CSS.
-	 *
-	 * @since 1.5.0
-	 * @staticvar array $c_ck Color keys.
-	 * @staticvar array $c_cv Color values.
-	 *
-	 * @param array $css The CSS to convert colors for.
-	 * @return array $css
-	 */
-	private function convert_color_css( array $css ) {
-
-		static $c_ck, $c_cv;
-
-		if ( ! isset( $c_ck, $c_cv ) ) {
-			$_scheme = \get_user_option( 'admin_color' ) ?: 'fresh';
-			$_colors = $GLOBALS['_wp_admin_css_colors'];
-
-			if (
-			   ! isset( $_colors[ $_scheme ]->colors )
-			|| ! \is_array( $_colors[ $_scheme ]->colors )
-			|| \count( $_colors[ $_scheme ]->colors ) < 4
-			) {
-				//= Default 'fresh' table.
-				$_table = [
-					'{{$bg}}'           => '#222',
-					'{{$bg_accent}}'    => '#333',
-					'{{$color}}'        => '#0073aa',
-					'{{$color_accent}}' => '#00a0d2',
-				];
-
-				$c_ck = array_keys( $_table );
-				$c_cv = array_values( $_table );
-			} else {
-				$_colors = $_colors[ $_scheme ]->colors;
-
-				$_bg           = $_colors[0];
-				$_bg_accent    = $_colors[1];
-				$_color        = $_colors[2];
-				$_color_accent = $_colors[3];
-
-				$_table = [
-					'{{$bg}}'           => $_bg,
-					'{{$bg_accent}}'    => $_bg_accent,
-					'{{$color}}'        => $_color,
-					'{{$color_accent}}' => $_color_accent,
-				];
-
-				$c_ck = array_keys( $_table );
-				$c_cv = array_values( $_table );
-			}
-		}
-
-		return str_replace( $c_ck, $c_cv, $css );
-	}
-
-	/**
-	 * Registers template for output in the admin footer.
-	 *
-	 * Set a multidimensional array to register multiple views.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $templates single or multi-dimensional : {
-	 *   'file' => string $file. The full file location,
-	 *   'args' => array $args. Optional,
-	 * }
-	 */
-	private function register_template( array $templates ) {
-		//= Wrap template if it's only one on the base.
-		if ( isset( $templates['file'] ) )
-			$templates = [ $templates ];
-
-		foreach ( $templates as $t )
-			static::$templates[] = [ $t['file'], \tsf_extension_manager()->coalesce_var( $t['args'], [] ) ];
-	}
-
-	/**
-	 * Outputs template views.
-	 *
-	 * The loop will only run when templates are registered.
-	 *
-	 * @since 1.5.0
-	 * @see $this->enqueue_scripts()
-	 */
-	public function _output_templates() {
-		foreach ( static::$templates as $template )
-			$this->output_view( $template[0], $template[1] );
-	}
-
-	/**
-	 * Generates file URL.
-	 *
-	 * @since 1.5.0
-	 * @staticvar string $min
-	 * @staticvar string $rtl
-	 * @NOTE smell: dupe from UI.trait
-	 *
-	 * @param array $script The script arguments.
-	 * @param array $type Either 'js' or 'css'.
-	 * @return string The file URL.
-	 */
-	private function generate_file_url( array $script, $type = 'js' ) {
-
-		static $min, $rtl;
-
-		if ( ! isset( $min, $rtl ) ) {
-			$min = \the_seo_framework()->script_debug ? '' : '.min';
-			$rtl = \is_rtl() ? '.rtl' : '';
-		}
-
-		if ( 'js' === $type )
-			return $script['base'] . "lib/js/{$script['name']}{$min}.js";
-
-		return $script['base'] . "lib/css/{$script['name']}{$rtl}{$min}.css";
 	}
 
 	/**

@@ -249,7 +249,7 @@ class Panes extends API {
 		$nonce_action = $this->_get_nonce_action_field( $this->request_name['enable-feed'] );
 		$nonce        = \wp_nonce_field( $this->nonce_action['enable-feed'], $this->nonce_name, true, false );
 		$submit       = sprintf(
-			'<input type="submit" name="submit" id="submit" class="tsfem-button-primary" value="%s">',
+			'<input type=submit name=submit id=tsfem-submit-enable-feed class=tsfem-button-primary value="%s">',
 			\esc_attr( $enable )
 		);
 

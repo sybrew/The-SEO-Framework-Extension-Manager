@@ -536,7 +536,7 @@ final class Layout extends Secure_Abstract {
 			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
-				'<input type=submit name=submit id=submit class="tsfem-button-primary" value="%s">',
+				'<input type=submit name=submit id=tsfem-account-upgrade-submit class="tsfem-button-primary" value="%s">',
 				\esc_attr__( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 

@@ -1590,23 +1590,37 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			} else {
 				//= Toggle fancy.
 				if ( event.target.checked ) {
-					tsfem_inpost.fadeOut( evaluator, 150, {
-						cb: () => {
-							tsfem_inpost.fadeIn( editor, 250 );
-							//? Because the promise is dropped, make sure it's set.
-							event.target.checked = true;
-						},
-						promise: false,
-					} );
+					tsfem_inpost.fadeOut(
+						evaluator,
+						150,
+						{
+							cb: () => {
+								tsfem_inpost.fadeIn( editor );
+								// Race condition workaround... ambitiously.
+								// evaluator.style.display = 'none';
+								// tsfem_inpost.fadeOut( evaluator, 100 );
+								//? Because the promise is dropped, make sure it's set.
+								event.target.checked = true;
+							},
+							promise: false,
+						}
+					);
 				} else {
-					tsfem_inpost.fadeOut( editor, 150, {
-						cb: () => {
-							tsfem_inpost.fadeIn( evaluator, 250 ),
-							//? Because the promise is dropped, make sure it's unset.
-							event.target.checked = false;
-						},
-						promise: false,
-					} );
+					tsfem_inpost.fadeOut(
+						editor,
+						150,
+						{
+							cb: () => {
+								tsfem_inpost.fadeIn( evaluator );
+								// Race condition workaround... ambitiously.
+								// editor.style.display = 'none';
+								// tsfem_inpost.fadeOut( editor, 100 );
+								//? Because the promise is dropped, make sure it's unset.
+								event.target.checked = false;
+							},
+							promise: false,
+						}
+					);
 				}
 			}
 		}
@@ -2301,12 +2315,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now checks for isGutenbergPage
+	 * @since 1.4.1 No longer passes isGutenbergPage property; relies on tsfPost instead.
 	 * @access private
 	 *
 	 * @function
 	 */
 	const monkeyPatch = () => {
-		if ( l10n.isGutenbergPage ) {
+		if ( tsfPost.l10n.states.isGutenbergPage ) {
 			patchNewEditor();
 		} else {
 			patchClassicEditor();

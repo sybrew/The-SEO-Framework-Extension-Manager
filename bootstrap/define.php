@@ -25,7 +25,7 @@ defined( 'TSF_EXTENSION_MANAGER_DB_VERSION' ) or die;
 /**
  * Tells the world the plugin is present and to be used.
  *
- * @since 2.4.1
+ * @since 2.5.0
  */
 define( 'TSF_EXTENSION_MANAGER_PRESENT', true );
 
