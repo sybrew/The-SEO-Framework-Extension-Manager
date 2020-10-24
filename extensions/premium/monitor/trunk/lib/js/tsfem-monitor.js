@@ -606,7 +606,7 @@ window.tsfem_e_monitor = {
 				errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
 			} ).always( function() {
 				tsfem.updatedResponse( loader, status, loaderText );
-			 	if ( topNoticeCode ) {
+				if ( topNoticeCode ) {
 					tsfem_ui.setTopNotice( topNoticeCode, topNotice );
 				}
 				tsfem_e_monitor.unsetSettingsLoader();

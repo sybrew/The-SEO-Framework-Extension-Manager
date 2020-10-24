@@ -15,8 +15,9 @@ namespace TSF_Extension_Manager\Extension\Focus;
 <div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
 	<?php
 	printf(
-		'<input type=checkbox id=%s value="1" checked class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
-		\esc_attr( $action_ids['collapser'] )
+		'<input type=checkbox id=%s value="1" %s class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
+		\esc_attr( $action_ids['collapser'] ),
+		( ! $supportive && '' !== $post_input['keyword']['value'] ? '' : 'checked' )
 	);
 	?>
 	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header tsf-flex" id=<?php echo \esc_attr( $wrap_ids['header'] ); ?>>

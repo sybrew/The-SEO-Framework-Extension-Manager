@@ -60,8 +60,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @var activeFocusAreas  Maintains all active focus elements' selectors.
 	 * @var activeAssessments Maintains all active focus elements' bound raters.
 	 */
-	let focusRegistry = {},
-		activeFocusAreas = {},
+	let focusRegistry     = {},
+		activeFocusAreas  = {},
 		activeAssessments = {};
 
 	/**
@@ -1214,6 +1214,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 	/**
 	 * Toggles display of subject analysis lines.
+	 *
 	 * @since 1.0.0
 	 * @function
 	 *
@@ -2105,6 +2106,174 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		} };
 	}
 
+	let _blockEditorStoreHolder = void 0;
+	/**
+	 * Applies various callbacks that allow you to alter the store which Focus reads.
+	 *
+	 * @since 1.5.0
+	 * @access private
+	 *
+	 * @function
+	 * @return {Boolean} true on success, false otherwise.
+	 */
+	const _createBlockEditorStoreHolder = () => !! ( _blockEditorStoreHolder = document.getElementById( 'tsf-gutenberg-data-holder' ) );
+
+	const _blockEditorEventLocker = new Map();
+	/**
+	 * Applies various callbacks that allow you to alter the store which Focus reads.
+	 *
+	 * @since 1.5.0
+	 * @access public
+	 *
+	 * @function
+	 * @param {string} type The content type: 'title', 'link', 'content'.
+	 * @return {Object<string,function>} : {
+	 *	@function getId           :
+	 *	@function getElement      :
+	 *	@function setup           :
+	 *	@function create          :
+	 *	@function empty           :
+	 *	@function fill            : @param {string} data The content type's contents.
+	 *	@function read            :
+	 *	@function triggerAnalysis :
+	 * }
+	 */
+	const blockEditorStore = type => {
+
+		/**
+		 * @access public
+		 * @return {string} Store element ID.
+		 */
+		const getId = () => `tsfem-focus-gbc-${type}`;
+
+		/**
+		 * @access public
+		 * @return {HTMLElement} Store element.
+		 */
+		const getElement = () => document.getElementById( getId() );
+
+		/**
+		 * @access public
+		 */
+		const setup = () => {
+			create( type );
+			let assessment = _getAssessment();
+			// Wait for store to be written, defer while other stores are also being setup:
+			setTimeout( () => {
+				updateActiveFocusAreas( assessment );
+				resetAnalysisChangeListeners( assessment );
+			} );
+			// Don't put this in a timeout, for that can cause infinite loops.
+			_dispatchEvent( 'setup', { assessment } );
+		}
+
+		/**
+		 * @access public
+		 */
+		const create = () => {
+			if ( getElement() ) return;
+			let store = document.createElement( 'div' );
+
+			store.id            = getId();
+			store.style.display = 'none';
+			_blockEditorStoreHolder.appendChild( store );
+
+			_dispatchEvent( 'create' );
+		}
+
+		/**
+		 * @access public
+		 */
+		const empty = () => {
+			getElement().innerHTML = null;
+			_dispatchEvent( 'empty' );
+		}
+
+		/**
+		 * Security: React securely stores any data you throw at it. There
+		 * shouldn't be a need to escape the content filled. However, follow
+		 * best-practices whenever necessary.
+		 *
+		 * @access public
+		 * @param {string} data The content type's contents.
+		 * @return {jQuery.Deferred|Promise} The promise object.
+		 */
+		const fill = data => {
+			getElement().innerHTML = data;
+			_dispatchEvent( 'fill', { data } );
+		}
+
+		/**
+		 * @access public
+		 */
+		const read = () => getElement().innerHTML;
+
+		/**
+		 * @access public
+		 */
+		const triggerAnalysis = () => {
+			let assessment = _getAssessment();
+			$( '#' + getId() ).trigger( analysisChangeEvents( assessment ).get( 'trigger' ) );
+			_dispatchEvent( 'trigger-read', { assessment } );
+		}
+
+		/**
+		 * @access private
+		 */
+		const _getAssessment = () => {
+			let assessment = '';
+			switch ( type ) {
+				case 'title':
+					assessment = 'pageTitle';
+					break;
+				case 'link':
+					assessment = 'pageUrl';
+					break;
+				case 'content':
+					assessment = 'pageContent';
+					break;
+				default:
+					break;
+			}
+
+			return assessment;
+		}
+
+		_blockEditorEventLocker.has( type ) || _blockEditorEventLocker.set( type, new Map() );
+		/**
+		 * @access private
+		 */
+		const _locked = name => _blockEditorEventLocker.get( type ).has( name );
+		const _lock   = name => _blockEditorEventLocker.get( type ).set( name, true );
+		const _unlock = name => _blockEditorEventLocker.get( type ).delete( name );
+		/**
+		 * @access private
+		 */
+		const _dispatchEvent = async ( name, detail ) => {
+			if ( _locked( name ) ) return;
+			_lock( name );
+			document.dispatchEvent( new CustomEvent(
+				`tsfem-focus-gutenberg-${type}-store-${name}`,
+				{
+					bubbles:    false,
+					cancelable: false,
+					detail:     detail || {},
+				}
+			) ) && _unlock( name );
+		}
+
+		return {
+			getId,
+			getElement,
+			setup,
+			create,
+			empty,
+			fill,
+			read,
+			triggerAnalysis,
+		};
+	}
+
 	/**
 	 * Applies analysis listeners to elements that can't have default JS listeners
 	 * for the new Gutenberg Editor.
@@ -2114,89 +2283,38 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @function
 	 */
-	const patchNewEditor = () => {
+	const patchBlockEditor = () => {
 
-		let $document = $( document ),
-			holder = document.getElementById( 'tsf-gutenberg-data-holder' );
+		if ( ! _createBlockEditorStoreHolder() ) return;
 
-		if ( ! holder ) return;
+		const $document  = $( document );
 
-		const getId      = type => `tsfem-focus-gbc-${type}`;
-		const getElement = type => document.getElementById( getId( type ) );
-
-		/**
-		 * @param {string} type
-		 * @param {string} assessment
-		 */
-		const setup = ( type, assessment ) => {
-			createStore( type );
-			// Wait for store to be written, defer:
-			setTimeout( () => {
-				updateActiveFocusAreas( assessment );
-				resetAnalysisChangeListeners( assessment );
-			} );
-			document.dispatchEvent( new CustomEvent( `tsfem-focus-gutenberg-${type}-store-set` ) );
-		}
-
-		/**
-		 * @param {string} type
-		 */
-		const createStore = type => {
-			if ( getElement( type ) ) return;
-			let store = document.createElement( 'div' );
-			store.id = getId( type );
-			store.style.display = 'none';
-			holder.appendChild( store );
-		};
-
-		/**
-		 * @param {string} type
-		 */
-		const emptyStore = type => {
-			getElement( type ).innerHTML = null;
-		};
-
-		/**
-		 * @note: Setting data takes time.
-		 * @param {string} type
-		 * @param {string} data
-	 	 * @return {jQuery.Deferred|Promise} The promise object.
-		 */
-		const fillStore = ( type, data ) => {
-			// Security: WordPress (or React) escapes the data.
-			getElement( type ).innerHTML = data;
-		};
-
-		/**
-		 * @param {string} type
-		 * @param {string} assessment
-		 */
-		const triggerRead = ( type, assessment ) => {
-			$( '#' + getId( type ) ).trigger( analysisChangeEvents( assessment ).get( 'trigger' ) );
-		}
+		const titleStore   = blockEditorStore( 'title' );
+		const linkStore    = blockEditorStore( 'link' );
+		const contentStore = blockEditorStore( 'content' );
 
 		$document.on( 'tsf-updated-gutenberg-title', ( event, title ) => {
-			fillStore( 'title', title );
-			triggerRead( 'title', 'pageTitle' );
+			titleStore.fill( title );
+			titleStore.triggerAnalysis();
 		} );
-		setup( 'title', 'pageTitle' );
+		titleStore.setup( 'pageTitle' );
 
 		$document.on( 'tsf-updated-gutenberg-link', ( event, link ) => {
-			fillStore( 'link', link );
-			triggerRead( 'link', 'pageUrl' );
+			linkStore.fill( link );
+			linkStore.triggerAnalysis();
 		} );
-		setup( 'link', 'pageUrl' );
+		linkStore.setup();
 
 		/**
 		 * Debounced function, as the content is heavy, and we want to read typing states.
 		 * @param {string} content
 		 */
 		const updateContent = content => {
-			fillStore( 'content', content );
-			triggerRead( 'content', 'pageContent' );
+			contentStore.fill( content );
+			contentStore.triggerAnalysis();
 		}
 		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
-			let debouncer = lodash.debounce( updateContent, 500 );
+			const debouncer = lodash.debounce( updateContent, 500 );
 
 			let isTyping = false,
 				editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
@@ -2214,7 +2332,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				updateContent( content ); // Set content immediately.
 			}
 		} );
-		setup( 'content', 'pageContent' );
+		contentStore.setup();
 	}
 
 	/**
@@ -2315,14 +2433,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now checks for isGutenbergPage
-	 * @since 1.4.1 No longer passes isGutenbergPage property; relies on tsfPost instead.
+	 * @since 1.5.0 No longer passes isGutenbergPage property; relies on tsfPost instead.
 	 * @access private
 	 *
 	 * @function
 	 */
 	const monkeyPatch = () => {
 		if ( tsfPost.l10n.states.isGutenbergPage ) {
-			patchNewEditor();
+			patchBlockEditor();
 		} else {
 			patchClassicEditor();
 		}
@@ -2414,7 +2532,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	}
 
 	/**
-	 * @since 1.4.1
+	 * @since 1.5.0
 	 * @access private
 	 *
 	 * @function
@@ -2446,16 +2564,25 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}, {
 		/**
+		 * Copies internal public variables to tsfem_e_focus_inpost for public access.
+		 * Don't overwrite these.
+		 *
+		 * @since 1.0.0
+		 * @access public
+		 */
+		focusRegistry,
+		activeFocusAreas,
+		activeAssessments,
+	}, {
+		/**
 		 * Copies internal public functions to tsfem_e_focus_inpost for public access.
 		 * Don't overwrite these.
 		 *
 		 * @since 1.0.0
-		 * @since 1.4.1 Made setAllRatersOf public.
+		 * @since 1.5.0: 1. Made setAllRatersOf public.
+		 *               2. Added blockEditorStore.
 		 * @access public
 		 */
- 		focusRegistry,
- 		activeFocusAreas,
- 		activeAssessments,
 		updateFocusRegistry,
 		updateActiveFocusAreas,
 		resetAnalysisChangeListeners,
@@ -2464,6 +2591,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		getSubIdPrefix,
 		getSubElementById,
 		setAllRatersOf,
+		blockEditorStore,
 	} );
 }( jQuery );
 window.tsfem_e_focus_inpost.load();

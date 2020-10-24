@@ -264,16 +264,75 @@ add_filter( 'the_seo_framework_focus_auto_interval', function( $interval ) {
 
 Considering increasing the value when parser loaders spin indefinitely.
 
+### JavaScript events
+
+Here you can find an example of the available JavaScript event listeners for Focus.
+
+#### Adjust content parser
+
+```js
+/**
+ * Listen for store setup. Runs once early during the page load-sequence.
+ *
+ * Details are documented at `tsfem_e_focus_inpost.blockEditorStore()`.
+ */
+document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
+	const contentStore = tsfem_e_focus_inpost.blockEditorStore( 'content' );
+
+	/**
+	 * This callback function must run synchronously.
+	 *
+	 * If you need to fill the store via a slow method, such as via a REST request,
+	 * then we recommend memoizing the content in another function asynchronously, and
+	 * fill its memoized content both in that memoizing function as well as here. In the
+	 * memoizing function, you can reparse the content via `contentStore.triggerAnalysis()`.
+	 * With `tsfem_e_focus_inpost.setAllRatersOf( 'pageContent', 'loading' )`, you can
+	 * convey the content is being retrieved. Focus will automatically update the rater.
+	 */
+	document.addEventListener( 'tsfem-focus-gutenberg-content-store-fill', event => {
+		// Mutate store with any content:
+		contentStore.fill( 'my custom content' );
+
+		// Read Focus's original store:
+		console.log( event.detail.data );
+
+		// Read active store:
+		console.log( contentStore.read() );
+	} );
+} );
+```
+
 ## Changelog
 
-### 1.4.1
+### 1.5.0
 
 [tsfep-release time="-1"]
 
 * **Added:** Filter `the_seo_framework_focus_auto_interval`.
 	* Documented at [developers](#developers).
 * **Added:** (JavaScript) `tsfem_e_focus_inpost.setAllRatersOf()` is now public.
-* **Fixed:** Addressed various race condition issues with jQuery 3.5.1.
+* **Added:** (JavaScript) `tsfem_e_focus_inpost.blockEditorStore()` is now available. It returns various methods:
+	* `getId`
+	* `getElement`
+	* `setup`
+	* `create`
+	* `empty`
+	* `fill`
+	* `read`
+	* `triggerAnalysis`
+	* Tip: Wrap a bind to the `.-store-setup` event documented below to assure the store is available.
+	* Glossed over at [developers](#developers).
+* **Added:** (JavaScript) Various synchronous events related to the Block Editor's storage for content assessment parsing, where `$type` is the type of storage:
+	* `tsfem-focus-gutenberg-${type}-store-setup`
+	* `tsfem-focus-gutenberg-${type}-store-create`
+	* `tsfem-focus-gutenberg-${type}-store-empty`
+	* `tsfem-focus-gutenberg-${type}-store-fill`
+	* `tsfem-focus-gutenberg-${type}-store-trigger-read`
+	* Tip: Via `tsfem_e_focus_inpost.blockEditorStore()` you can mutate the storage content before it's read.
+	* Awesome: You don't have to worry about infinite loops; if you call any event, the extension prevents invoking subsequent events until the event is resolved synchronously.
+	* Laconicly documented at [developers](#developers). These API features are for extreme edge-cases. Hire a developer at [our partners at Codable](https://codeable.io/partners/the-seo-framework/).
+* **Improved:** The primary subject's analyzer is now opened if you load the editor when a keyword is stored for it.
+* **Fixed:** Addressed various race condition issues with the upcoming jQuery 3.5.1.
 
 ### 1.4.0
 

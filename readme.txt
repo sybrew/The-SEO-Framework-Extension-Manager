@@ -75,11 +75,14 @@ TODO consider adding issue "Crawl data is old, the issues may be outdated or inc
 TODO consider refactoring Honeypot's readme? -> Later?
 TODO for Focus, make it easy to extend and hook into? -> Open up more callbacks!?
 
+TODO update:
+https://theseoframework.com/docs/api/constants/
+
 **Updated extensions:**
 
 NOTE these version numbers are already correct.
 * [Articles at version 2.1.0](https://theseoframework.com/extensions/articles/#changelog)
-* [Focus at version 1.4.1](https://theseoframework.com/extensions/focus/#changelog)
+* [Focus at version 1.5.0](https://theseoframework.com/extensions/focus/#changelog)
 * [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
 

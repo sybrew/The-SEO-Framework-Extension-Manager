@@ -172,7 +172,7 @@ final class Admin extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now passes the isGutenbergPage data property.
-	 * @since 1.4.1 No longer passes isGutenbergPage property; rely on tsfPost instead.
+	 * @since 1.5.0 No longer passes isGutenbergPage property; rely on tsfPost instead.
 	 * @access private
 	 * @uses The_SEO_Framework\Builders\Scripts
 	 *
@@ -183,7 +183,7 @@ final class Admin extends Core {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
 		/**
-		 * @since 1.4.1
+		 * @since 1.5.0
 		 * @param int $interval The auto-parsing interval in ms. Default 45 seconds.
 		 *                      Set this to 4999 or lower (preferred: -1) to disable this feature.
 		 */
