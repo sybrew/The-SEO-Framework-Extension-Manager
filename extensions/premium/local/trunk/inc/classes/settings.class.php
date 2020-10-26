@@ -65,8 +65,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @errorval 107xxxx
  */
 final class Settings {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
+	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
 		\TSF_Extension_Manager\UI,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,

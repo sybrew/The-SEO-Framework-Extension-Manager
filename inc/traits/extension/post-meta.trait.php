@@ -37,8 +37,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class Extensions_Post_Meta_Cache {
-	use Construct_Core_Static_Final,
-		Enclose_Core_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Holds the extension meta.

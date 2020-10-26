@@ -84,8 +84,7 @@ function title_fix_init() {
  * @final
  */
 final class Core {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
 	 * Check if title has been found, otherwise continue flushing till the bottom of plugin output.

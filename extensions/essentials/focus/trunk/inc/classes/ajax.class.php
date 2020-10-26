@@ -55,8 +55,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
  * @final
  */
 final class Ajax {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Core_Static_Final,
+	use \TSF_Extension_Manager\Construct_Core_Static_Final,
 		\TSF_Extension_Manager\Error;
 
 	/**

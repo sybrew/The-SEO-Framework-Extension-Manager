@@ -36,8 +36,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @final
  */
 final class Front extends Core {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
 
 	/**
 	 * States if the output is valid.

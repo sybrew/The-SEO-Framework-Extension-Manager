@@ -53,7 +53,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 class Core {
 	use \TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Extension_Post_Meta,
-		\TSF_Extension_Manager\Enclose_Stray_Private,
 		\TSF_Extension_Manager\Construct_Core_Interface;
 
 	/**

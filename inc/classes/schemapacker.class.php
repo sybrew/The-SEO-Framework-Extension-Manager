@@ -33,13 +33,10 @@ namespace TSF_Extension_Manager;
  * @since 1.3.0
  * @access private
  * @see \TSF_Extension_Manager\FormGenerator
- * @uses trait TSF_Extension_Manager\Enclose_Core_Final
- * @see TSF_Extension_Manager\Traits\Overload
  *
  * @final Can't be extended.
  */
 final class SchemaPacker {
-	use Enclose_Core_Final;
 
 	/**
 	 * Holds the bits

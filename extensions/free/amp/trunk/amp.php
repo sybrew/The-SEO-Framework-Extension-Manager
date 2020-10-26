@@ -87,8 +87,7 @@ function _amp_init() {
  * @final
  */
 final class Front {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
 	 * The constructor, initialize class actions.

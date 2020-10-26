@@ -57,7 +57,6 @@ final class ExtensionSettings {
 	use UI,
 		Error,
 		Extension_Options,
-		Enclose_Stray_Private,
 		Construct_Core_Static_Stray_Private_Instance;
 
 	/**

@@ -1,8 +1,8 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 5.1.0
-Tested up to: 5.5.1
+Requires at least: 5.1
+Tested up to: 5.6
 Requires PHP: 5.6.5
 Requires TSF: 4.0.5
 Stable tag: 2.5.0
@@ -43,6 +43,8 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.5.0 - TODO SEO =
 
+**To use this plugin after updating, you will need The SEO Framework v4.1.2 or higher.**
+
 **Release date:**
 
 * November TODOnth, 2020
@@ -60,12 +62,14 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Other:** The SEO Framework 4.1.2 or higher is now required, from 4.0.0.
 * **Other:** WordPress 5.1 or higher is now required, from 4.9.
 * **Other:** We now enforce [TSF coding standards](https://github.com/theseoframework/wpcs-tsf) for opcode performance, intercompatibility, and reliability.
-* **Other:** TODO This plugin is now compatible with PHP 8.0-RCTODO. This ensures compatibility with PHP 8.0 when it releases to the public, but changes may be provisionary.
+* **Other:** This plugin is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
+	* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
 
+TODO retest with latest PHP 8.0.0 RC.
 TODO require TSF 4.1.2 with:
-* `tsf-reset-image-editor` allows us to reset the media handler.
+* `resetImageEditorActions` allows us to reset the media handler.
 TODO fix index.php todos
 TODO remove all images, and rely on SVG only?
 TODO remove feed? Our plans never came to fruition for it...
@@ -73,7 +77,11 @@ TODO convert all JS objects to functions?
 TODO update images displayed for Local readme.
 TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
 TODO consider refactoring Honeypot's readme? -> Later?
-TODO for Focus, make it easy to extend and hook into? -> Open up more callbacks!?
+TODO .tsfem-e-focus-assessment-rating & tsfem-e-focus-assessment-title-wrap need rtl margins.
+TODO homographic example selector's dropdown isn't hidden with minified scripts on WP 5.6
+
+TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
+TODO this plugin and extensions are compatible up to WP 5.6.
 
 TODO update:
 https://theseoframework.com/docs/api/constants/
@@ -116,6 +124,10 @@ View the [detailed v2.4.0 changelog](https://theseoframework.com/?p=3572).
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
+
+= 2.5.0 =
+
+This plugin now requires WordPress TODO (samever as TSF) v5.1, and The SEO Framework v4.1.2 or higher.
 
 = 2.2.0 =
 

@@ -29,6 +29,17 @@ function _prepare_tsf_installer() {
 
 	if ( isset( $plugins['autodescription/autodescription.php'] ) || isset( $plugins['the-seo-framework/autodescription.php'] ) ) return;
 
+	\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\_prepare_tsf_nag_installer_scripts' );
+	\add_action( 'admin_notices', __NAMESPACE__ . '\\_nag_install_tsf' );
+}
+
+/**
+ * Registers and enqueues the TSF installer-nag required scripts.
+ *
+ * @since 2.5.0
+ * @access private
+ */
+function _prepare_tsf_nag_installer_scripts() {
 	$deps       = [
 		'plugin-install',
 		'updates',
@@ -51,8 +62,6 @@ function _prepare_tsf_installer() {
 	\wp_enqueue_style( 'plugin-install' );
 	\wp_enqueue_script( $scriptid );
 	\add_thickbox();
-
-	\add_action( 'admin_notices', __NAMESPACE__ . '\\_nag_install_tsf' );
 }
 
 /**

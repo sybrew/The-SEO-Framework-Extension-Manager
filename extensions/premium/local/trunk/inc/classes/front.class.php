@@ -38,8 +38,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @final
  */
 final class Front extends Core {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
 
 	/**
 	 * The constructor, initialize plugin.

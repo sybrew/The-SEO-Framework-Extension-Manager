@@ -38,8 +38,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @uses TSF_Extension_Manager\Traits
  */
 class Api extends Data {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Sub_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Sub_Once_Interface;
 
 	/**
 	 * Constructor. Verifies integrity.

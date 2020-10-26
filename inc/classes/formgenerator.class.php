@@ -48,14 +48,11 @@ namespace TSF_Extension_Manager;
  * @access private
  * @uses trait TSF_Extension_Manager\Extension_Options
  * @see TSF_Extension_Manager\Traits\Extension_Options
- * @uses trait TSF_Extension_Manager\Enclose_Core_Final
- * @see TSF_Extension_Manager\Traits\Overload
  *
  * @final Can't be extended.
  */
 final class FormGenerator {
-	use Extension_Options,
-		Enclose_Core_Final;
+	use Extension_Options;
 
 	/**
 	 * Maintains the option key, and the boolean value thereof.

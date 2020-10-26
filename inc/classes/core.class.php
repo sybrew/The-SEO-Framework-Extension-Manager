@@ -47,8 +47,7 @@ namespace TSF_Extension_Manager;
  * @access private
  */
 class Core {
-	use Enclose_Stray_Private,
-		Construct_Core_Interface,
+	use Construct_Core_Interface,
 		Destruct_Core_Public_Final_Interface,
 		Options,
 		Error;

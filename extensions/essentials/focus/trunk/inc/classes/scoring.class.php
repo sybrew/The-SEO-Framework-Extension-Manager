@@ -36,8 +36,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @final
  */
 final class Scoring {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
+	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
 	 * The scoring template.

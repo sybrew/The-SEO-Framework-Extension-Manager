@@ -111,32 +111,6 @@ namespace TSF_Extension_Manager;
  */
 
 /**
- * Holds private overloading functions to prevent injection or abstraction.
- *
- * @since 1.0.0
- * @access private
- */
-trait Enclose_Stray_Private {
-
-	private function __clone() { }
-
-	private function __wakeup() { }
-}
-
-/**
- * Forces all classes and subclasses to prevent injection or abstraction.
- *
- * @since 1.0.0
- * @access private
- */
-trait Enclose_Core_Final {
-
-	final protected function __clone() { }
-
-	final protected function __wakeup() { }
-}
-
-/**
  * Holds protected magic constructor method that forces only a parent constructor.
  *
  * To be used in a Facade pattern.
@@ -304,7 +278,6 @@ trait Construct_Core_Interface {
  * that use this trait can't be used with a 'new' keyword. They can be safely
  * called without interrupting flow.
  *
- * This is great together with Enclose_Core_Final.
  * Does not load parent.
  *
  * This trait applies nicely with the following design patterns:
@@ -325,7 +298,6 @@ trait Construct_Core_Static_Final {
  * use this trait can't be used with a 'new' keyword. They can be safely called without
  * interrupting flow.
  *
- * This is great together with Enclose_Core_Final.
  * Does not load parent.
  * Does load instance methods and properties.
  *
@@ -338,7 +310,7 @@ trait Construct_Core_Static_Final {
  */
 trait Construct_Core_Static_Final_Instance {
 
-	final private function __construct() {}
+	private function __construct() {}
 
 	/**
 	 * The object instance.
@@ -387,7 +359,6 @@ trait Construct_Core_Static_Final_Instance {
  * use this trait can't be used with a 'new' keyword. They may have public functions that
  * can kick off private instantiation.
  *
- * This is great together with Enclose_Stray_Private.
  * Does not load parent.
  * Does load private instance methods and properties.
  *

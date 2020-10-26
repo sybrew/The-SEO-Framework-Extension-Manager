@@ -45,7 +45,6 @@ $_load_inpostgui_class = function() {
  * @since 1.5.0
  * @requires TSF 2.9.0||^
  * @access private
- * @uses trait TSF_Extension_Manager\Enclose_Core_Final
  * @uses trait TSF_Extension_Manager\Construct_Master_Once_Final_Interface
  *       This means you shouldn't invoke new yourself.
  * @see package TSF_Extension_Manager\Traits\Overload
@@ -53,8 +52,7 @@ $_load_inpostgui_class = function() {
  * @final Can't be extended.
  */
 final class InpostGUI {
-	use Enclose_Core_Final,
-		Construct_Master_Once_Final_Interface;
+	use Construct_Master_Once_Final_Interface;
 
 	/**
 	 * @since 1.5.0

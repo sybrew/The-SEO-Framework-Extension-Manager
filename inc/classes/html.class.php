@@ -39,8 +39,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class HTML {
-	use Enclose_Stray_Private,
-		Construct_Core_Static_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Wraps tooltip item in wrapper.

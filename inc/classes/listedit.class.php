@@ -47,7 +47,6 @@ $_load_listedit_class = function() {
  * @since 2.5.0
  * @requires TSF 4.0.5||^
  * @access private
- * @uses trait TSF_Extension_Manager\Enclose_Core_Final
  * @uses trait TSF_Extension_Manager\Construct_Master_Once_Final_Interface
  *       This means you shouldn't invoke new yourself.
  * @see package TSF_Extension_Manager\Traits\Overload
@@ -55,8 +54,7 @@ $_load_listedit_class = function() {
  * @final Can't be extended.
  */
 final class ListEdit {
-	use Enclose_Core_Final,
-		Construct_Master_Once_Final_Interface;
+	use Construct_Master_Once_Final_Interface;
 
 	/**
 	 * @since 2.5.0

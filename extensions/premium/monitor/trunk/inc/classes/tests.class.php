@@ -37,8 +37,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @uses TSF_Extension_Manager\Traits
  */
 final class Tests {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Core_Static_Final;
+	use \TSF_Extension_Manager\Construct_Core_Static_Final;
 
 	/**
 	 * The object instance.

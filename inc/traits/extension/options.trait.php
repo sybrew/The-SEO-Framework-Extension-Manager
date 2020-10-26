@@ -36,8 +36,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class Extensions_Options_Cache {
-	use Construct_Core_Static_Final,
-		Enclose_Core_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Holds the extension options.
@@ -117,8 +116,7 @@ final class Extensions_Options_Cache {
  * @final
  */
 final class Stale_Extensions_Options_Cache {
-	use Construct_Core_Static_Final,
-		Enclose_Core_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Holds the extension options.

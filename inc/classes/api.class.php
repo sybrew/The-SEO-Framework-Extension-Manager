@@ -33,8 +33,7 @@ namespace TSF_Extension_Manager;
  * @access private
  */
 class API extends Core {
-	use Enclose_Stray_Private,
-		Construct_Child_Interface;
+	use Construct_Child_Interface;
 
 	/**
 	 * Constructor.
@@ -516,7 +515,7 @@ class API extends Core {
 	 * @param string $key    The attached object key.
 	 * @return bool True if verified, false otherwise.
 	 */
-	final private function _verify_api_access( $object, $key ) {
+	private function _verify_api_access( $object, $key ) {
 		$keys = &$this->generate_api_access_key();
 		return $this->coalesce_var( $keys[ \get_class( $object ) ], null ) === (string) $key;
 	}
@@ -530,7 +529,7 @@ class API extends Core {
 	 * @param string|bool $class The class name. If false, no key is generated.
 	 * @return array $keys, the storage keys. Passed by reference.
 	 */
-	final private function &generate_api_access_key( $class = false ) {
+	private function &generate_api_access_key( $class = false ) {
 
 		static $keys = [];
 

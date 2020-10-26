@@ -35,8 +35,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class Trends {
-	use Enclose_Core_Final,
-		Construct_Core_Static_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Returns the trend call.

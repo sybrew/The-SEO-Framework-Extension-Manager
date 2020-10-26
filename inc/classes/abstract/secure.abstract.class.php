@@ -68,8 +68,7 @@ interface Secure_Static_Abstracts {
  *      to the extending classes.
  */
 abstract class Secure_Abstract implements Secure_Static_Abstracts {
-	use Enclose_Core_Final,
-		Construct_Core_Static_Final,
+	use Construct_Core_Static_Final,
 		Ignore_Properties_Core_Public_Final;
 
 	/**
@@ -134,7 +133,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 *
 	 * @since 1.0.0
 	 */
-	final private static function reset_instance() {
+	private static function reset_instance() {
 
 		$class_vars = get_class_vars( __CLASS__ );
 

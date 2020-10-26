@@ -40,8 +40,7 @@ namespace TSF_Extension_Manager;
  * @access private
  */
 class AdminPages extends AccountActivation {
-	use Enclose_Stray_Private,
-		Construct_Child_Interface,
+	use Construct_Child_Interface,
 		UI;
 
 	/**

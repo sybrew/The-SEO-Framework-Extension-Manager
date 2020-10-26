@@ -37,8 +37,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class FormFieldParser {
-	use Enclose_Stray_Private,
-		Construct_Core_Static_Final;
+	use Construct_Core_Static_Final;
 
 	/**
 	 * Loops through multidimensional keys and values to find the corresponding one.

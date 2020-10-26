@@ -56,7 +56,7 @@ trait UI {
 	 * @since 1.0.0
 	 * @since 1.3.0 Now is private, instead of protected.
 	 */
-	final private function init_ui() {
+	private function init_ui() {
 
 		$this->ui_hook or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 

@@ -44,8 +44,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @uses TSF_Extension_Manager\Traits
  */
 class Core {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Core_Interface,
+	use \TSF_Extension_Manager\Construct_Core_Interface,
 		\TSF_Extension_Manager\Extension_Options;
 
 	/**

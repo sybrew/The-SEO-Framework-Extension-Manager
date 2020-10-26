@@ -34,8 +34,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class LoadFront extends Core {
-	use Construct_Master_Once_Interface,
-		Enclose_Stray_Private;
+	use Construct_Master_Once_Interface;
 
 	/**
 	 * Constructor, initializes WordPress actions.

@@ -53,15 +53,13 @@ $_load_upgrader_class = function() {
  *
  * @since 1.5.0
  * @access private
- * @uses trait \TSF_Extension_Manager\Enclose_Stray_Private
  * @uses trait \TSF_Extension_Manager\Construct_Core_Once_Interface
  * @see @package TSF_Extension_Manager\Overload
  * @uses trait \TSF_Extension_Manager\Memory
  * @see @package TSF_Extension_Manager\Factory
  */
 final class Upgrader {
-	use Enclose_Stray_Private,
-		Construct_Core_Once_Interface,
+	use Construct_Core_Once_Interface,
 		Memory;
 
 	/**

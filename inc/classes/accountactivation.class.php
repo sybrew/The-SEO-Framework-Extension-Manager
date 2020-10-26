@@ -35,7 +35,7 @@ namespace TSF_Extension_Manager;
  *       Instancing does expand complexity massively as it handles options.
  */
 class AccountActivation extends Panes {
-	use Enclose_Stray_Private, Construct_Child_Interface;
+	use Construct_Child_Interface;
 
 	/**
 	 * Constructor.

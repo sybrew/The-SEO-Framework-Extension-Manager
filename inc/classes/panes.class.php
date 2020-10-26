@@ -33,8 +33,7 @@ namespace TSF_Extension_Manager;
  * @access private
  */
 class Panes extends API {
-	use Enclose_Stray_Private,
-		Construct_Child_Interface;
+	use Construct_Child_Interface;
 
 	/**
 	 * Constructor, initializes WordPress Admin actions.

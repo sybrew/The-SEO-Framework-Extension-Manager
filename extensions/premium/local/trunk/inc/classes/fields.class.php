@@ -34,14 +34,12 @@ namespace TSF_Extension_Manager\Extension\Local;
  *
  * @since 1.0.0
  * @access private
- * @uses trait \TSF_Extension_Manager\Enclose_Core_Final
  * @uses trait \TSF_Extension_Manager\Construct_Core_Static_Final_Instance
  * @see TSF_Extension_Manager\Traits\Overload
  * @final Can't be extended.
  */
 final class Fields {
-	use \TSF_Extension_Manager\Enclose_Core_Final,
-		\TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
+	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
 	 * Returns all department fields for form iteration.

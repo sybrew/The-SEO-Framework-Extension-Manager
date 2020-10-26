@@ -72,8 +72,7 @@ use \TSF_Extension_Manager\HTML as HTML;
  * @final
  */
 final class Admin extends Api {
-	use \TSF_Extension_Manager\Enclose_Stray_Private,
-		\TSF_Extension_Manager\Construct_Master_Once_Interface,
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface,
 		\TSF_Extension_Manager\Time,
 		\TSF_Extension_Manager\UI,
 		\TSF_Extension_Manager\Extension_Options,
