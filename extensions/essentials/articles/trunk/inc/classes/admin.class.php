@@ -105,11 +105,11 @@ final class Admin extends Core {
 	 * @staticvar string $default
 	 * @staticvar array $type_i18n
 	 *
-	 * @param array    $states The current post states array
+	 * @param array    $states The current post states array.
 	 * @param \WP_Post $post The Post Object.
 	 * @return array Adjusted $states
 	 */
-	public function _add_post_state( $states = [], $post ) {
+	public function _add_post_state( $states, $post ) {
 
 		if ( ! $this->is_post_type_supported( $post->post_type ) ) return $states;
 
@@ -651,11 +651,12 @@ final class Admin extends Core {
 	 *
 	 * @param array $data  The current LE data.
 	 * @param array $query The current item's query.
+	 * @return array The augmented data.
 	 */
 	public function _add_list_table_data( $data, $query ) {
 
 		// This should never happen...
-		if ( ! empty( $query['taxonomy'] ) ) return;
+		if ( ! empty( $query['taxonomy'] ) ) return $data;
 
 		static $default = null;
 		if ( ! $default ) {

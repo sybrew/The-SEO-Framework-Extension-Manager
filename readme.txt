@@ -67,6 +67,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
 
+TODO Add persistent notice that sale is going on (we can use TSF + TSFEM api, if can access settings + is free user: "Thanks for updating! Did you know we have a x sale...")
 TODO retest with latest PHP 8.0.0 RC.
 TODO require TSF 4.1.2 with:
 * `resetImageEditorActions` allows us to reset the media handler.
