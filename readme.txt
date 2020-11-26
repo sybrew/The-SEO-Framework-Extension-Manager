@@ -57,6 +57,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
 * **Fixed:** Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
 * **Fixed:** Resolved an issue where double-quotes in metadata could cause serialization issues, corrupting Extension Manager's extension-post-metadata.
+* **Fixed:** Resolved an issue where Extension Settings panes weren't outputted on PHP 5.6.
 * **Dev:** Constant `TSF_EXTENSION_MANAGER_PRESENT` is now available. It indicates that the plugin is activated by WordPress, but it does not necessarily indicate that it's running otherwise.
 * **Dev:** Script debugging will no longer occur with `WP_DEBUG` enabled, but with `SCRIPT_DEBUG` enabled, instead.
 * **Other:** The SEO Framework 4.1.2 or higher is now required, from 4.0.0.
