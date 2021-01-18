@@ -331,8 +331,10 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 	* Tip: Via `tsfem_e_focus_inpost.blockEditorStore()` you can mutate the storage content before it's read.
 	* Awesome: You don't have to worry about infinite loops; if you call any event, the extension prevents invoking subsequent events until the event is resolved synchronously.
 	* Laconicly documented at [developers](#developers). These API features have been introduced to accomodate extreme edge-cases. Hire a developer at [our partners at Codeable](https://codeable.io/partners/the-seo-framework/).
-* **Improved:** The primary subject's analyzer is now opened if you load the editor when a keyword is stored for it.
+* **Improved:** If the primary subject has a keyword stored, its analyzer will be opened on-load.
 * **Fixed:** Addressed various race condition issues with the upcoming jQuery 3.5.1.
+* **Fixed:** Addressed various layout issues with WordPress 5.6.
+* **Fixed:** Addressed an issue where the subject editor won't be displayed automatically when it was hidden during a lexical form change.
 
 ### 1.4.0
 

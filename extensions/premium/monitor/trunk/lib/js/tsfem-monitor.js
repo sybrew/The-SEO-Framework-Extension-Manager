@@ -618,10 +618,10 @@ window.tsfem_e_monitor = {
 		}
 		const showForm = function() {
 			jQuery( clicker ).hide();
-			jQuery( selector ).slideDown( 200 ).focus();
+			jQuery( selector ).slideDown( 200 ).trigger( 'focus' );
 		}
 		const showClicker = function() {
-			jQuery( selector ).blur().hide();
+			jQuery( selector ).trigger( 'blur' ).hide();
 			jQuery( clicker ).fadeIn( 300 );
 		}
 		const onChange = function( event ) {

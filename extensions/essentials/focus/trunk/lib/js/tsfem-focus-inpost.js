@@ -652,8 +652,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const clearData = ( idPrefix, what ) => {
 		const clearLexical = () => {
 			let lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
-				lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
-				lexicalData = getSubElementById( idPrefix, 'lexical_data' );
+				lexicalSelector  = getSubElementById( idPrefix, 'lexical_selector' ),
+				lexicalData      = getSubElementById( idPrefix, 'lexical_data' );
 
 			if ( lexicalFormField instanceof HTMLInputElement ) {
 				lexicalFormField.value = '';
@@ -662,9 +662,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lexicalData.value = l10n.defaultLexicalForm;
 			}
 			if ( lexicalSelector instanceof HTMLSelectElement ) {
-				lexicalSelector.disabled = true;
+				lexicalSelector.disabled      = true;
 				lexicalSelector.selectedIndex = 0;
-				lexicalSelector.dataset.prev = 0;
+				lexicalSelector.dataset.prev  = 0;
 				updateLexicalSelector( idPrefix, l10n.defaultLexicalForm );
 			}
 			setEditButton( idPrefix ).to( 'unchecked' );
@@ -674,14 +674,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const clearDefinition = () => {
 			let definitionDropdown  = getSubElementById( idPrefix, 'definition_dropdown' ),
 				definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
+
 			if ( definitionDropdown instanceof HTMLSelectElement ) {
 				definitionDropdown.selectedIndex = 0;
-				definitionDropdown.innerHTML = '';
+				definitionDropdown.innerHTML     = '';
 				document.querySelector( '[data-for="' + definitionDropdown.id + '"]' ).innerHTML = '';
 			}
 			if ( definitionSelection instanceof HTMLInputElement ) {
 				definitionSelection.value = '';
 			}
+
 			activeWords( idPrefix ).clearCache();
 		}
 		const clearInflections = () => {
@@ -967,6 +969,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 						// FIXME: The user now gets spammed twice (or thrice) with notifications; find a way to combine them?
 						// We should either combine the query (and offload it to PHP), or resolve it by comparing the notices here.
+						// fetchInflections/fetchSynonyms -> fetchLemmas? -> let PHP handle a combined notice?
 
 						// Workaround jQuery's promise limitations by offsetting the deferred object.
 						$.when( $dfdInflection = fetchInflections() ).always( () => $dfdInflectionEnd.resolve() );
@@ -991,7 +994,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 								populateDefinitionSelector( idPrefix );
 								refillSubjectSelection( idPrefix );
-								setEditButton( idPrefix ).to( 'enabled, edit, checked' );
+								setEditButton( idPrefix ).to( 'enabled, edit, checked, display' );
 							} else {
 								// FIXME: Notify user the query got reset to previous?... if dataset.prev is not 0?
 								setDefinition( lexicalSelector.dataset.prev || 0 );
@@ -1035,20 +1038,21 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 		let _option = document.createElement( 'option' );
 		for ( let _i = 0; _i < synonyms.length; _i++ ) {
-			_option = _option.cloneNode();
-			_option.value = _i;
+			_option           = _option.cloneNode();
+			_option.value     = _i;
 			_option.innerHTML = tsfem_inpost.escapeStr( synonyms[ _i ].example || l10n.i18n.noExampleAvailable );
+
 			definitionDropdownClone.appendChild( _option );
 		}
-		definitionDropdown.innerHTML = definitionDropdownClone.innerHTML;
-		definitionDropdown.value = definitionSelection.value;
+		definitionDropdown.innerHTML     = definitionDropdownClone.innerHTML;
+		definitionDropdown.value         = definitionSelection.value;
 		definitionDropdown.selectedIndex = +definitionSelection.value;
 
 		let definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
 		if ( definitionDropdown.options.length ) {
 			//= Make selected index show up.
-			$( document.querySelector( '[data-for="' + definitionDropdown.id + '"]' ) )
-				.trigger( 'set-tsfem-e-focus-definition' );
+			let dropDown = document.querySelector( '[data-for="' + definitionDropdown.id + '"]' );
+			dropDown && dropDown.dispatchEvent( new CustomEvent( 'tsfem-e-focus-set-definition' ) );
 			definitionSelector.style.display = null;
 		} else {
 			//= Hide definition selector if there's nothing to be selected.
@@ -1283,8 +1287,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let editToggle = getSubElementById( idPrefix, 'subject_edit' );
 			if ( ! editToggle || ! editToggle instanceof HTMLInputElement ) return;
 
-			let editLabel = document.querySelector( 'label[for="' + editToggle.id + '"]' ),
-				editWrap = editToggle.parentNode,
+			let editLabel     = document.querySelector( `label[for="${editToggle.id}"]` ),
+				editWrap      = editToggle.parentNode,
 				disabledClass = 'tsfem-e-focus-edit-subject-button-wrap-disabled';
 
 			state.split( ',' ).forEach( ( _state ) => {
@@ -1292,13 +1296,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					case 'checked':
 						if ( ! editToggle.checked ) {
 							editToggle.checked = true;
-							$( editToggle ).trigger( 'change' );
+							editToggle.dispatchEvent( new Event( 'change' ) );
 						}
 						break;
 					case 'unchecked':
 						if ( editToggle.checked ) {
 							editToggle.checked = false;
-							$( editToggle ).trigger( 'change' );
+							editToggle.dispatchEvent( new Event( 'change' ) );
 						}
 						break;
 
@@ -1318,6 +1322,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						editWrap.classList.toggle( disabledClass, true );
 						break;
 
+					case 'display':
+						editToggle.dispatchEvent( new CustomEvent( 'tsfem-e-focus-display-editor' ) );
+						break;
 					default:break;
 				}
 			} );
@@ -1336,6 +1343,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const toggleCollapser = ( event ) => {
 			if ( tsfem_inpost.isActionableElement( event.target ) ) return;
 
+			// This can be squashed into 1 line using vanilla... what was I thinking?
 			let $target = $( event.target ).closest( '.tsfem-e-focus-collapse-wrap' ),
 				idPrefix = getSubIdPrefix( $target.attr( 'id' ) ),
 				collapser = getSubElementById( idPrefix, 'collapser' );
@@ -1401,9 +1409,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			setEditButton( idPrefix ).to( 'disabled, edit' );
 			setAnalysisInterval( idPrefix ).to( 'disabled' );
 
-			$( getSubElementById( idPrefix, 'scores' ) )
-				.find( '.tsfem-e-focus-assessment-description' )
-				.css( 'opacity', '0' );
+			getSubElementById( idPrefix, 'scores' )
+				.querySelectorAll( '.tsfem-e-focus-assessment-description' )
+				.forEach( el => { el.style.opacity = 0 } );
 
 			if ( ! val.length ) {
 				setEvaluationVisuals( idPrefix ).to( 'disabled' );
@@ -1427,7 +1435,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			if ( collapser.checked ) {
 				collapser.checked = false;
-				$( collapser ).trigger( 'change' );
+				collapser.dispatchEvent( new Event( 'change' ) );
 			}
 
 			clearInterval( barBuffer[ idPrefix ] );
@@ -1454,7 +1462,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * Maintains subject editor dropdown selection.
 	 * It's a visual medium that acts as a regular text field.
 	 *
-	 * Utilizes custom actions, like 'set-tsfem-e-focus-definition'.
+	 * Utilizes custom events, like 'tsfem-e-focus-set-definition'.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -1468,10 +1476,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @since 1.0.0
 		 *
 		 * @function
-		 * @param {jQuery.event} event
+		 * @param {event} event
+		 * @param {boolean} freshFill Whether the subject's being filled anew.
 		 * @return {boolean|undefined} False on error. Undefined otherwise.
 		 */
-		const editSubject = ( event ) => {
+		const editSubject = ( event, freshFill ) => {
 			let clicker  = event.target,
 				selectId = void 0,
 				selector = void 0,
@@ -1480,8 +1489,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lastVal  = 0,
 				lastText = '',
 				newVal   = 0,
-				newText  = '',
-				setNow   = event.data && event.data.change || false;
+				newText  = '';
+
+			freshFill = freshFill || false; // Could we rely on 'event.isTrusted'?
 
 			if ( typeof clicker.dataset.for !== 'undefined' )
 				selectId = clicker.dataset.for;
@@ -1491,19 +1501,19 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			selector = document.getElementById( selectId );
 			idPrefix = getSubIdPrefix( selectId );
-			holder = getSubElementById( idPrefix, 'definition_selection' );
+			holder   = getSubElementById( idPrefix, 'definition_selection' );
 
 			if ( ! selector )
 				return false;
 
-			lastVal = selector.value;
+			lastVal  = selector.value;
 			lastText = clicker.innerHTML;
 
 			const doChange = () => {
 				//= Show new option...
 				clicker.innerHTML = newText;
-				selector.value = newVal;
-				holder.value = newVal;
+				selector.value    = newVal;
+				holder.value      = newVal;
 
 				if ( +newVal !== +lastVal ) {
 					//= Refill selection.
@@ -1518,26 +1528,31 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				selector.value    = lastVal;
 			}
 			const showForm = () => {
-				$( clicker ).hide();
-				$( selector ).slideDown( 200 ).focus();
+				clicker.style.display = 'none';
+				$( selector ).slideDown( 200 ).trigger( 'focus' );
 			}
 			const showClicker = () => {
-				$( selector ).blur().hide();
-				$( clicker ).fadeIn( 300 );
+				selector.blur();
+				selector.style.display = null; // intrinsically hidden
+
+				$( clicker ).fadeIn( 300 ); // intrinsically shown?
 			}
 			const onChange = ( event ) => {
 				setVals( event.target );
 				+newVal === +lastVal && reset() || doChange();
 			}
 			const setVals = ( target ) => {
-				newVal = target.value;
+				newVal  = target.value;
 				newText = target.options[ target.selectedIndex ].text;
 			}
 			const clickOff = ( event ) => {
-				let $select = $( event.target ).closest( selector );
-				if ( $select.length < 1 ) {
+				// If event.target is of selector, then closest will throw an error.
+				// Filter from test early.
+				if ( event.target === selector ) return;
+
+				// If clicked is not of selector's descendant, reset listeners and show clicker.
+				if ( ! event.target.closest( `#${selector.id}` ) )
 					reset();
-				}
 			}
 			const reset = () => {
 				removeListeners();
@@ -1554,14 +1569,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				//= Fallback:
 				window.addEventListener( 'click', clickOff );
 
-				setNow && doNow();
+				freshFill && doNow();
 			}
 			const removeListeners = () => {
 				selector.removeEventListener( 'blur', reset );
 				selector.removeEventListener( 'change', onChange );
 				window.removeEventListener( 'click', clickOff );
 			}
-			showForm();
+
+			// Show form when the user instigates this method (clicked on clicker).
+			freshFill || showForm();
+
 			//= Don't propagate current events to new listeners.
 			setTimeout( addListeners, 10 );
 		}
@@ -1572,75 +1590,83 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
+		let showSubjectEditorDebouncer = {};
 		const showSubjectEditor = ( event ) => {
 			const idPrefix = getSubIdPrefix( event.target.id );
 
-			let editor    = getSubElementById( idPrefix, 'edit' ),
-				evaluator = getSubElementById( idPrefix, 'evaluate' );
+			showSubjectEditorDebouncer.hasOwnProperty( idPrefix )
+				&& clearTimeout( showSubjectEditorDebouncer[ idPrefix ] );
 
-			let collapser = getSubElementById( idPrefix, 'collapser' );
+			showSubjectEditorDebouncer[ idPrefix ] = setTimeout( () => {
+				let editor    = getSubElementById( idPrefix, 'edit' ),
+					evaluator = getSubElementById( idPrefix, 'evaluate' );
 
-			if ( collapser.checked ) {
-				//= Collapsed. Act as if it's getting checked either way, without fancy trickery.
-				event.target.checked = true;
-				evaluator.style.display = 'none';
-				evaluator.style.opacity = 0;
-				editor.style.display = null;
-				editor.style.opacity = 1;
-				collapser.checked = false; // Expand collapser.
-			} else {
-				//= Toggle fancy.
-				if ( event.target.checked ) {
-					tsfem_inpost.fadeOut(
-						evaluator,
-						150,
-						{
-							cb: () => {
-								tsfem_inpost.fadeIn( editor );
-								// Race condition workaround... ambitiously.
-								// evaluator.style.display = 'none';
-								// tsfem_inpost.fadeOut( evaluator, 100 );
-								//? Because the promise is dropped, make sure it's set.
-								event.target.checked = true;
-							},
-							promise: false,
-						}
-					);
+				let collapser = getSubElementById( idPrefix, 'collapser' );
+
+				if ( collapser.checked ) {
+					//= Collapsed. Act as if it's getting checked either way, without fancy trickery.
+					event.target.checked = true;
+
+					evaluator.style.display = 'none';
+					evaluator.style.opacity = 0;
+
+					editor.style.display = null;
+					editor.style.opacity = 1;
+
+					collapser.checked = false; // Expand collapser.
 				} else {
-					tsfem_inpost.fadeOut(
-						editor,
-						150,
-						{
-							cb: () => {
-								tsfem_inpost.fadeIn( evaluator );
-								// Race condition workaround... ambitiously.
-								// editor.style.display = 'none';
-								// tsfem_inpost.fadeOut( editor, 100 );
-								//? Because the promise is dropped, make sure it's unset.
-								event.target.checked = false;
-							},
-							promise: false,
-						}
-					);
+					//= Toggle fancy.
+					if ( event.target.checked ) {
+						tsfem_inpost.fadeOut(
+							evaluator,
+							150,
+							{
+								cb: () => {
+									tsfem_inpost.fadeIn( editor );
+									// Race condition workaround... ambitiously.
+									// evaluator.style.display = 'none';
+									// tsfem_inpost.fadeOut( evaluator, 100 );
+									//? Because the promise is dropped, make sure it's set.
+									event.target.checked = true;
+								},
+								promise: false,
+							}
+						);
+					} else {
+						tsfem_inpost.fadeOut(
+							editor,
+							150,
+							{
+								cb: () => {
+									tsfem_inpost.fadeIn( evaluator );
+									// Race condition workaround... ambitiously.
+									// editor.style.display = 'none';
+									// tsfem_inpost.fadeOut( editor, 100 );
+									//? Because the promise is dropped, make sure it's unset.
+									event.target.checked = false;
+								},
+								promise: false,
+							}
+						);
+					}
 				}
-			}
+			}, 20 );
 		}
-
-		let subjectEditAction       = 'click.tsfem-e-focus-definition-editor',
-			a11ySubjectEditAction   = 'keypress.tsfem-e-focus-definition-editor',
-			customSubjectEditAction = 'set-tsfem-e-focus-definition';
-		$( '.tsfem-e-focus-definition-editor' )
-			.off( subjectEditAction )
-			.on( subjectEditAction, editSubject )
-			.off( a11ySubjectEditAction )
-			.on( a11ySubjectEditAction, a11yEditSubject )
-			.off( customSubjectEditAction )
-			.on( customSubjectEditAction, { 'change': 1 }, editSubject );
-
-		let subjectEditToggle = 'change.tsfem-e-focus-edit-subject-toggle';
-		$( '.tsfem-e-focus-edit-subject-checkbox' )
-			.off( subjectEditToggle )
-			.on( subjectEditToggle, showSubjectEditor );
+		// definition_dropdown:
+		document.querySelectorAll( '.tsfem-e-focus-definition-editor' ).forEach(
+			el => {
+				el.addEventListener( 'click', editSubject )
+				el.addEventListener( 'keypress', a11yEditSubject )
+				el.addEventListener( 'tsfem-e-focus-set-definition', event => editSubject( event, true ) )
+			}
+		);
+		// subject_edit:
+		document.querySelectorAll( '.tsfem-e-focus-edit-subject-checkbox' ).forEach(
+			el => {
+				el.addEventListener( 'change', showSubjectEditor );
+				el.addEventListener( 'tsfem-e-focus-display-editor', showSubjectEditor );
+			}
+		);
 	}
 
 	let subjectFilterBuffer = {};
@@ -2507,15 +2533,15 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			resetAnalysisChangeListeners();
 		}
 
-		//= There's nothing to focus on.  Stop plugin and show why.
+		//= There's nothing to focus on. Stop plugin and show why.
 		//?! The monkeyPatch is still running...
 		if ( 0 === Object.keys( activeFocusAreas ).length ) {
-			let el = document.getElementById( 'tsfem-e-focus-analysis-wrap' );
-			if ( el instanceof Element ) {
-				let _el = el.querySelector( '.tsf-flex-setting-input' );
-				if ( _el instanceof Element )
-					_el.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
-			}
+			let wrap  = document.getElementById( 'tsfem-e-focus-analysis-wrap' );
+				input = wrap && wrap.querySelector( '.tsf-flex-setting-input' );
+
+			if ( input )
+				input.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();
+
 			return;
 		}
 
@@ -2539,12 +2565,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const _prepareUI = () => {
 		//= Reenable focus elements.
-		$( '.tsfem-e-focus-enable-if-js' ).removeAttr( 'disabled' );
+		document.querySelectorAll( '.tsfem-e-focus-enable-if-js' ).forEach(
+			el => { el.disabled = false }
+		);
 		//= Disable nojs placeholders.
-		$( '.tsfem-e-focus-disable-if-js' ).attr( 'disabled', 'disabled' );
+		document.querySelectorAll( '.tsfem-e-focus-disable-if-js' ).forEach(
+			el => { el.disabled = true }
+		);
 
 		//= Reenable highlighter.
-		$( '.tsfem-e-focus-requires-javascript' ).removeClass( 'tsfem-e-focus-requires-javascript' );
+		document.querySelectorAll( '.tsfem-e-focus-requires-javascript' ).forEach(
+			el => { el.classList.remove( 'tsfem-e-focus-requires-javascript' ) }
+		);
 	}
 
 	return Object.assign( {

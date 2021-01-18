@@ -184,7 +184,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 							sprintf(
 								'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
 								'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s" tabindex=0></span>',
-								'<select id=%1$s name=%1$s class="hide-if-js" value="%2$s"></select>'
+								'<select id=%1$s name=%1$s class=hidden value="%2$s"></select>'
 							),
 						]
 					),

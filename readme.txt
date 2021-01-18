@@ -45,15 +45,18 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **To use this plugin after updating, you will need The SEO Framework v4.1.2 or higher.**
 
+**This release brings support for WordPress 5.6's updated interface. Sorry for the delay!**
+
 **Release date:**
 
-* November TODOnth, 2020
+* February TODOnth, 2021
 
 * **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
 	* The first extension to make use of this is Articles.
 * **Improved:** TODO Akin to TSF v4.1.1, we also dropped many jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
 	* TODO Note to self: We already did... can we plan for more before PHP 8.0 launches?
 * **Improved:** Animations are now smoother by utilising modern browser APIs.
+* **Improved:** This plugin is now compatible with jQuery 3.5.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
 * **Fixed:** Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
 * **Fixed:** Resolved an issue where double-quotes in metadata could cause serialization issues, corrupting Extension Manager's extension-post-metadata.
@@ -68,10 +71,10 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
 
-TODO Add persistent notice that sale is going on (we can use TSF + TSFEM api, if can access settings + is free user: "Thanks for updating! Did you know we have a x sale...")
-TODO retest with latest PHP 8.0.0 RC.
-TODO require TSF 4.1.2 with:
-* `resetImageEditorActions` allows us to reset the media handler.
+TODO for honeypot: Add a hidden input field with just a bit of JS with value 0. The JS should add 10 seconds to the field, after which it counts down. If the field contains a value other than empty/0, then honeypot will spam the comment.
+
+TODO https://wordpress.org/support/topic/paginated-sitemap-like-google-xml-sitemaps/
+	-> We probably can't.
 TODO fix index.php todos
 TODO remove all images, and rely on SVG only?
 TODO remove feed? Our plans never came to fruition for it...
@@ -84,6 +87,7 @@ TODO homographic example selector's dropdown isn't hidden with minified scripts 
 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
 TODO this plugin and extensions are compatible up to WP 5.6.
+TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?
 
 TODO update:
 https://theseoframework.com/docs/api/constants/

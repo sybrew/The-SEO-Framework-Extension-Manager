@@ -191,7 +191,7 @@ window.tsfem_e_local = {
 	ready: function( jQ ) {
 
 		// Turn validate button into an AJAX pusher.
-		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).click( tsfem_e_local.validateFormJson );
+		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).on( 'click', tsfem_e_local.validateFormJson );
 	}
 };
 jQuery( tsfem_e_local.ready );
