@@ -70,6 +70,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
+* **Other:** It's 2021, so we added another year to the copyright mandate.
 
 TODO for honeypot: Add a hidden input field with just a bit of JS with value 0. The JS should add 10 seconds to the field, after which it counts down. If the field contains a value other than empty/0, then honeypot will spam the comment.
 
@@ -88,8 +89,6 @@ TODO homographic example selector's dropdown isn't hidden with minified scripts 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
 TODO this plugin and extensions are compatible up to WP 5.6.
 TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?
-
-TODO 2020 -> 2021
 
 TODO update:
 https://theseoframework.com/docs/api/constants/

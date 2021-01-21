@@ -21,7 +21,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 
 /**
  * Focus extension for The SEO Framework
- * Copyright (C) 2018-2020 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2018-2021 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
