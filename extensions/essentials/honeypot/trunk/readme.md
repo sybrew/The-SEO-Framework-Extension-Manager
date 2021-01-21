@@ -3,64 +3,69 @@ Location: https://theseoframework.com/extensions/honeypot/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension catches comment spammers with a 99.98% catch-rate through four lightweight yet powerful methods.
+This extension catches comment spammers with a 99.99% catch-rate through five lightweight yet powerful methods.
 
 ## Overview
 
-### Reduce spam
+### Stop comment spam
 
-WordPress allows visitors to easily interact with your website. Unfortunately, it's too easy.
+WordPress allows visitors to interact with your website easily. Unfortunately, it's too easy.
 
-Because WordPress's comment system is open, it attracts unwanted comments. Such comments are often automatically inserted to share backlinks. Websites with spammy content are rendered as low-quality by users and search engines alike.
+Because WordPress's comment system is open and known, it attracts unwanted comments. These comments are often automatically inserted to share backlinks via meticulously crafted text-templates that can fool anybody. Websites with spammy content are seen as low-quality by your visitors and search engines alike.
 
-To reduce comment spam, you could manually moderate the comments, but this is very time-consuming. Luckily, the Honeypot extension stops automatically inserted comments, saving you loads of time while improving SEO.
+Now, you could waste your time moderating the comments manually... or, you could use Honeypot.
 
 ### A non-intrusive, privacy-first extension
 
-The Honeypot extension is for catching robots, not humans. So, visitors shouldn't notice its presence.
+The Honeypot extension is for catching robots, not humans. So, your visitors shouldn't notice its presence.
 
-This extension protects all themes and plugins that use the default WordPress comment forms, which includes WooCommerce product reviews, without sending any comment data to other services.
+Unlike CAPTCHA, a honeypot is hidden from visitors. So, your visitors don't need to interact with Honeypot, vastly improving the user experience; Honeypot protects your site from spam in the background.
 
-Apart from other anti-spam techniques, like captcha or an answer field, a honeypot is hidden from visitors.
-This means the visitors don't need to interact with the anti-spam technique, which vastly improves the user experience. In short, your site is protected from spam in the background.
+This extension protects all WordPress themes and plugins that implement the default WordPress comment forms -- among WooCommerce product reviews -- without sending any comment data to other services.
 
-This extension also has an unmeasurably low server memory and CPU footprint, and it only adds roughly 160 bytes to your page's source. So, there's no performance difference with or without the extension.
+Honeypot also has an unmeasurably low server memory and CPU footprint, and it adds roughly 1kB to your pages.
 
-All this makes the Honeypot extension more favorable to other solutions.
+### Five powerful methods, zero false positives
 
-### How it works: Four methods
+Robots leave spammy comments via various techniques, and Honeypot counters almost all of them by adding five powerful barriers to your site.
 
-Robots that leave spammy comments use different techniques leaving comments.
-To counter various techniques, four powerful blockades will be implemented on your site when you activate the Honeypot extension.
+Only a human that uses a modern browser can pass these tests:
 
-All methods include randomization, they prevent robots programmatically bypassing the checks.
+1. Static CSS-hidden fields using unique IDs. All bots that do not target WordPress specifically will fail this test.
+1. Randomized CSS-hidden fields using HTML5 and time-bound IDs. Targets the same bots as above, but other bots that wait (far) too long to comment will also get caught.
+1. Randomized JavaScript. Most bots don't use a real browser that supports JavaScript, so they'll fail this test. Humans that don't use JavaScript will have to empty a field.
+1. Verification nonces. With this, bots can no longer abuse exposed endpoints in WordPress to leave comments.
+1. GPU timers. The bot must actually render the page to pass this test.
 
-All four methods combined block a broad overlapping spectrum of robot spamming techniques. Therefore, Honeypot has a **99.98% catch-rate**.
+All five methods are built around randomization, so no robot can use deep-learning to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**.
+
+## FAQ
+
+### How do the five methods help me?
+
+Below you find an overview of each method implemented in Honeypot.
 
 #### First method: Static CSS
 
 The Static CSS honeypot outputs a text field that must stay empty. Many robots are likely to fill in this field, marking their comment as spam.
 
-To prevent robots from detecting this field, it's marked with a unique ID. This ID differs per site and per post and won't change over time.
-Therefore, this field is compatible with caching plugins and is difficult to detect.
+To prevent robots from detecting the text field, the field's marked with a unique ID. This ID differs per site and per post; but, it won't change over time, so this field is compatible with caching plugins yet remains challenging to detect.
 
 #### Second method: Scoped Rotation CSS
 
-The Scoped Rotation CSS honeypot works like the Static CSS honeypot. But, it requires robots to use HTML5.
+The Scoped Rotation CSS honeypot works like the Static CSS honeypot. But, it requires robots to render HTML5, blocking most archaic bots automatically.
 
-Also, when no caching plugin is used, it will rotate its unique ID every 60 minutes.
-Because of its rotation, robots can't be taught what to target, which makes this field even more effective.
+When no caching plugin is used, the field will rotate its unique ID every 60 minutes. Because of its rotation, robots can't "learn" what to target, making this field even more effective.
 
-#### Third method: JS
+#### Third method: Rotating JavaScript (98.9% catch rate)
 
-The JS honeypot uses a combination of unique ID rotation, forced entry, and JavaScript.
+This honeypot uses a combination of unique ID rotation, forced entry, and JavaScript.
 
-Most robots do not enable JavaScript for an increased spamming rate, which makes this form field very useful.
+Almost no robot enables JavaScript for an increased spamming rate because it's resource-intensive, which makes this form field very useful.
 
-Like the second method, the unique ID rotation prevents robots from learning what to target.
-It also outputs a "textarea" field which must be emptied by the user. However, this field is emptied and hidden automatically when the visitor uses a JavaScript-enabled browser.
+It also outputs a 'textarea'-field which must be emptied manually by the visitor if JavaScript is disabled. However, when the visitor uses a JavaScript-enabled browser, this field remains hidden and is emptied automatically.
 
-If the user doesn't have a JavaScript-enabled browser, these fields will be shown:
+If the user doesn't have a JavaScript-enabled browser (or blocks JavaScript), Honeypot will show these fields:
 
 * **Label:** "Comments for robots".
 * **Input:** "Please remove this comment to prove you're human.".
@@ -68,13 +73,21 @@ If the user doesn't have a JavaScript-enabled browser, these fields will be show
 
 #### Fourth method: Nonce
 
-A nonce is a number that may only be used once. For this field, it may be used many times within a preset timeframe.
+A nonce is a number that may only be used once. Confusingly for this field, it may be used many times within an allocated timeframe.
 
-The Nonce honeypot is a form field that is automatically filled in by Honeypot. The nonce must unaffectedly be presented when the comment is sent.
-This prevents robots from using HTTP POST injection, which would otherwise allow them bypassing all other checks.
+Honeypot automatically fills in the nonce-honeypot field via a time-based algorithm, so this value isn't stored anywhere. The nonce-value must be sent back by the commenter to Honeypot unaltered. The nonce-value is then recalculated, and when matched, Honeypot may approve the comment.
 
-This field is unique per page and is valid for 24 hours. When a caching plugin is used, this field stays valid for 10 days.
-To prevent expired keys, a new key will be generated in half of the allotted time, so a visitor can always comment within at least 12 hours.
+The nonce prevents robots from sending comments to WordPress via XMLRPC or HTTP injections, one of the most common spamming techniques.
+
+This field is unique per page, and its value is valid for up to 24 hours. When a caching plugin is used, this field's validity is extended to 10 days. There are two values in circulation at all times, an old and a new nonce. If a visitor retrieved an old key that will no longer be handed out, they could still use that to prove they're human for at least 12 hours.
+
+#### Fifth method: GPU timer
+
+Robots that can bypass the other four methods are most definitely using a virtualized, up-to-date browser. Almost all these robots reply within seconds; this is where Honeypot's timer can still catch them.
+
+The timer works using JavaScript's animation frame-timers: the timer starts counting after the form is loaded and continues to do so only when the page is active. If the robot opens a new browser-tab and still sends a comment, Honeypot will block it.
+
+This field is unique per site and per page ID. The field's value will change as it counts down using pseudorandom numbers to throw off countdown detection. The frame-timer runs sporadically between 3.33~10Hz to nullify any performance penalty.
 
 ## Usage
 
@@ -92,9 +105,13 @@ There is no setup required, and no options are available.
 
 WordPress has various discussion settings, through which you can fine-tune how comments are displayed and moderated. You can find these settings at **Settings > Discussion**.
 
+### 100% privacy
+
+Honeypot does not create or store cookies, does not track users, stores no data WordPress wouldn't, and does not share any data. Honeypot only flags a comment from 'pending/approved' to 'spam' if it catches something. You need not update your privacy policy with Honeypot.
+
 ### Gotta catch 'em all
 
-With Honeypot, you can be confident that each comment that comes through is written by a human. But, if even those human comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity over many websites; but, using that might be unfavorable since it sends private user-data to third-parties.
+With Honeypot, you can be confident that each comment that comes through is written by a human. But, if even those human comments are spam, consider combining this extension with an authoritative comment plugin like [Akismet](https://wordpress.org/plugins/akismet/). That plugin tracks the user's comment activity over many websites; so, using that might be unfavorable since it sends private user-data to third-parties.
 
 ## Developers
 
@@ -157,10 +174,10 @@ add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) 
 	 *
 	 * When this time passes, the submitted comment bypasses some spam checks.
 	 *
-	 * Lower than 300 seconds (total 600, i.e. 10 minutes) is not recommended,
+	 * Lower than 300 seconds (total 600, i.e., 10 minutes) is not recommended,
 	 * as some bots enqueue their targets.
 	 *
-	 * Below are the default values.
+	 * Below is the default value.
 	 */
 	return 60 * MINUTE_IN_SECONDS;
 } );
@@ -187,7 +204,45 @@ add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, 
 }, 10, 2 );
 ```
 
+#### Adjust submit delay timer
+
+Honeypot blocks bots that leave comments within seconds of loading the page.
+
+The timer only runs when the comment-field is loaded while the window is active because it's attached to the browser's frame-timer.
+This means the timer should not need tweaking to accommodate slow servers or theme-loading time.
+
+This value has been carefully tuned and shouldn't need changing.
+
+```php
+add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 ) {
+	/**
+	 * This is the minimum time a visitor has to wait before submitting a comment on your site.
+	 * A random floating-point number between 0 and 1 is added to this number. The number
+	 * then gets randomly increased (up to 16 bits) to mitigate countdown detection.
+	 *
+	 * If the timer is still running, the submitted comment is automatically rejected.
+	 *
+	 * Higher than 10 seconds is not recommended, as advanced users might copy and paste
+	 * the comment from a failed (crashed) page-state.
+	 *
+	 * Values above 16 minus 8 bits (hex 0xFF00 or dec 65,280) may cause unexpected results.
+	 * This value shouldn't be used to fend off human commenters.
+	 *
+	 * Below is the default value. Floating points up to two decimals are recognized.
+	 */
+	return 5.33; // seconds
+} );
+```
+
 ## Changelog
+
+### 2.0.0
+
+[tsfep-release time="-1"]
+
+* **Added:** Processing power is affordable now thanks to AMD. So, Honeypot must now catch fast robots that use browser emulators.
+	* Basically, Honeypot now features a countdown timer. Don't comment too fast!
+	* This comes with a filter, `the_seo_framework_honeypot_countdown_time`, that's documented at [developers](#developers).
 
 ### 1.1.3
 

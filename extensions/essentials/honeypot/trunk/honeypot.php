@@ -8,8 +8,8 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 /**
  * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches comment spammers with a 99.98% catch-rate through four lightweight yet powerful ways.
- * Extension Version: 1.1.3
+ * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate through five lightweight yet powerful methods.
+ * Extension Version: 2.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -42,7 +42,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_HONEYPOT_VERSION', '1.1.3' );
+\define( 'TSFEM_E_HONEYPOT_VERSION', '2.0.0' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -148,6 +148,7 @@ final class Core {
 		$this->output_css_rotation_honeypot();
 		$this->output_js_honeypot();
 		$this->output_nonce_honeypot();
+		$this->output_timer_honeypot();
 	}
 
 	/**
@@ -166,7 +167,7 @@ final class Core {
 			return $approved;
 
 		// No need to check further.
-		if ( 'spam' === $approved || 'trash' === $approved )
+		if ( \in_array( $approved, [ 'spam', 'thrash' ], true ) )
 			return $approved;
 
 		// These checks only work if user is not logged in.
@@ -181,26 +182,66 @@ final class Core {
 		$i = 0;
 		do {
 			switch ( ++$i ) :
+				// 0% catch rate.
 				case 1:
 					$this->check_css_field( $approved );
+					if ( 'spam' === $approved ) {
+						error_log( '[COMMENT BLOCKED] CSS' );
+					}
 					break;
 
+				// 0% catch rate.
 				case 2:
 					$this->check_css_rotation_fields( $approved );
+					if ( 'spam' === $approved ) {
+						error_log( '[COMMENT BLOCKED] CSS ROT' );
+					}
 					break;
 
+				// 99% catch rate.
 				case 3:
 					$this->check_js_field( $approved );
+					if ( 'spam' === $approved ) {
+						error_log( '[COMMENT BLOCKED] JS' );
+					}
 					break;
 
 				case 4:
 					$this->check_nonce_rotation_field( $approved );
+					if ( 'spam' === $approved ) {
+						error_log( '[COMMENT BLOCKED] NONCE' );
+					}
+					break;
+
+				case 5:
+					$this->check_timer_field( $approved );
+					if ( 'spam' === $approved ) {
+						error_log( '[COMMENT BLOCKED] TIMER' );
+					}
 					break;
 
 				default:
 					break 2;
 			endswitch;
 		} while ( 'spam' !== $approved );
+
+		// var_dump() INTERNAL
+		if ( 'spam' !== $approved ) {
+			// phpcs:disable, PHPCompatibility.Operators.NewOperators.t_coalesceFound
+			$logdata = [
+				'user'            => ( $_SERVER['REMOTE_ADDR'] ?? '' ) ?: ( $_SERVER['HTTP_CLIENT_IP'] ?? '' ),
+				'http_host'       => $_SERVER['HTTP_HOST'] ?? '',
+				'server_name'     => $_SERVER['SERVER_NAME'] ?? '',
+				'request_method'  => $_SERVER['REQUEST_METHOD'] ?? '',
+				'request_URI'     => $_SERVER['REQUEST_URI'] ?? '',
+				'query_string'    => $_SERVER['QUERY_STRING'] ?? '',
+				'server_protocol' => $_SERVER['SERVER_PROTOCOL'] ?? '',
+				'referer'         => $_SERVER['HTTP_REFERER'] ?? '',
+				'commentData'     => $commentdata,
+				'post'            => $_POST,
+			];
+			error_log( '[COMMENT SPAM SUCCESS]' . print_r( $logdata, true ) );
+		}
 
 		return $approved;
 	}
@@ -258,7 +299,7 @@ final class Core {
 				<label for="%4$s">%3$s</label>
 				<textarea name="%2$s" id="%4$s" placeholder="%5$s">%6$s</textarea>
 			</p>
-			<script type="text/javascript">document.getElementById("%4$s").value="";document.getElementById("%1$s").style.display="none";</script>',
+			<script>document.getElementById("%4$s").value="";document.getElementById("%1$s").style.display="none";</script>',
 			[
 				\sanitize_key( $this->hp_properties['js_rotate_wrapper_id'] ),
 				\sanitize_key( $this->hp_properties['js_input_name'] ),
@@ -289,6 +330,59 @@ final class Core {
 	}
 
 	/**
+	 * Outputs timer honeypot.
+	 *
+	 * This input field forwards random, mangled floating point numbers.
+	 *
+	 * @since 2.0.0
+	 */
+	private function output_timer_honeypot() {
+
+		/**
+		 * @since 2.0.0
+		 * @uses const WP_CACHE If WP_CACHE is true, hardcore is false.
+		 * @todo make option.
+		 * @param float $time
+		 */
+		$time = (float) \apply_filters( 'the_seo_framework_honeypot_countdown_time', 5.33 );
+
+		// Random 16 bit timer scale. This converts to string, but that's what we need for reliable JS output.
+		// 0x00FF is subtracted for we reserve 8 bits as unknown zero-offset in JS.
+		$random_scale = number_format( mt_rand( 1, 0xFF00 / $time ), 2, '.', '' );
+
+		// This converts to string, but that's what we need for reliable JS output.
+		$random_time = number_format( $time * $random_scale, 2, '.', '' );
+
+		$input_name = \sanitize_key( $this->hp_properties['timer_input_name'] );
+
+		// All values have been sanitized!
+		$php_values = json_encode(
+			[
+				'n' => $input_name,
+				's' => $random_scale,
+				't' => $random_time,
+			],
+			JSON_FORCE_OBJECT
+		);
+
+		// Can we make this even smaller without losing functionality?
+		$script = <<<JS
+(a=>{let b,c,d=document.getElementsByName(a.n)[0],e=255*(1-Math.random()),f=f=>{void 0===b&&(b=f),c=f-b,c<1e3*(+a.t/+a.s)?(d.value=+a.t+e-c/1e3,g()):d.value=""},g=()=>setTimeout(()=>requestAnimationFrame(f),100+200*Math.random());d&&(d.value=+a.t+e,g())})($php_values);
+JS;
+
+		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already taken care of.
+		vprintf(
+			'<input type="hidden" name="%s" value=""><script>%s</script>',
+			[
+				$input_name,
+				$script,
+			]
+		);
+		// FIXME: Will this work with "value=""" omitted? Minifiers might cause that...
+		// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * Checks the static CSS input field that ought to be empty.
 	 *
 	 * @since 1.0.0
@@ -299,7 +393,7 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		// Perform same sanitization as displayed.
+		// Perform same sanitization during display.
 		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
 
 		// Check if input is set.
@@ -323,8 +417,8 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		// Perform same sanitization as displayed.
-		$_fields = \map_deep(
+		// Perform same sanitization during display.
+		$fields = \map_deep(
 			[
 				$this->hp_properties['css_rotate_input_name'],
 				$this->hp_properties['css_rotate_input_name_previous'],
@@ -332,18 +426,14 @@ final class Core {
 			'\\esc_attr'
 		);
 
-		// This is a low-level check... transform to higher level i.e. array_intersect()?
-		// This check is validation only, the $_POST data isn't stored or processed further.
-		// phpcs:disable, WordPress.WhiteSpace.PrecisionAlignment, WordPress.CodeAnalysis.AssignmentInCondition
-		$field = ( empty( $_POST[ $_fields[0] ] ) xor $k = 0 xor 1 )
-			  ?: ( empty( $_POST[ $_fields[1] ] ) xor $k = 1 )
-			  ?: ( $k = false );
-		// phpcs:enable, WordPress.WhiteSpace.PrecisionAlignment, WordPress.CodeAnalysis.AssignmentInCondition
-
-		if ( $field ) {
-			// Empty check failed.
-			$approved = 'spam';
-			unset( $_POST[ $_fields[ $k ] ] ); // Input var OK.
+		// var_dump() retest me?
+		foreach ( $fields as $input ) {
+			if ( ! empty( $_POST[ $input ] ) ) {
+				// Empty check failed.
+				$approved = 'spam';
+				unset( $_POST[ $input ] );
+				break;
+			}
 		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
@@ -361,7 +451,7 @@ final class Core {
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
 		// Perform same sanitization as displayed.
-		$_field = \esc_attr( $this->hp_properties['js_input_name'] );
+		$_field = \sanitize_key( $this->hp_properties['js_input_name'] );
 
 		// Check if input is set.
 		$set = ! empty( $_POST[ $_field ] );
@@ -388,7 +478,8 @@ final class Core {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
 
-		$_field = $this->hp_properties['nonce_input_name'];
+		// Perform same sanitization as displayed.
+		$_field = \sanitize_key( $this->hp_properties['nonce_input_name'] );
 
 		if ( empty( $_POST[ $_field ] ) ) {
 			$approved = 'spam';
@@ -417,6 +508,31 @@ final class Core {
 			$approved = 'spam';
 			unset( $_POST[ $_field ] );
 		}
+
+		// phpcs:enable, WordPress.Security.NonceVerification.Missing
+	}
+
+	/**
+	 * Checks the input fields that ought to be empty.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 * @return void Early if field is POSTed, therefore spam.
+	 */
+	private function check_timer_field( &$approved ) {
+
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+
+		// Perform same sanitization as displayed.
+		$_field = \sanitize_key( $this->hp_properties['timer_input_name'] );
+
+		if ( ! empty( $_POST[ $_field ] ) ) {
+			$approved = 'spam';
+			return;
+		}
+
+		unset( $_POST[ $_field ] );
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
@@ -504,6 +620,12 @@ final class Core {
 				'nonce_input_name'                   => 'tsfem-e-hp-nonce',
 				'nonce_rotated_input_value'          => $this->get_rotated_hashed_nonce_value( 24, false ),
 				'nonce_rotated_input_value_previous' => $this->get_rotated_hashed_nonce_value( 24, false, true ),
+
+				/**
+				 * Preventing real browsers commenting instantly.
+				 * Value must be empty.
+				 */
+				'timer_input_name' => $this->get_static_hashed_field_name( 24, true ),
 			];
 			// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 			return true;

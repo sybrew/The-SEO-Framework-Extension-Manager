@@ -89,6 +89,8 @@ TODO installer scripts does not refill "installed"-notice correctly nor refill t
 TODO this plugin and extensions are compatible up to WP 5.6.
 TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?
 
+TODO 2020 -> 2021
+
 TODO update:
 https://theseoframework.com/docs/api/constants/
 
