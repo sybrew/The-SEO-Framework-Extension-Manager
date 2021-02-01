@@ -13,7 +13,7 @@ WordPress allows visitors to interact with your website easily. Unfortunately, i
 
 Because WordPress's comment system is open and known, it attracts unwanted comments. These comments are often automatically inserted to share backlinks via meticulously crafted text-templates that can fool anybody. Websites with spammy content are seen as low-quality by your visitors and search engines alike.
 
-Now, you could waste your time moderating the comments manually... or, you could use Honeypot.
+Now, you could waste your time moderating the comments manually... or, you could use Honeypot, which does that in less than a thousandth of a second.
 
 ### A non-intrusive, privacy-first extension
 
@@ -67,8 +67,8 @@ It also outputs a 'textarea'-field which must be emptied manually by the visitor
 
 If the user doesn't have a JavaScript-enabled browser (or blocks JavaScript), Honeypot will show these fields:
 
-* **Label:** "Comments for robots".
-* **Input:** "Please remove this comment to prove you're human.".
+* **Label:** "Comment for robots".
+* **Input:** "Please empty this comment field to prove you're human.".
 * **Placeholder:** "You are human!".
 
 #### Fourth method: Nonce
@@ -243,6 +243,10 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 * **Added:** Processing power is affordable now thanks to AMD. So, Honeypot must now catch fast robots that use browser emulators.
 	* Basically, Honeypot now features a countdown timer. Don't comment too fast!
 	* This comes with a filter, `the_seo_framework_honeypot_countdown_time`, that's documented at [developers](#developers).
+* **Changed:** Some static honeypot's input fields are now pseudo-random, and Honeypot knows which part is usable.
+	* This throws off bots that look for permanent values to forward to your server.
+* **Changed:** Honeypot now uses Base36 and pseudo-Base62 instead of Base16, which makes nonce-hashes harder to detect by bots.
+* **Changed:** The output order of the honeypots are now randomized.
 
 ### 1.1.3
 

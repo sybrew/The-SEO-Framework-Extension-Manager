@@ -144,6 +144,8 @@ Some settings are hidden when your website represents a person, instead of an or
 When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`.
 Please note that your site must be verified before using the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
+This feature extends The SEO Framework's sitemap; therefore, **The SEO Framework's optimized sitemap must be enabled.**
+
 ### Where do I submit a Google News sitemap?
 
 You can submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://support.google.com/news/publisher-center/answer/74288).
@@ -236,6 +238,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 * **Changed:** The Google News sitemap now only shows posts published in the last two days (plus a half day, for some rounding leeway). This is according to [Google's Publishing guidelines](https://support.google.com/news/publisher-center/answer/9606710).
 	* The sitemap query can be modified; this is documented at [developers](#developers).
 * **Fixed:** Addressed an issue where after interacting with the quick-edit or bulk-edit UI, the post state declaration would disappear.
+* **Other:** We received multiple requests regarding the output of the Google News sitemap in combination with WordPress's new native sitemap: This combination is not possible. The Google News sitemap brought by Articles relies completely on The SEO Framework's sitemap API. To learn more, please see [The SEO Framework v4.0.0 changelog](https://theseoframework.com/?p=3268), under header "For developers: About the sitemap". We put thousands of hours perfecting that sitemap, and we're deeply saddened to learn that SEOs all over the world are still proselytising outdated tactics.
 
 ### 2.0.4
 

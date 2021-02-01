@@ -171,6 +171,10 @@ final class Admin extends Core {
 							/* translators: %s = Articles FAQ link. Markdown. */
 							\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
 							'https://theseoframework.com/extensions/articles/#faq'
+						) . (
+							\the_seo_framework()->get_option( 'sitemaps_output' )
+							? ''
+							: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
 						),
 						\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
 					],

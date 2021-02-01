@@ -2,9 +2,9 @@
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 5.1
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6.5
-Requires TSF: 4.0.5
+Requires TSF: 4.1.2
 Stable tag: 2.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -43,9 +43,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.5.0 - TODO SEO =
 
-**To use this plugin after updating, you will need The SEO Framework v4.1.2 or higher.**
+**Important release notes:**
 
-**This release brings support for WordPress 5.6's updated interface. Sorry for the delay!**
+* Henceforth, Extension Manager requires **The SEO Framework v4.1.2 or higher**.
+* This release brings support for WordPress 5.6's updated interface. Sorry for the delay!
+* Honeypot might mark legitimate comments as spam because it looks for new anti-spam data. Please manually moderate your comment section for a few minutes after updating, and be sure to clear your site's caches directly after updating to reduce the number of false negatives significantly.
 
 **Release date:**
 
@@ -54,7 +56,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
 	* The first extension to make use of this is Articles.
 * **Improved:** TODO Akin to TSF v4.1.1, we also dropped many jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
-	* TODO Note to self: We already did... can we plan for more before PHP 8.0 launches?
+	* TODO Note to self: We already did most of this... it's mostly needless work, but worth looking into for the long run.
 * **Improved:** Animations are now smoother by utilising modern browser APIs.
 * **Improved:** This plugin is now compatible with jQuery 3.5.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
@@ -72,32 +74,26 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
 * **Other:** It's 2021, so we added another year to the copyright mandate.
 
-TODO for honeypot: Add a hidden input field with just a bit of JS with value 0. The JS should add 10 seconds to the field, after which it counts down. If the field contains a value other than empty/0, then honeypot will spam the comment.
-
-TODO https://wordpress.org/support/topic/paginated-sitemap-like-google-xml-sitemaps/
-	-> We probably can't.
-TODO fix index.php todos
-TODO remove all images, and rely on SVG only?
-TODO remove feed? Our plans never came to fruition for it...
-TODO convert all JS objects to functions?
 TODO update images displayed for Local readme.
-TODO consider adding issue "Crawl data is old, the issues may be outdated or incorrect -> please request a new crawl."
-TODO consider refactoring Honeypot's readme? -> Later?
-TODO .tsfem-e-focus-assessment-rating & tsfem-e-focus-assessment-title-wrap need rtl margins.
-TODO homographic example selector's dropdown isn't hidden with minified scripts on WP 5.6
+TODO .tsfem-e-focus-assessment-rating & tsfem-e-focus-assessment-title-wrap need rtl margins. > We have fewer/less RTL users than COVID patience....
 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
-TODO this plugin and extensions are compatible up to WP 5.6.
 TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?
+
+TODO remove inflections that are merely capitalized (does JS handle this as well as PERL?).
 
 TODO update:
 https://theseoframework.com/docs/api/constants/
+
+TODO update POT file
+TODO consider adding Articles API example for paywalled content
 
 **Updated extensions:**
 
 NOTE these version numbers are already correct.
 * [Articles at version 2.1.0](https://theseoframework.com/extensions/articles/#changelog)
 * [Focus at version 1.5.0](https://theseoframework.com/extensions/focus/#changelog)
+* [Honeypot at version 2.0.0](https://theseoframework.com/extensions/honeypot/#changelog)
 * [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
 
