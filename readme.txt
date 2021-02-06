@@ -55,8 +55,8 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
 	* The first extension to make use of this is Articles.
-* **Improved:** TODO Akin to TSF v4.1.1, we also dropped many jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
-	* TODO Note to self: We already did most of this... it's mostly needless work, but worth looking into for the long run.
+* **Improved:** Akin to TSF v4.1.1, we also dropped many jQuery calls in this plugin, greatly improving the UI's responsiveness in the administrative dashboards.
+	* We didn't tackle every file we'd like, for we could not make the time.
 * **Improved:** Animations are now smoother by utilising modern browser APIs.
 * **Improved:** This plugin is now compatible with jQuery 3.5.
 * **Fixed:** Resolved a race condition with the AJAX loader notifications.
@@ -75,7 +75,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Other:** It's 2021, so we added another year to the copyright mandate.
 
 TODO update images displayed for Local readme.
-TODO .tsfem-e-focus-assessment-rating & tsfem-e-focus-assessment-title-wrap need rtl margins. > We have fewer/less RTL users than COVID patience....
 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
 TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?

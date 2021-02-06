@@ -233,6 +233,7 @@ final class Admin extends Core {
 				'ver'      => TSFEM_E_FOCUS_VERSION,
 				'deps'     => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 				'autoload' => true,
+				'hasrtl'   => false,
 				'inline'   => [
 					'.tsfem-e-focus-content-loader-bar' => [
 						'background:{{$color_accent}}',

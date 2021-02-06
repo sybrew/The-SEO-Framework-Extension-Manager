@@ -309,6 +309,12 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	margin-right: 1em;
 }
 
+body.rtl .tsfem-e-focus-definition-selection-title,
+body.rtl .tsfem-e-focus-assessment-title-wrap {
+	margin-right: 0;
+	margin-left: 1em;
+}
+
 .tsfem-e-focus-assessment-description {
 	flex: 1 1 66%;
 }
@@ -327,6 +333,11 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
 	vertical-align: middle;
 	display: inline-block;
 	align-self: center;
+}
+
+body.rtl .tsfem-e-focus-assessment-rating {
+	margin-right: 0;
+	margin-left: .5em;
 }
 
 /* # Subject editor
