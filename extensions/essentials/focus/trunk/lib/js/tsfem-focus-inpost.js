@@ -1363,6 +1363,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @since 1.0.0
 	 * @access private
 	 * @see doKeywordEntry() : Function that's called when the keyword is validated.
+	 * @todo use animation frames instead?
 	 *
 	 * @function
 	 */

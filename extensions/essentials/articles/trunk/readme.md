@@ -174,6 +174,25 @@ add_filter( 'the_seo_framework_articles_data', function( $data ) {
 	// Remove the description input.
 	unset( $data['description'] );
 
+	/**
+	 * Setup paywalled content.
+	 * Please contact your subscription/paywall plugin provider if you find issues.
+	 * See: https://developers.google.com/search/docs/data-types/paywalled-content
+	 */
+	$data['isAccessibleForFree'] = 'False';
+	$data['hasPart']             = [
+		[
+			'@type'               => 'WebPageElement',
+			'isAccessibleForFree' => 'False',
+			'cssSelector'         => '.section1',
+		],
+		[
+			'@type'               => 'WebPageElement',
+			'isAccessibleForFree' => 'False',
+			'cssSelector'         => '.section2',
+		]
+	];
+
 	return $data;
 } );
 ```

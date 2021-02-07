@@ -334,7 +334,7 @@ trait UI {
 				'type'     => 'css',
 				'deps'     => [ 'tsfem-ui', 'tsf-tt' ],
 				'autoload' => true,
-				'hasrtl'   => true,
+				'hasrtl'   => false,
 				'name'     => 'tsfem-form',
 				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
 				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
@@ -410,35 +410,8 @@ trait UI {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		// TODO use TSF v4.0 media handler, instead.
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-media',
-				'type'     => 'js',
-				'deps'     => [ 'media-editor' ],
-				'autoload' => true,
-				'name'     => 'tsfem-media',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
-				'l10n'     => [
-					'name' => 'tsfemMediaData',
-					'data' => [
-						'nonce'          => \current_user_can( 'upload_files' ) ? \wp_create_nonce( 'tsfem-media-nonce' ) : '',
-						'imgSelect'      => \esc_attr__( 'Select Image', 'the-seo-framework-extension-manager' ),
-						'imgSelectTitle' => \esc_attr_x( 'Select image', 'Button hover', 'the-seo-framework-extension-manager' ),
-						'imgChange'      => \esc_attr__( 'Change Image', 'the-seo-framework-extension-manager' ),
-						'imgRemove'      => \esc_attr__( 'Remove Image', 'the-seo-framework-extension-manager' ),
-						'imgRemoveTitle' => \esc_attr__( 'Remove selected image', 'the-seo-framework-extension-manager' ),
-						'imgFrameTitle'  => \esc_attr_x( 'Select Image', 'Frame title', 'the-seo-framework-extension-manager' ),
-						'imgFrameButton' => \esc_attr__( 'Use this image', 'the-seo-framework-extension-manager' ),
-						// phpcs:ignore -- redundant, maybe later.
-						// 'mediaEnqueued'  => \wp_style_is( 'media', 'enqueued' ),
-					],
-				],
-			],
-		] );
-
-		\wp_enqueue_media();
+		\The_SEO_Framework\Bridges\Scripts::prepare_media_scripts();
+		$scripts::register( \The_SEO_Framework\Bridges\Scripts::get_media_scripts() );
 	}
 
 	/**

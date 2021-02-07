@@ -257,7 +257,7 @@ final class Front extends Core {
 
 		$tsf->set_timezone( 'UTC' );
 
-		// Should've used a generator... TODO? => Wait for TSF v4.1?
+		// Should've used a generator... TODO? => Wait for TSF v4.2?
 		$data = [
 			$this->get_article_context(),
 			$this->get_article_type(),

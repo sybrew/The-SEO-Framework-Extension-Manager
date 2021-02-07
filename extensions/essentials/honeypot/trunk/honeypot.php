@@ -155,10 +155,8 @@ final class Core {
 		// That'd be 'fun' and 'interesting' for the user. That's it, though.
 		// TODO Allow user to (auto/optionally) send data to us, for us to showcase how many comments are blocked?
 		// Attach unique ID to each user sending it? Must be unique from TSFEM activation ID, though.
-		do {
-			$current = $shuffle[0];
-			unset( $shuffle[0] );
-			switch ( $current ) :
+		foreach ( $shuffle as $honeypot ) {
+			switch ( $honeypot ) :
 				case 0:
 					$this->output_css_honeypot();
 					break;
@@ -177,7 +175,7 @@ final class Core {
 				default:
 					break 2;
 			endswitch;
-		} while ( $shuffle = array_values( $shuffle ) );
+		}
 	}
 
 	/**

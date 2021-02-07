@@ -2000,8 +2000,12 @@ final class FormGenerator {
 	private function create_image_field( array $args ) {
 
 		//= s = Escaped.
-		$s_url_name  = $s_url_id = $this->get_sub_field_id( 'url' );
-		$s_id_name   = $s_id_id = $this->get_sub_field_id( 'id' );
+		$s_field_id = $this->get_field_id();
+		$s_url_name = $this->get_sub_field_id( 'url' );
+		$s_url_id   = "{$s_field_id}-url";
+		$s_id_name  = $this->get_sub_field_id( 'id' );
+		$s_id_id    = "{$s_field_id}-id";
+
 		$s_url_ph    = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
@@ -2047,7 +2051,7 @@ final class FormGenerator {
 			[
 				$this->create_field_description( $args, $s_url_id ),
 				vsprintf(
-					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s %s%s%s>',
@@ -2069,18 +2073,7 @@ final class FormGenerator {
 								$s_id_value,
 							]
 						),
-						vsprintf(
-							'<button type=button class="%1$s" data-href="%2$s" title="%3$s" id="%4$s-select" data-input-url="%4$s" data-input-id="%5$s">%6$s</button>',
-							[
-								'tsfem-set-image-button tsfem-button-primary tsfem-button-primary-bright tsfem-button-small',
-								\esc_url( \get_upload_iframe_src( 'image', -1, null ) ),
-								( $s_id_value ? \esc_attr_x( 'Change image', 'Button hover', 'the-seo-framework-extension-manager' ) : \esc_attr_x( 'Select image', 'Button hover', 'the-seo-framework-extension-manager' ) ),
-								$s_url_id,
-								$s_id_id,
-								( $s_id_value ? \esc_html__( 'Change Image', 'the-seo-framework-extension-manager' ) : \esc_html__( 'Select Image', 'the-seo-framework-extension-manager' ) ),
-							]
-						),
-						$s_remove_button,
+						\the_seo_framework()->get_social_image_uploader_form( $s_field_id )
 					]
 				),
 			]

@@ -103,6 +103,10 @@
 	content: "";
 	margin-right: 2px;
 }
+body.rtl .tsfem-form-title-icon:before {
+	margin-right: 0;
+	margin-left: 2px;
+}
 
 .tsfem-form-title-icon-okay:before,
 .tsfem-form-title-icon-good:before {
@@ -112,6 +116,12 @@
 	margin-left: -2px;
 	margin-right: 4px;
 }
+body.rtl .tsfem-form-title-icon-okay:before,
+body.rtl .tsfem-form-title-icon-good:before {
+	margin-left: 4px;
+	margin-right: -2px;
+}
+
 .tsfem-form-title-icon-okay:before,
 .tsfem-form-title-icon-warning:before {
 	color: #ffa01b;
@@ -151,6 +161,11 @@
 	border-radius: 3px;
 	transition: all 0.5s ease-in-out;
 	background: currentColor;
+}
+body.rtl .tsfem-form-collapse-icon:before,
+body.rtl .tsfem-form-collapse-icon:after {
+	right: unset;
+	left: .5em;
 }
 
 .tsfem-form-collapse-icon:before {
@@ -318,15 +333,19 @@ h4.tsfem-form-multi-title {
 	margin-top: 1.15em;
 	margin-left: 1px;
 	vertical-align: top;
-	line-height: 1em;
+	line-height: 1.4;
+}
+body.rtl .tsfem-form-image-buttons-wrap {
+	margin-left: 0;
+	margin-right: 1px;
 }
 
 .tsfem-form-image-buttons-wrap button {
 	margin-right: 1.15em;
 }
-
-.tsfem-form-image-buttons-wrap button:last-of-type {
+body.rtl .tsfem-form-image-buttons-wrap button {
 	margin-right: 0;
+	margin-left: 1.15em;
 }
 
 .tsfem-form-multi-select-wrap {
@@ -348,10 +367,17 @@ h4.tsfem-form-multi-title {
 .tsfem-form-multi-select-wrap-row ul li {
 	margin: 7px 14px 7px 0;
 }
+body.rtl .tsfem-form-multi-select-wrap-row ul li {
+	margin: 7px 0 7px 14px;
+}
 
 /* Indent second or later */
 .tsfem-form-multi-a11y-wrap .tsfem-form-multi-a11y-wrap {
 	margin-left: 20px;
+}
+body.rtl .tsfem-form-multi-a11y-wrap .tsfem-form-multi-a11y-wrap {
+	margin-left: 0;
+	margin-right: 20px;
 }
 
 /* Timer */
@@ -390,6 +416,10 @@ h4.tsfem-form-multi-title {
 	opacity: 0;
 	top: 0;
 	left: 0;
+}
+body.rtl .tsfem-form-checkbox-required {
+	left: unset;
+	right: 0;
 }
 
 /* TODO?
@@ -434,20 +464,21 @@ input[type=radio]
 	border-left: 3px solid #008964;
 }
 
-.tsfem-form-validate .tsfem-form-setting-input input[type=text]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=password]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=tel]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=url]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=search]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=time]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=week]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=month]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=date]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=number]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=range]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input select:invalid:focus,
-.tsfem-form-validate .tsfem-form-setting-input textarea:invalid:focus {
+/** Override tsfem-ui.css... */
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=text]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=password]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=tel]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=url]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=search]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=time]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=week]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=month]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=date]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=number]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=range]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input select:invalid:focus,
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input textarea:invalid:focus {
 	border-color: #0ebfe9;
 }

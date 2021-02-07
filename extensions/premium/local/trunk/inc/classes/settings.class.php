@@ -320,11 +320,14 @@ final class Settings {
 		 */
 		$this->register_media_scripts( $scripts );
 
+		// Normally, we load this as a dependency. But, Local has no CSS (that's dependent).
+		$scripts::enqueue_known_script( 'tsf', 'css' );
+
 		$scripts::register( [
 			[
 				'id'       => 'tsfem-local',
 				'type'     => 'js',
-				'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsfem-ui', 'tsfem-form', 'tsfem-media' ],
+				'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsf-media', 'tsfem-ui', 'tsfem-form' ],
 				'autoload' => true,
 				'name'     => 'tsfem-local',
 				'base'     => TSFEM_E_LOCAL_DIR_URL . 'lib/js/',

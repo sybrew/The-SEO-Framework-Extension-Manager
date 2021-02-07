@@ -65,27 +65,30 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Fixed:** Resolved an issue where Extension Settings panes weren't outputted on PHP 5.6.
 * **Dev:** Constant `TSF_EXTENSION_MANAGER_PRESENT` is now available. It indicates that the plugin is activated by WordPress, but it does not necessarily indicate that it's running otherwise.
 * **Dev:** Script debugging will no longer occur with `WP_DEBUG` enabled, but with `SCRIPT_DEBUG` enabled, instead.
-* **Other:** The SEO Framework 4.1.2 or higher is now required, from 4.0.0.
-* **Other:** WordPress 5.1 or higher is now required, from 4.9.
+* **Other:** The SEO Framework v4.1.2 or higher is now required, from v4.0.0.
+* **Other:** WordPress v5.1 or higher is now required, from v4.9.
 * **Other:** We now enforce [TSF coding standards](https://github.com/theseoframework/wpcs-tsf) for opcode performance, intercompatibility, and reliability.
-* **Other:** This plugin is now compatible with PHP 8.0.0-RC1<https://wiki.php.net/todo/php80>. This ensures compatibility with PHP 8.0.0 when it becomes generally available, but changes may be provisionary.
+* **Other:** This plugin is now compatible with PHP 8.0.
 	* Although a new PHP version is exciting, we advise against updating until the dust has settled. PHP 8.0 brings many deprecations and breaking changes, and those will probably cause many issues on your website for months to come, until all your plugins and theme have been updated accordingly. There's also no noticeable nor notable benefit using PHP 8.0 over PHP 7.4 for WordPress.
 * **Other:** We removed all script loaders in this plugin, and rely on The SEO Framework to load scripts, instead.
 	* The exception is for the scripts that are used when TSF isn't available, wherefor we've been using a simpler loader.
+* **Other:** We concatenated differing code from most RTL-support scripts into the LTR scripts, reducing the installation package noticably.
+* **Other:** This plugin now relies on The SEO Framework's media handler, instead of its own.
+	* There's a bug, in Local, where the preview-loader isn't reset properly during iteration. Dependency issues like these make TSF's API more reliable and extensible; this is probably this first time we do not address such an issue before the public can face it, but issues are becoming more intricate and time's becoming more scarce as the project advances.
 * **Other:** It's 2021, so we added another year to the copyright mandate.
 
 TODO update images displayed for Local readme.
 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
-TODO consider setKeywordEntryListeners()/setupIterations() using animationFrames? -> later?
 
-TODO remove inflections that are merely capitalized (does JS handle this as well as PERL?).
+TODO remove all custom coloring, and fall back to WP default?
+	-> Even apply color to TSF/extension color logos?
+		-> This can be awesome.
 
 TODO update:
 https://theseoframework.com/docs/api/constants/
 
 TODO update POT file
-TODO consider adding Articles API example for paywalled content
 
 **Updated extensions:**
 
