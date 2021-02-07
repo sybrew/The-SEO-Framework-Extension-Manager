@@ -677,7 +677,6 @@ final class Tests {
 	 * Returns translatable string wrapped in HTML for when no issues are found.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string HTML wrapped no issues found.
 	 */
@@ -695,7 +694,6 @@ final class Tests {
 	 * Returns translatable string wrapped in HTML for when no data is found.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string HTML wrapped no data found.
 	 */
@@ -713,7 +711,6 @@ final class Tests {
 	 * Returns translatable string wrapped in HTML for when a small sample size has been used.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string HTML wrapped small sample size used.
 	 */

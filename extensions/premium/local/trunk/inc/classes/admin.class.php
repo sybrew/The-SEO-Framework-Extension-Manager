@@ -200,7 +200,6 @@ final class Admin extends Core {
 	 * Determines whether we're on the Local overview page.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 * @access private
 	 *
 	 * @return bool

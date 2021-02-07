@@ -295,7 +295,6 @@ final class LoadAdmin extends AdminPages {
 	 * nonce can or has been been verified.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
 	 * @param string $key The nonce action used for caching.
 	 * @param bool   $check_post Whether to check for POST variables containing TSFEM settings.
@@ -452,8 +451,8 @@ final class LoadAdmin extends AdminPages {
 	 * If URL is empty, a doing it wrong notice will be output.
 	 *
 	 * @since 1.0.0
-	 * @since 1.2.0 : Added download, filename, id and data.
-	 * @since 1.5.0 : Now always adds `rel="nofollow noopener noreferrer"`
+	 * @since 1.2.0 Added download, filename, id and data.
+	 * @since 1.5.0 Now always adds `rel="nofollow noopener noreferrer"`
 	 *
 	 * @param array $args The link arguments : {
 	 *   'url'      => string The URL. Required.
@@ -629,10 +628,6 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.2.0
 	 * @access private
-	 * @uses \the_seo_framework()->seo_settings_page_slug
-	 * @uses \the_seo_framework()->add_menu_link()
-	 * @staticvar bool $parent_set
-	 * @staticvar array $slug_set
 	 *
 	 * @param string $slug       The menu slug. Required.
 	 * @param string $capability The menu's required access capability.
@@ -682,16 +677,13 @@ final class LoadAdmin extends AdminPages {
 	 * Determines if TSFEM AJAX has determined the correct page.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 * @NOTE Warning: Only set after valid nonce verification pass.
 	 *
 	 * @param bool $set If true, it registers the AJAX page.
 	 * @return bool True if set, false otherwise.
 	 */
 	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
-
 		static $cache = false;
-
 		return $set ? $cache = true : $cache;
 	}
 

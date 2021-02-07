@@ -324,8 +324,6 @@ trait Time {
 	 * Returns timestamp format based on TSF's timestamp settings.
 	 *
 	 * @since 1.5.0
-	 * @staticvar string $format
-	 * @requires TSF 3.0+
 	 *
 	 * @return string The timestamp format used for PHP date.
 	 */
@@ -353,8 +351,7 @@ trait Time {
 			$tzstring = '';
 
 		if ( $guess && empty( $tzstring ) ) {
-			$offset   = \get_option( 'gmt_offset' );
-			$tzstring = $this->get_tzstring_from_offset( $offset );
+			$tzstring = $this->get_tzstring_from_offset( \get_option( 'gmt_offset' ) );
 		}
 
 		return $tzstring;
@@ -364,8 +361,7 @@ trait Time {
 	 * Fetches the Timezone String from given offset.
 	 *
 	 * @since 1.5.0
-	 * @source The SEO Framework 3.0.
-	 *         Modified as we require PHP>5.5.10. See <https://bugs.php.net/bug.php?id=44780>
+	 * @source The SEO Framework 4.0.
 	 *
 	 * @param int $offset The GMT offzet.
 	 * @return string PHP Timezone String.

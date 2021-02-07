@@ -109,16 +109,14 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  * Also directly initializes extensions after the class constructors have run.
  * This will allow all extensions and functions to run exactly after The SEO Framework has been initialized.
  *
- * @action plugins_loaded
- * @priority 6: Use anything above 6, or any action later than plugins_loaded and
- *           you can access the class and functions. Failing to do so will perform wp_die().
- *           This makes sure The SEO Framework has been initialized correctly as well.
- *           So you can use function `the_seo_framework()` at all times.
+ * Priority 6: Use anything above 6, or any action later than plugins_loaded and
+ *             you can access the class and functions. Failing to do so will perform wp_die().
+ *             This makes sure The SEO Framework has been initialized correctly as well.
+ *             So you can use function `the_seo_framework()` at all times.
  *
  * Performs wp_die() when called prior to action `plugins_loaded`.
  *
  * @since 1.0.0
- * @staticvar object $tsf_extension_manager
  * @access private
  * @factory
  *
@@ -126,7 +124,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  */
 function _init_tsf_extension_manager() {
 
-	// Cache the class object. Do not run everything more than once.
+	// Memoize the class object. Do not run everything more than once.
 	static $tsf_extension_manager = null;
 
 	if ( $tsf_extension_manager )
@@ -205,15 +203,13 @@ function _register_autoloader() {
 
 /**
  * Determines whether we can load the the plugin.
- *
- * Applies filters 'tsf_extension_manager_enabled' : boolean
+ * Memoizes the result.
  *
  * @since 1.0.0
  * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @since 2.0.2 Now requires TSF 3.1+ to load.
  * @since 2.2.0 Now requires TSF 3.3+ to load.
  * @since 2.5.0 Now requires TSF 4.1.2 to load.
- * @staticvar bool $can_load
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */
@@ -225,8 +221,13 @@ function can_load_class() {
 		return $can_load;
 
 	if ( \function_exists( '\\the_seo_framework' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.2', '>=' ) && \the_seo_framework()->loaded )
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.2', '>=' ) && \the_seo_framework()->loaded ) {
+			/**
+			 * @since 1.0.0
+			 * @param bool $can_load
+			 */
 			return $can_load = (bool) \apply_filters( 'tsf_extension_manager_enabled', true );
+		}
 	}
 
 	return $can_load = false;

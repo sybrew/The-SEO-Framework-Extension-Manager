@@ -104,7 +104,6 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @uses const AMP_QUERY_VAR
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True if AMP is enabled.
 	 */

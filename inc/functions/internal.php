@@ -99,15 +99,12 @@ function is_done( &$bool ) {
  * Determines if the method or function has already run.
  *
  * @since 1.2.0
- * @staticvar array $cache
  *
  * @param string $caller The method or function that calls this.
  * @return bool True if already called, false otherwise.
  */
 function has_run( $caller ) {
-
 	static $cache = [];
-
 	return isset( $cache[ $caller ] ) ?: ( ( $cache[ $caller ] = true ) && false );
 }
 

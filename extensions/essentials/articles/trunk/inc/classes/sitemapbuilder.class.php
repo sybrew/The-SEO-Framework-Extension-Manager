@@ -210,7 +210,6 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 	 * Builds and returns a sitemap URL item.
 	 *
 	 * @since 2.0.0
-	 * @staticvar string $timestamp_format
 	 *
 	 * @param array $args : {
 	 *   string $loc                    : The item's URI.                 Required.

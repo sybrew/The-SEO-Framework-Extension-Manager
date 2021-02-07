@@ -47,7 +47,6 @@ trait Options {
 	 * Returns TSF Extension Manager options array.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $cache The cached options.
 	 *
 	 * @return array TSF Extension Manager options.
 	 */
@@ -100,14 +99,11 @@ trait Options {
 	 * first call. Always returns true on second or later call.
 	 *
 	 * @since 1.0.0
-	 * @staticvar $run Whether update_option has run.
 	 *
 	 * @return bool True if run, false otherwise.
 	 */
 	final protected function has_run_update_option() {
-
 		static $run = false;
-
 		return \TSF_Extension_Manager\is_done( $run );
 	}
 

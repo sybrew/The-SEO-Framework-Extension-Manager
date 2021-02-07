@@ -102,8 +102,6 @@ final class Admin extends Core {
 	 * @since 2.0.0
 	 * @since 2.1.0 Added the disabled type. When used, it won't add the state.
 	 * @access private
-	 * @staticvar string $default
-	 * @staticvar array $type_i18n
 	 *
 	 * @param array    $states The current post states array.
 	 * @param \WP_Post $post The Post Object.

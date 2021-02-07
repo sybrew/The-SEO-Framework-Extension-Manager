@@ -107,11 +107,6 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  * @since 1.2.0 Now also loads Admin class.
  * @since 1.4.0 Now always loads when the knowledge type is organization.
  * @since 2.0.0 No longer tests for the knowledge type option before launching.
- * @staticvar bool $loaded True when loaded.
- * @action 'the_seo_framework_do_before_output'
- * @action 'the_seo_framework_do_before_amp_output'
- * @action 'admin_init'
- * @priority 10
  * @access private
  *
  * @return bool True if class is loaded.

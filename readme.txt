@@ -41,7 +41,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-= 2.5.0 - TODO SEO =
+= 2.5.0 - Quick SEO =
 
 **Important release notes:**
 
@@ -51,7 +51,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Release date:**
 
-* February TODOnth, 2021
+* February 8th, 2021
 
 * **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
 	* The first extension to make use of this is Articles.
@@ -80,10 +80,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 TODO update images displayed for Local readme.
 
 TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
-
-TODO remove all custom coloring, and fall back to WP default?
-	-> Even apply color to TSF/extension color logos?
-		-> This can be awesome.
 
 TODO update:
 https://theseoframework.com/docs/api/constants/

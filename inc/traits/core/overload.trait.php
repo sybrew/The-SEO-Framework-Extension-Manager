@@ -446,15 +446,12 @@ trait Destruct_Core_Public_Final_Interface {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @staticvar bool $died Determines plugin alive state.
 	 *
 	 * @param bool $set Whether to set death.
 	 * @return false If the plugin has not died. True otherwise.
 	 */
 	final public function _has_died( $set = false ) {
-
 		static $died = false;
-
 		return $died || $set && $died = true;
 	}
 }

@@ -38,7 +38,6 @@ trait Extensions_I18n {
 	 * Initializes i18n.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $i18n
 	 *
 	 * @return array $i18n The internationalization data.
 	 */

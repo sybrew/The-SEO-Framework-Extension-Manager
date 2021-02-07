@@ -227,7 +227,6 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Determines whether the account level is premium.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $is_premium
 	 *
 	 * @return bool Whether the current account is premium.
 	 */
@@ -247,7 +246,6 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Determines whether the account level is premium or essential.
 	 *
 	 * @since 2.0.0
-	 * @staticvar bool $is_connected
 	 *
 	 * @return bool Whether the current account is API connected.
 	 */

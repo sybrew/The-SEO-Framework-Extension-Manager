@@ -155,7 +155,7 @@ class AccountActivation extends Panes {
 	 * Handles disconnection and returns status.
 	 *
 	 * @since 1.0.0
-	 * @since 1.1.0 : Can now also disconnect decoupled websites.
+	 * @since 1.1.0 Can now also disconnect decoupled websites.
 	 * @since 2.1.0 Added the $args parameter.
 	 *
 	 * @param array $args : {

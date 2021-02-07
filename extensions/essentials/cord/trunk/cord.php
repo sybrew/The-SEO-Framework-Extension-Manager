@@ -100,9 +100,6 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  * Initializes the extension.
  *
  * @since 1.0.0
- * @staticvar bool $loaded True when loaded.
- * @action 'plugins_loaded'
- * @priority 11
  * @access private
  *
  * @return bool True if class is loaded.

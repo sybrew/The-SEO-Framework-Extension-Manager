@@ -212,7 +212,6 @@ final class Settings {
 	 * Returns form object by reference.
 	 *
 	 * @since 1.2.0
-	 * @staticvar \TSF_Extension_Manager\FormGenerator $form The form object.
 	 *
 	 * @return \TSF_Extension_Manager\FormGenerator Passed by reference.
 	 */

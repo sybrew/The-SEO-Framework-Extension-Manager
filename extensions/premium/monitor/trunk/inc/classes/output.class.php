@@ -157,7 +157,6 @@ final class Output {
 	 * Also known as an accordion. Without the requirement for JS.
 	 *
 	 * @since 1.0.0
-	 * @staticvar int $count Couples label and checkbox IDs.
 	 *
 	 * @param string $title      The entry title. Must be escaped.
 	 * @param string $content    The entry content. Must be escaped.
@@ -250,7 +249,6 @@ final class Output {
 	 * Returns slab entry title based on $key and $type.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $cache Maintains the titles cache.
 	 *
 	 * @param string $key  The array key.
 	 * @param string $type The pane-data type.
@@ -290,7 +288,6 @@ final class Output {
 	 * Returns entry $state for $key and $type.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $cache Maintains state strings for $key and $type.
 	 *
 	 * @param string      $key  The array key.
 	 * @param string      $type The pane-data type.
@@ -504,7 +501,6 @@ final class Output {
 	 * Returns update notification string for information parsing.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $cache
 	 *
 	 * @return string Notifying user the Extension Manager requires an update.
 	 */
@@ -534,7 +530,6 @@ final class Output {
 	 * @since 1.0.0
 	 * @since 1.2.0 Added TSF v3.1 compat, by adding a condition to `$debug[2]`.
 	 * @since 1.3.0 Now only uses TSF 3.1+ debugging states, nullifying the 1.2.0 changes.
-	 * @staticvar array $debug
 	 *
 	 * @return array The debug values.
 	 */

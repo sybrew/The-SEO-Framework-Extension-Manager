@@ -138,7 +138,6 @@ class Core {
 	 * Handles extensions. On both the front end and back-end.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $loaded True if extensions are loaded, false otherwise.
 	 * @access private
 	 *
 	 * @return true If loaded, false otherwise.
@@ -217,7 +216,6 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.0 Now is public.
-	 * @staticvar bool $cache
 	 *
 	 * @return bool True if options are valid, false if not.
 	 */
@@ -437,7 +435,6 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 * @since 1.3.0 Removed and shifted 2nd and 3rd parameter.
-	 * @staticvar string $last The last value;
 	 *
 	 * @param string|array $value The array or string to loop. First call must be array.
 	 * @param int          $i     The iteration count. This shouldn't be filled in.
@@ -682,8 +679,6 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
-	 * @staticvar string $instance
-	 * @staticvar int $timer
 	 *
 	 * @param int|null $bit The instance bit.
 	 * @return string $instance The instance key.
@@ -744,8 +739,6 @@ class Core {
 	 * @since 1.0.0
 	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
 	 * @link https://theprime.site/
-	 * @staticvar int $_bit : $bits[0]
-	 * @staticvar int $bit  : $bits[1]
 	 *
 	 * @return array The verification bits.
 	 */
@@ -892,8 +885,6 @@ class Core {
 	 *
 	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 * @since 1.0.0
-	 * @staticvar array $cached_salts Contains cached salts based on $scheme input.
-	 * @staticvar string $instance_scheme Random scheme for instance verification. Determined at runtime.
 	 *
 	 * @param string $scheme Authentication scheme. ( 'instance', 'auth', 'secure_auth', 'nonce' ).
 	 *                       Default 'instance'.
@@ -950,7 +941,6 @@ class Core {
 	 * Returns working hash type.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $type
 	 *
 	 * @return string The working hash type to be used within hash() functions.
 	 */
@@ -978,7 +968,6 @@ class Core {
 	 * Determines whether the plugin is network activated.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $network_mode
 	 *
 	 * @return bool Whether the plugin is active in network mode.
 	 */
@@ -1065,7 +1054,7 @@ class Core {
 	 * @since 1.3.0 : 1. Now handles namespaces instead of class bases.
 	 *                2. Now is protected.
 	 *                3. Removed some checks as it's protected.
-	 * @since 1.5.0 : No longer returns void.
+	 * @since 1.5.0 No longer returns void.
 	 * @access private
 	 *
 	 * @param string $path      The extension path to look for.
@@ -1089,7 +1078,6 @@ class Core {
 	 * Registers and activated autoloader for extensions.
 	 *
 	 * @since 1.2.0
-	 * @staticvar bool $autoload_inactive Whether the autoloader is active.
 	 */
 	final protected function register_extension_autoloader() {
 
@@ -1106,8 +1094,7 @@ class Core {
 	 * Maintains a cache. So this can be fetched later.
 	 *
 	 * @since 1.2.0
-	 * @since 1.3.0 : Now handles namespaces instead of class bases.
-	 * @staticvar array $registered The registered classes.
+	 * @since 1.3.0 Now handles namespaces instead of class bases.
 	 *
 	 * @param string|null $path      The extension path to look for.
 	 * @param string|null $namespace The class name including namespace.
@@ -1156,8 +1143,7 @@ class Core {
 	 * the plugin classes.
 	 *
 	 * @since 1.2.0
-	 * @since 1.3.0 : Now handles namespaces instead of class bases.
-	 * @staticvar array $loaded Whether $class has been loaded.
+	 * @since 1.3.0 Now handles namespaces instead of class bases.
 	 *
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
@@ -1194,7 +1180,6 @@ class Core {
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-
 			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
 			$this->get_verification_codes( $_instance, $bits );
 
@@ -1245,7 +1230,6 @@ class Core {
 	 * Returns a numeric order list for all extensions.
 	 *
 	 * @since 2.0.0
-	 * @staticvar array $order
 	 *
 	 * @return array { string Extension => int Order }
 	 */
@@ -1361,7 +1345,6 @@ class Core {
 	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $status
 	 *
 	 * @return array Current subscription status.
 	 */
@@ -1467,7 +1450,6 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.4 No longer caches invalid requests.
-	 * @staticvar bool $cache
 	 *
 	 * @param bool $secure Whether to prevent insecure checks.
 	 * @return bool

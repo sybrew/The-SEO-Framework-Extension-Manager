@@ -118,7 +118,6 @@ class Core {
 	 * Determines if the current site is representing an organization.
 	 *
 	 * @since 2.0.0
-	 * @staticvar bool $is
 	 *
 	 * @return bool
 	 */

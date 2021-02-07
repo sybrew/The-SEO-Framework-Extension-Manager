@@ -40,7 +40,6 @@ trait Schema_Packer {
 	 * Determines whether php.ini 'serialize_precision' should be changed.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -64,7 +63,6 @@ trait Schema_Packer {
 	 * Determines whether php.ini 'serialize_precision' is changeable.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
@@ -95,7 +93,6 @@ trait Schema_Packer {
 	 * Sets php.ini serialize_precision to correct value, i.e. -1.
 	 *
 	 * @since 1.0.0
-	 * @staticvar string $prev The previous serialize_precision value.
 	 *
 	 * @param bool $reset Whether to reset to previous serialize_precision value.
 	 */
@@ -320,7 +317,6 @@ trait Schema_Packer {
 	 *
 	 * @since 1.0.0
 	 * @see $this->store_packed_data();
-	 * @staticvar array $_d The stored data.
 	 *
 	 * @param string|int $id   Either the URL or ID.
 	 * @param object     $data The data to store.

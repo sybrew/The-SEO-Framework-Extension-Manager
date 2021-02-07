@@ -103,9 +103,6 @@ if ( TSFEM_E_LOCAL_DB_VERSION > \tsf_extension_manager_db_version( 'local' ) ) {
  * Initializes the extension.
  *
  * @since 1.0.0
- * @staticvar bool $loaded True when loaded.
- * @action 'plugins_loaded'
- * @priority 11
  * @access private
  *
  * @return bool True if class is loaded.
@@ -158,7 +155,6 @@ function get_layout_class() {
  * @since 1.0.0
  * @uses TSFEM_E_LOCAL_PATH_TRAIT
  * @access private
- * @staticvar array $loaded
  *
  * @param string $file Trait file name.
  * @return bool True if loaded, false otherwise.

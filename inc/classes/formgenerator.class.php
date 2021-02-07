@@ -114,7 +114,6 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @static
-	 * @staticvar bool $found Prevents further callback matching to improve performance.
 	 *
 	 * @param string $class  The caller class.
 	 * @param array  $args : The form arguments {

@@ -101,7 +101,7 @@ trait Error {
 	 * @since 1.0.0
 	 * @since 1.5.0 : 1. Now stores multiple notices.
 	 *                2. Added a new parameter to clear previous notices.
-	 * @since 1.5.1 : Added an exact-match check to prevent duplicated entries.
+	 * @since 1.5.1 Added an exact-match check to prevent duplicated entries.
 	 *
 	 * @param array $notice    The notice. : {
 	 *    0 => int    key,

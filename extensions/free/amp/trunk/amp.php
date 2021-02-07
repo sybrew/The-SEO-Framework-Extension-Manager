@@ -51,8 +51,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  *
  * @since 1.0.0
  * @since 1.1.0 Now uses WP-AMP's new API.
- * @action 'wp'
- * @priority 11
  * @access private
  *
  * @return bool True if class is loaded.

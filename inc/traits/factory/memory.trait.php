@@ -51,7 +51,6 @@ class Memory_Cache {
 	 *
 	 * @since 1.5.0
 	 * @source http://php.net/manual/en/function.ini-get.php
-	 * @staticvar int <bytes> $limit
 	 *
 	 * @return int <bytes> memory limit.
 	 */
@@ -107,7 +106,6 @@ trait Memory {
 	 *
 	 * @since 1.5.0
 	 * @uses Memory_Cache::get_memory_limit_in_bytes()
-	 * @staticvar int <bytes> $limit
 	 *
 	 * @return int <bytes> memory limit.
 	 */

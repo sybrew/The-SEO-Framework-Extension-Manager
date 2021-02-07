@@ -188,7 +188,6 @@ class API extends Core {
 	 * Returns the API endpoint type.
 	 *
 	 * @since 2.1.0
-	 * @staticvar string $type Default 'global'.
 	 *
 	 * @return string $type The endpoint type. Passed by reference.
 	 */

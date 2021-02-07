@@ -142,7 +142,7 @@ Some settings are hidden when your website represents a person, instead of an or
 ### Where can I find the Google News sitemap?
 
 When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`.
-Please note that your site must be verified before using the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
+Please note that your site must be verified with Google News before you can benefit from the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
 This feature extends The SEO Framework's sitemap; therefore, **The SEO Framework's optimized sitemap must be enabled.**
 

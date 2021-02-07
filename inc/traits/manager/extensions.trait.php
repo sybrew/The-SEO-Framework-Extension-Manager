@@ -281,8 +281,7 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_asset_location( $slug, $file, $url = false ) {
 
-		if ( empty( $slug ) || empty( $file ) )
-			return '';
+		if ( empty( $slug ) || empty( $file ) ) return '';
 
 		$path = static::get_extension_relative_path( $slug );
 
@@ -299,15 +298,13 @@ trait Extensions_Properties {
 	 * Generates expected trunk path for extensions. If they're found.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $cache The trunk paths cache.
 	 *
 	 * @param string $slug The extension slug.
 	 * @return string The extension trunk file path.
 	 */
 	private static function get_extension_trunk_path( $slug ) {
 
-		if ( empty( $slug ) )
-			return '';
+		if ( empty( $slug ) ) return '';
 
 		$path = static::get_extension_relative_path( $slug );
 
@@ -373,7 +370,6 @@ trait Extensions_Properties {
 	 * Returns extension file headers.
 	 *
 	 * @since 1.0.0
-	 * @staticvar array $data The fetched header data.
 	 *
 	 * @param string $slug The extension slug.
 	 * @return array The extension header data.
@@ -486,11 +482,11 @@ trait Extensions_Actions {
 	/**
 	 * Returns a list of active extension slugs.
 	 *
-	 * TODO enforce extension order?
+	 * TODO Enforce extension order, instead of activation order?
+	 *      This could prevent some racing-bugs.
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
-	 * @staticvar array $cache
 	 *
 	 * @param array $placeholder Unused.
 	 * @return array : {
@@ -674,7 +670,6 @@ trait Extensions_Actions {
 	 * @since 2.1.0
 	 * @since 2.3.1 Now compares leniently.
 	 * @uses static::version_compare_lenient()
-	 * @staticvar array $cache
 	 * @global string $wp_version
 	 *
 	 * @param array|string $extension The extension to check.
@@ -974,8 +969,8 @@ trait Extensions_Actions {
 	 *
 	 * @see http://php.net/manual/en/function.error-reporting.php
 	 * @since 1.0.0
-	 * @staticvar int $_prev_error_reporting
 	 * @todo Reset WP_DEBUG functionality? i.e. by caching the filters current input.
+	 *       Probably not necessary, since we crash right after this.
 	 *
 	 * @param null|int $val The error reporting level. If null, it will reset
 	 *        error_reporting to its previous value.

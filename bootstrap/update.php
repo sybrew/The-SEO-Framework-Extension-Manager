@@ -285,7 +285,6 @@ function _clear_update_cache() {
  * @since 2.4.0 Can now fetch required (and available) locale files.
  * @access private
  * @see WP Core \wp_update_plugins()
- * @staticvar $runtimecache.
  *
  * @param mixed  $value     Site transient value.
  * @param string $transient Transient name.

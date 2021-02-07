@@ -83,8 +83,6 @@ if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM
  * Initializes the extension.
  *
  * @since 1.0.0
- * @action 'admin_init'
- * @priority 10
  * @access private
  *
  * @return bool True if class is loaded.

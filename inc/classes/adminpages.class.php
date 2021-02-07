@@ -219,7 +219,6 @@ class AdminPages extends AccountActivation {
 	 * Early enough for admin_notices and admin_head :).
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $run
 	 * @access private
 	 *
 	 * @return bool True on actions loaded, false on second load.

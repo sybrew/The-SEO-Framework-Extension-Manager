@@ -370,7 +370,6 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.6 The extension access level is now controlled via another constant.
-	 * @staticvar bool $validated Determines whether the nonce has already been verified.
 	 *
 	 * @param string $key        The nonce action used for caching.
 	 * @param bool   $check_post Whether to check for POST variables containing TSFEM settings.
@@ -729,14 +728,11 @@ final class Admin extends Api {
 	 * Determines whether we're on the monitor overview page.
 	 *
 	 * @since 1.0.0
-	 * @staticvar bool $cache
 	 *
 	 * @return bool
 	 */
 	public function is_monitor_page() {
-
 		static $cache;
-
 		// Don't load from $_GET request.
 		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
 	}

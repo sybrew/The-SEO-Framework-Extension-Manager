@@ -65,8 +65,6 @@ namespace TSF_Extension_Manager {
 	 * @since 2.4.0 1: Removed filter.
 	 *              2: Now uses constant `TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE`
 	 *
-	 * @staticvar bool $cache
-	 *
 	 * @return bool The minimum required capability for extension management.
 	 */
 	function can_do_extension_settings() {
@@ -95,7 +93,6 @@ namespace TSF_Extension_Manager {
 	 * @since 1.5.0 Added filter.
 	 * @since 2.4.0 Deprecated without warning.
 	 * @deprecated
-	 * @staticvar bool $cache
 	 *
 	 * @return string The minimum required capability for extension installation.
 	 */
@@ -108,9 +105,7 @@ namespace TSF_Extension_Manager {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Now returns state in boolean rather than void.
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT
 	 * @access private
-	 * @staticvar array $loaded
 	 *
 	 * @param string $file Where the trait is for. Must be lowercase.
 	 * @return bool True if loaded, false otherwise.
@@ -131,9 +126,7 @@ namespace TSF_Extension_Manager {
 	 * Requires WordPress compat files once.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT
 	 * @access private
-	 * @staticvar array $loaded
 	 *
 	 * @param string $version The version where the WordPress compatibility is required for.
 	 * @return bool True if loaded; false otherwise.
@@ -164,7 +157,6 @@ namespace TSF_Extension_Manager {
 	 *
 	 * @since 2.3.1
 	 * @access private
-	 * @staticvar $time The estimated total time for bootstrapping.
 	 *
 	 * @param int $add The time to add.
 	 * @return int The accumulated time, roughly.

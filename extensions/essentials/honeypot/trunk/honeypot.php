@@ -49,9 +49,6 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * Initializes the plugin.
  *
  * @since 1.0.0
- * @staticvar bool $loaded
- * @action 'plugins_loaded'
- * @priority 11
  *
  * @return bool True if class is loaded.
  */
@@ -560,7 +557,6 @@ JS;
 	 * If on POST, use $this->set_id() beforehand.
 	 *
 	 * @since 1.0.0
-	 * @staticvar int $id
 	 *
 	 * @param array $commentdata Optional. The commentdata on POST.
 	 * @return int The post ID.
@@ -740,7 +736,6 @@ JS;
 	 *
 	 * @since 1.0.0
 	 * @since 1.0.2 Values always start with an alphabetic character
-	 * @staticvar array $_hashes
 	 *
 	 * @param int  $length   The length of the hash to get.
 	 * @param bool $flip     Whether to flip the hash key prior to returning it.
@@ -793,7 +788,6 @@ JS;
 	 * @since 1.0.0
 	 * @since 1.0.2 Values always start with an alphabetic character
 	 * @since 2.0.0 No longer returns solely hexadecimals, but performs Base62 conversion.
-	 * @staticvar string $_hash
 	 *
 	 * @param int  $length   The length of the hash to get.
 	 * @param bool $flip     Whether to flip the hash key prior to returning it.
@@ -825,7 +819,6 @@ JS;
 	 * @since 1.0.0
 	 * @since 1.0.2 Values always start with an alphabetic character
 	 * @since 2.0.0 No longer returns solely hexadecimals, but performs Base36 conversion.
-	 * @staticvar array $_hashes
 	 *
 	 * @param int  $length   The length of the hash to get.
 	 * @param bool $flip     Whether to flip the hash key prior to returning it.

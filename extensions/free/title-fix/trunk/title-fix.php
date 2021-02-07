@@ -47,11 +47,10 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 /**
  * Initializes the extension.
  *
+ * Priority 11 : The WordPress.org version has priority 10, preventing collision.
+ *               Also, the loader requires 11 or later.
+ *
  * @since 1.0.0
- * @staticvar bool $loaded
- * @action 'plugins_loaded'
- * @priority 11 : The WordPress.org version has priority 10, preventing collision.
- *                Also, the loader requires 11 or later.
  *
  * @return bool True if class is loaded.
  */
@@ -157,7 +156,6 @@ final class Core {
 	 * Loads plugin actions.
 	 *
 	 * @since 1.0.3
-	 * @staticvar int $_sequence Iterates sequences for switch.
 	 *
 	 * @return null Early if title is fixed.
 	 */

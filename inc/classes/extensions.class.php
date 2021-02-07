@@ -200,7 +200,7 @@ final class Extensions extends Secure_Abstract {
 	 * Removes items from extension list based on $what and website conditions.
 	 *
 	 * @since 1.0.0
-	 * @since 1.3.0 : Now uses its own sorting system, speeding it up by roughly 40 times.
+	 * @since 1.3.0 Now uses its own sorting system, speeding it up by roughly 40 times.
 	 *
 	 * @param array        $extensions The extension list.
 	 * @param string|array $what       What to filter out of the list.

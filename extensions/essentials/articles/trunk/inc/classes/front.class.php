@@ -117,7 +117,6 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 * @since 1.4.0 Now supports AMP v0.5+ endpoints.
 	 * @uses const AMP_QUERY_VAR
-	 * @staticvar bool $is_amp
 	 *
 	 * @return bool True if AMP is enabled.
 	 */
@@ -180,14 +179,11 @@ final class Front extends Core {
 	 * Returns current WP_Post object.
 	 *
 	 * @since 1.0.0
-	 * @staticvar object $post
 	 *
 	 * @return object WP_Post
 	 */
 	private function get_current_post() {
-
 		static $post;
-
 		return isset( $post ) ? $post : $post = \get_post( $this->get_current_id() );
 	}
 
@@ -195,14 +191,11 @@ final class Front extends Core {
 	 * Returns current WP_Query object ID.
 	 *
 	 * @since 1.0.0
-	 * @staticvar int $id
 	 *
 	 * @return int Queried Object ID.
 	 */
 	private function get_current_id() {
-
 		static $id = null;
-
 		return $id ?: $id = \get_queried_object_id();
 	}
 
@@ -315,7 +308,6 @@ final class Front extends Core {
 	 * Builds up and returns article data by shifting array keys through reset.
 	 *
 	 * @since 1.0.0
-	 * @staticvar $data The generated data.
 	 * @see $this->build_article_data()
 	 *
 	 * @param bool  $get   Whether to return the accumulated data.
