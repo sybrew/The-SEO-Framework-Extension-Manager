@@ -92,6 +92,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 		* **Fixed:** The HTTPS test no longer expects subsequent redirects when the site can be served from both HTTP and HTTPS.
 	* **July 7th, 2020:**
 		* **Fixed:** The mixed scheme test no longer defaults to mixed, but correctly tests both the HTTP and HTTPS versions of your site.
+* **No extension changes were made.**
 
 ### 1.2.6
 
@@ -104,12 +105,13 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 [tsfep-release time="May 15th, 2020"]
 
-* **Other:** This extension is now out of beta! We're now ready to expand to per-page reviews, which will follow in a future update.
-* **Improved:** When no title tag is found, a non-generic message is now shown.
-* **Changed:** Removed the "coming soon" statistics pane.
-* **Changed:** Removed the "coming soon" issue.
-* **Fixed:** The PHP error evaluation link now works for the homepage.
-* **Fixed:** The `robots.txt` asserter now recognizes and extrudes The SEO Framework v4.0.5 robots' validator.
+* **Extension:**
+	* **Other:** This extension is now out of beta! We're now ready to expand to per-page reviews, which will follow in a future update.
+	* **Improved:** When no title tag is found, a non-generic message is now shown.
+	* **Changed:** Removed the "coming soon" statistics pane.
+	* **Changed:** Removed the "coming soon" issue.
+	* **Fixed:** The PHP error evaluation link now works for the homepage.
+	* **Fixed:** The `robots.txt` asserter now recognizes and extrudes The SEO Framework v4.0.5 robots' validator.
 * **API - Our servers:**
 	* **February 12th, 2020:**
 		* **Fixed:** Nonconventional title tags are now recognized.
@@ -121,7 +123,8 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 [tsfep-release time="December 18th, 2019"]
 
-* **Changed:** The `favicon.ico` check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
+* **Extension:**
+	* **Changed:** The `favicon.ico` check is now hidden when a meta icon is found. We changed this because modern browsers no longer ping the ico file when a meta-icon is proposed.
 * **API - Our servers:**
 	* **December 17th, 2019:**
 		* **Fixed:** You can now disconnect from the Monitor service after moving domains.
@@ -136,8 +139,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 [tsfep-release time="January 28th, 2019"]
 
-* **Extension:**
-	* **Changed:** This extension now uses TSF's script loader.
+* **Changed:** This extension now uses TSF's script loader.
 
 ### 1.2.1-beta-5
 

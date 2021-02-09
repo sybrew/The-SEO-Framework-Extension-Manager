@@ -1,15 +1,15 @@
-# Copyright (C) 2020 The SEO Framework Team
+# Copyright (C) 2021 The SEO Framework Team
 # This file is distributed under the same license as the The SEO Framework - Extension Manager plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework - Extension Manager 2.4.0\n"
+"Project-Id-Version: The SEO Framework - Extension Manager 2.5.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/The-SEO-Framework-Extension-Manager\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-02T02:45:48+02:00\n"
+"POT-Creation-Date: 2021-02-09T02:45:12+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: the-seo-framework-extension-manager\n"
@@ -35,3067 +35,3086 @@ msgid "https://theseoframework.com/"
 msgstr ""
 
 #. translators: %s: Plugin name
-#: bootstrap/update.php:99
+#: bootstrap/update.php:113
 msgid "Learn more about %s"
 msgstr ""
 
-#: bootstrap/update.php:100
+#: bootstrap/update.php:114
 msgid "View plugin details"
 msgstr ""
 
 #. translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details.
-#: bootstrap/update.php:104
-msgid "%1$s requires %2$s plugin to function. %3$s."
+#: bootstrap/update.php:118
+msgid "%1$s requires %2$s plugin to function. %3$s"
 msgstr ""
 
 #. translators: %s: The SEO Framework
-#: bootstrap/update.php:136
+#: bootstrap/update.php:150
 msgid "Install %s"
 msgstr ""
 
-#: bootstrap/update.php:137
+#: bootstrap/update.php:151
 msgid "Install Now"
 msgstr ""
 
 #. translators: Markdown. %s = Update API URL
-#: bootstrap/update.php:169
+#: bootstrap/update.php:183
 msgid "This website is blocking external requests, this means it will not be able to connect to The SEO Framework update services. Please add `%s` to `WP_ACCESSIBLE_HOSTS` to keep the Extension Manager plugin up-to-date and secure."
 msgstr ""
 
-#: bootstrap/update.php:204
+#: bootstrap/update.php:219
 msgid "This website does not support secure connections. This means \"The SEO Framework - Extension Manager\" can not be updated."
 msgstr ""
 
 #. translators: %1$s: API url, %2$s: support URL
-#: bootstrap/update.php:226
+#: bootstrap/update.php:241
 msgid "An unexpected error occurred. Something may be wrong with %1$s or this server&#8217;s configuration. If you continue to have problems, please <a href=\"%2$s\">contact us</a>."
 msgstr ""
 
 #. translators: %s: support forums URL
-#: bootstrap/update.php:240
+#: bootstrap/update.php:255
 msgid "An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href=\"%s\">contact us</a>."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:96
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:268
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:507
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:124
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:297
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:554
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:593
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:634
 msgid "Article"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:97
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:274
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:508
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:125
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:303
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:555
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:594
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:635
 msgid "News Article"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:98
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:280
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:509
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:126
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:309
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:556
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:595
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:636
 msgid "Blog Posting"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:149
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:167
 msgid "Google News Sitemap"
 msgstr ""
 
 #. translators: %s = Articles FAQ link. Markdown.
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:152
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:170
 msgid "For more information, please refer to the [Articles FAQ](%s)."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:155
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:175
+msgid "To use this feature, you must enable the optimized sitemap of The SEO Framework."
+msgstr ""
+
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:177
 msgid "The Google News sitemap will list all news articles and annotate them accordingly for Google News."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:159
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:181
 msgid "Enable Google News sitemap?"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:174
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:196
 msgid "Publisher Logo"
 msgstr ""
 
 #. translators: %s = Logo guidelines link. Markdown.
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:177
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:199
 msgid "Please refer to the [logo guidelines](%s)."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:180
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:202
 msgid "The logo must be a horizontally wide rectangle, not a square, and at least 60px high."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:226
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:249
 msgid "Enable Post Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:231
-msgid "Enable article markup?"
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:254
+msgid "Enable article markup support?"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:249
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:272
 msgid "Default Article Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:251
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:274
 msgid "This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already stored."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:310
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:291
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:553
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:592
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:633
+msgid "&mdash; Disabled &mdash;"
+msgstr ""
+
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:339
 msgid "Adjust article settings for this post type."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:323
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:352
 msgid "Post Type Settings"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:324
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:353
 msgid "Article markup should only be applied to content that is ephemeral and may be subject to change, like an opinionated blog post, a news article, or a research document. Timeless content, such as a contact, product, or about page, should not have the article markup."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:325
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:354
 msgid "Be mindful of the post types you enable. For instance, a product, app, recipe, or an event page should not always be recognized as an article."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:331
-msgid "Enabled"
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:360
+msgid "Supported"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:497
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:543
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:590
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:629
 msgid "Article Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:498
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:544
 msgid "Set the article type."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:84
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:83
 msgid "Connect your site with various third-party analytical platforms. Cord takes care of the rest."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:97
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:96
 msgid "Google Analytics"
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:100
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:99
 msgid "Start tracking with [Google Analytics](%s) by filling in a Tracking ID."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:114
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:190
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:113
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:189
 msgid "Tracking ID"
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:117
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:116
 msgid "Get your [Tracking ID](%s)."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:131
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:130
 msgid "Enhanced Link Attribution"
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:134
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:133
 msgid "You can improve the accuracy of links clicked with [Enhanced Link Attribution](%s)."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:137
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:136
 msgid "Use the \"Page Analytics (by Google)\" browser extension for Google Chrome to analyze the information collected. Custom theme development may be required to take full advantage of this feature."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:140
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:139
 msgid "Enable Enhanced Link Attribution?"
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:151
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:150
 msgid "IP Anonymization"
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:154
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:153
 msgid "You can protect the identity of your visitors through [IP anonymization](%s)."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:157
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:156
 msgid "This feature is at the cost of a slight possibility of inconsistent data."
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:160
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:159
 msgid "Enable IP anonymization?"
 msgstr ""
 
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:173
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:172
 msgid "Facebook Pixel"
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:176
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:175
 msgid "Start tracking with [Facebook pixel](%s) by filling in a Pixel ID."
 msgstr ""
 
 #. translators: %s = Tracking ID documentation link. Markdown.
-#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:193
+#: extensions/essentials/cord/trunk/inc/classes/admin.class.php:192
 msgid "Get your [Pixel ID](%s)."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:201
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:213
 msgid "No example available."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:202
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:214
 msgid "A parsing failure occurred."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:267
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:282
 msgid "Subject Analysis"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:268
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:283
 msgid "Set subjects and learn how you can improve their focus."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/core.class.php:72
+#: extensions/essentials/focus/trunk/inc/classes/core.class.php:71
 msgid "&mdash; Lexical form &mdash;"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:234
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:233
 msgid "Meta title:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:242
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:241
 msgid "The subject is found in the meta title, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:243
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:242
 msgid "A synonym is found in the meta title, consider using an inflection instead."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:244
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:243
 msgid "The subject is not found in the meta title, you should add it."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:267
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:266
 msgid "Page title:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:275
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:274
 msgid "The subject is found in the page title, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:276
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:275
 msgid "A synonym is found in the page title, consider using an inflection instead."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:277
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:276
 msgid "The subject is not found in the page title, you should add it."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:300
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:299
 msgid "Introduction:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:313
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:312
 msgid "The subject is found a few times in the introduction, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:314
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:313
 msgid "The subject is found in the introduction, consider highlighting it a bit more."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:315
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:314
 msgid "The subject is not found in the introduction, you should highlight it."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:338
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:337
 msgid "Subject density:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:349
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:348
 msgid "The subject density is far too high, consider lowering subject related word usage as it may seem like spam."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:350
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:349
 msgid "The subject density is high, consider lowering the subject usage."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:351
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:350
 msgid "The subject is recognizable from the content, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:352
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:351
 msgid "The subject is slightly recognizable from the content, consider highlighting it more."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:353
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:352
 msgid "The subject is not recognizable from the content, you should improve this."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:375
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:374
 msgid "Linking:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:384
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:383
 msgid "A few links are found related to the subject, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:385
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:384
 msgid "A link is found related to the subject, this is good, but consider adding more."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:386
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:385
 msgid "No links are found related to the subject."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:409
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:408
 msgid "Meta description:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:417
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:416
 msgid "The subject is clearly found in the meta description, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:418
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:417
 msgid "The subject is found in the meta description, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:419
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:418
 msgid "The subject is not found in the meta description, you should add it."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:441
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:440
 msgid "Page URL:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:452
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:451
 msgid "The subject is found in the page URL, this is good."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:453
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:452
 msgid "A synonym is found in the page URL, consider using an inflection instead."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:454
+#: extensions/essentials/focus/trunk/inc/classes/scoring.class.php:453
 msgid "The subject is not found in the page URL, you should add it."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:26
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:31
 msgid "Supporting keyword..."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:27
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:32
 msgid "Keyword..."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:83
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:91
 msgid "Adjust subject inflections and synonyms."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:84
-msgid "Only the English language currently supports lexical adjustments."
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:92
+msgid "The current site language has no support for lexical adjustments."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:108
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:122
 msgid "Adjusting the subject requires JavaScript"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:147
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:162
 msgid "View analysis"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:167
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:182
 msgid "Choose homonymous example:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:181
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:196
 msgid "Choose inflections"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:185
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:200
 msgid "Choose synonyms"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/js-templates.php:17
+#: extensions/essentials/focus/trunk/views/inpost/js-templates.php:21
 msgid "No elements are found that support this feature."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/score-template.php:17
+#: extensions/essentials/focus/trunk/views/inpost/score-template.php:21
 msgid "JavaScript is required to perform a subject analysis."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/score-template.php:18
+#: extensions/essentials/focus/trunk/views/inpost/score-template.php:22
 msgid "Below you find the previous assessments."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/score-template.php:23
+#: extensions/essentials/focus/trunk/views/inpost/score-template.php:27
 msgid "No keyword has been set, so no analysis can be made."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/score-template.php:28
+#: extensions/essentials/focus/trunk/views/inpost/score-template.php:32
 msgid "Something went wrong evaluating the subject."
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:557
+#: extensions/essentials/honeypot/trunk/honeypot.php:697
 msgid "You are human!"
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:565
-msgid "Please remove this comment to prove you're human."
+#: extensions/essentials/honeypot/trunk/honeypot.php:708
+msgid "Please empty this comment field to prove you're human."
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:573
-msgid "Comments for robots"
+#: extensions/essentials/honeypot/trunk/honeypot.php:719
+msgid "Comment for robots"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:91
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:89
 msgid "Set number of departments"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:92
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:90
 msgid "Each department must have its own publicly recognizable name and type."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:93
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:91
 msgid "For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:103
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:101
 msgid "Main Department"
 msgstr ""
 
 #. translators: %d is department iteration number
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:105
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:103
 msgid "Department %d"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:173
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:171
 msgid "Select supported department type"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:175
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:173
 msgid "Choose a (sub)type that closely describes the business."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:176
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:174
 msgid "(Sub)types with an asterisk are pending support."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:181
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:179
 msgid "Select \"Local Business\" if the department type is not listed."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:182
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:180
 msgid "Select \"Department disabled\" to disable this department."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:213
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:211
 msgid "Department name"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:215
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:213
 msgid "Fill in the name of the department accurately."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:216
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:214
 msgid "For example, myMart and myMart Pharmacy."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:218
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:216
 msgid "Include the store name with the department name in the following format: <code>{store name} {department name}</code>"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:235
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:233
 msgid "Department URL"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:237
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:235
 msgid "The fully-qualified URL of this department."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:238
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:236
 msgid "If this URL matches a page on this website, then this department data will be outputted there."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:239
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:237
 msgid "Leave empty if no assigned page exists."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:241
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:239
 msgid "For example, the contact page or homepage. It must be a working link and the department location must be described accurately on there."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:251
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:249
 msgid "Department address"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:252
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:250
 msgid "Fill in the exact address of the department."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:253
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:251
 msgid "If this is not the main department, and this department has the same address as the main department, leave these fields empty."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:269
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:267
 msgid "Telephone number"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:270
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:268
 msgid "This phone number meant to be the primary contact method for customers."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:271
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:269
 msgid "Be sure to include the country code and area code in the phone number: <code>+15555555555</code>"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:281
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:279
 msgid "Department opening hours"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:282
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:280
 msgid "Specify the hours during which the business location is open."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:283
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:281
 msgid "Be sure to specify all days of the week."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:297
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:295
 msgid "Image URL"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:298
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:296
 msgid "An image of the department or building."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:308
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:306
 msgid "Cuisine"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:309
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:307
 msgid "Select the types of cuisine the department serves."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:310
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:308
 msgid "Multiple cuisines are allowed."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:327
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:325
 msgid "Menu URL"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:328
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:326
 msgid "The department menu URL."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:329
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:327
 msgid "This must be a fully-qualified URL."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:345
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:343
 msgid "Reservations"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:346
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:344
 msgid "Department customers' reservation specification."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:347
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:345
 msgid "These fields are still being tested by Search Engines. Usage will likely yield no effect."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:399
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:397
 msgid "Street address"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:401
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:399
 msgid "Street number, street name, and unit number (if applicable)."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:415
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:413
 msgid "City, town, village"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:429
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:427
 msgid "State or province"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:430
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:428
 msgid "The region. For example, CA for California."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:444
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:442
 msgid "Postal or zip code"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:458
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:456
 msgid "Country"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:491
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:489
 msgid "Latitude"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:493
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:491
 msgid "The geographic latitude."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:513
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:511
 msgid "Longitude"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:515
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:513
 msgid "The geographic longitude."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:550
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:548
 msgid "Number of opening hours"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:551
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:549
 msgid "When opening hours fluctuate, increase this number to specify more opening hours."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:552
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:550
 msgid "Set to 0 or leave empty if unspecified."
 msgstr ""
 
 #. translators: %d is opening hours iteration number
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:563
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:561
 msgid "Opening Hours %d"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:587
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:585
 msgid "No country selected"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1607
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1605
 msgid "Department disabled"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1612
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1610
 msgid "Local business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1617
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1615
 msgid "Animal shelter"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1622
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1620
 msgid "Automotive business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1626
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1624
 msgid "Auto body shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1630
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1628
 msgid "Auto dealer"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1634
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2103
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1632
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2101
 msgid "Auto parts store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1638
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1636
 msgid "Auto rental"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1642
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1640
 msgid "Auto repair"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1646
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1644
 msgid "Auto wash"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1650
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1648
 msgid "Gas station"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1654
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1652
 msgid "Motorcycle dealer"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1658
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1656
 msgid "Motorcycle repair"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1664
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1662
 msgid "Child care"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1669
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1667
 msgid "Medical business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1674
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1672
 msgid "Community health"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1678
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1676
 msgid "Dentist"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1682
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1680
 msgid "Dermatology"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1686
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1684
 msgid "Diet / Nutrition"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1690
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1688
 msgid "Emergency / Trauma"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1694
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1692
 msgid "Geriatric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1698
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1696
 msgid "Gynecologic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1702
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1700
 msgid "Medical clinic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1706
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1704
 msgid "Midwifery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1710
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1708
 msgid "Nursing"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1714
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1712
 msgid "Obstetric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1718
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1716
 msgid "Oncologic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1722
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1720
 msgid "Optician"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1726
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1724
 msgid "Optometric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1730
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1728
 msgid "Otolaryngologic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1734
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1732
 msgid "Pediatric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1738
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1736
 msgid "Pharmacy"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1742
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1740
 msgid "Physician"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1746
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1744
 msgid "Physiotherapy"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1750
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1748
 msgid "Plastic surgery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1754
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1752
 msgid "Podiatric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1758
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1756
 msgid "Primary care"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1762
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1760
 msgid "Psychiatric"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1766
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1764
 msgid "Public health"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1772
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1770
 msgid "Dry cleaning or laundry"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1777
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1775
 msgid "Emergency service"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1781
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1779
 msgid "Fire station"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1785
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1783
 msgid "Hospital"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1789
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1787
 msgid "Police station"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1795
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1793
 msgid "Employment agency"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1800
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1798
 msgid "Entertainment business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1804
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1802
 msgid "Adult entertainment"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1808
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1806
 msgid "Amusement park"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1812
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1810
 msgid "Art gallery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1816
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1814
 msgid "Casino"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1820
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1818
 msgid "Comedy club"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1824
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1822
 msgid "Movie theater"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1828
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1826
 msgid "Night club"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1834
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1832
 msgid "Financial service"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1838
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1836
 msgid "Accounting service"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1842
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1840
 msgid "Automated teller"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1846
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1844
 msgid "Bank-or credit union"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1850
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1848
 msgid "Insurance agency"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1856
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1854
 msgid "Food establishment"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1860
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1858
 msgid "Bakery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1864
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1862
 msgid "Bar or pub"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1868
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1866
 msgid "Brewery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1872
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1870
 msgid "Cafe or coffee shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1876
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1874
 msgid "Fast food restaurant"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1880
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1878
 msgid "Ice cream shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1884
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1882
 msgid "Restaurant"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1888
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1886
 msgid "Winery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1892
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1890
 msgid "Distillery"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1898
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1896
 msgid "Government office"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1902
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1900
 msgid "Post office"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1908
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1906
 msgid "Health and beauty business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1912
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1910
 msgid "Beauty salon"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1916
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1914
 msgid "Day spa"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1920
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1918
 msgid "Hair salon"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1924
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1922
 msgid "Health club"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1928
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1926
 msgid "Nail salon"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1932
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1930
 msgid "Tattoo parlor"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1938
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1936
 msgid "Home and construction business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1942
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1940
 msgid "Electrician"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1946
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1944
 msgid "General contractor"
 msgstr ""
 
 #. translators: Keep it short! Or, keep it HVAC.
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1951
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1949
 msgctxt "Heating, Ventilation, Air Conditioning"
 msgid "HVAC business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1955
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1953
 msgid "House painter"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1959
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1957
 msgid "Locksmith"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1963
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1961
 msgid "Moving company"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1967
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1965
 msgid "Plumber"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1971
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1969
 msgid "Roofing contractor"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1977
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1975
 msgid "Internet cafe"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1982
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1980
 msgid "Legal service"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1986
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1984
 msgid "Attorney"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1990
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1988
 msgid "Notary"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:1996
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1994
 msgid "Library"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2001
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:1999
 msgid "Lodging business"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2005
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2003
 msgid "Bed and breakfast"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2009
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2007
 msgid "Campground"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2013
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2011
 msgid "Hostel"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2017
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2015
 msgid "Hotel"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2021
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2019
 msgid "Motel"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2025
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2023
 msgid "Resort"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2031
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2029
 msgid "Professional service"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2036
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2034
 msgid "Radio station"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2041
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2039
 msgid "Real estate agent"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2046
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2044
 msgid "Recycling center"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2051
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2049
 msgid "Self storage"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2056
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2054
 msgid "Shopping center"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2061
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2059
 msgid "Sports activity location"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2065
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2063
 msgid "Bowling alley"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2069
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2067
 msgid "Exercise gym"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2073
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2071
 msgid "Golf course"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2077
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2075
 msgid "Public swimming pool"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2081
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2079
 msgid "Ski resort"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2085
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2083
 msgid "Sports club"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2089
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2087
 msgid "Stadium or arena"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2093
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2091
 msgid "Tennis complex"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2099
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2097
 msgid "Store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2107
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2105
 msgid "Bike store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2111
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2109
 msgid "Book store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2115
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2113
 msgid "Clothing store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2119
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2117
 msgid "Computer store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2123
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2121
 msgid "Convenience store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2127
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2125
 msgid "Department store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2131
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2129
 msgid "Electronics store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2135
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2133
 msgid "Florist"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2139
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2137
 msgid "Furniture store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2143
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2141
 msgid "Garden store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2147
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2145
 msgid "Grocery store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2151
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2149
 msgid "Hardware store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2155
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2153
 msgid "Hobby shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2159
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2157
 msgid "Home goods store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2163
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2161
 msgid "Jewelry store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2167
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2165
 msgid "Liquor store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2171
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2169
 msgid "Mens clothing store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2175
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2173
 msgid "Mobile phone store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2179
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2177
 msgid "Movie rental store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2183
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2181
 msgid "Music store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2187
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2185
 msgid "Office equipment store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2191
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2189
 msgid "Outlet store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2195
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2193
 msgid "Pawn shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2199
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2197
 msgid "Pet store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2203
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2201
 msgid "Shoe store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2207
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2205
 msgid "Sporting goods store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2211
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2209
 msgid "Tire shop"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2215
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2213
 msgid "Toy store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2219
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2217
 msgid "Wholesale store"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2225
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2223
 msgid "Television station"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2230
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2228
 msgid "Tourist information center"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2235
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2233
 msgid "Travel agency"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2253
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2251
 msgid "African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2257
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2255
 msgid "North African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2261
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2259
 msgid "Algerian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2265
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2263
 msgid "Egyptian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2269
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2267
 msgid "Libyan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2273
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2271
 msgid "Mauritanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2277
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2275
 msgid "Moroccan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2281
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2279
 msgid "Sudanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2285
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2283
 msgid "Tunisian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2291
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2289
 msgid "Horn of Africa"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2295
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2293
 msgid "Djiboutian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2299
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2297
 msgid "Ethiopian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2303
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2301
 msgid "Eritrean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2307
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2305
 msgid "Somali"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2313
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2311
 msgid "East African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2317
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2315
 msgid "Burundian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2321
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2319
 msgid "Kenyan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2325
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2323
 msgid "Rwandan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2329
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2327
 msgid "South Sudanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2333
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2331
 msgid "Tanzanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2337
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2335
 msgid "Zanzibari"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2343
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2341
 msgid "Ugandan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2349
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2347
 msgid "Central African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2353
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2351
 msgid "Angolan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2357
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2355
 msgid "Cameroonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2361
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2359
 msgid "Centrafrican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2365
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2363
 msgid "Chadian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2369
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2367
 msgid "Congolese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2373
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2371
 msgid "Equatorial Guinean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2377
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2375
 msgid "Gabonese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2381
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2379
 msgid "São Toméan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2387
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2385
 msgid "Southern African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2391
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2389
 msgid "Botswanan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2395
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2393
 msgid "Comorian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2399
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2397
 msgid "Lesothoan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2403
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2401
 msgid "Malagasy"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2407
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2405
 msgid "Malawian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2411
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2409
 msgid "Mauritian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2415
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2413
 msgid "Mozambican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2419
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2417
 msgid "Namibian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2423
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2421
 msgid "Seychellois"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2427
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2425
 msgid "South African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2431
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2429
 msgid "Swazis"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2435
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2433
 msgid "Zambian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2439
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2437
 msgid "Zimbabwean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2445
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2443
 msgid "West African"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2449
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2447
 msgid "Benin"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2453
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2451
 msgid "Burkinabé"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2457
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2455
 msgid "Cabo Verdean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2461
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2459
 msgid "Nigerien"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2465
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2463
 msgid "Gambian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2469
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2467
 msgid "Ghanaian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2473
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2471
 msgid "Guinean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2477
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2475
 msgid "Bissau-Guinean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2481
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2479
 msgid "Ivorian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2485
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2483
 msgid "Liberian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2489
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2487
 msgid "Malian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2493
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2491
 msgid "Nigerian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2497
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2495
 msgid "Senegalese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2501
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2499
 msgid "Sierra Leonean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2505
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2503
 msgid "Togolese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2513
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2511
 msgid "North American"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2517
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2515
 msgid "Canadian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2521
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2519
 msgid "American"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2525
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2523
 msgid "Alabamian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2529
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2527
 msgid "Alaskan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2533
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2531
 msgid "Arizonan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2537
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2535
 msgid "Arkansan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2541
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2539
 msgid "Californian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2545
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2543
 msgid "Coloradan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2549
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2547
 msgid "Connecticuter"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2553
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2551
 msgid "Delawarean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2557
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2555
 msgid "Floridian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2561
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3003
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2559
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3001
 msgid "Georgian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2565
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2563
 msgid "Hawaiian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2569
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2567
 msgid "Idahoan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2573
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2571
 msgid "Illinoisan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2577
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2575
 msgid "Hoosier"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2581
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2579
 msgid "Iowan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2585
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2583
 msgid "Kansan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2589
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2587
 msgid "Kentuckian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2593
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2591
 msgid "Louisianian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2597
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2595
 msgid "Mainer"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2601
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2599
 msgid "Marylander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2605
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2603
 msgid "Massachusettsan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2609
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2607
 msgid "Michiganian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2613
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2611
 msgid "Minnesotan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2617
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2615
 msgid "Mississippian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2621
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2619
 msgid "Missourian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2625
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2623
 msgid "Montanan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2629
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2627
 msgid "Nebraskan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2633
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2631
 msgid "Nevadan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2637
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2635
 msgid "New Hampshirite"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2641
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2639
 msgid "New Jerseyan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2645
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2643
 msgid "New Mexican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2649
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2647
 msgid "New Yorker"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2653
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2651
 msgid "North Carolinian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2657
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2655
 msgid "North Dakotan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2661
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2659
 msgid "Ohioan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2665
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2663
 msgid "Oklahoman"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2669
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2667
 msgid "Oregonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2673
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2671
 msgid "Pennsylvanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2677
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2675
 msgid "Puerto Rican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2681
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2679
 msgid "Rhode Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2685
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2683
 msgid "South Carolinian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2689
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2687
 msgid "South Dakotan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2693
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2691
 msgid "Tennessean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2697
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2695
 msgid "Texan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2701
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2699
 msgid "Utahn"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2705
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2703
 msgid "Vermonter"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2709
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2707
 msgid "Virginian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2713
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2711
 msgid "Washingtonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2717
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2715
 msgid "West Virginian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2721
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2719
 msgid "Wisconsinite"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2725
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2723
 msgid "Wyomingite"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2731
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2729
 msgid "Mexican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2737
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2735
 msgid "Central American"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2741
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2857
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2739
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2855
 msgid "Belizean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2745
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2743
 msgid "Costa Rican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2749
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2747
 msgid "Salvadoran"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2753
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2751
 msgid "Guatemalan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2757
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2755
 msgid "Honduran"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2761
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2759
 msgid "Nicaraguan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2765
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2763
 msgid "Panamanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2771
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2769
 msgid "South American"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2775
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2773
 msgid "Brazilian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2779
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2777
 msgid "Colombian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2783
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2781
 msgid "Argentine"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2787
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2785
 msgid "Peruvian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2791
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2789
 msgid "Venezuelan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2795
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2793
 msgid "Chilean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2799
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2797
 msgid "Ecuadorian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2803
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2801
 msgid "Bolivian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2807
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2805
 msgid "Paraguayan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2811
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2809
 msgid "Uruguayan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2815
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2823
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2893
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2813
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2821
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2891
 msgid "Guyanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2819
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2817
 msgid "Surinamese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2827
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2889
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2825
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2887
 msgid "Guianan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2833
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2831
 msgid "Caribbean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2837
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2835
 msgid "Anguillan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2841
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2839
 msgid "Antiguan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2845
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2843
 msgid "Aruban"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2849
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2847
 msgid "Bahamian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2853
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2851
 msgid "Barbadian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2861
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2859
 msgid "Bermudian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2865
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2863
 msgid "Caymanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2869
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2867
 msgid "Cuban"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2873
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2871
 msgid "Curaçaoan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2877
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2875
 msgid "Dominican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2881
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2879
 msgid "Grenadian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2885
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2883
 msgid "Guadeloupean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2897
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2895
 msgid "Haitian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2901
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2899
 msgid "Jamaican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2905
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2903
 msgid "Kittitian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2909
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2907
 msgid "Martinican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2913
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2911
 msgid "Montserratian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2917
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2915
 msgid "Nevisian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2921
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2919
 msgid "Saint Lucian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2925
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2923
 msgid "Tobagonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2929
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2927
 msgid "Trinidadian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2933
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2931
 msgid "Turks and Caicos Islanders"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2937
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2935
 msgid "Vincentian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2941
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2939
 msgid "Virgin Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2947
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2945
 msgid "Asian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2951
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2949
 msgid "Afghan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2955
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2953
 msgid "Armenian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2959
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3169
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2957
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3167
 msgid "Azerbaijani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2963
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2961
 msgid "Bahraini"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2967
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2965
 msgid "Bangladeshi"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2971
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2969
 msgid "Bhutanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2975
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2973
 msgid "Bruneian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2979
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2977
 msgid "Burmese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2983
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2981
 msgid "Cambodian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2987
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2985
 msgid "Chinese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2991
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2989
 msgid "Cypriot"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2995
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2993
 msgid "Emirati"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:2999
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:2997
 msgid "Filipino"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3007
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3005
 msgid "Indian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3011
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3009
 msgid "Indonesian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3015
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3013
 msgid "Iranian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3019
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3017
 msgid "Iraqi"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3023
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3021
 msgid "Israeli"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3027
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3025
 msgid "Japanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3031
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3029
 msgid "Jordanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3035
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3033
 msgid "Kazakhstani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3039
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3037
 msgid "Kuwaiti"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3043
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3041
 msgid "Kyrgyzstani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3047
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3045
 msgid "Lao"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3051
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3049
 msgid "Lebanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3055
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3053
 msgid "Malaysian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3059
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3057
 msgid "Maldivian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3063
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3061
 msgid "Mongolian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3067
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3065
 msgid "Nepali"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3071
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3069
 msgid "North Korean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3075
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3073
 msgid "Omani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3079
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3077
 msgid "Pakistani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3083
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3081
 msgid "Palestinian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3087
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3085
 msgid "Qatari"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3091
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3089
 msgid "Russian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3095
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3093
 msgid "Saudi"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3099
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3097
 msgid "Singaporean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3103
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3101
 msgid "South Korean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3107
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3105
 msgid "Sri Lankan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3111
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3109
 msgid "Syrian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3115
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3113
 msgid "Taiwanese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3119
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3117
 msgid "Tajikistani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3123
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3121
 msgid "Thai"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3127
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3125
 msgid "Timorese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3131
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3129
 msgid "Turkish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3135
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3133
 msgid "Turkmen"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3139
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3137
 msgid "Uzbekistani"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3143
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3141
 msgid "Vietnamese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3147
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3145
 msgid "Yemeni"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3153
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3151
 msgid "European"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3157
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3155
 msgid "Albanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3161
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3159
 msgid "Andorran"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3165
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3163
 msgid "Austrian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3173
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3171
 msgid "Belarusian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3177
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3175
 msgid "Belgian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3181
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3179
 msgid "Bosnian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3185
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3183
 msgid "British"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3189
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3187
 msgid "Bulgarian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3193
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3191
 msgid "Croatian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3197
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3195
 msgid "Czech"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3201
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3199
 msgid "Danish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3205
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3203
 msgid "Dutch"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3209
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3207
 msgid "Estonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3213
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3211
 msgid "Finnish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3217
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3215
 msgid "French"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3221
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3219
 msgid "German"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3225
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3223
 msgid "Greek"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3229
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3227
 msgid "Herzegovinian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3233
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3231
 msgid "Hungarian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3237
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3235
 msgid "Icelandic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3241
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3239
 msgid "Irish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3245
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3243
 msgid "Italian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3249
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3247
 msgid "Kosovar"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3253
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3251
 msgid "Latvian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3257
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3255
 msgid "Liechtensteiner"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3261
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3259
 msgid "Lithuanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3265
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3263
 msgid "Luxembourg"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3269
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3267
 msgid "Macedonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3273
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3271
 msgid "Maltese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3277
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3275
 msgid "Moldovan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3281
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3279
 msgid "Montenegrin"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3285
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3283
 msgid "Monégasque"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3289
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3287
 msgid "Norwegian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3293
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3291
 msgid "Polish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3297
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3295
 msgid "Portuguese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3301
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3299
 msgid "Romanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3305
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3303
 msgid "Sammarinese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3309
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3307
 msgid "Serbian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3313
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3311
 msgid "Slovak"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3317
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3315
 msgid "Slovenian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3321
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3319
 msgid "Spanish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3325
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3323
 msgid "Swedish"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3329
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3327
 msgid "Swiss"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3333
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3331
 msgid "Ukrainian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3337
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3335
 msgid "Vatican"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3343
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3341
 msgid "Oceanic"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3347
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3345
 msgid "American Samoan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3351
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3349
 msgid "Australian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3355
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3353
 msgid "Cook Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3359
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3357
 msgid "Micronesian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3363
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3361
 msgid "Fijian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3367
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3365
 msgid "French Polynesian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3371
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3369
 msgid "Futunan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3375
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3373
 msgid "Guamanian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3379
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3377
 msgid "I-Kiribati"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3383
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3381
 msgid "Marshallese"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3387
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3385
 msgid "Nauruan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3391
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3389
 msgid "New Caledonian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3395
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3393
 msgid "New Zealander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3399
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3397
 msgid "Niuean"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3403
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3401
 msgid "Norfolk Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3407
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3405
 msgid "Northern Marianan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3411
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3409
 msgid "Palauan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3415
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3413
 msgid "Papuan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3419
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3417
 msgid "Pitcairn Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3423
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3421
 msgid "Samoan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3427
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3425
 msgid "Solomon Islander"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3431
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3429
 msgid "Tokelauan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3435
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3433
 msgid "Tongan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3439
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3437
 msgid "Tuvaluan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3443
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3441
 msgid "Vanuatuan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3447
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3445
 msgid "Wallisian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3453
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3451
 msgid "Barbecue"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3458
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3456
 msgid "Fast Food"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3463
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3461
 msgid "Vegetarian"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3468
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3466
 msgid "Vegan"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3491
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3489
 msgid "Applied days"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3492
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3490
 msgid "Select the days from and to which the opening and closing hours specify to."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3503
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3501
 msgid "State of department"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3504
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3502
 msgid "Set whether the department is open or closed on the applied days."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3518
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3516
 msgid "Open"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3522
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3520
 msgid "Open 24 hours"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3526
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3524
 msgid "Closed"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3537
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3535
 msgid "Opening time"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3539
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3537
 msgid "Time when the business location opens."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3540
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3538
 msgid "This time must be earlier than the closing time."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3542
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3563
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3540
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3561
 msgid "Specify the local time."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3558
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3556
 msgid "Closing time"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3560
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3558
 msgid "Time when the business location closes."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3561
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3559
 msgid "This time must be later than the opening time."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3586
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3584
 msgid "Monday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3590
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3588
 msgid "Tuesday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3594
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3592
 msgid "Wednesday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3598
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3596
 msgid "Thursday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3602
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3600
 msgid "Friday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3606
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3604
 msgid "Saturday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3610
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3608
 msgid "Sunday"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3631
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3644
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3629
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3642
 msgid "Accept reservations"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3633
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3631
 msgid "Specify whether this department accepts reservations or explicitly doesn't."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3634
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3632
 msgid "The reservation action must be completed through the website, not through a phonecall."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3640
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3844
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3929
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3638
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3842
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3927
 msgid "Not specified"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3648
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3646
 msgid "Don't accept reservations"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3678
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3676
 msgid "Target specifications"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3679
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3677
 msgid "Specify where the user can complete a reservation."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3717
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3715
 msgid "Form URL"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3718
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3716
 msgid "The location where the visitor can perform a reservation action."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3728
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3726
 msgid "Form language"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3729
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3727
 msgid "Specify the main language code of the form."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3782
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3780
 msgid "Reservation type"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3783
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3781
 msgid "Choose a type that describes the reservation."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3784
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3782
 msgid "If unlisted, select \"Reservation\"."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3801
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3799
 msgid "Reservation action name"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3802
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3800
 msgid "Describe the reservation, in a few words."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3803
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3801
 msgid "For example: \"Reserve table\" or \"Table for four at Restaurant Name\"."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3848
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3846
 msgid "Reservation"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3866
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3864
 msgid "Food establishment reservation"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3909
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3907
 msgid "Delivery method"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3910
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3908
 msgid "Specify how the goods and delivered to the customers."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3911
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3909
 msgid "Select all that apply."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3933
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3931
 msgid "Pickup"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3937
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3935
 msgid "Delivery through own fleet"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3941
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3939
 msgid "Delivery through mail"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3945
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3943
 msgid "Delivery through freight"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3949
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3947
 msgid "Delivery through DHL"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3953
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3951
 msgid "Delivery through FedEx"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3957
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3955
 msgid "Delivery through UPS"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/fields.class.php:3961
+#: extensions/premium/local/trunk/inc/classes/fields.class.php:3959
 msgid "Delivery through download"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:339
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:340
 msgid "Please correct the form fields before validating the markup."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:340
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:341
 msgid "The markup tester will be opened in a new window."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:369
-#: extensions/premium/local/trunk/views/layout/general/top.php:38
-#: inc/classes/extensionsettings.class.php:528
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:370
+#: extensions/premium/local/trunk/views/layout/general/top.php:40
+#: inc/classes/extensionsettings.class.php:529
 msgid "Save"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:414
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:415
 msgid "See Markup"
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/local.php:9
+#: extensions/premium/local/trunk/views/layout/pages/local.php:12
 msgid "Local Settings"
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:14
-#: views/layout/extension/pane.php:15
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:17
+#: views/layout/extension/pane.php:21
 msgid "JavaScript required"
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:15
-#: views/layout/extension/pane.php:16
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:18
+#: views/layout/extension/pane.php:22
 msgid "Because of the complexity of the settings, JavaScript is required."
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:20
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:23
 msgid "Set departments"
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:21
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:24
 msgid "With these options, you can annotate the location and practice of the business. This does not impact search ranking outside of the region, unless the region is part of the search query."
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:22
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:25
 msgid "Fill in these fields as accurately as possible. If a field doesn't allow a suitable and correct answer, leave it empty."
 msgstr ""
 
-#: extensions/premium/local/trunk/views/layout/pages/settings.php:23
+#: extensions/premium/local/trunk/views/layout/pages/settings.php:26
 msgid "All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:481
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:568
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:479
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:566
 msgid "Something went wrong. Please reload the page."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:909
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:904
 msgid "Actions"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:932
-#: inc/traits/manager/extensions-layout.trait.php:66
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:927
+#: inc/traits/manager/extensions-layout.trait.php:67
 msgid "Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:939
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:934
 msgid "These settings are in development. Enable these to participate in the beta tests."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:943
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:938
 msgid "Disabled"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:946
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:941
 msgid "Uptime monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:947
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:942
 msgid "Set how often you want Monitor to test your website for availability."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:958
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:953
 msgid "Performance monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:959
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:954
 msgid "Set how often you want Monitor to test your website for performance."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1040
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1035
 msgid "Update Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1067
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1062
 msgid "Fetch Data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1068
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1063
 msgid "Request Monitor to send you the latest data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1069
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1064
 msgid "Get the latest data of your website from Monitor."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1101
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1096
 msgid "Request Crawl"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1102
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1097
 msgid "Request Monitor to re-crawl this website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1103
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1098
 msgid "If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1147
-#: inc/traits/manager/extensions-layout.trait.php:63
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1142
+#: inc/traits/manager/extensions-layout.trait.php:64
 msgid "Overview"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1157
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1152
 msgid "Connected site:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1165
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1160
 msgid "Last crawled:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1186
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1181
 msgid "Never"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1191
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1186
 msgid "No completed crawl has been recorded yet."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1215
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1210
 msgid "Reconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1218
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1213
 msgid "Your website has been marked inactive."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1220
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1215
 msgid "The instance ID of your site does not match the remote server."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1246
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1241
 msgid "Request Reactivation"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1247
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1242
 msgid "Request Monitor to reconnect your website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1277
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1272
 #: inc/classes/layout.class.php:134
 msgid "Disconnect"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1278
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1273
 #: inc/classes/layout.class.php:135
 msgid "Are you sure?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1279
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1274
 msgid "Disconnect site?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1310
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1305
 msgid "Disconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1324
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1319
 msgid "No processable data was found. Try fetching new data."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1336
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1331
 msgid "Coming soon!"
 msgstr ""
 
 #. translators: %s = numeric seconds.
-#: extensions/premium/monitor/trunk/inc/classes/api.class.php:502
+#: extensions/premium/monitor/trunk/inc/classes/api.class.php:501
 msgid "Try again in %s second."
 msgid_plural "Try again in %s seconds."
 msgstr[0] ""
 msgstr[1] ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:396
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:392
 msgid "Titles"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:400
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:396
 msgid "Descriptions"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:404
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:400
 msgid "Scheme and canonical URLs"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:408
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:404
 msgid "PHP errors"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:412
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:408
 msgid "Sitemap output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:416
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:412
 msgid "Robots.txt output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:420
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:416
 msgid "Favicon output"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:424
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:420
 msgid "More coming soon!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:516
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:511
 msgid "The Extension Manager needs to be updated to interpret this data."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:124
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:123
 msgid "You should add a site icon through the customizer to add extra support for mobile devices."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the backticks.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:130
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:129
 msgid "No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:135
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:134
 msgid "A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:140
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:139
 msgid "A dynamic favicon has been found, this increases support for mobile devices."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:173
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:172
 msgid "No title tag was found."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:182
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:181
 msgid "The homepage title tag is empty."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:192
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:191
 msgid "The homepage title is not as expected. You should activate the Title Fix extension."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:195
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:194
 msgid "The homepage title is as expected."
 msgstr ""
 
 #. translators: %d = the number "2" or greater
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:203
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:202
 msgid "%d title tags are found on the homepage."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:216
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:220
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:285
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:289
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:215
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:219
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:284
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:288
 msgid "theme developer"
 msgstr ""
 
 #. translators: %s = theme developer
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:225
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:224
 msgid "Please consult with your %s to fix the title."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:264
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:263
 msgid "No description meta tags are found on the homepage."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:266
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:265
 msgid "A description meta tag is found on the homepage."
 msgstr ""
 
 #. translators: %d = Always the number "2" or greater
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:272
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:271
 msgid "%d description meta tags are found on the homepage."
 msgstr ""
 
 #. translators: %s = theme developer
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:294
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:293
 msgid "Please consult with your %s to fix the duplicated description meta tags."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:352
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:351
 msgid "Something is causing a PHP error on your website. This prevents correctly closing of HTML tags."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:353
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:352
 msgid "Affected page:"
 msgid_plural "Affected pages:"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the backticks.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:392
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:391
 msgid "No `robots.txt` file has been found. Please check your server configuration."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:402
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:401
 msgid "This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the backticks.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:429
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:428
 msgid "The `robots.txt` file is handled correctly by The SEO Framework."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the backticks.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:441
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:440
 msgid "The `robots.txt` file is not handled by The SEO Framework."
 msgstr ""
 
 #. translators: Backticks are markdown for <code>Text</code>. Keep the backticks.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:453
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:452
 msgid "The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:486
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:485
 msgid "No sitemap file could be found. Enable the sitemap or check your server configuration."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:495
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:494
 msgid "The sitemap file is bigger than 10MB, you should make it smaller."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:504
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:503
 msgid "The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:542
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:541
 msgid "Your website forces HTTPS through the server configuration. That is great!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:551
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:550
 msgid "Your website is accessible on both HTTPS and HTTP."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:563
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:562
 msgid "Your website is only accessible on HTTP."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:573
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:572
 msgid "No canonical URL is found."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:582
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:581
 msgid "Both versions of your site point to the secure version. Great!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:587
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:586
 msgid "Both versions of your site point to the insecure version. Is this intended?"
 msgstr ""
 
 #. translators: URLs are in markdown. %s = SEO Settings page admin URL.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:598
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:597
 msgid "The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s)."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:608
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:607
 msgid "No canonical URL is found on the HTTPS version of your site."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:615
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:614
 msgid "The canonical URL scheme matches the expected scheme."
 msgstr ""
 
 #. translators: URLs are in markdown. %s = SEO Settings page admin URL.
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:625
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:624
 msgid "The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s)."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:636
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:635
 msgid "The canonical URL does not seem to have a set scheme; so, the URL is invalid. The active theme, another plugin or an external service might be interfering."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:660
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:659
 msgid "More issue tests are coming soon!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:691
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:689
 msgid "No issues have been found."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:709
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:706
 msgid "No data has been found on this issue."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:727
+#: extensions/premium/monitor/trunk/inc/classes/tests.class.php:723
 msgid "This has been evaluated with a small sample size."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/forms/connect.php:9
+#: extensions/premium/monitor/trunk/views/forms/connect.php:12
 msgid "Register"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/forms/connect.php:10
+#: extensions/premium/monitor/trunk/views/forms/connect.php:13
 msgid "Connect this website to SEO Monitor"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/general/top.php:14
+#: extensions/premium/monitor/trunk/views/layout/general/top.php:17
 msgid "Let SEO Monitor help you improve your website. Your privacy is respected, read how below."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:12
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:15
 msgid "Privacy"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:13
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:16
 msgid "The SEO Monitor periodically crawls your website to scan for common issues from an external server. In order to do so, it first has to register your website."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:14
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:17
 msgid "Read more..."
 msgstr ""
 
 #. translators: %s = URL to privacy policy
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:21
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:25
 msgid "This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s)."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:27
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:33
 msgid "Data collection"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:28
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:34
 msgid "The crawler will act as a regular logged-out visitor and will ignore robots exclusion protocol details."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:29
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:35
 msgid "When structural non-public information is required (for example, which plugins are active) then you will be informed and prompted about it first."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:30
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:36
 msgid "Distribution"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:31
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:37
 msgid "Potentially personally-identifying information will only be granted to you on the SEO Monitor admin pages through secure authentication. Potentially personally-identifying information will never be disclosed to third parties, for any reason whatsoever."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:40
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:46
 msgid "Connect"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:41
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:47
 msgid "Register your website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:42
+#: extensions/premium/monitor/trunk/views/layout/pages/connect.php:48
 msgid "Get detailed information about your website. Automatically."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:9
+#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:12
 msgid "Common Issues"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:23
+#: extensions/premium/monitor/trunk/views/layout/pages/monitor.php:26
 msgid "Control Panel"
 msgstr ""
 
@@ -3114,14 +3133,14 @@ msgid_plural "%s notices waiting"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/classes/ajax.class.php:431
-#: inc/classes/ajax.class.php:492
+#: inc/classes/ajax.class.php:436
+#: inc/classes/ajax.class.php:497
 msgid "Image could not be processed."
 msgstr ""
 
+#: inc/classes/extensionsettings.class.php:224
 #: inc/classes/extensionsettings.class.php:225
-#: inc/classes/extensionsettings.class.php:226
-#: views/layout/extension/top.php:28
+#: views/layout/extension/top.php:33
 msgid "Extension Settings"
 msgstr ""
 
@@ -3129,76 +3148,54 @@ msgstr ""
 msgid "Save All"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:2024
+#: inc/classes/formgenerator.class.php:2040
 msgctxt "Button hover title"
 msgid "Remove selected image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:2027
-#: inc/traits/core/ui.trait.php:380
+#: inc/classes/formgenerator.class.php:2043
 msgid "Remove Image"
 msgstr ""
 
-#: inc/classes/formgenerator.class.php:2064
-msgctxt "Button hover"
-msgid "Change image"
-msgstr ""
-
-#: inc/classes/formgenerator.class.php:2064
-#: inc/traits/core/ui.trait.php:378
-msgctxt "Button hover"
-msgid "Select image"
-msgstr ""
-
-#: inc/classes/formgenerator.class.php:2067
-#: inc/traits/core/ui.trait.php:379
-msgid "Change Image"
-msgstr ""
-
-#: inc/classes/formgenerator.class.php:2067
-#: inc/traits/core/ui.trait.php:377
-msgid "Select Image"
-msgstr ""
-
-#: inc/classes/inpostgui.class.php:176
+#: inc/classes/inpostgui.class.php:168
 msgid "Structure"
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:182
+#: inc/classes/inpostgui.class.php:174
 msgid "Audit"
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:188
+#: inc/classes/inpostgui.class.php:180
 msgid "Advanced"
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:252
-#: inc/traits/core/ui.trait.php:251
+#: inc/classes/inpostgui.class.php:257
+#: inc/traits/core/ui.trait.php:236
 msgid "Received invalid AJAX response."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:253
-#: inc/traits/core/ui.trait.php:252
+#: inc/classes/inpostgui.class.php:258
+#: inc/traits/core/ui.trait.php:237
 msgid "An unknown error occurred."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:254
-#: inc/traits/core/ui.trait.php:253
+#: inc/classes/inpostgui.class.php:259
+#: inc/traits/core/ui.trait.php:238
 msgid "Timeout: Server took too long to respond."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:255
-#: inc/traits/core/ui.trait.php:254
+#: inc/classes/inpostgui.class.php:260
+#: inc/traits/core/ui.trait.php:239
 msgid "Bad request: The server can't handle the request."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:256
-#: inc/traits/core/ui.trait.php:255
+#: inc/classes/inpostgui.class.php:261
+#: inc/traits/core/ui.trait.php:240
 msgid "A fatal error occurred on the server."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:257
-#: inc/traits/core/ui.trait.php:256
+#: inc/classes/inpostgui.class.php:262
+#: inc/traits/core/ui.trait.php:241
 msgid "A parsing error occurred in your browser."
 msgstr ""
 
@@ -3206,662 +3203,663 @@ msgstr ""
 msgid "Disconnect account?"
 msgstr ""
 
-#: inc/classes/layout.class.php:224
+#: inc/classes/layout.class.php:225
 msgid "Unknown"
 msgstr ""
 
-#: inc/classes/layout.class.php:232
+#: inc/classes/layout.class.php:233
 msgid "Decoupled"
 msgstr ""
 
-#: inc/classes/layout.class.php:246
+#: inc/classes/layout.class.php:247
 msgid "Account email:"
 msgstr ""
 
-#: inc/classes/layout.class.php:253
+#: inc/classes/layout.class.php:254
 msgid "License key:"
 msgstr ""
 
-#: inc/classes/layout.class.php:262
+#: inc/classes/layout.class.php:263
 msgid "Enterprise"
 msgstr ""
 
-#: inc/classes/layout.class.php:267
-#: inc/traits/manager/extensions-layout.trait.php:54
+#: inc/classes/layout.class.php:268
+#: inc/traits/manager/extensions-layout.trait.php:55
 msgid "Premium"
 msgstr ""
 
-#: inc/classes/layout.class.php:272
-#: inc/traits/manager/extensions-layout.trait.php:52
+#: inc/classes/layout.class.php:273
+#: inc/traits/manager/extensions-layout.trait.php:53
 msgid "Essentials"
 msgstr ""
 
-#: inc/classes/layout.class.php:277
-#: inc/traits/manager/extensions-layout.trait.php:51
+#: inc/classes/layout.class.php:278
+#: inc/traits/manager/extensions-layout.trait.php:52
 msgid "Free"
 msgstr ""
 
 #. translators: %u = minutes number
-#: inc/classes/layout.class.php:300
+#: inc/classes/layout.class.php:301
 msgid "Next check is scheduled in %u minute."
 msgid_plural "Next check is scheduled in %u minutes."
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/classes/layout.class.php:313
+#: inc/classes/layout.class.php:314
 msgid "Account level:"
 msgstr ""
 
-#: inc/classes/layout.class.php:317
+#: inc/classes/layout.class.php:318
 msgid "TSF Europe"
 msgstr ""
 
-#: inc/classes/layout.class.php:322
+#: inc/classes/layout.class.php:323
 msgid "TSF global"
 msgstr ""
 
-#: inc/classes/layout.class.php:328
+#: inc/classes/layout.class.php:329
 msgid "Outbound API connections will prefer this endpoint."
 msgstr ""
 
-#: inc/classes/layout.class.php:332
+#: inc/classes/layout.class.php:333
 msgid "API endpoint:"
 msgstr ""
 
-#: inc/classes/layout.class.php:339
+#: inc/classes/layout.class.php:340
 msgid "Number of API requests left for this month."
 msgstr ""
 
-#: inc/classes/layout.class.php:342
+#: inc/classes/layout.class.php:343
 msgid "Only a few requests left for this month. Consider upgrading your account."
 msgstr ""
 
-#: inc/classes/layout.class.php:345
+#: inc/classes/layout.class.php:346
 msgid "No requests left for this month. Consider upgrading your account."
 msgstr ""
 
-#: inc/classes/layout.class.php:349
+#: inc/classes/layout.class.php:350
 msgid "Requests remaining:"
 msgstr ""
 
 #. translators: `%s` = domain with markdown backtics
-#: inc/classes/layout.class.php:372
+#: inc/classes/layout.class.php:373
 msgid "The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again."
 msgstr ""
 
-#: inc/classes/layout.class.php:381
+#: inc/classes/layout.class.php:382
 msgid "Valid for:"
 msgstr ""
 
-#: inc/classes/layout.class.php:404
+#: inc/classes/layout.class.php:405
 msgid "Account expired"
 msgstr ""
 
-#: inc/classes/layout.class.php:407
-#: inc/classes/layout.class.php:457
+#: inc/classes/layout.class.php:408
+#: inc/classes/layout.class.php:458
 msgid "Less than a week"
 msgstr ""
 
-#: inc/classes/layout.class.php:410
-#: inc/classes/layout.class.php:459
+#: inc/classes/layout.class.php:411
+#: inc/classes/layout.class.php:460
 msgid "Less than two weeks"
 msgstr ""
 
-#: inc/classes/layout.class.php:413
+#: inc/classes/layout.class.php:414
 msgid "Less than three weeks"
 msgstr ""
 
-#: inc/classes/layout.class.php:415
+#: inc/classes/layout.class.php:416
 msgid "Less than a month"
 msgstr ""
 
-#: inc/classes/layout.class.php:417
+#: inc/classes/layout.class.php:418
 msgid "Less than two months"
 msgstr ""
 
 #. translators: %d = months number
-#: inc/classes/layout.class.php:420
+#: inc/classes/layout.class.php:421
 msgid "About %d months"
 msgstr ""
 
-#: inc/classes/layout.class.php:427
+#: inc/classes/layout.class.php:428
 msgid "Expires in:"
 msgstr ""
 
-#: inc/classes/layout.class.php:454
+#: inc/classes/layout.class.php:455
 msgid "Payment processing"
 msgstr ""
 
 #. translators: %d = months number
-#: inc/classes/layout.class.php:463
+#: inc/classes/layout.class.php:464
 msgid "About %d month"
 msgid_plural "About %d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/classes/layout.class.php:478
+#: inc/classes/layout.class.php:479
 msgid "Payment due in:"
 msgstr ""
 
-#: inc/classes/layout.class.php:524
-#: views/forms/key.php:9
+#: inc/classes/layout.class.php:525
+#: views/forms/key.php:16
 msgid "License key"
 msgstr ""
 
-#: inc/classes/layout.class.php:531
-#: views/forms/key.php:10
+#: inc/classes/layout.class.php:532
+#: views/forms/key.php:17
 msgid "License email"
 msgstr ""
 
-#: inc/classes/layout.class.php:539
-#: views/layout/pages/activation.php:61
+#: inc/classes/layout.class.php:540
+#: views/layout/pages/activation.php:70
 msgid "Use this key"
 msgstr ""
 
+#: inc/classes/listedit.class.php:156
+#: inc/classes/listedit.class.php:182
+msgid "Structure SEO Settings"
+msgstr ""
+
+#: inc/classes/listedit.class.php:161
+#: inc/classes/listedit.class.php:187
+msgid "Audit SEO Settings"
+msgstr ""
+
+#: inc/classes/listedit.class.php:166
+#: inc/classes/listedit.class.php:192
+msgid "Advanced SEO Settings"
+msgstr ""
+
 #. translators: Markdown. %s = API URL
-#: inc/classes/loadadmin.class.php:170
+#: inc/classes/loadadmin.class.php:173
 msgid "This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`."
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:342
+#: inc/classes/loadadmin.class.php:346
 msgid "Your extensions are only three clicks away"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:344
+#: inc/classes/loadadmin.class.php:348
 msgid "Activate the SEO Extension Manager"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:478
+#: inc/classes/loadadmin.class.php:495
 msgid "No valid URL was supplied."
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:563
+#: inc/classes/loadadmin.class.php:580
 msgid "Go to My Account"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:564
-#: views/layout/general/top.php:14
+#: inc/classes/loadadmin.class.php:581
+#: views/layout/general/top.php:21
 msgid "My Account"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:583
+#: inc/classes/loadadmin.class.php:600
 msgid "Get support via mail"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:584
+#: inc/classes/loadadmin.class.php:601
 msgid "Private Support"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:591
+#: inc/classes/loadadmin.class.php:608
 msgid "File an issue with us"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:592
+#: inc/classes/loadadmin.class.php:609
 msgid "Public Support"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:647
-#: inc/traits/core/ui.trait.php:320
-msgid "Dismiss"
-msgstr ""
-
 #. translators: %s = extension slug
-#: inc/classes/loadadmin.class.php:922
+#: inc/classes/loadadmin.class.php:870
 msgid "Extension slug: %s"
 msgstr ""
 
-#: inc/classes/panes.class.php:120
-#: inc/classes/panes.class.php:150
+#: inc/classes/panes.class.php:119
+#: inc/classes/panes.class.php:149
 msgid "Unfortunately, your server can't process this request as of yet."
 msgstr ""
 
-#: inc/classes/panes.class.php:124
-#: inc/classes/panes.class.php:158
+#: inc/classes/panes.class.php:123
+#: inc/classes/panes.class.php:157
 msgid "There are no trends and updates to report yet."
 msgstr ""
 
 #. translators: %s = "Google Webmaster Central Blog"
-#: inc/classes/panes.class.php:215
+#: inc/classes/panes.class.php:214
 msgid "The feed is acquired from %s."
 msgstr ""
 
-#: inc/classes/panes.class.php:218
+#: inc/classes/panes.class.php:217
 msgid "Google's Privacy Policy"
 msgstr ""
 
 #. translators: %s = "Google's Privacy Policy"
-#: inc/classes/panes.class.php:222
+#: inc/classes/panes.class.php:221
 msgid "Read %s."
 msgstr ""
 
-#: inc/classes/panes.class.php:227
+#: inc/classes/panes.class.php:226
 msgid "The feed has been disabled to protect your privacy."
 msgstr ""
 
-#: inc/classes/panes.class.php:230
+#: inc/classes/panes.class.php:229
 msgid "You may choose to enable the feed. Once enabled, it can not be disabled."
 msgstr ""
 
-#: inc/classes/panes.class.php:247
+#: inc/classes/panes.class.php:246
 msgid "Enable feed?"
 msgstr ""
 
-#: inc/classes/panes.class.php:457
+#: inc/classes/panes.class.php:456
 msgid "This information is updated every few minutes, infrequently."
 msgstr ""
 
-#: inc/classes/panes.class.php:461
+#: inc/classes/panes.class.php:460
 msgid "Account information"
 msgstr ""
 
-#: inc/classes/panes.class.php:499
+#: inc/classes/panes.class.php:498
 msgid "Upgrade your account"
 msgstr ""
 
-#: inc/classes/panes.class.php:528
+#: inc/classes/panes.class.php:529
 msgid "This will free up your site limit."
 msgstr ""
 
-#: inc/classes/panes.class.php:530
+#: inc/classes/panes.class.php:531
 msgid "This will deactivate all extensions."
 msgstr ""
 
-#: inc/classes/panes.class.php:532
+#: inc/classes/panes.class.php:533
 msgid "No options from extensions will be lost."
 msgstr ""
 
-#: inc/classes/panes.class.php:536
+#: inc/classes/panes.class.php:537
 msgid "Disconnect account"
 msgstr ""
 
-#: inc/classes/panes.class.php:560
+#: inc/classes/panes.class.php:564
 msgid "Inquire your question publicly so more people will benefit from our support."
 msgstr ""
 
-#: inc/classes/panes.class.php:563
+#: inc/classes/panes.class.php:567
 msgid "Questions about your account should be inquired via Private Support."
 msgstr ""
 
-#: inc/classes/panes.class.php:567
+#: inc/classes/panes.class.php:571
 msgid "Get support"
 msgstr ""
 
-#: inc/classes/secureoption.class.php:168
+#: inc/classes/secureoption.class.php:172
 msgid "Options have been altered outside of this plugin's scope. Please deactivate your account and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:223
+#: inc/traits/core/error.trait.php:226
 msgid "Error code:"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:227
+#: inc/traits/core/error.trait.php:230
 msgid "Notice code:"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:233
+#: inc/traits/core/error.trait.php:236
 msgid "Status code:"
 msgstr ""
 
 #. translators: 1: 'Error code:', 2: The error code.
-#: inc/traits/core/error.trait.php:238
+#: inc/traits/core/error.trait.php:241
 msgid "%1$s %2$s"
 msgstr ""
 
 #. translators: %s = Error code
-#: inc/traits/core/error.trait.php:241
+#: inc/traits/core/error.trait.php:244
 msgid "<strong>%s</strong> &mdash;"
 msgstr ""
 
 #. translators: 1: Error code, 2: Error message, 3: Additional info
-#: inc/traits/core/error.trait.php:244
+#: inc/traits/core/error.trait.php:247
 msgid "%1$s %2$s %3$s"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:280
+#: inc/traits/core/error.trait.php:283
 msgid "No valid license key was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:285
+#: inc/traits/core/error.trait.php:288
 msgid "No valid license email was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:294
+#: inc/traits/core/error.trait.php:297
 msgid "Invalid API request type."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:303
+#: inc/traits/core/error.trait.php:306
 msgid "An incomplete API request was supplied."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:308
+#: inc/traits/core/error.trait.php:311
 msgid "No response received from the API server. Please try again later. If this error keeps coming back, contact your hosting provider."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:320
+#: inc/traits/core/error.trait.php:323
 msgid "An error occurred while contacting the API server. Please try again later."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:325
+#: inc/traits/core/error.trait.php:328
 msgid "An error occured while validating the settings. Please try again."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:333
+#: inc/traits/core/error.trait.php:336
 msgid "Invalid API license key. Login to the %s page to find a valid API License Key."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:347
+#: inc/traits/core/error.trait.php:350
 msgid "Remote software API error."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:363
+#: inc/traits/core/error.trait.php:366
 msgid "Remote Software API error. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:372
+#: inc/traits/core/error.trait.php:375
 msgid "Exceeded maximum number of monthly request. Upgrade your license or check back in next month."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:379
+#: inc/traits/core/error.trait.php:382
 msgid "Site language is not supported for lexical lookup."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:386
+#: inc/traits/core/error.trait.php:389
 msgid "Exceeded maximum number of activations. Login to the %s page to manage your sites."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:393
+#: inc/traits/core/error.trait.php:396
 msgid "Invalid instance ID. Please try again. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:399
+#: inc/traits/core/error.trait.php:402
 msgid "Your subscription is not active or has expired."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:404
+#: inc/traits/core/error.trait.php:407
 msgid "Your account has been successfully authorized to be used on this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:410
+#: inc/traits/core/error.trait.php:413
 msgid "Your account has been successfully deauthorized from this website."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:415
+#: inc/traits/core/error.trait.php:418
 msgid "Enjoy your free extensions!"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:420
+#: inc/traits/core/error.trait.php:423
 msgid "The feed has been enabled."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:425
+#: inc/traits/core/error.trait.php:428
 msgid "Successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:430
+#: inc/traits/core/error.trait.php:433
 msgid "Your subscription has expired or has been deactivated remotely."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:437
+#: inc/traits/core/error.trait.php:440
 msgid "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:445
+#: inc/traits/core/error.trait.php:448
 msgid "Your account level has been set to Essentials. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:453
+#: inc/traits/core/error.trait.php:456
 msgid "Your account level has been set to Premium. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:461
+#: inc/traits/core/error.trait.php:464
 msgid "Your account level has been set to Enterprise. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:472
+#: inc/traits/core/error.trait.php:475
 msgid "An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:486
+#: inc/traits/core/error.trait.php:489
 msgid "User verification failed. Please try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:493
+#: inc/traits/core/error.trait.php:496
 msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:498
-#: inc/traits/manager/extensions.trait.php:1046
+#: inc/traits/core/error.trait.php:501
+#: inc/traits/manager/extensions.trait.php:1051
 msgid "Extension is not compatible with your server configuration."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:504
+#: inc/traits/core/error.trait.php:507
 msgid "Extension has been successfully activated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:509
+#: inc/traits/core/error.trait.php:512
 msgid "Extension was already activated in another browser instance."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:515
+#: inc/traits/core/error.trait.php:518
 msgid "Can't touch this."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:520
+#: inc/traits/core/error.trait.php:523
 msgid "Extension has been successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:525
+#: inc/traits/core/error.trait.php:528
 msgid "Your website has been successfully connected to the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:530
+#: inc/traits/core/error.trait.php:533
 msgid "Your site has been successfully disconnected from the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:537
+#: inc/traits/core/error.trait.php:540
 msgid "The Monitor API server does not recognize your website's instance. Request reactivation."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:544
+#: inc/traits/core/error.trait.php:547
 msgid "Your website has been marked as inactive by the Monitor API server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:549
+#: inc/traits/core/error.trait.php:552
 msgid "Crawl request is still in queue. Please try again later."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:554
+#: inc/traits/core/error.trait.php:557
 msgid "Crawl request has just been submitted."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:559
+#: inc/traits/core/error.trait.php:562
 msgid "Data has just been updated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:565
+#: inc/traits/core/error.trait.php:568
 msgid "Crawl has been requested successfully. It can take up to three minutes to be processed."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:570
+#: inc/traits/core/error.trait.php:573
 msgid "The latest Monitor data has been recieved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:575
+#: inc/traits/core/error.trait.php:578
 msgid "Monitor has updated your site settings, but your site is now out of sync. You should fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:580
+#: inc/traits/core/error.trait.php:583
 msgid "Monitor has updated your site settings."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:585
+#: inc/traits/core/error.trait.php:588
 msgid "The SEO settings couldn't be converted to file."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:590
+#: inc/traits/core/error.trait.php:593
 msgid "An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:595
+#: inc/traits/core/error.trait.php:598
 msgid "Download will start shortly."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:603
+#: inc/traits/core/error.trait.php:606
 msgid "Invalid data was sent to the server."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:608
-msgid "A database error occurred. Some settings aren't saved."
+#: inc/traits/core/error.trait.php:611
+msgid "A database error occurred. Some changes aren't saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:615
-msgid "A database error occurred. Settings aren't saved."
+#: inc/traits/core/error.trait.php:618
+msgid "A database error occurred. Changes aren't saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:620
-msgid "All settings are saved."
+#: inc/traits/core/error.trait.php:623
+msgid "All changes are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:625
-msgid "Settings are saved for one extension."
+#: inc/traits/core/error.trait.php:628
+msgid "Changes are saved for one extension."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:631
-msgid "Settings are saved."
+#: inc/traits/core/error.trait.php:634
+msgid "Changes are saved."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:638
-msgid "Unable to verify if settings are saved. Refresh this page to manually verify."
+#: inc/traits/core/error.trait.php:641
+msgid "Unable to verify if changes are saved. Refresh this page to manually verify."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:643
+#: inc/traits/core/error.trait.php:646
 msgid "Unable to propagate request. Are you running the latest version?"
 msgstr ""
 
-#: inc/traits/core/error.trait.php:648
+#: inc/traits/core/error.trait.php:651
 msgid "Couldn't fetch data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:653
+#: inc/traits/core/error.trait.php:656
 msgid "Unable to create markup. Inspect your fields for errors or contact support."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:660
+#: inc/traits/core/error.trait.php:663
 msgid "Unable to fetch geocoding data."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:666
+#: inc/traits/core/error.trait.php:669
 msgid "No results found. Inspect your current input."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:680
+#: inc/traits/core/error.trait.php:683
 msgid "Please wait a few seconds before making another request."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:685
+#: inc/traits/core/error.trait.php:688
 msgid "Too many requests in the last period. Limit will be lifted soon."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:690
+#: inc/traits/core/error.trait.php:693
 msgid "Geocoding data received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:696
+#: inc/traits/core/error.trait.php:699
 msgid "No definitions found. Check your spelling."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:702
+#: inc/traits/core/error.trait.php:705
 msgid "No inflections found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:708
+#: inc/traits/core/error.trait.php:711
 msgid "No synonyms found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:715
+#: inc/traits/core/error.trait.php:718
 msgid "Lexical information received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:746
+#: inc/traits/core/error.trait.php:749
 msgid "An unknown error occurred. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:249
-#: inc/traits/manager/extensions-layout.trait.php:55
+#: inc/traits/core/ui.trait.php:303
+#: inc/traits/manager/extensions-layout.trait.php:56
 msgid "Activate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:250
-#: inc/traits/manager/extensions-layout.trait.php:56
+#: inc/traits/core/ui.trait.php:304
+#: inc/traits/manager/extensions-layout.trait.php:57
 msgid "Deactivate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:314
+#: inc/traits/core/ui.trait.php:361
 msgid "Please select any of the fields to proceed."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:317
+#: inc/traits/core/ui.trait.php:364
 msgid "Proceed"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:318
+#: inc/traits/core/ui.trait.php:365
 msgid "Select"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:319
+#: inc/traits/core/ui.trait.php:366
 msgid "Cancel"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:323
+#: inc/traits/core/ui.trait.php:367
+msgid "Dismiss"
+msgstr ""
+
+#: inc/traits/core/ui.trait.php:370
 msgid "Performance warning"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:324
+#: inc/traits/core/ui.trait.php:371
 msgid "You're about to load a large number of elements. This might degredate browser performance."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:325
+#: inc/traits/core/ui.trait.php:372
 msgid "You're about to load a huge number of elements. This might crash your browser."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:326
+#: inc/traits/core/ui.trait.php:373
 msgid "Are you sure you want to proceed?"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:329
+#: inc/traits/core/ui.trait.php:376
 msgid "Please fix the required fields before saving."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:332
+#: inc/traits/core/ui.trait.php:379
 msgid "Validate"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:333
+#: inc/traits/core/ui.trait.php:380
 msgid "Select address"
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:334
+#: inc/traits/core/ui.trait.php:381
 msgid "Select an address below."
 msgstr ""
 
-#: inc/traits/core/ui.trait.php:335
-msgid "Validation will be done only using Latitude and Longitude."
-msgstr ""
-
-#: inc/traits/core/ui.trait.php:381
-msgid "Remove selected image"
-msgstr ""
-
 #: inc/traits/core/ui.trait.php:382
-msgctxt "Frame title"
-msgid "Select Image"
-msgstr ""
-
-#: inc/traits/core/ui.trait.php:383
-msgid "Use this image"
+msgid "Validation will be done only using Latitude and Longitude."
 msgstr ""
 
 #: inc/traits/factory/time.trait.php:53
@@ -3973,148 +3971,148 @@ msgctxt "7 hours, 8 minutes [and...]"
 msgid "%1$s, %2$s"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:53
+#: inc/traits/manager/extensions-layout.trait.php:54
 msgid "Essentials+"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:57
+#: inc/traits/manager/extensions-layout.trait.php:58
 msgid "Version"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:58
+#: inc/traits/manager/extensions-layout.trait.php:59
 msgid "First party"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:59
+#: inc/traits/manager/extensions-layout.trait.php:60
 msgid "Third party"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:60
+#: inc/traits/manager/extensions-layout.trait.php:61
 msgid "View details"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:61
+#: inc/traits/manager/extensions-layout.trait.php:62
 msgid "Go to the author homepage"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:62
+#: inc/traits/manager/extensions-layout.trait.php:63
 msgid "Go to the extension overview page"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:64
+#: inc/traits/manager/extensions-layout.trait.php:65
 msgid "Compatible"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:65
+#: inc/traits/manager/extensions-layout.trait.php:66
 msgid "Incompatible"
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:67
+#: inc/traits/manager/extensions-layout.trait.php:68
 msgid "Visit the extension menu page"
 msgstr ""
 
 #. translators: 1: Version number, 2: Version number
-#: inc/traits/manager/extensions-layout.trait.php:498
+#: inc/traits/manager/extensions-layout.trait.php:503
 msgid "WordPress %1$s and The SEO Framework %2$s are required."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:506
+#: inc/traits/manager/extensions-layout.trait.php:511
 msgid "The SEO Framework version is higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:510
+#: inc/traits/manager/extensions-layout.trait.php:515
 msgid "WordPress version is higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:514
+#: inc/traits/manager/extensions-layout.trait.php:519
 msgid "WordPress and The SEO Framework versions are higher than tested against."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:520
+#: inc/traits/manager/extensions-layout.trait.php:525
 msgid "The extension will always be tested for errors before activation."
 msgstr ""
 
-#: inc/traits/manager/extensions-layout.trait.php:523
+#: inc/traits/manager/extensions-layout.trait.php:528
 msgid "Compatible with the current versions of WordPress and The SEO Framework."
 msgstr ""
 
-#: inc/traits/manager/extensions.trait.php:1059
+#: inc/traits/manager/extensions.trait.php:1065
 msgid "Extension has not been activated."
 msgstr ""
 
-#: views/layout/general/top.php:15
+#: views/layout/general/top.php:22
 msgid "View account"
 msgstr ""
 
-#: views/layout/general/top.php:25
+#: views/layout/general/top.php:32
 msgid "Extend license"
 msgstr ""
 
-#: views/layout/general/top.php:32
+#: views/layout/general/top.php:39
 msgid "Get license"
 msgstr ""
 
-#: views/layout/general/top.php:46
+#: views/layout/general/top.php:53
 msgid "Add more powerful SEO features to your website. To get started, use one of the options below."
 msgstr ""
 
-#: views/layout/pages/activation.php:14
+#: views/layout/pages/activation.php:20
 msgid "Get your key"
 msgstr ""
 
-#: views/layout/pages/activation.php:15
+#: views/layout/pages/activation.php:21
 msgid "Log in or sign up now"
 msgstr ""
 
-#: views/layout/pages/activation.php:16
+#: views/layout/pages/activation.php:22
 msgid "Get your key. Easy and secure."
 msgstr ""
 
-#: views/layout/pages/activation.php:32
+#: views/layout/pages/activation.php:40
 msgid "Get your API key"
 msgstr ""
 
-#: views/layout/pages/activation.php:44
+#: views/layout/pages/activation.php:51
 msgid "Use your key"
 msgstr ""
 
-#: views/layout/pages/activation.php:45
+#: views/layout/pages/activation.php:52
 msgid "Get access to premium extensions"
 msgstr ""
 
-#: views/layout/pages/activation.php:46
+#: views/layout/pages/activation.php:53
 msgid "Already have your key? Enter it here."
 msgstr ""
 
-#: views/layout/pages/activation.php:74
+#: views/layout/pages/activation.php:84
 msgid "Go free"
 msgstr ""
 
-#: views/layout/pages/activation.php:75
+#: views/layout/pages/activation.php:85
 msgid "Get access to free extensions"
 msgstr ""
 
-#: views/layout/pages/activation.php:76
+#: views/layout/pages/activation.php:86
 msgid "You can always upgrade later."
 msgstr ""
 
-#: views/layout/pages/activation.php:84
+#: views/layout/pages/activation.php:96
 msgid "Save a few bucks"
 msgstr ""
 
-#: views/layout/pages/extensions.php:6
+#: views/layout/pages/extensions.php:12
 msgid "Extensions"
 msgstr ""
 
-#: views/layout/pages/extensions.php:18
+#: views/layout/pages/extensions.php:24
 msgid "Account and Actions"
 msgstr ""
 
-#: views/layout/pages/extensions.php:32
+#: views/layout/pages/extensions.php:38
 msgid "SEO Trends and Updates"
 msgstr ""
 
-#: views/template/fbtopnotice.php:9
-#: views/template/inpostnotice.php:17
+#: views/template/fbtopnotice.php:17
+#: views/template/inpostnotice.php:15
 msgid "An informative notice should have been placed here for the error code, but the server experienced an error."
 msgstr ""
