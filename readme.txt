@@ -47,11 +47,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * Henceforth, Extension Manager requires **The SEO Framework v4.1.2 or higher**.
 * This release brings support for WordPress 5.6's updated interface. Sorry for the delay!
-* Honeypot might mark legitimate comments as spam because it looks for new anti-spam data. Please manually moderate your comment section for a few minutes after updating, and be sure to clear your site's caches directly after updating to reduce the number of false negatives significantly.
+* Honeypot might momentarily mark legitimate comments as spam because it looks for new anti-spam data. Please manually moderate your comment section for a few minutes after updating, and be sure to clear your site's caches directly after updating to reduce the number of false negatives significantly.
 
 **Release date:**
 
-* February 8th, 2021
+* February 9th, 2021
 
 * **Added:** This plugin now supports The SEO Framework's new quick-and bulk-edit functionality for its extensions.
 	* The first extension to make use of this is Articles.
@@ -63,6 +63,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * **Fixed:** Resolved an issue where multiple non-unique identifiers for no-JS-submit-buttons were used on the Extension Manager overview page.
 * **Fixed:** Resolved an issue where double-quotes in metadata could cause serialization issues, corrupting Extension Manager's extension-post-metadata.
 * **Fixed:** Resolved an issue where Extension Settings panes weren't outputted on PHP 5.6.
+* **Fixed:** Resolved an issue where the installer for The SEO Framework couldn't find translatable objects from WordPress 5.5 onward.
 * **Dev:** Constant `TSF_EXTENSION_MANAGER_PRESENT` is now available. It indicates that the plugin is activated by WordPress, but it does not necessarily indicate that it's running otherwise.
 * **Dev:** Script debugging will no longer occur with `WP_DEBUG` enabled, but with `SCRIPT_DEBUG` enabled, instead.
 * **Other:** The SEO Framework v4.1.2 or higher is now required, from v4.0.0.
@@ -77,13 +78,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* There's a bug, in Local, where the preview-loader isn't reset properly during iteration. Dependency issues like these make TSF's API more reliable and extensible; this is probably this first time we do not address such an issue before the public can face it, but issues are becoming more intricate and time's becoming more scarce as the project advances.
 * **Other:** It's 2021, so we added another year to the copyright mandate.
 
-TODO update images displayed for Local readme.
-
-TODO installer scripts does not refill "installed"-notice correctly nor refill the loader button neatly on WP 5.6.
-
-TODO update:
-https://theseoframework.com/docs/api/constants/
-
 TODO update POT file
 
 **Updated extensions:**
@@ -95,6 +89,9 @@ NOTE these version numbers are already correct.
 * [Local at version 1.1.8](https://theseoframework.com/extensions/local/#changelog)
 * [Monitor at version 1.2.7](https://theseoframework.com/extensions/monitor/#changelog)
 
+**Detailed log:**
+
+View the [detailed v2.5.0 changelog](https://theseoframework.com/?p= TODO).
 
 = 2.4.0 - Linguistic SEO =
 

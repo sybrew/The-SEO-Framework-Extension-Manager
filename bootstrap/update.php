@@ -40,20 +40,25 @@ function _prepare_tsf_installer() {
  * @access private
  */
 function _prepare_tsf_nag_installer_scripts() {
-	$deps       = [
+	$deps     = [
 		'plugin-install',
 		'updates',
 	];
-	$scriptid   = 'tsfinstaller';
-	$scriptname = 'tsfinstaller';
+	$scriptid = 'tsfinstaller';
+
+	// Don't rely on the script name! Rely on the script-id, if you so choose to manipulate it.
+	// This name will change back once we stop supporting WP<5.5
+	$scriptname = version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ? 'tsfinstaller' : 'tsfinstallernew';
 	$suffix     = SCRIPT_DEBUG ? '' : '.min';
 
 	$strings = [
 		'slug' => 'autodescription',
 	];
 
+	// NB 82% of our users are on WP 5.5+. Do we really _want_ to maintain compatibility with earlier versions?
+
 	\wp_register_script( $scriptid, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$scriptname}{$suffix}.js", $deps, TSF_EXTENSION_MANAGER_VERSION, true );
-	\wp_localize_script( $scriptid, "{$scriptname}L10n", $strings );
+	\wp_localize_script( $scriptid, "{$scriptid}L10n", $strings );
 
 	\add_action( 'admin_print_styles', __NAMESPACE__ . '\\_print_tsf_nag_installer_styles' );
 	\add_action( 'admin_footer', '\\wp_print_request_filesystem_credentials_modal' );
@@ -102,7 +107,7 @@ function _nag_install_tsf() {
 		\network_admin_url( 'plugin-install.php' )
 	);
 	$tsf_details_link = sprintf(
-		'<a href="%1$s" id=tsfem-tsf-tb class="thickbox open-plugin-details-modal" aria-label="%2$s">%3$s</a>',
+		'<a href="%1$s" id=tsfem-tsf-tb class="thickbox open-plugin-details-modal button button-small" aria-label="%2$s">%3$s</a>',
 		\esc_url( $details_url ),
 		/* translators: %s: Plugin name */
 		\esc_attr( sprintf( \__( 'Learn more about %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
@@ -110,7 +115,7 @@ function _nag_install_tsf() {
 	);
 	$nag = sprintf(
 		/* translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details. */
-		\esc_html__( '%1$s requires %2$s plugin to function. %3$s.', 'the-seo-framework-extension-manager' ),
+		\esc_html__( '%1$s requires %2$s plugin to function. %3$s', 'the-seo-framework-extension-manager' ),
 		sprintf( '<strong>%s</strong>', 'Extension Manager' ),
 		sprintf( '<strong>%s</strong>', \esc_html( $tsf_text ) ),
 		$tsf_details_link
@@ -137,7 +142,7 @@ function _nag_install_tsf() {
 		'install-plugin_' . $plugin_slug
 	);
 	$install_action    = sprintf(
-		'<a href="%1$s" id=tsfem-tsf-install class="install-now button button-small" data-slug="%2$s" data-name="%3$s" aria-label="%4$s">%5$s</a>',
+		'<a href="%1$s" id=tsfem-tsf-install class="install-now button button-small button-primary" data-slug="%2$s" data-name="%3$s" aria-label="%4$s">%5$s</a>',
 		\esc_url( $install_nonce_url ),
 		\esc_attr( $plugin_slug ),
 		\esc_attr( $tsf_text ),
