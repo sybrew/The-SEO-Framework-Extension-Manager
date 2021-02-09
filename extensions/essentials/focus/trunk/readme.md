@@ -306,7 +306,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.5.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 9th, 2021"]
 
 * **Added:** Filter `the_seo_framework_focus_auto_interval`.
 	* Documented at [developers](#developers).

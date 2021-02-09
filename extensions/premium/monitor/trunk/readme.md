@@ -85,7 +85,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.7
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 9th, 2021"]
 
 * **API - Our servers:**
 	* **July 5th, 2020:**

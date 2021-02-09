@@ -238,7 +238,7 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 
 ### 2.0.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 9th, 2021"]
 
 * **Added:** Processing power is affordable now thanks to AMD. So, Honeypot must now catch fast robots that use browser emulators.
 	* Basically, Honeypot now features a countdown timer. Don't comment too fast!

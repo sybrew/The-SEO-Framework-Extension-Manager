@@ -247,7 +247,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ### 2.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 9th, 2021"]
 
 * **Added:** You can now select a default 'disabled' Articles type for a post type. With that, you can enable support for Articles on a per-post basis.
 * **Added:** You can now select a 'disabled' Articles type on a per-post basis via the drop-down selection in the post-edit screen. With that, you can disable support for Articles on a per-post basis.
