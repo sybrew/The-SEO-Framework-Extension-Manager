@@ -388,9 +388,8 @@ class Panes extends API {
 						// Check for menu slug in order to add it.
 						$header = Extensions::get( 'ajax_get_extension_header', $slug );
 
-						if ( ! empty( $header['MenuSlug'] ) ) {
+						if ( ! empty( $header['MenuSlug'] ) )
 							$this->_set_ajax_menu_link( $header['MenuSlug'], TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
-						}
 					endif;
 
 					$html = Extensions::get( 'ajax_get_extension_desc_footer', $slug );

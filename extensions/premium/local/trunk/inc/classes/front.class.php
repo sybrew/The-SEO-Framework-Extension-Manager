@@ -61,8 +61,12 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
-			// Initialize output in The SEO Framework's front-end meta object.
-			\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '<=' ) ) {
+				// Initialize output in The SEO Framework's front-end meta object.
+				\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
+			} else {
+				\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_local_json' ] );
+			}
 		}
 	}
 
@@ -78,10 +82,19 @@ final class Front extends Core {
 	public function _local_hook_amp_output( $output = '' ) {
 		return $output .= $this->_get_local_json_output();
 	}
+	/**
+	 * Outputs Local JSON.
+	 *
+	 * @since 1.1.1
+	 * @access private
+	 */
+	public function _output_local_json() {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- is escaped.
+		echo $this->_get_local_json_output();
+	}
 
 	/**
 	 * Hooks into 'the_seo_framework_after_output' filter.
-	 * This allows output object caching.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -163,6 +176,7 @@ final class Front extends Core {
 	 * Gets packed data from URL.
 	 *
 	 * @since 1.0.0
+	 * @ignore Not used.
 	 *
 	 * @param string $id The data key to get from the pack.
 	 * @return array The packed data.
@@ -209,7 +223,8 @@ final class Front extends Core {
 		//= Get data by URL.
 		$json = $this->get_processed_packed_data_from_url( $url );
 
-		if ( $json )
+		// Empty JSON is only 2 characters long.
+		if ( $json && \strlen( $json ) > 2 )
 			return '<script type="application/ld+json">' . $json . '</script>' . PHP_EOL;
 
 		return '';

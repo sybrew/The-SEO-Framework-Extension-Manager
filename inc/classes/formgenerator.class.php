@@ -2072,7 +2072,8 @@ final class FormGenerator {
 								$s_id_value,
 							]
 						),
-						\the_seo_framework()->get_social_image_uploader_form( $s_field_id )
+						// TODO update me to get_image_uploader_form() and add data to generator args.
+						\the_seo_framework()->get_social_image_uploader_form( $s_field_id ),
 					]
 				),
 			]

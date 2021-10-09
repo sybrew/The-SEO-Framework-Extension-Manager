@@ -27,7 +27,7 @@ create_analysis_field :;
 	$focus_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['kw']['label']['title'] );
 	$focus_info  = sprintf(
 		'<div>%s</div>',
-		\the_seo_framework()->make_info(
+		\The_SEO_Framework\Interpreters\HTML::make_info(
 			$post_meta['kw']['label']['desc'],
 			$post_meta['kw']['label']['link'],
 			false

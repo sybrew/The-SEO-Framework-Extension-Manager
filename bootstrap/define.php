@@ -72,7 +72,7 @@ defined( 'TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS' )
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to
- * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster;
  * for example, in a WPMU environment. However, proceed with caution.
  *
  * @since 2.0.0
@@ -86,7 +86,7 @@ defined( 'TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE' )
  *
  * == WARNING ==
  * When this constant is used incorrectly, you can expose your site to
- * unforeseen security risks. We assume the role supplied here is lower than the webmaster's;
+ * unforeseen security risks. We assume the role supplied here is lower than the webmaster;
  * for example, in a WPMU environment. However, proceed with caution.
  *
  * @since 2.4.0

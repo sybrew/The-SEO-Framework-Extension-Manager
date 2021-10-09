@@ -126,6 +126,13 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.1.9
+
+[tsfep-release time="-1"]
+
+* **Changed:** Resolved deprecated usage from The SEO Framework v4.2.0.
+* **Fixed:** Resolved an issue that caused the output not to run on assigned URLs when the main department is disabled.
+
 ### 1.1.8
 
 [tsfep-release time="February 9th, 2021"]

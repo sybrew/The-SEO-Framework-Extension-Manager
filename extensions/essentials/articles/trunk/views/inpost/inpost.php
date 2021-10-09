@@ -21,7 +21,7 @@ create_type_field :;
 	);
 	$type_info  = sprintf(
 		'<div>%s</div>',
-		\the_seo_framework()->make_info(
+		\The_SEO_Framework\Interpreters\HTML::make_info(
 			$post_meta['type']['label']['desc'],
 			$post_meta['type']['label']['link'],
 			false
@@ -53,7 +53,10 @@ create_type_field :;
 	);
 
 	type_field_output :;
-		InpostHTML::wrap_flex_multi( 'block', [
-			InpostHTML::construct_flex_wrap( 'label-input', $type_label, '', $type_option_key ),
-			InpostHTML::construct_flex_wrap( 'input', $type_field ),
-		] );
+		InpostHTML::wrap_flex_multi(
+			'block',
+			[
+				InpostHTML::construct_flex_wrap( 'label-input', $type_label, '', $type_option_key ),
+				InpostHTML::construct_flex_wrap( 'input', $type_field ),
+			]
+		);

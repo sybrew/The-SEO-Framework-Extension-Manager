@@ -112,32 +112,6 @@ trait Time {
 	}
 
 	/**
-	 * Returns a rectified GMT date by calculating the site's timezone into the
-	 * inserted timestamp.
-	 *
-	 * @since 1.5.0
-	 * @since 2.2.1 Now also rectifies the timezone.
-	 *
-	 * @param string   $format    The Datetime format.
-	 * @param int|null $timestamp The UNIX timestamp. When null it uses time().
-	 * @return string The formatted GMT date including timezone offset.
-	 */
-	protected function get_rectified_date( $format, $timestamp = null ) {
-
-		\is_null( $timestamp )
-			and $timestamp = time();
-
-		$tsf = \the_seo_framework();
-
-		$tsf->set_timezone();
-		// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.date_date -- Rectified...
-		$date = date( $format, $timestamp );
-		$tsf->reset_timezone();
-
-		return $date;
-	}
-
-	/**
 	 * Returns a rectified translated date by shifting the PHP's timezone to the
 	 * site's settings.
 	 *
@@ -153,17 +127,9 @@ trait Time {
 		\is_null( $timestamp )
 			and $timestamp = time();
 
-		$tsf = \the_seo_framework();
-
-		// date_i18n() uses the WordPress timezone to send the real date.
-		// However, for accuracy, it relies on the dates being annotated with UTC.
-		$tsf->set_timezone( 'UTC' );
-
 		$offset = round( \get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
 		// date_i18n() expects an offset, whereas wp_date (WP5.3+) expects a timezone.
 		$date = \date_i18n( $format, $timestamp + $offset );
-
-		$tsf->reset_timezone();
 
 		return $date;
 	}

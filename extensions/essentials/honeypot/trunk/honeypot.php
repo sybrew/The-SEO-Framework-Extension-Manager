@@ -355,7 +355,6 @@ JS;
 
 		/**
 		 * @since 2.0.0
-		 * @uses const WP_CACHE If WP_CACHE is true, hardcore is false.
 		 * @todo make option.
 		 * @param float $time
 		 */

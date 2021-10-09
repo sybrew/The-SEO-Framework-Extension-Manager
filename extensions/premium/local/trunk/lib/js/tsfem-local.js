@@ -113,7 +113,7 @@ window.tsfem_e_local = {
 
 			response = tsf.convertJSONResponse( response );
 
-			if ( tsf.l10n.states.isRTL ) console.log( response );
+			if ( tsf.l10n.states.debug ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;

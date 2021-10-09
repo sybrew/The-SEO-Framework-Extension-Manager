@@ -383,39 +383,35 @@ class API extends Core {
 		}
 
 		if ( isset( $results['code'] ) ) :
+
+			$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
+
 			switch ( $results['code'] ) :
 				case '100':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 302 => $additional_info ] );
 					$registered_free or $this->do_deactivation( true, true );
 					break;
 				case '101':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 303 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;
 				case '102':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 304 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;
 				case '103':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 305 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;
 				case '104':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 306 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;
 				case '105':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 307 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;
 				case '106':
-					$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
 					$this->set_error_notice( [ 308 => $additional_info ] );
 					$registered_free or $this->do_deactivation( false, true );
 					break;

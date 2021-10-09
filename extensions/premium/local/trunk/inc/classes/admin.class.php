@@ -70,7 +70,8 @@ final class Admin extends Core {
 		$this->local_page_slug = 'theseoframework-local';
 
 		// Load admin actions.
-		$this->load_admin_actions();
+		if ( ! \the_seo_framework()->is_headless['settings'] )
+			$this->load_admin_actions();
 	}
 
 	/**
@@ -92,12 +93,11 @@ final class Admin extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.1.7 The extension access level is now controlled via another constant.
-	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
 	 * @uses \TSF_Extension_Manager\can_do_extension_settings()
 	 * @access private
 	 */
 	public function _init_menu() {
-		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 20 );
 	}
 

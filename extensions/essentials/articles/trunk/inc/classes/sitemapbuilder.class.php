@@ -322,7 +322,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap {
 	 * Escapes XML entities.
 	 *
 	 * @since 2.3.1
-	 * @ignore Unused.
+	 * @ignore Unused. Also, probably unsafe: Not protected against multibyte-attacks.
 	 * @link <https://www.w3.org/TR/xml/#syntax>
 	 * @link <https://www.w3.org/TR/REC-xml/#sec-external-ent>
 	 * NOTE: WordPress 5.5.0 includes a new function: esc_xml().

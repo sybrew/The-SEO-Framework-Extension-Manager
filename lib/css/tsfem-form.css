@@ -334,6 +334,7 @@ h4.tsfem-form-multi-title {
 	margin-left: 1px;
 	vertical-align: top;
 	line-height: 1.4;
+	flex-grow: 0;
 }
 body.rtl .tsfem-form-image-buttons-wrap {
 	margin-left: 0;

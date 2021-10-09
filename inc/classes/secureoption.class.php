@@ -140,7 +140,7 @@ final class SecureOption extends Secure_Abstract {
 		if ( empty( self::$_instance ) || empty( $type ) ) {
 			self::reset();
 			\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
-			return;
+			return '';
 		}
 
 		$instance = self::$_instance;
@@ -150,7 +150,7 @@ final class SecureOption extends Secure_Abstract {
 		} else {
 			self::reset();
 			\wp_die( 'Instance verification could not be done on option update.' );
-			return;
+			return '';
 		}
 
 		static $verified = false;

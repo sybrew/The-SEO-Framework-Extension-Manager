@@ -4,7 +4,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 5.1
 Tested up to: 5.7
 Requires PHP: 5.6.5
-Requires TSF: 4.1.2
+Requires TSF: 4.1.4
 Stable tag: 2.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -41,6 +41,36 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.5.1 =
+
+TODO see if we can get rid of 'require_once', which is the biggest performance hindrance.
+TODO see if we can improve version_compare_lenient(), which is the slowest method.
+TODO fix deprecations with TSF
+TODO test PHP requirement for update.
+TODO fix "update notice"
+TODO if PHP 7+ is used, populate second parameter of unserialize with 'false'.
+
+* **Fixed:** Resolved an issue where asset-URLs were generated incorrectly for extensions in the admin area on Windows-based servers. Props [Vitaliy].(https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/45)
+* **Fixed:** Regression for JS debug states.
+* TODO migrate the admin colors (for WP5.7, via TSF), dump the pngs?
+* TODO incorporate fix for TSF's media.js iteration?
+	-> Shouldn't TSF handle this fully, no?
+* TODO: https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/37
+	-> Should we test if $new === $old then return earlier?
+		-> Gotta POC it.
+* TODO: Issue 6001/2001 errors... we could circumvent it by using unique option indexes per domain, so that, when transfering domains, the keys must revalidate --- this prevents option hash mismatches.
+* TODO: Tell how to attach/change images for Cord: Media Library (list view) -> Uploaded to -> Attach.
+* TODO: When TSF's Headless mode is active, disable the page-specific notification systems.
+
+* **Updated extensions:**
+	* Articles @ Version 2.1.1:
+		* **Changed:** Now uses WordPress's timesystem.
+	* Local @ Version 1.1.9
+		* **Fixed:** You can now store and test your input correctly when the first department is disabled.
+	* Cord @ Version ??
+		* TODO **Added:** Google Analytics 4 support. New settings are added for this.
+
+
 = 2.5.0 - Quick SEO =
 
 **Release date:**
@@ -74,6 +104,10 @@ View the [detailed v2.5.0 changelog](https://theseoframework.com/?p=3686).
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
+
+= 2.5.1 =
+
+This plugin now requires WordPress v5.4 and The SEO Framework v4.1.4 or higher.
 
 = 2.5.0 =
 

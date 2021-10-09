@@ -88,10 +88,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1612645822',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -100,11 +100,11 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1602590757',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'last_updated' => '1633798024',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -114,10 +114,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1612160183',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'cord'      => [
 				'slug'         => 'cord',
@@ -127,10 +127,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1576470514',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'local'     => [
 				'slug'         => 'local',
@@ -139,11 +139,11 @@ trait Extensions_Properties {
 				'area'         => 'business',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1590706430',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'last_updated' => '1633798024',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -153,10 +153,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1565627638',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -165,11 +165,11 @@ trait Extensions_Properties {
 				'area'         => 'uptime, syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1596406019',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'last_updated' => '1633797930',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -179,10 +179,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1515109560',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -192,10 +192,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1541601833',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -205,10 +205,10 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1572496812',
-				'requires'     => '5.1',
-				'tested'       => '5.7',
-				'requires_tsf' => '4.0.5',
-				'tested_tsf'   => '4.1',
+				'requires'     => '5.4',
+				'tested'       => '5.9',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
 			],
 		];
 	}
@@ -226,9 +226,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '71aff90640bd46a2d15058f05a01d3481863335262449bc02d8ab1c7f39d5841',
-			'sha1'   => 'cbf58e2be985674a6fc2adb5461094318e19b97f',
-			'md5'    => '7e44ec16692a1230dd681ca9b6a93466',
+			'sha256' => 'bf52683a4cf1e15ee0161b247208d33723595e27b2a38f2044affd2446914dc9',
+			'sha1'   => '5dd2f31057c9a5f713608672792b8411613db7b8',
+			'md5'    => '40360b420752a88b8cef4dfa6cb5b860',
 		];
 	}
 
@@ -730,7 +730,8 @@ trait Extensions_Actions {
 	private static function version_compare_lenient( $version1, $version2, $operator = null ) {
 
 		// 1: major, 2: minor, 3: branch
-		$regex = '/^(\d+\.\d)(\.\d+)?(-.*)?$/';
+		// $regex = '/^(\d+\.\d)(\.\d+)?(-.*)?$/';
+		$regex = '/(\d+\.\d)(\.\d+)?(-.*)?/'; // 2 out of 10~14 steps fewer...
 
 		preg_match( $regex, $version1, $m_version1 );
 		preg_match( $regex, $version2, $m_version2 );

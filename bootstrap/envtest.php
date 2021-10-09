@@ -68,7 +68,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 	$requirements = array(
 		'php' => 50605,
-		'wp'  => '5.1-dev',
+		'wp'  => '5.4-dev',
 	);
 
 	// phpcs:disable, Generic.Formatting.MultipleStatementAlignment, WordPress.WhiteSpace.PrecisionAlignment
@@ -115,7 +115,7 @@ function tsf_extension_manager_pre_boot_test() {
 
 		case 2:
 			// WordPress requirements not met.
-			$requirement = 'WordPress 5.1 or later';
+			$requirement = 'WordPress 5.4 or later';
 			$issue       = 'WordPress version';
 			$version     = $GLOBALS['wp_version'];
 			$subtitle    = 'WordPress Requirements';

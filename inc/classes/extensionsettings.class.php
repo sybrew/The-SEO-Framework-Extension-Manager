@@ -207,7 +207,7 @@ final class ExtensionSettings {
 	 * @access private
 	 */
 	public function _init_menu() {
-		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() && ! \the_seo_framework()->is_headless['settings'] )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 12 );
 	}
 

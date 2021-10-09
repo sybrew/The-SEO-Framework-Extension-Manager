@@ -118,7 +118,7 @@ window.tsfem_e_monitor = {
 
 			response = tsf.convertJSONResponse( response );
 
-			if ( tsf.l10n.states.isRTL ) console.log( response );
+			if ( tsf.l10n.states.debug ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
@@ -209,7 +209,7 @@ window.tsfem_e_monitor = {
 
 			response = tsf.convertJSONResponse( response );
 
-			if ( tsf.l10n.states.isRTL ) console.log( response );
+			if ( tsf.l10n.states.debug ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
@@ -333,7 +333,7 @@ window.tsfem_e_monitor = {
 
 			response = tsf.convertJSONResponse( response );
 
-			if ( tsf.l10n.states.isRTL ) console.log( response );
+			if ( tsf.l10n.states.debug ) console.log( response );
 
 			let data = response && response.data || void 0,
 				type = response && response.type || void 0;
@@ -343,7 +343,7 @@ window.tsfem_e_monitor = {
 				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 		} ).fail( function( jqXHR, textStatus, errorThrown ) {
 			// No elaborate handling, as this function is invoked automatically.
-			if ( tsf.l10n.states.isRTL ) {
+			if ( tsf.l10n.states.debug ) {
 				console.log( jqXHR.responseText );
 				console.log( errorThrown );
 			}
@@ -539,7 +539,7 @@ window.tsfem_e_monitor = {
 
 				response = tsf.convertJSONResponse( response );
 
-				tsf.l10n.states.isRTL && console.log( response );
+				tsf.l10n.states.debug && console.log( response );
 
 				let data = response && response.data || void 0,
 					type = response && response.type || void 0;

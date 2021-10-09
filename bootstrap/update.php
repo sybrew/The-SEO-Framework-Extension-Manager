@@ -247,7 +247,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 			$request->get_error_message() // $data
 		);
 	} else {
-		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) ); // phpcs:ignore -- No objects are sent.
+		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) );
 		if ( ! \is_object( $res ) && ! \is_array( $res ) ) {
 			$res = new \WP_Error( 'plugins_api_failed',
 				sprintf(
@@ -310,6 +310,8 @@ function _push_update( $value, $transient ) {
 	if ( isset( $runtimecache ) ) {
 		$cache =& $runtimecache;
 	} else {
+		// TODO some sites install plugins that disable transients. They invoke thousands of requests to our services within days.
+		// Use options instead?
 		$cache_timeout = MINUTE_IN_SECONDS * 20;
 		$cache         = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
 

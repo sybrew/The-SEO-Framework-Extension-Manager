@@ -315,7 +315,6 @@ trait Options {
 		}
 	}
 
-
 	/**
 	 * Verifies options hash.
 	 *

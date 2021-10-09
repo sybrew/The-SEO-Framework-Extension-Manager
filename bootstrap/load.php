@@ -70,9 +70,9 @@ function _protect_options() {
 
 	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
-	\add_action( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+	\add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 	if ( isset( $current_options['_instance'] ) )
-		\add_action( 'pre_update_option_tsfem_i_' . $current_options['_instance'], __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+		\add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 }
 
 /**
@@ -89,6 +89,8 @@ function _protect_options() {
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 
+	if ( $new_value === $old_value ) return; // Is this OK?
+
 	// phpcs:ignore, TSF.Performance.Functions.PHP -- required
 	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) )
 		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
@@ -98,6 +100,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 	 */
 	\TSF_Extension_Manager\_load_trait( 'core/overload' );
 
+	// Why do we return on an ACTION? What's happening here... how has it tested time?
 	return SecureOption::verify_option_instance( $new_value, $old_value, $option );
 }
 
@@ -190,9 +193,10 @@ function _register_autoloader() {
 		'\TSF_Extension_Manager\LoadFront',
 	];
 
-	foreach ( $integrity_classes as $_class )
-		$iniquity = class_exists( $_class, false ); // phpcs:ignore, TSF.Performance.Functions.PHP -- required.
-	$iniquity and die;
+	foreach ( $integrity_classes as $_class ) {
+		 // phpcs:ignore, TSF.Performance.Functions.PHP -- no other method exists.
+		if ( class_exists( $_class, false ) ) die;
+	}
 
 	/**
 	 * Register class autoload here.
@@ -209,7 +213,8 @@ function _register_autoloader() {
  * @since 1.5.0 Now requires TSF 2.8+ to load.
  * @since 2.0.2 Now requires TSF 3.1+ to load.
  * @since 2.2.0 Now requires TSF 3.3+ to load.
- * @since 2.5.0 Now requires TSF 4.1.2 to load.
+ * @since 2.5.0 Now requires TSF 4.1.2+ to load.
+ * @since 2.5.1 Now requires TSF 4.1.4+ to load.
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */
@@ -221,7 +226,7 @@ function can_load_class() {
 		return $can_load;
 
 	if ( \function_exists( '\\the_seo_framework' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.2', '>=' ) && \the_seo_framework()->loaded ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '>=' ) && \the_seo_framework()->loaded ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load

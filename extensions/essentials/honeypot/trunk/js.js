@@ -6,7 +6,6 @@
  * @link <https://theseoframework.com/extension-manager/>
  */
 
-
 /**
  * Honeypot extension for The SEO Framework
  * Copyright (C) 2021 Sybre Waaijer, CyberWire (https://cyberwire.nl/)

@@ -180,6 +180,7 @@ final class Tests {
 			if ( ! $first_found_title ) {
 				$content .= $this->wrap_info( \esc_html__( 'The homepage title tag is empty.', 'the-seo-framework-extension-manager' ) );
 				$state    = 'error';
+
 				$consult_theme_author = true;
 			} else {
 
@@ -188,7 +189,27 @@ final class Tests {
 				$_expected_title = $tsf->get_title( [ 'id' => $tsf->get_the_front_page_ID() ] );
 
 				if ( $_expected_title !== $first_found_title ) {
-					$content = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
+					$content  = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
+					$content .= $this->wrap_info(
+						sprintf(
+							\the_seo_framework()->convert_markdown(
+								/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+								\esc_html__( 'Found: `%s`', 'the-seo-framework-extension-manager' ),
+								[ 'code' ]
+							),
+							\esc_html( $first_found_title )
+						)
+					);
+					$content .= $this->wrap_info(
+						sprintf(
+							\the_seo_framework()->convert_markdown(
+								/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
+								\esc_html__( 'Expected: `%s`', 'the-seo-framework-extension-manager' ),
+								[ 'code' ]
+							),
+							\esc_html( $_expected_title )
+						)
+					);
 					$state = 'bad';
 				} else {
 					$content = $this->wrap_info( \esc_html__( 'The homepage title is as expected.', 'the-seo-framework-extension-manager' ) );

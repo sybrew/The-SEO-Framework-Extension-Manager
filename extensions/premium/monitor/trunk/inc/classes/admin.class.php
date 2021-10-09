@@ -189,6 +189,9 @@ final class Admin extends Api {
 		 */
 		$this->o_index = 'monitor';
 
+		// Nothing to do here...
+		if ( \the_seo_framework()->is_headless['settings'] ) return;
+
 		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
@@ -216,12 +219,11 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.6 The extension access level is now controlled via another constant.
-	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
 	 * @uses \TSF_Extension_Manager\can_do_extension_settings()
 	 * @access private
 	 */
 	public function _init_menu() {
-		if ( \TSF_Extension_Manager\can_do_extension_settings() && \the_seo_framework()->load_options )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 100 );
 	}
 
@@ -391,7 +393,7 @@ final class Admin extends Api {
 			 * there's no need to check them on each request.
 			 */
 			if ( ! isset( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
-			|| ! is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			|| ! \is_array( $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
 			) {
 				return $validated[ $key ] = false;
 			}
@@ -446,7 +448,8 @@ final class Admin extends Api {
 					foreach ( [ 'uptime_setting', 'performance_setting' ] as $setting ) {
 						$send['settings'][ $setting ] = $this->get_option( $setting, 0 );
 					}
-					$type = empty( $response['success'] ) ? 'failure' : 'success';
+
+					$type            = empty( $response['success'] ) ? 'failure' : 'success';
 					$send['results'] = $response;
 				} else {
 					$send['results'] = $this->get_ajax_notice( false, 1010702 );
@@ -516,7 +519,7 @@ final class Admin extends Api {
 					else :
 						// No new data has been found.
 						$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
-						$status = [
+						$status  = [
 							'content' => null,
 							'type'    => 'yield_unchanged',
 							'notice'  => $this->get_try_again_notice( $seconds ),
@@ -562,7 +565,7 @@ final class Admin extends Api {
 
 				if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					$status = [
-						'type' => 'unknown',
+						'type'   => 'unknown',
 						'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 					];
 				} else {
@@ -936,7 +939,7 @@ final class Admin extends Api {
 
 		fields : {
 			$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
-			$time_settings = [
+			$time_settings  = [
 				'uptime_setting' => [
 					'title'   => \__( 'Uptime monitoring:', 'the-seo-framework-extension-manager' ),
 					'help'    => \__( 'Set how often you want Monitor to test your website for availability.', 'the-seo-framework-extension-manager' ),
@@ -1030,12 +1033,14 @@ final class Admin extends Api {
 
 		form : {
 			$nonce_action = $this->_get_nonce_action_field( 'update' );
-			$nonce = $this->_get_nonce_field( 'update' );
+			$nonce        = $this->_get_nonce_field( 'update' );
+
 			$submit = $this->_get_submit_button(
 				\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
 				'',
 				'tsfem-button-primary tsfem-button-cloud'
 			);
+
 			$content .= sprintf(
 				'<form action=%s method=post id=%s class="%s">%s</form>',
 				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
@@ -1177,18 +1182,18 @@ final class Admin extends Api {
 	 */
 	protected function get_last_crawled_field() {
 
-		$last_crawl = $this->get_last_issues_crawl();
+		$last_crawl      = $this->get_last_issues_crawl();
 		$last_crawl_i18n = $last_crawl ? $this->get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
 
 		$class = $last_crawl ? 'tsfem-success' : 'tsfem-error';
 		$title = $last_crawl
-			   ? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl )
-			   : \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
+			? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl )
+			: \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
 
 		return sprintf(
 			'<time class="tsfem-dashicon tsf-tooltip-item %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s">%s</time>',
 			\esc_attr( $class ),
-			\esc_attr( $this->get_rectified_date( 'c', $last_crawl ) ),
+			\esc_attr( gmdate( 'c', $last_crawl ) ),
 			\esc_attr( $title ),
 			\esc_html( $last_crawl_i18n )
 		);
@@ -1238,11 +1243,12 @@ final class Admin extends Api {
 	protected function get_fix_button() {
 
 		$class = 'tsfem-button tsfem-button-red tsfem-button-cloud';
-		$name = \__( 'Request Reactivation', 'the-seo-framework-extension-manager' );
+		$name  = \__( 'Request Reactivation', 'the-seo-framework-extension-manager' );
 		$title = \__( 'Request Monitor to reconnect your website', 'the-seo-framework-extension-manager' );
 
 		$nonce_action = $this->_get_nonce_action_field( 'fix' );
-		$nonce  = $this->_get_nonce_field( 'fix' );
+		$nonce        = $this->_get_nonce_field( 'fix' );
+
 		$submit = $this->_get_submit_button( $name, $title, $class );
 
 		$args = [

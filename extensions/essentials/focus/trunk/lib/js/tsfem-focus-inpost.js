@@ -7,7 +7,6 @@
  * @link <https://theseoframework.com/extension-manager/>
  */
 
-
 /**
  * Focus extension for The SEO Framework
  * Copyright (C) 2018-2021 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -2537,7 +2536,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		//= There's nothing to focus on. Stop plugin and show why.
 		//?! The monkeyPatch is still running...
 		if ( 0 === Object.keys( activeFocusAreas ).length ) {
-			let wrap  = document.getElementById( 'tsfem-e-focus-analysis-wrap' );
+			let wrap  = document.getElementById( 'tsfem-e-focus-analysis-wrap' ),
 				input = wrap && wrap.querySelector( '.tsf-flex-setting-input' );
 
 			if ( input )

@@ -27,23 +27,24 @@ namespace TSF_Extension_Manager;
 /**
  * Extracts the basename of an extension from its file location.
  *
+ * Dev note: wp_normalize_path() replaces backslashes with forward slashes.
+ *           So, we should NOT use DIRECTORY_SEPARATOR for variables parsed through it.
+ *
  * @since 1.0.0
  * @since 2.5.0 Now only replaces the first occurence of the dir path, for rare instances
  *              where extension names match the exact root path on a server.
+ * @since 2.5.1 Fixed DIRECTORY_SEPARATOR replacement issue on Windows installations.
  *
  * @param string $path The extension path.
  * @return string The normalized extension basename.
  */
 function extension_basename( $path ) {
 
-	$path = \wp_normalize_path( $path );
-	$path = trim( $path, DIRECTORY_SEPARATOR );
-
-	$extension_dir = \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH );
-	$extension_dir = trim( $extension_dir, DIRECTORY_SEPARATOR );
+	$extension_dir = trim( \wp_normalize_path( TSF_EXTENSION_MANAGER_DIR_PATH ), '/' );
+	$path          = trim( \wp_normalize_path( $path ), '/' );
 
 	$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
-	$path = trim( $path, DIRECTORY_SEPARATOR );
+	$path = trim( $path, '/' );
 
 	return $path;
 }

@@ -210,7 +210,7 @@ When the content parser experiences any error, the rater shows this generic mess
 
 ### Are page builders supported?
 Focus supports most page builders. However, page builders that rely on shortcodes may give incorrect assessments for the "introduction" and "subject density" ratings.
-This is because shortcodes are parsed as readable content, instead of HMTL constructors; the parser is yet unable to discern the shortcode's behavior without context.
+This is because shortcodes are parsed as readable content, instead of HTML constructors; the parser is yet unable to discern the shortcode's behavior without context.
 
 These page builders may be affected by this issue:
 
@@ -283,11 +283,15 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 	 * This callback function must run synchronously.
 	 *
 	 * If you need to fill the store via a slow method, such as via a REST request,
-	 * then we recommend memoizing the content in another function asynchronously, and
-	 * fill its memoized content both in that memoizing function as well as here. In the
-	 * memoizing function, you can reparse the content via `contentStore.triggerAnalysis()`.
-	 * With `tsfem_e_focus_inpost.setAllRatersOf( 'pageContent', 'loading' )`, you can
-	 * convey the content is being retrieved. Focus will automatically update the rater.
+	 * then we recommend memoizing the slow content in another function asynchronously,
+	 * and fill its memoized content both via the other function as well as via this
+	 * function below using `contentStore.fill( content )`.
+	 * In the slow method, you can reparse the content using
+	 * `contentStore.triggerAnalysis()` after you've retrieved (and memoized) the new
+	 * content.
+	 * Using `tsfem_e_focus_inpost.setAllRatersOf( 'pageContent', 'loading' )`, you can
+	 * convey that the content is still being retrieved. Focus will automatically update
+	 * the rater-icons after it's done parsing.
 	 */
 	document.addEventListener( 'tsfem-focus-gutenberg-content-store-fill', event => {
 		// Mutate store with any content:

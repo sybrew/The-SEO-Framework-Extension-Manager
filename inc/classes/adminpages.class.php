@@ -77,6 +77,9 @@ class AdminPages extends AccountActivation {
 	 */
 	private function construct() {
 
+		// Nothing to do here...
+		if ( \the_seo_framework()->is_headless['settings'] ) return;
+
 		// Initialize menu links. TODO add network menu.
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
 
@@ -90,7 +93,7 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_manager_settings()
 	 * @since 2.4.0 Removed security check, and offloads it to WordPress.
-	 * @uses \the_seo_framework()->load_options variable. Applies filters 'the_seo_framework_load_options'
+	 * @uses \the_seo_framework()->is_headless
 	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
@@ -102,8 +105,7 @@ class AdminPages extends AccountActivation {
 			// phpcs:ignore, Squiz.PHP.CommentedOutCode -- TODO?
 			// \add_action( 'network_admin_menu', [ $this, 'add_network_menu_link' ], 11 );
 		} else {
-			if ( \the_seo_framework()->load_options )
-				\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
+			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 11 );
 		}
 	}
 

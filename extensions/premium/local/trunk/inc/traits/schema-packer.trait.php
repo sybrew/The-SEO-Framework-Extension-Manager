@@ -183,6 +183,10 @@ trait Schema_Packer {
 			$packer->_iterate_base();
 			$_collection = $packer->_pack();
 
+			// Main department was disabled...
+			if ( ! $_collection )
+				$_collection = (object) [];
+
 			if ( $count > 1 ) {
 				//= Get sub departments.
 				$_collection->department = [];
@@ -254,12 +258,18 @@ trait Schema_Packer {
 			//= Get root/main department first.
 			$packer->_iterate_base();
 			$_collection = $packer->_pack();
-			/**
-			 * Store root department for URL.
-			 * Note, if it's the home URL, it will be overwritten out of this loop.
-			 */
-			$_data = $_collection;
-			$this->store_packed_data( $main_url, json_encode( $_data, $json_options ) );
+
+			// Main department was disabled...
+			if ( ! $_collection ) {
+				$_collection = (object) [];
+			} else {
+				/**
+				 * Store root department for URL.
+				 * Note, if it's the home URL, it will be overwritten out of this loop.
+				 */
+				$_data = $_collection;
+				$this->store_packed_data( $main_url, json_encode( $_data, $json_options ) );
+			}
 
 			if ( $count > 1 ) {
 				//= Get sub departments.
@@ -309,7 +319,7 @@ trait Schema_Packer {
 	 * @return bool True on success, false on failure.
 	 */
 	protected function save_packed_data() {
-		return $this->store_packed_data( '', [], true );
+		return $this->store_packed_data( '', '', true );
 	}
 
 	/**
@@ -319,7 +329,7 @@ trait Schema_Packer {
 	 * @see $this->store_packed_data();
 	 *
 	 * @param string|int $id   Either the URL or ID.
-	 * @param object     $data The data to store.
+	 * @param string     $data The data to store.
 	 * @param bool       $save Whether to store save the stored output.
 	 * @return bool|void : {
 	 *   Saving:  True on success, false on failure.
@@ -333,6 +343,7 @@ trait Schema_Packer {
 		if ( $save )
 			return $this->update_option( 'packed_data', $_d );
 
-		$_d[ $id ] = $data;
+		if ( $data )
+			$_d[ $id ] = $data;
 	}
 }

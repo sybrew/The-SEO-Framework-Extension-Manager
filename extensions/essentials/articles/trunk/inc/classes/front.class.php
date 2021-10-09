@@ -93,8 +93,12 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
 		} else {
-			// Initialize output in The SEO Framework's front-end meta object.
-			\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '<=' ) ) {
+				// Initialize output in The SEO Framework's front-end meta object.
+				\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
+			} else {
+				\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_articles_json' ] );
+			}
 		}
 	}
 
@@ -127,7 +131,7 @@ final class Front extends Core {
 		if ( isset( $is_amp ) )
 			return $is_amp;
 
-		if ( function_exists( '\\is_amp_endpoint' ) ) {
+		if ( \function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
 		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
 			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
@@ -214,8 +218,19 @@ final class Front extends Core {
 	}
 
 	/**
+	 * Outputs Articles JSON.
+	 *
+	 * @since 2.1.1
+	 * @access private
+	 *
+	 */
+	public function _output_articles_json() {
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- is escaped.
+		echo $this->_get_articles_json_output();
+	}
+
+	/**
 	 * Hooks into 'the_seo_framework_after_output' filter.
-	 * This allows output object caching.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -239,16 +254,13 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.2 No longer minifies the script when script debugging is activated.
+	 * @since 2.1.1 No longe rectifies the date.
 	 * @link https://developers.google.com/search/docs/data-types/article
 	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article scripts.
 	 */
 	public function _get_articles_json_output() {
-
-		$tsf = \the_seo_framework();
-
-		$tsf->set_timezone( 'UTC' );
 
 		// Should've used a generator... TODO? => Wait for TSF v4.2?
 		$data = [
@@ -263,8 +275,6 @@ final class Front extends Core {
 			$this->get_article_publisher(),
 			$this->get_article_description(),
 		];
-
-		$tsf->reset_timezone();
 
 		if ( ! $this->is_json_valid() )
 			return '';
@@ -429,7 +439,7 @@ final class Front extends Core {
 		] );
 
 		// Does not consider UTF-8 support. However, the regex does.
-		if ( strlen( $title ) > 110 ) {
+		if ( \strlen( $title ) > 110 ) {
 			preg_match( '/.{0,110}([^\P{Po}\'\"]|\p{Z}|$){1}/su', trim( $title ), $matches );
 			$title = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
 			$title = trim( $title );
@@ -511,7 +521,7 @@ final class Front extends Core {
 			}
 		}
 
-		return count( $images ) > 1 ? $images : reset( $images );
+		return \count( $images ) > 1 ? $images : reset( $images );
 	}
 
 	/**
@@ -668,7 +678,7 @@ final class Front extends Core {
 				$_src = \wp_get_attachment_image_src( $_img_id, $size );
 		}
 
-		if ( is_array( $_src ) && count( $_src ) >= 3 ) {
+		if ( \is_array( $_src ) && \count( $_src ) >= 3 ) {
 			$url = $_src[0];
 			$w   = $_src[1];
 			$h   = $_src[2];
