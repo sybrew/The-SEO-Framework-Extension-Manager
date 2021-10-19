@@ -45,11 +45,13 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 TODO see if we can get rid of 'require_once', which is the biggest performance hindrance.
 TODO see if we can improve version_compare_lenient(), which is the slowest method.
-TODO fix deprecations with TSF
+	-> Simply add memoization?
 TODO test PHP requirement for update.
 TODO fix "update notice"
 TODO if PHP 7+ is used, populate second parameter of unserialize with 'false'.
+	-> 2.6.0?
 
+* **Improved:** Extensions now load a tad faster.
 * **Fixed:** Resolved an issue where asset-URLs were generated incorrectly for extensions in the admin area on Windows-based servers. Props [Vitaliy].(https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/45)
 * **Fixed:** Regression for JS debug states.
 * TODO migrate the admin colors (for WP5.7, via TSF), dump the pngs?
@@ -112,11 +114,3 @@ This plugin now requires WordPress v5.4 and The SEO Framework v4.1.4 or higher.
 = 2.5.0 =
 
 This plugin now requires WordPress v5.1 and The SEO Framework v4.1.2 or higher.
-
-= 2.2.0 =
-
-This plugin now requires WordPress v4.9, PHP v5.6.5, and The SEO Framework v4.0 or higher.
-
-= 2.1.0 =
-
-This plugin now requires WordPress 4.8 or higher.

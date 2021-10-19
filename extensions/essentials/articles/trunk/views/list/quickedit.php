@@ -25,7 +25,7 @@ use \TSF_Extension_Manager\ListEdit as ListEdit;
 		// This is bad accessibility, but it's exactly as bad as WP is, and we don't want to stray away from their standards.
 		printf( '<span class=title>%s</span>', \esc_html( $post_meta['type']['label'] ) );
 		// phpcs:disable, WordPress.Security.EscapeOutput -- make_single_select_form() escapes.
-		echo \the_seo_framework()->make_single_select_form( [
+		echo \The_SEO_Framework\Interpreters\Form::make_single_select_form( [
 			'id'      => ListEdit::get_quick_option_key( 'type', $pm_index ),
 			'name'    => ListEdit::get_quick_option_key( 'type', $pm_index ),
 			'options' => $post_meta['type']['options'],

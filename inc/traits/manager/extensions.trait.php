@@ -1151,6 +1151,7 @@ trait Extensions_Actions {
 	 *
 	 * @since 1.0.0
 	 * @since 2.2.0 Now allows for persistent shared-class tests (thanks to _once).
+	 * @since 2.5.1 Added memoization, speeds up loading.
 	 *
 	 * @param string $file      The extension file to include.
 	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
@@ -1158,7 +1159,16 @@ trait Extensions_Actions {
 	 * @return bool True on success, false on failure.
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes
-		return (bool) include_once $file;
+
+		static $loaded = [];
+
+		if ( isset( $loaded[ $file ] ) ) {
+			// Tick the instance on failure.
+			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			return false;
+		}
+
+		return $loaded[ $file ] = (bool) include $file;
 	}
 
 	/**
