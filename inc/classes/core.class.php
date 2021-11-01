@@ -1184,7 +1184,7 @@ class Core {
 			$this->get_verification_codes( $_instance, $bits );
 
 			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
-			$loaded[ $class ] = require_once $_path . $_file . '.class.php';
+			$loaded[ $class ] = require_once "{$_path}{$_file}.class.php";
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
 

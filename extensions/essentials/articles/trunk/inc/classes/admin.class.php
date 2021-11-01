@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Local extension for The SEO Framework
+ * Articles extension for The SEO Framework
  * Copyright (C) 2017-2021 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify

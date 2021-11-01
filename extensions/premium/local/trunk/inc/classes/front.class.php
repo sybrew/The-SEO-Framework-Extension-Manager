@@ -61,7 +61,7 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
-			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '<=' ) ) {
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2', '<' ) ) {
 				// Initialize output in The SEO Framework's front-end meta object.
 				\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
 			} else {

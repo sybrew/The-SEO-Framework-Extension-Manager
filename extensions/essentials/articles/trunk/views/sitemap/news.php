@@ -21,6 +21,9 @@ $sitemap_content   = $tsf->get_option( 'cache_sitemap' ) ? get_transient( $this-
 if ( false === $sitemap_content ) {
 	$sitemap_generated = true;
 
+	if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2', '<' ) )
+		class_alias( '\The_SEO_Framework\Builders\Sitemap', '\The_SEO_Framework\Builders\Sitemap\Main', true );
+
 	$sitemap_builder = new TSF_Extension_Manager\Extension\Articles\SitemapBuilder;
 
 	/**

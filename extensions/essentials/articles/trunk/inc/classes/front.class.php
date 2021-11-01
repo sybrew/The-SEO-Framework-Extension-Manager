@@ -11,7 +11,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 	return;
 
 /**
- * Local extension for The SEO Framework
+ * Articles extension for The SEO Framework
  * Copyright (C) 2017-2021 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -93,7 +93,7 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
 		} else {
-			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '<=' ) ) {
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2', '<' ) ) {
 				// Initialize output in The SEO Framework's front-end meta object.
 				\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
 			} else {
@@ -222,7 +222,6 @@ final class Front extends Core {
 	 *
 	 * @since 2.1.1
 	 * @access private
-	 *
 	 */
 	public function _output_articles_json() {
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- is escaped.
@@ -755,7 +754,9 @@ final class Front extends Core {
 		$_resized_file = \image_make_intermediate_size( $_file, $size['width'], $size['height'], false );
 
 		if ( $_resized_file ) {
-			require_once ABSPATH . 'wp-admin/includes/image.php';
+			if ( ! \function_exists( '\\wp_generate_attachment_metadata' ) )
+				require_once ABSPATH . 'wp-admin/includes/image.php';
+
 			$_data   = \wp_generate_attachment_metadata( $attachment_id, $_file );
 			$success = (bool) \wp_update_attachment_metadata( $attachment_id, $_data );
 		}

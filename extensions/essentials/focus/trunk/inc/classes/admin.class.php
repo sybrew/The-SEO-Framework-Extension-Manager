@@ -131,10 +131,10 @@ final class Admin extends Core {
 						// NOTE: Can't reliably fetch Gutenberg's from DOM.
 					],
 					'seoTitle'       => [
-						'#tsf-title-reference' => 'dominate',
+						'#tsf-title-reference_autodescription_title' => 'dominate',
 					],
 					'seoDescription' => [
-						'#tsf-description-reference' => 'dominate',
+						'#tsf-description-reference_autodescription_description' => 'dominate',
 					],
 				],
 			]

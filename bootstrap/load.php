@@ -243,6 +243,7 @@ function can_load_class() {
  * the plugin classes.
  *
  * @since 1.0.0
+ * @since 2.5.1 Now handles mixed-case class names.
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  *
@@ -254,8 +255,8 @@ function can_load_class() {
  */
 function _autoload_classes( $class ) {
 
-	if ( 0 !== strpos( $class, __NAMESPACE__ . '\\', 0 ) )
-		return;
+	// It's TSF_Extension_Manager, not tsf_extension_manager!
+	if ( 0 !== strpos( strtolower( $class ), 'tsf_extension_manager\\', 0 ) ) return;
 
 	if ( WP_DEBUG ) {
 		/**
@@ -279,17 +280,16 @@ function _autoload_classes( $class ) {
 		$_bootstrap_timer = 0;
 	}
 
-	$class = strtolower( str_replace( __NAMESPACE__ . '\\', '', $class ) );
+	$file = str_replace( 'tsf_extension_manager\\', '', strtolower( $class ) );
 
-	if ( strpos( $class, '_abstract' ) ) {
-		$class = str_replace( '_abstract', '.abstract', $class );
-
-		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . 'abstract' . DIRECTORY_SEPARATOR;
+	if ( strpos( $file, '_abstract' ) ) {
+		$file    = str_replace( '_abstract', '.abstract', $file );
+		$rel_dir = 'abstract' . DIRECTORY_SEPARATOR;
 	} else {
-		$path = TSF_EXTENSION_MANAGER_DIR_PATH_CLASS;
+		$rel_dir = '';
 	}
 
-	require $path . $class . '.class.php';
+	require TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
 		$_t = microtime( true ) - $_bootstrap_timer;

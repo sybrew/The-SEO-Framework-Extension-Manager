@@ -87,7 +87,7 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1612645822',
+				'last_updated' => '1635798852',
 				'requires'     => '5.4',
 				'tested'       => '5.9',
 				'requires_tsf' => '4.1.4',
@@ -100,7 +100,7 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1633798024',
+				'last_updated' => '1635797892',
 				'requires'     => '5.4',
 				'tested'       => '5.9',
 				'requires_tsf' => '4.1.4',
@@ -226,9 +226,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'bf52683a4cf1e15ee0161b247208d33723595e27b2a38f2044affd2446914dc9',
-			'sha1'   => '5dd2f31057c9a5f713608672792b8411613db7b8',
-			'md5'    => '40360b420752a88b8cef4dfa6cb5b860',
+			'sha256' => 'eaebac3893652f40dcc064448296b3cb9b9290343282dd9a97f01e3e18db8813',
+			'sha1'   => '3b57ea91e5a7f08c8eed31c99f64a4f3e84d78eb',
+			'md5'    => 'ec63bc27eac6085420038cba59cee328',
 		];
 	}
 
@@ -1163,9 +1163,10 @@ trait Extensions_Actions {
 		static $loaded = [];
 
 		if ( isset( $loaded[ $file ] ) ) {
-			// Tick the instance on failure.
+			// Tick the instance for we bypass inclusion.
 			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
-			return false;
+
+			return $loaded[ $file ];
 		}
 
 		return $loaded[ $file ] = (bool) include $file;

@@ -308,6 +308,13 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ## Changelog
 
+### 1.5.1
+
+[tsfep-release time="-1"]
+
+* **Updated:**
+	* Addressed deprecated code usage with The SEO Framework v4.2.0.
+
 ### 1.5.0
 
 [tsfep-release time="February 9th, 2021"]
