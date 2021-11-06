@@ -61,6 +61,10 @@
 	flex-basis: 170px;
 }
 
+.tsfem-extension-header {
+	gap: 1ch;
+}
+
 .tsfem-extension-description-wrap {
 	flex-grow: 3;
 	flex-basis: 280px;
@@ -77,13 +81,8 @@
 	word-break: break-word;
 	font-weight: 600;
 	margin: 0;
-	margin-left: .4em;
 	padding: 0;
 	transition: color .5s;
-}
-body.rtl .tsfem-extension-title {
-	margin-right: initial;
-	margin-left: .4em;
 }
 
 .tsfem-extension-activated .tsfem-extension-title {

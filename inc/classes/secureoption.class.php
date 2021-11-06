@@ -140,7 +140,7 @@ final class SecureOption extends Secure_Abstract {
 		if ( empty( self::$_instance ) || empty( $type ) ) {
 			self::reset();
 			\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
-			return '';
+			return $old_value;
 		}
 
 		$instance = self::$_instance;

@@ -43,26 +43,15 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.5.1 =
 
-TODO see if we can get rid of 'require_once', which is the biggest performance hindrance.
-TODO see if we can improve version_compare_lenient(), which is the slowest method.
-	-> Simply add memoization?
 TODO test PHP requirement for update.
-TODO fix "update notice"
-TODO if PHP 7+ is used, populate second parameter of unserialize with 'false'.
-	-> 2.6.0?
 
 * **Improved:** Extensions now load a tad faster.
+* **Improved:** It is now less likely to have the options get invalidated which would otherwise invoke error 2001 (and error 6001 for API users).
 * **Fixed:** Resolved an issue where asset-URLs were generated incorrectly for extensions in the admin area on Windows-based servers. Props [Vitaliy].(https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/45)
 * **Fixed:** Regression for JS debug states.
-* TODO migrate the admin colors (for WP5.7, via TSF), dump the pngs?
-* TODO incorporate fix for TSF's media.js iteration?
-	-> Shouldn't TSF handle this fully, no?
 * TODO: https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/37
 	-> Should we test if $new === $old then return earlier?
 		-> Gotta POC it.
-* TODO: Issue 6001/2001 errors... we could circumvent it by using unique option indexes per domain, so that, when transfering domains, the keys must revalidate --- this prevents option hash mismatches.
-* TODO: Tell how to attach/change images for Cord: Media Library (list view) -> Uploaded to -> Attach.
-* TODO: When TSF's Headless mode is active, disable the page-specific notification systems.
 
 * **Updated extensions:**
 	* Articles @ Version 2.1.1:

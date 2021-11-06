@@ -711,7 +711,7 @@ trait Extensions_Actions {
 	}
 
 	/**
-	 * Compares the versions leniently by restricting $version1 to $version2's length in a WP's major-release fashion.
+	 * Compares the versions leniently by restricting $v1 to $v2's length in a WP's major-release fashion.
 	 *
 	 * Major/minor/branch: M[...M].M.m-b
 	 * The second "Major" branch may only be of length 1. M.MM is therefore not allowed.
@@ -719,37 +719,39 @@ trait Extensions_Actions {
 	 * @since 2.3.1
 	 * @link <https://www.php.net/manual/en/function.version-compare.php>
 	 *
-	 * @param string $version1 First version number.
-	 * @param string $version2 Second version number.
-	 * @param string $operator Optional. The comparison operator.
+	 * @param string $v1 First version number.
+	 * @param string $v2 Second version number.
+	 * @param string $op Optional. The comparison operator.
 	 * @return mixed When no operator is defined, -1 if the first version is lower than the second, 0 if they are equal,
 	 *               and 1 if the second is lower.
 	 *               When using the operator argument, return true if the relationship is the one specified by the
 	 *               operator, false otherwise. When an unsupported operator is given, NULL is returned.
 	 */
-	private static function version_compare_lenient( $version1, $version2, $operator = null ) {
+	private static function version_compare_lenient( $v1, $v2, $op = null ) {
+
+		static $memo = [];
+
+		if ( isset( $memo[ $v1 ][ $v2 ][ $op ] ) )
+			return $memo[ $v1 ][ $v2 ][ $op ];
 
 		// 1: major, 2: minor, 3: branch
 		// $regex = '/^(\d+\.\d)(\.\d+)?(-.*)?$/';
 		$regex = '/(\d+\.\d)(\.\d+)?(-.*)?/'; // 2 out of 10~14 steps fewer...
 
-		preg_match( $regex, $version1, $m_version1 );
-		preg_match( $regex, $version2, $m_version2 );
+		preg_match( $regex, $v1, $m_v1 );
+		preg_match( $regex, $v2, $m_v2 );
 
-		switch ( \count( $m_version2 ) ) {
+		switch ( \count( $m_v2 ) ) {
 			case 4: // branch
 			case 3: // minor
-				if ( isset( $operator ) )
-					return version_compare( $version1, $version2, $operator );
-				return version_compare( $version1, $version2 );
+				if ( isset( $op ) )
+					return $memo[ $v1 ][ $v2 ][ $op ] = version_compare( $v1, $v2, $op );
+				return $memo[ $v1 ][ $v2 ][ $op ] = version_compare( $v1, $v2 );
 
 			default: // major
-				$version1 = $m_version1[1];
-				$version2 = $m_version2[1];
-
-				if ( isset( $operator ) )
-					return version_compare( $version1, $version2, $operator );
-				return version_compare( $version1, $version2 );
+				if ( isset( $op ) )
+					return $memo[ $v1 ][ $v2 ][ $op ] = version_compare( $m_v1[1], $m_v2[1], $op );
+				return $memo[ $v1 ][ $v2 ][ $op ] = version_compare( $m_v1[1], $m_v2[1] );
 		}
 	}
 

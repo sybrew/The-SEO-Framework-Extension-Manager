@@ -313,7 +313,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 [tsfep-release time="-1"]
 
 * **Updated:**
-	* Addressed deprecated code usage with The SEO Framework v4.2.0.
+	* Extension now is fully compatible with The SEO Framework v4.2.0.
 
 ### 1.5.0
 

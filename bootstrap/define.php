@@ -262,3 +262,11 @@ define( 'TSFEM_INPOST_NO_AJAX',     0b00100 );
 define( 'TSFEM_INPOST_NO_CRON',     0b01000 );
 define( 'TSFEM_INPOST_NO_REVISION', 0b10000 );
 // phpcs:enable, Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma
+
+/**
+ * PHP <7.0 compat
+ *
+ * @since 1.0.0
+ * @since 2.5.1 Moved to define.php
+ */
+defined( 'PHP_INT_MIN' ) or define( 'PHP_INT_MIN', ~ PHP_INT_MAX );

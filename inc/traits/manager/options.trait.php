@@ -150,22 +150,24 @@ trait Options {
 			return false;
 		}
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$_instance_key = '_instance' === $option ? $value : $options['_instance'];
 
-		if ( $success ) {
-			$key = '_instance' === $option ? $value : $options['_instance'];
-			$this->set_options_instance( $options, $key );
+		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$instance_updated = $success && $this->set_options_instance( $options, $_instance_key );
+
+		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
+			if ( $instance_updated ) {
+				$this->set_error_notice( [ 6001 => '' ] );
+			} else {
+				$this->set_error_notice( [ 6002 => '' ] );
+			}
+
+			// Revert on failure.
+			if ( false === $kill )
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
 		}
 
-		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( [ 6001 => '' ] );
-
-			// Options have already been reverted.
-
-			return false;
-		}
-
-		return $success;
+		return $success && $instance_updated;
 	}
 
 	/**
@@ -221,21 +223,22 @@ trait Options {
 			return false;
 		}
 
-		$this->set_options_instance( $options, $options['_instance'] );
+		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
+			if ( $instance_updated ) {
+				$this->set_error_notice( [ 7101 => '' ] );
+			} else {
+				$this->set_error_notice( [ 7102 => '' ] );
+			}
 
-		if ( false === $this->verify_option_update_instance( $kill ) ) {
-			$this->set_error_notice( [ 7101 => '' ] );
-
-			// Revert option.
+			// Revert on failure.
 			if ( false === $kill )
 				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
-
-			return false;
 		}
 
-		return $success;
+		return $success && $instance_updated;
 	}
 
 	/**
@@ -254,15 +257,17 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $value The option value.
-	 * @param string $key Optional. The options key. Must be supplied when activating account.
+	 * @param string $value    The option value.
+	 * @param string $instance Optional. The options key. Must be supplied when activating account.
 	 * @return bool True on success, false on failure.
 	 */
-	final protected function update_options_instance( $value, $key = '' ) {
+	final protected function update_options_instance( $value, $instance = '' ) {
 
-		$key = $key ? $key : $this->get_option( '_instance' );
+		$instance = $instance ?: $this->get_option( '_instance' );
 
-		return \update_option( 'tsfem_i_' . $key, $value );
+		return \strlen( $instance ) && \strlen( $value )
+			? \update_option( "tsfem_i_$instance", $value )
+			: false;
 	}
 
 	/**
@@ -277,7 +282,7 @@ trait Options {
 
 		$instance = $instance ?: $this->get_option( '_instance' );
 
-		\delete_option( 'tsfem_i_' . $instance );
+		\delete_option( "tsfem_i_$instance" );
 
 		return true;
 	}

@@ -66,13 +66,12 @@ function _init_locale( $ignore = false ) {
  */
 function _protect_options() {
 
-	\defined( 'PHP_INT_MIN' ) or \define( 'PHP_INT_MIN', ~ PHP_INT_MAX );
-
 	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
 	\add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+
 	if ( isset( $current_options['_instance'] ) )
-		\add_filter( 'pre_update_option_tsfem_i_' . $current_options['_instance'], __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+		\add_filter( "pre_update_option_tsfem_i_{$current_options['_instance']}", __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
 }
 
 /**
@@ -89,11 +88,13 @@ function _protect_options() {
  */
 function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 
-	if ( $new_value === $old_value ) return; // Is this OK?
+	if ( $new_value === $old_value ) return $old_value;
 
 	// phpcs:ignore, TSF.Performance.Functions.PHP -- required
-	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) )
+	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) ) {
 		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
+		return $old_value;
+	}
 
 	/**
 	 * Load class overloading traits.

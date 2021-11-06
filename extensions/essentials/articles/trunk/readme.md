@@ -250,9 +250,9 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 [tsfep-release time="-1"]
 
 * **Changed:**
-	* Now relies on WordPress's timesystem.
+	* Now relies on WordPress's timesystem, instead of The SEO Framework's.
 * **Updated:**
-	* Addressed deprecated code usage with The SEO Framework v4.2.0.
+	* Extension now is fully compatible with The SEO Framework v4.2.0.
 
 ### 2.1.0
 
