@@ -100,7 +100,7 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1635797892',
+				'last_updated' => '1636205662',
 				'requires'     => '5.4',
 				'tested'       => '5.9',
 				'requires_tsf' => '4.1.4',
@@ -226,9 +226,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'eaebac3893652f40dcc064448296b3cb9b9290343282dd9a97f01e3e18db8813',
-			'sha1'   => '3b57ea91e5a7f08c8eed31c99f64a4f3e84d78eb',
-			'md5'    => 'ec63bc27eac6085420038cba59cee328',
+			'sha256' => '12a96e2301fbd5de1efbe6e95a2a1b40264fc43a14bde7f6aed610767415563a',
+			'sha1'   => 'efa5894da33d06857f6205e99fdad681a5a74bf2',
+			'md5'    => '7cd5c60a91074aec357d80066479a1d6',
 		];
 	}
 
@@ -363,7 +363,7 @@ trait Extensions_Properties {
 
 		if ( ! $path ) return '';
 
-		return $path . $slug . '.php';
+		return "$path$slug.php";
 	}
 
 	/**
@@ -870,7 +870,7 @@ trait Extensions_Actions {
 	private static function perform_extension_json_tests( $slug, &$_instance, &$bits ) {
 
 		$base_path = static::get_extension_trunk_path( $slug );
-		$json_file = $base_path . 'test.json';
+		$json_file = "{$base_path}test.json";
 
 		$success = [];
 
@@ -1185,15 +1185,19 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file, $type = 'php' ) {
 
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- necessary call.
-		if ( ( '.' . $type ) === substr( $file, - ( \strlen( $type ) + 1 ) ) && file_exists( $file ) ) {
-			$t = \validate_file( $file );
-
-			if ( 0 === $t )
-				return true;
-
-			if ( 2 === $t && 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) )
-				return true;
+		if ( ( '.' . $type ) === substr( $file, - ( \strlen( $type ) + 1 ) ) ) {
+			switch ( \validate_file( $file ) ) :
+				case 2:
+					if ( 'WIN' !== strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
+						break;
+					}
+					// Fall through to test 0
+				case 0:
+					// phpcs:ignore, TSF.Performance.Functions.PHP -- necessary call.
+					return file_exists( $file );
+				default:
+					break;
+			endswitch;
 		}
 
 		return false;

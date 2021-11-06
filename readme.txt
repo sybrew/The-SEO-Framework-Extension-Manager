@@ -48,10 +48,7 @@ TODO test PHP requirement for update.
 * **Improved:** Extensions now load a tad faster.
 * **Improved:** It is now less likely to have the options get invalidated which would otherwise invoke error 2001 (and error 6001 for API users).
 * **Fixed:** Resolved an issue where asset-URLs were generated incorrectly for extensions in the admin area on Windows-based servers. Props [Vitaliy].(https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/45)
-* **Fixed:** Regression for JS debug states.
-* TODO: https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/37
-	-> Should we test if $new === $old then return earlier?
-		-> Gotta POC it.
+* **Fixed:** Resolved an issue where site-settings were blocked from updating manually via `options.php`.
 
 * **Updated extensions:**
 	* Articles @ Version 2.1.1:

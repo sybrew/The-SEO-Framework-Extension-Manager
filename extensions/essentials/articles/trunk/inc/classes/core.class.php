@@ -56,11 +56,20 @@ class Core {
 		\TSF_Extension_Manager\Construct_Core_Interface;
 
 	/**
+	 * @since 2.1.1
+	 * @var \The_SEO_Framework\Load $tsf
+	 */
+	protected static $tsf;
+
+	/**
 	 * Child constructor.
 	 *
 	 * @since 1.2.0
 	 */
 	private function construct() {
+
+		if ( ! isset( static::$tsf ) )
+			static::$tsf = \the_seo_framework();
 
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
@@ -123,7 +132,7 @@ class Core {
 	 */
 	protected static function is_organization() {
 		static $is;
-		return isset( $is ) ? $is : $is = 'organization' === \the_seo_framework()->get_option( 'knowledge_type' );
+		return isset( $is ) ? $is : $is = 'organization' === static::$tsf->get_option( 'knowledge_type' );
 	}
 
 	/**
@@ -137,7 +146,7 @@ class Core {
 	 */
 	protected static function filter_article_type( $type ) {
 
-		if ( ! in_array( $type, static::get_available_article_types(), true ) ) {
+		if ( ! \in_array( $type, static::get_available_article_types(), true ) ) {
 			$type = 'Article';
 		}
 

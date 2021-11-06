@@ -158,8 +158,6 @@ class Core {
 			return $loaded = false;
 		}
 
-		$this->get_verification_codes( $_instance, $bits );
-
 		// Some AJAX functions require Extension layout traits to be loaded.
 		if ( \is_admin() && \wp_doing_ajax() ) {
 			// This should not ever be a security issue. However, sanity.
@@ -167,6 +165,7 @@ class Core {
 				$this->ajax_is_tsf_extension_manager_page( true );
 		}
 
+		$this->get_verification_codes( $_instance, $bits );
 		Extensions::initialize( 'list', $_instance, $bits );
 		Extensions::set_account( $this->get_subscription_status() );
 
@@ -197,12 +196,10 @@ class Core {
 			return $loaded = false;
 
 		$this->get_verification_codes( $_instance, $bits );
-
 		Extensions::initialize( 'load', $_instance, $bits );
 
 		foreach ( $extensions as $slug => $active ) {
 			$this->get_verification_codes( $_instance, $bits );
-
 			Extensions::load_extension( $slug, $_instance, $bits );
 		}
 
@@ -679,6 +676,7 @@ class Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added small prime number to prevent time freeze cracking.
+	 * @since 2.5.1 Removed needless hashing to improve performance, exchanged it for pepper.
 	 *
 	 * @param int|null $bit The instance bit.
 	 * @return string $instance The instance key.
@@ -711,21 +709,18 @@ class Core {
 			return $_retval;
 		}
 
-		static $timer = null;
-
-		// It's over ninethousand! And also a prime.
-		$_prime = 9001;
+		static $timer  = null;
+		static $pepper = null;
 
 		if ( null === $timer ) {
-			$timer = $this->is_64() ? time() * $_prime : PHP_INT_MAX / $_prime;
+			// It's over ninethousand! And also a prime.
+			$timer  = $this->is_64() ? time() * 9001 : PHP_INT_MAX / 9001;
+			$pepper = mt_rand( -$timer, $timer );
 		} else {
-			$timer += $_prime;
+			$timer += $pepper;
 		}
 
-		// This creates a unique salt for each bit.
-		$hash = $this->hash( $_bit . '\\' . mt_rand( ~ $timer, $timer ) . '\\' . $bit, 'instance' );
-
-		return $instance[ $bit ] = $instance[ $n_bit ] = $hash;
+		return $instance[ $bit ] = $instance[ $n_bit ] = "$_bit$timer$bit";
 	}
 
 	/**
@@ -813,10 +808,7 @@ class Core {
 	 * @return string Hash of $data.
 	 */
 	final protected function hash( $data, $scheme = 'instance' ) {
-
-		$salt = $this->get_salt( $scheme );
-
-		return hash_hmac( $this->get_hash_type(), $data, $salt );
+		return hash_hmac( $this->get_hash_type(), $data, $this->get_salt( $scheme ) );
 	}
 
 	/**
@@ -832,8 +824,6 @@ class Core {
 	 * @return string The timed hash that will always return the same.
 	 */
 	final public function _get_uid_hash( $uid ) {
-
-		if ( ! $uid ) return '';
 
 		$a   = (string) $uid;
 		$b   = strrev( $a );
@@ -1095,6 +1085,7 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 * @since 1.3.0 Now handles namespaces instead of class bases.
+	 * @since 2.5.1 Now supports mixed cases.
 	 *
 	 * @param string|null $path      The extension path to look for.
 	 * @param string|null $namespace The class name including namespace.
@@ -1111,13 +1102,17 @@ class Core {
 		static $locations = [];
 
 		if ( $get ) {
+			$get = strtolower( $get );
+
 			if ( isset( $locations[ $get ] ) )
 				return $locations[ $get ];
 
 			return false;
 		} else {
+			$namespace = strtolower( $namespace );
+
 			if ( $namespace ) {
-				$locations[ $namespace ] = $path;
+				$locations[ $namespace ] = strtolower( $path );
 				return true;
 			}
 		}
@@ -1144,15 +1139,16 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 * @since 1.3.0 Now handles namespaces instead of class bases.
+	 * @since 2.5.1 Now supports mixed class case.
 	 *
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
 	 */
 	final protected function autoload_extension_class( $class ) {
 
-		$class = '\\' . ltrim( $class, '\\' );
+		$class = strtolower( $class );
 
-		if ( 0 !== strpos( $class, '\\TSF_Extension_Manager\\Extension\\', 0 ) )
+		if ( 0 !== strpos( $class, 'tsf_extension_manager\\extension\\', 0 ) )
 			return;
 
 		static $loaded = [];
@@ -1174,19 +1170,19 @@ class Core {
 			$_bootstrap_timer = 0;
 		}
 
-		$_class = str_replace( '\\TSF_Extension_Manager\\Extension\\', '', $class );
+		$_class = str_replace( 'tsf_extension_manager\\extension\\', '', $class );
 		$_ns    = substr( $_class, 0, strpos( $_class, '\\' ) );
 
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-			$_file = strtolower( str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) ) );
+			$_file = str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) );
+
 			$this->get_verification_codes( $_instance, $bits );
 
-			//= Needs to be "_once", because `Extensions_Actions::include_extension` also loads it.
-			$loaded[ $class ] = require_once "{$_path}{$_file}.class.php";
+			$loaded[ $class ] = require "{$_path}{$_file}.class.php";
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered. Check the capitalization!' );
+			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
 
 			// Prevent fatal errors.
 			$this->create_class_alias( $class );

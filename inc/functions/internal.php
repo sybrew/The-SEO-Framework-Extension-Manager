@@ -44,9 +44,8 @@ function extension_basename( $path ) {
 	$path          = trim( \wp_normalize_path( $path ), '/' );
 
 	$path = preg_replace( '#^' . preg_quote( $extension_dir, '#' ) . '/#', '', $path );
-	$path = trim( $path, '/' );
 
-	return $path;
+	return trim( $path, '/' );
 }
 
 /**
@@ -73,14 +72,11 @@ function extension_dir_path( $file ) {
  */
 function extension_dir_url( $file ) {
 
-	$path = \dirname( \TSF_Extension_Manager\extension_basename( $file ) );
+	$path = \dirname( extension_basename( $file ) );
 	//= Convert Windows/Unix paths to URL paths.
 	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-	$url  = TSF_EXTENSION_MANAGER_DIR_URL;
-	$url .= trim( $path, '/ ' ) . '/';
-
-	return $url;
+	return TSF_EXTENSION_MANAGER_DIR_URL . trim( $path, '/ ' ) . '/';
 }
 
 /**
@@ -116,7 +112,12 @@ function has_run( $caller ) {
  * @since 1.5.0
  */
 function load_upgrader() {
-	require_once TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrader.class.php';
+	static $_loaded;
+	if ( $_loaded ) return;
+
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrader.class.php';
+
+	$_loaded = true;
 }
 
 /**

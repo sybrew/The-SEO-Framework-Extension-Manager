@@ -82,6 +82,7 @@ final class Front extends Core {
 	public function _local_hook_amp_output( $output = '' ) {
 		return $output .= $this->_get_local_json_output();
 	}
+
 	/**
 	 * Outputs Local JSON.
 	 *
@@ -139,7 +140,7 @@ final class Front extends Core {
 	 * @return string URL without scheme.
 	 */
 	protected function remove_scheme( $url ) {
-		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( $url, [ 'https', 'http' ] ) );
+		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url_raw( $url, [ 'https', 'http' ] ) );
 	}
 
 	/**
@@ -207,7 +208,7 @@ final class Front extends Core {
 			$url = \get_home_url();
 		} elseif ( \is_singular() ) {
 			$url = \get_permalink();
-		} else {
+		} elseif ( \is_category() || \is_tag() || \is_tax() ) {
 			$term     = \get_queried_object();
 			$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : null;
 
@@ -217,7 +218,7 @@ final class Front extends Core {
 			$url = \get_term_link( $term, $taxonomy );
 		}
 
-		if ( ! $url )
+		if ( empty( $url ) )
 			return '';
 
 		//= Get data by URL.

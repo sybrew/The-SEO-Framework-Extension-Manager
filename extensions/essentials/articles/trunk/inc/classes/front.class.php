@@ -80,7 +80,7 @@ final class Front extends Core {
 	 */
 	public function _init_articles_output() {
 
-		$tsf = \the_seo_framework();
+		$tsf = static::$tsf;
 
 		if ( ! $tsf->is_singular() || $tsf->is_query_exploited() ) return;
 
@@ -253,7 +253,7 @@ final class Front extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.2 No longer minifies the script when script debugging is activated.
-	 * @since 2.1.1 No longe rectifies the date.
+	 * @since 2.1.1 No longer rectifies the date.
 	 * @link https://developers.google.com/search/docs/data-types/article
 	 * @access private
 	 *
@@ -261,25 +261,18 @@ final class Front extends Core {
 	 */
 	public function _get_articles_json_output() {
 
-		// Should've used a generator... TODO? => Wait for TSF v4.2?
-		$data = [
-			$this->get_article_context(),
-			$this->get_article_type(),
-			$this->get_article_main_entity(),
-			$this->get_article_headline(),
-			$this->get_article_image(),
-			$this->get_article_published_date(),
-			$this->get_article_modified_date(),
-			$this->get_article_author(),
-			$this->get_article_publisher(),
-			$this->get_article_description(),
-		];
+		$data = [];
 
-		if ( ! $this->is_json_valid() )
-			return '';
+		foreach ( $this->generate_articles_json_output() as $entry ) {
+			if ( $entry )
+				$data[] = $entry;
+
+			if ( ! $this->is_json_valid() )
+				return '';
+		}
 
 		// Build data, fetch it later.
-		array_filter( array_filter( $data ), [ $this, 'build_article_data' ] );
+		array_filter( $data, [ $this, 'build_article_data' ] );
 
 		/**
 		 * @since 1.4.0
@@ -293,12 +286,33 @@ final class Front extends Core {
 		if ( ! empty( $data ) ) {
 			$options  = 0;
 			$options |= JSON_UNESCAPED_SLASHES;
-			$options |= \the_seo_framework()->script_debug ? JSON_PRETTY_PRINT : 0;
+			$options |= static::$tsf->script_debug ? JSON_PRETTY_PRINT : 0;
 
 			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, $options ) ) . PHP_EOL;
 		}
 
 		return '';
+	}
+
+
+	/**
+	 * Generates Article data.
+	 *
+	 * @since 2.2.1
+	 * @access private
+	 * @generator
+	 */
+	protected function generate_articles_json_output() {
+		yield $this->get_article_context();
+		yield $this->get_article_type();
+		yield $this->get_article_main_entity();
+		yield $this->get_article_headline();
+		yield $this->get_article_image();
+		yield $this->get_article_published_date();
+		yield $this->get_article_modified_date();
+		yield $this->get_article_author();
+		yield $this->get_article_publisher();
+		yield $this->get_article_description();
 	}
 
 	/**
@@ -309,7 +323,7 @@ final class Front extends Core {
 	 *
 	 * @param array $array The input element
 	 */
-	private function build_article_data( array $array ) {
+	private function build_article_data( $array ) {
 		$this->get_article_data( false, $array );
 	}
 
@@ -323,7 +337,7 @@ final class Front extends Core {
 	 * @param array $entry The input element
 	 * @return array The article data.
 	 */
-	private function get_article_data( $get = true, array $entry = [] ) {
+	private function get_article_data( $get = true, $entry = [] ) {
 
 		static $data = [];
 
@@ -394,7 +408,7 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$url = \the_seo_framework()->get_current_permalink();
+		$url = static::$tsf->get_current_permalink();
 
 		if ( ! $url ) {
 			$this->invalidate( 'amp' );
@@ -430,7 +444,7 @@ final class Front extends Core {
 			return [];
 
 		$id  = $this->get_current_id();
-		$tsf = \the_seo_framework();
+		$tsf = static::$tsf;
 
 		$title = $tsf->get_raw_generated_title( [
 			'id'       => $id,
@@ -504,7 +518,7 @@ final class Front extends Core {
 
 		// TODO: Do we want to take images from the content? Users have complained about this...
 		// ... We'd have to implement (and revoke) a filter, however.
-		foreach ( \the_seo_framework()->get_image_details( null, false, 'schema', true ) as $image ) {
+		foreach ( static::$tsf->get_image_details( null, false, 'schema', true ) as $image ) {
 
 			if ( ! $image['url'] ) continue;
 
@@ -635,12 +649,12 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$tsf = \the_seo_framework();
-
 		if ( ! static::is_organization() ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}
+
+		$tsf = static::$tsf;
 
 		/**
 		 * @since 1.0.0
@@ -720,9 +734,7 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		$tsf = \the_seo_framework();
-
-		$description = \esc_attr( $tsf->get_description( $this->get_current_id() ) );
+		$description = \esc_attr( static::$tsf->get_description() );
 
 		if ( ! $description ) {
 			// Optional.
