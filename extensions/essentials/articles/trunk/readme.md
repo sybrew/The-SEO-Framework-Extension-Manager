@@ -247,7 +247,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ### 2.1.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 8th, 2021"]
 
 * **Improved:**
 	* This extension now uses a coroutine to generate the Schema.org markup; now it can stop processing at any point the data is not valid.

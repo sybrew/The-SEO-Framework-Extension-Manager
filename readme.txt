@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 5.1
-Tested up to: 5.7
+Requires at least: 5.4
+Tested up to: 5.9
 Requires PHP: 5.6.5
 Requires TSF: 4.1.4
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,21 +43,25 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.5.1 =
 
-TODO test PHP requirement for update.
+**Release date:**
 
-* **Improved:** Extensions now load a tad faster.
-* **Improved:** It is now less likely to have the options get invalidated which would otherwise invoke error 2001 (and error 6001 for API users).
-* **Fixed:** Resolved an issue where asset-URLs were generated incorrectly for extensions in the admin area on Windows-based servers. Props [Vitaliy].(https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/45)
-* **Fixed:** Resolved an issue where site-settings were blocked from updating manually via `options.php`.
+* November 8th, 2021
 
-* **Updated extensions:**
-	* Articles @ Version 2.1.1:
-		* **Changed:** Now uses WordPress's timesystem.
-	* Local @ Version 1.1.9
-		* **Fixed:** You can now store and test your input correctly when the first department is disabled.
-	* Cord @ Version ??
-		* TODO **Added:** Google Analytics 4 support. New settings are added for this.
+**Feature highlights**
 
+* Extension Manager is now fully prepared for the imminent release of TSF v4.2.0.
+* The 2001 error is now less likely to get invoked.
+* Asset URLs are now generated correctly on Windows-based servers.
+
+**Updated extensions:**
+
+* [Articles at version 2.1.1](https://theseoframework.com/extensions/articles/#changelog)
+* [Local at version 1.1.9](https://theseoframework.com/extensions/local/#changelog)
+* [Focus at version 1.5.1](https://theseoframework.com/extensions/focus/#changelog)
+
+**Detailed log:**
+
+View the [detailed v2.5.1 changelog](https://tsf.fyi/p/3779).
 
 = 2.5.0 - Quick SEO =
 
@@ -92,10 +96,6 @@ View the [detailed v2.5.0 changelog](https://theseoframework.com/?p=3686).
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
-
-= 2.5.1 =
-
-This plugin now requires WordPress v5.4 and The SEO Framework v4.1.4 or higher.
 
 = 2.5.0 =
 

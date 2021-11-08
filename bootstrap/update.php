@@ -226,7 +226,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 	$url       = TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
 	$http_args = [
 		'timeout'    => 15,
-		'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
+		'user-agent' => "WordPress/$wp_version; " . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 		'body'       => [
 			'action'  => $action,
 			'request' => serialize( $args ), // phpcs:ignore -- Object injection is mitigated at the request server.
@@ -274,7 +274,7 @@ function _hook_plugins_api( $res, $action, $args ) {
  * @access private
  */
 function _clear_update_cache() {
-	\delete_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
+	\update_site_option( TSF_EXTENSION_MANAGER_UPDATER_CACHE, [] );
 }
 
 \add_filter( 'pre_set_site_transient_update_plugins', __NAMESPACE__ . '\\_push_update', PHP_INT_MAX, 2 );
@@ -288,6 +288,8 @@ function _clear_update_cache() {
  * @since 2.0.0
  * @since 2.0.2 Added more cache, because some sites disable transients completely...
  * @since 2.4.0 Can now fetch required (and available) locale files.
+ * @since 2.5.1 1. Now uses site options instead of transients. We still have far too many update-spammers.
+ *              2. We may now collect a list of active extensions.
  * @access private
  * @see WP Core \wp_update_plugins()
  *
@@ -310,12 +312,16 @@ function _push_update( $value, $transient ) {
 	if ( isset( $runtimecache ) ) {
 		$cache =& $runtimecache;
 	} else {
-		// TODO some sites install plugins that disable transients. They invoke thousands of requests to our services within days.
-		// Use options instead?
-		$cache_timeout = MINUTE_IN_SECONDS * 20;
-		$cache         = \get_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE );
+		$cache = \get_site_option( TSF_EXTENSION_MANAGER_UPDATER_CACHE, [] );
 
-		if ( false === $cache ) {
+		if ( isset( $cache['_failure_timeout'] ) ) {
+			if ( $cache['_failure_timeout'] > time() )
+				return $value;
+
+			$cache = [];
+		}
+
+		if ( empty( $cache['_tsfem_delay_updater'] ) || $cache['_tsfem_delay_updater'] < time() ) {
 			// include an unmodified $wp_version
 			include ABSPATH . WPINC . '/version.php';
 
@@ -346,13 +352,17 @@ function _push_update( $value, $transient ) {
 				$translations = [];
 			}
 
+			$options    = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+			$extensions = isset( $options['active_extensions'] ) ? $options['active_extensions'] : [];
+
 			$http_args = [
 				'timeout'    => 7, // WordPress generously sets 30 seconds when doing cron to check all plugins, but we only check 1 plugin.
-				'user-agent' => 'WordPress/' . $wp_version . '; ' . PHP_VERSION_ID . '; ' . \home_url( '/' ),
+				'user-agent' => "WordPress/$wp_version; " . PHP_VERSION_ID . '; ' . \home_url( '/' ),
 				'body'       => [
 					'plugins'      => \wp_json_encode( $plugins ),
 					'translations' => \wp_json_encode( $translations ),
 					'locales'      => \wp_json_encode( $locales ),
+					'extensions'   => \wp_json_encode( array_keys( array_filter( $extensions ) ) ),
 				],
 			];
 
@@ -361,6 +371,11 @@ function _push_update( $value, $transient ) {
 			if ( \is_wp_error( $raw_response )
 			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 			) {
+				$_cache = [
+					'_failure_timeout' => time() + ( MINUTE_IN_SECONDS * 10 ),
+				];
+				\update_site_option( TSF_EXTENSION_MANAGER_UPDATER_CACHE, $_cache );
+
 				return $value;
 			}
 
@@ -380,8 +395,10 @@ function _push_update( $value, $transient ) {
 			}
 			unset( $plugin );
 
-			$cache =& $response;
-			\set_site_transient( TSF_EXTENSION_MANAGER_UPDATER_CACHE, $cache, $cache_timeout );
+			$cache                         =& $response;
+			$cache['_tsfem_delay_updater'] = time() + ( MINUTE_IN_SECONDS * 30 );
+
+			\update_site_option( TSF_EXTENSION_MANAGER_UPDATER_CACHE, $cache );
 		}
 
 		$runtimecache = $cache;

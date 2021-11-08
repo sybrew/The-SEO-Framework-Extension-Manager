@@ -310,7 +310,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.5.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 8th, 2021"]
 
 * **Updated:**
 	* Extension now is fully compatible with The SEO Framework v4.2.0.

@@ -7,27 +7,23 @@ This extension lets you set up important local business information for search e
 
 ## Overview
 
-### Higher ranking through local search
+### Higher ranking with local search
 
-A potential customer or visitor often wants to find out more about your business before interacting.
-Therefore, for many businesses, local listings are a must.
+For most businesses, local listings are a must. Once listed, a potential visitor can then find more about your business directly from search engines.
 
 A local listing within Google will also be placed upfront and sometimes above all other search results.
 
-With the Local extension, you can rank your different local business departments higher in Google and other search engines.
-So, your business will be found better by your local customers.
-
-All the above also accounts for users who add locations in their search query.
+With the Local extension, you can list your local business departments in Google and other search engines.
 
 [tsfep-image id="1"]
 
 ### An advanced SEO solution
 
-We present you an advanced and leading Local solution, excelling other existing similar solutions, for a lower price.
+We present you an advanced and leading Local solution.
 
 **This software package includes:**
 
-* Support for multiple locations (up to 4096, not only 2).
+* Support for up to 4096 locations.
 * (Reverse) Geocoding through our API services.
 * Options for opening hours per area.
 * Internal caching, for significantly faster execution.
@@ -128,9 +124,9 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.1.9
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 8th, 2021"]
 
-* **Changed:** Resolved deprecated usage from The SEO Framework v4.2.0.
+* **Changed:** Extension now is fully compatible with The SEO Framework v4.2.0.
 * **Fixed:** Resolved an issue that caused the output not to run on assigned URLs when the main department is disabled.
 
 ### 1.1.8
