@@ -25,6 +25,13 @@ namespace TSF_Extension_Manager;
  */
 
 /**
+ * Require time factory trait.
+ *
+ * @since 2.5.2
+ */
+\TSF_Extension_Manager\_load_trait( 'factory/time' );
+
+/**
  * Class TSF_Extension_Manager\Layout.
  *
  * Outputs layout based on instance.
@@ -35,6 +42,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class Layout extends Secure_Abstract {
+	use \TSF_Extension_Manager\Time;
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -421,8 +429,8 @@ final class Layout extends Secure_Abstract {
 				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
-			$end_date      = gmdate( 'Y-m-d', $date_until );
-			$end_date_i18n = \date_i18n( 'F j, Y, g:i A', $date_until );
+			$end_date      = date( 'Y-m-d', $date_until );
+			$end_date_i18n = static::get_rectified_date_i18n( 'F j, Y, g:i A (\G\M\TP)', $date_until );
 
 			$output .= static::wrap_row_content(
 				\esc_html__( 'Expires in:', 'the-seo-framework-extension-manager' ),
@@ -464,7 +472,7 @@ final class Layout extends Secure_Abstract {
 				$payment_in = sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
 			}
 
-			$end_date_i18n = $payment_date ? \date_i18n( 'F j, Y, g:i A', $date_until ) : '';
+			$end_date_i18n = $payment_date ? static::get_rectified_date_i18n( 'F j, Y, g:i A (\G\M\TP)', $date_until ) : '';
 
 			$payment_in = HTML::wrap_inline_tooltip( vsprintf(
 				'<time class="tsfem-dashicon tsf-tooltip-item %s" title="%s" datetime="%s">%s</time>',

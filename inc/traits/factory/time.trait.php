@@ -41,7 +41,7 @@ trait Time {
 	 * @param int $since The UNIX timestamp in the past.
 	 * @return string The time ago.
 	 */
-	protected function get_time_ago_i18n( $since ) {
+	protected static function get_time_ago_i18n( $since ) {
 
 		$now = time();
 		$ago = $now - $since;
@@ -122,7 +122,7 @@ trait Time {
 	 * @param int|null $timestamp The UNIX timestamp. When null it uses time().
 	 * @return string The formatted i18n date.
 	 */
-	protected function get_rectified_date_i18n( $format, $timestamp = null ) {
+	protected static function get_rectified_date_i18n( $format, $timestamp = null ) {
 
 		\is_null( $timestamp )
 			and $timestamp = time();
@@ -138,7 +138,7 @@ trait Time {
 	 * Scales time according to input.
 	 *
 	 * @since 1.5.0
-	 * @uses $this->_upscale_time()
+	 * @uses static::_upscale_time()
 	 *
 	 * @param int <R> $x       The time to convert.
 	 * @param string  $x_scale The time scale $x is in.
@@ -152,13 +152,13 @@ trait Time {
 	 *                         but instead it will return "61 minutes and 6 seconds".
 	 * @return string Scaled i18n time. Not escaped.
 	 */
-	protected function scale_time( $x, $x_scale = 'seconds', $scales = 2, $precise = false ) {
+	protected static function scale_time( $x, $x_scale = 'seconds', $scales = 2, $precise = false ) {
 
 		$x = round( $x );
 
 		//= Can't upscale 0.
 		if ( $scales && $x )
-			return $this->_upscale_time( $x, $x_scale, $scales, $precise );
+			return static::_upscale_time( $x, $x_scale, $scales, $precise );
 
 		$time_i18n = '';
 
@@ -195,12 +195,12 @@ trait Time {
 	/**
 	 * Upscales time, reiterates over itself until it's happy.
 	 *
-	 * This is a helper function for $this->scale_time().
+	 * This is a helper function for static::scale_time().
 	 * Don't call this.
 	 *
 	 * @since 1.5.0
 	 * @access private
-	 * @see $this->scale_time()
+	 * @see static::scale_time()
 	 *
 	 * @param int <R> $x       The time to convert.
 	 * @param string  $x_scale The time scale $x is in.
@@ -214,7 +214,7 @@ trait Time {
 	 *                         but instead it will return "61 minutes and 6 seconds".
 	 * @return string Scaled i18n time. Not escaped.
 	 */
-	protected function _upscale_time( $x, $x_scale, $scales, $precise ) {
+	protected static function _upscale_time( $x, $x_scale, $scales, $precise ) {
 
 		$x_remaining = $x;
 		$times       = [];
@@ -241,7 +241,7 @@ trait Time {
 					$_current_time = round( $x_remaining - $_next_time * $_threshold );
 
 					// Found leftovers, use them.
-					$times[] = $this->scale_time( $_current_time, $x_scale, 0 );
+					$times[] = static::scale_time( $_current_time, $x_scale, 0 );
 
 					$x_remaining = $_next_time;
 					$x_scale     = $scale_table[ $x_scale ][1];
@@ -252,7 +252,7 @@ trait Time {
 				}
 			} else {
 				//= Reached threshold through precision or time overlap.
-				$times[] = $this->scale_time( $x_remaining, $x_scale, 0 );
+				$times[] = static::scale_time( $x_remaining, $x_scale, 0 );
 				// No need to try upcoming scales, save processing power.
 				break;
 			}
@@ -284,56 +284,5 @@ trait Time {
 			}
 		}
 		return $out;
-	}
-
-	/**
-	 * Returns timestamp format based on TSF's timestamp settings.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @return string The timestamp format used for PHP date.
-	 */
-	protected function get_timestamp_format() {
-		static $format;
-		return $format ?: $format = \the_seo_framework()->get_timestamp_format();
-	}
-
-	/**
-	 * Returns the PHP timezone compatible string.
-	 * UTC offsets are unreliable.
-	 *
-	 * @since 1.5.0
-	 * @source The SEO Framework 3.0
-	 *
-	 * @param bool $guess : If true, the timezone will be guessed from the
-	 * WordPress core gmt_offset option.
-	 * @return string PHP Timezone String.
-	 */
-	private function get_timezone_string( $guess = false ) {
-
-		$tzstring = \get_option( 'timezone_string' );
-
-		if ( false !== strpos( $tzstring, 'Etc/GMT' ) )
-			$tzstring = '';
-
-		if ( $guess && empty( $tzstring ) ) {
-			$tzstring = $this->get_tzstring_from_offset( \get_option( 'gmt_offset' ) );
-		}
-
-		return $tzstring;
-	}
-
-	/**
-	 * Fetches the Timezone String from given offset.
-	 *
-	 * @since 1.5.0
-	 * @source The SEO Framework 4.0.
-	 *
-	 * @param int $offset The GMT offzet.
-	 * @return string PHP Timezone String.
-	 */
-	private function get_tzstring_from_offset( $offset = 0 ) {
-		$seconds = round( $offset * HOUR_IN_SECONDS );
-		return timezone_name_from_abbr( '', $seconds, 1 );
 	}
 }

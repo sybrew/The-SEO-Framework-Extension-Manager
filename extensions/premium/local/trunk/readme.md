@@ -126,7 +126,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 [tsfep-release time="November 8th, 2021"]
 
-* **Changed:** Extension now is fully compatible with The SEO Framework v4.2.0.
+* **Updated:** This extension now is fully compatible with The SEO Framework v4.2.0.
 * **Fixed:** Resolved an issue that caused the output not to run on assigned URLs when the main department is disabled.
 
 ### 1.1.8

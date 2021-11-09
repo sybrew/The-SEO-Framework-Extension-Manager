@@ -254,7 +254,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 * **Changed:**
 	* Now relies on WordPress's timesystem, instead of The SEO Framework's.
 * **Updated:**
-	* Extension now is fully compatible with The SEO Framework v4.2.0.
+	* This extension now is fully compatible with The SEO Framework v4.2.0.
 
 ### 2.1.0
 

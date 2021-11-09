@@ -1085,7 +1085,8 @@ class Core {
 	 *
 	 * @since 1.2.0
 	 * @since 1.3.0 Now handles namespaces instead of class bases.
-	 * @since 2.5.1 Now supports mixed cases.
+	 * @since 2.5.1 Now supports mixed cases in classnames.
+	 * @since 2.5.2 Now supports mixed cases in paths again (oops). Props Carl D. Erling.
 	 *
 	 * @param string|null $path      The extension path to look for.
 	 * @param string|null $namespace The class name including namespace.
@@ -1112,7 +1113,7 @@ class Core {
 			$namespace = strtolower( $namespace );
 
 			if ( $namespace ) {
-				$locations[ $namespace ] = strtolower( $path );
+				$locations[ $namespace ] = $path;
 				return true;
 			}
 		}

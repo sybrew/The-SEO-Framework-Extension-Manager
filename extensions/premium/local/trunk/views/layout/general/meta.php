@@ -10,7 +10,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\E
 
 // So fancy.
 ?>
-<meta name="theme-color" content="#0ebfe9" />
-<meta name="msapplication-navbutton-color" content="#0ebfe9" />
-<meta name="apple-mobile-web-app-status-bar-style" content="#0ebfe9" />
+<meta name="theme-color" content="#057f9c" />
+<meta name="msapplication-navbutton-color" content="#057f9c" />
+<meta name="apple-mobile-web-app-status-bar-style" content="#057f9c" />
 <?php

@@ -976,7 +976,7 @@ final class Admin extends Api {
 							$_value,
 							$args['value'] === $_value ? 'selected' : '',
 							\esc_html( $_value
-								? $this->scale_time( $_value, $args['options']['in'], $args['options']['scale'], false )
+								? static::scale_time( $_value, $args['options']['in'], $args['options']['scale'], false )
 								: $args['options']['if-empty']
 							),
 						]
@@ -1000,7 +1000,7 @@ final class Admin extends Api {
 						[
 							\esc_attr( $_field_id ),
 							\esc_html( $args['value']
-								? $this->scale_time( $args['value'], $args['options']['in'], $args['options']['scale'], false )
+								? static::scale_time( $args['value'], $args['options']['in'], $args['options']['scale'], false )
 								: $args['options']['if-empty']
 							),
 						]
@@ -1183,11 +1183,11 @@ final class Admin extends Api {
 	protected function get_last_crawled_field() {
 
 		$last_crawl      = $this->get_last_issues_crawl();
-		$last_crawl_i18n = $last_crawl ? $this->get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
+		$last_crawl_i18n = $last_crawl ? static::get_time_ago_i18n( $last_crawl ) : \esc_html__( 'Never', 'the-seo-framework-extension-manager' );
 
 		$class = $last_crawl ? 'tsfem-success' : 'tsfem-error';
 		$title = $last_crawl
-			? $this->get_rectified_date_i18n( 'F j, Y, g:i A T (\G\M\TP)', $last_crawl )
+			? static::get_rectified_date_i18n( 'F j, Y, g:i A (\G\M\TP)', $last_crawl )
 			: \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
 
 		return sprintf(

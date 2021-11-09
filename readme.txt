@@ -5,7 +5,7 @@ Requires at least: 5.4
 Tested up to: 5.9
 Requires PHP: 5.6.5
 Requires TSF: 4.1.4
-Stable tag: 2.5.1
+Stable tag: 2.5.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -40,6 +40,18 @@ Learn [how to contribute](https://tsf.fyi/contributing).
 Please refer to [the installation instructions on our website](https://kb.theseoframework.com/kb/how-to-install-the-extension-manager/).
 
 == Changelog ==
+
+= 2.5.2 =
+
+* **Release date:**
+
+* November 9th, 2021
+
+**This update addresses a regression brought in 2.5.1 where upper-case file paths were no longer recognized.**
+
+**Detailed log:**
+
+View the [detailed v2.5.2 changelog](https://tsf.fyi/p/3782).
 
 = 2.5.1 =
 
