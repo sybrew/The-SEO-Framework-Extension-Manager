@@ -69,7 +69,7 @@ final class Ajax {
 	 */
 	public static function _init( Admin $_admin ) {
 
-		$instance = new static();
+		$instance = new static;
 
 		/**
 		 * Set error notice option.

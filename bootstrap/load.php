@@ -129,7 +129,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 function _init_tsf_extension_manager() {
 
 	// Memoize the class object. Do not run everything more than once.
-	static $tsf_extension_manager = null;
+	static $tsf_extension_manager;
 
 	if ( $tsf_extension_manager )
 		return $tsf_extension_manager;
@@ -221,7 +221,7 @@ function _register_autoloader() {
  */
 function can_load_class() {
 
-	static $can_load = null;
+	static $can_load;
 
 	if ( isset( $can_load ) )
 		return $can_load;

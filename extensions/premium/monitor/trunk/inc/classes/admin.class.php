@@ -604,7 +604,7 @@ final class Admin extends Api {
 					else :
 						// Crawl has already been requested recently.
 						$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
-						$status = [
+						$status  = [
 							'type'    => 'yield_unchanged',
 							'notice'  => $this->get_try_again_notice( $seconds ),
 							'timeout' => $current_timeout,
@@ -937,10 +937,10 @@ final class Admin extends Api {
 			\esc_html__( 'These settings are in development. Enable these to participate in the beta tests.', 'the-seo-framework-extension-manager' )
 		);
 
-		fields : {
+		fields: {
 			$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
 			$time_settings  = [
-				'uptime_setting' => [
+				'uptime_setting'      => [
 					'title'   => \__( 'Uptime monitoring:', 'the-seo-framework-extension-manager' ),
 					'help'    => \__( 'Set how often you want Monitor to test your website for availability.', 'the-seo-framework-extension-manager' ),
 					'option'  => 'uptime_setting',
@@ -995,7 +995,7 @@ final class Admin extends Api {
 							implode( '', $_options ),
 						]
 					),
-					'js' => vsprintf(
+					'js'   => vsprintf(
 						'<span class="hide-if-no-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
 						[
 							\esc_attr( $_field_id ),
@@ -1009,7 +1009,7 @@ final class Admin extends Api {
 			endforeach;
 		}
 
-		rows : {
+		rows: {
 			$_rows = '';
 			foreach ( $options as $id => $_fields ) :
 				$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
@@ -1031,7 +1031,7 @@ final class Admin extends Api {
 			$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
 		}
 
-		form : {
+		form: {
 			$nonce_action = $this->_get_nonce_action_field( 'update' );
 			$nonce        = $this->_get_nonce_field( 'update' );
 
@@ -1269,8 +1269,8 @@ final class Admin extends Api {
 	 */
 	protected function get_disconnect_site_view() {
 
+		$nonce        = $this->_get_nonce_field( 'disconnect' );
 		$nonce_action = $this->_get_nonce_action_field( 'disconnect' );
-		$nonce = $this->_get_nonce_field( 'disconnect' );
 
 		$s_field_id = 'disconnect-switcher';
 

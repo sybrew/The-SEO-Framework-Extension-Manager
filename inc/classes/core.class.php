@@ -144,7 +144,7 @@ class Core {
 	 */
 	final public function _init_extensions() {
 
-		static $loaded = null;
+		static $loaded;
 
 		if ( isset( $loaded ) )
 			return $loaded;
@@ -218,7 +218,7 @@ class Core {
 	 */
 	final public function are_options_valid() {
 
-		static $cache = null;
+		static $cache;
 
 		if ( isset( $cache ) )
 			return $cache;
@@ -443,7 +443,7 @@ class Core {
 		$output = '';
 		$i++;
 
-		static $last = null;
+		static $last;
 
 		if ( \is_array( $value ) ) {
 
@@ -591,7 +591,7 @@ class Core {
 		$_key   = key( $current_filter );
 		$filter = reset( $current_filter );
 
-		static $_this = null;
+		static $_this;
 
 		if ( null === $_this )
 			$_this = \get_class( $this );
@@ -709,15 +709,15 @@ class Core {
 			return $_retval;
 		}
 
-		static $timer  = null;
-		static $pepper = null;
+		static $timer;
+		static $pepper;
 
-		if ( null === $timer ) {
+		if ( isset( $timer ) ) {
+			$timer += $pepper;
+		} else {
 			// It's over ninethousand! And also a prime.
 			$timer  = $this->is_64() ? time() * 9001 : PHP_INT_MAX / 9001;
 			$pepper = mt_rand( -$timer, $timer );
-		} else {
-			$timer += $pepper;
 		}
 
 		return $instance[ $bit ] = $instance[ $n_bit ] = "$_bit$timer$bit";
@@ -760,6 +760,7 @@ class Core {
 
 			$_time = time();
 
+			// phpcs:disable, Generic.Formatting.MultipleStatementAlignment -- It'll be worse to read.
 			$_i = $this->is_64() && $_time > $_boundary ? $_time : ( PHP_INT_MAX - $_boundary ) / $_prime;
 			$_i > 0 or $_i = ~$_i;
 			$_i = (int) $_i;
@@ -770,6 +771,7 @@ class Core {
 			and $bit = $_bit = mt_rand( ~ $_i, $_i )
 			and $bit & 1
 			and $bit = $_bit++;
+			// phpcs:enable, Generic.Formatting.MultipleStatementAlignment
 		}
 
 		// Hit 0 or is overflown on 32 bit. Retry.
@@ -895,7 +897,7 @@ class Core {
 		$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
 
 		// 'instance' picks a random key.
-		static $instance_scheme = null;
+		static $instance_scheme;
 		if ( null === $instance_scheme ) {
 			$_key            = mt_rand( 0, \count( $schemes ) - 1 );
 			$instance_scheme = $schemes[ $_key ];
@@ -936,7 +938,7 @@ class Core {
 	 */
 	final public function get_hash_type() {
 
-		static $type = null;
+		static $type;
 
 		if ( isset( $type ) )
 			return $type;
@@ -965,7 +967,7 @@ class Core {
 		// TODO remove this! It now renders network mode as singular installations per site. This is NOT what I promised.
 		return false;
 		// phpcs:disable
-		static $network_mode = null;
+		static $network_mode;
 
 		if ( isset( $network_mode ) )
 			return $network_mode;
@@ -1347,9 +1349,9 @@ class Core {
 	 */
 	final protected function get_subscription_status() {
 
-		static $status = null;
+		static $status;
 
-		if ( null !== $status )
+		if ( $status )
 			return $status;
 
 		return $status = [
@@ -1453,7 +1455,7 @@ class Core {
 	 */
 	final public function is_tsf_extension_manager_page( $secure = true ) {
 
-		static $cache = null;
+		static $cache;
 
 		if ( isset( $cache ) )
 			return $cache;

@@ -45,7 +45,7 @@ final class Extensions_Options_Cache {
 	 *
 	 * @var array $options
 	 */
-	private static $options = null;
+	private static $options;
 
 	/**
 	 * Initializes the options cache.
@@ -125,7 +125,7 @@ final class Stale_Extensions_Options_Cache {
 	 *
 	 * @var array $options
 	 */
-	private static $options = null;
+	private static $options;
 
 	/**
 	 * Initializes the options cache.

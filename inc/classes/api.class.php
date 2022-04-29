@@ -155,7 +155,7 @@ class API extends Core {
 	 */
 	final protected function get_activation_instance( $save_option = true ) {
 
-		static $instance = null;
+		static $instance;
 
 		if ( isset( $instance ) )
 			return $instance;

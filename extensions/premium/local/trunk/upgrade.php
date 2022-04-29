@@ -41,14 +41,21 @@ function _do_admin_upgrade( \TSF_Extension_Manager\Upgrader $upgrader ) {
 	$version = $upgrader->get_current_version( 'local' );
 
 	if ( $version < '1100' ) {
-		$upgrader->_register_upgrade( 'local', '1100', function( $version ) {
-			// Defer: If it crashes, nothing happens.
-			\add_action( 'shutdown', function() {
-				\TSF_Extension_Manager\Extension\Local\Settings::get_instance()->_reprocess_all_stored_data();
-			} );
-			// Register it's done, always.
-			return true;
-		} );
+		$upgrader->_register_upgrade(
+			'local',
+			'1100',
+			function( $version ) {
+				// Defer: If it crashes, nothing happens.
+				\add_action(
+					'shutdown',
+					function() {
+						\TSF_Extension_Manager\Extension\Local\Settings::get_instance()->_reprocess_all_stored_data();
+					}
+				);
+				// Register it's done, always.
+				return true;
+			}
+		);
 	}
 
 	$upgrader->_register_upgrade( 'local', TSFEM_E_LOCAL_DB_VERSION, '\\__return_true' );

@@ -56,7 +56,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 function title_fix_init() {
 
-	static $loaded = null;
+	static $loaded;
 
 	// Don't init the class twice.
 	if ( isset( $loaded ) )

@@ -98,7 +98,7 @@ trait Schema_Packer {
 	 */
 	private function correct_precision( $reset = false ) {
 
-		static $prev = null;
+		static $prev;
 
 		// phpcs:disable, WordPress.PHP.IniSet.Risky -- cPanel needs to fix this...
 		// @TODO make case for feature change.

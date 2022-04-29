@@ -197,7 +197,7 @@ final class Front extends Core {
 	 * Runs at 'the_seo_framework_after_output' filter.
 	 *
 	 * @since 1.0.0
-	 * @link https://developers.google.com/search/docs/data-types/local-businesses
+	 * @link https://developers.google.com/search/docs/advanced/structured-data/local-business
 	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article script.

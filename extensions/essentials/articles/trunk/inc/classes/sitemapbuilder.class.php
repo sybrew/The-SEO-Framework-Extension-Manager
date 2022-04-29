@@ -284,11 +284,11 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 		if ( empty( $args['loc'] ) ) return '';
 
-		static $timestamp_format = null;
+		static $timestamp_format;
 
 		$timestamp_format = $timestamp_format ?: static::$tsf->get_timestamp_format();
 
-		static $publication = null;
+		static $publication;
 		if ( ! $publication ) {
 			// @see https://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd
 
@@ -432,7 +432,10 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		if ( ! $type ) {
 			$post_type_options = $this->get_option( 'post_types' );
 			$post_type         = \get_post_type( $post_id );
-			$type = isset( $post_type_options[ $post_type ]['default_type'] ) ? $post_type_options[ $post_type ]['default_type'] : 'Article';
+
+			$type = isset( $post_type_options[ $post_type ]['default_type'] )
+				? $post_type_options[ $post_type ]['default_type']
+				: 'Article';
 		}
 
 		return 'NewsArticle' === $type;

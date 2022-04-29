@@ -102,7 +102,7 @@ final class Admin extends Core {
 						],
 						'_md'      => true,
 						'_fields'  => [
-							'tracking_id' => [
+							'tracking_id'               => [
 								'_default' => null,
 								'_edit'    => true,
 								'_ret'     => 's',
@@ -140,7 +140,7 @@ final class Admin extends Core {
 								],
 								'_md'      => true,
 							],
-							'ip_anonymization' => [
+							'ip_anonymization'          => [
 								'_default' => null,
 								'_edit'    => true,
 								'_ret'     => 's',
@@ -162,7 +162,7 @@ final class Admin extends Core {
 							],
 						],
 					],
-					'facebook_pixel' => [
+					'facebook_pixel'   => [
 						'_default' => null,
 						'_edit'    => true,
 						'_ret'     => '',

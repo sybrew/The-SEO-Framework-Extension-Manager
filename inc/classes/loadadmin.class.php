@@ -683,7 +683,9 @@ final class LoadAdmin extends AdminPages {
 	 * @return bool True if set, false otherwise.
 	 */
 	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
+
 		static $cache = false;
+
 		return $set ? $cache = true : $cache;
 	}
 

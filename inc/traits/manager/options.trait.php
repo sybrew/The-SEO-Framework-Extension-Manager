@@ -55,7 +55,7 @@ trait Options {
 		if ( $this->killed_options )
 			return [];
 
-		static $cache = null;
+		static $cache;
 
 		if ( isset( $cache ) )
 			return $cache;

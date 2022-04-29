@@ -24,6 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound, we require both definitions and overrides.
+
 /**
  * Declares static functions to always be used within the Secure class.
  *
@@ -75,13 +77,13 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * @since 1.0.0
 	 * @var string The class instance type.
 	 */
-	private static $_type = '';
+	private static $_type = ''; // phpcs:ignore, PSR2.Classes.PropertyDeclaration.Underscore -- confusing otherwise.
 
 	/**
 	 * @since 1.0.0
 	 * @var string The current WordPress admin action.
 	 */
-	private static $_wpaction = '';
+	private static $_wpaction = ''; // phpcs:ignore, PSR2.Classes.PropertyDeclaration.Underscore -- confusing otherwise.
 
 	/**
 	 * @since 1.0.0
@@ -232,7 +234,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final protected static function is_premium_user() {
 
-		static $is_premium = null;
+		static $is_premium;
 
 		if ( isset( $is_premium ) )
 			return $is_premium;
@@ -251,7 +253,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final protected static function is_connected_user() {
 
-		static $is_connected = null;
+		static $is_connected;
 
 		if ( isset( $is_connected ) )
 			return $is_connected;

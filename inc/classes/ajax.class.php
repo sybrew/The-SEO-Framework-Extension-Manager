@@ -50,7 +50,7 @@ final class AJAX extends Secure_Abstract {
 	/**
 	 * @var null|AJAX The class instance.
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	/**
 	 * @var null|object TSF class object.
@@ -312,7 +312,7 @@ final class AJAX extends Secure_Abstract {
 
 						if ( 'OK' !== $data['status'] ) {
 							switch ( $data['status'] ) :
-								// @link https://developers.google.com/maps/documentation/geocoding/intro#reverse-response
+								// @link https://developers.google.com/maps/documentation/geocoding/overview#reverse-response
 								case 'ZERO_RESULTS':
 									$send['results'] = static::$instance->get_ajax_notice( false, 17004 );
 									break;

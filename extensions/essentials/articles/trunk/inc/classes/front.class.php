@@ -199,7 +199,7 @@ final class Front extends Core {
 	 * @return int Queried Object ID.
 	 */
 	private function get_current_id() {
-		static $id = null;
+		static $id;
 		return $id ?: $id = \get_queried_object_id();
 	}
 
@@ -254,7 +254,7 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 * @since 2.0.2 No longer minifies the script when script debugging is activated.
 	 * @since 2.1.1 No longer rectifies the date.
-	 * @link https://developers.google.com/search/docs/data-types/article
+	 * @link https://developers.google.com/search/docs/advanced/structured-data/article
 	 * @access private
 	 *
 	 * @return string The additional JSON-LD Article scripts.
@@ -555,7 +555,9 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		if ( ! ( $post = $this->get_current_post() ) ) {
+		$post = $this->get_current_post();
+
+		if ( ! $post ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}
@@ -584,7 +586,9 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		if ( ! ( $post = $this->get_current_post() ) )
+		$post = $this->get_current_post();
+
+		if ( ! $post )
 			return [];
 
 		$i = strtotime( $post->post_modified_gmt );
@@ -610,7 +614,9 @@ final class Front extends Core {
 		if ( ! $this->is_json_valid() )
 			return [];
 
-		if ( ! $post = $this->get_current_post() ) {
+		$post = $this->get_current_post();
+
+		if ( ! $post ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}

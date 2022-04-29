@@ -57,32 +57,29 @@ class AccountActivation extends Panes {
 		if ( false === $this->handle_update_nonce( $this->request_name['activate-external'] ) )
 			return;
 
-		return $response = $this->get_remote_activation_listener_response();
+		return $this->get_remote_activation_listener_response();
 	}
 
 	/**
 	 * Fetches external activation response, periodically.
 	 *
 	 * @since 1.0.0
+	 * @ignore
+	 * @collector
 	 * @todo everything.
 	 *
 	 * @return bool|array False if data has not yet been set. Array if data has been set.
 	 */
-	protected function get_remote_activation_listener_response( $store = false ) {
-
+	protected function &get_remote_activation_listener_response() {
 		static $response = false;
-
-		if ( false !== $store ) {
-			return $response = $store;
-		} else {
-			return $response;
-		}
+		return $response;
 	}
 
 	/**
 	 * Sets external activation response.
 	 *
 	 * @since 1.0.0
+	 * @ignore
 	 * @todo use this
 	 *
 	 * @param array $value The data that needs to be set.
@@ -93,7 +90,8 @@ class AccountActivation extends Panes {
 		if ( empty( $value ) || \is_wp_error( $value ) )
 			return false;
 
-		$this->get_remote_activation_listener_response( $value );
+		$store = &$this->get_remote_activation_listener_response();
+		$store = $value;
 
 		return true;
 	}
@@ -260,16 +258,18 @@ class AccountActivation extends Panes {
 
 		$success = [];
 
-		$success[] = $this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true );
-		$success[] = $this->update_option( 'api_key', $args['licence_key'], 'instance', true );
-		$success[] = $this->update_option( 'activation_email', $args['activation_email'], 'instance', true );
-		$success[] = $this->update_option( '_activation_level', $args['_activation_level'], 'instance', true );
-		$success[] = $this->update_option( '_activated', 'Activated', 'instance', true );
+		$success = [
+			$this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true ),
+			$this->update_option( 'api_key', $args['licence_key'], 'instance', true ),
+			$this->update_option( 'activation_email', $args['activation_email'], 'instance', true ),
+			$this->update_option( '_activation_level', $args['_activation_level'], 'instance', true ),
+			$this->update_option( '_activated', 'Activated', 'instance', true ),
 
-		// Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
-		$success[] = $this->set_remote_subscription_status( $args );
+			// Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
+			$this->set_remote_subscription_status( $args ),
+		];
 
-		return ! in_array( false, $success, true );
+		return ! \in_array( false, $success, true );
 	}
 
 	/**
@@ -299,12 +299,14 @@ class AccountActivation extends Panes {
 			// Activation failed, and no instance available.
 			if ( ! $this->get_all_options() ) return true;
 
-			$success[] = $this->update_option( 'api_key', '', 'regular', true );
-			$success[] = $this->update_option( 'activation_email', '', 'regular', true );
-			$success[] = $this->update_option( '_activation_level', 'Free', 'instance', true );
-			$success[] = $this->update_option( '_remote_subscription_status', false, 'instance', true );
+			$success = [
+				$this->update_option( 'api_key', '', 'regular', true ),
+				$this->update_option( 'activation_email', '', 'regular', true ),
+				$this->update_option( '_activation_level', 'Free', 'instance', true ),
+				$this->update_option( '_remote_subscription_status', false, 'instance', true ),
+			];
 
-			return ! in_array( false, $success, true );
+			return ! \in_array( false, $success, true );
 		}
 
 		return $this->kill_options();
@@ -448,7 +450,7 @@ class AccountActivation extends Panes {
 		if ( null === $args && ! $this->is_connected_user() )
 			return false;
 
-		static $response = null;
+		static $response;
 
 		if ( isset( $response ) )
 			return $response;

@@ -49,7 +49,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Feature highlights:**
 
-* TODO
+* Improved overal performance of the plugin by refactoring various parts using our latest coding standards.
 
 **API Updates:**
 

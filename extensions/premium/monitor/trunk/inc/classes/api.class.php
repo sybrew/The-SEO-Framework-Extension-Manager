@@ -89,7 +89,7 @@ class Api extends Data {
 					break;
 
 				case 2:
-					if ( is_array( $subscription ) ) {
+					if ( \is_array( $subscription ) ) {
 						$args = array_merge(
 							$args,
 							[
@@ -132,7 +132,7 @@ class Api extends Data {
 			return $ajax ? $this->get_ajax_notice( false, 1010204 ) : false;
 		}
 
-		$data = is_string( $response->data ) ? json_decode( $response->data, true ) : (array) $response->data;
+		$data = \is_string( $response->data ) ? json_decode( $response->data, true ) : (array) $response->data;
 
 		return [
 			'success' => true,
@@ -171,7 +171,7 @@ class Api extends Data {
 		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) ) );
 		$success[] = $this->update_option( 'connected', 'yes' );
 
-		if ( in_array( false, $success, true ) ) {
+		if ( \in_array( false, $success, true ) ) {
 			$delete and $this->get_monitor_api_response( 'remove_site' );
 			$this->set_error_notice( [ 1010302 => '' ] );
 			return false;
@@ -182,7 +182,7 @@ class Api extends Data {
 		$success[] = $this->update_option( 'site_requires_fix', false );
 		$success[] = $this->update_option( 'site_marked_inactive', false );
 
-		if ( in_array( false, $success, true ) ) {
+		if ( \in_array( false, $success, true ) ) {
 			$this->set_error_notice( [ 1010303 => '' ] );
 			return false;
 		}
@@ -270,7 +270,7 @@ class Api extends Data {
 			$ajax or $this->set_error_notice( [ 1010509 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010508 ) : false;
 		}
-		if ( in_array( $response['status'], [ 'failure', 'LICENSE_TOO_LOW' ], true ) ) {
+		if ( \in_array( $response['status'], [ 'failure', 'LICENSE_TOO_LOW' ], true ) ) {
 			$ajax or $this->set_error_notice( [ 1010501 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
 		}
@@ -370,7 +370,7 @@ class Api extends Data {
 		$success = [];
 
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'issues', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
+			if ( \in_array( $type, [ 'issues', 'issues_lc', 'uptime_setting', 'performance_setting' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -378,7 +378,7 @@ class Api extends Data {
 			}
 		}
 
-		if ( in_array( false, $success, true ) ) {
+		if ( \in_array( false, $success, true ) ) {
 			$ajax or $this->set_error_notice( [ 1010605 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010605 ) : false;
 		}
@@ -445,7 +445,7 @@ class Api extends Data {
 
 		$success = [];
 		foreach ( $response as $type => $values ) {
-			if ( in_array( $type, [ 'uptime_setting', 'performance_setting' ], true ) ) {
+			if ( \in_array( $type, [ 'uptime_setting', 'performance_setting' ], true ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
@@ -453,7 +453,7 @@ class Api extends Data {
 			}
 		}
 
-		if ( in_array( false, $success, true ) ) {
+		if ( \in_array( false, $success, true ) ) {
 			$ajax or $this->set_error_notice( [ 1010804 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010804 ) : false;
 		}

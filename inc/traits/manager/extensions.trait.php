@@ -89,7 +89,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1635798852',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -102,7 +102,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1651198376',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -115,7 +115,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1612160183',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -128,7 +128,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1576470514',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -141,7 +141,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1633798024',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -154,7 +154,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1565627638',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -167,7 +167,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1633797930',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -180,7 +180,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -193,7 +193,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -206,7 +206,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1572496812',
 				'requires'     => '5.4',
-				'tested'       => '5.9',
+				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
@@ -226,9 +226,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '29b4fd9f1dd03249228c2c11d6ffeda46b879048c37312dd43c365bc4776950a',
-			'sha1'   => 'fab6134e2139d19513ec43f75c79d88dc99b8223',
-			'md5'    => '7bce2ea837772668bd3a207b6e1689bb',
+			'sha256' => '1738e94a24b54681c348bbe05983e3fc7a4d1e689da7abf2139ae9c79bcc4783',
+			'sha1'   => 'dda31ed9e11d54419da20b40dda331c1b492b37c',
+			'md5'    => '8afcc0ecb8c2b063767f86e896ca7768',
 		];
 	}
 
@@ -432,7 +432,7 @@ trait Extensions_Actions {
 	 */
 	private static function get_extensions_checksum() {
 
-		static $checksum = null;
+		static $checksum;
 
 		if ( isset( $checksum ) )
 			return $checksum;
@@ -461,7 +461,7 @@ trait Extensions_Actions {
 	 */
 	private static function get_extension_checksum() {
 
-		static $checksum = null;
+		static $checksum;
 
 		if ( isset( $checksum ) )
 			return $checksum;
@@ -982,7 +982,7 @@ trait Extensions_Actions {
 	private static function set_error_reporting( $val = null ) {
 		// phpcs:disable, WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- Required catchables.
 
-		static $_prev_error_reporting = null;
+		static $_prev_error_reporting;
 
 		if ( null === $val ) {
 			// Reset error reporting, if set.

@@ -56,7 +56,7 @@ class Memory_Cache {
 	 */
 	final public static function get_memory_limit_in_bytes() {
 
-		static $limit = null;
+		static $limit;
 
 		if ( $limit )
 			return $limit;

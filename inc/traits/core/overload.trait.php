@@ -319,7 +319,7 @@ trait Construct_Core_Static_Final_Instance {
 	 *
 	 * @var object|null This object instance.
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	/**
 	 * Sets the class instance.
@@ -329,10 +329,8 @@ trait Construct_Core_Static_Final_Instance {
 	 * @static
 	 */
 	final public static function set_instance() {
-
-		if ( \is_null( static::$instance ) ) {
-			static::$instance = new static();
-		}
+		if ( ! static::$instance )
+			static::$instance = new static;
 	}
 
 	/**
@@ -346,9 +344,8 @@ trait Construct_Core_Static_Final_Instance {
 	 */
 	final public static function get_instance() {
 
-		if ( \is_null( static::$instance ) ) {
+		if ( ! static::$instance )
 			static::set_instance();
-		}
 
 		return static::$instance;
 	}
@@ -380,7 +377,7 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	 *
 	 * @var object|null This object instance.
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	/**
 	 * Sets the class instance.
@@ -391,9 +388,8 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	 */
 	private static function set_instance() {
 
-		if ( \is_null( static::$instance ) ) {
-			static::$instance = new static();
-		}
+		if ( ! static::$instance )
+			static::$instance = new static;
 	}
 
 	/**
@@ -407,9 +403,8 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	 */
 	private static function get_instance() {
 
-		if ( \is_null( static::$instance ) ) {
+		if ( ! static::$instance )
 			static::set_instance();
-		}
 
 		return static::$instance;
 	}
@@ -424,7 +419,6 @@ trait Construct_Core_Static_Stray_Private_Instance {
  * @access private
  */
 trait Construct_Stray_Private {
-
 	private function __construct() { }
 }
 
@@ -451,7 +445,9 @@ trait Destruct_Core_Public_Final_Interface {
 	 * @return false If the plugin has not died. True otherwise.
 	 */
 	final public function _has_died( $set = false ) {
+
 		static $died = false;
+
 		return $died || $set && $died = true;
 	}
 }

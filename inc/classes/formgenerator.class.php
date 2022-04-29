@@ -64,8 +64,8 @@ final class FormGenerator {
 	 * @var bool   $use_stale
 	 */
 	private $o_key     = '',
-	        $has_o_key = false,
-	        $use_stale = false;
+			$has_o_key = false,
+			$use_stale = false;
 
 	/**
 	 * Holds the bits and maximum iterations thereof.
@@ -76,7 +76,7 @@ final class FormGenerator {
 	 * @var int $max_it
 	 */
 	private $bits,
-	        $max_it;
+			$max_it;
 
 	/**
 	 * Maintains the reiteration level, the name thereof, and the iteration within.
@@ -104,8 +104,8 @@ final class FormGenerator {
 	 * @var array  $ajax_it_args
 	 */
 	private static $cur_ajax_caller = '',
-	               $ajax_it_fields  = [],
-	               $ajax_it_args    = [];
+				   $ajax_it_fields  = [],
+				   $ajax_it_args    = [];
 
 	/**
 	 * Determines and initializes AJAX iteration listener.
@@ -312,21 +312,22 @@ final class FormGenerator {
 	 *                           e.g. 5 depth @ 32 bits =>  6 bits =>>  6 bits ===   64 iterations.
 	 *   int    'architecture' : The amount of bits to work with. If unassigned, it will autodetermine.
 	 * }
-	 * @return \TSF_Extension_Manager\Settings_Generator $this
 	 */
 	public function __construct( &$args ) {
 
 		empty( $args['o_index'] ) and \wp_die( __METHOD__ . ': Assign o_index.' );
 
-		$defaults = [
-			'o_index'      => '',
-			'o_defaults'   => [],
-			'o_key'        => '',
-			'use_stale'    => false,
-			'levels'       => 5,
-			'architecture' => null,
-		];
-		$args = array_merge( $defaults, $args );
+		$args = array_merge(
+			[
+				'o_index'      => '',
+				'o_defaults'   => [],
+				'o_key'        => '',
+				'use_stale'    => false,
+				'levels'       => 5,
+				'architecture' => null,
+			],
+			$args
+		);
 
 		/**
 		 * @see trait \TSF_Extension_Manager\Extension_Options
@@ -1403,7 +1404,7 @@ final class FormGenerator {
 					),
 				]
 			);
-			$icon = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"></span>';
+			$icon  = '<span class="tsfem-form-collapse-icon tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"></span>';
 
 			$header = vsprintf(
 				'<label class="tsfem-form-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s" %s>%s%s</label>',

@@ -46,7 +46,7 @@ final class Tests {
 	 *
 	 * @var object|null This object instance.
 	 */
-	private static $instance = null;
+	private static $instance;
 
 	/**
 	 * The constructor. Does nothing.
@@ -63,7 +63,7 @@ final class Tests {
 	 * @param array  $arguments The method arguments.
 	 * @return string Empty.
 	 */
-	public function __call( $name, $arguments ) {
+	public function __call( $name, $arguments ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis
 		return '';
 	}
 
@@ -74,10 +74,8 @@ final class Tests {
 	 * @access private
 	 */
 	public static function set_instance() {
-
-		if ( is_null( static::$instance ) ) {
-			static::$instance = new static();
-		}
+		if ( ! static::$instance )
+			static::$instance = new static;
 	}
 
 	/**
@@ -90,9 +88,8 @@ final class Tests {
 	 */
 	public static function get_instance() {
 
-		if ( is_null( static::$instance ) ) {
+		if ( ! static::$instance )
 			static::set_instance();
-		}
 
 		return static::$instance;
 	}
@@ -164,8 +161,9 @@ final class Tests {
 			goto end;
 		}
 
-		$state = 'good';
+		$state   = 'good';
 		$content = '';
+
 		$consult_theme_author = false;
 
 		if ( ! $data['located'] ) {
@@ -218,17 +216,18 @@ final class Tests {
 		}
 
 		if ( isset( $data['count'] ) && $data['count'] > 1 ) {
+			$state    = 'bad';
 			$content .= $this->wrap_info( sprintf(
 				/* translators: %d = the number "2" or greater */
 				\esc_html__( '%d title tags are found on the homepage.', 'the-seo-framework-extension-manager' ),
 				$data['count']
 			) );
-			$state = 'bad';
+
 			$consult_theme_author = true;
 		}
 
 		if ( $consult_theme_author ) {
-			$_theme = \wp_get_theme();
+			$_theme         = \wp_get_theme();
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
 				$_dev = \tsf_extension_manager()->get_link( [
@@ -237,7 +236,7 @@ final class Tests {
 					'target'  => '_blank',
 				] );
 			} else {
-				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
+				$_dev = \esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
 			}
 
 			$content .= $this->wrap_info( sprintf(
@@ -269,7 +268,7 @@ final class Tests {
 		$state   = 'unknown';
 
 		if ( ! isset( $data['located'] ) ) {
-			$state = 'unknown';
+			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
 		}
@@ -280,24 +279,25 @@ final class Tests {
 		$consult_theme_author_on_duplicate = false;
 
 		if ( ! $data['located'] ) {
-			$state = 'warning';
+			$state   = 'warning';
 			$content = $this->wrap_info( \esc_html__( 'No description meta tags are found on the homepage.', 'the-seo-framework-extension-manager' ) );
 		} else {
 			$content = $this->wrap_info( \esc_html__( 'A description meta tag is found on the homepage.', 'the-seo-framework-extension-manager' ) );
 		}
 
 		if ( isset( $data['count'] ) && $data['count'] > 1 ) {
+			$state    = 'bad';
 			$content .= $this->wrap_info( sprintf(
 				/* translators: %d = Always the number "2" or greater */
 				\esc_html__( '%d description meta tags are found on the homepage.', 'the-seo-framework-extension-manager' ),
 				$data['count']
 			) );
-			$state = 'bad';
+
 			$consult_theme_author_on_duplicate = true;
 		}
 
 		if ( $consult_theme_author_on_duplicate ) {
-			$_theme = \wp_get_theme();
+			$_theme         = \wp_get_theme();
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
 				$_dev = \tsf_extension_manager()->get_link( [
@@ -306,7 +306,7 @@ final class Tests {
 					'target'  => '_blank',
 				] );
 			} else {
-				$_dev = esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
+				$_dev = \esc_html__( 'theme developer', 'the-seo-framework-extension-manager' );
 			}
 
 			$content .= $this->wrap_info( sprintf(
@@ -335,9 +335,9 @@ final class Tests {
 	public function issue_php( $data ) {
 
 		$content = '';
-		$state = 'unknown';
+		$state   = 'unknown';
 
-		if ( ! is_array( $data ) ) {
+		if ( ! \is_array( $data ) ) {
 			$state   = 'unknown';
 			$content = $this->no_data_found();
 			goto end;
@@ -368,9 +368,9 @@ final class Tests {
 			$state   = 'good';
 			$content = $this->wrap_info( $this->no_issue_found() );
 		} else {
-			$state = 'bad';
-			$content = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
-			$content .= sprintf( '<h4>%s</h4>', \esc_html( \_n( 'Affected page:', 'Affected pages:', count( $links ), 'the-seo-framework-extension-manager' ) ) );
+			$state    = 'bad';
+			$content  = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
+			$content .= sprintf( '<h4>%s</h4>', \esc_html( \_n( 'Affected page:', 'Affected pages:', \count( $links ), 'the-seo-framework-extension-manager' ) ) );
 
 			$content .= '<ul class="tsfem-ul-disc">';
 			foreach ( $links as $link ) {
@@ -417,7 +417,7 @@ final class Tests {
 		}
 
 		if ( ! \get_option( 'blog_public' ) ) {
-			$state = 'bad';
+			$state   = 'bad';
 			$content = $this->wrap_info(
 				\esc_html__( 'This site is discouraging Search Engines from visiting. This means popular Search Engines are not crawling and indexing your website.', 'the-seo-framework-extension-manager' )
 			);
@@ -453,6 +453,7 @@ final class Tests {
 			goto end;
 		}
 
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- This is an asserter for issues so there's no other way.
 		if ( ! file_exists( \get_home_path() . 'robots.txt' ) ) {
 			$state   = 'unknown';
 			$content = $this->wrap_info(
@@ -558,20 +559,20 @@ final class Tests {
 		switch ( $data['https_type'] ) :
 			case 1:
 				// Forced HTTPS
-				$content .= $this->wrap_info(
+				$content         .= $this->wrap_info(
 					\esc_html__( 'Your website forces HTTPS through the server configuration. That is great!', 'the-seo-framework-extension-manager' )
 				);
-				$state = 'good';
+				$state            = 'good';
 				$_expected_scheme = 'https';
 				break;
 
 			case 2:
 				// Could do HTTPS
-				$content .= $this->wrap_info(
+				$content         .= $this->wrap_info(
 					\esc_html__( 'Your website is accessible on both HTTPS and HTTP.', 'the-seo-framework-extension-manager' )
 				);
-				$state = 'good';
-				$_test_alt = true;
+				$state            = 'good';
+				$_test_alt        = true;
 				$_expected_scheme = 'https';
 				break;
 
@@ -579,10 +580,10 @@ final class Tests {
 			case 3:
 			case 0:
 				// Forced HTTP or error on HTTPS.
-				$content .= $this->wrap_info(
+				$content         .= $this->wrap_info(
 					\esc_html__( 'Your website is only accessible on HTTP.', 'the-seo-framework-extension-manager' )
 				);
-				$state = 'warning';
+				$state            = 'warning';
 				$_expected_scheme = 'http';
 				break;
 		endswitch;
@@ -597,12 +598,12 @@ final class Tests {
 				if ( ! empty( $data['canonical_url_scheme_alt'] ) ) :
 					if ( $data['canonical_url_scheme'] === $data['canonical_url_scheme_alt'] ) :
 						if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
-							$state = 'good';
+							$state    = 'good';
 							$content .= $this->wrap_info(
 								\esc_html__( 'Both versions of your site point to the secure version. Great!', 'the-seo-framework-extension-manager' )
 							);
 						} else {
-							$state = 'warning';
+							$state    = 'warning';
 							$content .= $this->wrap_info(
 								\esc_html__( 'Both versions of your site point to the insecure version. Is this intended?', 'the-seo-framework-extension-manager' )
 							);
@@ -623,7 +624,7 @@ final class Tests {
 						);
 					endif;
 				else :
-					$state = 'bad';
+					$state    = 'bad';
 					$content .= $this->wrap_info(
 						\esc_html__( 'No canonical URL is found on the HTTPS version of your site.', 'the-seo-framework-extension-manager' )
 					);
@@ -702,9 +703,7 @@ final class Tests {
 	 * @return string HTML wrapped no issues found.
 	 */
 	protected function no_issue_found() {
-
-		static $cache = null;
-
+		static $cache;
 		return $cache ?: $cache = sprintf(
 			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
@@ -719,9 +718,7 @@ final class Tests {
 	 * @return string HTML wrapped no data found.
 	 */
 	protected function no_data_found() {
-
-		static $cache = null;
-
+		static $cache;
 		return $cache ?: $cache = sprintf(
 			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
@@ -736,9 +733,7 @@ final class Tests {
 	 * @return string HTML wrapped small sample size used.
 	 */
 	protected function small_sample_disclaimer() {
-
-		static $cache = null;
-
+		static $cache;
 		return $cache ?: $cache = sprintf(
 			'<span class="tsfem-description">%s</span>',
 			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )

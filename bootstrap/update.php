@@ -305,7 +305,7 @@ function _push_update( $value, $transient ) {
 		$value->no_update[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ]
 	);
 
-	static $runtimecache = null;
+	static $runtimecache;
 
 	$this_plugin = \get_plugins()[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
 

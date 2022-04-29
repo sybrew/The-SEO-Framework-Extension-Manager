@@ -54,7 +54,7 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  */
 function honeypot_init() {
 
-	static $loaded = null;
+	static $loaded;
 
 	// Don't init the class twice.
 	if ( isset( $loaded ) )
@@ -562,7 +562,7 @@ JS;
 	 */
 	private function get_id( array $commentdata = [] ) {
 
-		static $id = null;
+		static $id;
 
 		return $id ?: $id = (int) ( isset( $commentdata['comment_post_ID'] ) ? $commentdata['comment_post_ID'] : \get_the_ID() );
 	}

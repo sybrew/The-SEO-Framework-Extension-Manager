@@ -189,6 +189,7 @@ final class Output {
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 * @ignore
 	 * @TODO unused?
 	 *
 	 * @param array  $data The pane data to parse.
@@ -212,6 +213,7 @@ final class Output {
 	 * @since 1.0.0
 	 * @uses TSF_Extension_Manager\Extension\Monitor\Output->make_slab_graph_entry()
 	 * @generator
+	 * @ignore
 	 * @TODO unused?
 	 *
 	 * @param array  $data The fetched data.
@@ -225,6 +227,7 @@ final class Output {
 	}
 
 	/**
+	 * @ignore
 	 * @TODO document
 	 * @TODO unused?
 	 */
@@ -471,9 +474,9 @@ final class Output {
 	 */
 	protected function parse_issues_content( $key, $value ) {
 
-		static $tests = null;
+		static $tests;
 
-		if ( is_null( $tests ) )
+		if ( ! isset( $tests ) )
 			$tests = Tests::get_instance();
 
 		$content = '';
@@ -505,9 +508,7 @@ final class Output {
 	 * @return string Notifying user the Extension Manager requires an update.
 	 */
 	protected function get_em_requires_update_notification() {
-
-		static $cache = null;
-
+		static $cache;
 		return $cache ?: $cache = \esc_html__( 'The Extension Manager needs to be updated to interpret this data.', 'the-seo-framework-extension-manager' );
 	}
 
@@ -520,7 +521,7 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \the_seo_framework()->the_seo_framework_debug = false;
+		$debug[1] and \the_seo_framework()->the_seo_framework_debug                     = false;
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = false;
 	}
 
@@ -535,9 +536,9 @@ final class Output {
 	 */
 	protected function get_tsf_debug_states() {
 
-		static $debug = null;
+		static $debug;
 
-		if ( null === $debug ) {
+		if ( ! isset( $debug ) ) {
 			$debug = [];
 
 			$tsf = \the_seo_framework();
@@ -559,7 +560,7 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \the_seo_framework()->the_seo_framework_debug  = $debug[1];
+		$debug[1] and \the_seo_framework()->the_seo_framework_debug                     = $debug[1];
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = $debug[2];
 	}
 }

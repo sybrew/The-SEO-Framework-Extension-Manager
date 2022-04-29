@@ -40,5 +40,8 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 final class Front {
 	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
+	/**
+	 * @ignore
+	 */
 	private function construct() { }
 }

@@ -111,7 +111,7 @@ final class Admin extends Core {
 
 		if ( ! $this->is_post_type_supported( $post->post_type ) ) return $states;
 
-		static $default = null;
+		static $default;
 		if ( ! $default ) {
 			$settings = $this->get_option( 'post_types' );
 			$default  = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post->post_type ]['default_type'], 'Article' ) );
@@ -204,7 +204,7 @@ final class Admin extends Core {
 						sprintf(
 							/* translators: %s = Logo guidelines link. Markdown. */
 							\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
-							'https://developers.google.com/search/docs/data-types/article#logo-guidelines'
+							'https://developers.google.com/search/docs/advanced/structured-data/article#logo-guidelines'
 						),
 						\__( 'The logo must be a horizontally wide rectangle, not a square, and at least 60px high.', 'the-seo-framework-extension-manager' ),
 					],
@@ -510,7 +510,7 @@ final class Admin extends Core {
 	 */
 	private function is_post_type_supported( $post_type = '' ) {
 
-		static $supported = null;
+		static $supported;
 
 		if ( isset( $supported ) ) return $supported;
 
@@ -590,8 +590,10 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\ListEdit::activate_quick_section( 'structure' );
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$pm_index = $this->pm_index;
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$post_meta = [
 			'type' => [
 				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
@@ -629,8 +631,10 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\ListEdit::activate_bulk_section( 'structure' );
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$pm_index = $this->pm_index;
 
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$post_meta = [
 			'type' => [
 				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
@@ -667,7 +671,7 @@ final class Admin extends Core {
 		// This should never happen...
 		if ( ! empty( $query['taxonomy'] ) ) return $data;
 
-		static $default = null;
+		static $default;
 		if ( ! $default ) {
 			$post_type = \the_seo_framework()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
@@ -727,9 +731,9 @@ final class Admin extends Core {
 	 */
 	public function _save_meta_bulk_edit( $post, $data ) {
 
-		static $store = null;
+		static $store;
 
-		if ( null === $store ) {
+		if ( ! isset( $store ) ) {
 			$store = [];
 
 			if ( empty( $data[ $this->pm_index ] ) ) return;
