@@ -101,6 +101,7 @@ final class Sitemap extends Core {
 	public function _register_news_sitemap_endpoint( $list = [] ) {
 
 		$list[ $this->sitemap_id ] = [
+			'lock_id'  => '_news', // reserved, not used
 			'endpoint' => 'sitemap-news.xml',
 			'regex'    => '/^sitemap-news\.xml/i',
 			'callback' => [ $this, '_output_news_sitemap' ],
@@ -120,18 +121,11 @@ final class Sitemap extends Core {
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 */
-	public function _do_news_sitemap_header( $sitemap_id = '' ) {
+	public function _do_news_sitemap_header( $sitemap_id = 'news' ) {
 
 		if ( $this->sitemap_id !== $sitemap_id ) return;
 
 		$this->doing_news_sitemap = true;
-
-		\the_seo_framework()->clean_response_header();
-
-		if ( ! headers_sent() ) {
-			\status_header( 200 );
-			header( 'Content-type: text/xml; charset=utf-8', true );
-		}
 	}
 
 	/**
@@ -142,11 +136,22 @@ final class Sitemap extends Core {
 	 *
 	 * @param string $sitemap_id The sitemap ID.
 	 */
-	public function _output_news_sitemap( $sitemap_id ) {
+	public function _output_news_sitemap( $sitemap_id = 'news' ) { // phpcs:ignore -- included.
 
+		// No locking protection. The sitemap is (and should) remain small, so it'd be redundant; even counter-productive.
+
+		// Remove output, if any.
+		\the_seo_framework()->clean_response_header();
+
+		if ( ! headers_sent() ) {
+			\status_header( 200 );
+			header( 'Content-type: text/xml; charset=utf-8', true );
+		}
+
+		// Fetch sitemap content and add trailing line. Already escaped internally.
 		include TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . 'sitemap' . DIRECTORY_SEPARATOR . 'news.php';
+		echo "\n";
 
-		echo PHP_EOL;
 		exit;
 	}
 
@@ -154,6 +159,7 @@ final class Sitemap extends Core {
 	 * Adjusts the News schema markup header.
 	 *
 	 * @since 2.0.0
+	 * @since 2.2.0 Now overwrites the sitemap schema entirely. Use a later priority to adjust this.
 	 * @access private
 	 *
 	 * @param array $schemas The schema list. URLs are expected to be escaped.
@@ -163,14 +169,19 @@ final class Sitemap extends Core {
 
 		if ( ! $this->doing_news_sitemap ) return $schemas;
 
-		// TODO this appends; should we overwrite the schema completely for sanity?
-		$schemas['xmlns:news']           = 'http://www.google.com/schemas/sitemap-news/0.9';
-		$schemas['xsi:schemaLocation'][] = 'http://www.google.com/schemas/sitemap-news/0.9';
-		$schemas['xsi:schemaLocation'][] = 'http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd';
-		$schemas['xmlns:image']          = 'http://www.google.com/schemas/sitemap-image/1.1';
-
-		// We don't want a stylesheet.
-		unset( $schemas['xmlns:xhtml'] );
+		// Overwrite.
+		$schemas = [
+			'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+			'xsi:schemaLocation' => [
+				'http://www.sitemaps.org/schemas/sitemap/0.9',
+				'http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
+				'http://www.google.com/schemas/sitemap-news/0.9',
+				'http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd',
+			],
+			'xmlns:news'         => 'http://www.google.com/schemas/sitemap-news/0.9',
+			'xmlns:image'        => 'http://www.google.com/schemas/sitemap-image/1.1',
+		];
 
 		return $schemas;
 	}

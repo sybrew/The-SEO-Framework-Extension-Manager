@@ -42,6 +42,12 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		\TSF_Extension_Manager\Extension_Post_Meta;
 
 	/**
+	 * @since 2.2.0
+	 * @var bool
+	 */
+	public $news_is_regenerated = false;
+
+	/**
 	 * Sets option indexes.
 	 *
 	 * @since 2.0.0
@@ -64,6 +70,44 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		 */
 		$this->o_index    = $o_index;
 		$this->o_defaults = $o_defaults;
+	}
+
+	/**
+	 * Returns the generated sitemap. Also stores it in the database when caching is enabled.
+	 *
+	 * @since 2.2.0
+	 * @access private
+	 * TODO Make the transient name accessible instead of passing as argument.
+	 *
+	 * @param string $transient_name The sitemap transient name.
+	 * @return string The sitemap content.
+	 */
+	public function _generate_sitemap( $transient_name ) {
+
+		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+		$_caching_enabled = $bridge->sitemap_cache_enabled();
+
+		$sitemap_content = $_caching_enabled ? \the_seo_framework()->get_transient( $transient_name ) : false;
+
+		if ( false === $sitemap_content ) {
+			$this->prepare_generation();
+
+			$sitemap_content = $this->build_sitemap();
+
+			$this->shutdown_generation();
+			$this->news_is_regenerated = true;
+
+			if ( $_caching_enabled ) {
+				\the_seo_framework()->set_transient(
+					$transient_name,
+					$sitemap_content,
+					HOUR_IN_SECONDS // Keep the sitemap for at most 1 hour. Will expire during post actions.
+				);
+			}
+		}
+
+		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Content should be escaped.
+		return $sitemap_content;
 	}
 
 	/**
@@ -204,7 +248,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 				// stock_tickers is deprecated.
 			];
 
-			if ( '0000-00-00 00:00:00' === $_values['news']['publication_date'] || ! strlen( $_values['news']['title'] ) ) continue;
+			if ( '0000-00-00 00:00:00' === $_values['news']['publication_date'] || ! \strlen( $_values['news']['title'] ) ) continue;
 
 			// Get a single image that isn't clean. Do rudimentarily cleaning later for what we actually use, saves processing power.
 			$image_details = current( static::$tsf->get_image_details( [ 'id' => $post_id ], true, 'sitemap', false ) );
@@ -305,7 +349,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		foreach ( $data as $key => $value ) {
 			$tabs = str_repeat( "\t", $level );
 
-			if ( is_array( $value ) )
+			if ( \is_array( $value ) )
 				$value = "\n" . $this->create_xml( $value, $level + 1 ) . $tabs;
 
 			$out .= "$tabs<$key>$value</$key>\n";

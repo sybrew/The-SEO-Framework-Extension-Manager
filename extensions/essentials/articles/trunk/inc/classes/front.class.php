@@ -623,12 +623,19 @@ final class Front extends Core {
 			return [];
 		}
 
-		return [
+		$data = [
 			'author' => [
 				'@type' => 'Person',
 				'name'  => \esc_attr( $name ),
 			],
 		];
+
+		$url = \esc_url( static::$tsf->get_author_canonical_url( $post->post_author ) );
+
+		if ( $url )
+			$data['author']['url'] = $url;
+
+		return $data;
 	}
 
 	/**

@@ -148,7 +148,15 @@ This feature extends The SEO Framework's sitemap; therefore, **The SEO Framework
 
 ### Where do I submit a Google News sitemap?
 
-You can submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://support.google.com/news/publisher-center/answer/74288).
+You can submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap).
+
+### The Google News sitemap is empty!
+
+The Google News sitemap will only be populated with Articles assigned the "News Article" Article Type. You can adjust the Article Type on a per-post basis for supported post types under "Structure."
+
+[Google News sitemaps documentation](https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap) states that articles older than two days should be removed. Articles extension uses a grace period of 2.5 days.
+
+If you have not published a News Article in the past two and a half days, the sitemap will be empty.
 
 ### Does Bing support the Google News sitemap?
 
@@ -167,8 +175,9 @@ add_filter( 'the_seo_framework_articles_data', function( $data ) {
 
 	// Overwrite the author input.
 	$data['author'] = [
-		'@type' => 'Organization',
-		'name'  => 'The SEO Framework',
+		'@type' => 'Person',
+		'name'  => 'J. Doe',
+		'url'   => 'https://facebook.com/profile.php?id=2147483647',
 	];
 
 	// Remove the description input.
@@ -244,6 +253,16 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 ```
 
 ## Changelog
+
+### 2.2.0
+
+[tsfep-release time="-1"]
+
+* **Added:**
+	* The Article markup author object now has a URL provided, as suggested by Google. This URL points to the author archive page of the website.
+* **Improved:**
+	* A News Sitemap URL has been added to the Extensions Settings page.
+		* This is only visible after the sitemap has been enabled and the settings page refreshed.
 
 ### 2.1.1
 

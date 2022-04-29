@@ -41,13 +41,34 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.5.3 =
+
+**Release date:**
+
+* TODO
+
+**Feature highlights:**
+
+* TODO
+
+**API Updates:**
+
+* Jan 31st, 2022: Duplicated domain activations no longer count toward the activation limit.
+* Jan 31st, 2022: Duplicated instance activations now automatically switch site -- this helps ease migrating from staging to production, and vice versa.
+
+**Updated extensions:**
+
+* [Articles at version 2.2.0](https://theseoframework.com/extensions/articles/#changelog)
+
 = 2.5.2 =
 
-* **Release date:**
+**Release date:**
 
 * November 9th, 2021
 
-**This update addresses a regression brought in 2.5.1 where upper-case file paths were no longer recognized.**
+**Feature highlights:**
+
+* This update addresses a regression brought in v2.5.1 where upper-case file paths were no longer recognized for.
 
 **Detailed log:**
 
@@ -59,7 +80,7 @@ View the [detailed v2.5.2 changelog](https://tsf.fyi/p/3782).
 
 * November 8th, 2021
 
-**Feature highlights**
+**Feature highlights:**
 
 * Extension Manager is now fully prepared for the imminent release of TSF v4.2.0.
 * The 2001 error is now less likely to get invoked.

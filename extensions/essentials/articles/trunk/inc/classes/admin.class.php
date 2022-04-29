@@ -165,15 +165,22 @@ final class Admin extends Core {
 					'_type'    => 'checkbox',
 					'_desc'    => [
 						\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
-						sprintf(
-							/* translators: %s = Articles FAQ link. Markdown. */
-							\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
-							'https://theseoframework.com/extensions/articles/#faq'
-						) . (
-							\the_seo_framework()->get_option( 'sitemaps_output' )
-							? ''
-							: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
-						),
+						[
+							sprintf(
+								/* translators: %s = Articles FAQ link. Markdown. */
+								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
+								'https://theseoframework.com/extensions/articles/#faq'
+							) . (
+								\the_seo_framework()->get_option( 'sitemaps_output' )
+								? ''
+								: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
+							),
+							$this->get_option( 'news_sitemap' ) ? sprintf(
+								'[%s](%s)',
+								\__( 'View the news sitemap.', 'the-seo-framework-extension-manager' ),
+								\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'news' )
+							) : '',
+						],
 						\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
 					],
 					'_md'      => true,
