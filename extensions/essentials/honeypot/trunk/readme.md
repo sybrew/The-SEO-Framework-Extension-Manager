@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/honeypot/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension catches comment spammers with a 99.99% catch-rate through five lightweight yet powerful methods.
+This privacy-focussed extension catches comment spammers with a 99.99% catch-rate using five lightweight yet powerful methods that won't leak data from your site.
 
 ## Overview
 

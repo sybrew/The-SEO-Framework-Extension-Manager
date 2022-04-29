@@ -40,12 +40,6 @@ final class Sitemap extends Core {
 
 	/**
 	 * @since 2.0.0
-	 * @var string $sitemap_id
-	 */
-	private $sitemap_id = 'news';
-
-	/**
-	 * @since 2.0.0
 	 * @var bool $doing_news_sitemap
 	 */
 	private $doing_news_sitemap = false;
@@ -60,7 +54,6 @@ final class Sitemap extends Core {
 		if ( ! $this->get_option( 'news_sitemap' ) || ! static::is_organization() ) return;
 
 		\add_filter( 'the_seo_framework_sitemap_endpoint_list', [ $this, '_register_news_sitemap_endpoint' ] );
-		\add_action( 'the_seo_framework_sitemap_header', [ $this, '_do_news_sitemap_header' ] );
 		\add_action( 'the_seo_framework_sitemap_schemas', [ $this, '_adjust_news_sitemap_schemas' ] );
 
 		\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_delete_news_sitemap_transient' ] );
@@ -79,6 +72,7 @@ final class Sitemap extends Core {
 	 * Registers the news sitemap endpoint.
 	 *
 	 * @since 2.0.0
+	 * @since 2.2.0 Added Yoast SEO's endpoint for cross server compatibility with broken NGINX configs (Namecheap...).
 	 * @access private
 	 *
 	 * @param array $list The endpoints: {
@@ -99,33 +93,25 @@ final class Sitemap extends Core {
 	 * @return array
 	 */
 	public function _register_news_sitemap_endpoint( $list = [] ) {
-
-		$list[ $this->sitemap_id ] = [
-			'lock_id'  => '_news', // reserved, not used
-			'endpoint' => 'sitemap-news.xml',
-			'regex'    => '/^sitemap-news\.xml/i',
-			'callback' => [ $this, '_output_news_sitemap' ],
-			'robots'   => true,
-		];
-
-		return $list;
-	}
-
-	/**
-	 * Adjusts the HTML header for the news sitemap.
-	 *
-	 * @since 2.0.0
-	 * @access private
-	 * @see `The_SEO_Framework\Bridges\Sitemap::get_sitemap_endpoint_list()`.
-	 * @see `$this->_register_news_sitemap_endpoint()`
-	 *
-	 * @param string $sitemap_id The sitemap ID.
-	 */
-	public function _do_news_sitemap_header( $sitemap_id = 'news' ) {
-
-		if ( $this->sitemap_id !== $sitemap_id ) return;
-
-		$this->doing_news_sitemap = true;
+		return array_merge(
+			$list,
+			[
+				'news'     => [
+					'lock_id'  => '_news', // reserved, not used
+					'endpoint' => 'sitemap-news.xml',
+					'regex'    => '/^sitemap-news\.xml/i',
+					'callback' => [ $this, '_output_news_sitemap' ],
+					'robots'   => true,
+				],
+				'news-alt' => [
+					'lock_id'  => '_news', // reserved, not used
+					'endpoint' => 'news-sitemap.xml',
+					'regex'    => '/^news-sitemap\.xml/i',
+					'callback' => [ $this, '_output_news_sitemap' ],
+					'robots'   => false,
+				],
+			]
+		);
 	}
 
 	/**
@@ -133,12 +119,11 @@ final class Sitemap extends Core {
 	 *
 	 * @since 2.0.0
 	 * @access private
-	 *
-	 * @param string $sitemap_id The sitemap ID.
 	 */
-	public function _output_news_sitemap( $sitemap_id = 'news' ) { // phpcs:ignore -- included.
+	public function _output_news_sitemap() {
 
 		// No locking protection. The sitemap is (and should) remain small, so it'd be redundant; even counter-productive.
+		$this->doing_news_sitemap = true;
 
 		// Remove output, if any.
 		\the_seo_framework()->clean_response_header();
@@ -170,7 +155,7 @@ final class Sitemap extends Core {
 		if ( ! $this->doing_news_sitemap ) return $schemas;
 
 		// Overwrite.
-		$schemas = [
+		return [
 			'xmlns'              => 'http://www.sitemaps.org/schemas/sitemap/0.9',
 			'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
 			'xsi:schemaLocation' => [
@@ -182,8 +167,6 @@ final class Sitemap extends Core {
 			'xmlns:news'         => 'http://www.google.com/schemas/sitemap-news/0.9',
 			'xmlns:image'        => 'http://www.google.com/schemas/sitemap-image/1.1',
 		];
-
-		return $schemas;
 	}
 
 	/**
@@ -204,7 +187,7 @@ final class Sitemap extends Core {
 	 */
 	public function _ping_google_news() {
 		$pingurl = 'https://www.google.com/ping?sitemap=' . rawurlencode(
-			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( $this->sitemap_id )
+			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'news' )
 		);
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}

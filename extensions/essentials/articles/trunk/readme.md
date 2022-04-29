@@ -141,7 +141,7 @@ Some settings are hidden when your website represents a person, instead of an or
 
 ### Where can I find the Google News sitemap?
 
-When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`.
+When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`. If that endpoint doesn't work, try `https://example.com/news-sitemap.xml`.
 Please note that your site must be verified with Google News before you can benefit from the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
 This feature extends The SEO Framework's sitemap; therefore, **The SEO Framework's optimized sitemap must be enabled.**
@@ -260,6 +260,8 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 * **Added:**
 	* The Article markup author object now has a URL provided, as suggested by Google. This URL points to the author archive page of the website.
+	* A misconfigured NGINX-compatible endpoint for the Google News sitemap was added (`/news-sitemap.xml`).
+		* Namecheap, EasyWP, SpinupWP, etc. blindly implemented the broken NGINX script from Yoast SEO; this changes makes Articles compatible with witless hosting providers.
 * **Improved:**
 	* A News Sitemap URL has been added to the Extensions Settings page.
 		* This is only visible after the sitemap has been enabled and the settings page refreshed.

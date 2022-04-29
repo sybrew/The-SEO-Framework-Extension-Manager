@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 /**
  * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate through five lightweight yet powerful methods.
+ * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate using five lightweight yet powerful methods that won't leak data from your site.
  * Extension Version: 2.0.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/

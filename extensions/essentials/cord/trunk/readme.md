@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/cord/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension helps you connect your website to third-party services, like Google Analytics and Facebook pixel.
+This extension helps you connect your website to third-party services, like Google Universal Analytics and Facebook pixel.
 
 ## Overview
 
