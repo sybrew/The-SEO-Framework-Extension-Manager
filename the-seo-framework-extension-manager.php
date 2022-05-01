@@ -3,13 +3,13 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework. Right from your WordPress dashboard.
- * Version: 2.5.3-dev-3
+ * Version: 2.5.3-beta-1
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: the-seo-framework-extension-manager
  * Domain Path: /language
- * Requires at least: 5.4.0
+ * Requires at least: 5.5
  * Requires PHP: 5.6.5
  *
  * @package TSF_Extension_Manager\Bootstrap
@@ -46,14 +46,14 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '2.5.2' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '2.5.3' );
 
 /**
  * The plugin's database version.
  *
  * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '1600' );
+define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '2500' );
 
 /**
  * The plugin file, absolute unix path.
@@ -76,46 +76,21 @@ define( 'TSF_EXTENSION_MANAGER_PLUGIN_BASENAME', plugin_basename( TSF_EXTENSION_
  */
 define( 'TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH', dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR );
 
-/**
- * Checks whether to start plugin or test server first.
- *
- * @since 1.5.0
- */
-if ( get_option( 'tsfem_tested_environment_version' ) < TSF_EXTENSION_MANAGER_DB_VERSION ) {
-	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'envtest.php';
+// Defines environental constants.
+require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'define.php';
 
-	//= This check is for the front-end. The back-end performs wp_die() when false to notify the admin.
-	if ( get_option( 'tsfem_tested_environment_version' ) >= TSF_EXTENSION_MANAGER_DB_VERSION )
-		tsf_extension_manager_boot();
-} else {
-	tsf_extension_manager_boot();
-}
+// Load plugin API file.
+require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
 
-/**
- * Starts the plugin.
- *
- * @since 1.5.0
- * @access private
- */
-function tsf_extension_manager_boot() {
+// Load internal functions file.
+require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'internal.php';
 
-	// Defines environental constants.
-	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'define.php';
+// Prepare plugin upgrader before the plugin loads.
+if ( tsf_extension_manager_db_version() < TSF_EXTENSION_MANAGER_DB_VERSION )
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrade.php';
 
-	// Load plugin API file.
-	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
+if ( is_admin() || wp_doing_cron() )
+	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'update.php';
 
-	// Load internal functions file.
-	require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'internal.php';
-
-	// Prepare plugin upgrader before the plugin loads.
-	if ( tsf_extension_manager_db_version() < TSF_EXTENSION_MANAGER_DB_VERSION ) {
-		require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrade.php';
-	}
-
-	if ( is_admin() || wp_doing_cron() )
-		require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'update.php';
-
-	// Load plugin files.
-	require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'load.php';
-}
+// Load plugin files.
+require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'load.php';

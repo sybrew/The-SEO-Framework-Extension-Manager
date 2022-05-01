@@ -103,6 +103,7 @@ final class Upgrader {
 		$this->set_defaults();
 		$this->increase_available_memory();
 
+		// These are not available to extensions.
 		\add_action( 'plugins_loaded', [ $this, '_load_critical_hook' ], 0 );
 		\add_action( 'plugins_loaded', [ $this, '_parse_critical' ], 1 );
 
@@ -182,6 +183,7 @@ final class Upgrader {
 	 * shouldn't interfere flow, ever. Let defensive and state programming occur instead.
 	 *
 	 * @since 1.5.0
+	 * @since 2.5.3 Now supports multiple callbacks per version. Order of registration is important.
 	 * @factory
 	 *
 	 * @param string   $member   The member of the upgrade, e.g. the extension slug.
@@ -193,10 +195,9 @@ final class Upgrader {
 		$c = &$this->_upgrade_collector();
 
 		// phpcs:ignore, WordPress.WhiteSpace.OperatorSpacing
-		isset( $c->{$member} )             or $c->{$member}             = new \stdClass;
-		isset( $c->{$member}->{$version} ) or $c->{$member}->{$version} = [];
+		isset( $c->{$member} ) or $c->{$member} = new \stdClass;
 
-		$c->{$member}->{$version} = $callback;
+		$c->{$member}->{$version}[] = $callback;
 	}
 
 	/**
@@ -231,7 +232,7 @@ final class Upgrader {
 
 		if ( \is_admin() ) {
 			$this->do_admin_upgrade();
-			$ms and $this->do_admin_upgrade();
+			$ms and $this->do_network_admin_upgrade();
 		}
 
 		$this->do_always_upgrade();
@@ -326,6 +327,7 @@ final class Upgrader {
 
 		foreach ( $upgrades as $member => $version ) {
 			$upgrades->{$member} = (array) $upgrades->{$member};
+			// Sort by version.
 			ksort( $upgrades->{$member} );
 		}
 
@@ -338,6 +340,7 @@ final class Upgrader {
 				// Continue anyway?
 				break;
 			}
+
 			if ( ! $updated ) {
 				// TODO log error. Wait for logger factory/framework.
 				// REASON: Database error while trying to store data.
@@ -356,14 +359,17 @@ final class Upgrader {
 	 * Doesn't yield when the input is empty.
 	 *
 	 * @since 1.5.0
+	 * @since 2.5.3 Now supports multiple callbacks per version.
 	 *
 	 * @param \stdClass $upgrade The upgrade iterator object.
 	 * @yield array { $member => $version }
 	 */
 	private function yield_runs( \stdClass $upgrade ) {
-		foreach ( $upgrade as $member => $data ) {
-			foreach ( $data as $version => $callback ) {
-				yield $member => $this->do_upgrade_cb( (string) $version, $callback );
+		foreach ( $upgrade as $member => $versions ) {
+			foreach ( $versions as $version => $callbacks ) {
+				foreach ( $callbacks as $callback ) {
+					yield $member => $this->do_upgrade_cb( (string) $version, $callback );
+				}
 			}
 		}
 	}

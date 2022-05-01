@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 5.4
+Requires at least: 5.5
 Tested up to: 5.9
 Requires PHP: 5.6.5
 Requires TSF: 4.1.4
-Stable tag: 2.5.2
+Stable tag: 2.5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,11 +54,20 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 **API Updates:**
 
 * Jan 31st, 2022: Duplicated domain activations no longer count toward the activation limit.
-* Jan 31st, 2022: Duplicated instance activations now automatically switch site -- this helps ease migrating from staging to production, and vice versa.
+* Jan 31st, 2022: Duplicated instance activations now automatically switch sites -- this helps ease migrating from staging to production, and vice versa.
 
 **Updated extensions:**
 
 * [Articles at version 2.2.0](https://theseoframework.com/extensions/articles/#changelog)
+
+**Detailed log**
+
+* **Updated:** The plugin database version is now `2500`, from `1600`.
+* **Updated:** This plugin and its extensions now require WordPress v5.5 or higher.
+* **Removed:** WordPress and PHP environment testing is currently executed by WordPress, so we removed our tests.
+	* Upon upgrade, related setting is removed from every site: `tsfem_tested_environment_version`.
+* **Fixed:** The upgraded no longer runs the admin upgrader twice on multisite networks.
+* **Other:** Cleaned up code, hung out laundry.
 
 = 2.5.2 =
 
@@ -129,6 +138,10 @@ View the [detailed v2.5.0 changelog](https://theseoframework.com/?p=3686).
 * **The full changelog can be found [here](http://theseoframework.com/?cat=19).**
 
 == Upgrade Notice ==
+
+= 2.5.3 =
+
+This plugin now requires WordPress v5.5 or higher.
 
 = 2.5.0 =
 

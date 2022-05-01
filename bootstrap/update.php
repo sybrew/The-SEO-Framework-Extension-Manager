@@ -45,19 +45,12 @@ function _prepare_tsf_nag_installer_scripts() {
 		'updates',
 	];
 	$scriptid = 'tsfinstaller';
-
-	// Don't rely on the script name! Rely on the script-id, if you so choose to manipulate it.
-	// This name will change back once we stop supporting WP<5.5
-	$scriptname = version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ? 'tsfinstaller' : 'tsfinstallernew';
-	$suffix     = SCRIPT_DEBUG ? '' : '.min';
-
-	$strings = [
+	$suffix   = SCRIPT_DEBUG ? '' : '.min';
+	$strings  = [
 		'slug' => 'autodescription',
 	];
 
-	// NB 82% of our users are on WP 5.5+. Do we really _want_ to maintain compatibility with earlier versions?
-
-	\wp_register_script( $scriptid, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$scriptname}{$suffix}.js", $deps, TSF_EXTENSION_MANAGER_VERSION, true );
+	\wp_register_script( $scriptid, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$scriptid}{$suffix}.js", $deps, TSF_EXTENSION_MANAGER_VERSION, true );
 	\wp_localize_script( $scriptid, "{$scriptid}L10n", $strings );
 
 	\add_action( 'admin_print_styles', __NAMESPACE__ . '\\_print_tsf_nag_installer_styles' );

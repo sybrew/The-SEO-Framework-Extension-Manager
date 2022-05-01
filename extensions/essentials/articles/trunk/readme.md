@@ -260,8 +260,8 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 * **Added:**
 	* The Article markup author object now has a URL provided, as suggested by Google. This URL points to the author archive page of the website.
-	* A misconfigured NGINX-compatible endpoint for the Google News sitemap was added (`/news-sitemap.xml`).
-		* Namecheap, EasyWP, SpinupWP, etc. blindly implemented the broken NGINX script from Yoast SEO; this changes makes Articles compatible with witless hosting providers.
+	* A compatible endpoint for the Google News sitemap supporting misconfigured NGINX profiles has been added (`/news-sitemap.xml`).
+		* Namecheap, EasyWP, SpinupWP, etc. blindly implemented the broken NGINX script from Yoast SEO; this change makes Articles compatible with witless hosting providers.
 * **Improved:**
 	* A News Sitemap URL has been added to the Extensions Settings page.
 		* This is only visible after the sitemap has been enabled and the settings page refreshed.
