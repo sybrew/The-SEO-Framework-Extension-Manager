@@ -4,7 +4,7 @@ Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honey
 Requires at least: 5.5
 Tested up to: 5.9
 Requires PHP: 5.6.5
-Requires TSF: 4.1.4
+Requires TSF: 4.2.4
 Stable tag: 2.5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -45,11 +45,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Release date:**
 
-* TODO
+* May 2nd, 2022
 
 **Feature highlights:**
 
-* Improved overal performance of the plugin by refactoring various parts using our latest coding standards.
+* Improved overall performance of the plugin by refactoring various parts using our latest coding standards.
 
 **API Updates:**
 
@@ -62,12 +62,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Detailed log**
 
-* **Updated:** The plugin database version is now `2500`, from `1600`.
-* **Updated:** This plugin and its extensions now require WordPress v5.5 or higher.
-* **Removed:** WordPress and PHP environment testing is currently executed by WordPress, so we removed our tests.
-	* Upon upgrade, related setting is removed from every site: `tsfem_tested_environment_version`.
-* **Fixed:** The upgraded no longer runs the admin upgrader twice on multisite networks.
-* **Other:** Cleaned up code, hung out laundry.
+View the [detailed v2.5.2 changelog](https://tsf.fyi/p/3890).
 
 = 2.5.2 =
 

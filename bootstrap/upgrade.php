@@ -53,8 +53,7 @@ function _do_critical_core_upgrade( Upgrader $upgrader ) {
 				'2500',
 				function( $version ) {
 					// Declare success when the option doesn't exist or is succesfully deleted.
-					$success = ! \get_option( 'tsfem_tested_environment_version' ) || \delete_option( 'tsfem_tested_environment_version' );
-					return $success;
+					return ! \get_option( 'tsfem_tested_environment_version' ) || \delete_option( 'tsfem_tested_environment_version' );
 				}
 			);
 			// no break, do moar upgrades;

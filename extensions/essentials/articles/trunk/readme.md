@@ -256,7 +256,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ### 2.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="May 2nd, 2022"]
 
 * **Added:**
 	* The Article markup author object now has a URL provided, as suggested by Google. This URL points to the author archive page of the website.
