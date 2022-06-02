@@ -173,7 +173,7 @@ window.tsfem_e_monitor = {
 			return;
 
 		let loading = 'tsfem-button-disabled tsfem-button-loading',
-			loader = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax';
+			loader  = '#tsfem-e-monitor-issues-pane .tsfem-pane-header .tsfem-ajax';
 
 		$button.addClass( loading );
 		$button.prop( 'disabled', true );

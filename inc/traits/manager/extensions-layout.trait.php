@@ -349,18 +349,18 @@ trait Extensions_Layout {
 				$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 
 				$extension = sprintf(
-					'<input type="hidden" name="%s" value="%s">',
+					'<input type=hidden name="%s" value="%s">',
 					$cache['input_name'],
 					$s_slug
 				);
 				$submit    = sprintf(
-					'<input type="submit" name="submit" id="tsfem-activate-submit[%s]" class="%s" value="%s">',
+					'<input type=submit name=submit id="tsfem-activate-submit[%s]" class="%s" value="%s">',
 					$s_slug,
 					$s_class,
 					\esc_attr( $text )
 				);
 				$nojs      = sprintf(
-					'<form action="%s" method="post" id="tsfem-activate-form[%s]" class="hide-if-js">%s</form>',
+					'<form action="%s" method=post id="tsfem-activate-form[%s]" class=hide-if-tsf-js autocomplete=off data-form-type=other>%s</form>',
 					$cache['admin_url'],
 					$s_slug,
 					$nonce_action . $nonce . $extension . $submit
@@ -368,7 +368,7 @@ trait Extensions_Layout {
 
 			js:;
 				$js = sprintf(
-					'<button type=button id="tsfem-activate[%s]" class="hide-if-no-js %s" data-slug="%s" data-case="%s">%s</button>',
+					'<button type=button id="tsfem-activate[%s]" class="hide-if-no-tsf-js %s" data-slug="%s" data-case="%s">%s</button>',
 					$s_slug,
 					$s_class,
 					$s_slug,

@@ -91,7 +91,7 @@
 
 .tsfem-extension-entry .tsfem-extension-title:after {
 	content: "\2022\00fe0e";
-	margin-left: .5em;
+	margin-left: .75ch;
 	font-weight: 400;
 	font-size: 1em;
 	color: transparent;
@@ -99,7 +99,7 @@
 }
 body.rtl .tsfem-extension-entry .tsfem-extension-title:after {
 	margin-left: initial;
-	margin-right: .5em;
+	margin-right: .75ch;
 }
 
 .tsfem-extension-entry.tsfem-extension-activated .tsfem-extension-title:after {

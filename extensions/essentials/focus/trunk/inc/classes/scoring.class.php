@@ -214,7 +214,7 @@ final class Scoring {
 	 * @return string The data attributes.
 	 */
 	public function get_data_attributes( $type ) {
-		return \TSF_Extension_Manager\HTML::make_data_attributes( [
+		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( [
 			'scores'         => \tsf_extension_manager()->filter_keys(
 				$this->get_template( $type ),
 				[ 'assessment', 'maxScore', 'minScore', 'phrasing', 'rating', 'scoring' ]

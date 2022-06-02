@@ -379,7 +379,7 @@ JS;
 			JSON_FORCE_OBJECT
 		);
 
-		// Can we make this even smaller without losing functionality?
+		// Can we make this even smaller without losing functionality? Unpacked source: /timer.js
 		$script = <<<JS
 (a=>{let b,c,d=document.getElementsByName(a.n)[0],e=255*(1-Math.random()),f=f=>{void 0===b&&(b=f),c=f-b,c<1e3*(+a.t/+a.s)?(d.value=+a.t+e-c/1e3,g()):d.value=""},g=()=>setTimeout(()=>requestAnimationFrame(f),100+200*Math.random());d&&(d.value=+a.t+e,g())})($php_values);
 JS;

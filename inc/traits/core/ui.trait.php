@@ -64,6 +64,10 @@ trait UI {
 		\add_action( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
 		\add_action( 'update_footer', '__return_empty_string', PHP_INT_MAX );
 
+		// Prevent annoying nags (they're hidden by CSS anyway).
+		\remove_action( 'admin_notices', 'update_nag', 3 );
+		\remove_action( 'admin_notices', 'maintenance_nag', 10 );
+
 		// Add body class.
 		\add_action( 'admin_body_class', [ $this, '_add_admin_body_class' ], 999, 1 );
 
@@ -106,9 +110,9 @@ trait UI {
 	 */
 	final public function header_wrap() {
 		echo '<div id=tsfem-sticky-top>';
-			echo '<section class="tsfem-top-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
+			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
 				\do_action( 'tsfem_header' );
-			echo '</section>';
+			echo '</section></div>';
 			$this->notice_wrap();
 		echo '</div>';
 	}
@@ -132,15 +136,16 @@ trait UI {
 	 * @since 1.5.0
 	 * @since 2.0.1 Now listens to $this->wrap_type
 	 * @since 2.2.0 Is no longer a tsfem-flex-item.
+	 * @since 2.6.0 Added a super wrap to allow a condensed layout.
 	 */
 	final public function panes_wrap() {
 		printf(
-			'<main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
+			'<div class=tsfem-panes-super-wrap><main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
 			\in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
 		);
 		\do_action( 'tsfem_content' );
-		echo '</main>';
+		echo '</main></div>';
 	}
 
 	/**

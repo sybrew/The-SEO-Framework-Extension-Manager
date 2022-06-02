@@ -33,10 +33,29 @@ namespace {
 	 * or even other plugins.
 	 *
 	 * @since 1.0.0
+	 * @see `tsfem()` alias.
+	 * @api
 	 *
 	 * @return null|object The plugin class object.
 	 */
 	function tsf_extension_manager() {
+		return \TSF_Extension_Manager\_init_tsf_extension_manager();
+	}
+
+	/**
+	 * Returns the class from cache.
+	 *
+	 * This is the recommended way of calling the class, if needed.
+	 * Call this after action 'init' priority 0 otherwise it will kill the plugin,
+	 * or even other plugins.
+	 *
+	 * @since 2.6.0
+	 * @see `tsf_extension_manager()` alias.
+	 * @api
+	 *
+	 * @return null|object The plugin class object.
+	 */
+	function tsfem() {
 		return \TSF_Extension_Manager\_init_tsf_extension_manager();
 	}
 

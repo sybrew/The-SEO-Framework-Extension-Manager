@@ -294,6 +294,7 @@ trait Error {
 			case 701:
 			case 708:
 			case 1010702:
+			case 1060106:
 				$message = \esc_html__( 'Invalid API request type.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
@@ -560,6 +561,11 @@ trait Error {
 				$type    = 'warning';
 				break;
 
+			case 1060201:
+				$message = \esc_html__( "Importer does't exist.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
 			case 1010607:
 				$message = \esc_html__( 'Data has just been updated.', 'the-seo-framework-extension-manager' );
 				$type    = 'warning';
@@ -586,23 +592,9 @@ trait Error {
 				$type    = 'updated';
 				break;
 
-			case 1060301:
-				$message = \esc_html__( "The SEO settings couldn't be converted to file.", 'the-seo-framework-extension-manager' );
-				$type    = 'error';
-				break;
-
-			case 1060302:
-				$message = \esc_html__( 'An unknown source outputted data before sending the file. Therefore, Transporter is unable to complete your request.', 'the-seo-framework-extension-manager' );
-				$type    = 'error';
-				break;
-
-			case 1060401:
-				$message = \esc_html__( 'Download will start shortly.', 'the-seo-framework-extension-manager' );
-				$type    = 'info';
-				break;
-
 			case 17100:
 			case 18101:
+			case 1060200:
 			case 1070100:
 			case 1090100:
 				$message = \esc_html__( 'Invalid data was sent to the server.', 'the-seo-framework-extension-manager' );
@@ -631,9 +623,29 @@ trait Error {
 				$type    = 'updated';
 				break;
 
+			case 1060202:
+				$message = \esc_html__( 'Transporting in session, trying to connect to logger...', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
 			case 1070102:
 			case 1090102:
 				$message = \esc_html__( 'Changes are saved.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
+			case 1060203:
+				$message = \esc_html__( 'Timeout', 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 1060204:
+				$message = \esc_html__( 'Crash', 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 1060205:
+				$message = \esc_html__( 'Done!', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 
@@ -746,8 +758,6 @@ trait Error {
 			case 1010505:
 			case 1010604:
 			case 1010605:
-			case 1060101:
-			case 1060402:
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;

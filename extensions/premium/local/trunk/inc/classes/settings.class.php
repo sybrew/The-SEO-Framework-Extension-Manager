@@ -353,7 +353,7 @@ final class Settings {
 	 *
 	 * @param self $_s Used for integrity.
 	 */
-	public function _get_local_settings_overview( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function _local_settings_overview( self $_s ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$this->get_view( 'layout/pages/settings' );
 	}
 
@@ -411,7 +411,7 @@ final class Settings {
 		return sprintf(
 			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
 			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
-			'hide-if-no-js tsfem-button tsfem-button-external',
+			'hide-if-no-tsf-js tsfem-button tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);
 	}

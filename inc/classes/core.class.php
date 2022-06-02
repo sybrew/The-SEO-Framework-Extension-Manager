@@ -250,21 +250,21 @@ class Core {
 	final public function _clean_response_header() {
 
 		$retval = 0;
-		// PHP 5.6+ //= $i = 0;
+		$i      = 0;
 
 		if ( $level = ob_get_level() ) { // phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- this is fine.
 			while ( $level-- ) {
 				ob_end_clean();
 			}
-			$retval |= 1; //= 2 ** $i
+			$retval |= 2 ** $i;
 		}
 
-		// PHP 5.6+ //= $i++;
+		$i++;
 
 		// wp_ajax sets required headers early.
 		if ( ! headers_sent() ) {
 			header_remove();
-			$retval |= 2; //= 2 ** $i
+			$retval |= 2 ** $i;
 		}
 
 		return $retval;
@@ -303,6 +303,7 @@ class Core {
 	 * is actually JSON encoded. When it's 1, we can safely assume it's JSON.
 	 *
 	 * @since 1.2.0
+	 * @since 2.6.0 Now outputs boolean key 'success' if $type is of 'success'.
 	 * @TODO set a standard for $data, i.e. [ 'results'=>[],'html'=>"", etc. ];
 	 *
 	 * @param mixed  $data The data that needs to be send.
@@ -321,7 +322,9 @@ class Core {
 			$this->set_status_header( null, 'json' );
 		}
 
-		echo json_encode( compact( 'data', 'type', 'json' ) );
+		$success = 'success' === $type;
+
+		echo json_encode( compact( 'data', 'type', 'json', 'success' ) );
 		exit;
 	}
 
@@ -865,9 +868,7 @@ class Core {
 
 		$now_x = floor( ( $_time - $_delta ) / $length );
 
-		$string = $uid . '\\' . $now_x . '\\' . $uid;
-
-		return $this->hash( $string, 'auth' );
+		return $this->hash( "$uid\\$now_x\\$uid", 'auth' );
 	}
 
 	/**
@@ -1143,6 +1144,7 @@ class Core {
 	 * @since 1.2.0
 	 * @since 1.3.0 Now handles namespaces instead of class bases.
 	 * @since 2.5.1 Now supports mixed class case.
+	 * @since 2.6.0 Now supports branched path files.
 	 *
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
@@ -1179,7 +1181,11 @@ class Core {
 		$_path = $this->get_extension_autload_path( $_ns );
 
 		if ( $_path ) {
-			$_file = str_replace( '_', '-', str_replace( $_ns . '\\', '', $_class ) );
+			$_file = str_replace(
+				[ "$_ns\\", '\\', '/', '_' ],
+				[ '', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, '-' ],
+				$_class
+			);
 
 			$this->get_verification_codes( $_instance, $bits );
 

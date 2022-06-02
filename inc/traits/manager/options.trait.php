@@ -82,16 +82,11 @@ trait Options {
 			return null;
 
 		if ( $this->killed_options )
-			return [];
+			return null;
 
 		static $options_cache = [];
 
-		if ( isset( $options_cache[ $option ] ) )
-			return $options_cache[ $option ];
-
-		$options = $this->get_all_options();
-
-		return $options_cache[ $option ] = isset( $options[ $option ] ) ? $options[ $option ] : $default;
+		return $options_cache[ $option ] = $options_cache[ $option ] ?? $this->get_all_options()[ $option ] ?? $default;
 	}
 
 	/**

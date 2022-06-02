@@ -3674,7 +3674,7 @@ final class Fields {
 				'_type' => 'multi',
 				'_desc' => [
 					\__( 'Target specifications', 'the-seo-framework-extension-manager' ),
-					\__( 'Specify where the user can complete a reservation.', 'the-seo-framework-extension-manager' ),
+					\__( 'Specify where visitors can complete a reservation.', 'the-seo-framework-extension-manager' ),
 				],
 				'_data' => [
 					'is-showif-listener' => '1',
@@ -3712,8 +3712,8 @@ final class Fields {
 				'_req' => false,
 				'_type' => 'url',
 				'_desc' => [
-					\__( 'Form URL', 'the-seo-framework-extension-manager' ),
-					\__( 'The location where the visitor can perform a reservation action.', 'the-seo-framework-extension-manager' ),
+					\__( 'Form location URL', 'the-seo-framework-extension-manager' ),
+					\__( 'The location where visitors can perform a reservation action.', 'the-seo-framework-extension-manager' ),
 				],
 			],
 			'inLanguage' => [

@@ -56,6 +56,8 @@ trait Extensions_Properties {
 	 * Fetches all extensions.
 	 *
 	 * @since 1.0.0
+	 * @TODO Once we deprecate extensions, we'd want to do that here 'deprecated'=>true,
+	 *       and hide those from view when deactivated. Constant activation is still possible.
 	 *
 	 * @return array The extensions list.
 	 */
@@ -114,6 +116,19 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1612160183',
+				'requires'     => '5.5',
+				'tested'       => '6.0',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
+			],
+			'transport' => [
+				'slug'         => 'transport',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'setup',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1651931204',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
@@ -226,9 +241,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '5b80680cd8b82eb998370ea50b5aa5afdbe2c4a45d1386a1cec399f462741dc9',
-			'sha1'   => '00968dd9ff0d9791e083c2766a5d17af1dd0ad0a',
-			'md5'    => '3ddc34319cd368d11459cbc5cb34029e',
+			'sha256' => '542e47beb1f4eb8f563909576e24f8ae99052475a830d22d4bf59409866dafc9',
+			'sha1'   => '9f03c10713d3adcc47e0f0f3d6c558943f843c7b',
+			'md5'    => 'a903c19b2df26eea0a657a5674845cb1',
 		];
 	}
 

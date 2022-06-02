@@ -291,9 +291,7 @@ final class ExtensionSettings {
 			foreach ( $sanitizations as $_key => $_cb ) {
 				$store[ $slug ][ $_key ] = \call_user_func(
 					$_cb,
-					isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ] )
-						? $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ]
-						: null
+					$data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ] ?? null
 				);
 			}
 		}

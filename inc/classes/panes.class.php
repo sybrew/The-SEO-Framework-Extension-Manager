@@ -82,10 +82,7 @@ class Panes extends API {
 	 * @return string The escaped account actions overview.
 	 */
 	protected function get_extensions_actions_overview() {
-
-		$output = $this->get_actions_output();
-
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-actions-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-actions-wrap">%s</div>', $this->get_actions_output() );
 	}
 
 	/**
@@ -96,10 +93,7 @@ class Panes extends API {
 	 * @return string The extensions overview.
 	 */
 	protected function get_extension_overview() {
-
-		$output = $this->get_extensions_output();
-
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-extensions-wrap">%s</div>', $output );
+		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-extensions-wrap">%s</div>', $this->get_extensions_output() );
 	}
 
 	/**
@@ -113,18 +107,18 @@ class Panes extends API {
 
 		$feed = $this->get_trends_feed();
 
-		$output = '';
-
 		if ( -1 === $feed ) {
-			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
-
-			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output = sprintf(
+				'<h4 class="tsfem-status-title">%s</h4>',
+				\esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' )
+			);
 		} elseif ( empty( $feed ) ) {
-			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
-
-			$output .= sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output = sprintf(
+				'<h4 class="tsfem-status-title">%s</h4>',
+				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
+			);
 		} else {
-			$output .= sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
+			$output = sprintf( '<div class="tsfem-feed-wrap tsfem-flex tsfem-flex-row">%s</div>', $feed );
 		}
 
 		return sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output );
@@ -146,16 +140,20 @@ class Panes extends API {
 		$data = $this->get_trends_feed( true );
 
 		if ( -1 === $data ) {
-			$feed_error = \esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' );
-			$output     = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output = sprintf(
+				'<h4 class="tsfem-status-title">%s</h4>',
+				\esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' )
+			);
 
 			$send = [
 				'status'       => 'parse_error',
 				'error_output' => sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output ),
 			];
 		} elseif ( empty( $data ) ) {
-			$feed_error = \esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' );
-			$output     = sprintf( '<h4 class="tsfem-status-title">%s</h4>', $feed_error );
+			$output = sprintf(
+				'<h4 class="tsfem-status-title">%s</h4>',
+				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
+			);
 
 			$send = [
 				'status'       => 'unknown_error',
@@ -252,16 +250,16 @@ class Panes extends API {
 			\esc_attr( $enable )
 		);
 
-		$form = $nonce_action . $nonce . $submit;
+		$form = "{$nonce_action}{$nonce}{$submit}";
 
 		$nojs = sprintf(
-			'<form action="%s" method=post id=tsfem-enable-feeds-form class=hide-if-js>%s</form>',
+			'<form action="%s" method=post id=tsfem-enable-feeds-form class=hide-if-tsf-js autocomplete=off data-form-type=other>%s</form>',
 			\esc_url( $this->get_admin_page_url() ),
 			$form
 		);
-		$js   = '<p class=hide-if-no-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
+		$js   = '<p class=hide-if-no-tsf-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
 
-		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', $js . $nojs );
+		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', "{$js}{$nojs}" );
 	}
 
 	/**

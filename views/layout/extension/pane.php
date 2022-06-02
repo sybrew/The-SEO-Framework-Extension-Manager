@@ -12,17 +12,15 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSe
 
 $f = static::get_settings_form( $index );
 
-// TODO Set TSF v4.0 JS check instead.
-
 ?>
 <div class="tsfem-pane-inner-wrap tsfem-pane-inner-collapsable-settings-wrap">
-	<div class="tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-hide-if-js">
+	<div class="tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-tsf-js">
 		<div class="tsfem-pane-inner-pad">
 			<h4 class="tsfem-info-title"><?php esc_html_e( 'JavaScript required', 'the-seo-framework-extension-manager' ); ?></h4>
 			<p class="tsfem-description"><?php esc_html_e( 'Because of the complexity of the settings, JavaScript is required.', 'the-seo-framework-extension-manager' ); ?></p>
 		</div>
 	</div>
-	<div class="tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-hide-if-no-js">
+	<div class="tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-no-tsf-js">
 		<div class="tsfem-pane-inner-pad">
 			<?php
 			$f->_form_wrap( 'start', tsf_extension_manager()->get_admin_page_url( static::$settings_page_slug ), true );

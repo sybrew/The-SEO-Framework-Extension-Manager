@@ -4,14 +4,6 @@
 /* # Start Normalize.
 /*----------------------------------------------------------------------------*/
 
-/* ## Notices: Annoyances.
-/* We don't ever want to remove potentially non-recurring notices.
-/*--------------------------------------*/
-body.tsfem .update-nag,
-body.tsfem #update-nag {
-	display: none;
-}
-
 /* ## Notices: Core + self.
 /*--------------------------------------*/
 /* "margin: 1.2% 0 0" Edge/Firefox inline margins issue */
@@ -19,8 +11,20 @@ body.tsfem #update-nag {
 #tsfem-page-wrap .error,
 #tsfem-page-wrap .warning,
 #tsfem-page-wrap .tsf-notice {
-	margin: 1.2vw 0 0;
-	box-shadow: 0 .1em .4em rgba(0,0,0,.18);
+	display: block;
+	margin: 1.2vw .6vw 0;
+	box-shadow: 0 0.1em 0.4em rgba(0, 0, 0, .18);
+	border-radius: 3px;
+}
+
+/* ### Notices: Annoyances.
+/* We don't ever want to remove potentially non-recurring notices.
+/*--------------------------------------*/
+body.tsfem .update-nag, /* before displacement */
+body.tsfem #update-nag, /* before displacement */
+#tsfem-page-wrap .update-nag, /* after displacement */
+#tsfem-page-wrap #update-nag { /* after displacement */
+	display: none;
 }
 
 /* ## Loading...
@@ -142,12 +146,8 @@ body.tsfem.rtl .wrap {
 }
 
 #tsfem-notice-wrap {
-	margin: 1.2vw;
-	margin-bottom: 0;
-}
-
-#tsfem-notice-wrap:empty {
-	margin: 0;
+	margin: 0 auto;
+	max-width: 1240px;
 }
 
 /* Stretches content over the page, pushing footer down. */
@@ -162,7 +162,7 @@ body.tsfem.rtl .wrap {
 	margin-bottom: 1.2vw;
 	top: 32px;
 	z-index: 9980; /* Admin sidebar is 9990 */
-	background: linear-gradient( to bottom, rgba(0,0,0,.25), rgba(241,241,241,0 ) );
+	background: linear-gradient( to bottom, rgba(0,0,0,.3), rgba(0,0,0,0) ); /* Revealed when notices appear */
 }
 
 @media screen and ( max-width: 782px ) {
@@ -178,18 +178,23 @@ body.tsfem.rtl .wrap {
 @media screen and ( max-width: 600px ) {
 	#tsfem-sticky-top {
 		position: initial; /* unsticky */
+		background: none;
 	}
 }
 
-.tsfem-top-wrap {
+#tsfem-top-super-wrap {
 	background-color: #fff;
 	border-bottom: 1px solid #ccd0d4;
 	width: 100%;
-	margin: 0;
-	padding: 0 1.2vw;
 }
 
-.tsfem-top-wrap > * {
+#tsfem-top-wrap {
+	margin: 0 auto;
+	padding: 0 1.2vw;
+	max-width: 1240px;
+}
+
+#tsfem-top-wrap > * {
 	padding: 1em 0;
 }
 
@@ -221,7 +226,7 @@ body.tsfem.rtl .wrap {
 
 .tsfem-top-actions,
 .tsfem-top-about,
-.tsfem-top-wrap .tsfem-title {
+#tsfem-top-wrap .tsfem-title {
 	text-align: left;
 	align-items: center;
 }
@@ -260,7 +265,7 @@ body.rtl .tsfem-top-actions > *:nth-last-child(n+2) {
 /* ## Title.
 /*--------------------------------------*/
 
-.tsfem-top-wrap .tsfem-title h1 {
+#tsfem-top-wrap .tsfem-title h1 {
 	display: flex;
 	font-family: Verdana, Geneva, sans-serif;
 	word-break: break-word;
@@ -272,14 +277,37 @@ body.rtl .tsfem-top-actions > *:nth-last-child(n+2) {
 	padding: 0;
 }
 
-.tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
+#tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	padding: 0;
-	margin-right: 7px;
+	margin-right: .75ch;
 	vertical-align: top;
 }
-body.rtl .tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
+body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	margin-right: 0;
-	margin-left: 7px;
+	margin-left: .75ch;
+}
+
+/* ##Logger
+/*----------------------------------------------------------------------------*/
+
+.tsfem-logger {
+	display: block;
+	padding: 1em 1em .5em;
+	margin: 0;
+	line-height: 1.5;
+	word-break: break-all;
+	word-wrap: break-word;
+	color: #333;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	overflow: auto;
+	min-height: calc( 2.5em * 1.5 ); /* 2.5 rows time 1.5 line height */
+	height: calc( 14em * 1.5 ); /* 14 rows times 1.5 line height */
+	resize: vertical;
+	white-space: pre-wrap;
+	word-break: break-word;
+	clear: both;
 }
 
 /* # Start Buttons.
@@ -332,7 +360,7 @@ body.rtl .tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	display: inline-block;
 	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset;
 	filter: none;
-	transition: box-shadow .25s, color .25s .125s, background .125s .25s;
+	transition: box-shadow .125s, color .125s .0625s, background .0625s .125s;
 	padding: .4em 1em .5em;
 	font-size: 1em;
 	font-weight: 400;
@@ -581,7 +609,7 @@ body.rtl .tsfem-button-loading:after {
 	transform: rotateX(-90deg);
 	transform-origin: 0 100% 0;
 	opacity: 0;
-	transition: transform 1.2s, opacity 0.6s;
+	transition: transform 1.2s, opacity .6s;
 }
 
 .tsfem-switch-button-container input[type=checkbox]:checked:before {
@@ -592,7 +620,7 @@ body.rtl .tsfem-button-loading:after {
 	transform: rotateX(90deg) translateY(-100%);
 	opacity: 0;
 	z-index: 0;
-	transition: transform 1.2s, opacity 0.6s;
+	transition: transform 1.2s, opacity .6s;
 }
 
 .tsfem-switch-button-container input[type=checkbox]:checked ~ button {
@@ -608,13 +636,17 @@ body.rtl .tsfem-button-loading:after {
 .tsfem-button:disabled,
 .tsfem-button:disabled:hover,
 .tsfem-button:disabled:active,
+.tsfem-button:disabled:focus,
 .tsfem-button-primary:disabled,
 .tsfem-button-primary:disabled:hover,
 .tsfem-button-primary:disabled:active,
+.tsfem-button-primary:disabled:focus,
 .tsfem-button-disabled,
 .tsfem-button-disabled:hover,
 .tsfem-button-disabled:active,
+.tsfem-button-disabled:focus,
 .tsfem-button-disabled:disabled,
+.tsfem-button-disabled:disabled:focus,
 .tsfem-button-disabled:disabled:hover,
 .tsfem-button-disabled:disabled:active {
 	background: #ddd;
@@ -704,6 +736,12 @@ body.rtl .tsfem-button-loading:after {
 /* # Global panes wrap.
 /*--------------------------------------*/
 /* "margin: .6%" Edge/Firefox inline margins issue */
+.tsfem-panes-super-wrap {
+	width: 100%;
+	max-width: 1240px;
+	margin: 0 auto;
+}
+
 .tsfem-panes-wrap {
 	padding: 0;
 	margin: 0 1.2vw;
@@ -808,12 +846,12 @@ body.rtl .tsfem-button-loading:after {
 	color: #057f9c;
 	font-weight: 400;
 	justify-content: flex-start;
-	flex-basis: 200px;
+	width: max-content;
 }
 
 .tsfem-pane-header svg,
 .tsfem-pane-header img {
-	margin-right: .333em;
+	margin-right: .75ch;
 }
 
 .tsfem-pane-content h4.tsfem-status-title,
@@ -836,13 +874,13 @@ body.rtl .tsfem-button-loading:after {
 	padding: 0;
 }
 
-.tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad {
+.tsfem-pane-inner-pad {
 	width: 100%;
 	padding: 1.5em;
 }
 
 /* Grab every consecutive call */
-.tsfem-pane-inner-collapsable-settings-wrap .tsfem-pane-inner-pad + .tsfem-pane-inner-pad {
+.tsfem-pane-inner-pad + .tsfem-pane-inner-pad {
 	padding-top: 0;
 }
 
@@ -1175,8 +1213,6 @@ h4.tsfem-cp-title {
 	cursor: pointer;
 	padding: 1em;
 	width: 100%;
-	-moz-transition: all .33s;
-	-o-transition: all .33s;
 	transition: all .33s;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -1220,7 +1256,7 @@ body.rtl .tsfem-modal-buttons button:nth-child(n+2) {
 	cursor: pointer;
 	text-decoration: none;
 	z-index: 6;
-	transition: color 0.15s;
+	transition: color .15s;
 }
 
 body.rtl .tsfem-modal-dismiss {
@@ -1259,13 +1295,4 @@ body.rtl .tsfem-modal-dismiss {
 
 .tsfem-ltr {
 	direction: ltr;
-}
-
-body.js .tsfem-flex-hide-if-js,
-.tsfem-flex-hide-if-no-js {
-	display: none;
-}
-
-body.js .tsfem-flex-hide-if-no-js {
-	display: flex;
 }

@@ -165,7 +165,7 @@
 	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
-	transition: all 0.5s ease-in-out;
+	transition: all .5s ease-in-out;
 	background: currentColor;
 }
 

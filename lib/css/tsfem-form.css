@@ -159,7 +159,7 @@ body.rtl .tsfem-form-title-icon-good:before {
 	height: 1px;
 	border: 1px solid;
 	border-radius: 3px;
-	transition: all 0.5s ease-in-out;
+	transition: all .5s ease-in-out;
 	background: currentColor;
 }
 body.rtl .tsfem-form-collapse-icon:before,
@@ -350,7 +350,7 @@ body.rtl .tsfem-form-image-buttons-wrap button {
 }
 
 .tsfem-form-multi-select-wrap {
-	max-height: 350px;
+	max-height: 448px; /* 20 rows of 16px checkboxes with 1.4 lineheight */
 	padding: 0px 15px;
 	box-shadow: 0 0 0 1px #ccd0d4;
 	overflow: hidden;

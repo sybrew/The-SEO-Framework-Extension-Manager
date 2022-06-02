@@ -195,7 +195,7 @@ function _register_autoloader() {
 	];
 
 	foreach ( $integrity_classes as $_class ) {
-		 // phpcs:ignore, TSF.Performance.Functions.PHP -- no other method exists.
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- no other method exists.
 		if ( class_exists( $_class, false ) ) die;
 	}
 
@@ -256,7 +256,7 @@ function can_load_class() {
  */
 function _autoload_classes( $class ) {
 
-	// It's TSF_Extension_Manager, not tsf_extension_manager!
+	// NB It's TSF_Extension_Manager, not tsf_extension_manager!
 	if ( 0 !== strpos( strtolower( $class ), 'tsf_extension_manager\\', 0 ) ) return;
 
 	if ( WP_DEBUG ) {
@@ -273,7 +273,7 @@ function _autoload_classes( $class ) {
 	}
 
 	static $_timenow = true;
-
+	// Prevent running two timers at once, restart timing once done loading batch.
 	if ( $_timenow ) {
 		$_bootstrap_timer = microtime( true );
 		$_timenow         = false;

@@ -1,5 +1,5 @@
 /**
- * This file holds Focus' code for interpreting keywords and their subjects.
+ * This file holds Focus's code for interpreting keywords and their subjects.
  * Serve JavaScript as an addition, not as an ends or means.
  * Alas, there's no other way here.
  *

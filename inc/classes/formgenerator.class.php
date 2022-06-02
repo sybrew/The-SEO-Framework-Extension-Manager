@@ -27,6 +27,13 @@ namespace TSF_Extension_Manager;
 // phpcs:disable, Squiz.Commenting.VariableComment.DuplicateVar, PSR2.Classes.PropertyDeclaration.Multiple -- @TODO later. This class is too complex.
 
 /**
+ * Require extension settings trait.
+ *
+ * @since 2.6.0
+ */
+_load_trait( 'extension/options' );
+
+/**
  * Holds settings generator functions for package TSF_Extension_Manager\Extension.
  *
  * The class maintains static functions as well as a constructor. They go hand-in-hand.
@@ -404,7 +411,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'start':
 				return vsprintf(
-					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s">',
+					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s" autocomplete=off data-form-type=other>',
 					[
 						\esc_url( $url ),
 						$this->get_form_id(),
@@ -455,7 +462,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'submit':
 				return vsprintf(
-					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload hide-if-no-js">%2$s</button>',
+					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload hide-if-no-tsf-js">%2$s</button>',
 					[
 						$this->get_form_id(),
 						\esc_html( $name ),
@@ -2051,7 +2058,7 @@ final class FormGenerator {
 			[
 				$this->create_field_description( $args, $s_url_id ),
 				vsprintf(
-					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row tsfem-flex-hide-if-no-js">%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row hide-if-no-tsf-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s %s%s%s>',

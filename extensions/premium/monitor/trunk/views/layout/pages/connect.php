@@ -14,8 +14,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\E
 		<div class=tsfem-connect-description>
 			<h3><?php esc_html_e( 'Privacy', 'the-seo-framework-extension-manager' ); ?></h3>
 			<p><?php esc_html_e( 'The SEO Monitor periodically crawls your website to scan for common issues from an external server. In order to do so, it first has to register your website.', 'the-seo-framework-extension-manager' ); ?></p>
-			<div class="hide-if-no-js" id="tsfem-e-monitor-privacy-readmore-wrap"><p><a class="tsfem-e-monitor-readmore" id="tsfem-e-monitor-privacy-readmore" href=javascript:;><?php esc_html_e( 'Read more...', 'the-seo-framework-extension-manager' ); ?></a></p></div>
-			<div class="hide-if-js" id="tsfem-e-monitor-privacy-readmore-content">
+			<div class=hide-if-no-tsf-js id="tsfem-e-monitor-privacy-readmore-wrap"><p><a class="tsfem-e-monitor-readmore" id="tsfem-e-monitor-privacy-readmore" href=javascript:;><?php esc_html_e( 'Read more...', 'the-seo-framework-extension-manager' ); ?></a></p></div>
+			<div class=hide-if-tsf-js id="tsfem-e-monitor-privacy-readmore-content">
 				<p>
 				<?php
 				// phpcs:disable, WordPress.Security.EscapeOutput -- Already escaped.

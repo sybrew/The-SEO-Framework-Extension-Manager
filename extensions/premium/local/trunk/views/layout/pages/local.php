@@ -10,7 +10,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\E
 
 tsf_extension_manager()->_do_pane_wrap_callable(
 	__( 'Local Settings', 'the-seo-framework-extension-manager' ),
-	[ $this, '_get_local_settings_overview' ],
+	[ $this, '_local_settings_overview' ],
 	[
 		'full'       => true,
 		'collapse'   => false,

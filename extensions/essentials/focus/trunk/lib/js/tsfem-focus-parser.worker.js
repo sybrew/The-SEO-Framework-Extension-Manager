@@ -1,5 +1,5 @@
 /**
- * This worker file holds Focus' code for interpreting contents.
+ * This worker file holds Focus's code for interpreting contents.
  * Serve JavaScript as an addition, not as an ends or means.
  * Alas, there's no other way here.
  *
@@ -178,7 +178,7 @@ const escapeStr = ( str, noquotes ) => {
  * @param {function}                 cb       The callback function returning a Promise.
  * @param {number|undefined}         timeout  The iteration timeout. Optional. Defaults to 0.
  * @param {number|undefined}         stopAt   The iteration anti-lag blocker. Optional. Defaults to 2000 ms.
- * @return {jQuery.Deferred|Promise} The promise object.
+ * @return {Promise} The promise object.
  */
 const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise( ( resolve, reject ) => {
 	let its = iterable.length;

@@ -170,48 +170,4 @@ final class HTML {
 
 		return static::make_dropdown_option_list( $_options, $selected ?: 0 );
 	}
-
-	/**
-	 * Makes either simple or JSON-encoded data-* attributes for HTML elements.
-	 *
-	 * Converts CamelCase to dash-case when needed.
-	 * Data value may be anything, and is JSON encoded. Use jQuery.data() to extract.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param array $data : {
-	 *    string $k => mixed $v
-	 * }
-	 * @return string The HTML data attributes, with added space to the start.
-	 */
-	public static function make_data_attributes( array $data ) {
-
-		$ret = [];
-
-		foreach ( $data as $k => $v ) {
-			if ( ! is_scalar( $v ) ) {
-				$ret[] = sprintf(
-					'data-%s="%s"',
-					strtolower( preg_replace(
-						'/([A-Z])/',
-						'-$1',
-						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
-					) ), // dash case.
-					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
-				);
-			} else {
-				$ret[] = sprintf(
-					'data-%s="%s"',
-					strtolower( preg_replace(
-						'/([A-Z])/',
-						'-$1',
-						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
-					) ), // dash case.
-					\esc_attr( $v )
-				);
-			}
-		}
-
-		return ' ' . implode( ' ', $ret );
-	}
 }

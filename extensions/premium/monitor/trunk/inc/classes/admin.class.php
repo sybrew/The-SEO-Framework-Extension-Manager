@@ -807,7 +807,7 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _output_theme_color_meta() {
-		$this->get_view( 'layout/pages/meta' );
+		$this->get_view( 'layout/general/meta' );
 	}
 
 	/**
@@ -987,7 +987,7 @@ final class Admin extends Api {
 
 				$options[ $id ] = [
 					'edit' => vsprintf(
-						'<select form=%s id=%s name=%s class="hide-if-js">%s</select>',
+						'<select form=%s id=%s name=%s class=hide-if-tsf-js>%s</select>',
 						[
 							$form_id,
 							\esc_attr( $_field_id ),
@@ -996,7 +996,7 @@ final class Admin extends Api {
 						]
 					),
 					'js'   => vsprintf(
-						'<span class="hide-if-no-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
+						'<span class="hide-if-no-tsf-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
 						[
 							\esc_attr( $_field_id ),
 							\esc_html( $args['value']
@@ -1042,10 +1042,10 @@ final class Admin extends Api {
 			);
 
 			$content .= sprintf(
-				'<form action=%s method=post id=%s class="%s">%s</form>',
+				'<form action=%s method=post id=%s class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 				$form_id,
-				'hide-if-js',
+				'hide-if-tsf-js',
 				$nonce_action . $nonce . $submit
 			);
 		}
@@ -1303,7 +1303,7 @@ final class Admin extends Api {
 					. '</div></div>';
 
 		$button = sprintf(
-			'<form name=deactivate action="%s" method=post id="tsfem-e-monitor-disconnect-form">%s</form>',
+			'<form name=deactivate action="%s" method=post id=tsfem-e-monitor-disconnect-form autocomplete=off data-form-type=other>%s</form>',
 			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 			$nonce_action . $nonce . $switcher
 		);

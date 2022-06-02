@@ -50,10 +50,8 @@ trait Schema_Packer {
 		if ( isset( $cache ) )
 			return $cache;
 
-		$precision = \function_exists( 'ini_get' ) ? ini_get( 'serialize_precision' ) : null;
-
 		//= -1 means it's optimized correctly. 7 to 14 would also do, actually.
-		if ( isset( $precision ) && -1 !== (int) $precision )
+		if ( -1 !== (int) ini_get( 'serialize_precision' ) )
 			return $cache = true;
 
 		return $cache = false;
@@ -67,26 +65,8 @@ trait Schema_Packer {
 	 * @return bool
 	 */
 	private function can_change_precision() {
-
 		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		if ( ! \function_exists( 'ini_get_all' ) )
-			return $cache = false;
-
-		$ini_all = ini_get_all();
-
-		if ( empty( $ini_all['serialize_precision']['access'] ) )
-			return $cache = false;
-
-		$access = &$ini_all['serialize_precision']['access'];
-
-		if ( INI_USER & $access || INI_ALL & $access )
-			return $cache = true;
-
-		return $cache = false;
+		return $cache ?? ( $cache = \wp_is_ini_value_changeable( 'serialize_precision' ) );
 	}
 
 	/**

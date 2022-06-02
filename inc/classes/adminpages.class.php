@@ -337,7 +337,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	final public function _output_theme_color_meta() {
-		$this->get_view( 'layout/pages/meta' );
+		$this->get_view( 'layout/general/meta' );
 	}
 
 	/**

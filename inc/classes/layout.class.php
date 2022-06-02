@@ -29,7 +29,7 @@ namespace TSF_Extension_Manager;
  *
  * @since 2.5.2
  */
-\TSF_Extension_Manager\_load_trait( 'factory/time' );
+_load_trait( 'factory/time' );
 
 /**
  * Class TSF_Extension_Manager\Layout.
@@ -42,7 +42,7 @@ namespace TSF_Extension_Manager;
  * @final
  */
 final class Layout extends Secure_Abstract {
-	use \TSF_Extension_Manager\Time;
+	use Time;
 
 	/**
 	 * Initializes class variables. Always use reset when done with this class.
@@ -164,7 +164,8 @@ final class Layout extends Secure_Abstract {
 							. $button
 						. '</div></div>';
 
-			$output = sprintf( '<form name=deactivate action="%s" method=post id="tsfem-deactivation-form">%s</form>',
+			$output = sprintf(
+				'<form name=deactivate action="%s" method=post id=tsfem-deactivation-form  autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( $tsfem->get_admin_page_url() ),
 				$nonce_action . $nonce . $switcher
 			);
@@ -552,7 +553,7 @@ final class Layout extends Secure_Abstract {
 			$form = $input . $nonce_action . $nonce . $submit;
 
 			return sprintf(
-				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method="post" id="%s" class="%s">%s</form>',
+				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_attr( self::$request_name['activate-key'] ),
 				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
 				'input-activation',
