@@ -516,13 +516,16 @@ final class Tests {
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is bigger than 10MB, you should make it smaller.', 'the-seo-framework-extension-manager' ) );
 		}
 
-		if ( isset( $data['index'] ) && $data['index'] ) {
-			$content .= $this->wrap_info( $this->small_sample_disclaimer() );
-		}
-
 		if ( isset( $data['valid'] ) && ! $data['valid'] ) {
 			$state    = 'bad';
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this.', 'the-seo-framework-extension-manager' ) );
+		} else {
+			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found and valid.', 'the-seo-framework-extension-manager' ) );
+
+		}
+
+		if ( isset( $data['index'] ) && $data['index'] ) {
+			$content .= $this->wrap_info( $this->small_sample_disclaimer() );
 		}
 
 		if ( empty( $content ) ) {

@@ -83,6 +83,12 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
 
+### 1.2.8
+
+[tsfep-release time="-1"]
+
+* **Improved:** The valid sitemap message is now more descriptive.
+
 ### 1.2.7
 
 [tsfep-release time="February 9th, 2021"]

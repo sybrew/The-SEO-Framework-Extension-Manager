@@ -105,7 +105,7 @@ final class Server {
 	 * @param int $interval The polling interval in seconds.
 	 * @return bool false on failure, true otherwise.
 	 */
-	public function start( $interval = 3000 ) {
+	public function start( $interval = 1000 ) {
 
 		if ( ! static::$supports_stream ) return false;
 
@@ -161,9 +161,10 @@ final class Server {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param bool $forcepad Whether to force padding.
 	 * @return bool true on success, false on failure.
 	 */
-	public function flush() {
+	public function flush( $forcepad = false ) {
 
 		if ( ! static::$supports_stream ) return false;
 		if ( connection_aborted() ) return false;

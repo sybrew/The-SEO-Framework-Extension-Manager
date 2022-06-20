@@ -127,7 +127,7 @@ final class Handler {
 					'server'     => $server,
 					'poll_data'  => [ 'results' => $this->get_ajax_notice( false, 1060202 ) ],
 					'logger_uid' => $logger_uid,
-					'event'      => 'tsfem-e-transport-failure',
+					'event'      => 'tsfem-e-transport-locked',
 					'type'       => 'failure',
 				] );
 
@@ -204,7 +204,7 @@ final class Handler {
 										sprintf(
 											/* translators: %d = post ID */
 											\esc_html__( 'Post ID %d imported succesfully.', 'the-seo-framework-extension-manager' ),
-											$post_id
+											$post_id,
 										)
 									);
 								}
@@ -291,7 +291,9 @@ final class Handler {
 					'logMsg'  =>
 						sprintf(
 							( $streaming
+								/* translators: %s = Unknown error reason */
 								? \esc_html__( 'Server stopped execution. Reason: %s. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
+								/* translators: %s = Unknown error reason */
 								: \esc_html__( 'Server stopped execution: Reason: %s. Please try again to resume.', 'the-seo-framework-extension-manager' )
 							),
 							$e->getMessage() ?: 'undefined'

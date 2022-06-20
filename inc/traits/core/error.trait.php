@@ -583,12 +583,12 @@ trait Error {
 				break;
 
 			case 1010804:
-				$message = \esc_html__( 'Monitor has updated your site settings, but your site is now out of sync. You should fetch data.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Updated site settings, but your site is now out of sync. You should fetch data.', 'the-seo-framework-extension-manager' );
 				$type    = 'warning';
 				break;
 
 			case 1010805:
-				$message = \esc_html__( 'Monitor has updated your site settings.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Updated site settings.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 

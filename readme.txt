@@ -83,6 +83,7 @@ TODO de-jQueryfy?
 	-> Especially form.js
 TODO function(){} => ()=>{}
 TODO coalesce_var() => ??
+TODO /isset\( (.*?) \) \? \1/ -> ??
 
 TODO add grid display to importer options...
 
@@ -93,6 +94,13 @@ TODO convert all serialized objects to JSON for future parsing, such as requesti
 
 TODO fix notice bounce (reintroduced for we ditched the stagnant :empty selector)
 TODO fewer jQuery animations, more CSS animations.
+
+TODO (FIXED, clean up) instead of a fancy observer on logger, we might simply just test if user is scrolled all the way to the bottom, and if so, append data and instantly scroll down.
+
+TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
+	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
+
+TODO we use hrtime(), PHP 7.3+.... ooops?
 
 = 2.5.3 =
 

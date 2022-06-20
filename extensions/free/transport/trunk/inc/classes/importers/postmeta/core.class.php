@@ -62,6 +62,27 @@ abstract class Core {
 	 */
 	final public function import() {
 		global $wpdb;
+		// var_dump() dummy wpdb.
+		// $wpdb = new class {
+		// 	public $postmeta   = '';
+		// 	public $last_error = '';
+		// 	function __construct() {
+		// 		$this->postmeta = $GLOBALS['wpdb']->postmeta;
+		// 	}
+		// 	public function update() {
+		// 		usleep( random_int( 2900, 5800 ) );
+		// 		// usleep( random_int( 29000, 58000 ) );
+		// 		return true;
+		// 	}
+		// 	public function insert() {
+		// 		usleep( random_int( 2500, 5000 ) );
+		// 		// usleep( random_int( 25000, 50000 ) );
+		// 		return true;
+		// 	}
+		// 	public function get_var(...$args) { return $GLOBALS['wpdb']->get_var(...$args); }
+		// 	public function get_col(...$args) { return $GLOBALS['wpdb']->get_col(...$args); }
+		// 	public function prepare(...$args) {return $GLOBALS['wpdb']->prepare(...$args);}
+		// };
 
 		// Assume that we don't need to keep track of how much data is transported?
 		// Assume we do not need to transport in batches? -> Tackle when we need to? -> Tell user to try again, and again...?
@@ -204,7 +225,7 @@ abstract class Core {
 					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				}
 
-				$is_lastpost = $post_iterator === $total_posts;
+				$is_lastpost = $post_iterator - 1 === $total_posts;
 				yield 'results' => [ $results, $actions, $post_id, $is_lastpost ];
 
 				// This can bust cache of caching plugins. Intended: Update the post!

@@ -103,6 +103,7 @@ window.tsfem_e_import = function() {
 		button.classList.add( ...buttonLoadingClasses );
 		_disableButtons();
 		_setLoggerLoader();
+		_startLoggerAnimation();
 
 		const formNs   = 'tsfem-e-transport-importer';
 		const form     = document.getElementById( formNs );
@@ -139,6 +140,8 @@ window.tsfem_e_import = function() {
 					delete el.dataset.handlerDisabled;
 				} );
 			} );
+
+			_stopLoggerAnimation();
 		} );
 	}
 
@@ -164,11 +167,12 @@ window.tsfem_e_import = function() {
 
 		const SSE = new EventSource( url.href );
 
-
-		SSE.onopen = () => { _log( logStart ) };
+		SSE.onopen = () => {
+			_log( logStart )
+		};
 		SSE.onerror = event => {
 			SSE.close();
-			_log( l10n.i18n.logMessages.unknownErrorFull );
+			_log( l10n.i18n.logMessages.unknownErrorFull, 2 );
 			reject( l10n.i18n.logMessages.unknownError );
 		}
 
@@ -182,13 +186,13 @@ window.tsfem_e_import = function() {
 		const doEventResolve = event => {
 			SSE.close();
 			let data = extractEventData( event.data );
-			_log( data?.logMsg );
+			_log( data.logMsg, 2 );
 			resolve( data?.results.notice );
 		}
 		const doEventReject = event => {
 			SSE.close();
 			let data = extractEventData( event.data );
-			_log( data?.logMsg );
+			_log( data?.logMsg, 2 );
 			reject( data?.results.notice );
 		}
 
@@ -198,6 +202,7 @@ window.tsfem_e_import = function() {
 		SSE.addEventListener( 'tsfem-e-transport-done', doEventResolve );
 
 		SSE.addEventListener( 'tsfem-e-transport-failure', doEventReject );
+		SSE.addEventListener( 'tsfem-e-transport-locked', doEventReject );
 		SSE.addEventListener( 'tsfem-e-transport-crash', doEventReject );
 		SSE.addEventListener( 'tsfem-e-transport-timeout', event => {
 			// Only log, retry automatically.
@@ -218,7 +223,7 @@ window.tsfem_e_import = function() {
 	 */
 	const _handlePost = ( handle, formData, logStart ) => new Promise( ( resolve, reject ) => {
 
-		_log( logStart );
+		_log( logStart, 1 );
 
 		wp.ajax.post(
 			'tsfem_e_transport',
@@ -229,27 +234,53 @@ window.tsfem_e_import = function() {
 			}
 		).done( data => {
 			resolve( data?.results?.notice );
-			_log( data?.logMsg );
+			_log( data?.logMsg, 2 );
 		} ).fail( response => {
 			reject( response.data?.results?.notice );
-			_log( response.data?.logMsg );
+			_log( response.data?.logMsg, 2 );
 		} );
 	} );
 
 	const _logger = document.getElementById( 'tsfem-e-transport-logger' );
 	/**
-	 * Writes data to logger.
+	 * Writes data to logger queue.
+	 * Must start logger animation.
 	 *
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param {String} message The message to log
+	 * @param {String}  message The message to log
+	 * @param {Integer} newLine Whether to add newlines.
 	 * @function
 	 */
-	const _log = message => {
+	const _log = ( message, newLine ) => {
 		if ( _logger && message?.length )
-			_logger.innerHTML += '\n&ratio; ' + tsf.escapeString( tsf.decodeEntities( message ) );
+			tsfem_ui.logger.queue(
+				_logger,
+				`\n&ratio; ${tsf.escapeString( tsf.decodeEntities( message ) )}${( '\n'.repeat( newLine || 0 ) )}`
+			);
 	}
+
+	/**
+	 * Starts logger animation. Required to write to logger queue.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @param {String}  message The message to log
+	 * @param {Integer} newLine Whether to add newlines.
+	 * @function
+	 */
+	const _startLoggerAnimation = () => _logger && tsfem_ui.logger.start( _logger );
+	/**
+	 * Stops logger animation.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @function
+	 */
+	const _stopLoggerAnimation = () => _logger && tsfem_ui.logger.stop( _logger );
 
 	/**
 	 * Sets up importer select display.
