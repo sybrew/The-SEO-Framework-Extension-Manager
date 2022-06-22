@@ -70,13 +70,13 @@ abstract class Core {
 		// 		$this->postmeta = $GLOBALS['wpdb']->postmeta;
 		// 	}
 		// 	public function update() {
-		// 		usleep( random_int( 2900, 5800 ) );
-		// 		// usleep( random_int( 29000, 58000 ) );
+		// 		// usleep( random_int( 2900, 5800 ) );
+		// 		usleep( random_int( 29000, 58000 ) );
 		// 		return true;
 		// 	}
 		// 	public function insert() {
-		// 		usleep( random_int( 2500, 5000 ) );
-		// 		// usleep( random_int( 25000, 50000 ) );
+		// 		// usleep( random_int( 2500, 5000 ) );
+		// 		usleep( random_int( 25000, 50000 ) );
 		// 		return true;
 		// 	}
 		// 	public function get_var(...$args) { return $GLOBALS['wpdb']->get_var(...$args); }
@@ -114,6 +114,9 @@ abstract class Core {
 			$post_iterator = 1;
 
 			foreach ( $post_ids as $post_id ) :
+				// Clear query cache every 25 queries when Database debugging is enabled (e.g. Query Monitor)
+				if ( ! ( $post_iterator % 25 ) )
+					$wpdb->queries = [];
 
 				$results = [];
 
@@ -228,7 +231,7 @@ abstract class Core {
 				$is_lastpost = $post_iterator - 1 === $total_posts;
 				yield 'results' => [ $results, $actions, $post_id, $is_lastpost ];
 
-				// This can bust cache of caching plugins. Intended: Update the post!
+				// This also busts cache of caching plugins. Intended: Update the post!
 				\clean_post_cache( $post_id );
 			endforeach;
 		endforeach;

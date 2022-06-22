@@ -44,6 +44,20 @@ window.tsfem_e_import = function() {
 	 */
 	const l10n = tsfem_e_transportL10n;
 
+	/**
+	 * @since 1.0.0
+	 * @access private
+	 * @type {int} The retry timeout in milliseconds.
+	 */
+	const retryTimeout = 5000;
+
+	/**
+	 * @since 1.0.0
+	 * @access private
+	 * @type {int} The number of retries allowed before manual intervention is required.
+	 */
+	const retryLimit = 5;
+
 	const _enableButtons = disable => {
 		disable ||= false;
 		[
@@ -160,54 +174,94 @@ window.tsfem_e_import = function() {
 
 		const url = new URL( ajaxurl, new URL( document.baseURI ).origin );
 
-		url.searchParams.append( 'action', 'tsfem_e_transport' );
-		url.searchParams.append( 'handle', handle );
-		url.searchParams.append( 'nonce', l10n.nonce );
-		url.searchParams.append( 'data', formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString() );
+		url.searchParams.set( 'action', 'tsfem_e_transport' );
+		url.searchParams.set( 'handle', handle );
+		url.searchParams.set( 'nonce', l10n.nonce );
+		url.searchParams.set( 'data', formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString() );
 
-		const SSE = new EventSource( url.href );
+		let retryCount           = 0,
+			urlParamRetryAllowed = 1;
 
-		SSE.onopen = () => {
-			_log( logStart )
-		};
-		SSE.onerror = event => {
-			SSE.close();
-			_log( l10n.i18n.logMessages.unknownErrorFull, 2 );
-			reject( l10n.i18n.logMessages.unknownError );
-		}
+		const startSSE = () => {
+			url.searchParams.set( 'retryAllowed', urlParamRetryAllowed );
 
-		const extractEventData = data => {
-			try {
-				return JSON.parse( data );
-			} catch ( error ) {
-				return void 0;
+			const SSE = new EventSource( url.href );
+
+			SSE.onopen = () => {
+				_log( logStart )
+			};
+			SSE.onerror = event => {
+				SSE.close();
+				_log( l10n.i18n.logMessages.unknownErrorFull, 2 );
+				reject( l10n.i18n.logMessages.unknownError );
 			}
-		}
-		const doEventResolve = event => {
-			SSE.close();
-			let data = extractEventData( event.data );
-			_log( data.logMsg, 2 );
-			resolve( data?.results.notice );
-		}
-		const doEventReject = event => {
-			SSE.close();
-			let data = extractEventData( event.data );
-			_log( data?.logMsg, 2 );
-			reject( data?.results.notice );
+			const extractEventData = data => {
+				try {
+					return JSON.parse( data );
+				} catch ( error ) {
+					return void 0;
+				}
+			}
+			const doEventResolve = event => {
+				SSE.close();
+				let data = extractEventData( event.data );
+				_log( '&nbsp;' );
+				_log( "\n" + data.logMsg, 2 );
+				resolve( data?.results.notice );
+			}
+			const doEventReject = event => {
+				SSE.close();
+				let data = extractEventData( event.data );
+				_log( '&nbsp;' );
+				_log( data?.logMsg, 2 );
+				reject( data?.results.notice );
+			}
+			const doEventRetry = event => {
+
+				retryCount++;
+
+				_log( '===============', 1 );
+
+				if ( retryCount > retryLimit ) {
+					_log( l10n.i18n.logMessages.retryLimitReached );
+					return doEventReject( event );
+				}
+
+				// Not <= because we counted.
+				urlParamRetryAllowed = retryCount < retryLimit ? 1 : 0;
+
+				SSE.close();
+				// Only log, retry automatically.
+				_log( extractEventData( event.data )?.logMsg, 1 );
+
+				// Start at 1 because when we hit 1 we immediately start
+				let retryTick = 1;
+				const retryTicker = setInterval( () => {
+					let countDown = ( retryTimeout / 1000 ) - retryTick++,
+						lastTick  = countDown < 2;
+
+					_log( l10n.i18n.logMessages.retryCountdown.replace( '%d', countDown ), lastTick ? 1 : 0 );
+
+					if ( lastTick )
+						clearInterval( retryTicker );
+				}, 1000 );
+
+				setTimeout( startSSE, retryTimeout );
+			}
+
+			SSE.addEventListener( 'tsfem-e-transport-log', event => {
+				_log( extractEventData( event.data )?.content );
+			} );
+			SSE.addEventListener( 'tsfem-e-transport-done', doEventResolve );
+
+			SSE.addEventListener( 'tsfem-e-transport-failure', doEventReject );
+			SSE.addEventListener( 'tsfem-e-transport-locked', doEventReject );
+
+			SSE.addEventListener( 'tsfem-e-transport-crash', doEventRetry );
+			SSE.addEventListener( 'tsfem-e-transport-timeout', doEventRetry );
 		}
 
-		SSE.addEventListener( 'tsfem-e-transport-log', event => {
-			_log( extractEventData( event.data )?.content );
-		} );
-		SSE.addEventListener( 'tsfem-e-transport-done', doEventResolve );
-
-		SSE.addEventListener( 'tsfem-e-transport-failure', doEventReject );
-		SSE.addEventListener( 'tsfem-e-transport-locked', doEventReject );
-		SSE.addEventListener( 'tsfem-e-transport-crash', doEventReject );
-		SSE.addEventListener( 'tsfem-e-transport-timeout', event => {
-			// Only log, retry automatically.
-			_log( extractEventData( event.data )?.logMsg );
-		} );
+		startSSE();
 	} );
 
 	/**

@@ -357,7 +357,7 @@ trait UI {
 					'name' => 'tsfemFormL10n',
 					'data' => [
 						'nonce'  => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-form-nonce' ) : '',
-						'callee' => \get_class( $this ), //! Don't use __CLASS__, we require the core instance.
+						'callee' => \get_class( $this ), //! Don't use __CLASS__, we require the core instance. TODO self::class?
 						'i18n'   => [
 							// TODO categorize in multidimensionals
 							// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- Alignment is fine.

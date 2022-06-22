@@ -149,9 +149,6 @@ final class Handler {
 			$time_limit += time() - 5;
 		}
 
-		// TODO gauge memory usage and timeouts? -> We should!
-		// TODO start timer + memory usage
-		// TODO keep track of timer (timeout) + memory usage and kill if exceed.
 		try {
 			if ( \in_array( 'postmeta', $import_settings['selectType'], true ) ) :
 				$_class = __NAMESPACE__ . "\\Importers\\PostMeta\\{$import_settings['choosePlugin']}";
@@ -212,7 +209,24 @@ final class Handler {
 							if ( $is_lastpost ) {
 								$store->store( '===============' );
 							} else {
-								$store->store( '---------------' );
+								$store->store( '&nbsp;' );
+							}
+
+							// Test if limit is reached after every post conversion.
+							if ( $time_limit < time() ) {
+								$this->release_transport_lock();
+								$this->_halt_server( [
+									'server'     => $server,
+									'poll_data'  => [
+										'results' => $this->get_ajax_notice( false, 1060203 ),
+										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
+											? \esc_html__( 'Transporting time limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
+											: \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+									],
+									'logger_uid' => $logger_uid,
+									'event'      => 'tsfem-e-transport-timeout',
+									'type'       => 'failure',
+								] );
 							}
 							break;
 
@@ -256,22 +270,6 @@ final class Handler {
 							break;
 					endswitch;
 
-					// TODO FIXME: This needs to output after every post, not yield.
-					if ( $time_limit < time() ) {
-						$this->release_transport_lock();
-						$this->_halt_server( [
-							'server'     => $server,
-							'poll_data'  => [
-								'results' => $this->get_ajax_notice( false, 1060203 ),
-								'logMsg'  => $streaming
-									? \esc_html__( 'Transporting time limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-									: \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
-							],
-							'logger_uid' => $logger_uid,
-							'event'      => 'tsfem-e-transport-timeout',
-							'type'       => 'failure',
-						] );
-					}
 					$streaming = $server->poll( $store );
 				endforeach;
 			endif;
@@ -290,12 +288,11 @@ final class Handler {
 					'results' => $this->get_ajax_notice( false, 1060204 ),
 					'logMsg'  =>
 						sprintf(
-							( $streaming
+							$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 								/* translators: %s = Unknown error reason */
 								? \esc_html__( 'Server stopped execution. Reason: %s. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
 								/* translators: %s = Unknown error reason */
-								: \esc_html__( 'Server stopped execution: Reason: %s. Please try again to resume.', 'the-seo-framework-extension-manager' )
-							),
+								: \esc_html__( 'Server stopped execution: Reason: %s. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 							$e->getMessage() ?: 'undefined'
 						)
 				],

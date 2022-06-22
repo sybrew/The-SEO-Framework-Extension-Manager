@@ -345,9 +345,12 @@ final class Admin {
 							],
 							'logMessages' => [
 								/* translators: %s = plugin name, such as Yoost SEO */
-								'requestImport'    => \esc_html__( 'Request Importer for %s&hellip;', 'the-seo-framework-extension-manager' ),
-								'unknownError'     => \esc_html__( 'Unknown error', 'the-seo-framework-extension-manager' ),
-								'unknownErrorFull' => \esc_html__( 'An unknown error occured. Please refresh this page and try again.', 'the-seo-framework-extension-manager' ),
+								'requestImport'     => \esc_html__( 'Request Importer for %s&hellip;', 'the-seo-framework-extension-manager' ),
+								'unknownError'      => \esc_html__( 'Unknown error', 'the-seo-framework-extension-manager' ),
+								'unknownErrorFull'  => \esc_html__( 'An unknown error occured. Please refresh this page and try again.', 'the-seo-framework-extension-manager' ),
+								/* translators: %d = Seconds */
+								'retryCountdown'    => \esc_html__( 'Retrying in %d&hellip;', 'the-seo-framework-extension-manager' ),
+								'retryLimitReached' => \esc_html__( 'Automated retry limit reached.', 'the-seo-framework-extension-manager' ),
 							],
 						],
 					],

@@ -102,10 +102,9 @@ final class Server {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $interval The polling interval in seconds.
 	 * @return bool false on failure, true otherwise.
 	 */
-	public function start( $interval = 1000 ) {
+	public function start() {
 
 		if ( ! static::$supports_stream ) return false;
 
@@ -125,9 +124,6 @@ final class Server {
 		static::$streaming = true;
 
 		ob_start();
-
-		// phpcs:ignore, WordPress.Security.EscapeOutput -- unsigned int.
-		printf( "retry: %u\n\n", $interval );
 
 		static::$lastpadstamp = time();
 
