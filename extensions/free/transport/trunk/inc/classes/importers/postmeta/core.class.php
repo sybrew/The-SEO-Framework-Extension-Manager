@@ -70,13 +70,13 @@ abstract class Core {
 		// 		$this->postmeta = $GLOBALS['wpdb']->postmeta;
 		// 	}
 		// 	public function update() {
-		// 		// usleep( random_int( 2900, 5800 ) );
-		// 		usleep( random_int( 29000, 58000 ) );
+		// 		usleep( random_int( 2900, 5800 ) );
+		// 		// usleep( random_int( 290000, 580000 ) );
 		// 		return true;
 		// 	}
 		// 	public function insert() {
-		// 		// usleep( random_int( 2500, 5000 ) );
-		// 		usleep( random_int( 25000, 50000 ) );
+		// 		usleep( random_int( 2500, 5000 ) );
+		// 		// usleep( random_int( 250000, 500000 ) );
 		// 		return true;
 		// 	}
 		// 	public function get_var(...$args) { return $GLOBALS['wpdb']->get_var(...$args); }
@@ -107,6 +107,9 @@ abstract class Core {
 			) ) ?: [];
 
 			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+			// 300,000 posts. var_dump() debug
+			// $post_ids = array_fill( \count( $post_ids ), 50000, $post_ids[ array_key_first( $post_ids ) ] );
 
 			$total_posts = \count( $post_ids );
 			yield 'foundPosts' => [ $total_posts, $post_ids ];

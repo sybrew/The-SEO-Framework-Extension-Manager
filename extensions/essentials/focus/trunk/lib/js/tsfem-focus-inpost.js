@@ -337,11 +337,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 				$.when(
 					tsfem_inpost.tellWorker( workerId, {
-						regex:       regex,
-						inflections: inflections,
-						synonyms:    synonyms,
-						content:     content,
-						assess:      {
+						regex,
+						inflections,
+						synonyms,
+						content,
+						assess: {
 							getCharCount: 'p' === data.scoring.type, // p stands for "percent", which is relative.
 						},
 					} ),

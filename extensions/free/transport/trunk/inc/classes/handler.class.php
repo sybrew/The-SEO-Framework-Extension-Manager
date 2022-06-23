@@ -82,7 +82,6 @@ final class Handler {
 	 * @access private
 	 *
 	 * @param array $supported_importers A map of supported importers.
-	 * @return void If nonce failed.
 	 */
 	public function _import( $supported_importers ) {
 
@@ -120,6 +119,7 @@ final class Handler {
 		}
 
 		prepare : {
+			// Convert 90 posts per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
 			if ( ! $this->lock_transport( $timeout ) )
@@ -147,6 +147,7 @@ final class Handler {
 
 			// Add current time to start rolling, 5 seconds penalty for startup/shutdown time (allows graceful shutdown).
 			$time_limit += time() - 5;
+			$time_limit = time() + 10; // var_dump() test
 		}
 
 		try {
@@ -323,7 +324,7 @@ final class Handler {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $release_timeout The time (in seconds) a lock should regarded as valid.
+	 * @param int $release_timeout The time (in seconds) a lock should be regarded as valid.
 	 * @return bool False if already locked, true if new lock is placed.
 	 */
 	protected function lock_transport( $release_timeout = 60 ) {

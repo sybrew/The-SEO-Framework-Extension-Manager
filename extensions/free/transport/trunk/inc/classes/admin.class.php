@@ -479,4 +479,24 @@ final class Admin {
 	public function _logger_overview() {
 		$this->get_view( 'layout/panes/logger' );
 	}
+
+	/**
+	 * Outputs logger footer pane.
+	 *
+	 * @since 1.0.0
+	 */
+	public function _logger_bottom_wrap() {
+		printf(
+			'<div class=tsf-tooltip-wrap><button type=button id=tsfem-e-transport-copy-log class="%s" data-copyconfirm="%s" data-copyfail="%s">%s</button></div>',
+			'hide-if-no-tsf-js tsfem-button tsfem-button-clipboard tsf-tooltip-item',
+			\esc_attr__( 'Copied!', 'the-seo-framework-extension-manager' ),
+			\esc_attr__( 'Failed to copy', 'the-seo-framework-extension-manager' ),
+			\esc_html__( 'Copy log', 'the-seo-framework-extension-manager' )
+		);
+		printf(
+			'<button type=button id=tsfem-e-transport-scroll-log class="%s">%s</button>',
+			'hide-if-no-tsf-js tsfem-button-primary tsfem-button-primary-dark tsfem-button-down',
+			\esc_html__( 'Scroll to bottom', 'the-seo-framework-extension-manager' )
+		);
+	}
 }

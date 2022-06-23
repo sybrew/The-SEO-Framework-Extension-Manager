@@ -32,5 +32,6 @@ tsf_extension_manager()->_do_pane_wrap_callable(
 		'pane_id'  => 'tsfem-e-transport-log-pane',
 		'ajax'     => true,
 		'ajax_id'  => 'tsfem-e-transport-log-ajax',
+		'footer'   => [ $this, '_logger_bottom_wrap' ],
 	]
 );

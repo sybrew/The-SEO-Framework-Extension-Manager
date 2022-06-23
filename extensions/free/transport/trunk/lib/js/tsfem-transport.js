@@ -337,6 +337,40 @@ window.tsfem_e_import = function() {
 	const _stopLoggerAnimation = () => _logger && tsfem_ui.logger.stop( _logger );
 
 	/**
+	 * Copies logger's contents.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @function
+	 * @param {Event} event Button click event.
+	 */
+	const _copyLog = event => {
+		if ( ! _logger ) return;
+
+		const removeTT = () => setTimeout( () => {
+			tsfTT.removeTooltip( event.target );
+		}, 3000 );
+
+		tsfem_ui.logger.copy( _logger ).then( () => {
+			tsfTT.doTooltip( event, event.target, event.target.dataset.copyconfirm );
+			removeTT();
+		} ).catch( () => {
+			tsfTT.doTooltip( event, event.target, event.target.dataset.copyfail );
+			removeTT();
+		} );
+	}
+	/**
+	 * Copies logger's contents.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 *
+	 * @function
+	 */
+	const _scrollLogToBottom = () => _logger && tsfem_ui.logger.scrollToBottom( _logger );
+
+	/**
 	 * Sets up importer select display.
 	 *
 	 * This callback doesn't have its element-fetchers optimized; however, since it is a one-time operation,
@@ -449,6 +483,9 @@ window.tsfem_e_import = function() {
 		const importSelector = document.getElementById( 'tsfem-e-transport-importer[choosePlugin]' );
 		importSelector.addEventListener( 'change', _importerSelectPlugin );
 		importSelector.dispatchEvent( new Event( 'change' ) );
+
+		document.getElementById( 'tsfem-e-transport-copy-log' )?.addEventListener( 'click', _copyLog );
+		document.getElementById( 'tsfem-e-transport-scroll-log' )?.addEventListener( 'click', _scrollLogToBottom );
 	}
 
 	return Object.assign( {

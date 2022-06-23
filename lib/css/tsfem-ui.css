@@ -457,6 +457,7 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 .tsfem-button-cloud:after,
 .tsfem-button-external:after,
 .tsfem-button-image:after,
+.tsfem-button-down:after,
 .tsfem-button-loading:after {
 	display: inline-block;
 	width: 1em;
@@ -482,6 +483,7 @@ body.rtl .tsfem-button-index:after,
 body.rtl .tsfem-button-cloud:after,
 body.rtl .tsfem-button-external:after,
 body.rtl .tsfem-button-image:after,
+body.rtl .tsfem-button-down:after,
 body.rtl .tsfem-button-loading:after {
 	margin-left: 0;
 	margin-right: .5em;
@@ -529,6 +531,10 @@ body.rtl .tsfem-button-loading:after {
 
 .tsfem-button-image:after {
 	content: "\f128";
+}
+
+.tsfem-button-down:after {
+	content: "\f347";
 }
 
 .tsfem-button-loading:after {

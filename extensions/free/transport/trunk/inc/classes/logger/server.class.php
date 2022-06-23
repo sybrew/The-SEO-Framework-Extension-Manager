@@ -113,6 +113,9 @@ final class Server {
 		// Disable. With it enabled it would otherwise cause double-output.
 		ob_implicit_flush( false );
 
+		// Abort shouldn't cause shutdown functions to run. Continue transporting in the background.
+		ignore_user_abort( true );
+
 		foreach ( [
 			'Content-Type'      => 'text/event-stream',
 			'Cache-Control'     => 'no-store, no-cache, no-transform', // Discourages all caching.
