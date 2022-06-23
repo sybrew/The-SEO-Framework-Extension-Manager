@@ -195,7 +195,7 @@ final class Admin extends Core {
 				'name'     => 'tsfem-focus-inpost',
 				'base'     => TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
 				'ver'      => TSFEM_E_FOCUS_VERSION,
-				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost' ],
+				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost', 'tsfem-worker' ],
 				'autoload' => true,
 				'l10n'     => [
 					'name' => 'tsfem_e_focusInpostL10n',

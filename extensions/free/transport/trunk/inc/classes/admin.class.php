@@ -327,7 +327,7 @@ final class Admin {
 			[
 				'id'       => 'tsfem-transport',
 				'type'     => 'js',
-				'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
+				'deps'     => [ 'tsf-tt', 'tsfem-worker', 'tsfem-ui' ],
 				'autoload' => true,
 				'name'     => 'tsfem-transport',
 				'base'     => TSFEM_E_TRANSPORT_DIR_URL . 'lib/js/',

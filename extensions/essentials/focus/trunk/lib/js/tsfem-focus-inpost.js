@@ -213,17 +213,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 */
 		const elements = focusRegistry;
 
-		let areas = activeFocusAreas,
-			types = {},
-			hasDominant = false,
+		let areas        = activeFocusAreas,
+			types        = {},
+			hasDominant  = false,
 			lastDominant = '',
-			keys = [];
+			keys         = [];
 
 		const update = ( _area ) => {
-			types = elements[ _area ];
-			hasDominant = false;
+			types        = elements[ _area ];
+			hasDominant  = false;
 			lastDominant = '';
-			keys = [];
+			keys         = [];
+
 			if ( typeof types.dominate !== 'undefined' ) {
 				types.dominate.forEach( selector => {
 					//= Skip if the selector doesn't exist.
@@ -281,20 +282,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {HTMLElement} rater The score element wrap.
 	 */
-	const doCheck = ( rater ) => {
+	const doCheck = rater => {
 
 		let idPrefix   = getSubIdPrefix( rater.id ),
-			workerId   = 'e_focus_pw_' + $( rater ).data( 'assessment-type' ) + '_' + idPrefix,
+			workerId   = `e_focus_pw_${rater.dataset.assessmentType}_${idPrefix}`,
 			ratingIcon = rater.querySelector( '.tsfem-e-focus-assessment-rating' );
 
-		if ( tsfem_inpost.isWorkerBusy( workerId ) ) {
+		if ( tsfem_worker.isWorkerBusy( workerId ) ) {
 			// Debounce if worker is busy.
 			workerId in _debouncedChecks && clearTimeout( _debouncedChecks[ workerId ] );
 			_debouncedChecks[ workerId ] = setTimeout( () => doCheck( rater ), 2000 );
 			return;
 		}
 		delete _debouncedChecks[ workerId ];
-		tsfem_inpost.occupyWorker( workerId );
+		tsfem_worker.occupyWorker( workerId );
 		tsfem_inpost.setIconClass( ratingIcon, 'loading' );
 
 		/**
@@ -318,25 +319,26 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			regex = [ regex ];
 		}
 
-		const checkElement = ( element ) => {
-			let selector = document.querySelector( element ),
-				$dfd     = $.Deferred();
+		const checkElement = ( element ) => new Promise( ( resolve, reject ) => {
+
+			let selector = document.querySelector( element );
 
 			content = typeof selector.value !== 'undefined' ? selector.value : '';
 			// if ( ! content.length ) content = selector.placeholder;
 			if ( ! content.length )
 				content = selector.innerHTML;
-			if ( ! content.length ) return $dfd.resolve();
+			if ( ! content.length ) return resolve();
 
 			setTimeout( async () => {
 
 				await (
-					tsfem_inpost.getWorker( workerId )
-					|| tsfem_inpost.spawnWorker( l10n.scripts.parserWorker, workerId )
+					tsfem_worker.getWorker( workerId )
+					|| tsfem_worker.spawnWorker( l10n.scripts.parserWorker, workerId )
 				);
 
-				$.when(
-					tsfem_inpost.tellWorker( workerId, {
+				tsfem_worker.tellWorker(
+					workerId,
+					{
 						regex,
 						inflections,
 						synonyms,
@@ -344,22 +346,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						assess: {
 							getCharCount: 'p' === data.scoring.type, // p stands for "percent", which is relative.
 						},
-					} ),
-				).done( ( data ) => {
+					}
+				).then( ( data ) => {
 					inflectionCount     = data.inflectionCount;
 					synonymCount        = data.synonymCount;
 					inflectionCharCount = data.inflectionCharCount;
 					synonymCharCount    = data.synonymCharCount;
 					contentCharCount    = data.contentCharCount;
 
-					$dfd.resolve();
-				} ).fail( ( message ) => { // NOTE: Parameters aren't set as intended?
-					$dfd.reject();
+					resolve();
+				} ).catch( message => { // NOTE: Parameters aren't set as intended?
+					reject();
 				} );
 			} );
-
-			return $dfd.promise();
-		}
+		} );
 
 		//= Calculate scores when done.
 		const showScore = () => {
@@ -385,7 +385,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// const calcEndDensityScore = ( score, max, min, penalty ) => getMaxIfOver( max, Math.max( min, max - ( score - max ) * penalty ) );
 
 			switch ( scoring.type ) {
-				case 'n' :
+				case 'n':
 					if ( inflectionCount )
 						realScore += calcScoreN( scoring.keyword, getMaxIfOver( scoring.keyword.max, inflectionCount ) );
 					if ( synonymCount )
@@ -394,7 +394,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					// endScore = realScore;
 					break;
 
-				case 'p' :
+				case 'p':
 					if ( contentCharCount ) {
 						if ( inflectionCharCount )
 							density += calcDensity( contentCharCount, calcSChars( scoring.keyword.weight, inflectionCharCount ) );
@@ -408,11 +408,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 
 			//= Store realScore in input for saving.
-			let input = document.querySelector( 'input[name="' + rater.id + '"]' );
+			let input = document.querySelector( `input[name="${rater.id}"]` );
 			if ( input ) input.value = realScore;
 
 			//= Gets description based on nearest threshold value.
-			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
+			let description    = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
 				newDescription = getNearestNumericIndexValue( data.phrasing, realScore );
 
 			if ( description.innerHTML === newDescription ) {
@@ -421,12 +421,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					ratingIcon,
 					getIconType( data.rating, realScore )
 				);
-				description.style.opacity = '1';
+				description.style.opacity    = '1';
 				description.style.willChange = 'auto';
 			} else {
 				description.style.willChange = 'contents, opacity';
-				description.style.opacity = '0';
-				description.innerHTML = newDescription;
+				description.style.opacity    = '0';
+				description.innerHTML        = newDescription;
 				tsfem_inpost.setIconClass(
 					ratingIcon,
 					getIconType( data.rating, realScore )
@@ -451,12 +451,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					ratingIcon,
 					getIconType( -1, -1 )
 				);
-				description.style.opacity = '1';
+				description.style.opacity    = '1';
 				description.style.willChange = 'auto';
 			} else {
 				description.style.willChange = 'contents, opacity';
-				description.style.opacity = '0';
-				description.innerHTML = newDescription;
+				description.style.opacity    = '0';
+				description.innerHTML        = newDescription;
 				tsfem_inpost.setIconClass(
 					ratingIcon,
 					getIconType( -1, -1 )
@@ -467,20 +467,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		//= Run over element asynchronously and sequentially, when done, resolve function promise.
-		$.when( tsfem_inpost.promiseLoop(
+		tsfem_inpost.promiseLoop(
 			activeFocusAreas[ data.assessment.content ],
 			checkElement,
 			5,
 			30000 // fail at 30s
-		) )
-		.done( () => {
+		).then( () => {
 			showScore();
-			tsfem_inpost.freeWorker( workerId );
-		} )
-		.fail( () => {
+			tsfem_worker.freeWorker( workerId );
+		} ).catch( () => {
 			// Worker likely got stuck. Let's despawn it.
 			showFailure();
-			tsfem_inpost.despawnWorker( workerId );
+			tsfem_worker.despawnWorker( workerId );
 		} );
 	}
 
@@ -516,7 +514,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
-		return ret ? ret : ( obj[ Object.keys( obj )[0] ] || '' );
+		return ret || obj[ Object.keys( obj )[0] ] || '';
 	}
 
 	/**
@@ -533,7 +531,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @return {string} The icon class.
 	 */
 	const getIconType = ( ratings, value ) => {
-		let index = getNearestNumericIndexValue( ratings, value ).toString(),
+		let index   = getNearestNumericIndexValue( ratings, value ).toString(),
 			classes = {
 				'-1' : 'error',
 				'0'  : 'unknown',
@@ -543,9 +541,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				'4'  : 'good',
 			};
 
-		return ( typeof classes[ index ] !== 'undefined' )
-			&& classes[ index ]
-			|| classes['-1'];
+		return classes?.[ index ] || classes['-1'];
 	}
 
 	/**
@@ -599,40 +595,36 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 		const getLexicalForms = ( idPrefix, keyword ) => {
-			let ops = {
-				method:   'POST',
-				url:      ajaxurl,
-				dataType: 'json',
-				data: {
-					action: 'tsfem_e_focus_get_lexicalforms',
-					nonce:   l10n.nonce,
-					post_ID: tsfem_inpost.postID,
-					args:    {
-						keyword,
-						language: l10n.language,
+			return tsfem_inpost.doAjax(
+				{
+					method:   'POST',
+					url:      ajaxurl,
+					dataType: 'json',
+					data: {
+						action: 'tsfem_e_focus_get_lexicalforms',
+						nonce:   l10n.nonce,
+						post_ID: tsfem_inpost.postID,
+						args:    {
+							keyword,
+							language: l10n.language,
+						},
 					},
+					timeout:  15000,
+					async:    true,
 				},
-				timeout:  15000,
-				async:    true,
-			};
-
-			let $dfd = $.Deferred();
-
-			tsfem_inpost.doAjax(
-				$dfd,
-				ops,
-				{ 'noticeArea': noticeArea, 'premium': true }
+				{
+					noticeArea,
+					premium: true
+				}
 			);
-
-			return $dfd.promise();
 		}
 
-		$.when( getLexicalForms( idPrefix, keyword ) ).done( ( data ) => {
+		getLexicalForms( idPrefix, keyword ).then( data => {
 			setLexicalFormSelectionFields( data.forms );
-		} ).fail( () => {
+		} ).catch( () => {
 			//= Redundant.
 			clearData( idPrefix, 'lexical' );
-		} ).always( () => {
+		} ).finally( () => {
 			setEditButton( idPrefix ).to( 'edit' );
 		} );
 	}
@@ -804,8 +796,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			lexicalDataField = getSubElementById( idPrefix, 'lexical_data' );
 
 		const apiHandler = ( type ) => {
-			let action,
-				$dfd = $.Deferred();
+			let action;
 
 			if ( 'inflections' === type ) {
 				action = 'tsfem_e_focus_get_inflections';
@@ -813,38 +804,31 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				action = 'tsfem_e_focus_get_synonyms';
 			}
 
-			if ( ! action ) {
-				$dfd.reject();
-				return $dfd.promise();
-			}
+			if ( ! action )
+				return Promise.reject();
 
-			let ops = {
-				method: 'POST',
-				url: ajaxurl,
-				dataType: 'json',
-				data: {
-					action,
-					nonce: l10n.nonce,
-					post_ID: tsfem_inpost.postID,
-					args: {
-						form: JSON.parse( lexicalDataField.value )[ lexicalFormField.value ],
-						language: l10n.language,
+			return tsfem_inpost.doAjax(
+				{
+					method: 'POST',
+					url: ajaxurl,
+					dataType: 'json',
+					data: {
+						action,
+						nonce: l10n.nonce,
+						post_ID: tsfem_inpost.postID,
+						args: {
+							form: JSON.parse( lexicalDataField.value )[ lexicalFormField.value ],
+							language: l10n.language,
+						},
 					},
+					timeout: 15000,
+					async: true,
 				},
-				timeout: 15000,
-				async: true,
-			};
-
-			tsfem_inpost.doAjax(
-				$dfd,
-				ops,
 				{
 					noticeArea,
 					premium: true
 				}
 			);
-
-			return $dfd.promise();
 		}
 		const getInflections = () => apiHandler( 'inflections' );
 		const getSynonyms    = () => apiHandler( 'synonyms' );
@@ -855,23 +839,19 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			lexicalSelector.value         = value;
 			lexicalSelector.selectedIndex = +value;
 		}
-		const fetchInflections = () => {
-			let $dfd = $.Deferred();
+		const fetchInflections = () => new Promise( ( resolve, reject ) => {
+			if ( ! l10n.languageSupported.inflections )
+				return reject();
 
-			if ( ! l10n.languageSupported.inflections ) {
-				$dfd.reject();
-				return $dfd.promise();
-			}
-
-			$.when( getInflections() ).done( ( data ) => {
+			getInflections().then( data => {
 				if ( data.inflections.length ) {
 					clearData( idPrefix, 'inflections' );
 					getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: data.inflections } ] );
-					$dfd.resolve();
+					resolve();
 				} else {
-					$dfd.reject();
+					reject();
 				}
-			} ).fail( ( code ) => {
+			} ).catch( code => {
 				switch ( code ) {
 					case 1100302: // Word not found
 					case 1100306: // Empty return value
@@ -886,7 +866,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 					default:
 						// Don't forge the request, tyvm.
-						$dfd.reject();
+						reject();
 						return;
 				}
 
@@ -904,7 +884,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					words.push( lexicalWord );
 				} else {
 					// No new word to work with. Reject.
-					$dfd.reject();
+					reject();
 					return;
 				}
 
@@ -912,44 +892,37 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				getSubElementById( idPrefix, 'inflection_data' ).value = JSON.stringify( [ { inflections: words } ] );
 
 				// This is OK; we already have some form of inflection--hopefully.
-				$dfd.resolve();
+				resolve();
 			} );
+		} );
+		const fetchSynonyms = () => new Promise( ( resolve, reject ) => {
+			if ( ! l10n.languageSupported.synonyms )
+				return reject();
 
-			return $dfd.promise();
-		}
-		const fetchSynonyms = () => {
-			let $dfd = $.Deferred();
-
-			if ( ! l10n.languageSupported.synonyms ) {
-				$dfd.reject();
-				return $dfd.promise();
-			}
-
-			$.when( getSynonyms() ).done( ( data ) => {
+			getSynonyms().then( data => {
 				if ( data.synonyms.length ) {
 					clearData( idPrefix, 'definition' );
 					clearData( idPrefix, 'synonyms' );
 					getSubElementById( idPrefix, 'synonym_data' ).value = JSON.stringify( data.synonyms );
-					$dfd.resolve();
+					resolve();
 				} else {
-					$dfd.reject();
+					reject();
 				}
-			} ).fail( ( code ) => {
+			} ).catch( ( code ) => {
 				switch ( code ) {
 					case 1100202: // Word not found
 					case 1100205: // Empty return value
 						clearData( idPrefix, 'definition' );
 						clearData( idPrefix, 'synonyms' );
-						$dfd.reject();
+						reject();
 						break;
 
 					default:
-						$dfd.reject();
+						reject();
 						break;
 				}
 			} );
-			return $dfd.promise();
-		}
+		} );
 		const run = () => {
 			setEditButton( idPrefix ).to( 'loading' );
 			clearTimeout( lexicalFormSelectionBuffer[ idPrefix ] );
@@ -960,46 +933,28 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				} else {
 					setDefinition( lexicalSelector.value );
 					if ( +lexicalSelector.value ) {
-						let $dfdInflection = void 0,
-							$dfdSynonym    = void 0;
-
-						let $dfdInflectionEnd = $.Deferred(),
-							$dfdSynonymEnd    = $.Deferred();
-
 						// FIXME: The user now gets spammed twice (or thrice) with notifications; find a way to combine them?
 						// We should either combine the query (and offload it to PHP), or resolve it by comparing the notices here.
 						// fetchInflections/fetchSynonyms -> fetchLemmas? -> let PHP handle a combined notice?
 
-						// Workaround jQuery's promise limitations by offsetting the deferred object.
-						$.when( $dfdInflection = fetchInflections() ).always( () => $dfdInflectionEnd.resolve() );
-						// Don't bombard the user's server, wait a little.
-						setTimeout( () => {
-							$.when( $dfdSynonym = fetchSynonyms() ).always( () => $dfdSynonymEnd.resolve() );
-						}, 100 );
+						Promise.allSettled( [ fetchInflections(), fetchSynonyms() ] ).then( results => {
+							lexicalSelector.dataset.prev = lexicalSelector.value;
 
-						//? Button changes at prepareSynonyms
-						$.when( $dfdInflectionEnd, $dfdSynonymEnd ).done( () => {
-							// jQuery's deferred isn't as neat as ECMA's, let's work around that.
-							if ( [ $dfdInflection.state(), $dfdSynonym.state() ].includes( 'resolved' ) ) {
-
-								lexicalSelector.dataset.prev = lexicalSelector.value;
-
-								if ( $dfdInflection.state() !== 'resolved' ) {
-									clearData( idPrefix, 'inflections' );
-								} else if ( $dfdSynonym.state() !== 'resolved' ) {
-									clearData( idPrefix, 'definition' );
-									clearData( idPrefix, 'synonyms' );
-								}
-
-								populateDefinitionSelector( idPrefix );
-								refillSubjectSelection( idPrefix );
-								setEditButton( idPrefix ).to( 'enabled, edit, checked, display' );
-							} else {
-								// FIXME: Notify user the query got reset to previous?... if dataset.prev is not 0?
-								setDefinition( lexicalSelector.dataset.prev || 0 );
-								setEditButton( idPrefix ).to( 'edit' );
+							if ( 'fulfilled' !== results[0].status ) {
+								clearData( idPrefix, 'inflections' );
+							} else if ( 'fulfilled' !== results[1].status ) {
+								clearData( idPrefix, 'definition' );
+								clearData( idPrefix, 'synonyms' );
 							}
-						} );
+
+							populateDefinitionSelector( idPrefix );
+							refillSubjectSelection( idPrefix );
+							setEditButton( idPrefix ).to( 'enabled, edit, checked, display' );
+						} ).catch( () => {
+							// FIXME: Notify user the query got reset to previous?... if dataset.prev is not 0?
+							setDefinition( lexicalSelector.dataset.prev || 0 );
+							setEditButton( idPrefix ).to( 'edit' );
+						} )
 					} else {
 						lexicalSelector.dataset.prev = lexicalSelector.value;
 						setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );

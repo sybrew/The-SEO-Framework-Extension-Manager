@@ -278,6 +278,18 @@ final class InpostGUI {
 			],
 		] );
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
+
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-worker',
+				'type'     => 'js',
+				'deps'     => [],
+				'autoload' => false,
+				'name'     => 'tsfem-worker',
+				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+			],
+		] );
 	}
 
 	/**

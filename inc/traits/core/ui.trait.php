@@ -280,6 +280,18 @@ trait UI {
 			],
 		] );
 
+		$scripts::register( [
+			[
+				'id'       => 'tsfem-worker',
+				'type'     => 'js',
+				'deps'     => [],
+				'autoload' => false,
+				'name'     => 'tsfem-worker',
+				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+			],
+		] );
+
 		if ( $tsfem->is_tsf_extension_manager_page() ) {
 			$scripts::register( [
 				[

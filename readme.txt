@@ -45,6 +45,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * Touched up the interface, it's now more compact and easier on your eyes.
 * Now relies on The SEO Framework's JavaScript availability test, instead of WordPress's, making unresponsive interfaces a thing of the past.
+* Modernized code, especially JavaScript, improving UI responsiveness significantly.
 
 * TODO Add index.php files to extension top-folders
 * TODO require TSF 4.2+
