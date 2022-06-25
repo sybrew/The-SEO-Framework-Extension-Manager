@@ -424,7 +424,7 @@ final class Upgrader {
 	 * @return bool True if possible, false othewise.
 	 */
 	private function can_do_upgrade() {
-		return $this->has_free_memory( 1024 * 1024 * 2 );
+		return $this->has_free_memory( 2 * MB_IN_BYTES );
 	}
 }
 

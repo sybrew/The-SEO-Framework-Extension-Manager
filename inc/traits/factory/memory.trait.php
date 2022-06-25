@@ -50,34 +50,38 @@ class Memory_Cache {
 	 * Returns the memory limit in bytes.
 	 *
 	 * @since 1.5.0
+	 * @since 2.6.0 Can now have cache busted when limit changes.
 	 * @source http://php.net/manual/en/function.ini-get.php
 	 *
+	 * @param bool $bust Whether to bust the cache.
 	 * @return int <bytes> memory limit.
 	 */
-	final public static function get_memory_limit_in_bytes() {
+	final public static function get_memory_limit_in_bytes( $bust = false ) {
 
-		static $limit;
+		static $memo;
 
-		if ( $limit )
-			return $limit;
+		if ( $bust )
+			$memo = null;
 
-		$_limit     = trim( ini_get( 'memory_limit' ) );
-		$quantifier = strtolower( $_limit[ \strlen( $_limit ) - 1 ] );
-		$val        = filter_var( $_limit, FILTER_SANITIZE_NUMBER_INT );
+		if ( isset( $memo ) ) return $memo;
+
+		$limit      = trim( ini_get( 'memory_limit' ) );
+		$quantifier = strtolower( $limit[ \strlen( $limit ) - 1 ] );
+		$limit      = filter_var( $limit, FILTER_SANITIZE_NUMBER_INT );
 
 		switch ( $quantifier ) {
 			case 'g':
-				$val *= 1024;
+				$limit *= 1024;
 				// No break. Run next calculation.
 			case 'm':
-				$val *= 1024;
+				$limit *= 1024;
 				// No break. Run next calculation.
 			case 'k':
-				$val *= 1024;
+				$limit *= 1024;
 				break;
 		}
 
-		return $limit = $val;
+		return $memo = $limit;
 	}
 }
 
@@ -94,11 +98,15 @@ trait Memory {
 	 *
 	 * @since 1.5.0
 	 * @since 2.3.1 Now uses wp_raise_memory_limit()
+	 * @since 2.6.0 Now busts memory limit capture from cacher.
 	 * @uses Memory_Cache::increased_available_memory()
 	 */
 	final protected function increase_available_memory() {
-		Memory_Cache::increased_available_memory()
-			or \wp_raise_memory_limit( 'tsfem' );
+		if ( ! Memory_Cache::increased_available_memory() ) {
+			\wp_raise_memory_limit( 'tsfem' );
+			// Bust
+			Memory_Cache::get_memory_limit_in_bytes( true );
+		}
 	}
 
 	/**

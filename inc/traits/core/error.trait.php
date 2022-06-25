@@ -649,6 +649,11 @@ trait Error {
 				$type    = 'updated';
 				break;
 
+			case 1060206:
+				$message = \esc_html__( 'Memory exhaustion', 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
 			case 1011700:
 			case 1071100:
 			case 1071101:

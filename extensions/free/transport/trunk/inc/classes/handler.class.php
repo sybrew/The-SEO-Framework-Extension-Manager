@@ -30,6 +30,13 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
 // phpcs:disable, WordPress.Security.NonceVerification -- This file expects that to have been done.
 
 /**
+ * Require memory factory trait.
+ *
+ * @since 1.0.0
+ */
+\TSF_Extension_Manager\_load_trait( 'factory/memory' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Transport\Handler
  *
  * Handles callbacks for Transport.
@@ -38,10 +45,12 @@ if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager
  * @access private
  * @errorval 106xxxx
  * @uses TSF_Extension_Manager\Traits
+ * @uses trait \TSF_Extension_Manager\Memory
  * @final
  */
 final class Handler {
-	use \TSF_Extension_Manager\Error;
+	use \TSF_Extension_Manager\Error,
+		\TSF_Extension_Manager\Memory;
 
 	/**
 	 * @since 1.0.0
@@ -122,6 +131,9 @@ final class Handler {
 			// Convert 90 posts per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
+			// var_dump()
+			$this->release_transport_lock();
+
 			if ( ! $this->lock_transport( $timeout ) )
 				$this->_halt_server( [
 					'server'     => $server,
@@ -134,7 +146,10 @@ final class Handler {
 			// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
 			register_shutdown_function( [ $this, 'release_transport_lock' ] );
 
-			\wp_raise_memory_limit( 'tsfem_e_transport_import' );
+			/** @uses trait \TSF_Extension_Manager\Memory */
+			$this->increase_available_memory();
+			// Require 2 MB.
+			$memory_bytes_requires = 2 * MB_IN_BYTES;
 
 			$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 
@@ -147,7 +162,6 @@ final class Handler {
 
 			// Add current time to start rolling, 5 seconds penalty for startup/shutdown time (allows graceful shutdown).
 			$time_limit += time() - 5;
-			$time_limit = time() + 10; // var_dump() test
 		}
 
 		try {
@@ -161,7 +175,7 @@ final class Handler {
 							$streaming and $store->store(
 								sprintf(
 									/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
-									\esc_html__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
+									\esc_html__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ) . " peak usage: ".memory_get_usage(true),
 									$post_iterator,
 									$total_posts,
 									$post_id
@@ -223,6 +237,23 @@ final class Handler {
 										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 											? \esc_html__( 'Transporting time limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
 											: \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+									],
+									'logger_uid' => $logger_uid,
+									'event'      => 'tsfem-e-transport-timeout',
+									'type'       => 'failure',
+								] );
+							}
+
+							// Test if memory limit is reached after every post conversion.
+							if ( ! $this->has_free_memory( $memory_bytes_requires ) ) {
+								$this->release_transport_lock();
+								$this->_halt_server( [
+									'server'     => $server,
+									'poll_data'  => [
+										'results' => $this->get_ajax_notice( false, 1060206 ),
+										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
+											? \esc_html__( 'Process memory usage limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
+											: \esc_html__( 'Process memory usage limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
