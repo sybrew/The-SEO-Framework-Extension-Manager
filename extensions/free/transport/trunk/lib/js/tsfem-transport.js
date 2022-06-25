@@ -159,109 +159,58 @@ window.tsfem_e_import = function() {
 		} );
 	}
 
+	const _sseWorkerId = 'tsfem_e_transporter_sse';
 	/**
 	 * Handles AJAX post requests securely.
 	 *
 	 * @since 1.0.0
 	 * @access private
+	 * @TODO use sharedworker, so we can continue reading in the background and allow for somewhat more easy continuation?
 	 *
 	 * @param {String}   handle   The transport action type/handle.
 	 * @param {FormData} formData The formdata to post for handle.
 	 * @param {?String}  logStart The starting log text. Expected to be escaped.
 	 * @function
 	 */
-	const _handleEventStream = ( handle, formData, logStart ) => new Promise( ( resolve, reject ) => {
+	const _handleEventStream = ( handle, formData, logStart ) => new Promise( async ( resolve, reject ) => {
 
-		const url = new URL( ajaxurl, new URL( document.baseURI ).origin );
+		await (
+			tsfem_worker.getWorker( _sseWorkerId )
+			|| tsfem_worker.spawnWorker( l10n.scripts.sseWorker, _sseWorkerId )
+		);
 
-		url.searchParams.set( 'action', 'tsfem_e_transport' );
-		url.searchParams.set( 'handle', handle );
-		url.searchParams.set( 'nonce', l10n.nonce );
-		url.searchParams.set( 'data', formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString() );
+		if ( tsfem_worker.isWorkerBusy( _sseWorkerId ) ) return reject( 'Worker busy.' );
 
-		let retryCount           = 0,
-			urlParamRetryAllowed = 1;
+		tsfem_worker.occupyWorker( _sseWorkerId );
 
-		const startSSE = () => {
-			url.searchParams.set( 'retryAllowed', urlParamRetryAllowed );
-
-			const SSE = new EventSource( url.href );
-
-			SSE.onopen = () => {
-				_log( logStart )
-			};
-			SSE.onerror = event => {
-				SSE.close();
-				_log( l10n.i18n.logMessages.unknownErrorFull, 2 );
-				reject( l10n.i18n.logMessages.unknownError );
-			}
-			const extractEventData = data => {
-				try {
-					return JSON.parse( data );
-				} catch ( error ) {
-					return void 0;
+		tsfem_worker.assignWorker(
+			_sseWorkerId,
+			{
+				handle,
+				formData:    formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString(),
+				logStart,
+				urlData:     { endpoint: ajaxurl, base: new URL( document.baseURI ).origin },
+				nonce:       l10n.nonce,
+				logMessages: l10n.i18n.logMessages
+			},
+			mEvent => {
+				if ( 'log' in mEvent.data ) {
+					return _log( ...mEvent.data.log );
 				}
-			}
-			const doEventResolve = event => {
-				SSE.close();
-				let data = extractEventData( event.data );
-				_log( '&nbsp;' );
-				_log( "\n" + data.logMsg, 2 );
-				resolve( data?.results.notice );
-			}
-			const doEventReject = event => {
-				SSE.close();
-				let data = extractEventData( event.data );
-				_log( '&nbsp;' );
-				_log( data?.logMsg, 2 );
-				reject( data?.results.notice );
-			}
-			const doEventRetry = event => {
-
-				retryCount++;
-
-				_log( '===============', 1 );
-
-				if ( retryCount > retryLimit ) {
-					_log( l10n.i18n.logMessages.retryLimitReached );
-					return doEventReject( event );
+				if ( 'reject' in mEvent.data ) {
+					tsfem_worker.despawnWorker( _sseWorkerId );
+					return reject( ...mEvent.data.reject );
 				}
-
-				// Not <= because we counted.
-				urlParamRetryAllowed = retryCount < retryLimit ? 1 : 0;
-
-				SSE.close();
-				// Only log, retry automatically.
-				_log( extractEventData( event.data )?.logMsg, 1 );
-
-				// Start at 1 because when we hit 1 we immediately start
-				let retryTick = 1;
-				const retryTicker = setInterval( () => {
-					let countDown = ( retryTimeout / 1000 ) - retryTick++,
-						lastTick  = countDown < 2;
-
-					_log( l10n.i18n.logMessages.retryCountdown.replace( '%d', countDown ), lastTick ? 1 : 0 );
-
-					if ( lastTick )
-						clearInterval( retryTicker );
-				}, 1000 );
-
-				setTimeout( startSSE, retryTimeout );
+				if ( 'resolve' in mEvent.data ) {
+					tsfem_worker.freeWorker( _sseWorkerId );
+					return resolve( ...mEvent.data.resolve );
+				}
+			},
+			message => {
+				tsfem_worker.despawnWorker( _sseWorkerId );
+				reject( message );
 			}
-
-			SSE.addEventListener( 'tsfem-e-transport-log', event => {
-				_log( extractEventData( event.data )?.content );
-			} );
-			SSE.addEventListener( 'tsfem-e-transport-done', doEventResolve );
-
-			SSE.addEventListener( 'tsfem-e-transport-failure', doEventReject );
-			SSE.addEventListener( 'tsfem-e-transport-locked', doEventReject );
-
-			SSE.addEventListener( 'tsfem-e-transport-crash', doEventRetry );
-			SSE.addEventListener( 'tsfem-e-transport-timeout', doEventRetry );
-		}
-
-		startSSE();
+		);
 	} );
 
 	/**
@@ -303,7 +252,7 @@ window.tsfem_e_import = function() {
 	 * @since 1.0.0
 	 * @access private
 	 *
-	 * @param {String}  message The message to log
+	 * @param {String}  message The message to log.
 	 * @param {Integer} newLine Whether to add newlines.
 	 * @function
 	 */
@@ -311,7 +260,7 @@ window.tsfem_e_import = function() {
 		if ( _logger && message?.length )
 			tsfem_ui.logger.queue(
 				_logger,
-				`\n&ratio; ${tsf.escapeString( tsf.decodeEntities( message ) )}${( '\n'.repeat( newLine || 0 ) )}`
+				`\n&ratio; ${message}${( '\n'.repeat( newLine || 0 ) )}`
 			);
 	}
 

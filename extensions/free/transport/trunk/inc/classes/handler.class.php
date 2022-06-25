@@ -132,7 +132,7 @@ final class Handler {
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
 			// var_dump()
-			$this->release_transport_lock();
+			// $this->release_transport_lock();
 
 			if ( ! $this->lock_transport( $timeout ) )
 				$this->_halt_server( [
@@ -175,7 +175,7 @@ final class Handler {
 							$streaming and $store->store(
 								sprintf(
 									/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
-									\esc_html__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ) . " peak usage: ".memory_get_usage(true),
+									\esc_html__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
 									$post_iterator,
 									$total_posts,
 									$post_id
@@ -221,10 +221,13 @@ final class Handler {
 									);
 								}
 							}
-							if ( $is_lastpost ) {
-								$store->store( '===============' );
-							} else {
-								$store->store( '&nbsp;' );
+							if ( $streaming ) {
+								if ( $is_lastpost ) {
+									$store->store( '&nbsp;' );
+									$store->store( '===============' );
+								} else {
+									$store->store( '&nbsp;' );
+								}
 							}
 
 							// Test if limit is reached after every post conversion.
@@ -265,6 +268,7 @@ final class Handler {
 						// These below are hit less often, thus later in the switch.
 						case 'nowConverting':
 							[ $from_index, $to_index, $from_database, $to_database ] = $data;
+							$streaming and $store->store( '&nbsp;' );
 							$streaming and $store->store(
 								vsprintf(
 									/* translators: 1,2 = database location. */

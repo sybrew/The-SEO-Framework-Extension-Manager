@@ -353,11 +353,27 @@ final class Admin {
 								'retryLimitReached' => \esc_html__( 'Automated retry limit reached.', 'the-seo-framework-extension-manager' ),
 							],
 						],
+						'scripts' => [
+							'sseWorker' => $this->get_sse_worker_location(),
+						],
 					],
 				],
 			],
 		] );
 	}
+
+	/**
+	 * Returns the SSE worker file location.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	private function get_sse_worker_location() {
+		$min = \tsf()->script_debug ? '' : '.min';
+		return \esc_url( \set_url_scheme( TSFEM_E_TRANSPORT_DIR_URL . "lib/js/sse.worker{$min}.js" ) );
+	}
+
 
 	/**
 	 * Hooks admin actions into the TSF Extension Manager pagehook.

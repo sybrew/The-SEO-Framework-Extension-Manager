@@ -85,6 +85,7 @@ TODO de-jQueryfy?
 TODO function(){} => ()=>{}
 TODO coalesce_var() => ??
 TODO /isset\( (.*?) \) \? \1/ -> ??
+TODO ([a-zA-Z0-9_-]+)\s*=\s*(\1)\b\s*\|\| -> ||=
 
 TODO add grid display to importer options...
 

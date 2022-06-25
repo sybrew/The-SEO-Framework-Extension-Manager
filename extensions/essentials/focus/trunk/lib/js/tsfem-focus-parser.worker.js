@@ -201,9 +201,9 @@ const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise(
 			}, stopAt );
 		}
 
-		looper = setTimeout( () => new Promise( ( _resolve, _reject ) => {
+		looper = setTimeout( () => new Promise( async ( _resolve, _reject ) => {
 			try {
-				cb( iterable[ it ] );
+				await cb( iterable[ it ] );
 				_resolve();
 			} catch ( e ) {
 				_reject();
