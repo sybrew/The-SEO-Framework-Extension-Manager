@@ -44,20 +44,6 @@ window.tsfem_e_import = function() {
 	 */
 	const l10n = tsfem_e_transportL10n;
 
-	/**
-	 * @since 1.0.0
-	 * @access private
-	 * @type {int} The retry timeout in milliseconds.
-	 */
-	const retryTimeout = 5000;
-
-	/**
-	 * @since 1.0.0
-	 * @access private
-	 * @type {int} The number of retries allowed before manual intervention is required.
-	 */
-	const retryLimit = 5;
-
 	const _enableButtons = disable => {
 		disable ||= false;
 		[

@@ -308,7 +308,7 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	white-space: pre-wrap;
 	word-break: break-word;
 	clear: both;
-	will-change: contents;
+	will-change: contents, scroll-position;
 }
 
 /* # Start Buttons.

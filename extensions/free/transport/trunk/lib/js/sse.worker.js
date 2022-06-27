@@ -24,8 +24,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @since 1.0.0
+ * @access private
+ * @type {String} The current worker ID.
+ */
 let workerId = '';
+
+/**
+ * @since 1.0.0
+ * @access private
+ * @type {Object<string,Worker>}
+ */
 const SSE = {};
+
+/**
+ * @since 1.0.0
+ * @access private
+ * @type {int} The retry timeout in milliseconds.
+ */
+const retryTimeout = 5000;
+
+/**
+ * @since 1.0.0
+ * @access private
+ * @type {int} The number of retries allowed before manual intervention is required.
+ */
+const retryLimit = 5;
 
 const _log     = ( ...message ) => postMessage( { workerId, log: message } );
 const _resolve = ( ...message ) => postMessage( { workerId, resolve: message } );

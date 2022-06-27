@@ -162,10 +162,16 @@ final class Handler {
 
 			// Add current time to start rolling, 5 seconds penalty for startup/shutdown time (allows graceful shutdown).
 			$time_limit += time() - 5;
+
+			$succeeded = 0;
+			$skipped   = 0;
+			$failed    = 0;
+			$deleted   = 0;
 		}
 
 		try {
-			if ( \in_array( 'postmeta', $import_settings['selectType'], true ) ) :
+			if ( \in_array( 'postmeta', $import_settings['selectType'], true ) ) {
+
 				$_class = __NAMESPACE__ . "\\Importers\\PostMeta\\{$import_settings['choosePlugin']}";
 
 				foreach ( ( new $_class )->import() as $handle => $data ) :
@@ -173,12 +179,14 @@ final class Handler {
 						case 'currentPostId':
 							[ $post_id, $total_posts, $post_iterator ] = $data;
 							$streaming and $store->store(
-								sprintf(
-									/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
-									\esc_html__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
-									$post_iterator,
-									$total_posts,
-									$post_id
+								\esc_html(
+									sprintf(
+										/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
+										\__( 'Importing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
+										$post_iterator,
+										$total_posts,
+										$post_id
+									)
 								)
 							);
 							break;
@@ -187,40 +195,42 @@ final class Handler {
 							if ( empty( $results['updated'] ) ) {
 								if ( $actions['transport'] ) {
 									$streaming and $store->store(
-										sprintf(
-											/* translators: %d = post ID */
-											\esc_html__( 'Post ID %d failed import.', 'the-seo-framework-extension-manager' ),
-											$post_id
-										)
+										\esc_html__( 'Failed import.', 'the-seo-framework-extension-manager' )
 									);
+									$failed++;
 								} else {
 									$streaming and $store->store(
-										sprintf(
-											/* translators: %d = post ID */
-											\esc_html__( 'Skipped import for Post ID %d.', 'the-seo-framework-extension-manager' ),
-											$post_id
-										)
+										\esc_html__( 'Skipped import.', 'the-seo-framework-extension-manager' )
 									);
+									$skipped++;
 								}
 							} else {
 								if ( $actions['transformed'] ) {
 									$streaming and $store->store(
-										sprintf(
-											/* translators: %d = post ID */
-											\esc_html__( 'Post ID %d transformed succesfully.', 'the-seo-framework-extension-manager' ),
-											$post_id
-										)
+										\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
 									);
 								} else {
 									$streaming and $store->store(
-										sprintf(
-											/* translators: %d = post ID */
-											\esc_html__( 'Post ID %d imported succesfully.', 'the-seo-framework-extension-manager' ),
-											$post_id,
-										)
+										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
+									);
+								}
+								$succeeded++;
+							}
+
+							if ( $actions['deleted'] ) {
+								// In case anyone asks: "useless" data is '' or null.
+								if ( $results['delete'] ) {
+									$streaming and $store->store(
+										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
+									);
+									$deleted++;
+								} else {
+									$streaming and $store->store(
+										\esc_html__( 'Failed deleting useless data.', 'the-seo-framework-extension-manager' )
 									);
 								}
 							}
+
 							if ( $streaming ) {
 								if ( $is_lastpost ) {
 									$store->store( '&nbsp;' );
@@ -264,36 +274,93 @@ final class Handler {
 								] );
 							}
 							break;
+						case 'transmutedResults':
+							[ $results, $actions, $post_id ] = $data;
+							if ( empty( $results['updated'] ) ) {
+								if ( $actions['transport'] ) {
+									$streaming and $store->store(
+										\esc_html__( 'Failed import.', 'the-seo-framework-extension-manager' )
+									);
+									$failed++;
+								} else {
+									$streaming and $store->store(
+										\esc_html__( 'Skipped import.', 'the-seo-framework-extension-manager' )
+									);
+									$skipped++;
+								}
+							} else {
+								if ( $actions['transformed'] ) {
+									$streaming and $store->store(
+										\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
+									);
+								} else {
+									$streaming and $store->store(
+										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
+									);
+								}
+								$succeeded++;
+							}
+							if ( $actions['deleted'] ) {
+								// In case anyone asks: "useless" data is '' or null.
+								if ( $results['delete'] ) {
+									$streaming and $store->store(
+										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
+									);
+									$deleted++;
+								} else {
+									$streaming and $store->store(
+										\esc_html__( 'Failed deleting useless data.', 'the-seo-framework-extension-manager' )
+									);
+								}
+							}
+							break;
 
 						// These below are hit less often, thus later in the switch.
 						case 'nowConverting':
-							[ $from_index, $to_index, $from_database, $to_database ] = $data;
-							$streaming and $store->store( '&nbsp;' );
-							$streaming and $store->store(
-								vsprintf(
-									/* translators: 1,2 = database location. */
-									\esc_html__( 'Starting import from "%1$s" to "%2$s".', 'the-seo-framework-extension-manager' ),
-									[
-										\esc_html( $from_index ),
-										\esc_html( $to_index ),
-									]
-								)
-							);
+							[ $from, $to ] = $data;
+							if ( $streaming ) {
+								$store->store( '&nbsp;' );
+								$store->store(
+									\esc_html(
+										sprintf(
+											/* translators: 1,2 = data location. */
+											\__( 'Starting import from "%1$s" to "%2$s".', 'the-seo-framework-extension-manager' ),
+											$from[1],
+											$to[1]
+										)
+									)
+								);
+							}
+							break;
+						case 'nowTransmuting':
+							[ $from, $to, $name ] = $data;
+							if ( $streaming ) {
+								$store->store( '&nbsp;' );
+								$store->store(
+									\esc_html(
+										sprintf(
+											/* translators: %s is identifier type */
+											\__( 'Starting transmution of "%s".', 'the-seo-framework-extension-manager' ),
+											$name
+										)
+									)
+								);
+							}
 							break;
 						case 'foundPosts':
-							[ $total_posts, $post_ids ] = $data;
+							[ $total_posts ] = $data;
 							$streaming and $store->store(
-								sprintf(
-									\esc_html(
+								\esc_html(
+									sprintf(
 										/* translators: %d = number of posts found. */
 										\_n(
 											'Found %d post to import.',
 											'Found %d posts to import.',
 											$total_posts,
 											'the-seo-framework-extension-manager'
-										)
-									),
-									$total_posts
+										),
+										$total_posts
+									)
 								)
 							);
 							if ( $total_posts ) {
@@ -308,7 +375,8 @@ final class Handler {
 
 					$streaming = $server->poll( $store );
 				endforeach;
-			endif;
+			}
+
 			// if ( \in_array( 'termmeta', $import_settings['selectType'], true ) ) {
 			// 	$_class = __NAMESPACE__ . "\\Importers\\TermMeta\\{$import_settings['choosePlugin']}";
 			// 	$importer = new $_class;
@@ -323,15 +391,17 @@ final class Handler {
 				'poll_data'  => [
 					'results' => $this->get_ajax_notice( false, 1060204 ),
 					'logMsg'  =>
-						sprintf(
-							$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
-								/* translators: %s = Unknown error reason */
-								? \esc_html__( 'Server stopped execution. Reason: %s. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-								/* translators: %s = Unknown error reason */
-								: \esc_html__( 'Server stopped execution: Reason: %s. Please try again to resume.', 'the-seo-framework-extension-manager' ),
-							$e->getMessage() ?: 'undefined'
-						)
-				],
+						\esc_html(
+							sprintf(
+								$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
+									/* translators: %s = Unknown error reason */
+									? \__( 'Server stopped execution. Reason: "%s". Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
+									/* translators: %s = Unknown error reason */
+									: \__( 'Server stopped execution: Reason: "%s". Please try again to resume.', 'the-seo-framework-extension-manager' ),
+								$e->getMessage() ?: 'undefined'
+							)
+						),
+					],
 				'logger_uid' => $logger_uid,
 				'event'      => 'tsfem-e-transport-crash',
 				'type'       => 'failure',
@@ -345,7 +415,18 @@ final class Handler {
 			'server'     => $server,
 			'poll_data'  => [
 				'results' => $this->get_ajax_notice( true, 1060205 ),
-				'logMsg'  => \esc_html__( 'Completed transport.', 'the-seo-framework-extension-manager' ),
+				'logMsg'  => \esc_html(
+					vsprintf(
+						/* translators: 1,2,3,4 are numbers */
+						\__( 'Completed import with %1$d successful, %2$d skipped, and %3$d failed transports. Deleted %4$d old entries.', 'the-seo-framework-extension-manager' ),
+						[
+							$succeeded,
+							$skipped,
+							$failed,
+							$deleted,
+						]
+					)
+				),
 			],
 			'logger_uid' => $logger_uid,
 			'event'      => 'tsfem-e-transport-done',
