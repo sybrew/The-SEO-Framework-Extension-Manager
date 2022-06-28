@@ -78,31 +78,14 @@ final class Store {
 
 	/**
 	 * Clears store.
+	 *
+	 * @param int $length The allowed array length of the store. -1 is unlimited.
 	 */
-	public function clear_store() {
-		unset( static::$store[ $this->id ] );
+	public function clear_store( $length = -1 ) {
+		if ( -1 === $length ) {
+			unset( static::$store[ $this->id ] );
+		} else {
+			array_splice( static::$store[ $this->id ], 0, -$length );
+		}
 	}
-
-	// public function store( $data ) {
-	// 	$store = \get_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE, [] ) ?: [];
-	// 	$store[ $this->id ][ microtime() ] = $data;
-	// 	\update_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE, $store );
-	// }
-	// public function get_store( $after ) {
-	// 	$store = \get_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE ) ?? [];
-	// 	if ( isset( $store[ $this->id ] ) ) {
-	// 		// Clear old data.
-	// 		foreach ( $store[ $this->id ] as $microtime => $values ) {
-	// 			if ( $microtime < $after )
-	// 				unset( $data[ $this->id ][ $microtime ] );
-	// 		}
-	// 		\update_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE, $store );
-	// 	}
-	// 	return $store[ $this->id ] ?? null;
-	// }
-	// public function clear_store() {
-	// 	$store = \get_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE ) ?? [];
-	// 	unset( $store[ $this->id ] );
-	// 	\update_option( TSFEM_E_TRANSPORT_LOGSERVER_STORE, $store );
-	// }
 }

@@ -19,7 +19,7 @@ abstract class Core {
 
 	/**
 	 * @since 1.0.0
-	 * @var array[] A set of conversions that should take place. : [
+	 * @var array A set of conversions that should take place. : [
 	 *     [
 	 *         (?string[]) 'from'        The database table + index key to take data from,
 	 *         (?string[]) 'to'          The database table + index key to set data to,
@@ -28,15 +28,26 @@ abstract class Core {
 	 *                                   `$value`
 	 *         (?string[]) 'transmuter'  The complex data transmuter, if any: {
 	 *              'name'           => (string)   The name, required,
-	 *              'to|from'        => (callable) The transformers, any required, both available,
-	 *                                             The callable requires parameters:
-	 *                                             `$type, $data, &$actions = null, &$results = null`
+	 *              'to'             => (\Generator) The transmuter, either to or from (or both) required.
+	 *                                               The callable requires parameters:
+	 *                                               `$type, $data, &$actions = null, &$results = null`
+	 *                                               The callable must be of type Generator, as such,
+	 *                                               it MUST contain the yield keyword, whether useful or not.
+	 *              'from'           => (callable)   The transmuter, either to or from (or both) required.
+	 *                                               The callable requires parameters:
+	 *                                               `$type, $data, &$actions = null, &$results = null`
 	 *              '(to|from)_data' => (mixed)    The pertaining callable data, custom.
 	 *         }
 	 *     ]
 	 * ]
 	 */
 	protected $conversion_sets;
+
+	/**
+	 * @since 1.0.0
+	 * @var array The useless data we shall discard.
+	 */
+	protected $useless_data = [ null, '', 0, '0', false, [], 's:0:"";', 'a:0:{}', '[]', '""', "''" ];
 
 	/**
 	 * Sets up class, mainly required variables.
@@ -54,6 +65,25 @@ abstract class Core {
 	 * @abstract
 	 */
 	abstract protected function setup_vars();
+
+	/**
+	 * Returns a list of taxonomies that could have primary term support.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string[] List of taxonomy names.
+	 */
+	final protected function get_taxonomy_list_with_pt_support() {
+
+		$taxonomies = array_filter(
+			\get_taxonomies( [], 'objects' ),
+			static function( $t ) {
+				return ! empty( $t->hierarchical );
+			}
+		);
+
+		return array_keys( $taxonomies );
+	}
 
 	/**
 	 * Walks the postdata.
@@ -78,30 +108,44 @@ abstract class Core {
 		// Offset needless FETCH_OBJ_R opcodes by using a single extra ASSIGN.
 		$_globals_postmeta = $wpdb->postmeta;
 
+		// phpcs:disable, Generic.WhiteSpace.ScopeIndent -- https://github.com/squizlabs/PHP_CodeSniffer/issues/3571
+
 		foreach ( $this->conversion_sets as $conversion_set ) :
 			prepare: {
-				[ $transfer_from, $transfer_to, $transformer, $transmuter ] = array_pad( $conversion_set, 4, null );
+				[ $transfer_from, $transfer_to, $transformer, $sanitizer, $transmuter ] = array_pad( $conversion_set, 4, null );
 
 				[ $from_table, $from_index ] = array_pad( $transfer_from ?? [], 2, null );
 				[ $to_table, $to_index ]     = array_pad( $transfer_to ?? [], 2, null );
+
+				// Syntax only: The callable must work otherwise we might cause exploits by storing unsanitized values.
+				// So, call these callables even when not strictly callable, let them cause errors.
+				$has_transformer     = \is_callable( $transformer, true );
+				$has_transmuter_from = \is_callable( $transmuter['from'][0] ?? null, true ) && \is_callable( $transmuter['from'][1] ?? null, true );
+				$has_transmuter_to   = \is_callable( $transmuter['to'][0] ?? null, true ) && \is_callable( $transmuter['to'][1] ?? null, true );
+				$has_sanitizer       = \is_callable( $sanitizer, true );
+				$is_deletion_only    = ! $has_transmuter_to && ! $to_index;
 			}
 
-			getlist:
+			getlist: {
 				// Sanity is a virtue.
 				$from_table = \esc_sql( $from_table ) ?: $_globals_postmeta;
 				$to_table   = \esc_sql( $to_table ) ?: $_globals_postmeta;
 
-				yield ( $transmuter ? 'nowTransmuting' : 'nowConverting' ) => [
-					[ $from_table, $from_index ],
-					[ $to_table, $to_index ],
-					$transmuter['name'] ?? null,
-				];
+				if ( $is_deletion_only ) {
+					yield 'nowDeleting' => [ [ $from_table, $from_index ] ];
+				} elseif ( $has_transmuter_from || $has_transmuter_to ) {
+					yield 'nowTransmuting' => [ $transmuter['name'] ];
+				} else {
+					yield 'nowConverting' => [
+						[ $from_table, $from_index ],
+						[ $to_table, $to_index ],
+					];
+				}
 
-				if ( isset( $transmuter['from'] ) ) {
+				if ( $has_transmuter_from ) {
 					$post_ids = \call_user_func_array(
-						$transmuter['from'],
+						$transmuter['from'][0],
 						[
-							'get:post_ids',
 							[
 								'from_data' => $transmuter['from_data'] ?? null,
 								'from'      => [ $from_table, $from_index ],
@@ -117,11 +161,19 @@ abstract class Core {
 					) ) ?: [];
 					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				}
-
 				$total_posts = \count( $post_ids );
-				yield 'foundPosts' => [ $total_posts ];
+				yield 'foundPosts' => [
+					$total_posts,
+					$is_deletion_only
+						? 'delete'
+						: ( $has_transmuter_from || $has_transmuter_to
+							? 'transmute'
+							: 'import'
+						),
+				];
+			}
 
-			transmute: // phpcs:ignore, Generic.WhiteSpace.ScopeIndent.Incorrect -- https://github.com/squizlabs/PHP_CodeSniffer/issues/3571
+			transmute: {
 				$post_iterator = 0;
 
 				foreach ( $post_ids as $post_id ) :
@@ -129,87 +181,97 @@ abstract class Core {
 					if ( ! ( $post_iterator % 25 ) )
 						$wpdb->queries = [];
 
-					$results = [];
-
 					yield 'currentPostId' => [ $post_id, $total_posts, $post_iterator + 1 ];
 
-					// phpcs:ignore, WordPress.PHP.YodaConditions.NotYoda -- Nani?
-					$identical_index = $transmuter ? false : [ $from_table, $from_index ] === [ $to_table, $to_index ];
+					$identical_index = $has_transmuter_from || $has_transmuter_to
+						? false
+						: [ $from_table, $from_index ] === [ $to_table, $to_index ]; // phpcs:ignore, WordPress.PHP.YodaConditions.NotYoda -- Nani?
 
-					$actions = [
+					$results = [
+						'updated'     => false,
 						'transformed' => false,
-						'transform'   => (bool) $transformer,
+						'deleted'     => false,
+						'only_end'    => $has_transmuter_to,
+						'only_delete' => $is_deletion_only,
+					];
+					$actions = [
+						'transform' => $has_transformer,
 						// If the data goes nowhere there's no need to delete nor transport.
-						'transport'   => ! $identical_index,
-						'delete'      => ! $identical_index,
+						'transport' => ! $identical_index,
+						'delete'    => ! $identical_index,
+						'sanitize'  => $has_sanitizer,
+						'sanitized' => false,
 					];
 
-					$existing_value = null;
-					$old_value      = null;
-					$set_value      = null;
+					$existing_value  = null; // Value in place by new plugin.
+					$transport_value = null; // Value from old plugin.
+					$set_value       = null; // Value to put for new plugin.
 
 					// Test if data already exists on new entry.
-					if ( isset( $transmuter['to'] ) ) {
-						$existing_value = \call_user_func_array(
-							$transmuter['to'],
-							[
-								'get:existing_value:to',
+					if ( ! $is_deletion_only ) {
+						if ( $has_transmuter_to ) {
+							// This won't allow merging when data comes from multiple places.
+							// Transmuter must handle this early, and regard "stored" value as overwritable.
+							$existing_value = \call_user_func_array(
+								$transmuter['to'][0],
 								[
-									'post_id' => $post_id,
-									'to_data' => $transmuter['to_data'] ?? null,
-									'to'      => [ $to_table, $to_index ],
+									[
+										'post_id' => $post_id,
+										'to_data' => $transmuter['to_data'] ?? null,
+										'to'      => [ $to_table, $to_index ],
+										'from'    => [ $from_table, $from_index ],
+									],
+								]
+							);
+						} else {
+							$existing_value = $wpdb->get_var( $wpdb->prepare(
+								// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
+								"SELECT meta_value FROM `$to_table` WHERE post_id = %d AND meta_key = %s",
+								$post_id,
+								$to_index
+							) );
+							if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+						}
+					}
+
+					if ( $has_transmuter_from ) {
+						$transport_value = \call_user_func_array(
+							$transmuter['from'][1],
+							[
+								[
+									'post_id'           => $post_id,
+									'from_data'         => $transmuter['from_data'] ?? null,
+									'from'              => [ $from_table, $from_index ],
+									'existing_value'    => $existing_value,
+									'has_transmuter_to' => $has_transmuter_to,
 								],
 								&$actions,
 								&$results,
 							]
 						);
 					} else {
-						$existing_value = $wpdb->get_var( $wpdb->prepare(
-							// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
-							"SELECT meta_value FROM `$to_table` WHERE post_id = %d AND meta_key = %s",
-							$post_id,
-							$to_index
-						) );
-						if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-					}
-
-					if ( \is_null( $existing_value ) ) {
-						if ( isset( $transmuter['from'] ) ) {
-							$old_value = /*yield from*/ \call_user_func_array(
-								$transmuter['from'],
-								[
-									'get:old_value:from',
-									[
-										'post_id'   => $post_id,
-										'from_data' => $transmuter['from_data'] ?? null,
-										'from'      => [ $from_table, $from_index ],
-									],
-									&$actions,
-									&$results,
-								]
-							);
-						} else {
-							$old_value = $wpdb->get_var( $wpdb->prepare(
+						if ( \is_null( $existing_value ) ) {
+							$transport_value = $wpdb->get_var( $wpdb->prepare(
 								// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
 								"SELECT meta_value FROM `$from_table` WHERE post_id = %d AND meta_key = %s",
 								$post_id,
 								$from_index
 							) );
+							if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+						} else {
+							// If new data exists, don't overwrite with old.
+							$actions['transport'] = false;
+							// If new data exists and index is the same, still try to transform. Otherwise, forgo.
+							$actions['transform'] = $actions['transform'] && $identical_index;
 						}
-						if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-					} else {
-						// If new data exists, don't overwrite with old.
-						$actions['transport'] = false;
-						// If new data exists and index is the same, still try to transform. Otherwise, forgo.
-						$actions['transform'] = $actions['transform'] && $identical_index;
 					}
 
-					$set_value = $existing_value ?? $old_value;
+					$set_value = $existing_value ?? $transport_value;
 
 					if ( $actions['transform'] ) {
 						$_pre_transform_value = $set_value;
 
-						$set_value = /*yield from*/ \call_user_func_array(
+						$set_value = \call_user_func_array(
 							$transformer,
 							[
 								$set_value,
@@ -219,21 +281,28 @@ abstract class Core {
 							]
 						);
 
-						$actions['transformed'] = $_pre_transform_value !== $set_value;
+						$results['transformed'] = $_pre_transform_value !== $set_value;
 					}
 
-					// Still allow "0" and '0'. TSF will later assess its usefulness.
-					if ( \in_array( $set_value, [ null, '' ], true ) ) {
+					if ( $actions['sanitize'] ) {
+						$_pre_sanitize_value = $set_value;
+
+						$set_value = \call_user_func( $sanitizer, $set_value );
+
+						$actions['sanitized'] = $_pre_sanitize_value !== $set_value;
+					}
+
+					if ( \in_array( $set_value, $this->useless_data, true ) ) {
+						$set_value              = null;
 						$actions['delete']      = true;
-						$actions['transformed'] = false;
+						$results['transformed'] = false;
 						$actions['transport']   = false;
 					}
 
-					if ( isset( $transmuter['to'] ) ) {
+					if ( $has_transmuter_to ) {
 						yield from \call_user_func_array(
-							$transmuter['to'],
+							$transmuter['to'][1],
 							[
-								'transmute:set_value:to',
 								[
 									'post_id'   => $post_id,
 									'set_value' => $set_value,
@@ -248,7 +317,7 @@ abstract class Core {
 						);
 					} else {
 						// $actions and $results are passed by reference.
-						/*yield from*/$this->transmute(
+						$this->transmute(
 							$set_value,
 							$post_id,
 							[ $from_table, $from_index ],
@@ -259,13 +328,16 @@ abstract class Core {
 					}
 
 					$is_lastpost = $post_iterator === $total_posts;
-					yield 'results' => [ $results, $actions, $post_id, $is_lastpost ];
+					yield 'results' => [ $results, $actions, $post_id, $is_lastpost, $has_transmuter_to ];
 
 					// This also busts cache of caching plugins. Intended: Update the post!
 					\clean_post_cache( $post_id );
 					$post_iterator++;
 				endforeach;
+			}
 		endforeach;
+
+		// phpcs:enable, Generic.WhiteSpace.ScopeIndent -- https://github.com/squizlabs/PHP_CodeSniffer/issues/3571
 
 		return true;
 	}
@@ -289,9 +361,11 @@ abstract class Core {
 		[ $from_table, $from_index ] = $transfer_from;
 		[ $to_table, $to_index ]     = $transfer_to;
 
+		if ( ! $to_index ) goto delete;
+
 		if ( $actions['transport'] ) {
 			if ( $to_table === $from_table ) {
-				if ( $actions['transformed'] ) {
+				if ( $results['transformed'] ) {
 					$results['updated'] = $wpdb->update(
 						$to_table,
 						[
@@ -329,7 +403,7 @@ abstract class Core {
 				);
 				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 			}
-		} elseif ( $actions['transformed'] ) {
+		} elseif ( $results['transformed'] ) {
 			$results['updated'] = $wpdb->update(
 				$to_table,
 				[ 'meta_value' => $set_value ],
@@ -343,7 +417,7 @@ abstract class Core {
 			$actions['delete'] = false;
 		}
 
-		if ( $actions['delete'] ) {
+		delete: if ( $actions['delete'] ) {
 			$results['deleted'] = $wpdb->delete(
 				$from_table,
 				[
