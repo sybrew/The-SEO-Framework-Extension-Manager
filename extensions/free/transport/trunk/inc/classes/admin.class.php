@@ -136,7 +136,8 @@ final class Admin {
 							'twitter_title',
 							'twitter_description',
 							'og_image',
-							'article_type',
+							// 'article_type', TODO
+							'primary_term',
 						],
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
 							'title',
@@ -148,6 +149,7 @@ final class Admin {
 							'og_description',
 							'twitter_title',
 							'twitter_description',
+							'canonical_url',
 						],
 					],
 					'termmeta' => [
@@ -176,6 +178,67 @@ final class Admin {
 							'twitter_description',
 						],
 					],
+				],
+			],
+			'Temp_The_SEO_Framework' => [ // For moving data back/forth
+				'title'     => 'Temp The SEO Framework',
+				'importers' => [
+					'settings' => false, // Let's keep this at false, for now. Perhaps we want to move the homepage stuff, but that's tricky.
+					'postmeta' => [
+						'supports'  => [
+							'title',
+							'description',
+							'canonical_url',
+							'redirect',
+							'noindex',
+							'nofollow',
+							'noarchive',
+							'og_title',
+							'og_description',
+							'twitter_title',
+							'twitter_description',
+							'og_image',
+							// 'article_type', TODO
+							'primary_term',
+						],
+						// 'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
+						// 	'title',
+						// 	'description',
+						// 	'noindex',
+						// 	'nofollow',
+						// 	'noarchive',
+						// 	'og_title',
+						// 	'og_description',
+						// 	'twitter_title',
+						// 	'twitter_description',
+						// ],
+					],
+					// 'termmeta' => [
+					// 	'supports'  => [
+					// 		'title',
+					// 		'description',
+					// 		'canonical_url',
+					// 		'noindex',
+					// 		'nofollow',
+					// 		'noarchive',
+					// 		'og_title',
+					// 		'og_description',
+					// 		'twitter_title',
+					// 		'twitter_description',
+					// 		'og_image',
+					// 	],
+					// 	'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
+					// 		'title',
+					// 		'description',
+					// 		'noindex',
+					// 		'nofollow',
+					// 		'noarchive',
+					// 		'og_title',
+					// 		'og_description',
+					// 		'twitter_title',
+					// 		'twitter_description',
+					// 	],
+					// ],
 				],
 			],
 			// TODO

@@ -131,8 +131,8 @@ final class Handler {
 			// Convert 90 posts per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
-			// var_dump()
-			$this->release_transport_lock();
+			// var_dump() debug
+			// $this->release_transport_lock();
 
 			if ( ! $this->lock_transport( $timeout ) )
 				$this->_halt_server( [
@@ -182,7 +182,7 @@ final class Handler {
 								\esc_html(
 									sprintf(
 										/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
-										\__( 'Handling post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
+										\__( 'Processing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
 										$post_iterator,
 										$total_posts,
 										$post_id
@@ -218,7 +218,7 @@ final class Handler {
 										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
 									);
 								}
-								$succeeded++;
+								$succeeded += (int) $results['updated'];
 							}
 
 							resultsDelete:;
@@ -233,7 +233,7 @@ final class Handler {
 									$store->store(
 										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
 									);
-									$deleted++;
+									$deleted += (int) $results['deleted'];
 								}
 							}
 
@@ -304,7 +304,7 @@ final class Handler {
 										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
 									);
 								}
-								$succeeded++;
+								$succeeded += (int) $results['updated'];
 							}
 							if ( $actions['delete'] ) {
 								// In case anyone asks: "useless" data is '' or null.
@@ -316,7 +316,7 @@ final class Handler {
 									$store->store(
 										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
 									);
-									$deleted++;
+									$deleted += (int) $results['deleted'];
 								}
 							}
 							break;
@@ -385,6 +385,7 @@ final class Handler {
 							}
 							break;
 						case 'debug':
+							// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- Exactly.
 							$store->store( \esc_html( print_r( $data, true ) ) );
 							break;
 						default:

@@ -53,8 +53,8 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * TODO use API functions of TSF (memo, has_run, isset()?..: et al.)
 * TODO refactor coalesce_var to PHP 7.0+.
 * TODO Start requiring PHP 7.2+
-	* We'd love to use 7.4+ but 13% of our users are on 7.3 or lower (measured 2022/05/07).
-		* Otto said we'd have to learn from <https://wordpress.org/about/stats/> because it's leading. It's only off by 40%.
+	* We'd love to use 7.3+ but 4.2% of our users are on 7.2 or lower (measured 2022/07/10).
+		* Otto said we'd have to learn from <https://wordpress.org/about/stats/> because it's leading. It's only off by an insignificant 10% of all users.
 			* Let's henceforth rely on our data. TODO remeasure, compare change.
 * Moved TSF installation hanlder to a different file.
 * Improved letter spacing from logos.
@@ -86,6 +86,7 @@ TODO function(){} => ()=>{}
 TODO coalesce_var() => ??
 TODO /isset\( (.*?) \) \? \1/ -> ??
 TODO ([a-zA-Z0-9_-]+)\s*=\s*(\1)\b\s*\|\| -> ||=
+TODO use :where() css instead of the avalange of entries.
 
 TODO add grid display to importer options...
 

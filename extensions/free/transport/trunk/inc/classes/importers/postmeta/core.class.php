@@ -112,7 +112,7 @@ abstract class Core {
 
 		foreach ( $this->conversion_sets as $conversion_set ) :
 			prepare: {
-				[ $transfer_from, $transfer_to, $transformer, $sanitizer, $transmuter ] = array_pad( $conversion_set, 4, null );
+				[ $transfer_from, $transfer_to, $transformer, $sanitizer, $transmuter ] = array_pad( $conversion_set, 5, null );
 
 				[ $from_table, $from_index ] = array_pad( $transfer_from ?? [], 2, null );
 				[ $to_table, $to_index ]     = array_pad( $transfer_to ?? [], 2, null );
@@ -128,8 +128,8 @@ abstract class Core {
 
 			getlist: {
 				// Sanity is a virtue.
-				$from_table = \esc_sql( $from_table ) ?: $_globals_postmeta;
-				$to_table   = \esc_sql( $to_table ) ?: $_globals_postmeta;
+				$from_table = \esc_sql( $from_table ) ?: ( $from_index ? $_globals_postmeta : null );
+				$to_table   = \esc_sql( $to_table ) ?: ( $to_index ? $_globals_postmeta : null );
 
 				if ( $is_deletion_only ) {
 					yield 'nowDeleting' => [ [ $from_table, $from_index ] ];
@@ -198,10 +198,12 @@ abstract class Core {
 						'transform' => $has_transformer,
 						// If the data goes nowhere there's no need to delete nor transport.
 						'transport' => ! $identical_index,
-						'delete'    => ! $identical_index,
+						// With no old handle, we must delete manually. TODO fixme?
+						'delete'    => $from_index && ! $identical_index,
 						'sanitize'  => $has_sanitizer,
 						'sanitized' => false,
 					];
+					$cleanup = [];
 
 					$existing_value  = null; // Value in place by new plugin.
 					$transport_value = null; // Value from old plugin.
@@ -234,6 +236,11 @@ abstract class Core {
 						}
 					}
 
+					// If existing new data exists, don't overwrite with old.
+					// Updating is still tried if $results['transformed'] is true.
+					if ( isset( $existing_value ) )
+						$actions['transport'] = false;
+
 					if ( $has_transmuter_from ) {
 						$transport_value = \call_user_func_array(
 							$transmuter['from'][1],
@@ -247,6 +254,7 @@ abstract class Core {
 								],
 								&$actions,
 								&$results,
+								&$cleanup,
 							]
 						);
 					} else {
@@ -259,9 +267,7 @@ abstract class Core {
 							) );
 							if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 						} else {
-							// If new data exists, don't overwrite with old.
-							$actions['transport'] = false;
-							// If new data exists and index is the same, still try to transform. Otherwise, forgo.
+							// If new data exists and index is the same, still try to transform (update). Otherwise, forgo.
 							$actions['transform'] = $actions['transform'] && $identical_index;
 						}
 					}
@@ -276,8 +282,7 @@ abstract class Core {
 							[
 								$set_value,
 								$post_id,
-								[ $from_table, $from_index ],
-								[ $to_table, $to_index ],
+								'post',
 							]
 						);
 
@@ -313,9 +318,28 @@ abstract class Core {
 								],
 								&$actions,
 								&$results,
+								$cleanup,
 							]
 						);
 					} else {
+						if ( 1984 == $post_id )
+							yield 'debug' =>
+							[
+
+								[
+									'transport_value' => $transport_value,
+									'post_id'           => $post_id,
+									'from_data'         => $transmuter['from_data'] ?? null,
+									'from'              => [ $from_table, $from_index ],
+									'existing_value'    => $existing_value,
+									'has_transmuter_to' => $has_transmuter_to,
+									'set_value' => $set_value,
+								],
+								$actions,
+								$results,
+								$cleanup,
+							];
+
 						// $actions and $results are passed by reference.
 						$this->transmute(
 							$set_value,
@@ -323,7 +347,8 @@ abstract class Core {
 							[ $from_table, $from_index ],
 							[ $to_table, $to_index ],
 							$actions,
-							$results
+							$results,
+							$cleanup
 						);
 					}
 
@@ -353,9 +378,10 @@ abstract class Core {
 	 * @param ?string[] $transfer_to   The table+index to transfer to.
 	 * @param array     $actions       The actions for and after transmuation, passed by reference.
 	 * @param array     $results       The results before and after transmuation, passed by reference.
+	 * @param ?array    $cleanup       The extraneous database indexes to clean up.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	protected function transmute( $set_value, $post_id, $transfer_from, $transfer_to, &$actions, &$results ) {
+	protected function transmute( $set_value, $post_id, $transfer_from, $transfer_to, &$actions, &$results, &$cleanup = null ) {
 		global $wpdb;
 
 		[ $from_table, $from_index ] = $transfer_from;
@@ -364,7 +390,7 @@ abstract class Core {
 		if ( ! $to_index ) goto delete;
 
 		if ( $actions['transport'] ) {
-			if ( $to_table === $from_table ) {
+			if ( $from_index && $to_table === $from_table ) {
 				if ( $results['transformed'] ) {
 					$results['updated'] = $wpdb->update(
 						$to_table,
@@ -418,14 +444,25 @@ abstract class Core {
 		}
 
 		delete: if ( $actions['delete'] ) {
-			$results['deleted'] = $wpdb->delete(
+			$results['deleted'] += $from_index ? $wpdb->delete(
 				$from_table,
 				[
 					'post_id'  => $post_id,
 					'meta_key' => $from_index,
 				]
-			);
+			) : false;
 			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		}
+
+		// This is also "deleting", but then willfully.
+		cleanup: foreach ( (array) $cleanup as [ $_from_table, $_from_index ] ) {
+			$results['deleted'] += $wpdb->delete(
+				$_from_table,
+				[
+					'post_id'  => $post_id,
+					'meta_key' => $_from_index,
+				]
+			);
 		}
 	}
 }

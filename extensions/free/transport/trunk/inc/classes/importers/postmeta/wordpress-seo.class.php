@@ -26,42 +26,15 @@ final class WordPress_SEO extends Core {
 	protected function setup_vars() {
 		global $wpdb;
 
-		// 'supports'  => [
-		// 	'title',
-		// 	'description',
-		// 	'canonical_url',
-		// 	'noindex',
-		// 	'nofollow',
-		// 	'noarchive',
-		// 	'og_title',
-		// 	'og_description',
-		// 	'twitter_title',
-		// 	'twitter_description',
-		// 	'og_image',
-		// 	'article_type',
-		// ],
-
-		// 'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
-		// 	'title',
-		// 	'description',
-		// 	'noindex',
-		// 	'nofollow',
-		// 	'noarchive',
-		// 	'og_title',
-		// 	'og_description',
-		// 	'twitter_title',
-		// 	'twitter_description',
-		// ],
-
-		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer::class;
-
-		// var_dump() TODO primary term... _yoast_wpseo_primary_category -> _yoast_wpseo_primary_product_cat, etc.
-		// We should get the supported cats from TSF and generate the keys here.
+		// Construct and fetch classname.
+		$transformer_class = \get_class( new \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer );
 
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]
 		 * $transformer
+		 * $sanitizer
+		 * $transmuter
 		 */
 		$this->conversion_sets = [
 			[
@@ -141,6 +114,9 @@ final class WordPress_SEO extends Core {
 				[ $wpdb->postmeta, '_yoast_wpseo_content_score' ], // delete
 			],
 			[
+				[ $wpdb->postmeta, '_yoast_wpseo_wordproof_timestamp' ], // delete
+			],
+			[
 				[ $wpdb->postmeta, '_yoast_wpseo_estimated-reading-time-minutes' ], // delete
 			],
 		];
@@ -213,7 +189,7 @@ final class WordPress_SEO extends Core {
 
 		[ $from_table, $from_index ] = $data['from'];
 
-		$transmutations = count( $data['to_data']['transmuters'] );
+		$transmutations = \count( $data['to_data']['transmuters'] );
 		$i              = 0;
 
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {

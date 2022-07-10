@@ -76,7 +76,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 					// ); // TODO this ugly.
 					printf(
 						'<em class=description>%s</em>',
-						esc_html__( 'Some textual data will have syntax transformed into real text; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
+						esc_html__( 'Some textual data will have syntax transformed into human readable text; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
 					);
 					?>
 				</p>
