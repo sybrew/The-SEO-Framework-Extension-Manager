@@ -1144,7 +1144,8 @@ class Core {
 	 * @since 1.2.0
 	 * @since 1.3.0 Now handles namespaces instead of class bases.
 	 * @since 2.5.1 Now supports mixed class case.
-	 * @since 2.6.0 Now supports branched path files.
+	 * @since 2.6.0 1. Now supports branched path files.
+	 *              2. Now uses `hrtime()` instead of `microtime()`.
 	 *
 	 * @param string $class The extension classname.
 	 * @return bool False if file hasn't yet been included, otherwise true.
@@ -1169,7 +1170,7 @@ class Core {
 		static $_timenow = true;
 
 		if ( $_timenow ) {
-			$_bootstrap_timer = microtime( true );
+			$_bootstrap_timer = hrtime( true );
 			$_timenow         = false;
 		} else {
 			$_bootstrap_timer = 0;
@@ -1200,7 +1201,7 @@ class Core {
 		}
 
 		if ( $_bootstrap_timer ) {
-			$_t = microtime( true ) - $_bootstrap_timer;
+			$_t = ( hrtime( true ) - $_bootstrap_timer ) / 1e9; // ns to s
 			\The_SEO_Framework\_bootstrap_timer( $_t );
 			\TSF_Extension_Manager\_bootstrap_timer( $_t );
 			$_timenow = true;

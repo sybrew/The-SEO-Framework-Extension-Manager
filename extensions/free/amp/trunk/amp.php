@@ -117,7 +117,7 @@ final class Front {
 
 		\do_action( 'the_seo_framework_do_before_amp_output' );
 
-		$output_start = microtime( true );
+		$output_start = hrtime( true );
 
 		$output = '';
 
@@ -129,7 +129,10 @@ final class Front {
 
 		$output = $tsf->get_plugin_indicator( 'before' )
 				. $output
-				. $tsf->get_plugin_indicator( 'after', $output_start );
+				. $tsf->get_plugin_indicator(
+					'after',
+					( $output_start - hrtime( true ) ) / 1e9
+				);
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
 		echo PHP_EOL . $output . PHP_EOL;

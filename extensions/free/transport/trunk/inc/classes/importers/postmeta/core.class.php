@@ -322,24 +322,6 @@ abstract class Core {
 							]
 						);
 					} else {
-						if ( 1984 == $post_id )
-							yield 'debug' =>
-							[
-
-								[
-									'transport_value' => $transport_value,
-									'post_id'           => $post_id,
-									'from_data'         => $transmuter['from_data'] ?? null,
-									'from'              => [ $from_table, $from_index ],
-									'existing_value'    => $existing_value,
-									'has_transmuter_to' => $has_transmuter_to,
-									'set_value' => $set_value,
-								],
-								$actions,
-								$results,
-								$cleanup,
-							];
-
 						// $actions and $results are passed by reference.
 						$this->transmute(
 							$set_value,

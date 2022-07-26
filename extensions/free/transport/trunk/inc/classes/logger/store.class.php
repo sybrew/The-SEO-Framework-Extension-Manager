@@ -49,7 +49,7 @@ final class Store {
 	 * @param mixed $data The data to store
 	 */
 	public function store( $data ) {
-		static::$store[ $this->id ][ uniqid( microtime( true ), true ) ] = $data;
+		static::$store[ $this->id ][ uniqid( hrtime( true ), true ) ] = $data;
 	}
 
 	/**

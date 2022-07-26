@@ -245,6 +245,7 @@ function can_load_class() {
  *
  * @since 1.0.0
  * @since 2.5.1 Now handles mixed-case class names.
+ * @since 2.6.0 Now uses `hrtime()` instead of `microtime()`.
  * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  *
@@ -275,7 +276,7 @@ function _autoload_classes( $class ) {
 	static $_timenow = true;
 	// Prevent running two timers at once, restart timing once done loading batch.
 	if ( $_timenow ) {
-		$_bootstrap_timer = microtime( true );
+		$_bootstrap_timer = hrtime( true );
 		$_timenow         = false;
 	} else {
 		$_bootstrap_timer = 0;
@@ -293,7 +294,7 @@ function _autoload_classes( $class ) {
 	require TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
-		$_t = microtime( true ) - $_bootstrap_timer;
+		$_t = ( hrtime( true ) - $_bootstrap_timer ) / 1e9;
 		\The_SEO_Framework\_bootstrap_timer( $_t );
 		\TSF_Extension_Manager\_bootstrap_timer( $_t );
 		$_timenow = true;

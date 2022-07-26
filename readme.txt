@@ -52,10 +52,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * TODO Use tsf() insteadof the_seo_framework()
 * TODO use API functions of TSF (memo, has_run, isset()?..: et al.)
 * TODO refactor coalesce_var to PHP 7.0+.
-* TODO Start requiring PHP 7.2+
+* Start requiring PHP 7.3+
 	* We'd love to use 7.3+ but 4.2% of our users are on 7.2 or lower (measured 2022/07/10).
 		* Otto said we'd have to learn from <https://wordpress.org/about/stats/> because it's leading. It's only off by an insignificant 10% of all users.
-			* Let's henceforth rely on our data. TODO remeasure, compare change.
+			* Let's henceforth rely on our data. ...remeasure, compare change.
+			* Found less than 2.2% use PHP 7.2 or lower (1.8% uses 7.2)
 * Moved TSF installation hanlder to a different file.
 * Improved letter spacing from logos.
 TODO remove png files, all browsers support svg now.
@@ -102,8 +103,6 @@ TODO (FIXED, clean up) instead of a fancy observer on logger, we might simply ju
 
 TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
 	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
-
-TODO we use hrtime(), PHP 7.3+.... ooops?
 
 = 2.5.3 =
 
