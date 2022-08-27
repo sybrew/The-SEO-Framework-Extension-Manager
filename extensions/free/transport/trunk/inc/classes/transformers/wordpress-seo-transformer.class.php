@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
- * Transformer for Yoost SEO.
+ * Transformer for Yoast SEO.
  *
  * @since 1.0.0
  * @access private
@@ -75,6 +75,10 @@ class WordPress_SEO_Transformer extends Core {
 		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) )
 			return $text;
 
+		// TODO Consider using `/%%([^%]+(%%single)?)%%/`, for we might land stray `single%%`
+		// There is zero documentation on the use of %%single, though. It's probably a bug or
+		// leftover code in/following Yoast's regex. Here, enjoy 30 more bugs they refuse to fix:
+		// <https://twitter.com/SybreWaaijer/status/1545621157998649346>
 		if ( ! preg_match_all( '/%%([^%]+)%%/', $text, $matches ) )
 			return $text;
 

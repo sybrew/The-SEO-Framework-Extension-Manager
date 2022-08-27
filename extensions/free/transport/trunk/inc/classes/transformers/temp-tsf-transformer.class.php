@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
- * Transformer for Yoost SEO.
+ * Transformer for TSF.
  *
  * @since 1.0.0
  * @access private

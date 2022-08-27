@@ -94,6 +94,8 @@ final class Handler {
 	 */
 	public function _import( $supported_importers ) {
 
+		$hrtimestart = hrtime( true );
+
 		server: {
 			$logger_uid = uniqid( static::LOG_ID['import'], true );
 
@@ -176,7 +178,7 @@ final class Handler {
 
 				foreach ( ( new $_class )->import() as $handle => $data ) :
 					switch ( $handle ) :
-						case 'currentPostId':
+						case 'currentItemId':
 							[ $post_id, $total_posts, $post_iterator ] = $data;
 							$store->store(
 								\esc_html(
@@ -362,7 +364,7 @@ final class Handler {
 								)
 							);
 							break;
-						case 'foundPosts':
+						case 'foundItems':
 							[ $total_posts ] = $data;
 							$store->store(
 								\esc_html(
@@ -386,6 +388,7 @@ final class Handler {
 							break;
 						case 'debug':
 							// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- Exactly.
+							$store->store( 'Debug:' );
 							$store->store( \esc_html( print_r( $data, true ) ) );
 							break;
 						default:
@@ -433,15 +436,22 @@ final class Handler {
 		$server->poll( $store );
 		$this->release_transport_lock();
 
+		$seconds = ceil( ( hrtime( true ) - $hrtimestart ) / 1e9 );
 		$this->_halt_server( [
 			'server'     => $server,
 			'poll_data'  => [
 				'results' => $this->get_ajax_notice( true, 1060205 ),
 				'logMsg'  => ( $streaming ? '' : $server->get_flush_store() ) . \esc_html(
 					vsprintf(
-						/* translators: 1,2,3,4 are numbers */
-						\__( 'Completed import with %1$d successful, %2$d skipped, and %3$d failed transports. Deleted %4$d old entries.', 'the-seo-framework-extension-manager' ),
+						/* translators: 1,2,3,4,5 are numbers */
+						\_n(
+							'Completed import in %1$d second with %2$d successful, %3$d skipped, and %4$d failed transports. Deleted %5$d old entries.',
+							'Completed import in %1$d seconds with %2$d successful, %3$d skipped, and %4$d failed transports. Deleted %5$d old entries.',
+							$seconds,
+							'the-seo-framework-extension-manager'
+						),
 						[
+							$seconds,
 							$succeeded,
 							$skipped,
 							$failed,

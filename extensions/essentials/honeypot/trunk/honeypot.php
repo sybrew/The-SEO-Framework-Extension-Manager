@@ -511,9 +511,8 @@ JS;
 			$_tick = 2;
 		endif;
 
-		if ( $_tick < 1 ) {
+		if ( $_tick < 1 )
 			$approved = 'spam';
-		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
@@ -532,9 +531,8 @@ JS;
 		// Perform same sanitization as displayed.
 		$_field = \sanitize_key( $this->hp_properties['timer_input_name'] );
 
-		if ( ! empty( $_POST[ $_field ] ) ) {
+		if ( ! empty( $_POST[ $_field ] ) )
 			$approved = 'spam';
-		}
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}

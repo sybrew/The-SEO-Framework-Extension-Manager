@@ -209,7 +209,7 @@ abstract class Core {
 
 		$term = \get_the_terms(
 			self::$post->ID,
-			current( \get_object_taxonomies( self::$post->post_type, 'objects' ) )
+			current( \get_object_taxonomies( self::$post->post_type, 'names' ) )
 		)[0] ?? null;
 
 		$term instanceof \WP_Term and self::set_term( $term );

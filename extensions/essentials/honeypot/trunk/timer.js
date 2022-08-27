@@ -43,7 +43,7 @@
 	 */
 	let rZeroOffset = ( 1 - Math.random() ) * 0xFF;
 
-	let timer = ( timestamp ) => {
+	let timer = timestamp => {
 		if ( void 0 === start )
 			start = timestamp;
 

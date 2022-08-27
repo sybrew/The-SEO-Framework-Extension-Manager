@@ -8,7 +8,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\PostMeta;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
- * Importer for Yoost SEO.
+ * Importer for Yoast SEO.
  *
  * @since 1.0.0
  * @access private

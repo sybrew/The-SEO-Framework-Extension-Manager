@@ -104,6 +104,10 @@ TODO (FIXED, clean up) instead of a fancy observer on logger, we might simply ju
 TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
 	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
 
+TODO Add "mark as spam, put in trash, or discard/permanently delete the comment."
+TODO Add method used to mark as spam as comment-meta? -> Is this possible, I don't want to add more rows.
+	-> Otherwise, simply add a counter for each type. Store as array?
+
 = 2.5.3 =
 
 **Release date:**

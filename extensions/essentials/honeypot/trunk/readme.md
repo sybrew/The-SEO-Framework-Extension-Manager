@@ -57,7 +57,7 @@ The Scoped Rotation CSS honeypot works like the Static CSS honeypot. But, it req
 
 When no caching plugin is used, the field will rotate its unique ID every 60 minutes. Because of its rotation, robots can't "learn" what to target, making this field even more effective.
 
-#### Third method: Rotating JavaScript (98.9% catch rate)
+#### Third method: Rotating JavaScript
 
 This honeypot uses a combination of unique ID rotation, forced entry, and JavaScript.
 
