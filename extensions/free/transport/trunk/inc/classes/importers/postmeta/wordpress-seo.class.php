@@ -8,6 +8,23 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\PostMeta;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
+ * Transport extension for The SEO Framework
+ * Copyright (C) 2022 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * Importer for Yoast SEO.
  *
  * @since 1.0.0
@@ -152,12 +169,13 @@ final class WordPress_SEO extends Core {
 			// 'noimageindex', // reserved for later
 			// 'nosnippet', // reserved for later
 		] as $type ) {
+			// Defined in $this->conversion_sets
 			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['transmuters'][ $type ] );
 
 			$current_value = $wpdb->get_var( $wpdb->prepare(
 				// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
 				"SELECT meta_value FROM `$to_table` WHERE post_id = %d AND meta_key = %s",
-				$data['post_id'],
+				$data['item_id'],
 				$to_index
 			) );
 			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
@@ -213,31 +231,32 @@ final class WordPress_SEO extends Core {
 					$data['to_data']['transformers'][ $type ],
 					[
 						$_set_value,
-						$data['post_id'],
+						$data['item_id'],
+						$this->type,
 						[ $from_table, $from_index ],
 						[ $to_table, $to_index ],
 					]
 				);
 
-				$_results['transformed'] = $__pre_transform_value !== $_set_value;
+				$_results['transformed'] += (int) ( $__pre_transform_value !== $_set_value );
 			}
 
 			if ( \in_array( $_set_value, $this->useless_data, true ) ) {
 				$_set_value              = null;
-				$_results['transformed'] = false;
+				$_results['transformed'] = 0;
 				$_actions['transport']   = false;
 			}
 
 			$this->transmute(
 				$_set_value,
-				$data['post_id'],
+				$data['item_id'],
 				[ $from_table, $from_index ],
 				[ $to_table, $to_index ],
 				$_actions,
 				$_results
 			);
 
-			yield 'transmutedResults' => [ $_results, $_actions, $data['post_id'] ];
+			yield 'transmutedResults' => [ $_results, $_actions, $data['item_id'] ];
 		}
 	}
 }

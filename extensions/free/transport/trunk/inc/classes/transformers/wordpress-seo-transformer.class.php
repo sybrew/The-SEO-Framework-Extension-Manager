@@ -8,6 +8,23 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
+ * Transport extension for The SEO Framework
+ * Copyright (C) 2022 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * Transformer for Yoast SEO.
  *
  * @since 1.0.0
@@ -153,6 +170,25 @@ class WordPress_SEO_Transformer extends Core {
 	public static function _robots_advanced( $value ) {
 
 		if ( \in_array( $value, [ 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
+			$value = 1; // Force no_robots
+		} else {
+			$value = null; // Default/unassigned
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Converts Yoast SEO term robots-settings to TSF's qubit.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value The old robots value possibly unsafe for TSF.
+	 * @return int|null The sanitized qubit.
+	 */
+	public static function _robots_term( $value ) {
+
+		if ( 'noindex' === $value ) {
 			$value = 1; // Force no_robots
 		} else {
 			$value = null; // Default/unassigned

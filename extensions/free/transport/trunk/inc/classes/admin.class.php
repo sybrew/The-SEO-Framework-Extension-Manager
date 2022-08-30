@@ -169,6 +169,7 @@ final class Admin {
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
 							'title',
 							'description',
+							'canonical_url',
 							'noindex',
 							'nofollow',
 							'noarchive',
@@ -176,6 +177,7 @@ final class Admin {
 							'og_description',
 							'twitter_title',
 							'twitter_description',
+							'og_image',
 						],
 					],
 				],

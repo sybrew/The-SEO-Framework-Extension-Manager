@@ -32,10 +32,10 @@ Robots leave spammy comments via various techniques, and Honeypot counters almos
 Only a human that uses a modern browser can pass these tests:
 
 1. Static CSS-hidden fields using unique IDs. All bots that do not target WordPress specifically will fail this test.
-1. Randomized CSS-hidden fields using HTML5 and time-bound IDs. Targets the same bots as above, but other bots that wait (far) too long to comment will also get caught.
-1. Randomized JavaScript. Most bots don't use a real browser that supports JavaScript, so they'll fail this test. Humans that don't use JavaScript will have to empty a field.
-1. Verification nonces. With this, bots can no longer abuse exposed endpoints in WordPress to leave comments.
-1. GPU timers. The bot must actually render the page to pass this test.
+1. Randomized CSS-hidden fields using HTML5 and time-limited IDs. Targets the same bots as above, but other bots that scrape comment forms for postponed abuse will also get caught.
+1. Randomized JavaScript. Most bots don't use a real browser that supports JavaScript, so they'll fail this test. Humans that don't use JavaScript are asked kindly to empty a field.
+1. Verification nonces. With this, bots can no longer abuse easily exposed endpoints in WordPress to leave comments.
+1. GPU timers. The bot must actually render the page to pass this test, blocking spam from many emulated browsers.
 
 All five methods are built around randomization, so no robot can use deep-learning to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**.
 

@@ -3,26 +3,9 @@
  * @package TSF_Extension_Manager\Extension\Transport\Importers
  */
 
-namespace TSF_Extension_Manager\Extension\Transport\Importers\PostMeta;
+namespace TSF_Extension_Manager\Extension\Transport\Importers\TermMeta;
 
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
-
-/**
- * Transport extension for The SEO Framework
- * Copyright (C) 2022 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 as published
- * by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 
 /**
  * Importer for TSF from Yoast SEO.
@@ -42,33 +25,6 @@ final class Temp_The_SEO_Framework extends Core {
 	 */
 	protected function setup_vars() {
 		global $wpdb;
-
-		// 'supports'  => [
-		// 	'title',
-		// 	'description',
-		// 	'canonical_url',
-		// 	'noindex',
-		// 	'nofollow',
-		// 	'noarchive',
-		// 	'og_title',
-		// 	'og_description',
-		// 	'twitter_title',
-		// 	'twitter_description',
-		// 	'og_image',
-		// 	'article_type',
-		// ],
-
-		// 'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
-		// 	'title',
-		// 	'description',
-		// 	'noindex',
-		// 	'nofollow',
-		// 	'noarchive',
-		// 	'og_title',
-		// 	'og_description',
-		// 	'twitter_title',
-		// 	'twitter_description',
-		// ],
 
 		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF_Transformer::class;
 

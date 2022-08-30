@@ -8,6 +8,23 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers;
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
 /**
+ * Transport extension for The SEO Framework
+ * Copyright (C) 2022 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published
+ * by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
  * Base importer class.
  *
  * @since 1.0.0
@@ -141,7 +158,7 @@ abstract class Base {
 				$is_deletion_only    = ! $has_transmuter_to && ! $to_index;
 			}
 
-			getlist: {
+			getitems: {
 				// Sanity is a virtue.
 				$from_table = \esc_sql( $from_table ) ?: ( $from_index ? $_globals_table_fallback : null );
 				$to_table   = \esc_sql( $to_table ) ?: ( $to_index ? $_globals_table_fallback : null );
@@ -204,11 +221,12 @@ abstract class Base {
 						: [ $from_table, $from_index ] === [ $to_table, $to_index ]; // phpcs:ignore, WordPress.PHP.YodaConditions.NotYoda -- Nani?
 
 					$results = [
-						'updated'     => false,
-						'transformed' => false,
-						'deleted'     => false,
-						'only_end'    => $has_transmuter_to,
-						'only_delete' => $is_deletion_only,
+						'updated'     => 0,
+						'transformed' => 0,
+						'deleted'     => 0,
+						'only_end'    => (int) $has_transmuter_to,
+						'only_delete' => (int) $is_deletion_only,
+						'sanitized'   => 0,
 					];
 					$actions = [
 						'transform' => $has_transformer,
@@ -217,7 +235,6 @@ abstract class Base {
 						// With no old handle, we must delete manually. TODO fixme?
 						'delete'    => $from_index && ! $identical_index,
 						'sanitize'  => $has_sanitizer,
-						'sanitized' => false,
 					];
 					$cleanup = [];
 
@@ -234,7 +251,7 @@ abstract class Base {
 								$transmuter['to'][0],
 								[
 									[
-										$_id_key  => $item_id,
+										'item_id' => $item_id,
 										'to_data' => $transmuter['to_data'] ?? null,
 										'to'      => [ $to_table, $to_index ],
 										'from'    => [ $from_table, $from_index ],
@@ -262,7 +279,7 @@ abstract class Base {
 							$transmuter['from'][1],
 							[
 								[
-									$_id_key            => $item_id,
+									'item_id'           => $item_id,
 									'from_data'         => $transmuter['from_data'] ?? null,
 									'from'              => [ $from_table, $from_index ],
 									'existing_value'    => $existing_value,
@@ -302,7 +319,7 @@ abstract class Base {
 							]
 						);
 
-						$results['transformed'] = $_pre_transform_value !== $set_value;
+						$results['transformed'] += (int) ( $_pre_transform_value !== $set_value );
 					}
 
 					if ( $actions['sanitize'] ) {
@@ -310,13 +327,13 @@ abstract class Base {
 
 						$set_value = \call_user_func( $sanitizer, $set_value );
 
-						$actions['sanitized'] = $_pre_sanitize_value !== $set_value;
+						$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
 					}
 
 					if ( \in_array( $set_value, $this->useless_data, true ) ) {
 						$set_value              = null;
 						$actions['delete']      = true;
-						$results['transformed'] = false;
+						$results['transformed'] = 0;
 						$actions['transport']   = false;
 					}
 
@@ -325,7 +342,7 @@ abstract class Base {
 							$transmuter['to'][1],
 							[
 								[
-									$_id_key    => $item_id,
+									'item_id'   => $item_id,
 									'set_value' => $set_value,
 									'from_data' => $transmuter['from_data'] ?? null,
 									'from'      => [ $from_table, $from_index ],
@@ -351,7 +368,7 @@ abstract class Base {
 					}
 
 					$is_lastitem = $item_iterator === $total_items;
-					yield 'results' => [ $results, $actions, $item_id, $is_lastitem, $has_transmuter_to ];
+					yield 'results' => [ $results, $actions, $item_id, $is_lastitem ];
 
 					// This also busts cache of caching plugins. Intended: Update the post/term/item!
 					$_has_cache_clear_cb and \call_user_func( $_cache_clear_cb, $item_id );
@@ -379,7 +396,7 @@ abstract class Base {
 	 * @param ?array    $cleanup       The extraneous database indexes to clean up.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	protected function transmute( $set_value, $item_id, $transfer_from, $transfer_to, &$actions, &$results, &$cleanup = null ) {
+	protected function transmute( $set_value, $item_id, $transfer_from, $transfer_to, &$actions, &$results, $cleanup = null ) {
 		global $wpdb;
 
 		[ $from_table, $from_index ] = $transfer_from;
@@ -389,10 +406,12 @@ abstract class Base {
 
 		if ( ! $to_index ) goto delete;
 
+		$set_value = \maybe_serialize( $set_value );
+
 		if ( $actions['transport'] ) {
 			if ( $from_index && $to_table === $from_table ) {
 				if ( $results['transformed'] ) {
-					$results['updated'] = $wpdb->update(
+					$results['updated'] += (int) $wpdb->update(
 						$to_table,
 						[
 							'meta_key'   => $to_index,
@@ -405,7 +424,7 @@ abstract class Base {
 					);
 					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				} else {
-					$results['updated'] = $wpdb->update(
+					$results['updated'] += (int) $wpdb->update(
 						$to_table,
 						[ 'meta_key' => $to_index ],
 						[
@@ -419,7 +438,7 @@ abstract class Base {
 				$actions['delete'] = false;
 			} else {
 				// We don't care whether it's transformed here.
-				$results['updated'] = $wpdb->insert(
+				$results['updated'] += (int) $wpdb->insert(
 					$to_table,
 					[
 						$_id_key     => $item_id,
@@ -429,34 +448,38 @@ abstract class Base {
 				);
 				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 			}
-		} elseif ( $results['transformed'] ) {
-			$results['updated'] = $wpdb->update(
-				$to_table,
-				[ 'meta_value' => $set_value ],
-				[
-					$_id_key   => $item_id,
-					'meta_key' => $to_index,
-				]
-			);
-			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-			// Altered, mustn't be deleted. Should've already been false. Just in case:
-			$actions['delete'] = false;
+		} else {
+			if ( $results['transformed'] ) {
+				$results['updated'] += (int) $wpdb->update(
+					$to_table,
+					[ 'meta_value' => $set_value ],
+					[
+						$_id_key   => $item_id,
+						'meta_key' => $to_index,
+					]
+				);
+				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+				// Altered, mustn't be deleted. Should've already been false. Just in case:
+				$actions['delete'] = false;
+			}
 		}
 
 		delete: if ( $actions['delete'] ) {
-			$results['deleted'] += $from_index ? $wpdb->delete(
-				$from_table,
-				[
-					$_id_key   => $item_id,
-					'meta_key' => $from_index,
-				]
-			) : false;
-			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+			if ( $from_index ) {
+				$results['deleted'] += (int) $wpdb->delete(
+					$from_table,
+					[
+						$_id_key   => $item_id,
+						'meta_key' => $from_index,
+					]
+				);
+				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+			}
 		}
 
-		// This is also "deleting", but then willfully.
+		// This is also "deleting", but then assigned manually by developer.
 		cleanup: foreach ( (array) $cleanup as [ $_from_table, $_from_index ] ) {
-			$results['deleted'] += $wpdb->delete(
+			$results['deleted'] += (int) $wpdb->delete(
 				$_from_table,
 				[
 					$_id_key   => $item_id,

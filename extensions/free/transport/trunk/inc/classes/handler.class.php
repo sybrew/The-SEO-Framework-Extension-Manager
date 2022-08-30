@@ -130,7 +130,7 @@ final class Handler {
 		}
 
 		prepare: {
-			// Convert 90 posts per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
+			// Convert 90 posts/terms/items per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
 			// var_dump() debug
@@ -172,28 +172,38 @@ final class Handler {
 		}
 
 		try {
-			if ( \in_array( 'postmeta', $import_settings['selectType'], true ) ) {
+			foreach ( $import_settings['selectType'] as $_type ) {
+				switch ( $_type ) {
+					case 'postmeta':
+						$_class = __NAMESPACE__ . "\\Importers\\PostMeta\\{$import_settings['choosePlugin']}";
+						break;
+					case 'termmeta':
+						$_class = __NAMESPACE__ . "\\Importers\\TermMeta\\{$import_settings['choosePlugin']}";
+						break;
 
-				$_class = __NAMESPACE__ . "\\Importers\\PostMeta\\{$import_settings['choosePlugin']}";
+					default:
+						// Nothing useful found, go to next type.
+						continue 2;
+				}
 
 				foreach ( ( new $_class )->import() as $handle => $data ) :
 					switch ( $handle ) :
 						case 'currentItemId':
-							[ $post_id, $total_posts, $post_iterator ] = $data;
+							[ $item_id, $total_items, $post_iterator ] = $data;
 							$store->store(
 								\esc_html(
 									sprintf(
-										/* translators: 1 = post number, 2 = totalposts, 3 = post ID */
-										\__( 'Processing post %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
+										/* translators: 1 = item number, 2 = total items, 3 = item ID */
+										\__( 'Processing item %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
 										$post_iterator,
-										$total_posts,
-										$post_id
+										$total_items,
+										$item_id
 									)
 								)
 							);
 							break;
 						case 'results':
-							[ $results, $actions, $post_id, $is_lastpost ] = $data;
+							[ $results, $actions, $item_id, $is_lastitem ] = $data;
 
 							if ( $results['only_end'] ) goto resultsEnd;
 							if ( $results['only_delete'] ) goto resultsDelete;
@@ -220,7 +230,7 @@ final class Handler {
 										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
 									);
 								}
-								$succeeded += (int) $results['updated'];
+								$succeeded += $results['updated'];
 							}
 
 							resultsDelete:;
@@ -235,19 +245,19 @@ final class Handler {
 									$store->store(
 										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
 									);
-									$deleted += (int) $results['deleted'];
+									$deleted += $results['deleted'];
 								}
 							}
 
 							resultsEnd:;
-							if ( $is_lastpost ) {
+							if ( $is_lastitem ) {
 								$store->store( '&nbsp;' );
 								$store->store( '===============' );
 							} else {
 								$store->store( '&nbsp;' );
 							}
 
-							// Test if limit is reached after every post conversion.
+							// Test if limit is reached after every item conversion.
 							if ( $time_limit < time() ) {
 								$this->release_transport_lock();
 								$this->_halt_server( [
@@ -264,7 +274,7 @@ final class Handler {
 								] );
 							}
 
-							// Test if memory limit is reached after every post conversion.
+							// Test if memory limit is reached after every item conversion.
 							if ( ! $this->has_free_memory( $memory_bytes_requires ) ) {
 								$this->release_transport_lock();
 								$this->_halt_server( [
@@ -282,7 +292,7 @@ final class Handler {
 							}
 							break;
 						case 'transmutedResults':
-							[ $results, $actions, $post_id ] = $data;
+							[ $results, $actions, $item_id ] = $data;
 
 							if ( ! $results['updated'] ) {
 								if ( $actions['transport'] ) {
@@ -306,7 +316,7 @@ final class Handler {
 										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
 									);
 								}
-								$succeeded += (int) $results['updated'];
+								$succeeded += $results['updated'];
 							}
 							if ( $actions['delete'] ) {
 								// In case anyone asks: "useless" data is '' or null.
@@ -318,7 +328,7 @@ final class Handler {
 									$store->store(
 										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
 									);
-									$deleted += (int) $results['deleted'];
+									$deleted += $results['deleted'];
 								}
 							}
 							break;
@@ -365,30 +375,30 @@ final class Handler {
 							);
 							break;
 						case 'foundItems':
-							[ $total_posts ] = $data;
+							[ $total_items ] = $data;
 							$store->store(
 								\esc_html(
 									sprintf(
-										/* translators: %d = number of posts found. */
+										/* translators: %d = number of items found. */
 										\_n(
-											'Found %d post.',
-											'Found %d posts.',
-											$total_posts,
+											'Found %d item.',
+											'Found %d items.',
+											$total_items,
 											'the-seo-framework-extension-manager'
 										),
-										$total_posts
+										$total_items
 									)
 								)
 							);
-							if ( $total_posts ) {
+							if ( $total_items ) {
 								$store->store( '= = = = = = = =' );
 							} else {
 								$store->store( '===============' );
 							}
 							break;
 						case 'debug':
-							// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- Exactly.
 							$store->store( 'Debug:' );
+							// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- Exactly.
 							$store->store( \esc_html( print_r( $data, true ) ) );
 							break;
 						default:
@@ -402,11 +412,6 @@ final class Handler {
 					}
 				endforeach;
 			}
-
-			// if ( \in_array( 'termmeta', $import_settings['selectType'], true ) ) {
-			// 	$_class = __NAMESPACE__ . "\\Importers\\TermMeta\\{$import_settings['choosePlugin']}";
-			// 	$importer = new $_class;
-			// }
 		} catch ( \Exception $e ) {
 
 			$server->poll( $store );
