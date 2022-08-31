@@ -32,7 +32,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\PostMeta;
  *
  * Inherits abstract setup_vars.
  */
-final class Temp_The_SEO_Framework extends Core {
+final class Temp_The_SEO_Framework extends Base {
 
 	/**
 	 * Sets up variables.

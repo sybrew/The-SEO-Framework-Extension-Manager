@@ -34,15 +34,27 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  */
 class WordPress_SEO_Transformer extends Core {
 
-	/**
-	 * Constructor, sets up vars.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function construct() {
-		parent::construct();
-		// static::$separators = [];
-	}
+	// /**
+	//  * Constructor, sets up vars.
+	//  *
+	//  * @since 1.0.0
+	//  * @ignore
+	//  * @override
+	//  */
+	// protected static function construct() {
+	// 	parent::construct();
+	// }
+
+	// /**
+	//  * Resets replacements.
+	//  *
+	//  * @since 1.0.0
+	//  * @ignore
+	//  * @override
+	//  */
+	// protected static function reset_replacements() {
+	// 	parent::reset_replacements();
+	// }
 
 	/**
 	 * Converts Yoast SEO title syntax to human readable text.

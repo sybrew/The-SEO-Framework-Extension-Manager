@@ -93,7 +93,9 @@ final class Server {
 			preg_split( '/\s*,\s*/', $this->get_headers()['accept'] ?? '' )
 			as $mime
 		) {
-			if ( 0 !== preg_match( '/^(\*\/\*|text\/event-stream;?)/', $mime ) ) {
+			// */* technically accepts event-stream, but doesn't explicitely request it.
+			// if ( 0 !== preg_match( '/^(\*\/\*|text\/event-stream;?)/', $mime ) ) {
+			if ( 0 !== preg_match( '/^(text\/event-stream;?)/', $mime ) ) {
 				static::$supports_stream = true;
 				break;
 			}
@@ -125,6 +127,14 @@ final class Server {
 
 		if ( ! static::$supports_stream ) return false;
 
+		\add_filter(
+			'wp_die_ajax_handler',
+			function() {
+				return [ $this, '_wp_die_handler' ];
+			},
+			9999
+		);
+
 		\tsf()->clean_response_header();
 
 		// Disable. With it enabled it would otherwise cause double-output.
@@ -146,6 +156,9 @@ final class Server {
 		ob_start();
 
 		static::$lastpadstamp = time();
+		// $this->send( 'Exit: ' . ( wp_doing_ajax() ? 'yup' : 'np' ), -1, 'tsfem-e-transport-die' );
+		// $this->send( 'Message: ' . \wp_strip_all_tags( 'what' ), -1, 'tsfem-e-transport-die' );
+		// $this->flush();
 
 		return $this->flush();
 	}
@@ -225,6 +238,7 @@ final class Server {
 
 		if ( \is_string( $data ) )
 			$data = [ 'content' => $data ];
+			// $data = [ 'content' => strtr( $data, [ ':' => '&#58;' ] ) ];
 
 		printf( "event: %s\nid: %s\n", \esc_html( $event ), \esc_html( $id ) );
 		echo 'data: ', json_encode( $data, JSON_FORCE_OBJECT ), "\n\n";
@@ -246,6 +260,25 @@ final class Server {
 			// phpcs:ignore, WordPress.Security.EscapeOutput -- it's just null..., man, chill.
 			echo ':' . str_repeat( "\x00", $length - 3 ) . "\n\n";
 		}
+	}
+
+	/**
+	 * Customizes WP Die handler for event streams.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $message The (HTML) die message.
+	 * @param string $title   The page title. Might be empty.
+	 * @param array  $args    Arguments to control behavior.
+	 */
+	public function _wp_die_handler( $message, $title = '', $args = [] ) {
+		$this->send(
+			'WordPress exit: ' . \wp_strip_all_tags( trim( "$title: $message", ': ' ) ),
+			-1,
+			'tsfem-e-transport-die'
+		);
+		$this->flush();
+		exit;
 	}
 
 	/**

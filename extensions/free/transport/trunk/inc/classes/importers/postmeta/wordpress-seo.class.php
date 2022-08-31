@@ -32,7 +32,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\PostMeta;
  *
  * Inherits abstract setup_vars.
  */
-final class WordPress_SEO extends Core {
+final class WordPress_SEO extends Base {
 
 	/**
 	 * Sets up variables.
@@ -44,7 +44,7 @@ final class WordPress_SEO extends Core {
 		global $wpdb;
 
 		// Construct and fetch classname.
-		$transformer_class = \get_class( new \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer );
+		$transformer_class = \get_class( \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer::get_instance() );
 
 		/**
 		 * [ $from_table, $from_index ]

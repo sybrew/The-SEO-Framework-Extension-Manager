@@ -50,7 +50,7 @@ const retryTimeout = 5000;
  * @access private
  * @type {int} The number of retries allowed before manual intervention is required.
  */
-const retryLimit = 5;
+const retryLimit = 3;
 
 const _log     = ( ...message ) => postMessage( { workerId, log: message } );
 const _resolve = ( ...message ) => postMessage( { workerId, resolve: message } );
@@ -97,16 +97,24 @@ onmessage = message => {
 		}
 		const doEventResolve = event => {
 			SSE[ workerId ].close();
-			let data = extractEventData( event.data );
+			const data = extractEventData( event.data );
 			_log( "\n\n" + data.logMsg, 2 );
 			_resolve( data?.results.notice );
 		}
 		const doEventReject = event => {
 			SSE[ workerId ].close();
-			let data = extractEventData( event.data );
+			const data = extractEventData( event.data );
 			_log( '&nbsp;' );
 			_log( data?.logMsg, 2 );
 			_resolve( data?.results.notice );
+		}
+		const doEventDie = event => {
+			// Don't close: On die it will close anyway.
+			_log( '===============' );
+			_log( '&nbsp;' );
+			_log( extractEventData( event.data )?.content );
+			_log( '&nbsp;' );
+			_log( '===============', 1 );
 		}
 		const doEventRetry = event => {
 
@@ -129,8 +137,8 @@ onmessage = message => {
 			// Start at 1 because when we hit 1 we immediately start
 			let retryTick = 1;
 			const retryTicker = setInterval( () => {
-				let countDown = ( retryTimeout / 1000 ) - retryTick++,
-					lastTick  = countDown < 2;
+				const countDown = ( retryTimeout / 1000 ) - retryTick++,
+					  lastTick  = countDown < 2;
 
 				_log( logMessages.retryCountdown.replace( '%d', countDown ), lastTick ? 1 : 0 );
 
@@ -151,6 +159,8 @@ onmessage = message => {
 
 		SSE[ workerId ].addEventListener( 'tsfem-e-transport-crash', doEventRetry );
 		SSE[ workerId ].addEventListener( 'tsfem-e-transport-timeout', doEventRetry );
+
+		SSE[ workerId ].addEventListener( 'tsfem-e-transport-die', doEventDie );
 	}
 
 	startSSE();

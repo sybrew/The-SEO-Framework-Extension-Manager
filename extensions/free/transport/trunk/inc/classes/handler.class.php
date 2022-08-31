@@ -189,13 +189,13 @@ final class Handler {
 				foreach ( ( new $_class )->import() as $handle => $data ) :
 					switch ( $handle ) :
 						case 'currentItemId':
-							[ $item_id, $total_items, $post_iterator ] = $data;
+							[ $item_id, $total_items, $item_iterator ] = $data;
 							$store->store(
 								\esc_html(
 									sprintf(
 										/* translators: 1 = item number, 2 = total items, 3 = item ID */
 										\__( 'Processing item %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
-										$post_iterator,
+										$item_iterator,
 										$total_items,
 										$item_id
 									)
@@ -222,9 +222,15 @@ final class Handler {
 								}
 							} else {
 								if ( $results['transformed'] ) {
-									$store->store(
-										\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
-									);
+									if ( $actions['transport'] ) {
+										$store->store(
+											\esc_html__( 'Data imported and transformed succesfully.', 'the-seo-framework-extension-manager' )
+										);
+									} else {
+										$store->store(
+											\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
+										);
+									}
 								} else {
 									$store->store(
 										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )

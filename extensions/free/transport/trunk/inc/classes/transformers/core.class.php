@@ -32,7 +32,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  * @abstract
  */
 abstract class Core {
-	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
+	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
 	 * @since 1.0.0
@@ -130,8 +130,9 @@ abstract class Core {
 	 * Constructor, sets up vars.
 	 *
 	 * @since 1.0.0
+	 * @override See Trait Construct_Core_Static_Final_Instance
 	 */
-	protected function construct() {
+	private function __construct() {
 		self::$tsf = \tsf();
 		static::reset_replacements();
 
@@ -272,18 +273,18 @@ abstract class Core {
 		// Names are derived from Yoast SEO's transformations -- but all other SEO plugins use these as a baseline.
 		// Add to these replacements as you see fit, this array shouldn't be looped over, indexes should be fetched directly.
 		self::$replacements = [
-			'archive_title'        => [ static::class, 'get_term_title' ], // CPTA aren't transported.
-			'author_first_name'    => [ static::class, 'get_post_author_first_name' ],
-			'author_last_name'     => [ static::class, 'get_post_author_last_name' ],
+			'archive_title'        => [ static::class, 'get_term_title' ], // Note: CPTA aren't transported--this replacement doesn't consider.
+			'author_first_name'    => [ static::class, 'get_post_author_first_name' ], // Doesn't (shouldn't) work on Terms.
+			'author_last_name'     => [ static::class, 'get_post_author_last_name' ],  // Doesn't (shouldn't) work on Terms.
 			'caption'              => [ static::class, 'get_post_excerpt' ],
 			'category'             => [ static::class, 'get_post_all_term_names' ],
 			'category_description' => [ static::class, 'get_term_description' ],
 			'category_title'       => [ static::class, 'get_term_title' ],
-			'currentdate'          => [ static::class, 'get_current_date' ],
-			'currentday'           => [ static::class, 'get_current_day' ],
-			'currentmonth'         => [ static::class, 'get_current_month' ],
-			'currentyear'          => [ static::class, 'get_current_year' ],
-			'date'                 => [ static::class, 'get_post_date' ],
+			'currentdate'          => [ static::class, 'get_current_date' ],  // should we?
+			'currentday'           => [ static::class, 'get_current_day' ],   // should we?
+			'currentmonth'         => [ static::class, 'get_current_month' ], // should we?
+			'currentyear'          => [ static::class, 'get_current_year' ],  // should we?
+			'date'                 => [ static::class, 'get_post_date' ],     // Doesn't (shouldn't) work on Terms.
 			'excerpt'              => [ static::class, 'get_post_excerpt_trimmed' ],
 			'excerpt_only'         => [ static::class, 'get_post_excerpt' ],
 			'id'                   => [ static::class, 'get_id' ],
@@ -323,7 +324,7 @@ abstract class Core {
 			// Fancy and fun in some situation, sure, but bad for SEO. Warn user.
 			'currenttime',
 
-			// We could extract these... but we can't tell whether this was migrated already or not.
+			// We could extract these... but we can't tell whether they were migrated already or not.
 			'focuskw',
 			'primary_category',
 

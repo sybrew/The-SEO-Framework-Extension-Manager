@@ -25,14 +25,13 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers;
  */
 
 /**
- * Base importer class.
+ * Core importer class.
  *
  * @since 1.0.0
  * @access private
  * @abstract
  */
-abstract class Base {
-	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
+abstract class Core {
 
 	/**
 	 * @since 1.0.0
@@ -186,7 +185,6 @@ abstract class Base {
 					);
 				} else {
 					$item_ids = $wpdb->get_col( $wpdb->prepare(
-						// "SELECT DISTINCT `$_id_key` FROM `$from_table` WHERE meta_key = %s",
 						// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
 						"SELECT `$_id_key` FROM `$from_table` WHERE meta_key = %s", // No "DISTINCT", show "skipped" and explain in FAQ what it means.
 						$from_index
@@ -438,11 +436,13 @@ abstract class Base {
 				$actions['delete'] = false;
 			} else {
 				// We don't care whether it's transformed here.
+				// FIXME var_dump(): wpdb can duplicate indexes here. Insert if not distinct, otherwise override?
+				// Does "update" do insert? update_{option|post|term{*meta}}?() definitely does.
 				$results['updated'] += (int) $wpdb->insert(
 					$to_table,
 					[
-						$_id_key     => $item_id,
-						'meta_key'   => $to_index,
+						$_id_key     => $item_id,   // Shared Key
+						'meta_key'   => $to_index,  // Local DISTINCT Key
 						'meta_value' => $set_value,
 					]
 				);

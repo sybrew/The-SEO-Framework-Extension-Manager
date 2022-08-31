@@ -25,21 +25,22 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\TermMeta;
  */
 
 /**
- * Core importer class.
+ * Base Term importer class.
  *
  * @since 1.0.0
  * @access private
  * @abstract via extends
  */
-abstract class Core extends \TSF_Extension_Manager\Extension\Transport\Importers\Base {
-	use \TSF_Extension_Manager\Construct_Sub_Once_Interface;
+abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers\Core {
 
 	/**
 	 * Sets up class, mainly required variables.
 	 *
 	 * @since 1.0.0
 	 */
-	protected function construct() {
+	public function __construct() {
+		parent::__construct();
+
 		$this->type                   = 'term';
 		$this->id_key                 = 'term_id';
 		$this->globals_table_fallback = $GLOBALS['wpdb']->termmeta;

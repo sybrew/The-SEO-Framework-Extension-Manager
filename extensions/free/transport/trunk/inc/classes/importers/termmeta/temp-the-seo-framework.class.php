@@ -15,7 +15,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Importers\TermMeta;
  *
  * Inherits abstract setup_vars.
  */
-final class Temp_The_SEO_Framework extends Core {
+final class Temp_The_SEO_Framework extends Base {
 
 	/**
 	 * Sets up variables.
@@ -173,9 +173,8 @@ final class Temp_The_SEO_Framework extends Core {
 		) );
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
-		if ( $data['existing_value'] ) {
+		if ( $data['existing_value'] )
 			$actions['transport'] = false;
-		}
 
 		// Actually, we do not want to merge, but exit here. This is a proof of concept, though.
 		// All code below is not a real-world analogue, yet for testing purposes only.
