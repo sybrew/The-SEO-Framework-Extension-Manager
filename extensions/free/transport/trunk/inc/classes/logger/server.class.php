@@ -156,9 +156,6 @@ final class Server {
 		ob_start();
 
 		static::$lastpadstamp = time();
-		// $this->send( 'Exit: ' . ( wp_doing_ajax() ? 'yup' : 'np' ), -1, 'tsfem-e-transport-die' );
-		// $this->send( 'Message: ' . \wp_strip_all_tags( 'what' ), -1, 'tsfem-e-transport-die' );
-		// $this->flush();
 
 		return $this->flush();
 	}

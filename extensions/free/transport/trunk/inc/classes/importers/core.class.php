@@ -108,6 +108,16 @@ abstract class Core {
 	abstract protected function setup_vars();
 
 	/**
+	 * Escapes input variable only when not set.
+	 *
+	 * @param ?string $var The variable to escape.
+	 * @return ?string The escaped variable.
+	 */
+	private static function esc_sql_if_set( $var ) {
+		return isset( $var ) ? \esc_sql( $var ) : $var;
+	}
+
+	/**
 	 * Walks the post/term/item metadata.
 	 *
 	 * @since 1.0.0
@@ -128,9 +138,9 @@ abstract class Core {
 		// Test if large_network()?
 
 		// Offset needless FETCH_OBJ_R opcodes by using a single extra ASSIGN.
-		$_id_key                 = $this->id_key;
+		$_id_key                 = static::esc_sql_if_set( $this->id_key );
 		$_type                   = $this->type;
-		$_globals_table_fallback = $this->globals_table_fallback;
+		$_globals_table_fallback = static::esc_sql_if_set( $this->globals_table_fallback );
 		$_cache_clear_cb         = $this->cache_clear_cb;
 		$_has_cache_clear_cb     = \is_callable( $_cache_clear_cb );
 
@@ -141,26 +151,34 @@ abstract class Core {
 
 		// phpcs:disable, Generic.WhiteSpace.ScopeIndent -- https://github.com/squizlabs/PHP_CodeSniffer/issues/3571
 
-		foreach ( $this->conversion_sets as $conversion_set ) :
+		foreach ( $this->conversion_sets as $conversion_set ) {
 			prepare: {
-				[ $transfer_from, $transfer_to, $transformer, $sanitizer, $transmuter ] = array_pad( $conversion_set, 5, null );
+				[ $transfer_from, $transfer_to, $transformer, $sanitizer, $transmuter, $cb_after_loop ]
+					= array_pad( $conversion_set, 6, null );
 
-				[ $from_table, $from_index ] = array_pad( $transfer_from ?? [], 2, null );
-				[ $to_table, $to_index ]     = array_pad( $transfer_to ?? [], 2, null );
+				[ $from_table, $from_index ] = array_map(
+					[ static::class, 'esc_sql_if_set' ],
+					array_pad( $transfer_from ?? [], 2, null )
+				);
+				[ $to_table, $to_index ] = array_map(
+					[ static::class, 'esc_sql_if_set' ],
+					array_pad( $transfer_to ?? [], 2, null )
+				);
 
 				// Syntax only: The callable must work otherwise we might cause exploits by storing unsanitized values.
 				// So, call these callables even when not strictly callable, let them cause errors.
 				$has_transformer     = \is_callable( $transformer, true );
-				$has_transmuter_from = \is_callable( $transmuter['from'][0] ?? null, true ) && \is_callable( $transmuter['from'][1] ?? null, true );
-				$has_transmuter_to   = \is_callable( $transmuter['to'][0] ?? null, true ) && \is_callable( $transmuter['to'][1] ?? null, true );
+				$has_transmuter_from = \is_callable( $transmuter['from'][1] ?? null, true );
+				$has_transmuter_to   = \is_callable( $transmuter['to'][1] ?? null, true );
 				$has_sanitizer       = \is_callable( $sanitizer, true );
-				$is_deletion_only    = ! $has_transmuter_to && ! $to_index;
+				$is_deletion_only    = ( ! $has_transmuter_to && ! $to_index )      // Doesn't go anywhere.
+									|| ( ! $has_transmuter_from && ! $from_index ); // Came from nowhere.
 			}
 
 			getitems: {
 				// Sanity is a virtue.
-				$from_table = \esc_sql( $from_table ) ?: ( $from_index ? $_globals_table_fallback : null );
-				$to_table   = \esc_sql( $to_table ) ?: ( $to_index ? $_globals_table_fallback : null );
+				$from_table = $from_table ?: ( $from_index ? $_globals_table_fallback : null );
+				$to_table   = $to_table ?: ( $to_index ? $_globals_table_fallback : null );
 
 				if ( $is_deletion_only ) {
 					yield 'nowDeleting' => [ [ $from_table, $from_index ] ];
@@ -173,24 +191,16 @@ abstract class Core {
 					];
 				}
 
-				if ( $has_transmuter_from ) {
-					$item_ids = \call_user_func_array(
-						$transmuter['from'][0],
+				$item_ids = \call_user_func_array(
+					$transmuter['from'][0] ?? [ $this, 'get_item_ids' ],
+					[
 						[
-							[
-								'from_data' => $transmuter['from_data'] ?? null,
-								'from'      => [ $from_table, $from_index ],
-							],
-						]
-					);
-				} else {
-					$item_ids = $wpdb->get_col( $wpdb->prepare(
-						// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
-						"SELECT `$_id_key` FROM `$from_table` WHERE meta_key = %s", // No "DISTINCT", show "skipped" and explain in FAQ what it means.
-						$from_index
-					) ) ?: [];
-					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-				}
+							'from_data' => $transmuter['from_data'] ?? null,
+							'from'      => [ $from_table, $from_index ],
+						],
+					]
+				);
+
 				$total_items = \count( $item_ids );
 				yield 'foundItems' => [
 					$total_items,
@@ -207,7 +217,7 @@ abstract class Core {
 			transmute: {
 				$item_iterator = 0;
 
-				foreach ( $item_ids as $item_id ) :
+				foreach ( $item_ids as $item_id ) {
 					// Clear query cache every 25 queries when Database debugging is enabled (e.g., via Query Monitor)
 					if ( ! ( $item_iterator % 25 ) )
 						$wpdb->queries = [];
@@ -240,112 +250,92 @@ abstract class Core {
 					$transport_value = null; // Value from old plugin.
 					$set_value       = null; // Value to put for new plugin.
 
-					// Test if data already exists on new entry.
 					if ( ! $is_deletion_only ) {
-						if ( $has_transmuter_to ) {
-							// This won't allow merging when data comes from multiple places.
-							// Transmuter must handle this early, and regard "stored" value as overwritable.
-							$existing_value = \call_user_func_array(
-								$transmuter['to'][0],
+						// Test if data already exists on new entry.
+						// This won't allow merging when data comes from multiple places.
+						// Transmuter must handle this early, and regard "stored" value as overwritable.
+						$existing_value = \call_user_func_array(
+							$transmuter['to'][0] ?? [ $this, 'get_existing_meta' ],
+							[
+								[
+									'item_id' => $item_id,
+									'to_data' => $transmuter['to_data'] ?? null,
+									'to'      => [ $to_table, $to_index ],
+									'from'    => [ $from_table, $from_index ],
+								],
+							]
+						);
+
+						// If existing new data exists, don't overwrite with old.
+						// Updating is still tried if $results['transformed'] is true.
+						if ( isset( $existing_value ) )
+							$actions['transport'] = false;
+
+						if ( \is_null( $existing_value ) ) {
+							$transport_value = \call_user_func_array(
+								$transmuter['from'][1] ?? [ $this, 'get_transport_value' ],
 								[
 									[
-										'item_id' => $item_id,
-										'to_data' => $transmuter['to_data'] ?? null,
-										'to'      => [ $to_table, $to_index ],
-										'from'    => [ $from_table, $from_index ],
+										'item_id'           => $item_id,
+										'from_data'         => $transmuter['from_data'] ?? null,
+										'from'              => [ $from_table, $from_index ],
+										'existing_value'    => $existing_value,
+										'has_transmuter_to' => $has_transmuter_to,
 									],
+									&$actions,
+									&$results,
+									&$cleanup,
 								]
 							);
-						} else {
-							$existing_value = $wpdb->get_var( $wpdb->prepare(
-								// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
-								"SELECT meta_value FROM `$to_table` WHERE `$_id_key` = %d AND meta_key = %s",
-								$item_id,
-								$to_index
-							) );
-							if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+						} elseif ( ! $identical_index ) {
+							// If data exists but shares the index, still allow transforming.
+							// Otherwise, we might as well skip transforming altogether.
+							$actions['transform'] = false;
 						}
-					}
 
-					// If existing new data exists, don't overwrite with old.
-					// Updating is still tried if $results['transformed'] is true.
-					if ( isset( $existing_value ) )
-						$actions['transport'] = false;
+						$set_value = $existing_value ?? $transport_value;
 
-					if ( $has_transmuter_from ) {
-						$transport_value = \call_user_func_array(
-							$transmuter['from'][1],
-							[
+						if ( $actions['transform'] ) {
+							$_pre_transform_value = $set_value;
+
+							$set_value = \call_user_func_array(
+								$transformer,
 								[
-									'item_id'           => $item_id,
-									'from_data'         => $transmuter['from_data'] ?? null,
-									'from'              => [ $from_table, $from_index ],
-									'existing_value'    => $existing_value,
-									'has_transmuter_to' => $has_transmuter_to,
-								],
-								&$actions,
-								&$results,
-								&$cleanup,
-							]
-						);
-					} else {
-						if ( \is_null( $existing_value ) ) {
-							$transport_value = $wpdb->get_var( $wpdb->prepare(
-								// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
-								"SELECT meta_value FROM `$from_table` WHERE `$_id_key` = %d AND meta_key = %s",
-								$item_id,
-								$from_index
-							) );
-							if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-						} else {
-							// If new data exists and index is the same, still try to transform (update). Otherwise, forgo.
-							$actions['transform'] = $actions['transform'] && $identical_index;
+									$set_value,
+									$item_id,
+									$_type,
+								]
+							);
+
+							$results['transformed'] += (int) ( $_pre_transform_value !== $set_value );
+						}
+
+						if ( $actions['sanitize'] ) {
+							$_pre_sanitize_value = $set_value;
+
+							$set_value = \call_user_func( $sanitizer, $set_value );
+
+							$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
+						}
+
+						if ( \in_array( $set_value, $this->useless_data, true ) ) {
+							$set_value              = null;
+							$actions['delete']      = true;
+							$results['transformed'] = 0;
+							$actions['transport']   = false;
 						}
 					}
-
-					$set_value = $existing_value ?? $transport_value;
-
-					if ( $actions['transform'] ) {
-						$_pre_transform_value = $set_value;
-
-						$set_value = \call_user_func_array(
-							$transformer,
-							[
-								$set_value,
-								$item_id,
-								$_type,
-							]
-						);
-
-						$results['transformed'] += (int) ( $_pre_transform_value !== $set_value );
-					}
-
-					if ( $actions['sanitize'] ) {
-						$_pre_sanitize_value = $set_value;
-
-						$set_value = \call_user_func( $sanitizer, $set_value );
-
-						$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
-					}
-
-					if ( \in_array( $set_value, $this->useless_data, true ) ) {
-						$set_value              = null;
-						$actions['delete']      = true;
-						$results['transformed'] = 0;
-						$actions['transport']   = false;
-					}
-
-					if ( $has_transmuter_to ) {
+					if ( isset( $transmuter['to'][1] ) ) {
 						yield from \call_user_func_array(
 							$transmuter['to'][1],
 							[
 								[
-									'item_id'   => $item_id,
 									'set_value' => $set_value,
-									'from_data' => $transmuter['from_data'] ?? null,
+									'item_id'   => $item_id,
 									'from'      => [ $from_table, $from_index ],
-									'to_data'   => $transmuter['to_data'] ?? null,
 									'to'        => [ $to_table, $to_index ],
+									'from_data' => $transmuter['from_data'] ?? null,
+									'to_data'   => $transmuter['to_data'] ?? null,
 								],
 								&$actions,
 								&$results,
@@ -366,18 +356,101 @@ abstract class Core {
 					}
 
 					$is_lastitem = $item_iterator === $total_items;
-					yield 'results' => [ $results, $actions, $item_id, $is_lastitem ];
+					yield 'results' => [ $results, $actions, $is_lastitem ];
 
 					// This also busts cache of caching plugins. Intended: Update the post/term/item!
 					$_has_cache_clear_cb and \call_user_func( $_cache_clear_cb, $item_id );
 					$item_iterator++;
-				endforeach;
+				}
 			}
-		endforeach;
+
+			$cb_after_loop and yield from \call_user_func( $cb_after_loop, $item_ids );
+		}
 
 		// phpcs:enable, Generic.WhiteSpace.ScopeIndent -- https://github.com/squizlabs/PHP_CodeSniffer/issues/3571
 
 		return true;
+	}
+
+	/**
+	 * Gets item IDs for transport.
+	 *
+	 * @since 1.0.0
+	 * @global \wpdb $wpdb WordPress Database handler.
+	 *
+	 * @param mixed $data Any useful data pertaining to the current transmutation type.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @return array Array of item ids with existing data.
+	 */
+	public function get_item_ids( $data ) {
+		global $wpdb;
+
+		[ $from_table, $from_index ] = $data['from'];
+
+		$item_ids = $wpdb->get_col( $wpdb->prepare(
+			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
+			"SELECT `{$this->id_key}` FROM `$from_table` WHERE meta_key = %s", // No "DISTINCT", show "skipped" and explain in FAQ what it means.
+			$from_index
+		) );
+		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+		return $item_ids ?: [];
+	}
+
+	/**
+	 * Gets existing metadata.
+	 *
+	 * @since 1.0.0
+	 * @global \wpdb $wpdb WordPress Database handler.
+	 *
+	 * @param mixed $data Any useful data pertaining to the current transmutation type.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @return array|null Array if existing values are present, null otherwise.
+	 */
+	public function get_existing_meta( $data ) {
+		global $wpdb;
+
+		// Defined at $this->conversion_sets
+		[ $to_table, $to_index ] = $data['to'];
+
+		$existing_value = $wpdb->get_var( $wpdb->prepare(
+			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
+			"SELECT meta_value FROM `$to_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
+			$data['item_id'],
+			$to_index
+		) );
+		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+		return $existing_value;
+	}
+
+	/**
+	 * Gets transporting value.
+	 *
+	 * @since 1.0.0
+	 * @global \wpdb $wpdb WordPress Database handler.
+	 *
+	 * @param mixed  $data          Any useful data pertaining to the current transmutation type.
+	 * @param array  $actions       The actions for and after transmuation, passed by reference.
+	 * @param array  $results       The results before and after transmuation, passed by reference.
+	 * @param ?array $cleanup       The extraneous database indexes to clean up.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @return array|null Array if existing values are present, null otherwise.
+	 */
+	public function get_transport_value( $data, &$actions, &$results, &$cleanup ) {
+		global $wpdb;
+
+		[ $from_table, $from_index ] = $data['from'];
+
+		$transport_value = $wpdb->get_var( $wpdb->prepare(
+			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
+			"SELECT meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
+			$item_id,
+			$from_index
+		) );
+		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+		return $transport_value;
 	}
 
 	/**

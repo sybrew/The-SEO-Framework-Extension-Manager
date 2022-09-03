@@ -76,8 +76,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 					// ); // TODO this ugly.
 					printf(
 						'<em class=description>%s</em>',
-						esc_html__( 'Some textual data will have syntax transformed into human readable text; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
-					);
+						esc_html__( 'Some data will be transformed; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
+					); // var_dump() add link to FAQ what transformation means (and what is transformed to what)
 					?>
 				</p>
 				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload"><?= esc_html__( 'Import', 'the-seo-framework-extension-manager' ); ?></a>

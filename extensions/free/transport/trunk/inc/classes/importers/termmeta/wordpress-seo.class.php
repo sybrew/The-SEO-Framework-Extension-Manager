@@ -46,7 +46,9 @@ final class WordPress_SEO extends Base {
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment -- deeply nested is still simple here.
 
 		// Construct and fetch classname.
-		$transformer_class = \get_class( \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer::get_instance() );
+		$transformer_class = \get_class(
+			\TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO::get_instance()
+		);
 
 		/**
 		 * [ $from_table, $from_index ]
@@ -54,6 +56,7 @@ final class WordPress_SEO extends Base {
 		 * $transformer
 		 * $sanitizer
 		 * $transmuter
+		 * $cbafter
 		 */
 		$this->conversion_sets = [
 			[
@@ -64,11 +67,11 @@ final class WordPress_SEO extends Base {
 				[
 					'name'    => 'Yoost Term Meta',
 					'from' => [
-						[ $this, '_extract_ids_from_wpseo_taxonomy_meta' ],
-						[ $this, '_extract_data_from_wpseo_taxonomy_meta' ],
+						[ $this, '_get_wpseo_transport_term_ids' ],
+						[ $this, '_get_wpseo_term_transport_value' ],
 					],
 					'to'      => [
-						[ $this, '_term_meta_existing' ],
+						null,
 						[ $this, '_term_meta_transmuter' ],
 					],
 					'to_data' => [
@@ -98,6 +101,7 @@ final class WordPress_SEO extends Base {
 						],
 					],
 				],
+				[ $this, '_term_meta_option_cleanup' ],
 			],
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
@@ -129,7 +133,7 @@ final class WordPress_SEO extends Base {
 	 * @param mixed $data Any useful data pertaining to the current transmutation type.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
-	public function _extract_ids_from_wpseo_taxonomy_meta( $data ) {
+	public function _get_wpseo_transport_term_ids( $data ) {
 
 		$ids = [];
 
@@ -151,19 +155,16 @@ final class WordPress_SEO extends Base {
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
-	public function _extract_data_from_wpseo_taxonomy_meta( $data, &$actions, &$results, &$cleanup ) {
+	public function _get_wpseo_term_transport_value( $data, &$actions, &$results, &$cleanup ) {
 
-		if ( \is_null( $data['existing_value'] ) ) {
-			// No need to access the index a dozen time times, store pointer in var.
-			$item_id = &$data['item_id'];
+		// No need to access the index a dozen time times, store pointer in var.
+		$item_id = &$data['item_id'];
 
-			$meta = $this->get_yoast_meta();
-			// Walk until index is found. We are unaware of taxonomies during transportation.
-			foreach ( $meta as $taxonomy => $data ) {
-				if ( \array_key_exists( $item_id, $data ) ) {
-					$transport_value = $meta[ $taxonomy ][ $item_id ];
-					break;
-				}
+		// Walk until index is found. We are unaware of taxonomies during transportation.
+		foreach ( $this->get_yoast_meta() as $taxonomy => $meta ) {
+			if ( \array_key_exists( $item_id, $meta ) ) {
+				$transport_value = $meta[ $item_id ];
+				break;
 			}
 		}
 
@@ -171,34 +172,7 @@ final class WordPress_SEO extends Base {
 	}
 
 	/**
-	 * Gets existing advanced robots values.
-	 *
-	 * @since 1.0.0
-	 * @global \wpdb $wpdb WordPress Database handler.
-	 *
-	 * @param mixed $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
-	 */
-	public function _term_meta_existing( $data ) {
-		global $wpdb;
-
-		// Defined at $this->conversion_sets
-		[ $to_table, $to_index ] = $data['to'];
-
-		$existing_value = $wpdb->get_var( $wpdb->prepare(
-			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
-			"SELECT meta_value FROM `$to_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
-			$data['item_id'],
-			$to_index
-		) );
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-
-		return $existing_value;
-	}
-
-	/**
-	 * Transmutes comma-separated advanced robots to a single value.
+	 * Transmutes Yoast SEO Meta to TSF's serialized metadata.
 	 *
 	 * @since 1.0.0
 	 * @generator
@@ -258,10 +232,32 @@ final class WordPress_SEO extends Base {
 			$results,
 		);
 
-		if ( ! $results['updated'] )
-			$results['transformed'] = 0;
-
 		// Gotta be a generator, tick.
-		yield 'transmutedResults' => [ $results, $actions, $data['item_id'] ];
+		yield 'transmutedResults' => [ $results, $actions ];
+	}
+
+	/**
+	 * Cleans Yoast SEO Meta from the database.
+	 *
+	 * @since 1.0.0
+	 * @generator
+	 *
+	 * @param array $item_ids The term IDs looped over.
+	 */
+	public function _term_meta_option_cleanup( $item_ids ) {
+		yield 'afterResults' => [
+			// This also invokes all necessary cache clearning. This function runs only once.
+			(bool) \delete_option( 'wpseo_taxonomy_meta' ), // assert success
+			[ // onsuccess
+				'message' => \__( 'Deleted old term meta successfully.', 'the-seo-framework-extension-manager' ),
+				'addTo'   => 'deleted', // writes variable, must never be untrusted
+				'count'   => \count( $item_ids ),
+			],
+			[ // onfailure
+				'message' => \__( 'Failed to delete old term meta.', 'the-seo-framework-extension-manager' ),
+				'addTo'   => 'failed', // writes variable, must never be untrusted
+				'count'   => 1,
+			],
+		];
 	}
 }

@@ -70,7 +70,7 @@ final class Temp_The_SEO_Framework extends Base {
 		// 	'twitter_description',
 		// ],
 
-		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF_Transformer::class;
+		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF::class;
 
 		/**
 		 * [ $from_table, $from_index ]
@@ -240,7 +240,7 @@ final class Temp_The_SEO_Framework extends Base {
 			) )
 		) : $transport_value;
 
-		$results['transformed'] = $set_value !== $data['existing_value'];
+		$results['transformed'] = (int) ( $set_value !== $data['existing_value'] );
 
 		return $set_value;
 	}

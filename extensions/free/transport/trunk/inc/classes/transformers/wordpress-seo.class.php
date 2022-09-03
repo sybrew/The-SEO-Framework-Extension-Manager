@@ -32,29 +32,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  *
  * Inherits \TSF_Extension_Manager\Construct_Stray_Private. Requires construct().
  */
-class WordPress_SEO_Transformer extends Core {
-
-	// /**
-	//  * Constructor, sets up vars.
-	//  *
-	//  * @since 1.0.0
-	//  * @ignore
-	//  * @override
-	//  */
-	// protected static function construct() {
-	// 	parent::construct();
-	// }
-
-	// /**
-	//  * Resets replacements.
-	//  *
-	//  * @since 1.0.0
-	//  * @ignore
-	//  * @override
-	//  */
-	// protected static function reset_replacements() {
-	// 	parent::reset_replacements();
-	// }
+class WordPress_SEO extends Core {
 
 	/**
 	 * Converts Yoast SEO title syntax to human readable text.

@@ -26,7 +26,7 @@ final class Temp_The_SEO_Framework extends Base {
 	protected function setup_vars() {
 		global $wpdb;
 
-		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF_Transformer::class;
+		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF::class;
 
 		/**
 		 * [ $from_table, $from_index ]
@@ -173,8 +173,9 @@ final class Temp_The_SEO_Framework extends Base {
 		) );
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
-		if ( $data['existing_value'] )
-			$actions['transport'] = false;
+		// We omit this very much later, and therefore, all code below is useless. See notes below.
+		// if ( $data['existing_value'] )
+		// 	$actions['transport'] = false;
 
 		// Actually, we do not want to merge, but exit here. This is a proof of concept, though.
 		// All code below is not a real-world analogue, yet for testing purposes only.

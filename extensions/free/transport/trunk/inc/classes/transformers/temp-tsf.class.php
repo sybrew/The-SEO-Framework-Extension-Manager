@@ -32,7 +32,7 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  *
  * Inherits \TSF_Extension_Manager\Construct_Stray_Private. Requires construct().
  */
-class Temp_TSF_Transformer {
+class Temp_TSF {
 	use \TSF_Extension_Manager\Construct_Stray_Private;
 
 	/**

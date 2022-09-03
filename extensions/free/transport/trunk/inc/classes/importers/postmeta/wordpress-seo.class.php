@@ -44,7 +44,9 @@ final class WordPress_SEO extends Base {
 		global $wpdb;
 
 		// Construct and fetch classname.
-		$transformer_class = \get_class( \TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO_Transformer::get_instance() );
+		$transformer_class = \get_class(
+			\TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO::get_instance()
+		);
 
 		/**
 		 * [ $from_table, $from_index ]
@@ -86,6 +88,8 @@ final class WordPress_SEO extends Base {
 						[ $this, '_robots_adv_transmuter' ],
 					],
 					'to_data' => [
+						// This could've been a simple transformer,
+						// but then we don't get to split the data if we add more robots types.
 						'transmuters'  => [
 							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
 						],
@@ -256,7 +260,7 @@ final class WordPress_SEO extends Base {
 				$_results
 			);
 
-			yield 'transmutedResults' => [ $_results, $_actions, $data['item_id'] ];
+			yield 'transmutedResults' => [ $_results, $_actions ];
 		}
 	}
 }

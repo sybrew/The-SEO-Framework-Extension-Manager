@@ -203,10 +203,15 @@ final class Handler {
 							);
 							break;
 						case 'results':
-							[ $results, $actions, $item_id, $is_lastitem ] = $data;
+						case 'transmutedResults':
+							// transmutedResults doesn't send $is_lastitem.
+							[ $results, $actions, $is_lastitem ] = array_pad( $data, 3, false );
 
-							if ( $results['only_end'] ) goto resultsEnd;
-							if ( $results['only_delete'] ) goto resultsDelete;
+							// These $result types may only be used when working with 'results'.
+							if ( 'results' === $handle ) {
+								if ( $results['only_end'] ) goto resultsEnd;
+								if ( $results['only_delete'] ) goto resultsDelete;
+							}
 
 							if ( ! $results['updated'] ) {
 								if ( $actions['transport'] ) {
@@ -255,6 +260,10 @@ final class Handler {
 								}
 							}
 
+							// 'transmutedResults' is expected to fall through 'results'
+							// which will always invoke whatever is after here.
+							if ( 'transmutedResults' === $handle ) break;
+
 							resultsEnd:;
 							if ( $is_lastitem ) {
 								$store->store( '&nbsp;' );
@@ -295,47 +304,6 @@ final class Handler {
 									'event'      => 'tsfem-e-transport-timeout',
 									'type'       => 'failure',
 								] );
-							}
-							break;
-						case 'transmutedResults':
-							[ $results, $actions, $item_id ] = $data;
-
-							if ( ! $results['updated'] ) {
-								if ( $actions['transport'] ) {
-									$store->store(
-										\esc_html__( 'Failed import.', 'the-seo-framework-extension-manager' )
-									);
-									$failed++;
-								} else {
-									$store->store(
-										\esc_html__( 'Skipped import.', 'the-seo-framework-extension-manager' )
-									);
-									$skipped++;
-								}
-							} else {
-								if ( $results['transformed'] ) {
-									$store->store(
-										\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
-									);
-								} else {
-									$store->store(
-										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
-									);
-								}
-								$succeeded += $results['updated'];
-							}
-							if ( $actions['delete'] ) {
-								// In case anyone asks: "useless" data is '' or null.
-								if ( ! $results['deleted'] ) {
-									$store->store(
-										\esc_html__( 'Failed deleting useless data.', 'the-seo-framework-extension-manager' )
-									);
-								} else {
-									$store->store(
-										\esc_html__( 'Deleted useless data successfully.', 'the-seo-framework-extension-manager' )
-									);
-									$deleted += $results['deleted'];
-								}
 							}
 							break;
 
@@ -399,6 +367,22 @@ final class Handler {
 							if ( $total_items ) {
 								$store->store( '= = = = = = = =' );
 							} else {
+								$store->store( '===============' );
+							}
+							break;
+						case 'afterResults':
+							// See _term_meta_option_cleanup() for example.
+							[ $success, $onsuccess, $onfailure ] = array_pad( $data, 3, null );
+
+							$_data = $success ? $onsuccess : $onfailure;
+
+							// Assume this is safe?
+							if ( isset( $_data['addTo'] ) )
+								${$_data['addTo']} += $_data['count'];
+
+							if ( isset( $_data['message'] ) ) {
+								$store->store( \esc_html( $_data['message'] ) );
+								$store->store( '&nbsp;' );
 								$store->store( '===============' );
 							}
 							break;
