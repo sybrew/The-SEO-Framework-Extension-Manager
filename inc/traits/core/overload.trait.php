@@ -298,6 +298,9 @@ trait Construct_Core_Static_Final {
  * use this trait can't be used with a 'new' keyword. They can be safely called without
  * interrupting flow.
  *
+ * You cannot instantiate a child class with this on PHP 7.3 or below. 7.4 or later do
+ * ignore the private variable.
+ *
  * Does not load parent.
  * Does load instance methods and properties.
  *
@@ -316,10 +319,11 @@ trait Construct_Core_Static_Final_Instance {
 	 * The object instance.
 	 *
 	 * @since 1.3.0
+	 * @since 2.6.0 Made protected from private; scope binding is ignored anyway on PHP 7.4+.
 	 *
 	 * @var object|null This object instance.
 	 */
-	private static $instance;
+	protected static $instance;
 
 	/**
 	 * Sets the class instance.
@@ -349,6 +353,78 @@ trait Construct_Core_Static_Final_Instance {
 
 		return static::$instance;
 	}
+}
+
+
+/**
+ * Forces the classes to be treated as a single static. In essence, classes that
+ * use this trait can't be used with a 'new' keyword. They can be safely called without
+ * interrupting flow.
+ *
+ * Does load instance methods and properties.
+ *
+ * This trait applies nicely with the following design patterns:
+ * - Singleton Pattern.
+ * - Prototype Pattern.
+ *
+ * @see Construct_Core_Static_Unique_Instance_Master.
+ *      That trait allows overriding the instance so the class can be extended
+ *      by various arbitrary classes, each holding a unique instance.
+ * @since 2.6.0
+ * @access private
+ */
+trait Construct_Core_Static_Unique_Instance_Core {
+
+	private function __construct() {}
+
+	/**
+	 * Sets the class instance.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 * @static
+	 */
+	final public static function reset_instance() {
+		self::class === static::class
+			and \wp_die( '<code>' . \esc_html( __CLASS__ ) . '()</code> must be extended. See trait <code>' . \esc_html( __TRAIT__ ) . '</code>.' );
+
+		static::$instance = new static;
+	}
+
+	/**
+	 * Gets the class instance. It's set when it's null.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 * @static
+	 *
+	 * @return object The current instance.
+	 */
+	final public static function get_instance() {
+
+		// static::$instance::class is PHP 8.0+
+		if ( ! static::$instance || ( \get_class( static::$instance ) !== static::class ) )
+			static::reset_instance();
+
+		return static::$instance;
+	}
+}
+
+/**
+ * @see Construct_Core_Static_Unique_Instance_Core
+ * @since 2.6.0
+ * @access private
+ */
+trait Construct_Core_Static_Unique_Instance_Master {
+
+	/**
+	 * The object instance.
+	 *
+	 * @since 2.6.0
+	 *
+	 * @var object|null This object instance.
+	 */
+	protected static $instance;
 }
 
 /**

@@ -130,10 +130,10 @@ final class WordPress_SEO extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $data Any useful data pertaining to the current transmutation type.
+	 * @param array $data Any useful data pertaining to the current transmutation type.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
-	public function _get_wpseo_transport_term_ids( $data ) {
+	protected function _get_wpseo_transport_term_ids( $data ) {
 
 		$ids = [];
 
@@ -144,20 +144,20 @@ final class WordPress_SEO extends Base {
 	}
 
 	/**
-	 * Gets existing advanced robots values.
+	 * Returns existing advanced robots values.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed  $data    Any useful data pertaining to the current transmutation type.
+	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param array  $actions The actions for and after transmuation, passed by reference.
 	 * @param array  $results The results before and after transmuation, passed by reference.
 	 * @param ?array $cleanup The extraneous database indexes to clean up, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
-	public function _get_wpseo_term_transport_value( $data, &$actions, &$results, &$cleanup ) {
+	protected function _get_wpseo_term_transport_value( $data, &$actions, &$results, &$cleanup ) {
 
-		// No need to access the index a dozen time times, store pointer in var.
+		// No need to access the index a dozen times, store pointer in var.
 		$item_id = &$data['item_id'];
 
 		// Walk until index is found. We are unaware of taxonomies during transportation.
@@ -177,12 +177,12 @@ final class WordPress_SEO extends Base {
 	 * @since 1.0.0
 	 * @generator
 	 *
-	 * @param mixed  $data    Any useful data pertaining to the current transmutation type.
+	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	public function _term_meta_transmuter( $data, &$actions = null, &$results = null ) {
+	protected function _term_meta_transmuter( $data, &$actions, &$results ) {
 
 		[ $from_table, $from_index ] = $data['from'];
 		[ $to_table, $to_index ]     = $data['to'];
@@ -232,7 +232,6 @@ final class WordPress_SEO extends Base {
 			$results,
 		);
 
-		// Gotta be a generator, tick.
 		yield 'transmutedResults' => [ $results, $actions ];
 	}
 
@@ -243,20 +242,35 @@ final class WordPress_SEO extends Base {
 	 * @generator
 	 *
 	 * @param array $item_ids The term IDs looped over.
+	 * @return ?void Early when option is not registered.
 	 */
-	public function _term_meta_option_cleanup( $item_ids ) {
+	protected function _term_meta_option_cleanup( $item_ids ) {
+
+		// If no items are looped over, test if the option even exists before deleting.
+		// If option is false, $item_ids is always empty, but not vice versa. Saved db call.
+		if ( ! $item_ids ) {
+			global $wpdb;
+
+			if ( null === $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT option_value FROM `$wpdb->options` WHERE option_name = %s",
+					'wpseo_taxonomy_meta'
+				)
+			) ) return;
+		}
+
 		yield 'afterResults' => [
 			// This also invokes all necessary cache clearning. This function runs only once.
 			(bool) \delete_option( 'wpseo_taxonomy_meta' ), // assert success
 			[ // onsuccess
-				'message' => \__( 'Deleted old term meta successfully.', 'the-seo-framework-extension-manager' ),
+				'message' => \__( 'Cleanup: Deleted old term meta successfully.', 'the-seo-framework-extension-manager' ),
 				'addTo'   => 'deleted', // writes variable, must never be untrusted
-				'count'   => \count( $item_ids ),
+				'count'   => \count( $item_ids ), // Success count".
 			],
 			[ // onfailure
-				'message' => \__( 'Failed to delete old term meta.', 'the-seo-framework-extension-manager' ),
+				'message' => \__( 'Cleanup: Failed to delete old term meta.', 'the-seo-framework-extension-manager' ),
 				'addTo'   => 'failed', // writes variable, must never be untrusted
-				'count'   => 1,
+				'count'   => 1, // "failure" count
 			],
 		];
 	}

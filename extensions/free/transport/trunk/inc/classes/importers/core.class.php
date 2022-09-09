@@ -113,8 +113,22 @@ abstract class Core {
 	 * @param ?string $var The variable to escape.
 	 * @return ?string The escaped variable.
 	 */
-	private static function esc_sql_if_set( $var ) {
+	final protected static function esc_sql_if_set( $var ) {
 		return isset( $var ) ? \esc_sql( $var ) : $var;
+	}
+
+	/**
+	 * Escapes input variable only when scalar for IN clause.
+	 * Accepts a single dimensional array of strings.
+	 *
+	 * @param string|string[] $var The variable to escape.
+	 * @return string|string[] The escaped variable. Returns array if array was inputted.
+	 */
+	final protected static function esc_sql_in( $var ) {
+		if ( ! is_scalar( $var ) )
+			$var = array_filter( (array) $var, 'is_scalar' );
+
+		return \esc_sql( $var );
 	}
 
 	/**
@@ -218,11 +232,14 @@ abstract class Core {
 				$item_iterator = 0;
 
 				foreach ( $item_ids as $item_id ) {
+
+					$item_iterator++;
+
 					// Clear query cache every 25 queries when Database debugging is enabled (e.g., via Query Monitor)
 					if ( ! ( $item_iterator % 25 ) )
 						$wpdb->queries = [];
 
-					yield 'currentItemId' => [ $item_id, $total_items, $item_iterator + 1 ];
+					yield 'currentItemId' => [ $item_id, $total_items, $item_iterator ];
 
 					$identical_index = $has_transmuter_from || $has_transmuter_to
 						? false
@@ -243,6 +260,7 @@ abstract class Core {
 						// With no old handle, we must delete manually. TODO fixme?
 						'delete'    => $from_index && ! $identical_index,
 						'sanitize'  => $has_sanitizer,
+						'cleanup'   => false,
 					];
 					$cleanup = [];
 
@@ -356,11 +374,11 @@ abstract class Core {
 					}
 
 					$is_lastitem = $item_iterator === $total_items;
+					// yield 'debug' => compact( 'item_iterator', 'total_items', 'is_lastitem' );
 					yield 'results' => [ $results, $actions, $is_lastitem ];
 
 					// This also busts cache of caching plugins. Intended: Update the post/term/item!
 					$_has_cache_clear_cb and \call_user_func( $_cache_clear_cb, $item_id );
-					$item_iterator++;
 				}
 			}
 
@@ -510,12 +528,12 @@ abstract class Core {
 			} else {
 				// We don't care whether it's transformed here.
 				// FIXME var_dump(): wpdb can duplicate indexes here. Insert if not distinct, otherwise override?
-				// Does "update" do insert? update_{option|post|term{*meta}}?() definitely does.
+				// Does "update" do insert? update_{option|post|term{*meta}}?() definitely do.
 				$results['updated'] += (int) $wpdb->insert(
 					$to_table,
 					[
 						$_id_key     => $item_id,   // Shared Key
-						'meta_key'   => $to_index,  // Local DISTINCT Key
+						'meta_key'   => $to_index,  // Local "unique" Key
 						'meta_value' => $set_value,
 					]
 				);
@@ -550,7 +568,9 @@ abstract class Core {
 			}
 		}
 
-		// This is also "deleting", but then assigned manually by developer.
+		if ( $cleanup ) $actions['cleanup'] = true;
+
+		// This is also "deleting", but then assigned manually by developer. Ignores other tests.
 		cleanup: foreach ( (array) $cleanup as [ $_from_table, $_from_index ] ) {
 			$results['deleted'] += (int) $wpdb->delete(
 				$_from_table,
@@ -559,6 +579,7 @@ abstract class Core {
 					'meta_key' => $_from_index,
 				]
 			);
+			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 		}
 	}
 }

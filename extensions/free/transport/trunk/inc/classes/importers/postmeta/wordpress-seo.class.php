@@ -122,6 +122,18 @@ final class WordPress_SEO extends Base {
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
 			],
 			[
+				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-image' ],
+				[ $wpdb->postmeta, '_social_image_url' ],
+				null,
+				'\\esc_url_raw',
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-image-id' ],
+				[ $wpdb->postmeta, '_social_image_id' ],
+				null,
+				'\\absint',
+			],
+			[
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
 				[ $transformer_class, '_title_syntax' ], // also sanitizes
@@ -130,6 +142,12 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-description' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
+			],
+			[
+				[ $wpdb->postmeta, ' _yoast_wpseo_twitter-image' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_twitter-image-id' ], // delete
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_content_score' ], // delete
@@ -143,13 +161,15 @@ final class WordPress_SEO extends Base {
 		];
 
 		foreach ( $this->get_taxonomy_list_with_pt_support() as $_taxonomy ) {
-			$this->conversion_sets += [
-				[ $wpdb->postmeta, "_yoast_wpseo_primary-{$_taxonomy}" ],
-				[ $wpdb->postmeta, "_primary_term_{$_taxonomy}" ],
-				null,
-				null,
-				'absint',
-			];
+			array_push(
+				$this->conversion_sets,
+				[
+					[ $wpdb->postmeta, "_yoast_wpseo_primary_{$_taxonomy}" ],
+					[ $wpdb->postmeta, "_primary_term_{$_taxonomy}" ],
+					null,
+					'\\absint',
+				]
+			);
 		}
 	}
 
@@ -159,7 +179,7 @@ final class WordPress_SEO extends Base {
 	 * @since 1.0.0
 	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
-	 * @param mixed $data Any useful data pertaining to the current transmutation type.
+	 * @param array $data Any useful data pertaining to the current transmutation type.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
@@ -202,7 +222,7 @@ final class WordPress_SEO extends Base {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed  $data    Any useful data pertaining to the current transmutation type.
+	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.

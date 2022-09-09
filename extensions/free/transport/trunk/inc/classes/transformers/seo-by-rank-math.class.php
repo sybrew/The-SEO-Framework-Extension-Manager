@@ -25,18 +25,60 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  */
 
 /**
- * Transformer for Yoast SEO.
+ * Transformer for Rank Math.
  *
  * @since 1.0.0
  * @access private
  *
  * Inherits \TSF_Extension_Manager\Construct_Core_Static_Final_Instance.
  */
-class WordPress_SEO extends Core {
+class SEO_By_Rank_Math extends Core {
 	use \TSF_Extension_Manager\Construct_Core_Static_Unique_Instance_Master;
 
 	/**
-	 * Converts Yoast SEO title syntax to human readable text.
+	 * @since 1.0.0
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var array[string:callable] The replacement types by name.
+	 */
+	protected static $replacements = [];
+
+	/**
+	 * @since 1.0.0
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string[] The non-replacement types' prefixes.
+	 */
+	protected static $prefix_preserve = [];
+
+	/**
+	 * Resets replacement values, if needed.
+	 *
+	 * NOTE: When overriding, you're likely also overriding self::properties:
+	 * register those self::properties statically to the child class to exploit
+	 * late-static binding for properties.
+	 *
+	 * See for reference RankMath\Admin\Importers\Yoast::convert_variables()
+	 *
+	 * @since 1.0.0
+	 * @override
+	 */
+	protected static function reset_replacements() {
+		parent::reset_replacements();
+
+		static::$replacements['term'] = static::$replacements['term_title'];
+		unset(
+			static::$replacements['term_title'],
+		);
+
+		static::$prefix_preserve = [
+			'customfield',
+			'customterm',
+		];
+	}
+
+	/**
+	 * Converts Rank Math title syntax to human readable text.
 	 *
 	 * @since 1.0.0
 	 *
@@ -52,7 +94,7 @@ class WordPress_SEO extends Core {
 	}
 
 	/**
-	 * Converts Yoast SEO description syntax to human readable text.
+	 * Converts Rank Math description syntax to human readable text.
 	 *
 	 * @since 1.0.0
 	 *
@@ -68,7 +110,7 @@ class WordPress_SEO extends Core {
 	}
 
 	/**
-	 * Converts Yoast SEO title/description syntax to human readable text.
+	 * Converts Rank Math title/description syntax to human readable text.
 	 *
 	 * @since 1.0.0
 	 *
@@ -79,15 +121,13 @@ class WordPress_SEO extends Core {
 	 */
 	private static function _transform_syntax( $text, $object_id, $object_type ) {
 
-		// %%id%% is the shortest valid tag... ish. Let's stop at 6.
-		if ( \strlen( $text ) < 6 || false === strpos( $text, '%%' ) )
+		// %id% is the shortest valid tag... ish. Let's stop at 4.
+		if ( \strlen( $text ) < 4 || false === strpos( $text, '%' ) )
 			return $text;
 
-		// TODO Consider using `/%%([^%]+(%%single)?)%%/`, for we might land stray `single%%`
-		// There is zero documentation on the use of %%single, though. It's probably a bug or
-		// leftover code in/following Yoast's regex. Here, enjoy 30 more bugs they refuse to fix:
-		// <https://twitter.com/SybreWaaijer/status/1545621157998649346>
-		if ( ! preg_match_all( '/%%([^%]+)%%/', $text, $matches ) )
+		// Rank Math supports %var(something)% syntax, whence they extract something.
+		// We do not care for (something), for now at least. Ignore the basic syntax:
+		if ( ! preg_match_all( '/%([^%]+)%/', $text, $matches ) )
 			return $text;
 
 		static::set_main_object_type( $object_type );
@@ -127,52 +167,7 @@ class WordPress_SEO extends Core {
 	}
 
 	/**
-	 * Converts Yoast SEO robots-settings to TSF's qubit.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param mixed $value The old robots value possibly unsafe for TSF.
-	 * @return int|null The sanitized qubit.
-	 */
-	public static function _robots_qubit( $value ) {
-
-		switch ( (int) $value ) {
-			case 2:
-				$value = -1; // Force allow_robots
-				break;
-			case 1:
-				$value = 1; // Force no_robots
-				break;
-			default:
-			case 0:
-				$value = null; // Default/unassigned
-				break;
-		}
-
-		return $value;
-	}
-
-	/**
-	 * Converts Yoast SEO advanced robots-settings to TSF's qubit.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param mixed $value The old robots value possibly unsafe for TSF.
-	 * @return int|null The sanitized qubit.
-	 */
-	public static function _robots_advanced( $value ) {
-
-		if ( \in_array( $value, [ 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
-			$value = 1; // Force no_robots
-		} else {
-			$value = null; // Default/unassigned
-		}
-
-		return $value;
-	}
-
-	/**
-	 * Converts Yoast SEO term robots-settings to TSF's qubit.
+	 * Converts Rank Math term robots-settings to TSF's qubit.
 	 *
 	 * @since 1.0.0
 	 *
@@ -181,7 +176,8 @@ class WordPress_SEO extends Core {
 	 */
 	public static function _robots_term( $value ) {
 
-		if ( 'noindex' === $value ) {
+		// Future-proofed. TSF "only" supports 'noindex', 'nofollow', and 'noarchive'.
+		if ( \in_array( $value, [ 'noindex', 'nofollow', 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
 			$value = 1; // Force no_robots
 		} else {
 			$value = null; // Default/unassigned

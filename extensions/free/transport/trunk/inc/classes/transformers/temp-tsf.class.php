@@ -32,8 +32,8 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  *
  * Inherits \TSF_Extension_Manager\Construct_Stray_Private. Requires construct().
  */
-class Temp_TSF {
-	use \TSF_Extension_Manager\Construct_Stray_Private;
+class Temp_TSF extends Core {
+	use \TSF_Extension_Manager\Construct_Core_Static_Unique_Instance_Master;
 
 	/**
 	 * Converts TSF qubit robots-settings to Yoast SEO.

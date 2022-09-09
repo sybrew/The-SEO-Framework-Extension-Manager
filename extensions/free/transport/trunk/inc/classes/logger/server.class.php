@@ -155,7 +155,7 @@ final class Server {
 
 		ob_start();
 
-		static::$lastpadstamp = time();
+		static::$lastpadstamp = hrtime( true );
 
 		return $this->flush();
 	}
@@ -205,11 +205,11 @@ final class Server {
 				} else {
 					static::$buffersize = static::$buffersize % static::$chunksize;
 				}
-				static::$lastpadstamp = time();
-			} elseif ( ( static::$lastpadstamp + static::$padinterval ) < time() ) {
+				static::$lastpadstamp = hrtime( true ) / 1e9;
+			} elseif ( ( static::$lastpadstamp + static::$padinterval ) < ( hrtime( true ) / 1e9 ) ) {
 				$this->padchunk();
 				static::$buffersize   = 0;
-				static::$lastpadstamp = time();
+				static::$lastpadstamp = hrtime( true ) / 1e9;
 			}
 		}
 
@@ -266,7 +266,7 @@ final class Server {
 	 *
 	 * @param string $message The (HTML) die message.
 	 * @param string $title   The page title. Might be empty.
-	 * @param array  $args    Arguments to control behavior.
+	 * @param array  $args    Arguments to control behavior. Ignored, for now.
 	 */
 	public function _wp_die_handler( $message, $title = '', $args = [] ) {
 		$this->send(

@@ -32,7 +32,42 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
  * @abstract
  */
 abstract class Core {
-	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
+	use \TSF_Extension_Manager\Construct_Core_Static_Unique_Instance_Core;
+
+	/**
+	 * @since 1.0.0
+	 * @var array[string:callable] The replacement types by name.
+	 * @static Allows overrides
+	 */
+	protected static $replacements = [];
+
+	/**
+	 * @since 1.0.0
+	 * @var string[] The non-replacement types.
+	 * @static Allows overrides
+	 */
+	protected static $preserve = [];
+
+	/**
+	 * @since 1.0.0
+	 * @var string The non-replacement types, quoted for regex.
+	 * @static Allows overrides
+	 */
+	protected static $preserve_preg_quoted = '';
+
+	/**
+	 * @since 1.0.0
+	 * @var string[] The non-replacement types' prefixes.
+	 * @static Allows overrides
+	 */
+	protected static $prefix_preserve = [];
+
+	/**
+	 * @since 1.0.0
+	 * @var string The non-replacement types' prefixes, quoted for regex.
+	 * @static Allows overrides
+	 */
+	protected static $prefix_preserve_preg_quoted = '';
 
 	/**
 	 * @since 1.0.0
@@ -40,36 +75,6 @@ abstract class Core {
 	 * @final
 	 */
 	protected static $tsf;
-
-	/**
-	 * @since 1.0.0
-	 * @var array[string:callable] The replacement types by name.
-	 */
-	protected static $replacements = [];
-
-	/**
-	 * @since 1.0.0
-	 * @var string[] The non-replacement types.
-	 */
-	protected static $preserve = [];
-
-	/**
-	 * @since 1.0.0
-	 * @var string The non-replacement types, quoted for regex.
-	 */
-	protected static $preserve_preg_quoted = '';
-
-	/**
-	 * @since 1.0.0
-	 * @var string[] The non-replacement types' prefixes.
-	 */
-	protected static $prefix_preserve = [];
-
-	/**
-	 * @since 1.0.0
-	 * @var string The non-replacement types' prefixes, quoted for regex.
-	 */
-	protected static $prefix_preserve_preg_quoted = '';
 
 	/**
 	 * @since 1.0.0
@@ -123,6 +128,7 @@ abstract class Core {
 	/**
 	 * @since 1.0.0
 	 * @var array[string:mixed] The cache that will never expire.
+	 * @final
 	 */
 	protected static $persistent_cache = [];
 
@@ -133,10 +139,14 @@ abstract class Core {
 	 * @override See Trait Construct_Core_Static_Final_Instance
 	 */
 	private function __construct() {
+
+		// TODO improve performance for PHP 7.4 using ??=.
 		self::$tsf = \tsf();
+
 		static::reset_replacements();
 
-		self::$persistent_cache['separator']   = self::$tsf->get_separator();
+		// TODO improve performance for PHP 7.4 using ??=.
+		self::$persistent_cache['separator']   = self::$tsf->s_description_raw( self::$tsf->get_separator() );
 		self::$persistent_cache['q_separator'] = preg_quote( self::$persistent_cache['separator'], '/' );
 
 		self::$persistent_cache['date_format'] = \get_option( 'date_format' );
@@ -154,7 +164,7 @@ abstract class Core {
 	 *                     'user' will probably never be implemented, but this whole class supports it.
 	 */
 	final public static function set_main_object_type( $type ) {
-		static::$main_object_type = $type;
+		self::$main_object_type = $type;
 	}
 
 	/**
@@ -263,6 +273,10 @@ abstract class Core {
 	/**
 	 * Resets replacement values, if needed.
 	 *
+	 * NOTE: When overriding, you're likely also overriding self::$properties:
+	 * register those self::$properties statically to the child class to exploit
+	 * late-static binding for properties.
+	 *
 	 * @since 1.0.0
 	 */
 	protected static function reset_replacements() {
@@ -272,7 +286,7 @@ abstract class Core {
 		// Late static binding: The methods may be overwritten in a child class without affecting this array.
 		// Names are derived from Yoast SEO's transformations -- but all other SEO plugins use these as a baseline.
 		// Add to these replacements as you see fit, this array shouldn't be looped over, indexes should be fetched directly.
-		self::$replacements = [
+		static::$replacements = [
 			'archive_title'        => [ static::class, 'get_term_title' ], // Note: CPTA aren't transported--this replacement doesn't consider.
 			'author_first_name'    => [ static::class, 'get_post_author_first_name' ], // Doesn't (shouldn't) work on Terms.
 			'author_last_name'     => [ static::class, 'get_post_author_last_name' ],  // Doesn't (shouldn't) work on Terms.
@@ -311,7 +325,7 @@ abstract class Core {
 		];
 
 		// We preserve these, some harmful, to allow warning the user they have not been transformed in TSF.
-		self::$preserve = [
+		static::$preserve = [
 			// Too complex. Maybe later. Implied via prefix_preserve
 			// 'ct_desc',
 			// 'ct_product_cat',
@@ -340,14 +354,14 @@ abstract class Core {
 			'wc_sku',
 		];
 		// This is also where /(%%single)?/ regex comes in.
-		self::$prefix_preserve = [
+		static::$prefix_preserve = [
 			// 'ct_pa_',   // Custom Taxonomy Product Attribute
 			'ct_',      // Custom Taxonomy field name., this can be %%ct_something%%single%%, which we do not test.
 			'cf_',      // Custom field name.
 		];
 
-		self::$preserve_preg_quoted        = implode( '|', array_map( '\\preg_quote', self::$preserve ) );
-		self::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', self::$prefix_preserve ) );
+		static::$preserve_preg_quoted        = implode( '|', array_map( '\\preg_quote', static::$preserve ) );
+		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
 	}
 
 	/**
@@ -892,5 +906,18 @@ abstract class Core {
 			self::$persistent_cache['separator'],
 			$text
 		);
+	}
+
+	/**
+	 * Trims leading and trailing separators and spaces from input text.
+	 *
+	 * @since 1.0.0
+	 * Helper method.
+	 *
+	 * @param string $text The value to trim separators and spaces.
+	 * @return string
+	 */
+	protected static function _trim_separators( $text ) {
+		return trim( $text, self::$persistent_cache['separator'] . ' ' );
 	}
 }

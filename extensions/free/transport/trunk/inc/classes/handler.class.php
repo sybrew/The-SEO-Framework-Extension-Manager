@@ -229,7 +229,7 @@ final class Handler {
 								if ( $results['transformed'] ) {
 									if ( $actions['transport'] ) {
 										$store->store(
-											\esc_html__( 'Data imported and transformed succesfully.', 'the-seo-framework-extension-manager' )
+											\esc_html__( 'Data imported and transformed successfully.', 'the-seo-framework-extension-manager' )
 										);
 									} else {
 										$store->store(
@@ -245,7 +245,7 @@ final class Handler {
 							}
 
 							resultsDelete:;
-							if ( $actions['delete'] ) {
+							if ( $actions['delete'] || $actions['cleanup'] ) {
 								// In case anyone asks: "useless" data is null, '', 0, '0', false, [], 's:0:"";', 'a:0:{}', '[]', '""', "''"
 								// Or without any usecase at all in TSF.
 								if ( ! $results['deleted'] ) {
@@ -281,7 +281,7 @@ final class Handler {
 										'results' => $this->get_ajax_notice( false, 1060203 ),
 										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 											? \esc_html__( 'Transporting time limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-											: \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+											: ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
@@ -298,7 +298,7 @@ final class Handler {
 										'results' => $this->get_ajax_notice( false, 1060206 ),
 										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 											? \esc_html__( 'Process memory usage limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-											: \esc_html__( 'Process memory usage limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+											: ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html__( 'Process memory usage limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
@@ -329,7 +329,7 @@ final class Handler {
 								\esc_html(
 									sprintf(
 										/* translators: %s = unique identifier name */
-										\__( 'Starting transmution of "%s".', 'the-seo-framework-extension-manager' ),
+										\__( 'Starting transmutation of "%s".', 'the-seo-framework-extension-manager' ),
 										$name
 									)
 								)
@@ -376,13 +376,11 @@ final class Handler {
 
 							$_data = $success ? $onsuccess : $onfailure;
 
-							// Assume this is safe?
-							if ( isset( $_data['addTo'] ) )
+							if ( \in_array( $_data['addTo'] ?? '', [ 'succeeded', 'skipped', 'failed', 'deleted' ], true ) )
 								${$_data['addTo']} += $_data['count'];
 
 							if ( isset( $_data['message'] ) ) {
 								$store->store( \esc_html( $_data['message'] ) );
-								$store->store( '&nbsp;' );
 								$store->store( '===============' );
 							}
 							break;
@@ -411,7 +409,7 @@ final class Handler {
 				'server'     => $server,
 				'poll_data'  => [
 					'results' => $this->get_ajax_notice( false, 1060204 ),
-					'logMsg'  => ( $streaming ? '' : $server->get_flush_store() ) . \esc_html(
+					'logMsg'  => ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html(
 						sprintf(
 							$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 								/* translators: %s = Unknown error reason */
@@ -431,17 +429,20 @@ final class Handler {
 		$server->poll( $store );
 		$this->release_transport_lock();
 
-		$seconds = ceil( ( hrtime( true ) - $hrtimestart ) / 1e9 );
+		$seconds = \number_format_i18n( ( hrtime( true ) - $hrtimestart ) / 1e9, 1 );
+
+		if ( '0.0' === $seconds ) $seconds = '0.1';
+
 		$this->_halt_server( [
 			'server'     => $server,
 			'poll_data'  => [
 				'results' => $this->get_ajax_notice( true, 1060205 ),
-				'logMsg'  => ( $streaming ? '' : $server->get_flush_store() ) . \esc_html(
+				'logMsg'  => ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html(
 					vsprintf(
-						/* translators: 1,2,3,4,5 are numbers */
+						/* translators: 1 = seconds with 1 decimal (e.g. 4.2 seconds, 1.0 second), 2,3,4 = numbers */
 						\_n(
-							'Completed import in %1$d second with %2$d successful, %3$d skipped, and %4$d failed transports. Deleted %5$d old entries.',
-							'Completed import in %1$d seconds with %2$d successful, %3$d skipped, and %4$d failed transports. Deleted %5$d old entries.',
+							'Completed import in %1$s second with %2$d successful, %3$d skipped, and %4$d failed transports.',
+							'Completed import in %1$s seconds with %2$d successful, %3$d skipped, and %4$d failed transports.',
 							$seconds,
 							'the-seo-framework-extension-manager'
 						),
@@ -450,8 +451,16 @@ final class Handler {
 							$succeeded,
 							$skipped,
 							$failed,
-							$deleted,
 						]
+					) . "\n" . sprintf(
+						/* translators: %d = number */
+						\_n(
+							'Deleted %d old entry.',
+							'Deleted %d old entries.',
+							$deleted,
+							'the-seo-framework-extension-manager'
+						),
+						$deleted
 					)
 				),
 			],

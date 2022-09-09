@@ -26,7 +26,9 @@ final class Temp_The_SEO_Framework extends Base {
 	protected function setup_vars() {
 		global $wpdb;
 
-		$transformer_class = \TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF::class;
+		$transformer_class = \get_class(
+			\TSF_Extension_Manager\Extension\Transport\Transformers\Temp_TSF::get_instance()
+		);
 
 		/**
 		 * [ $from_table, $from_index ]

@@ -109,9 +109,12 @@ TODO Add method used to mark as spam as comment-meta? -> Is this possible, I don
 	-> Otherwise, simply add a counter for each type. Store as array?
 
 TODO set Transporter default selection to "&ndash; Select Plugin &ndash;"
-TODO "Data imported and transformed succesfully" <- 1) typo (missing s), 2) also returns when no actual transformation took place (only request for transportation was there) -> set $results['transformed']!
+TODO "Data imported and transformed successfully" 2) also returns when no actual transformation took place (only request for transportation was there) -> set $results['transformed']! (was this resolveD?)
 TODO "Transporting in session, trying to connect to logger..." <- not true lol... can we even hook into an active process?
 	-> Maybe, we can set a flag in the database which is checked every 50 items or something and if it exists, it aborts the current run and "continues (restarts)" on the next one?
+
+TODO "^%sitetitle% %sep%" -> ""?
+TODO "%sep% %sitetitle%$" -> ""?
 
 = 2.5.3 =
 
