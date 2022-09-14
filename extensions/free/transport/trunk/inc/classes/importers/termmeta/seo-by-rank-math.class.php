@@ -55,7 +55,7 @@ final class SEO_By_Rank_Math extends Base {
 		 * from Rank Math, and merge each new value into the "existing" serialized
 		 * array for TSF. However, in doing so, we must keep a list of what has
 		 * yet to be transmuted. this list can grow in massive proportions, not suitable
-		 * for storing in temp. Therefore, I oped for the more complex custom
+		 * for storing in temp. Therefore, I opted for the more complex custom
 		 * transmutation route: fetch IDs containing ANY data, then grab ALL data for each
 		 * term ID, and merge into TSF's meta.
 		 */
@@ -66,6 +66,7 @@ final class SEO_By_Rank_Math extends Base {
 		 * $transformer
 		 * $sanitizer
 		 * $transmuter
+		 * $cb_after_loop
 		 */
 		$this->conversion_sets = [
 			[
@@ -97,7 +98,7 @@ final class SEO_By_Rank_Math extends Base {
 					],
 					'to'      => [
 						null,
-						[ $this, '_term_meta_transmuter' ],
+						[ $this, '_rank_math_term_meta_transmuter' ],
 					],
 					'to_data' => [
 						'pretransmute' => [
@@ -113,9 +114,10 @@ final class SEO_By_Rank_Math extends Base {
 								],
 							],
 							'rank_math_twitter_use_facebook' => [
-								'cb'   => [ $this, 'pretransmute_twitter' ],
+								'cb'   => [ $this, '_rank_math_pretransmute_twitter' ],
 								'data' => [
 									'test_value' => 'rank_math_twitter_use_facebook',
+									// If off, do use own data. If on, don't use own data. See,
 									'isnot'      => 'off', //= if on, then unset; also means if absent, don't unset.
 									'unset'      => [
 										'rank_math_twitter_title',
@@ -148,9 +150,9 @@ final class SEO_By_Rank_Math extends Base {
 							'rank_math_facebook_image_id'     => '\\absint',
 							'rank_math_twitter_title'         => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'rank_math_twitter_description'   => [ $transformer_class, '_description_syntax' ], // also sanitizes
-							'_rm_transm_robots_noindex'       => [ $transformer_class, '_robots_term' ], // also sanitizes
-							'_rm_transm_robots_nofollow'      => [ $transformer_class, '_robots_term' ], // also sanitizes
-							'_rm_transm_robots_noarchive'     => [ $transformer_class, '_robots_term' ], // also sanitizes
+							'_rm_transm_robots_noindex'       => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
+							'_rm_transm_robots_nofollow'      => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
+							'_rm_transm_robots_noarchive'     => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 						],
 						'cleanup' => [
 							[ $wpdb->termmeta, 'rank_math_title' ],
@@ -173,6 +175,12 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_facebook_image_overlay' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_twitter_enable_image_overlay' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_twitter_image_overlay' ], // delete
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_twitter_image' ], // delete
@@ -265,12 +273,12 @@ final class SEO_By_Rank_Math extends Base {
 	 * @param ?array $results The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	protected function _term_meta_transmuter( $data, &$actions, &$results ) {
+	protected function _rank_math_term_meta_transmuter( $data, &$actions, &$results ) {
 
 		[ $from_table, $from_index ] = $data['from'];
 		[ $to_table, $to_index ]     = $data['to'];
 
-		$_set_value = [];
+		$set_value = [];
 
 		// Nothing to do here, TSF already has value set. Skip to next item.
 		if ( ! $actions['transport'] ) goto useless;
@@ -288,14 +296,14 @@ final class SEO_By_Rank_Math extends Base {
 		}
 
 		foreach ( $data['to_data']['transmuters'] as $from => $to ) {
-			$__pre_transform_value = $data['set_value'][ $from ] ?? null;
+			$_pre_transform_value = $data['set_value'][ $from ] ?? null;
 
-			if ( \in_array( $__pre_transform_value, $this->useless_data, true ) ) continue;
+			if ( \in_array( $_pre_transform_value, $this->useless_data, true ) ) continue;
 
-			$_set_value[ $to ] = \call_user_func_array(
+			$set_value[ $to ] = \call_user_func_array(
 				$data['to_data']['transformers'][ $from ],
 				[
-					$__pre_transform_value,
+					$_pre_transform_value,
 					$data['item_id'],
 					$this->type,
 					[ $from_table, $from_index ],
@@ -303,23 +311,23 @@ final class SEO_By_Rank_Math extends Base {
 				]
 			);
 
-			if ( \in_array( $_set_value[ $to ], $this->useless_data, true ) ) {
-				unset( $_set_value[ $to ] );
+			if ( \in_array( $set_value[ $to ], $this->useless_data, true ) ) {
+				unset( $set_value[ $to ] );
 			} else {
 				// We actually only read this as boolean. Still, might be fun later.
-				$results['transformed'] += (int) ( $__pre_transform_value !== $_set_value[ $to ] );
+				$results['transformed'] += (int) ( $_pre_transform_value !== $set_value[ $to ] );
 			}
 		}
 
-		if ( \in_array( $_set_value, $this->useless_data, true ) ) {
+		if ( \in_array( $set_value, $this->useless_data, true ) ) {
 			useless:;
-			$_set_value             = null;
+			$set_value              = null;
 			$actions['transport']   = false;
 			$results['transformed'] = 0;
 		}
 
 		$this->transmute(
-			$_set_value,
+			$set_value,
 			$data['item_id'],
 			[ $from_table, $from_index ], // Should be [ null, null ]
 			[ $to_table, $to_index ],
@@ -346,7 +354,11 @@ final class SEO_By_Rank_Math extends Base {
 
 		foreach ( $data as $original_key => $subkeys ) {
 			$robots = isset( $set_value[ $original_key ] )
-				? \maybe_unserialize( $set_value[ $original_key ] )
+				? (
+					\is_serialized( $set_value[ $original_key ] )
+						? $this->maybe_unserialize_no_class( $set_value[ $original_key ], false )
+						: null
+				)
 				: null;
 
 			if ( ! $robots ) continue;
@@ -370,11 +382,10 @@ final class SEO_By_Rank_Math extends Base {
 	 * @param ?array $results   The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	protected function pretransmute_twitter( $data, &$set_value, &$actions, &$results ) {
+	protected function _rank_math_pretransmute_twitter( $data, &$set_value, &$actions, &$results ) {
 
 		if ( empty( $set_value[ $data['test_value'] ] ) ) return;
 
-		// Unset data if condition is met. Maybe in the future add a 'is'.
 		if ( $set_value[ $data['test_value'] ] !== $data['isnot'] )
 			$set_value = array_diff_key( $set_value, array_flip( $data['unset'] ) );
 	}

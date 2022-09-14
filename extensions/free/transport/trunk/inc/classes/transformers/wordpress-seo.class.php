@@ -153,25 +153,6 @@ class WordPress_SEO extends Core {
 	}
 
 	/**
-	 * Converts Yoast SEO advanced robots-settings to TSF's qubit.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param mixed $value The old robots value possibly unsafe for TSF.
-	 * @return int|null The sanitized qubit.
-	 */
-	public static function _robots_advanced( $value ) {
-
-		if ( \in_array( $value, [ 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
-			$value = 1; // Force no_robots
-		} else {
-			$value = null; // Default/unassigned
-		}
-
-		return $value;
-	}
-
-	/**
 	 * Converts Yoast SEO term robots-settings to TSF's qubit.
 	 *
 	 * @since 1.0.0
@@ -179,9 +160,10 @@ class WordPress_SEO extends Core {
 	 * @param mixed $value The old robots value possibly unsafe for TSF.
 	 * @return int|null The sanitized qubit.
 	 */
-	public static function _robots_term( $value ) {
+	public static function _robots_text_to_qubit( $value ) {
 
-		if ( 'noindex' === $value ) {
+		// Future-proofed. TSF "only" supports 'noindex', 'nofollow', and 'noarchive'.
+		if ( \in_array( $value, [ 'noindex', 'nofollow', 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
 			$value = 1; // Force no_robots
 		} else {
 			$value = null; // Default/unassigned

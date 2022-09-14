@@ -54,6 +54,7 @@ abstract class Core {
 	 *                                               `$type, $data, &$actions = null, &$results = null`
 	 *              '(to|from)_data' => (mixed)    The pertaining callable data, custom.
 	 *         }
+	 *         (?callable) 'cb_after_loop' The after loop callable, if any.
 	 *     ]
 	 * ]
 	 */
@@ -174,6 +175,7 @@ abstract class Core {
 					[ static::class, 'esc_sql_if_set' ],
 					array_pad( $transfer_from ?? [], 2, null )
 				);
+
 				[ $to_table, $to_index ] = array_map(
 					[ static::class, 'esc_sql_if_set' ],
 					array_pad( $transfer_to ?? [], 2, null )
@@ -257,7 +259,6 @@ abstract class Core {
 						'transform' => $has_transformer,
 						// If the data goes nowhere there's no need to delete nor transport.
 						'transport' => ! $identical_index,
-						// With no old handle, we must delete manually. TODO fixme?
 						'delete'    => $from_index && ! $identical_index,
 						'sanitize'  => $has_sanitizer,
 						'cleanup'   => false,
@@ -289,15 +290,17 @@ abstract class Core {
 						if ( isset( $existing_value ) )
 							$actions['transport'] = false;
 
-						if ( \is_null( $existing_value ) ) {
+						// If a transmuter is found, identical index is always false.
+						// If no transmuter is found, and the $identical_index is true, then this is needless.
+						if ( \is_null( $existing_value ) && ! $identical_index ) {
 							$transport_value = \call_user_func_array(
 								$transmuter['from'][1] ?? [ $this, 'get_transport_value' ],
 								[
 									[
-										'item_id'           => $item_id,
-										'from_data'         => $transmuter['from_data'] ?? null,
-										'from'              => [ $from_table, $from_index ],
-										'existing_value'    => $existing_value,
+										'item_id'        => $item_id,
+										'from_data'      => $transmuter['from_data'] ?? null,
+										'from'           => [ $from_table, $from_index ],
+										'existing_value' => $existing_value,
 										'has_transmuter_to' => $has_transmuter_to,
 									],
 									&$actions,
@@ -374,7 +377,6 @@ abstract class Core {
 					}
 
 					$is_lastitem = $item_iterator === $total_items;
-					// yield 'debug' => compact( 'item_iterator', 'total_items', 'is_lastitem' );
 					yield 'results' => [ $results, $actions, $is_lastitem ];
 
 					// This also busts cache of caching plugins. Intended: Update the post/term/item!
@@ -423,13 +425,16 @@ abstract class Core {
 	 *
 	 * @param mixed $data Any useful data pertaining to the current transmutation type.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
+	 * @return mixed Any data if existing values are present, null otherwise.
 	 */
 	public function get_existing_meta( $data ) {
-		global $wpdb;
 
-		// Defined at $this->conversion_sets
 		[ $to_table, $to_index ] = $data['to'];
+
+		if ( ! isset( $to_table, $to_index ) )
+			return null;
+
+		global $wpdb;
 
 		$existing_value = $wpdb->get_var( $wpdb->prepare(
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
@@ -453,17 +458,21 @@ abstract class Core {
 	 * @param array  $results       The results before and after transmuation, passed by reference.
 	 * @param ?array $cleanup       The extraneous database indexes to clean up.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
+	 * @return mixed Any data if transport values are present, null otherwise.
 	 */
 	public function get_transport_value( $data, &$actions, &$results, &$cleanup ) {
-		global $wpdb;
 
 		[ $from_table, $from_index ] = $data['from'];
+
+		if ( ! isset( $from_table, $from_index ) )
+			return null;
+
+		global $wpdb;
 
 		$transport_value = $wpdb->get_var( $wpdb->prepare(
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
 			"SELECT meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
-			$item_id,
+			$data['item_id'],
 			$from_index
 		) );
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
@@ -475,6 +484,7 @@ abstract class Core {
 	 * Transmute data from and to index.
 	 *
 	 * @since 1.0.0
+	 * @global \wpdb $wpdb The WordPress database instance.
 	 *
 	 * @param ?mixed    $set_value     The value to set (if any).
 	 * @param int       $item_id       The post/term/item ID to transmute.
@@ -527,9 +537,9 @@ abstract class Core {
 				$actions['delete'] = false;
 			} else {
 				// We don't care whether it's transformed here.
-				// FIXME var_dump(): wpdb can duplicate indexes here. Insert if not distinct, otherwise override?
-				// Does "update" do insert? update_{option|post|term{*meta}}?() definitely do.
-				$results['updated'] += (int) $wpdb->insert(
+				// Use 'replace' instead of 'insert', for 'replace' won't create duplicates,
+				// replaces "bad" data, and inserts if data doesn't exist.
+				$results['updated'] += (int) $wpdb->replace(
 					$to_table,
 					[
 						$_id_key     => $item_id,   // Shared Key
@@ -581,5 +591,45 @@ abstract class Core {
 			);
 			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 		}
+	}
+
+	/**
+	 * Deletes single data from index.
+	 *
+	 * @since 1.0.0
+	 * @global \wpdb $wpdb The WordPress database instance.
+	 *
+	 * @param int       $item_id The post/term/item ID to transmute.
+	 * @param ?string[] $from    The table+index to transfer from.
+	 * @param array     $results The results before and after transmuation, passed by reference.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 */
+	protected function delete( $item_id, $from, &$results ) {
+		global $wpdb;
+
+		[ $from_table, $from_index ] = $from;
+
+		$results['deleted'] += (int) $wpdb->delete(
+			$from_table,
+			[
+				$this->id_key => $item_id,
+				'meta_key'    => $from_index,
+			]
+		);
+		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+	}
+
+	/**
+	 * Unserializes data a bit safer than WordPress does.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $data Expected to be serialized.
+	 * @return ?mixed The unserialized data without classes. Null on failure.
+	 */
+	protected function maybe_unserialize_no_class( $data ) {
+		return \is_serialized( $data )
+			? unserialize( trim( $data ), [ 'allowed_classes' => false ] ) // phpcs:ignore -- it fine.
+			: $data;
 	}
 }

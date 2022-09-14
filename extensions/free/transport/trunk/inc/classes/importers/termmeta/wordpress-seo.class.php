@@ -56,7 +56,7 @@ final class WordPress_SEO extends Base {
 		 * $transformer
 		 * $sanitizer
 		 * $transmuter
-		 * $cbafter
+		 * $cb_after_loop
 		 */
 		$this->conversion_sets = [
 			[
@@ -72,7 +72,7 @@ final class WordPress_SEO extends Base {
 					],
 					'to'      => [
 						null,
-						[ $this, '_term_meta_transmuter' ],
+						[ $this, '_wpseo_term_meta_transmuter' ],
 					],
 					'to_data' => [
 						'transmuters'  => [
@@ -91,7 +91,7 @@ final class WordPress_SEO extends Base {
 							'wpseo_title'                 => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'wpseo_desc'                  => [ $transformer_class, '_description_syntax' ], // also sanitizes
 							'wpseo_canonical'             => '\\esc_url_raw',
-							'wpseo_noindex'               => [ $transformer_class, '_robots_term' ], // also sanitizes
+							'wpseo_noindex'               => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 							'wpseo_opengraph-title'       => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'wpseo_opengraph-description' => [ $transformer_class, '_description_syntax' ], // also sanitizes
 							'wpseo_opengraph-image'       => '\\esc_url_raw',
@@ -182,7 +182,7 @@ final class WordPress_SEO extends Base {
 	 * @param ?array $results The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	protected function _term_meta_transmuter( $data, &$actions, &$results ) {
+	protected function _wpseo_term_meta_transmuter( $data, &$actions, &$results ) {
 
 		[ $from_table, $from_index ] = $data['from'];
 		[ $to_table, $to_index ]     = $data['to'];
@@ -265,7 +265,7 @@ final class WordPress_SEO extends Base {
 			[ // onsuccess
 				'message' => \__( 'Cleanup: Deleted old term meta successfully.', 'the-seo-framework-extension-manager' ),
 				'addTo'   => 'deleted', // writes variable, must never be untrusted
-				'count'   => \count( $item_ids ), // Success count".
+				'count'   => \count( $item_ids ), // Success "count."
 			],
 			[ // onfailure
 				'message' => \__( 'Cleanup: Failed to delete old term meta.', 'the-seo-framework-extension-manager' ),

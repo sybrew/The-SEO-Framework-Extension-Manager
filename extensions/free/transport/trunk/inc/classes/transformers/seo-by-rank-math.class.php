@@ -167,14 +167,14 @@ class SEO_By_Rank_Math extends Core {
 	}
 
 	/**
-	 * Converts Rank Math term robots-settings to TSF's qubit.
+	 * Converts Rank Math robots-text to TSF's qubit.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param mixed $value The old robots value possibly unsafe for TSF.
 	 * @return int|null The sanitized qubit.
 	 */
-	public static function _robots_term( $value ) {
+	public static function _robots_text_to_qubit( $value ) {
 
 		// Future-proofed. TSF "only" supports 'noindex', 'nofollow', and 'noarchive'.
 		if ( \in_array( $value, [ 'noindex', 'nofollow', 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {

@@ -148,6 +148,10 @@ final class Handler {
 			// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
 			register_shutdown_function( [ $this, 'release_transport_lock' ] );
 
+			// We're assuming this does not work as intended. I hate caching plugins with a passion.
+			\wp_suspend_cache_addition( true );
+			// Do not disable cache invalidation: We want to steamroll the path we travel.
+
 			/** @uses trait \TSF_Extension_Manager\Memory */
 			$this->increase_available_memory();
 			// Require 2 MB.

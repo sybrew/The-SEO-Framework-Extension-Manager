@@ -54,6 +54,7 @@ final class WordPress_SEO extends Base {
 		 * $transformer
 		 * $sanitizer
 		 * $transmuter
+		 * $cb_after_loop
 		 */
 		$this->conversion_sets = [
 			[
@@ -90,11 +91,8 @@ final class WordPress_SEO extends Base {
 					'to_data' => [
 						// This could've been a simple transformer,
 						// but then we don't get to split the data if we add more robots types.
-						'transmuters'  => [
+						'transmuters' => [
 							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
-						],
-						'transformers' => [
-							'noarchive' => [ $transformer_class, '_robots_advanced' ], // also sanitizes
 						],
 					],
 				],
@@ -158,6 +156,9 @@ final class WordPress_SEO extends Base {
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_estimated-reading-time-minutes' ], // delete
 			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_bctitle' ], // delete
+			],
 		];
 
 		foreach ( $this->get_taxonomy_list_with_pt_support() as $_taxonomy ) {
@@ -181,12 +182,16 @@ final class WordPress_SEO extends Base {
 	 *
 	 * @param array $data Any useful data pertaining to the current transmutation type.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
+	 * @return array An array with existing and transport values -- if any.
 	 */
 	public function _robots_adv_transmuter_existing( $data ) {
 		global $wpdb;
 
-		$ret = [];
+		$ret             = [
+			'existing'  => [],
+			'transport' => [],
+		];
+		$transport_value = null; // reserve, only set once when one existing value isn't.
 
 		foreach ( [
 			'noarchive',
@@ -196,6 +201,8 @@ final class WordPress_SEO extends Base {
 			// Defined in $this->conversion_sets
 			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['transmuters'][ $type ] );
 
+			// TODO improve performance make this get_col->WHERE IN? Do we even improve performance then?
+			// For now, we only get one value so it doesn't matter here. For Rank Math, it may.
 			$current_value = $wpdb->get_var( $wpdb->prepare(
 				// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
 				"SELECT meta_value FROM `$to_table` WHERE post_id = %d AND meta_key = %s",
@@ -204,17 +211,33 @@ final class WordPress_SEO extends Base {
 			) );
 			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
-			if ( $current_value )
-				$ret[ $type ] = $current_value;
+			if ( isset( $current_value ) ) {
+				$ret['existing'][ $type ] = $current_value;
+			} else {
+				// Get transport value if not fetched before.
+				if ( ! isset( $transport_value ) ) {
+					[ $from_table, $from_index ] = $data['from'];
+
+					$transport_value = $wpdb->get_var( $wpdb->prepare(
+						// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
+						"SELECT meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
+						$data['item_id'],
+						$from_index
+					) );
+					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+					// Makes [ 'noarchive' => 1, 'nosnippet' => 1, 'noimageindex' => 1 ] when index is found.
+					$transport_value = \is_string( $transport_value )
+						? array_fill_keys( explode( ',', $transport_value ), 1 ) // no_robots = 1
+						: [];
+				}
+
+				if ( isset( $transport_value[ $type ] ) )
+					$ret['transport'][ $type ] = $transport_value[ $type ];
+			}
 		}
 
-		if ( $ret ) {
-			// Convert new data to Yoast-esque data.
-			$ret = implode( ',', array_keys( $ret ) );
-		}
-
-		// If no current data was found, fall back to default "from".
-		return $ret ?: null;
+		return $ret;
 	}
 
 	/**
@@ -227,54 +250,37 @@ final class WordPress_SEO extends Base {
 	 * @param ?array $results The results before and after transmutation, passed by reference.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 */
-	public function _robots_adv_transmuter( $data, &$actions = null, &$results = null ) {
+	public function _robots_adv_transmuter( $data, &$actions, &$results ) {
 
 		[ $from_table, $from_index ] = $data['from'];
 
-		$transmutations = \count( $data['to_data']['transmuters'] );
-		$i              = 0;
-
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {
-			$i++;
-
 			[ $to_table, $to_index ] = array_map( '\\esc_sql', $transmuter );
 
 			$_actions = $actions;
 			$_results = $results;
 
-			$_set_value = false !== strpos( $data['set_value'], $type ) ? $type : null;
+			$_actions['transport'] = true;
+			$_actions['delete']    = false;
 
-			$_actions['transport'] = (bool) $_set_value;
-			$_actions['transform'] = (bool) $_set_value;
-			$_actions['delete']    = $i === $transmutations; // Delete only if completed.
+			$existing_value  = $data['set_value']['existing'][ $type ] ?? null;
+			$transport_value = $data['set_value']['transport'][ $type ] ?? null;
 
-			if ( $_actions['transform'] ) {
-				$__pre_transform_value = $_set_value;
+			$set_value = $existing_value ?? $transport_value;
 
-				$_set_value = \call_user_func_array(
-					$data['to_data']['transformers'][ $type ],
-					[
-						$_set_value,
-						$data['item_id'],
-						$this->type,
-						[ $from_table, $from_index ],
-						[ $to_table, $to_index ],
-					]
-				);
+			$results['transformed'] += (int) ( $existing_value !== $set_value );
 
-				$_results['transformed'] += (int) ( $__pre_transform_value !== $_set_value );
-			}
-
-			if ( \in_array( $_set_value, $this->useless_data, true ) ) {
-				$_set_value              = null;
+			if ( \in_array( $set_value, $this->useless_data, true ) ) {
+				$set_value               = null;
 				$_results['transformed'] = 0;
 				$_actions['transport']   = false;
 			}
 
 			$this->transmute(
-				$_set_value,
+				$set_value,
 				$data['item_id'],
-				[ $from_table, $from_index ],
+				// We cleanup later; data comes from "nowhere."
+				[ null, null ],
 				[ $to_table, $to_index ],
 				$_actions,
 				$_results
@@ -282,5 +288,12 @@ final class WordPress_SEO extends Base {
 
 			yield 'transmutedResults' => [ $_results, $_actions ];
 		}
+
+		// $results gets forwarded from here to yield 'results'.
+		$this->delete(
+			$data['item_id'],
+			[ $from_table, $from_index ],
+			$results,
+		);
 	}
 }
