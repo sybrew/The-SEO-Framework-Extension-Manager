@@ -70,6 +70,12 @@ final class SEO_By_Rank_Math extends Base {
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
 			],
 			[
+				[ $wpdb->postmeta, 'rank_math_canonical_url' ],
+				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
+				null,
+				'\\esc_url_raw',
+			],
+			[
 				[ $wpdb->postmeta, 'rank_math_robots' ],
 				null,
 				null,
@@ -90,12 +96,6 @@ final class SEO_By_Rank_Math extends Base {
 						],
 					],
 				],
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_canonical_url' ],
-				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
-				null,
-				'\\esc_url_raw',
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_facebook_title' ],
@@ -149,59 +149,6 @@ final class SEO_By_Rank_Math extends Base {
 				[ $wpdb->postmeta, '_twitter_description' ],
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
 			],
-			// [
-			// 	null,
-			// 	null,
-			// 	null,
-			// 	null,
-			// 	[
-			// 		'name'    => 'Twitter Advanced',
-			// 		'from'    => [
-			// 			[ $this, '_get_rank_math_populated_twitter_meta_ids' ],
-			// 			[ $this, '_get_rank_math_congealed_transport_value' ],
-			// 		],
-			// 		'from_data' => [
-			// 			'table'   => $wpdb->postmeta,
-			// 			'indexes' => [
-			// 				'rank_math_twitter_use_facebook',
-			// 				'rank_math_twitter_title',
-			// 				'rank_math_twitter_description',
-			// 			],
-			// 		],
-			// 		'to'      => [
-			// 			null,
-			// 			[ $this, '_rank_math_twitter_meta_transmuter' ],
-			// 		],
-			// 		'to_data' => [
-			// 			'pretransmute' => [
-			// 				'rank_math_twitter_use_facebook' => [
-			// 					'cb'   => [ $this, '_rank_math_pretransmute_twitter' ],
-			// 					'data' => [
-			// 						'test_value' => 'rank_math_twitter_use_facebook',
-			// 						'isnot'      => 'off', //= if on, then unset; also means if absent, don't unset.
-			// 						'unset'      => [
-			// 							'rank_math_twitter_title',
-			// 							'rank_math_twitter_description',
-			// 						],
-			// 					],
-			// 				],
-			// 			],
-			// 			'transmuters'  => [
-			// 				'rank_math_twitter_title'        => '_twitter_title',
-			// 				'rank_math_twitter_description'  => '_twitter_description',
-			// 			],
-			// 			'transformers' => [
-			// 				'rank_math_twitter_title'         => [ $transformer_class, '_title_syntax' ], // also sanitizes
-			// 				'rank_math_twitter_description'   => [ $transformer_class, '_description_syntax' ], // also sanitizes
-			// 			],
-			// 			'cleanup' => [
-			// 				[ $wpdb->postmeta, 'rank_math_twitter_use_facebook' ],
-			// 				[ $wpdb->postmeta, 'rank_math_twitter_title' ],
-			// 				[ $wpdb->postmeta, 'rank_math_twitter_description' ],
-			// 			],
-			// 		],
-			// 	],
-			// ],
 			[
 				[ $wpdb->postmeta, 'rank_math_pillar_content' ], // delete
 			],
@@ -400,159 +347,4 @@ final class SEO_By_Rank_Math extends Base {
 
 		yield 'transmutedResults' => [ $results, $actions ];
 	}
-
-	/**
-	 * Obtains post ids of populated Rank Math Twitter meta.
-	 *
-	 * @since 1.0.0
-	 * @global \wpdb $wpdb WordPress Database handler.
-	 *
-	 * @param array $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
-	 */
-	// protected function _get_rank_math_populated_twitter_meta_ids( $data ) {
-	// 	global $wpdb;
-
-	// 	// Redundant. If 'indexes' is a MD-array, though, we'd get 'Array', which is undesirable.
-	// 	// MD = multidimensional (we refer to that more often using MD).
-	// 	$indexes    = implode( "', '", static::esc_sql_in( $data['from_data']['indexes'] ) );
-	// 	$from_table = \esc_sql( $data['from_data']['table'] );
-
-	// 	$item_ids = $wpdb->get_col(
-	// 		// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table/$indexes are escaped.
-	// 		"SELECT DISTINCT `{$this->id_key}` FROM `$from_table` WHERE meta_key IN ('$indexes')",
-	// 	);
-	// 	if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-
-	// 	return $item_ids ?: [];
-	// }
-
-	/**
-	 * Returns combined metadata from Rank Math for ID.
-	 *
-	 * @since 1.0.0
-	 * @global \wpdb $wpdb WordPress Database handler.
-	 *
-	 * @param array  $data    Any useful data pertaining to the current transmutation type.
-	 * @param array  $actions The actions for and after transmuation, passed by reference.
-	 * @param array  $results The results before and after transmuation, passed by reference.
-	 * @param ?array $cleanup The extraneous database indexes to clean up, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 * @return array|null Array if existing values are present, null otherwise.
-	 */
-	// protected function _get_rank_math_congealed_transport_value( $data, &$actions, &$results, &$cleanup ) {
-	// 	global $wpdb;
-
-	// 	// Redundant. If 'indexes' is a MD-array, though, we'd get 'Array', which is undesirable.
-	// 	// MD = multidimensional (we refer to that more often using MD).
-	// 	$indexes    = implode( "', '", static::esc_sql_in( $data['from_data']['indexes'] ) );
-	// 	$from_table = \esc_sql( $data['from_data']['table'] );
-
-	// 	$metadata = $wpdb->get_results( $wpdb->prepare(
-	// 		// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table/$indexes are escaped.
-	// 		"SELECT meta_key, meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key IN ('$indexes')",
-	// 		$data['item_id'],
-	// 	) );
-	// 	if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-
-	// 	return $metadata ? array_column( $metadata, 'meta_value', 'meta_key' ) : [];
-	// }
-
-	/**
-	 * Transmutes comma-separated advanced robots to a single value.
-	 *
-	 * @since 1.0.0
-	 * @generator
-	 *
-	 * @param array  $data    Any useful data pertaining to the current transmutation type.
-	 * @param ?array $actions The actions for and after transmuation, passed by reference.
-	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 */
-	// protected function _rank_math_twitter_meta_transmuter( $data, &$actions, &$results ) {
-
-	// 	[ $from_table, $from_index ] = $data['from'];
-	// 	[ $to_table, $to_index ]     = $data['to'];
-
-	// 	$set_value = [];
-
-	// 	// Nothing to do here, TSF already has value set. Skip to next item.
-	// 	if ( ! $actions['transport'] ) goto useless;
-
-	// 	foreach ( $data['to_data']['pretransmute'] as $type => $pretransmutedata ) {
-	// 		\call_user_func_array(
-	// 			$pretransmutedata['cb'],
-	// 			[
-	// 				$pretransmutedata['data'],
-	// 				&$data['set_value'],
-	// 				&$actions,
-	// 				&$results,
-	// 			]
-	// 		);
-	// 	}
-
-	// 	foreach ( $data['to_data']['transmuters'] as $from => $to ) {
-	// 		$_pre_transform_value = $data['set_value'][ $from ] ?? null;
-
-	// 		if ( \in_array( $_pre_transform_value, $this->useless_data, true ) ) continue;
-
-	// 		$set_value[ $to ] = \call_user_func_array(
-	// 			$data['to_data']['transformers'][ $from ],
-	// 			[
-	// 				$_pre_transform_value,
-	// 				$data['item_id'],
-	// 				$this->type,
-	// 				[ $from_table, $from_index ],
-	// 				[ $to_table, $to_index ],
-	// 			]
-	// 		);
-
-	// 		if ( \in_array( $set_value[ $to ], $this->useless_data, true ) ) {
-	// 			unset( $set_value[ $to ] );
-	// 		} else {
-	// 			// We actually only read this as boolean. Still, might be fun later.
-	// 			$results['transformed'] += (int) ( $_pre_transform_value !== $set_value[ $to ] );
-	// 		}
-	// 	}
-
-	// 	if ( \in_array( $set_value, $this->useless_data, true ) ) {
-	// 		useless:;
-	// 		$set_value              = null;
-	// 		$actions['transport']   = false;
-	// 		$results['transformed'] = 0;
-	// 	}
-
-	// 	$this->transmute(
-	// 		$set_value,
-	// 		$data['item_id'],
-	// 		[ $from_table, $from_index ], // Should be [ null, null ]
-	// 		[ $to_table, $to_index ],
-	// 		$actions,
-	// 		$results,
-	// 		$data['to_data']['cleanup']
-	// 	);
-
-	// 	yield 'transmutedResults' => [ $results, $actions ];
-	// }
-
-	/**
-	 * Pretransmutes Rank Math Twitter value by testing whether user used values.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $data      The pretransmutation data ('cbdata').
-	 * @param array  $set_value The current $set_value data used for actual transmuation, passed by reference.
-	 * @param ?array $actions   The actions for and after transmuation, passed by reference.
-	 * @param ?array $results   The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
-	 */
-	// protected function _rank_math_pretransmute_twitter( $data, &$set_value, &$actions, &$results ) {
-
-	// 	if ( empty( $set_value[ $data['test_value'] ] ) ) return;
-
-	// 	// Unset data if condition is met. Maybe in the future add a 'is'.
-	// 	if ( $set_value[ $data['test_value'] ] !== $data['isnot'] )
-	// 		$set_value = array_diff_key( $set_value, array_flip( $data['unset'] ) );
-	// }
 }

@@ -86,6 +86,7 @@ final class SEO_By_Rank_Math extends Base {
 							'rank_math_title',
 							'rank_math_description',
 							'rank_math_canonical_url',
+							'rank_math_robots',
 							'rank_math_facebook_title',
 							'rank_math_facebook_description',
 							'rank_math_facebook_image',
@@ -93,7 +94,6 @@ final class SEO_By_Rank_Math extends Base {
 							'rank_math_twitter_use_facebook',
 							'rank_math_twitter_title',
 							'rank_math_twitter_description',
-							'rank_math_robots',
 						],
 					],
 					'to'      => [
@@ -130,34 +130,35 @@ final class SEO_By_Rank_Math extends Base {
 							'rank_math_title'                => 'doctitle',
 							'rank_math_description'          => 'description',
 							'rank_math_canonical_url'        => 'canonical',
+							'_rm_transm_robots_noindex'      => 'noindex',
+							'_rm_transm_robots_nofollow'     => 'nofollow',
+							'_rm_transm_robots_noarchive'    => 'noarchive',
 							'rank_math_facebook_title'       => 'og_title',
 							'rank_math_facebook_description' => 'og_description',
 							'rank_math_facebook_image'       => 'social_image_url',
 							'rank_math_facebook_image_id'    => 'social_image_id',
 							'rank_math_twitter_title'        => 'tw_title',
 							'rank_math_twitter_description'  => 'tw_description',
-							'_rm_transm_robots_noindex'      => 'noindex',
-							'_rm_transm_robots_nofollow'     => 'nofollow',
-							'_rm_transm_robots_noarchive'    => 'noarchive',
 						],
 						'transformers' => [
 							'rank_math_title'                 => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'rank_math_description'           => [ $transformer_class, '_description_syntax' ], // also sanitizes
 							'rank_math_canonical_url'         => '\\esc_url_raw',
+							'_rm_transm_robots_noindex'       => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
+							'_rm_transm_robots_nofollow'      => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
+							'_rm_transm_robots_noarchive'     => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 							'rank_math_facebook_title'        => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'rank_math_facebook_description'  => [ $transformer_class, '_description_syntax' ], // also sanitizes
 							'rank_math_facebook_image'        => '\\esc_url_raw',
 							'rank_math_facebook_image_id'     => '\\absint',
 							'rank_math_twitter_title'         => [ $transformer_class, '_title_syntax' ], // also sanitizes
 							'rank_math_twitter_description'   => [ $transformer_class, '_description_syntax' ], // also sanitizes
-							'_rm_transm_robots_noindex'       => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
-							'_rm_transm_robots_nofollow'      => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
-							'_rm_transm_robots_noarchive'     => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 						],
 						'cleanup' => [
 							[ $wpdb->termmeta, 'rank_math_title' ],
 							[ $wpdb->termmeta, 'rank_math_description' ],
 							[ $wpdb->termmeta, 'rank_math_canonical_url' ],
+							[ $wpdb->termmeta, 'rank_math_robots' ],
 							[ $wpdb->termmeta, 'rank_math_facebook_title' ],
 							[ $wpdb->termmeta, 'rank_math_facebook_description' ],
 							[ $wpdb->termmeta, 'rank_math_facebook_image' ],
@@ -165,7 +166,6 @@ final class SEO_By_Rank_Math extends Base {
 							[ $wpdb->termmeta, 'rank_math_twitter_use_facebook' ],
 							[ $wpdb->termmeta, 'rank_math_twitter_title' ],
 							[ $wpdb->termmeta, 'rank_math_twitter_description' ],
-							[ $wpdb->termmeta, 'rank_math_robots' ],
 						],
 					],
 				],
