@@ -119,7 +119,18 @@ final class Admin {
 		$this->ajax_nonce_action = 'tsfem_e_transport_ajax';
 
 		$this->importers = [
-			'WordPress_SEO' => [
+			''                 => [
+				'title'     => sprintf(
+					'&mdash; %s &mdash;',
+					\__( 'Select plugin', 'the-seo-framework-extension-manager' )
+				),
+				'importers' => [
+					'settings' => false,
+					'postmeta' => false,
+					'termmeta' => false,
+				],
+			],
+			'WordPress_SEO'    => [
 				'title'     => 'Yoost SEO',
 				'importers' => [
 					'settings' => false, // Let's keep this at false, for now. Perhaps we want to move the homepage stuff, but that's tricky.
@@ -128,28 +139,25 @@ final class Admin {
 							'title',
 							'description',
 							'canonical_url',
+							'og_title',
+							'og_description',
+							'og_image',
+							'og_image_id',
+							'twitter_title',
+							'twitter_description',
 							'noindex',
 							'nofollow',
 							'noarchive',
-							'og_title',
-							'og_description',
-							'twitter_title',
-							'twitter_description',
-							'og_image',
 							'primary_term',
 							// 'article_type', TODO?
 						],
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
 							'title',
 							'description',
-							'noindex',
-							'nofollow',
-							'noarchive',
 							'og_title',
 							'og_description',
 							'twitter_title',
 							'twitter_description',
-							'canonical_url',
 						],
 					],
 					'termmeta' => [
@@ -168,12 +176,10 @@ final class Admin {
 							'title',
 							'description',
 							'canonical_url',
-							'noindex',
 							'og_title',
 							'og_description',
 							'twitter_title',
 							'twitter_description',
-							'og_image',
 						],
 					],
 				],
@@ -187,15 +193,15 @@ final class Admin {
 							'title',
 							'description',
 							'canonical_url',
-							'noindex',
-							'nofollow',
-							'noarchive',
 							'og_title',
 							'og_description',
 							'og_image',
 							'og_image_id',
 							'twitter_title',
 							'twitter_description',
+							'noindex',
+							'nofollow',
+							'noarchive',
 							// 'article_type', TODO?
 						],
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
@@ -212,15 +218,15 @@ final class Admin {
 							'title',
 							'description',
 							'canonical_url',
-							'noindex',
-							'nofollow',
-							'noarchive',
 							'og_title',
 							'og_description',
 							'og_image',
 							'og_image_id',
 							'twitter_title',
 							'twitter_description',
+							'noindex',
+							'nofollow',
+							'noarchive',
 						],
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
 							'title',
@@ -287,8 +293,8 @@ final class Admin {
 	public function _add_menu_link() {
 		$this->transport_menu_page_hook = \add_submenu_page(
 			\tsf()->seo_settings_page_slug, // parent_slug
-			'Transport', // page_title
-			'Transport', // menu_title
+			'Transport &beta;eta', // page_title
+			'Transport (&beta;eta)', // menu_title
 			TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
 			$this->transport_page_slug, // menu_slug
 			[ $this, '_init_transport_page' ] // callback

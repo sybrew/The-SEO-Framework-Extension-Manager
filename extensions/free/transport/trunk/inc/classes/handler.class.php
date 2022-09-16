@@ -133,9 +133,6 @@ final class Handler {
 			// Convert 90 posts/terms/items per second, 5400 per minute, 27_000 per 5. Some have 100_000+... welp, they can automatically retry.
 			$timeout = 5 * MINUTE_IN_SECONDS;
 
-			// var_dump() debug
-			// $this->release_transport_lock();
-
 			if ( ! $this->lock_transport( $timeout ) )
 				$this->_halt_server( [
 					'server'     => $server,

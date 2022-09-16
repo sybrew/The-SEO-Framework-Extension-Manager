@@ -356,12 +356,13 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @since 2.0.1 Added the push argument.
 	 * @since 2.2.0 Added the logo, wide, tall, and fcbargs arguments.
+	 * @since 2.7.0 Logo is now a string from associative array; preferably SVG.
 	 * @access private
 	 *
 	 * @param string $title   The pane title.
 	 * @param string $content The escaped pane content.
 	 * @param array  $args    The output arguments : {
-	 *   'logo'       array    : An array with svg, 1x, and 2x logo links. 1x is required. svg is preferred.
+	 *   'logo'       string   : An string with svg logo link.
 	 *   'full'       bool     : Whether to output a two wide and high pane.
 	 *   'wide'       bool     : Whether to output a two wide pane.
 	 *   'tall'       bool     : Whether to output a two tall pane. Quite useless and ugly.
@@ -382,7 +383,7 @@ class AdminPages extends AccountActivation {
 
 		$args = array_merge(
 			[
-				'logo'     => [],
+				'logo'     => '',
 				'full'     => true,
 				'wide'     => false,
 				'tall'     => false,

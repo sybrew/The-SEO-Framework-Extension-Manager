@@ -24,14 +24,14 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 			tsf()->convert_markdown(
 				sprintf(
 					/* translators: %s = URL to backup documentation */
-					esc_html__( 'Importer updates indexes in the meta databases of this WordPress installation and can transform values. Old data may be deleted or transformed irreversibly. Although careful consideration was made, transaction errors can occur and data can get lost. Always make a backup before importing. [Learn about WordPress backups](%s).', 'the-seo-framework-extension-manager' ),
+					esc_html__( 'This importer updates index keys in the meta databases of this WordPress installation. **Old data will be deleted** and some data may be transformed irreversibly. Although careful consideration was made, transaction errors can occur where **data can be lost permanently**. The Transport extension actively logs all transactions on your screen and will halt transportation on failure. Still, **always make a backup before importing**. [Learn about WordPress backups](%s).', 'the-seo-framework-extension-manager' ),
 					esc_url( _x(
 						'https://wordpress.org/support/article/wordpress-backups/',
 						'backup documentation',
 						'the-seo-framework-extension-manager'
 					) )
 				),
-				[ 'a' ]
+				[ 'a', 'strong' ]
 			);
 			?>
 		</div>
@@ -67,31 +67,31 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 					]
 				);
 				?>
-				<p id=tsfem-e-transport-importer-options style=display:none></p>
+				<div id=tsfem-e-transport-importer-options style=display:none></div>
 				<p id=tsfem-e-transport-importer-supports-transformation-help style=display:none>
 					<?php
-					// printf(
-					// 	'<sup>&dagger;</sup> <em>%s</em>',
-					// 	esc_html__( 'This data type will be transformed and will no longer be dynamic.', 'the-seo-framework-extension-manager' )
-					// ); // TODO this ugly.
-					printf(
-						'<em class=description>%s</em>',
-						esc_html__( 'Some data will be transformed; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
-					); // var_dump() add link to FAQ what transformation means (and what is transformed to what)
+						// TODO maybe later.
+						// printf(
+						// 	'<sup>&dagger;</sup> <em>%s</em>',
+						// 	esc_html__( 'This data will be transformed to become usable; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
+						// );
+						printf(
+							'<em>%s</em>',
+							esc_html__( 'Title and description data will have their syntax markup transformed into real text. Those results cannot be transported back.', 'the-seo-framework-extension-manager' )
+						);
 					?>
 				</p>
-				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload"><?= esc_html__( 'Import', 'the-seo-framework-extension-manager' ); ?></a>
+				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload tsfem-button-disabled"><?= esc_html__( 'Import', 'the-seo-framework-extension-manager' ); ?></a>
 			</form>
 			<template id=tsfem-e-transport-importer-options-template style=display:none>
-				<label class=tsfem-e-transport-importer-selectType>
-					<input type=checkbox name=tsfem-e-transport-importer[selectType][] value="" checked></input>
-					<span class=tsfem-e-transport-importer-selectType-description></span>
-				</label>
-				<?php /* <p class=tsfem-e-transport-importer-selectType-supports></p> */ // TODO? this ugly. */ ?>
+				<p>
+					<label class=tsfem-e-transport-importer-selectType>
+						<input type=checkbox name=tsfem-e-transport-importer[selectType][] value="" checked></input>
+						<span class=tsfem-e-transport-importer-selectType-description></span>
+					</label>
+					<div class=tsfem-e-transport-importer-selectType-supports></div>
+				</p>
 			</template>
-			<?php
-			// TODO? This ugly.
-			/*
 			<template id=tsfem-e-transport-importer-supports-template style=display:none>
 				<ul>
 				<?php
@@ -99,15 +99,16 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 					'title'               => __( 'Meta Title', 'the-seo-framework-extension-manager' ),
 					'description'         => __( 'Meta Description', 'the-seo-framework-extension-manager' ),
 					'canonical_url'       => __( 'Canonical URL', 'the-seo-framework-extension-manager' ),
+					'og_title'            => __( 'Open Graph Title', 'the-seo-framework-extension-manager' ),
+					'og_description'      => __( 'Open Graph Description', 'the-seo-framework-extension-manager' ),
+					'og_image'            => __( 'Social Image', 'the-seo-framework-extension-manager' ),
+					'twitter_title'       => __( 'Twitter Title', 'the-seo-framework-extension-manager' ),
+					'twitter_description' => __( 'Twitter Description', 'the-seo-framework-extension-manager' ),
 					'noindex'             => __( 'Robots Indexing', 'the-seo-framework-extension-manager' ),
 					'nofollow'            => __( 'Robots Link Following', 'the-seo-framework-extension-manager' ),
 					'noarchive'           => __( 'Robots Archiving', 'the-seo-framework-extension-manager' ),
-					'og_title'            => __( 'Open Graph Title', 'the-seo-framework-extension-manager' ),
-					'og_description'      => __( 'Open Graph Description', 'the-seo-framework-extension-manager' ),
-					'twitter_title'       => __( 'Twitter Title', 'the-seo-framework-extension-manager' ),
-					'twitter_description' => __( 'Twitter Description', 'the-seo-framework-extension-manager' ),
-					'og_image'            => __( 'Open Graph Image', 'the-seo-framework-extension-manager' ),
-					'article_type'        => __( 'Article Type', 'the-seo-framework-extension-manager' ),
+					'primary_term'        => __( 'Primary Term', 'the-seo-framework-extension-manager' ),
+					// 'article_type'        => __( 'Article Type', 'the-seo-framework-extension-manager' ),
 				] as $selection => $i18n ) {
 					vprintf(
 						'<li class=tsfem-e-transport-importer-support[%s] style=display:none>%s<sup class=tsfem-e-transport-importer-transform>&dagger;</sup></li>',
@@ -120,8 +121,6 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				?>
 				</ul>
 			</template>
-			*/
-			?>
 		</div>
 	</div>
 </div>

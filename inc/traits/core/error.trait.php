@@ -624,7 +624,7 @@ trait Error {
 				break;
 
 			case 1060202:
-				$message = \esc_html__( 'Transporting in session, trying to connect to logger...', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Transporting in session, please wait...', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 

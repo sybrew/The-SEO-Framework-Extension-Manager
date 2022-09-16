@@ -176,15 +176,9 @@ trait Extensions_Layout {
 				\esc_attr( $extension['slug'] )
 			);
 		} else {
-			$items = [
-				'svg' => \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true ),
-				'1x'  => \tsf_extension_manager()->get_image_file_location( 'exticon-fallback-120x120px.png', true ),
-			];
-
 			$icon = sprintf(
-				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s" alt="extension fallback icon"></image>',
-				\esc_url( $items['svg'], [ 'https', 'http' ] ),
-				\esc_url( $items['1x'], [ 'https', 'http' ] ),
+				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s" alt="extension fallback icon"></image>',
+				\esc_url( \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true ), [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
 		}

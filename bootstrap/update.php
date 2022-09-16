@@ -58,6 +58,20 @@ function _check_external_blocking() {
 	}
 }
 
+/**
+ * Unserializes data a bit safer than WordPress does.
+ *
+ * @since 2.6.0
+ *
+ * @param mixed $data Expected to be serialized.
+ * @return ?mixed The unserialized data without classes. Null on failure.
+ */
+function _maybe_unserialize_no_class( $data ) {
+	return \is_serialized( $data )
+		? unserialize( trim( $data ), [ 'allowed_classes' => false ] ) // phpcs:ignore -- it fine.
+		: $data;
+}
+
 \add_filter( 'plugins_api', __NAMESPACE__ . '\\_hook_plugins_api', PHP_INT_MAX, 3 );
 /**
  * Filters the plugin API to bind to The SEO Framework's own updater service.
@@ -112,7 +126,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 			$request->get_error_message() // $data
 		);
 	} else {
-		$res = \maybe_unserialize( \wp_remote_retrieve_body( $request ) );
+		$res = \_maybe_unserialize_no_class( \wp_remote_retrieve_body( $request ) );
 		if ( ! \is_object( $res ) && ! \is_array( $res ) ) {
 			$res = new \WP_Error( 'plugins_api_failed',
 				sprintf(

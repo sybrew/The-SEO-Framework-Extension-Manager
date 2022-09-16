@@ -81,7 +81,7 @@ final class SEO_By_Rank_Math extends Base {
 				null,
 				null,
 				[
-					'name'    => 'Robots Advanced',
+					'name'    => 'Rank Math Robots',
 					'to'      => [
 						[ $this, '_robots_transmuter_existing' ],
 						[ $this, '_robots_transmuter' ],

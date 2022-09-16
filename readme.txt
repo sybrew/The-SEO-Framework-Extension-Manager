@@ -46,6 +46,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Touched up the interface, it's now more compact and easier on your eyes.
 * Now relies on The SEO Framework's JavaScript availability test, instead of WordPress's, making unresponsive interfaces a thing of the past.
 * Modernized code, especially JavaScript, improving UI responsiveness significantly.
+* Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
 
 * TODO Add index.php files to extension top-folders
 * TODO require TSF 4.2+
@@ -64,8 +65,8 @@ TODO remove png files, all browsers support svg now.
 	* Use `<use>` like on TSF site for improved painting performance?
 TODO move get_view() to trait, using prescribed base URL.
 TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Transport\get_active_class() and ", try a secret (for all extensions).
-TODO 'a' . $b -> "a$b" (PHP)
-TODO 'a' + b -> `a${b}` (JS) (.e.g. '.' + ...)
+TODO 'a' . $b -> "a$b" (PHP) (regex '.*?'\s*\.\s*\$)
+TODO 'a' + b -> `a${b}` (JS) (regex '.*?'\s*\+\s*[a-zA-Z_])
 TODO implement views trait.
 TODO remove typehinting
 TODO introduced tsfem()
@@ -77,7 +78,7 @@ TODO remove trends pane... we planned to add our blog items there, but that neve
 TODO <?php echo ... ?> -> <?= ?>
 	also <?php print() ?> -> <?= ?>
 TODO POT file. (also update related github)
-TODO <el method="post"> -> <el method=post>
+TODO <el method="post"> -> <el method=post> (regex <[a-zA-Z].*?[a-zA-Z_-]+="[a-zA-Z0-9+_-]+")
 TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
 	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`
 TODO //= //? //* -> //
@@ -86,8 +87,9 @@ TODO de-jQueryfy?
 TODO function(){} => ()=>{}
 TODO coalesce_var() => ??
 TODO /isset\( (.*?) \) \? \1/ -> ??
-TODO ([a-zA-Z0-9_-]+)\s*=\s*(\1)\b\s*\|\| -> ||=
+TODO ([a-zA-Z_][a-zA-Z0-9_]+)\s*=\s*(\1)\b\s*\|\| -> ||=
 TODO use :where() css instead of the avalange of entries.
+TODO use `use` for SVG logos? -> Is this feasible? -> tsfem_ui()->register_logo( id, svg );
 
 TODO add grid display to importer options...
 
@@ -108,13 +110,19 @@ TODO Add "mark as spam, put in trash, or discard/permanently delete the comment.
 TODO Add method used to mark as spam as comment-meta? -> Is this possible, I don't want to add more rows.
 	-> Otherwise, simply add a counter for each type. Store as array?
 
-TODO set Transporter default selection to "&ndash; Select Plugin &ndash;"
-TODO "Data imported and transformed successfully" 2) also returns when no actual transformation took place (only request for transportation was there) -> set $results['transformed']! (was this resolveD?)
-TODO "Transporting in session, trying to connect to logger..." <- not true lol... can we even hook into an active process?
-	-> Maybe, we can set a flag in the database which is checked every 50 items or something and if it exists, it aborts the current run and "continues (restarts)" on the next one?
+TODO When transporter is in session, maybe we can set a flag in the database which is checked every 50 items or something and if it exists, it aborts the current run and "continues (restarts)" on the next one?
+	-> Ergo, store 50 (or 250) transactions in memory, when 0==$trans%50, then store blob in database, continue to next 50.
+	-> Store end also in database.
 
 TODO "^%sitetitle% %sep%" -> ""?
 TODO "%sep% %sitetitle%$" -> ""?
+
+TODO addslashes( serialize( $c_meta ) )  -> $c_meta + maybe_unserialize()?
+	-> The maybe_unserialize() will gradually translate metadata back to what it's supposed to be. We can keep this indefinitely, with a NOTE that removing this would incur data loss.
+		-> There's no need for a safer maybe_unserialize, for future data won't be serialized, so it at most can be a self-resolving stored issue, not reflective.
+	-> Figure out if we can maintain slashes like TSF does by converting them via tsf()->bsol()
+		-> Break this feature first by spamming slashes without the serialization feature on a new post.
+		-> Then, test if migration is seamless. Test on our own sites, prominently, if the focus keywords stay intact.
 
 = 2.5.3 =
 

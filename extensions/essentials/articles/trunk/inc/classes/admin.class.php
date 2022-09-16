@@ -217,11 +217,7 @@ final class Admin extends Core {
 			$this->o_index,
 			[
 				'title'    => 'Articles',
-				'logo'     => [
-					'svg' => TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon.svg',
-					'2x'  => TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon-58x58.png',
-					'1x'  => TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon-29x29px.png',
-				],
+				'logo'     => TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon.svg',
 				'before'   => '',
 				'after'    => '',
 				'pane'     => [],

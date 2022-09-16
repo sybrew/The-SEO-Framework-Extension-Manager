@@ -83,7 +83,7 @@ final class WordPress_SEO extends Base {
 				null,
 				null,
 				[
-					'name'    => 'Robots Advanced',
+					'name'    => 'Yoost Robots',
 					'to'      => [
 						[ $this, '_robots_adv_transmuter_existing' ],
 						[ $this, '_robots_adv_transmuter' ],

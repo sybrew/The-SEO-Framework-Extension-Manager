@@ -36,25 +36,15 @@ foreach ( $_classes as $_arg => $_class ) {
 if ( $args['logo'] ) {
 	$logo_size = '1.4em';
 
-	if ( isset( $args['logo']['svg'] ) ) {
-		$logo = sprintf(
-			'<svg width="%1$s" height="%1$s">%2$s</svg>',
-			esc_attr( $logo_size ),
-			sprintf(
-				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" src="%2$s" width="%3$s" height="%3$s"></image>',
-				esc_url( $args['logo']['svg'], [ 'https', 'http' ] ),
-				esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
-				esc_attr( $logo_size )
-			)
-		);
-	} else {
-		$logo = sprintf(
-			'<img src="%1$s" srcset="%1$s 1x, %2$s 2x" height="%3$s" width="%3$s">',
-			esc_url( $args['logo']['1x'], [ 'https', 'http' ] ),
-			isset( $args['logo']['2x'] ) ? esc_url( $args['logo']['2x'], [ 'https', 'http' ] ) : '',
+	$logo = sprintf(
+		'<svg width="%1$s" height="%1$s">%2$s</svg>',
+		esc_attr( $logo_size ),
+		sprintf(
+			'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s"></image>',
+			esc_url( $args['logo'], [ 'https', 'http' ] ),
 			esc_attr( $logo_size )
-		);
-	}
+		)
+	);
 } else {
 	$logo = '';
 }

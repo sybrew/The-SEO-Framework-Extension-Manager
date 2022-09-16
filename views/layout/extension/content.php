@@ -25,8 +25,7 @@ $_tsfem = tsf_extension_manager();
 foreach ( $_settings as $index => $params ) {
 	$_tsfem->_do_pane_wrap_callable(
 		$params['title'],
-		// [ static::class, '_output_pane_settings' ], // PHP 5.6 scoping bug.
-		[ TSF_Extension_Manager\ExtensionSettings::class, '_output_pane_settings' ],
+		[ static::class, '_output_pane_settings' ],
 		[
 			'logo'     => $params['logo'],
 			'full'     => in_array( 'full', $params['pane'], true ),
@@ -34,11 +33,10 @@ foreach ( $_settings as $index => $params ) {
 			'tall'     => in_array( 'tall', $params['pane'], true ),
 			'collapse' => true,
 			'move'     => true,
-			'pane_id'  => 'tsfem-extension-settings-pane-' . $index,
+			'pane_id'  => "tsfem-extension-settings-pane-$index",
 			'ajax'     => true,
-			'ajax_id'  => 'tsfem-extension-settings-ajax-' . $index,
-			// 'footer'   => [ static::class, '_output_pane_settings_footer' ], // PHP 5.6 scoping bug.
-			'footer'   => [ TSF_Extension_Manager\ExtensionSettings::class, '_output_pane_settings_footer' ],
+			'ajax_id'  => "tsfem-extension-settings-ajax-$index",
+			'footer'   => [ static::class, '_output_pane_settings_footer' ],
 			'cbargs'   => [ $index, $params['settings'] ],
 			'fcbargs'  => [ $index ],
 		]

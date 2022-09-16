@@ -79,8 +79,7 @@ onmessage = message => {
 		SSE[ workerId ] = new EventSource( sseURL.href );
 
 		SSE[ workerId ].onopen = event => {
-			_log( logStart );
-			_log( "&nbsp;" );
+			_log( logStart, 1 );
 		}
 		SSE[ workerId ].onerror = event => {
 			SSE[ workerId ].close();

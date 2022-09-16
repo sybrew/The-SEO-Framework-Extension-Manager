@@ -116,6 +116,7 @@ window.tsfem_e_import = function() {
 		} );
 
 		const handler = 'undefined' !== typeof( EventSource ) ? _handleEventStream : _handlePost;
+		// const handler = _handlePost;
 
 		handler(
 			'import',
@@ -201,6 +202,8 @@ window.tsfem_e_import = function() {
 
 	/**
 	 * Handles AJAX post requests securely.
+	 * This probably never runs, maybe when a text-based browser is used.
+	 * It works, though... var_dump() verify before launch.
 	 *
 	 * @since 1.0.0
 	 * @access private
@@ -340,7 +343,14 @@ window.tsfem_e_import = function() {
 		let hasTransformation = false,
 			hasOptions        = false;
 
-		const handleTypeChange = e => {
+		let disableSubmit = false;
+
+		const setDisabled = () => {
+			submit.disabled = disableSubmit;
+			submit.classList.toggle( 'tsfem-button-disabled', disableSubmit );
+		}
+
+		const testActiveOptions = () => {
 			// We could "effeciently" keep track of how many items are checked (out of total)
 			// We do that in ../../..tsfem-form.js, but this doesn't require that level of optimization.
 			// Query all the fields! All the time! Yay for pushing out code ASAP. This is me not giving a hoot.
@@ -353,42 +363,38 @@ window.tsfem_e_import = function() {
 
 			supportsTransformationHelp.style.display = hasTransformation ? null : 'none';
 
-			const disableSubmit = ! enabledTypes.length;
-			submit.disabled = disableSubmit;
-			submit.classList.toggle( 'tsfem-button-disabled', disableSubmit );
+			disableSubmit = ! enabledTypes.length;
+			setDisabled();
 		}
 
 		const populateOptionsTemplate = type => {
 			const optionsTemplate = document.getElementById( `${basename}-options-template` ).content.cloneNode( true );
+			const typeInput       = optionsTemplate.querySelector( `[name^="${basename}\\[selectType\\]"]` );
+
 			optionsTemplate.querySelector( `.${basename}-selectType-description` ).innerText = l10n.i18n.optionNames[ type ] ?? '';
 
-			const typeInput = optionsTemplate.querySelector( `[name^="${basename}\\[selectType\\]"]` );
 			typeInput.value = type;
+			typeInput.addEventListener( 'change', testActiveOptions );
 
-			optionsWrap.appendChild( optionsTemplate );
+			// TODO maybe later.
+			// const supportsTemplate = document.getElementById( `${basename}-supports-template` ).content.cloneNode( true );
+			// data[ type ].supports?.forEach( metaType => {
+			// 	const item = supportsTemplate.querySelector( `.${basename}-support\\[${metaType}\\]` );
 
-			typeInput.addEventListener( 'change', handleTypeChange );
-			typeInput.dispatchEvent( new Event( 'change' ) );
-
-			// const supportsTemplate = document.getElementById( `${basename}supports-template` ).content.cloneNode( true );
-			// const typeSupports = optionsTemplate.querySelector( `.${basename}selectType-supports` );
-			// optionsTemplate.querySelector( `.${basename}-selectType-supports` ).appendChild( supportsTemplate );
-			// data[ name ].supports?.forEach( type => {
-			// 	hasTransformation = ! data[ type ].transform?.includes( type );
-			// 	// TODO? This ugly.
-			// 	/*
-			// 	const item = supportsTemplate.querySelector( `.${basename}-support\\[${type}\\]` );
 			// 	if ( item ) {
 			// 		item.style.display = null;
 
-			// 		if ( ! data[ type ].transform?.includes( type ) ) {
+			// 		if ( ! data[ type ].transform?.includes( metaType ) ) {
 			// 			item.querySelector( `.${basename}-transform` ).style.display = 'none';
 			// 		} else {
 			// 			hasTransformation = true;
 			// 		}
 			// 	}
-			// 	*/
 			// } );
+
+			// appendChild will disconnect the reference pointer from the constant -- do it as late as possible.
+			// optionsTemplate.querySelector( `.${basename}-selectType-supports` ).appendChild( supportsTemplate );
+			optionsWrap.appendChild( optionsTemplate );
 		}
 
 		// if ( data.settings ) {} // TODO? FORGO?
@@ -401,8 +407,13 @@ window.tsfem_e_import = function() {
 			hasOptions = true;
 		}
 
-		if ( hasOptions )
+		if ( hasOptions ) {
 			optionsWrap.style.display = null;
+			testActiveOptions();
+		} else {
+			disableSubmit = true;
+			setDisabled();
+		}
 
 		// Register this. JS event handler should allow it only once.
 		submit.addEventListener( 'click', _handleImport );
