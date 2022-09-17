@@ -70,15 +70,15 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				<div id=tsfem-e-transport-importer-options style=display:none></div>
 				<p id=tsfem-e-transport-importer-supports-transformation-help style=display:none>
 					<?php
-						// TODO maybe later.
-						// printf(
-						// 	'<sup>&dagger;</sup> <em>%s</em>',
-						// 	esc_html__( 'This data will be transformed to become usable; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
-						// );
-						printf(
-							'<em>%s</em>',
-							esc_html__( 'Title and description data will have their syntax markup transformed into real text. Those results cannot be transported back.', 'the-seo-framework-extension-manager' )
-						);
+					// TODO maybe later.
+					// printf(
+					// 	'<sup>&dagger;</sup> <em>%s</em>',
+					// 	esc_html__( 'This data will be transformed to become usable; this process cannot be reversed.', 'the-seo-framework-extension-manager' )
+					// );
+					printf(
+						'<em>%s</em>',
+						esc_html__( 'Title and description data will have their syntax markup transformed into real text. Those results cannot be transported back.', 'the-seo-framework-extension-manager' )
+					);
 					?>
 				</p>
 				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload tsfem-button-disabled"><?= esc_html__( 'Import', 'the-seo-framework-extension-manager' ); ?></a>

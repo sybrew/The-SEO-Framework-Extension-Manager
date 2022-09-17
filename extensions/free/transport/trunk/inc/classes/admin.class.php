@@ -30,30 +30,11 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  */
 
 /**
- * Transports HTML.
- */
-// use \TSF_Extension_Manager\HTML as HTML;
-
-/**
  * Require user interface trait.
  *
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
-
-/**
- * Require extension settings trait.
- *
- * @since 1.0.0
- */
-\TSF_Extension_Manager\_load_trait( 'extension/options' );
-
-/**
- * Require extension forms trait.
- *
- * @since 1.0.0
- */
-// \TSF_Extension_Manager\_load_trait( 'extension/forms' );
 
 /**
  * Require extension forms trait.
@@ -76,8 +57,6 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
 final class Admin {
 	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface,
 		\TSF_Extension_Manager\UI,
-		// \TSF_Extension_Manager\Extension_Options,
-		// \TSF_Extension_Manager\Extension_Forms,
 		\TSF_Extension_Manager\Extension_Views,
 		\TSF_Extension_Manager\Error;
 
@@ -373,17 +352,6 @@ final class Admin {
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
 		$scripts::register( [
-			// [
-			// 	'id'       => 'tsfem-transport',
-			// 	'type'     => 'css',
-			// 	'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
-			// 	'autoload' => true,
-			// 	'hasrtl'   => true,
-			// 	'name'     => 'tsfem-transport',
-			// 	'base'     => TSFEM_E_TRANSPORT_DIR_URL . 'lib/css/',
-			// 	'ver'      => TSFEM_E_TRANSPORT_VERSION,
-			// 	'inline'   => null,
-			// ],
 			[
 				'id'       => 'tsfem-transport',
 				'type'     => 'js',

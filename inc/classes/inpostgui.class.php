@@ -470,7 +470,7 @@ final class InpostGUI {
 
 		unset( $_key, $_val, $args );
 
-		//= Prevent private includes hijacking.
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Includes.
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;
 		static::$include_secret = null;

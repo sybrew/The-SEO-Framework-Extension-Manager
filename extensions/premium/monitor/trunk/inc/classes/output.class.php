@@ -187,70 +187,6 @@ final class Output {
 	}
 
 	/**
-	 * Returns pane graph overview.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 * @ignore
-	 * @TODO unused?
-	 *
-	 * @param array  $data The pane data to parse.
-	 * @param string $type The pane data type.
-	 * @return string The pane graph overview.
-	 */
-	public function get_pane_graph_data( $data, $type ) {
-
-		$info = '';
-
-		foreach ( $this->generate_pane_graph_data( $data, $type ) as $info_entry ) {
-			$info .= $info_entry;
-		}
-
-		return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info );
-	}
-
-	/**
-	 * Iterates over graph data to generate information.
-	 *
-	 * @since 1.0.0
-	 * @uses TSF_Extension_Manager\Extension\Monitor\Output->make_slab_graph_entry()
-	 * @generator
-	 * @ignore
-	 * @TODO unused?
-	 *
-	 * @param array  $data The fetched data.
-	 * @param string $type The data type.
-	 * @yields Interpreted data from array for the information slab.
-	 */
-	protected function generate_pane_graph_data( $data, $type ) {
-		foreach ( $data as $key => $value ) :
-			yield $this->make_slab_graph_entry( $key, $value, $type );
-		endforeach;
-	}
-
-	/**
-	 * @ignore
-	 * @TODO document
-	 * @TODO unused?
-	 */
-	protected function make_slab_graph_entry( $key, $value, $type ) {
-
-		$output = $this->parse_content( $key, $value, $type );
-
-		if ( $output ) {
-			$title  = $this->get_entry_title( $key, $type );
-			$prefix = $this->get_entry_state_icon( $key, $type );
-
-			$title  = sprintf( '<h3 class="tsfem-flex tsfem-flex-row">%s%s</h3>', $prefix, $title );
-			$output = sprintf( '<div class="tsfem-flex">%s</div>', $output );
-
-			return sprintf( '<div id="tsfem-e-monitor-%s-graph-output" class="tsfem-e-monitor-nav-output tsfem-flex">%s%s</div>', \esc_attr( $key ), $title, $output );
-		}
-
-		return '';
-	}
-
-	/**
 	 * Returns slab entry title based on $key and $type.
 	 *
 	 * @since 1.0.0
@@ -526,7 +462,8 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \tsf()->the_seo_framework_debug                     = false;
+		// phpcs:ignore, Generic.Formatting.MultipleStatementAlignment
+		$debug[1] and \tsf()->the_seo_framework_debug = false;
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = false;
 	}
 

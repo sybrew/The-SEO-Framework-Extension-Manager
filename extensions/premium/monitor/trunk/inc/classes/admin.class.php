@@ -942,118 +942,112 @@ final class Admin extends Api {
 			\esc_html__( 'These settings are in development. Enable these to participate in the beta tests.', 'the-seo-framework-extension-manager' )
 		);
 
-		fields: {
-			$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
-			$time_settings  = [
-				'uptime_setting'      => [
-					'title'   => \__( 'Uptime monitoring:', 'the-seo-framework-extension-manager' ),
-					'help'    => \__( 'Set how often you want Monitor to test your website for availability.', 'the-seo-framework-extension-manager' ),
-					'option'  => 'uptime_setting',
-					'value'   => $this->get_option( 'uptime_setting', 0 ),
-					'options' => [
-						'values'   => [ 0, 5, 10, 30 ],
-						'in'       => 'minutes',
-						'scale'    => 0,
-						'if-empty' => $_disabled_i18n,
-					],
+		$_disabled_i18n = \__( 'Disabled', 'the-seo-framework-extension-manager' );
+		$time_settings  = [
+			'uptime_setting'      => [
+				'title'   => \__( 'Uptime monitoring:', 'the-seo-framework-extension-manager' ),
+				'help'    => \__( 'Set how often you want Monitor to test your website for availability.', 'the-seo-framework-extension-manager' ),
+				'option'  => 'uptime_setting',
+				'value'   => $this->get_option( 'uptime_setting', 0 ),
+				'options' => [
+					'values'   => [ 0, 5, 10, 30 ],
+					'in'       => 'minutes',
+					'scale'    => 0,
+					'if-empty' => $_disabled_i18n,
 				],
-				'performance_setting' => [
-					'title'   => \__( 'Performance monitoring:', 'the-seo-framework-extension-manager' ),
-					'help'    => \__( 'Set how often you want Monitor to test your website for performance.', 'the-seo-framework-extension-manager' ),
-					'option'  => 'performance_setting',
-					'value'   => $this->get_option( 'performance_setting', 0 ),
-					'options' => [
-						'values'   => [ 0, 60, 180, 720, 1440 ],
-						'in'       => 'minutes',
-						'scale'    => 1,
-						'if-empty' => $_disabled_i18n,
-					],
+			],
+			'performance_setting' => [
+				'title'   => \__( 'Performance monitoring:', 'the-seo-framework-extension-manager' ),
+				'help'    => \__( 'Set how often you want Monitor to test your website for performance.', 'the-seo-framework-extension-manager' ),
+				'option'  => 'performance_setting',
+				'value'   => $this->get_option( 'performance_setting', 0 ),
+				'options' => [
+					'values'   => [ 0, 60, 180, 720, 1440 ],
+					'in'       => 'minutes',
+					'scale'    => 1,
+					'if-empty' => $_disabled_i18n,
 				],
-			];
+			],
+		];
 
-			$options = [];
-			foreach ( $time_settings as $id => $args ) :
-				$_options = [];
-				foreach ( $args['options']['values'] as $_value ) {
-					$_options[] = vsprintf(
-						'<option value="%s" %s>%s</option>',
-						[
-							$_value,
-							$args['value'] === $_value ? 'selected' : '',
-							\esc_html( $_value
-								? static::scale_time( $_value, $args['options']['in'], $args['options']['scale'], false )
-								: $args['options']['if-empty']
-							),
-						]
-					);
-				}
-
-				$_field_id = ! empty( $args['id'] ) ? $args['id'] : $this->_get_field_id( $args['option'] );
-
-				$options[ $id ] = [
-					'edit' => vsprintf(
-						'<select form=%s id=%s name=%s class=hide-if-tsf-js>%s</select>',
-						[
-							$form_id,
-							\esc_attr( $_field_id ),
-							$this->_get_field_name( $args['option'] ),
-							implode( '', $_options ),
-						]
-					),
-					'js'   => vsprintf(
-						'<span class="hide-if-no-tsf-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
-						[
-							\esc_attr( $_field_id ),
-							\esc_html( $args['value']
-								? static::scale_time( $args['value'], $args['options']['in'], $args['options']['scale'], false )
-								: $args['options']['if-empty']
-							),
-						]
-					),
-				];
-			endforeach;
-		}
-
-		rows: {
-			$_rows = '';
-			foreach ( $options as $id => $_fields ) :
-				$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
-					HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-						\esc_html( $time_settings[ $id ]['title'] ),
-						\esc_attr( $time_settings[ $id ]['help'] )
-					) ),
-					vsprintf(
-						'<div class="tsfem-e-monitor-settings-holder" data-option-id=%1$s id=%1$s>%2$s</div>',
-						[
-							\esc_attr( $id ),
-							$_fields['edit'] . $_fields['js'],
-						]
-					),
-					false
+		$options = [];
+		foreach ( $time_settings as $id => $args ) :
+			$_options = [];
+			foreach ( $args['options']['values'] as $_value ) {
+				$_options[] = vsprintf(
+					'<option value="%s" %s>%s</option>',
+					[
+						$_value,
+						$args['value'] === $_value ? 'selected' : '',
+						\esc_html( $_value
+							? static::scale_time( $_value, $args['options']['in'], $args['options']['scale'], false )
+							: $args['options']['if-empty']
+						),
+					]
 				);
-			endforeach;
+			}
 
-			$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
-		}
+			$_field_id = ! empty( $args['id'] ) ? $args['id'] : $this->_get_field_id( $args['option'] );
 
-		form: {
-			$nonce_action = $this->_get_nonce_action_field( 'update' );
-			$nonce        = $this->_get_nonce_field( 'update' );
+			$options[ $id ] = [
+				'edit' => vsprintf(
+					'<select form=%s id=%s name=%s class=hide-if-tsf-js>%s</select>',
+					[
+						$form_id,
+						\esc_attr( $_field_id ),
+						$this->_get_field_name( $args['option'] ),
+						implode( '', $_options ),
+					]
+				),
+				'js'   => vsprintf(
+					'<span class="hide-if-no-tsf-js tsfem-e-monitor-edit tsfem-dashicon tsfem-edit" data-for=%s tabindex=0>%s</span>',
+					[
+						\esc_attr( $_field_id ),
+						\esc_html( $args['value']
+							? static::scale_time( $args['value'], $args['options']['in'], $args['options']['scale'], false )
+							: $args['options']['if-empty']
+						),
+					]
+				),
+			];
+		endforeach;
 
-			$submit = $this->_get_submit_button(
-				\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
-				'',
-				'tsfem-button-primary tsfem-button-cloud'
+		$_rows = '';
+		foreach ( $options as $id => $_fields ) :
+			$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
+				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+					\esc_html( $time_settings[ $id ]['title'] ),
+					\esc_attr( $time_settings[ $id ]['help'] )
+				) ),
+				vsprintf(
+					'<div class="tsfem-e-monitor-settings-holder" data-option-id=%1$s id=%1$s>%2$s</div>',
+					[
+						\esc_attr( $id ),
+						$_fields['edit'] . $_fields['js'],
+					]
+				),
+				false
 			);
+		endforeach;
 
-			$content .= sprintf(
-				'<form action=%s method=post id=%s class="%s" autocomplete=off data-form-type=other>%s</form>',
-				\esc_url( \tsfem()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
-				$form_id,
-				'hide-if-tsf-js',
-				$nonce_action . $nonce . $submit
-			);
-		}
+		$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
+
+		$nonce_action = $this->_get_nonce_action_field( 'update' );
+		$nonce        = $this->_get_nonce_field( 'update' );
+
+		$submit = $this->_get_submit_button(
+			\__( 'Update Settings', 'the-seo-framework-extension-manager' ),
+			'',
+			'tsfem-button-primary tsfem-button-cloud'
+		);
+
+		$content .= sprintf(
+			'<form action=%s method=post id=%s class="%s" autocomplete=off data-form-type=other>%s</form>',
+			\esc_url( \tsfem()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
+			$form_id,
+			'hide-if-tsf-js',
+			$nonce_action . $nonce . $submit
+		);
 
 		return sprintf( '<div class="tsfem-e-monitor-cp-settings tsfem-pane-section">%s%s</div>', $title, $content );
 	}

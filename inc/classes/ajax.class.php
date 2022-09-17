@@ -94,11 +94,12 @@ final class AJAX extends Secure_Abstract {
 	 * Returns false, unused.
 	 *
 	 * @since 2.1.0
+	 * @ignore
 	 *
 	 * @param string $type Determines what to get.
 	 * @return bool false
 	 */
-	public static function get( $type = '' ) {
+	public static function get( $type = '' ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis
 		return false;
 	}
 
@@ -418,16 +419,21 @@ final class AJAX extends Secure_Abstract {
 
 		if ( ! static::$_validated ) return;
 
-		if ( ! \current_user_can( 'upload_files' ) )
+		\tsf()->clean_response_header();
+
+		if ( ! \current_user_can( 'upload_files' ) || ! isset( $_POST['id'], $_POST['context'], $_POST['cropDetails'] ) )
 			\wp_send_json_error();
 
 		if ( ! \check_ajax_referer( 'tsfem-media-nonce', 'nonce', false ) )
 			\wp_send_json_error();
 
-		$attachment_id = \absint( $_POST['id'] ); // phpcs:ignore -- Sanitization, input var OK.
+		$attachment_id = \absint( $_POST['id'] );
 
-		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) ); // phpcs:ignore -- Sanitization, input var OK.
-		$data    = array_map( 'absint', $_POST['cropDetails'] );                // phpcs:ignore -- Input var, input var OK.
+		if ( ! $attachment_id || 'attachment' !== \get_post_type( $attachment_id ) || ! \wp_attachment_is_image( $attachment_id ) )
+			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'default' ) ) ] );
+
+		$context = str_replace( '_', '-', \sanitize_key( $_POST['context'] ) );
+		$data    = array_map( 'absint', $_POST['cropDetails'] );
 		$cropped = \wp_crop_image( $attachment_id, $data['x1'], $data['y1'], $data['width'], $data['height'], $data['dst_width'], $data['dst_height'] );
 
 		if ( ! $cropped || \is_wp_error( $cropped ) )
@@ -448,43 +454,63 @@ final class AJAX extends Secure_Abstract {
 				 */
 				\do_action( 'wp_ajax_crop_image_pre_save', $context, $attachment_id, $cropped );
 
-				/** This filter is documented in wp-admin/custom-header.php */
+				/** This filter is documented in wp-admin/includes/class-custom-image-header.php */
 				$cropped = \apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
 
-				$parent_url = \wp_get_attachment_url( $attachment_id );
-				$url        = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+				$parent_url       = \wp_get_attachment_url( $attachment_id );
+				$parent_basename  = \wp_basename( $parent_url );
+				$cropped_basename = \wp_basename( $cropped );
+				$url              = str_replace( $parent_basename, $cropped_basename, $parent_url );
 
-				$size       = @getimagesize( $cropped );
-				$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
+				$size       = \function_exists( '\\wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
+				$image_type = $size ? $size['mime'] : 'image/jpeg';
 
-				$object = [
-					'post_title'     => basename( $cropped ),
-					'post_content'   => $url,
+				// Get the original image's post to pre-populate the cropped image.
+				$original_attachment  = \get_post( $attachment_id );
+				$sanitized_post_title = \sanitize_file_name( $original_attachment->post_title );
+				$use_original_title   = (
+					\strlen( trim( $original_attachment->post_title ) ) &&
+					/**
+					 * Check if the original image has a title other than the "filename" default,
+					 * meaning the image had a title when originally uploaded or its title was edited.
+					 */
+					( $parent_basename !== $sanitized_post_title ) &&
+					( pathinfo( $parent_basename, PATHINFO_FILENAME ) !== $sanitized_post_title )
+				);
+				$use_original_description = \strlen( trim( $original_attachment->post_content ) );
+
+				$attachment = [
+					'post_title'     => $use_original_title ? $original_attachment->post_title : $cropped_basename,
+					'post_content'   => $use_original_description ? $original_attachment->post_content : $url,
 					'post_mime_type' => $image_type,
 					'guid'           => $url,
 					'context'        => $context,
 				];
 
-				$attachment_id = \wp_insert_attachment( $object, $cropped );
+				// Copy the image caption attribute (post_excerpt field) from the original image.
+				if ( \strlen( trim( $original_attachment->post_excerpt ) ) )
+					$attachment['post_excerpt'] = $original_attachment->post_excerpt;
+
+				// Copy the image alt text attribute from the original image.
+				if ( \strlen( trim( $original_attachment->_wp_attachment_image_alt ) ) )
+					$attachment['meta_input'] = [
+						'_wp_attachment_image_alt' => \wp_slash( $original_attachment->_wp_attachment_image_alt ),
+					];
+
+				$attachment_id = \wp_insert_attachment( $attachment, $cropped );
 				$metadata      = \wp_generate_attachment_metadata( $attachment_id, $cropped );
 
 				/**
-				 * Filters the cropped image attachment metadata.
-				 *
 				 * @since 4.3.0 WordPress Core
-				 *
 				 * @see wp_generate_attachment_metadata()
-				 *
 				 * @param array $metadata Attachment metadata.
 				 */
 				$metadata = \apply_filters( 'wp_ajax_cropped_attachment_metadata', $metadata );
 				\wp_update_attachment_metadata( $attachment_id, $metadata );
 
 				/**
-				 * Filters the attachment ID for a cropped image.
-				 *
 				 * @since 4.3.0 WordPress Core
-				 *
 				 * @param int    $attachment_id The attachment ID of the cropped image.
 				 * @param string $context       The Customizer control requesting the cropped image.
 				 */

@@ -44,14 +44,6 @@ namespace TSF_Extension_Manager\Extension\Articles;
 \define( 'TSFEM_E_ARTICLES_VERSION', '2.2.0' );
 
 /**
- * The extension database version.
- *
- * @since ?.?.?
- * @ignore
- */
-// \define( 'TSFEM_E_ARTICLES_DB_VERSION', '1000' );
-
-/**
  * The extension file, absolute unix path.
  *
  * @since 1.1.0
@@ -86,10 +78,6 @@ namespace TSF_Extension_Manager\Extension\Articles;
  */
 if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
 	return;
-
-// if ( TSFEM_E_ARTICLES_DB_VERSION > \tsf_extension_manager_db_version( 'articles' ) ) {
-// 	require TSFEM_E_ARTICLES_DIR_PATH . 'upgrade.php';
-// }
 
 /**
  * Removes AMP articles if AMP extension is active.

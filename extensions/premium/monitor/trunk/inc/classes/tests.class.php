@@ -650,10 +650,9 @@ final class Tests {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data The input data.
 	 * @return string The information string in HTML.
 	 */
-	public function issue_moresoon( $data ) {
+	public function issue_moresoon() {
 		return [
 			'content' => $this->wrap_info( \esc_html__( 'More issue tests are coming soon!', 'the-seo-framework-extension-manager' ) ),
 			'state'   => 'unknown',
