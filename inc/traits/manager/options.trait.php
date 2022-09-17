@@ -175,7 +175,7 @@ trait Options {
 	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	final protected function update_option_multi( array $options = [], $type = 'instance', $kill = false ) {
+	final protected function update_option_multi( $options = [], $type = 'instance', $kill = false ) {
 
 		static $run = false;
 

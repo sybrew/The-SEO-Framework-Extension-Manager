@@ -395,7 +395,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param array  $args The arguments to be supplied within the file name.
 	 *                     Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = [] ) {
+	protected function get_view( $view, $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;
@@ -465,7 +465,7 @@ final class LoadAdmin extends AdminPages {
 	 * }
 	 * @return string escaped link.
 	 */
-	public function get_link( array $args = [] ) {
+	public function get_link( $args = [] ) {
 
 		if ( empty( $args ) )
 			return '';
@@ -547,7 +547,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param array $args The button arguments.
 	 * @return string The download button.
 	 */
-	public function get_download_link( array $args = [] ) {
+	public function get_download_link( $args = [] ) {
 
 		$defaults = [
 			'url'      => '',

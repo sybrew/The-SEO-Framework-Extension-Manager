@@ -56,6 +56,6 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 	The SEO Framework &ndash; Extension Manager
 </p>
 <p class=tsfem-footer-motto dir=ltr>
-	<?php echo esc_html( "{$mottos[ $motto_key ]} Initiative" ); ?>
+	<?= esc_html( "{$mottos[ $motto_key ]} Initiative" ) ?>
 </p>
 <?php

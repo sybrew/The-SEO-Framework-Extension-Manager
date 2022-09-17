@@ -41,7 +41,7 @@ namespace TSF_Extension_Manager;
  * @since 1.5.0
  * @param Upgrader $upgrader The TSF_Extension_Manager\Upgrader instance.
  */
-function _do_critical_core_upgrade( Upgrader $upgrader ) {
+function _do_critical_core_upgrade( $upgrader ) {
 
 	// phpcs:disable -- Example with unused variable.
 	$version = $upgrader->get_current_version( 'core' );

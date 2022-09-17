@@ -195,7 +195,7 @@ final class Scoring {
 	 * @param int   $value The value to find nearest index of.
 	 * @return mixed The nearest index value.
 	 */
-	public function get_nearest_numeric_index_value( array $a, $value ) {
+	public function get_nearest_numeric_index_value( $a, $value ) {
 
 		ksort( $a, SORT_NUMERIC );
 

@@ -190,7 +190,7 @@ final class Upgrader {
 	 * @param string   $version  TSFEM's database version.
 	 * @param callable $callback The callback to perform for the upgrade.
 	 */
-	public function _register_upgrade( $member, $version, callable $callback ) {
+	public function _register_upgrade( $member, $version, $callback ) {
 
 		$c = &$this->_upgrade_collector();
 
@@ -364,7 +364,7 @@ final class Upgrader {
 	 * @param \stdClass $upgrade The upgrade iterator object.
 	 * @yield array { $member => $version }
 	 */
-	private function yield_runs( \stdClass $upgrade ) {
+	private function yield_runs( \$upgrade ) {
 		foreach ( $upgrade as $member => $versions ) {
 			foreach ( $versions as $version => $callbacks ) {
 				foreach ( $callbacks as $callback ) {
@@ -386,7 +386,7 @@ final class Upgrader {
 	 *   'version' => string $version
 	 * }
 	 */
-	private function do_upgrade_cb( $version, callable $callback ) {
+	private function do_upgrade_cb( $version, $callback ) {
 		return [
 			'success' => (bool) \call_user_func_array( $callback, [ $version ] ),
 			'version' => $version,

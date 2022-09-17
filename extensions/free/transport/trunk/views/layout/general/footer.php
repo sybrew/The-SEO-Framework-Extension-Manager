@@ -28,6 +28,6 @@ $motto     = "An {$mottos[ $motto_key ]} Future";
 	Transport &ndash; The SEO Framework
 </p>
 <p class=tsfem-footer-motto dir=ltr>
-	<?php echo esc_html( $motto ); ?>
+	<?= esc_html( $motto ) ?>
 </p>
 <?php

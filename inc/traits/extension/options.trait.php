@@ -278,7 +278,7 @@ trait Extension_Options {
 	 *                       Defaults to the corrolated $this->o_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	final protected function get_option_by_mda_key( array $keys, $default = null ) {
+	final protected function get_option_by_mda_key( $keys, $default = null ) {
 
 		// If the array is sequential, convert it to a multidimensional array.
 		if ( array_values( $keys ) === $keys ) {
@@ -469,7 +469,7 @@ trait Extension_Options {
 	 *                       Defaults to the corrolated $this->o_stale_defaults.
 	 * @return mixed The option value if exists. Otherwise $default.
 	 */
-	final protected function get_stale_option_by_mda_key( array $keys, $default = null ) {
+	final protected function get_stale_option_by_mda_key( $keys, $default = null ) {
 
 		// If the array is sequential, convert it to a multidimensional array.
 		if ( array_values( $keys ) === $keys ) {
@@ -496,7 +496,7 @@ trait Extension_Options {
 	 * @param array $options The Single Dimensional options array with key.
 	 * @return bool True on success or the stale option is unchanged, false on failure.
 	 */
-	final protected function update_stale_options_array_by_key( array $options ) {
+	final protected function update_stale_options_array_by_key( $options ) {
 
 		$k = key( $options );
 

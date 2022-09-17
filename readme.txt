@@ -48,9 +48,10 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Modernized code, especially JavaScript, improving UI responsiveness significantly.
 * Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
+* Modernized many parts of the code, making Extension Manager up to 30% faster.
+	* TODO measure again.
 
 * TODO $var = call\nreturn $var; -> return call
-* TODO <?php echo -> <?=
 * TODO isset( $cache ) ? $cache : $cache -> memo\memo_query
 * TODO get_admin_page_url -> TSFEM to TSF?
 * TODO _class = function() { -> ??
@@ -75,13 +76,10 @@ TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Ex
 TODO 'a' . $b -> "a$b" (PHP) (regex '.*?'\s*\.\s*\$)
 TODO 'a' + b -> `a${b}` (JS) (regex '.*?'\s*\+\s*[a-zA-Z_])
 TODO implement views trait.
-TODO remove typehinting
 TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.
 		-> Should we let the extensions wrap side-by-side instead? flex base 400px, stretch to fit?
 			-> Copy from tsf.fyi/e?
-TODO <?php echo ... ?> -> <?= ?>
-	also <?php print() ?> -> <?= ?>
 TODO POT file. (also update related github)
 TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
 	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`

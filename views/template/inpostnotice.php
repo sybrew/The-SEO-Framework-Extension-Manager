@@ -34,7 +34,7 @@ $inline = true;
 
 foreach ( [ 'updated', 'warning', 'error' ] as $type ) :
 	?>
-<script type=text/html id=tmpl-tsfem-inpost-notice-<?php echo esc_attr( $type ); ?>>
+<script type=text/html id=tmpl-tsfem-inpost-notice-<?= esc_attr( $type ) ?>>
 	<?php
 	$tsf->do_dismissible_notice(
 		$tsfem->format_error_notice( '{{data.code}}', [ 'type' => $type ] )['before'] . ' {{{data.msg}}}',

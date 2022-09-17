@@ -50,7 +50,7 @@ if ( $args['logo'] ) {
 }
 
 ?>
-<section class="<?php echo esc_attr( implode( ' ', $pane_classes ) ); ?>" id="<?php echo esc_attr( $pane_id ); ?>">
+<section class="<?= esc_attr( implode( ' ', $pane_classes ) ) ?>" id="<?= esc_attr( $pane_id ) ?>">
 	<div class=tsfem-pane-wrap>
 		<?php
 		printf(

@@ -491,7 +491,7 @@ final class FormGenerator {
 	 * @param string $type   Accepts 'get' and 'echo'.
 	 * @return string|void $_fields. Void if $type is echo.
 	 */
-	public function _fields( array $fields, $type = 'echo' ) {
+	public function _fields( $fields, $type = 'echo' ) {
 
 		if ( 'get' === $type )
 			return $this->get_fields( $fields );
@@ -748,7 +748,7 @@ final class FormGenerator {
 	 * @param array $fields The fields with sequence [ option => args ].
 	 * @yields Field based on input.
 	 */
-	private function generate_fields( array $fields ) {
+	private function generate_fields( $fields ) {
 
 		// Store first key, to be caught later when iterating.
 		$this->level_names[ $this->level ] = key( $fields );
@@ -858,7 +858,7 @@ final class FormGenerator {
 	 * @param string $id   The field ID.
 	 * @return string
 	 */
-	private function create_field_description( array $args, $id ) {
+	private function create_field_description( $args, $id ) {
 
 		// Not escaped.
 		$title = $args['_desc'][0];
@@ -894,7 +894,7 @@ final class FormGenerator {
 	 * @param array $args The field arguments.
 	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
-	private function create_field( array $args ) {
+	private function create_field( $args ) {
 
 		if ( empty( $args['_edit'] ) )
 			return '';
@@ -981,7 +981,7 @@ final class FormGenerator {
 	 * @param bool  $plain Whether to conver the fields to a plain wrap.
 	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
-	private function create_fields_multi( array $args, $plain = false ) {
+	private function create_fields_multi( $args, $plain = false ) {
 
 		$this->clean_desc_index( $args['_desc'] );
 		$title = $args['_desc'][0];
@@ -1044,7 +1044,7 @@ final class FormGenerator {
 	 * @param bool  $plain Whether to conver the fields to a plain wrap.
 	 * @return string
 	 */
-	private function create_fields_multi_dropdown( array $args, $plain = false ) {
+	private function create_fields_multi_dropdown( $args, $plain = false ) {
 
 		$this->clean_desc_index( $args['_desc'] );
 		$title = $args['_desc'][0];
@@ -1134,7 +1134,7 @@ final class FormGenerator {
 	 * @param array $args The field arguments.
 	 * @return mixed string the fields; empty string failure; bool true or false; void.
 	 */
-	private function create_fields_multi_placeholder( array $args ) {
+	private function create_fields_multi_placeholder( $args ) {
 		return $this->get_fields( $args['_fields'] );
 	}
 
@@ -1150,7 +1150,7 @@ final class FormGenerator {
 	 * @param string $type Determines whether to output, output for AJAX or return.
 	 * @return string HTML on return. Empty string on echo.
 	 */
-	private function fields_iterator( array $args, $type = 'echo' ) {
+	private function fields_iterator( $args, $type = 'echo' ) {
 
 		$o = '';
 
@@ -1196,7 +1196,7 @@ final class FormGenerator {
 	 *
 	 * @param array $args The fields iterator arguments.
 	 */
-	private function output_fields_iterator( array $args ) {
+	private function output_fields_iterator( $args ) {
 
 		echo '<div class=tsfem-form-iterator-setting>';
 
@@ -1274,7 +1274,7 @@ final class FormGenerator {
 	 *
 	 * @param array $args The fields iterator arguments.
 	 */
-	private function output_ajax_fields_iterator( array $args ) {
+	private function output_ajax_fields_iterator( $args ) {
 
 		$it_option_key = key( $args['_iterate_selector'] );
 		// Set maximum iterations based on option depth if left unassigned.
@@ -1319,7 +1319,7 @@ final class FormGenerator {
 	 * @param array $args The fields iterator arguments.
 	 * @return string
 	 */
-	private function get_fields_iterator( array $args ) {
+	private function get_fields_iterator( $args ) {
 
 		$it_option_key = key( $args['_iterate_selector'] );
 
@@ -1383,7 +1383,7 @@ final class FormGenerator {
 	 * @param array  $args The collapse wrap arguments.
 	 * @return string
 	 */
-	private function get_collapse_wrap( $what, array $args = [] ) {
+	private function get_collapse_wrap( $what, $args = [] ) {
 
 		if ( 'start' === $what ) :
 
@@ -1521,7 +1521,7 @@ final class FormGenerator {
 	 * @param mixed $default The default field value.
 	 * @return mixed The field value if set, $default otherwise.
 	 */
-	private function get_field_value_by_key( array $key, $default = null ) {
+	private function get_field_value_by_key( $key, $default = null ) {
 
 		if ( $this->use_stale )
 			return $this->get_stale_option_by_mda_key( $key, $default );
@@ -1568,7 +1568,7 @@ final class FormGenerator {
 	 * @param array $data The field's data.
 	 * @return string The field's data.
 	 */
-	private function get_fields_data( array $data ) {
+	private function get_fields_data( $data ) {
 
 		$ret = [];
 
@@ -1628,7 +1628,7 @@ final class FormGenerator {
 	 * @param array $args The input field arguments.
 	 * @return string The input field.
 	 */
-	private function create_input_field_by_type( array $args ) {
+	private function create_input_field_by_type( $args ) {
 
 		switch ( $args['_type'] ) :
 			case 'date':
@@ -1711,7 +1711,7 @@ final class FormGenerator {
 	 * @param array $args The select field arguments.
 	 * @return string A select field.
 	 */
-	private function create_select_field( array $args ) {
+	private function create_select_field( $args ) {
 
 		// s = Escaped.
 		$s_name     = $s_id = $this->get_field_id();
@@ -1754,7 +1754,7 @@ final class FormGenerator {
 	 * @param bool         $multiple Whether it's a multi-select field.
 	 * @return string The select options.
 	 */
-	private function get_select_options( array $select, $selected = '', $multiple = false ) {
+	private function get_select_options( $select, $selected = '', $multiple = false ) {
 
 		$_fields = '';
 
@@ -1782,7 +1782,7 @@ final class FormGenerator {
 	 * @param bool         $multiple Whether it's a multi-select field.
 	 * @yield The select option field.
 	 */
-	private function generate_select_fields( array $select, $selected = '', $multiple = false ) {
+	private function generate_select_fields( $select, $selected = '', $multiple = false ) {
 
 		static $_level = 0;
 
@@ -1852,7 +1852,7 @@ final class FormGenerator {
 	 * @param array $args The multi-select field arguments.
 	 * @return string An accessible option checkbox list acting as a multiselect field.
 	 */
-	private function create_select_multi_a11y_field( array $args ) {
+	private function create_select_multi_a11y_field( $args ) {
 
 		// Not escaped.
 		$title = $args['_desc'][0];
@@ -1915,7 +1915,7 @@ final class FormGenerator {
 	 * @param bool  $reset    Determines whether to reset the iterations.
 	 * @return string An unordered list of checkboxes acting as multiselect.
 	 */
-	private function get_select_multi_a11y_options( array $select, array $selected = [], $reset = false ) {
+	private function get_select_multi_a11y_options( $select, $selected = [], $reset = false ) {
 
 		$_fields = '';
 
@@ -1946,7 +1946,7 @@ final class FormGenerator {
 	 * @param array $selected The default or currently selected fields.
 	 * @yield An unordered list of checkboxes acting as multiselect.
 	 */
-	private function generate_select_multi_a11y_fields( array $select, array $selected = [] ) {
+	private function generate_select_multi_a11y_fields( $select, $selected = [] ) {
 
 		yield '<ul class=tsfem-form-multi-a11y-wrap>';
 
@@ -2012,7 +2012,7 @@ final class FormGenerator {
 	 * @param array $args The field generation arguments.
 	 * @return string The image field input with buttons.
 	 */
-	private function create_image_field( array $args ) {
+	private function create_image_field( $args ) {
 
 		// s = Escaped.
 		$s_field_id = $this->get_field_id();
@@ -2104,7 +2104,7 @@ final class FormGenerator {
 	 * @param array $args The field generation arguments.
 	 * @return string The checkbox field.
 	 */
-	private function create_checkbox_field( array $args ) {
+	private function create_checkbox_field( $args ) {
 
 		// s = Escaped.
 		$s_name     = $s_id = $this->get_field_id();
@@ -2143,7 +2143,7 @@ final class FormGenerator {
 	 * @return void
 	 */
 	// phpcs:disable
-	private function create_radio_field( array $args ) {}
-	private function create_textarea_field( array $args ) {}
+	private function create_radio_field( $args ) {}
+	private function create_textarea_field( $args ) {}
 	// phpcs:enable
 }

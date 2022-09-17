@@ -211,7 +211,7 @@ trait Extension_Forms {
 	 *    'input'   => array The form input entry items.
 	 * }
 	 */
-	public function _action_button( $url = '', array $items = [] ) {
+	public function _action_button( $url = '', $items = [] ) {
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- The input must be escaped.
 		echo $this->_get_action_button( $url, $items );
 	}
@@ -235,7 +235,7 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _get_action_button( $url = '', array $items = [] ) {
+	public function _get_action_button( $url = '', $items = [] ) {
 
 		if ( empty( $url ) ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );

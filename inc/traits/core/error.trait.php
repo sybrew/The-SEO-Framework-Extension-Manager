@@ -181,7 +181,7 @@ trait Error {
 	 * @param array $options The error notice keys.
 	 * @return array $notices
 	 */
-	final protected function get_error_notices( array $options = [] ) {
+	final protected function get_error_notices( $options = [] ) {
 
 		$notices = [];
 
@@ -205,7 +205,7 @@ trait Error {
 	 * }
 	 * @return array|string The escaped notice. Empty string when no array key is set.
 	 */
-	final public function format_error_notice( $code, array $args ) {
+	final public function format_error_notice( $code, $args ) {
 
 		$defaults = [
 			'type'            => 'updated',

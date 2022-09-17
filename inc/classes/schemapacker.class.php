@@ -106,7 +106,7 @@ final class SchemaPacker {
 	 * }
 	 * @return bool true On setup. False otherwise.
 	 */
-	public function __construct( array $data, \stdClass $schema ) {
+	public function __construct( $data, \stdClass $schema ) {
 
 		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) )
 			return false;
@@ -292,7 +292,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to pack.
 	 * @return object The packed data.
 	 */
-	private function pack( \stdClass $schema ) {
+	private function pack( $schema ) {
 
 		$_ = [];
 
@@ -326,7 +326,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to generate from.
 	 * @yield array { string $key => mixed $value }
 	 */
-	private function generate_data( \stdClass $schema ) {
+	private function generate_data( $schema ) {
 
 		foreach ( $schema as $k => $s ) {
 			yield $k => $this->get_value( $k, $s );
@@ -342,7 +342,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to get the value from.
 	 * @return mixed The key's value.
 	 */
-	private function get_value( $key, \stdClass $schema ) {
+	private function get_value( $key, $schema ) {
 
 		switch ( $schema->_data->_type ) {
 			case 'single':
@@ -381,7 +381,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to iterate.
 	 * @return mixed The packed iteration data, if successful.
 	 */
-	private function make_iteration( \stdClass $schema ) {
+	private function make_iteration( $schema ) {
 
 		$count = $this->access_data( $schema->_data->_access );
 
@@ -414,7 +414,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to generate data from.
 	 * @return mixed The expected data.
 	 */
-	private function make_data( \stdClass $schema ) {
+	private function make_data( $schema ) {
 
 		switch ( $schema->_data->_from ) {
 			case 'default':
@@ -449,7 +449,7 @@ final class SchemaPacker {
 	 * @param \stdClass $schema The schema data to pack and concatenate.
 	 * @return mixed The concatenated data.
 	 */
-	private function concat( \stdClass $schema ) {
+	private function concat( $schema ) {
 
 		$value = '';
 		// Not invoking a generator. Data does not yield, but return.
@@ -469,7 +469,7 @@ final class SchemaPacker {
 	 * @param array $keys The $this->data access keys.
 	 * @return mixed The data from $this->data's $keys' level.
 	 */
-	private function access_data( array $keys ) {
+	private function access_data( $keys ) {
 
 		$v     = $this->data;
 		$level = 0;

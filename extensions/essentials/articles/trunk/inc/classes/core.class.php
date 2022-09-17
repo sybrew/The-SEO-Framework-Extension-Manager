@@ -163,7 +163,7 @@ class Core {
 	 * @param array $items An array with Article types as keys.
 	 * @return string The filtered array.
 	 */
-	protected static function filter_article_keys( array $items ) {
+	protected static function filter_article_keys( $items ) {
 		return array_intersect_key(
 			$items,
 			array_flip( static::get_available_article_types() )

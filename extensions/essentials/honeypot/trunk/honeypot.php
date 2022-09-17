@@ -546,7 +546,7 @@ JS;
 	 *
 	 * @param array $commentdata Required. The commentdata on POST.
 	 */
-	private function set_id( array $commentdata ) {
+	private function set_id( $commentdata ) {
 		$this->get_id( $commentdata );
 	}
 
@@ -560,7 +560,7 @@ JS;
 	 * @param array $commentdata Optional. The commentdata on POST.
 	 * @return int The post ID.
 	 */
-	private function get_id( array $commentdata = [] ) {
+	private function get_id( $commentdata = [] ) {
 
 		static $id;
 

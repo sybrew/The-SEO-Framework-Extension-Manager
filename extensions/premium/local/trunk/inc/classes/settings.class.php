@@ -437,7 +437,7 @@ final class Settings {
 	 * @param array  $__args The arguments to be supplied within the file name.
 	 *                       Each array key is converted to a variable with its value attached.
 	 */
-	private function get_view( $view, array $__args = [] ) {
+	private function get_view( $view, $__args = [] ) {
 
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );

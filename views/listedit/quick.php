@@ -17,7 +17,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and ListEdit::verify( $_secret ) or d
 foreach ( $sections as $section ) {
 	?>
 	<fieldset class=inline-edit-col-left>
-		<legend class=inline-edit-legend><?php echo esc_html( $section['name'] ); ?></legend>
+		<legend class=inline-edit-legend><?= esc_html( $section['name'] ) ?></legend>
 		<div class=inline-edit-col>
 			<?php
 			call_user_func_array( $section['callback'], $section['args'] );

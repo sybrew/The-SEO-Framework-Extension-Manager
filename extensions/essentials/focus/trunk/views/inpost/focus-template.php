@@ -14,7 +14,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 $tsfem = \tsfem();
 
 ?>
-<div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
+<div class=tsfem-e-focus-collapse-wrap id=<?= \esc_attr( $wrap_ids['collapse'] ) ?>>
 	<?php
 	printf(
 		'<input type=checkbox id=%s value=1 %s class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
@@ -22,7 +22,7 @@ $tsfem = \tsfem();
 		( ! $supportive && '' !== $post_input['keyword']['value'] ? '' : 'checked' )
 	);
 	?>
-	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header tsf-flex" id=<?php echo \esc_attr( $wrap_ids['header'] ); ?>>
+	<div class="tsfem-e-focus-collapse-header tsfem-e-focus-header tsf-flex" id=<?= \esc_attr( $wrap_ids['header'] ) ?>>
 		<div class="tsfem-e-focus-collapse-header-row tsf-flex">
 			<?php
 			printf(
@@ -167,11 +167,11 @@ $tsfem = \tsfem();
 			?>
 		</div>
 	</div>
-	<div class=tsfem-e-focus-collapse-content-wrap id=<?php echo \esc_attr( $wrap_ids['content'] ); ?>>
+	<div class=tsfem-e-focus-collapse-content-wrap id=<?= \esc_attr( $wrap_ids['content'] ) ?>>
 		<div class=tsfem-e-focus-content-loader><div class=tsfem-e-focus-content-loader-bar></div></div>
 		<div class=tsfem-e-focus-collapse-content>
 			<?php if ( $is_premium ) : ?>
-			<div class=tsfem-e-focus-subject id=<?php echo \esc_attr( $wrap_ids['edit'] ); ?> style=display:none>
+			<div class=tsfem-e-focus-subject id=<?= \esc_attr( $wrap_ids['edit'] ) ?> style=display:none>
 				<?php
 				printf(
 					vsprintf(
@@ -194,17 +194,17 @@ $tsfem = \tsfem();
 					\esc_attr( $post_input['definition_selection']['value'] )
 				);
 				?>
-				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['inflections'] ); ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Choose inflections', 'the-seo-framework-extension-manager' ); ?></h2>
+				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['inflections'] ) ?>>
+					<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose inflections', 'the-seo-framework-extension-manager' ); ?></h2>
 					<div class=tsfem-e-focus-subject-selection></div>
 				</div>
-				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?php echo \esc_attr( $wrap_ids['synonyms'] ); ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?php \esc_html_e( 'Choose synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
+				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['synonyms'] ) ?>>
+					<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
 					<div class=tsfem-e-focus-subject-selection></div>
 				</div>
 			</div>
 			<?php endif; ?>
-			<div class=tsfem-e-focus-evaluation id=<?php echo \esc_attr( $wrap_ids['evaluate'] ); ?>>
+			<div class=tsfem-e-focus-evaluation id=<?= \esc_attr( $wrap_ids['evaluate'] ) ?>>
 				<?php
 				$this->output_score_template( compact( 'is_premium', 'has_keyword', 'sub_scores' ) );
 				?>

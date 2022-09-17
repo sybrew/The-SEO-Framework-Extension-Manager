@@ -1337,7 +1337,7 @@ final class Admin extends Api {
 	 * @param array  $__args The arguments to be supplied within the file name.
 	 *                       Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $__args = [] ) {
+	protected function get_view( $view, $__args = [] ) {
 
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );

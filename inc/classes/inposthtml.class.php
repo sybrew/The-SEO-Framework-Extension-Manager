@@ -83,7 +83,7 @@ final class InpostHTML {
 	 * @param array  $contents The contents to wrap. Should be escaped.
 	 * @param string $id       The wrap ID.
 	 */
-	public static function wrap_flex_multi( $what, array $contents, $id = '' ) {
+	public static function wrap_flex_multi( $what, $contents, $id = '' ) {
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- See method docs
 		echo static::contruct_flex_wrap_multi( $what, $contents, $id );
 	}
@@ -102,7 +102,7 @@ final class InpostHTML {
 	 * @param array  $contents The contents to wrap. Should be escaped.
 	 * @param string $id       The wrap ID.
 	 */
-	public static function contruct_flex_wrap_multi( $what, array $contents, $id = '' ) {
+	public static function contruct_flex_wrap_multi( $what, $contents, $id = '' ) {
 		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ), $id );
 	}
 

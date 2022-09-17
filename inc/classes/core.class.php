@@ -373,7 +373,7 @@ class Core {
 	 * }
 	 * @return array|bool False on failure; array containing the jQuery.post object.
 	 */
-	final public function _get_ajax_post_object( array $args ) {
+	final public function _get_ajax_post_object( $args ) {
 
 		$required = [
 			'options_key',
@@ -480,7 +480,7 @@ class Core {
 	 * @param array $compare The keys to compare it to.
 	 * @return bool True on success, false if keys are missing.
 	 */
-	final public function has_required_array_keys( array $input, array $compare ) {
+	final public function has_required_array_keys( $input, $compare ) {
 		return empty( array_diff_key( array_flip( $compare ), $input ) );
 	}
 
@@ -1444,7 +1444,7 @@ class Core {
 	 * @param array $keys The wanted keys, e.g. ['key','key2']
 	 * @return array The $input array with only indexes from $keys.
 	 */
-	final public function filter_keys( array $input, array $keys ) {
+	final public function filter_keys( $input, $keys ) {
 		$expected_keys = array_fill_keys( $keys, '' );
 		return array_intersect_key( array_merge( $expected_keys, $input ), $expected_keys );
 	}

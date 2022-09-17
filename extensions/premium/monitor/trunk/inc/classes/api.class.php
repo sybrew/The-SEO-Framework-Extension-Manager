@@ -64,7 +64,7 @@ class Api extends Data {
 	 * @param array  $args Additional arguments to send.
 	 * @return array The response body. Or error notice on AJAX.
 	 */
-	protected function get_monitor_api_response( $type = '', $ajax = false, array $args = [] ) {
+	protected function get_monitor_api_response( $type = '', $ajax = false, $args = [] ) {
 
 		if ( empty( $type ) ) {
 			$ajax or $this->set_error_notice( [ 1010201 => '' ] );
@@ -400,7 +400,7 @@ class Api extends Data {
 	 * @return bool|array False on invalid input or on activation failure. True otherwise.
 	 *         Array The status notice on AJAX.
 	 */
-	protected function api_update_remote_settings( array $settings, $ajax = false ) {
+	protected function api_update_remote_settings( $settings, $ajax = false ) {
 
 		if ( $this->get_option( 'site_marked_inactive' ) || $this->get_option( 'site_requires_fix' ) ) {
 			// Notified through Control Panel. AJAX will elaborate on this issue as it can be asynchronously updated.

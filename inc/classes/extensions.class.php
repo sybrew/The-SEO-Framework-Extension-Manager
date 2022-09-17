@@ -206,7 +206,7 @@ final class Extensions extends Secure_Abstract {
 	 * @param string|array $what       What to filter out of the list.
 	 * @return array The leftover extensions.
 	 */
-	private static function filter_extensions( array $extensions = [], $what = 'maybe_network' ) {
+	private static function filter_extensions( $extensions = [], $what = 'maybe_network' ) {
 
 		// Temporarily. Exchange for count( $what ) > 1
 		if ( \is_array( $what ) ) {

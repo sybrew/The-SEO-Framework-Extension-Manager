@@ -561,7 +561,7 @@ final class ExtensionSettings {
 	 * @param string $file The file location, relative to TSFEM base view folder.
 	 * @param array  $args The registered view arguments.
 	 */
-	private function output_view( $file, array $args = [] ) {
+	private function output_view( $file, $args = [] ) {
 
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;

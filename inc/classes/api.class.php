@@ -273,7 +273,7 @@ class API extends Core {
 	 * @param int    $bits      The verification instance bit. Passed by reference.
 	 * @return string|boolean The escaped API URL with parameters. False on failed instance verification.
 	 */
-	final public function _get_api_response( array $args, &$_instance, &$bits ) {
+	final public function _get_api_response( $args, &$_instance, &$bits ) {
 
 		if ( $this->_verify_instance( $_instance, $bits[1] ) )
 			return $this->get_api_response( $args, false );
@@ -292,7 +292,7 @@ class API extends Core {
 	 * @param bool  $internal Whether the API call is for $this object.
 	 * @return string Response body. Empty string if no body or incorrect parameter given.
 	 */
-	final protected function get_api_response( array $args, $internal = true ) {
+	final protected function get_api_response( $args, $internal = true ) {
 
 		$defaults = [
 			'request'     => '',

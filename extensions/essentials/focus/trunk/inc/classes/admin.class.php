@@ -371,7 +371,7 @@ final class Admin extends Core {
 	 * @param array $values The keyword data.
 	 * @return array|null The sanitized keyword data.
 	 */
-	private function sanitize_keyword_data( array $values ) {
+	private function sanitize_keyword_data( $values ) {
 		$output = [];
 		foreach ( $values as $id => $items ) {
 			// Don't store when no keyword is set.
@@ -466,7 +466,7 @@ final class Admin extends Core {
 	 *
 	 * @param array $args The focus template arguments.
 	 */
-	public function _output_focus_template( array $args ) {
+	public function _output_focus_template( $args ) {
 		$this->get_view( 'inpost/focus-template', $args );
 	}
 
@@ -478,7 +478,7 @@ final class Admin extends Core {
 	 *
 	 * @param array $args The focus template arguments.
 	 */
-	private function output_score_template( array $args ) {
+	private function output_score_template( $args ) {
 		$this->get_view( 'inpost/score-template', $args );
 	}
 
@@ -492,7 +492,7 @@ final class Admin extends Core {
 	 * @param array  $args The arguments to be supplied within the file name.
 	 *                     Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = [] ) {
+	protected function get_view( $view, $args = [] ) {
 
 		foreach ( $args as $key => $val ) {
 			$$key = $val;

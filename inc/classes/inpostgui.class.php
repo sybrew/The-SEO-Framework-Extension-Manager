@@ -414,7 +414,7 @@ final class InpostGUI {
 	 * @param array $tabs The registered tabs.
 	 * @return array $tabs The SEO Framework's tabs.
 	 */
-	public function _load_tabs( array $tabs ) {
+	public function _load_tabs( $tabs ) {
 
 		$registered_tabs = static::$tabs;
 		$active_tab_keys = static::$active_tab_keys;
@@ -463,7 +463,7 @@ final class InpostGUI {
 	 * @param string $file The file location.
 	 * @param array  $args The registered view arguments.
 	 */
-	private function output_view( $file, array $args ) {
+	private function output_view( $file, $args ) {
 
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;
@@ -521,7 +521,7 @@ final class InpostGUI {
 	 * @param string    $tab  The tab the view is outputted in.
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
-	public static function register_view( $file, array $args = [], $tab = 'advanced', $priority = 10 ) {
+	public static function register_view( $file, $args = [], $tab = 'advanced', $priority = 10 ) {
 		// Prevent excessive static calls and write directly to var.
 		$_views =& static::$views;
 

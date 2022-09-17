@@ -18,7 +18,7 @@ use \TSF_Extension_Manager\InpostGUI as InpostGUI;
 
 ?>
 <script type=text/html id=tmpl-tsfem-e-focus-nofocus>
-	<div><span><?php \esc_html_e( 'No elements are found that support this feature.', 'the-seo-framework-extension-manager' ); ?></span></div>
+	<div><span><?= \esc_html__( 'No elements are found that support this feature.', 'the-seo-framework-extension-manager' ); ?></span></div>
 </script>
 
 <script type=text/html id=tmpl-tsfem-e-focus-subject-item>

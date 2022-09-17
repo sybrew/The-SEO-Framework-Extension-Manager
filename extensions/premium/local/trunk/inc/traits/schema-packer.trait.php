@@ -143,7 +143,7 @@ trait Schema_Packer {
 	 * @param bool  $pretty Whether to output prettified JSON
 	 * @return string|null The JSON data. Null on failure.
 	 */
-	protected function pack_data( array $data, $pretty = false ) {
+	protected function pack_data( $data, $pretty = false ) {
 
 		$schema = $this->get_schema();
 

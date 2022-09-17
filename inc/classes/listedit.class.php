@@ -427,7 +427,7 @@ final class ListEdit {
 	 * @param string $file The file location.
 	 * @param array  $args The registered view arguments.
 	 */
-	private function output_view( $file, array $args ) {
+	private function output_view( $file, $args ) {
 
 		foreach ( $args as $_key => $_val )
 			$$_key = $_val;
@@ -503,7 +503,7 @@ final class ListEdit {
 	 * @param string    $section  The section the view is outputted in.
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
-	public static function register_quick_view( $file, array $args = [], $section = 'advanced', $priority = 10 ) {
+	public static function register_quick_view( $file, $args = [], $section = 'advanced', $priority = 10 ) {
 		// Prevent excessive static calls and write directly to var.
 		$_views =& static::$quick_views;
 
@@ -529,7 +529,7 @@ final class ListEdit {
 	 * @param string    $section  The section the view is outputted in.
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
-	public static function register_bulk_view( $file, array $args = [], $section = 'advanced', $priority = 10 ) {
+	public static function register_bulk_view( $file, $args = [], $section = 'advanced', $priority = 10 ) {
 		// Prevent excessive static calls and write directly to var.
 		$_views =& static::$bulk_views;
 
