@@ -135,7 +135,7 @@ final class InpostGUI {
 	 * Constructor. Loads all appropriate actions asynchronously.
 	 *
 	 * @TODO consider running "post type supported" calls, instead of relying on failsafes in TSF.
-	 * @see \the_seo_framework()->_init_admin_scripts(); this requires TSF 4.0+ dependency, however.
+	 * @see \tsf()->_init_admin_scripts(); this requires TSF 4.0+ dependency, however.
 	 */
 	private function construct() {
 

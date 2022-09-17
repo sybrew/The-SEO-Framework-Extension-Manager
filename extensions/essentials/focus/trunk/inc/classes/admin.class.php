@@ -255,7 +255,7 @@ final class Admin extends Core {
 	 */
 	private function get_worker_file_location() {
 
-		$min = \the_seo_framework()->script_debug ? '' : '.min';
+		$min = \tsf()->script_debug ? '' : '.min';
 
 		return \esc_url( \set_url_scheme( TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
 	}
@@ -276,7 +276,7 @@ final class Admin extends Core {
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
-			'post_id'  => \the_seo_framework()->get_the_real_ID(),
+			'post_id'  => \tsf()->get_the_real_ID(),
 			'kw'       => [
 				'label'        => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),

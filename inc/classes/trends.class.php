@@ -180,7 +180,7 @@ final class Trends {
 			$date = $date ? '<time>' . \date_i18n( \get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
 			$title = isset( $object->title ) ? $object->title->__toString() : '';
-			$title = $title ? \the_seo_framework()->escape_title( $title ) : '';
+			$title = $title ? \tsf()->escape_title( $title ) : '';
 
 			if ( ! $title )
 				continue;
@@ -189,8 +189,8 @@ final class Trends {
 			$content = $content ? \wp_strip_all_tags( $content ) : '';
 			unset( $object );
 
-			$content = \the_seo_framework()->trim_excerpt( $content, 0, 300 );
-			$content = \the_seo_framework()->escape_description( $content );
+			$content = \tsf()->trim_excerpt( $content, 0, 300 );
+			$content = \tsf()->escape_description( $content );
 
 			// No need for translations, it's English only.
 			$title = sprintf(

@@ -58,7 +58,7 @@ trait UI {
 	 */
 	private function init_ui() {
 
-		$this->ui_hook or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
+		$this->ui_hook or \tsf()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
 		// Remove WordPress footer strings.
 		\add_action( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
@@ -220,7 +220,7 @@ trait UI {
 
 		if ( has_run( __METHOD__ ) ) return;
 
-		\the_seo_framework()->init_admin_scripts();
+		\tsf()->init_admin_scripts();
 		$tsfem = \tsfem();
 
 		$scripts::register( [

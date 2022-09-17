@@ -171,7 +171,7 @@ final class Admin extends Core {
 								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
 								'https://theseoframework.com/extensions/articles/#faq'
 							) . (
-								\the_seo_framework()->get_option( 'sitemaps_output' )
+								\tsf()->get_option( 'sitemaps_output' )
 								? ''
 								: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
 							),
@@ -193,7 +193,7 @@ final class Admin extends Core {
 						'url' => '',
 						'id'  => '',
 					],
-					'_ph'       => \the_seo_framework()->get_option( 'knowledge_logo_url' ) ?: '',
+					'_ph'       => \tsf()->get_option( 'knowledge_logo_url' ) ?: '',
 					'_edit'     => true,
 					'_ret'      => 'image',
 					'_req'      => false,
@@ -318,7 +318,7 @@ final class Admin extends Core {
 			$fields['default_type']['_select'][] = $_select_item;
 		endforeach;
 
-		$tsf        = \the_seo_framework();
+		$tsf        = \tsf();
 		$post_types = $tsf->get_supported_post_types();
 
 		$settings = [];
@@ -373,7 +373,7 @@ final class Admin extends Core {
 	public function _do_filter_upgrade_notice() {
 
 		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' ) ) {
-			\the_seo_framework()->do_dismissible_notice(
+			\tsf()->do_dismissible_notice(
 				'Filter <code>the_seo_framework_articles_supported_post_types</code> is deprecated. Please remove it and use the settings below instead.',
 				'error',
 				true,
@@ -382,7 +382,7 @@ final class Admin extends Core {
 			);
 		}
 		if ( \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
-			\the_seo_framework()->do_dismissible_notice(
+			\tsf()->do_dismissible_notice(
 				'Filter <code>the_seo_framework_articles_default_meta</code> is deprecated. Please remove it and use the settings below instead.',
 				'error',
 				true,
@@ -424,7 +424,7 @@ final class Admin extends Core {
 		if ( ! \is_array( $value ) )
 			$value = [];
 
-		$post_types = \the_seo_framework()->get_supported_post_types();
+		$post_types = \tsf()->get_supported_post_types();
 
 		// TODO do we want to strip unknown entries from payload?
 		// Only sanitize known post types.
@@ -510,7 +510,7 @@ final class Admin extends Core {
 
 		if ( isset( $supported ) ) return $supported;
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$post_type = $post_type ?: $tsf->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
@@ -534,7 +534,7 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 
-		$post_type = \the_seo_framework()->get_admin_post_type();
+		$post_type = \tsf()->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
 
 		$_default = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
@@ -669,7 +669,7 @@ final class Admin extends Core {
 
 		static $default;
 		if ( ! $default ) {
-			$post_type = \the_seo_framework()->get_admin_post_type();
+			$post_type = \tsf()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
 			$default   = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 		}

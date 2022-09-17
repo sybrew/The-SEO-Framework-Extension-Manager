@@ -125,7 +125,7 @@ final class Front {
 		$output .= $this->get_social_metadata();
 		$output .= $this->get_structured_metadata();
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		$output = $tsf->get_plugin_indicator( 'before' )
 				. $output
@@ -158,7 +158,7 @@ final class Front {
 	 * @return string The general metadata.
 	 */
 	protected function get_general_metadata() {
-		return \the_seo_framework()->the_description();
+		return \tsf()->the_description();
 	}
 
 	/**
@@ -172,7 +172,7 @@ final class Front {
 	 */
 	protected function get_social_metadata() {
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		/**
 		 * Adds content before the output.
@@ -221,6 +221,6 @@ final class Front {
 	 * @return string The structured metadata.
 	 */
 	protected function get_structured_metadata() {
-		return \the_seo_framework()->ld_json();
+		return \tsf()->ld_json();
 	}
 }

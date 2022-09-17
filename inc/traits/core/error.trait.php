@@ -59,7 +59,7 @@ trait Error {
 	 */
 	final protected function init_errors() {
 
-		$this->error_notice_option or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
+		$this->error_notice_option or \tsf()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
 		//? Can this be applied in-post too, when $this->error_notice_option is known? Otherwise, supply parameter?
 		\add_action( 'tsfem_notices', [ $this, '_do_error_notices' ] );
@@ -86,7 +86,7 @@ trait Error {
 			return;
 		}
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// Already escaped.
 		foreach ( $notices as $notice )

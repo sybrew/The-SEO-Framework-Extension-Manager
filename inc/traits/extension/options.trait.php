@@ -246,7 +246,7 @@ trait Extension_Options {
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
 		} else {
-			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property \TSF_Extension_Manager\Extension_Options->o_index.' );
+			empty( $this->o_index ) and \tsf()->_doing_it_wrong( __METHOD__, 'You need to assign property \TSF_Extension_Manager\Extension_Options->o_index.' );
 		}
 
 		return [];
@@ -440,7 +440,7 @@ trait Extension_Options {
 		if ( isset( $options[ $this->o_index ] ) ) {
 			return $options[ $this->o_index ];
 		} else {
-			empty( $this->o_index ) and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Options->o_index</code>.' );
+			empty( $this->o_index ) and \tsf()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Options->o_index</code>.' );
 		}
 
 		return [];

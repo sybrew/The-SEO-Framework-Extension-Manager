@@ -1468,7 +1468,7 @@ final class FormGenerator {
 		if ( is_scalar( $description ) ) {
 			return sprintf(
 				'<span class="tsfem-form-option-description">%s</span>',
-				$use_markdown ? \the_seo_framework()->convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
+				$use_markdown ? \tsf()->convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
 			);
 		} else {
 			$ret = '';

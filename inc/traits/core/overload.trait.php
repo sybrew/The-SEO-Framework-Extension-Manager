@@ -546,7 +546,7 @@ trait Ignore_Properties_Core_Public_Final {
 	 * @param mixed  $value The propertie value that ought to be set.
 	 */
 	final public function __set( $name = '', $value = null ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
+		\tsf()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
 	}
 
 	/**
@@ -559,7 +559,7 @@ trait Ignore_Properties_Core_Public_Final {
 	 */
 	final public function __get( $name = '' ) {
 
-		\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
+		\tsf()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::$' . $name . ' does not exist.' ) );
 
 		return null;
 	}

@@ -150,7 +150,7 @@ final class InpostHTML {
 				break;
 
 			case 'label-input':
-				$for or \the_seo_framework()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
+				$for or \tsf()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
 				$content = sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">

@@ -215,7 +215,7 @@ trait Extensions_Layout {
 
 		$title = sprintf(
 			'<h4 class="tsfem-extension-title">%s</h4>',
-			\the_seo_framework()->convert_markdown(
+			\tsf()->convert_markdown(
 				\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
 				[ 'strong', 'em' ]
 			)
@@ -390,7 +390,7 @@ trait Extensions_Layout {
 	private static function make_extension_list_description( $extension ) {
 
 		$description = static::get_extension_header( $extension['slug'] )['Description'];
-		$description = \the_seo_framework()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
+		$description = \tsf()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
 
 		$footer = static::get_extension_description_footer( $extension );
 
@@ -430,7 +430,7 @@ trait Extensions_Layout {
 		// Make extension version element.
 		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
-			\the_seo_framework()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
+			\tsf()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
 
 		// Make extension compatibility element.

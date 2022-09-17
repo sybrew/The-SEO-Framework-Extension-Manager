@@ -88,7 +88,7 @@ final class LoadAdmin extends AdminPages {
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
-				\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+				\tsf()->admin_redirect( $this->seo_extensions_page_slug );
 				exit;
 			}
 		} else {
@@ -104,7 +104,7 @@ final class LoadAdmin extends AdminPages {
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
-				\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+				\tsf()->admin_redirect( $this->seo_extensions_page_slug );
 				exit;
 			}
 		}
@@ -163,7 +163,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( ! $show_notice ) return;
 
-		$tsf = \the_seo_framework();
+		$tsf = \tsf();
 
 		// Already escaped.
 		$tsf->do_dismissible_notice(
@@ -268,7 +268,7 @@ final class LoadAdmin extends AdminPages {
 
 		// Adds action to the URI. It's only used to visualize what has happened.
 		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug, $args );
+		\tsf()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
 
@@ -325,7 +325,7 @@ final class LoadAdmin extends AdminPages {
 		if ( false === $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 9001 => '' ] );
-			\the_seo_framework()->admin_redirect( $this->seo_extensions_page_slug );
+			\tsf()->admin_redirect( $this->seo_extensions_page_slug );
 			exit;
 		}
 
@@ -352,7 +352,7 @@ final class LoadAdmin extends AdminPages {
 		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
 
 		// No a11y icon. Already escaped. Use TSF as it loads styles.
-		\the_seo_framework()->do_dismissible_notice( $notice, 'updated', false, false, false );
+		\tsf()->do_dismissible_notice( $notice, 'updated', false, false, false );
 	}
 
 	/**
@@ -492,7 +492,7 @@ final class LoadAdmin extends AdminPages {
 		}
 
 		if ( empty( $args['url'] ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
+			\tsf()->_doing_it_wrong( __METHOD__, \esc_html__( 'No valid URL was supplied.', 'the-seo-framework-extension-manager' ), null );
 			return '';
 		}
 
@@ -646,7 +646,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( false === $parent_set ) {
 			// Set parent slug.
-			\the_seo_framework()->add_menu_link();
+			\tsf()->add_menu_link();
 			$parent_set = true;
 		}
 
@@ -655,7 +655,7 @@ final class LoadAdmin extends AdminPages {
 
 		// Add arbitrary menu contents to known menu slug.
 		$menu = [
-			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
+			'parent_slug' => \tsf()->seo_settings_page_slug,
 			'page_title'  => '1',
 			'menu_title'  => '1',
 			'capability'  => $capability,

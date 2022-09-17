@@ -521,7 +521,7 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \the_seo_framework()->the_seo_framework_debug                     = false;
+		$debug[1] and \tsf()->the_seo_framework_debug                     = false;
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = false;
 	}
 
@@ -541,7 +541,7 @@ final class Output {
 		if ( ! isset( $debug ) ) {
 			$debug = [];
 
-			$tsf = \the_seo_framework();
+			$tsf = \tsf();
 
 			$debug[1] = $tsf->the_seo_framework_debug;
 			$debug[2] = $debug[1] ? \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug : false;
@@ -560,7 +560,7 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \the_seo_framework()->the_seo_framework_debug                     = $debug[1];
+		$debug[1] and \tsf()->the_seo_framework_debug                     = $debug[1];
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = $debug[2];
 	}
 }

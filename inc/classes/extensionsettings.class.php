@@ -207,7 +207,7 @@ final class ExtensionSettings {
 	 * @access private
 	 */
 	public function _init_menu() {
-		if ( \TSF_Extension_Manager\can_do_extension_settings() && ! \the_seo_framework()->is_headless['settings'] )
+		if ( \TSF_Extension_Manager\can_do_extension_settings() && ! \tsf()->is_headless['settings'] )
 			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 12 );
 	}
 
@@ -220,7 +220,7 @@ final class ExtensionSettings {
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
+			'parent_slug' => \tsf()->seo_settings_page_slug,
 			'page_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
 			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
@@ -365,7 +365,7 @@ final class ExtensionSettings {
 	 */
 	public function _do_settings_page_actions() {
 
-		if ( ! \the_seo_framework()->is_menu_page( $this->ui_hook ) ) return;
+		if ( ! \tsf()->is_menu_page( $this->ui_hook ) ) return;
 
 		/**
 		 * @see trait TSF_Extension_Manager\Error

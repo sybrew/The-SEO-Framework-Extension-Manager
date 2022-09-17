@@ -316,7 +316,7 @@ final class Core {
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
 
-		$new_title = '<title>' . \the_seo_framework()->get_title() . '</title>' . $this->indicator();
+		$new_title = '<title>' . \tsf()->get_title() . '</title>' . $this->indicator();
 
 		// Replace the title tag within the header.
 		// TODO substr_replace to prevent multiple replacements? The DOM should contain only one title tag, though.

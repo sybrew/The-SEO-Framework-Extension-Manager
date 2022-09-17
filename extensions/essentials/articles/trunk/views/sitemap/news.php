@@ -9,7 +9,7 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this instanceof TSF_Extension_Manager\Extension\Articles\Sitemap or die;
 
-$tsf = the_seo_framework();
+$tsf = tsf();
 
 $tsf->the_seo_framework_debug and $timer_start = hrtime( true );
 

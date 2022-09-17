@@ -70,7 +70,7 @@ final class Admin extends Core {
 		$this->local_page_slug = 'theseoframework-local';
 
 		// Load admin actions.
-		if ( ! \the_seo_framework()->is_headless['settings'] )
+		if ( ! \tsf()->is_headless['settings'] )
 			$this->load_admin_actions();
 	}
 
@@ -107,13 +107,13 @@ final class Admin extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 1.1.0 Added TSF v3.1 compat.
-	 * @uses \the_seo_framework()->seo_settings_page_slug.
+	 * @uses \tsf()->seo_settings_page_slug.
 	 * @access private
 	 */
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
+			'parent_slug' => \tsf()->seo_settings_page_slug,
 			'page_title'  => 'Local',
 			'menu_title'  => 'Local',
 			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
@@ -209,7 +209,7 @@ final class Admin extends Core {
 		static $cache;
 
 		// Don't load from $_GET request.
-		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->local_menu_page_hook );
+		return isset( $cache ) ? $cache : $cache = \tsf()->is_menu_page( $this->local_menu_page_hook );
 	}
 
 	/**

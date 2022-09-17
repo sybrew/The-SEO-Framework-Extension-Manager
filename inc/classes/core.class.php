@@ -538,9 +538,9 @@ class Core {
 
 			if ( $message ) {
 				// Use debug_print_backtrace() to debug.
-				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
+				\tsf()->_doing_it_wrong( __CLASS__, 'Class execution stopped with message: <strong>' . \esc_html( $message ) . '</strong>' );
 			} else {
-				\the_seo_framework()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
+				\tsf()->_doing_it_wrong( __CLASS__, 'Class execution stopped because of an error.' );
 			}
 		}
 
@@ -1192,7 +1192,7 @@ class Core {
 
 			$loaded[ $class ] = require "{$_path}{$_file}.class.php";
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
 
 			// Prevent fatal errors.
 			$this->create_class_alias( $class );
@@ -1473,7 +1473,7 @@ class Core {
 		if ( $secure ) {
 			// Don't load from $_GET request if secure.
 			if ( \did_action( 'current_screen' ) ) {
-				return $cache = \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook );
+				return $cache = \tsf()->is_menu_page( $this->seo_extensions_menu_page_hook );
 			} else {
 				// current_screen isn't set up.
 				return false;
@@ -1483,7 +1483,7 @@ class Core {
 			if ( \wp_doing_ajax() ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
-				return \the_seo_framework()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+				return \tsf()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
 			}
 		}
 	}

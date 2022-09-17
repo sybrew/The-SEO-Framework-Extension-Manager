@@ -61,7 +61,7 @@ final class Sitemap extends Core {
 		// Don't use action `the_seo_framework_ping_search_engines`; News Sitemaps don't have a ping threshold.
 		// Don't allow prerendering; News Sitemaps are small for a reason!
 		// Don't discern the post. For the cron callback to work, that'd be unreliable.
-		if ( \the_seo_framework()->get_option( 'ping_use_cron' ) ) {
+		if ( \tsf()->get_option( 'ping_use_cron' ) ) {
 			\add_action( 'tsf_sitemap_cron_hook', [ $this, '_ping_google_news' ] );
 		} else {
 			\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_ping_google_news' ] );
@@ -126,7 +126,7 @@ final class Sitemap extends Core {
 		$this->doing_news_sitemap = true;
 
 		// Remove output, if any.
-		\the_seo_framework()->clean_response_header();
+		\tsf()->clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );

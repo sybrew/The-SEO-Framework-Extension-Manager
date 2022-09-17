@@ -116,7 +116,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  * Priority 6: Use anything above 6, or any action later than plugins_loaded and
  *             you can access the class and functions. Failing to do so will perform wp_die().
  *             This makes sure The SEO Framework has been initialized correctly as well.
- *             So you can use function `the_seo_framework()` at all times.
+ *             So you can use function `tsf()` at all times.
  *
  * Performs wp_die() when called prior to action `plugins_loaded`.
  *
@@ -227,7 +227,7 @@ function can_load_class() {
 		return $can_load;
 
 	if ( \function_exists( '\\the_seo_framework' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '>=' ) && \the_seo_framework()->loaded ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '>=' ) && \tsf()->loaded ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load

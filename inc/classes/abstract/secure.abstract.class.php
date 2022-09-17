@@ -305,9 +305,9 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		$verified = false;
 
 		if ( \current_action() !== self::$_wpaction ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The instance may not be left active between WordPress action hooks. Reset or initialize this instance first.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The instance may not be left active between WordPress action hooks. Reset or initialize this instance first.' );
 		} elseif ( empty( self::$_type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must first use initialize class and set property <code>$_type</code>.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must first use initialize class and set property <code>$_type</code>.' );
 		} elseif ( ! \tsfem()->_has_died() ) {
 			$verified = true;
 		}

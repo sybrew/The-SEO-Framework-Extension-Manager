@@ -101,7 +101,7 @@ final class Extensions extends Secure_Abstract {
 		self::reset();
 
 		if ( empty( $type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 			return;
 		}
 
@@ -143,7 +143,7 @@ final class Extensions extends Secure_Abstract {
 		if ( ! self::verify_instance() ) return;
 
 		if ( empty( $type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
 			return false;
 		}
 
@@ -167,7 +167,7 @@ final class Extensions extends Secure_Abstract {
 				return static::get_extension_description_footer( static::get_extension( $slug ), false );
 
 			default:
-				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
+				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
 		endswitch;
 

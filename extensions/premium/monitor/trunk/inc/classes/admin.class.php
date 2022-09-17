@@ -190,7 +190,7 @@ final class Admin extends Api {
 		$this->o_index = 'monitor';
 
 		// Nothing to do here...
-		if ( \the_seo_framework()->is_headless['settings'] ) return;
+		if ( \tsf()->is_headless['settings'] ) return;
 
 		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
@@ -233,13 +233,13 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added TSF v3.1 compat.
-	 * @uses \the_seo_framework()->seo_settings_page_slug.
+	 * @uses \tsf()->seo_settings_page_slug.
 	 * @access private
 	 */
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \the_seo_framework()->seo_settings_page_slug,
+			'parent_slug' => \tsf()->seo_settings_page_slug,
 			'page_title'  => 'Monitor',
 			'menu_title'  => 'Monitor',
 			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
@@ -356,7 +356,7 @@ final class Admin extends Api {
 		endswitch;
 
 		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\the_seo_framework()->admin_redirect( $this->monitor_page_slug, $args );
+		\tsf()->admin_redirect( $this->monitor_page_slug, $args );
 		exit;
 
 		// phpcs:enable, WordPress.Security.NonceVerification
@@ -406,7 +406,7 @@ final class Admin extends Api {
 		if ( false === $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 1019001 => '' ] );
-			\the_seo_framework()->admin_redirect( $this->monitor_page_slug );
+			\tsf()->admin_redirect( $this->monitor_page_slug );
 			exit;
 		}
 
@@ -648,7 +648,7 @@ final class Admin extends Api {
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					// Initialize menu hooks.
-					\the_seo_framework()->add_menu_link();
+					\tsf()->add_menu_link();
 					$this->_add_menu_link();
 
 					$send['html'] = $this->get_site_fix_fields();
@@ -737,7 +737,7 @@ final class Admin extends Api {
 	public function is_monitor_page() {
 		static $cache;
 		// Don't load from $_GET request.
-		return isset( $cache ) ? $cache : $cache = \the_seo_framework()->is_menu_page( $this->monitor_menu_page_hook );
+		return isset( $cache ) ? $cache : $cache = \tsf()->is_menu_page( $this->monitor_menu_page_hook );
 	}
 
 	/**

@@ -273,7 +273,7 @@ final class Admin extends Core {
 
 							case 'enhanced_link_attribution':
 							case 'ip_anonymization':
-								$value[ $index ][ $key ] = \the_seo_framework()->s_one_zero(
+								$value[ $index ][ $key ] = \tsf()->s_one_zero(
 									\tsfem()->coalesce_var( $value[ $index ][ $key ], 0 )
 								);
 								break;

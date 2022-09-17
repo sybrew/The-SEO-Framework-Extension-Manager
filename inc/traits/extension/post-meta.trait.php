@@ -181,7 +181,7 @@ trait Extension_Post_Meta {
 	 * @since 1.5.0
 	 */
 	final protected function reset_extension_post_meta_id() {
-		$this->set_extension_post_meta_id( \the_seo_framework()->get_the_real_ID() );
+		$this->set_extension_post_meta_id( \tsf()->get_the_real_ID() );
 	}
 
 	/**
@@ -202,7 +202,7 @@ trait Extension_Post_Meta {
 			return $meta[ $this->pm_index ];
 		} else {
 			empty( $this->pm_index )
-				and \the_seo_framework()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Post_Meta::$pm_index</code>.' );
+				and \tsf()->_doing_it_wrong( __METHOD__, 'You need to assign property <code>\TSF_Extension_Manager\Extension_Post_Meta::$pm_index</code>.' );
 		}
 
 		return [];

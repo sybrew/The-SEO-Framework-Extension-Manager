@@ -69,7 +69,7 @@ class Core {
 	private function construct() {
 
 		if ( ! isset( static::$tsf ) )
-			static::$tsf = \the_seo_framework();
+			static::$tsf = \tsf();
 
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta

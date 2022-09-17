@@ -87,7 +87,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 		$_caching_enabled = $bridge->sitemap_cache_enabled();
 
-		$sitemap_content = $_caching_enabled ? \the_seo_framework()->get_transient( $transient_name ) : false;
+		$sitemap_content = $_caching_enabled ? \tsf()->get_transient( $transient_name ) : false;
 
 		if ( false === $sitemap_content ) {
 			$this->prepare_generation();
@@ -98,7 +98,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			$this->news_is_regenerated = true;
 
 			if ( $_caching_enabled ) {
-				\the_seo_framework()->set_transient(
+				\tsf()->set_transient(
 					$transient_name,
 					$sitemap_content,
 					HOUR_IN_SECONDS // Keep the sitemap for at most 1 hour. Will expire during post actions.

@@ -196,13 +196,13 @@ trait Options {
 			return true;
 
 		if ( $run ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
 			\wp_die();
 			return false;
 		}
 
 		if ( $this->has_run_update_option() ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' ) );
+			\tsf()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' ) );
 			\wp_die();
 			return false;
 		}

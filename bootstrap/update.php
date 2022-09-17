@@ -42,7 +42,7 @@ function _check_external_blocking() {
 		$host       = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
 
 		if ( ! \defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
-			$notice = \the_seo_framework()->convert_markdown(
+			$notice = \tsf()->convert_markdown(
 				sprintf(
 					/* translators: Markdown. %s = Update API URL */
 					\esc_html__(
@@ -53,7 +53,7 @@ function _check_external_blocking() {
 				),
 				[ 'code' ]
 			);
-			\the_seo_framework()->do_dismissible_notice( $notice, 'error', true, false );
+			\tsf()->do_dismissible_notice( $notice, 'error', true, false );
 		}
 	}
 }

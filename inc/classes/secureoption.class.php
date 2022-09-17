@@ -59,7 +59,7 @@ final class SecureOption extends Secure_Abstract {
 		self::reset();
 
 		if ( empty( $type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 
 			switch ( $type ) :
@@ -114,7 +114,7 @@ final class SecureOption extends Secure_Abstract {
 
 			default:
 				self::reset();
-				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
+				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
 				break;
 		endswitch;
 

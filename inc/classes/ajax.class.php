@@ -82,7 +82,7 @@ final class AJAX extends Secure_Abstract {
 		static::$tsfem = \tsfem();
 		static::$tsfem->_verify_instance( $instance, $bits[1] ) or die;
 
-		static::$tsf = \the_seo_framework();
+		static::$tsf = \tsf();
 
 		static::$_validated = true;
 		static::$instance   = new static;

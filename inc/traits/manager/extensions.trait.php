@@ -271,14 +271,14 @@ trait Extensions_Properties {
 				//! The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
 				//! TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
 				//! TODO Forward this to the upgrader for whenever an extension's removed.
-				\the_seo_framework()->_doing_it_wrong(
+				\tsf()->_doing_it_wrong(
 					__CLASS__ . '::' . __FUNCTION__,
 					sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )
 				);
 				return [];
 			}
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify a slug.' );
+			\tsf()->_doing_it_wrong( __CLASS__ . '::' . __FUNCTION__, 'You must specify a slug.' );
 			return [];
 		}
 	}

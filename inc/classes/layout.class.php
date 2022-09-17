@@ -58,7 +58,7 @@ final class Layout extends Secure_Abstract {
 		self::reset();
 
 		if ( empty( $type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 
 			self::set( '_wpaction' );
@@ -92,7 +92,7 @@ final class Layout extends Secure_Abstract {
 		if ( ! self::verify_instance() ) return;
 
 		if ( empty( $type ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
 			return false;
 		}
 
@@ -113,7 +113,7 @@ final class Layout extends Secure_Abstract {
 				return static::get_account_upgrade_form();
 
 			default:
-				\the_seo_framework()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
+				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
 		endswitch;
 
@@ -170,7 +170,7 @@ final class Layout extends Secure_Abstract {
 				$nonce_action . $nonce . $switcher
 			);
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The disconnect button only supports the form type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The disconnect button only supports the form type.' );
 		}
 
 		return $output;
@@ -188,7 +188,7 @@ final class Layout extends Secure_Abstract {
 		if ( 'link' === self::get_property( '_type' ) ) {
 			return \tsfem()->get_support_link( 'public' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The public support button only supports the link type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The public support button only supports the link type.' );
 			return '';
 		}
 	}
@@ -205,7 +205,7 @@ final class Layout extends Secure_Abstract {
 		if ( 'link' === self::get_property( '_type' ) ) {
 			return \tsfem()->get_support_link( 'private' );
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The private support button only supports the link type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The private support button only supports the link type.' );
 			return '';
 		}
 	}
@@ -220,7 +220,7 @@ final class Layout extends Secure_Abstract {
 	private static function get_account_info() {
 
 		if ( 'list' !== self::get_property( '_type' ) ) {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The premium account information output only supports list type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The premium account information output only supports list type.' );
 			return '';
 		}
 
@@ -376,7 +376,7 @@ final class Layout extends Secure_Abstract {
 			if ( $_domain === $domain ) {
 				$_classes[] = 'tsfem-success';
 			} else {
-				$_warning = \the_seo_framework()->convert_markdown(
+				$_warning = \tsf()->convert_markdown(
 					sprintf(
 						/* translators: `%s` = domain with markdown backtics */
 						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, deactivate the account and try again.', 'the-seo-framework-extension-manager' ),
@@ -561,7 +561,7 @@ final class Layout extends Secure_Abstract {
 				$form
 			);
 		} else {
-			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The upgrade form only supports the form type.' );
+			\tsf()->_doing_it_wrong( __METHOD__, 'The upgrade form only supports the form type.' );
 			return '';
 		}
 	}
