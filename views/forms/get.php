@@ -8,7 +8,7 @@
 
 // phpcs:disable -- TODO use this file.
 
-defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or die;
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsfem()->_verify_instance( $_instance, $bits[1] ) or die;
 
 $class_submit   = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'tsfem-button-primary';
 $value_redirect = isset( $redirect ) ? $redirect : 'signup';

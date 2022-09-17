@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -325,7 +325,7 @@ final class Admin {
 		if ( ! \wp_doing_ajax() ) exit;
 
 		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( $this->ajax_nonce_action, 'nonce', false ) )
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 1069001 ) ], 'failure' ); // nice
+			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1069001 ) ], 'failure' ); // nice
 
 		switch ( $_REQUEST['handle'] ?? null ) :
 			case 'import':
@@ -333,7 +333,7 @@ final class Admin {
 				break;
 
 			default:
-				\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 1060106 ) ], 'failure' );
+				\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1060106 ) ], 'failure' );
 				break;
 		endswitch;
 	}

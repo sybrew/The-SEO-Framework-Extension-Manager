@@ -75,7 +75,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  *
  * @since 1.0.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_FOCUS_PATH_CLASS, 'Focus', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_FOCUS_PATH_CLASS, 'Focus', $_instance, $bits ) )
 	return;
 
 \add_action( 'admin_init', __NAMESPACE__ . '\\_focus_init', 10 );

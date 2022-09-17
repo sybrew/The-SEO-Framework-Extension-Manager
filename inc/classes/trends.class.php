@@ -49,7 +49,7 @@ final class Trends {
 	 */
 	public static function get( $type, $instance, $bits ) {
 
-		\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
+		\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 
 		switch ( $type ) :
 			case 'feed':

@@ -20,7 +20,7 @@ uasort(
 	}
 );
 
-$_tsfem = tsf_extension_manager();
+$_tsfem = tsfem();
 
 foreach ( $_settings as $index => $params ) {
 	$_tsfem->_do_pane_wrap_callable(

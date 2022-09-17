@@ -83,7 +83,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
  *
  * @since 1.0.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_TRANSPORT_PATH_CLASS, 'Transport', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_TRANSPORT_PATH_CLASS, 'Transport', $_instance, $bits ) )
 	return;
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\transport_init', 11 );

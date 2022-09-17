@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -115,7 +115,7 @@ class Core {
 		foreach ( $filtered_post_types as $post_type ) {
 			$this->o_defaults['post_types'][ $post_type ] = [
 				'enabled'      => 1,
-				'default_type' => static::filter_article_type( \tsf_extension_manager()->coalesce_var( $this->pm_defaults['type'], 'Article' ) ),
+				'default_type' => static::filter_article_type( \tsfem()->coalesce_var( $this->pm_defaults['type'], 'Article' ) ),
 			];
 		}
 

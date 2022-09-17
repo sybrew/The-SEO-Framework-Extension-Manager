@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -80,7 +80,7 @@ final class Handler {
 			$args['server']->flush();
 			exit;
 		} else {
-			\tsf_extension_manager()->send_json( $args['poll_data'], $args['type'] );
+			\tsfem()->send_json( $args['poll_data'], $args['type'] );
 		}
 	}
 

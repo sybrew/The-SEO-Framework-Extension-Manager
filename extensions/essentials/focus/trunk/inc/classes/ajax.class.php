@@ -14,7 +14,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  */
 \define(
 	'TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY',
-	\tsf_extension_manager()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Ajax', $_instance, $bits ) ?: false
+	\tsfem()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Ajax', $_instance, $bits ) ?: false
 );
 if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 	return;
@@ -94,7 +94,7 @@ final class Ajax {
 	 * @return bool|void True on success. Void and exit on failure.
 	 */
 	private function get_api_response( $type, $data ) {
-		return \tsf_extension_manager()->_get_protected_api_response(
+		return \tsfem()->_get_protected_api_response(
 			$this,
 			TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY,
 			[
@@ -113,7 +113,7 @@ final class Ajax {
 	 */
 	private function verify_api_access() {
 
-		$tsfem   = \tsf_extension_manager();
+		$tsfem   = \tsfem();
 		$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
 
 		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) {
@@ -141,7 +141,7 @@ final class Ajax {
 		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
 		$this->verify_api_access();
 
-		$tsfem = \tsf_extension_manager();
+		$tsfem = \tsfem();
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
@@ -216,7 +216,7 @@ final class Ajax {
 		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
 		$this->verify_api_access();
 
-		$tsfem = \tsf_extension_manager();
+		$tsfem = \tsfem();
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$form_keys = [ 'category', 'value' ];
@@ -302,7 +302,7 @@ final class Ajax {
 		// phpcs:disable, WordPress.Security.NonceVerification -- this is the verification.
 		$this->verify_api_access();
 
-		$tsfem = \tsf_extension_manager();
+		$tsfem = \tsfem();
 		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
 
 		$form_keys = [ 'category', 'value' ];

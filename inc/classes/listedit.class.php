@@ -343,7 +343,7 @@ final class ListEdit {
 		endforeach;
 
 		// TODO We need to differentiate between post and term!
-		$this->output_view( \tsf_extension_manager()->get_view_location( 'listedit/quick' ), compact( 'sections', 'post_type', 'taxonomy' ) );
+		$this->output_view( \tsfem()->get_view_location( 'listedit/quick' ), compact( 'sections', 'post_type', 'taxonomy' ) );
 	}
 
 	/**
@@ -367,7 +367,7 @@ final class ListEdit {
 				$sections[ $index ] = $args;
 		endforeach;
 
-		$this->output_view( \tsf_extension_manager()->get_view_location( 'listedit/bulk' ), compact( 'sections', 'post_type', 'taxonomy' ) );
+		$this->output_view( \tsfem()->get_view_location( 'listedit/bulk' ), compact( 'sections', 'post_type', 'taxonomy' ) );
 	}
 
 	/**

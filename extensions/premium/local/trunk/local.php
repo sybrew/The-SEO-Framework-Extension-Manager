@@ -90,7 +90,7 @@ namespace TSF_Extension_Manager\Extension\Local;
  *
  * @since 1.0.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
 	return;
 
 if ( TSFEM_E_LOCAL_DB_VERSION > \tsf_extension_manager_db_version( 'local' ) ) {

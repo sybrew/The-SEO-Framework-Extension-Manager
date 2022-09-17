@@ -8,7 +8,7 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
-tsf_extension_manager()->_do_pane_wrap_callable(
+tsfem()->_do_pane_wrap_callable(
 	__( 'Local Settings', 'the-seo-framework-extension-manager' ),
 	[ $this, '_local_settings_overview' ],
 	[

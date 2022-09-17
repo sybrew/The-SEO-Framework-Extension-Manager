@@ -50,7 +50,7 @@ namespace {
 	 * or even other plugins.
 	 *
 	 * @since 2.6.0
-	 * @see `tsf_extension_manager()` alias.
+	 * @see `tsfem()` alias.
 	 * @api
 	 *
 	 * @return null|object The plugin class object.

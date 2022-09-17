@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -114,7 +114,7 @@ final class Admin extends Core {
 		static $default;
 		if ( ! $default ) {
 			$settings = $this->get_option( 'post_types' );
-			$default  = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post->post_type ]['default_type'], 'Article' ) );
+			$default  = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post->post_type ]['default_type'], 'Article' ) );
 		}
 
 		static $type_i18n = null;
@@ -223,7 +223,7 @@ final class Admin extends Core {
 				'pane'     => [],
 				'settings' => $_settings,
 				// When we add more panes, we can order them by adding up to 9.9999 to this value.
-				'priority' => \tsf_extension_manager()->get_extension_order()['articles'],
+				'priority' => \tsfem()->get_extension_order()['articles'],
 			]
 		);
 
@@ -537,7 +537,7 @@ final class Admin extends Core {
 		$post_type = \the_seo_framework()->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
 
-		$_default = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
+		$_default = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
@@ -671,7 +671,7 @@ final class Admin extends Core {
 		if ( ! $default ) {
 			$post_type = \the_seo_framework()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
-			$default   = static::filter_article_type( \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
+			$default   = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
 		}
 
 		$this->set_extension_post_meta_id( $query['id'] );

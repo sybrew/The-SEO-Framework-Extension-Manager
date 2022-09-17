@@ -178,7 +178,7 @@ trait Extensions_Layout {
 		} else {
 			$icon = sprintf(
 				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s" alt="extension fallback icon"></image>',
-				\esc_url( \tsf_extension_manager()->get_image_file_location( 'exticon-fallback.svg', true ), [ 'https', 'http' ] ),
+				\esc_url( \tsfem()->get_image_file_location( 'exticon-fallback.svg', true ), [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);
 		}
@@ -253,7 +253,7 @@ trait Extensions_Layout {
 	 * @since 1.5.1 Now checks for options validity.
 	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 * @uses trait TSF_Extension_Manager\Extensions_Actions
-	 * @uses object tsf_extension_manager()
+	 * @uses object tsfem()
 	 *
 	 * @param array $extension The extension to make button from.
 	 * @return string HTML extension button with nonce.
@@ -262,7 +262,7 @@ trait Extensions_Layout {
 
 		$buttons = [];
 
-		$disabled = ! \tsf_extension_manager()->are_options_valid();
+		$disabled = ! \tsfem()->are_options_valid();
 
 		if ( static::is_extension_active( $extension ) ) {
 			$buttons[] = [
@@ -332,15 +332,15 @@ trait Extensions_Layout {
 			static $cache = [];
 
 			if ( empty( $cache ) ) {
-				$cache['input_name'] = \esc_attr( \tsf_extension_manager()->_get_field_name( 'extension' ) );
-				$cache['admin_url']  = \esc_url( \tsf_extension_manager()->get_admin_page_url(), [ 'https', 'http' ] );
+				$cache['input_name'] = \esc_attr( \tsfem()->_get_field_name( 'extension' ) );
+				$cache['admin_url']  = \esc_url( \tsfem()->get_admin_page_url(), [ 'https', 'http' ] );
 			}
 
 			$s_slug = \sanitize_key( $slug );
 
 			nojs:;
-				$nonce        = \tsf_extension_manager()->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
-				$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
+				$nonce        = \tsfem()->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
+				$nonce_action = \tsfem()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 
 				$extension = sprintf(
 					'<input type=hidden name="%s" value="%s">',
@@ -468,7 +468,7 @@ trait Extensions_Layout {
 	 * @return string The escaped extension Home URL item.
 	 */
 	private static function get_extension_desc_home_item( $url ) {
-		return \tsf_extension_manager()->get_link( [
+		return \tsfem()->get_link( [
 			'url'     => $url,
 			'content' => static::get_i18n( 'overview' ),
 			'title'   => static::get_i18n( 'visit-extension' ),
@@ -547,11 +547,11 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {
 
-		$url = \tsf_extension_manager()->get_admin_page_url( $slug );
+		$url = \tsfem()->get_admin_page_url( $slug );
 
 		if ( ! $url ) return '';
 
-		return \tsf_extension_manager()->get_link( [
+		return \tsfem()->get_link( [
 			'url'     => $url,
 			'content' => static::get_i18n( 'settings' ),
 			'title'   => static::get_i18n( 'visit-menupage' ),

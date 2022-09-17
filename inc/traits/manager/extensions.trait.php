@@ -452,7 +452,7 @@ trait Extensions_Actions {
 		if ( isset( $checksum ) )
 			return $checksum;
 
-		$type = \tsf_extension_manager()->get_hash_type();
+		$type = \tsfem()->get_hash_type();
 		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 		$hash = hash( $type, serialize( static::$extensions ) );
 
@@ -485,7 +485,7 @@ trait Extensions_Actions {
 
 		$file = static::get_extension_header_file_location( $slug );
 
-		$type = \tsf_extension_manager()->get_hash_type();
+		$type = \tsfem()->get_hash_type();
 		$hash = hash_file( $type, $file );
 
 		return $checksum = [
@@ -861,7 +861,7 @@ trait Extensions_Actions {
 
 		tick : {
 			// Tick the instance.
-			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			\tsfem()->_verify_instance( $_instance, $bits[1] );
 		}
 
 		end :;
@@ -949,7 +949,7 @@ trait Extensions_Actions {
 		$success     = [];
 
 		// Get follow-up verification instance.
-		foreach ( \tsf_extension_manager()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+		foreach ( \tsfem()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
 
 			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
@@ -1072,7 +1072,7 @@ trait Extensions_Actions {
 
 		if ( \wp_doing_ajax() ) {
 			// TODO send slug?
-			\tsf_extension_manager()->send_json(
+			\tsfem()->send_json(
 				[
 					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
 					'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
@@ -1157,7 +1157,7 @@ trait Extensions_Actions {
 			return static::include_extension( $file, $_instance, $bits );
 
 		// Tick the instance on failure.
-		\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+		\tsfem()->_verify_instance( $_instance, $bits[1] );
 
 		return false;
 	}
@@ -1181,7 +1181,7 @@ trait Extensions_Actions {
 
 		if ( isset( $loaded[ $file ] ) ) {
 			// Tick the instance for we bypass inclusion.
-			\tsf_extension_manager()->_verify_instance( $_instance, $bits[1] );
+			\tsfem()->_verify_instance( $_instance, $bits[1] );
 
 			return $loaded[ $file ];
 		}

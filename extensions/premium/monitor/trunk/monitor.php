@@ -76,7 +76,7 @@ namespace TSF_Extension_Manager\Extension\Monitor;
  *
  * @since 1.0.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_MONITOR_PATH_CLASS, 'Monitor', $_instance, $bits ) )
 	return;
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\monitor_init', 11 );

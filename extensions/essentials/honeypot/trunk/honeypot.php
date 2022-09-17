@@ -17,7 +17,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -761,11 +761,11 @@ JS;
 				$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 60 * MINUTE_IN_SECONDS );
 
 				$_hashes = [
-					'current'  => \tsf_extension_manager()->_get_timed_hash( $uid, $scale ),
-					'previous' => \tsf_extension_manager()->_get_timed_hash( $uid, $scale, time() - $scale ),
+					'current'  => \tsfem()->_get_timed_hash( $uid, $scale ),
+					'previous' => \tsfem()->_get_timed_hash( $uid, $scale, time() - $scale ),
 				];
 			} else {
-				$_hash   = \tsf_extension_manager()->_get_uid_hash( $uid );
+				$_hash   = \tsfem()->_get_uid_hash( $uid );
 				$_hashes = [
 					'current'  => $_hash,
 					'previous' => $_hash,
@@ -796,7 +796,7 @@ JS;
 
 		if ( ! \strlen( $_hash ) ) {
 			$uid   = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
-			$_hash = \tsf_extension_manager()->_get_uid_hash( $uid );
+			$_hash = \tsfem()->_get_uid_hash( $uid );
 			$_hash = $this->hex_to_62_trim( $_hash );
 		}
 
@@ -850,10 +850,10 @@ JS;
 
 			$_hashes = [
 				'current'  => $this->hex_to_36_trim(
-					\tsf_extension_manager()->_get_timed_hash( $uid, $scale )
+					\tsfem()->_get_timed_hash( $uid, $scale )
 				),
 				'previous' => $this->hex_to_36_trim(
-					\tsf_extension_manager()->_get_timed_hash( $uid, $scale, time() - $scale )
+					\tsfem()->_get_timed_hash( $uid, $scale, time() - $scale )
 				),
 			];
 		}

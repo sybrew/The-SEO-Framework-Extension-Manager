@@ -297,7 +297,7 @@ final class ExtensionSettings {
 		}
 
 		if ( empty( $store ) )
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 18101 ) ], 'failure' );
+			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 18101 ) ], 'failure' );
 
 		$success = [];
 
@@ -320,7 +320,7 @@ final class ExtensionSettings {
 			if ( \in_array( true, $success, true ) ) {
 				// Some data got saved.
 				// TODO do something with the failures (when we implement a save-all button).
-				\tsf_extension_manager()->send_json(
+				\tsfem()->send_json(
 					[
 						'results' => $this->get_ajax_notice( false, 18102 ),
 						'data'    => $data,
@@ -328,7 +328,7 @@ final class ExtensionSettings {
 					'failure'
 				);
 			} else {
-				\tsf_extension_manager()->send_json(
+				\tsfem()->send_json(
 					[
 						'results' => $this->get_ajax_notice( false, 18103 ),
 						'data'    => $data,
@@ -339,7 +339,7 @@ final class ExtensionSettings {
 		}
 
 		if ( \count( $success ) > 1 ) {
-			\tsf_extension_manager()->send_json(
+			\tsfem()->send_json(
 				[
 					'results' => $this->get_ajax_notice( true, 18104 ),
 					'data'    => $data,
@@ -347,7 +347,7 @@ final class ExtensionSettings {
 				'success'
 			);
 		} else {
-			\tsf_extension_manager()->send_json(
+			\tsfem()->send_json(
 				[
 					'results' => $this->get_ajax_notice( true, 18105 ),
 					'data'    => $data,
@@ -377,7 +377,7 @@ final class ExtensionSettings {
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_scripts' ] );
 
 		// Add something special for Vivaldi & Android.
-		\add_action( 'admin_head', [ \tsf_extension_manager(), '_output_theme_color_meta' ], 0 );
+		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
 	}
 
 	/**
@@ -470,7 +470,7 @@ final class ExtensionSettings {
 			$args = [
 				'caller'       => __CLASS__,
 				'o_index'      => $index,
-				'o_defaults'   => \tsf_extension_manager()->coalesce_var( static::$defaults[ $index ], [] ),
+				'o_defaults'   => \tsfem()->coalesce_var( static::$defaults[ $index ], [] ),
 				'o_key'        => '',
 				'use_stale'    => false,
 				'levels'       => 5,
@@ -570,7 +570,7 @@ final class ExtensionSettings {
 		//= Prevents private-includes hijacking.
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- Read the include?
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
-		include \tsf_extension_manager()->get_view_location( $file );
+		include \tsfem()->get_view_location( $file );
 		static::$include_secret = null;
 	}
 }

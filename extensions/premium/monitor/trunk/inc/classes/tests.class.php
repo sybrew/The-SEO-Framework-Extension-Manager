@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -230,7 +230,7 @@ final class Tests {
 			$_theme         = \wp_get_theme();
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
-				$_dev = \tsf_extension_manager()->get_link( [
+				$_dev = \tsfem()->get_link( [
 					'url'     => $_theme_contact,
 					'content' => \__( 'theme developer', 'the-seo-framework-extension-manager' ),
 					'target'  => '_blank',
@@ -300,7 +300,7 @@ final class Tests {
 			$_theme         = \wp_get_theme();
 			$_theme_contact = $_theme->get( 'ThemeURI' ) ?: $_theme->get( 'AuthorURI' ) ?: '';
 			if ( $_theme_contact ) {
-				$_dev = \tsf_extension_manager()->get_link( [
+				$_dev = \tsfem()->get_link( [
 					'url'     => $_theme_contact,
 					'content' => \__( 'theme developer', 'the-seo-framework-extension-manager' ),
 					'target'  => '_blank',
@@ -647,7 +647,7 @@ final class Tests {
 							sprintf(
 								/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-								\esc_url( \tsf_extension_manager()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'https', 'http' ] )
+								\esc_url( \tsfem()->get_admin_page_url( \the_seo_framework()->seo_settings_page_slug ), [ 'https', 'http' ] )
 							),
 							[ 'a' ]
 						)

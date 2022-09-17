@@ -342,7 +342,7 @@ final class FormGenerator {
 		$this->o_index    = $args['o_index'];
 		$this->o_defaults = $args['o_defaults'];
 
-		$args['architecture'] = $args['architecture'] ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
+		$args['architecture'] = $args['architecture'] ?: ( \tsfem()->is_64() ? 64 : 32 );
 
 		$this->bits   = floor( $args['architecture'] / $args['levels'] );
 		$this->max_it = 2 ** $this->bits;

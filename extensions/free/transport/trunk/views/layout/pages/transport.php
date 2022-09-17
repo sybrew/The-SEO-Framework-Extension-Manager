@@ -8,7 +8,7 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
 
-tsf_extension_manager()->_do_pane_wrap_callable(
+tsfem()->_do_pane_wrap_callable(
 	__( 'Importer', 'the-seo-framework-extension-manager' ),
 	[ $this, '_importer_overview' ],
 	[
@@ -22,7 +22,7 @@ tsf_extension_manager()->_do_pane_wrap_callable(
 		'ajax_id'  => 'tsfem-e-transport-importer-ajax',
 	]
 );
-tsf_extension_manager()->_do_pane_wrap_callable(
+tsfem()->_do_pane_wrap_callable(
 	__( 'Logger', 'the-seo-framework-extension-manager' ),
 	[ $this, '_logger_overview' ],
 	[

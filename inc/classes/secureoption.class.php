@@ -65,7 +65,7 @@ final class SecureOption extends Secure_Abstract {
 			switch ( $type ) :
 				case 'update_option':
 				case 'update_option_instance':
-					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
+					\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
@@ -146,7 +146,7 @@ final class SecureOption extends Secure_Abstract {
 		$instance = self::$_instance;
 
 		if ( isset( $instance[0], $instance[1][1] ) ) {
-			\tsf_extension_manager()->_verify_instance( $instance[0], $instance[1][1] );
+			\tsfem()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
 			self::reset();
 			\wp_die( 'Instance verification could not be done on option update.' );
@@ -162,7 +162,7 @@ final class SecureOption extends Secure_Abstract {
 			} elseif ( 'update_option' === $type ) {
 				$options = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
-				if ( \tsf_extension_manager()->verify_options_hash( serialize( $options ) ) ) {
+				if ( \tsfem()->verify_options_hash( serialize( $options ) ) ) {
 					$verified = true;
 				} else {
 					self::reset();
@@ -177,7 +177,7 @@ final class SecureOption extends Secure_Abstract {
 						$results = \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 );
 						$type    = 'failure';
 
-						\tsf_extension_manager()->send_json( compact( 'results' ), $type );
+						\tsfem()->send_json( compact( 'results' ), $type );
 
 						//= Who knows, someone could filter wp_die();.
 						$value = $old_value;

@@ -135,7 +135,7 @@ final class SchemaPacker {
 		$this->data =& $data;
 		$o          = $schema->_OPTIONS;
 
-		$architecture = $o->architecture ?: ( \tsf_extension_manager()->is_64() ? 64 : 32 );
+		$architecture = $o->architecture ?: ( \tsfem()->is_64() ? 64 : 32 );
 		$levels       = $o->levels ?: 5;
 		$this->bits   = floor( $architecture / $levels );
 		$this->max_it = 2 ** $this->bits;

@@ -79,7 +79,7 @@ final class AJAX extends Secure_Abstract {
 		self::set( '_wpaction' );
 		self::set( '_type', 'generic' );
 
-		static::$tsfem = \tsf_extension_manager();
+		static::$tsfem = \tsfem();
 		static::$tsfem->_verify_instance( $instance, $bits[1] ) or die;
 
 		static::$tsf = \the_seo_framework();

@@ -247,8 +247,8 @@ final class InpostGUI {
 					'data' => [
 						'post_ID'     => (int) $GLOBALS['post']->ID,
 						'nonce'       => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
-						'isPremium'   => \tsf_extension_manager()->is_premium_user(),
-						'isConnected' => \tsf_extension_manager()->is_connected_user(),
+						'isPremium'   => \tsfem()->is_premium_user(),
+						'isConnected' => \tsfem()->is_connected_user(),
 						'locale'      => \get_locale(),
 						'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
 						'debug'       => (bool) WP_DEBUG,
@@ -264,7 +264,7 @@ final class InpostGUI {
 					],
 				],
 				'tmpl' => [
-					'file' => \tsf_extension_manager()->get_template_location( 'inpostnotice' ),
+					'file' => \tsfem()->get_template_location( 'inpostnotice' ),
 				],
 			],
 			[

@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Cord;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -212,7 +212,7 @@ final class Admin extends Core {
 				'pane'     => [],
 				'settings' => $_settings,
 				// When we add more panes, we can order them by adding up to 9.9999 to this value.
-				'priority' => \tsf_extension_manager()->get_extension_order()['cord'],
+				'priority' => \tsfem()->get_extension_order()['cord'],
 			]
 		);
 
@@ -265,7 +265,7 @@ final class Admin extends Core {
 					foreach ( $keys as $key ) {
 						switch ( $key ) {
 							case 'tracking_id':
-								$value[ $index ][ $key ] = trim( \tsf_extension_manager()->coalesce_var( $value[ $index ][ $key ], '' ) );
+								$value[ $index ][ $key ] = trim( \tsfem()->coalesce_var( $value[ $index ][ $key ], '' ) );
 								if ( ! preg_match( '/^\bUA-\d{4,10}-\d{1,4}\b$/', $value[ $index ][ $key ] ) ) {
 									$value[ $index ][ $key ] = '';
 								}
@@ -274,7 +274,7 @@ final class Admin extends Core {
 							case 'enhanced_link_attribution':
 							case 'ip_anonymization':
 								$value[ $index ][ $key ] = \the_seo_framework()->s_one_zero(
-									\tsf_extension_manager()->coalesce_var( $value[ $index ][ $key ], 0 )
+									\tsfem()->coalesce_var( $value[ $index ][ $key ], 0 )
 								);
 								break;
 
@@ -287,7 +287,7 @@ final class Admin extends Core {
 				case 'facebook_pixel':
 					$key = 'pixel_id';
 
-					$value[ $index ][ $key ] = trim( \tsf_extension_manager()->coalesce_var( $value[ $index ][ $key ], '' ) );
+					$value[ $index ][ $key ] = trim( \tsfem()->coalesce_var( $value[ $index ][ $key ], '' ) );
 					if ( ! preg_match( '/^[0-9]+$/', $value[ $index ][ $key ] ) ) {
 						$value[ $index ][ $key ] = '';
 					}

@@ -8,7 +8,7 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Monitor\get_active_class() and $this instanceof $_class or die;
 
-tsf_extension_manager()->_do_pane_wrap(
+tsfem()->_do_pane_wrap(
 	__( 'Common Issues', 'the-seo-framework-extension-manager' ),
 	$this->get_issues_overview(),
 	[
@@ -22,7 +22,7 @@ tsf_extension_manager()->_do_pane_wrap(
 		'ajax_id'  => 'tsfem-e-monitor-issues-ajax',
 	]
 );
-tsf_extension_manager()->_do_pane_wrap(
+tsfem()->_do_pane_wrap(
 	__( 'Control Panel', 'the-seo-framework-extension-manager' ),
 	$this->get_cp_overview(),
 	[

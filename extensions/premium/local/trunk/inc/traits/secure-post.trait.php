@@ -180,7 +180,7 @@ trait Secure_Post {
 			}
 		}
 
-		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+		\tsfem()->send_json( $send, \tsfem()->coalesce_var( $type, 'failure' ) );
 	}
 
 	/**
@@ -249,7 +249,7 @@ trait Secure_Post {
 				}
 			endif;
 
-			\tsf_extension_manager()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
+			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
 		endif;
 
 		exit;
@@ -302,7 +302,7 @@ trait Secure_Post {
 			}
 		}
 
-		\tsf_extension_manager()->send_json( $send, \tsf_extension_manager()->coalesce_var( $type, 'failure' ) );
+		\tsfem()->send_json( $send, \tsfem()->coalesce_var( $type, 'failure' ) );
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}

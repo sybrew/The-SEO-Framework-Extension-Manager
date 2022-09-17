@@ -86,7 +86,7 @@ namespace TSF_Extension_Manager\Extension\Cord;
  *
  * @since 1.0.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_CORD_PATH_CLASS, 'Cord', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_CORD_PATH_CLASS, 'Cord', $_instance, $bits ) )
 	return;
 
 // phpcs:disable -- @ignore

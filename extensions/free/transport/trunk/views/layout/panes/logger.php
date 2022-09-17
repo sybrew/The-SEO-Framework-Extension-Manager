@@ -14,6 +14,6 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 		<pre class=tsfem-logger id=tsfem-e-transport-logger><?= esc_html__( 'Waiting for transport&hellip;', 'the-seo-framework-extension-manager' ) ?></pre>
 	</div>
 	<div class="tsfem-pane-section">
-		<em><?= esc_html__( 'If you lose connection, the logger will stop reporting. Transactions may still continue on the server.', 'the-seo-framework-extension-manager' ) ?></em>
+		<em><?= esc_html__( 'Logger will stop reporting if you lose connection. Transactions may still continue on the server.', 'the-seo-framework-extension-manager' ) ?></em>
 	</div>
 </div>

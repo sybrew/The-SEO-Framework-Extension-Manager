@@ -57,7 +57,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 			 * data loss.
 			 */
 			foreach (
-				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
+				\tsfem()->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
 				as $hidden_input
 			) {
 				vprintf(
@@ -70,7 +70,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 				);
 			}
 			foreach (
-				\tsf_extension_manager()->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
+				\tsfem()->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
 				as $hidden_input
 			) {
 				vprintf(

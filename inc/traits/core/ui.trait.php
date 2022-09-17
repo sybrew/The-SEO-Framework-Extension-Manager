@@ -221,7 +221,7 @@ trait UI {
 		if ( has_run( __METHOD__ ) ) return;
 
 		\the_seo_framework()->init_admin_scripts();
-		$tsfem = \tsf_extension_manager();
+		$tsfem = \tsfem();
 
 		$scripts::register( [
 			[
@@ -404,7 +404,7 @@ trait UI {
 				// phpcs:disable
 				// Inherits from 'tsfem'
 				// 'tmpl'     => [
-				// 	'file' => \tsf_extension_manager()->get_template_location( 'fbtopnotice' ),
+				// 	'file' => \tsfem()->get_template_location( 'fbtopnotice' ),
 				// ],
 				// phpcs:enable
 			],

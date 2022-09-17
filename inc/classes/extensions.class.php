@@ -41,7 +41,7 @@ namespace TSF_Extension_Manager;
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  * @TODO Move trait items to own static class.
  */
-if ( \tsf_extension_manager()->is_tsf_extension_manager_page( false ) ) {
+if ( \tsfem()->is_tsf_extension_manager_page( false ) ) {
 	\TSF_Extension_Manager\_load_trait( 'manager/extensions-layout' );
 } else {
 	// Empty dummy traits.
@@ -113,7 +113,7 @@ final class Extensions extends Secure_Abstract {
 			case 'list':
 			case 'load':
 			case 'ajax_layout':
-				\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die();
+				\tsfem()->_verify_instance( $instance, $bits[1] ) or \tsfem()->_maybe_die();
 				self::set( '_type', $type );
 				static::set_up_variables();
 				break;
@@ -220,7 +220,7 @@ final class Extensions extends Secure_Abstract {
 
 		// Temporarily check. Will be substituted by new functions that pass these as filters.
 		if ( 'maybe_network' === $what ) {
-			$network_mode = \tsf_extension_manager()->is_plugin_in_network_mode();
+			$network_mode = \tsfem()->is_plugin_in_network_mode();
 
 			if ( $network_mode )
 				return $extensions;

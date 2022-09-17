@@ -84,7 +84,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  *
  * @since 1.2.0
  */
-if ( false === \tsf_extension_manager()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
+if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
 	return;
 
 // if ( TSFEM_E_ARTICLES_DB_VERSION > \tsf_extension_manager_db_version( 'articles' ) ) {

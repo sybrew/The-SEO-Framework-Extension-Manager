@@ -21,7 +21,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSe
 				esc_attr( $size ),
 				sprintf(
 					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s"></image>',
-					esc_url( tsf_extension_manager()->get_image_file_location( 'tsflogo.svg', true ), [ 'https', 'http' ] ),
+					esc_url( tsfem()->get_image_file_location( 'tsflogo.svg', true ), [ 'https', 'http' ] ),
 					esc_attr( $size )
 				)
 			),

@@ -135,7 +135,7 @@ function _init_tsf_extension_manager() {
 		return $tsf_extension_manager;
 
 	if ( false === \doing_action( 'plugins_loaded' ) ) {
-		\wp_die( 'Use tsf_extension_manager() after action `plugins_loaded` priority 6.' );
+		\wp_die( 'Use tsfem() after action `plugins_loaded` priority 6.' );
 		exit;
 	}
 

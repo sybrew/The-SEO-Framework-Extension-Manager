@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -381,7 +381,7 @@ final class Front extends Core {
 		// We can collapse these 3 lines into one using PHP 7+...
 		$settings  = $this->get_option( 'post_types' );
 		$post_type = \get_post_type();
-		$_default  = \tsf_extension_manager()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
+		$_default  = \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
 
 		$type = static::filter_article_type( $this->get_post_meta( 'type', $_default ) );
 

@@ -67,7 +67,7 @@ final class Layout extends Secure_Abstract {
 				case 'form':
 				case 'link':
 				case 'list':
-					\tsf_extension_manager()->_verify_instance( $instance, $bits[1] ) or die;
+					\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
 
@@ -132,7 +132,7 @@ final class Layout extends Secure_Abstract {
 		$output = '';
 
 		if ( 'form' === self::get_property( '_type' ) ) {
-			$tsfem = \tsf_extension_manager();
+			$tsfem = \tsfem();
 
 			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['deactivate'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
@@ -186,7 +186,7 @@ final class Layout extends Secure_Abstract {
 	private static function get_public_support_button() {
 
 		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsf_extension_manager()->get_support_link( 'public' );
+			return \tsfem()->get_support_link( 'public' );
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The public support button only supports the link type.' );
 			return '';
@@ -203,7 +203,7 @@ final class Layout extends Secure_Abstract {
 	private static function get_private_support_button() {
 
 		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsf_extension_manager()->get_support_link( 'private' );
+			return \tsfem()->get_support_link( 'private' );
 		} else {
 			\the_seo_framework()->_doing_it_wrong( __METHOD__, 'The private support button only supports the link type.' );
 			return '';
@@ -224,7 +224,7 @@ final class Layout extends Secure_Abstract {
 			return '';
 		}
 
-		$valid_options = \tsf_extension_manager()->are_options_valid();
+		$valid_options = \tsfem()->are_options_valid();
 
 		$account = self::$account;
 
@@ -315,14 +315,14 @@ final class Layout extends Secure_Abstract {
 
 		$_level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 			$level,
-			\tsf_extension_manager()->coalesce_var( $level_desc, '' ),
+			\tsfem()->coalesce_var( $level_desc, '' ),
 			'',
 			$_class
 		) );
 
 		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $_level, false );
 
-		switch ( \tsf_extension_manager()->get_api_endpoint_type() ) :
+		switch ( \tsfem()->get_api_endpoint_type() ) :
 			case 'eu':
 				$_ep = \__( 'TSF Europe', 'the-seo-framework-extension-manager' );
 				break;
@@ -530,19 +530,19 @@ final class Layout extends Secure_Abstract {
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$input = sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'key' ),
-				\tsf_extension_manager()->_get_field_name( 'key' ),
+				\tsfem()->_get_field_id( 'key' ),
+				\tsfem()->_get_field_name( 'key' ),
 				\esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 
 			$input .= sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsf_extension_manager()->_get_field_id( 'email' ),
-				\tsf_extension_manager()->_get_field_name( 'email' ),
+				\tsfem()->_get_field_id( 'email' ),
+				\tsfem()->_get_field_name( 'email' ),
 				\esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
-			$nonce_action = \tsf_extension_manager()->_get_nonce_action_field( self::$request_name['activate-key'] );
+			$nonce_action = \tsfem()->_get_nonce_action_field( self::$request_name['activate-key'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
@@ -555,7 +555,7 @@ final class Layout extends Secure_Abstract {
 			return sprintf(
 				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_attr( self::$request_name['activate-key'] ),
-				\esc_url( \tsf_extension_manager()->get_admin_page_url() ),
+				\esc_url( \tsfem()->get_admin_page_url() ),
 				'input-activation',
 				'',
 				$form

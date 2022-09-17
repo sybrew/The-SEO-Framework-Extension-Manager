@@ -7,7 +7,7 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsf_extension_manager()->_has_died() or false === ( \tsf_extension_manager()->_verify_instance( $_instance, $bits[1] ) or \tsf_extension_manager()->_maybe_die() ) )
+if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
 	return;
 
 /**
@@ -424,7 +424,7 @@ final class Admin extends Api {
 
 		if ( \wp_doing_ajax() ) :
 			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
-				$tsfem  = \tsf_extension_manager();
+				$tsfem  = \tsfem();
 				$option = '';
 				$send   = [];
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
@@ -541,7 +541,7 @@ final class Admin extends Api {
 					$response = [ 'status' => $status ];
 				}
 
-				\tsf_extension_manager()->send_json( $response, null );
+				\tsfem()->send_json( $response, null );
 			endif;
 		endif;
 
@@ -625,7 +625,7 @@ final class Admin extends Api {
 					$response = [ 'status' => $status ];
 				}
 
-				\tsf_extension_manager()->send_json( $response, null );
+				\tsfem()->send_json( $response, null );
 			endif;
 		endif;
 
@@ -654,7 +654,7 @@ final class Admin extends Api {
 					$send['html'] = $this->get_site_fix_fields();
 				}
 
-				\tsf_extension_manager()->send_json( $send, null );
+				\tsfem()->send_json( $send, null );
 			}
 		}
 
@@ -1043,7 +1043,7 @@ final class Admin extends Api {
 
 			$content .= sprintf(
 				'<form action=%s method=post id=%s class="%s" autocomplete=off data-form-type=other>%s</form>',
-				\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
+				\esc_url( \tsfem()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 				$form_id,
 				'hide-if-tsf-js',
 				$nonce_action . $nonce . $submit
@@ -1083,7 +1083,7 @@ final class Admin extends Api {
 		];
 
 		return $this->_get_action_button(
-			\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+			\tsfem()->get_admin_page_url( $this->monitor_page_slug ),
 			$args
 		) . \TSF_Extension_Manager\HTML::make_inline_question_tooltip( $question_title );
 	}
@@ -1117,7 +1117,7 @@ final class Admin extends Api {
 		];
 
 		return $this->_get_action_button(
-			\tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ),
+			\tsfem()->get_admin_page_url( $this->monitor_page_slug ),
 			$args
 		) . \TSF_Extension_Manager\HTML::make_inline_question_tooltip( $question_title );
 	}
@@ -1257,7 +1257,7 @@ final class Admin extends Api {
 			'ajax'  => false,
 		];
 
-		return $this->_get_action_button( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), $args );
+		return $this->_get_action_button( \tsfem()->get_admin_page_url( $this->monitor_page_slug ), $args );
 	}
 
 	/**
@@ -1304,7 +1304,7 @@ final class Admin extends Api {
 
 		$button = sprintf(
 			'<form name=deactivate action="%s" method=post id=tsfem-e-monitor-disconnect-form autocomplete=off data-form-type=other>%s</form>',
-			\esc_url( \tsf_extension_manager()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
+			\esc_url( \tsfem()->get_admin_page_url( $this->monitor_page_slug ), [ 'https', 'http' ] ),
 			$nonce_action . $nonce . $switcher
 		);
 

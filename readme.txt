@@ -47,6 +47,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Now relies on The SEO Framework's JavaScript availability test, instead of WordPress's, making unresponsive interfaces a thing of the past.
 * Modernized code, especially JavaScript, improving UI responsiveness significantly.
 * Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
+* Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
 
 * TODO Add index.php files to extension top-folders
 * TODO require TSF 4.2+
@@ -69,8 +70,6 @@ TODO 'a' . $b -> "a$b" (PHP) (regex '.*?'\s*\.\s*\$)
 TODO 'a' + b -> `a${b}` (JS) (regex '.*?'\s*\+\s*[a-zA-Z_])
 TODO implement views trait.
 TODO remove typehinting
-TODO introduced tsfem()
-	* Migrate tsf_extension_manager() calls to tsfem().
 TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.
 		-> Should we let the extensions wrap side-by-side instead? flex base 400px, stretch to fit?
