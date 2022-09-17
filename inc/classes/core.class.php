@@ -1445,6 +1445,7 @@ class Core {
 	 *
 	 * @param array $input The input with possible keys.
 	 * @param array $keys The wanted keys, e.g. ['key','key2']
+	 * @return array The $input array with only indexes from $keys.
 	 */
 	final public function filter_keys( array $input, array $keys ) {
 		$expected_keys = array_fill_keys( $keys, '' );

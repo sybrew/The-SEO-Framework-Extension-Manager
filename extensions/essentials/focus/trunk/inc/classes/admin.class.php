@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Focus;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -200,7 +202,9 @@ final class Admin extends Core {
 				'l10n'     => [
 					'name' => 'tsfem_e_focusInpostL10n',
 					'data' => [
-						'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' ) : false,
+						'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID )
+							? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' )
+							: false,
 						'focusElements'      => $this->get_focus_elements(),
 						'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
 						'languageSupported'  => [
@@ -503,6 +507,6 @@ final class Admin extends Core {
 	 * @return string The view file location.
 	 */
 	private function get_view_location( $view ) {
-		return TSFEM_E_FOCUS_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		return TSFEM_E_FOCUS_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

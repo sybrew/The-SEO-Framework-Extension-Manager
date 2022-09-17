@@ -11,6 +11,8 @@ namespace TSF_Extension_Manager\Extension\Focus;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
 
+$tsfem = \tsfem();
+
 ?>
 <div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
 	<?php
@@ -57,7 +59,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 			 * data loss.
 			 */
 			foreach (
-				\tsfem()->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
+				$tsfem->filter_keys( $post_input, [ 'lexical_data', 'inflection_data', 'synonym_data' ] )
 				as $hidden_input
 			) {
 				vprintf(
@@ -70,7 +72,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 				);
 			}
 			foreach (
-				\tsfem()->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
+				$tsfem->filter_keys( $post_input, [ 'lexical_form', 'active_inflections', 'active_synonyms', 'definition_selection' ] )
 				as $hidden_input
 			) {
 				vprintf(

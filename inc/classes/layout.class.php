@@ -224,6 +224,8 @@ final class Layout extends Secure_Abstract {
 			return '';
 		}
 
+		$tsfem = \tsfem();
+
 		$valid_options = \tsfem()->are_options_valid();
 
 		$account = self::$account;
@@ -322,7 +324,7 @@ final class Layout extends Secure_Abstract {
 
 		$output .= static::wrap_row_content( \esc_html__( 'Account level:', 'the-seo-framework-extension-manager' ), $_level, false );
 
-		switch ( \tsfem()->get_api_endpoint_type() ) :
+		switch ( $tsfem->get_api_endpoint_type() ) :
 			case 'eu':
 				$_ep = \__( 'TSF Europe', 'the-seo-framework-extension-manager' );
 				break;
@@ -528,21 +530,23 @@ final class Layout extends Secure_Abstract {
 	private static function get_account_upgrade_form() {
 
 		if ( 'form' === self::get_property( '_type' ) ) {
+			$tsfem = \tsfem();
+
 			$input = sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsfem()->_get_field_id( 'key' ),
-				\tsfem()->_get_field_name( 'key' ),
+				$tsfem->_get_field_id( 'key' ),
+				$tsfem->_get_field_name( 'key' ),
 				\esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 
 			$input .= sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
-				\tsfem()->_get_field_id( 'email' ),
-				\tsfem()->_get_field_name( 'email' ),
+				$tsfem->_get_field_id( 'email' ),
+				$tsfem->_get_field_name( 'email' ),
 				\esc_attr__( 'License email', 'the-seo-framework-extension-manager' )
 			);
 
-			$nonce_action = \tsfem()->_get_nonce_action_field( self::$request_name['activate-key'] );
+			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['activate-key'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
@@ -555,7 +559,7 @@ final class Layout extends Secure_Abstract {
 			return sprintf(
 				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_attr( self::$request_name['activate-key'] ),
-				\esc_url( \tsfem()->get_admin_page_url() ),
+				\esc_url( $tsfem->get_admin_page_url() ),
 				'input-activation',
 				'',
 				$form

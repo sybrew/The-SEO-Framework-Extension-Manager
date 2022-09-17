@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -891,7 +893,10 @@ final class Admin extends Api {
 	protected function get_cp_output() {
 		return sprintf(
 			'<div class="tsfem-e-monitor-cp tsfem-flex">%s</div>',
-			$this->get_account_information() . $this->get_site_actions_view() . $this->get_site_settings_view() . $this->get_disconnect_site_view()
+			$this->get_account_information()
+				. $this->get_site_actions_view()
+				. $this->get_site_settings_view()
+				. $this->get_disconnect_site_view()
 		);
 	}
 
@@ -1343,18 +1348,16 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $view The file name.
-	 * @param array  $args The arguments to be supplied within the file name.
-	 *                     Each array key is converted to a variable with its value attached.
+	 * @param string $view   The file name.
+	 * @param array  $__args The arguments to be supplied within the file name.
+	 *                       Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, array $args = [] ) {
+	protected function get_view( $view, array $__args = [] ) {
 
-		foreach ( $args as $__k => $__v ) {
-			$$__k = $__v;
-		}
-		unset( $__k, $__v );
+		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		unset( $__k, $__v, $__args );
 
-		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 
 		include $file;
 	}

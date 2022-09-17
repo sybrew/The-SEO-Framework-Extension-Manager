@@ -331,16 +331,18 @@ trait Extensions_Layout {
 
 			static $cache = [];
 
+			$tsfem = \tsfem();
+
 			if ( empty( $cache ) ) {
-				$cache['input_name'] = \esc_attr( \tsfem()->_get_field_name( 'extension' ) );
-				$cache['admin_url']  = \esc_url( \tsfem()->get_admin_page_url(), [ 'https', 'http' ] );
+				$cache['input_name'] = \esc_attr( $tsfem->_get_field_name( 'extension' ) );
+				$cache['admin_url']  = \esc_url( $tsfem->get_admin_page_url(), [ 'https', 'http' ] );
 			}
 
 			$s_slug = \sanitize_key( $slug );
 
 			nojs:;
-				$nonce        = \tsfem()->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
-				$nonce_action = \tsfem()->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
+				$nonce        = $tsfem->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
+				$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 
 				$extension = sprintf(
 					'<input type=hidden name="%s" value="%s">',
@@ -547,11 +549,13 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {
 
-		$url = \tsfem()->get_admin_page_url( $slug );
+		$tsfem = \tsfem();
+
+		$url = $tsfem->get_admin_page_url( $slug );
 
 		if ( ! $url ) return '';
 
-		return \tsfem()->get_link( [
+		return $tsfem->get_link( [
 			'url'     => $url,
 			'content' => static::get_i18n( 'settings' ),
 			'title'   => static::get_i18n( 'visit-menupage' ),

@@ -145,13 +145,11 @@ final class AJAX extends Secure_Abstract {
 	public static function _wp_ajax_get_dismissible_notice() {
 
 		if ( ! static::$_validated ) return;
-		if (
-			! ( \TSF_Extension_Manager\can_do_manager_settings() || \TSF_Extension_Manager\can_do_extension_settings() )
-		) return;
+		if ( ! ( \TSF_Extension_Manager\can_do_manager_settings() || \TSF_Extension_Manager\can_do_extension_settings() ) )
+			return;
 
-		if ( \check_ajax_referer( 'tsfem-ajax-insecure-nonce', 'nonce', false ) ) {
+		if ( \check_ajax_referer( 'tsfem-ajax-insecure-nonce', 'nonce', false ) )
 			$notice_data = static::build_ajax_dismissible_notice();
-		}
 
 		static::$tsfem->send_json(
 			static::$tsfem->coalesce_var( $notice_data, [] ),

@@ -61,7 +61,6 @@ final class SecureOption extends Secure_Abstract {
 		if ( empty( $type ) ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
-
 			switch ( $type ) :
 				case 'update_option':
 				case 'update_option_instance':

@@ -49,6 +49,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
 
+* TODO gotohook : { -> gotohook: { () Regex: ^\t*(?!if|return|exit|die)[a-z][a-z_]*\s:
+* TODO send_json -> TSFEM to TSF?
+* TODO get_admin_page_url -> TSFEM to TSF?
+* TODO _class = function() { -> ??
+* TODO Scoring::get_instance()->template -> something else?
 * TODO Add index.php files to extension top-folders
 * TODO require TSF 4.2+
 * TODO Use tsf() insteadof the_seo_framework()

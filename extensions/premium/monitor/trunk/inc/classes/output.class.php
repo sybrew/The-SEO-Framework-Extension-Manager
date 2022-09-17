@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -335,7 +337,10 @@ final class Output {
 
 		$state = $this->parse_defined_icon_state( $state );
 
-		return sprintf( '<span class="tsfem-e-monitor-title-icon tsfem-e-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>', \esc_attr( $state ) );
+		return sprintf(
+			'<span class="tsfem-e-monitor-title-icon tsfem-e-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>',
+			\esc_attr( $state )
+		);
 	}
 
 	/**

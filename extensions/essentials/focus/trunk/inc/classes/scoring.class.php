@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Focus;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -70,10 +72,19 @@ final class Scoring {
 	 * @since 1.0.0
 	 * @ignore
 	 * @var int $current_score The current score.
-	 * @var int $max_score     The maximum score.
 	 */
 	public $current_score = 0;
-	public $max_score     = 0;
+
+	/**
+	 * Not utilized.
+	 * Can be summed from $this->values[x]['endScore'] (not stored yet)
+	 * Can be summed from $this->template[x]['maxScore']-
+	 *
+	 * @since 1.0.0
+	 * @ignore
+	 * @var int $max_score The maximum score.
+	 */
+	public $max_score = 0;
 
 	/**
 	 * Returns complete template, or part thereof.

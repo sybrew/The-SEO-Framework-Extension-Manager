@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Transport;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -394,8 +396,8 @@ final class Admin {
 					'name' => 'tsfem_e_transportL10n',
 					'data' => [
 						// This won't ever run when the user can't. But, sanity.
-						'nonce' => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( $this->ajax_nonce_action ) : '',
-						'i18n'  => [
+						'nonce'   => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( $this->ajax_nonce_action ) : '',
+						'i18n'    => [
 							'optionNames' => [
 								'settings' => \esc_html__( 'SEO Settings', 'the-seo-framework-extension-manager' ),
 								'postmeta' => \esc_html__( 'Post Metadata', 'the-seo-framework-extension-manager' ),

@@ -824,7 +824,7 @@ trait Extensions_Actions {
 		}
 
 		// Goto tick is now forbidden. Use goto clean.
-		unclean : {
+		unclean: {
 			ob_start();
 
 			\define( '_TSFEM_TESTING_EXTENSION', true );
@@ -836,7 +836,7 @@ trait Extensions_Actions {
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
 
-		basetest : {
+		basetest: {
 			// Test base file.
 			$success = static::persist_include_extension( $file, $_instance, $bits );
 		}
@@ -850,7 +850,7 @@ trait Extensions_Actions {
 
 		$val = $success ? 4 : 3;
 
-		clean : {
+		clean: {
 			ob_clean();
 
 			static::reset_error_reporting();
@@ -859,7 +859,7 @@ trait Extensions_Actions {
 			\define( '_TSFEM_TEST_EXT_PASS', true );
 		}
 
-		tick : {
+		tick: {
 			// Tick the instance.
 			\tsfem()->_verify_instance( $_instance, $bits[1] );
 		}

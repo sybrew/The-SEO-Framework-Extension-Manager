@@ -7,7 +7,9 @@ namespace TSF_Extension_Manager\Extension\Local;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -434,16 +436,15 @@ final class Settings {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $view The file name.
-	 * @param array  $args The arguments to be supplied within the file name.
-	 *                     Each array key is converted to a variable with its value attached.
+	 * @param string $view   The file name.
+	 * @param array  $__args The arguments to be supplied within the file name.
+	 *                       Each array key is converted to a variable with its value attached.
 	 */
-	private function get_view( $view, array $args = [] ) {
+	private function get_view( $view, array $__args = [] ) {
 
-		foreach ( $args as $key => $val ) {
-			$$key = $val;
-		}
+		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		unset( $__k, $__v, $__args );
 
-		include TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		include TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

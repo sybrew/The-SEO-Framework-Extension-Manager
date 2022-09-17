@@ -16,6 +16,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 	'TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY',
 	\tsfem()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Ajax', $_instance, $bits ) ?: false
 );
+
 if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 	return;
 

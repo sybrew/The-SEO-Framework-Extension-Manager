@@ -17,7 +17,9 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_has_died() or false === ( \tsfem()->_verify_instance( $_instance, $bits[1] ) or \tsfem()->_maybe_die() ) )
+$tsfem = \tsfem();
+
+if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
 	return;
 
 /**
@@ -745,7 +747,8 @@ JS;
 
 		if ( empty( $_hashes ) ) {
 
-			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+			$uid   = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
+			$tsfem = \tsfem();
 
 			if ( $this->hardcore ) {
 				/**
@@ -761,11 +764,11 @@ JS;
 				$scale = (int) \apply_filters( 'the_seo_framework_honeypot_field_scale', 60 * MINUTE_IN_SECONDS );
 
 				$_hashes = [
-					'current'  => \tsfem()->_get_timed_hash( $uid, $scale ),
-					'previous' => \tsfem()->_get_timed_hash( $uid, $scale, time() - $scale ),
+					'current'  => $tsfem->_get_timed_hash( $uid, $scale ),
+					'previous' => $tsfem->_get_timed_hash( $uid, $scale, time() - $scale ),
 				];
 			} else {
-				$_hash   = \tsfem()->_get_uid_hash( $uid );
+				$_hash   = $tsfem->_get_uid_hash( $uid );
 				$_hashes = [
 					'current'  => $_hash,
 					'previous' => $_hash,
@@ -848,12 +851,14 @@ JS;
 			 */
 			$scale = (int) \apply_filters( 'the_seo_framework_honeypot_nonce_scale', $time, $this->hardcore );
 
+			$tsfem = \tsfem();
+
 			$_hashes = [
 				'current'  => $this->hex_to_36_trim(
-					\tsfem()->_get_timed_hash( $uid, $scale )
+					$tsfem->_get_timed_hash( $uid, $scale )
 				),
 				'previous' => $this->hex_to_36_trim(
-					\tsfem()->_get_timed_hash( $uid, $scale, time() - $scale )
+					$tsfem->_get_timed_hash( $uid, $scale, time() - $scale )
 				),
 			];
 		}
