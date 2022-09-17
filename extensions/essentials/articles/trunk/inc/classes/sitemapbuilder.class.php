@@ -246,8 +246,8 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 				// publication(name/language) is inferred later. Save processing power and memory during generation here.
 				// access is deprecated.
 				// genres is deprecated.
-				'publication_date' => isset( $post->post_date_gmt ) ? $post->post_date_gmt : '0000-00-00 00:00:00',
-				'title'            => isset( $post->post_title ) ? $post->post_title : '',
+				'publication_date' => $post->post_date_gmt ?? '0000-00-00 00:00:00',
+				'title'            => $post->post_title ?? '',
 				// keywords is deprecated.
 				// stock_tickers is deprecated.
 			];
@@ -259,7 +259,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 			// @see https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd
 			$_values['image'] = [
-				'loc' => isset( $image_details['url'] ) ? $image_details['url'] : '',
+				'loc' => $image_details['url'] ?? '',
 				// caption in inferred from post description. Tested: this field is ignored.
 				// geo_location is inferred from publication.
 				// title is inferred from title. Tested: this field is ignored.

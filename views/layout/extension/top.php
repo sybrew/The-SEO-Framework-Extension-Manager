@@ -9,13 +9,13 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSettings::verify( $_secret ) or die;
 
 ?>
-<div class="tsfem-title">
+<div class=tsfem-title>
 	<header><h1>
 		<?php
 		$size = '1em';
 
 		printf(
-			'<span class="tsfem-logo">%s%s</span>',
+			'<span class=tsfem-logo>%s%s</span>',
 			sprintf(
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),

@@ -37,11 +37,8 @@ namespace TSF_Extension_Manager;
 final class SecureOption extends Secure_Abstract {
 
 	/**
-	 * The update action instances.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var array The instance array.
+	 * @var array The update instance array.
 	 */
 	private static $_instance = []; // phpcs:ignore, PSR2.Classes.PropertyDeclaration.Underscore -- confusing otherwise.
 
@@ -178,7 +175,7 @@ final class SecureOption extends Secure_Abstract {
 
 						\tsfem()->send_json( compact( 'results' ), $type );
 
-						//= Who knows, someone could filter wp_die();.
+						// Who knows, someone could filter wp_die();.
 						$value = $old_value;
 
 						\wp_die();

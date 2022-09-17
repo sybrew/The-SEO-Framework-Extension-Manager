@@ -156,7 +156,7 @@ final class Upgrader {
 	 */
 	public function get_previous_version( $member ) {
 		$versions = $this->previous_db_versions;
-		return isset( $versions[ $member ] ) ? $versions[ $member ] : '0';
+		return $versions[ $member ] ?? '0';
 	}
 
 	/**
@@ -170,7 +170,7 @@ final class Upgrader {
 	 */
 	public function get_current_version( $member ) {
 		$versions = $this->current_db_versions;
-		return isset( $versions[ $member ] ) ? $versions[ $member ] : '0';
+		return $versions[ $member ] ?? '0';
 	}
 
 	/**
@@ -428,5 +428,5 @@ final class Upgrader {
 	}
 }
 
-//= Loads class.
+// Loads class.
 $_load_upgrader_class();

@@ -41,11 +41,10 @@ final class Front extends Core {
 	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
 
 	/**
-	 * States if the output is valid.
 	 * If the output is invalidated, the output should be cancelled.
 	 *
 	 * @since 1.0.0
-	 * @var array $is_json_valid : { key => bool }
+	 * @var array Whether the JSON output is valid : { key => bool }
 	 */
 	private $is_json_valid = [
 		'amp'    => true,
@@ -53,11 +52,9 @@ final class Front extends Core {
 	];
 
 	/**
-	 * Registers the image size name.
-	 *
 	 * @since 1.1.0
 	 * @since 2.0.0 Value changed from 'tsfem-e-articles-logo'.
-	 * @var string $image_size_name
+	 * @var string The image size name.
 	 */
 	private $image_size_name = 'tsfem-e-articles-logo-rect';
 
@@ -190,7 +187,7 @@ final class Front extends Core {
 	 */
 	private function get_current_post() {
 		static $post;
-		return isset( $post ) ? $post : $post = \get_post( $this->get_current_id() );
+		return $post ?? $post = \get_post( $this->get_current_id() );
 	}
 
 	/**
@@ -380,12 +377,10 @@ final class Front extends Core {
 	 */
 	private function get_article_type() {
 
-		// We can collapse these 3 lines into one using PHP 7+...
-		$settings  = $this->get_option( 'post_types' );
-		$post_type = \get_post_type();
-		$_default  = \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' );
-
-		$type = static::filter_article_type( $this->get_post_meta( 'type', $_default ) );
+		$type = static::filter_article_type( $this->get_post_meta(
+			'type',
+			$this->get_option( 'post_types' )[ \get_post_type() ]['default_type'] ?? 'Article' // Default
+		) );
 
 		if ( 'disabled' === $type ) {
 			$this->invalidate( 'both' );
@@ -624,7 +619,7 @@ final class Front extends Core {
 		}
 
 		$author = \get_userdata( $post->post_author );
-		$name   = isset( $author->display_name ) ? $author->display_name : '';
+		$name   = $author->display_name ?? '';
 
 		if ( ! $name ) {
 			$this->invalidate( 'amp' );
@@ -701,7 +696,7 @@ final class Front extends Core {
 
 		$_src = \wp_get_attachment_image_src( $_img_id, $size );
 		if ( $resize && isset( $_src[3] ) && ! $_src[3] ) {
-			//= Add intermediate size, so $_src[3] will return true next time.
+			// Add intermediate size, so $_src[3] will return true next time.
 			if ( $this->make_amp_logo( $_img_id ) )
 				$_src = \wp_get_attachment_image_src( $_img_id, $size );
 		}

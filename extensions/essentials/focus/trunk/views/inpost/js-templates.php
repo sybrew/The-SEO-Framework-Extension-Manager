@@ -22,8 +22,8 @@ use \TSF_Extension_Manager\InpostGUI as InpostGUI;
 </script>
 
 <script type=text/html id=tmpl-tsfem-e-focus-subject-item>
-	<label class="tsfem-e-focus-subject-item">
-		<input type=checkbox id={{{data.id}}} class="tsfem-e-focus-subject-item" {{{data.disabled}}} value=1 {{{data.checked}}}>
+	<label class=tsfem-e-focus-subject-item>
+		<input type=checkbox id={{{data.id}}} class=tsfem-e-focus-subject-item {{{data.disabled}}} value=1 {{{data.checked}}}>
 		<span>{{data.value}}</span>
 	</label>
 </script>

@@ -54,21 +54,18 @@ class Core {
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce name.
 	 */
 	protected $nonce_name;
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation request name.
 	 */
 	protected $request_name = [];
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_action = [];
@@ -392,7 +389,7 @@ class Core {
 		if ( ! $this->has_required_array_keys( $args, $required ) )
 			return false;
 
-		$url = $this->get_admin_page_url( $args['menu_slug'] );
+		$url = \menu_page_url( $args['menu_slug'], false );
 
 		if ( ! $url )
 			return false;
@@ -506,7 +503,7 @@ class Core {
 	 * @return mixed
 	 */
 	final public function coalesce_var( &$v = null, $f = null ) {
-		return isset( $v ) ? $v : $v = $f;
+		return $v ?? ( $v = $f );
 	}
 
 	/**
@@ -694,7 +691,7 @@ class Core {
 
 		// Timing-attack safe.
 		if ( isset( $instance[ $n_bit ] ) ) {
-			//= Timing attack mitigated.
+			// Timing attack mitigated.
 
 			// Don't use hash_equals(). This is already safe.
 			if ( empty( $instance[ $bit ] ) || $instance[ $n_bit ] !== $instance[ $bit ] ) {
@@ -754,10 +751,11 @@ class Core {
 		 * Uses various primes to prevent overflow (which is heavy and can loop) on 32 bit architecture.
 		 * Time can never be 0, because it will then loop.
 		 */
-		set : {
+		set: {
 			$bit = $_bit = 0;
 
-			$this->coalesce_var( $_prime, 317539 );
+			// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- goto loop.
+			$_prime    = $_prime ?? 317539;
 			$_boundary = 10000;
 
 			$_time = time();
@@ -782,7 +780,7 @@ class Core {
 			goto set;
 		}
 
-		generate : {
+		generate: {
 			/**
 			 * Count to create an irregular bit verification.
 			 * This can jump multiple sequences while maintaining the previous.

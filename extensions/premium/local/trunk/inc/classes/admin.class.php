@@ -44,19 +44,13 @@ final class Admin extends Core {
 	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
 
 	/**
-	 * Name of the page hook when the menu is registered.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string Page hook.
+	 * @var string Page hook name.
 	 */
 	protected $local_menu_page_hook;
 
 	/**
-	 * The extension page ID/slug.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string Page ID/Slug
 	 */
 	protected $local_page_slug;
@@ -211,7 +205,7 @@ final class Admin extends Core {
 		static $cache;
 
 		// Don't load from $_GET request.
-		return isset( $cache ) ? $cache : $cache = \tsf()->is_menu_page( $this->local_menu_page_hook );
+		return $cache ?? $cache = \tsf()->is_menu_page( $this->local_menu_page_hook );
 	}
 
 	/**

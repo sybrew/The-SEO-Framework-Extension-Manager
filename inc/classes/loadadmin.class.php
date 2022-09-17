@@ -369,9 +369,7 @@ final class LoadAdmin extends AdminPages {
 
 		$page = $page ? $page : $this->seo_extensions_page_slug;
 
-		$url = \add_query_arg( $args, \menu_page_url( $page, false ) );
-
-		return $url;
+		return \add_query_arg( $args, \menu_page_url( $page, false ) );
 	}
 
 	/**
@@ -708,7 +706,7 @@ final class LoadAdmin extends AdminPages {
 
 		$slug = \sanitize_key( $options['extension'] );
 
-		//? PHP 7 please.
+		// PHP 7 please.
 		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 10013, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 10013 ) : false;
@@ -760,13 +758,13 @@ final class LoadAdmin extends AdminPages {
 
 			$test = $this->test_extension( $slug, $ajax );
 
-			//= 5 means it's already activated. 4 means it passed all tests.
+			// 5 means it's already activated. 4 means it passed all tests.
 			if ( ! \in_array( $test, [ 4, 5 ], true ) || $this->_has_died() ) {
 				$ajax or $this->set_error_notice( [ 10005 => $test ] );
 				return $ajax ? $this->get_ajax_notice( false, 10005 ) : false;
 			}
 
-			//= 5 means it's already activated. Enable it otherwise.
+			// 5 means it's already activated. Enable it otherwise.
 			$success = 5 === $test || $this->enable_extension( $slug );
 
 			if ( false === $success ) {
@@ -837,7 +835,7 @@ final class LoadAdmin extends AdminPages {
 		 */
 		$slug = \sanitize_key( $options['extension'] );
 
-		//? PHP 7 please.
+		// PHP 7 please.
 		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 11003, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 11003 ) : false;

@@ -1666,7 +1666,7 @@ final class Fields {
 				'MedicalBusiness',
 				\__( 'Medical business', 'the-seo-framework-extension-manager' ),
 				[
-					//= Names with asterisk are still under review by Schema.org and are currently Extensions...
+					// Names with asterisk are still under review by Schema.org and are currently Extensions...
 					[
 						'CommunityHealth',
 						\__( 'Community health', 'the-seo-framework-extension-manager' ) . ' *',

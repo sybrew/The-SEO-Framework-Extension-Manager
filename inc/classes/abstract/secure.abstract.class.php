@@ -104,20 +104,14 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	protected static $nonce_action = [];
 
 	/**
-	 * The user's account information.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var array $account The account information.
+	 * @var array The current account information.
 	 */
 	protected static $account = [];
 
 	/**
-	 * Holds the secret API key, bound to the parent's instance.
-	 *
 	 * @since 2.1.0
-	 *
-	 * @var string
+	 * @var string Holds the secret API key, bound to the parent's instance.
 	 */
 	protected static $secret_api_key;
 
@@ -239,7 +233,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		if ( isset( $is_premium ) )
 			return $is_premium;
 
-		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
+		$level = self::$account['level'] ?? '';
 
 		return $is_premium = \in_array( $level, [ 'Enterprise', 'Premium' ], true );
 	}
@@ -258,7 +252,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 		if ( isset( $is_connected ) )
 			return $is_connected;
 
-		$level = isset( self::$account['level'] ) ? self::$account['level'] : '';
+		$level = self::$account['level'] ?? '';
 
 		return $is_connected = \in_array( $level, [ 'Enterprise', 'Premium', 'Essentials' ], true );
 	}

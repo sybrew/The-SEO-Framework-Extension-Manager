@@ -117,7 +117,7 @@ class Core {
 		foreach ( $filtered_post_types as $post_type ) {
 			$this->o_defaults['post_types'][ $post_type ] = [
 				'enabled'      => 1,
-				'default_type' => static::filter_article_type( \tsfem()->coalesce_var( $this->pm_defaults['type'], 'Article' ) ),
+				'default_type' => static::filter_article_type( $this->pm_defaults['type'] ?? 'Article' ),
 			];
 		}
 
@@ -134,7 +134,7 @@ class Core {
 	 */
 	protected static function is_organization() {
 		static $is;
-		return isset( $is ) ? $is : $is = 'organization' === static::$tsf->get_option( 'knowledge_type' );
+		return $is ?? $is = 'organization' === static::$tsf->get_option( 'knowledge_type' );
 	}
 
 	/**

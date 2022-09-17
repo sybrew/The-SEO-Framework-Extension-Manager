@@ -118,7 +118,7 @@ final class SEO_By_Rank_Math extends Base {
 								'data' => [
 									'test_value' => 'rank_math_twitter_use_facebook',
 									// If off, do use own data. If on, don't use own data. See,
-									'isnot'      => 'off', //= if on, then unset; also means if absent, don't unset.
+									'isnot'      => 'off', // if on, then unset; also means if absent, don't unset.
 									'unset'      => [
 										'rank_math_twitter_title',
 										'rank_math_twitter_description',

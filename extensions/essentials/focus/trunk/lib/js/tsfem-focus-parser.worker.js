@@ -253,7 +253,7 @@ const countWords = ( word, contentMatch ) => {
 	// If nothing comes from sanitization, return 0 (nothing found).
 	if ( ! sWord ) return 0;
 
-	//= Iterate over multiple regex scripts.
+	// Iterate over multiple regex scripts.
 	for ( let i = 0; i < regex.length; i++ ) {
 		// Split Regex's flags from the expression.
 		pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
@@ -263,10 +263,10 @@ const countWords = ( word, contentMatch ) => {
 			pReg[2]                                  // flag.
 		) );
 
-		//= Stop if there's no content, or when this is the last iteration.
+		// Stop if there's no content, or when this is the last iteration.
 		if ( ! contentMatch || i === regex.length - 1 ) break;
 
-		//= Join content as this is a recursive regexp.
+		// Join content as this is a recursive regexp.
 		contentMatch = contentMatch.join( ' ' );
 	}
 	// Return the number of matches found.
@@ -277,7 +277,7 @@ const stripWord = ( word, str ) => str.replace(
 		escapeRegex( escapeStr( word, true ) ),
 		'gi'
 	),
-	'/' //? A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
+	'/' // A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
 );
 
 const countCharacters = ( content ) => new Promise( ( resolve, reject ) => {

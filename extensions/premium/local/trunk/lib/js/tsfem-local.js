@@ -58,7 +58,7 @@ window.tsfem_e_local = {
 	 * @param {jQuery.event} event jQuery event
 	 * @return {boolean} False if form isn't valid. True on AJAX completion.
 	 */
-	validateFormJson: function( event ) {
+	validateFormJson: ( event ) => {
 
 		let formId = event.target.getAttribute( 'form' ),
 			form,
@@ -80,19 +80,19 @@ window.tsfem_e_local = {
 		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
 			status = 0, loaderText = '';
 
-		//= Disable the submit button.
+		// Disable the submit button.
 		tsfemForm.disableButton( button );
 
-		//= Reset ajax loader
+		// Reset ajax loader
 		tsfem.resetAjaxLoader( $loader );
 
-		//= Set ajax loader.
+		// Set ajax loader.
 		tsfem.setAjaxLoader( $loader );
 
-		//= Capture current window.
+		// Capture current window.
 		let _currentWindow = window;
 
-		//= Assign a new window and open it. Regardless of outcome to circumvent popup blockers.
+		// Assign a new window and open it. Regardless of outcome to circumvent popup blockers.
 		let _windowTarget = '_tsfemMarkupTester',
 			_window = window.open( 'about:blank', _windowTarget );
 
@@ -109,7 +109,7 @@ window.tsfem_e_local = {
 			processData: true,
 			timeout: 14000,
 			async: true,
-		} ).done( function( response ) {
+		} ).done( ( response ) => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -157,7 +157,7 @@ window.tsfem_e_local = {
 					_currentWindow.focus();
 				}
 			}
-		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			_window.close();
 			_currentWindow.focus();
 			// Set Ajax response for wrapper.
@@ -166,7 +166,7 @@ window.tsfem_e_local = {
 			// Try to set top notices, regardless. First notifies that there's an error saving.
 			tsfem_ui.setTopNotice( 1072100 );
 			errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
-		} ).always( function() {
+		} ).always( () => {
 			tsfem.updatedResponse( $loader, status, loaderText );
 			tsfemForm.enableButton( button );
 		} );
@@ -188,8 +188,7 @@ window.tsfem_e_local = {
 	 * @param {Object} jQ jQuery
 	 * @function
 	 */
-	ready: function( jQ ) {
-
+	ready: ( jQ ) => {
 		// Turn validate button into an AJAX pusher.
 		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).on( 'click', tsfem_e_local.validateFormJson );
 	}

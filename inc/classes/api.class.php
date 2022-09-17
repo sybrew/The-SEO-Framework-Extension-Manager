@@ -511,8 +511,9 @@ class API extends Core {
 	 * @return bool True if verified, false otherwise.
 	 */
 	private function _verify_api_access( $object, $key ) {
-		$keys = &$this->generate_api_access_key();
-		return $this->coalesce_var( $keys[ \get_class( $object ) ], null ) === (string) $key;
+		return (
+			$this->generate_api_access_key()[ \get_class( $object ) ] ?? null
+		) === (string) $key;
 	}
 
 	/**

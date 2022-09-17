@@ -151,14 +151,14 @@ final class Ajax {
 		$send = [];
 
 		if ( ! \strlen( $keyword ) || ! $language ) {
-			//= How in the...
+			// How in the...
 			$send['results'] = $this->get_ajax_notice( false, 1100101 );
 		} else {
 			$response = $this->get_api_response( 'lexicalform', compact( 'keyword', 'language' ) );
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+				switch ( $response->data->error ?? '' ) :
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100102 );
 						break;
@@ -184,8 +184,11 @@ final class Ajax {
 				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->forms ) ) {
+
 					$type = 'success'; // The API responded as intended, although the data may not be useful.
+
 					$send['data']['forms'] = $_data->forms ?: [];
+
 					if ( ! $send['data']['forms'] ) {
 						$send['results'] = $this->get_ajax_notice( false, 1100105 );
 					} else {
@@ -200,7 +203,7 @@ final class Ajax {
 			}
 		}
 
-		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+		$tsfem->send_json( $send, $type ?? 'failure' );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
@@ -228,7 +231,7 @@ final class Ajax {
 		$send = [];
 
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
-			//= How in the...
+			// How in the...
 			$send['results'] = $this->get_ajax_notice( false, 1100301 );
 		} else {
 			$keyword = $form['value'];
@@ -238,7 +241,7 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+				switch ( $response->data->error ?? '' ) :
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100302 );
 						break;
@@ -286,7 +289,7 @@ final class Ajax {
 			}
 		}
 
-		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+		$tsfem->send_json( $send, $type ?? 'failure' );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
@@ -314,7 +317,7 @@ final class Ajax {
 		$send = [];
 
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
-			//= How in the...
+			// How in the...
 			$send['results'] = $this->get_ajax_notice( false, 1100201 );
 		} else {
 			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
@@ -323,7 +326,7 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( isset( $response->data->error ) ? $response->data->error : '' ) :
+				switch ( $response->data->error ?? '' ) :
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100202 );
 						break;
@@ -350,7 +353,9 @@ final class Ajax {
 
 				if ( isset( $_data->synonyms ) ) {
 					$type = 'success'; // The API responded as intended, although the data may not be useful.
+
 					$send['data']['synonyms'] = $_data->synonyms ?: [];
+
 					if ( ! $send['data']['synonyms'] ) {
 						$send['results'] = $this->get_ajax_notice( false, 1100205 );
 					} else {
@@ -365,7 +370,7 @@ final class Ajax {
 			}
 		}
 
-		$tsfem->send_json( $send, $tsfem->coalesce_var( $type, 'failure' ) );
+		$tsfem->send_json( $send, $type ?? 'failure' );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}

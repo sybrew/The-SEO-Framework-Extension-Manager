@@ -35,22 +35,16 @@ namespace TSF_Extension_Manager;
 trait Extensions_Properties {
 
 	/**
-	 * Holds the class extension list contents.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var array $extensions
+	 * @var array Map of extensions.
 	 */
 	private static $extensions = [];
 
 	/**
-	 * Holds the instance extension slug to handle.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string $current_slug
+	 * @var string The current extension slug to handle (activate/check/etc.).
 	 */
-	private static $current_slug = [];
+	private static $current_slug = '';
 
 	/**
 	 * Fetches all extensions.
@@ -481,9 +475,7 @@ trait Extensions_Actions {
 		if ( isset( $checksum ) )
 			return $checksum;
 
-		$slug = static::$current_slug;
-
-		$file = static::get_extension_header_file_location( $slug );
+		$file = static::get_extension_header_file_location( static::$current_slug );
 
 		$type = \tsfem()->get_hash_type();
 		$hash = hash_file( $type, $file );
@@ -516,7 +508,7 @@ trait Extensions_Actions {
 			return $cache;
 
 		$options    = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
-		$extensions = isset( $options['active_extensions'] ) ? $options['active_extensions'] : [];
+		$extensions = $options['active_extensions'] ?? [];
 
 		$is_premium_user   = self::is_premium_user();
 		$is_connected_user = self::is_connected_user();
@@ -824,7 +816,7 @@ trait Extensions_Actions {
 		}
 
 		// Goto tick is now forbidden. Use goto clean.
-		unclean : {
+		unclean: {
 			ob_start();
 
 			\define( '_TSFEM_TESTING_EXTENSION', true );
@@ -836,13 +828,13 @@ trait Extensions_Actions {
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
 
-		basetest : {
+		basetest: {
 			// Test base file.
 			$success = static::persist_include_extension( $file, $_instance, $bits );
 		}
 
 		if ( $success ) {
-			jsontest : {
+			jsontest: {
 				// Test json file and contents.
 				$success = static::perform_extension_json_tests( $slug, $_instance, $bits );
 			}
@@ -859,12 +851,12 @@ trait Extensions_Actions {
 			\define( '_TSFEM_TEST_EXT_PASS', true );
 		}
 
-		tick : {
+		tick: {
 			// Tick the instance.
 			\tsfem()->_verify_instance( $_instance, $bits[1] );
 		}
 
-		end :;
+		end:;
 
 		return $val;
 	}
@@ -929,7 +921,7 @@ trait Extensions_Actions {
 			}
 		}
 
-		end :;
+		end:;
 		return ! \in_array( false, $success, true );
 	}
 
@@ -957,7 +949,7 @@ trait Extensions_Actions {
 			switch ( $yield_count ) :
 				case 0:
 					$success[] = static::include_extension( $file, $_instance, $bits );
-					//= Continue to default for counting.
+					// Continue to default for counting.
 
 				default:
 					$yield_count++;

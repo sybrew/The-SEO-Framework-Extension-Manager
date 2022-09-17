@@ -47,7 +47,7 @@ if ( $options ) {
 		'content' => $account_text,
 	] );
 
-	$account = '<div class="tsfem-top-account">' . $account_link . '</div>';
+	$account = '<div class=tsfem-top-account>' . $account_link . '</div>';
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
 } else {
 	$info  = __( 'Add more powerful SEO features to your website. To get started, use one of the options below.', 'the-seo-framework-extension-manager' );
@@ -55,12 +55,12 @@ if ( $options ) {
 }
 
 ?>
-<div class="tsfem-title">
+<div class=tsfem-title>
 	<header><h1>
 		<?php
 		$size = '1em';
 		printf(
-			'<span class="tsfem-logo">%sExtension Manager</span>',
+			'<span class=tsfem-logo>%sExtension Manager</span>',
 			sprintf(
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),

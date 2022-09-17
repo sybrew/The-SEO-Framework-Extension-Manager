@@ -73,7 +73,7 @@ function extension_dir_path( $file ) {
 function extension_dir_url( $file ) {
 
 	$path = \dirname( extension_basename( $file ) );
-	//= Convert Windows/Unix paths to URL paths.
+	// Convert Windows/Unix paths to URL paths.
 	$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
 	return TSF_EXTENSION_MANAGER_DIR_URL . trim( $path, '/ ' ) . '/';

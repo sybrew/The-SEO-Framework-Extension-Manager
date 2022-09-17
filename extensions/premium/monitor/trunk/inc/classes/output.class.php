@@ -175,15 +175,15 @@ final class Output {
 		$icon_state = $this->parse_defined_icon_state( $icon_state );
 
 		$checkbox_id = sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
-		$checkbox    = sprintf( '<input type="checkbox" id="%s" checked>', $checkbox_id );
+		$checkbox    = sprintf( '<input type=checkbox id="%s" checked>', $checkbox_id );
 
-		$title = sprintf( '<h3 class="tsfem-e-monitor-collapse-title">%s</h3>', $title );
+		$title = sprintf( '<h3 class=tsfem-e-monitor-collapse-title>%s</h3>', $title );
 		$icon  = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-e-monitor-icon-%s"></span>', $icon_state );
 
 		$header  = sprintf( '<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>', $checkbox_id, $title, $icon );
-		$content = sprintf( '<div class="tsfem-e-monitor-collapse-content">%s</div>', $content );
+		$content = sprintf( '<div class=tsfem-e-monitor-collapse-content>%s</div>', $content );
 
-		return sprintf( '<div class="tsfem-e-monitor-collapse"%s>%s%s%s</div>', $id, $checkbox, $header, $content );
+		return sprintf( '<div class=tsfem-e-monitor-collapse%s>%s%s%s</div>', $id, $checkbox, $header, $content );
 	}
 
 	/**
@@ -368,7 +368,7 @@ final class Output {
 						// Falls back to underlying default.
 						break 1;
 				endswitch;
-				//= No break to fall back to default.
+				// No break to fall back to default.
 
 			default:
 				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );

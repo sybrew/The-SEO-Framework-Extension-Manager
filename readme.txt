@@ -49,10 +49,9 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
 
+* TODO $var = call\nreturn $var; -> return call
+* TODO <?php echo -> <?=
 * TODO isset( $cache ) ? $cache : $cache -> memo\memo_query
-* TODO compact var PHPdoc
-* TODO gotohook : { -> gotohook: { () Regex: ^\t*(?!if|return|exit|die)[a-z][a-z_]*\s:
-* TODO send_json -> TSFEM to TSF?
 * TODO get_admin_page_url -> TSFEM to TSF?
 * TODO _class = function() { -> ??
 * TODO Scoring::get_instance()->template -> something else?
@@ -84,16 +83,14 @@ TODO remove trends pane... we planned to add our blog items there, but that neve
 TODO <?php echo ... ?> -> <?= ?>
 	also <?php print() ?> -> <?= ?>
 TODO POT file. (also update related github)
-TODO <el method="post"> -> <el method=post> (regex <[a-zA-Z].*?[a-zA-Z_-]+="[a-zA-Z0-9+_-]+")
 TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
 	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`
-TODO //= //? //* -> //
 TODO de-jQueryfy?
 	-> Especially form.js
 TODO function(){} => ()=>{}
-TODO coalesce_var() => ??
-TODO /isset\(\s*(.*?)\s*\)\s*\?\s*\1/ -> ??
-TODO ([a-zA-Z_][a-zA-Z0-9_]+)\s*=\s*(\1)\b\s*\|\| -> ||=
+	-> `((\\?tsfem\(\))|\$this)->coalesce_var\( (.*?), (.*?) \)` -> $3 ?? $4
+TODO isset\(\s*(.*?)\s*\)\s*\?\s*\1\s*: -> $1 ??
+TODO \s([a-zA-Z_][a-zA-Z0-9_\.]+)\s*=\s*(\1)\b\s*\|\| -> ||=
 TODO use :where() css instead of the avalange of entries.
 TODO use `use` for SVG logos? -> Is this feasible? -> tsfem_ui()->register_logo( id, svg );
 

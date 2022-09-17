@@ -131,7 +131,7 @@ final class SEO_By_Rank_Math extends Base {
 						[ $this, '_purge_rank_math_twitter_if_facebook' ],
 					],
 					'to_data' => [
-						'valueisnot' => 'off', //= if on, then purge; also means if absent, don't purge.
+						'valueisnot' => 'off', // if on, then purge; also means if absent, don't purge.
 						'purge'      => [
 							[ $wpdb->postmeta, 'rank_math_twitter_title' ],
 							[ $wpdb->postmeta, 'rank_math_twitter_description' ],

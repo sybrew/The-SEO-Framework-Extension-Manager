@@ -24,10 +24,10 @@ $motto_key = mt_rand( 0, count( $mottos ) - 1 );
 $motto     = "An {$mottos[ $motto_key ]} Future";
 
 ?>
-<p class="tsfem-footer-title" dir=ltr>
+<p class=tsfem-footer-title dir=ltr>
 	Transport &ndash; The SEO Framework
 </p>
-<p class="tsfem-footer-motto" dir=ltr>
+<p class=tsfem-footer-motto dir=ltr>
 	<?php echo esc_html( $motto ); ?>
 </p>
 <?php

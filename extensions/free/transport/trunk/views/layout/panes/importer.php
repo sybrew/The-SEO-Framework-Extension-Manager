@@ -12,8 +12,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 <div class=tsfem-pane-inner-wrap id=tsfem-e-transport-importer-wrap>
 	<div class="tsfem-e-transport-importer tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-tsf-js">
 		<div class=tsfem-pane-section>
-			<h4 class="tsfem-info-title"><?= esc_html__( 'JavaScript required', 'the-seo-framework-extension-manager' ); ?></h4>
-			<p class="tsfem-description"><?= esc_html__( 'To give live status updates, JavaScript is required.', 'the-seo-framework-extension-manager' ); ?></p>
+			<h4 class=tsfem-info-title><?= esc_html__( 'JavaScript required', 'the-seo-framework-extension-manager' ); ?></h4>
+			<p class=tsfem-description><?= esc_html__( 'To give live status updates, JavaScript is required.', 'the-seo-framework-extension-manager' ); ?></p>
 		</div>
 	</div>
 	<div class="tsfem-e-transport-importer tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-no-tsf-js">

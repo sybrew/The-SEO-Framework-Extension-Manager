@@ -83,25 +83,25 @@ final class Core {
 
 	/**
 	 * @since 1.0.0
-	 * @var bool $setup Whether the class has been constructed.
+	 * @var bool Whether the class has been constructed.
 	 */
 	private $setup = false;
 
 	/**
 	 * @since 1.0.0
-	 * @var bool $hardcore Whether the spam validation is extremely vibrant and dynamic.
+	 * @var bool Whether the spam validation is extremely vibrant and dynamic.
 	 */
 	private $hardcore = false;
 
 	/**
 	 * @since 1.0.0
-	 * @var array $hp_properties Array of properties, like fields.
+	 * @var array Array of properties, like fields.
 	 */
 	private $hp_properties = [];
 
 	/**
 	 * @since 2.0.0
-	 * @var int $nonce_length Nonce length.
+	 * @var int Expected nonce length.
 	 */
 	private $nonce_length = 20;
 
@@ -564,7 +564,7 @@ JS;
 
 		static $id;
 
-		return $id ?: $id = (int) ( isset( $commentdata['comment_post_ID'] ) ? $commentdata['comment_post_ID'] : \get_the_ID() );
+		return $id ?: $id = (int) ( $commentdata['comment_post_ID'] ?? \get_the_ID() );
 	}
 
 	/**
@@ -915,7 +915,7 @@ JS;
 			return $hash;
 
 		$table = range( 'a', 'z' );
-		//= We can't divide by 0.
+		// We can't divide by 0.
 		$first_char = $first_char ?: 10;
 
 		return $table[ round( \count( $table ) / $first_char ) - 1 ] . substr( $hash, 1 );

@@ -13,7 +13,7 @@ unset( $bits, $file, $key, $val );
 
 if ( $args['ajax'] ) {
 	$a_id = $args['ajax_id'] ? ' id="' . esc_attr( $args['ajax_id'] ) . '"' : '';
-	$ajax = '<div class="tsfem-ajax"' . $a_id . '></div>';
+	$ajax = "<div class=tsfem-ajax$a_id></div>";
 } else {
 	$ajax = '';
 }
@@ -51,7 +51,7 @@ if ( $args['logo'] ) {
 
 ?>
 <section class="<?php echo esc_attr( implode( ' ', $pane_classes ) ); ?>" id="<?php echo esc_attr( $pane_id ); ?>">
-	<div class="tsfem-pane-wrap">
+	<div class=tsfem-pane-wrap>
 		<?php
 		printf(
 			'<header class="tsfem-pane-header tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-nowrap"><h3>%s%s</h3>%s</header>',
@@ -61,7 +61,7 @@ if ( $args['logo'] ) {
 		);
 		if ( isset( $callable ) || isset( $content ) ) {
 			?>
-			<div class="tsfem-pane-content">
+			<div class=tsfem-pane-content>
 				<?php
 				if ( isset( $callable ) ) {
 					// If secure, pass object.

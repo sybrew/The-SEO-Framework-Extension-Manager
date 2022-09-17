@@ -39,42 +39,31 @@ namespace TSF_Extension_Manager;
 final class SchemaPacker {
 
 	/**
-	 * Holds the bits
-	 *
 	 * @since 1.3.0
 	 * @see $max_it
-	 *
-	 * @var int $bits
+	 * @var int Maximum bits assignable ((64|32)/levels-requested).
 	 */
 	private $bits;
 
 	/**
-	 * Holds the maximum iterations of bits.
-	 *
 	 * @since 1.3.0
 	 * @see $bits
-	 *
-	 * @var int $max_it
+	 * @var int Max iteration of bits for current OS (64/32 bits).
 	 */
 	private $max_it;
 
 	/**
-	 * Maintains the reiteration level.
-	 *
 	 * This corresponds to FormGenerator, but, it doesn't keep perfect track of
 	 * all data.
 	 * It's only maintained when iterating, as we access the `'$nth'` schema key.
 	 *
 	 * @since 1.3.0
 	 * @see $it
-	 *
-	 * @var int $level
+	 * @var int The current reiteration level.
 	 */
 	private $level = 0;
 
 	/**
-	 * Maintains the iteration within the iteration level.
-	 *
 	 * This corresponds to FormGenerator, but, it doesn't keep perfect track of
 	 * all data.
 	 * It's only maintained when iterating, as we access the `'$nth'` schema key.
@@ -83,37 +72,27 @@ final class SchemaPacker {
 	 *
 	 * @since 1.3.0
 	 * @see $level
-	 *
-	 * @var int $it
+	 * @var int The current iteration of level.
 	 */
 	private $it = 0;
 
 	/**
-	 * Maintains data for $schema.
-	 *
 	 * @since 1.3.0
 	 * @see $schema
-	 *
-	 * @var array  $data
+	 * @var array All data packable via $schema.
 	 */
 	private $data;
 
 	/**
-	 * Maintains corresponding schema of $data.
-	 *
 	 * @since 1.3.0
 	 * @see $data
-	 *
-	 * @var object $schema
+	 * @var object Schema.org setup for $data.
 	 */
 	private $schema;
 
 	/**
-	 * Maintains output.
-	 *
 	 * @since 1.3.0
-	 *
-	 * @var object $output
+	 * @var object Schema.org output.
 	 */
 	private $output;
 
@@ -473,7 +452,7 @@ final class SchemaPacker {
 	private function concat( \stdClass $schema ) {
 
 		$value = '';
-		//= Not invoking a generator. Data does not yield, but return.
+		// Not invoking a generator. Data does not yield, but return.
 		foreach ( ( $this->pack( $schema ) ) as $k => $v ) {
 			$value .= $v;
 		}
@@ -573,7 +552,7 @@ final class SchemaPacker {
 			${$v} = 1;
 		}
 
-		//= Returns in order of impact.
+		// Returns in order of impact.
 		if ( $kill_pack )
 			return 'kill_pack';
 
@@ -583,7 +562,7 @@ final class SchemaPacker {
 		if ( $kill_this )
 			return 'kill_this';
 
-		//= This should never happen.
+		// This should never happen.
 		return 0;
 	}
 

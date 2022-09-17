@@ -17,7 +17,7 @@ $tsfem = \tsfem();
 <div class=tsfem-e-focus-collapse-wrap id=<?php echo \esc_attr( $wrap_ids['collapse'] ); ?>>
 	<?php
 	printf(
-		'<input type=checkbox id=%s value="1" %s class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
+		'<input type=checkbox id=%s value=1 %s class="tsfem-e-focus-collapse-checkbox tsf-input-not-saved">',
 		\esc_attr( $action_ids['collapser'] ),
 		( ! $supportive && '' !== $post_input['keyword']['value'] ? '' : 'checked' )
 	);
@@ -108,7 +108,7 @@ $tsfem = \tsfem();
 						'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 						[
 							sprintf(
-								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox tsf-input-not-saved" value="1" disabled>',
+								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox tsf-input-not-saved" value=1 disabled>',
 								\esc_attr( $action_ids['subject_edit'] )
 							),
 							\esc_attr( $action_ids['subject_edit'] ),
@@ -127,7 +127,7 @@ $tsfem = \tsfem();
 					)
 				);
 			} else {
-				//= TEMP until highligher comes.
+				// TEMP until highligher comes.
 				print '<span class=tsfem-e-focus-pusher></span>';
 			}
 			// phpcs:disable -- TODO: upcoming version.
@@ -143,7 +143,7 @@ $tsfem = \tsfem();
 			// 		'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 			// 		[
 			// 			sprintf(
-			// 				'<input type=checkbox id=%s class="tsfem-e-focus-highlight-subject-checkbox tsf-input-not-saved" value="1" disabled>',
+			// 				'<input type=checkbox id=%s class="tsfem-e-focus-highlight-subject-checkbox tsf-input-not-saved" value=1 disabled>',
 			// 				\esc_attr( $action_ids['highlighter'] )
 			// 			),
 			// 			\esc_attr( $action_ids['highlighter'] ),
@@ -159,7 +159,7 @@ $tsfem = \tsfem();
 			// );
 			// phpcs:enable
 			printf(
-				'<label class="tsfem-e-focus-arrow-label" for=%s title="%s">%s</label>',
+				'<label class=tsfem-e-focus-arrow-label for="%s" title="%s">%s</label>',
 				\esc_attr( $action_ids['collapser'] ), // @see first checkbox
 				\esc_attr__( 'View analysis', 'the-seo-framework-extension-manager' ),
 				'<span class="tsf-tooltip-item tsfem-e-focus-arrow-item"></span>'

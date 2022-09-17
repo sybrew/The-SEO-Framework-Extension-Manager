@@ -316,11 +316,8 @@ trait Construct_Core_Static_Final_Instance {
 	private function __construct() {}
 
 	/**
-	 * The object instance.
-	 *
 	 * @since 1.3.0
 	 * @since 2.6.0 Made protected from private; scope binding is ignored anyway on PHP 7.4+.
-	 *
 	 * @var object|null This object instance.
 	 */
 	protected static $instance;
@@ -418,10 +415,7 @@ trait Construct_Core_Static_Unique_Instance_Core {
 trait Construct_Core_Static_Unique_Instance_Master {
 
 	/**
-	 * The object instance.
-	 *
 	 * @since 2.6.0
-	 *
 	 * @var object|null This object instance.
 	 */
 	protected static $instance;
@@ -447,10 +441,7 @@ trait Construct_Core_Static_Stray_Private_Instance {
 	private function __construct() {}
 
 	/**
-	 * The object instance.
-	 *
 	 * @since 2.2.0
-	 *
 	 * @var object|null This object instance.
 	 */
 	private static $instance;

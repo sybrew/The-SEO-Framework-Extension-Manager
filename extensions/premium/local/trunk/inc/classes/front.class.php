@@ -212,7 +212,7 @@ final class Front extends Core {
 			$url = \get_permalink();
 		} elseif ( \is_category() || \is_tag() || \is_tax() ) {
 			$term     = \get_queried_object();
-			$taxonomy = isset( $term->taxonomy ) ? $term->taxonomy : null;
+			$taxonomy = $term->taxonomy ?? null;
 
 			if ( ! $taxonomy )
 				return '';
@@ -223,7 +223,7 @@ final class Front extends Core {
 		if ( empty( $url ) )
 			return '';
 
-		//= Get data by URL.
+		// Get data by URL.
 		$json = $this->get_processed_packed_data_from_url( $url );
 
 		// Empty JSON is only 2 characters long.

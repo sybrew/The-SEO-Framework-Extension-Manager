@@ -66,7 +66,7 @@ window.tsfem_e_monitor = {
 	 * @function
 	 * @param {Object} event jQuery event
 	 */
-	showReadMore: function( event ) {
+	showReadMore: ( event ) => {
 
 		let $parent = jQuery( '#' + event.target.id + '-wrap' ),
 			$content = jQuery( '#' + event.target.id + '-content' );
@@ -84,7 +84,7 @@ window.tsfem_e_monitor = {
 	 * @param {!jQuery.event} event
 	 * @return {(undefined|null)}
 	 */
-	requestCrawl: function( event ) {
+	requestCrawl: ( event ) => {
 
 		let $button = jQuery( event.target );
 
@@ -114,7 +114,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 10000,
 			async: true,
-		} ).done( function( response ) {
+		} ).done( ( response ) => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -148,10 +148,10 @@ window.tsfem_e_monitor = {
 					tsfem_ui.setTopNotice( code, notice );
 				}
 			}
-		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 			tsfem.updatedResponse( loader, 0, _error );
-		} ).always( function() {
+		} ).always( () => {
 			$button.removeClass( loading );
 			$button.prop( 'disabled', false );
 		} );
@@ -205,7 +205,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 15000,
 			async: true,
-		} ).done( function( response ) {
+		} ).done( ( response ) => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -250,7 +250,7 @@ window.tsfem_e_monitor = {
 
 						// Loop through each issue and slowly insert it.
 						jQuery.each( issues.data.info, function( index, value ) {
-							setTimeout( function() {
+							setTimeout( () => {
 								jQuery( value ).appendTo( '.tsfem-e-monitor-issues-wrap > div' ).css( 'opacity', 0 ).animate(
 									{ 'opacity' : 1 },
 									{ queue: false, duration: 250 }
@@ -265,13 +265,13 @@ window.tsfem_e_monitor = {
 					}
 
 					jQuery( '#tsfem-e-monitor-last-crawled' ).replaceWith( jQuery( lc ).css( 'opacity', 0 ) );
-					//= Node is gone from memory. Reaccess it.
+					// Node is gone from memory. Reaccess it.
 					jQuery( '#tsfem-e-monitor-last-crawled' ).animate(
 						{ 'opacity' : 1 },
 						{ queue: true, duration: 1000 }
 					);
 
-					setTimeout( function() { tsfem.updatedResponse( loader, 1, notice ); }, 1000 );
+					setTimeout( () => { tsfem.updatedResponse( loader, 1, notice ); }, 1000 );
 
 					// Update hover cache.
 					tsfTT.triggerReset();
@@ -286,10 +286,10 @@ window.tsfem_e_monitor = {
 					tsfem_ui.setTopNotice( code, notice );
 				}
 			}
-		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			let _error = tsfem.getAjaxError( jqXHR, textStatus, errorThrown );
 			tsfem.updatedResponse( loader, 0, _error );
-		} ).always( function() {
+		} ).always( () => {
 			/**
 			 * If the element isn't replaced, this will work as intended.
 			 * If the elemnt is replaced, then the replacement is correct.
@@ -329,7 +329,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 7000,
 			async: true,
-		} ).done( function( response ) {
+		} ).done( ( response ) => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -341,7 +341,7 @@ window.tsfem_e_monitor = {
 			// No error handling, as this is invoked automatically.
 			if ( data && data.html )
 				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
-		} ).fail( function( jqXHR, textStatus, errorThrown ) {
+		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			// No elaborate handling, as this function is invoked automatically.
 			if ( tsf.l10n.states.debug ) {
 				console.log( jqXHR.responseText );
@@ -395,7 +395,7 @@ window.tsfem_e_monitor = {
 	 */
 	setSetting: function( what, value, animate ) {
 
-		animate = animate || false;
+		animate ||= false;
 
 		let holder = document.querySelector( '.tsfem-e-monitor-settings-holder[data-option-id="' + what + '"]' ),
 			clicker = holder && holder.querySelector( '.tsfem-e-monitor-edit' ),
@@ -445,7 +445,7 @@ window.tsfem_e_monitor = {
 			clicker.classList.add( 'tsfem-edit' );
 		} else {
 			clicker.classList.add( 'tsfem-dashicon-fadeout-3000' );
-			setTimeout( function() {
+			setTimeout( () => {
 				clicker.classList.remove( 'tsfem-success' );
 				clicker.classList.remove( 'tsfem-error' );
 				clicker.classList.remove( 'tsfem-dashicon-fadeout-3000' );
@@ -492,12 +492,12 @@ window.tsfem_e_monitor = {
 		lastVal = selector.value;
 		lastText = clicker.innerHTML;
 
-		const doChange = function() {
-			const showAjaxEditError = function() {
+		const doChange = () => {
+			const showAjaxEditError = () => {
 				clicker.classList.remove( 'tsfem-loading' );
 				clicker.classList.add( 'tsfem-error' );
 			}
-			const showAjaxEditSuccess = function() {
+			const showAjaxEditSuccess = () => {
 				clicker.classList.remove( 'tsfem-loading' );
 				clicker.classList.add( 'tsfem-success' );
 			}
@@ -520,7 +520,7 @@ window.tsfem_e_monitor = {
 			// Set settings Ajax loaders.
 			tsfem_e_monitor.setSettingsLoader();
 
-			//= Show new option...
+			// Show new option...
 			clicker.innerHTML = newText;
 
 			jQuery.ajax( {
@@ -535,7 +535,7 @@ window.tsfem_e_monitor = {
 				},
 				timeout: 15000,
 				async: true,
-			} ).done( function( response ) {
+			} ).done( ( response ) => {
 
 				response = tsf.convertJSONResponse( response );
 
@@ -593,8 +593,8 @@ window.tsfem_e_monitor = {
 						}
 					}
 				}
-			} ).fail( function( jqXHR, textStatus, errorThrown ) {
-				//= Undo new option.
+			} ).fail( ( jqXHR, textStatus, errorThrown ) => {
+				// Undo new option.
 				undoChanges();
 				showAjaxEditError();
 
@@ -604,7 +604,7 @@ window.tsfem_e_monitor = {
 				// Try to set top notices, regardless.
 				tsfem_ui.setTopNotice( 1011700 ); // Notifies that there's an error saving.
 				errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
-			} ).always( function() {
+			} ).always( () => {
 				tsfem.updatedResponse( loader, status, loaderText );
 				if ( topNoticeCode ) {
 					tsfem_ui.setTopNotice( topNoticeCode, topNotice );
@@ -612,15 +612,15 @@ window.tsfem_e_monitor = {
 				tsfem_e_monitor.unsetSettingsLoader();
 			} );
 		}
-		const undoChanges = function() {
+		const undoChanges = () => {
 			clicker.innerHTML = lastText;
 			selector.value = lastVal;
 		}
-		const showForm = function() {
+		const showForm = () => {
 			jQuery( clicker ).hide();
 			jQuery( selector ).slideDown( 200 ).trigger( 'focus' );
 		}
-		const showClicker = function() {
+		const showClicker = () => {
 			jQuery( selector ).trigger( 'blur' ).hide();
 			jQuery( clicker ).fadeIn( 300 );
 		}
@@ -637,24 +637,24 @@ window.tsfem_e_monitor = {
 				reset();
 			}
 		}
-		const reset = function() {
+		const reset = () => {
 			removeListeners();
 			showClicker();
 			return true;
 		}
-		const addListeners = function() {
+		const addListeners = () => {
 			selector.addEventListener( 'blur', reset );
 			selector.addEventListener( 'change', onChange );
-			//= Fallback:
+			// Fallback:
 			window.addEventListener( 'click', clickOff );
 		}
-		const removeListeners = function() {
+		const removeListeners = () => {
 			selector.removeEventListener( 'blur', reset );
 			selector.removeEventListener( 'change', onChange );
 			window.removeEventListener( 'click', clickOff );
 		}
 		showForm();
-		//= Don't propagate current events.
+		// Don't propagate current events.
 		setTimeout( addListeners, 10 );
 	},
 

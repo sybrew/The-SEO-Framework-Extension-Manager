@@ -9,12 +9,12 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
 
 ?>
-<div class="tsfem-title">
+<div class=tsfem-title>
 	<header><h1>
 		<?php
 		$size = '1em';
 		printf(
-			'<span class="tsfem-logo">%sTransport <em>&beta;eta</em></span>',
+			'<span class=tsfem-logo>%sTransport <em>&beta;eta</em></span>',
 			sprintf(
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),

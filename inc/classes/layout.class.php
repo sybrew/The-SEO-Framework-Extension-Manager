@@ -137,8 +137,6 @@ final class Layout extends Secure_Abstract {
 			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['deactivate'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['deactivate'], self::$nonce_name, true, false );
 
-			$field_id = 'disconnect-switcher';
-
 			$deactivate_i18n = \__( 'Disconnect', 'the-seo-framework-extension-manager' );
 			$ays_i18n        = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n         = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
@@ -158,9 +156,9 @@ final class Layout extends Secure_Abstract {
 			// phpcs:ignore -- maybe later
 			// $switcher_class .= $tsfem->are_options_valid() ? '' : ' tsfem-button-pulse';
 
-			$switcher = '<div class="tsfem-switch-button-container-wrap"><div class="tsfem-switch-button-container">'
-							. '<input type=checkbox id="' . $field_id . '-action" value="1" />'
-							. '<label for="' . $field_id . '-action" title="' . \esc_attr( $da_i18n ) . '" class="' . $switcher_class . '">' . \esc_html( $deactivate_i18n ) . '</label>'
+			$switcher = '<div class=tsfem-switch-button-container-wrap><div class=tsfem-switch-button-container>'
+							. '<input type=checkbox id=disconnect-switcher-action value=1 />'
+							. '<label for=disconnect-switcher-action title="' . \esc_attr( $da_i18n ) . '" class="' . $switcher_class . '">' . \esc_html( $deactivate_i18n ) . '</label>'
 							. $button
 						. '</div></div>';
 
@@ -230,9 +228,9 @@ final class Layout extends Secure_Abstract {
 
 		$account = self::$account;
 
-		$email              = isset( $account['email'] ) ? $account['email'] : '';
-		$key                = isset( $account['key'] ) ? $account['key'] : '';
-		$data               = isset( $account['data'] ) ? $account['data'] : '';
+		$email              = $account['email'] ?? '';
+		$key                = $account['key'] ?? '';
+		$data               = $account['data'] ?? '';
 		$level              = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
 		$domain             = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 		$end_date           = '';
@@ -244,10 +242,10 @@ final class Layout extends Secure_Abstract {
 				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
 				// UTC.
-				$end_date           = isset( $data['status']['end_date'] ) ? $data['status']['end_date'] : '';
-				$payment_date       = isset( $data['status']['payment_date'] ) ? $data['status']['payment_date'] : '';
-				$domain             = isset( $data['status']['activation_domain'] ) ? $data['status']['activation_domain'] : '';
-				$requests_remaining = isset( $data['status']['requests_remaining'] ) ? $data['status']['requests_remaining'] : '';
+				$end_date           = $data['status']['end_date'] ?? '';
+				$payment_date       = $data['status']['payment_date'] ?? '';
+				$domain             = $data['status']['activation_domain'] ?? '';
+				$requests_remaining = $data['status']['requests_remaining'] ?? '';
 			}
 		}
 
@@ -317,7 +315,7 @@ final class Layout extends Secure_Abstract {
 
 		$_level = HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 			$level,
-			\tsfem()->coalesce_var( $level_desc, '' ),
+			$level_desc ?? '',
 			'',
 			$_class
 		) );
@@ -392,7 +390,7 @@ final class Layout extends Secure_Abstract {
 			$output .= static::wrap_row_content(
 				\esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ),
 				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-					//= Not necessarily this domain.
+					// Not necessarily this domain.
 					$domain,
 					$_warning,
 					'',
@@ -493,7 +491,7 @@ final class Layout extends Secure_Abstract {
 
 		end:;
 
-		//= Wrap tooltips here.
+		// Wrap tooltips here.
 		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
 
@@ -515,7 +513,7 @@ final class Layout extends Secure_Abstract {
 			$content = \esc_html( $content );
 		}
 
-		$output = sprintf( '<div class="tsfem-row-info-title">%s</div><div class="tsfem-row-info-value">%s</div>', $title, $content );
+		$output = sprintf( '<div class=tsfem-row-info-title>%s</div><div class=tsfem-row-info-value>%s</div>', $title, $content );
 
 		return sprintf( '<div class="tsfem-row-info tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>', $output );
 	}
@@ -550,7 +548,7 @@ final class Layout extends Secure_Abstract {
 			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
 			$submit = sprintf(
-				'<input type=submit name=submit id=tsfem-account-upgrade-submit class="tsfem-button-primary" value="%s">',
+				'<input type=submit name=submit id=tsfem-account-upgrade-submit class=tsfem-button-primary value="%s">',
 				\esc_attr__( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 

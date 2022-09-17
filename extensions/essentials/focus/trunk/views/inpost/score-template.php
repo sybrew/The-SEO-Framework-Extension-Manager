@@ -32,7 +32,7 @@ printf(
 	\esc_html__( 'Something went wrong evaluating the subject.', 'the-seo-framework-extension-manager' )
 );
 
-output_scores :;
+output_scores:;
 	printf(
 		'<div class="tsfem-e-focus-scores-wrap tsfem-flex" id=%s %s>',
 		\esc_attr( $scoring->key ),
@@ -63,11 +63,11 @@ output_scores :;
 				),
 			]
 		);
-		//= Data capturer.
+		// Data capturer.
 		printf(
 			'<input type=hidden name=%s value="%s">',
 			\esc_attr( $scoring->get_id( $type ) ),
 			\esc_attr( $scoring->get_value( $type ) )
 		);
 	endforeach;
-	echo '</div>'; //= END tsfem-e-focus-scores-wrap;
+	echo '</div>'; // END tsfem-e-focus-scores-wrap;

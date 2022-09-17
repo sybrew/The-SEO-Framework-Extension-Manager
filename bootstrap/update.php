@@ -39,7 +39,7 @@ function _check_external_blocking() {
 	if ( \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && true === WP_HTTP_BLOCK_EXTERNAL ) {
 
 		$parsed_url = \wp_parse_url( TSF_EXTENSION_MANAGER_DL_URI );
-		$host       = isset( $parsed_url['host'] ) ? $parsed_url['host'] : '';
+		$host       = $parsed_url['host'] ?? '';
 
 		if ( ! \defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
 			$tsf = \tsf();
@@ -225,7 +225,7 @@ function _push_update( $value, $transient ) {
 			$translations = \wp_get_installed_translations( 'plugins' );
 
 			// This is set at the plugin's base PHP file plugin-header.
-			$text_domain = isset( $this_plugin['TextDomain'] ) ? $this_plugin['TextDomain'] : '';
+			$text_domain = $this_plugin['TextDomain'] ?? '';
 
 			if ( $text_domain && isset( $translations[ $text_domain ] ) ) {
 				$translations = array_intersect_key( $translations, array_flip( [ $text_domain ] ) );
@@ -234,7 +234,7 @@ function _push_update( $value, $transient ) {
 			}
 
 			$options    = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
-			$extensions = isset( $options['active_extensions'] ) ? $options['active_extensions'] : [];
+			$extensions = $options['active_extensions'] ?? [];
 
 			$http_args = [
 				'timeout'    => 7, // WordPress generously sets 30 seconds when doing cron to check all plugins, but we only check 1 plugin.
@@ -285,7 +285,7 @@ function _push_update( $value, $transient ) {
 		$runtimecache = $cache;
 	}
 
-	//? We're only checking this plugin. This type of merge needs expansion in a bulk-updater.
+	// We're only checking this plugin. This type of merge needs expansion in a bulk-updater.
 	$value->checked[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $this_plugin['Version'];
 	if ( isset( $cache['no_update'][ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
 		// TODO Core considers changing this. @see \wp_update_plugins().

@@ -253,7 +253,7 @@ class Api extends Data {
 		}
 
 		if ( ! $this->can_request_next_crawl() ) {
-			//= AJAX shouldn't get this far.
+			// AJAX shouldn't get this far.
 			$ajax or $this->set_error_notice( [ 1010507 => $this->get_try_again_notice( $this->get_remote_crawl_timeout_remainder() ) ] );
 			return false;
 		}
@@ -328,7 +328,7 @@ class Api extends Data {
 		}
 
 		if ( ! $this->is_remote_data_expired() ) {
-			//= AJAX shouldn't get this far... But it does, after the page is just loaded whilst data is fetched.
+			// AJAX shouldn't get this far... But it does, after the page is just loaded whilst data is fetched.
 			$ajax or $this->set_error_notice( [ 1010607 => $this->get_try_again_notice( $this->get_remote_data_timeout_remainder() ) ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010607 ) : false;
 		}
@@ -415,7 +415,7 @@ class Api extends Data {
 			'uptime_setting'      => $this->get_option( 'uptime_setting', 0 ),
 			'performance_setting' => $this->get_option( 'performance_setting', 0 ),
 		];
-		//= Filters and merges old and new settings. Magic.
+		// Filters and merges old and new settings. Magic.
 		$settings = array_intersect_key(
 			array_merge( $old_settings, $settings ),
 			$old_settings

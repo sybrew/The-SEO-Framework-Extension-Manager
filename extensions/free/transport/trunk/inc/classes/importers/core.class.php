@@ -86,8 +86,8 @@ abstract class Core {
 
 	/**
 	 * @since 1.0.0
-	 * @var null|callable $cache_clear_cb The caching clearing callback. Leave null to not clear.
-	 *                                    First parameter will be the $id_key value.
+	 * @var null|callable The caching clearing callback. Leave null to not clear.
+	 *                    First parameter will be the $id_key value.
 	 */
 	protected $cache_clear_cb = null;
 

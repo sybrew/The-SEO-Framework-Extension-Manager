@@ -9,12 +9,12 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Local\get_layout_class() and $this instanceof $_class or die;
 
 ?>
-<div class="tsfem-title">
+<div class=tsfem-title>
 	<header><h1>
 		<?php
 		$size = '1em';
 		printf(
-			'<span class="tsfem-logo">%sLocal</span>',
+			'<span class=tsfem-logo>%sLocal</span>',
 			sprintf(
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),

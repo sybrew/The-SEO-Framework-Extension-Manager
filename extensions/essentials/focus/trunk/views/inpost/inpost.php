@@ -23,7 +23,7 @@ $make_option_id = function( $id, $key ) use ( $option_index ) {
 	return sprintf( '%s[%s][%s]', $option_index, $id, $key );
 };
 
-create_analysis_field :;
+create_analysis_field:;
 	$focus_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['kw']['label']['title'] );
 	$focus_info  = sprintf(
 		'<div>%s</div>',
@@ -35,7 +35,7 @@ create_analysis_field :;
 	);
 	$focus_label = $focus_title . $focus_info;
 
-	//= Fix array if data is missing.
+	// Fix array if data is missing.
 	$keyword_meta = \array_slice(
 		array_merge_recursive(
 			$post_meta['kw']['values'],
@@ -46,16 +46,16 @@ create_analysis_field :;
 	);
 
 	// phpcs:disable, Generic.WhiteSpace.ScopeIndent.IncorrectExact -- we're templating.
-	analysis_fields_output :;
+	analysis_fields_output:;
 		InpostHTML::wrap_flex( 'block-open', '', 'tsfem-e-focus-analysis-wrap' );
 			InpostHTML::wrap_flex( 'label', $focus_label );
 			InpostHTML::wrap_flex( 'content-open', '' );
 				InpostHTML::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
 				foreach ( $keyword_meta as $id => $values ) :
-					//= TEMP: PHP 7 null coalescing.
+					// TEMP: PHP 7 null coalescing.
 					$get_value = function( $id ) use ( $values ) {
-						return isset( $values[ $id ] ) ? $values[ $id ] : '';
+						return $values[ $id ] ?? '';
 					};
 
 					\call_user_func(

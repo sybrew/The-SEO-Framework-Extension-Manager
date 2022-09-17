@@ -63,12 +63,12 @@ final class Admin extends Core {
 	 */
 	private function prepare_inpostgui() {
 
-		//= Prepares InpostGUI's class for nonce checking.
+		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
 		\add_action( 'tsfem_inpost_before_enqueue_scripts', [ $this, '_enqueue_inpost_scripts' ] );
 
-		//= Called late because we need to access the meta object after current_screen.
+		// Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
@@ -374,7 +374,7 @@ final class Admin extends Core {
 	private function sanitize_keyword_data( array $values ) {
 		$output = [];
 		foreach ( $values as $id => $items ) {
-			//= Don't store when no keyword is set.
+			// Don't store when no keyword is set.
 			if ( ! \strlen( $items['keyword'] ?? '' ) )
 				continue;
 
@@ -386,11 +386,11 @@ final class Admin extends Core {
 			}
 		}
 
-		//= When all entries are emptied, clear meta data.
+		// When all entries are emptied, clear meta data.
 		if ( empty( $output ) )
 			return null;
 
-		//= Fills missing data to maintain consistency.
+		// Fills missing data to maintain consistency.
 		foreach ( [ 0, 1, 2 ] as $k ) {
 			// PHP 7.4: ??=
 			if ( ! isset( $output[ $k ] ) ) {
@@ -423,7 +423,7 @@ final class Admin extends Core {
 			case 'lexical_data':
 			case 'inflection_data':
 			case 'synonym_data':
-				//= An empty array will be returned on failure. This will be refilled in the UI.
+				// An empty array will be returned on failure. This will be refilled in the UI.
 				$value = json_decode( $value, true ) ?: [];
 				break;
 
@@ -432,7 +432,7 @@ final class Admin extends Core {
 					$value = [];
 				} else {
 					foreach ( $value as $_t => $_v ) {
-						//= Convert to float, have 2 f decimals, trim trailing zeros, trim trailing dots, convert to string.
+						// Convert to float, have 2 f decimals, trim trailing zeros, trim trailing dots, convert to string.
 						// 2x rtrim: first trim trailing 0's, then trim remainder . (if any);
 						// don't trim both at the same time, otherwise 90.0 -> 9, instead of 90.0 -> 90
 						$value[ $_t ] = (string) ( rtrim( rtrim( sprintf( '%.2F', (float) $_v ), '0' ), '.' ) ?: 0 );
@@ -455,7 +455,7 @@ final class Admin extends Core {
 				break;
 		endswitch;
 
-		return isset( $value ) ? $value : null;
+		return $value ?? null;
 	}
 
 	/**

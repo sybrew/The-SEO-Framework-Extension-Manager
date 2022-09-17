@@ -88,33 +88,16 @@ final class Core {
 	use \TSF_Extension_Manager\Construct_Master_Once_Final_Interface;
 
 	/**
-	 * Check if title has been found, otherwise continue flushing till the bottom of plugin output.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var bool $title_found_and_flushed
+	 * @var bool Check if title has been found, otherwise continue flushing till the bottom of plugin output.
 	 */
 	protected $title_found_and_flushed = false;
 
 	/**
-	 * If Output Buffering is started or not.
-	 * If started, don't start again.
-	 * If stopped, don't stop again.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var bool $ob_started
+	 * @var bool Whether Output Buffering has started by extension.
 	 */
 	protected $ob_started = false;
-
-	/**
-	 * Determines if the title has been fixed yet.
-	 *
-	 * @since 1.0.3
-	 *
-	 * @var bool $is_fixed
-	 */
-	protected $is_fixed = false;
 
 	/**
 	 * The constructor, initialize plugin.
@@ -158,20 +141,13 @@ final class Core {
 	 * Loads plugin actions.
 	 *
 	 * @since 1.0.3
-	 *
-	 * @return null Early if title is fixed.
 	 */
 	public function loader() {
 
-		if ( $this->is_fixed )
-			return;
-
 		static $_sequence = 0;
 
-		$_sequence++;
-
 		switch ( $_sequence ) :
-			case 1:
+			case 0:
 				/**
 				 * First run.
 				 * Start at HTTP header.
@@ -181,7 +157,7 @@ final class Core {
 				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 0 );
 				break;
 
-			case 2:
+			case 1:
 				/**
 				 * Second run. Capture WP head.
 				 * Scenario: \add_action( 'wp_head', 'wp_title' );.. or another callback.
@@ -192,7 +168,7 @@ final class Core {
 				\add_action( 'wp_head', [ $this, 'maybe_rewrite_title' ], 9999 );
 				break;
 
-			case 3:
+			case 2:
 				/**
 				 * Third run. Capture the page.
 				 * Start at where wp_head has ended (last run left off),
@@ -206,6 +182,8 @@ final class Core {
 			default:
 				break;
 		endswitch;
+
+		$_sequence++;
 	}
 
 	/**
@@ -242,7 +220,7 @@ final class Core {
 	public function maybe_start_ob() {
 
 		// Reset the output buffer if not found.
-		if ( false === $this->ob_started && false === $this->title_found_and_flushed ) {
+		if ( ! $this->ob_started && ! $this->title_found_and_flushed ) {
 			$this->start_ob();
 		}
 	}
@@ -268,7 +246,7 @@ final class Core {
 	 */
 	public function maybe_rewrite_title() {
 
-		if ( $this->ob_started && false === $this->title_found_and_flushed ) {
+		if ( $this->ob_started && ! $this->title_found_and_flushed ) {
 			$content = ob_get_clean();
 
 			$this->ob_started = false;
@@ -277,7 +255,9 @@ final class Core {
 		}
 
 		$this->maybe_stop_ob();
-		$this->loader();
+
+		if ( ! $this->title_found_and_flushed )
+			$this->loader();
 	}
 
 	/**
@@ -293,7 +273,7 @@ final class Core {
 
 		// Let's use regex.
 		if ( 1 === preg_match( '/<title.*?<\/title>/is', $content, $matches ) ) {
-			$title_tag = isset( $matches[0] ) ? $matches[0] : null;
+			$title_tag = $matches[0] ?? null;
 
 			if ( isset( $title_tag ) ) {
 				$this->replace_title_tag( $title_tag, $content );

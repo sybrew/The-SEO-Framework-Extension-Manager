@@ -75,11 +75,8 @@ final class Settings {
 		Schema_Packer;
 
 	/**
-	 * The settings page slug.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string $slug
+	 * @var string Settings page slug name.
 	 */
 	protected $slug = '';
 
@@ -397,7 +394,7 @@ final class Settings {
 
 		$f = $this->get_form();
 
-		$f->_form_wrap( 'start', \tsfem()->get_admin_page_url( $this->slug ), true );
+		$f->_form_wrap( 'start', \menu_page_url( $this->slug, false ), true );
 		$f->_fields( Fields::get_instance()->get_departments_fields() );
 		$f->_form_wrap( 'end' );
 	}
@@ -411,7 +408,7 @@ final class Settings {
 	 */
 	private function get_test_button() {
 		return sprintf(
-			'<button type=button name="tsfem-e-local-validateFormJson" form="%s" class="%s">%s</button>',
+			'<button type=button name=tsfem-e-local-validateFormJson form="%s" class="%s">%s</button>',
 			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
 			'hide-if-no-tsf-js tsfem-button tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )

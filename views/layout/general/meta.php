@@ -9,7 +9,7 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsfem()->_verify_instance( $_instance, $bits[1] ) or die;
 
 ?>
-<meta name="theme-color" content="#057f9c" />
-<meta name="msapplication-navbutton-color" content="#057f9c" />
-<meta name="apple-mobile-web-app-status-bar-style" content="#057f9c" />
+<meta name=theme-color content=#057f9c />
+<meta name=msapplication-navbutton-color content=#057f9c />
+<meta name=apple-mobile-web-app-status-bar-style content=#057f9c />
 <?php

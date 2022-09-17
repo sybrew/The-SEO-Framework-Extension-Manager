@@ -49,7 +49,7 @@ trait Time {
 		$ago_i18n = '';
 
 		if ( $ago < 0 || $ago > $now ) {
-			//= $since is in the future. Or, $since is before recorded time itself.
+			// $since is in the future. Or, $since is before recorded time itself.
 			$ago_i18n = \__( 'Invalid time. Is your server clock OK?', 'the-seo-framework-extension-manager' );
 			goto ret;
 		}
@@ -81,11 +81,11 @@ trait Time {
 		$month = $week * 4;
 		$year  = $week * 52;
 
-		//= A more accurate representation. It annotates the beginning of X.
+		// A more accurate representation. It annotates the beginning of X.
 		// e.g. last week can be up to 13 days ago; last month 60 days ago, etc.
 		$last_week  = $now - strtotime( 'last week', $now );
 		$last_month = $now - strtotime( 'last month', $now );
-		$last_year  = $now - strtotime( 'last year', $now ); //= '12 months ago'
+		$last_year  = $now - strtotime( 'last year', $now ); // '12 months ago'
 
 		if ( $ago < $last_week ) {
 			$ago_i18n = \__( 'Last week', 'the-seo-framework-extension-manager' );
@@ -107,7 +107,7 @@ trait Time {
 			$ago_i18n = sprintf( \_n( '%d year ago', '%d years ago', $x, 'the-seo-framework-extension-manager' ), $x );
 		}
 
-		ret :;
+		ret:;
 		return $ago_i18n;
 	}
 
@@ -156,7 +156,7 @@ trait Time {
 
 		$x = round( $x );
 
-		//= Can't upscale 0.
+		// Can't upscale 0.
 		if ( $scales && $x )
 			return static::_upscale_time( $x, $x_scale, $scales, $precise );
 
@@ -219,7 +219,7 @@ trait Time {
 		$x_remaining = $x;
 		$times       = [];
 
-		//= type => [ threshold_for_next, next ];
+		// type => [ threshold_for_next, next ];
 		$scale_table = [
 			'seconds' => [ 60, 'minutes' ],
 			'minutes' => [ 60, 'hours' ],
@@ -246,12 +246,12 @@ trait Time {
 					$x_remaining = $_next_time;
 					$x_scale     = $scale_table[ $x_scale ][1];
 				} else {
-					//= Rescale up.
+					// Rescale up.
 					$x_remaining = round( $x_remaining / $_threshold );
 					$x_scale     = $scale_table[ $x_scale ][1];
 				}
 			} else {
-				//= Reached threshold through precision or time overlap.
+				// Reached threshold through precision or time overlap.
 				$times[] = static::scale_time( $x_remaining, $x_scale, 0 );
 				// No need to try upcoming scales, save processing power.
 				break;
@@ -261,7 +261,7 @@ trait Time {
 		$out = '';
 
 		$times = array_reverse( $times );
-		//= Don't return more items than the threshold.
+		// Don't return more items than the threshold.
 		$count = min( \count( $times ), $scales );
 
 		for ( $i = 0; $i < $count; $i++ ) {

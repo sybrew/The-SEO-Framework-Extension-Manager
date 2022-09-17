@@ -43,21 +43,25 @@ final class AJAX extends Secure_Abstract {
 	 *
 	 * As such, we use this.
 	 *
+	 * @since 2.1.0
 	 * @var bool Whether the instance is validated.
 	 */
 	private static $_validated = false; // phpcs:ignore -- internal
 
 	/**
+	 * @since 2.1.0
 	 * @var null|AJAX The class instance.
 	 */
 	private static $instance;
 
 	/**
+	 * @since 2.1.0
 	 * @var null|object TSF class object.
 	 */
 	private static $tsf;
 
 	/**
+	 * @since 2.1.0
 	 * @var null|object TSF Extension Manager class object.
 	 */
 	private static $tsfem;
@@ -153,8 +157,8 @@ final class AJAX extends Secure_Abstract {
 			$notice_data = static::build_ajax_dismissible_notice();
 
 		static::$tsfem->send_json(
-			static::$tsfem->coalesce_var( $notice_data, [] ),
-			static::$tsfem->coalesce_var( $notice_data['type'], 'failure' )
+			$notice_data ?? [],
+			$notice_data['type'] ?? 'failure'
 		);
 		exit;
 	}
@@ -180,8 +184,8 @@ final class AJAX extends Secure_Abstract {
 		}
 
 		static::$tsfem->send_json(
-			static::$tsfem->coalesce_var( $notice_data, [] ),
-			static::$tsfem->coalesce_var( $notice_data['type'], 'failure' )
+			$notice_data ?? [],
+			$notice_data['type'] ?? 'failure'
 		);
 		exit;
 	}
@@ -275,7 +279,7 @@ final class AJAX extends Secure_Abstract {
 
 		$send = [];
 
-		//= Input gets forwarded to secure location. Sanitization happens externally.
+		// Input gets forwarded to secure location. Sanitization happens externally.
 		$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
 
 		if ( ! $input || ! \is_object( $input ) ) {
@@ -327,33 +331,33 @@ final class AJAX extends Secure_Abstract {
 									break;
 
 								case 'INVALID_REQUEST':
-									//= Data is missing.
+									// Data is missing.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17007 );
 									break;
 
 								case 'UNKNOWN_ERROR':
-									//= Remote Geocoding API error. Try again...
+									// Remote Geocoding API error. Try again...
 									$send['results'] = static::$instance->get_ajax_notice( false, 17008 );
 									break;
 
 								case 'TIMEOUT':
-									//= Too many consecutive requests.
+									// Too many consecutive requests.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17009 );
 									break;
 
 								case 'RATE_LIMIT':
-									//= Too many requests in the last period.
+									// Too many requests in the last period.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17010 );
 									break;
 
 								case 'REQUEST_LIMIT_REACHED':
-									//= License request limit reached.
+									// License request limit reached.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17013 );
 									break;
 
 								case 'LICENSE_TOO_LOW':
 								default:
-									//= Undefined error.
+									// Undefined error.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
 									break;
 							endswitch;
@@ -367,7 +371,7 @@ final class AJAX extends Secure_Abstract {
 			}
 		}
 
-		static::$tsfem->send_json( $send, static::$tsfem->coalesce_var( $_type, 'failure' ) );
+		static::$tsfem->send_json( $send, $_type ?? 'failure' );
 		exit;
 	}
 
@@ -385,12 +389,12 @@ final class AJAX extends Secure_Abstract {
 		// phpcs:disable, WordPress.Security.NonceVerification -- Caller must check for this.
 		$data = [];
 
-		$data['key'] = (int) static::$tsfem->coalesce_var( $_POST['tsfem-notice-key'], false );
+		$data['key'] = (int) $_POST['tsfem-notice-key'] ?? false;
 		if ( $data['key'] ) {
 			$notice = static::$instance->get_error_notice( $data['key'] );
 
 			if ( \is_array( $notice ) ) {
-				//= If it has a custom message (already stored in browser), then don't output the notice message.
+				// If it has a custom message (already stored in browser), then don't output the notice message.
 				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
 
 				$data['notice'] = static::$tsf->generate_dismissible_notice( $msg, $notice['type'], true, false, true );

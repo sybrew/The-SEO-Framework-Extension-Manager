@@ -185,7 +185,7 @@ trait Extension_Forms {
 	public function _get_submit_button( $name, $title = '', $class = '' ) {
 
 		$title = $title ? sprintf( ' title="%s" ', \esc_attr( $title ) ) : '';
-		$class = $class ? sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class="tsfem-button-primary"';
+		$class = $class ? sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class=tsfem-button-primary';
 
 		return sprintf(
 			'<button type=submit name=submit %s%s>%s</button>',

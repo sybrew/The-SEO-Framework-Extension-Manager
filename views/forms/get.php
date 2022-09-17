@@ -11,7 +11,7 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and tsfem()->_verify_instance( $_instance, $bits[1] ) or die;
 
 $class_submit   = isset( $classes ) && count( $classes ) > 0 ? implode( ' ', $classes ) : 'tsfem-button-primary';
-$value_redirect = isset( $redirect ) ? $redirect : 'signup';
+$value_redirect = $redirect ?? 'signup';
 
 // @TODO nonce? nonce.
 exit; // UNSAFE (and unused...) SCRIPT! Needs nonce.

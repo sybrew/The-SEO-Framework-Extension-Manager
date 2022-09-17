@@ -35,19 +35,13 @@ namespace TSF_Extension_Manager;
 trait Error {
 
 	/**
-	 * The Error hook where all scripts should be loaded.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string The Error loader hook.
 	 */
 	private $error_hook = '';
 
 	/**
-	 * The POST request status code option name.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string The POST request status code option name.
 	 */
 	protected $error_notice_option;
@@ -61,7 +55,7 @@ trait Error {
 
 		$this->error_notice_option or \tsf()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>error_notice_option</code>' );
 
-		//? Can this be applied in-post too, when $this->error_notice_option is known? Otherwise, supply parameter?
+		// Can this be applied in-post too, when $this->error_notice_option is known? Otherwise, supply parameter?
 		\add_action( 'tsfem_notices', [ $this, '_do_error_notices' ] );
 	}
 
@@ -122,10 +116,10 @@ trait Error {
 		} else {
 			//! This checks if the notice is already stored.
 			//# This prevents adding timestamps preemptively in the future.
-			//? We could form a timestamp collection per notice, separately.
+			// We could form a timestamp collection per notice, separately.
 			//# But, that would cause performance issues.
 			if ( \in_array( $notice, $notices, true ) ) {
-				//= We already have the notice stored in cache.
+				// We already have the notice stored in cache.
 				return;
 			} else {
 				array_push( $notices, $notice );
@@ -274,7 +268,7 @@ trait Error {
 
 		switch ( $key ) :
 			case -1:
-				//? Placeholder error. See TSF_Extension_Manager\_wp_ajax_get_dismissible_notice()
+				// Placeholder error. See TSF_Extension_Manager\_wp_ajax_get_dismissible_notice()
 				$message = 'Undefined error. Check other messages.';
 				$type    = 'error';
 				break;

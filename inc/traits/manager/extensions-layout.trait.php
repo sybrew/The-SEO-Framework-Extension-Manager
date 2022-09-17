@@ -81,7 +81,7 @@ trait Extensions_I18n {
 
 		$i18n = static::obtain_i18n();
 
-		return isset( $i18n[ $key ] ) ? $i18n[ $key ] : '';
+		return $i18n[ $key ] ?? '';
 	}
 }
 
@@ -143,13 +143,13 @@ trait Extensions_Layout {
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
 			$entry = sprintf(
-				'<div class="tsfem-extension-entry-inner"><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
+				'<div class=tsfem-extension-entry-inner><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
 				$class,
 				\esc_attr( $id . '-extension-entry' ),
 				$wrap
 			);
 
-			$output .= sprintf( '<div class="tsfem-extension-entry-wrap">%s</div>', $entry );
+			$output .= sprintf( '<div class=tsfem-extension-entry-wrap>%s</div>', $entry );
 		}
 
 		return $output;
@@ -214,7 +214,7 @@ trait Extensions_Layout {
 	private static function make_extension_header( $extension ) {
 
 		$title = sprintf(
-			'<h4 class="tsfem-extension-title">%s</h4>',
+			'<h4 class=tsfem-extension-title>%s</h4>',
 			\tsf()->convert_markdown(
 				\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
 				[ 'strong', 'em' ]
@@ -240,7 +240,7 @@ trait Extensions_Layout {
 		$party_title = 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' );
 
 		$party  = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, \esc_attr( $party_title ) );
-		$author = '<span class="tsfem-extension-author">' . \esc_html( static::get_extension_header( $extension['slug'] )['Author'] ) . '</span>';
+		$author = '<span class=tsfem-extension-author>' . \esc_html( static::get_extension_header( $extension['slug'] )['Author'] ) . '</span>';
 
 		return '<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $party . $author . '</div>';
 	}
@@ -426,11 +426,11 @@ trait Extensions_Layout {
 		// MAYBE: Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target="_blank" rel="nofollow noopener noreferrer" class="tsfem-extension-description-author" title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		//	$author = sprintf( '<a href="%s" target=_blank rel="nofollow noopener noreferrer" class=tsfem-extension-description-author title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 		// phpcs:enable
 
 		// Make extension version element.
-		$items['version'] = sprintf( '<span class="tsfem-extension-description-version">%s %s</span>',
+		$items['version'] = sprintf( '<span class=tsfem-extension-description-version>%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
 			\tsf()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
@@ -445,7 +445,7 @@ trait Extensions_Layout {
 
 		if ( ! empty( $data['MenuSlug'] ) && static::is_extension_active( $extension ) ) {
 			$_menu = static::get_extension_desc_menu_item( $data['MenuSlug'] );
-			//= The menu item can't be generated when extensions aren't loaded.
+			// The menu item can't be generated when extensions aren't loaded.
 			// This should ONLY happen when the verification fails.
 			if ( $_menu ) $items['menu'] = $_menu;
 		}
@@ -549,13 +549,11 @@ trait Extensions_Layout {
 	 */
 	private static function get_extension_desc_menu_item( $slug ) {
 
-		$tsfem = \tsfem();
-
-		$url = $tsfem->get_admin_page_url( $slug );
+		$url = \menu_page_url( $slug, false );
 
 		if ( ! $url ) return '';
 
-		return $tsfem->get_link( [
+		return \tsfem()->get_link( [
 			'url'     => $url,
 			'content' => static::get_i18n( 'settings' ),
 			'title'   => static::get_i18n( 'visit-menupage' ),

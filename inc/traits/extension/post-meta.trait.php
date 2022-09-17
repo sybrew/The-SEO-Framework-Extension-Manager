@@ -40,11 +40,8 @@ final class Extensions_Post_Meta_Cache {
 	use Construct_Core_Static_Final;
 
 	/**
-	 * Holds the extension meta.
-	 *
 	 * @since 1.5.0
-	 *
-	 * @var array $meta : {
+	 * @var array Cached extension post metadata : {
 	 *    'id' => [ 'key' => 'value' ],
 	 * }
 	 */
@@ -125,41 +122,34 @@ final class Extensions_Post_Meta_Cache {
 trait Extension_Post_Meta {
 
 	/**
-	 * Current Extension meta index field. Likely equal to extension slug.
-	 *
 	 * @NOTE: Always set this directly in the constructor of the class.
 	 *        Traits do not share class properties and thus properties hold their
 	 *        value as if it were its user's class.
 	 *
 	 * @since 1.5.0
-	 * @var string $pm_index The current extension meta base index field.
+	 * @var string The current extension meta base index field.
+	 *             Likely equal to extension slug.
 	 */
 	protected $pm_index = '';
 
 	/**
-	 * Holds the post ID.
-	 *
 	 * @since 1.5.0
-	 * @var int|null $id
+	 * @var int|null The current post ID.
 	 */
 	protected $pm_id = null;
 
 	/**
-	 * Current Extension default meta.
-	 *
 	 * If meta key's value is not null, it will fall back to set meta when
 	 * $this->get_post_meta()'s second parameter is not null either.
 	 *
 	 * @since 1.5.0
-	 * @var array $pm_defaults The default meta.
+	 * @var array The current extension default meta.
 	 */
 	protected $pm_defaults = [];
 
 	/**
-	 * Flag for initialization.
-	 *
 	 * @since 1.5.0
-	 * @var bool $pm_initialized Whether the meta is initialized.
+	 * @var bool Whether the meta is initialized.
 	 */
 	protected $pm_initialized = false;
 

@@ -33,19 +33,13 @@ namespace TSF_Extension_Manager;
 trait UI {
 
 	/**
-	 * The User Interface hook where all scripts should be loaded.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string The UI loader hook.
 	 */
 	private $ui_hook;
 
 	/**
-	 * The UI wrap type.
-	 *
 	 * @since 2.0.1
-	 *
 	 * @var string The UI wrap type. Accepts 'column' and 'row'.
 	 */
 	private $wrap_type = 'column';

@@ -35,11 +35,8 @@ namespace TSF_Extension_Manager;
 trait Options {
 
 	/**
-	 * Determines whether the options have been killed.
-	 *
 	 * @since 1.1.0
-	 *
-	 * @var bool $killed_options
+	 * @var bool Whether the options have been killed.
 	 */
 	private $killed_options = false;
 
@@ -139,7 +136,7 @@ trait Options {
 
 		$this->initialize_option_update_instance( $type );
 
-		//? TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
+		// TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
 		if ( empty( $options['_instance'] ) && '_instance' !== $option ) {
 			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 			return false;

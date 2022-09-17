@@ -19,12 +19,12 @@ if ( $options ) { // phpcs:ignore, Generic.CodeAnalysis.EmptyStatement
 }
 
 ?>
-<div class="tsfem-title">
+<div class=tsfem-title>
 	<header><h1>
 		<?php
 		$size = '1em';
 		printf(
-			'<span class="tsfem-logo">%sMonitor</span>',
+			'<span class=tsfem-logo>%sMonitor</span>',
 			sprintf(
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),

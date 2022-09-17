@@ -109,12 +109,12 @@ class Panes extends API {
 
 		if ( -1 === $feed ) {
 			$output = sprintf(
-				'<h4 class="tsfem-status-title">%s</h4>',
+				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' )
 			);
 		} elseif ( empty( $feed ) ) {
 			$output = sprintf(
-				'<h4 class="tsfem-status-title">%s</h4>',
+				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
 			);
 		} else {
@@ -141,7 +141,7 @@ class Panes extends API {
 
 		if ( -1 === $data ) {
 			$output = sprintf(
-				'<h4 class="tsfem-status-title">%s</h4>',
+				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' )
 			);
 
@@ -151,7 +151,7 @@ class Panes extends API {
 			];
 		} elseif ( empty( $data ) ) {
 			$output = sprintf(
-				'<h4 class="tsfem-status-title">%s</h4>',
+				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
 			);
 
@@ -220,7 +220,7 @@ class Panes extends API {
 
 		// The feed is totally optional until it pulls from The SEO Framework premium. I.e. privacy.
 		$title = sprintf(
-			'<h4 class="tsfem-status-title">%s</h4>',
+			'<h4 class=tsfem-status-title>%s</h4>',
 			\esc_html__( 'The feed has been disabled to protect your privacy.', 'the-seo-framework-extension-manager' )
 		);
 
@@ -228,7 +228,7 @@ class Panes extends API {
 		$output .= '<p>' . $acquiredfrom . ' ' . $privacystatement . '</p>';
 		$output .= $this->get_feed_enabler_button();
 
-		return sprintf( '<div class="tsfem-trends-activation">%s</div>', $title . $output );
+		return sprintf( '<div class=tsfem-trends-activation>%s</div>', $title . $output );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class Panes extends API {
 			\esc_url( $this->get_admin_page_url() ),
 			$form
 		);
-		$js   = '<p class=hide-if-no-tsf-js><a id=tsfem-enable-feeds href=javascript:; class="tsfem-button-primary">' . \esc_html( $enable ) . '</a></p>';
+		$js   = '<p class=hide-if-no-tsf-js><a id=tsfem-enable-feeds href=javascript:; class=tsfem-button-primary>' . \esc_html( $enable ) . '</a></p>';
 
 		return sprintf( '<div class="tsfem-flex tsfem-flex-no-wrap tsfem-enable-feed-button">%s</div>', "{$js}{$nojs}" );
 	}
@@ -344,7 +344,7 @@ class Panes extends API {
 
 				$data = compact( 'slug', 'case' );
 
-				$this->send_json( compact( 'results', 'data' ), $this->coalesce_var( $type, 'failure' ) );
+				$this->send_json( compact( 'results', 'data' ), $type ?? 'failure' );
 			endif;
 		endif;
 
@@ -453,7 +453,7 @@ class Panes extends API {
 			$infos[] = \esc_html__( 'This information is updated every few minutes, infrequently.', 'the-seo-framework-extension-manager' );
 
 		$title = sprintf(
-			'<h4 class="tsfem-info-title">%s %s</h4>',
+			'<h4 class=tsfem-info-title>%s %s</h4>',
 			\esc_html__( 'Account information', 'the-seo-framework-extension-manager' ),
 			( $infos ? HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) ) : '' )
 		);
@@ -492,7 +492,7 @@ class Panes extends API {
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-form-title">%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class=tsfem-form-title>%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
 		return sprintf( '<div class="tsfem-account-upgrade tsfem-pane-section">%s%s</div>', $title, $form );
 	}
@@ -530,7 +530,7 @@ class Panes extends API {
 		$infos[] = \esc_html__( 'No options from extensions will be lost.', 'the-seo-framework-extension-manager' );
 
 		$title = sprintf(
-			'<h4 class="tsfem-info-title">%s %s</h4>',
+			'<h4 class=tsfem-info-title>%s %s</h4>',
 			\esc_html__( 'Disconnect account', 'the-seo-framework-extension-manager' ),
 			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
 		);
@@ -565,12 +565,12 @@ class Panes extends API {
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class="tsfem-support-title">%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+		$title = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
 
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
 			$content .= sprintf(
-				'<div class="tsfem-support-buttons">%s %s</div>',
+				'<div class=tsfem-support-buttons>%s %s</div>',
 				$button,
 				HTML::make_inline_question_tooltip( $description[ $key ] )
 			);
@@ -599,7 +599,7 @@ class Panes extends API {
 		Extensions::set_account( $this->get_subscription_status() );
 
 		$content = Extensions::get( 'layout_content' );
-		$content = sprintf( '<div class="tsfem-extensions-overview-content">%s</div>', $content );
+		$content = sprintf( '<div class=tsfem-extensions-overview-content>%s</div>', $content );
 
 		Extensions::reset();
 

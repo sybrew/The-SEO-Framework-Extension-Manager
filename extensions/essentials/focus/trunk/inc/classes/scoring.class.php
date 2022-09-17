@@ -41,26 +41,20 @@ final class Scoring {
 	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
 
 	/**
-	 * The scoring template.
-	 *
 	 * @since 1.0.0
-	 * @var array The template to iterate over.
+	 * @var array The scoring template to iterate over.
 	 */
 	public $template = [];
 
 	/**
-	 * The current ID prefix key.
-	 *
 	 * @since 1.0.0
-	 * @var string $key
+	 * @var string The current ID prefix key.
 	 */
 	public $key;
 
 	/**
-	 * The current score values.
-	 *
 	 * @since 1.0.0
-	 * @var array $values
+	 * @var array The current score values.
 	 */
 	public $values;
 
@@ -71,7 +65,7 @@ final class Scoring {
 	 *
 	 * @since 1.0.0
 	 * @ignore
-	 * @var int $current_score The current score.
+	 * @var int The current score.
 	 */
 	public $current_score = 0;
 
@@ -82,7 +76,7 @@ final class Scoring {
 	 *
 	 * @since 1.0.0
 	 * @ignore
-	 * @var int $max_score The maximum score.
+	 * @var int The maximum score.
 	 */
 	public $max_score = 0;
 
@@ -135,7 +129,7 @@ final class Scoring {
 	 * @return string The score value.
 	 */
 	public function get_value( $type ) {
-		return $this->sanitize( isset( $this->values[ $type ] ) ? $this->values[ $type ] : 0 );
+		return $this->sanitize( $this->values[ $type ] ?? 0 );
 	}
 
 	/**
@@ -186,7 +180,7 @@ final class Scoring {
 			4  => 'tsfem-e-inpost-icon-good',
 		];
 
-		return isset( $classes[ $index ] ) ? $classes[ $index ] : $classes[0];
+		return $classes[ $index ] ?? $classes[0];
 	}
 
 	/**
@@ -215,7 +209,7 @@ final class Scoring {
 			}
 		}
 
-		return isset( $ret ) ? $ret : array_values( $a )[0];
+		return $ret ?? array_values( $a )[0];
 	}
 
 	/**
@@ -237,8 +231,8 @@ final class Scoring {
 
 // phpcs:disable -- WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned, oh boy, this is a lot.
 
-//= Registers template.
-//= To register more templates, simply call the instance and merge arrays before output.
+// Registers template.
+// To register more templates, simply call the instance and merge arrays before output.
 Scoring::get_instance()->template = [
 	'seoTitle' => [
 		'title' => \esc_html__( 'Meta title:', 'the-seo-framework-extension-manager' ),

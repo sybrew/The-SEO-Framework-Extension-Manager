@@ -44,28 +44,19 @@ class AdminPages extends AccountActivation {
 		UI;
 
 	/**
-	 * Name of the page hook when the menu is registered.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string Page hook.
+	 * @var string Page hook name.
 	 */
 	public $seo_extensions_menu_page_hook;
 
 	/**
-	 * The plugin page ID/slug.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string Page ID/Slug
+	 * @var string Page ID/Slug.
 	 */
 	public $seo_extensions_page_slug = 'theseoframework-extensions';
 
 	/**
-	 * The plugin settings field.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string TSF Extension Manager Settings Field.
 	 */
 	const SETTINGS_FIELD = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
@@ -150,7 +141,7 @@ class AdminPages extends AccountActivation {
 			);
 
 			$menu['menu_title'] .= ' ' . sprintf(
-				'<span class="tsfem-menu-notice tsfem-menu-errors count-%d"><span class="tsfem-error-count" aria-hidden="true">%s</span><span class="tsfem-error-count-text screen-reader-text">%s</span></span>',
+				'<span class="tsfem-menu-notice tsfem-menu-errors count-%d"><span class=tsfem-error-count aria-hidden=true>%s</span><span class="tsfem-error-count-text screen-reader-text">%s</span></span>',
 				$notice_count,
 				$notice_i18n,
 				$notice_text
@@ -541,7 +532,7 @@ class AdminPages extends AccountActivation {
 	 * @param string $key The action key.
 	 */
 	final public function _get_nonce_action_field( $key ) {
-		return '<input type="hidden" name="' . \esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . \esc_attr( $key ) . '">';
+		return '<input type=hidden name="' . \esc_attr( $this->_get_field_name( 'nonce-action' ) ) . '" value="' . \esc_attr( $key ) . '">';
 	}
 
 	/**
@@ -573,7 +564,7 @@ class AdminPages extends AccountActivation {
 	final public function _get_nonce_field( $action, $name, $referer = true ) {
 
 		$name        = \esc_attr( $name );
-		$nonce_field = '<input type="hidden" name="' . $name . '" value="' . \wp_create_nonce( $action ) . '" />';
+		$nonce_field = '<input type=hidden name="' . $name . '" value="' . \wp_create_nonce( $action ) . '" />';
 
 		if ( $referer ) {
 			$nonce_field .= \wp_referer_field( false );

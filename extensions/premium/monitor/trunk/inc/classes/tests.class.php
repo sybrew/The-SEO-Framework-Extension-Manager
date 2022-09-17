@@ -113,7 +113,7 @@ final class Tests {
 			$content .= $this->wrap_info( \esc_html__( 'A dynamic favicon has been found, this increases support for mobile devices.', 'the-seo-framework-extension-manager' ) );
 		}
 
-		end :;
+		end:;
 		return compact( 'content', 'state' );
 	}
 
@@ -221,7 +221,7 @@ final class Tests {
 			) );
 		}
 
-		end :;
+		end:;
 		return [
 			'content' => $content,
 			'state'   => $state,
@@ -291,7 +291,7 @@ final class Tests {
 			) );
 		}
 
-		end :;
+		end:;
 		return [
 			'content' => $content,
 			'state'   => $state,
@@ -332,7 +332,7 @@ final class Tests {
 					$title = static::$tsf->get_title( [ 'id' => $id ] );
 					$url   = static::$tsf->create_canonical_url( [ 'id' => $id ] );
 
-					$links[] = sprintf( '<a href="%s" target="_blank" rel="noopener">%s</a>', $url, $title );
+					$links[] = sprintf( '<a href="%s" target=_blank rel=noopener>%s</a>', $url, $title );
 				}
 			endif;
 		endforeach;
@@ -346,7 +346,7 @@ final class Tests {
 			$content  = $this->wrap_info( \esc_html__( 'Something is causing a PHP error on your website. This prevents correctly closing of HTML tags.', 'the-seo-framework-extension-manager' ) );
 			$content .= sprintf( '<h4>%s</h4>', \esc_html( \_n( 'Affected page:', 'Affected pages:', \count( $links ), 'the-seo-framework-extension-manager' ) ) );
 
-			$content .= '<ul class="tsfem-ul-disc">';
+			$content .= '<ul class=tsfem-ul-disc>';
 			foreach ( $links as $link ) {
 				$content .= sprintf( '<li>%s</li>', $link );
 			}
@@ -355,7 +355,7 @@ final class Tests {
 
 		$content .= $this->wrap_info( $this->small_sample_disclaimer() );
 
-		end :;
+		end:;
 		return [
 			'content' => $content,
 			'state'   => $state,
@@ -495,18 +495,15 @@ final class Tests {
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found to be invalid. Please request Premium Support if you do not know how to resolve this.', 'the-seo-framework-extension-manager' ) );
 		} else {
 			$content .= $this->wrap_info( \esc_html__( 'The sitemap file is found and valid.', 'the-seo-framework-extension-manager' ) );
-
 		}
 
-		if ( isset( $data['index'] ) && $data['index'] ) {
+		if ( isset( $data['index'] ) && $data['index'] )
 			$content .= $this->wrap_info( $this->small_sample_disclaimer() );
-		}
 
-		if ( empty( $content ) ) {
+		if ( empty( $content ) )
 			$content = $this->wrap_info( $this->no_issue_found() );
-		}
 
-		end :;
+		end:;
 		return [
 			'content' => $content,
 			'state'   => $state,
@@ -594,7 +591,7 @@ final class Tests {
 								sprintf(
 									/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 									\esc_html__( 'The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-									\esc_url( static::$tsf->get_admin_page_url( static::$tsf->seo_settings_page_slug ), [ 'https', 'http' ] )
+									static::$tsf->get_seo_settings_page_url()
 								),
 								[ 'a' ]
 							)
@@ -608,7 +605,7 @@ final class Tests {
 				endif;
 			else :
 				if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
-					//= Don't change state.
+					// Don't change state.
 					$content .= $this->wrap_info(
 						\esc_html__( 'The canonical URL scheme matches the expected scheme.', 'the-seo-framework-extension-manager' )
 					);
@@ -621,7 +618,7 @@ final class Tests {
 							sprintf(
 								/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-								\esc_url( \tsfem()->get_admin_page_url( static::$tsf->seo_settings_page_slug ), [ 'https', 'http' ] )
+								static::$tsf->get_seo_settings_page_url()
 							),
 							[ 'a' ]
 						)
@@ -638,7 +635,7 @@ final class Tests {
 		if ( empty( $content ) )
 			$content = $this->wrap_info( $this->no_issue_found() );
 
-		end :;
+		end:;
 		return [
 			'content' => $content,
 			'state'   => $state,
@@ -668,7 +665,7 @@ final class Tests {
 	 * @return string The HTML wrapped information text.
 	 */
 	protected function wrap_info( $text ) {
-		return sprintf( '<p class="tsfem-e-monitor-info">%s</p>', $text );
+		return "<p class=tsfem-e-monitor-info>$text</p>";
 	}
 
 	/**
@@ -681,7 +678,7 @@ final class Tests {
 	protected function no_issue_found() {
 		static $cache;
 		return $cache ?: $cache = sprintf(
-			'<span class="tsfem-description">%s</span>',
+			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
 		);
 	}
@@ -696,7 +693,7 @@ final class Tests {
 	protected function no_data_found() {
 		static $cache;
 		return $cache ?: $cache = sprintf(
-			'<span class="tsfem-description">%s</span>',
+			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
 		);
 	}
@@ -711,7 +708,7 @@ final class Tests {
 	protected function small_sample_disclaimer() {
 		static $cache;
 		return $cache ?: $cache = sprintf(
-			'<span class="tsfem-description">%s</span>',
+			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )
 		);
 	}

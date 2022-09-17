@@ -11,19 +11,19 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\E
 ?>
 <div class="tsfem-pane-inner-wrap tsfem-pane-inner-collapsable-settings-wrap tsfem-e-local-settings-wrap">
 	<div class="tsfem-e-local-settings tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-tsf-js">
-		<div class="tsfem-pane-inner-pad">
-			<h4 class="tsfem-info-title"><?php esc_html_e( 'JavaScript required', 'the-seo-framework-extension-manager' ); ?></h4>
-			<p class="tsfem-description"><?php esc_html_e( 'Because of the complexity of the settings, JavaScript is required.', 'the-seo-framework-extension-manager' ); ?></p>
+		<div class=tsfem-pane-inner-pad>
+			<h4 class=tsfem-info-title><?= esc_html__( 'JavaScript required', 'the-seo-framework-extension-manager' ) ?></h4>
+			<p class=tsfem-description><?= esc_html__( 'Because of the complexity of the settings, JavaScript is required.', 'the-seo-framework-extension-manager' ) ?></p>
 		</div>
 	</div>
 	<div class="tsfem-e-local-settings tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-no-tsf-js">
-		<div class="tsfem-pane-inner-pad">
-			<h4 class="tsfem-form-title"><?php esc_html_e( 'Set departments', 'the-seo-framework-extension-manager' ); ?></h4>
-			<span class="description"><?php esc_html_e( 'With these options, you can annotate the location and practice of the business. This does not impact search ranking outside of the region, unless the region is part of the search query.', 'the-seo-framework-extension-manager' ); ?></span><br>
-			<span class="description"><?php esc_html_e( 'Fill in these fields as accurately as possible. If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ); ?></span><br>
-			<span class="description"><?php esc_html_e( 'All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in.', 'the-seo-framework-extension-manager' ); ?></span>
+		<div class=tsfem-pane-inner-pad>
+			<h4 class=tsfem-form-title><?= esc_html__( 'Set departments', 'the-seo-framework-extension-manager' ) ?></h4>
+			<span class=description><?= esc_html__( 'With these options, you can annotate the location and practice of the business. This does not impact search ranking outside of the region, unless the region is part of the search query.', 'the-seo-framework-extension-manager' ) ?></span><br>
+			<span class=description><?= esc_html__( 'Fill in these fields as accurately as possible. If a field doesn\'t allow a suitable and correct answer, leave it empty.', 'the-seo-framework-extension-manager' ) ?></span><br>
+			<span class=description><?= esc_html__( 'All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in.', 'the-seo-framework-extension-manager' ) ?></span>
 		</div>
-		<div class="tsfem-pane-inner-pad">
+		<div class=tsfem-pane-inner-pad>
 			<?php $this->output_department_fields(); ?>
 		</div>
 	</div>

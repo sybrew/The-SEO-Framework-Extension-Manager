@@ -58,10 +58,10 @@ final class Admin extends Core {
 	 */
 	private function prepare_inpostgui() {
 
-		//= Prepares InpostGUI's class for nonce checking.
+		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		//= Called late because we need to access the meta object after current_screen.
+		// Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
@@ -116,7 +116,7 @@ final class Admin extends Core {
 		static $default;
 		if ( ! $default ) {
 			$settings = $this->get_option( 'post_types' );
-			$default  = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post->post_type ]['default_type'], 'Article' ) );
+			$default  = static::filter_article_type( $settings[ $post->post_type ]['default_type'] ?? 'Article' );
 		}
 
 		static $type_i18n = null;
@@ -342,7 +342,7 @@ final class Admin extends Core {
 				'_req'     => false,
 				'_type'    => 'multi_placeholder',
 				'_desc'    => [
-					$tsf->get_post_type_label( $post_type ),
+					$tsf->get_post_type_label( $post_type, false ),
 					$post_type_desc_i18n,
 				],
 				'_fields'  => $fields,
@@ -541,7 +541,7 @@ final class Admin extends Core {
 		$post_type = \tsf()->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
 
-		$_default = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
+		$_default = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
@@ -675,7 +675,7 @@ final class Admin extends Core {
 		if ( ! $default ) {
 			$post_type = \tsf()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
-			$default   = static::filter_article_type( \tsfem()->coalesce_var( $settings[ $post_type ]['default_type'], 'Article' ) );
+			$default   = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
 		}
 
 		$this->set_extension_post_meta_id( $query['id'] );
@@ -794,7 +794,7 @@ final class Admin extends Core {
 		endforeach;
 
 		if ( empty( $store ) ) {
-			//= Delete everything. Using defaults.
+			// Delete everything. Using defaults.
 			$this->delete_post_meta_index();
 		} else {
 			foreach ( $store as $key => $value )

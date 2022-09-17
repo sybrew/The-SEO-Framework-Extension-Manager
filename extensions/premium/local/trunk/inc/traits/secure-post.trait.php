@@ -39,21 +39,18 @@ trait Secure_Post {
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce name.
 	 */
 	protected $nonce_name;
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation request name.
 	 */
 	protected $request_name = [];
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce action.
 	 */
 	protected $nonce_action = [];
@@ -149,7 +146,7 @@ trait Secure_Post {
 	public function _do_ajax_form_save() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification -- Already done at _wp_ajax_tsfemForm_save()
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+		$post_data = $_POST['data'] ?? '';
 		parse_str( $post_data, $data );
 
 		$send = [];
@@ -180,7 +177,7 @@ trait Secure_Post {
 			}
 		}
 
-		\tsfem()->send_json( $send, \tsfem()->coalesce_var( $type, 'failure' ) );
+		\tsfem()->send_json( $send, $type ?? 'failure' );
 	}
 
 	/**
@@ -215,7 +212,7 @@ trait Secure_Post {
 
 		$items = $this->get_registered_iterator_callbacks();
 
-		return isset( $items[ $key ] ) ? $items[ $key ] : '';
+		return $items[ $key ] ?? '';
 	}
 
 	/**
@@ -271,7 +268,7 @@ trait Secure_Post {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
 
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+		$post_data = $_POST['data'] ?? '';
 
 		parse_str( $post_data, $data );
 
@@ -302,7 +299,7 @@ trait Secure_Post {
 			}
 		}
 
-		\tsfem()->send_json( $send, \tsfem()->coalesce_var( $type, 'failure' ) );
+		\tsfem()->send_json( $send, $type ?? 'failure' );
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}

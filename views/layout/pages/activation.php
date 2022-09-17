@@ -17,9 +17,9 @@ if ( ! $this->is_auto_activated() ) :
 	<div class="tsfem-connect-row tsfem-flex tsfem-flex-row">
 		<div class="tsfem-connect-text tsfem-flex">
 			<div class=tsfem-connect-description>
-				<h3><?php esc_html_e( 'Get your key', 'the-seo-framework-extension-manager' ); ?></h3>
-				<strong><?php esc_html_e( 'Log in or sign up now', 'the-seo-framework-extension-manager' ); ?></strong>
-				<p><?php esc_html_e( 'Get your key. Easy and secure.', 'the-seo-framework-extension-manager' ); ?></p>
+				<h3><?= esc_html__( 'Get your key', 'the-seo-framework-extension-manager' ) ?></h3>
+				<strong><?= esc_html__( 'Log in or sign up now', 'the-seo-framework-extension-manager' ) ?></strong>
+				<p><?= esc_html__( 'Get your key. Easy and secure.', 'the-seo-framework-extension-manager' ) ?></p>
 			</div>
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
@@ -48,9 +48,9 @@ if ( ! $this->is_auto_activated() ) :
 	<div class="tsfem-connect-row tsfem-flex tsfem-flex-row">
 		<div class="tsfem-connect-text tsfem-flex">
 			<div class=tsfem-connect-description>
-				<h3><?php esc_html_e( 'Use your key', 'the-seo-framework-extension-manager' ); ?></h3>
-				<strong><?php esc_html_e( 'Get access to premium extensions', 'the-seo-framework-extension-manager' ); ?></strong>
-				<p><?php esc_html_e( 'Already have your key? Enter it here.', 'the-seo-framework-extension-manager' ); ?></p>
+				<h3><?= esc_html__( 'Use your key', 'the-seo-framework-extension-manager' ) ?></h3>
+				<strong><?= esc_html__( 'Get access to premium extensions', 'the-seo-framework-extension-manager' ) ?></strong>
+				<p><?= esc_html__( 'Already have your key? Enter it here.', 'the-seo-framework-extension-manager' ) ?></p>
 			</div>
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">
@@ -81,9 +81,9 @@ endif; // Ends "if ( ! $this->is_auto_activated() )"
 	<div class="tsfem-connect-row tsfem-flex tsfem-flex-row">
 		<div class="tsfem-connect-text tsfem-flex">
 			<div class=tsfem-connect-description>
-				<h3><?php esc_html_e( 'Go free', 'the-seo-framework-extension-manager' ); ?></h3>
-				<strong><?php esc_html_e( 'Get access to free extensions', 'the-seo-framework-extension-manager' ); ?></strong>
-				<p><?php esc_html_e( 'You can always upgrade later.', 'the-seo-framework-extension-manager' ); ?></p>
+				<h3><?= esc_html__( 'Go free', 'the-seo-framework-extension-manager' ) ?></h3>
+				<strong><?= esc_html__( 'Get access to free extensions', 'the-seo-framework-extension-manager' ) ?></strong>
+				<p><?= esc_html__( 'You can always upgrade later.', 'the-seo-framework-extension-manager' ) ?></p>
 			</div>
 		</div>
 		<div class="tsfem-connect-action tsfem-flex">

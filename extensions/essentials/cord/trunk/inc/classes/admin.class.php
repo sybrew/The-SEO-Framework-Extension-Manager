@@ -267,7 +267,7 @@ final class Admin extends Core {
 					foreach ( $keys as $key ) {
 						switch ( $key ) {
 							case 'tracking_id':
-								$value[ $index ][ $key ] = trim( \tsfem()->coalesce_var( $value[ $index ][ $key ], '' ) );
+								$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
 								if ( ! preg_match( '/^\bUA-\d{4,10}-\d{1,4}\b$/', $value[ $index ][ $key ] ) ) {
 									$value[ $index ][ $key ] = '';
 								}
@@ -275,9 +275,7 @@ final class Admin extends Core {
 
 							case 'enhanced_link_attribution':
 							case 'ip_anonymization':
-								$value[ $index ][ $key ] = \tsf()->s_one_zero(
-									\tsfem()->coalesce_var( $value[ $index ][ $key ], 0 )
-								);
+								$value[ $index ][ $key ] = \tsf()->s_one_zero( $value[ $index ][ $key ] ?? 0 );
 								break;
 
 							default:
@@ -289,10 +287,11 @@ final class Admin extends Core {
 				case 'facebook_pixel':
 					$key = 'pixel_id';
 
-					$value[ $index ][ $key ] = trim( \tsfem()->coalesce_var( $value[ $index ][ $key ], '' ) );
-					if ( ! preg_match( '/^[0-9]+$/', $value[ $index ][ $key ] ) ) {
+					$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
+
+					if ( ! preg_match( '/^[0-9]+$/', $value[ $index ][ $key ] ) )
 						$value[ $index ][ $key ] = '';
-					}
+
 					break;
 
 				default:

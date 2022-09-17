@@ -87,37 +87,37 @@ final class InpostGUI {
 	/**
 	 * @since 1.5.0
 	 * @see static::_verify_nonce()
-	 * @var string $save_access_state The state the save is in.
+	 * @var string The state the save is in.
 	 */
 	public static $save_access_state = 0;
 
 	/**
 	 * @since 1.5.0
-	 * @var string $include_secret The inclusion secret generated on tab load.
+	 * @var string The inclusion secret generated on tab load.
 	 */
 	private static $include_secret;
 
 	/**
 	 * @since 1.5.0
-	 * @var array $tabs The registered tabs.
+	 * @var array The registered tabs.
 	 */
 	private static $tabs = [];
 
 	/**
 	 * @since 1.5.0
-	 * @var array $active_tab_keys The activate tab keys of static::$tabs
+	 * @var array The activate tab keys of static::$tabs
 	 */
 	private static $active_tab_keys = [];
 
 	/**
 	 * @since 1.5.0
-	 * @var array $views The registered view files for the tabs.
+	 * @var array The registered view files for the tabs.
 	 */
 	private static $views = [];
 
 	/**
 	 * @since 1.5.0
-	 * @var array $templates The registered templates.
+	 * @var array The registered templates.
 	 */
 	private static $templates = [];
 
@@ -141,15 +141,15 @@ final class InpostGUI {
 
 		$this->register_tabs();
 
-		//= Scripts.
+		// Scripts.
 		\add_action( 'load-post.php', [ $this, '_prepare_admin_scripts' ] );
 		\add_action( 'load-post-new.php', [ $this, '_prepare_admin_scripts' ] );
 
-		//= Saving.
+		// Saving.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
 		\add_action( 'save_post', [ static::class, '_verify_nonce' ], 1, 2 );
 
-		//= Output.
+		// Output.
 		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
 	}
 
@@ -303,7 +303,7 @@ final class InpostGUI {
 	 * @return bool True if user has acces. False otherwise.
 	 */
 	public static function current_user_can_edit_post( $post_id = null ) {
-		$post_id = isset( $post_id ) ? $post_id : $GLOBALS['post']->ID;
+		$post_id = $post_id ?? $GLOBALS['post']->ID;
 		return \current_user_can( 'edit_post', $post_id );
 	}
 
@@ -440,7 +440,7 @@ final class InpostGUI {
 
 		if ( isset( static::$views[ $tab ] ) ) {
 			$views = static::$views[ $tab ];
-			//= Sort by the priority indexes. Priority values get lost in this process.
+			// Sort by the priority indexes. Priority values get lost in this process.
 			sort( $views );
 
 			foreach ( $views as $view )
@@ -522,7 +522,7 @@ final class InpostGUI {
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
 	public static function register_view( $file, array $args = [], $tab = 'advanced', $priority = 10 ) {
-		//= Prevent excessive static calls and write directly to var.
+		// Prevent excessive static calls and write directly to var.
 		$_views =& static::$views;
 
 		if ( ! isset( $_views[ $tab ] ) )

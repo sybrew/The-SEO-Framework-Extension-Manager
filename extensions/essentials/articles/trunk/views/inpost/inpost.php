@@ -14,7 +14,7 @@ use \TSF_Extension_Manager\InpostHTML as InpostHTML;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and InpostGUI::verify( $_secret ) or die;
 
-create_type_field :;
+create_type_field:;
 	$type_title = sprintf(
 		'<div><strong>%s</strong></div>',
 		$post_meta['type']['label']['title']
@@ -52,7 +52,7 @@ create_type_field :;
 		]
 	);
 
-	type_field_output :;
+	type_field_output:;
 		InpostHTML::wrap_flex_multi(
 			'block',
 			[

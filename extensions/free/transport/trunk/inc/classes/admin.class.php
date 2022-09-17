@@ -62,25 +62,18 @@ final class Admin {
 
 	/**
 	 * @since 1.0.0
-	 *
 	 * @var string The validation nonce name.
 	 */
 	protected $ajax_nonce_action;
 
 	/**
-	 * Name of the page hook when the menu is registered.
-	 *
 	 * @since 1.0.0
-	 *
-	 * @var string Page hook.
+	 * @var string Page hook name
 	 */
 	protected $transport_menu_page_hook;
 
 	/**
-	 * The extension page ID/slug.
-	 *
 	 * @since 1.0.0
-	 *
 	 * @var string Page ID/Slug
 	 */
 	protected $transport_page_slug;

@@ -42,7 +42,7 @@ final class Sitemap extends Core {
 
 	/**
 	 * @since 2.0.0
-	 * @var bool $doing_news_sitemap
+	 * @var bool Whether outputting news sitemap.
 	 */
 	private $doing_news_sitemap = false;
 

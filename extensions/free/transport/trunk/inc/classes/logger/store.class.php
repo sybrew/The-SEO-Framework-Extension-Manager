@@ -39,14 +39,14 @@ final class Store {
 
 	/**
 	 * @since 1.0.0
-	 * @var string $id The unique store identifier.
+	 * @var string The unique store identifier.
 	 */
 	public $id;
 	// public immutable $id; // :(
 
 	/**
 	 * @since 1.0.0
-	 * @var array $store The current store. Shared across instances.
+	 * @var array The current store. Shared across instances.
 	 */
 	private static $store = [];
 

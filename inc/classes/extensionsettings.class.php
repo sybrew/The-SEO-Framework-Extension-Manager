@@ -86,7 +86,7 @@ final class ExtensionSettings {
 	/**
 	 * @since 2.2.0
 	 * @see static::verify()
-	 * @var string|null $include_secret The inclusion secret generated on tab load.
+	 * @var string|null The inclusion secret generated on tab load.
 	 */
 	private static $include_secret;
 
@@ -277,7 +277,7 @@ final class ExtensionSettings {
 		\do_action( 'tsfem_register_settings_sanitization', static::class );
 
 		// phpcs:ignore, WordPress.Security.NonceVerification -- Already done at _wp_ajax_tsfemForm_save()
-		$post_data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+		$post_data = $_POST['data'] ?? '';
 		parse_str( $post_data, $data );
 
 		$store = [];
@@ -470,7 +470,7 @@ final class ExtensionSettings {
 			$args = [
 				'caller'       => __CLASS__,
 				'o_index'      => $index,
-				'o_defaults'   => \tsfem()->coalesce_var( static::$defaults[ $index ], [] ),
+				'o_defaults'   => static::$defaults[ $index ] ?? [],
 				'o_key'        => '',
 				'use_stale'    => false,
 				'levels'       => 5,
@@ -493,7 +493,7 @@ final class ExtensionSettings {
 		// TODO
 		// phpcs:disable
 		return sprintf(
-			'<button type="submit" name="tsf-extension-manager-extension-settings" form="tsf-extension-manager-extension-settings" class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-upload" onclick="tsfemForm.saveAll()">%s</button>',
+			'<button type=submit name=tsf-extension-manager-extension-settings form=tsf-extension-manager-extension-settings class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-upload" onclick="tsfemForm.saveAll()">%s</button>',
 			\esc_html__( 'Save All', 'the-seo-framework-extension-manager' )
 		);
 		// phpcs:enable
@@ -567,7 +567,7 @@ final class ExtensionSettings {
 			$$_key = $_val;
 		unset( $_key, $_val, $args );
 
-		//= Prevents private-includes hijacking.
+		// Prevents private-includes hijacking.
 		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis -- Read the include?
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include \tsfem()->get_view_location( $file );
