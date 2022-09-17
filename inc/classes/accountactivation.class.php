@@ -406,11 +406,12 @@ class AccountActivation extends Panes {
 
 			$this->coalesce_var( $response['_activation_level'], '' );
 
-			if ( 'Premium' === $response['_activation_level'] ) {
-				$status += 1;
-			} elseif ( 'Enterprise' === $response['_activation_level'] ) {
-				$status += 2;
-			}
+			if ( \in_array( $response['_activation_level'], [ 'Premium', 'Enterprise' ], true ) )
+				++$status;
+
+			// Another one for Enterprise.
+			if ( 'Enterprise' === $response['_activation_level'] )
+				++$status;
 			break;
 		}
 

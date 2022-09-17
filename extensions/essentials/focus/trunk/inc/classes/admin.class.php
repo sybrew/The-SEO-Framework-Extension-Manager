@@ -375,7 +375,7 @@ final class Admin extends Core {
 		$output = [];
 		foreach ( $values as $id => $items ) {
 			//= Don't store when no keyword is set.
-			if ( ! isset( $items['keyword'] ) || ! \strlen( $items['keyword'] ) )
+			if ( ! \strlen( $items['keyword'] ?? '' ) )
 				continue;
 
 			foreach ( (array) $items as $key => $value ) {
@@ -392,6 +392,7 @@ final class Admin extends Core {
 
 		//= Fills missing data to maintain consistency.
 		foreach ( [ 0, 1, 2 ] as $k ) {
+			// PHP 7.4: ??=
 			if ( ! isset( $output[ $k ] ) ) {
 				$output[ $k ] = $this->pm_defaults['kw'][ $k ];
 			}
@@ -432,6 +433,8 @@ final class Admin extends Core {
 				} else {
 					foreach ( $value as $_t => $_v ) {
 						//= Convert to float, have 2 f decimals, trim trailing zeros, trim trailing dots, convert to string.
+						// 2x rtrim: first trim trailing 0's, then trim remainder . (if any);
+						// don't trim both at the same time, otherwise 90.0 -> 9, instead of 90.0 -> 90
 						$value[ $_t ] = (string) ( rtrim( rtrim( sprintf( '%.2F', (float) $_v ), '0' ), '.' ) ?: 0 );
 					}
 				}

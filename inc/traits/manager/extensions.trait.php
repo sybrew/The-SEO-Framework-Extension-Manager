@@ -824,7 +824,7 @@ trait Extensions_Actions {
 		}
 
 		// Goto tick is now forbidden. Use goto clean.
-		unclean: {
+		unclean : {
 			ob_start();
 
 			\define( '_TSFEM_TESTING_EXTENSION', true );
@@ -836,7 +836,7 @@ trait Extensions_Actions {
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
 
-		basetest: {
+		basetest : {
 			// Test base file.
 			$success = static::persist_include_extension( $file, $_instance, $bits );
 		}
@@ -859,7 +859,7 @@ trait Extensions_Actions {
 			\define( '_TSFEM_TEST_EXT_PASS', true );
 		}
 
-		tick: {
+		tick : {
 			// Tick the instance.
 			\tsfem()->_verify_instance( $_instance, $bits[1] );
 		}
@@ -1037,12 +1037,9 @@ trait Extensions_Actions {
 		if ( \defined( '_TSFEM_TEST_EXT_PASS' ) )
 			return;
 
-		if ( $level = ob_get_level() ) { // phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- this is fine.
-			while ( $level ) {
-				ob_end_clean();
-				$level--;
-			}
-		}
+		$level = ob_get_level();
+		if ( $level )
+			while ( $level-- ) ob_end_clean();
 
 		$error      = error_get_last();
 		$error_type = '';

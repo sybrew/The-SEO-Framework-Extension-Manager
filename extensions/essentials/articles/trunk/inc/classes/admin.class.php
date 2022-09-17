@@ -158,6 +158,9 @@ final class Admin extends Core {
 		];
 
 		if ( static::is_organization() ) {
+
+			$tsf = \tsf();
+
 			$_settings += [
 				'news_sitemap' => [
 					'_default' => null,
@@ -173,7 +176,7 @@ final class Admin extends Core {
 								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
 								'https://theseoframework.com/extensions/articles/#faq'
 							) . (
-								\tsf()->get_option( 'sitemaps_output' )
+								$tsf->get_option( 'sitemaps_output' )
 								? ''
 								: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
 							),
@@ -195,7 +198,7 @@ final class Admin extends Core {
 						'url' => '',
 						'id'  => '',
 					],
-					'_ph'       => \tsf()->get_option( 'knowledge_logo_url' ) ?: '',
+					'_ph'       => $tsf->get_option( 'knowledge_logo_url' ) ?: '',
 					'_edit'     => true,
 					'_ret'      => 'image',
 					'_req'      => false,
@@ -325,13 +328,12 @@ final class Admin extends Core {
 
 		$settings = [];
 
+		$post_type_desc_i18n = \__( 'Adjust article settings for this post type.', 'the-seo-framework-extension-manager' );
+
 		foreach ( $post_types as $post_type ) {
 
 			// This is definitely not an Article type.
 			if ( 'attachment' === $post_type ) continue;
-
-			$pto             = \get_post_type_object( $post_type );
-			$post_type_label = isset( $pto->labels->name ) ? $pto->labels->name : $tsf->get_post_type_label( $post_type );
 
 			$settings[ $post_type ] = [
 				'_default' => null,
@@ -340,8 +342,8 @@ final class Admin extends Core {
 				'_req'     => false,
 				'_type'    => 'multi_placeholder',
 				'_desc'    => [
-					$post_type_label,
-					\__( 'Adjust article settings for this post type.', 'the-seo-framework-extension-manager' ),
+					$tsf->get_post_type_label( $post_type ),
+					$post_type_desc_i18n,
 				],
 				'_fields'  => $fields,
 			];
@@ -714,9 +716,8 @@ final class Admin extends Core {
 			endswitch;
 		endforeach;
 
-		foreach ( $store as $key => $value ) {
+		foreach ( $store as $key => $value )
 			$this->update_post_meta( $key, $value );
-		}
 	}
 
 	/**
@@ -755,9 +756,8 @@ final class Admin extends Core {
 
 		$this->set_extension_post_meta_id( $post->ID );
 
-		foreach ( $store as $key => $value ) {
+		foreach ( $store as $key => $value )
 			$this->update_post_meta( $key, $value );
-		}
 	}
 
 	/**
@@ -797,9 +797,8 @@ final class Admin extends Core {
 			//= Delete everything. Using defaults.
 			$this->delete_post_meta_index();
 		} else {
-			foreach ( $store as $key => $value ) {
+			foreach ( $store as $key => $value )
 				$this->update_post_meta( $key, $value );
-			}
 		}
 	}
 
@@ -812,6 +811,6 @@ final class Admin extends Core {
 	 * @return string The view file location.
 	 */
 	protected function get_view_location( $view ) {
-		return TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		return TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

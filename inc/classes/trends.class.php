@@ -113,8 +113,8 @@ final class Trends {
 		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 		if ( empty( $xml->entry ) ) {
-			// Retry in half an hour when server is down.
-			\set_transient( $transient_name, '', HOUR_IN_SECONDS / 2 );
+			// Retry in hour when server is down.
+			\set_transient( $transient_name, '', HOUR_IN_SECONDS );
 			return '';
 		}
 
@@ -123,6 +123,8 @@ final class Trends {
 
 		$output   = '';
 		$a_output = [];
+
+		$tsf = \tsf();
 
 		$max = 15;
 		$i   = 0;
@@ -180,7 +182,7 @@ final class Trends {
 			$date = $date ? '<time>' . \date_i18n( \get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
 
 			$title = isset( $object->title ) ? $object->title->__toString() : '';
-			$title = $title ? \tsf()->escape_title( $title ) : '';
+			$title = $title ? $tsf->escape_title( $title ) : '';
 
 			if ( ! $title )
 				continue;
@@ -189,8 +191,8 @@ final class Trends {
 			$content = $content ? \wp_strip_all_tags( $content ) : '';
 			unset( $object );
 
-			$content = \tsf()->trim_excerpt( $content, 0, 300 );
-			$content = \tsf()->escape_description( $content );
+			$content = $tsf->trim_excerpt( $content, 0, 300 );
+			$content = $tsf->escape_description( $content );
 
 			// No need for translations, it's English only.
 			$title = sprintf(
@@ -215,7 +217,7 @@ final class Trends {
 			$i++;
 		endforeach;
 
-		\set_transient( $transient_name, $output, DAY_IN_SECONDS );
+		\set_transient( $transient_name, $output, DAY_IN_SECONDS * 2 );
 
 		return $ajax ? $a_output : $output;
 	}

@@ -252,10 +252,9 @@ class Core {
 		$retval = 0;
 		$i      = 0;
 
-		if ( $level = ob_get_level() ) { // phpcs:ignore, WordPress.CodeAnalysis.AssignmentInCondition -- this is fine.
-			while ( $level-- ) {
-				ob_end_clean();
-			}
+		$level = ob_get_level();
+		if ( $level ) {
+			while ( $level-- ) ob_end_clean();
 			$retval |= 2 ** $i;
 		}
 

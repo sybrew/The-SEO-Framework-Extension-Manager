@@ -185,12 +185,14 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 		$post_ids = $wp_query->get_posts();
 
+		// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $count is passed by reference.
 		foreach ( $this->generate_url_item_values( $post_ids, $count ) as $_values ) {
 			// No more than 1000 complex items are allowed. (ref:https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd)
 			// Also stated here: https://support.google.com/news/publisher-center/answer/6075793
 			$content .= $this->build_url_item( $_values );
 			if ( $count > 999 ) break;
 		}
+		// phpcs:enable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
 
 		return $content;
 	}
