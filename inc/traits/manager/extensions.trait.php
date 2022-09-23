@@ -102,6 +102,19 @@ trait Extensions_Properties {
 				'requires_tsf' => '4.1.4',
 				'tested_tsf'   => '4.2',
 			],
+			'transport' => [
+				'slug'         => 'transport',
+				'network'      => '0',
+				'type'         => 'free',
+				'area'         => 'general',
+				'author'       => 'Sybre Waaijer',
+				'party'        => 'first',
+				'last_updated' => '1663907292',
+				'requires'     => '5.5',
+				'tested'       => '6.0',
+				'requires_tsf' => '4.1.4',
+				'tested_tsf'   => '4.2',
+			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
 				'network'      => '0',
@@ -110,19 +123,6 @@ trait Extensions_Properties {
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1612160183',
-				'requires'     => '5.5',
-				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
-			],
-			'transport' => [
-				'slug'         => 'transport',
-				'network'      => '0',
-				'type'         => 'free',
-				'area'         => 'setup',
-				'author'       => 'Sybre Waaijer',
-				'party'        => 'first',
-				'last_updated' => '1651931204',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.1.4',
@@ -171,7 +171,7 @@ trait Extensions_Properties {
 				'slug'         => 'monitor',
 				'network'      => '0',
 				'type'         => 'premium',
-				'area'         => 'uptime, syntax',
+				'area'         => 'syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1633797930',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '542e47beb1f4eb8f563909576e24f8ae99052475a830d22d4bf59409866dafc9',
-			'sha1'   => '9f03c10713d3adcc47e0f0f3d6c558943f843c7b',
-			'md5'    => 'a903c19b2df26eea0a657a5674845cb1',
+			'sha256' => '5c9bd7f2313371522c5d9c4a4f712acde526d5748a1c5821acbe54ffe040efdb',
+			'sha1'   => '331877ff8fd08e294ef63cb266a20a9c87e7afec',
+			'md5'    => '791f1fa2ec2fe5fc5057cbb30688b6ed',
 		];
 	}
 
@@ -403,15 +403,12 @@ trait Extensions_Properties {
 			'MenuSlug'     => 'Extension Menu Slug',
 		];
 
-		$data[ $slug ] = false;
-
 		$file = static::get_extension_header_file_location( $slug );
 
-		// phpcs:ignore, TSF.Performance.Functions.PHP -- required.
-		if ( file_exists( $file ) )
-			$data[ $slug ] = \get_file_data( $file, $default_headers, 'tsfem-extension' );
-
-		return $data[ $slug ];
+		// phpcs:ignore, TSF.Performance.Functions.PHP -- file_exists is required.
+		return $data[ $slug ] = file_exists( $file )
+			? \get_file_data( $file, $default_headers, 'tsfem-extension' )
+			: false;
 	}
 }
 

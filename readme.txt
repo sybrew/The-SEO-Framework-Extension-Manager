@@ -51,12 +51,14 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Modernized many parts of the code, making Extension Manager up to 30% faster.
 	* TODO measure again.
 
+* TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
+* TODO empty() -> ! (when not also testing for isset())
 * TODO $var = call\nreturn $var; -> return call
 * TODO isset( $cache ) ? $cache : $cache -> memo\memo_query
 * TODO get_admin_page_url -> TSFEM to TSF?
 * TODO _class = function() { -> ??
 * TODO Scoring::get_instance()->template -> something else?
-* TODO Add index.php files to extension top-folders
+* TODO Add index.php files to extension top-folders (and fill in empty index.php files)
 * TODO require TSF 4.2+
 * TODO Use tsf() insteadof the_seo_framework()
 * TODO use API functions of TSF (memo, has_run, isset()?..: et al.)

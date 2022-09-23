@@ -9,7 +9,7 @@
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
 
 ?>
-<meta name="theme-color" content="#057f9c" />
-<meta name="msapplication-navbutton-color" content="#057f9c" />
-<meta name="apple-mobile-web-app-status-bar-style" content="#057f9c" />
+<meta name=theme-color content=#057f9c />
+<meta name=msapplication-navbutton-color content=#057f9c />
+<meta name=apple-mobile-web-app-status-bar-style content=#057f9c />
 <?php

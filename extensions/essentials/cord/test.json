@@ -1,0 +1,11 @@
+{
+	"slug" : "cord",
+	"namespace" : "\\TSF_Extension_Manager\\Extension\\Cord",
+	"test" : {
+		"_base" : "cord.php",
+		"Admin" : [
+			"inc/classes/core.class.php",
+			"inc/classes/admin.class.php"
+		]
+	}
+}
