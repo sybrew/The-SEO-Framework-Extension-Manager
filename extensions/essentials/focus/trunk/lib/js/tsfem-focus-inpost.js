@@ -78,9 +78,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} id The element's ID.
 	 * @return {string} The Element's sub ID, or an empty string.
 	 */
-	const getSubIdPrefix = ( id ) => {
-		return ( /.*\[[0-9]+\]/.exec( id ) || '' )[0];
-	}
+	const getSubIdPrefix = id => ( /.*\[[0-9]+\]/.exec( id ) || '' )[0];
 
 	/**
 	 * Creates sub element ID.
@@ -94,9 +92,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} prefix The element's prefix.
 	 * @param {string} type   The element's type.
 	 */
-	const createSubId = ( idPrefix, name ) => {
-		return idPrefix + '[' + name + ']';
-	}
+	const createSubId = ( idPrefix, name ) => `${idPrefix}[${name}]`;
 
 	/**
 	 * Returns an element based on prefix and type.
@@ -105,16 +101,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @access public
 	 * @see getSubIdPrefix() To get the prefix.
 	 * @see createSubId() To create the type.
+	 * @TODO store return value in Map? => doesn't the browser do that already?
 	 *
 	 * @function
 	 * @param {string} idPrefix The element's prefix.
 	 * @param {string} type     The element's type.
 	 * @return {HTMLElement}
 	 */
-	const getSubElementById = ( idPrefix, type ) => {
-		// TODO store in Map?
-		return document.getElementById( idPrefix + '[' + type + ']' );
-	}
+	const getSubElementById = ( idPrefix, type ) => document.getElementById( `${idPrefix}[${type}]` );
 
 	/**
 	 * Sorts map.
@@ -438,8 +432,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		const showFailure = () => {
 			// Store realScore in input for saving (which is 0).
-			let input = document.querySelector( 'input[name="' + rater.id + '"]' );
-			if ( input ) input.value = 0;
+			let input = document.querySelector( `input[name="${rater.id}"]` );
 
 			// Gets description based on nearest threshold value.
 			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
@@ -574,7 +567,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						_forms.push( {
 							value:    entry.inflection,
 							category: entry.category,
-							name:     entry.category + ': ' + entry.inflection,
+							name:     `${entry.category}: ${entry.inflection}`,
 						} );
 					}
 				} );
@@ -669,17 +662,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( definitionDropdown instanceof HTMLSelectElement ) {
 				definitionDropdown.selectedIndex = 0;
 				definitionDropdown.innerHTML     = '';
-				document.querySelector( '[data-for="' + definitionDropdown.id + '"]' ).innerHTML = '';
+
+				document.querySelector( `[data-for="${definitionDropdown.id}"]` ).innerHTML = '';
 			}
-			if ( definitionSelection instanceof HTMLInputElement ) {
+
+			if ( definitionSelection instanceof HTMLInputElement )
 				definitionSelection.value = '';
-			}
 
 			activeWords( idPrefix ).clearCache();
 		}
 		const clearInflections = () => {
-			let inflectionSection = getSubElementById( idPrefix, 'inflections' ),
-				inflectionEntries = inflectionSection && inflectionSection.querySelector( '.tsfem-e-focus-subject-selection' ),
+			let inflectionEntries = getSubElementById( idPrefix, 'inflections' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
 				inflectionData    = getSubElementById( idPrefix, 'inflection_data' ),
 				activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
@@ -696,8 +689,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			activeWords( idPrefix ).clearCache( 'inflections' );
 		}
 		const clearSynonyms = () => {
-			let synonymSection = getSubElementById( idPrefix, 'synonyms' ),
-				synonymEntries = synonymSection && synonymSection.querySelector( '.tsfem-e-focus-subject-selection' ),
+			let synonymEntries = getSubElementById( idPrefix, 'synonyms' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
 				synonymData    = getSubElementById( idPrefix, 'synonym_data' ),
 				activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' );
 
@@ -719,23 +711,23 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		switch ( what ) {
-			case 'lexical' :
+			case 'lexical':
 				clearLexical();
 				clearDefinition();
 				break;
-			case 'definition' :
+			case 'definition':
 				clearDefinition();
 				break;
-			case 'inflections' :
+			case 'inflections':
 				clearInflections();
 				break;
-			case 'synonyms' :
+			case 'synonyms':
 				clearSynonyms();
 				break;
-			case 'ratings' :
+			case 'ratings':
 				clearRatings();
 				break;
-			default :
+			default:
 				clearLexical();
 				clearDefinition();
 				clearInflections();
@@ -1005,8 +997,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		let definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
 		if ( definitionDropdown.options.length ) {
 			// Make selected index show up.
-			let dropDown = document.querySelector( '[data-for="' + definitionDropdown.id + '"]' );
-			dropDown && dropDown.dispatchEvent( new CustomEvent( 'tsfem-e-focus-set-definition' ) );
+			document.querySelector( `[data-for="${definitionDropdown.id}"]` )
+				?.dispatchEvent( new CustomEvent( 'tsfem-e-focus-set-definition' ) );
 			definitionSelector.style.display = null;
 		} else {
 			// Hide definition selector if there's nothing to be selected.
@@ -1064,8 +1056,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} idPrefix
 	 */
 	const prepareWrapScoreElements = ( idPrefix ) => {
-		let scoresWrap = getSubElementById( idPrefix, 'scores' ),
-			subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
+		let scoresWrap = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
 		setAnalysisInterval( idPrefix ).to( 'disabled' );
 
@@ -1150,7 +1141,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		// jQuery unpacks JSON data.
 		data = $( rater ).data( 'scores' );
 
-		if ( data && data.hasOwnProperty( 'assessment' ) ) {
+		if ( data?.hasOwnProperty( 'assessment' ) ) {
 			if ( typeof activeFocusAreas[ data.assessment.content ] !== 'undefined' ) {
 				rater.dataset.assess = 1;
 				addToChangeListener( rater, data.assessment.content );
@@ -1989,8 +1980,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( ! changeListenerFlags[ event.data.type ] ) {
 				setTimeout( () => tsfem_inpost.setIconClass(
 					document.querySelectorAll(
-						'[data-assessment-type="' + event.data.type + '"] .tsfem-e-focus-assessment-rating'
-					), 'unknown'
+						`[data-assessment-type="${event.data.type}"] .tsfem-e-focus-assessment-rating`
+					),
+					'unknown'
 				), 0 );
 				changeListenerFlags[ event.data.type ] = true;
 			}
@@ -2045,8 +2037,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		clearTimeout( triggerAllBuffer[ idPrefix ] );
 		triggerAllBuffer[ idPrefix ] = setTimeout( () => {
 			if ( idPrefix ) {
-				let scoresWrap = getSubElementById( idPrefix, 'scores' ),
-					subScores = scoresWrap && scoresWrap.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
+				let subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
 				if ( subScores instanceof NodeList && subScores.length ) {
 					tsfem_inpost.promiseLoop( subScores, item => doCheck( item ), 150 );
 				} else {
@@ -2074,9 +2065,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const analysisChangeEvents = ( type ) => {
 		const events = [
-			'tsfem-e-focus.analysis-' + type, // Custom trigger.
-			'input.tsfem-e-focus-' + type,
-			'change.tsfem-e-focus-' + type
+			`tsfem-e-focus.analysis-${type}`, // Custom trigger.
+			`input.tsfem-e-focus-${type}`,
+			`change.tsfem-e-focus-${type}`
 		];
 		return { get: ( what ) => {
 			switch ( what ) {
@@ -2194,7 +2185,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 */
 		const triggerAnalysis = () => {
 			let assessment = _getAssessment();
-			$( '#' + getId() ).trigger( analysisChangeEvents( assessment ).get( 'trigger' ) );
+			$( `#${getId()}` ).trigger( analysisChangeEvents( assessment ).get( 'trigger' ) );
 			_dispatchEvent( 'trigger-read', { assessment } );
 		}
 
@@ -2491,8 +2482,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		// There's nothing to focus on. Stop plugin and show why.
 		//! The monkeyPatch is still running...
 		if ( 0 === Object.keys( activeFocusAreas ).length ) {
-			let wrap  = document.getElementById( 'tsfem-e-focus-analysis-wrap' ),
-				input = wrap && wrap.querySelector( '.tsf-flex-setting-input' );
+			let input = document.getElementById( 'tsfem-e-focus-analysis-wrap' )?.querySelector( '.tsf-flex-setting-input' );
 
 			if ( input )
 				input.innerHTML = wp.template( 'tsfem-e-focus-nofocus' )();

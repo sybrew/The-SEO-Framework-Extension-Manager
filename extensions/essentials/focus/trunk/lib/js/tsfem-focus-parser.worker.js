@@ -270,7 +270,7 @@ const countWords = ( word, contentMatch ) => {
 		contentMatch = contentMatch.join( ' ' );
 	}
 	// Return the number of matches found.
-	return contentMatch && contentMatch.length || 0;
+	return contentMatch?.length || 0;
 }
 const stripWord = ( word, str ) => str.replace(
 	new RegExp(

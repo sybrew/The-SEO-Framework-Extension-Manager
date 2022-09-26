@@ -78,7 +78,7 @@ window.tsfem_e_local = {
 		}
 
 		let $loader = jQuery( form ).closest( '.tsfem-pane-wrap' ).find( '.tsfem-pane-header .tsfem-ajax' ),
-			status = 0, loaderText = '';
+			status  = 0, loaderText = '';
 
 		// Disable the submit button.
 		tsfemForm.disableButton( button );
@@ -94,7 +94,7 @@ window.tsfem_e_local = {
 
 		// Assign a new window and open it. Regardless of outcome to circumvent popup blockers.
 		let _windowTarget = '_tsfemMarkupTester',
-			_window = window.open( 'about:blank', _windowTarget );
+			_window       = window.open( 'about:blank', _windowTarget );
 
 		// Do ajax...
 		jQuery.ajax( {
@@ -102,9 +102,9 @@ window.tsfem_e_local = {
 			url: ajaxurl,
 			dataType: 'json',
 			data: {
-				'action' : 'tsfem_e_local_validateFormJson',
-				'nonce' : tsfem_e_local.nonce,
-				'data' : jQuery( form ).serialize(),
+				action: 'tsfem_e_local_validateFormJson',
+				nonce: tsfem_e_local.nonce,
+				data: jQuery( form ).serialize(),
 			},
 			processData: true,
 			timeout: 14000,
@@ -115,15 +115,15 @@ window.tsfem_e_local = {
 
 			if ( tsf.l10n.states.debug ) console.log( response );
 
-			let data = response && response.data || void 0,
-				type = response && response.type || void 0;
+			let data = response?.data,
+				type = response?.type;
 
 			if ( ! data || ! type ) {
 				// Erroneous output.
 				loaderText = tsfem.i18n['InvalidResponse'];
 			} else {
-				let rCode = data.results && data.results.code || void 0,
-					success = data.results && data.results.success || void 0;
+				let rCode   = data?.results?.code,
+					success = data?.results?.success;
 
 				if ( rCode ) {
 					if ( ! success ) {
@@ -165,7 +165,7 @@ window.tsfem_e_local = {
 
 			// Try to set top notices, regardless. First notifies that there's an error saving.
 			tsfem_ui.setTopNotice( 1072100 );
-			errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
+			errorThrown && tsfem_ui.setTopNotice( -1, `Thrown error: ${errorThrown}` );
 		} ).always( () => {
 			tsfem.updatedResponse( $loader, status, loaderText );
 			tsfemForm.enableButton( button );

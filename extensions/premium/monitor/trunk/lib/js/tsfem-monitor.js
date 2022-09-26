@@ -66,13 +66,9 @@ window.tsfem_e_monitor = {
 	 * @function
 	 * @param {Object} event jQuery event
 	 */
-	showReadMore: ( event ) => {
-
-		let $parent = jQuery( '#' + event.target.id + '-wrap' ),
-			$content = jQuery( '#' + event.target.id + '-content' );
-
-		$parent.remove();
-		$content.slideDown( 500 );
+	showReadMore: event => {
+		jQuery( `#${event.target.id}-wrap` ).remove();
+		jQuery( `#${event.target.id}-content` ).slideDown( 500 );
 	},
 
 	/**
@@ -120,8 +116,8 @@ window.tsfem_e_monitor = {
 
 			if ( tsf.l10n.states.debug ) console.log( response );
 
-			let data = response && response.data || void 0,
-				type = response && response.type || void 0;
+			let data = response?.data,
+				type = response?.type;
 
 			if ( ! data ) {
 				// Erroneous output.
@@ -211,8 +207,8 @@ window.tsfem_e_monitor = {
 
 			if ( tsf.l10n.states.debug ) console.log( response );
 
-			let data = response && response.data || void 0,
-				type = response && response.type || void 0;
+			let data = response?.data,
+				type = response?.type;
 
 			if ( ! data || ! data.status ) {
 				// Erroneous output.
@@ -335,11 +331,10 @@ window.tsfem_e_monitor = {
 
 			if ( tsf.l10n.states.debug ) console.log( response );
 
-			let data = response && response.data || void 0,
-				type = response && response.type || void 0;
+			let data = response?.data;
 
 			// No error handling, as this is invoked automatically.
-			if ( data && data.html )
+			if ( data?.html )
 				jQuery( data.html ).insertAfter( '.tsfem-account-info' ).hide().slideDown( 500 );
 		} ).fail( ( jqXHR, textStatus, errorThrown ) => {
 			// No elaborate handling, as this function is invoked automatically.
@@ -397,10 +392,8 @@ window.tsfem_e_monitor = {
 
 		animate ||= false;
 
-		let holder = document.querySelector( '.tsfem-e-monitor-settings-holder[data-option-id="' + what + '"]' ),
-			clicker = holder && holder.querySelector( '.tsfem-e-monitor-edit' ),
-			selector = void 0,
-			selectId = '';
+		let clicker = document.querySelector( `.tsfem-e-monitor-settings-holder[data-option-id="${what}"]` )
+			?.querySelector( '.tsfem-e-monitor-edit' );
 
 		if ( ! clicker ) {
 			// Clicker not found. Update your plugins message.
@@ -408,10 +401,12 @@ window.tsfem_e_monitor = {
 			return;
 		}
 
+		let selectId = '';
+
 		if ( 'for' in clicker.dataset )
 			selectId = clicker.dataset.for;
 
-		selector = selectId && document.getElementById( selectId );
+		let selector = selectId && document.getElementById( selectId );
 
 		if ( ! selector )
 			return; // User edited the DOM. Shun.
@@ -541,8 +536,8 @@ window.tsfem_e_monitor = {
 
 				tsf.l10n.states.debug && console.log( response );
 
-				let data = response && response.data || void 0,
-					type = response && response.type || void 0;
+				let data = response?.data,
+					type = response?.type;
 
 				if ( ! data || ! type ) {
 					// Erroneous output.
@@ -550,10 +545,10 @@ window.tsfem_e_monitor = {
 					undoChanges();
 					showAjaxEditError();
 				} else {
-					let rCode = data.results && data.results.code || void 0,
-						success = data.results && data.results.success || void 0;
+					let rCode   = data?.results?.code,
+						success = data?.results?.success;
 
-					loaderText = data.results && data.results.notice || void 0;
+					loaderText = data?.results?.notice;
 
 					if ( success ) {
 						showAjaxEditSuccess();
@@ -603,7 +598,7 @@ window.tsfem_e_monitor = {
 
 				// Try to set top notices, regardless.
 				tsfem_ui.setTopNotice( 1011700 ); // Notifies that there's an error saving.
-				errorThrown && tsfem_ui.setTopNotice( -1, 'Thrown error: ' + errorThrown );
+				errorThrown && tsfem_ui.setTopNotice( -1, `Thrown error: ${errorThrown}` );
 			} ).always( () => {
 				tsfem.updatedResponse( loader, status, loaderText );
 				if ( topNoticeCode ) {

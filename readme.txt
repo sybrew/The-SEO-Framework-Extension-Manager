@@ -53,6 +53,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Reduced plugin file size relatively by no longer packing rendered vector images for archaic browser support.
 	* TODO Use `<use>` like on TSF site for improved painting performance?
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
+TODO POT file. (also update related github)
 
 * TODO Add index.php files to extension top-folders (and fill in empty index.php files)
 
@@ -61,37 +62,24 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * TODO use API functions of TSF (memo, has_run, isset()?..: et al.)
 * TODO move get_view() to trait, using prescribed base URL.
 
-TODO 'a' . $b -> "a$b" (PHP) (regex '.*?'\s*\.\s*\$)
-TODO 'a' + b -> `a${b}` (JS) (regex '.*?'\s*\+\s*[a-zA-Z_])
 * TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Transport\get_active_class() and ", try a secret (for all extensions).
 TODO implement views trait.
 TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.
 		-> Should we let the extensions wrap side-by-side instead? flex base 400px, stretch to fit?
 			-> Copy from tsf.fyi/e?
-TODO POT file. (also update related github)
 TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
 	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`
-TODO de-jQueryfy?
-	-> Especially form.js
-TODO function(){} => ()=>{}
-	-> `((\\?tsfem\(\))|\$this)->coalesce_var\( (.*?), (.*?) \)` -> $3 ?? $4
-TODO isset\(\s*(.*?)\s*\)\s*\?\s*\1\s*: -> $1 ??
-TODO \s([a-zA-Z_][a-zA-Z0-9_\.]+)\s*=\s*(\1)\b\s*\|\| -> ||=
 TODO use :where() css instead of the avalange of entries.
 TODO use `use` for SVG logos? -> Is this feasible? -> tsfem_ui()->register_logo( id, svg );
-
-TODO add grid display to importer options...
+	-> Don't register logo, just have a symbols output file and use that. At most, tsfem_ui()->output_logo( id, [ 'defaultColor' => false ] );
 
 TODO convert post metadata from double-serialized to single-serialized (with perhaps WP interfering?)
-	-> We took control because WP was causing issues (which?), are those issues resolved?
-TODO convert all serialized objects to JSON for future parsing, such as requesting updates. This improves security on OUR servers, not the users.
-	-> Increment API version number.
+	-> We took control because WP was causing issues with backslashes...
 
 TODO fix notice bounce (reintroduced for we ditched the stagnant :empty selector)
 TODO fewer jQuery animations, more CSS animations.
-
-TODO (FIXED, clean up) instead of a fancy observer on logger, we might simply just test if user is scrolled all the way to the bottom, and if so, append data and instantly scroll down.
+	-> Planned for future update. 3.0?
 
 TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
 	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
