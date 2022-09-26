@@ -162,7 +162,7 @@ class API extends Core {
 
 		$instance = $this->get_option( '_instance' );
 
-		if ( empty( $instance ) ) {
+		if ( ! $instance ) {
 			$instance = trim( \wp_generate_password( 32, false ) );
 
 			if ( $save_option )
@@ -357,9 +357,9 @@ class API extends Core {
 	 * @param bool   $explain  Whether to show additional info in error messages.
 	 * @return bool True on successful response, false on failure.
 	 */
-	final protected function handle_response( $args, $response = '', $explain = false ) {
+	final protected function handle_response( $args, $response, $explain = false ) {
 
-		if ( empty( $response ) ) {
+		if ( ! $response ) {
 			$this->set_error_notice( [ 301 => '' ] );
 			return false;
 		}

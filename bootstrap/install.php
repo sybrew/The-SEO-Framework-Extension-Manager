@@ -147,7 +147,7 @@ function _nag_install_tsf() {
 			],
 			\self_admin_url( 'update.php' )
 		),
-		'install-plugin_' . $plugin_slug
+		"install-plugin_$plugin_slug"
 	);
 	$install_action    = sprintf(
 		'<a href="%1$s" id=tsfem-tsf-install class="install-now button button-small button-primary" data-slug="%2$s" data-name="%3$s" aria-label="%4$s">%5$s</a>',
@@ -162,7 +162,7 @@ function _nag_install_tsf() {
 	// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- it is.
 	printf(
 		'<div class="notice notice-info"><p>%s</p></div>',
-		\is_rtl() ? $install_action . ' ' . $nag : $nag . ' ' . $install_action
+		\is_rtl() ? "$install_action $nag" : "$nag $install_action"
 	);
 	// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped
 }

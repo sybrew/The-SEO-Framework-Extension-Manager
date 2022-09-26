@@ -338,7 +338,7 @@ final class Tests {
 		endforeach;
 
 		// Links are filled in with erroneous pages.
-		if ( empty( $links ) ) {
+		if ( ! $links ) {
 			$state   = 'good';
 			$content = $this->wrap_info( $this->no_issue_found() );
 		} else {
@@ -500,7 +500,7 @@ final class Tests {
 		if ( isset( $data['index'] ) && $data['index'] )
 			$content .= $this->wrap_info( $this->small_sample_disclaimer() );
 
-		if ( empty( $content ) )
+		if ( ! $content )
 			$content = $this->wrap_info( $this->no_issue_found() );
 
 		end:;
@@ -632,7 +632,7 @@ final class Tests {
 			);
 		endif;
 
-		if ( empty( $content ) )
+		if ( ! $content )
 			$content = $this->wrap_info( $this->no_issue_found() );
 
 		end:;
@@ -676,11 +676,11 @@ final class Tests {
 	 * @return string HTML wrapped no issues found.
 	 */
 	protected function no_issue_found() {
-		static $cache;
-		return $cache ?: $cache = sprintf(
+		static $memo;
+		return $memo ?? ( $memo = sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
-		);
+		) );
 	}
 
 	/**
@@ -691,11 +691,11 @@ final class Tests {
 	 * @return string HTML wrapped no data found.
 	 */
 	protected function no_data_found() {
-		static $cache;
-		return $cache ?: $cache = sprintf(
+		static $memo;
+		return $memo ?? ( $memo = sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
-		);
+		) );
 	}
 
 	/**
@@ -706,10 +706,10 @@ final class Tests {
 	 * @return string HTML wrapped small sample size used.
 	 */
 	protected function small_sample_disclaimer() {
-		static $cache;
-		return $cache ?: $cache = sprintf(
+		static $memo;
+		return $memo ?? ( $memo = sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )
-		);
+		) );
 	}
 }

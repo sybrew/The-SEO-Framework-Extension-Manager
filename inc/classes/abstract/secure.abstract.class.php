@@ -44,7 +44,7 @@ interface Secure_Static_Abstracts {
 	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = null, &$bits = null );
+	public static function initialize( $type, &$instance = null, &$bits = null );
 
 	/**
 	 * Returns the current call values based on initialization set in self::$_type.
@@ -55,7 +55,7 @@ interface Secure_Static_Abstracts {
 	 * @param string $type Determines what to get.
 	 * @return string
 	 */
-	public static function get( $type = '' );
+	public static function get( $type );
 }
 
 /**

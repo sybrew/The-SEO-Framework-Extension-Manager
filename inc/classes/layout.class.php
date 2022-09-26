@@ -53,11 +53,11 @@ final class Layout extends Secure_Abstract {
 	 * @param string $instance Required. The verification instance key. Passed by reference.
 	 * @param array  $bits     Required. The verification instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = [] ) {
+	public static function initialize( $type, &$instance = '', &$bits = [] ) {
 
 		self::reset();
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 
@@ -87,11 +87,11 @@ final class Layout extends Secure_Abstract {
 	 * @param string $type Required. Determines what to get.
 	 * @return string|bool|void
 	 */
-	public static function get( $type = '' ) {
+	public static function get( $type ) {
 
 		if ( ! self::verify_instance() ) return;
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
 			return false;
 		}

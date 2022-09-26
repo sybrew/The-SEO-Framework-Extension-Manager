@@ -668,7 +668,7 @@ final class Admin extends Core {
 	 */
 	public function _add_list_table_data( $data, $query ) {
 
-		// This should never happen...
+		// This should never happen... still...
 		if ( ! empty( $query['taxonomy'] ) ) return $data;
 
 		static $default;
@@ -793,7 +793,7 @@ final class Admin extends Core {
 			}
 		endforeach;
 
-		if ( empty( $store ) ) {
+		if ( ! $store ) {
 			// Delete everything. Using defaults.
 			$this->delete_post_meta_index();
 		} else {

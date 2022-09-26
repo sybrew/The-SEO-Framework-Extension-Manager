@@ -84,15 +84,13 @@ class Data {
 			$this->set_installing_site( false );
 			return null;
 		}
+
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Options
 		 */
-		$data = $this->get_option( $type, [] );
-
-		if ( empty( $data ) )
-			$data = $this->get_remote_data( $type );
-
-		return empty( $data ) ? $default : $data;
+		return $this->get_option( $type, [] )
+			?: $this->get_remote_data( $type )
+			?: $default;
 	}
 
 	/**

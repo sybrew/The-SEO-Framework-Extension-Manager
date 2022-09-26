@@ -212,18 +212,17 @@ trait Extensions_Layout {
 	 * @return string HTML extension header.
 	 */
 	private static function make_extension_header( $extension ) {
-
-		$title = sprintf(
-			'<h4 class=tsfem-extension-title>%s</h4>',
-			\tsf()->convert_markdown(
-				\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
-				[ 'strong', 'em' ]
-			)
+		return sprintf(
+			'<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>',
+			sprintf(
+				'<h4 class=tsfem-extension-title>%s</h4>',
+				\tsf()->convert_markdown(
+					\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
+					[ 'strong', 'em' ]
+				)
+			),
+			'<h5 class=tsfem-extension-type>' . \esc_html( static::get_i18n( $extension['type'] ) ) . '</h5>'
 		);
-
-		$type = '<h5 class=tsfem-extension-type>' . \esc_html( static::get_i18n( $extension['type'] ) ) . '</h5>';
-
-		return '<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">' . $title . $type . '</div>';
 	}
 
 	/**
@@ -235,14 +234,15 @@ trait Extensions_Layout {
 	 * @return string HTML extension subheader.
 	 */
 	private static function make_extension_subheader( $extension ) {
-
-		$party_class = 'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon';
-		$party_title = 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' );
-
-		$party  = sprintf( '<span class="tsfem-extension-party %s" title="%s"></span>', $party_class, \esc_attr( $party_title ) );
-		$author = '<span class=tsfem-extension-author>' . \esc_html( static::get_extension_header( $extension['slug'] )['Author'] ) . '</span>';
-
-		return '<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">' . $party . $author . '</div>';
+		return sprintf(
+			'<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">%s%s</div>',
+			sprintf(
+				'<span class="tsfem-extension-party %s" title="%s"></span>',
+				'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon',
+				\esc_attr( 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' ) )
+			),
+			'<span class=tsfem-extension-author>' . \esc_html( static::get_extension_header( $extension['slug'] )['Author'] ) . '</span>'
+		);
 	}
 
 	/**
@@ -329,13 +329,15 @@ trait Extensions_Layout {
 			$button = sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
 
-			static $cache = [];
+			static $memo;
 
 			$tsfem = \tsfem();
 
-			if ( empty( $cache ) ) {
-				$cache['input_name'] = \esc_attr( $tsfem->_get_field_name( 'extension' ) );
-				$cache['admin_url']  = \esc_url( $tsfem->get_admin_page_url(), [ 'https', 'http' ] );
+			if ( ! isset( $memo ) ) {
+				$memo = [
+					'input_name' => \esc_attr( $tsfem->_get_field_name( 'extension' ) ),
+					'admin_url'  => \esc_url( $tsfem->get_admin_page_url(), [ 'https', 'http' ] ),
+				];
 			}
 
 			$s_slug = \sanitize_key( $slug );
@@ -346,7 +348,7 @@ trait Extensions_Layout {
 
 				$extension = sprintf(
 					'<input type=hidden name="%s" value="%s">',
-					$cache['input_name'],
+					$memo['input_name'],
 					$s_slug
 				);
 				$submit    = sprintf(
@@ -357,7 +359,7 @@ trait Extensions_Layout {
 				);
 				$nojs      = sprintf(
 					'<form action="%s" method=post id="tsfem-activate-form[%s]" class=hide-if-tsf-js autocomplete=off data-form-type=other>%s</form>',
-					$cache['admin_url'],
+					$memo['admin_url'],
 					$s_slug,
 					$nonce_action . $nonce . $extension . $submit
 				);

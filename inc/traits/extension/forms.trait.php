@@ -235,9 +235,9 @@ trait Extension_Forms {
 	 * }
 	 * @return string The input submit button.
 	 */
-	public function _get_action_button( $url = '', $items = [] ) {
+	public function _get_action_button( $url, $items = [] ) {
 
-		if ( empty( $url ) ) {
+		if ( ! $url ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You need to supply an action URL.' );
 			return '';
 		}

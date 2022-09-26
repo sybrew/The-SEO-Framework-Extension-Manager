@@ -132,10 +132,10 @@ final class Front extends Core {
 		$link    = '';
 
 		// Fix and normalize search link recognition.
-		if ( \is_search() && ! empty( $GLOBALS['wp_rewrite']->get_search_permastruct() ) ) {
+		if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
 			$search_q = \get_search_query();
 			$rel_s_q  = \set_url_scheme( \get_search_link( $search_q ), 'relative' );
-			$link     = \esc_js( $rel_s_q . '?s=' . rawurlencode( $search_q ) );
+			$link     = \esc_js( "$rel_s_q?s=" . rawurlencode( $search_q ) );
 		}
 
 		$tracking_id               = \esc_js( trim( $options['tracking_id'] ) );
@@ -159,7 +159,7 @@ final class Front extends Core {
 			{$ip_anonymization} && ga( 'set', 'anonymizeIp', true );
 			{$enhanced_link_attribution} && ga( 'require', 'linkid', { levels: {$ela_id_levels} } );
 			'{$link}'.length ? ga( 'send', 'pageview', '{$link}' ) : ga( 'send', 'pageview' );
-JS;
+		JS;
 
 		$script = $this->minify_script( $script );
 

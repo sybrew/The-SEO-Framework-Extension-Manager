@@ -204,7 +204,7 @@ class AdminPages extends AccountActivation {
 	 * @access private
 	 */
 	final public function _load_tsfem_admin_actions() {
-		\add_action( 'load-' . $this->seo_extensions_menu_page_hook, [ $this, '_do_tsfem_admin_actions' ] );
+		\add_action( "load-{$this->seo_extensions_menu_page_hook}", [ $this, '_do_tsfem_admin_actions' ] );
 	}
 
 	/**

@@ -43,40 +43,27 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.6.0 =
 
-* Touched up the interface, it's now more compact and easier on your eyes.
-* Now relies on The SEO Framework's JavaScript availability test, instead of WordPress's, making unresponsive interfaces a thing of the past.
-* Modernized code, especially JavaScript, improving UI responsiveness significantly.
-* Reduced plugin file size relatively by no longer storing rendered vector images for archaic browsers.
+* Extension Manager now requires PHP 7.3.0 or higher, from PHP 5.6.5.
+* The SEO Framework v4.2 or higher is now required, from TSF v4.1.4.
+* Touched up the interface, it's now centered, more compact, and easier on the eyes.
+* Now relies on The SEO Framework's JavaScript availability test, instead of WordPress's, making unresponsive interfaces less likely when a faulty plugin or theme is installed.
+* Modernized PHP code, making the plugin up to 30% faster.
+	* TODO test.
+* Modernized some JavaScript code, improving UI responsiveness significantly.
+* Reduced plugin file size relatively by no longer packing rendered vector images for archaic browser support.
+	* TODO Use `<use>` like on TSF site for improved painting performance?
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
-* Modernized many parts of the code, making Extension Manager up to 30% faster.
-	* TODO measure again.
 
-* TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
-* TODO empty() -> ! (when not also testing for isset())
-* TODO $var = call\nreturn $var; -> return call
-* TODO isset( $cache ) ? $cache : $cache -> memo\memo_query
-* TODO get_admin_page_url -> TSFEM to TSF?
-* TODO _class = function() { -> ??
-* TODO Scoring::get_instance()->template -> something else?
 * TODO Add index.php files to extension top-folders (and fill in empty index.php files)
-* TODO require TSF 4.2+
-* TODO Use tsf() insteadof the_seo_framework()
+
+* TODO consider cleaning unused functions? e.g. pixels_to_points
+* TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
 * TODO use API functions of TSF (memo, has_run, isset()?..: et al.)
-* TODO refactor coalesce_var to PHP 7.0+.
-* Start requiring PHP 7.3+
-	* We'd love to use 7.3+ but 4.2% of our users are on 7.2 or lower (measured 2022/07/10).
-		* Otto said we'd have to learn from <https://wordpress.org/about/stats/> because it's leading. It's only off by an insignificant 10% of all users.
-			* Let's henceforth rely on our data. ...remeasure, compare change.
-			* Found less than 2.2% use PHP 7.2 or lower (1.8% uses 7.2)
-* Moved TSF installation hanlder to a different file.
-* Improved letter spacing from logos.
-TODO remove png files, all browsers support svg now.
-	* TSF site already dropped support.
-	* Use `<use>` like on TSF site for improved painting performance?
-TODO move get_view() to trait, using prescribed base URL.
-TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Transport\get_active_class() and ", try a secret (for all extensions).
+* TODO move get_view() to trait, using prescribed base URL.
+
 TODO 'a' . $b -> "a$b" (PHP) (regex '.*?'\s*\.\s*\$)
 TODO 'a' + b -> `a${b}` (JS) (regex '.*?'\s*\+\s*[a-zA-Z_])
+* TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Transport\get_active_class() and ", try a secret (for all extensions).
 TODO implement views trait.
 TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.

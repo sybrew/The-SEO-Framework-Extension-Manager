@@ -37,13 +37,13 @@ abstract class Core {
 	 * @since 1.0.0
 	 * @var array A set of conversions that should take place. : [
 	 *     [
-	 *         (?string[]) 'from'        The database table + index key to take data from,
-	 *         (?string[]) 'to'          The database table + index key to set data to,
-	 *         (?callable) 'transformer' The data transformer, if any,
-	 *                                   The callable requires parameters:
-	 *                                   `$value`
-	 *         (?string[]) 'transmuter'  The complex data transmuter, if any: {
-	 *              'name'           => (string)   The name, required,
+	 *         (?string[]) 'from'          The database table + index key to take data from,
+	 *         (?string[]) 'to'            The database table + index key to set data to,
+	 *         (?callable) 'transformer'   The data transformer, if any,
+	 *                                     The callable requires parameters:
+	 *                                     `$value`
+	 *         (?string[]) 'transmuter'    The complex data transmuter, if any: {
+	 *              'name'           => (string)     The name, required,
 	 *              'to'             => (\Generator) The transmuter, either to or from (or both) required.
 	 *                                               The callable requires parameters:
 	 *                                               `$type, $data, &$actions = null, &$results = null`
@@ -52,7 +52,7 @@ abstract class Core {
 	 *              'from'           => (callable)   The transmuter, either to or from (or both) required.
 	 *                                               The callable requires parameters:
 	 *                                               `$type, $data, &$actions = null, &$results = null`
-	 *              '(to|from)_data' => (mixed)    The pertaining callable data, custom.
+	 *              '(to|from)_data' => (mixed)      The pertaining callable data, custom.
 	 *         }
 	 *         (?callable) 'cb_after_loop' The after loop callable, if any.
 	 *     ]

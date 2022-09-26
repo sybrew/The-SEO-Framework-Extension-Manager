@@ -743,9 +743,9 @@ JS;
 	 */
 	private function get_rotated_hashed_field_name( $length = 24, $flip = false, $previous = false ) {
 
-		static $_hashes = [];
+		static $_hashes;
 
-		if ( empty( $_hashes ) ) {
+		if ( ! isset( $_hashes ) ) {
 
 			$uid   = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
 			$tsfem = \tsfem();

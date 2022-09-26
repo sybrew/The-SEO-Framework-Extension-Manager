@@ -112,7 +112,7 @@ class Panes extends API {
 				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( "Unfortunately, your server can't process this request as of yet.", 'the-seo-framework-extension-manager' )
 			);
-		} elseif ( empty( $feed ) ) {
+		} elseif ( ! $feed ) {
 			$output = sprintf(
 				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
@@ -149,7 +149,7 @@ class Panes extends API {
 				'status'       => 'parse_error',
 				'error_output' => sprintf( '<div class="tsfem-trends tsfem-ltr tsfem-flex tsfem-flex-row">%s</div>', $output ),
 			];
-		} elseif ( empty( $data ) ) {
+		} elseif ( ! $data ) {
 			$output = sprintf(
 				'<h4 class=tsfem-status-title>%s</h4>',
 				\esc_html__( 'There are no trends and updates to report yet.', 'the-seo-framework-extension-manager' )
@@ -225,7 +225,7 @@ class Panes extends API {
 		);
 
 		$output .= '<p>' . \esc_html__( 'You may choose to enable the feed. Once enabled, it can not be disabled.', 'the-seo-framework-extension-manager' ) . '</p>';
-		$output .= '<p>' . $acquiredfrom . ' ' . $privacystatement . '</p>';
+		$output .= "<p>$acquiredfrom $privacystatement</p>";
 		$output .= $this->get_feed_enabler_button();
 
 		return sprintf( '<div class=tsfem-trends-activation>%s</div>', $title . $output );

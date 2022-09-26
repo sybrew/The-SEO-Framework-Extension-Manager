@@ -258,7 +258,7 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _load_monitor_admin_actions() {
-		\add_action( 'load-' . $this->monitor_menu_page_hook, [ $this, '_do_monitor_admin_actions' ] );
+		\add_action( "load-{$this->monitor_menu_page_hook}", [ $this, '_do_monitor_admin_actions' ] );
 	}
 
 	/**
@@ -816,9 +816,8 @@ final class Admin extends Api {
 		$output = '';
 		$issues = $this->get_data( 'issues', [] );
 
-		if ( ! empty( $issues ) ) {
+		if ( $issues )
 			$output = Output::get_instance()->_get_data( $issues, 'issues' );
-		}
 
 		if ( ! $output ) {
 			$output = sprintf(
@@ -845,9 +844,8 @@ final class Admin extends Api {
 		$issues = $this->get_data( 'issues', [] );
 		$found  = true;
 
-		if ( ! empty( $issues ) ) {
+		if ( $issues )
 			$data = Output::get_instance()->_ajax_get_pane_data( $issues, 'issues' );
-		}
 
 		if ( empty( $data['info'] ) ) {
 			$found = false;

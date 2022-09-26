@@ -92,7 +92,7 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_filter( 'the_seo_framework_amp_pro', [ $this, '_articles_hook_amp_output' ] );
 		} else {
-			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2', '<' ) ) {
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '<' ) ) {
 				// Initialize output in The SEO Framework's front-end meta object.
 				\add_filter( 'the_seo_framework_after_output', [ $this, '_articles_hook_output' ] );
 			} else {
@@ -199,7 +199,7 @@ final class Front extends Core {
 	 */
 	private function get_current_id() {
 		static $id;
-		return $id ?: $id = \get_queried_object_id();
+		return $id ?? ( $id = \get_queried_object_id() );
 	}
 
 	/**
@@ -282,7 +282,7 @@ final class Front extends Core {
 			$this->get_article_data()
 		);
 
-		if ( ! empty( $data ) ) {
+		if ( $data ) {
 			$options  = 0;
 			$options |= JSON_UNESCAPED_SLASHES;
 			$options |= static::$tsf->script_debug ? JSON_PRETTY_PRINT : 0;

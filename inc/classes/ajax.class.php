@@ -75,7 +75,7 @@ final class AJAX extends Secure_Abstract {
 	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = [] ) {
+	public static function initialize( $type, &$instance = '', &$bits = [] ) {
 
 		self::reset();
 
@@ -103,7 +103,7 @@ final class AJAX extends Secure_Abstract {
 	 * @param string $type Determines what to get.
 	 * @return bool false
 	 */
-	public static function get( $type = '' ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis
+	public static function get( $type ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis
 		return false;
 	}
 
@@ -311,7 +311,7 @@ final class AJAX extends Secure_Abstract {
 					if ( ! $data ) {
 						$send['results'] = static::$instance->get_ajax_notice( false, 17003 );
 					} else {
-						static::$tsfem->coalesce_var( $data['status'] );
+						$data['status'] = $data['status'] ?? null;
 
 						if ( 'OK' !== $data['status'] ) {
 							switch ( $data['status'] ) :

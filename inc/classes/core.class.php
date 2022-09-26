@@ -189,7 +189,7 @@ class Core {
 
 		Extensions::reset();
 
-		if ( empty( $extensions ) )
+		if ( ! $extensions )
 			return $loaded = false;
 
 		$this->get_verification_codes( $_instance, $bits );
@@ -454,7 +454,7 @@ class Core {
 				if ( 1 === $i ) {
 					$output .= $index . $this->matosa( $item, $i, false );
 				} else {
-					$output .= '[' . $index . ']' . $this->matosa( $item, $i, false );
+					$output .= "[{$index}]" . $this->matosa( $item, $i, false );
 				}
 			}
 		} elseif ( 1 === $i ) {
@@ -481,7 +481,7 @@ class Core {
 	 * @return bool True on success, false if keys are missing.
 	 */
 	final public function has_required_array_keys( $input, $compare ) {
-		return empty( array_diff_key( array_flip( $compare ), $input ) );
+		return ! array_diff_key( array_flip( $compare ), $input );
 	}
 
 	/**
@@ -492,7 +492,7 @@ class Core {
 	 *
 	 * It will also return the value so it can be used in a return statement.
 	 *
-	 * Example: `$v ?? $f` becomes `coalesce_var( $v, $f )`
+	 * Example: `$v = $v ?? $f` becomes `coalesce_var( $v, $f )`
 	 * The fallback value must always be set, so performance benefits thereof aren't present.
 	 *
 	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
@@ -1271,6 +1271,7 @@ class Core {
 	 * Converts pixels to points.
 	 *
 	 * @since 1.0.0
+	 * @ignore unused
 	 *
 	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
 	 * @return int Points.
@@ -1336,12 +1337,7 @@ class Core {
 	 * @return array|boolean Current subscription status. False on failed instance verification.
 	 */
 	final public function _get_subscription_status( &$_instance, &$bits ) {
-
-		if ( $this->_verify_instance( $_instance, $bits[1] ) ) {
-			return $this->get_subscription_status();
-		}
-
-		return false;
+		return $this->_verify_instance( $_instance, $bits[1] ) ? $this->get_subscription_status() : false;
 	}
 
 	/**
@@ -1352,19 +1348,14 @@ class Core {
 	 * @return array Current subscription status.
 	 */
 	final protected function get_subscription_status() {
-
 		static $status;
-
-		if ( $status )
-			return $status;
-
-		return $status = [
+		return $status ?? ( $status = [
 			'key'    => $this->get_option( 'api_key' ),
 			'email'  => $this->get_option( 'activation_email' ),
 			'active' => $this->get_option( '_activated' ),
 			'level'  => $this->get_option( '_activation_level' ),
 			'data'   => $this->get_option( '_remote_subscription_status' ),
-		];
+		] );
 	}
 
 	/**
@@ -1379,7 +1370,7 @@ class Core {
 	 */
 	final public function get_font_file_location( $font = '', $url = false ) {
 		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/fonts/' . $font;
+			return TSF_EXTENSION_MANAGER_DIR_URL . "lib/fonts/$font";
 		} else {
 			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
 		}
@@ -1396,7 +1387,7 @@ class Core {
 	 */
 	final public function get_image_file_location( $image = '', $url = false ) {
 		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . 'lib/images/' . $image;
+			return TSF_EXTENSION_MANAGER_DIR_URL . "lib/images/$image";
 		} else {
 			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
 		}

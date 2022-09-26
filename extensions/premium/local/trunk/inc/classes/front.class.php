@@ -63,7 +63,7 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
-			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2', '<' ) ) {
+			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '<' ) ) {
 				// Initialize output in The SEO Framework's front-end meta object.
 				\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
 			} else {
@@ -124,13 +124,10 @@ final class Front extends Core {
 	 * @return bool True if AMP is enabled.
 	 */
 	protected function is_amp() {
-
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		return $cache = \defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false;
+		static $memo;
+		return $memo ?? (
+			$memo = \defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false
+		);
 	}
 
 	/**
@@ -228,7 +225,7 @@ final class Front extends Core {
 
 		// Empty JSON is only 2 characters long.
 		if ( $json && \strlen( $json ) > 2 )
-			return '<script type="application/ld+json">' . $json . '</script>' . PHP_EOL;
+			return sprintf( '<script type="application/ld+json">%s</script>', $json ) . PHP_EOL;
 
 		return '';
 	}

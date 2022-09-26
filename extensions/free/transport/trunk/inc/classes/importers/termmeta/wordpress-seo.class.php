@@ -120,7 +120,7 @@ final class WordPress_SEO extends Base {
 	 *     }
 	 * }
 	 */
-	private function get_yoast_meta() {
+	private function get_wpseo_taxonomy_meta() {
 		static $data;
 		return $data ?? ( $data = \get_option( 'wpseo_taxonomy_meta' ) ?: [] );
 	}
@@ -137,7 +137,7 @@ final class WordPress_SEO extends Base {
 
 		$ids = [];
 
-		foreach ( $this->get_yoast_meta() as $taxonomy => $data )
+		foreach ( $this->get_wpseo_taxonomy_meta() as $taxonomy => $data )
 			$ids = array_merge( $ids, array_keys( $data ) );
 
 		return $ids;
@@ -161,7 +161,7 @@ final class WordPress_SEO extends Base {
 		$item_id = &$data['item_id'];
 
 		// Walk until index is found. We are unaware of taxonomies during transportation.
-		foreach ( $this->get_yoast_meta() as $taxonomy => $meta ) {
+		foreach ( $this->get_wpseo_taxonomy_meta() as $taxonomy => $meta ) {
 			if ( \array_key_exists( $item_id, $meta ) ) {
 				$transport_value = $meta[ $item_id ];
 				break;

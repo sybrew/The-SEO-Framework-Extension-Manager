@@ -287,25 +287,23 @@ final class Core {
 	}
 
 	/**
-	 * Replaces the title tag.
+	 * Replaces the title tag from buffer and outputs it.
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Added TSF v3.1 compat.
 	 * @since 1.2.1 Dropped TSF < v3.1 compat.
+	 * @TODO Use substr_replace to prevent multiple replacements? The DOM head should contain only one title tag, though.
 	 *
 	 * @param string $title_tag the Title tag with the title
 	 * @param string $content The content containing the $title_tag
 	 */
 	public function replace_title_tag( $title_tag, $content ) {
-
-		$new_title = '<title>' . \tsf()->get_title() . '</title>' . $this->indicator();
-
-		// Replace the title tag within the header.
-		// TODO substr_replace to prevent multiple replacements? The DOM should contain only one title tag, though.
-		$content = str_replace( $title_tag, $new_title, $content );
-
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- Not our content.
-		echo $content;
+		echo str_replace(
+			$title_tag,
+			'<title>' . \tsf()->get_title() . '</title>' . $this->indicator(),
+			$content
+		);
 	}
 
 	/**

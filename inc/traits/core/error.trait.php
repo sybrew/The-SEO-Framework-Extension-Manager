@@ -75,7 +75,7 @@ trait Error {
 
 		$notices = $this->get_error_notices( $options );
 
-		if ( empty( $notices ) ) {
+		if ( ! $notices ) {
 			$this->unset_error_notice_option();
 			return;
 		}
@@ -111,7 +111,7 @@ trait Error {
 
 		$notices = ( $clear_old ? null : \get_option( $this->error_notice_option ) ) ?: [];
 
-		if ( empty( $notices ) ) {
+		if ( ! $notices ) {
 			$notices = [ $notice ];
 		} else {
 			//! This checks if the notice is already stored.
@@ -161,13 +161,12 @@ trait Error {
 		if ( empty( $key ) )
 			return '';
 
-		$notice          = $this->get_error_notice_by_key( $key, true );
-		$additional_info = \is_array( $option ) && ! empty( $option[ $key ] ) ? $option[ $key ] : '';
+		$notice = $this->get_error_notice_by_key( $key, true );
 
 		$args = [
 			'type'            => $notice['type'],
 			'message'         => $notice['message'],
-			'additional_info' => $additional_info,
+			'additional_info' => ( $option[ $key ] ?? null ) ?: '',
 		];
 
 		return $this->format_error_notice( $key, $args );
@@ -185,9 +184,8 @@ trait Error {
 
 		$notices = [];
 
-		foreach ( $options as $option ) {
+		foreach ( $options as $option )
 			$notices[] = $this->get_error_notice( $option );
-		}
 
 		return $notices;
 	}

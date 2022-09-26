@@ -70,8 +70,7 @@ namespace {
 	 * @return string The database version. '0' if version isn't found.
 	 */
 	function tsf_extension_manager_db_version( $member = 'core' ) {
-		$versions = get_option( 'tsfem_current_db_versions', [] );
-		return ! empty( $versions[ $member ] ) ? $versions[ $member ] : '0';
+		return ( get_option( 'tsfem_current_db_versions', [] )[ $member ] ?? null ) ?: '0';
 	}
 }
 
@@ -157,7 +156,7 @@ namespace TSF_Extension_Manager {
 		if ( isset( $loaded[ $version ] ) )
 			return $loaded[ $version ];
 
-		if ( empty( $version ) || 3 !== \strlen( $version ) ) {
+		if ( ! $version || 3 !== \strlen( $version ) ) {
 			\tsf()->_doing_it_wrong( __FUNCTION__, 'You must tell the two-point required WordPress version.' );
 			return $loaded[ $version ] = false;
 		}

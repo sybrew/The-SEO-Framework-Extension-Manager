@@ -83,11 +83,11 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1635798852',
+				'last_updated' => '1664173453',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -96,11 +96,11 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1651198376',
+				'last_updated' => '1664173453',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'transport' => [
 				'slug'         => 'transport',
@@ -112,8 +112,8 @@ trait Extensions_Properties {
 				'last_updated' => '1663907292',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -122,11 +122,11 @@ trait Extensions_Properties {
 				'area'         => 'anti-spam',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1612160183',
+				'last_updated' => '1664173453',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'cord'      => [
 				'slug'         => 'cord',
@@ -135,11 +135,11 @@ trait Extensions_Properties {
 				'area'         => 'analytics',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1576470514',
+				'last_updated' => '1664173453',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'local'     => [
 				'slug'         => 'local',
@@ -151,8 +151,8 @@ trait Extensions_Properties {
 				'last_updated' => '1633798024',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -164,8 +164,8 @@ trait Extensions_Properties {
 				'last_updated' => '1565627638',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -177,8 +177,8 @@ trait Extensions_Properties {
 				'last_updated' => '1633797930',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -190,8 +190,8 @@ trait Extensions_Properties {
 				'last_updated' => '1515109560',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -203,8 +203,8 @@ trait Extensions_Properties {
 				'last_updated' => '1541601833',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -216,8 +216,8 @@ trait Extensions_Properties {
 				'last_updated' => '1572496812',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
-				'requires_tsf' => '4.1.4',
-				'tested_tsf'   => '4.2',
+				'requires_tsf' => '4.2.0',
+				'tested_tsf'   => '4.2.0',
 			],
 		];
 	}
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '5c9bd7f2313371522c5d9c4a4f712acde526d5748a1c5821acbe54ffe040efdb',
-			'sha1'   => '331877ff8fd08e294ef63cb266a20a9c87e7afec',
-			'md5'    => '791f1fa2ec2fe5fc5057cbb30688b6ed',
+			'sha256' => '482ef8e824f80cee45c721fa142526ee474d89fa19efbaabb2a61da0c91e5d4f',
+			'sha1'   => '02420d3fe8f3f6c69cf0f176c20fc7d6be100f27',
+			'md5'    => '41b46e3b70558f3b508b5fc9641a0a45',
 		];
 	}
 
@@ -290,16 +290,16 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_asset_location( $slug, $file, $url = false ) {
 
-		if ( empty( $slug ) || empty( $file ) ) return '';
+		if ( ! $slug || ! $file ) return '';
 
 		$path = static::get_extension_relative_path( $slug );
 
 		if ( $url ) {
 			$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
 
-			return TSF_EXTENSION_MANAGER_DIR_URL . $path . 'assets/' . $file;
+			return TSF_EXTENSION_MANAGER_DIR_URL . "{$path}assets/$file";
 		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . $path . 'assets' . DIRECTORY_SEPARATOR . $file;
+			return TSF_EXTENSION_MANAGER_DIR_PATH . "{$path}assets" . DIRECTORY_SEPARATOR . $file;
 		}
 	}
 
@@ -312,12 +312,8 @@ trait Extensions_Properties {
 	 * @return string The extension trunk file path.
 	 */
 	private static function get_extension_trunk_path( $slug ) {
-
-		if ( empty( $slug ) ) return '';
-
-		$path = static::get_extension_relative_path( $slug );
-
-		return $path = TSF_EXTENSION_MANAGER_DIR_PATH . $path . 'trunk' . DIRECTORY_SEPARATOR;
+		if ( ! $slug ) return '';
+		return TSF_EXTENSION_MANAGER_DIR_PATH . static::get_extension_relative_path( $slug ) . 'trunk' . DIRECTORY_SEPARATOR;
 	}
 
 	/**
@@ -337,7 +333,7 @@ trait Extensions_Properties {
 
 		$extension = static::get_extension( $slug );
 
-		if ( empty( $extension ) )
+		if ( ! $extension )
 			return '';
 
 		// phpcs:ignore -- No network support like this, yet.
@@ -552,7 +548,7 @@ trait Extensions_Actions {
 
 		$extension = static::get_extension( static::$current_slug );
 
-		if ( empty( $extension ) )
+		if ( ! $extension )
 			return [ 'success' => false, 'case' => 1 ];
 
 		if ( static::is_extension_active( $extension ) )
@@ -802,7 +798,7 @@ trait Extensions_Actions {
 
 		$file = static::get_extension_header_file_location( $slug );
 
-		if ( empty( $file ) ) {
+		if ( ! $file ) {
 			$val = 1;
 			goto tick;
 		}
@@ -885,7 +881,7 @@ trait Extensions_Actions {
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions, TSF.Performance.Functions -- this is a local file call, required file get.
 		$json = json_decode( file_get_contents( $json_file, false, $timeout ) );
 
-		if ( empty( $json ) ) {
+		if ( ! $json ) {
 			// json file contents are invalid.
 			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
 
@@ -913,7 +909,7 @@ trait Extensions_Actions {
 			}
 
 			if ( $_class ) {
-				$class     = $namespace . '\\' . $_class;
+				$class     = "$namespace\\$_class";
 				$success[] = (bool) new $class;
 			}
 		}
@@ -1067,7 +1063,7 @@ trait Extensions_Actions {
 			);
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
-			$error_notice .= '<p><strong>Error message:</strong> <br>' . $advanced_error_notice . '</p>';
+			$error_notice .= "<p><strong>Error message:</strong> <br>$advanced_error_notice</p>";
 
 			\wp_die(
 				$error_notice, // phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- it's escaped.
@@ -1186,7 +1182,7 @@ trait Extensions_Actions {
 	 */
 	private static function validate_file( $file, $type = 'php' ) {
 
-		if ( ( '.' . $type ) === substr( $file, - ( \strlen( $type ) + 1 ) ) ) {
+		if ( ( ".$type" ) === substr( $file, - ( \strlen( $type ) + 1 ) ) ) {
 			switch ( \validate_file( $file ) ) :
 				case 2:
 					if ( 'WIN' !== strtoupper( substr( PHP_OS, 0, 3 ) ) ) {

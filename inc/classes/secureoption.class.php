@@ -51,11 +51,11 @@ final class SecureOption extends Secure_Abstract {
 	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array  $bits     Required. The instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
+	public static function initialize( $type, &$instance = '', &$bits = null ) {
 
 		self::reset();
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
 			switch ( $type ) :
@@ -86,7 +86,7 @@ final class SecureOption extends Secure_Abstract {
 	 * @param string $type Determines what to get.
 	 * @return bool false
 	 */
-	public static function get( $type = '' ) {
+	public static function get( $type ) {
 		return false;
 	}
 	// phpcs:enable
@@ -133,7 +133,7 @@ final class SecureOption extends Secure_Abstract {
 
 		$type = self::get_property( '_type' );
 
-		if ( empty( self::$_instance ) || empty( $type ) ) {
+		if ( empty( self::$_instance ) || ! $type ) {
 			self::reset();
 			\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 			return $old_value;

@@ -343,16 +343,14 @@ final class LoadAdmin extends AdminPages {
 		if ( $this->is_plugin_activated() || ! \TSF_Extension_Manager\can_do_manager_settings() || $this->is_tsf_extension_manager_page() )
 			return;
 
-		$text  = \__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
 		$url   = $this->get_admin_page_url();
 		$title = \__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
 
 		$notice_link = '<a href="' . \esc_url( $url ) . '" title="' . \esc_attr( $title ) . '" target=_self>' . \esc_html( $title ) . '</a>';
-
-		$notice = \esc_html( $text ) . ' &mdash; ' . $notice_link;
+		$text        = \esc_html__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
 
 		// No a11y icon. Already escaped. Use TSF as it loads styles.
-		\tsf()->do_dismissible_notice( $notice, 'updated', false, false, false );
+		\tsf()->do_dismissible_notice( "$text &mdash; $notice_link", 'updated', false, false, false );
 	}
 
 	/**
@@ -360,6 +358,8 @@ final class LoadAdmin extends AdminPages {
 	 * Defaults to the Extension Manager page ID.
 	 *
 	 * @since 1.0.0
+	 * @TODO change to get_setitngs_page_url() (incl. parameter for extensions?).
+	 *       see get_seo_settings_page_url() of TSF.
 	 *
 	 * @param string $page The admin menu page slug. Defaults to TSF Extension Manager's.
 	 * @param array  $args Other query arguments.
@@ -465,9 +465,9 @@ final class LoadAdmin extends AdminPages {
 	 * }
 	 * @return string escaped link.
 	 */
-	public function get_link( $args = [] ) {
+	public function get_link( $args ) {
 
-		if ( empty( $args ) )
+		if ( ! $args )
 			return '';
 
 		$defaults = [

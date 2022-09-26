@@ -87,7 +87,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function set_remote_activation_listener_response( $value = [] ) {
 
-		if ( empty( $value ) || \is_wp_error( $value ) )
+		if ( ! $value || \is_wp_error( $value ) )
 			return false;
 
 		$store = &$this->get_remote_activation_listener_response();
@@ -493,7 +493,7 @@ class AccountActivation extends Panes {
 		$response = $this->handle_request( 'status', $args );
 		$success  = false;
 
-		if ( ! empty( $response ) )
+		if ( $response )
 			$success = $this->update_option(
 				'_remote_subscription_status',
 				[

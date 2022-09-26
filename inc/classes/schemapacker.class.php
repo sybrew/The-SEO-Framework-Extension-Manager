@@ -400,10 +400,7 @@ final class SchemaPacker {
 
 		$this->delevel();
 
-		if ( empty( $data ) )
-			return null;
-
-		return $data;
+		return $data ?: null;
 	}
 
 	/**
@@ -626,8 +623,9 @@ final class SchemaPacker {
 				$action = $v > $c->_value;
 				break;
 
+			case '!':
 			case 'empty':
-				$action = empty( $v );
+				$action = ! $v;
 				break;
 
 			case 'count':

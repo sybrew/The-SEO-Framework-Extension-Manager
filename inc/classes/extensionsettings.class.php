@@ -250,7 +250,7 @@ final class ExtensionSettings {
 			// Run after other extensions are done parsing. They must ignore empty indexes.
 			\add_action( 'tsfem_form_do_ajax_save', [ $this, '_do_ajax_form_save' ], 20 );
 		} else {
-			\add_action( 'load-' . $this->ui_hook, [ $this, '_do_settings_page_actions' ] );
+			\add_action( "load-{$this->ui_hook}", [ $this, '_do_settings_page_actions' ] );
 		}
 	}
 

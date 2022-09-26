@@ -134,7 +134,7 @@ class Core {
 	 */
 	protected static function is_organization() {
 		static $is;
-		return $is ?? $is = 'organization' === static::$tsf->get_option( 'knowledge_type' );
+		return $is ?? ( $is = 'organization' === static::$tsf->get_option( 'knowledge_type' ) );
 	}
 
 	/**
@@ -147,12 +147,9 @@ class Core {
 	 * @return string The filtered Article type.
 	 */
 	protected static function filter_article_type( $type ) {
-
-		if ( ! \in_array( $type, static::get_available_article_types(), true ) ) {
-			$type = 'Article';
-		}
-
-		return $type;
+		return \in_array( $type, static::get_available_article_types(), true )
+			? $type
+			: 'Article';
 	}
 
 	/**

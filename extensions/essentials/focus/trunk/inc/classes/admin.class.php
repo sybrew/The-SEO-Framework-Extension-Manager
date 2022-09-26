@@ -354,12 +354,12 @@ final class Admin extends Core {
 			if ( \is_null( $store[ $key ] ) ) unset( $store[ $key ] );
 		endforeach;
 
-		if ( empty( $store ) ) {
-			$this->delete_post_meta_index();
-		} else {
+		if ( $store ) {
 			foreach ( $store as $key => $value ) {
 				$this->update_post_meta( $key, $value );
 			}
+		} else {
+			$this->delete_post_meta_index();
 		}
 	}
 
@@ -372,6 +372,7 @@ final class Admin extends Core {
 	 * @return array|null The sanitized keyword data.
 	 */
 	private function sanitize_keyword_data( $values ) {
+
 		$output = [];
 		foreach ( $values as $id => $items ) {
 			// Don't store when no keyword is set.
@@ -387,7 +388,7 @@ final class Admin extends Core {
 		}
 
 		// When all entries are emptied, clear meta data.
-		if ( empty( $output ) )
+		if ( ! $output )
 			return null;
 
 		// Fills missing data to maintain consistency.

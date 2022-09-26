@@ -66,7 +66,7 @@ class Api extends Data {
 	 */
 	protected function get_monitor_api_response( $type = '', $ajax = false, $args = [] ) {
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			$ajax or $this->set_error_notice( [ 1010201 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010201 ) : false;
 		}
@@ -95,7 +95,7 @@ class Api extends Data {
 						$args = array_merge(
 							$args,
 							[
-								'request'     => 'extension/monitor/' . $type,
+								'request'     => "extension/monitor/$type",
 								'email'       => $subscription['email'],
 								'licence_key' => $subscription['key'],
 							]

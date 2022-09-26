@@ -129,10 +129,10 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 function _init_tsf_extension_manager() {
 
 	// Memoize the class object. Do not run everything more than once.
-	static $tsf_extension_manager;
+	static $tsfem;
 
-	if ( $tsf_extension_manager )
-		return $tsf_extension_manager;
+	if ( $tsfem )
+		return $tsfem;
 
 	if ( false === \doing_action( 'plugins_loaded' ) ) {
 		\wp_die( 'Use tsfem() after action `plugins_loaded` priority 6.' );
@@ -150,13 +150,13 @@ function _init_tsf_extension_manager() {
 		 * @package TSF_Extension_Manager
 		 */
 		if ( \is_admin() ) {
-			$tsf_extension_manager = new LoadAdmin;
+			$tsfem = new LoadAdmin;
 		} else {
-			$tsf_extension_manager = new LoadFront;
+			$tsfem = new LoadFront;
 		}
 
 		// Initialize extensions.
-		$tsf_extension_manager->_init_extensions();
+		$tsfem->_init_extensions();
 
 		/**
 		 * Runs after extensions are initialized
@@ -164,7 +164,7 @@ function _init_tsf_extension_manager() {
 		 * @since 1.5.0
 		 */
 		\do_action( 'tsfem_extensions_initialized' );
-	} elseif ( ! \function_exists( '\\the_seo_framework' ) ) {
+	} elseif ( ! \function_exists( '\\tsf' ) ) {
 		/**
 		 * Nothing is loaded at this point; not even The SEO Framework.
 		 *
@@ -173,7 +173,7 @@ function _init_tsf_extension_manager() {
 		\do_action( 'tsfem_needs_the_seo_framework' );
 	}
 
-	return $tsf_extension_manager;
+	return $tsfem;
 }
 
 \TSF_Extension_Manager\_register_autoloader();
@@ -216,6 +216,7 @@ function _register_autoloader() {
  * @since 2.2.0 Now requires TSF 3.3+ to load.
  * @since 2.5.0 Now requires TSF 4.1.2+ to load.
  * @since 2.5.1 Now requires TSF 4.1.4+ to load.
+ * @since 2.6.0 Now requires TSF 4.2.0+ to load.
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */
@@ -226,8 +227,8 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( \function_exists( '\\the_seo_framework' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.1.4', '>=' ) && \tsf()->loaded ) {
+	if ( \function_exists( '\\tsf' ) ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '>=' ) && \tsf()->loaded ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load

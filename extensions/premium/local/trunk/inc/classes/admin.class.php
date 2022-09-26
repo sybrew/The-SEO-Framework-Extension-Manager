@@ -149,7 +149,7 @@ final class Admin extends Core {
 		if ( \wp_doing_ajax() ) {
 			$this->do_settings_page_ajax_actions();
 		} else {
-			\add_action( 'load-' . $this->local_menu_page_hook, [ $this, '_do_settings_page_actions' ] );
+			\add_action( "load-{$this->local_menu_page_hook}", [ $this, '_do_settings_page_actions' ] );
 		}
 	}
 

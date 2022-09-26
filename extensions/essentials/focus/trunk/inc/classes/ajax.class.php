@@ -99,7 +99,7 @@ final class Ajax {
 			$this,
 			TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY,
 			[
-				'request' => 'extension/focus/' . $type,
+				'request' => "extension/focus/$type",
 				'data'    => $data,
 			]
 		);
@@ -143,7 +143,7 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsfem();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+		$_args = ( $_POST['args'] ?? null ) ?: [];
 
 		$keyword  = isset( $_args['keyword'] ) ? $tsfem->s_ajax_string( $_args['keyword'] ) : '';
 		$language = isset( $_args['language'] ) ? $tsfem->s_ajax_string( $_args['language'] ) : '';
@@ -221,7 +221,7 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsfem();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+		$_args = ( $_POST['args'] ?? null ) ?: [];
 
 		$form_keys = [ 'category', 'value' ];
 
@@ -307,7 +307,7 @@ final class Ajax {
 		$this->verify_api_access();
 
 		$tsfem = \tsfem();
-		$_args = ! empty( $_POST['args'] ) ? $_POST['args'] : [];
+		$_args = ( $_POST['args'] ?? null ) ?: [];
 
 		$form_keys = [ 'category', 'value' ];
 

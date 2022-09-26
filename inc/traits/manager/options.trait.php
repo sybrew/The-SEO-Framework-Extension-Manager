@@ -122,7 +122,7 @@ trait Options {
 		// Cache current options from loop. This is used for activation where _instance needs to be used.
 		static $options = [];
 
-		if ( empty( $options ) )
+		if ( ! $options )
 			$options = $_options;
 
 		// If option is unchanged, return true.
@@ -179,7 +179,7 @@ trait Options {
 
 		static $run = false;
 
-		if ( empty( $options ) )
+		if ( ! $options )
 			return false;
 
 		if ( $this->killed_options )

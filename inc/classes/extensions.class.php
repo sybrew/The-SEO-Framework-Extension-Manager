@@ -96,11 +96,11 @@ final class Extensions extends Secure_Abstract {
 	 * @param string $instance Required. The instance key. Passed by reference.
 	 * @param array  $bits Required. The instance bits. Passed by reference.
 	 */
-	public static function initialize( $type = '', &$instance = '', &$bits = null ) {
+	public static function initialize( $type, &$instance = '', &$bits = null ) {
 
 		self::reset();
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 			return;
 		}
@@ -138,11 +138,11 @@ final class Extensions extends Secure_Abstract {
 	 * @param string $slug The extension slug. Required with AJAX.
 	 * @return string|bool False on failure. String on success.
 	 */
-	public static function get( $type = '', $slug = '' ) {
+	public static function get( $type, $slug = '' ) {
 
 		if ( ! self::verify_instance() ) return;
 
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an get type.' );
 			return false;
 		}
