@@ -122,6 +122,12 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.2.0
+
+[tsfep-release time="-1"]
+
+* **Improved:** Modernized code with a focus on improving performance.
+
 ### 1.1.9
 
 [tsfep-release time="November 8th, 2021"]

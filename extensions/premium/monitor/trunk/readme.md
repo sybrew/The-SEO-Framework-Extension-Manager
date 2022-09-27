@@ -81,13 +81,18 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ## Changelog
 
-*Because Monitor is a heavily dependent two-part system, these changes are annotated through Extension and API nodes.*
+*Because Monitor is a two-part system, changes are differentiated via Extension and API.*
 
 ### 1.2.8
 
 [tsfep-release time="-1"]
 
-* **Improved:** The valid sitemap message is now more descriptive.
+* **Extension:**
+	* **Improved:** The valid sitemap message is now more descriptive.
+	* **Improved:** Modernized code with a focus on improving performance.
+* **API - Our servers:**
+	* **September 27th, 2020:**
+		* **Improved:** Improved lookups for descriptions, canonical URLs, and icons, now supporting more vigorous minification plugins.
 
 ### 1.2.7
 
@@ -98,7 +103,6 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 		* **Fixed:** The HTTPS test no longer expects subsequent redirects when the site can be served from both HTTP and HTTPS.
 	* **July 7th, 2020:**
 		* **Fixed:** The mixed scheme test no longer defaults to mixed, but correctly tests both the HTTP and HTTPS versions of your site.
-* **No extension changes were made.**
 
 ### 1.2.6
 

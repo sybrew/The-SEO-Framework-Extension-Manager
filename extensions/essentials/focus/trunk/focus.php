@@ -40,7 +40,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-\define( 'TSFEM_E_FOCUS_VERSION', '1.5.1' );
+\define( 'TSFEM_E_FOCUS_VERSION', '1.5.2' );
 
 /**
  * The extension file, absolute unix path.
@@ -100,18 +100,4 @@ function _focus_init() {
 	}
 
 	return $loaded = (bool) $loaded;
-}
-
-/**
- * Returns the active base class.
- *
- * @since 1.0.0
- *
- * @return string The active class name.
- */
-function get_active_class() {
-	if ( \is_admin() ) {
-		return __NAMESPACE__ . '\\Admin';
-	}
-	return '';
 }

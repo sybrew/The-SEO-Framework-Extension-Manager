@@ -36,7 +36,7 @@ namespace TSF_Extension_Manager\Extension\Local;
  * @since 1.5.0
  * @param \TSF_Extension_Manager\Upgrader $upgrader The \TSF_Extension_Manager\Upgrader instance.
  */
-function _do_admin_upgrade( \TSF_Extension_Manager\$upgrader ) {
+function _do_admin_upgrade( $upgrader ) {
 
 	$version = $upgrader->get_current_version( 'local' );
 

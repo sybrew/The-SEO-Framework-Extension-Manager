@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Monitor extension for The SEO Framework
@@ -33,6 +30,7 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  * Class TSF_Extension_Manager\Extension\Monitor\Output
  *
  * Parses and evaluates input data.
+ * TODO make this entire class consist of static functions?
  *
  * @since 1.0.0
  * @access private
@@ -44,34 +42,19 @@ final class Output {
 	/**
 	 * Returns HTML pane overview based on $data input and $type.
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.8
 	 * @access private
-	 *
-	 * @param array  $data The pane data to parse.
-	 * @param string $type The pane data type.
-	 * @return string The HTML pane overview.
-	 */
-	public function _get_data( $data, $type ) {
-		return $this->get_pane_data( $data, $type );
-	}
-
-	/**
-	 * Generates information pane data based on $data input and $type.
-	 *
-	 * @since 1.0.0
-	 * @since 1.2.6 Now outputs an empty string when the pane info list yields nothing.
 	 *
 	 * @param array  $data The pane data to parse.
 	 * @param string $type The pane data type.
 	 * @return string The HTML pane overview. Empty string if unresolved.
 	 */
-	protected function get_pane_data( $data, $type ) {
+	public function _build_pane_html( $data, $type ) {
 
 		$info = '';
 
-		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry ) {
+		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
 			$info .= $info_entry;
-		}
 
 		return $info ? sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info ) : '';
 	}
@@ -80,8 +63,7 @@ final class Output {
 	 * Generates information pane data based on $data input and $type.
 	 * For ajax.
 	 *
-	 * @since 1.0.0
-	 * @since 1.2.6 Now returns an empty 'info' array when the pane info list yields nothing.
+	 * @since 1.2.8 Now returns an empty 'info' array when the pane info list yields nothing.
 	 * @access private
 	 *
 	 * @param array  $data The pane data to parse.
@@ -91,7 +73,7 @@ final class Output {
 	 *     'wrap' => string The HTML items wrap,
 	 * }
 	 */
-	public function _ajax_get_pane_data( $data, $type ) {
+	public function _ajax_build_pane_html( $data, $type ) {
 
 		$info = [];
 
@@ -171,19 +153,27 @@ final class Output {
 		static $count = 0;
 		$count++;
 
-		$id         = $id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', \esc_attr( $id ) ) : '';
-		$icon_state = $this->parse_defined_icon_state( $icon_state );
-
 		$checkbox_id = sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
-		$checkbox    = sprintf( '<input type=checkbox id="%s" checked>', $checkbox_id );
 
-		$title = sprintf( '<h3 class=tsfem-e-monitor-collapse-title>%s</h3>', $title );
-		$icon  = sprintf( '<span class="tsfem-e-monitor-collapse-icon tsfem-e-monitor-icon-%s"></span>', $icon_state );
-
-		$header  = sprintf( '<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>', $checkbox_id, $title, $icon );
-		$content = sprintf( '<div class=tsfem-e-monitor-collapse-content>%s</div>', $content );
-
-		return sprintf( '<div class=tsfem-e-monitor-collapse%s>%s%s%s</div>', $id, $checkbox, $header, $content );
+		return vsprintf(
+			'<div class=tsfem-e-monitor-collapse%s>%s%s%s</div>',
+			[
+				$id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', \esc_attr( $id ) ) : '',
+				sprintf( '<input type=checkbox id="%s" checked>', $checkbox_id ),
+				vsprintf(
+					'<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
+					[
+						$checkbox_id,
+						sprintf( '<h3 class=tsfem-e-monitor-collapse-title>%s</h3>', $title ),
+						sprintf(
+							'<span class="tsfem-e-monitor-collapse-icon tsfem-e-monitor-icon-%s"></span>',
+							$this->parse_defined_icon_state( $icon_state )
+						),
+					]
+				),
+				sprintf( '<div class=tsfem-e-monitor-collapse-content>%s</div>', $content ),
+			]
+		);
 	}
 
 	/**
@@ -202,9 +192,7 @@ final class Output {
 		if ( isset( $cache[ $type ][ $key ] ) )
 			return $cache[ $type ][ $key ];
 
-		$title = $this->parse_title( $key, $type );
-
-		return $cache[ $type ][ $key ] = \esc_html( $title );
+		return $cache[ $type ][ $key ] = \esc_html( $this->parse_title( $key, $type ) );
 	}
 
 	/**
@@ -375,7 +363,7 @@ final class Output {
 				break 1;
 		endswitch;
 
-		return $title;
+		return $title ?? '';
 	}
 
 	/**
@@ -390,8 +378,6 @@ final class Output {
 	 */
 	protected function parse_content( $key, $value, $type ) {
 
-		$content = '';
-
 		switch ( $type ) :
 			case 'issues':
 				$content = $this->parse_issues_content( $key, $value );
@@ -401,7 +387,7 @@ final class Output {
 				break;
 		endswitch;
 
-		return $content;
+		return $content ?? '';
 	}
 
 	/**
@@ -420,8 +406,6 @@ final class Output {
 		if ( ! isset( $tests ) )
 			$tests = Tests::get_instance();
 
-		$content = '';
-
 		$this->disable_tsf_debugging();
 
 		if ( isset( $value['requires'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['requires'], '>=' ) ) {
@@ -438,7 +422,7 @@ final class Output {
 
 		$this->reset_tsf_debugging();
 
-		return $content;
+		return $content ?? '';
 	}
 
 	/**
@@ -483,9 +467,7 @@ final class Output {
 		if ( ! isset( $debug ) ) {
 			$debug = [];
 
-			$tsf = \tsf();
-
-			$debug[1] = $tsf->the_seo_framework_debug;
+			$debug[1] = \tsf()->the_seo_framework_debug;
 			$debug[2] = $debug[1] ? \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug : false;
 		}
 
@@ -502,7 +484,7 @@ final class Output {
 
 		$debug = $this->get_tsf_debug_states();
 
-		$debug[1] and \tsf()->the_seo_framework_debug                     = $debug[1];
+		$debug[1] and \tsf()->the_seo_framework_debug                                   = $debug[1];
 		$debug[2] and \The_SEO_Framework\Debug::get_instance()->the_seo_framework_debug = $debug[2];
 	}
 }

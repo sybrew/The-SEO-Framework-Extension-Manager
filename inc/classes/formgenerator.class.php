@@ -215,7 +215,7 @@ final class FormGenerator {
 	 */
 	private static function get_ajax_iteration_start() {
 		// Careful, smart logic. Will return 1 if not set.
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
+		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
 	}
 
@@ -228,7 +228,7 @@ final class FormGenerator {
 	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
+		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
 		return \absint( $_POST['args']['newIt'] ?? 0 );
 	}
 
@@ -258,7 +258,7 @@ final class FormGenerator {
 	 */
 	private function prepare_ajax_iteration() {
 
-		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
+		// phpcs:ignore, WordPress.Security.NonceVerification -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
 		$caller = $_POST['args']['caller'];
 		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
 
@@ -2035,8 +2035,6 @@ final class FormGenerator {
 			)
 		);
 
-		$s_remove_button = '';
-
 		$url_readonly = false;
 
 		if ( ! empty( $args['_readonly'] ) ) {
@@ -2047,19 +2045,8 @@ final class FormGenerator {
 		$s_required = $args['_req'] ? 'required' : '';
 		$s_data     = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
-		if ( $s_id_value ) {
-			$url_readonly    = true;
-			$s_remove_button = vsprintf(
-				'<button type=button class="%1$s" title="%2$s" id="%3$s-remove" data-input-url="%3$s" data-input-id="%4$s">%5$s</button>',
-				[
-					'tsfem-remove-image-button tsfem-button-primary tsfem-button-small',
-					\esc_attr_x( 'Remove selected image', 'Button hover title', 'the-seo-framework-extension-manager' ),
-					$s_url_id,
-					$s_id_id,
-					\esc_html__( 'Remove Image', 'the-seo-framework-extension-manager' ),
-				]
-			);
-		}
+		if ( $s_id_value )
+			$url_readonly = true;
 
 		return vsprintf(
 			'<div class="tsfem-image-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',

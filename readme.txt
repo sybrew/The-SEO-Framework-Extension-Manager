@@ -3,7 +3,7 @@ Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 5.5
 Tested up to: 5.9
-Requires PHP: 5.6.5
+Requires PHP: 7.3.0
 Requires TSF: 4.2.4
 Stable tag: 2.5.3
 License: GPLv3
@@ -53,21 +53,20 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Reduced plugin file size relatively by no longer packing rendered vector images for archaic browser support.
 	* TODO Use `<use>` like on TSF site for improved painting performance?
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
+* With this update we hit a new milestone: 2 million characters of amazing code.
 TODO POT file. (also update related github)
 
 * TODO Add index.php files to extension top-folders (and fill in empty index.php files)
 
 * TODO consider cleaning unused functions? e.g. pixels_to_points
 * TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
-* TODO use API functions of TSF (memo, has_run, isset()?..: et al.)
 * TODO move get_view() to trait, using prescribed base URL.
 
-* TODO instead of "defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = TSF_Extension_Manager\Extension\Transport\get_active_class() and ", try a secret (for all extensions).
-TODO implement views trait.
-TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
+* TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.
 		-> Should we let the extensions wrap side-by-side instead? flex base 400px, stretch to fit?
 			-> Copy from tsf.fyi/e?
+	-> Convert it to "quick links"?
 TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
 	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`
 TODO use :where() css instead of the avalange of entries.

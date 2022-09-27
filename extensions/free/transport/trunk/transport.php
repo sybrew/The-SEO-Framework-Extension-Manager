@@ -109,18 +109,3 @@ function transport_init() {
 
 	return $loaded = false;
 }
-
-/**
- * Returns the active base class.
- *
- * @since 1.0.0
- *
- * @return string The active class name.
- */
-function get_active_class() {
-
-	if ( \is_admin() )
-		return __NAMESPACE__ . '\\Admin';
-
-	return '';
-}

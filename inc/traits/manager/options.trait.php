@@ -125,7 +125,7 @@ trait Options {
 		if ( ! $options )
 			$options = $_options;
 
-		// If option is unchanged, return true.
+		// If option is unchanged, return true. Don't merge the isset() check: $value may be null.
 		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
 			return true;
 

@@ -608,6 +608,28 @@ class Core {
 	}
 
 	/**
+	 * Verifies extension loading instances. May clear the input through reference.
+	 * Kills extension load sequence on failure.
+	 *
+	 * @since 2.6.0
+	 * @access private
+	 *
+	 * @param string $instance The verification instance key. Passed by reference.
+	 * @param int    $bit      The verification instance bit. Passed by reference.
+	 * @return bool False when extension may be loaded. True otherwise.
+	 */
+	final public function _blocked_extension_file( &$instance, &$bit ) {
+
+		if ( $this->_has_died() )
+			return true;
+
+		if ( false === ( $this->_verify_instance( $instance, $bit ) or $this->_maybe_die() ) )
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Verifies views instances. Clears the input through reference.
 	 *
 	 * Is seems vulnerable to timing attacks, but that's mitigated further for
@@ -1027,10 +1049,7 @@ class Core {
 	 */
 	final public function _init_early_extension_autoloader( $path, $namespace, &$_instance, &$bits ) {
 
-		if ( $this->_has_died() )
-			return false;
-
-		if ( false === ( $this->_verify_instance( $_instance, $bits[1] ) or $this->_maybe_die() ) )
+		if ( $this->_blocked_extension_file( $_instance, $bits[1] ) )
 			return false;
 
 		return $this->register_extension_autoload_path( $path, $namespace );

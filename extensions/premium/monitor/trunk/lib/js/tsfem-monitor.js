@@ -662,7 +662,7 @@ window.tsfem_e_monitor = {
 	 * @param {jQuery.event} event
 	 */
 	a11yEditSetting: function( event ) {
-		if ( event.which == 32 ) { // spacebar
+		if ( 32 === event.which ) { // spacebar nonJQ: ' ' === event.key
 			event.preventDefault();
 			tsfem_e_monitor.editSetting( event );
 		}

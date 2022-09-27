@@ -9,12 +9,11 @@ This extension redirects attachment-page visitors back to the parent post.
 
 ### Clean up the web
 
-Within WordPress, you can easily upload and manage your media.
-This media, for example, an image, is often placed inside post content.
+You can easily upload and manage your media, such as images, within WordPress. Most website owners use these as attachments in posts.
 
-WordPress creates a new page as a placeholder for each attachment. These pages are not beneficial for most websites, because your visitors won't see the initially intended context. These pages are also harmful to SEO, as there's often no content attached.
+But, WordPress creates a new page as a placeholder for each attachment. These pages are not beneficial for most websites because your visitors won't see your initially intended context. These placeholder pages also harm SEO, as there's often no readable content attached.
 
-With Origin, all attachment pages will redirect your visitors to the best page available. Albeit the original content, or the plain attachment itself.
+With Origin, all attachment pages will redirect your visitors to the best page available, albeit the original content or the actual attachment itself.
 
 ## Usage
 

@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Local;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Local extension for The SEO Framework
@@ -58,6 +55,13 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
 \TSF_Extension_Manager\Extension\Local\_load_trait( 'schema-packer' );
 
 /**
+ * Require extension views trait.
+ *
+ * @since 1.2.0
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/views' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Local\Settings
  *
  * Holds extension settings methods.
@@ -69,6 +73,7 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
 final class Settings {
 	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance,
 		\TSF_Extension_Manager\UI,
+		\TSF_Extension_Manager\Extension_Views,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Error,
 		Secure_Post,
@@ -92,6 +97,11 @@ final class Settings {
 	 * @param string $o_index The options index.
 	 */
 	public function _init( Core $_core, $slug, $hook, $o_index ) {
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Views
+		 */
+		$this->view_location_base = TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
 
 		/**
 		 * Set options index.
@@ -278,8 +288,8 @@ final class Settings {
 
 		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_local_scripts' ] );
 
-		// Add something special for Vivaldi
-		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
+		// Add something special for Vivaldi & Android.
+		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
 
 		/**
 		 * Initialize UI calls.
@@ -371,17 +381,6 @@ final class Settings {
 	}
 
 	/**
-	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
-	 * Does not always work. So many browser bugs... It's just fancy.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function _output_theme_color_meta() {
-		$this->get_view( 'layout/general/meta' );
-	}
-
-	/**
 	 * Outputs department fields and floating buttons.
 	 *
 	 * @since 1.0.0
@@ -425,23 +424,5 @@ final class Settings {
 	public function _reprocess_all_stored_data() {
 		$this->_init_main();
 		$this->process_all_stored_data();
-	}
-
-	/**
-	 * Fetches files based on input to reduce memory overhead.
-	 * Passes on input vars.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $view   The file name.
-	 * @param array  $__args The arguments to be supplied within the file name.
-	 *                       Each array key is converted to a variable with its value attached.
-	 */
-	private function get_view( $view, $__args = [] ) {
-
-		foreach ( $__args as $__k => $__v ) $$__k = $__v;
-		unset( $__k, $__v, $__args );
-
-		include TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

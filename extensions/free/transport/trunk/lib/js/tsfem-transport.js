@@ -203,7 +203,6 @@ window.tsfem_e_import = function() {
 	/**
 	 * Handles AJAX post requests securely.
 	 * This probably never runs, maybe when a text-based browser is used.
-	 * It works, though... var_dump() verify before launch.
 	 *
 	 * @since 1.0.0
 	 * @access private

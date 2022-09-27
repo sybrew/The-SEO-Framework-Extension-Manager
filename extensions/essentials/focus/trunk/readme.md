@@ -308,6 +308,12 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ## Changelog
 
+### 1.5.2
+
+[tsfep-release time="-1"]
+
+* **Improved:** Modernized code with a focus on improving performance.
+
 ### 1.5.1
 
 [tsfep-release time="November 8th, 2021"]

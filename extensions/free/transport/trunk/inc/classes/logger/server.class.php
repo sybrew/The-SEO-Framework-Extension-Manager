@@ -100,9 +100,6 @@ final class Server {
 				break;
 			}
 		}
-
-		// Debug: var_dump()
-		// static::$supports_stream = false;
 	}
 
 	/**
@@ -235,7 +232,6 @@ final class Server {
 
 		if ( \is_string( $data ) )
 			$data = [ 'content' => $data ];
-			// $data = [ 'content' => strtr( $data, [ ':' => '&#58;' ] ) ];
 
 		printf( "event: %s\nid: %s\n", \esc_html( $event ), \esc_html( $id ) );
 		echo 'data: ', json_encode( $data, JSON_FORCE_OBJECT ), "\n\n";

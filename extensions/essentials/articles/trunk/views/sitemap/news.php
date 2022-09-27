@@ -7,7 +7,7 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this instanceof TSF_Extension_Manager\Extension\Articles\Sitemap or die;
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
 
 $tsf = tsf();
 

@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Articles extension for The SEO Framework
@@ -30,6 +27,13 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  */
 
 /**
+ * Require extension views trait.
+ *
+ * @since 2.2.1
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/views' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Articles\Sitemap
  *
  * @since 2.0.0
@@ -38,7 +42,8 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  * @final
  */
 final class Sitemap extends Core {
-	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface,
+		\TSF_Extension_Manager\Extension_Views;
 
 	/**
 	 * @since 2.0.0
@@ -54,6 +59,11 @@ final class Sitemap extends Core {
 	private function construct() {
 
 		if ( ! $this->get_option( 'news_sitemap' ) || ! static::is_organization() ) return;
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Views
+		 */
+		$this->view_location_base = TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
 
 		\add_filter( 'the_seo_framework_sitemap_endpoint_list', [ $this, '_register_news_sitemap_endpoint' ] );
 		\add_action( 'the_seo_framework_sitemap_schemas', [ $this, '_adjust_news_sitemap_schemas' ] );
@@ -136,7 +146,7 @@ final class Sitemap extends Core {
 		}
 
 		// Fetch sitemap content and add trailing line. Already escaped internally.
-		include TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . 'sitemap' . DIRECTORY_SEPARATOR . 'news.php';
+		$this->get_view( 'sitemap/news' );
 		echo "\n";
 
 		exit;

@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Monitor extension for The SEO Framework
@@ -40,6 +37,13 @@ use \TSF_Extension_Manager\HTML as HTML;
  * @since 1.0.0
  */
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
+
+/**
+ * Require extension views trait.
+ *
+ * @since 1.2.8
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/views' );
 
 /**
  * Require extension options trait.
@@ -77,6 +81,7 @@ final class Admin extends Api {
 	use \TSF_Extension_Manager\Construct_Master_Once_Interface,
 		\TSF_Extension_Manager\Time,
 		\TSF_Extension_Manager\UI,
+		\TSF_Extension_Manager\Extension_Views,
 		\TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Extension_Forms,
 		\TSF_Extension_Manager\Error;
@@ -117,6 +122,11 @@ final class Admin extends Api {
 	 * @since 1.0.0
 	 */
 	private function construct() {
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Views
+		 */
+		$this->view_location_base = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
 
 		$this->nonce_name = 'tsfem_e_monitor_nonce_name';
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
@@ -292,8 +302,8 @@ final class Admin extends Api {
 		 */
 		$this->init_errors();
 
-		// Add something special for Vivaldi
-		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
+		// Add something special for Vivaldi & Android.
+		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
 
 		return true;
 	}
@@ -793,17 +803,6 @@ final class Admin extends Api {
 	}
 
 	/**
-	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
-	 * Does not always work. So many browser bugs... It's just fancy.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function _output_theme_color_meta() {
-		$this->get_view( 'layout/general/meta' );
-	}
-
-	/**
 	 * Creates issues overview for the issues pane.
 	 *
 	 * @since 1.0.0
@@ -817,7 +816,7 @@ final class Admin extends Api {
 		$issues = $this->get_data( 'issues', [] );
 
 		if ( $issues )
-			$output = Output::get_instance()->_get_data( $issues, 'issues' );
+			$output = Output::get_instance()->_build_pane_html( $issues, 'issues' );
 
 		if ( ! $output ) {
 			$output = sprintf(
@@ -845,7 +844,7 @@ final class Admin extends Api {
 		$found  = true;
 
 		if ( $issues )
-			$data = Output::get_instance()->_ajax_get_pane_data( $issues, 'issues' );
+			$data = Output::get_instance()->_ajax_build_pane_html( $issues, 'issues' );
 
 		if ( empty( $data['info'] ) ) {
 			$found = false;
@@ -1323,25 +1322,5 @@ final class Admin extends Api {
 	 */
 	protected function get_string_coming_soon() {
 		return \esc_html__( 'Coming soon!', 'the-seo-framework-extension-manager' );
-	}
-
-	/**
-	 * Fetches files based on input to reduce memory overhead.
-	 * Passes on input vars.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $view   The file name.
-	 * @param array  $__args The arguments to be supplied within the file name.
-	 *                       Each array key is converted to a variable with its value attached.
-	 */
-	protected function get_view( $view, $__args = [] ) {
-
-		foreach ( $__args as $__k => $__v ) $$__k = $__v;
-		unset( $__k, $__v, $__args );
-
-		$file = TSFEM_E_MONITOR_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
-
-		include $file;
 	}
 }

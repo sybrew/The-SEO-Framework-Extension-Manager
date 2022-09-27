@@ -148,6 +148,12 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-image-id' ], // delete
 			],
 			[
+				[ $wpdb->postmeta, '_yoast_wpseo_focuskw' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_is_cornerstone' ], // delete
+			],
+			[
 				[ $wpdb->postmeta, '_yoast_wpseo_content_score' ], // delete
 			],
 			[

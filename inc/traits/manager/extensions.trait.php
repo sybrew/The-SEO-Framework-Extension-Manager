@@ -83,7 +83,7 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664173453',
+				'last_updated' => '1664262329',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.2.0',
@@ -96,7 +96,7 @@ trait Extensions_Properties {
 				'area'         => 'blogging, news',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664173453',
+				'last_updated' => '1664262329',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.2.0',
@@ -106,7 +106,7 @@ trait Extensions_Properties {
 				'slug'         => 'transport',
 				'network'      => '0',
 				'type'         => 'free',
-				'area'         => 'general',
+				'area'         => 'setup',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
 				'last_updated' => '1663907292',
@@ -148,7 +148,7 @@ trait Extensions_Properties {
 				'area'         => 'business',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1633798024',
+				'last_updated' => '1664262329',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.2.0',
@@ -174,7 +174,7 @@ trait Extensions_Properties {
 				'area'         => 'syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1633797930',
+				'last_updated' => '1664262329',
 				'requires'     => '5.5',
 				'tested'       => '6.0',
 				'requires_tsf' => '4.2.0',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '482ef8e824f80cee45c721fa142526ee474d89fa19efbaabb2a61da0c91e5d4f',
-			'sha1'   => '02420d3fe8f3f6c69cf0f176c20fc7d6be100f27',
-			'md5'    => '41b46e3b70558f3b508b5fc9641a0a45',
+			'sha256' => '3ab866d424aac2ccd232a853bc3f11717bd6bef9417ac6e6d8f2568b8db4b17e',
+			'sha1'   => '8e776f587417c3ef86b58007033f172b14f41bf9',
+			'md5'    => '1b4956a20cdf15fb68af6b717acd6b5d',
 		];
 	}
 
@@ -265,10 +265,10 @@ trait Extensions_Properties {
 				//! The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
 				//! TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
 				//! TODO Forward this to the upgrader for whenever an extension's removed.
-				\tsf()->_doing_it_wrong(
-					__CLASS__ . '::' . __FUNCTION__,
-					sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )
-				);
+				// \tsf()->_doing_it_wrong(
+				// 	__CLASS__ . '::' . __FUNCTION__,
+				// 	sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )
+				// );
 				return [];
 			}
 		} else {

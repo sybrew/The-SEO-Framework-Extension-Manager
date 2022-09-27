@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Articles extension for The SEO Framework
@@ -30,6 +27,13 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  */
 
 /**
+ * Require extension views trait.
+ *
+ * @since 2.2.1
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/views' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Articles\Admin
  *
  * @since 1.2.0
@@ -37,12 +41,18 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  * @final
  */
 final class Admin extends Core {
-	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface,
+		\TSF_Extension_Manager\Extension_Views;
 
 	/**
 	 * Constructor.
 	 */
 	private function construct() {
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Views
+		 */
+		$this->view_location_base = TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
 
 		$this->prepare_inpostgui();
 		$this->prepare_listedit();
@@ -567,7 +577,7 @@ final class Admin extends Core {
 		];
 
 		\TSF_Extension_Manager\InpostGUI::register_view(
-			$this->get_view_location( 'inpost/inpost' ),
+			$this->_get_view_location( 'inpost/inpost' ),
 			compact( 'post_meta' ),
 			'structure'
 		);
@@ -607,7 +617,7 @@ final class Admin extends Core {
 		];
 
 		\TSF_Extension_Manager\ListEdit::register_quick_view(
-			$this->get_view_location( 'list/quickedit' ),
+			$this->_get_view_location( 'list/quickedit' ),
 			get_defined_vars(),
 			'structure',
 			10
@@ -650,7 +660,7 @@ final class Admin extends Core {
 		];
 
 		\TSF_Extension_Manager\ListEdit::register_bulk_view(
-			$this->get_view_location( 'list/bulkedit' ),
+			$this->_get_view_location( 'list/bulkedit' ),
 			get_defined_vars(),
 			'structure',
 			10
@@ -800,17 +810,5 @@ final class Admin extends Core {
 			foreach ( $store as $key => $value )
 				$this->update_post_meta( $key, $value );
 		}
-	}
-
-	/**
-	 * Returns view location.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @param string $view The relative file location and name without '.php'.
-	 * @return string The view file location.
-	 */
-	protected function get_view_location( $view ) {
-		return TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

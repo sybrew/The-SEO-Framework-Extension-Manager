@@ -550,13 +550,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		let keyword          = getSubElementById( idPrefix, 'keyword' ).value,
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' );
 
-		if ( ! lexicalFormField instanceof HTMLInputElement ) return;
+		if ( ! lexicalFormField ) return;
 
 		setEditButton( idPrefix ).to( 'loading' );
 
 		const setLexicalFormSelectionFields = ( entries ) => {
-			let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
-				lexicalData = getSubElementById( idPrefix, 'lexical_data' );
+			const lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
+				  lexicalData     = getSubElementById( idPrefix, 'lexical_data' );
 
 			// Get default form field, and append to it.
 			let _forms = Object.values( JSON.parse( l10n.defaultLexicalForm ) );
@@ -578,10 +578,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let formValues = _forms.length && JSON.stringify( _forms ) || l10n.defaultLexicalForm;
 
 			lexicalFormField.value = '';
-			if ( lexicalData instanceof HTMLInputElement ) {
+			if ( lexicalData )
 				lexicalData.value = formValues;
-			}
-			if ( lexicalSelector instanceof HTMLSelectElement ) {
+
+			if ( lexicalSelector ) {
 				updateLexicalSelector( idPrefix, formValues );
 				lexicalSelector.disabled = false;
 				lexicalSelector.selectedIndex = 0;
@@ -635,17 +635,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const clearData = ( idPrefix, what ) => {
 		const clearLexical = () => {
-			let lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
-				lexicalSelector  = getSubElementById( idPrefix, 'lexical_selector' ),
-				lexicalData      = getSubElementById( idPrefix, 'lexical_data' );
+			const lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
+				  lexicalSelector  = getSubElementById( idPrefix, 'lexical_selector' ),
+				  lexicalData      = getSubElementById( idPrefix, 'lexical_data' );
 
-			if ( lexicalFormField instanceof HTMLInputElement ) {
+			if ( lexicalFormField )
 				lexicalFormField.value = '';
-			}
-			if ( lexicalData instanceof HTMLInputElement ) {
+
+			if ( lexicalData )
 				lexicalData.value = l10n.defaultLexicalForm;
-			}
-			if ( lexicalSelector instanceof HTMLSelectElement ) {
+
+			if ( lexicalSelector ) {
 				lexicalSelector.disabled      = true;
 				lexicalSelector.selectedIndex = 0;
 				lexicalSelector.dataset.prev  = 0;
@@ -656,52 +656,52 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// Always calls clearDefinition!!
 		}
 		const clearDefinition = () => {
-			let definitionDropdown  = getSubElementById( idPrefix, 'definition_dropdown' ),
-				definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
+			const definitionDropdown  = getSubElementById( idPrefix, 'definition_dropdown' ),
+				  definitionSelection = getSubElementById( idPrefix, 'definition_selection' );
 
-			if ( definitionDropdown instanceof HTMLSelectElement ) {
+			if ( definitionDropdown ) {
 				definitionDropdown.selectedIndex = 0;
 				definitionDropdown.innerHTML     = '';
 
 				document.querySelector( `[data-for="${definitionDropdown.id}"]` ).innerHTML = '';
 			}
 
-			if ( definitionSelection instanceof HTMLInputElement )
+			if ( definitionSelection )
 				definitionSelection.value = '';
 
 			activeWords( idPrefix ).clearCache();
 		}
 		const clearInflections = () => {
-			let inflectionEntries = getSubElementById( idPrefix, 'inflections' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
-				inflectionData    = getSubElementById( idPrefix, 'inflection_data' ),
-				activeInflections = getSubElementById( idPrefix, 'active_inflections' );
+			const inflectionEntries = getSubElementById( idPrefix, 'inflections' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
+				  inflectionData    = getSubElementById( idPrefix, 'inflection_data' ),
+				  activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
-			if ( inflectionEntries instanceof Element ) {
+			if ( inflectionEntries )
 				inflectionEntries.innerHTML = '';
-			}
-			if ( inflectionData instanceof HTMLInputElement ) {
+
+			if ( inflectionData )
 				inflectionData.value = '';
-			}
-			if ( activeInflections instanceof HTMLInputElement ) {
+
+			if ( activeInflections )
 				activeInflections.value = '';
-			}
+
 			// Clear cache.
 			activeWords( idPrefix ).clearCache( 'inflections' );
 		}
 		const clearSynonyms = () => {
-			let synonymEntries = getSubElementById( idPrefix, 'synonyms' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
-				synonymData    = getSubElementById( idPrefix, 'synonym_data' ),
-				activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' );
+			const synonymEntries = getSubElementById( idPrefix, 'synonyms' )?.querySelector( '.tsfem-e-focus-subject-selection' ),
+				  synonymData    = getSubElementById( idPrefix, 'synonym_data' ),
+				  activeSynonyms = getSubElementById( idPrefix, 'active_synonyms' );
 
-			if ( synonymEntries instanceof Element ) {
+			if ( synonymEntries )
 				synonymEntries.innerHTML = '';
-			}
-			if ( synonymData instanceof HTMLInputElement ) {
+
+			if ( synonymData )
 				synonymData.value = '';
-			}
-			if ( activeSynonyms instanceof HTMLInputElement ) {
+
+			if ( activeSynonyms )
 				activeSynonyms.value = '';
-			}
+
 			activeWords( idPrefix ).clearCache( 'synonyms' );
 			tsfem_inpost.isPremium && refillSubjectSelection( idPrefix );
 		}
@@ -1030,16 +1030,17 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		return {
 			to: ( what ) => {
-				let lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
-				if ( ! lexicalSelector instanceof HTMLSelectElement ) return;
-				switch ( what ) {
-					case 'enabled':
-						enable( lexicalSelector );
-						break;
-					default:
-					case 'disabled':
-						disable( lexicalSelector );
-						break;
+				const lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
+				if ( lexicalSelector ) {
+					switch ( what ) {
+						case 'enabled':
+							enable( lexicalSelector );
+							break;
+						default:
+						case 'disabled':
+							disable( lexicalSelector );
+							break;
+					}
 				}
 			}
 		}
@@ -1056,11 +1057,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} idPrefix
 	 */
 	const prepareWrapScoreElements = ( idPrefix ) => {
-		let scoresWrap = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
+		const subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
 		setAnalysisInterval( idPrefix ).to( 'disabled' );
 
-		if ( ! subScores || subScores !== Object( subScores ) ) {
+		if ( ! subScores?.length ) {
 			// subScores isn't set.
 			setEvaluationVisuals( idPrefix ).to( 'error' );
 		} else {
@@ -1124,7 +1125,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const prepareScoreElement = ( rater ) => {
 
 		let idPrefix = getSubIdPrefix( rater.id ),
-			kw = getSubElementById( idPrefix, 'keyword' ).value;
+			kw       = getSubElementById( idPrefix, 'keyword' ).value;
 
 		if ( ! kw ) return;
 
@@ -1229,8 +1230,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const setEditButton = ( idPrefix ) => {
 		return { to: ( state ) => {
-			let editToggle = getSubElementById( idPrefix, 'subject_edit' );
-			if ( ! editToggle || ! editToggle instanceof HTMLInputElement ) return;
+			const editToggle = getSubElementById( idPrefix, 'subject_edit' );
+			if ( ! editToggle ) return;
 
 			let editLabel     = document.querySelector( `label[for="${editToggle.id}"]` ),
 				editWrap      = editToggle.parentNode,
@@ -1288,12 +1289,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const toggleCollapser = ( event ) => {
 			if ( tsfem_inpost.isActionableElement( event.target ) ) return;
 
-			// This can be squashed into 1 line using vanilla... what was I thinking?
-			let $target = $( event.target ).closest( '.tsfem-e-focus-collapse-wrap' ),
-				idPrefix = getSubIdPrefix( $target.attr( 'id' ) ),
-				collapser = getSubElementById( idPrefix, 'collapser' );
+			const collapser = getSubElementById(
+				getSubIdPrefix( event.target.closest( '.tsfem-e-focus-collapse-wrap' )?.id ),
+				'collapser'
+			);
 
-			if ( collapser instanceof HTMLInputElement ) collapser.checked = ! collapser.checked;
+			if ( collapser )
+				collapser.checked = ! collapser.checked;
 		}
 
 		// Make the whole collapse bar a double-clickable expander/retractor.
@@ -1427,30 +1429,27 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @return {boolean|undefined} False on error. Undefined otherwise.
 		 */
 		const editSubject = ( event, freshFill ) => {
-			let clicker  = event.target,
-				selectId = void 0,
-				selector = void 0,
-				holder   = void 0,
-				idPrefix = void 0,
-				lastVal  = 0,
+			const clicker  = event.target;
+
+			let lastVal  = 0,
 				lastText = '',
 				newVal   = 0,
 				newText  = '';
 
 			freshFill ||= false; // Could we rely on 'event.isTrusted'?
 
-			if ( typeof clicker.dataset.for !== 'undefined' )
-				selectId = clicker.dataset.for;
+			const selectId = clicker?.dataset?.for;
 
 			if ( ! selectId )
 				return false;
 
-			selector = document.getElementById( selectId );
-			idPrefix = getSubIdPrefix( selectId );
-			holder   = getSubElementById( idPrefix, 'definition_selection' );
+			const selector = document.getElementById( selectId );
 
 			if ( ! selector )
 				return false;
+
+			const idPrefix = getSubIdPrefix( selectId ),
+				  holder   = getSubElementById( idPrefix, 'definition_selection' );
 
 			lastVal  = selector.value;
 			lastText = clicker.innerHTML;
@@ -1529,8 +1528,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// Don't propagate current events to new listeners.
 			setTimeout( addListeners, 10 );
 		}
-		const a11yEditSubject = ( event ) => {
-			if ( 32 == event.which ) {
+		const a11yEditSubject = event => {
+			if ( ' ' === event.key ) { // spacebar.
 				event.preventDefault();
 				editSubject( event );
 			}
@@ -1544,10 +1543,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				&& clearTimeout( showSubjectEditorDebouncer[ idPrefix ] );
 
 			showSubjectEditorDebouncer[ idPrefix ] = setTimeout( () => {
-				let editor    = getSubElementById( idPrefix, 'edit' ),
-					evaluator = getSubElementById( idPrefix, 'evaluate' );
-
-				let collapser = getSubElementById( idPrefix, 'collapser' );
+				const editor    = getSubElementById( idPrefix, 'edit' ),
+					  evaluator = getSubElementById( idPrefix, 'evaluate' ),
+					  collapser = getSubElementById( idPrefix, 'collapser' );
 
 				if ( collapser.checked ) {
 					// Collapsed. Act as if it's getting checked either way, without fancy trickery.
@@ -1629,22 +1627,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const resetSubjectFilterListeners = () => {
 
 		const getIterationFromId = id => ( /\[([0-9]+)\]$/.exec( id ) || '' )[1];
-		const setActiveInflections = ( idPrefix ) => {
-			let inflectionSection = getSubElementById( idPrefix, 'inflections' ),
-				selected          = inflectionSection.querySelectorAll( 'input:checked' ),
-				values            = [];
-			selected.forEach( el => {
+		const setActiveInflections = idPrefix => {
+			let values = [];
+			getSubElementById( idPrefix, 'inflections' ).querySelectorAll( 'input:checked' ).forEach( el => {
 				values.push( getIterationFromId( el.id ) );
 			} );
 			getSubElementById( idPrefix, 'active_inflections' ).value = values.join();
 			activeWords( idPrefix ).clearCache( 'inflections' );
 			triggerAllAnalysis( idPrefix );
 		}
-		const setActiveSynonyms = ( idPrefix ) => {
-			let synonymSection = getSubElementById( idPrefix, 'synonyms' ),
-				selected       = synonymSection.querySelectorAll( 'input:checked' ),
-				values         = [];
-			selected.forEach( el => {
+		const setActiveSynonyms = idPrefix => {
+			let values = [];
+			getSubElementById( idPrefix, 'synonyms' ).querySelectorAll( 'input:checked' ).forEach( el => {
 				values.push( getIterationFromId( el.id ) );
 			} );
 			getSubElementById( idPrefix, 'active_synonyms' ).value = values.join();
@@ -1815,7 +1809,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			const activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
-			if ( activeInflections instanceof HTMLInputElement && activeInflections.value ) {
+			if ( activeInflections?.value ) {
 				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value,
 					inflections    = JSON.parse( inflectionData )[0].inflections;
 
@@ -1835,7 +1829,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			const activeSynonyms     = getSubElementById( idPrefix, 'active_synonyms' ),
 				  selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
 
-			if ( activeSynonyms instanceof HTMLInputElement && activeSynonyms.value ) {
+			if ( activeSynonyms?.value ) {
 				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value,
 					synonyms    = JSON.parse( synonymData )[ +selectedDefinition.value ].synonyms;
 
@@ -2037,8 +2031,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		clearTimeout( triggerAllBuffer[ idPrefix ] );
 		triggerAllBuffer[ idPrefix ] = setTimeout( () => {
 			if ( idPrefix ) {
-				let subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
-				if ( subScores instanceof NodeList && subScores.length ) {
+				const subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
+				if ( subScores?.length ) {
 					tsfem_inpost.promiseLoop( subScores, item => doCheck( item ), 150 );
 				} else {
 					setEvaluationVisuals( idPrefix ).to( 'error' );
@@ -2332,15 +2326,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( typeof l10n.focusElements.pageUrl === 'undefined' ) return;
 
 			let listenNode = document.getElementById( 'edit-slug-box' );
-			if ( ! listenNode || ! listenNode instanceof HTMLElement ) {
+			if ( ! listenNode )
 				return;
-			}
 
 			const updatePageUrlRegistry = () => {
-				let unregisteredUrlAssessments = document.querySelectorAll(
+				const unregisteredUrlAssessments = document.querySelectorAll(
 					'.tsfem-e-focus-assessment-wrap[data-assessment-type="url"][data-assess="0"]'
 				);
-				if ( unregisteredUrlAssessments instanceof NodeList && unregisteredUrlAssessments.length ) {
+				if ( unregisteredUrlAssessments.length ) {
 					updateActiveFocusAreas( 'pageUrl' );
 					resetAnalysisChangeListeners( 'pageUrl' );
 					unregisteredUrlAssessments.forEach( el => prepareScoreElement( el ) );

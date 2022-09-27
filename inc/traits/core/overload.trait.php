@@ -515,7 +515,9 @@ trait Destruct_Core_Public_Final_Interface {
 
 		static $died = false;
 
-		return $died || $set && $died = true;
+		if ( $set ) $died = true;
+
+		return $died;
 	}
 }
 

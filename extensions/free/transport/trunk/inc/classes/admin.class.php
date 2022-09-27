@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Transport extension for The SEO Framework
@@ -37,7 +34,7 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
 \TSF_Extension_Manager\_load_trait( 'core/ui' );
 
 /**
- * Require extension forms trait.
+ * Require extension views trait.
  *
  * @since 1.0.0
  */
@@ -112,13 +109,14 @@ final class Admin {
 						'supports'  => [
 							'title',
 							'description',
-							'canonical_url',
 							'og_title',
 							'og_description',
 							'og_image',
 							'og_image_id',
 							'twitter_title',
 							'twitter_description',
+							'canonical_url',
+							'redirect',
 							'noindex',
 							'nofollow',
 							'noarchive',
@@ -138,22 +136,22 @@ final class Admin {
 						'supports'  => [
 							'title',
 							'description',
-							'canonical_url',
-							'noindex',
 							'og_title',
 							'og_description',
+							'og_image',
 							'twitter_title',
 							'twitter_description',
-							'og_image',
+							'canonical_url',
+							'noindex',
 						],
 						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
 							'title',
 							'description',
-							'canonical_url',
 							'og_title',
 							'og_description',
 							'twitter_title',
 							'twitter_description',
+							'canonical_url',
 						],
 					],
 				],
@@ -166,13 +164,13 @@ final class Admin {
 						'supports'  => [
 							'title',
 							'description',
-							'canonical_url',
 							'og_title',
 							'og_description',
 							'og_image',
 							'og_image_id',
 							'twitter_title',
 							'twitter_description',
+							'canonical_url',
 							'noindex',
 							'nofollow',
 							'noarchive',
@@ -191,13 +189,13 @@ final class Admin {
 						'supports'  => [
 							'title',
 							'description',
-							'canonical_url',
 							'og_title',
 							'og_description',
 							'og_image',
 							'og_image_id',
 							'twitter_title',
 							'twitter_description',
+							'canonical_url',
 							'noindex',
 							'nofollow',
 							'noarchive',
@@ -427,8 +425,8 @@ final class Admin {
 		 */
 		$this->init_errors();
 
-		// Add something special.
-		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
+		// Add something special for Vivaldi & Android.
+		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
 
 		return true;
 	}
@@ -486,17 +484,6 @@ final class Admin {
 	 */
 	public function _output_transport_footer() {
 		$this->get_view( 'layout/general/footer' );
-	}
-
-	/**
-	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
-	 * Does not always work. So many browser bugs... It's just fancy.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function _output_theme_color_meta() {
-		$this->get_view( 'layout/general/meta' );
 	}
 
 	/**

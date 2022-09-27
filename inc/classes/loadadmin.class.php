@@ -391,15 +391,14 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $view The file name.
-	 * @param array  $args The arguments to be supplied within the file name.
-	 *                     Each array key is converted to a variable with its value attached.
+	 * @param string $view   The file name.
+	 * @param array  $__args The arguments to be supplied within the file name.
+	 *                       Each array key is converted to a variable with its value attached.
 	 */
-	protected function get_view( $view, $args = [] ) {
+	protected function get_view( $view, $__args = [] ) {
 
-		foreach ( $args as $key => $val ) {
-			$$key = $val;
-		}
+		foreach ( $__args as $__k => $__v ) $$__k = $__v;
+		unset( $__k, $__v, $__args );
 
 		$this->get_verification_codes( $_instance, $bits );
 
@@ -428,7 +427,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param string $view The view file name.
 	 */
 	public function get_view_location( $view ) {
-		return TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . $view . '.php';
+		return TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 
 	/**

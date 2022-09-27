@@ -436,17 +436,11 @@ class API extends Core {
 	 * @param string $class     The class instance name.
 	 * @param string $_instance The verification instance. Passed by reference.
 	 * @param array  $bits      The verification bits. Passed by reference.
-	 * @return string The storage key.
+	 * @return string|false The storage key, false on failure.
 	 */
 	final public function _init_final_static_extension_api_access( $class, &$_instance, &$bits ) {
 
-		if ( $this->_has_died() )
-			return false;
-
-		if ( false === ( $this->_verify_instance( $_instance, $bits[1] ) or $this->_maybe_die() ) )
-			return false;
-
-		if ( false === $class )
+		if ( $this->_blocked_extension_file( $_instance, $bits[1] ) )
 			return false;
 
 		return $this->_create_protected_api_access_key( $class );

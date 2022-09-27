@@ -9,7 +9,7 @@
 
 namespace TSF_Extension_Manager\Extension\Focus;
 
-\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $_class = \TSF_Extension_Manager\Extension\Focus\get_active_class() and $this instanceof $_class or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
 
 $tsfem = \tsfem();
 

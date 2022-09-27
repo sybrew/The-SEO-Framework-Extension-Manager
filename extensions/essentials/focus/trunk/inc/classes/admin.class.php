@@ -7,10 +7,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-$tsfem = \tsfem();
-
-if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $bits[1] ) or $tsfem->_maybe_die() ) )
-	return;
+if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Focus extension for The SEO Framework
@@ -37,12 +34,19 @@ if ( $tsfem->_has_died() or false === ( $tsfem->_verify_instance( $_instance, $b
  * @final
  */
 final class Admin extends Core {
-	use \TSF_Extension_Manager\Construct_Master_Once_Interface;
+	use \TSF_Extension_Manager\Construct_Master_Once_Interface,
+		\TSF_Extension_Manager\Extension_Views;
 
 	/**
 	 * Constructor.
 	 */
 	private function construct() {
+
+		/**
+		 * @see trait TSF_Extension_Manager\Extension_Views
+		 */
+		$this->view_location_base = TSFEM_E_FOCUS_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
+
 		$this->prepare_ajax();
 		$this->prepare_inpostgui();
 	}
@@ -226,7 +230,7 @@ final class Admin extends Core {
 					],
 				],
 				'tmpl'     => [
-					'file' => $this->get_view_location( 'inpost/js-templates' ),
+					'file' => $this->_get_view_location( 'inpost/js-templates' ),
 				],
 			],
 			[
@@ -294,7 +298,7 @@ final class Admin extends Core {
 		];
 
 		\TSF_Extension_Manager\InpostGUI::register_view(
-			$this->get_view_location( 'inpost/inpost' ),
+			$this->_get_view_location( 'inpost/inpost' ),
 			[
 				'post_meta'          => $post_meta,
 				'defaults'           => $this->pm_defaults,
@@ -481,36 +485,5 @@ final class Admin extends Core {
 	 */
 	private function output_score_template( $args ) {
 		$this->get_view( 'inpost/score-template', $args );
-	}
-
-	/**
-	 * Fetches files based on input to reduce memory overhead.
-	 * Passes on input vars.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $view The file name.
-	 * @param array  $args The arguments to be supplied within the file name.
-	 *                     Each array key is converted to a variable with its value attached.
-	 */
-	protected function get_view( $view, $args = [] ) {
-
-		foreach ( $args as $key => $val ) {
-			$$key = $val;
-		}
-
-		include $this->get_view_location( $view );
-	}
-
-	/**
-	 * Returns view location.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $view The relative file location and name without '.php'.
-	 * @return string The view file location.
-	 */
-	private function get_view_location( $view ) {
-		return TSFEM_E_FOCUS_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
 	}
 }

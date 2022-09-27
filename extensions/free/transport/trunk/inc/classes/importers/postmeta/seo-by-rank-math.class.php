@@ -70,34 +70,6 @@ final class SEO_By_Rank_Math extends Base {
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
 			],
 			[
-				[ $wpdb->postmeta, 'rank_math_canonical_url' ],
-				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
-				null,
-				'\\esc_url_raw',
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_robots' ],
-				null,
-				null,
-				null,
-				[
-					'name'    => 'Rank Math Robots',
-					'to'      => [
-						[ $this, '_robots_transmuter_existing' ],
-						[ $this, '_robots_transmuter' ],
-					],
-					'to_data' => [
-						// This could've been a simple transformer,
-						// but then we don't get to split the data if we add more robots types.
-						'transmuters'  => [
-							'noindex'   => [ $wpdb->postmeta, '_genesis_noindex' ],
-							'nofollow'  => [ $wpdb->postmeta, '_genesis_nofollow' ],
-							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
-						],
-					],
-				],
-			],
-			[
 				[ $wpdb->postmeta, 'rank_math_facebook_title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
 				[ $transformer_class, '_title_syntax' ], // also sanitizes
@@ -150,7 +122,50 @@ final class SEO_By_Rank_Math extends Base {
 				[ $transformer_class, '_description_syntax' ], // also sanitizes
 			],
 			[
+				[ $wpdb->postmeta, 'rank_math_canonical_url' ],
+				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
+				null,
+				'\\esc_url_raw',
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_robots' ],
+				null,
+				null,
+				null,
+				[
+					'name'    => 'Rank Math Robots',
+					'to'      => [
+						[ $this, '_robots_transmuter_existing' ],
+						[ $this, '_robots_transmuter' ],
+					],
+					'to_data' => [
+						// This could've been a simple transformer,
+						// but then we don't get to split the data if we add more robots types.
+						'transmuters'  => [
+							'noindex'   => [ $wpdb->postmeta, '_genesis_noindex' ],
+							'nofollow'  => [ $wpdb->postmeta, '_genesis_nofollow' ],
+							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
+						],
+					],
+				],
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_twitter_image' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_twitter_image_id' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_twitter_card_type' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_focus_keyword' ], // delete
+			],
+			[
 				[ $wpdb->postmeta, 'rank_math_pillar_content' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_seo_score' ], // delete
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
@@ -165,25 +180,10 @@ final class SEO_By_Rank_Math extends Base {
 				[ $wpdb->postmeta, 'rank_math_twitter_image_overlay' ], // delete
 			],
 			[
-				[ $wpdb->postmeta, 'rank_math_twitter_image' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_twitter_image_id' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_twitter_card_type' ], // delete
-			],
-			[
 				[ $wpdb->postmeta, 'rank_math_advanced_robots' ], // delete
 			],
 			[
-				[ $wpdb->postmeta, 'rank_math_focus_keyword' ], // delete
-			],
-			[
 				[ $wpdb->postmeta, 'rank_math_breadcrumb_title' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_seo_score' ], // delete
 			],
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment

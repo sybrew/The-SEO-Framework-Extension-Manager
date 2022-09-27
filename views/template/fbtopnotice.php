@@ -11,11 +11,9 @@
  */
 defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
 
-$tsf   = tsf();
-$tsfem = tsfem();
 
 $message = esc_html__( 'An informative notice should have been placed here for the error code, but the server experienced an error.', 'the-seo-framework-extension-manager' );
-$notice  = $tsfem->format_error_notice(
+$notice  = tsfem()->format_error_notice(
 	'{{data.code}}',
 	[
 		'type'    => 'error',
@@ -27,6 +25,7 @@ $a11y   = true;
 $escape = false;
 $inline = true;
 
+$tsf = tsf();
 ?>
 <script type=text/html id=tmpl-tsfem-fbtopnotice>
 	<?php
