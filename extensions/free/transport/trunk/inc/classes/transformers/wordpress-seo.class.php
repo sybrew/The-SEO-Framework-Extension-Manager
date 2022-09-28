@@ -46,9 +46,7 @@ class WordPress_SEO extends Core {
 	 * @return string The transformed title.
 	 */
 	public static function _title_syntax( $value, $object_id, $object_type ) {
-		return self::$tsf->s_title_raw(
-			static::_transform_syntax( $value, $object_id, $object_type )
-		);
+		return static::_transform_syntax( $value, $object_id, $object_type );
 	}
 
 	/**
@@ -62,9 +60,7 @@ class WordPress_SEO extends Core {
 	 * @return string The transformed description.
 	 */
 	public static function _description_syntax( $value, $object_id, $object_type ) {
-		return self::$tsf->s_description_raw(
-			static::_transform_syntax( $value, $object_id, $object_type )
-		);
+		return static::_transform_syntax( $value, $object_id, $object_type );
 	}
 
 	/**

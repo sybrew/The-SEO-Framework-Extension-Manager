@@ -265,7 +265,7 @@ abstract class Core {
 					];
 					$cleanup = [];
 
-					$existing_value  = null; // Value in place by new plugin.
+					$existing_value  = null; // Value already in put by new plugin.
 					$transport_value = null; // Value from old plugin.
 					$set_value       = null; // Value to put for new plugin.
 

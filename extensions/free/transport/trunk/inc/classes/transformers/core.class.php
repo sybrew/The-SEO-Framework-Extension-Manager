@@ -50,13 +50,6 @@ abstract class Core {
 
 	/**
 	 * @since 1.0.0
-	 * @var string The non-replacement types, quoted for regex.
-	 * @static Allows overrides
-	 */
-	protected static $preserve_preg_quoted = '';
-
-	/**
-	 * @since 1.0.0
 	 * @var string[] The non-replacement types' prefixes.
 	 * @static Allows overrides
 	 */
@@ -360,7 +353,6 @@ abstract class Core {
 			'cf_',      // Custom field name.
 		];
 
-		static::$preserve_preg_quoted        = implode( '|', array_map( '\\preg_quote', static::$preserve ) );
 		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
 	}
 

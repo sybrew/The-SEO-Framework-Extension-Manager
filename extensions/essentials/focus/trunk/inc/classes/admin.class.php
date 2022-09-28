@@ -359,9 +359,8 @@ final class Admin extends Core {
 		endforeach;
 
 		if ( $store ) {
-			foreach ( $store as $key => $value ) {
+			foreach ( $store as $key => $value )
 				$this->update_post_meta( $key, $value );
-			}
 		} else {
 			$this->delete_post_meta_index();
 		}

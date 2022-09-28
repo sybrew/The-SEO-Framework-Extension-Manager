@@ -57,7 +57,10 @@ final class Extensions_Post_Meta_Cache {
 	 */
 	private static function init_meta_cache( $id ) {
 		static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
-			\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
+			(
+				\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
+			),
+			[ 'allowed_classes' => false ] // Redundant.
 		);
 	}
 
@@ -260,7 +263,7 @@ trait Extension_Post_Meta {
 		$c_meta[ $this->pm_index ] = $meta;
 
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
-		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
@@ -300,7 +303,7 @@ trait Extension_Post_Meta {
 		$c_meta[ $this->pm_index ] = $meta;
 
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
-		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
+		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
 		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
@@ -338,7 +341,7 @@ trait Extension_Post_Meta {
 		if ( [] === $c_meta ) {
 			$success = \delete_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		} else {
-			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen.
+			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
 			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 		}
 

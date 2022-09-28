@@ -50,6 +50,8 @@ final class SEO_By_Rank_Math extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\SEO_By_Rank_Math::get_instance()
 		);
 
+		$tsf = \tsf();
+
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]
@@ -62,22 +64,39 @@ final class SEO_By_Rank_Math extends Base {
 			[
 				[ $wpdb->postmeta, 'rank_math_title' ],
 				[ $wpdb->postmeta, '_genesis_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
+				[
+					'name' => 'Meta Title',
+					'to'   => [
+						null,
+						[ $this, '_title_transmuter' ],
+					],
+					'to_data' => [
+						'titleset' => [
+							'index' => [ $wpdb->postmeta, '_tsf_title_no_blogname' ],
+							'value' => 1,
+						],
+					],
+				],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_description' ],
 				[ $wpdb->postmeta, '_genesis_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_facebook_title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_facebook_description' ],
 				[ $wpdb->postmeta, '_open_graph_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_facebook_image' ],
@@ -93,7 +112,7 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_twitter_use_facebook' ],
-				[ $wpdb->postmeta, 'rank_math_twitter_use_facebook' ], // stall on identical index.
+				[ $wpdb->postmeta, 'rank_math_twitter_use_facebook' ], // HACK FIXME: stall on identical index.
 				null,
 				null,
 				[
@@ -185,8 +204,73 @@ final class SEO_By_Rank_Math extends Base {
 			[
 				[ $wpdb->postmeta, 'rank_math_breadcrumb_title' ], // delete
 			],
+			[
+				[ $wpdb->postmeta, 'rank_math_contentai_score' ], // delete
+			],
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment
+
+		foreach ( $this->get_taxonomy_list_with_pt_support() as $_taxonomy ) {
+			array_push(
+				$this->conversion_sets,
+				[
+					[ $wpdb->postmeta, "rank_math_primary_{$_taxonomy}" ],
+					[ $wpdb->postmeta, "_primary_term_{$_taxonomy}" ],
+					null,
+					'\\absint',
+				]
+			);
+		}
+	}
+
+	/**
+	 * Sets `_tsf_title_no_blogname` to `1` if title is transformed.
+	 *
+	 * @since 1.0.0
+	 * @generator
+	 *
+	 * @param array  $data    Any useful data pertaining to the current transmutation type.
+	 * @param ?array $actions The actions for and after transmuation, passed by reference.
+	 * @param ?array $results The results before and after transmutation, passed by reference.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 */
+	protected function _title_transmuter( $data, &$actions, &$results ) {
+
+		if ( ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
+			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['titleset']['index'] );
+
+			$_actions = [
+				'transport' => true,
+				'delete'    => false,
+			];
+			$_results = [
+				'updated'     => 0,
+				'transformed' => 0,
+				'deleted'     => 0,
+				'sanitized'   => 0,
+			];
+
+			$this->transmute(
+				$data['to_data']['titleset']['value'],
+				$data['item_id'],
+				[ null, null ], // data comes from nowhere.
+				[ $to_table, $to_index ],
+				$_actions,
+				$_results
+			);
+
+			yield 'transmutedResults' => [ $_results, $_actions ];
+		}
+
+		// Pass through to transmute. $actions and $results get written by reference here.
+		$this->transmute(
+			$data['set_value'],
+			$data['item_id'],
+			$data['from'],
+			$data['to'],
+			$actions,
+			$results,
+		);
 	}
 
 	/**
@@ -275,11 +359,17 @@ final class SEO_By_Rank_Math extends Base {
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {
 			[ $to_table, $to_index ] = array_map( '\\esc_sql', $transmuter );
 
-			$_actions = $actions;
-			$_results = $results;
-
-			$_actions['transport'] = true;
-			$_actions['delete']    = false;
+			$_actions = [
+				'transport' => true,
+				'delete'    => false,
+			];
+			// We landed here without prior transformation or sanitization.
+			$_results = [
+				'updated'     => 0,
+				'transformed' => 0,
+				'deleted'     => 0,
+				'sanitized'   => 0,
+			];
 
 			$existing_value  = $data['set_value']['existing'][ $type ] ?? null;
 			$transport_value = $data['set_value']['transport'][ $type ] ?? null;
@@ -297,8 +387,7 @@ final class SEO_By_Rank_Math extends Base {
 			$this->transmute(
 				$set_value,
 				$data['item_id'],
-				// We cleanup later; data comes from "nowhere."
-				[ null, null ],
+				[ null, null ], // We cleanup later; data comes from "nowhere."
 				[ $to_table, $to_index ],
 				$_actions,
 				$_results
@@ -316,7 +405,7 @@ final class SEO_By_Rank_Math extends Base {
 	}
 
 	/**
-	 * Transmutes comma-separated advanced robots to a single value.
+	 * Purges Twitter data if `rank_math_twitter_use_facebook` is set to `off`.
 	 *
 	 * @since 1.0.0
 	 * @generator

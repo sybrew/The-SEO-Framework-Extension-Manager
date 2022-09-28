@@ -56,11 +56,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * With this update we hit a new milestone: 2 million characters of amazing code.
 TODO POT file. (also update related github)
 
-* TODO Add index.php files to extension top-folders (and fill in empty index.php files)
+TODO readme: Add pictures, create share logo,
+TODO transpile all JS and CSS files
 
 * TODO consider cleaning unused functions? e.g. pixels_to_points
 * TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
-* TODO move get_view() to trait, using prescribed base URL.
 
 * TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
 	-> We kept it there to visually balance the page.
@@ -90,9 +90,6 @@ TODO Add method used to mark as spam as comment-meta? -> Is this possible, I don
 TODO When transporter is in session, maybe we can set a flag in the database which is checked every 50 items or something and if it exists, it aborts the current run and "continues (restarts)" on the next one?
 	-> Ergo, store 50 (or 250) transactions in memory, when 0==$trans%50, then store blob in database, continue to next 50.
 	-> Store end also in database.
-
-TODO "^%sitetitle% %sep%" -> ""?
-TODO "%sep% %sitetitle%$" -> ""?
 
 TODO addslashes( serialize( $c_meta ) )  -> $c_meta + maybe_unserialize()?
 	-> The maybe_unserialize() will gradually translate metadata back to what it's supposed to be. We can keep this indefinitely, with a NOTE that removing this would incur data loss.

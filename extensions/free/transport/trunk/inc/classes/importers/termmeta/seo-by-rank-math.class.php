@@ -50,6 +50,8 @@ final class SEO_By_Rank_Math extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\SEO_By_Rank_Math::get_instance()
 		);
 
+		$tsf = \tsf();
+
 		/**
 		 * NOTE: I considered making a separate transaction for each term meta entry
 		 * from Rank Math, and merge each new value into the "existing" serialized
@@ -102,17 +104,6 @@ final class SEO_By_Rank_Math extends Base {
 					],
 					'to_data' => [
 						'pretransmute' => [
-							'rank_math_robots'               => [
-								'cb'   => [ $this, 'pretransmute_robots' ],
-								'data' => [
-									'rank_math_robots' => [
-										// new index => from recognized tag
-										'_rm_transm_robots_noindex'   => 'noindex',
-										'_rm_transm_robots_nofollow'  => 'nofollow',
-										'_rm_transm_robots_noarchive' => 'noarchive',
-									],
-								],
-							],
 							'rank_math_twitter_use_facebook' => [
 								'cb'   => [ $this, '_rank_math_pretransmute_twitter' ],
 								'data' => [
@@ -125,13 +116,21 @@ final class SEO_By_Rank_Math extends Base {
 									],
 								],
 							],
+							'rank_math_robots'               => [
+								'cb'   => [ $this, 'pretransmute_robots' ],
+								'data' => [
+									'rank_math_robots' => [
+										// new index => from recognized tag
+										'_rm_transm_robots_noindex'   => 'noindex',
+										'_rm_transm_robots_nofollow'  => 'nofollow',
+										'_rm_transm_robots_noarchive' => 'noarchive',
+									],
+								],
+							],
 						],
 						'transmuters'  => [
 							'rank_math_title'                => 'doctitle',
 							'rank_math_description'          => 'description',
-							'_rm_transm_robots_noindex'      => 'noindex',
-							'_rm_transm_robots_nofollow'     => 'nofollow',
-							'_rm_transm_robots_noarchive'    => 'noarchive',
 							'rank_math_facebook_title'       => 'og_title',
 							'rank_math_facebook_description' => 'og_description',
 							'rank_math_facebook_image'       => 'social_image_url',
@@ -139,19 +138,30 @@ final class SEO_By_Rank_Math extends Base {
 							'rank_math_twitter_title'        => 'tw_title',
 							'rank_math_twitter_description'  => 'tw_description',
 							'rank_math_canonical_url'        => 'canonical',
+							'_rm_transm_robots_noindex'      => 'noindex',
+							'_rm_transm_robots_nofollow'     => 'nofollow',
+							'_rm_transm_robots_noarchive'    => 'noarchive',
 						],
 						'transformers' => [
-							'rank_math_title'                 => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'rank_math_description'           => [ $transformer_class, '_description_syntax' ], // also sanitizes
+							'rank_math_title'                 => [ $transformer_class, '_title_syntax' ],
+							'rank_math_description'           => [ $transformer_class, '_description_syntax' ],
+							'rank_math_facebook_title'        => [ $transformer_class, '_title_syntax' ],
+							'rank_math_facebook_description'  => [ $transformer_class, '_description_syntax' ],
+							'rank_math_twitter_title'         => [ $transformer_class, '_title_syntax' ],
+							'rank_math_twitter_description'   => [ $transformer_class, '_description_syntax' ],
 							'_rm_transm_robots_noindex'       => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 							'_rm_transm_robots_nofollow'      => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 							'_rm_transm_robots_noarchive'     => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
-							'rank_math_facebook_title'        => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'rank_math_facebook_description'  => [ $transformer_class, '_description_syntax' ], // also sanitizes
+						],
+						'sanitizers' => [
+							'rank_math_title'                 => [ $tsf, 's_title_raw' ],
+							'rank_math_description'           => [ $tsf, 's_description_raw' ],
+							'rank_math_facebook_title'        => [ $tsf, 's_title_raw' ],
+							'rank_math_facebook_description'  => [ $tsf, 's_description_raw' ],
 							'rank_math_facebook_image'        => '\\esc_url_raw',
 							'rank_math_facebook_image_id'     => '\\absint',
-							'rank_math_twitter_title'         => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'rank_math_twitter_description'   => [ $transformer_class, '_description_syntax' ], // also sanitizes
+							'rank_math_twitter_title'         => [ $tsf, 's_title_raw' ],
+							'rank_math_twitter_description'   => [ $tsf, 's_description_raw' ],
 							'rank_math_canonical_url'         => '\\esc_url_raw',
 						],
 						'cleanup' => [
@@ -171,6 +181,18 @@ final class SEO_By_Rank_Math extends Base {
 				],
 			],
 			[
+				[ $wpdb->termmeta, 'rank_math_twitter_image' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_twitter_image_id' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_twitter_card_type' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_focus_keyword' ], // delete
+			],
+			[
 				[ $wpdb->termmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
 			],
 			[
@@ -183,19 +205,7 @@ final class SEO_By_Rank_Math extends Base {
 				[ $wpdb->termmeta, 'rank_math_twitter_image_overlay' ], // delete
 			],
 			[
-				[ $wpdb->termmeta, 'rank_math_twitter_image' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_twitter_image_id' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_twitter_card_type' ], // delete
-			],
-			[
 				[ $wpdb->termmeta, 'rank_math_advanced_robots' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_focus_keyword' ], // delete
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_breadcrumb_title' ], // delete
@@ -296,26 +306,53 @@ final class SEO_By_Rank_Math extends Base {
 		}
 
 		foreach ( $data['to_data']['transmuters'] as $from => $to ) {
-			$_pre_transform_value = $data['set_value'][ $from ] ?? null;
+			$_set_value = $data['set_value'][ $from ] ?? null;
 
-			if ( \in_array( $_pre_transform_value, $this->useless_data, true ) ) continue;
+			// We assume here that all Rank Math data without value is useless.
+			// This might prove an issue later, where 0 carries significance.
+			// Though, no developer in their right mind would store 0 or empty string...
+			if ( \in_array( $_set_value, $this->useless_data, true ) ) continue;
 
-			$set_value[ $to ] = \call_user_func_array(
-				$data['to_data']['transformers'][ $from ],
-				[
-					$_pre_transform_value,
-					$data['item_id'],
-					$this->type,
-					[ $from_table, $from_index ],
-					[ $to_table, $to_index ],
-				]
-			);
+			$_transformed = 0;
 
-			if ( \in_array( $set_value[ $to ], $this->useless_data, true ) ) {
-				unset( $set_value[ $to ] );
-			} else {
+			if ( isset( $data['to_data']['transformers'][ $from ] ) ) {
+				$_pre_transform_value = $_set_value;
+
+				$_set_value = \call_user_func_array(
+					$data['to_data']['transformers'][ $from ],
+					[
+						$_set_value,
+						$data['item_id'],
+						$this->type,
+						[ $from_table, $from_index ],
+						[ $to_table, $to_index ],
+					]
+				);
+
 				// We actually only read this as boolean. Still, might be fun later.
-				$results['transformed'] += (int) ( $_pre_transform_value !== $set_value[ $to ] );
+				$_transformed = (int) ( $_pre_transform_value !== $_set_value );
+			}
+
+			if ( isset( $data['to_data']['sanitizers'][ $from ] ) ) {
+				$_set_value = \call_user_func_array(
+					$data['to_data']['sanitizers'][ $from ],
+					[
+						$_set_value,
+						$data['item_id'],
+						$this->type,
+						[ $from_table, $from_index ],
+						[ $to_table, $to_index ],
+					]
+				);
+			}
+
+			if ( ! \in_array( $_set_value, $this->useless_data, true ) ) {
+				$set_value[ $to ]        = $_set_value;
+				$results['transformed'] += $_transformed;
+
+				// If the title is not useless, assume it must remain how the user set it.
+				if ( 'doctitle' === $to )
+					$set_value['title_no_blog_name'] = 1;
 			}
 		}
 

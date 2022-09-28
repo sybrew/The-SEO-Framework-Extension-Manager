@@ -50,6 +50,8 @@ final class WordPress_SEO extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO::get_instance()
 		);
 
+		$tsf = \tsf();
+
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]
@@ -78,26 +80,34 @@ final class WordPress_SEO extends Base {
 						'transmuters'  => [
 							'wpseo_title'                 => 'doctitle',
 							'wpseo_desc'                  => 'description',
-							'wpseo_canonical'             => 'canonical',
-							'wpseo_noindex'               => 'noindex',
 							'wpseo_opengraph-title'       => 'og_title',
 							'wpseo_opengraph-description' => 'og_description',
 							'wpseo_opengraph-image'       => 'social_image_url',
 							'wpseo_opengraph-image-id'    => 'social_image_id',
 							'wpseo_twitter-title'         => 'tw_title',
 							'wpseo_twitter-description'   => 'tw_description',
+							'wpseo_canonical'             => 'canonical',
+							'wpseo_noindex'               => 'noindex',
 						],
 						'transformers' => [
-							'wpseo_title'                 => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'wpseo_desc'                  => [ $transformer_class, '_description_syntax' ], // also sanitizes
-							'wpseo_canonical'             => '\\esc_url_raw',
+							'wpseo_title'                 => [ $transformer_class, '_title_syntax' ],
+							'wpseo_desc'                  => [ $transformer_class, '_description_syntax' ],
+							'wpseo_opengraph-title'       => [ $transformer_class, '_title_syntax' ],
+							'wpseo_opengraph-description' => [ $transformer_class, '_description_syntax' ],
+							'wpseo_twitter-title'         => [ $transformer_class, '_title_syntax' ],
+							'wpseo_twitter-description'   => [ $transformer_class, '_description_syntax' ],
 							'wpseo_noindex'               => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
-							'wpseo_opengraph-title'       => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'wpseo_opengraph-description' => [ $transformer_class, '_description_syntax' ], // also sanitizes
+						],
+						'sanitizers' => [
+							'wpseo_title'                 => [ $tsf, 's_title_raw' ],
+							'wpseo_desc'                  => [ $tsf, 's_description_raw' ],
+							'wpseo_opengraph-title'       => [ $tsf, 's_title_raw' ],
+							'wpseo_opengraph-description' => [ $tsf, 's_description_raw' ],
 							'wpseo_opengraph-image'       => '\\esc_url_raw',
 							'wpseo_opengraph-image-id'    => '\\absint',
-							'wpseo_twitter-title'         => [ $transformer_class, '_title_syntax' ], // also sanitizes
-							'wpseo_twitter-description'   => [ $transformer_class, '_description_syntax' ], // also sanitizes
+							'wpseo_twitter-title'         => [ $tsf, 's_title_raw' ],
+							'wpseo_twitter-description'   => [ $tsf, 's_description_raw' ],
+							'wpseo_canonical'             => '\\esc_url_raw',
 						],
 					],
 				],
@@ -187,44 +197,71 @@ final class WordPress_SEO extends Base {
 		[ $from_table, $from_index ] = $data['from'];
 		[ $to_table, $to_index ]     = $data['to'];
 
-		$_set_value = [];
+		$set_value = [];
 
 		// Nothing to do here, TSF already has value set. Skip to next item.
 		if ( ! $actions['transport'] ) goto useless;
 
 		foreach ( $data['to_data']['transmuters'] as $from => $to ) {
-			$__pre_transform_value = $data['set_value'][ $from ] ?? null;
+			$_set_value = $data['set_value'][ $from ] ?? null;
 
-			if ( \in_array( $__pre_transform_value, $this->useless_data, true ) ) continue;
+			// We assume here that all Rank Math data without value is useless.
+			// This might prove an issue later, where 0 carries significance.
+			// Though, no developer in their right mind would store 0 or empty string... Oh wait, we're dealing with Yoast.
+			if ( \in_array( $_set_value, $this->useless_data, true ) ) continue;
 
-			$_set_value[ $to ] = \call_user_func_array(
-				$data['to_data']['transformers'][ $from ],
-				[
-					$__pre_transform_value,
-					$data['item_id'],
-					$this->type,
-					[ $from_table, $from_index ],
-					[ $to_table, $to_index ],
-				]
-			);
+			$_transformed = 0;
 
-			if ( \in_array( $_set_value[ $to ], $this->useless_data, true ) ) {
-				unset( $_set_value[ $to ] );
-			} else {
+			if ( isset( $data['to_data']['transformers'][ $from ] ) ) {
+				$_pre_transform_value = $_set_value;
+
+				$_set_value = \call_user_func_array(
+					$data['to_data']['transformers'][ $from ],
+					[
+						$_set_value,
+						$data['item_id'],
+						$this->type,
+						[ $from_table, $from_index ],
+						[ $to_table, $to_index ],
+					]
+				);
+
 				// We actually only read this as boolean. Still, might be fun later.
-				$results['transformed'] += (int) ( $__pre_transform_value !== $_set_value[ $to ] );
+				$_transformed = (int) ( $_pre_transform_value !== $_set_value );
+			}
+
+			if ( isset( $data['to_data']['sanitizers'][ $from ] ) ) {
+				$_set_value = \call_user_func_array(
+					$data['to_data']['sanitizers'][ $from ],
+					[
+						$_set_value,
+						$data['item_id'],
+						$this->type,
+						[ $from_table, $from_index ],
+						[ $to_table, $to_index ],
+					]
+				);
+			}
+
+			if ( ! \in_array( $_set_value, $this->useless_data, true ) ) {
+				$set_value[ $to ]        = $_set_value;
+				$results['transformed'] += $_transformed;
+
+				// If the title is not useless, assume it must remain how the user set it.
+				if ( 'doctitle' === $to )
+					$set_value['title_no_blog_name'] = 1;
 			}
 		}
 
-		if ( \in_array( $_set_value, $this->useless_data, true ) ) {
+		if ( \in_array( $set_value, $this->useless_data, true ) ) {
 			useless:;
-			$_set_value             = null;
+			$set_value              = null;
 			$actions['transport']   = false;
 			$results['transformed'] = 0;
 		}
 
 		$this->transmute(
-			$_set_value,
+			$set_value,
 			$data['item_id'],
 			[ $from_table, $from_index ], // Should be [ null, null ]
 			[ $to_table, $to_index ],

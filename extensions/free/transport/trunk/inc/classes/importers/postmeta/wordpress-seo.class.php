@@ -48,6 +48,8 @@ final class WordPress_SEO extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO::get_instance()
 		);
 
+		$tsf = \tsf();
+
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]
@@ -60,12 +62,27 @@ final class WordPress_SEO extends Base {
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_title' ],
 				[ $wpdb->postmeta, '_genesis_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
+				[
+					'name' => 'Meta Title',
+					'to'   => [
+						null,
+						[ $this, '_title_transmuter' ],
+					],
+					'to_data' => [
+						'titleset' => [
+							'index' => [ $wpdb->postmeta, '_tsf_title_no_blogname' ],
+							'value' => 1,
+						],
+					],
+				],
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_metadesc' ],
 				[ $wpdb->postmeta, '_genesis_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-noindex' ],
@@ -112,12 +129,14 @@ final class WordPress_SEO extends Base {
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-description' ],
 				[ $wpdb->postmeta, '_open_graph_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-image' ],
@@ -134,12 +153,14 @@ final class WordPress_SEO extends Base {
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-description' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, ' _yoast_wpseo_twitter-image' ], // delete
@@ -154,6 +175,9 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_yoast_wpseo_is_cornerstone' ], // delete
 			],
 			[
+				[ $wpdb->postmeta, '_yoast_wpseo_linkdex' ], // delete
+			],
+			[
 				[ $wpdb->postmeta, '_yoast_wpseo_content_score' ], // delete
 			],
 			[
@@ -164,6 +188,15 @@ final class WordPress_SEO extends Base {
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_bctitle' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_schema_page_type' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_schema_article_type' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_zapier_trigger_sent' ], // delete
 			],
 		];
 
@@ -178,6 +211,56 @@ final class WordPress_SEO extends Base {
 				]
 			);
 		}
+	}
+
+	/**
+	 * Sets `_tsf_title_no_blogname` to `1` if title is transformed.
+	 *
+	 * @since 1.0.0
+	 * @generator
+	 *
+	 * @param array  $data    Any useful data pertaining to the current transmutation type.
+	 * @param ?array $actions The actions for and after transmuation, passed by reference.
+	 * @param ?array $results The results before and after transmutation, passed by reference.
+	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 */
+	protected function _title_transmuter( $data, &$actions, &$results ) {
+
+		if ( ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
+			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['titleset']['index'] );
+
+			$_actions = [
+				'transport' => true,
+				'delete'    => false,
+			];
+			$_results = [
+				'updated'     => 0,
+				'transformed' => 0,
+				'deleted'     => 0,
+				'sanitized'   => 0,
+			];
+
+			$this->transmute(
+				$data['to_data']['titleset']['value'],
+				$data['item_id'],
+				[ null, null ], // data comes from nowhere.
+				[ $to_table, $to_index ],
+				$_actions,
+				$_results
+			);
+
+			yield 'transmutedResults' => [ $_results, $_actions ];
+		}
+
+		// Pass through to transmute. $actions and $results get written by reference here.
+		$this->transmute(
+			$data['set_value'],
+			$data['item_id'],
+			$data['from'],
+			$data['to'],
+			$actions,
+			$results,
+		);
 	}
 
 	/**
@@ -263,11 +346,17 @@ final class WordPress_SEO extends Base {
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {
 			[ $to_table, $to_index ] = array_map( '\\esc_sql', $transmuter );
 
-			$_actions = $actions;
-			$_results = $results;
-
-			$_actions['transport'] = true;
-			$_actions['delete']    = false;
+			$_actions = [
+				'transport' => true,
+				'delete'    => false,
+			];
+			// We landed here without prior transformation or sanitization.
+			$_results = [
+				'updated'     => 0,
+				'transformed' => 0,
+				'deleted'     => 0,
+				'sanitized'   => 0,
+			];
 
 			$existing_value  = $data['set_value']['existing'][ $type ] ?? null;
 			$transport_value = $data['set_value']['transport'][ $type ] ?? null;
@@ -285,8 +374,7 @@ final class WordPress_SEO extends Base {
 			$this->transmute(
 				$set_value,
 				$data['item_id'],
-				// We cleanup later; data comes from "nowhere."
-				[ null, null ],
+				[ null, null ], // We cleanup later; data comes from "nowhere."
 				[ $to_table, $to_index ],
 				$_actions,
 				$_results

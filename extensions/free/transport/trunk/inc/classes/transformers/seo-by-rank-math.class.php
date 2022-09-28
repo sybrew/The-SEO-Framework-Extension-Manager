@@ -52,6 +52,14 @@ class SEO_By_Rank_Math extends Core {
 	protected static $prefix_preserve = [];
 
 	/**
+	 * @since 1.0.0
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string The non-replacement types' prefixes, quoted for regex.
+	 */
+	protected static $prefix_preserve_preg_quoted = '';
+
+	/**
 	 * Resets replacement values, if needed.
 	 *
 	 * NOTE: When overriding, you're likely also overriding self::properties:
@@ -71,10 +79,32 @@ class SEO_By_Rank_Math extends Core {
 			static::$replacements['term_title'],
 		);
 
+		static::$preserve = array_merge(
+			static::$preserve,
+			[
+				// Too complex. Maybe later.
+				'org_name',
+				'org_logo',
+				'org_url',
+
+				// (Should) never (be) used in object context. Trim without warning.
+				// 'search_query',
+
+				// Maybe later. Warn user.
+				'filename',
+			]
+		);
+
+		// Override.
 		static::$prefix_preserve = [
+			// Too complex. Maybe later.
+			'count',
+			'currenttime', // Rank Math has two currenttime, this one is advanced.
 			'customfield',
 			'customterm',
 		];
+
+		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
 	}
 
 	/**
@@ -88,9 +118,7 @@ class SEO_By_Rank_Math extends Core {
 	 * @return string The transformed title.
 	 */
 	public static function _title_syntax( $value, $object_id, $object_type ) {
-		return self::$tsf->s_title_raw(
-			static::_transform_syntax( $value, $object_id, $object_type )
-		);
+		return static::_transform_syntax( $value, $object_id, $object_type );
 	}
 
 	/**
@@ -104,9 +132,7 @@ class SEO_By_Rank_Math extends Core {
 	 * @return string The transformed description.
 	 */
 	public static function _description_syntax( $value, $object_id, $object_type ) {
-		return self::$tsf->s_description_raw(
-			static::_transform_syntax( $value, $object_id, $object_type )
-		);
+		return static::_transform_syntax( $value, $object_id, $object_type );
 	}
 
 	/**
