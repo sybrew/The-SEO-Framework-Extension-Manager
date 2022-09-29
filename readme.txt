@@ -54,6 +54,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* TODO Use `<use>` like on TSF site for improved painting performance?
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
 * With this update we hit a new milestone: 2 million characters of amazing code.
+* The plugin and its extensions now support PHP 8.2 flawlessly.
 TODO POT file. (also update related github)
 
 TODO readme: Add pictures, create share logo,

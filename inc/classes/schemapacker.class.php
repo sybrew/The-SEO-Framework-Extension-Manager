@@ -97,6 +97,12 @@ final class SchemaPacker {
 	private $output;
 
 	/**
+	 * @since 1.3.0
+	 * @var array $registered_conditions The registered conditions to handle.
+	 */
+	private $registered_conditions;
+
+	/**
 	 * Constructor. Sets up class main variables.
 	 *
 	 * @param array     $data   The data to iterate over.
@@ -362,7 +368,7 @@ final class SchemaPacker {
 			$value = $this->escape( $value, $schema->_handlers->_escape );
 
 		if ( isset( $schema->_handlers->_condition ) ) {
-			$this->condition[ $key ] = [];
+			$this->registered_conditions[ $key ] = [];
 
 			$value = $this->condition( $key, $value, $schema->_handlers->_condition );
 		}
@@ -535,19 +541,18 @@ final class SchemaPacker {
 	 */
 	private function get_condition( $key ) {
 
-		if ( empty( $this->condition[ $key ] ) ) {
-			unset( $this->condition[ $key ] );
+		if ( empty( $this->registered_conditions[ $key ] ) ) {
+			unset( $this->registered_conditions[ $key ] );
 			return -1;
 		}
 
-		$c = $this->condition[ $key ];
-		unset( $this->condition[ $key ] );
-
 		$kill_this = $kill_sub = $kill_pack = 0;
-
-		foreach ( $c as $v ) {
+		// Write to variables. TODO use array_flip/fill or eqv, which are safer?
+		// $this->registered_conditions[ $key ] = [ 'kill_pack', 'kill_sub', 'kill_this' ];
+		foreach ( $this->registered_conditions[ $key ] as $v )
 			${$v} = 1;
-		}
+
+		unset( $this->registered_conditions[ $key ] );
 
 		// Returns in order of impact.
 		if ( $kill_pack )
@@ -579,9 +584,9 @@ final class SchemaPacker {
 	private function condition( $key, $value, $what ) {
 
 		if ( \is_array( $what ) && \count( $what ) > 1 ) {
-			foreach ( $what as $w ) {
+			foreach ( $what as $w )
 				$value = $this->condition( $key, $value, $w );
-			}
+
 			return $value;
 		}
 
@@ -674,7 +679,7 @@ final class SchemaPacker {
 			case 'kill_this':
 			case 'kill_sub':
 			case 'kill_pack':
-				$this->condition[ $key ][] = $c->_do;
+				$this->registered_conditions[ $key ][] = $c->_do;
 				return null;
 
 			case 'set':

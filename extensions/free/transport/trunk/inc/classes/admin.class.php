@@ -61,19 +61,19 @@ final class Admin {
 	 * @since 1.0.0
 	 * @var string The validation nonce name.
 	 */
-	protected $ajax_nonce_action;
+	private $ajax_nonce_action;
 
 	/**
 	 * @since 1.0.0
 	 * @var string Page hook name
 	 */
-	protected $transport_menu_page_hook;
+	private $transport_menu_page_hook;
 
 	/**
 	 * @since 1.0.0
 	 * @var string Page ID/Slug
 	 */
-	protected $transport_page_slug;
+	private $transport_page_slug;
 
 	/**
 	 * Constructor, initializes WordPress actions.
@@ -89,7 +89,37 @@ final class Admin {
 
 		$this->ajax_nonce_action = 'tsfem_e_transport_ajax';
 
-		$this->importers = [
+		$this->transport_page_slug = 'theseoframework-transport';
+
+		/**
+		 * Set error notice option.
+		 *
+		 * @see trait TSF_Extension_Manager\Error
+		 */
+		$this->error_notice_option = 'tsfem_e_transport_error_notice_option';
+
+		// Nothing to do here...
+		if ( \tsf()->is_headless['settings'] ) return;
+
+		// Initialize menu links
+		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
+
+		// Initialize Transport page actions.
+		\add_action( 'admin_init', [ $this, '_load_transport_admin_actions' ] );
+
+		// Update POST listener.
+		\add_action( 'wp_ajax_tsfem_e_transport', [ $this, '_wp_ajax_transport' ] );
+	}
+
+	/**
+	 * Returns a list of supported importers.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array A list of supported importers.
+	 */
+	private function get_importers() {
+		return [
 			''                 => [
 				'title'     => sprintf(
 					'&mdash; %s &mdash;',
@@ -219,27 +249,6 @@ final class Admin {
 			// 	'title' => 'All In One SEO',
 			// ],
 		];
-
-		$this->transport_page_slug = 'theseoframework-transport';
-
-		/**
-		 * Set error notice option.
-		 *
-		 * @see trait TSF_Extension_Manager\Error
-		 */
-		$this->error_notice_option = 'tsfem_e_transport_error_notice_option';
-
-		// Nothing to do here...
-		if ( \tsf()->is_headless['settings'] ) return;
-
-		// Initialize menu links
-		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
-
-		// Initialize Transport page actions.
-		\add_action( 'admin_init', [ $this, '_load_transport_admin_actions' ] );
-
-		// Update POST listener.
-		\add_action( 'wp_ajax_tsfem_e_transport', [ $this, '_wp_ajax_transport' ] );
 	}
 
 	/**
@@ -301,7 +310,7 @@ final class Admin {
 
 		switch ( $_REQUEST['handle'] ?? null ) :
 			case 'import':
-				( new Handler )->_import( $this->importers );
+				( new Handler )->_import( $this->get_importers() );
 				break;
 
 			default:

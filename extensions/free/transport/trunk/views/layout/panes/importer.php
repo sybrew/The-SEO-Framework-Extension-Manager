@@ -23,8 +23,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- tsf()->convert_markdown escapes.
 			tsf()->convert_markdown(
 				sprintf(
-					/* translators: %s = URL to backup documentation */
-					esc_html__( 'This importer updates index keys in the meta databases of this WordPress installation. **Old data will be deleted** and some data may be transformed irreversibly. Although careful consideration was made, transaction errors can occur where **data can be lost permanently**. The Transport extension actively logs all transactions on your screen and will halt transportation on failure. Still, **always make a backup before importing**. [Learn about WordPress backups](%s).', 'the-seo-framework-extension-manager' ),
+					/* translators: %s = URL to backup documentation. Asterisks are markdown! */
+					esc_html__( 'The importer updates index keys in the database of this WordPress installation. **Old data will be deleted** and some data will be transformed. The Transport extension actively logs all transactions on your screen and will halt transportation on failure. **Always make a backup before importing** in case you need to undo the transport. [Learn about WordPress backups](%s).', 'the-seo-framework-extension-manager' ),
 					esc_url( _x(
 						'https://wordpress.org/support/article/wordpress-backups/',
 						'backup documentation',
@@ -42,7 +42,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				$_importer_options = '';
 				$_selected         = true;
 				$_available        = true;
-				foreach ( $this->importers as $importer => $data ) {
+				foreach ( $this->get_importers() as $importer => $data ) {
 					$_importer_options .= vsprintf(
 						'<option value="%s" %s %s>%s</option>',
 						[

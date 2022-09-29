@@ -190,12 +190,8 @@ body.tsfem.rtl .wrap {
 
 #tsfem-top-wrap {
 	margin: 0 auto;
-	padding: 0 1.2vw;
+	padding: 1em 1.2vw;
 	max-width: 1240px;
-}
-
-#tsfem-top-wrap > * {
-	padding: 1em 0;
 }
 
 /* "padding: 0 0 1.4%" Edge/Firefox inline margins issue */
@@ -695,7 +691,7 @@ body.rtl .tsfem-button-loading:after {
 	width: 100%;
 	max-width: 690px;
 	padding: 1em 1.5em;
-	margin: 0 auto 1.2vw;
+	margin-bottom: 1.2vw;
 	box-sizing: border-box;
 	background: #fff;
 	border: 1px solid #ccd0d4;

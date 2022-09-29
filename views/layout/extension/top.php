@@ -30,10 +30,11 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and TSF_Extension_Manager\ExtensionSe
 		?>
 	</h1></header>
 </div>
-<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">
-	<?php
-	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- get_save_all_button() escapes.
-	echo $this->get_save_all_button();
-	?>
-</div>
 <?php
+/* TODO
+<div class="tsfem-top-actions tsfem-flex tsfem-flex-row"><?=
+	// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- get_save_all_button() escapes.
+	$this->get_save_all_button();
+?></div>
+<?php
+*/

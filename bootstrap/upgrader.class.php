@@ -364,7 +364,7 @@ final class Upgrader {
 	 * @param \stdClass $upgrade The upgrade iterator object.
 	 * @yield array { $member => $version }
 	 */
-	private function yield_runs( \$upgrade ) {
+	private function yield_runs( $upgrade ) {
 		foreach ( $upgrade as $member => $versions ) {
 			foreach ( $versions as $version => $callbacks ) {
 				foreach ( $callbacks as $callback ) {

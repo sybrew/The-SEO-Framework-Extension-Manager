@@ -86,6 +86,12 @@ final class Settings {
 	protected $slug = '';
 
 	/**
+	 * @since 1.0.0
+	 * @var array The settings form architectural arguments.
+	 */
+	protected $form_args = [];
+
+	/**
 	 * Initializes and outputs Settings page.
 	 *
 	 * @since 1.0.0

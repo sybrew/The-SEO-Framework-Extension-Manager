@@ -231,16 +231,11 @@ final class WordPress_SEO extends Base {
 			}
 
 			if ( isset( $data['to_data']['sanitizers'][ $from ] ) ) {
-				$_set_value = \call_user_func_array(
-					$data['to_data']['sanitizers'][ $from ],
-					[
-						$_set_value,
-						$data['item_id'],
-						$this->type,
-						[ $from_table, $from_index ],
-						[ $to_table, $to_index ],
-					]
-				);
+				$_pre_sanitize_value = $_set_value;
+
+				$_set_value = \call_user_func( $data['to_data']['sanitizers'][ $from ], $_set_value );
+
+				$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
 			}
 
 			if ( ! \in_array( $_set_value, $this->useless_data, true ) ) {

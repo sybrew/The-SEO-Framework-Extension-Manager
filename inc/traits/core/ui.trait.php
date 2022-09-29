@@ -148,9 +148,9 @@ trait UI {
 	 * @since 1.5.0
 	 */
 	final public function connect_wrap() {
-		echo '<main class=tsfem-connect-wrap>';
+		echo '<div class=tsfem-panes-super-wrap><main class=tsfem-connect-wrap>';
 		\do_action( 'tsfem_content' );
-		echo '</main>';
+		echo '</main></div>';
 	}
 
 	/**

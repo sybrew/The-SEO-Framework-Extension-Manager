@@ -28,10 +28,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 		?>
 	</h1></header>
 </div>
-<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">
-	<?php
+<div class="tsfem-top-actions tsfem-flex tsfem-flex-row"><?=
 	// phpcs:ignore, WordPress.Security.EscapeOutput -- Already escaped.
-	echo $this->get_test_button(), $this->get_form()->_form_button( 'submit', __( 'Save', 'the-seo-framework-extension-manager' ), 'get' );
-	?>
-</div>
+	$this->get_test_button(), $this->get_form()->_form_button( 'submit', __( 'Save', 'the-seo-framework-extension-manager' ), 'get' )
+?></div>
 <?php

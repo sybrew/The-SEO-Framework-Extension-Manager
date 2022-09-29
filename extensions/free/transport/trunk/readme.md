@@ -48,8 +48,8 @@ The importer keeps track of how many database items are found per data type; it 
 
 The logger will display in real-time the progress of all data transactions.
 
-Because webbrowsers become slow at about 32&nbsp;000 characters, the logger trims chunks of old log data to stay beneath that number.
-You can  hit "Copy log" to grab what's in the logger.
+Because webbrowsers become slow at about 32&nbsp;000 characters (18 book pages), the logger trims chunks of old log data to stay beneath that number.
+You can  hit "Copy log" to grab what's present in the logger.
 
 If there's an issue, feel free to send us a [support email](https://theseoframework.com/support/) with the log attached.
 
@@ -65,16 +65,16 @@ Yes.
 
 #### Really?
 
-Yes. Transport can irreversibly alter and irretrievably delete metadata.
+Yes. Transport will irreversibly alter and irretrievably delete metadata; both are intended features.
 
 We recommend transporting only when you're certain you want to stay with The SEO Framework.
 Otherwise, you should keep a backup ready in case you want to go back (we cannot comprehend why anyone would, though).
 
 ### What data is transformed?
 
-All titles and descriptions pass through the transformer. This transformer takes syntax, such as `%archive_title%`, and transforms those accordingly.
+All titles and descriptions pass through the transformer. This transformer takes syntax, such as `%archive_title%`, and transforms those as the plugin you're migrating from would.
 
-After transformation, stray separators and spaces will be trimmed from either side of the title or description.
+After transformation, repeating separators will coalesced (`text | | | text` becomes `text | text`), and stray separators and spaces will be trimmed from either side of the title or description.
 
 | Syntax                  | Becomes                                                                  |
 |:----------------------- |:------------------------------------------------------------------------ |
@@ -82,7 +82,7 @@ After transformation, stray separators and spaces will be trimmed from either si
 | `author_first_name`     | The post author first name                                               |
 | `author_last_name`      | The post author last name                                                |
 | `caption`               | The post excerpt                                                         |
-| `category`              | All post category names, or the term title                               |
+| `category`              | All post category names or the term title                                |
 | `category_description`  | The term description                                                     |
 | `category_title`        | The term title                                                           |
 | `currentdate`           | [tsfep-gimmick type="date" format="F j, Y"]                              |
@@ -103,7 +103,7 @@ After transformation, stray separators and spaces will be trimmed from either si
 | `post_day`              | The post publishing day (e.g., [tsfep-gimmick type="date" format="j"])   |
 | `pt_plural`             | The current post type plural name (e.g., Posts)                          |
 | `pt_single`             | The current post type singular name (e.g., Post)                         |
-| `sep`                   | The title separator (&middot;, |, &gt;, etc.)                            |
+| `sep`                   | The title separator (`&middot;`, `|`, `&gt;`, etc.)                      |
 | `sitedesc`              | The blog description                                                     |
 | `sitename`              | The blog name                                                            |
 | `tag`                   | All post tag names, or the term title                                    |
