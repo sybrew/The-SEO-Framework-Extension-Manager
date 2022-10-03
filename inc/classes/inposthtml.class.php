@@ -186,7 +186,7 @@ final class InpostHTML {
 				break;
 
 			// phpcs:disable
-			//! Not used.
+			// Not used.
 			// case 'checkbox':
 			// 	$content = sprintf( '<div class=tsf-checkbox-wrapper>%s</div>', $content );
 			// 	break;

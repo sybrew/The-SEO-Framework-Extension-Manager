@@ -74,7 +74,7 @@ trait Extension_Views {
 	 * @return string|null The stored secret.
 	 */
 	protected function create_view_secret( $value = null ) {
-		// Use unique key that's shared accross all trait's instances.
+		// Use a unique key that's shared accross all trait's instances.
 		return \The_SEO_Framework\umemo( __METHOD__, $value );
 	}
 

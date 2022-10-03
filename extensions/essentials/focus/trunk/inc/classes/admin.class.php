@@ -298,7 +298,7 @@ final class Admin extends Core {
 					'desc'  => \__( 'Set subjects and learn how you can improve their focus.', 'the-seo-framework-extension-manager' ),
 					'link'  => 'https://theseoframework.com/extensions/focus/#usage',
 				],
-				//! Don't set default, it's already pre-populated.
+				// Don't set default, it's already pre-populated.
 				'values'       => $this->get_post_meta( 'kw', null ),
 				'option_index' => 'kw',
 			],

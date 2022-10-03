@@ -1287,19 +1287,6 @@ class Core {
 	}
 
 	/**
-	 * Converts pixels to points.
-	 *
-	 * @since 1.0.0
-	 * @ignore unused
-	 *
-	 * @param int|string $px The pixels amount. Accepts 42 as well as '42px'.
-	 * @return int Points.
-	 */
-	final public function pixels_to_points( $px = 0 ) {
-		return \intval( $px ) * .75;
-	}
-
-	/**
 	 * Determines whether the plugin's activated. Either free or premium.
 	 *
 	 * @since 1.0.0

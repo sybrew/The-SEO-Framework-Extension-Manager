@@ -60,20 +60,6 @@ function _check_external_blocking() {
 	}
 }
 
-/**
- * Unserializes data a bit safer than WordPress does.
- *
- * @since 2.6.0
- *
- * @param mixed $data Expected to be serialized.
- * @return ?mixed The unserialized data without classes. Null on failure.
- */
-function _maybe_unserialize_no_class( $data ) {
-	return \is_serialized( $data )
-		? unserialize( trim( $data ), [ 'allowed_classes' => false ] ) // phpcs:ignore -- it fine.
-		: $data;
-}
-
 \add_filter( 'plugins_api', __NAMESPACE__ . '\\_hook_plugins_api', PHP_INT_MAX, 3 );
 /**
  * Filters the plugin API to bind to The SEO Framework's own updater service.
@@ -123,14 +109,22 @@ function _hook_plugins_api( $res, $action, $args ) {
 			\esc_url( TSF_EXTENSION_MANAGER_DL_URI ),
 			'https://theseoframework.com/contact/'
 		);
-		$res = new \WP_Error( 'plugins_api_failed',
+		$res = new \WP_Error(
+			'plugins_api_failed',
 			$error_message,
 			$request->get_error_message() // $data
 		);
 	} else {
-		$res = \_maybe_unserialize_no_class( \wp_remote_retrieve_body( $request ) );
-		if ( ! \is_object( $res ) && ! \is_array( $res ) ) {
-			$res = new \WP_Error( 'plugins_api_failed',
+		// aka maybe_unserialize but then without class support.
+		$res = \is_serialized( $res )
+			? unserialize( trim( $res ), [ 'allowed_classes' => false ] ) // phpcs:ignore -- it fine.
+			: $res;
+
+		if ( \is_array( $res ) ) {
+			$res = (object) $res;
+		} elseif ( ! \is_object( $res ) ) {
+			$res = new \WP_Error(
+				'plugins_api_failed',
 				sprintf(
 					/* translators: %s: support forums URL */
 					\__( 'An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href="%s">contact us</a>.', 'the-seo-framework-extension-manager' ),
@@ -138,8 +132,6 @@ function _hook_plugins_api( $res, $action, $args ) {
 				),
 				\wp_remote_retrieve_body( $request )
 			);
-		} elseif ( \is_array( $res ) ) {
-			$res = (object) $res;
 		}
 	}
 

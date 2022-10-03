@@ -738,9 +738,8 @@ final class Admin extends Api {
 	 * @return bool
 	 */
 	public function is_monitor_page() {
-		static $cache;
 		// Don't load from $_GET request.
-		return $cache ?? ( $cache = \tsf()->is_menu_page( $this->monitor_menu_page_hook ) );
+		return \The_SEO_Framework\memo( \tsf()->is_menu_page( $this->monitor_menu_page_hook ) );
 	}
 
 	/**

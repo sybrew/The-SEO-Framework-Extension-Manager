@@ -114,7 +114,7 @@ trait Error {
 		if ( ! $notices ) {
 			$notices = [ $notice ];
 		} else {
-			//! This checks if the notice is already stored.
+			// This checks if the notice is already stored.
 			//# This prevents adding timestamps preemptively in the future.
 			// We could form a timestamp collection per notice, separately.
 			//# But, that would cause performance issues.

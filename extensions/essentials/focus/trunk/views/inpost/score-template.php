@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
 $scoring = Scoring::get_instance();
 
@@ -39,7 +39,7 @@ output_scores:;
 		$has_keyword ? '' : 'style="display:none"'
 	);
 	foreach ( $scoring->get_template() as $type => $args ) :
-		//! All output below should already be escaped.
+		// All output below should already be escaped.
 		vprintf(
 			'<span id=%s class="%s" %s>%s%s</span>',
 			[

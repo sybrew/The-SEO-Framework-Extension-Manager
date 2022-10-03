@@ -261,10 +261,10 @@ trait Extensions_Properties {
 			if ( isset( $extensions[ $slug ] ) ) {
 				return $extensions[ $slug ];
 			} else {
-				//! Extension that doesn't exist is registered as activated.
-				//! The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
-				//! TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
-				//! TODO Forward this to the upgrader for whenever an extension's removed.
+				// Extension that doesn't exist is registered as activated.
+				// The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
+				// TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
+				// TODO Forward this to the upgrader for whenever an extension's removed.
 				// \tsf()->_doing_it_wrong(
 				// 	__CLASS__ . '::' . __FUNCTION__,
 				// 	sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )

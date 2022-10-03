@@ -9,7 +9,7 @@
 
 namespace TSF_Extension_Manager\Extension\Focus;
 
-\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
 $tsfem = \tsfem();
 
@@ -180,7 +180,7 @@ $tsfem = \tsfem();
 							\esc_attr( $action_ids['definition_selector'] ),
 							sprintf(
 								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
-								//! It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
+								// It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
 								\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
 							),
 							sprintf(

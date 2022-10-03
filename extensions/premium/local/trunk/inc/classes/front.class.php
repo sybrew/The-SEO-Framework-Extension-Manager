@@ -60,12 +60,7 @@ final class Front extends Core {
 			// Initialize output in The SEO Framework's front-end AMP meta object.
 			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
 		} else {
-			if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '<' ) ) {
-				// Initialize output in The SEO Framework's front-end meta object.
-				\add_filter( 'the_seo_framework_after_output', [ $this, '_local_hook_output' ] );
-			} else {
-				\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_local_json' ] );
-			}
+			\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_local_json' ] );
 		}
 	}
 
@@ -91,25 +86,6 @@ final class Front extends Core {
 	public function _output_local_json() {
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- is escaped.
 		echo $this->_get_local_json_output();
-	}
-
-	/**
-	 * Hooks into 'the_seo_framework_after_output' filter.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @param array $functions The hooked functions.
-	 * @return array The hooked functions.
-	 */
-	public function _local_hook_output( $functions = [] ) {
-
-		$functions[] = [
-			'callback' => [ $this, '_get_local_json_output' ],
-			'args'     => [],
-		];
-
-		return $functions;
 	}
 
 	/**

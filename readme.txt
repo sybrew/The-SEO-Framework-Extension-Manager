@@ -51,53 +51,10 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 	* TODO test.
 * Modernized some JavaScript code, improving UI responsiveness significantly.
 * Reduced plugin file size relatively by no longer packing rendered vector images for archaic browser support.
-	* TODO Use `<use>` like on TSF site for improved painting performance?
 * Introduced a new API alias for `tsf_extension_manager()`: `tsfem()`.
 * With this update we hit a new milestone: 2 million characters of amazing code.
 * The plugin and its extensions now support PHP 8.2 flawlessly.
 TODO POT file. (also update related github)
-
-TODO readme: Add pictures, create share logo,
-TODO transpile all JS and CSS files
-
-* TODO consider cleaning unused functions? e.g. pixels_to_points
-* TODO consider removing dependency on /trunk/lib/images/icon.svg and rely on /assets/icon.svg
-
-* TODO remove trends pane... we planned to add our blog items there, but that never came to fruition.
-	-> We kept it there to visually balance the page.
-		-> Should we let the extensions wrap side-by-side instead? flex base 400px, stretch to fit?
-			-> Copy from tsf.fyi/e?
-	-> Convert it to "quick links"?
-TODO make Traits autoloadable? -> The Construct_* part is annoying -> \Construct\?. Extension_* needs to become \Extension\
-	-> `use \TSF_Extension_Manager\Traits\{Construct_Master_Once_Interface,Time,UI,Extension_Options,Extension_Forms,Error};`
-TODO use :where() css instead of the avalange of entries.
-TODO use `use` for SVG logos? -> Is this feasible? -> tsfem_ui()->register_logo( id, svg );
-	-> Don't register logo, just have a symbols output file and use that. At most, tsfem_ui()->output_logo( id, [ 'defaultColor' => false ] );
-
-TODO convert post metadata from double-serialized to single-serialized (with perhaps WP interfering?)
-	-> We took control because WP was causing issues with backslashes...
-
-TODO fix notice bounce (reintroduced for we ditched the stagnant :empty selector)
-TODO fewer jQuery animations, more CSS animations.
-	-> Planned for future update. 3.0?
-
-TODO Reevaluate get_view()'s implicated extract() and the use of get_defined_vars()
-	- Neither of these can be populated by the user, still, they are an exploit waiting to happen.
-
-TODO Add "mark as spam, put in trash, or discard/permanently delete the comment."
-TODO Add method used to mark as spam as comment-meta? -> Is this possible, I don't want to add more rows.
-	-> Otherwise, simply add a counter for each type. Store as array?
-
-TODO When transporter is in session, maybe we can set a flag in the database which is checked every 50 items or something and if it exists, it aborts the current run and "continues (restarts)" on the next one?
-	-> Ergo, store 50 (or 250) transactions in memory, when 0==$trans%50, then store blob in database, continue to next 50.
-	-> Store end also in database.
-
-TODO addslashes( serialize( $c_meta ) )  -> $c_meta + maybe_unserialize()?
-	-> The maybe_unserialize() will gradually translate metadata back to what it's supposed to be. We can keep this indefinitely, with a NOTE that removing this would incur data loss.
-		-> There's no need for a safer maybe_unserialize, for future data won't be serialized, so it at most can be a self-resolving stored issue, not reflective.
-	-> Figure out if we can maintain slashes like TSF does by converting them via tsf()->bsol()
-		-> Break this feature first by spamming slashes without the serialization feature on a new post.
-		-> Then, test if migration is seamless. Test on our own sites, prominently, if the focus keywords stay intact.
 
 = 2.5.3 =
 

@@ -78,7 +78,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} id The element's ID.
 	 * @return {string} The Element's sub ID, or an empty string.
 	 */
-	const getSubIdPrefix = id => ( /.*\[[0-9]+\]/.exec( id ) || '' )[0];
+	const getSubIdPrefix = id => /.*\[[0-9]+\]/.exec( id )[0] || '';
 
 	/**
 	 * Creates sub element ID.
@@ -559,7 +559,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				  lexicalData     = getSubElementById( idPrefix, 'lexical_data' );
 
 			// Get default form field, and append to it.
-			let _forms = Object.values( JSON.parse( l10n.defaultLexicalForm ) );
+			let _forms = Object.values( JSON.parse( l10n.defaultLexicalForm ) || [] );
 
 			if ( entries.length ) {
 				entries.forEach( ( entry ) => {
@@ -801,20 +801,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			return tsfem_inpost.doAjax(
 				{
-					method: 'POST',
-					url: ajaxurl,
+					method:   'POST',
+					url:      ajaxurl,
 					dataType: 'json',
-					data: {
+					data:     {
 						action,
 						nonce: l10n.nonce,
 						post_ID: tsfem_inpost.postID,
 						args: {
-							form: JSON.parse( lexicalDataField.value )[ lexicalFormField.value ],
+							form: JSON.parse( lexicalDataField.value )?.[ lexicalFormField.value ],
 							language: l10n.language,
 						},
 					},
-					timeout: 15000,
-					async: true,
+					timeout:  15000,
+					async:    true,
 				},
 				{
 					noticeArea,
@@ -870,7 +870,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					words       = [];
 
 				// get Lexical form, push with keyword when the words don't match.
-				lexicalWord = JSON.parse( lexicalData )[ lexicalForm ].value.toLowerCase();
+				lexicalWord = JSON.parse( lexicalData )?.[ lexicalForm ].value.toLowerCase();
 				words.push( keyword );
 				if ( keyword !== lexicalWord ) {
 					words.push( lexicalWord );
@@ -1136,7 +1136,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		blind = true;
 
 		// Determine if value must be made visible again, e.g. after DOM entry.
-		//! @see updateActiveFocusAreas()
+		// @see updateActiveFocusAreas()
 		reassess = typeof rater.dataset.assess !== 'undefined' && ! +rater.dataset.assess;
 
 		// jQuery unpacks JSON data.
@@ -1685,23 +1685,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				synonymEntries      = synonymSection.querySelector( '.tsfem-e-focus-subject-selection' );
 			const subjectTemplate = wp.template( 'tsfem-e-focus-subject-item' );
 
-			//! There's always just one form of inflections in latin.
-			let availableInflections = inflectionHolder.value && JSON.parse( inflectionHolder.value ),
-				inflections          =
-					availableInflections
-					&& availableInflections[0]
-					&& availableInflections[0].inflections
-					|| [];
-
-			//! A little bit trickier, because they might or might not be available.
-			let availableSynonyms = synonymHolder.value && JSON.parse( synonymHolder.value ),
-				synonyms          = availableSynonyms
-					&& availableSynonyms[ +definitionSelection.value ]
-					&& availableSynonyms[ +definitionSelection.value ].synonyms
-					|| [];
+			// There's always just one form of inflections in latin.
+			let inflections = inflectionHolder.value && JSON.parse( inflectionHolder.value )?.[0].inflections || [];
+			// A little bit trickier, because they might or might not be available.
+			let synonyms = synonymHolder.value && JSON.parse( synonymHolder.value )?.[ +definitionSelection.value ].synonyms || [];
 
 			inflectionEntries.style.opacity = 0;
-			synonymEntries.style.opacity = 0;
+			synonymEntries.style.opacity    = 0;
 
 			let activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
 				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' ),
@@ -1811,7 +1801,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			if ( activeInflections?.value ) {
 				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value,
-					inflections    = JSON.parse( inflectionData )[0].inflections;
+					inflections    = JSON.parse( inflectionData )?.[0].inflections;
 
 				activeInflections.value.split( ',' ).forEach( i => {
 					ret.push( inflections[ +i ] );
@@ -1831,7 +1821,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			if ( activeSynonyms?.value ) {
 				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value,
-					synonyms    = JSON.parse( synonymData )[ +selectedDefinition.value ].synonyms;
+					synonyms    = JSON.parse( synonymData )?.[ +selectedDefinition.value ].synonyms;
 
 				activeSynonyms.value.split( ',' ).forEach( i => {
 					ret.push( synonyms[ +i ] );
@@ -1970,7 +1960,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			clearTimeout( changeListenersBuffers[ event.data.type ] );
 
 			// Show the world it's unknown, maintaining a caching flag.
-			//! Don't revert this flag here when this event is done. The state remains unknown on failure!
+			// Don't revert this flag here when this event is done. The state remains unknown on failure!
 			if ( ! changeListenerFlags[ event.data.type ] ) {
 				setTimeout( () => tsfem_inpost.setIconClass(
 					document.querySelectorAll(
@@ -2473,7 +2463,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		// There's nothing to focus on. Stop plugin and show why.
-		//! The monkeyPatch is still running...
+		// The monkeyPatch is still running...
 		if ( 0 === Object.keys( activeFocusAreas ).length ) {
 			let input = document.getElementById( 'tsfem-e-focus-analysis-wrap' )?.querySelector( '.tsf-flex-setting-input' );
 

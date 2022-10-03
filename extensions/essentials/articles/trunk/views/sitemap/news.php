@@ -7,7 +7,7 @@
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret );
+defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
 $tsf = tsf();
 
@@ -19,9 +19,6 @@ $sitemap_bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
 $sitemap_bridge->output_sitemap_urlset_open_tag();
-
-if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '<' ) )
-	class_alias( '\The_SEO_Framework\Builders\Sitemap', '\The_SEO_Framework\Builders\Sitemap\Main', true );
 
 $sitemap_news = new TSF_Extension_Manager\Extension\Articles\SitemapBuilder;
 /**
