@@ -49,9 +49,6 @@ if ( $options ) {
 
 	$account = "<div class=tsfem-top-account>$account_link</div>";
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';
-} else {
-	$info  = __( 'Add more powerful SEO features to your website. To get started, use one of the options below.', 'the-seo-framework-extension-manager' );
-	$about = '<div class="tsfem-top-about tsfem-about-activation tsfem-flex tsfem-flex-row tsfem-flex-nowrap"><div>' . esc_html( $info ) . '</div></div>';
 }
 
 ?>

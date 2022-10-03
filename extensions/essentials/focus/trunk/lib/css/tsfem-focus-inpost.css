@@ -107,7 +107,7 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	display: block;
 	height: 2em;
 	width:  2em;
-	vertical-align: middle; /* inherited downward */
+	vertical-align: middle; /* captured down */
 	cursor: pointer;
 	position: relative;
 	box-shadow: 0 0 0 0 rgba(0,0,0,.25) inset, 0 0 0 0 rgba(0,0,0,.25);

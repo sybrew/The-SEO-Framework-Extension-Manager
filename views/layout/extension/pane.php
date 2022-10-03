@@ -23,7 +23,7 @@ $f = static::get_settings_form( $index );
 	<div class="tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-no-tsf-js">
 		<div class=tsfem-pane-inner-pad>
 			<?php
-			$f->_form_wrap( 'start', \menu_page_url( static::$settings_page_slug, false ), true );
+			$f->_form_wrap( 'start', menu_page_url( static::$settings_page_slug, false ), true );
 			$f->_fields( $settings );
 			$f->_form_wrap( 'end' );
 			?>

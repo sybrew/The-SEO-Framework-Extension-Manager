@@ -27,6 +27,13 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  */
 
 /**
+ * Require extension views trait.
+ *
+ * @since 1.5.2
+ */
+\TSF_Extension_Manager\_load_trait( 'extension/views' );
+
+/**
  * Class TSF_Extension_Manager\Extension\Focus\Admin
  *
  * @since 1.0.0

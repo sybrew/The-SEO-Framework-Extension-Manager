@@ -77,8 +77,8 @@ trait UI {
 	 * @param string $type The type of main content. Accepts 'panes' and 'connect'.
 	 */
 	final protected function ui_wrap( $type = 'panes' ) {
-		\add_action( 'tsfem_page', [ $this, 'header_wrap' ], 25 );
-		\add_action( 'tsfem_page', [ $this, $type . '_wrap' ], 100 );
+		\add_action( 'tsfem_page', [ $this, "{$type}_header_wrap" ], 25 );
+		\add_action( 'tsfem_page', [ $this, "{$type}_page_wrap" ], 100 );
 		\add_action( 'tsfem_page', [ $this, 'footer_wrap' ], 200 );
 
 		\do_action( 'tsfem_before_page' );
@@ -100,11 +100,25 @@ trait UI {
 	/**
 	 * Outputs header wrap and does callback.
 	 *
-	 * @since 1.5.0
+	 * @since 2.6.0
 	 */
-	final public function header_wrap() {
+	final public function panes_header_wrap() {
 		echo '<div id=tsfem-sticky-top>';
 			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
+				\do_action( 'tsfem_header' );
+			echo '</section></div>';
+			$this->notice_wrap();
+		echo '</div>';
+	}
+
+	/**
+	 * Outputs header wrap and does callback.
+	 *
+	 * @since 2.6.0
+	 */
+	final public function connect_header_wrap() {
+		echo '<div id=tsfem-sticky-top>';
+			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space connect-top-wrap">';
 				\do_action( 'tsfem_header' );
 			echo '</section></div>';
 			$this->notice_wrap();
@@ -130,11 +144,12 @@ trait UI {
 	 * @since 1.5.0
 	 * @since 2.0.1 Now listens to $this->wrap_type
 	 * @since 2.2.0 Is no longer a tsfem-flex-item.
-	 * @since 2.6.0 Added a super wrap to allow a condensed layout.
+	 * @since 2.6.0 1. Added a super wrap to allow a condensed layout.
+	 *              2. Renamed from "panes_wrap".
 	 */
-	final public function panes_wrap() {
+	final public function panes_page_wrap() {
 		printf(
-			'<div class=tsfem-panes-super-wrap><main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
+			'<div id=tsfem-panes-super-wrap><main class="tsfem-panes-wrap tsfem-panes-wrap-%s">',
 			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
 			\in_array( $this->wrap_type, [ 'column', 'row' ], true ) ? $this->wrap_type : 'column'
 		);
@@ -147,8 +162,8 @@ trait UI {
 	 *
 	 * @since 1.5.0
 	 */
-	final public function connect_wrap() {
-		echo '<div class=tsfem-panes-super-wrap><main class=tsfem-connect-wrap>';
+	final public function connect_page_wrap() {
+		echo '<div id=tsfem-panes-super-wrap><main id=tsfem-connect-wrap class="tsfem-flex tsfem-flex-row">';
 		\do_action( 'tsfem_content' );
 		echo '</main></div>';
 	}

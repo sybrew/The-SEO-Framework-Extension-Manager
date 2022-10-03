@@ -150,10 +150,9 @@ body.tsfem.rtl .wrap {
 	max-width: 1240px;
 }
 
-/* Stretches content over the page, pushing footer down. */
-.tsfem-connect-wrap {
-	flex: 1 1 auto;
-	margin: 1.2vw;
+#tsfem-connect-wrap {
+	justify-content: center;
+	margin: 0 1.2vw;
 }
 
 #tsfem-sticky-top {
@@ -162,7 +161,7 @@ body.tsfem.rtl .wrap {
 	margin-bottom: 1.2vw;
 	top: 32px;
 	z-index: 9980; /* Admin sidebar is 9990 */
-	background: linear-gradient( to bottom, rgba(0,0,0,.3), rgba(0,0,0,0) ); /* Revealed when notices appear */
+	background: linear-gradient( to bottom, rgba(0,0,0,.1), rgba(0,0,0,0) ); /* Revealed when notices appear */
 }
 
 @media screen and ( max-width: 782px ) {
@@ -192,6 +191,11 @@ body.tsfem.rtl .wrap {
 	margin: 0 auto;
 	padding: 1em 1.2vw;
 	max-width: 1240px;
+	gap: 1em;
+}
+
+#tsfem-top-wrap.connect-top-wrap {
+	justify-content: center;
 }
 
 /* "padding: 0 0 1.4%" Edge/Firefox inline margins issue */
@@ -225,6 +229,7 @@ body.tsfem.rtl .wrap {
 #tsfem-top-wrap .tsfem-title {
 	text-align: left;
 	align-items: center;
+	align-self: center;
 }
 
 .tsfem-top-actions,
@@ -704,10 +709,6 @@ body.rtl .tsfem-button-loading:after {
 	justify-content: space-between;
 }
 
-.tsfem-connect-option:last-of-type {
-	margin-bottom: 0;
-}
-
 .tsfem-connect-text,
 .tsfem-connect-action {
 	margin: .5em 0;
@@ -730,7 +731,7 @@ body.rtl .tsfem-button-loading:after {
 	margin-bottom: 0;
 }
 
-.tsfem-connect-wrap h3 {
+#tsfem-connect-wrap h3 {
 	font-size: 1.66em;
 	color: #057f9c;
 	font-weight: 400;
@@ -739,7 +740,7 @@ body.rtl .tsfem-button-loading:after {
 /* # Global panes wrap.
 /*--------------------------------------*/
 /* "margin: .6%" Edge/Firefox inline margins issue */
-.tsfem-panes-super-wrap {
+#tsfem-panes-super-wrap {
 	width: 100%;
 	max-width: 1240px;
 	margin: 0 auto;

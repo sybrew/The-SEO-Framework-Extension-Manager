@@ -165,7 +165,7 @@ Not all SEO plugins are alike. The SEO Framework (TSF) takes a straightforward a
 | Primary term ID&dagger; | `postmeta` | `_yoast_wpseo_primary_{$taxonomy}`   | &ndash;          |
 | Term metadata&Dagger;   | `options`  | `wpseo_taxonomy_meta`                | &#x2713;&#xFE0F; |
 
-_&#x2a; When transformed, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
+_&#x2a; When found, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
 _&dagger; To transport primary term IDs, the taxonomy must be active before Transport can detect the data. For example, WooCommerce must be active to transport Primary Product Category IDs for Products._ <br>
 _&Dagger; This includes: title, description, Open Graph title, Open Graph description, Twitter title, Twitter description, Canonical URL, and Robots noindex._
 
@@ -214,7 +214,7 @@ The following data will be irretrievably deleted from your database; doing this 
 | Canonical URL               | `termmeta` | `rank_math_canonical_url`        | &ndash;          |
 | Robots metadata             | `termmeta` | `rank_math_robots`               | &#x2713;&#xFE0F; |
 
-_&#x2a; When transformed, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
+_&#x2a; When found, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
 _&dagger; Conditional: Twitter metadata is only transported when enabled for the post or term in Rank Math._
 _&Dagger; To transport primary term IDs, the taxonomy must be active before Transport can detect the data. For example, WooCommerce must be active to transport Primary Product Category IDs for Products._ <br>
 

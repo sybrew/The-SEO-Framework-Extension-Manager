@@ -348,7 +348,8 @@ abstract class Core {
 		];
 		// This is also where /(%%single)?/ regex comes in.
 		static::$prefix_preserve = [
-			// 'ct_pa_',   // Custom Taxonomy Product Attribute
+			// Custom Taxonomy Product Attribute, implied via ct_*:
+			// 'ct_pa_',
 			'ct_',      // Custom Taxonomy field name., this can be %%ct_something%%single%%, which we do not test.
 			'cf_',      // Custom field name.
 		];
