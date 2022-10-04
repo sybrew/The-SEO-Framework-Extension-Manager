@@ -360,7 +360,7 @@ class Core {
 	 * @since 1.2.0
 	 * @since 2.4.0 Added nonce capability requirement, extra sanity for when the caller fails to do so.
 	 * @access private
-	 * @ignore unused. Leftover from the never-released Transporter
+	 * @ignore unused. Leftover from the dumped release of Transporter (old version).
 	 *
 	 * @param array $args - Required : {
 	 *    'options_key'   => string The extension options key,

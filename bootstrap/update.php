@@ -42,6 +42,10 @@ function _check_external_blocking() {
 		$host       = $parsed_url['host'] ?? '';
 
 		if ( ! \defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
+
+			// TODO We rely on TSF here but it might not be available.
+			if ( ! \function_exists( '\\tsf' ) ) return;
+
 			$tsf = \tsf();
 
 			$notice = $tsf->convert_markdown(
@@ -116,9 +120,11 @@ function _hook_plugins_api( $res, $action, $args ) {
 		);
 	} else {
 		// aka maybe_unserialize but then without class support.
-		$res = \is_serialized( $res )
-			? unserialize( trim( $res ), [ 'allowed_classes' => false ] ) // phpcs:ignore -- it fine.
-			: $res;
+		$body = \wp_remote_retrieve_body( $request );
+
+		$res = \is_serialized( $body )
+			? unserialize( trim( $body ), [ 'allowed_classes' => [ 'stdClass' ] ] ) // phpcs:ignore -- it fine.
+			: $body;
 
 		if ( \is_array( $res ) ) {
 			$res = (object) $res;

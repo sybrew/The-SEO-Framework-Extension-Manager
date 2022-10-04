@@ -254,6 +254,6 @@ The following data will be irretrievably deleted from your database; doing this 
 
 ### 1.0.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="October 4th, 2022"]
 
 * Initial extension beta release.

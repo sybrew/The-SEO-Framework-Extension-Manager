@@ -85,13 +85,13 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.8
 
-[tsfep-release time="-1"]
+[tsfep-release time="October 4th, 2022"]
 
 * **Extension:**
 	* **Improved:** The valid sitemap message is now more descriptive.
 	* **Improved:** Modernized code with a focus on improving performance.
 * **API - Our servers:**
-	* **September 27th, 2020:**
+	* **September 27th, 2022:**
 		* **Improved:** Improved lookups for descriptions, canonical URLs, and icons, now supporting more vigorous minification plugins.
 
 ### 1.2.7

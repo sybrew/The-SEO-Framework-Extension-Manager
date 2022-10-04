@@ -310,7 +310,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.5.2
 
-[tsfep-release time="-1"]
+[tsfep-release time="October 4th, 2022"]
 
 * **Improved:** Modernized code with a focus on improving performance.
 

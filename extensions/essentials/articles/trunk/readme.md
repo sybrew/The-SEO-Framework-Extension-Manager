@@ -256,7 +256,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ### 2.2.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="October 4th, 2022"]
 
 * **Improved:** Modernized code with a focus on improving performance.
 

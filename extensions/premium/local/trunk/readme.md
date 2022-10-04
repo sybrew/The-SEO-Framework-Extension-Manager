@@ -124,7 +124,7 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.2.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="October 4th, 2022"]
 
 * **Improved:** Modernized code with a focus on improving performance.
 

@@ -60,7 +60,7 @@ final class Extensions_Post_Meta_Cache {
 			(
 				\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
 			),
-			[ 'allowed_classes' => false ] // Redundant.
+			[ 'allowed_classes' => [ 'stdClass' ] ] // Redundant.
 		);
 	}
 
