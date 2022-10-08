@@ -13,7 +13,7 @@ Used another WordPress SEO plugin, like Yoast SEO or Rank Math, before you found
 
 #### Transform '%%currentdate%%' to ‘[tsfep-gimmick type="date" format="Y-m-d g:i a"]’
 
-The importer not only moves your old metadata, but it also transforms: Complex and difficult to understand syntax becomes human-readable.
+The importer not only moves your old metadata but also transforms: Complex and difficult-to-understand syntax becomes human-readable.
 You can learn more about what data is transformed at the [FAQ](#faq/what-data-is-transformed).
 
 ### Logged and loaded
@@ -40,7 +40,7 @@ On the Transport screen, you can start importing metadata.
 
 ### Importing
 
-First, select the plugin you want to import from. You'll then be presented with the types of data you can import. Hit "Import" and Transport will take care of the rest.
+First, select the plugin you want to import from. Transport will then present you with the types of data you can import. Hit "Import," and Transport will take care of the rest.
 
 The importer keeps track of how many database items are found per data type; it will recount from 0 when it moves to the next data type. You can see this in real-time at the logger.
 
@@ -48,16 +48,16 @@ The importer keeps track of how many database items are found per data type; it 
 
 The logger will display in real-time the progress of all data transactions.
 
-Because webbrowsers become slow at about 32&nbsp;000 characters (18 book pages), the logger trims chunks of old log data to stay beneath that number.
-You can  hit "Copy log" to grab what's present in the logger.
+Because web browsers become slow at about 32&nbsp;000 characters (18 book pages), the logger trims chunks of old log data to stay beneath that number.
+You can hit "Copy log" to grab what's in the logger.
 
-If there's an issue, feel free to send us a [support email](https://theseoframework.com/support/) with the log attached.
+If you find an issue, please send us a [support email](https://theseoframework.com/support/) with the log attached.
 
 ## FAQ
 
 ### Supported plugins for import
 
-The importer currenlty supports Yoast SEO and Rank Math. Support for AIOSEO and SEOPress is coming soon&trade;.
+The importer currently supports Yoast SEO and Rank Math. Support for AIOSEO and SEOPress is coming soon&trade;.
 
 ### Should I create a backup before transporting?
 
@@ -67,14 +67,14 @@ Yes.
 
 Yes. Transport will irreversibly alter and irretrievably delete metadata; both are intended features.
 
-We recommend transporting only when you're certain you want to stay with The SEO Framework.
+We recommend transporting only when you're sure you want to stay with The SEO Framework.
 Otherwise, you should keep a backup ready in case you want to go back (we cannot comprehend why anyone would, though).
 
 ### What data is transformed?
 
 All titles and descriptions pass through the transformer. This transformer takes syntax, such as `%archive_title%`, and transforms those as the plugin you're migrating from would.
 
-After transformation, repeating separators will coalesced (`text | | | text` becomes `text | text`), and stray separators and spaces will be trimmed from either side of the title or description.
+After transformation, repeating separators will be coalesced (`text | | | text` becomes `text | text`), and stray separators and spaces will be trimmed from either side of the title or description.
 
 | Syntax                  | Becomes                                                                  |
 |:----------------------- |:------------------------------------------------------------------------ |
@@ -135,15 +135,15 @@ After transformation, repeating separators will coalesced (`text | | | text` bec
 
 #### Not everything is transformed
 
-Only items listed in the table above will be transformed. All text is preserved, unless the text acts like syntax, that will be removed.
+Only items listed in the table above will be transformed. All text is preserved -- unless the text acts like syntax, which will be removed.
 
-Some data in the table is treated as "_(preserved)_" because these types are dependent on their context. For example, `%%page%%` will stay `%%page%%`. The remaining preserved types we cannot replace reliably. The SEO Framework can hint you later for manual correction of these type.
+Some data in the table is treated as "_(preserved)_" because these types depend on their context. For example, `%%page%%` will stay `%%page%%`. The remaining preserved types we cannot replace reliably, but The SEO Framework can hint you later for manual correction of these types.
 
-When a meta title is transformed, importer will check the "Remove site title" option for the post or term.
+When a meta title is transformed, the importer will check the "Remove site title" option for the post or term.
 
 ### What data is transported?
 
-Not all SEO plugins are alike. The SEO Framework (TSF) takes a straightforward approach to SEO, backed only by scientific data. It is why you find fewer features in our plugin, but each feature is far more evolved and polished.
+Not all SEO plugins are alike. The SEO Framework (TSF) takes a straightforward approach to SEO, backed only by scientific data. It is why you find fewer features in our plugin, but each component is far more evolved and polished.
 
 #### Yoast SEO
 
@@ -171,7 +171,7 @@ _&Dagger; This includes: title, description, Open Graph title, Open Graph descri
 
 #### Yoast SEO cleanup
 
-The following data will be irretrievably deleted from your database; doing this will improve your website performance.
+Transporter will irretrievably delete the following data from your database, improving your website performance.
 
 | What                     | Table      | Index                                         | Reason                         |
 |:------------------------ |:---------- |:--------------------------------------------- |:------------------------------ |
@@ -220,7 +220,7 @@ _&Dagger; To transport primary term IDs, the taxonomy must be active before Tran
 
 #### Rank Math cleanup
 
-The following data will be irretrievably deleted from your database; doing this will improve your website performance.
+Transporter will irretrievably delete the following data from your database, improving your website performance.
 
 | What                     | Table      | Index                                     | Reason                            |
 |:------------------------ |:---------- |:----------------------------------------- |:--------------------------------- |

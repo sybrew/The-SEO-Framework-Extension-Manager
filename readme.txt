@@ -41,6 +41,12 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+TODO add RTL support for _print_tsf_nag_installer_styles (regression)
+
+**Updated extensions:**
+
+* [AMP at version 1.2.1](https://theseoframework.com/extensions/monitor/#changelog)
+
 = 2.6.0 - Mobile SEO =
 
 **Release date:**

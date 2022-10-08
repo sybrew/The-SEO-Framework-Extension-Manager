@@ -70,6 +70,10 @@ add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
 
 ## Changelog
 
+### 1.2.1
+
+* **Fixed:** Removed a dependency of TSF, which blocked its visibility of a method in v4.2.0.
+
 ### 1.2.0
 
 [tsfep-release time="August 20th, 2019"]

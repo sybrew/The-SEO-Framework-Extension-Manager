@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager\Extension\AMP;
  * Extension Name: AMP
  * Extension URI: https://theseoframework.com/extensions/amp/
  * Extension Description: The AMP extension binds The SEO Framework to the [AMP plugin](https://wordpress.org/plugins/amp/) for [AMP](https://www.ampproject.org/) supported articles and pages.
- * Extension Version: 1.2.0
+ * Extension Version: 1.2.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -116,25 +116,8 @@ final class Front {
 
 		\do_action( 'the_seo_framework_do_before_amp_output' );
 
-		$output_start = hrtime( true );
-
-		$output = '';
-
-		$output .= $this->get_general_metadata();
-		$output .= $this->get_social_metadata();
-		$output .= $this->get_structured_metadata();
-
-		$tsf = \tsf();
-
-		$output = $tsf->get_plugin_indicator( 'before' )
-				. $output
-				. $tsf->get_plugin_indicator(
-					'after',
-					( $output_start - hrtime( true ) ) / 1e9
-				);
-
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped.
-		echo PHP_EOL . $output . PHP_EOL;
+		// phpcs:ignore -- All callbacks escape their output.
+		echo "\n", $this->get_general_metadata(), $this->get_social_metadata(), $this->get_structured_metadata(), "\n";
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 	}
