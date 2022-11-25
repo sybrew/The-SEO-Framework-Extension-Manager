@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
  * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
  * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate using five lightweight yet powerful methods that won't leak data from your site.
- * Extension Version: 2.0.0
+ * Extension Version: 2.0.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -41,7 +41,7 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_HONEYPOT_VERSION', '2.0.0' );
+\define( 'TSFEM_E_HONEYPOT_VERSION', '2.0.1' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -261,11 +261,12 @@ final class Core {
 	 * @since 1.0.0
 	 * @since 1.0.1 Moved display annotation into a scoped style node.
 	 * @since 2.0.0 Added a fake label: Website.
+	 * @since 2.0.1 Removed scoped tag for style, which became deprecated. Doesn't affect.
 	 * @todo Set CSS external rather than inline when http/2 using HTML5 spec?
 	 */
 	private function output_css_rotation_honeypot() {
 		printf(
-			'<p id="%1$s"><label for="%1$s">Website</label><input type="text" name="%1$s" value=""><style scoped>#%1$s{display:none}</style></p>',
+			'<p id="%1$s"><label for="%1$s">Website</label><input type="text" name="%1$s" value=""><style>#%1$s{display:none}</style></p>',
 			\esc_attr( $this->hp_properties['css_rotate_input_name'] )
 		);
 	}

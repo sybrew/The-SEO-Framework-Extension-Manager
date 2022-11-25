@@ -181,6 +181,12 @@ final class SEO_By_Rank_Math extends Base {
 				],
 			],
 			[
+				[ $wpdb->termmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_facebook_image_overlay' ], // delete
+			],
+			[
 				[ $wpdb->termmeta, 'rank_math_twitter_image' ], // delete
 			],
 			[
@@ -188,15 +194,6 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_twitter_card_type' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_focus_keyword' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
-			],
-			[
-				[ $wpdb->termmeta, 'rank_math_facebook_image_overlay' ], // delete
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_twitter_enable_image_overlay' ], // delete
@@ -209,6 +206,9 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->termmeta, 'rank_math_breadcrumb_title' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, 'rank_math_focus_keyword' ], // delete
 			],
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment

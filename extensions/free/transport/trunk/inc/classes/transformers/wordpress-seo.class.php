@@ -36,6 +36,97 @@ class WordPress_SEO extends Core {
 	use \TSF_Extension_Manager\Construct_Core_Static_Unique_Instance_Master;
 
 	/**
+	 * Resets replacement values, if needed.
+	 *
+	 * NOTE: When overriding, you're likely also overriding self::$properties:
+	 * register those self::$properties statically to the child class to exploit
+	 * late-static binding for properties.
+	 *
+	 * @since 1.0.0
+	 */
+	protected static function reset_replacements() {
+
+		static::$replacements = [
+			'archive_title'        => [ static::class, 'get_term_title' ], // Note: CPTA aren't transported--this replacement doesn't consider.
+			'author_first_name'    => [ static::class, 'get_post_author_first_name' ], // Doesn't (shouldn't) work on Terms.
+			'author_last_name'     => [ static::class, 'get_post_author_last_name' ],  // Doesn't (shouldn't) work on Terms.
+			'caption'              => [ static::class, 'get_post_excerpt' ],
+			'category'             => [ static::class, 'get_post_all_term_names' ],
+			'category_description' => [ static::class, 'get_term_description' ],
+			'category_title'       => [ static::class, 'get_term_title' ],
+			'currentdate'          => [ static::class, 'get_current_date' ],  // should we?
+			'currentday'           => [ static::class, 'get_current_day' ],   // should we?
+			'currentmonth'         => [ static::class, 'get_current_month' ], // should we?
+			'currentyear'          => [ static::class, 'get_current_year' ],  // should we?
+			'date'                 => [ static::class, 'get_post_date' ],     // Doesn't (shouldn't) work on Terms.
+			'excerpt'              => [ static::class, 'get_post_excerpt_trimmed' ],
+			'excerpt_only'         => [ static::class, 'get_post_excerpt' ],
+			'id'                   => [ static::class, 'get_id' ],
+			'modified'             => [ static::class, 'get_post_modified_date' ], // date_i18n get_option( 'date_format' )
+			'name'                 => [ static::class, 'get_post_author_display_name' ],
+			'parent_title'         => [ static::class, 'get_post_parent_post_title' ], // Is this the only parent one?
+			'post_content'         => [ static::class, 'get_post_content' ],
+			'post_year'            => [ static::class, 'get_post_year' ],
+			'post_month'           => [ static::class, 'get_post_month' ],
+			'post_day'             => [ static::class, 'get_post_day' ],
+			'pt_plural'            => [ static::class, 'get_post_post_type_plural_name' ],
+			'pt_single'            => [ static::class, 'get_post_post_type_singular_name' ],
+			'sep'                  => [ static::class, 'get_separator' ],
+			'sitedesc'             => [ static::class, 'get_blog_description' ],
+			'sitename'             => [ static::class, 'get_blog_name' ],
+			'tag'                  => [ static::class, 'get_post_all_tag_names' ],
+			'tag_description'      => [ static::class, 'get_term_description' ],
+			'term_description'     => [ static::class, 'get_term_description' ],
+			'term_title'           => [ static::class, 'get_term_title' ],
+			'title'                => [ static::class, 'get_post_title' ],
+			'user_description'     => [ static::class, 'get_post_author_description' ],
+			'userid'               => [ static::class, 'get_post_author_id' ],
+		];
+
+		// We preserve these, some harmful, to allow warning the user they have not been transformed in TSF.
+		static::$preserve = [
+			// Too complex. Maybe later. Implied via prefix_preserve
+			// 'ct_desc',
+			// 'ct_product_cat',
+			// 'ct_product_tag',
+
+			// (Should) never (be) used in object context. Trim without warning.
+			// 'searchphrase',
+			// 'term404',
+
+			// Fancy and fun in some situation, sure, but bad for SEO. Warn user.
+			'currenttime',
+
+			// We could extract these... but we can't tell whether they were migrated already or not.
+			'focuskw',
+			'primary_category',
+
+			// "pagenumber of pagetotal" will cause issues. Warn user.
+			'page',
+			'pagenumber',
+			'pagetotal',
+
+			// Outputs URLs. This should not be used for titles and descriptions.
+			'permalink',
+
+			// WooCommerce: Maybe later. Warn user.
+			'wc_brand',
+			'wc_price',
+			'wc_shortdesc',
+			'wc_sku',
+		];
+		// This is also where /(%%single)?/ regex comes in.
+		static::$prefix_preserve = [
+			// Custom Taxonomy Product Attribute, implied via ct_*:
+			// 'ct_pa_',
+			'ct_',      // Custom Taxonomy field name., this can be %%ct_something%%single%%, which we do not test.
+			'cf_',      // Custom field name.
+		];
+
+		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
+	}
+
+	/**
 	 * Converts Yoast SEO title syntax to human readable text.
 	 *
 	 * @since 1.0.0
@@ -105,8 +196,8 @@ class WordPress_SEO extends Core {
 					]
 				);
 			} elseif (
-				! \in_array( $type, static::$preserve, true ) &&
-				! preg_match(
+				   ! \in_array( $type, static::$preserve, true )
+				&& ! preg_match(
 					sprintf( '/^(%s)/', static::$prefix_preserve_preg_quoted ),
 					$type
 				)

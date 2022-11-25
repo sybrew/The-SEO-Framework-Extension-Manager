@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
 Requires at least: 5.5
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.3.0
 Requires TSF: 4.2.0
 Stable tag: 2.5.3
@@ -42,6 +42,20 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 == Changelog ==
 
 TODO add RTL support for _print_tsf_nag_installer_styles (regression)
+TODO fix tsf dependency in _check_external_blocking
+TODO align AMP's get_social_metadata() with TSF's output handling? This might incur deprecation of some filters.
+TODO change site checking from AUTH key to primary domain name. Domains as less likely to be migrated than the AUTH key.
+	- Combine this with another unique static key, such as initial database version?
+	- This might mean that dynamically served sites will encounter issues. Figure this out.
+		-> admin_email -> quite static, but might throw users off when changed?
+		-> siteurl     ->
+		-> home        ->
+		-> the_seo_framework_initial_db_version
+		-> DB_NAME     -> static, but might affect staging?
+		->
+			-> Test at WP Engine's staging?
+TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
+TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
 
 **Updated extensions:**
 

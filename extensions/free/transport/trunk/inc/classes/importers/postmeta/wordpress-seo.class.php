@@ -85,48 +85,6 @@ final class WordPress_SEO extends Base {
 				[ $tsf, 's_description_raw' ],
 			],
 			[
-				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-noindex' ],
-				[ $wpdb->postmeta, '_genesis_noindex' ],
-				[ $transformer_class, '_robots_qubit' ], // also sanitizes
-			],
-			[
-				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-nofollow' ],
-				[ $wpdb->postmeta, '_genesis_nofollow' ],
-				[ $transformer_class, '_robots_qubit' ], // also sanitizes
-			],
-			[
-				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-adv' ],
-				null,
-				null,
-				null,
-				[
-					'name'    => 'Yoost Robots',
-					'to'      => [
-						[ $this, '_robots_adv_transmuter_existing' ],
-						[ $this, '_robots_adv_transmuter' ],
-					],
-					'to_data' => [
-						// This could've been a simple transformer,
-						// but then we don't get to split the data if we add more robots types.
-						'transmuters' => [
-							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
-						],
-					],
-				],
-			],
-			[
-				[ $wpdb->postmeta, '_yoast_wpseo_canonical' ],
-				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
-				null,
-				'\\esc_url_raw',
-			],
-			[
-				[ $wpdb->postmeta, '_yoast_wpseo_redirect' ],
-				[ $wpdb->postmeta, 'redirect' ],
-				null,
-				'\\esc_url_raw',
-			],
-			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
 				[ $transformer_class, '_title_syntax' ],
@@ -161,6 +119,42 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_twitter_description' ],
 				[ $transformer_class, '_description_syntax' ],
 				[ $tsf, 's_description_raw' ],
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_canonical' ],
+				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
+				null,
+				'\\esc_url_raw',
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-noindex' ],
+				[ $wpdb->postmeta, '_genesis_noindex' ],
+				[ $transformer_class, '_robots_qubit' ], // also sanitizes
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-nofollow' ],
+				[ $wpdb->postmeta, '_genesis_nofollow' ],
+				[ $transformer_class, '_robots_qubit' ], // also sanitizes
+			],
+			[
+				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-adv' ],
+				null,
+				null,
+				null,
+				[
+					'name'    => 'Yoost Robots',
+					'to'      => [
+						[ $this, '_robots_adv_transmuter_existing' ],
+						[ $this, '_robots_adv_transmuter' ],
+					],
+					'to_data' => [
+						// This could've been a simple transformer,
+						// but then we don't get to split the data if we add more robots types.
+						'transmuters' => [
+							'noarchive' => [ $wpdb->postmeta, '_genesis_noarchive' ],
+						],
+					],
+				],
 			],
 			[
 				[ $wpdb->postmeta, ' _yoast_wpseo_twitter-image' ], // delete

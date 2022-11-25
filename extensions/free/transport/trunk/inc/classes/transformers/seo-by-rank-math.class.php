@@ -66,42 +66,105 @@ class SEO_By_Rank_Math extends Core {
 	 * register those self::properties statically to the child class to exploit
 	 * late-static binding for properties.
 	 *
-	 * See for reference RankMath\Admin\Importers\Yoast::convert_variables()
+	 * See for reference (in Rank Math) RankMath\Admin\Importers\Yoast::convert_variables()
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Now no longer relies on Rank Math's erroneous ...Importers\Yoast::convert_variables(),
+	 *              but we read the code, and implemented all instances of register_var_replacement() calls.
 	 * @override
 	 */
 	protected static function reset_replacements() {
 		parent::reset_replacements();
 
-		static::$replacements['term'] = static::$replacements['term_title'];
-		unset(
-			static::$replacements['term_title'],
-		);
+		static::$replacements = [
+			'category'         => [ static::class, 'get_post_first_category_name' ],
+			'categories'       => [ static::class, 'get_post_all_category_names' ],
+			'currentdate'      => [ static::class, 'get_current_date' ],  // should we?
+			'currentday'       => [ static::class, 'get_current_day' ],   // should we?
+			'currentmonth'     => [ static::class, 'get_current_month' ], // should we?
+			'currentyear'      => [ static::class, 'get_current_year' ],  // should we?
+			'date'             => [ static::class, 'get_post_date' ],     // Doesn't (shouldn't) work on Terms.
+			'excerpt'          => [ static::class, 'get_post_excerpt_trimmed' ],
+			'excerpt_only'     => [ static::class, 'get_post_excerpt' ],
+			'id'               => [ static::class, 'get_id' ],
+			'modified'         => [ static::class, 'get_post_modified_date' ], // date_i18n get_option( 'date_format' )
+			'name'             => [ static::class, 'get_post_author_display_name' ],
+			'parent_title'     => [ static::class, 'get_post_parent_post_title' ], // Is this the only parent one?
+			'post_author'      => [ static::class, 'get_post_author_display_name' ],
+			'pt_plural'        => [ static::class, 'get_post_post_type_plural_name' ],
+			'pt_single'        => [ static::class, 'get_post_post_type_singular_name' ],
+			'seo_title'        => [ static::class, 'get_post_title' ],           // hidden, likely confusing
+			'seo_description'  => [ static::class, 'get_post_excerpt_trimmed' ], // hidden, likely confusing
+			'sep'              => [ static::class, 'get_separator' ],
+			'sitedesc'         => [ static::class, 'get_blog_description' ],
+			'sitename'         => [ static::class, 'get_blog_name' ],
+			'tag'              => [ static::class, 'get_post_first_tag_name' ],
+			'tags'             => [ static::class, 'get_post_all_tag_names' ],
+			'term'             => [ static::class, 'get_term_title' ],
+			'term_description' => [ static::class, 'get_term_description' ],
+			'title'            => [ static::class, 'get_post_title' ],
+			'user_description' => [ static::class, 'get_post_author_description' ],
+			'userid'           => [ static::class, 'get_post_author_id' ],
+		];
+		static::$preserve     = [
+			// Fancy and fun in some situation, sure, but bad for SEO. Warn user.
+			'currenttime',
 
-		static::$preserve = array_merge(
-			static::$preserve,
-			[
-				// Too complex. Maybe later.
-				'org_name',
-				'org_logo',
-				'org_url',
+			// This one is actually neat, but who does SEO for attachments? Preserve.
+			'filename',
 
-				// (Should) never (be) used in object context. Trim without warning.
-				// 'search_query',
+			// We could extract this... but we can't tell whether they were migrated already or not.
+			'focuskw',
 
-				// Maybe later. Warn user.
-				'filename',
-			]
-		);
+			// BuddyPress: Maybe later. Warn user.
+			'group_desc',
+			'group_name',
+
+			// We could extract this... but we can't tell whether they were migrated already or not.
+			'keywords',
+
+			// Too complex. Maybe later.
+			'org_name',
+			'org_logo',
+			'org_url',
+
+			// "pagenumber of pagetotal" will cause issues. Warn user.
+			'page',
+			'pagenumber',
+			'pagetotal',
+
+			// (Should) never (be) used in object context. Trim without warning.
+			// 'search_query',
+
+			// Outputs URLs. This should not be used for titles and descriptions.
+			'post_thumbnail',
+
+			// We could extract this... but we can't tell whether they were migrated already or not.
+			'primary_category',
+			'primary_taxonomy_terms',
+
+			// Outputs URLs. This should not be used for titles and descriptions.
+			'url',
+
+			// WooCommerce: Maybe later. Warn user.
+			'wc_brand',
+			'wc_price',
+			'wc_shortdesc',
+			'wc_sku',
+		];
 
 		// Override.
 		static::$prefix_preserve = [
 			// Too complex. Maybe later.
+			'categories', // Rank Math has two categories, this one is advanced.
 			'count',
 			'currenttime', // Rank Math has two currenttime, this one is advanced.
 			'customfield',
 			'customterm',
+			'customterm_desc',
+			'date', // Rank Math has two date, this one is advanced.
+			'modified', // Rank Math has two modified, this one is advanced.
+			'tags', // Rank Math has two tags, this one is advanced.
 		];
 
 		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
@@ -175,8 +238,8 @@ class SEO_By_Rank_Math extends Core {
 					]
 				);
 			} elseif (
-				! \in_array( $type, static::$preserve, true ) &&
-				! preg_match(
+				   ! \in_array( $type, static::$preserve, true )
+				&& ! preg_match(
 					sprintf( '/^(%s)/', static::$prefix_preserve_preg_quoted ),
 					$type
 				)

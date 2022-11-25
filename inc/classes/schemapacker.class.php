@@ -112,7 +112,7 @@ final class SchemaPacker {
 	 * }
 	 * @return bool true On setup. False otherwise.
 	 */
-	public function __construct( $data, \stdClass $schema ) {
+	public function __construct( $data, $schema ) {
 
 		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) )
 			return false;

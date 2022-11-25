@@ -271,90 +271,16 @@ abstract class Core {
 	 * late-static binding for properties.
 	 *
 	 * @since 1.0.0
+	 * @abstract
 	 */
 	protected static function reset_replacements() {
-
-		// searchphrase and term404 are trimmed.
-
 		// Late static binding: The methods may be overwritten in a child class without affecting this array.
-		// Names are derived from Yoast SEO's transformations -- but all other SEO plugins use these as a baseline.
 		// Add to these replacements as you see fit, this array shouldn't be looped over, indexes should be fetched directly.
-		static::$replacements = [
-			'archive_title'        => [ static::class, 'get_term_title' ], // Note: CPTA aren't transported--this replacement doesn't consider.
-			'author_first_name'    => [ static::class, 'get_post_author_first_name' ], // Doesn't (shouldn't) work on Terms.
-			'author_last_name'     => [ static::class, 'get_post_author_last_name' ],  // Doesn't (shouldn't) work on Terms.
-			'caption'              => [ static::class, 'get_post_excerpt' ],
-			'category'             => [ static::class, 'get_post_all_term_names' ],
-			'category_description' => [ static::class, 'get_term_description' ],
-			'category_title'       => [ static::class, 'get_term_title' ],
-			'currentdate'          => [ static::class, 'get_current_date' ],  // should we?
-			'currentday'           => [ static::class, 'get_current_day' ],   // should we?
-			'currentmonth'         => [ static::class, 'get_current_month' ], // should we?
-			'currentyear'          => [ static::class, 'get_current_year' ],  // should we?
-			'date'                 => [ static::class, 'get_post_date' ],     // Doesn't (shouldn't) work on Terms.
-			'excerpt'              => [ static::class, 'get_post_excerpt_trimmed' ],
-			'excerpt_only'         => [ static::class, 'get_post_excerpt' ],
-			'id'                   => [ static::class, 'get_id' ],
-			'modified'             => [ static::class, 'get_post_modified_date' ], // date_i18n get_option( 'date_format' )
-			'name'                 => [ static::class, 'get_post_author_display_name' ],
-			'parent_title'         => [ static::class, 'get_post_parent_post_title' ], // Is this the only parent one?
-			'permalink'            => [ static::class, 'get_post_permalink' ],
-			'post_content'         => [ static::class, 'get_post_content' ],
-			'post_year'            => [ static::class, 'get_post_year' ],
-			'post_month'           => [ static::class, 'get_post_month' ],
-			'post_day'             => [ static::class, 'get_post_day' ],
-			'pt_plural'            => [ static::class, 'get_post_post_type_plural_name' ],
-			'pt_single'            => [ static::class, 'get_post_post_type_singular_name' ],
-			'sep'                  => [ static::class, 'get_separator' ],
-			'sitedesc'             => [ static::class, 'get_blog_description' ],
-			'sitename'             => [ static::class, 'get_blog_name' ],
-			'tag'                  => [ static::class, 'get_post_all_term_names' ],
-			'tag_description'      => [ static::class, 'get_term_description' ],
-			'term_description'     => [ static::class, 'get_term_description' ],
-			'term_title'           => [ static::class, 'get_term_title' ],
-			'title'                => [ static::class, 'get_post_title' ],
-			'user_description'     => [ static::class, 'get_post_author_description' ],
-			'userid'               => [ static::class, 'get_post_author_id' ],
-		];
 
-		// We preserve these, some harmful, to allow warning the user they have not been transformed in TSF.
-		static::$preserve = [
-			// Too complex. Maybe later. Implied via prefix_preserve
-			// 'ct_desc',
-			// 'ct_product_cat',
-			// 'ct_product_tag',
-
-			// (Should) never (be) used in object context. Trim without warning.
-			// 'searchphrase',
-			// 'term404',
-
-			// Fancy and fun in some situation, sure, but bad for SEO. Warn user.
-			'currenttime',
-
-			// We could extract these... but we can't tell whether they were migrated already or not.
-			'focuskw',
-			'primary_category',
-
-			// "pagenumber of pagetotal" will cause issues. Warn user.
-			'page',
-			'pagenumber',
-			'pagetotal',
-
-			// Maybe later. Warn user.
-			'wc_brand',
-			'wc_price',
-			'wc_shortdesc',
-			'wc_sku',
-		];
-		// This is also where /(%%single)?/ regex comes in.
-		static::$prefix_preserve = [
-			// Custom Taxonomy Product Attribute, implied via ct_*:
-			// 'ct_pa_',
-			'ct_',      // Custom Taxonomy field name., this can be %%ct_something%%single%%, which we do not test.
-			'cf_',      // Custom field name.
-		];
-
-		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
+		static::$replacements                = [];
+		static::$preserve                    = [];
+		static::$prefix_preserve             = [];
+		static::$prefix_preserve_preg_quoted = [];
 	}
 
 	/**
@@ -406,7 +332,7 @@ abstract class Core {
 	}
 
 	/**
-	 * Returns current month, translated.
+	 * Returns current month (January,February,etc.), translated.
 	 *
 	 * @since 1.0.0
 	 *
@@ -415,6 +341,30 @@ abstract class Core {
 	protected static function get_current_month() {
 		return self::$persistent_cache['current_month']
 			?? self::$persistent_cache['current_month'] = \date_i18n( 'F' );
+	}
+
+	/**
+	 * Returns current month number (1,2,etc.), translated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_current_month_number() {
+		return self::$persistent_cache['current_month_n']
+			?? self::$persistent_cache['current_month_n'] = \date_i18n( 'n' );
+	}
+
+	/**
+	 * Returns current month short (Jan,Feb,etc.), translated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_current_month_short() {
+		return self::$persistent_cache['current_month_M']
+			?? self::$persistent_cache['current_month_M'] = \date_i18n( 'M' );
 	}
 
 	/**
@@ -446,25 +396,89 @@ abstract class Core {
 	}
 
 	/**
-	 * Returns current post's category list, comma separated.
+	 * Returns current post's term list, comma separated.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $text The complete text with matched syntax. (Unused).
-	 * @param string $type The registered type of the transformation.
+	 * @param string $type The registered %type% of the transformation.
 	 * @return string
 	 */
 	protected static function get_post_all_term_names( $text, $type ) {
 
-		if ( 'term' === self::$main_object_type ) {
+		if ( 'term' === self::$main_object_type )
 			return self::$term->name ?? '';
-		} else {
-			return self::$post_cache['all_categories_names'][ $type ]
-				?? self::$post_cache['all_categories_names'][ $type ] = self::_get_term_list(
-					self::$post->ID,
-					'tag' === $type ? 'post_tag' : $type
-				);
-		}
+
+		return self::$post_cache['all_term_names'][ $type ]
+			?? self::$post_cache['all_term_names'][ $type ] = self::_get_term_fields(
+				self::$post->ID,
+				$type
+			);
+	}
+
+	/**
+	 * Returns current post's category list, comma separated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_all_category_names() {
+		return static::get_post_all_term_names( '', 'category' );
+	}
+
+	/**
+	 * Returns current post's tag list, comma separated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_all_tag_names() {
+		return static::get_post_all_term_names( '', 'post_tag' );
+	}
+
+	/**
+	 * Returns current post's first field.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $text The complete text with matched syntax. (Unused).
+	 * @param string $type The registered %type% of the transformation.
+	 * @return string
+	 */
+	protected static function get_post_first_term_name( $text, $type ) {
+
+		if ( 'term' === self::$main_object_type )
+			return self::$term->name ?? '';
+
+		return self::$post_cache['first_term_name'][ $type ]
+			?? self::$post_cache['first_term_name'][ $type ] = self::_get_first_term_field(
+				self::$post->ID,
+				$type
+			);
+	}
+
+	/**
+	 * Returns current post's first category.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_first_category_name() {
+		return static::get_post_first_term_name( '', 'category' );
+	}
+
+	/**
+	 * Returns current post's first tag.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_first_tag_name() {
+		return static::get_post_first_term_name( '', 'post_tag' );
 	}
 
 	/**
@@ -857,9 +871,9 @@ abstract class Core {
 	}
 
 	/**
-	 * Returns a list of term values.
+	 * Returns a list of term field values.
 	 *
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 * Helper method.
 	 *
 	 * @param int    $post_id  The post ID to fetch terms for.
@@ -868,17 +882,29 @@ abstract class Core {
 	 * @param string $sep      The term list separator.
 	 * @return string
 	 */
-	protected static function _get_term_list( $post_id, $taxonomy, $field = 'name', $sep = ', ' ) {
+	protected static function _get_term_fields( $post_id, $taxonomy, $field = 'name', $sep = ', ' ) {
 
-		$terms = \get_the_terms( $post_id, 'category' );
+		$terms = \get_the_terms( $post_id, $taxonomy );
 
 		return \is_array( $terms ) ? implode(
 			$sep,
-			array_column(
-				(array) \get_the_terms( self::$post->ID, 'category' ),
-				$field
-			)
+			array_column( $terms, $field )
 		) : '';
+	}
+
+	/**
+	 * Returns the first term's field value.
+	 *
+	 * @since 1.1.0
+	 * Helper method.
+	 *
+	 * @param int    $post_id  The post ID to fetch terms for.
+	 * @param string $taxonomy The taxonomy to fetch terms for.
+	 * @param string $field    The field name to extract.
+	 * @return string
+	 */
+	protected static function _get_first_term_field( $post_id, $taxonomy, $field = 'name' ) {
+		return \get_the_terms( $post_id, $taxonomy )[0][ $field ] ?? null;
 	}
 
 	/**

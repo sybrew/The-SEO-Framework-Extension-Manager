@@ -236,6 +236,12 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 
 ## Changelog
 
+### 2.0.1
+
+[tsfep-release time="-1"]
+
+* **Other:** Removed the browser-deprecated "scoped" attribute from the CSS rotation method.
+
 ### 2.0.0
 
 [tsfep-release time="February 9th, 2021"]

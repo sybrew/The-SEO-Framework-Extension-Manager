@@ -76,76 +76,19 @@ All titles and descriptions pass through the transformer. This transformer takes
 
 After transformation, repeating separators will be coalesced (`text | | | text` becomes `text | text`), and stray separators and spaces will be trimmed from either side of the title or description.
 
-| Syntax                  | Becomes                                                                  |
-|:----------------------- |:------------------------------------------------------------------------ |
-| `archive_title`         | The term title                                                           |
-| `author_first_name`     | The post author first name                                               |
-| `author_last_name`      | The post author last name                                                |
-| `caption`               | The post excerpt                                                         |
-| `category`              | All post category names or the term title                                |
-| `category_description`  | The term description                                                     |
-| `category_title`        | The term title                                                           |
-| `currentdate`           | [tsfep-gimmick type="date" format="F j, Y"]                              |
-| `currentday`            | [tsfep-gimmick type="date" format="j"]                                   |
-| `currentmonth`          | [tsfep-gimmick type="date" format="F"]                                   |
-| `currentyear`           | [tsfep-gimmick type="date" format="Y"]                                   |
-| `date`                  | The post publishing date                                                 |
-| `excerpt`               | The post excerpt, trimmed via [TSF's AI](https://tsf.fyi/kb/a/65)        |
-| `excerpt_only`          | The full post excerpt                                                    |
-| `id`                    | The post or term ID                                                      |
-| `modified`              | The post modified date                                                   |
-| `name`                  | The post author display name                                             |
-| `parent_title`          | The post parent title (not meta title)                                   |
-| `permalink`             | The post or term permalink                                               |
-| `post_content`          | The post content (why would anyone...)                                   |
-| `post_year`             | The post publishing year (e.g., [tsfep-gimmick type="date" format="Y"])  |
-| `post_month`            | The post publishing month (e.g., [tsfep-gimmick type="date" format="F"]) |
-| `post_day`              | The post publishing day (e.g., [tsfep-gimmick type="date" format="j"])   |
-| `pt_plural`             | The current post type plural name (e.g., Posts)                          |
-| `pt_single`             | The current post type singular name (e.g., Post)                         |
-| `sep`                   | The title separator (`&middot;`, `|`, `&gt;`, etc.)                      |
-| `sitedesc`              | The blog description                                                     |
-| `sitename`              | The blog name                                                            |
-| `tag`                   | All post tag names, or the term title                                    |
-| `tag_description`       | The term description                                                     |
-| `term_description`      | The term description                                                     |
-| `term_title`            | The term title                                                           |
-| `title`                 | The post or term title                                                   |
-| `user_description`      | The post author biography                                                |
-| `userid`                | The post author user ID                                                  |
-| `count*`                | _(preserved)_                                                            |
-| `customfield`           | _(preserved)_                                                            |
-| `customterm`            | _(preserved)_                                                            |
-| `currenttime*`          | _(preserved)_                                                            |
-| `focuskw`               | _(preserved)_                                                            |
-| `primary_category`      | _(preserved)_                                                            |
-| `page`                  | _(preserved)_                                                            |
-| `pagenumber`            | _(preserved)_                                                            |
-| `pagetotal`             | _(preserved)_                                                            |
-| `wc_brand`              | _(preserved)_                                                            |
-| `wc_price`              | _(preserved)_                                                            |
-| `wc_shortdesc`          | _(preserved)_                                                            |
-| `wc_sku`                | _(preserved)_                                                            |
-| `ct_*`                  | _(preserved)_                                                            |
-| `cf_*`                  | _(preserved)_                                                            |
-| `org_name`              | _(preserved)_                                                            |
-| `org_logo`              | _(preserved)_                                                            |
-| `org_url`               | _(preserved)_                                                            |
-| `filename`              | _(preserved)_                                                            |
-
 #### Not everything is transformed
 
 Only items listed in the table above will be transformed. All text is preserved -- unless the text acts like syntax, which will be removed.
 
-Some data in the table is treated as "_(preserved)_" because these types depend on their context. For example, `%%page%%` will stay `%%page%%`. The remaining preserved types we cannot replace reliably, but The SEO Framework can hint you later for manual correction of these types.
+Some data in the tables below are treated as "_(preserved)_" because these types depend on their context. For example, `%%page%%` will stay `%%page%%`. The remaining preserved types we cannot replace reliably, but The SEO Framework can hint you later for manual correction of these types.
 
-When a meta title is transformed, the importer will check the "Remove site title" option for the post or term.
+When a meta title is transformed, the importer will check the "Remove site title" option for the post or term. This prevents some further augmentation from The SEO Framework.
 
 ### What data is transported?
 
 Not all SEO plugins are alike. The SEO Framework (TSF) takes a straightforward approach to SEO, backed only by scientific data. It is why you find fewer features in our plugin, but each component is far more evolved and polished.
 
-#### Yoast SEO
+### Yoast SEO
 
 | What                    | Table      | Index                                | Transform        |
 |:----------------------- |:---------- |:------------------------------------ |:-----------------|
@@ -158,14 +101,13 @@ Not all SEO plugins are alike. The SEO Framework (TSF) takes a straightforward a
 | Twitter title           | `postmeta` | `_yoast_wpseo_twitter-title`         | &#x2713;&#xFE0F; |
 | Twitter description     | `postmeta` | `_yoast_wpseo_twitter-description`   | &#x2713;&#xFE0F; |
 | Canonical URL           | `postmeta` | `_yoast_wpseo_canonical`             | &ndash;          |
-| Redirect URL            | `postmeta` | `_yoast_wpseo_redirect`              | &ndash;          |
 | Robots noindex          | `postmeta` | `_yoast_wpseo_meta-robots-noindex`   | &#x2713;&#xFE0F; |
 | Robots nofollow         | `postmeta` | `_yoast_wpseo_meta-robots-nofollow`  | &#x2713;&#xFE0F; |
 | Robots noarchive        | `postmeta` | `_yoast_wpseo_meta-robots-adv`       | &#x2713;&#xFE0F; |
 | Primary term ID&dagger; | `postmeta` | `_yoast_wpseo_primary_{$taxonomy}`   | &ndash;          |
 | Term metadata&Dagger;   | `options`  | `wpseo_taxonomy_meta`                | &#x2713;&#xFE0F; |
 
-_&#x2a; When found, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
+_&#x2a; When found, the importer will set a flag for TSF to remove appending of the site title. You can uncheck this flag via the post edit screen._ <br>
 _&dagger; To transport primary term IDs, the taxonomy must be active before Transport can detect the data. For example, WooCommerce must be active to transport Primary Product Category IDs for Products._ <br>
 _&Dagger; This includes: title, description, Open Graph title, Open Graph description, Twitter title, Twitter description, Canonical URL, and Robots noindex._
 
@@ -188,7 +130,59 @@ Transporter will irretrievably delete the following data from your database, imp
 | Schema.org article type  | `postmeta` | `_yoast_wpseo_schema_article_type`            | TSF uses a different system    |
 | Zappier trigger flag     | `postmeta` | `_yoast_wpseo_zapier_trigger_sent`            | Commercial, selling your data  |
 
-#### Rank Math
+#### Yoast SEO transformations
+
+| Syntax                  | Becomes                                                                  |
+|:----------------------- |:------------------------------------------------------------------------ |
+| `archive_title`         | The term title                                                           |
+| `author_first_name`     | The post author's first name                                             |
+| `author_last_name`      | The post author's last name                                              |
+| `caption`               | The post excerpt                                                         |
+| `category`              | All post category names or the term title                                |
+| `category_description`  | The term description                                                     |
+| `category_title`        | The term title                                                           |
+| `currentdate`           | [tsfep-gimmick type="date" format="F j, Y"]                              |
+| `currentday`            | [tsfep-gimmick type="date" format="j"]                                   |
+| `currentmonth`          | [tsfep-gimmick type="date" format="F"]                                   |
+| `currentyear`           | [tsfep-gimmick type="date" format="Y"]                                   |
+| `date`                  | The post publishing date                                                 |
+| `excerpt`               | The post excerpt, trimmed via [TSF's AI](https://tsf.fyi/kb/a/65)        |
+| `excerpt_only`          | The full post excerpt                                                    |
+| `id`                    | The post or term ID                                                      |
+| `modified`              | The post modified date                                                   |
+| `name`                  | The post author display name                                             |
+| `parent_title`          | The post parent title (not meta title)                                   |
+| `post_content`          | The post content (why would anyone...)                                   |
+| `post_year`             | The post publishing year (e.g., [tsfep-gimmick type="date" format="Y"])  |
+| `post_month`            | The post publishing month (e.g., [tsfep-gimmick type="date" format="F"]) |
+| `post_day`              | The post publishing day (e.g., [tsfep-gimmick type="date" format="j"])   |
+| `pt_plural`             | The current post type plural name (e.g., Posts)                          |
+| `pt_single`             | The current post type singular name (e.g., Post)                         |
+| `sep`                   | The title separator (`&middot;`, `|`, `&gt;`, etc.)                      |
+| `sitedesc`              | The blog description                                                     |
+| `sitename`              | The blog name                                                            |
+| `tag`                   | All post tag names, or the term title                                    |
+| `tag_description`       | The term description                                                     |
+| `term_description`      | The term description                                                     |
+| `term_title`            | The term title                                                           |
+| `title`                 | The post or term title                                                   |
+| `user_description`      | The post author biography                                                |
+| `userid`                | The post author user ID                                                  |
+| `currenttime`           | _(preserved)_                                                            |
+| `focuskw`               | _(preserved)_                                                            |
+| `primary_category`      | _(preserved)_                                                            |
+| `page`                  | _(preserved)_                                                            |
+| `pagenumber`            | _(preserved)_                                                            |
+| `pagetotal`             | _(preserved)_                                                            |
+| `permalink`             | _(preserved)_                                                            |
+| `wc_brand`              | _(preserved)_                                                            |
+| `wc_price`              | _(preserved)_                                                            |
+| `wc_shortdesc`          | _(preserved)_                                                            |
+| `wc_sku`                | _(preserved)_                                                            |
+| `ct_*`                  | _(preserved)_                                                            |
+| `cf_*`                  | _(preserved)_                                                            |
+
+### Rank Math
 
 | What                        | Table      | Index                            | Transform        |
 |:--------------------------- |:---------- |:-------------------------------- |:---------------- |
@@ -214,9 +208,9 @@ Transporter will irretrievably delete the following data from your database, imp
 | Canonical URL               | `termmeta` | `rank_math_canonical_url`        | &ndash;          |
 | Robots metadata             | `termmeta` | `rank_math_robots`               | &#x2713;&#xFE0F; |
 
-_&#x2a; When found, the importer will set a flag for TSF to add the site title. You can remove this flag via the post edit screen._ <br>
-_&dagger; Conditional: Twitter metadata is only transported when enabled for the post or term in Rank Math._
-_&Dagger; To transport primary term IDs, the taxonomy must be active before Transport can detect the data. For example, WooCommerce must be active to transport Primary Product Category IDs for Products._ <br>
+_&#x2a; When found, the importer will set a flag for TSF to remove appending of the site title. You can uncheck this flag via the post edit screen._ <br>
+_&dagger; Conditional: Twitter metadata is only transported when enabled for the post or term in Rank Math._ <br>
+_&Dagger; To transport primary term IDs, the taxonomy must be active before Transport can detect the data. For example, WooCommerce must be active to transport Primary Product Category IDs for Products._
 
 #### Rank Math cleanup
 
@@ -224,33 +218,104 @@ Transporter will irretrievably delete the following data from your database, imp
 
 | What                     | Table      | Index                                     | Reason                            |
 |:------------------------ |:---------- |:----------------------------------------- |:--------------------------------- |
+| Open Graph image overlay | `postmeta` | `rank_math_facebook_enable_image_overlay` | Deceptive practice                |
+| Open Graph image overlay | `postmeta` | `rank_math_facebook_image_overlay`        | Deceptive practice                |
 | Disable Twitter input    | `postmeta` | `rank_math_twitter_use_facebook`          | TSF determines this automatically |
 | Twitter image URL        | `postmeta` | `rank_math_twitter_image`                 | TSF falls back to Open Graph      |
 | Twitter image ID         | `postmeta` | `rank_math_twitter_image_id`              | TSF falls back to Open Graph      |
 | Twitter Card type        | `postmeta` | `rank_math_twitter_card_type`             | Not in TSF, micromanagement       |
-| Focus keyword            | `postmeta` | `rank_math_focus_keyword`                 | TSF uses a different system       |
-| Pillar content           | `postmeta` | `rank_math_pillar_content`                | Best done via SEM software        |
-| SEO score                | `postmeta` | `rank_math_seo_score`                     | Unscientific feature              |
-| Open Graph image overlay | `postmeta` | `rank_math_facebook_enable_image_overlay` | Deceptive practice                |
-| Open Graph image overlay | `postmeta` | `rank_math_facebook_image_overlay`        | Deceptive practice                |
 | Twitter image overlay    | `postmeta` | `rank_math_twitter_enable_image_overlay`  | Deceptive practice                |
 | Twitter image overlay    | `postmeta` | `rank_math_twitter_image_overlay`         | Deceptive practice                |
 | Robots copyright         | `postmeta` | `rank_math_advanced_robots`               | Broken feature                    |
 | Breadcrumbs title        | `postmeta` | `rank_math_breadcrumb_title`              | Does not belong in SEO plugins    |
+| Focus keyword            | `postmeta` | `rank_math_focus_keyword`                 | TSF uses a different system       |
+| Pillar content           | `postmeta` | `rank_math_pillar_content`                | Best done via SEM software        |
+| SEO score                | `postmeta` | `rank_math_seo_score`                     | Unscientific feature              |
+| Content AI score         | `postmeta` | `rank_math_contentai_score`               | Unscientific feature              |
+| Open Graph image overlay | `termmeta` | `rank_math_facebook_enable_image_overlay` | Deceptive practice                |
+| Open Graph image overlay | `termmeta` | `rank_math_facebook_image_overlay`        | Deceptive practice                |
 | Disable Twitter input    | `termmeta` | `rank_math_twitter_use_facebook`          | TSF determines this automatically |
 | Twitter image URL        | `termmeta` | `rank_math_twitter_image`                 | TSF falls back to Open Graph      |
 | Twitter image ID         | `termmeta` | `rank_math_twitter_image_id`              | TSF falls back to Open Graph      |
 | Twitter Card type        | `termmeta` | `rank_math_twitter_card_type`             | Not in TSF, micromanagement       |
-| Focus keyword            | `termmeta` | `rank_math_focus_keyword`                 | Meritless feature                 |
-| Open Graph image overlay | `termmeta` | `rank_math_facebook_enable_image_overlay` | Deceptive practice                |
-| Open Graph image overlay | `termmeta` | `rank_math_facebook_image_overlay`        | Deceptive practice                |
 | Twitter image overlay    | `termmeta` | `rank_math_twitter_enable_image_overlay`  | Deceptive practice                |
 | Twitter image overlay    | `termmeta` | `rank_math_twitter_image_overlay`         | Deceptive practice                |
 | Robots copyright         | `termmeta` | `rank_math_advanced_robots`               | Broken feature                    |
 | Breadcrumbs title        | `termmeta` | `rank_math_breadcrumb_title`              | Does not belong in SEO plugins    |
-| Content AI score         | `termmeta` | `rank_math_contentai_score`               | Unscientific feature              |
+| Focus keyword            | `termmeta` | `rank_math_focus_keyword`                 | Meritless feature                 |
+
+#### Rank Math transformations
+
+| Syntax                   | Becomes                                                           |
+|:------------------------ |:----------------------------------------------------------------- |
+| `category`               | The post's first category name or the term title                  |
+| `categories`             | All post category names or the term title                         |
+| `currentdate`            | [tsfep-gimmick type="date" format="F j, Y"]                       |
+| `currentday`             | [tsfep-gimmick type="date" format="j"]                            |
+| `currentmonth`           | [tsfep-gimmick type="date" format="F"]                            |
+| `currentyear`            | [tsfep-gimmick type="date" format="Y"]                            |
+| `date`                   | The post publishing date                                          |
+| `excerpt`                | The post excerpt, trimmed via [TSF's AI](https://tsf.fyi/kb/a/65) |
+| `excerpt_only`           | The full post excerpt                                             |
+| `id`                     | The post or term ID                                               |
+| `modified`               | The post modified date                                            |
+| `name`                   | The post author display name                                      |
+| `parent_title`           | The post parent title (not meta title)                            |
+| `post_author`            | The post author display name                                      |
+| `pt_plural`              | The current post type plural name (e.g., Posts)                   |
+| `pt_single`              | The current post type singular name (e.g., Post)                  |
+| `seo_title`              | The generated title (not SEO title)                               |
+| `seo_description`        | The post excerpt, trimmed via [TSF's AI](https://tsf.fyi/kb/a/65) |
+| `sep`                    | The title separator (`&middot;`, `|`, `&gt;`, etc.)               |
+| `sitedesc`               | The blog description                                              |
+| `sitename`               | The blog name                                                     |
+| `tag`                    | The post's first tag name, or the term title                      |
+| `tags`                   | All post tag names, or the term title                             |
+| `term`                   | The term title                                                    |
+| `term_description`       | The term description                                              |
+| `title`                  | The post or term title                                            |
+| `user_description`       | The post author biography                                         |
+| `userid`                 | The post author user ID                                           |
+| `currenttime`            | _(preserved)_                                                     |
+| `filename`               | _(preserved)_                                                     |
+| `focuskw`                | _(preserved)_                                                     |
+| `group_desc`             | _(preserved)_                                                     |
+| `group_name`             | _(preserved)_                                                     |
+| `keywords`               | _(preserved)_                                                     |
+| `org_name`               | _(preserved)_                                                     |
+| `org_logo`               | _(preserved)_                                                     |
+| `org_url`                | _(preserved)_                                                     |
+| `page`                   | _(preserved)_                                                     |
+| `pagenumber`             | _(preserved)_                                                     |
+| `pagetotal`              | _(preserved)_                                                     |
+| `post_thumbnail`         | _(preserved)_                                                     |
+| `primary_category`       | _(preserved)_                                                     |
+| `primary_taxonomy_terms` | _(preserved)_                                                     |
+| `url`                    | _(preserved)_                                                     |
+| `wc_brand`               | _(preserved)_                                                     |
+| `wc_price`               | _(preserved)_                                                     |
+| `wc_shortdesc`           | _(preserved)_                                                     |
+| `wc_sku`                 | _(preserved)_                                                     |
+| `categories(*)`          | _(preserved)_                                                     |
+| `count(*)`               | _(preserved)_                                                     |
+| `currenttime(*)`         | _(preserved)_                                                     |
+| `customfield(*)`         | _(preserved)_                                                     |
+| `customterm(*)`          | _(preserved)_                                                     |
+| `customterm_desc(*)`     | _(preserved)_                                                     |
+| `date(*)`                | _(preserved)_                                                     |
+| `modified(*)`            | _(preserved)_                                                     |
+| `tags(*)`                | _(preserved)_                                                     |
 
 ## Changelog
+
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+* **Fixed:** Added missing transformations for Rank Math.
+	* Among these are: `categories`, `post_author`, `seo_title`, `seo_description`, `tags`, and `term`.
+* **Fixed:** Added missing tag preservation for Rank Math.
+	* Among these are: `group_desc`, `group_name`, `keywords`, `post_thumbnail`, `primary_taxonomy_terms`, `url`, `categories(*)`,  `customterm_desc(*)`, `date(*)`, `modified(*)`, `tags(*)`.
 
 ### 1.0.0
 

@@ -42,7 +42,7 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  * @since 1.0.0
  * @param string
  */
-\define( 'TSFEM_E_AMP_VERSION', '1.1.0' );
+\define( 'TSFEM_E_AMP_VERSION', '1.2.1' );
 
 \add_action( 'wp', __NAMESPACE__ . '\\_amp_init', 11 );
 /**

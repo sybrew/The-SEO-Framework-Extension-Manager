@@ -133,12 +133,14 @@ final class SEO_By_Rank_Math extends Base {
 			[
 				[ $wpdb->postmeta, 'rank_math_twitter_title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
-				[ $transformer_class, '_title_syntax' ], // also sanitizes
+				[ $transformer_class, '_title_syntax' ],
+				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_twitter_description' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
-				[ $transformer_class, '_description_syntax' ], // also sanitizes
+				[ $transformer_class, '_description_syntax' ],
+				[ $tsf, 's_description_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_canonical_url' ],
@@ -169,6 +171,12 @@ final class SEO_By_Rank_Math extends Base {
 				],
 			],
 			[
+				[ $wpdb->postmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_facebook_image_overlay' ], // delete
+			],
+			[
 				[ $wpdb->postmeta, 'rank_math_twitter_image' ], // delete
 			],
 			[
@@ -176,21 +184,6 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_twitter_card_type' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_focus_keyword' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_pillar_content' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_seo_score' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_facebook_enable_image_overlay' ], // delete
-			],
-			[
-				[ $wpdb->postmeta, 'rank_math_facebook_image_overlay' ], // delete
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_twitter_enable_image_overlay' ], // delete
@@ -203,6 +196,15 @@ final class SEO_By_Rank_Math extends Base {
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_breadcrumb_title' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_focus_keyword' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_pillar_content' ], // delete
+			],
+			[
+				[ $wpdb->postmeta, 'rank_math_seo_score' ], // delete
 			],
 			[
 				[ $wpdb->postmeta, 'rank_math_contentai_score' ], // delete
