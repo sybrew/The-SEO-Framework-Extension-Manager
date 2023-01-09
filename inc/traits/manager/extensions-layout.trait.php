@@ -161,7 +161,6 @@ trait Extensions_Layout {
 	 * @since 1.0.0
 	 * @since 2.2.0 1. Changed the default size from 120 to 100.
 	 *              2. Now returns a href, instead of the actual file output.
-	 * @TODO see if xlink:href can be exchanged for just href.
 	 *
 	 * @param array $extension The extension to make icon from.
 	 * @param array $size The icon height and width.
@@ -171,13 +170,13 @@ trait Extensions_Layout {
 
 		if ( ! empty( $extension['slug'] ) ) {
 			$icon = sprintf(
-				'<svg class=tsfem-extension-entry-icon alt="extension icon" width=%1$s height=%1$s><use xlink:href=#tsfem-logo-%2$s></use></svg>',
+				'<svg class=tsfem-extension-entry-icon alt="extension icon" width=%1$s height=%1$s><use href=#tsfem-logo-%2$s></use></svg>',
 				\esc_attr( $size ),
 				\esc_attr( $extension['slug'] )
 			);
 		} else {
 			$icon = sprintf(
-				'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s" alt="extension fallback icon"></image>',
+				'<image href="%1$s" width="%2$s" height="%2$s" alt="extension fallback icon" />',
 				\esc_url( \tsfem()->get_image_file_location( 'exticon-fallback.svg', true ), [ 'https', 'http' ] ),
 				\esc_attr( $size )
 			);

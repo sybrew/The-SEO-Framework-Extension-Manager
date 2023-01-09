@@ -147,7 +147,7 @@ const escapeStr = ( str, noquotes ) => {
 	if ( ! str.length ) return '';
 
 	if ( noquotes ) {
-		return str.replace( /[&<>]/g, ( m ) => {
+		return str.replace( /[&<>]/g, m => {
 			return {
 				'&': '&amp;',
 				'<': '&lt;',
@@ -155,7 +155,7 @@ const escapeStr = ( str, noquotes ) => {
 			}[ m ];
 		} );
 	} else {
-		return str.replace( /[&<>"']/g, ( m ) => {
+		return str.replace( /[&<>"']/g, m => {
 			return {
 				'&': '&amp;',
 				'<': '&lt;',
@@ -186,7 +186,7 @@ const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise(
 	// No iterable is set. That's OK, this should be handled earlier.
 	if ( ! its ) return resolve();
 
-	const loop = ( it ) => {
+	const loop = it => {
 		let looper, stopper, rejector;
 		// return new Promise( ( resolve, reject ) => {
 			// Prepare loop stopper.
@@ -235,7 +235,7 @@ const promiseLoop = ( iterable, cb, timeout = 0, stopAt = 2000 ) => new Promise(
 	loop( 0 );
 } );
 
-const countChars = ( str ) => {
+const countChars = str => {
 	// TODO does this stripping interfere with lone < (that become &lt;)?
 	// Strip all XML tags first.
 	str = str.match( /(?=([^<>]+))\1(?=<|$)/gi );
@@ -280,32 +280,32 @@ const stripWord = ( word, str ) => str.replace(
 	'/' // A filler that doesn't break XML tag attribute closures (<|>|"|'|\s).
 );
 
-const countCharacters = ( content ) => new Promise( ( resolve, reject ) => {
+const countCharacters = content => new Promise( ( resolve, reject ) => {
 	setTimeout( () => {
 		contentCharCount += countChars( content );
 		resolve();
 	}, 5 );
 } );
 
-const countInflections = ( content ) => {
+const countInflections = content => {
 	let _inflections = inflections,
 		_content     = content;
 	_inflections.length && _inflections.sort( ( a, b ) => b.length - a.length );
 
-	return promiseLoop( _inflections, ( inflection ) => {
+	return promiseLoop( _inflections, inflection => {
 		let count = countWords( inflection, _content );
 		inflectionCount += count;
 		inflectionCharCount += inflection.length * count;
 		_content = stripWord( inflection, _content );
 	}, 5, 10000 );
 }
-const countSynonyms = ( content ) => {
+const countSynonyms = content => {
 	let _synonyms = synonyms,
 		_content  = content;
 
 	_synonyms.length && _synonyms.sort( ( a, b ) => b.length - a.length );
 
-	return promiseLoop( _synonyms, ( synonym ) => {
+	return promiseLoop( _synonyms, synonym => {
 		let count = countWords( synonym, _content );
 		synonymCount += count;
 		synonymCharCount += synonym.length * count;

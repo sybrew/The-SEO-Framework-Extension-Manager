@@ -56,6 +56,10 @@ TODO change site checking from AUTH key to primary domain name. Domains as less 
 			-> Test at WP Engine's staging?
 TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
 TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
+TODO https://github.com/sybrew/the-seo-framework/issues/590 (add three fields: Valuta, Min price, Max price; and/or a dropdown: "Cheap/OK/Expensive/Exclusive" (find proper terms)).
+TODO https://github.com/sybrew/the-seo-framework/issues/616
+
+* **Other:** Modernized code.
 
 **Updated extensions:**
 

@@ -260,7 +260,7 @@ final class Front extends Core {
 			$options |= JSON_UNESCAPED_SLASHES;
 			$options |= static::$tsf->script_debug ? JSON_PRETTY_PRINT : 0;
 
-			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, $options ) ) . PHP_EOL;
+			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, $options ) ) . "\n";
 		}
 
 		return '';

@@ -109,8 +109,8 @@ final class Front extends Core {
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
 
-		echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', PHP_EOL;
-		echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', PHP_EOL;
+		echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', "\n"; // Keep XHTML valid!
+		echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
 	}
 
 	/**
@@ -161,9 +161,9 @@ final class Front extends Core {
 		$script = $this->minify_script( $script );
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "<script>$script</script>", PHP_EOL;
+		echo "<script>$script</script>\n";
 		// phpcs:ignore, WordPress.WP.EnqueuedResources.NonEnqueuedScript
-		echo '<script async src="https://www.google-analytics.com/analytics.js"></script>', PHP_EOL;
+		echo '<script async="async" src="https://www.google-analytics.com/analytics.js"></script>', "\n"; // Keep XHTML valid!
 	}
 
 	/**
@@ -218,6 +218,7 @@ JS;
 
 		$script = $this->minify_script( $script );
 
+		// Keep XHTML valid!
 		$noscript = <<<NOJS
 			<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={$pixel_id_attr}&ev=PageView&noscript=1" />
 NOJS;
@@ -225,9 +226,9 @@ NOJS;
 		$noscript = str_replace( [ "\n", "\t" ], '', $noscript );
 
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "<script>$script</script>", PHP_EOL;
+		echo "<script>$script</script>\n";
 		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "<noscript>$noscript</noscript>", PHP_EOL;
+		echo "<noscript>$noscript</noscript>\n";
 	}
 
 	/**

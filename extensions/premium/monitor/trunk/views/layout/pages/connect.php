@@ -48,7 +48,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				<p><?= esc_html__( 'Get detailed information about your website. Automatically.', 'the-seo-framework-extension-manager' ) ?></p>
 			</div>
 		</div>
-		<div class="tsfem-connect-action">
+		<div class=tsfem-connect-action>
 			<?php $this->get_view( 'forms/connect' ); ?>
 		</div>
 	</div>

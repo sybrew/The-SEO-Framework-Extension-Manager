@@ -119,6 +119,7 @@ final class Admin extends Core {
 		 * @see PHP `array_unshift()`
 		 * @since 1.0.0
 		 * @NOTE: No longer reliably works with Gutenberg.
+		 *        Use the JS API, or create a fill (hidden element updated via JS with 'input/change' events).
 		 *
 		 * @param array $elements : { 'type' => [
 		 *    'querySelector' => string 'append|dominate'.
@@ -129,25 +130,25 @@ final class Admin extends Core {
 			[
 				[
 					'pageTitle'      => [
-						'#titlewrap > input'     => 'append',
-						'#tsfem-focus-gbc-title' => 'dominate',
-						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+						'#titlewrap > input'     => 'append',   // Classic Editor
+						'#tsfem-focus-gbc-title' => 'dominate', // Gutenberg fill
+						// NOTE: Can't reliably fetch Gutenberg's from DOM. That's why we use a fill.
 					],
 					'pageUrl'        => [
-						'#sample-permalink'     => 'dominate',
-						'#tsfem-focus-gbc-link' => 'dominate',
-						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+						'#sample-permalink'     => 'dominate', // Classic Editor
+						'#tsfem-focus-gbc-link' => 'dominate', // Gutenberg fill
+						// NOTE: Can't reliably fetch Gutenberg's from DOM. That's why we use a fill.
 					],
 					'pageContent'    => [
-						'#content'                 => 'append',
-						'#tsfem-focus-gbc-content' => 'append',
-						// NOTE: Can't reliably fetch Gutenberg's from DOM.
+						'#content'                 => 'append', // Classic Editor
+						'#tsfem-focus-gbc-content' => 'append', // Gutenberg fill
+						// NOTE: Can't reliably fetch Gutenberg's from DOM. That's why we use a fill.
 					],
 					'seoTitle'       => [
-						'#tsf-title-reference_autodescription_title' => 'dominate',
+						'#tsf-title-reference_autodescription_title' => 'dominate', // Fill (Classic & Gutenberg)
 					],
 					'seoDescription' => [
-						'#tsf-description-reference_autodescription_description' => 'dominate',
+						'#tsf-description-reference_autodescription_description' => 'dominate', // Fill (Classic & Gutenberg)
 					],
 				],
 			]
@@ -160,7 +161,7 @@ final class Admin extends Core {
 	 * @since 1.0.0
 	 * @since 1.4.0 Added language support type selection.
 	 *
-	 * @param string $type The type of supoport, either 'any', 'synonyms', or 'inflections'.
+	 * @param string $type The type of support, either 'any', 'synonyms', or 'inflections'.
 	 * @return bool True if supported, false otherwise.
 	 */
 	private function is_language_supported( $type ) {

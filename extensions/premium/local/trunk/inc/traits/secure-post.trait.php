@@ -295,7 +295,7 @@ trait Secure_Post {
 			} else {
 				$type            = 'success';
 				$send['results'] = $this->get_ajax_notice( true, 1070202 );
-				$send['tdata']   = '<script type="application/ld+json">' . PHP_EOL . $data . PHP_EOL . '</script>';
+				$send['tdata']   = '<script type="application/ld+json">' . "\n$data\n" . '</script>'; // This goes to Google for preview.
 			}
 		}
 

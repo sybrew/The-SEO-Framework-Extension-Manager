@@ -123,7 +123,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {(Object<*,*>|Array|Map)} obj The object that needs to be sorted.
 	 * @return {(Object)} The sorted map.
 	 */
-	const sortMap = ( obj ) => {
+	const sortMap = obj => {
 		Object.keys( obj ).sort( ( a, b ) => {
 			return Object.keys( a )[0] - Object.keys( b )[0];
 		} );
@@ -139,7 +139,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @since 1.0.0
 	 * @see updateActiveFocusAreas() To be called after the
 	 *      registry has been updated.
-	 * @uses @var focusRegistry
+	 * @uses focusRegistry
 	 * @access private
 	 *
 	 * @function
@@ -192,13 +192,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @uses @var focusRegistry
-	 * @uses @var activeFocusAreas
+	 * @uses focusRegistry
+	 * @uses activeFocusAreas
 	 *
 	 * @function
 	 * @param {string|undefined} area The area to reset. Default undefined (catch-all).
 	 */
-	const updateActiveFocusAreas = ( area ) => {
+	const updateActiveFocusAreas = area => {
 
 		/**
 		 * @param {!Object} elements : {
@@ -213,7 +213,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			lastDominant = '',
 			keys         = [];
 
-		const update = ( _area ) => {
+		const update = _area => {
 			types        = elements[ _area ];
 			hasDominant  = false;
 			lastDominant = '';
@@ -244,7 +244,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				}
 			}
 		}
-		const unset = ( area ) => {
+		const unset = area => {
 			delete areas[ area ];
 		}
 
@@ -313,7 +313,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			regex = [ regex ];
 		}
 
-		const checkElement = ( element ) => new Promise( ( resolve, reject ) => {
+		const checkElement = element => new Promise( ( resolve, reject ) => {
 
 			let selector = document.querySelector( element );
 
@@ -341,7 +341,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 							getCharCount: 'p' === data.scoring.type, // p stands for "percent", which is relative.
 						},
 					}
-				).then( ( data ) => {
+				).then( data => {
 					inflectionCount     = data.inflectionCount;
 					synonymCount        = data.synonymCount;
 					inflectionCharCount = data.inflectionCharCount;
@@ -546,7 +546,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {string} idPrefix
 	 */
-	const runLexicalFormSetter = ( idPrefix ) => {
+	const runLexicalFormSetter = idPrefix => {
 		let keyword          = getSubElementById( idPrefix, 'keyword' ).value,
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' );
 
@@ -554,7 +554,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		setEditButton( idPrefix ).to( 'loading' );
 
-		const setLexicalFormSelectionFields = ( entries ) => {
+		const setLexicalFormSelectionFields = entries => {
 			const lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' ),
 				  lexicalData     = getSubElementById( idPrefix, 'lexical_data' );
 
@@ -562,7 +562,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			let _forms = Object.values( JSON.parse( l10n.defaultLexicalForm ) || [] );
 
 			if ( entries.length ) {
-				entries.forEach( ( entry ) => {
+				entries.forEach( entry => {
 					if ( entry.inflection && entry.category ) {
 						_forms.push( {
 							value:    entry.inflection,
@@ -775,19 +775,19 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @since 1.0.0
 	 * @since 1.4.0 Converted inflection setter to getter.
 	 * @access private
-	 * @uses @var lexicalFormSelectionBuffer
+	 * @uses lexicalFormSelectionBuffer
 	 *
 	 * @function
 	 * @param {!jQuery.event} event The jQuery event, containing the idPrefix.
 	 *                              === idPrefix['lexical_selector']
 	 */
-	const lexicalSelectorChangeHandler = ( event ) => {
+	const lexicalSelectorChangeHandler = event => {
 		let idPrefix         = event.data.idPrefix,
 			lexicalSelector  = getSubElementById( idPrefix, 'lexical_selector' ),
 			lexicalFormField = getSubElementById( idPrefix, 'lexical_form' ),
 			lexicalDataField = getSubElementById( idPrefix, 'lexical_data' );
 
-		const apiHandler = ( type ) => {
+		const apiHandler = type => {
 			let action;
 
 			if ( 'inflections' === type ) {
@@ -825,7 +825,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const getInflections = () => apiHandler( 'inflections' );
 		const getSynonyms    = () => apiHandler( 'synonyms' );
 
-		const setDefinition = ( value ) => {
+		const setDefinition = value => {
 			// Set static lexicalform field.
 			lexicalFormField.value        = value;
 			lexicalSelector.value         = value;
@@ -900,7 +900,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				} else {
 					reject();
 				}
-			} ).catch( ( code ) => {
+			} ).catch( code => {
 				switch ( code ) {
 					case 1100202: // Word not found
 					case 1100205: // Empty return value
@@ -970,7 +970,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {string} idPrefix
 	 */
-	const populateDefinitionSelector = ( idPrefix ) => {
+	const populateDefinitionSelector = idPrefix => {
 		let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
 			synonyms      = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
 
@@ -1018,18 +1018,18 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *    @param {string} state
 	 * } }
 	 */
-	const setLexicalFormSelectionListener = ( idPrefix ) => {
-		const enable = ( selector ) => {
+	const setLexicalFormSelectionListener = idPrefix => {
+		const enable = selector => {
 			$( selector )
 				.off( 'change.tsfemInpostLexical' )
 				.on( 'change.tsfemInpostLexical', { 'idPrefix': idPrefix }, lexicalSelectorChangeHandler );
 		}
-		const disable = ( selector ) => {
+		const disable = selector => {
 			$( selector ).off( 'change.tsfemInpostLexical' );
 		}
 
 		return {
-			to: ( what ) => {
+			to: what => {
 				const lexicalSelector = getSubElementById( idPrefix, 'lexical_selector' );
 				if ( lexicalSelector ) {
 					switch ( what ) {
@@ -1056,7 +1056,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {string} idPrefix
 	 */
-	const prepareWrapScoreElements = ( idPrefix ) => {
+	const prepareWrapScoreElements = idPrefix => {
 		const subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap' );
 
 		setAnalysisInterval( idPrefix ).to( 'disabled' );
@@ -1087,7 +1087,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *    @param {string} state
 	 * }
 	 */
-	const setAnalysisInterval = ( idPrefix ) => {
+	const setAnalysisInterval = idPrefix => {
 		return {
 			to: state => {
 				switch( state ) {
@@ -1122,7 +1122,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {HTMLElement} rater The score element wrap.
 	 */
-	const prepareScoreElement = ( rater ) => {
+	const prepareScoreElement = rater => {
 
 		let idPrefix = getSubIdPrefix( rater.id ),
 			kw       = getSubElementById( idPrefix, 'keyword' ).value;
@@ -1173,7 +1173,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *    @param {string} state
 	 * }
 	 */
-	const setEvaluationVisuals = ( idPrefix ) => {
+	const setEvaluationVisuals = idPrefix => {
 		let $content = $( getSubElementById( idPrefix, 'content' ) ),
 			hideClasses = [
 				'.tsfem-e-focus-scores-wrap',
@@ -1181,7 +1181,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				'.tsfem-e-focus-something-wrong-wrap'
 			];
 
-		const set = ( show ) => {
+		const set = show => {
 			hideClasses.splice( hideClasses.indexOf( show ), 1 );
 
 			$content.find( hideClasses.join( ', ' ) ).fadeOut( 150, () => {
@@ -1193,7 +1193,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		return {
-			to: ( state ) => {
+			to: state => {
 				let show;
 				switch ( state ) {
 					case 'disabled':
@@ -1228,8 +1228,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *	@function to : @param {(string|array)} state The state or states to transform the button into.
 	 * }
 	 */
-	const setEditButton = ( idPrefix ) => {
-		return { to: ( state ) => {
+	const setEditButton = idPrefix => {
+		return { to: state => {
 			const editToggle = getSubElementById( idPrefix, 'subject_edit' );
 			if ( ! editToggle ) return;
 
@@ -1237,7 +1237,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				editWrap      = editToggle.parentNode,
 				disabledClass = 'tsfem-e-focus-edit-subject-button-wrap-disabled';
 
-			state.split( ',' ).forEach( ( _state ) => {
+			state.split( ',' ).forEach( _state => {
 				switch ( _state.trim() ) {
 					case 'checked':
 						if ( ! editToggle.checked ) {
@@ -1286,7 +1286,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 */
 	const setCollapserListeners = () => {
-		const toggleCollapser = ( event ) => {
+		const toggleCollapser = event => {
 			if ( tsfem_inpost.isActionableElement( event.target ) ) return;
 
 			const collapser = getSubElementById(
@@ -1339,7 +1339,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		let keywordEntries = document.querySelectorAll( '.tsfem-e-focus-keyword-entry' );
 
-		const doKeywordEntry = ( event ) => {
+		const doKeywordEntry = event => {
 			let target = event.target,
 				val    = target.value.trim().replace( /[\s\t\r\n]+/g, ' ' ) || '',
 				prev   = target.dataset.prev || '';
@@ -1375,7 +1375,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			// prepareHighlighter( event );
 		}
 
-		const setKeyword = ( event ) => {
+		const setKeyword = event => {
 			// Vars must be registered here as it's asynchronous.
 			let idPrefix  = getSubIdPrefix( event.target.id ),
 				bar       = getSubElementById( idPrefix, 'content' ).querySelector( '.tsfem-e-focus-content-loader-bar' ),
@@ -1482,15 +1482,15 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 				$( clicker ).fadeIn( 300 ); // intrinsically shown?
 			}
-			const onChange = ( event ) => {
+			const onChange = event => {
 				setVals( event.target );
 				+newVal === +lastVal && reset() || doChange();
 			}
-			const setVals = ( target ) => {
+			const setVals = target => {
 				newVal  = target.value;
 				newText = target.options[ target.selectedIndex ].text;
 			}
-			const clickOff = ( event ) => {
+			const clickOff = event => {
 				// If event.target is of selector, then closest will throw an error.
 				// Filter from test early.
 				if ( event.target === selector ) return;
@@ -1536,7 +1536,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		let showSubjectEditorDebouncer = {};
-		const showSubjectEditor = ( event ) => {
+		const showSubjectEditor = event => {
 			const idPrefix = getSubIdPrefix( event.target.id );
 
 			showSubjectEditorDebouncer.hasOwnProperty( idPrefix )
@@ -1619,7 +1619,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @uses @var subjectFilterBuffer
+	 * @uses subjectFilterBuffer
 	 * @see refillSubjectSelection() : The trigger method.
 	 *
 	 * @function
@@ -1645,7 +1645,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			activeWords( idPrefix ).clearCache( 'synonyms' );
 			triggerAllAnalysis( idPrefix );
 		}
-		const updateActive = ( event ) => {
+		const updateActive = event => {
 			const idPrefix  = event.data.idPrefix,
 				  type      = event.data.type,
 				  bufferKey = idPrefix + type;
@@ -1763,7 +1763,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @function
 	 * @param {string} idPrefix
 	 */
-	const refillSubjectSelection = ( idPrefix ) => {
+	const refillSubjectSelection = idPrefix => {
 		$( window ).trigger(
 			'tsfem-e-focus-updated-subject',
 			[ { idPrefix } ]
@@ -1776,7 +1776,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @access private
-	 * @uses @var cachedActiveWords
+	 * @uses cachedActiveWords
 	 *
 	 * @function
 	 * @param {string} idPrefix
@@ -1785,7 +1785,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *  @function clearCache : @param what What to clear.
 	 * }
 	 */
-	const activeWords = ( idPrefix ) => {
+	const activeWords = idPrefix => {
 		if ( ! cachedActiveWords.hasOwnProperty( idPrefix ) ) {
 			cachedActiveWords[ idPrefix ] = {
 				inflections: void 0,
@@ -1831,7 +1831,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			return cachedActiveWords[ idPrefix ].synonyms = ret;
 		}
 
-		const getActive = ( what ) => {
+		const getActive = what => {
 			if ( void 0 !== cachedActiveWords[ idPrefix ][ what ] )
 				return cachedActiveWords[ idPrefix ][ what ];
 
@@ -1848,7 +1848,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			}
 		}
 
-		const clear = ( what ) => {
+		const clear = what => {
 			if ( what ) {
 				delete cachedActiveWords[ idPrefix ][ what ];
 			} else {
@@ -1868,7 +1868,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @since 1.0.0
 	 * @access private
 	 * @see tsfem_e_focus_inpost.setIconClass()
-	 * @uses @var activeAssessments
+	 * @uses activeAssessments
 	 *
 	 * @function
 	 * @param {string} type
@@ -1893,7 +1893,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.5.0
 	 * @access private
-	 * @uses @var activeAssessments
+	 * @uses activeAssessments
 	 *
 	 * @function
 	 * @param {(HTMLInputElement|HTMLElement)} checkerWrap The scoring wrap to add checks for.
@@ -1927,19 +1927,19 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @uses @var activeAssessments
-	 * @uses @var changeListenersBuffers
-	 * @uses @var changeListenerFlags
+	 * @uses activeAssessments
+	 * @uses changeListenersBuffers
+	 * @uses changeListenerFlags
 	 *
 	 * @function
 	 * @param {string|undefined} type The type to reset. Default undefined (catch-all).
 	 */
-	const resetAnalysisChangeListeners = ( type ) => {
+	const resetAnalysisChangeListeners = type => {
 		/**
 		 * One of two main function that runs the checks on registered change events.
 		 */
-		const triggerChangeListener = ( type ) => {
-			tsfem_inpost.promiseLoop( activeAssessments[ type ], ( id ) => {
+		const triggerChangeListener = type => {
+			tsfem_inpost.promiseLoop( activeAssessments[ type ], id => {
 				let idPrefix = getSubIdPrefix( id ),
 					kwInput = getSubElementById( idPrefix, 'keyword' ),
 					kw = kwInput.value || '';
@@ -1953,7 +1953,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				setTimeout( () => doCheck( el ), 150 );
 			} );
 		}
-		const listener = ( event ) => {
+		const listener = event => {
 			if ( typeof activeAssessments[ event.data.type ] === 'undefined' ) return;
 
 			// let key = event.target.id || event.target.name || event.target.classList.join('');
@@ -1976,7 +1976,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				changeListenerFlags[ event.data.type ] = false;
 			}, 1500 );
 		}
-		const reset = ( type ) => {
+		const reset = type => {
 			let changeEventName = analysisChangeEvents( type ).get( 'names' );
 			$( activeFocusAreas[ type ].join( ', ' ) )
 				.off( changeEventName )
@@ -2010,13 +2010,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 *
 	 * @since 1.0.0
 	 * @access public
-	 * @uses @var activeFocusAreas
-	 * @uses @var triggerAllBuffer
+	 * @uses activeFocusAreas
+	 * @uses triggerAllBuffer
 	 *
 	 * @function
 	 * @param {(string|undefined)} idPrefix The idPrefix. If omitted, all checks are performed.
 	 */
-	const triggerAllAnalysis = ( idPrefix ) => {
+	const triggerAllAnalysis = idPrefix => {
 		idPrefix ||= 0;
 		clearTimeout( triggerAllBuffer[ idPrefix ] );
 		triggerAllBuffer[ idPrefix ] = setTimeout( () => {
@@ -2047,13 +2047,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} type The content type.
 	 * @return {object<string,?>)}
 	 */
-	const analysisChangeEvents = ( type ) => {
+	const analysisChangeEvents = type => {
 		const events = [
 			`tsfem-e-focus.analysis-${type}`, // Custom trigger.
 			`input.tsfem-e-focus-${type}`,
 			`change.tsfem-e-focus-${type}`
 		];
-		return { get: ( what ) => {
+		return { get: what => {
 			switch ( what ) {
 				case 'names'   : return events.join( ' ' );
 				case 'trigger' : return events[0];
@@ -2321,7 +2321,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			const updatePageUrlRegistry = () => {
 				const unregisteredUrlAssessments = document.querySelectorAll(
-					'.tsfem-e-focus-assessment-wrap[data-assessment-type="url"][data-assess="0"]'
+					'.tsfem-e-focus-assessment-wrap[data-assessment-type=url][data-assess="0"]'
 				);
 				if ( unregisteredUrlAssessments.length ) {
 					updateActiveFocusAreas( 'pageUrl' );
@@ -2334,7 +2334,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				updatePageUrlRegistry();
 				resetAnalysisChangeListeners( 'pageUrl' );
 				$( '#sample-permalink' ).trigger( analysisChangeEvents( 'pageUrl' ).get( 'trigger' ) );
-			} ).observe( listenNode, { 'childList': true, 'subtree' : true } );
+			} ).observe( listenNode, { childList: true, subtree: true } );
 		})();
 
 		/**
@@ -2347,7 +2347,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 			let loaded = false;
 
-			tinyMCE.on( 'addEditor', ( event ) => {
+			tinyMCE.on( 'addEditor', event => {
 				if ( loaded ) return;
 				if ( event.editor.id !== 'content' ) return;
 				loaded = true; // prevent further checks.
@@ -2360,13 +2360,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					buffering = false,
 					setUnknown = false;
 
-				editor.on( 'Dirty', ( event ) => {
+				editor.on( 'Dirty', event => {
 					if ( ! setUnknown ) {
 						setAllRatersOf( 'pageContent', 'unknown' );
 						setUnknown = true;
 					}
 				} );
-				editor.on( 'GetContent', ( event ) => {
+				editor.on( 'GetContent', event => {
 					clearTimeout( buffers['GetContent'] );
 					if ( ! buffering && editor.isDirty() ) {
 						setAllRatersOf( 'pageContent', 'loading' );
@@ -2416,7 +2416,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		for ( let _i = wraps.length; _i--; ) {
 			let idPrefix = getSubIdPrefix( wraps[ _i ].id ),
-				kwEntry = getSubElementById( idPrefix, 'keyword' );
+				kwEntry  = getSubElementById( idPrefix, 'keyword' );
 
 			if ( kwEntry.value.length ) {
 				// Prepare keyword value.

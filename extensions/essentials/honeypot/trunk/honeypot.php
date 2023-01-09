@@ -243,7 +243,7 @@ final class Core {
 	 */
 	private function output_css_honeypot() {
 		printf(
-			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>',
+			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>', // Keep XHTML valid!
 			\esc_attr( $this->hp_properties['css_input_name'] )
 		);
 	}
@@ -266,6 +266,7 @@ final class Core {
 	 */
 	private function output_css_rotation_honeypot() {
 		printf(
+			// Keep XHTML valid!
 			'<p id="%1$s"><label for="%1$s">Website</label><input type="text" name="%1$s" value=""><style>#%1$s{display:none}</style></p>',
 			\esc_attr( $this->hp_properties['css_rotate_input_name'] )
 		);
@@ -336,7 +337,7 @@ JS;
 	 */
 	private function output_nonce_honeypot() {
 		vprintf(
-			'<input type="hidden" name="%1$s" value="%2$s">',
+			'<input type="hidden" name="%1$s" value="%2$s">', // Keep XHTML valid!
 			[
 				\sanitize_key( $this->hp_properties['nonce_input_name'] ),
 				\esc_attr( $this->hp_properties['nonce_rotated_input_value'] ),
@@ -386,7 +387,7 @@ JS;
 
 		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already taken care of.
 		vprintf(
-			'<input type="hidden" name="%s" value=""><script>%s</script>',
+			'<input type="hidden" name="%s" value=""><script>%s</script>', // Keep XHTML valid!
 			[
 				$input_name,
 				$script,

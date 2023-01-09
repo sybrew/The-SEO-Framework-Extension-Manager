@@ -80,7 +80,7 @@ window.tsfem_e_monitor = {
 	 * @param {!jQuery.event} event
 	 * @return {(undefined|null)}
 	 */
-	requestCrawl: ( event ) => {
+	requestCrawl: event => {
 
 		let $button = jQuery( event.target );
 
@@ -110,7 +110,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 10000,
 			async: true,
-		} ).done( ( response ) => {
+		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -201,7 +201,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 15000,
 			async: true,
-		} ).done( ( response ) => {
+		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -325,7 +325,7 @@ window.tsfem_e_monitor = {
 			},
 			timeout: 7000,
 			async: true,
-		} ).done( ( response ) => {
+		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -530,7 +530,7 @@ window.tsfem_e_monitor = {
 				},
 				timeout: 15000,
 				async: true,
-			} ).done( ( response ) => {
+			} ).done( response => {
 
 				response = tsf.convertJSONResponse( response );
 

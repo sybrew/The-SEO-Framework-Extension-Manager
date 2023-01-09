@@ -19,7 +19,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				'<svg width="%1$s" height="%1$s">%2$s</svg>',
 				esc_attr( $size ),
 				sprintf(
-					'<image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%1$s" width="%2$s" height="%2$s"></image>',
+					'<image href="%1$s" width="%2$s" height="%2$s" />',
 					esc_url( TSFEM_E_TRANSPORT_DIR_URL . 'lib/images/icon.svg', [ 'https', 'http' ] ),
 					esc_attr( $size )
 				)

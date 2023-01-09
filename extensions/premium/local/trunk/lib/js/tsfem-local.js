@@ -58,7 +58,7 @@ window.tsfem_e_local = {
 	 * @param {jQuery.event} event jQuery event
 	 * @return {boolean} False if form isn't valid. True on AJAX completion.
 	 */
-	validateFormJson: ( event ) => {
+	validateFormJson: event => {
 
 		let formId = event.target.getAttribute( 'form' ),
 			form,
@@ -109,7 +109,7 @@ window.tsfem_e_local = {
 			processData: true,
 			timeout: 14000,
 			async: true,
-		} ).done( ( response ) => {
+		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
 
@@ -188,9 +188,9 @@ window.tsfem_e_local = {
 	 * @param {Object} jQ jQuery
 	 * @function
 	 */
-	ready: ( jQ ) => {
+	ready: jQ => {
 		// Turn validate button into an AJAX pusher.
-		jQ( 'button[name="tsfem-e-local-validateFormJson"]' ).on( 'click', tsfem_e_local.validateFormJson );
+		jQ( 'button[name=tsfem-e-local-validateFormJson]' ).on( 'click', tsfem_e_local.validateFormJson );
 	}
 };
 jQuery( tsfem_e_local.ready );

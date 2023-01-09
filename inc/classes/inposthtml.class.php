@@ -103,7 +103,7 @@ final class InpostHTML {
 	 * @param string $id       The wrap ID.
 	 */
 	public static function contruct_flex_wrap_multi( $what, $contents, $id = '' ) {
-		return static::construct_flex_wrap( $what, implode( PHP_EOL, $contents ), $id );
+		return static::construct_flex_wrap( $what, implode( "\n", $contents ), $id );
 	}
 
 	/**

@@ -36,7 +36,7 @@ output_scores:;
 	printf(
 		'<div class="tsfem-e-focus-scores-wrap tsfem-flex" id=%s %s>',
 		\esc_attr( $scoring->key ),
-		$has_keyword ? '' : 'style="display:none"'
+		$has_keyword ? '' : 'style=display:none'
 	);
 	foreach ( $scoring->get_template() as $type => $args ) :
 		// All output below should already be escaped.

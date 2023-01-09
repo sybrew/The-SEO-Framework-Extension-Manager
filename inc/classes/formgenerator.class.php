@@ -419,7 +419,7 @@ final class FormGenerator {
 		switch ( $what ) :
 			case 'start':
 				return vsprintf(
-					'<form action="%s" method=post id="%s" enctype="multipart/form-data" class="tsfem-form%s" autocomplete=off data-form-type=other>',
+					'<form action="%s" method=post id="%s" enctype=multipart/form-data class="tsfem-form%s" autocomplete=off data-form-type=other>',
 					[
 						\esc_url( $url ),
 						$this->get_form_id(),

@@ -198,7 +198,7 @@ final class Front extends Core {
 
 		// Empty JSON is only 2 characters long.
 		if ( $json && \strlen( $json ) > 2 )
-			return sprintf( '<script type="application/ld+json">%s</script>', $json ) . PHP_EOL;
+			return sprintf( '<script type="application/ld+json">%s</script>', $json ) . "\n"; // Keep XHTML Valid!
 
 		return '';
 	}

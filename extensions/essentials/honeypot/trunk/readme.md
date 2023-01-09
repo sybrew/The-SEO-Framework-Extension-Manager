@@ -21,9 +21,9 @@ The Honeypot extension is for catching robots, not humans. So, your visitors sho
 
 Unlike CAPTCHA, a honeypot is hidden from visitors. So, your visitors don't need to interact with Honeypot, vastly improving the user experience; Honeypot protects your site from spam in the background.
 
-This extension protects all WordPress themes and plugins that implement the default WordPress comment forms -- among WooCommerce product reviews -- without sending any comment data to other services.
+This extension protects all WordPress themes and plugins that implement the default WordPress comment forms -- among WooCommerce product reviews -- without sharing comment data with anyone.
 
-Honeypot also has an unmeasurably low server memory and CPU footprint, and it adds roughly 1kB to your pages.
+Honeypot also has an unmeasurably low footprint on server memory and CPU usage, it adds roughly 1kB to your pages.
 
 ### Five powerful methods, zero false positives
 
@@ -37,7 +37,7 @@ Only a human that uses a modern browser can pass these tests:
 1. Verification nonces. With this, bots can no longer abuse easily exposed endpoints in WordPress to leave comments.
 1. GPU timers. The bot must actually render the page to pass this test, blocking spam from many emulated browsers.
 
-All five methods are built around randomization, so no robot can use deep-learning to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**.
+All five methods are entirely randomized and use secure authentication methods, so no robot can learn how to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**. Now you can finally uninstall and delete Akismet.
 
 ## FAQ
 

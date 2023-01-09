@@ -65,8 +65,8 @@ final class WordPress_SEO extends Base {
 				[ $transformer_class, '_title_syntax' ],
 				[ $tsf, 's_title_raw' ],
 				[
-					'name' => 'Meta Title',
-					'to'   => [
+					'name'    => 'Meta Title',
+					'to'      => [
 						null,
 						[ $this, '_title_transmuter' ],
 					],
