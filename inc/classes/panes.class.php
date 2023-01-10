@@ -61,11 +61,7 @@ class Panes extends API {
 	 */
 	protected function get_seo_trends_and_updates_overview() {
 
-		$output = '';
-
-		$feed_enabled = $this->get_option( '_enable_feed', false );
-
-		if ( $feed_enabled ) {
+		if ( $this->get_option( '_enable_feed' ) ) {
 			$output = $this->get_trends_output();
 		} else {
 			$output = $this->get_trends_activation_output();
@@ -288,7 +284,7 @@ class Panes extends API {
 						'type'    => $type,
 					];
 				} else {
-					$type = $this->update_option( '_enable_feed', true, 'regular', false ) ? 'success' : 'error';
+					$type = $this->update_option( '_enable_feed', true ) ? 'success' : 'error';
 					$data = [
 						'content' => 'success' === $type ? $this->ajax_get_trends_output() : '',
 						'type'    => $type,

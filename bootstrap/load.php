@@ -91,7 +91,7 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 	if ( $new_value === $old_value ) return $old_value;
 
 	// phpcs:ignore, TSF.Performance.Functions.PHP -- required
-	if ( false === class_exists( 'TSF_Extension_Manager\SecureOption', true ) ) {
+	if ( ! class_exists( 'TSF_Extension_Manager\SecureOption', true ) ) {
 		\wp_die( '<code>' . \esc_html( $option ) . '</code> is a protected option.' );
 		return $old_value;
 	}
@@ -134,7 +134,7 @@ function _init_tsf_extension_manager() {
 	if ( $tsfem )
 		return $tsfem;
 
-	if ( false === \doing_action( 'plugins_loaded' ) ) {
+	if ( ! \doing_action( 'plugins_loaded' ) ) {
 		\wp_die( 'Use tsfem() after action `plugins_loaded` priority 6.' );
 		exit;
 	}

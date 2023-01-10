@@ -76,7 +76,7 @@ namespace TSF_Extension_Manager\Extension\Articles;
  *
  * @since 1.2.0
  */
-if ( false === \tsfem()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
+if ( ! \tsfem()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
 	return;
 
 /**

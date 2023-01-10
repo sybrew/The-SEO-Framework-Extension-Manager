@@ -86,7 +86,7 @@ final class Trends {
 		$output         = \get_transient( $transient_name );
 
 		// Bypass cache on AJAX as multi-admin can interfere.
-		if ( false === $ajax && false !== $output )
+		if ( ! $ajax && false !== $output )
 			return $output;
 
 		// Google Webmasters official blog feed.
@@ -150,7 +150,7 @@ final class Trends {
 				continue;
 			endforeach;
 			unset( $category );
-			if ( false === $found )
+			if ( ! $found )
 				continue;
 
 			$link = '';

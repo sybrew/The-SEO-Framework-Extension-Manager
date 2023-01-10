@@ -218,7 +218,7 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _do_tsfem_admin_actions() {
 
-		if ( false === $this->is_tsf_extension_manager_page() )
+		if ( ! $this->is_tsf_extension_manager_page() )
 			return;
 
 		static $run = false;

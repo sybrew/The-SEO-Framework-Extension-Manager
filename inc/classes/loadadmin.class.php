@@ -82,7 +82,7 @@ final class LoadAdmin extends AdminPages {
 
 			$args = [
 				'activation_email' => $current['email'],
-				'licence_key'      => $current['key'],
+				'api_key'          => $current['key'],
 			];
 			$this->handle_request( 'deactivation', $args );
 
@@ -98,7 +98,7 @@ final class LoadAdmin extends AdminPages {
 
 			$args = [
 				'activation_email' => $data['email'],
-				'licence_key'      => $data['key'],
+				'api_key'          => $data['key'],
 			];
 			$this->handle_request( 'activation', $args );
 
@@ -204,14 +204,14 @@ final class LoadAdmin extends AdminPages {
 		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
 		// Options exist. There's no need to check again them.
-		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
+		if ( ! $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
 		switch ( $options['nonce-action'] ) :
 			case $this->request_name['activate-key']:
 				if ( $this->is_auto_activated() ) break;
 				$args = [
-					'licence_key'      => trim( $options['key'] ),
+					'api_key'          => trim( $options['key'] ),
 					'activation_email' => \sanitize_email( $options['email'] ),
 				];
 
@@ -229,16 +229,16 @@ final class LoadAdmin extends AdminPages {
 
 			case $this->request_name['deactivate']:
 				if ( $this->is_auto_activated() ) break;
-				if ( false === $this->is_plugin_activated() ) {
+				if ( ! $this->is_plugin_activated() ) {
 					$this->set_error_notice( [ 701 => '' ] );
 					break;
-				} elseif ( false === $this->is_connected_user() || false === $this->are_options_valid() ) {
+				} elseif ( ! $this->is_connected_user() || ! $this->are_options_valid() ) {
 					$this->do_free_deactivation();
 					break;
 				}
 
 				$args = [
-					'licence_key'      => trim( $this->get_option( 'api_key' ) ),
+					'api_key'          => trim( $this->get_option( 'api_key' ) ),
 					'activation_email' => \sanitize_email( $this->get_option( 'activation_email' ) ),
 				];
 
@@ -249,7 +249,7 @@ final class LoadAdmin extends AdminPages {
 				break;
 
 			case $this->request_name['enable-feed']:
-				$success = $this->update_option( '_enable_feed', true, 'regular', false );
+				$success = $this->update_option( '_enable_feed', true );
 				$this->set_error_notice( [ $success ? 702 : 703 => '' ] );
 				break;
 
@@ -319,10 +319,10 @@ final class LoadAdmin extends AdminPages {
 		}
 
 		$result = isset( $_POST[ $this->nonce_name ] )
-				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
-				: false;
+			? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+			: false;
 
-		if ( false === $result ) {
+		if ( ! $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 9001 => '' ] );
 			\tsf()->admin_redirect( $this->seo_extensions_page_slug );
@@ -366,10 +366,13 @@ final class LoadAdmin extends AdminPages {
 	 * @return string Admin Page URL.
 	 */
 	public function get_admin_page_url( $page = '', $args = [] ) {
-
-		$page = $page ? $page : $this->seo_extensions_page_slug;
-
-		return \add_query_arg( $args, \menu_page_url( $page, false ) );
+		return \add_query_arg(
+			$args,
+			\menu_page_url(
+				$page ?: $this->seo_extensions_page_slug,
+				false
+			)
+		);
 	}
 
 	/**
@@ -641,7 +644,7 @@ final class LoadAdmin extends AdminPages {
 		static $parent_set = false;
 		static $set        = [];
 
-		if ( false === $parent_set ) {
+		if ( ! $parent_set ) {
 			// Set parent slug.
 			\tsf()->add_menu_link();
 			$parent_set = true;
@@ -977,13 +980,13 @@ final class LoadAdmin extends AdminPages {
 	 */
 	protected function update_extension( $slug, $enable = false ) {
 
-		$extensions = $this->get_option( 'active_extensions', [] );
+		$extensions = $this->get_option( 'active_extensions' ) ?: [];
 
 		$extensions[ $slug ] = (bool) $enable;
 
 		// Kill options on failure when enabling.
 		$kill = $enable;
 
-		return $this->update_option( 'active_extensions', $extensions, 'regular', $kill );
+		return $this->update_option( 'active_extensions', $extensions, $kill );
 	}
 }

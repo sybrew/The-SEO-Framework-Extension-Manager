@@ -54,7 +54,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function get_remote_activation_listener() {
 
-		if ( false === $this->handle_update_nonce( $this->request_name['activate-external'] ) )
+		if ( ! $this->handle_update_nonce( $this->request_name['activate-external'] ) )
 			return;
 
 		return $this->get_remote_activation_listener_response();
@@ -105,7 +105,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @param array $args : {
 	 *    'request'          => string The request type.
-	 *    'licence_key'      => string The license key used.
+	 *    'api_key'          => string The license key used.
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @param array $results The activation response.
@@ -116,7 +116,7 @@ class AccountActivation extends Panes {
 		if ( ! empty( $results['activated'] ) && ! empty( $results['_activation_level'] ) ) {
 
 			$success = $this->do_premium_activation( [
-				'licence_key'       => $args['licence_key'],
+				'api_key'           => $args['api_key'],
 				'activation_email'  => $args['activation_email'],
 				'_activation_level' => $results['_activation_level'],
 			] );
@@ -158,7 +158,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @param array $args : {
 	 *    'request'          => string The request type.
-	 *    'licence_key'      => string The license key used.
+	 *    'api_key'          => string The license key used.
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @param array $results The disconnection response.
@@ -193,6 +193,24 @@ class AccountActivation extends Panes {
 	}
 
 	/**
+	 * Returns the default activation options.
+	 *
+	 * @since 2.6.1
+	 *
+	 * @return array The default activation options.
+	 */
+	protected function get_default_activation_options() {
+		return [
+			'api_key'           => '',
+			'activation_email'  => '',
+			'_activation_level' => 'Free',
+			'_activated'        => 'Activated',
+			'_instance'         => $this->get_activation_instance(),
+			'_instance_version' => '2.0', // If not in database, assume 1.0
+		];
+	}
+
+	/**
 	 * Handles free activation.
 	 *
 	 * @since 1.0.0
@@ -201,25 +219,14 @@ class AccountActivation extends Panes {
 	 */
 	protected function do_free_activation() {
 
-		$options = [
-			'api_key'             => '',
-			'activation_email'    => '',
-			'_activation_level'   => 'Free',
-			'_activation_expires' => '',
-			'_activated'          => 'Activated',
-			'_instance'           => $this->get_activation_instance( false ),
-		];
-
-		$success = $this->update_option_multi( $options );
-
-		if ( $success ) {
+		if ( $this->update_option_multi( $this->get_default_activation_options() ) ) {
 			$this->set_error_notice( [ 601 => '' ] );
 			return true;
-		} else {
-			$this->set_error_notice( [ 602 => '' ] );
-			$this->do_deactivation( false, false );
-			return false;
 		}
+
+		$this->set_error_notice( [ 602 => '' ] );
+		$this->do_deactivation( false, false );
+		return false;
 	}
 
 	/**
@@ -244,11 +251,12 @@ class AccountActivation extends Panes {
 
 	/**
 	 * Handles premium activation.
+	 * Unlike the free activation, we do not update in bulk here, for it may be an upgrade.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array $args : {
-	 *    'licence_key'       => string The license key used.
+	 *    'api_key'           => string The license key used.
 	 *    'activation_email'  => string The activation email used.
 	 *    '_activation_level' => string The activation email used.
 	 * }
@@ -256,20 +264,20 @@ class AccountActivation extends Panes {
 	 */
 	protected function do_premium_activation( $args ) {
 
-		$success = [];
+		$options = array_merge(
+			// Get existing options before filling with defaults;
+			// this allows for both an upgrade of free, and a new instant premium setup.
+			$this->get_all_options() ?: $this->get_default_activation_options(),
+			$args
+		);
 
-		$success = [
-			$this->update_option( '_instance', $this->get_activation_instance( false ), 'instance', true ),
-			$this->update_option( 'api_key', $args['licence_key'], 'instance', true ),
-			$this->update_option( 'activation_email', $args['activation_email'], 'instance', true ),
-			$this->update_option( '_activation_level', $args['_activation_level'], 'instance', true ),
-			$this->update_option( '_activated', 'Activated', 'instance', true ),
+		if ( $this->update_option_multi( $options, true ) ) {
+			// Wait 0.0625 seconds as a second request is now quickly following up (1~20x load time server).
+			usleep( 62500 );
+			return $this->update_remote_subscription_status( $args );
+		}
 
-			// Fetches and saves extra subscription status data. i.e. '_remote_subscription_status'
-			$this->set_remote_subscription_status( $args ),
-		];
-
-		return ! \in_array( false, $success, true );
+		return false;
 	}
 
 	/**
@@ -277,36 +285,42 @@ class AccountActivation extends Panes {
 	 * Sets all options to empty i.e. 'Deactivated'.
 	 *
 	 * @since 1.0.0
-	 * @since 2.0.0 Added
+	 * @since 2.0.0 Added margin of error handling.
 	 * @TODO lower margin of error if server maintains stable. Well, we had a 99.991% uptime in 2018 =/
 	 *
-	 * @param bool $moe  Whether to allow a margin of error.
-	 *                   May happen once every 30 days for 3 days.
-	 * @param bool $soft Whether to switch to Free, or disconnect completely.
+	 * @param bool $moe       Whether to allow a margin of error.
+	 *                        May happen once every 7 days for 3 days.
+	 * @param bool $downgrade Whether to downgrade to Free, or disconnect completely.
 	 * @return bool True on success. False on failure.
 	 */
-	protected function do_deactivation( $moe = false, $soft = false ) {
+	protected function do_deactivation( $moe = false, $downgrade = false ) {
 
 		if ( $moe ) {
-			$expire = $this->get_option( 'moe', $nt = ( time() + DAY_IN_SECONDS * 3 ) );
-			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 30 ) ) {
-				$this->update_option( 'moe', $nt );
+			$expire = $this->get_option( 'moe' ) ?: time() + DAY_IN_SECONDS * 3;
+			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 7 ) ) {
+				$this->update_option( 'moe', time() + DAY_IN_SECONDS * 3 );
 				return false;
 			}
 		}
 
-		if ( $soft ) {
+		if ( $downgrade ) {
+			$options = $this->get_all_options();
 			// Activation failed, and no instance available.
-			if ( ! $this->get_all_options() ) return true;
+			if ( ! $options ) return true;
 
-			$success = [
-				$this->update_option( 'api_key', '', 'regular', true ),
-				$this->update_option( 'activation_email', '', 'regular', true ),
-				$this->update_option( '_activation_level', 'Free', 'instance', true ),
-				$this->update_option( '_remote_subscription_status', false, 'instance', true ),
-			];
-
-			return ! \in_array( false, $success, true );
+			// Downgrade.
+			return $this->update_option_multi(
+				array_merge(
+					$options,
+					[
+						'api_key'                     => '',
+						'activation_email'            => '',
+						'_activation_level'           => 'Free',
+						'_remote_subscription_status' => false,
+					]
+				),
+				true
+			);
 		}
 
 		return $this->kill_options();
@@ -347,21 +361,21 @@ class AccountActivation extends Panes {
 				break;
 
 			case 4:
-				// Everything's superb.
+				// Everything's superb. Remote upgrade.
 				( $this->get_option( '_activation_level' ) !== 'Essentials' )
 					and $this->update_option( '_activation_level', 'Essentials' )
 						and $this->set_error_notice( [ 904 => '' ] );
 				break;
 
 			case 5:
-				// Everything's Premium.
+				// Everything's Premium. Remote upgrade.
 				( $this->get_option( '_activation_level' ) !== 'Premium' )
 					and $this->update_option( '_activation_level', 'Premium' )
 						and $this->set_error_notice( [ 905 => '' ] );
 				break;
 
 			case 6:
-				// Everything's Enterprise.
+				// Everything's Enterprise. Remote upgrade.
 				( $this->get_option( '_activation_level' ) !== 'Enterprise' )
 					and $this->update_option( '_activation_level', 'Enterprise' )
 						and $this->set_error_notice( [ 906 => '' ] );
@@ -390,7 +404,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function validate_remote_subscription_license() {
 
-		$response = $this->get_remote_subscription_status();
+		$response = $this->update_remote_subscription_status();
 
 		$status = 0;
 
@@ -419,34 +433,18 @@ class AccountActivation extends Panes {
 	}
 
 	/**
-	 * Sets remote subscription status cache.
-	 *
-	 * @since 1.0.0
-	 * @see $this->get_remote_subscription_status()
-	 *
-	 * @param array|null $args : {
-	 *    'licence_key'      => string The license key used.
-	 *    'activation_email' => string The activation email used.
-	 * }
-	 * @return bool True on success, false on failure.
-	 */
-	protected function set_remote_subscription_status( $args = null ) {
-		return false !== $this->get_remote_subscription_status( $args );
-	}
-
-	/**
 	 * Fetches remote subscription status. Use this scarcely.
 	 *
 	 * @since 1.0.0
 	 * @since 2.1.0 The first parameter now accepts arguments.
 	 *
-	 * @param array|null $args : Should only be set during activation {
-	 *    'licence_key'      => string The license key used.
+	 * @param array|null $args Should only be set during activation : {
+	 *    'api_key'          => string The license key used.
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @return bool|array False on failure. Array subscription status on success.
 	 */
-	protected function get_remote_subscription_status( $args = null ) {
+	protected function update_remote_subscription_status( $args = null ) {
 
 		if ( null === $args && ! $this->is_connected_user() )
 			return false;
@@ -456,13 +454,10 @@ class AccountActivation extends Panes {
 		if ( isset( $response ) )
 			return $response;
 
-		$status = $this->get_option(
-			'_remote_subscription_status',
-			[
-				'timestamp' => 0,
-				'status'    => [],
-			]
-		);
+		$status = $this->get_option( '_remote_subscription_status' ) ?: [
+			'timestamp' => 0,
+			'status'    => [],
+		];
 
 		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
 			// Updates at most every 1 minute.
@@ -476,7 +471,7 @@ class AccountActivation extends Panes {
 		$timestamp = (int) ceil( time() / $divider );
 
 		// Return cached status within 2 hours.
-		if ( null === $args && $timestamp === $status['timestamp'] )
+		if ( $timestamp === $status['timestamp'] )
 			return $response = $status['status'];
 
 		if ( null !== $args ) {
@@ -485,7 +480,7 @@ class AccountActivation extends Panes {
 			usleep( 62500 );
 		} else {
 			$args = [
-				'licence_key'      => $this->get_option( 'api_key' ),
+				'api_key'          => $this->get_option( 'api_key' ),
 				'activation_email' => $this->get_option( 'activation_email' ),
 			];
 		}
@@ -501,7 +496,6 @@ class AccountActivation extends Panes {
 					'status'    => $response,
 					'divider'   => $divider,
 				],
-				'regular',
 				false
 			);
 

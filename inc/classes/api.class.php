@@ -62,7 +62,7 @@ class API extends Core {
 	 *
 	 * @param string $type The request type.
 	 * @param array  $args : {
-	 *    'licence_key'      => string The license key.
+	 *    'api_key'          => string The license key.
 	 *    'activation_email' => string The activation email.
 	 * }
 	 * @return bool|array {
@@ -73,7 +73,7 @@ class API extends Core {
 	 */
 	final protected function handle_request( $type = 'status', $args = [] ) {
 
-		if ( empty( $args['licence_key'] ) ) {
+		if ( empty( $args['api_key'] ) ) {
 			$this->set_error_notice( [ 101 => '' ] );
 			return false;
 		}
@@ -89,15 +89,15 @@ class API extends Core {
 				break;
 
 			case 'deactivation':
-				if ( false === $this->is_plugin_activated() ) {
+				if ( ! $this->is_plugin_activated() ) {
 					$this->kill_options();
 					$this->set_error_notice( [ 103 => '' ] );
 					return false;
 				}
 
-				if ( false === $this->is_connected_user() ) {
+				if ( ! $this->is_connected_user() )
 					return $this->do_free_deactivation();
-				}
+
 				// Premium/Essential deactivation propagates through API, so nothing happens here.
 				break;
 
@@ -106,19 +106,19 @@ class API extends Core {
 				return false;
 		endswitch;
 
-		$key   = trim( $args['licence_key'] );
+		$key   = trim( $args['api_key'] );
 		$email = \sanitize_email( $args['activation_email'] );
 
 		$response = $this->handle_response(
 			[
 				'request'          => $type,
-				'licence_key'      => $key,
+				'api_key'          => $key,
 				'activation_email' => $email,
 			],
 			$this->get_api_response( [
-				'request'     => $type,
-				'licence_key' => $key,
-				'email'       => $email,
+				'request' => $type,
+				'api_key' => $key,
+				'email'   => $email,
 			] ),
 			WP_DEBUG
 		);
@@ -149,27 +149,13 @@ class API extends Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool $save_option Whether to save the instance in an option. Useful
-	 *             for when you're going to save it later.
 	 * @return string Instance key.
 	 */
-	final protected function get_activation_instance( $save_option = true ) {
-
+	final protected function get_activation_instance() {
 		static $instance;
-
-		if ( isset( $instance ) )
-			return $instance;
-
-		$instance = $this->get_option( '_instance' );
-
-		if ( ! $instance ) {
-			$instance = trim( \wp_generate_password( 32, false ) );
-
-			if ( $save_option )
-				$this->update_option( '_instance', $instance );
-		}
-
-		return $instance;
+		return $instance ?? (
+			$instance = $this->get_option( '_instance' ) ?: trim( \wp_generate_password( 32, false ) )
+		);
 	}
 
 	/**
@@ -295,12 +281,12 @@ class API extends Core {
 	final protected function get_api_response( $args, $internal = true ) {
 
 		$defaults = [
-			'request'     => '',
-			'email'       => '',
-			'licence_key' => '',
-			'instance'    => $this->get_activation_instance( false ),
-			'platform'    => $this->get_activation_site_domain(),
-			'version'     => TSF_EXTENSION_MANAGER_API_VERSION,
+			'request'  => '',
+			'email'    => '',
+			'api_key'  => '',
+			'instance' => $this->get_activation_instance(),
+			'platform' => $this->get_activation_site_domain(),
+			'version'  => TSF_EXTENSION_MANAGER_API_VERSION,
 		];
 
 		if ( TSF_EXTENSION_MANAGER_DEV_API )
@@ -313,7 +299,7 @@ class API extends Core {
 			return false;
 		}
 
-		$this->set_api_endpoint_type( $this->get_key_endpoint_origin( $args['licence_key'] ) );
+		$this->set_api_endpoint_type( $this->get_key_endpoint_origin( $args['api_key'] ) );
 
 		$target_url = $this->get_api_url( $args );
 
@@ -350,7 +336,7 @@ class API extends Core {
 	 *
 	 * @param array  $args : {
 	 *    'request'          => string The request type.
-	 *    'licence_key'      => string The license key used.
+	 *    'api_key'          => string The license key used.
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @param string $response The obtained response body.
@@ -370,7 +356,7 @@ class API extends Core {
 		$additional_info = '';
 
 		// If the user's already using a free account, don't deactivate.
-		$registered_free = $this->is_plugin_activated() && false === $this->is_connected_user();
+		$registered_free = $this->is_plugin_activated() && ! $this->is_connected_user();
 
 		if ( 'status' !== $args['request'] ) {
 			if ( 'activation' === $args['request'] ) :
@@ -487,8 +473,8 @@ class API extends Core {
 		$args = array_merge(
 			$args,
 			[
-				'email'       => $subscription['email'],
-				'licence_key' => $subscription['key'],
+				'email'   => $subscription['email'],
+				'api_key' => $subscription['key'],
 			]
 		);
 

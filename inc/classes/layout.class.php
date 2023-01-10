@@ -153,7 +153,7 @@ final class Layout extends Secure_Abstract {
 			);
 
 			$switcher_class = 'tsfem-button-flag tsfem-button';
-			// phpcs:ignore -- maybe later
+			// phpcs:ignore -- maybe later var_dump() fixme?
 			// $switcher_class .= $tsfem->are_options_valid() ? '' : ' tsfem-button-pulse';
 
 			$switcher = '<div class=tsfem-switch-button-container-wrap><div class=tsfem-switch-button-container>'

@@ -122,7 +122,7 @@ final class Core {
 		 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
 		 * Requires initial load after theme switch.
 		 */
-		if ( false === $this->current_theme_supports_title_tag() ) :
+		if ( ! $this->current_theme_supports_title_tag() ) :
 			// Start loader.
 			$this->loader();
 
@@ -190,7 +190,7 @@ final class Core {
 	 */
 	public function start_ob() {
 
-		if ( false === $this->ob_started ) {
+		if ( ! $this->ob_started ) {
 			ob_start();
 			$this->ob_started = true;
 		}

@@ -68,52 +68,16 @@ class Api extends Data {
 			return $ajax ? $this->get_ajax_notice( false, 1010201 ) : false;
 		}
 
-		$tsfem = \tsfem();
-
-		/**
-		 * Request verification instances, variables are passed by reference :
-		 * 0. Request by class. Pass to yield.
-		 * 1. Yield first loop, get options.
-		 * 2. Yield second loop. Use options to build API link.
-		 */
-		$tsfem->_request_premium_extension_verification_instance( $this, $_instance, $bits );
-		$count = 1;
-		foreach ( $tsfem->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
-			$bits      = $verification['bits'];
-			$_instance = $verification['instance'];
-
-			switch ( $count ) :
-				case 1:
-					$subscription = $tsfem->_get_subscription_status( $_instance, $bits );
-					break;
-
-				case 2:
-					if ( \is_array( $subscription ) ) {
-						$args = array_merge(
-							$args,
-							[
-								'request'     => "extension/monitor/$type",
-								'email'       => $subscription['email'],
-								'licence_key' => $subscription['key'],
-							]
-						);
-
-						$response = $tsfem->_get_api_response( $args, $_instance, $bits );
-					} else {
-						$tsfem->_verify_instance( $_instance, $bits );
-
-						$ajax or $this->set_error_notice( [ 1010202 => '' ] );
-						return $ajax ? $this->get_ajax_notice( false, 1010202 ) : false;
-					}
-					break;
-
-				default:
-					$tsfem->_verify_instance( $_instance, $bits );
-					break;
-			endswitch;
-			$count++;
-		endforeach;
-
+		$response = \tsfem()->_get_protected_api_response(
+			$this,
+			TSFEM_E_MONITOR_API_ACCESS_KEY,
+			array_merge(
+				$args,
+				[
+					'request' => "extension/monitor/$type",
+				]
+			),
+		);
 		$response = json_decode( $response );
 
 		if ( isset( $response->status_check ) && 'inactive' === $response->status_check ) {
@@ -167,7 +131,10 @@ class Api extends Data {
 		}
 
 		$success   = [];
-		$success[] = $this->update_option( 'monitor_expected_domain', str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) ) );
+		$success[] = $this->update_option(
+			'monitor_expected_domain',
+			str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) )
+		);
 		$success[] = $this->update_option( 'connected', 'yes' );
 
 		if ( \in_array( false, $success, true ) ) {
@@ -217,7 +184,7 @@ class Api extends Data {
 
 		$success = $this->delete_option_index();
 
-		if ( false === $success ) {
+		if ( ! $success ) {
 			$this->set_error_notice( [ 1010402 => '' ], true );
 			return false;
 		}
@@ -291,7 +258,7 @@ class Api extends Data {
 
 		$success = $this->set_remote_crawl_timeout();
 
-		if ( false === $success ) {
+		if ( ! $success ) {
 			$ajax or $this->set_error_notice( [ 1010505 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010505 ) : false;
 		}
@@ -361,7 +328,7 @@ class Api extends Data {
 		 */
 		$success = $this->set_remote_data_timeout();
 
-		if ( false === $success ) {
+		if ( ! $success ) {
 			$ajax or $this->set_error_notice( [ 1010604 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010604 ) : false;
 		}

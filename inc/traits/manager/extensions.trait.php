@@ -404,7 +404,7 @@ trait Extensions_Properties {
 		// phpcs:ignore, TSF.Performance.Functions.PHP -- file_exists is required.
 		return $data[ $slug ] = file_exists( $file )
 			? \get_file_data( $file, $default_headers, 'tsfem-extension' )
-			: false;
+			: [];
 	}
 }
 

@@ -288,10 +288,10 @@ final class AJAX extends Secure_Abstract {
 			$account = self::get_property( 'account' );
 
 			$args = [
-				'request'     => 'geocoding/get',
-				'email'       => $account['email'],
-				'licence_key' => $account['key'],
-				'data'        => [
+				'request' => 'geocoding/get',
+				'email'   => $account['email'],
+				'api_key' => $account['key'],
+				'data'    => [
 					'geodata' => json_encode( $input ),
 					'locale'  => \get_user_locale(),
 				],
@@ -468,7 +468,7 @@ final class AJAX extends Secure_Abstract {
 
 				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
 				$size       = \function_exists( '\\wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
-				$image_type = $size ? $size['mime'] : 'image/jpeg';
+				$image_type = $size['mime'] ?? 'image/jpeg';
 
 				// Get the original image's post to pre-populate the cropped image.
 				$original_attachment  = \get_post( $attachment_id );

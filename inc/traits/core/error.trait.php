@@ -391,7 +391,6 @@ trait Error {
 				break;
 
 			case 308:
-			case 1010202:
 				$message = \esc_html__( 'Your subscription is not active or has expired.', 'the-seo-framework-extension-manager' );
 				$type    = 'warning';
 				break;
@@ -467,7 +466,7 @@ trait Error {
 			case 7002:
 			case 7101:
 			case 7102:
-				$message = \esc_html__( 'An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account and try again.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'An error occured while verifying the options. Security keys have likely changed and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account at "Account and Actions" and try again.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 

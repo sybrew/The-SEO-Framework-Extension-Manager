@@ -304,6 +304,7 @@ final class ExtensionSettings {
 		foreach ( $store as $slug => $data ) {
 			$this->o_index = $slug;
 			foreach ( $data as $key => $value ) {
+				// Yea, update the same index over and over again. @TODO fixme -> update_option_multi?
 				$success[ $slug ] = $this->update_option( $key, $value );
 
 				// Break this loop on failure. Continue to next extension.

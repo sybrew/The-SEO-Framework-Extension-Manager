@@ -161,7 +161,7 @@ final class Admin extends Core {
 	 */
 	public function _do_settings_page_actions() {
 
-		if ( false === $this->is_local_page() )
+		if ( ! $this->is_local_page() )
 			return false;
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )

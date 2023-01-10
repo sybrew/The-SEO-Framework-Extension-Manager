@@ -7,7 +7,18 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
-if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
+/**
+ * Verify integrity and sets up API secret.
+ *
+ * @since 1.0.0
+ */
+\define(
+	'TSFEM_E_MONITOR_API_ACCESS_KEY',
+	\tsfem()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Admin', $_instance, $bits ) ?: false
+);
+
+if ( false === TSFEM_E_MONITOR_API_ACCESS_KEY )
+	return;
 
 /**
  * Monitor extension for The SEO Framework
@@ -282,7 +293,7 @@ final class Admin extends Api {
 	 */
 	public function _do_monitor_admin_actions() {
 
-		if ( false === $this->is_monitor_page() )
+		if ( ! $this->is_monitor_page() )
 			return false;
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )
@@ -325,7 +336,7 @@ final class Admin extends Api {
 
 		$options = $_POST[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ];
 
-		if ( false === $this->handle_update_nonce( $options['nonce-action'], false ) )
+		if ( ! $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
 		switch ( $options['nonce-action'] ) :

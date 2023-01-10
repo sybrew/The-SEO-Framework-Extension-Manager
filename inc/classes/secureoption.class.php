@@ -60,7 +60,6 @@ final class SecureOption extends Secure_Abstract {
 		} else {
 			switch ( $type ) :
 				case 'update_option':
-				case 'update_option_instance':
 					\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
 					break;
@@ -104,7 +103,6 @@ final class SecureOption extends Secure_Abstract {
 
 		switch ( self::get_property( '_type' ) ) :
 			case 'update_option':
-			case 'update_option_instance':
 				static::$_instance = [ $instance, $bits ];
 				return true;
 
@@ -144,50 +142,37 @@ final class SecureOption extends Secure_Abstract {
 		if ( isset( $instance[0], $instance[1][1] ) ) {
 			\tsfem()->_verify_instance( $instance[0], $instance[1][1] );
 		} else {
+			static::verify_option_update( false );
 			self::reset();
-			\wp_die( 'Instance verification could not be done on option update.' );
+			\wp_die( 'Instance verification failed on option update.' );
 			return '';
 		}
 
-		static $verified = false;
+		if ( \tsfem()->are_options_valid() ) {
+			static::verify_option_update( true );
+		} else {
+			static::verify_option_update( false );
+			self::reset();
 
-		if ( false === $verified ) {
-			// Always update instance before updating options when deactivating.
-			if ( 'update_option_instance' === $type ) {
-				$verified = true;
-			} elseif ( 'update_option' === $type ) {
-				$options = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
-				if ( \tsfem()->verify_options_hash( serialize( $options ) ) ) {
-					$verified = true;
-				} else {
-					self::reset();
-					$verified = false;
+			$value = $old_value;
 
-					if ( \wp_doing_ajax() ) {
-						$notice = \esc_html__(
-							"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
-							'the-seo-framework-extension-manager'
-						);
+			if ( \wp_doing_ajax() ) {
+				$notice = \esc_html__(
+					"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
+					'the-seo-framework-extension-manager'
+				);
 
-						$results = \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 );
-						$type    = 'failure';
+				\tsfem()->send_json(
+					[
+						'results' => \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 ),
+					],
+					'failure'
+				);
 
-						\tsfem()->send_json( compact( 'results' ), $type );
-
-						// Who knows, someone could filter wp_die();.
-						$value = $old_value;
-
-						\wp_die();
-						return;
-					} else {
-						$value = $old_value;
-					}
-				}
+				\wp_die();
+				return;
 			}
 		}
-
-		static::verify_option_update( $verified );
 
 		return $value;
 	}
@@ -196,16 +181,17 @@ final class SecureOption extends Secure_Abstract {
 	 * Determines if the option has been verified.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.1 Now can be set to unverify.
 	 *
-	 * @param bool $set Whether to verify the option update.
+	 * @param ?bool $set Whether to verify the option update.
 	 * @return bool True on success, false on failure.
 	 */
-	protected static function verify_option_update( $set = false ) {
+	protected static function verify_option_update( $set = null ) {
 
 		static $verified = false;
 
-		if ( $set )
-			$verified = true;
+		if ( isset( $set ) )
+			$verified = $set;
 
 		return $verified;
 	}

@@ -236,12 +236,12 @@ function _push_update( $value, $transient ) {
 
 			$http_args = [
 				'timeout'    => 7, // WordPress generously sets 30 seconds when doing cron to check all plugins, but we only check 1 plugin.
-				'user-agent' => "WordPress/$wp_version; " . PHP_VERSION_ID . '; ' . \home_url( '/' ),
+				'user-agent' => "WordPress/$wp_version; " . PHP_VERSION_ID . '; ' . \home_url( '/' ), // phpcs:ignore, VariableAnalysis
 				'body'       => [
-					'plugins'      => \wp_json_encode( $plugins ),
-					'translations' => \wp_json_encode( $translations ),
-					'locales'      => \wp_json_encode( $locales ),
-					'extensions'   => \wp_json_encode( array_keys( array_filter( $extensions ) ) ),
+					'plugins'      => json_encode( $plugins ),
+					'translations' => json_encode( $translations ),
+					'locales'      => json_encode( $locales ),
+					'extensions'   => json_encode( $extensions ),
 				],
 			];
 

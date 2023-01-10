@@ -41,6 +41,21 @@ trait Options {
 	private $killed_options = false;
 
 	/**
+	 * @since 2.6.1
+	 * @var array The options cache.
+	 */
+	private $options = [];
+
+	/**
+	 * Resets the options cache.
+	 *
+	 * @since 2.6.1
+	 */
+	private function clear_options_cache() {
+		$this->options = [];
+	}
+
+	/**
 	 * Returns TSF Extension Manager options array.
 	 *
 	 * @since 1.0.0
@@ -52,51 +67,29 @@ trait Options {
 		if ( $this->killed_options )
 			return [];
 
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
+		if ( $this->options )
+			return $this->options;
 
 		\remove_all_filters( 'pre_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		\remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		\remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
-		return $cache = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+		return $this->options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 	}
 
 	/**
 	 * Fetches TSF Extension Manager options.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.1 1. Removed memoization.
+	 *              2. Second parameter now tells to reset cache.
 	 *
-	 * @param string $option  The Option name.
-	 * @param mixed  $default The fallback value if the option doesn't exist.
-	 * @return mixed The option value if exists. Otherwise $default.
+	 * @param string  $option The Option name.
+	 * @param boolean $reset  Optional. Whether to reset the memoization and fetch the latest options.
+	 * @return ?mixed The option value if exists. Otherwise null.
 	 */
-	final protected function get_option( $option, $default = null ) {
-
-		if ( ! $option )
-			return null;
-
-		if ( $this->killed_options )
-			return null;
-
-		static $options_cache = [];
-
-		return $options_cache[ $option ] = $options_cache[ $option ] ?? $this->get_all_options()[ $option ] ?? $default;
-	}
-
-	/**
-	 * Determines whether update_option has already run. Always returns false on
-	 * first call. Always returns true on second or later call.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool True if run, false otherwise.
-	 */
-	final protected function has_run_update_option() {
-		static $run = false;
-		return \TSF_Extension_Manager\is_done( $run );
+	final protected function get_option( $option, $reset = false ) {
+		return $this->get_all_options( $reset )[ $option ] ?? null;
 	}
 
 	/**
@@ -108,11 +101,10 @@ trait Options {
 	 *
 	 * @param string $option The option name.
 	 * @param mixed  $value The option value.
-	 * @param string $type The option update type, accepts 'instance' and 'regular'.
 	 * @param bool   $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success or the option is unchanged, false on failure.
 	 */
-	final protected function update_option( $option, $value, $type = 'instance', $kill = false ) {
+	final protected function update_option( $option, $value, $kill = false ) {
 
 		if ( ! $option || $this->killed_options )
 			return false;
@@ -131,10 +123,7 @@ trait Options {
 
 		$options[ $option ] = $value;
 
-		// Set option update tick to prevent collision.
-		$this->has_run_update_option();
-
-		$this->initialize_option_update_instance( $type );
+		$this->initialize_option_update_instance();
 
 		// TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
 		if ( empty( $options['_instance'] ) && '_instance' !== $option ) {
@@ -142,24 +131,20 @@ trait Options {
 			return false;
 		}
 
-		$_instance_key = '_instance' === $option ? $value : $options['_instance'];
-
 		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
-		$instance_updated = $success && $this->set_options_instance( $options, $_instance_key );
+		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
 		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
-			if ( $instance_updated ) {
-				$this->set_error_notice( [ 6001 => '' ] );
-			} else {
-				$this->set_error_notice( [ 6002 => '' ] );
-			}
+			$this->set_error_notice( [ $instance_updated ? 6001 : 6002 => '' ] );
 
 			// Revert on failure.
-			if ( false === $kill )
+			if ( ! $kill )
 				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
 		}
 
-		return $success && $instance_updated;
+		$this->clear_options_cache();
+
+		return $instance_updated;
 	}
 
 	/**
@@ -167,17 +152,14 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $options : {
+	 * @param array $options : {
 	 *    $option_name => $value,
 	 *    ...
 	 * }
-	 * @param string $type The option update type, accepts 'instance' and 'regular'.
-	 * @param bool   $kill Whether to kill the plugin on invalid instance.
+	 * @param bool  $kill Whether to kill the plugin on invalid instance.
 	 * @return bool True on success, false on failure or when options haven't changed.
 	 */
-	final protected function update_option_multi( $options = [], $type = 'instance', $kill = false ) {
-
-		static $run = false;
+	final protected function update_option_multi( $options = [], $kill = false ) {
 
 		if ( ! $options )
 			return false;
@@ -185,30 +167,14 @@ trait Options {
 		if ( $this->killed_options )
 			return false;
 
-		$_options = $this->get_all_options();
+		$existing_options = $this->get_all_options();
+		$options          = array_merge( $existing_options, $options );
 
 		// If options are unchanged, return true.
-		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
-		if ( serialize( $options ) === serialize( $_options ) )
+		if ( $options === $existing_options )
 			return true;
 
-		if ( $run ) {
-			\tsf()->_doing_it_wrong( __METHOD__, 'You may only run this method once per request. Doing so multiple times will result in data loss.' );
-			\wp_die();
-			return false;
-		}
-
-		if ( $this->has_run_update_option() ) {
-			\tsf()->_doing_it_wrong( __METHOD__, \esc_html( __CLASS__ . '::update_option() has already run in the current request. Running this function will lead to data loss.' ) );
-			\wp_die();
-			return false;
-		}
-
-		// This won't fire the filter 'wp_parse_str'. As $options requires to be an array.
-		$options = \wp_parse_args( $options, $_options );
-		$run     = true;
-
-		$this->initialize_option_update_instance( $type );
+		$this->initialize_option_update_instance();
 
 		if ( empty( $options['_instance'] ) ) {
 			\wp_die( 'Error 7108: Supply an instance key before updating other options.' );
@@ -219,64 +185,16 @@ trait Options {
 		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
 		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
-			if ( $instance_updated ) {
-				$this->set_error_notice( [ 7101 => '' ] );
-			} else {
-				$this->set_error_notice( [ 7102 => '' ] );
-			}
+			$this->set_error_notice( [ $instance_updated ? 7101 : 7102 => '' ] );
 
 			// Revert on failure.
-			if ( false === $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+			if ( ! $kill )
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
 		}
 
+		$this->clear_options_cache();
+
 		return $success && $instance_updated;
-	}
-
-	/**
-	 * Returns verification instance option.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string|bool The hashed option. False if non-existent.
-	 */
-	final protected function get_options_instance() {
-		return \get_option( 'tsfem_i_' . $this->get_option( '_instance' ) );
-	}
-
-	/**
-	 * Updates verification instance option.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $value    The option value.
-	 * @param string $instance Optional. The options key. Must be supplied when activating account.
-	 * @return bool True on success, false on failure.
-	 */
-	final protected function update_options_instance( $value, $instance = '' ) {
-
-		$instance = $instance ?: $this->get_option( '_instance' );
-
-		return \strlen( $instance ) && \strlen( $value )
-			? \update_option( "tsfem_i_$instance", $value )
-			: false;
-	}
-
-	/**
-	 * Deletes option instance on account deactivation.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $instance Optional. When supplied it will delete entered instance.
-	 * @return bool
-	 */
-	final protected function delete_options_instance( $instance = '' ) {
-
-		$instance = $instance ?: $this->get_option( '_instance' );
-
-		\delete_option( "tsfem_i_$instance" );
-
-		return true;
 	}
 
 	/**
@@ -286,22 +204,22 @@ trait Options {
 	 * @since 1.0.0
 	 * @since 1.2.0 Improved hashing algorithm.
 	 *
-	 * @param array  $options The options to hash.
-	 * @param string $key     The instance key, needs to be supplied on plugin activation.
+	 * @param array  $options  The options to hash.
+	 * @param string $instance The instance key, needs to be supplied on plugin activation.
 	 * @return bool True on success, false on failure.
 	 */
-	final protected function set_options_instance( $options, $key = '' ) {
+	final protected function set_options_instance( $options, $instance = '' ) {
 
 		if ( empty( $options['_instance'] ) )
 			return false;
 
-		// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
-		$hash = $this->hash( serialize( $options ), 'auth' );
+		$hash = $this->hash_options( $options );
 
-		if ( $hash ) {
-			$update = $this->update_options_instance( $hash, $key );
+		if ( \strlen( $hash ) ) {
+			$instance = $instance ?: $this->get_option( '_instance' );
+			$updated  = \strlen( $instance ) && \update_option( "tsfem_i_$instance", $hash );
 
-			if ( false === $update ) {
+			if ( ! $updated ) {
 				$this->set_error_notice( [ 7001 => '' ] );
 				return false;
 			}
@@ -313,16 +231,24 @@ trait Options {
 	}
 
 	/**
-	 * Verifies options hash.
+	 * Hashes the options.
 	 *
-	 * @since 1.0.0
-	 * @since 1.2.0 Expanded hashing algorithm.
+	 * @since 2.6.1
 	 *
-	 * @param string $data The data to compare hash with.
+	 * @param mixed $options The option data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
 	 */
-	final public function verify_options_hash( $data ) {
-		return hash_equals( $this->hash( $data, 'auth' ), (string) $this->get_options_instance() );
+	private function hash_options( $options ) {
+		switch ( $options['_instance_version'] ?? '1.0' ) {
+			case '2.0':
+				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
+				return $this->hash( \serialize( $options ), 'options' );
+
+			default:
+			case '1.0':
+				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
+				return $this->hash( \serialize( $options ), 'auth' );
+		}
 	}
 
 	/**
@@ -331,19 +257,11 @@ trait Options {
 	 *
 	 * @since 1.0.0
 	 * @see $this->verify_option_update_instance().
-	 *
-	 * @param string $type What type of update this is, accepts 'instance' and 'regular'.
 	 */
-	final protected function initialize_option_update_instance( $type = 'regular' ) {
-
-		if ( 'instance' === $type ) {
-			$type = 'update_option_instance';
-		} elseif ( 'regular' === $type ) {
-			$type = 'update_option';
-		}
+	final protected function initialize_option_update_instance() {
 
 		$this->get_verification_codes( $_instance, $bits );
-		SecureOption::initialize( $type, $_instance, $bits );
+		SecureOption::initialize( 'update_option', $_instance, $bits );
 
 		$this->get_verification_codes( $_instance, $bits );
 		SecureOption::set_update_instance( $_instance, $bits );
@@ -365,7 +283,7 @@ trait Options {
 
 		$verified = SecureOption::verified_option_update();
 
-		if ( $kill && false === $verified )
+		if ( $kill && ! $verified )
 			$this->kill_options();
 
 		SecureOption::reset();
@@ -383,11 +301,14 @@ trait Options {
 	 */
 	final protected function kill_options() {
 
-		$success = [
-			$this->delete_options_instance(),
-			\delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS ),
-		];
+		$instance = $this->get_option( '_instance' );
 
-		return $this->killed_options = ! \in_array( false, $success, true );
+		// Don't record whether this is a success. It's lame if it fails, but there's no harm other than an autoloaded string.
+		\delete_option( "tsfem_i_$instance" );
+
+		$this->killed_options = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		$this->clear_options_cache();
+
+		return $this->killed_options;
 	}
 }
