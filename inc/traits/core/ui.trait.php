@@ -107,6 +107,7 @@ trait UI {
 			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
 				\do_action( 'tsfem_header' );
 			echo '</section></div>';
+			echo '<hr class=wp-header-end>';
 			$this->notice_wrap();
 		echo '</div>';
 	}
@@ -121,6 +122,7 @@ trait UI {
 			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space connect-top-wrap">';
 				\do_action( 'tsfem_header' );
 			echo '</section></div>';
+			echo '<hr class=wp-header-end>';
 			$this->notice_wrap();
 		echo '</div>';
 	}

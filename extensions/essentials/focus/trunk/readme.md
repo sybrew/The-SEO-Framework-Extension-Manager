@@ -311,6 +311,12 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ## Changelog
 
+### 1.5.3
+
+[tsfep-release time="-1"]
+
+* **Improved:** Made status notices about lexical information less homogenous.
+
 ### 1.5.2
 
 [tsfep-release time="October 4th, 2022"]

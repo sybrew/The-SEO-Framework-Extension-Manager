@@ -1,5 +1,9 @@
 /* ## Notices
 /*--------------------------------------*/
+.tsfem-flex-settings-notification-area {
+	display: flow-root;
+}
+
 .tsfem-flex-settings-notification-area .tsf-notice {
 	margin: 0 0 15px;
 	box-shadow: 0 1px 3px 1px #ccc;

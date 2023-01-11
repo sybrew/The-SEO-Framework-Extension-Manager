@@ -59,7 +59,11 @@ TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
 TODO https://github.com/sybrew/the-seo-framework/issues/590 (add three fields: Valuta, Min price, Max price; and/or a dropdown: "Cheap/OK/Expensive/Exclusive" (find proper terms)).
 TODO https://github.com/sybrew/the-seo-framework/issues/616
 
+TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
+	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
+
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option. New sites no longer rely on authentication keys for hashing, but create a key using the administator's email address and domain name. Change any of these, and your site will disconnect from our services. This is a local verification; the administrator's email address is not shared with us. You can reconnect after disconnecting without losing data.
+* **Improved:** Notification animations are faster now, and no longer cause minor text movement.
 * **Improved:** Optimized option handling for improved performance.
 * **Updated:** Now uses our licensing API v2.2, primarily for key naming convenience.
 * **Other:** Modernized code.

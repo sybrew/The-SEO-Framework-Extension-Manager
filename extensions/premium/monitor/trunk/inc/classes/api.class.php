@@ -394,31 +394,29 @@ class Api extends Data {
 
 		$response = $response['data'];
 
-		if ( 'failure' === $response['status'] ) {
-			$ajax or $this->set_error_notice( [ 1010801 => '' ] );
-			return $ajax ? $this->get_ajax_notice( false, 1010801 ) : false;
-		}
-		if ( 'site expired' === $response['status'] ) {
-			$this->update_option( 'site_requires_fix', true );
-			$ajax or $this->set_error_notice( [ 1010802 => '' ] );
-			return $ajax ? $this->get_ajax_notice( false, 1010802 ) : false;
-		}
-		if ( 'site inactive' === $response['status'] ) {
-			$this->update_option( 'site_marked_inactive', true );
-			$ajax or $this->set_error_notice( [ 1010803 => '' ] );
-			return $ajax ? $this->get_ajax_notice( false, 1010803 ) : false;
+		switch ( $response['status'] ) {
+			case 'failure':
+				$ajax or $this->set_error_notice( [ 1010801 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010801 ) : false;
+			case 'site expired':
+				$this->update_option( 'site_requires_fix', true );
+				$ajax or $this->set_error_notice( [ 1010802 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010802 ) : false;
+			case 'site inactive':
+				$this->update_option( 'site_marked_inactive', true );
+				$ajax or $this->set_error_notice( [ 1010803 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010803 ) : false;
 		}
 
 		$success = [];
-		foreach ( $response as $type => $values ) {
-			if ( \in_array( $type, [ 'uptime_setting', 'performance_setting' ], true ) ) {
+		foreach ( [ 'uptime_setting', 'performance_setting' ] as $type ) {
+			if ( isset( $response[ $type ] ) ) {
 				/**
 				 * @see trait TSF_Extension_Manager\Extension_Options
 				 */
-				$success[] = $this->update_option( $type, $values );
+				$success[] = $this->update_option( $type, $response[ $type ] );
 			}
 		}
-
 		if ( \in_array( false, $success, true ) ) {
 			$ajax or $this->set_error_notice( [ 1010804 => '' ] );
 			return $ajax ? $this->get_ajax_notice( false, 1010804 ) : false;

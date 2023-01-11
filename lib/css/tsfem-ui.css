@@ -148,6 +148,7 @@ body.tsfem.rtl .wrap {
 #tsfem-notice-wrap {
 	margin: 0 auto;
 	max-width: 1240px;
+	display: flow-root;
 }
 
 #tsfem-connect-wrap {

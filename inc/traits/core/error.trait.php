@@ -723,9 +723,17 @@ trait Error {
 				break;
 
 			case 1100106:
+				$message = \esc_html__( 'Lexical forms received.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
 			case 1100206:
+				$message = \esc_html__( 'Synonyms received.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
 			case 1100307:
-				$message = \esc_html__( 'Lexical information received.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Inflections received.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 
