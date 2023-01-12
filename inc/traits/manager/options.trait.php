@@ -238,7 +238,7 @@ trait Options {
 	 * @param mixed $options The option data to compare hash with.
 	 * @return bool True when hash passes, false on failure.
 	 */
-	private function hash_options( $options ) {
+	protected function hash_options( $options ) {
 		switch ( $options['_instance_version'] ?? '1.0' ) {
 			case '2.0':
 				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.

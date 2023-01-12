@@ -815,7 +815,7 @@ class Core {
 			 * It traverses in three (actually two, but get_verification_instance makes it
 			 * three) dimensions: up (positive), down (negative) and right (new sequence).
 			 *
-			 * Because it either goes up or down based on integer, it's timing attack secure.
+			 * Because it always moves based on arbitrary last input, it's timing attack secure.
 			 */
 			    $bit  = $_bit <= 0 ? ~$bit | ~$_bit-- : ~$bit | ~$_bit++
 			and $bit  = $bit++ & $_bit--
@@ -842,16 +842,15 @@ class Core {
 	}
 
 	/**
-	 * Generates static hash based on $uid.
-	 *
-	 * Caution: This function does not generate cryptographically secure values.
+	 * Generates static hash based on a unique ID.
+	 * Prescrambles the input.
 	 *
 	 * @since 1.2.0
 	 * @access private
 	 *
 	 * @param string $uid The unique ID for the hash.
 	 *                    A good choice would be the page ID + concatentated blog name.
-	 * @return string The timed hash that will always return the same.
+	 * @return string A hash from scrambled UID input.
 	 */
 	final public function _get_uid_hash( $uid ) {
 
@@ -921,18 +920,15 @@ class Core {
 			'salt' => '',
 		];
 
-		$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
-
 		if ( 'options' === $scheme ) {
-			$home = str_ireplace( [ 'http://', 'https://' ], '', \get_home_url( null, '', 'https' ) );
-			$site = str_ireplace( [ 'http://', 'https://' ], '', \get_site_url() );
-
 			// A combobulation of various static yet unique values.
 			$values = [
-				'key'  => 'k' . md5( \get_site_option( 'initial_db_version' ) . "+++42---$home" ),
-				'salt' => 's' . md5( \get_site_option( 'admin_email' ) . "+++69---$site" ),
+				'key'  => 'k' . ( \get_option( 'initial_db_version' ) + 1493641 ) . '+++42===',
+				'salt' => 's' . md5( \dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) )
+					. \get_option( 'the_seo_framework_initial_db_version' ) . '+++69---',
 			];
 		} else {
+			$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
 			// 'instance' picks a random key. Store in other variable so we can cache this result.
 			$_scheme = 'instance' === $scheme ? $schemes[ mt_rand( 0, \count( $schemes ) - 1 ) ] : $scheme;
 

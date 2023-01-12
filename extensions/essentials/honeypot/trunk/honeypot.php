@@ -560,10 +560,10 @@ JS;
 	 * @return int The post ID.
 	 */
 	private function get_id( $commentdata = [] ) {
-
 		static $id;
-
-		return $id ?: $id = (int) ( $commentdata['comment_post_ID'] ?? \get_the_ID() );
+		return $id ?? (
+			$id = (int) ( $commentdata['comment_post_ID'] ?? \get_the_ID() )
+		);
 	}
 
 	/**
@@ -776,8 +776,14 @@ JS;
 		}
 
 		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
-		$hash = $flip ? strrev( $hash ) : $hash;
-		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
+
+		return $this->alpha_first(
+			(string) substr(
+				$flip ? strrev( $hash ) : $hash,
+				0,
+				$length
+			)
+		);
 	}
 
 	/**
@@ -794,16 +800,20 @@ JS;
 	 */
 	private function get_static_hashed_field_name( $length = 24, $flip = false ) {
 
-		static $_hash = '';
+		static $hash = '';
 
-		if ( ! \strlen( $_hash ) ) {
-			$uid   = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
-			$_hash = \tsfem()->_get_uid_hash( $uid );
-			$_hash = $this->hex_to_62_trim( $_hash );
-		}
+		if ( ! \strlen( $hash ) )
+			$hash = $this->hex_to_62_trim( \tsfem()->_get_uid_hash(
+				$this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id']
+			) );
 
-		$hash = $flip ? strrev( $_hash ) : $_hash;
-		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
+		return $this->alpha_first(
+			(string) substr(
+				$flip ? strrev( $hash ) : $hash,
+				0,
+				$length
+			)
+		);
 	}
 
 	/**
@@ -863,8 +873,14 @@ JS;
 		}
 
 		$hash = $previous ? $_hashes['previous'] : $_hashes['current'];
-		$hash = $flip ? strrev( $hash ) : $hash;
-		return $this->alpha_first( (string) substr( $hash, 0, $length ) );
+
+		return $this->alpha_first(
+			(string) substr(
+				$flip ? strrev( $hash ) : $hash,
+				0,
+				$length
+			)
+		);
 	}
 
 	/**

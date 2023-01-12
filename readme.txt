@@ -44,16 +44,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 TODO add RTL support for _print_tsf_nag_installer_styles (regression)
 TODO fix tsf dependency in _check_external_blocking
 TODO align AMP's get_social_metadata() with TSF's output handling? This might incur deprecation of some filters.
-TODO change site checking from AUTH key to primary domain name. Domains as less likely to be migrated than the AUTH key.
-	- Combine this with another unique static key, such as initial database version?
-	- This might mean that dynamically served sites will encounter issues. Figure this out.
-		-> admin_email -> quite static, but might throw users off when changed?
-		-> siteurl     ->
-		-> home        ->
-		-> the_seo_framework_initial_db_version
-		-> DB_NAME     -> static, but might affect staging?
-		->
-			-> Test at WP Engine's staging?
 TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
 TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
 TODO https://github.com/sybrew/the-seo-framework/issues/590 (add three fields: Valuta, Min price, Max price; and/or a dropdown: "Cheap/OK/Expensive/Exclusive" (find proper terms)).
@@ -62,11 +52,15 @@ TODO https://github.com/sybrew/the-seo-framework/issues/616
 TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
 
-* **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option. New sites no longer rely on authentication keys for hashing, but create a key using the administator's email address and domain name. Change any of these, and your site will disconnect from our services. This is a local verification; the administrator's email address is not shared with us. You can reconnect after disconnecting without losing data.
+TODO add save all button. -> Basically run through all forms and save them, and send message from "saved for one extension" to "saved for X (slug)."
+
+* **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
+* **Improved:** Increased clarity about how the API connection is validated.
 * **Improved:** Notification animations are faster now, and no longer cause minor text movement.
 * **Improved:** Optimized option handling for improved performance.
 * **Updated:** Now uses our licensing API v2.2, primarily for key naming convenience.
 * **Other:** Modernized code.
+* **Other:** New translations are available. TODO update POT
 
 **Updated extensions:**
 

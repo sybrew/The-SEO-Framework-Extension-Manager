@@ -43,7 +43,7 @@ function _check_external_blocking() {
 
 		if ( ! \defined( 'WP_ACCESSIBLE_HOSTS' ) || false === stristr( WP_ACCESSIBLE_HOSTS, $host ) ) {
 
-			// TODO We rely on TSF here but it might not be available.
+			// We rely on TSF here but it might not be available. Still, not outputting this notice does not harm.
 			if ( ! \function_exists( '\\tsf' ) ) return;
 
 			$tsf = \tsf();

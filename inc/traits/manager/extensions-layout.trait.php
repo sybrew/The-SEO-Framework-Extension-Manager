@@ -238,6 +238,7 @@ trait Extensions_Layout {
 		}
 
 		$buttons_output = '';
+
 		foreach ( $buttons as $button )
 			$buttons_output .= static::get_extension_button_form( $extension['slug'], $button['type'], $button['disabled'] );
 

@@ -148,13 +148,17 @@ class API extends Core {
 	 * Returns website's instance key from option. Generates one if non-existent.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.1 Now generates numerics at the end, to reduce potential offensive content.
 	 *
 	 * @return string Instance key.
 	 */
 	final protected function get_activation_instance() {
 		static $instance;
 		return $instance ?? (
-			$instance = $this->get_option( '_instance' ) ?: trim( \wp_generate_password( 32, false ) )
+			$instance = $this->get_option( '_instance' )
+				?: \wp_generate_password( 29, false )
+					. mt_rand( 12, 98 )
+					. mt_rand( 1, 9 ) // Remove likelihood of leading zeros.
 		);
 	}
 

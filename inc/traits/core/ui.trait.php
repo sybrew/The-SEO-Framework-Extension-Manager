@@ -107,7 +107,6 @@ trait UI {
 			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space">';
 				\do_action( 'tsfem_header' );
 			echo '</section></div>';
-			echo '<hr class=wp-header-end>';
 			$this->notice_wrap();
 		echo '</div>';
 	}
@@ -122,7 +121,6 @@ trait UI {
 			echo '<div id=tsfem-top-super-wrap><section id=tsfem-top-wrap class="tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink tsfem-flex-space connect-top-wrap">';
 				\do_action( 'tsfem_header' );
 			echo '</section></div>';
-			echo '<hr class=wp-header-end>';
 			$this->notice_wrap();
 		echo '</div>';
 	}
@@ -136,6 +134,7 @@ trait UI {
 	 */
 	final public function notice_wrap() {
 		echo '<aside id=tsfem-notice-wrap>';
+		echo '<hr class=wp-header-end>'; // This is a hook WP uses to dump notices after; aptly named, of course.
 		\do_action( 'tsfem_notices' );
 		echo '</aside>';
 	}

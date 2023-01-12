@@ -155,8 +155,7 @@ final class Upgrader {
 	 * @return string
 	 */
 	public function get_previous_version( $member ) {
-		$versions = $this->previous_db_versions;
-		return $versions[ $member ] ?? '0';
+		return $this->previous_db_versions[ $member ] ?? '0';
 	}
 
 	/**
@@ -169,8 +168,7 @@ final class Upgrader {
 	 * @return string
 	 */
 	public function get_current_version( $member ) {
-		$versions = $this->current_db_versions;
-		return $versions[ $member ] ?? '0';
+		return $this->current_db_versions[ $member ] ?? '0';
 	}
 
 	/**
@@ -365,13 +363,10 @@ final class Upgrader {
 	 * @yield array { $member => $version }
 	 */
 	private function yield_runs( $upgrade ) {
-		foreach ( $upgrade as $member => $versions ) {
-			foreach ( $versions as $version => $callbacks ) {
-				foreach ( $callbacks as $callback ) {
+		foreach ( $upgrade as $member => $versions )
+			foreach ( $versions as $version => $callbacks )
+				foreach ( $callbacks as $callback )
 					yield $member => $this->do_upgrade_cb( (string) $version, $callback );
-				}
-			}
-		}
 	}
 
 	/**

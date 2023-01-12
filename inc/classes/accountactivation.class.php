@@ -413,9 +413,9 @@ class AccountActivation extends Panes {
 			++$status;
 			if ( 'active' !== $response['status_check'] ) break;
 			++$status;
-			if ( $this->get_activation_instance() !== $response['_instance'] ?? -1 ) break;
+			if ( $this->get_activation_instance() !== ( $response['_instance'] ?? -1 ) ) break;
 			++$status;
-			if ( $this->get_activation_site_domain() !== $response['activation_domain'] ?? -1 ) break;
+			if ( $this->get_activation_site_domain() !== ( $response['activation_domain'] ?? -1 ) ) break;
 			++$status;
 
 			if ( ! isset( $response['_activation_level'] ) ) break;

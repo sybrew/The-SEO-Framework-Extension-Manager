@@ -35,6 +35,7 @@ create_type_field:;
 	$type_select_fields = '';
 	foreach ( $post_meta['type']['option']['select_values'] as $_value => $_name ) :
 		$_selected = $_value === $type_option_value ? ' selected=selected' : '';
+
 		$type_select_fields .= sprintf(
 			'<option value="%s"%s>%s</option>',
 			\esc_attr( $_value ),
