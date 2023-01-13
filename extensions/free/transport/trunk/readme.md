@@ -316,6 +316,8 @@ Transporter will irretrievably delete the following data from your database, imp
 	* Among these are: `categories`, `post_author`, `seo_title`, `seo_description`, `tags`, and `term`.
 * **Fixed:** Added missing tag preservation for Rank Math.
 	* Among these are: `group_desc`, `group_name`, `keywords`, `post_thumbnail`, `primary_taxonomy_terms`, `url`, `categories(*)`,  `customterm_desc(*)`, `date(*)`, `modified(*)`, `tags(*)`.
+* **Fixed:** When an existing post title is already present of The SEO Framework, a title present in another plugin will no longer cause Transport to check the blogname removal option.
+* **Fixed:** Transformation and deletion counters from titles are now correctly updated.
 
 ### 1.0.0
 

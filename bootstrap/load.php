@@ -68,10 +68,20 @@ function _protect_options() {
 
 	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
-	\add_filter( 'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS, __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+	\add_filter(
+		'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS,
+		__NAMESPACE__ . '\\_pre_execute_protect_option',
+		PHP_INT_MIN,
+		3
+	);
 
 	if ( isset( $current_options['_instance'] ) )
-		\add_filter( "pre_update_option_tsfem_i_{$current_options['_instance']}", __NAMESPACE__ . '\\_pre_execute_protect_option', PHP_INT_MIN, 3 );
+		\add_filter(
+			"pre_update_option_tsfem_i_{$current_options['_instance']}",
+			__NAMESPACE__ . '\\_pre_execute_protect_option',
+			PHP_INT_MIN,
+			3
+		);
 }
 
 /**
@@ -96,9 +106,6 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
 		return $old_value;
 	}
 
-	/**
-	 * Load class overloading traits.
-	 */
 	\TSF_Extension_Manager\_load_trait( 'core/overload' );
 
 	// Why do we return on an ACTION? What's happening here... how has it tested time?
@@ -196,7 +203,7 @@ function _register_autoloader() {
 
 	foreach ( $integrity_classes as $_class ) {
 		// phpcs:ignore, TSF.Performance.Functions.PHP -- no other method exists.
-		if ( class_exists( $_class, false ) ) die;
+		class_exists( $_class, false ) and die;
 	}
 
 	/**

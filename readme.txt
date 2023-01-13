@@ -53,6 +53,7 @@ TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
 
 TODO add save all button. -> Basically run through all forms and save them, and send message from "saved for one extension" to "saved for X (slug)."
+TODO copyright 2022 -> 2023
 
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
 * **Improved:** Increased clarity about how the API connection is validated.

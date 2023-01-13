@@ -45,6 +45,7 @@ class WordPress_SEO extends Core {
 	 * @since 1.0.0
 	 */
 	protected static function reset_replacements() {
+		parent::reset_replacements();
 
 		static::$replacements = [
 			'archive_title'        => [ static::class, 'get_term_title' ], // Note: CPTA aren't transported--this replacement doesn't consider.

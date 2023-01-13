@@ -80,7 +80,7 @@ abstract class Core {
 
 	/**
 	 * @since 1.0.0
-	 * @var ?string $id_key The data store ID.
+	 * @var ?string $globals_table_fallback The data table to fall back to if none is assigned.
 	 */
 	protected $globals_table_fallback;
 
@@ -251,9 +251,10 @@ abstract class Core {
 						'updated'     => 0,
 						'transformed' => 0,
 						'deleted'     => 0,
+						'sanitized'   => 0,
+						'inserted'    => 0,
 						'only_end'    => (int) $has_transmuter_to,
 						'only_delete' => (int) $is_deletion_only,
-						'sanitized'   => 0,
 					];
 					$actions = [
 						'transform' => $has_transformer,
@@ -332,18 +333,16 @@ abstract class Core {
 						}
 
 						if ( $actions['sanitize'] ) {
-							$_pre_sanitize_value = $set_value;
-
-							$set_value = \call_user_func( $sanitizer, $set_value );
-
+							$_pre_sanitize_value   = $set_value;
+							$set_value             = \call_user_func( $sanitizer, $set_value );
 							$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
 						}
 
 						if ( \in_array( $set_value, $this->useless_data, true ) ) {
 							$set_value              = null;
-							$actions['delete']      = true;
-							$results['transformed'] = 0;
+							$actions['delete']      = true; // Force delete also identical index.
 							$actions['transport']   = false;
+							$results['transformed'] = 0;
 						}
 					}
 					if ( isset( $transmuter['to'][1] ) ) {
@@ -424,27 +423,10 @@ abstract class Core {
 	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
 	 * @param mixed $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return mixed Any data if existing values are present, null otherwise.
 	 */
 	public function get_existing_meta( $data ) {
-
-		[ $to_table, $to_index ] = $data['to'];
-
-		if ( ! isset( $to_table, $to_index ) )
-			return null;
-
-		global $wpdb;
-
-		$existing_value = $wpdb->get_var( $wpdb->prepare(
-			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
-			"SELECT meta_value FROM `$to_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
-			$data['item_id'],
-			$to_index
-		) );
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-
-		return $existing_value;
+		return $this->get_var( $data['to'][0], $data['to'][1], $data['item_id'] );
 	}
 
 	/**
@@ -453,31 +435,41 @@ abstract class Core {
 	 * @since 1.0.0
 	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
-	 * @param mixed  $data          Any useful data pertaining to the current transmutation type.
-	 * @param array  $actions       The actions for and after transmuation, passed by reference.
-	 * @param array  $results       The results before and after transmuation, passed by reference.
-	 * @param ?array $cleanup       The extraneous database indexes to clean up.
+	 * @param mixed $data Any useful data pertaining to the current transmutation type.
+	 * @return mixed Any data if transport values are present, null otherwise.
+	 */
+	public function get_transport_value( $data ) {
+		return $this->get_var( $data['from'][0], $data['from'][1], $data['item_id'] );
+	}
+
+	/**
+	 * Gets value from database.
+	 *
+	 * @since 1.1.0
+	 * @global \wpdb $wpdb WordPress Database handler.
+	 *
+	 * @param ?string $table The database table.
+	 * @param ?string $index The table index key.
+	 * @param ?int    $id    The table item ID for `$this->id_key`.
 	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return mixed Any data if transport values are present, null otherwise.
 	 */
-	public function get_transport_value( $data, &$actions, &$results, &$cleanup ) {
+	protected function get_var( $table, $index, $id ) {
 
-		[ $from_table, $from_index ] = $data['from'];
-
-		if ( ! isset( $from_table, $from_index ) )
+		if ( ! isset( $table, $index ) )
 			return null;
 
 		global $wpdb;
 
-		$transport_value = $wpdb->get_var( $wpdb->prepare(
+		$var = $wpdb->get_var( $wpdb->prepare(
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
-			"SELECT meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
-			$data['item_id'],
-			$from_index
+			"SELECT meta_value FROM `$table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
+			$id,
+			$index
 		) );
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
-		return $transport_value;
+		return $var;
 	}
 
 	/**
@@ -539,7 +531,7 @@ abstract class Core {
 				// We don't care whether it's transformed here.
 				// Use 'replace' instead of 'insert', for 'replace' won't create duplicates,
 				// replaces "bad" data, and inserts if data doesn't exist.
-				$results['updated'] += (int) $wpdb->replace(
+				$_results = (int) $wpdb->replace(
 					$to_table,
 					[
 						$_id_key     => $item_id,   // Shared Key
@@ -548,6 +540,9 @@ abstract class Core {
 					]
 				);
 				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+
+				$results['updated']  += $_results;
+				$results['inserted'] += $_results;
 			}
 		} else {
 			if ( $results['transformed'] ) {

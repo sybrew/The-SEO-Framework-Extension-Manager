@@ -231,10 +231,8 @@ final class WordPress_SEO extends Base {
 			}
 
 			if ( isset( $data['to_data']['sanitizers'][ $from ] ) ) {
-				$_pre_sanitize_value = $_set_value;
-
-				$_set_value = \call_user_func( $data['to_data']['sanitizers'][ $from ], $_set_value );
-
+				$_pre_sanitize_value   = $_set_value;
+				$_set_value            = \call_user_func( $data['to_data']['sanitizers'][ $from ], $_set_value );
 				$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
 			}
 

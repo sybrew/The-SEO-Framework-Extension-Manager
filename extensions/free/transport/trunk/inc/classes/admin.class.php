@@ -146,7 +146,6 @@ final class Admin {
 							'twitter_title',
 							'twitter_description',
 							'canonical_url',
-							'redirect',
 							'noindex',
 							'nofollow',
 							'noarchive',
@@ -241,10 +240,63 @@ final class Admin {
 					],
 				],
 			],
+			'WP_SEOPress'      => [
+				'title'     => 'SEOPress',
+				'importers' => [
+					'settings' => false, // Let's keep this at false, for now. Perhaps we want to move the homepage stuff, but that's tricky.
+					'postmeta' => [
+						'supports'  => [
+							'title',
+							'description',
+							'og_title',
+							'og_description',
+							'og_image',
+							'og_image_id',
+							'twitter_title',
+							'twitter_description',
+							'canonical_url',
+							'noindex',
+							'nofollow',
+							'noarchive',
+							'redirect',
+							// 'article_type', TODO?
+						],
+						'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
+							'title',
+							'description',
+							'og_title',
+							'og_description',
+							'twitter_title',
+							'twitter_description',
+						],
+					],
+					// 'termmeta' => [
+					// 	'supports'  => [
+					// 		'title',
+					// 		'description',
+					// 		'og_title',
+					// 		'og_description',
+					// 		'og_image',
+					// 		'og_image_id',
+					// 		'twitter_title',
+					// 		'twitter_description',
+					// 		'canonical_url',
+					// 		'noindex',
+					// 		'nofollow',
+					// 		'noarchive',
+					// 	],
+					// 	'transform' => [ /* "Transformed fields cannot be recovered without a backup" */
+					// 		'title',
+					// 		'description',
+					// 		'og_title',
+					// 		'og_description',
+					// 		'twitter_title',
+					// 		'twitter_description',
+					// 	],
+					// ],
+				],
+			],
 			// TODO
-			// 'WP_SEOPress' => [
-			// 	'title' => 'SEOPress',
-			// ],
 			// 'All_In_One_SEO_Pack' => [
 			// 	'title' => 'All In One SEO',
 			// ],
@@ -414,7 +466,7 @@ final class Admin {
 	 */
 	public function _do_transport_admin_actions() {
 
-		if ( false === $this->is_transport_page() )
+		if ( ! $this->is_transport_page() )
 			return false;
 
 		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) )

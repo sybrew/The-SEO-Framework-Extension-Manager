@@ -211,6 +211,7 @@ final class WordPress_SEO extends Base {
 	 * Sets `_tsf_title_no_blogname` to `1` if title is transformed.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 No longer sets value if not transporting.
 	 * @generator
 	 *
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
@@ -220,8 +221,9 @@ final class WordPress_SEO extends Base {
 	 */
 	protected function _title_transmuter( $data, &$actions, &$results ) {
 
-		if ( ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
-			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['titleset']['index'] );
+		// Set _tsf_title_no_blogname to 1 if data isn't useless:
+		if ( $actions['transport'] && ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
+			[ $to_table, $to_index ] = $data['to_data']['titleset']['index'];
 
 			$_actions = [
 				'transport' => true,
@@ -246,7 +248,10 @@ final class WordPress_SEO extends Base {
 			yield 'transmutedResults' => [ $_results, $_actions ];
 		}
 
-		// Pass through to transmute. $actions and $results get written by reference here.
+		// Pass through all results for the following transmutation.
+		$results['only_end'] = false;
+
+		// Pass actual title through to transmute. $actions and $results get written by reference here.
 		$this->transmute(
 			$data['set_value'],
 			$data['item_id'],
@@ -261,14 +266,11 @@ final class WordPress_SEO extends Base {
 	 * Gets existing advanced robots values.
 	 *
 	 * @since 1.0.0
-	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
 	 * @param array $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
 	 * @return array An array with existing and transport values -- if any.
 	 */
 	public function _robots_adv_transmuter_existing( $data ) {
-		global $wpdb;
 
 		$ret             = [
 			'existing'  => [],
@@ -281,33 +283,21 @@ final class WordPress_SEO extends Base {
 			// 'noimageindex', // reserved for later
 			// 'nosnippet', // reserved for later
 		] as $type ) {
-			// Defined in $this->conversion_sets
-			[ $to_table, $to_index ] = array_map( '\\esc_sql', $data['to_data']['transmuters'][ $type ] );
+			$existing_value = $this->get_existing_meta( [
+				// Defined in $this->conversion_sets
+				'to'      => $data['to_data']['transmuters'][ $type ],
+				'item_id' => $data['item_id'],
+			] );
 
-			// TODO improve performance make this get_col->WHERE IN? Do we even improve performance then?
-			// For now, we only get one value so it doesn't matter here. For Rank Math, it may.
-			$current_value = $wpdb->get_var( $wpdb->prepare(
-				// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $to_table is escaped.
-				"SELECT meta_value FROM `$to_table` WHERE post_id = %d AND meta_key = %s",
-				$data['item_id'],
-				$to_index
-			) );
-			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
-
-			if ( isset( $current_value ) ) {
-				$ret['existing'][ $type ] = $current_value;
+			if ( isset( $existing_value ) ) {
+				$ret['existing'][ $type ] = $existing_value;
 			} else {
 				// Get transport value if not fetched before.
 				if ( ! isset( $transport_value ) ) {
-					[ $from_table, $from_index ] = $data['from'];
-
-					$transport_value = $wpdb->get_var( $wpdb->prepare(
-						// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table is escaped.
-						"SELECT meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key = %s",
-						$data['item_id'],
-						$from_index
-					) );
-					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+					$transport_value = $this->get_transport_value( [
+						'from'    => $data['from'],
+						'item_id' => $data['item_id'],
+					] );
 
 					// Makes [ 'noarchive' => 1, 'nosnippet' => 1, 'noimageindex' => 1 ] when index is found.
 					$transport_value = \is_string( $transport_value )
@@ -338,7 +328,7 @@ final class WordPress_SEO extends Base {
 		[ $from_table, $from_index ] = $data['from'];
 
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {
-			[ $to_table, $to_index ] = array_map( '\\esc_sql', $transmuter );
+			[ $to_table, $to_index ] = $transmuter;
 
 			$_actions = [
 				'transport' => true,
@@ -361,8 +351,8 @@ final class WordPress_SEO extends Base {
 
 			if ( \in_array( $set_value, $this->useless_data, true ) ) {
 				$set_value               = null;
-				$_results['transformed'] = 0;
 				$_actions['transport']   = false;
+				$_results['transformed'] = 0;
 			}
 
 			$this->transmute(

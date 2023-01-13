@@ -439,6 +439,28 @@ abstract class Core {
 	}
 
 	/**
+	 * Returns current post's product category list, comma separated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_all_product_cat_names() {
+		return static::get_post_all_term_names( '', 'product_cat' );
+	}
+
+	/**
+	 * Returns current post's tag category list, comma separated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	protected static function get_post_all_product_tag_names() {
+		return static::get_post_all_term_names( '', 'product_tag' );
+	}
+
+	/**
 	 * Returns current post's first field.
 	 *
 	 * @since 1.1.0

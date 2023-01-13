@@ -237,9 +237,15 @@ final class Handler {
 										);
 									}
 								} else {
-									$store->store(
-										\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
-									);
+									if ( $results['inserted'] ) {
+										$store->store(
+											\esc_html__( 'Data inserted succesfully.', 'the-seo-framework-extension-manager' )
+										);
+									} else {
+										$store->store(
+											\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
+										);
+									}
 								}
 								$succeeded += $results['updated'];
 							}
