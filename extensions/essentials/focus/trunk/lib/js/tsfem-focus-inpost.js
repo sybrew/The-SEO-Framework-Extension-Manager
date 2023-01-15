@@ -1155,7 +1155,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			rater.dataset.assess = 0;
 
 			input = document.getElementsByName( rater.id );
-			if ( input && input[0] ) input[0].value = 0;
+			if ( input?.[0] ) input[0].value = 0;
 			tsfem_inpost.fadeOut( rater, 250 );
 		} else if ( reassess ) {
 			tsfem_inpost.fadeIn( rater, 250 );

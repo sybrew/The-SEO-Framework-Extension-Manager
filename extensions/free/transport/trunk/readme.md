@@ -312,12 +312,19 @@ Transporter will irretrievably delete the following data from your database, imp
 
 [tsfep-release time="-1"]
 
+* **Added**: SEOPress transport support. Including:
+	* Migration of titles, descriptions, visibility options, Open Graph, Twitter, redirections, and primary terms.
+	* Support for all posts, pages, custom post types, and all terms like categories and tags.
+	* Transformation of titles and descriptions; faster and more accurate than their developers can ever promise.
+	* Cleanup of useless data.
 * **Fixed:** Added missing transformations for Rank Math.
 	* Among these are: `categories`, `post_author`, `seo_title`, `seo_description`, `tags`, and `term`.
-* **Fixed:** Added missing tag preservation for Rank Math.
+	* Documented at [FAQ](#faq/rank-math-transformations).
+* **Fixed:** Added missing transformation preservation for Rank Math.
 	* Among these are: `group_desc`, `group_name`, `keywords`, `post_thumbnail`, `primary_taxonomy_terms`, `url`, `categories(*)`,  `customterm_desc(*)`, `date(*)`, `modified(*)`, `tags(*)`.
+	* Documented at [FAQ](#faq/rank-math-transformations).
 * **Fixed:** When an existing post title is already present of The SEO Framework, a title present in another plugin will no longer cause Transport to check the blogname removal option.
-* **Fixed:** Transformation and deletion counters from titles are now correctly updated.
+* **Fixed:** The number of transformation and deletion counted from titles are now correctly reflected in the log.
 
 ### 1.0.0
 

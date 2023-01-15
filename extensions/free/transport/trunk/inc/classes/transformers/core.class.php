@@ -926,7 +926,12 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function _get_first_term_field( $post_id, $taxonomy, $field = 'name' ) {
-		return \get_the_terms( $post_id, $taxonomy )[0][ $field ] ?? null;
+
+		$terms = \get_the_terms( $post_id, $taxonomy );
+
+		return \is_array( $terms )
+			? ( $terms[0]->{$field} ?? '' )
+			: '';
 	}
 
 	/**

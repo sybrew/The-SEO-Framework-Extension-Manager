@@ -55,6 +55,12 @@ TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 TODO add save all button. -> Basically run through all forms and save them, and send message from "saved for one extension" to "saved for X (slug)."
 TODO copyright 2022 -> 2023
 
+TODO make $notice_count visible on SEO menu, not only subitem.
+
+TODO add "reset instance" button -- also visible when using constant activation
+	* Only display when SOMETHING is marked invalid.
+	* This will reset the current installation API and local instances and will attempt to reconnect your account.
+
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
 * **Improved:** Increased clarity about how the API connection is validated.
 * **Improved:** Notification animations are faster now, and no longer cause minor text movement.

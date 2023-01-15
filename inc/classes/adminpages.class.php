@@ -132,6 +132,7 @@ class AdminPages extends AccountActivation {
 			 * TODO Update these when clearing them via JS.
 			 *
 			 * @see /wp-admin/menu.php @ $awaiting_mod & edit-comments.js' updateCountText & updateInModerationText
+			 *      also refreshCount/decrementCount
 			 */
 			$notice_i18n = \number_format_i18n( $notice_count );
 			$notice_text = sprintf(

@@ -89,13 +89,13 @@ final class WP_SEOPress extends Base {
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
-				null,
+				[ $transformer_class, '_title_syntax' ],
 				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_desc' ],
 				[ $wpdb->postmeta, '_open_graph_description' ],
-				null,
+				[ $transformer_class, '_description_syntax' ],
 				[ $tsf, 's_description_raw' ],
 			],
 			[
@@ -113,13 +113,13 @@ final class WP_SEOPress extends Base {
 			[
 				[ $wpdb->postmeta, '_seopress_social_twitter_title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
-				null,
+				[ $transformer_class, '_title_syntax' ],
 				[ $tsf, 's_title_raw' ],
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_twitter_desc' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
-				null,
+				[ $transformer_class, '_description_syntax' ],
 				[ $tsf, 's_description_raw' ],
 			],
 			[
@@ -424,7 +424,8 @@ final class WP_SEOPress extends Base {
 
 		// We cannot trust SEOPress with data -- if this failed, delete their nonsense.
 		// Don't set $actions['transport'] to false -- report it failed to user.
-		if ( empty( $data['set_value']['destination'] ) ) goto useless;
+		if ( empty( $data['set_value']['destination'] ) )
+			goto useless;
 
 		$existing_value  = $data['set_value']['existing'];
 		$transport_value = $data['set_value']['transport'];

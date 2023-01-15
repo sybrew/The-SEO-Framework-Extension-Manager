@@ -156,7 +156,7 @@ class WP_SEOPress extends Core {
 		static::$prefix_preserve = [
 			// Too complex. Undocumented; doubt anyone uses it. Maybe later, probably never.
 			'_cf_',
-			'_ct_',
+			'_ct_', // These don't even transform in SEOPress. What a joke.
 			'_ucf_',
 		];
 
