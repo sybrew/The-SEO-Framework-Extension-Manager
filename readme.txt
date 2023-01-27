@@ -60,18 +60,24 @@ TODO make $notice_count visible on SEO menu, not only subitem.
 TODO add "reset instance" button -- also visible when using constant activation
 	* Only display when SOMETHING is marked invalid.
 	* This will reset the current installation API and local instances and will attempt to reconnect your account.
+	* "Otherwise, disconnect..." -> rephrase.
+		-> Transfer the license!
 
+* **Added:** When you move WordPress between domains, you can now easily switch the registered domain with us without needing to reactivate extensions. A red button is presented under "Account and Actions" when a transfer is detected.
+	* This is especially handy for multisite domain transfers.
+	* TODO This won't work for switching between development, staging, and production environments, unless the file paths are identical.
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
 * **Improved:** Increased clarity about how the API connection is validated.
-* **Improved:** Notification animations are faster now, and no longer cause minor text movement.
+* **Improved:** Notification animations are faster now, no longer cause minor text movement, and no longer cause large screen movement due to race conditions.
 * **Improved:** Optimized option handling for improved performance.
-* **Updated:** Now uses our licensing API v2.2, primarily for key naming convenience.
+* **Updated:** Now uses our v2.2 licensing API, primarily for key naming convenience.
 * **Other:** Modernized code.
 * **Other:** New translations are available. TODO update POT
 
 **Updated extensions:**
 
-* [AMP at version 1.2.1](https://theseoframework.com/extensions/monitor/#changelog)
+* [AMP at version 1.2.1](https://theseoframework.com/extensions/amp/#changelog)
+* [Monitor at version 1.2.9](https://theseoframework.com/extensions/monitor/#changelog)
 
 = 2.6.0 - Mobile SEO =
 

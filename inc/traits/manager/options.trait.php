@@ -84,12 +84,11 @@ trait Options {
 	 * @since 2.6.1 1. Removed memoization.
 	 *              2. Second parameter now tells to reset cache.
 	 *
-	 * @param string  $option The Option name.
-	 * @param boolean $reset  Optional. Whether to reset the memoization and fetch the latest options.
+	 * @param string $option The Option name.
 	 * @return ?mixed The option value if exists. Otherwise null.
 	 */
-	final protected function get_option( $option, $reset = false ) {
-		return $this->get_all_options( $reset )[ $option ] ?? null;
+	final protected function get_option( $option ) {
+		return $this->get_all_options()[ $option ] ?? null;
 	}
 
 	/**
@@ -109,24 +108,19 @@ trait Options {
 		if ( ! $option || $this->killed_options )
 			return false;
 
-		$_options = $this->get_all_options();
-
-		// Cache current options from loop. This is used for activation where _instance needs to be used.
-		static $options = [];
-
-		if ( ! $options )
-			$options = $_options;
-
-		// If option is unchanged, return true. Don't merge the isset() check: $value may be null.
-		if ( isset( $options[ $option ] ) && $value === $options[ $option ] )
-			return true;
+		$existing_options = $this->get_all_options();
+		$options          = $existing_options;
 
 		$options[ $option ] = $value;
+
+		// If options are unchanged, return true.
+		if ( $options === $existing_options )
+			return true;
 
 		$this->initialize_option_update_instance();
 
 		// TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
-		if ( empty( $options['_instance'] ) && '_instance' !== $option ) {
+		if ( empty( $options['_instance'] ) ) {
 			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 			return false;
 		}
@@ -139,7 +133,7 @@ trait Options {
 
 			// Revert on failure.
 			if ( ! $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $_options );
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
 		}
 
 		$this->clear_options_cache();
@@ -151,6 +145,7 @@ trait Options {
 	 * Updates multiple TSF Extension Manager options.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.1 Now works without crashing the instance, so it can be used to set the instance.
 	 *
 	 * @param array $options : {
 	 *    $option_name => $value,
@@ -161,7 +156,7 @@ trait Options {
 	 */
 	final protected function update_option_multi( $options = [], $kill = false ) {
 
-		if ( ! $options )
+		if ( ! $options || $this->killed_options )
 			return false;
 
 		if ( $this->killed_options )
@@ -178,6 +173,52 @@ trait Options {
 
 		if ( empty( $options['_instance'] ) ) {
 			\wp_die( 'Error 7108: Supply an instance key before updating other options.' );
+			return false;
+		}
+
+		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
+
+		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
+			$this->set_error_notice( [ $instance_updated ? 7101 : 7102 => '' ] );
+
+			// Revert on failure.
+			if ( ! $kill )
+				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
+		}
+
+		$this->clear_options_cache();
+
+		return $success && $instance_updated;
+	}
+
+	/**
+	 * Deletes TSF Extension Manager options.
+	 *
+	 * @since 1.0.0
+	 * @since 2.6.1 1. Removed memoization.
+	 *              2. Second parameter now tells to reset cache.
+	 *
+	 * @param string|string[] $option The option name(s).
+	 * @param bool            $kill   Whether to kill the plugin on invalid instance.
+	 * @return ?mixed The option value if exists. Otherwise null.
+	 */
+	final protected function delete_option( $option, $kill = false ) {
+
+		if ( ! $option || $this->killed_options )
+			return false;
+
+		$existing_options = $this->get_all_options();
+		$options          = array_diff_key( $existing_options, array_flip( (array) $option ) );
+
+		// If options didn't change, return true.
+		if ( $options === $existing_options )
+			return true;
+
+		$this->initialize_option_update_instance();
+
+		if ( empty( $options['_instance'] ) ) {
+			\wp_die( 'Error 7208: Supply an instance key before updating other options.' );
 			return false;
 		}
 

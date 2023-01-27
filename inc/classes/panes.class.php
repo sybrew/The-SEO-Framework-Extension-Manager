@@ -81,9 +81,10 @@ class Panes extends API {
 		return sprintf(
 			'<div class="tsfem-pane-inner-wrap tsfem-actions-wrap">%s</div>',
 			vsprintf(
-				'<div class="tsfem-actions tsfem-flex">%s%s%s%s</div>',
+				'<div class="tsfem-actions tsfem-flex">%s%s%s%s%s</div>',
 				[
 					$this->get_account_information(),
+					$this->get_transfer_domain_form(),
 					$this->get_account_upgrade_form(),
 					$this->get_support_buttons(),
 					$this->get_disconnect_button(),
@@ -467,9 +468,9 @@ class Panes extends API {
 		Layout::set_account( $this->get_subscription_status() );
 		Layout::set_misc( [
 			'options' => [
-				'valid'    => $this->are_options_valid(),
-				'instance' => substr( $this->get_option( '_instance' ), -4 ),
-				'hash'     => [
+				'valid'     => $this->are_options_valid(),
+				'instance'  => substr( $this->get_option( '_instance' ), -4 ),
+				'hash'      => [
 					'expected' => substr( \get_option( 'tsfem_i_' . $this->get_option( '_instance' ) ), -4 ),
 					'actual'   => substr( $this->hash_options( \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] ) ), -4 ),
 				],
@@ -517,7 +518,42 @@ class Panes extends API {
 
 		$title = sprintf( '<h4 class=tsfem-form-title>%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-upgrade tsfem-pane-section">%s%s</div>', $title, $form );
+		return sprintf( '<div class="tsfem-cp-buttons tsfem-cp-buttons tsfem-pane-section">%s%s</div>', $title, $form );
+	}
+
+	/**
+	 * Wraps and returns the domain transfer form.
+	 *
+	 * @since 2.6.1
+	 *
+	 * @return string The account upgrade form wrap.
+	 */
+	protected function get_transfer_domain_form() {
+
+		if ( ! $this->get_option( 'requires_domain_transfer' )
+		  || ! $this->is_connected_user()
+		  || ! $this->are_options_valid()
+		) return '';
+
+		$title = sprintf(
+			'<h4 class=tsfem-form-title>%s</h4>',
+			\esc_html__( 'Transfer domain', 'the-seo-framework-extension-manager' )
+		);
+
+		$this->get_verification_codes( $_instance, $bits );
+		Layout::initialize( 'form', $_instance, $bits );
+		Layout::set_account( $this->get_subscription_status() );
+		Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		Layout::set_nonces( 'request_name', $this->request_name );
+		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+		$form = Layout::get( 'transfer-domain-button' );
+		Layout::reset();
+
+		return sprintf(
+			'<div class="tsfem-domain-transfer tsfem-pane-section tsfem-cp-buttons">%s%s</div>',
+			$title,
+			$form
+		);
 	}
 
 	/**
@@ -530,18 +566,6 @@ class Panes extends API {
 	protected function get_disconnect_button() {
 
 		if ( $this->is_auto_activated() ) return '';
-
-		$this->get_verification_codes( $_instance, $bits );
-
-		Layout::initialize( 'form', $_instance, $bits );
-
-		Layout::set_nonces( 'nonce_name', $this->nonce_name );
-		Layout::set_nonces( 'request_name', $this->request_name );
-		Layout::set_nonces( 'nonce_action', $this->nonce_action );
-
-		$button = Layout::get( 'disconnect-button' );
-
-		Layout::reset();
 
 		$infos = [];
 
@@ -558,9 +582,18 @@ class Panes extends API {
 			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
 		);
 
+		$this->get_verification_codes( $_instance, $bits );
+		Layout::initialize( 'form', $_instance, $bits );
+		Layout::set_nonces( 'nonce_name', $this->nonce_name );
+		Layout::set_nonces( 'request_name', $this->request_name );
+		Layout::set_nonces( 'nonce_action', $this->nonce_action );
+		$button = Layout::get( 'disconnect-button' );
+		Layout::reset();
+
 		return sprintf(
-			'<div class="tsfem-account-disconnect tsfem-pane-section">%s</div>',
-			implode( '', compact( 'title', 'button' ) )
+			'<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>',
+			$title,
+			$button
 		);
 	}
 
@@ -575,6 +608,8 @@ class Panes extends API {
 
 		$this->get_verification_codes( $_instance, $bits );
 
+		$title = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+
 		Layout::initialize( 'link', $_instance, $bits );
 
 		$buttons     = [];
@@ -588,17 +623,19 @@ class Panes extends API {
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
-
 		$content = '';
 		foreach ( $buttons as $key => $button ) {
 			$content .= sprintf(
-				'<div class=tsfem-support-buttons>%s %s</div>',
+				'<div class=tsfem-cp-buttons>%s %s</div>',
 				$button,
 				HTML::make_inline_question_tooltip( $description[ $key ] )
 			);
 		}
 
-		return sprintf( '<div class="tsfem-account-support tsfem-pane-section">%s%s</div>', $title, $content );
+		return sprintf(
+			'<div class="tsfem-account-support tsfem-pane-section">%s%s</div>',
+			$title,
+			$content
+		);
 	}
 }

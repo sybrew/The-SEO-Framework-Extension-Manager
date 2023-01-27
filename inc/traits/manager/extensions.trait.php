@@ -83,11 +83,11 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664262329',
+				'last_updated' => '1674791061',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -98,9 +98,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1664262329',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'transport' => [
 				'slug'         => 'transport',
@@ -111,9 +111,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1664387758',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -124,9 +124,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1664173453',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'cord'      => [
 				'slug'         => 'cord',
@@ -137,9 +137,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1664173453',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'local'     => [
 				'slug'         => 'local',
@@ -150,9 +150,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1664262329',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -163,9 +163,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1565627638',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -174,11 +174,11 @@ trait Extensions_Properties {
 				'area'         => 'syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664262329',
+				'last_updated' => '1674790889',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -189,9 +189,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -202,9 +202,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -215,9 +215,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1572496812',
 				'requires'     => '5.5',
-				'tested'       => '6.0',
+				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
-				'tested_tsf'   => '4.2.0',
+				'tested_tsf'   => '4.2.8',
 			],
 		];
 	}
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '907f04cfdbeace844e88793fd61bf1c48871ce230791103d0753a6fb9165c96b',
-			'sha1'   => '9345a800ec49536295ecd15fe998cd71544b71ec',
-			'md5'    => 'd586cf0a78a6228c9d97af72b4c831e4',
+			'sha256' => 'a9729c0211234344a15c830ec35073b676f79cc6b3be29eff7c7d928d18b6583',
+			'sha1'   => '4895778334f9c5ef76837660bd5eacba008d2a0d',
+			'md5'    => 'd3aba691a875245789c5787cab3d0b25',
 		];
 	}
 
@@ -531,15 +531,21 @@ trait Extensions_Actions {
 	 *
 	 * @return array : {
 	 *    'success' => bool Whether the activation can proceed.
-	 *    'case'    => int The status key.
+	 *    'case'    => int The status key. {
+	 *       0: Invalid instance.
+	 *       1: Invalid extension.
+	 *       2: Premium/Essentials OK.
+	 *       3: Not enough privileges.
+	 *       4: Free OK.
+	 *       5: Race condition on activation (send OK for "activated").
+	 *    }
 	 * }
 	 */
 	public static function validate_extension_activation() {
 		// phpcs:disable, WordPress.Arrays.ArrayDeclarationSpacing.AssociativeArrayFound -- condensed code
 
-		if ( ! self::verify_instance() ) {
+		if ( ! self::verify_instance() )
 			return [ 'success' => false, 'case' => 0 ];
-		}
 
 		if ( 'activation' !== self::get_property( '_type' ) ) {
 			self::reset();

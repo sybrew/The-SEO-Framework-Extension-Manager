@@ -356,6 +356,9 @@ final class AJAX extends Secure_Abstract {
 									break;
 
 								case 'LICENSE_TOO_LOW':
+									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
+									break;
+
 								default:
 									// Undefined error.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );

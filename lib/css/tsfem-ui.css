@@ -930,24 +930,19 @@ h4.tsfem-cp-title {
 	color: #057f9c;
 }
 
-.tsfem-account-upgrade,
-.tsfem-support-buttons,
 .tsfem-cp-buttons {
 	max-width: 300px;
 }
 
-.tsfem-support-buttons,
 .tsfem-cp-buttons {
 	margin-bottom: .8em;
 	flex-basis: 50%;
 }
 
-.tsfem-support-buttons:last-of-type,
 .tsfem-cp-buttons:last-of-type {
 	margin-bottom: 0;
 }
 
-.tsfem-support-buttons > a,
 .tsfem-cp-buttons > form,
 .tsfem-cp-buttons > a {
 	cursor: pointer;

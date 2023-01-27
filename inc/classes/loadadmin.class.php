@@ -67,11 +67,9 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function _check_constant_activation() {
 
-		// Store in $var for PHP<7 compiling compat.
-		$data = TSF_EXTENSION_MANAGER_API_INFORMATION;
 		$data = [
-			'email' => \sanitize_email( $data['email'] ),
-			'key'   => trim( $data['key'] ),
+			'email' => \sanitize_email( TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
+			'key'   => trim( TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
 		];
 
 		if ( $this->is_connected_user() ) {
@@ -225,6 +223,29 @@ final class LoadAdmin extends AdminPages {
 			case $this->request_name['activate-external']:
 				if ( $this->is_auto_activated() ) break;
 				$this->get_remote_activation_listener_response();
+				break;
+
+			case $this->request_name['transfer-domain']:
+				$this->delete_option( 'requires_domain_transfer' );
+
+				// We store the API server's known domain in this value.
+				$this->delete_option( '_remote_subscription_status' );
+
+				if ( $this->is_auto_activated() ) {
+					$args = [
+						'api_key'          => trim( TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
+						'activation_email' => \sanitize_email( TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
+					];
+				} else {
+					$args = [
+						'api_key'          => trim( $this->get_option( 'api_key' ) ),
+						'activation_email' => \sanitize_email( $this->get_option( 'activation_email' ) ),
+					];
+				}
+
+				// At our API, we remerge on instance or domain match.
+				if ( $this->handle_request( 'activation', $args ) )
+					$this->revalidate_subscription(); // Get new domain data JIT.
 				break;
 
 			case $this->request_name['deactivate']:
@@ -751,11 +772,24 @@ final class LoadAdmin extends AdminPages {
 		Extensions::reset();
 
 		if ( $status['success'] ) :
-			if ( 2 === $status['case'] ) {
-				if ( 0 === $this->validate_remote_subscription_license() ) {
-					$ajax or $this->set_error_notice( [ 10004 => '' ] );
-					return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
-				}
+			if ( 2 === $status['case'] ) { // Extension and license == Premium/Essentials OK.
+				switch ( $this->validate_remote_subscription_license() ) :
+					case 6: // Enterprise.
+					case 5: // Premium.
+					case 4: // Essentials.
+						break;
+
+					case 3: // Domain mismatch.
+						$ajax or $this->set_error_notice( [ 10015 => '' ] );
+						return $ajax ? $this->get_ajax_notice( false, 10015 ) : false;
+
+					case 2: // Disconnected from API.
+					case 1: // Connected user, but verification failed.
+					case 0: // Free user.
+					default: // ???
+						$ajax or $this->set_error_notice( [ 10004 => '' ] );
+						return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
+				endswitch;
 			}
 
 			$test = $this->test_extension( $slug, $ajax );

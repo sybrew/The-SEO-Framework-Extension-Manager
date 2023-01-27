@@ -335,7 +335,6 @@ trait Error {
 			case 304:
 			case 17001:
 			case 17002:
-			case 1010203:
 			case 1010204:
 			case 1100104:
 			case 1100204:
@@ -352,7 +351,6 @@ trait Error {
 			case 1010801:
 			case 1100103:
 			case 1100107:
-			case 1100203:
 			case 1100207:
 			case 1100304:
 			case 1100308:
@@ -361,10 +359,15 @@ trait Error {
 				break;
 
 			case 17013:
+			case 1010306:
+			case 1010404:
+			case 1010508:
+			case 1010608:
+			case 1010806:
 			case 1100108:
 			case 1100208:
 			case 1100303:
-			case 1010508:
+			case 1010205:
 				$message = \esc_html__( 'Exceeded maximum number of monthly request. Upgrade your license or check back in next month.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
@@ -510,6 +513,25 @@ trait Error {
 			case 10009:
 			case 10102:
 				$message = \esc_html__( "Can't touch this.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 10015:
+				$message = \esc_html__( "This domain isn't connected to the API. Transfer the license and try again.", 'the-seo-framework-extension-manager' );
+				$type    = 'error';
+				break;
+
+			case 17014:
+			case 1010307:
+			case 1010405:
+			case 1010509:
+			case 1010609:
+			case 1010807:
+			case 1100110:
+			case 1100210:
+			case 1100310:
+			case 1010206:
+				$message = \esc_html__( "This domain isn't connected to the API. Reconnect via Extension Manager.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
 

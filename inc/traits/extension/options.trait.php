@@ -281,9 +281,8 @@ trait Extension_Options {
 	final protected function get_option_by_mda_key( $keys, $default = null ) {
 
 		// If the array is sequential, convert it to a multidimensional array.
-		if ( array_values( $keys ) === $keys ) {
+		if ( array_values( $keys ) === $keys )
 			$keys = FormFieldParser::satoma( $keys );
-		}
 
 		// Should this be `array_merge( $this->o_defaults, $this->get_extension_options() )`?
 		$options = $this->get_extension_options();
@@ -344,8 +343,9 @@ trait Extension_Options {
 	 *
 	 * @since 1.0.0
 	 * @since 2.3.0 Removed redundant option name check.
+	 * @since 2.6.1 Now allows an array as $option input to delete multiple keys at once.
 	 *
-	 * @param string $option The Option name to delete.
+	 * @param string|string[] $option The Option name to delete.
 	 * @return boolean True on success; false on failure.
 	 */
 	final protected function delete_option( $option ) {
@@ -353,13 +353,12 @@ trait Extension_Options {
 		if ( ! $this->o_index )
 			return false;
 
-		$options = $this->get_extension_options();
+		$existing_options = $this->get_extension_options();
+		$options          = array_diff_key( $existing_options, array_flip( (array) $option ) );
 
-		// If option is non existent, return true.
-		if ( ! isset( $options[ $option ] ) )
+		// If options didn't change, return true.
+		if ( $options === $existing_options )
 			return true;
-
-		unset( $options[ $option ] );
 
 		// Prepare options cache.
 		$c_options                   = Extensions_Options_Cache::_get_options_cache();

@@ -340,7 +340,7 @@ class AccountActivation extends Panes {
 
 		switch ( $status ) :
 			case 0:
-				// Already free.
+				// Already free or couldn't reach API.
 				break;
 
 			case 1:
@@ -350,25 +350,28 @@ class AccountActivation extends Panes {
 				break;
 
 			case 2:
-				// Set 3 day timeout. Administrator has already been notified to fix this ASAP.
+				// Instance failed. Set 3 day timeout.
+				// Administrator has already been notified to fix this ASAP.
 				$this->do_deactivation( true, true );
 				// @TODO notify of timeout?
 				$this->set_error_notice( [ 902 => '' ] );
 				break;
 
 			case 3:
-				// Everything's OK. User gets notified via the CP pane on certain actions and may not access private data.
+				// Domain mismatch. Everything else is OK. Don't downgrade to Free.
+				// User gets notified via the CP pane on certain actions and can not perform API actions.
+				$this->update_option( 'requires_domain_transfer', true );
 				break;
 
 			case 4:
-				// Everything's superb. Remote upgrade.
+				// Everything's superb. Remote upgrade/downgrade.
 				( $this->get_option( '_activation_level' ) !== 'Essentials' )
 					and $this->update_option( '_activation_level', 'Essentials' )
 						and $this->set_error_notice( [ 904 => '' ] );
 				break;
 
 			case 5:
-				// Everything's Premium. Remote upgrade.
+				// Everything's Premium. Remote upgrade/downgrade.
 				( $this->get_option( '_activation_level' ) !== 'Premium' )
 					and $this->update_option( '_activation_level', 'Premium' )
 						and $this->set_error_notice( [ 905 => '' ] );
@@ -410,22 +413,18 @@ class AccountActivation extends Panes {
 
 		while ( true ) {
 			if ( ! isset( $response['status_check'] ) ) break;
-			++$status;
+			++$status; // 1
 			if ( 'active' !== $response['status_check'] ) break;
-			++$status;
-			if ( $this->get_activation_instance() !== ( $response['_instance'] ?? -1 ) ) break;
-			++$status;
-			if ( $this->get_activation_site_domain() !== ( $response['activation_domain'] ?? -1 ) ) break;
-			++$status;
+			++$status; // 2
+			if ( $this->get_activation_instance() !== ( $response['_instance'] ?? null ) ) break;
+			++$status; // 3
+			if ( $this->get_current_site_domain() !== ( $response['activation_domain'] ?? -1 ) ) break;
+			++$status; // 4
+			if ( ! \in_array( $response['_activation_level'] ?? '', [ 'Premium', 'Enterprise' ], true ) ) break;
+			++$status; // 5
+			if ( 'Enterprise' !== $response['_activation_level'] ) break;
+			++$status; // 6
 
-			if ( ! isset( $response['_activation_level'] ) ) break;
-
-			if ( \in_array( $response['_activation_level'], [ 'Premium', 'Enterprise' ], true ) )
-				++$status;
-
-			// Another one for Enterprise.
-			if ( 'Enterprise' === $response['_activation_level'] )
-				++$status;
 			break;
 		}
 
@@ -437,6 +436,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 2.1.0 The first parameter now accepts arguments.
+	 * @since 2.6.1 Removed memoization.
 	 *
 	 * @param array|null $args Should only be set during activation : {
 	 *    'api_key'          => string The license key used.
@@ -448,11 +448,6 @@ class AccountActivation extends Panes {
 
 		if ( null === $args && ! $this->is_connected_user() )
 			return false;
-
-		static $response;
-
-		if ( isset( $response ) )
-			return $response;
 
 		$status = $this->get_option( '_remote_subscription_status' ) ?: [
 			'timestamp' => 0,
@@ -470,9 +465,9 @@ class AccountActivation extends Panes {
 		// In-house transient cache.
 		$timestamp = (int) ceil( time() / $divider );
 
-		// Return cached status within 2 hours.
+		// If timeout hasn't passed, return registered data.
 		if ( $timestamp === $status['timestamp'] )
-			return $response = $status['status'];
+			return $status['status'];
 
 		if ( null !== $args ) {
 			// $args should only be supplied when doing activation.

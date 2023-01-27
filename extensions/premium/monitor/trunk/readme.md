@@ -83,6 +83,16 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a two-part system, changes are differentiated via Extension and API.*
 
+### 1.2.9
+
+[tsfep-release time="-1"]
+
+* **Extension:**
+	* **Fixed:** Connection errors are now forwarded correctly.
+* **API - Our servers:**
+	* **January 27th, 2023:**
+		* **Improved:** Licensing errors are now more descriptive.
+
 ### 1.2.8
 
 [tsfep-release time="October 4th, 2022"]

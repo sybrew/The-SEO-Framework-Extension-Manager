@@ -171,8 +171,11 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100109 );
 						break;
 
-					default:
 					case 'LICENSE_TOO_LOW':
+						$send['results'] = $this->get_ajax_notice( false, 1100110 );
+						break;
+
+					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100103 );
@@ -254,8 +257,11 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100309 );
 						break;
 
-					default:
 					case 'LICENSE_TOO_LOW':
+						$send['results'] = $this->get_ajax_notice( false, 1100310 );
+						break;
+
+					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100304 );
@@ -339,8 +345,11 @@ final class Ajax {
 						$send['results'] = $this->get_ajax_notice( false, 1100209 );
 						break;
 
-					default:
 					case 'LICENSE_TOO_LOW':
+						$send['results'] = $this->get_ajax_notice( false, 1100210 );
+						break;
+
+					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100203 );

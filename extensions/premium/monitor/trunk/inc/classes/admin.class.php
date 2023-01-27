@@ -914,9 +914,9 @@ final class Admin extends Api {
 			$this->get_fetch_button(),
 			$this->get_crawl_button(),
 		];
-		foreach ( $buttons as $button ) {
+
+		foreach ( $buttons as $button )
 			$content .= sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
-		}
 
 		return sprintf( '<div class="tsfem-e-monitor-cp-actions tsfem-pane-section">%s%s</div>', $title, $content );
 	}
@@ -1144,7 +1144,7 @@ final class Admin extends Api {
 		$title   = sprintf( '<h4 class=tsfem-info-title>%s</h4>', \esc_html__( 'Overview', 'the-seo-framework-extension-manager' ) );
 		$content = '';
 
-		$domain  = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
+		$domain  = \tsfem()->get_current_site_domain();
 		$_domain = $this->get_expected_domain();
 		$class   = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
 		$domain  = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );

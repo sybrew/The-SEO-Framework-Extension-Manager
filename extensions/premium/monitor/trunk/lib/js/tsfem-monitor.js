@@ -38,25 +38,25 @@ window.tsfem_e_monitor = {
 	 * @since 1.0.0
 	 * @param {String} nonce Ajax nonce
 	 */
-	nonce : tsfem_e_monitorL10n.nonce,
+	nonce: tsfem_e_monitorL10n.nonce,
 
 	/**
 	 * @since 1.0.0
 	 * @param {Array} i18n Localized strings
 	 */
-	i18n : tsfem_e_monitorL10n.i18n,
+	i18n: tsfem_e_monitorL10n.i18n,
 
 	/**
 	 * @since 1.0.0
 	 * @param {Number} rDataTimeout Remote data fetch timeout
 	 */
-	rDataTimeout : tsfem_e_monitorL10n.remote_data_timeout,
+	rDataTimeout: tsfem_e_monitorL10n.remote_data_timeout,
 
 	/**
 	 * @since 1.0.0
 	 * @param {Number} rCrawlTimeout Remote crawl request timeout
 	 */
-	rCrawlTimeout : tsfem_e_monitorL10n.remote_crawl_timeout,
+	rCrawlTimeout: tsfem_e_monitorL10n.remote_crawl_timeout,
 
 	/**
 	 * Expands readmore button's content whilst removing button.
@@ -104,9 +104,9 @@ window.tsfem_e_monitor = {
 			url: ajaxurl,
 			datatype: 'json',
 			data: {
-				'action' : 'tsfem_e_monitor_crawl',
-				'nonce' : tsfem_e_monitor.nonce,
-				'remote_crawl_timeout' : tsfem_e_monitor.rCrawlTimeout,
+				action:              'tsfem_e_monitor_crawl',
+				nonce:                tsfem_e_monitor.nonce,
+				remote_crawl_timeout: tsfem_e_monitor.rCrawlTimeout,
 			},
 			timeout: 10000,
 			async: true,
@@ -316,15 +316,15 @@ window.tsfem_e_monitor = {
 			return;
 
 		jQuery.ajax( {
-			method: 'POST',
-			url: ajaxurl,
+			method:   'POST',
+			url:      ajaxurl,
 			datatype: 'json',
-			data: {
-				'action' : 'tsfem_e_monitor_get_requires_fix',
-				'nonce' : tsfem_e_monitor.nonce,
+			data:     {
+				action: 'tsfem_e_monitor_get_requires_fix',
+				nonce:  tsfem_e_monitor.nonce,
 			},
-			timeout: 7000,
-			async: true,
+			timeout:  7000,
+			async:    true,
 		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
@@ -461,14 +461,14 @@ window.tsfem_e_monitor = {
 	 */
 	editSetting: function( event ) {
 
-		let clicker = event.target,
+		let clicker  = event.target,
 			selectId = void 0,
 			selector = void 0,
-			lastVal = 0,
+			lastVal  = 0,
 			lastText = '',
-			newVal = 0,
-			newText = '',
-			option = '';
+			newVal   = 0,
+			newText  = '',
+			option   = '';
 
 		if ( clicker.classList.contains( 'tsfem-loading' ) )
 			return false;
@@ -519,17 +519,17 @@ window.tsfem_e_monitor = {
 			clicker.innerHTML = newText;
 
 			jQuery.ajax( {
-				method: 'POST',
-				url: ajaxurl,
+				method:   'POST',
+				url:      ajaxurl,
 				datatype: 'json',
-				data: {
-					'action' : 'tsfem_e_monitor_update',
-					'nonce' : tsfem_e_monitor.nonce,
-					'option' : option,
-					'value' : newVal,
+				data:     {
+					action: 'tsfem_e_monitor_update',
+					nonce:  tsfem_e_monitor.nonce,
+					option: option,
+					value:  newVal,
 				},
-				timeout: 15000,
-				async: true,
+				timeout:  15000,
+				async:    true,
 			} ).done( response => {
 
 				response = tsf.convertJSONResponse( response );
@@ -570,6 +570,8 @@ window.tsfem_e_monitor = {
 						case 1010801: // Remote error.
 						case 1010802: // Instance mismatch.
 						case 1010803: // Site marked inactive by Monitor.
+						case 1010806: // Request limit reached.
+						case 1010807: // License too low.
 						case 1019002: // No access.
 						case 1010702: // No option sent.
 							loaderText = tsfem.i18n['UnknownError'];
@@ -621,9 +623,10 @@ window.tsfem_e_monitor = {
 		}
 		const onChange = function( event ) {
 			let _target = event.target;
-			newVal = _target.value;
+			newVal  = _target.value;
 			newText = _target.options[ _target.selectedIndex ].text;
-			option = _target.name;
+			option  = _target.name;
+
 			newVal == lastVal && reset() || doChange();
 		}
 		const clickOff = function( event ) {

@@ -127,7 +127,8 @@ class API extends Core {
 	}
 
 	/**
-	 * Returns domain host of plugin holder.
+	 * Returns registered domain host of plugin holder.
+	 *
 	 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
 	 * so only the host portion of the URL can be sent. For example the host portion might be
 	 * www.example.com or example.com. http://www.example.com includes the scheme http,
@@ -135,12 +136,29 @@ class API extends Core {
 	 * Sending only the host also eliminates issues when a client site changes from http to https,
 	 * but their activation still uses the original scheme.
 	 *
-	 * @since 1.0.0
-	 * @since 2.0.0 Now uses the site URL instead of the home URL.
+	 * @since 2.6.1
 	 *
 	 * @return string Domain Host.
 	 */
-	final protected function get_activation_site_domain() {
+	final public function get_expected_site_domain() {
+		return $this->get_option( 'activation_domain' );
+	}
+
+	/**
+	 * Returns domain host of plugin holder.
+	 *
+	 * Some web hosts have security policies that block the : (colon) and // (slashes) in http://,
+	 * so only the host portion of the URL can be sent. For example the host portion might be
+	 * www.example.com or example.com. http://www.example.com includes the scheme http,
+	 * and the host www.example.com.
+	 * Sending only the host also eliminates issues when a client site changes from http to https,
+	 * but their activation still uses the original scheme.
+	 *
+	 * @since 2.6.1
+	 *
+	 * @return string Domain Host.
+	 */
+	final public function get_current_site_domain() {
 		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 	}
 
@@ -289,7 +307,7 @@ class API extends Core {
 			'email'    => '',
 			'api_key'  => '',
 			'instance' => $this->get_activation_instance(),
-			'platform' => $this->get_activation_site_domain(),
+			'platform' => $this->get_current_site_domain(),
 			'version'  => TSF_EXTENSION_MANAGER_API_VERSION,
 		];
 

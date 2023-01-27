@@ -112,6 +112,9 @@ final class Layout extends Secure_Abstract {
 			case 'account-upgrade':
 				return static::get_account_upgrade_form();
 
+			case 'transfer-domain-button':
+				return static::get_transfer_domain_button();
+
 			default:
 				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
 				break;
@@ -141,13 +144,11 @@ final class Layout extends Secure_Abstract {
 			$ays_i18n        = \__( 'Are you sure?', 'the-seo-framework-extension-manager' );
 			$da_i18n         = \__( 'Disconnect account?', 'the-seo-framework-extension-manager' );
 
-			$button_class = 'tsfem-switcher-button tsfem-button tsfem-button-red tsfem-button-warning';
-
 			$button = vsprintf(
 				'<button type=submit title="%s" class="%s">%s</button>',
 				[
 					\esc_attr( $ays_i18n ),
-					$button_class,
+					'tsfem-switcher-button tsfem-button tsfem-button-red tsfem-button-warning',
 					\esc_html( $deactivate_i18n ),
 				]
 			);
@@ -159,7 +160,7 @@ final class Layout extends Secure_Abstract {
 						. '</div></div>';
 
 			$output = sprintf(
-				'<form name=deactivate action="%s" method=post id=tsfem-deactivation-form  autocomplete=off data-form-type=other>%s</form>',
+				'<form name=deactivate action="%s" method=post id=tsfem-deactivation-form autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( $tsfem->get_admin_page_url() ),
 				$nonce_action . $nonce . $switcher
 			);
@@ -168,6 +169,47 @@ final class Layout extends Secure_Abstract {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Outputs transfer domain button.
+	 *
+	 * @since 2.6.1
+	 *
+	 * @return string The transfer domain button.
+	 */
+	private static function get_transfer_domain_button() {
+
+		if ( 'form' === self::get_property( '_type' ) ) {
+
+			$tsfem = \tsfem();
+
+			$description = sprintf(
+				'<p>%s</p>',
+				\esc_html__( 'The domain of this site does not match the stored connection. You can transfer the license to this domain to regain API access.', 'the-seo-framework-extension-manager' )
+			);
+
+			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['transfer-domain'] );
+			$nonce        = \wp_nonce_field( self::$nonce_action['transfer-domain'], self::$nonce_name, true, false );
+
+			$submit = sprintf(
+				'<button type=submit name=submit id=tsfem-transfer-domain-submit class="tsfem-button tsfem-button-red tsfem-button-cloud">%s</button>',
+				\esc_attr__( 'Transfer domain', 'the-seo-framework-extension-manager' )
+			);
+
+			return $description . sprintf(
+				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
+				\esc_attr( self::$request_name['transfer-domain'] ),
+				\esc_url( $tsfem->get_admin_page_url() ),
+				'input-activation',
+				'',
+				"{$nonce_action}{$nonce}{$submit}"
+			);
+		} else {
+			\tsf()->_doing_it_wrong( __METHOD__, 'The domain transfer button only supports the form type.' );
+		}
+
+		return '';
 	}
 
 	/**
@@ -229,7 +271,7 @@ final class Layout extends Secure_Abstract {
 		$key                = $account['key'] ?? '';
 		$data               = $account['data'] ?? '';
 		$level              = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
-		$domain             = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
+		$current_domain     = $tsfem->get_current_site_domain();
 		$end_date           = '';
 		$payment_date       = '';
 		$requests_remaining = '';
@@ -238,10 +280,9 @@ final class Layout extends Secure_Abstract {
 			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
 				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
-				// UTC.
-				$end_date           = $data['status']['end_date'] ?? '';
-				$payment_date       = $data['status']['payment_date'] ?? '';
-				$domain             = $data['status']['activation_domain'] ?? '';
+				$activation_domain  = $data['status']['activation_domain'] ?? '';
+				$end_date           = $data['status']['end_date'] ?? ''; // UTC.
+				$payment_date       = $data['status']['payment_date'] ?? ''; // UTC.
 				$requests_remaining = $data['status']['requests_remaining'] ?? '';
 			}
 		}
@@ -321,38 +362,34 @@ final class Layout extends Secure_Abstract {
 			false
 		);
 
-		if ( $domain ) {
-			// Check for domain mismatch. If they don't match no premium extensions can be activated.
-			$_domain  = str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
-			$_warning = '';
-			$_classes = [ 'tsfem-dashicon' ];
+		// Check for domain mismatch. If they don't match no premium extensions can be activated.
+		$_warning = '';
+		$_classes = [ 'tsfem-dashicon' ];
 
-			if ( $_domain === $domain ) {
-				$_classes[] = 'tsfem-success';
-			} else {
-				$_warning = \tsf()->convert_markdown(
-					sprintf(
-						/* translators: `%s` = domain with markdown backtics */
-						\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, disconnect the account and reconnect.', 'the-seo-framework-extension-manager' ),
-						$_domain
-					),
-					[ 'code' ]
-				);
-				$_classes[] = 'tsfem-error';
-			}
-
-			$output .= static::wrap_row_content(
-				\esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ),
-				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-					// Not necessarily this domain.
-					$domain,
-					$_warning,
-					'',
-					$_classes
-				) ),
-				false
+		if ( empty( $activation_domain ) || $activation_domain === $current_domain ) {
+			$_classes[] = 'tsfem-success';
+		} else {
+			$_warning = \tsf()->convert_markdown(
+				sprintf(
+					/* translators: `%s` = domain with markdown backtics */
+					\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, disconnect the account and reconnect.', 'the-seo-framework-extension-manager' ),
+					$current_domain,
+				),
+				[ 'code' ]
 			);
+			$_classes[] = 'tsfem-error';
 		}
+
+		$output .= static::wrap_row_content(
+			\esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ),
+			HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
+				$activation_domain ?? $current_domain,
+				$_warning,
+				'',
+				$_classes
+			) ),
+			false
+		);
 
 		switch ( $tsfem->get_api_endpoint_type() ) :
 			case 'eu':
