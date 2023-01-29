@@ -56,7 +56,7 @@ final class SEO_By_Rank_Math extends Base {
 		 * NOTE: I considered making a separate transaction for each term meta entry
 		 * from Rank Math, and merge each new value into the "existing" serialized
 		 * array for TSF. However, in doing so, we must keep a list of what has
-		 * yet to be transmuted. this list can grow in massive proportions, not suitable
+		 * yet to be transmuted. This list can grow in massive proportions, not suitable
 		 * for storing in temp. Therefore, I opted for the more complex custom
 		 * transmutation route: fetch IDs containing ANY data, then grab ALL data for each
 		 * term ID, and merge into TSF's meta.

@@ -55,15 +55,15 @@ trait UI {
 		$this->ui_hook or \tsf()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
 		// Remove WordPress footer strings.
-		\add_action( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
-		\add_action( 'update_footer', '__return_empty_string', PHP_INT_MAX );
+		\add_filter( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
+		\add_filter( 'update_footer', '__return_empty_string', PHP_INT_MAX );
 
 		// Prevent annoying nags (they're hidden by CSS anyway).
 		\remove_action( 'admin_notices', 'update_nag', 3 );
 		\remove_action( 'admin_notices', 'maintenance_nag', 10 );
 
 		// Add body class.
-		\add_action( 'admin_body_class', [ $this, '_add_admin_body_class' ], 999, 1 );
+		\add_filter( 'admin_body_class', [ $this, '_add_admin_body_class' ], 999, 1 );
 
 		$this->enqueue_admin_scripts();
 	}

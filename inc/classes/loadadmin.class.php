@@ -681,7 +681,7 @@ final class LoadAdmin extends AdminPages {
 			'menu_title'  => '1',
 			'capability'  => $capability,
 			'menu_slug'   => $slug,
-			'callback'    => '\\__return_empty_string',
+			'callback'    => '__return_empty_string',
 		];
 
 		return $set[ $slug ] = (bool) \add_submenu_page(
@@ -705,9 +705,9 @@ final class LoadAdmin extends AdminPages {
 	 */
 	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
 
-		static $cache = false;
+		static $memo = false;
 
-		return $set ? $cache = true : $cache;
+		return $set ? $memo = true : $memo;
 	}
 
 	/**

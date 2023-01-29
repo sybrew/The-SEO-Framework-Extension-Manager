@@ -124,7 +124,7 @@ window.tsfem_e_import = function() {
 			( new Date() ).toLocaleTimeString() + " :: " + l10n.i18n.logMessages.requestImport.replace(
 				'%s',
 				form.querySelector( `[value="${formData.get( `${formNs}[choosePlugin]` )}"]` )?.dataset.title
-			),
+			)
 		).then( successMsg => {
 			_setLoggerLoader( 'end', 1, successMsg );
 		} ).catch( errorMsg => {

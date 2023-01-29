@@ -904,6 +904,7 @@ class Core {
 	 * @link https://developer.wordpress.org/reference/functions/wp_salt/
 	 * @since 1.0.0
 	 * @since 2.6.1 Added an options salt, formed from static entries on the site.
+	 *              Annoyingly, this affects staging on WP Engine unlike it previously didn't.
 	 *
 	 * @param string $scheme Authentication scheme, accepts 'instance', 'auth', 'secure_auth',
 	 *                       'nonce', and 'options'.

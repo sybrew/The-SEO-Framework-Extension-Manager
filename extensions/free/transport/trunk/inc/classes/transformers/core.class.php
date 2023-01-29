@@ -253,9 +253,9 @@ abstract class Core {
 		// Posts may have shared a term, let's not reset the cache.
 		if ( $term !== self::$term ) {
 			self::$term and \clean_term_cache(
-				self::$term->ID,        // Discrepancy, term object not accepted.
-				self::$term->taxonomy,  // Provide otherwise a new query takes place.
-				false                   // Keep taxonomy cache.
+				self::$term->term_id,  // Discrepancy, term object not accepted.
+				self::$term->taxonomy, // Provide otherwise a new query takes place.
+				false                  // Keep taxonomy cache.
 			);
 
 			self::$term       = $term;

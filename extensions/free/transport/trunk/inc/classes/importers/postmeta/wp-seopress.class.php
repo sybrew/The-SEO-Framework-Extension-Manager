@@ -291,16 +291,13 @@ final class WP_SEOPress extends Base {
 		if ( $actions['transport'] && ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
 			[ $to_table, $to_index ] = $data['to_data']['titleset']['index'];
 
-			$_actions = [
-				'transport' => true,
-				'delete'    => false,
-			];
-			$_results = [
-				'updated'     => 0,
-				'transformed' => 0,
-				'deleted'     => 0,
-				'sanitized'   => 0,
-			];
+			$_actions = array_merge(
+				$this->zero_actions,
+				[
+					'transport' => true,
+				]
+			);
+			$_results = $this->zero_results;
 
 			$this->transmute(
 				$data['to_data']['titleset']['value'],
@@ -324,7 +321,7 @@ final class WP_SEOPress extends Base {
 			$data['from'],
 			$data['to'],
 			$actions,
-			$results,
+			$results
 		);
 	}
 
@@ -345,7 +342,7 @@ final class WP_SEOPress extends Base {
 				$this->delete(
 					$data['item_id'],
 					[ $from_table, $from_index ],
-					$results,
+					$results
 				);
 		}
 
@@ -355,7 +352,7 @@ final class WP_SEOPress extends Base {
 		$this->delete(
 			$data['item_id'],
 			[ $from_table, $from_index ],
-			$results,
+			$results
 		);
 
 		yield 'transmutedResults' => [ $results, $actions ];
@@ -417,13 +414,17 @@ final class WP_SEOPress extends Base {
 
 		$set_value = null;
 
-		$actions = [
-			'transport' => true,
-			'delete'    => true,
-		];
+		$_actions = array_merge(
+			$this->zero_actions,
+			[
+				'transport' => true,
+			]
+		);
+		$_results = $this->zero_results;
 
 		// We cannot trust SEOPress with data -- if this failed, delete their nonsense.
 		// Don't set $actions['transport'] to false -- report it failed to user.
+		// In fact, the data is atrocious: SEOPress allows setting this value whether the term is assigned or not.
 		if ( empty( $data['set_value']['destination'] ) )
 			goto useless;
 
@@ -431,21 +432,21 @@ final class WP_SEOPress extends Base {
 		$transport_value = $data['set_value']['transport'];
 
 		if ( isset( $existing_value ) )
-			$actions['transport'] = false;
+			$_actions['transport'] = false;
 
 		$set_value = $existing_value ?? $transport_value;
 
 		if ( 'none' === $set_value )
 			goto useless;
 
-		$_pre_sanitize_value   = $set_value;
-		$set_value             = \absint( $set_value );
-		$results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
+		$_pre_sanitize_value    = $set_value;
+		$set_value              = \absint( $set_value );
+		$_results['sanitized'] += (int) ( $_pre_sanitize_value !== $set_value );
 
 		if ( \in_array( $set_value, $this->useless_data, true ) ) {
 			useless:;
-			$set_value            = null;
-			$actions['transport'] = false;
+			$set_value             = null;
+			$_actions['transport'] = false;
 		}
 
 		$this->transmute(
@@ -453,10 +454,10 @@ final class WP_SEOPress extends Base {
 			$data['item_id'],
 			[ $from_table, $from_index ],
 			[ $to_table, $to_index ],
-			$actions,
-			$results
+			$_actions,
+			$_results
 		);
 
-		yield 'transmutedResults' => [ $results, $actions ];
+		yield 'transmutedResults' => [ $_results, $_actions ];
 	}
 }

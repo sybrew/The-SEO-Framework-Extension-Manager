@@ -87,7 +87,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 
 		$item_ids = $wpdb->get_col(
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table/$indexes are escaped.
-			"SELECT DISTINCT `{$this->id_key}` FROM `$from_table` WHERE meta_key IN ('$indexes')",
+			"SELECT DISTINCT `{$this->id_key}` FROM `$from_table` WHERE meta_key IN ('$indexes')"
 		);
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
@@ -118,7 +118,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 		$metadata = $wpdb->get_results( $wpdb->prepare(
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table/$indexes are escaped.
 			"SELECT meta_key, meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key IN ('$indexes')",
-			$data['item_id'],
+			$data['item_id']
 		) );
 		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 

@@ -289,9 +289,8 @@ final class ListEdit {
 
 			// Memoize 'sanitized' bulk data, since that won't change over the loop.
 			static $data_bulk;
-			if ( ! isset( $data_bulk ) ) {
+			if ( ! isset( $data_bulk ) )
 				$data_bulk = \wp_unslash( $_REQUEST[ static::META_PREFIX_BULK ] );
-			}
 
 			/**
 			 * Runs after nonce and possibly interfering actions have been verified.

@@ -150,7 +150,7 @@ final class Handler {
 
 			/** @uses trait \TSF_Extension_Manager\Memory */
 			$this->increase_available_memory();
-			// Require 2 MB.
+			// Require at least 2 MB for the largest of posts.
 			$memory_bytes_requires = 2 * MB_IN_BYTES;
 
 			$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
@@ -382,7 +382,11 @@ final class Handler {
 
 							$_data = $success ? $onsuccess : $onfailure;
 
-							if ( \in_array( $_data['addTo'] ?? '', [ 'succeeded', 'skipped', 'failed', 'deleted' ], true ) )
+							if ( \in_array(
+								$_data['addTo'] ?? '',
+								[ 'succeeded', 'skipped', 'failed', 'deleted' ],
+								true
+							) )
 								${$_data['addTo']} += $_data['count'];
 
 							if ( isset( $_data['message'] ) ) {

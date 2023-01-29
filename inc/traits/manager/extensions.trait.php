@@ -1007,9 +1007,9 @@ trait Extensions_Actions {
 
 		if ( 0 === $val ) {
 			// Also disable WP_DEBUG functions used by The SEO Framework.
-			\add_action( 'doing_it_wrong_trigger_error', '\\__return_false' );
-			\add_action( 'deprecated_function_trigger_error', '\\__return_false' );
-			\add_action( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '\\__return_false' );
+			\add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
+			\add_filter( 'deprecated_function_trigger_error', '__return_false' );
+			\add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
 		}
 
 		// phpcs:enable, WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions

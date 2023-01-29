@@ -128,7 +128,7 @@ final class Front {
 	 * @since 1.0.0
 	 */
 	protected function remove_amp_articles() {
-		\add_filter( 'amp_post_template_metadata', '\\__return_empty_array', 10 );
+		\add_filter( 'amp_post_template_metadata', '__return_empty_array', 10 );
 	}
 
 	/**

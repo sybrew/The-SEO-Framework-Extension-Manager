@@ -242,16 +242,13 @@ final class SEO_By_Rank_Math extends Base {
 		if ( $actions['transport'] && ! \in_array( $data['set_value'], $this->useless_data, true ) ) {
 			[ $to_table, $to_index ] = $data['to_data']['titleset']['index'];
 
-			$_actions = [
-				'transport' => true,
-				'delete'    => false,
-			];
-			$_results = [
-				'updated'     => 0,
-				'transformed' => 0,
-				'deleted'     => 0,
-				'sanitized'   => 0,
-			];
+			$_actions = array_merge(
+				$this->zero_actions,
+				[
+					'transport' => true,
+				]
+			);
+			$_results = $this->zero_results;
 
 			$this->transmute(
 				$data['to_data']['titleset']['value'],
@@ -275,7 +272,7 @@ final class SEO_By_Rank_Math extends Base {
 			$data['from'],
 			$data['to'],
 			$actions,
-			$results,
+			$results
 		);
 	}
 
@@ -353,17 +350,14 @@ final class SEO_By_Rank_Math extends Base {
 		foreach ( $data['to_data']['transmuters'] as $type => $transmuter ) {
 			[ $to_table, $to_index ] = $transmuter;
 
-			$_actions = [
-				'transport' => true,
-				'delete'    => false,
-			];
+			$_actions = array_merge(
+				$this->zero_actions,
+				[
+					'transport' => true,
+				]
+			);
 			// We landed here without prior transformation or sanitization.
-			$_results = [
-				'updated'     => 0,
-				'transformed' => 0,
-				'deleted'     => 0,
-				'sanitized'   => 0,
-			];
+			$_results = $this->zero_results;
 
 			$existing_value  = $data['set_value']['existing'][ $type ] ?? null;
 			$transport_value = $data['set_value']['transport'][ $type ] ?? null;
@@ -394,7 +388,7 @@ final class SEO_By_Rank_Math extends Base {
 		$this->delete(
 			$data['item_id'],
 			[ $from_table, $from_index ],
-			$results,
+			$results
 		);
 	}
 
@@ -416,7 +410,7 @@ final class SEO_By_Rank_Math extends Base {
 				$this->delete(
 					$data['item_id'],
 					[ $from_table, $from_index ],
-					$results,
+					$results
 				);
 
 		[ $from_table, $from_index ] = $data['from'];
@@ -425,7 +419,7 @@ final class SEO_By_Rank_Math extends Base {
 		$this->delete(
 			$data['item_id'],
 			[ $from_table, $from_index ],
-			$results,
+			$results
 		);
 
 		yield 'transmutedResults' => [ $results, $actions ];

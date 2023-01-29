@@ -92,6 +92,32 @@ abstract class Core {
 	protected $cache_clear_cb = null;
 
 	/**
+	 * @since 1.1.0
+	 * @var array The results array, zero'd. Immutable.
+	 */
+	protected $zero_results = [
+		'updated'     => 0,
+		'transformed' => 0,
+		'deleted'     => 0,
+		'sanitized'   => 0, // This value is recorded but useless. Also inaccurate if not updated.
+		'inserted'    => 0,
+		'only_end'    => 0,
+		'only_delete' => 0,
+	];
+
+	/**
+	 * @since 1.1.0
+	 * @var array The actions array, zero'd. Immutable.
+	 */
+	protected $zero_actions = [
+		'transform' => false,
+		'transport' => false,
+		'delete'    => false,
+		'sanitize'  => false,
+		'cleanup'   => false,
+	];
+
+	/**
 	 * Sets up class, mainly required variables.
 	 *
 	 * @since 1.0.0
@@ -247,23 +273,23 @@ abstract class Core {
 						? false
 						: [ $from_table, $from_index ] === [ $to_table, $to_index ]; // phpcs:ignore, WordPress.PHP.YodaConditions.NotYoda -- Nani?
 
-					$results = [
-						'updated'     => 0,
-						'transformed' => 0,
-						'deleted'     => 0,
-						'sanitized'   => 0,
-						'inserted'    => 0,
-						'only_end'    => (int) $has_transmuter_to,
-						'only_delete' => (int) $is_deletion_only,
-					];
-					$actions = [
-						'transform' => $has_transformer,
-						// If the data goes nowhere there's no need to delete nor transport.
-						'transport' => ! $identical_index,
-						'delete'    => $from_index && ! $identical_index,
-						'sanitize'  => $has_sanitizer,
-						'cleanup'   => false,
-					];
+					$results = array_merge(
+						$this->zero_results,
+						[
+							'only_end'    => (int) $has_transmuter_to,
+							'only_delete' => (int) $is_deletion_only,
+						]
+					);
+					$actions = array_merge(
+						$this->zero_actions,
+						[
+							'transform' => $has_transformer,
+							// If the data goes nowhere there's no need to delete nor transport.
+							'transport' => ! $identical_index,
+							'delete'    => $from_index && ! $identical_index,
+							'sanitize'  => $has_sanitizer,
+						]
+					);
 					$cleanup = [];
 
 					$existing_value  = null; // Value already in put by new plugin.

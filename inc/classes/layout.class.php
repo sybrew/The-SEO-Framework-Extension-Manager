@@ -373,7 +373,7 @@ final class Layout extends Secure_Abstract {
 				sprintf(
 					/* translators: `%s` = domain with markdown backtics */
 					\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, disconnect the account and reconnect.', 'the-seo-framework-extension-manager' ),
-					$current_domain,
+					$current_domain
 				),
 				[ 'code' ]
 			);

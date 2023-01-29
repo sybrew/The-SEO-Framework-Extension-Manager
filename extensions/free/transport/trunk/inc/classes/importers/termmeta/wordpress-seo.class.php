@@ -259,7 +259,7 @@ final class WordPress_SEO extends Base {
 			[ $from_table, $from_index ], // Should be [ null, null ]
 			[ $to_table, $to_index ],
 			$actions,
-			$results,
+			$results
 		);
 
 		yield 'transmutedResults' => [ $results, $actions ];

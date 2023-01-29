@@ -76,7 +76,7 @@ class Api extends Data {
 				[
 					'request' => "extension/monitor/$type",
 				]
-			),
+			)
 		);
 		$response = json_decode( $response );
 
