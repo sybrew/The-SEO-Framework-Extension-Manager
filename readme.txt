@@ -67,6 +67,7 @@ TODO add "reset instance" button -- also visible when using constant activation
 	* This is especially handy for multisite domain transfers.
 	* TODO This won't work for switching between development, staging, and production environments, unless the file paths are identical.
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
+	* Only with a new installation, downgrading to an earlier version can cause the new instance to be invalidated. If you wish to downgrade, disconnect your account via Extension Manager and reconnect to set up a legacy instance key.
 * **Improved:** Increased clarity about how the API connection is validated.
 * **Improved:** Notification animations are faster now, no longer cause minor text movement, and no longer cause large screen movement due to race conditions.
 * **Improved:** Optimized option handling for improved performance.
