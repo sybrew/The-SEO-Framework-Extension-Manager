@@ -109,7 +109,7 @@ trait Extensions_Properties {
 				'area'         => 'setup',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664387758',
+				'last_updated' => '1675059167',
 				'requires'     => '5.5',
 				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => 'a9729c0211234344a15c830ec35073b676f79cc6b3be29eff7c7d928d18b6583',
-			'sha1'   => '4895778334f9c5ef76837660bd5eacba008d2a0d',
-			'md5'    => 'd3aba691a875245789c5787cab3d0b25',
+			'sha256' => '7295673e80bafca2a23d470eb65dff7e3a58ee58dadcfd8578a545a50ae36a04',
+			'sha1'   => 'ae98d42261294f25fb2a44db4fd4e1f378eb2454',
+			'md5'    => 'd835a638da42ce35f15e97472bb46cec',
 		];
 	}
 
@@ -265,10 +265,6 @@ trait Extensions_Properties {
 				// The user can't remove this notice without disconnecting the account. TODO Purge it? --> Not here!
 				// TODO run $this->disable_extension( $slug ) and register a notice: "${slug} no longer exists"
 				// TODO Forward this to the upgrader for whenever an extension's removed.
-				// \tsf()->_doing_it_wrong(
-				// 	__CLASS__ . '::' . __FUNCTION__,
-				// 	sprintf( 'You must specify an existing extension slug. <code>%s</code> does not exist.', \esc_html( $slug ) )
-				// );
 				return [];
 			}
 		} else {

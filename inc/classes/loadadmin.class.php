@@ -82,7 +82,7 @@ final class LoadAdmin extends AdminPages {
 				'activation_email' => $current['email'],
 				'api_key'          => $current['key'],
 			];
-			$this->handle_request( 'deactivation', $args );
+			$this->handle_activation_request( 'deactivation', $args );
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
@@ -98,7 +98,7 @@ final class LoadAdmin extends AdminPages {
 				'activation_email' => $data['email'],
 				'api_key'          => $data['key'],
 			];
-			$this->handle_request( 'activation', $args );
+			$this->handle_activation_request( 'activation', $args );
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
@@ -213,7 +213,7 @@ final class LoadAdmin extends AdminPages {
 					'activation_email' => \sanitize_email( $options['email'] ),
 				];
 
-				$this->handle_request( 'activation', $args );
+				$this->handle_activation_request( 'activation', $args );
 				break;
 
 			case $this->request_name['activate-free']:
@@ -244,7 +244,7 @@ final class LoadAdmin extends AdminPages {
 				}
 
 				// At our API, we remerge on instance or domain match.
-				if ( $this->handle_request( 'activation', $args ) )
+				if ( $this->handle_activation_request( 'activation', $args ) )
 					$this->revalidate_subscription(); // Get new domain data JIT.
 				break;
 
@@ -263,7 +263,7 @@ final class LoadAdmin extends AdminPages {
 					'activation_email' => \sanitize_email( $this->get_option( 'activation_email' ) ),
 				];
 
-				if ( ! $this->handle_request( 'deactivation', $args ) ) {
+				if ( ! $this->handle_activation_request( 'deactivation', $args ) ) {
 					// Deactivate regardless, without requesting.
 					$this->kill_options();
 				}

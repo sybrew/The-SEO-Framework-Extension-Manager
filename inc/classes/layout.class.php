@@ -277,7 +277,7 @@ final class Layout extends Secure_Abstract {
 		$requests_remaining = '';
 
 		if ( $data ) {
-			if ( isset( $data['status']['status_check'] ) && 'inactive' === $data['status']['status_check'] ) {
+			if ( 'active' !== ( $data['status']['status_check'] ?? 'inactive' ) ) {
 				$level = \__( 'Decoupled', 'the-seo-framework-extension-manager' );
 			} else {
 				$activation_domain  = $data['status']['activation_domain'] ?? '';

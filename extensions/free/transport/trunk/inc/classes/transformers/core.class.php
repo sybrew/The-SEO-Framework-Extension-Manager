@@ -400,7 +400,7 @@ abstract class Core {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $text The complete text with matched syntax. (Unused).
+	 * @param string $text The complete text with matched syntax. (Unused, from Yoast API).
 	 * @param string $type The registered %type% of the transformation.
 	 * @return string
 	 */
@@ -814,12 +814,22 @@ abstract class Core {
 	/**
 	 * Returns current post title.
 	 *
+	 * Yoast SEO supports this feature for posts and terms in the back-end.
+	 * But does not support terms on the front-end.
+	 * Since Rank Math effectively stole most of Yoast SEO's code without proper
+	 * credit (their actions are illegal), they have the same bug.
+	 * We honor their output.
+	 * We care very little about SEOPress, for anything they do is sporadic, but
+	 * they somehow honor the same system in this case.
+	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
 	protected static function get_post_title() {
 
+		// Yoast SEO supports posts on the front-end, but does support terms in the back-end.
+		// Since Rank Math stole Yoast's
 		if ( 'post' !== self::$main_object_type ) return '';
 
 		return self::$post->post_title ?? '';

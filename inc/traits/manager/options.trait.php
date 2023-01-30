@@ -257,7 +257,7 @@ trait Options {
 		$hash = $this->hash_options( $options );
 
 		if ( \strlen( $hash ) ) {
-			$instance = $instance ?: $this->get_option( '_instance' );
+			$instance = $instance ?: $this->get_option( '_instance' ); // Get latest.
 			$updated  = \strlen( $instance ) && \update_option( "tsfem_i_$instance", $hash );
 
 			if ( ! $updated ) {
@@ -277,7 +277,7 @@ trait Options {
 	 * @since 2.6.1
 	 *
 	 * @param mixed $options The option data to compare hash with.
-	 * @return bool True when hash passes, false on failure.
+	 * @return string The hashed options.
 	 */
 	protected function hash_options( $options ) {
 		switch ( $options['_instance_version'] ?? '1.0' ) {
@@ -336,16 +336,21 @@ trait Options {
 	 * Deletes all plugin options when an options breach has been spotted.
 	 *
 	 * @since 1.0.0
+	 * @since 1.1.0 Lowered the chance of leaving stray options behind.
 	 * @uses $this->killed_options
 	 *
 	 * @return bool True on success, false on failure.
 	 */
 	final protected function kill_options() {
 
-		$instance = $this->get_option( '_instance' );
-
-		// Don't record whether this is a success. It's lame if it fails, but there's no harm other than an autoloaded string.
-		\delete_option( "tsfem_i_$instance" );
+		foreach ( [
+			$this->get_option( '_instance' ),  // Current.
+			$this->get_options_instance_key(), // Plausibly old.
+		] as $instance ) {
+			// Don't record whether this is a success. It's lame if it fails,
+			// but there's no harm done, other than having an autoloaded string.
+			\delete_option( "tsfem_i_$instance" );
+		}
 
 		$this->killed_options = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		$this->clear_options_cache();

@@ -59,6 +59,7 @@ class API extends Core {
 	 * Fetches status API request and returns response data.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.1 Renamed to more accurately describe the function.
 	 *
 	 * @param string $type The request type.
 	 * @param array  $args : {
@@ -71,7 +72,7 @@ class API extends Core {
 	 *    Activation/Status: Reponse data.
 	 * }
 	 */
-	final protected function handle_request( $type = 'status', $args = [] ) {
+	final protected function handle_activation_request( $type = 'status', $args = [] ) {
 
 		if ( empty( $args['api_key'] ) ) {
 			$this->set_error_notice( [ 101 => '' ] );
@@ -109,7 +110,7 @@ class API extends Core {
 		$key   = trim( $args['api_key'] );
 		$email = \sanitize_email( $args['activation_email'] );
 
-		$response = $this->handle_response(
+		$response = $this->handle_activation_response(
 			[
 				'request'          => $type,
 				'api_key'          => $key,
@@ -160,24 +161,6 @@ class API extends Core {
 	 */
 	final public function get_current_site_domain() {
 		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
-	}
-
-	/**
-	 * Returns website's instance key from option. Generates one if non-existent.
-	 *
-	 * @since 1.0.0
-	 * @since 2.6.1 Now generates numerics at the end, to reduce potential offensive content.
-	 *
-	 * @return string Instance key.
-	 */
-	final protected function get_activation_instance() {
-		static $instance;
-		return $instance ?? (
-			$instance = $this->get_option( '_instance' )
-				?: \wp_generate_password( 29, false )
-					. mt_rand( 12, 98 )
-					. mt_rand( 1, 9 ) // Remove likelihood of leading zeros.
-		);
 	}
 
 	/**
@@ -294,7 +277,7 @@ class API extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 2.1.0 Now listens to the `TSF_EXTENSION_MANAGER_API_VERSION` and `TSF_EXTENSION_MANAGER_DEV_API` constants.
-	 * @see $this->handle_request() The request validation wrapper.
+	 * @see $this->handle_activation_request() The request validation wrapper.
 	 *
 	 * @param array $args     The API query parameters.
 	 * @param bool  $internal Whether the API call is for $this object.
@@ -306,7 +289,7 @@ class API extends Core {
 			'request'  => '',
 			'email'    => '',
 			'api_key'  => '',
-			'instance' => $this->get_activation_instance(),
+			'instance' => $this->get_options_instance_key(),
 			'platform' => $this->get_current_site_domain(),
 			'version'  => TSF_EXTENSION_MANAGER_API_VERSION,
 		];
@@ -354,7 +337,8 @@ class API extends Core {
 	 * Handles AME response and sets options.
 	 *
 	 * @since 1.0.0
-	 * @see $this->handle_request() The request validation wrapper.
+	 * @since 2.6.1 Renamed to more accurately describe the function.
+	 * @see $this->handle_activation_request() The request validation wrapper.
 	 *
 	 * @param array  $args : {
 	 *    'request'          => string The request type.
@@ -365,7 +349,7 @@ class API extends Core {
 	 * @param bool   $explain  Whether to show additional info in error messages.
 	 * @return bool True on successful response, false on failure.
 	 */
-	final protected function handle_response( $args, $response, $explain = false ) {
+	final protected function handle_activation_response( $args, $response, $explain = false ) {
 
 		if ( ! $response ) {
 			$this->set_error_notice( [ 301 => '' ] );

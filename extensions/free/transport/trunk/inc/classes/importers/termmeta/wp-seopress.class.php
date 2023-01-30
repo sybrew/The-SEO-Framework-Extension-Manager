@@ -197,26 +197,25 @@ final class WP_SEOPress extends Base {
 				[ $wpdb->termmeta, '_seopress_social_fb_img_height' ], // delete
 			],
 			[
-				[ $wpdb->termmeta, '_seopress_social_fb_img_overlay' ], // delete
+				[ $wpdb->termmeta, '_seopress_social_twitter_img' ], // delete
 			],
 			[
-				[ $wpdb->termmeta, '_seopress_social_twitter_img' ], // delete
+				[ $wpdb->termmeta, '_seopress_social_twitter_img_width' ], // delete
+			],
+			[
+				[ $wpdb->termmeta, '_seopress_social_twitter_img_height' ], // delete
 			],
 			[
 				[ $wpdb->termmeta, '_seopress_robots_imageindex' ], // delete
 			],
 			[
-				[ $wpdb->termmeta, '_seopress_robots_archive' ], // delete
-			],
-			[
 				[ $wpdb->termmeta, '_seopress_robots_snippet' ], // delete
 			],
 			[
-				[ $wpdb->termmeta, '_seopress_redirections_type' ], // delete
+				[ $wpdb->termmeta, '_seopress_robots_breadcrumbs' ], // delete
 			],
 			[
-				// SEOPress writes this at their import this but never uses it.
-				[ $wpdb->termmeta, '_seopress_analysis_target_kw' ], // delete
+				[ $wpdb->termmeta, '_seopress_redirections_type' ], // delete
 			],
 		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment

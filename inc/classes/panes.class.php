@@ -465,14 +465,20 @@ class Panes extends API {
 		Layout::set_nonces( 'request_name', $this->request_name );
 		Layout::set_nonces( 'nonce_action', $this->nonce_action );
 
+		$options_instance = $this->get_options_instance_key();
+		$options_valid    = $this->are_options_valid();
+		$options_hash     = substr( \get_option( "tsfem_i_$options_instance" ), -4 );
+
 		Layout::set_account( $this->get_subscription_status() );
 		Layout::set_misc( [
 			'options' => [
-				'valid'     => $this->are_options_valid(),
-				'instance'  => substr( $this->get_option( '_instance' ), -4 ),
-				'hash'      => [
-					'expected' => substr( \get_option( 'tsfem_i_' . $this->get_option( '_instance' ) ), -4 ),
-					'actual'   => substr( $this->hash_options( \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] ) ), -4 ),
+				'valid'    => $options_valid,
+				'instance' => substr( $options_instance, -4 ),
+				'hash'     => [
+					'expected' => $options_hash,
+					'actual'   => $options_valid
+						? $options_hash
+						: substr( $this->hash_options( \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] ) ), -4 ),
 				],
 			],
 		] );

@@ -208,6 +208,25 @@ class Core {
 	}
 
 	/**
+	 * Returns website's instance key from option. Generates one if non-existent.
+	 *
+	 * @since 1.0.0
+	 * @since 2.6.1 1. Now generates numerics at the end, to reduce potential offensive content.
+	 *              2. Renamed from `get_activation_instance()` and moved to Core to allow front-end tests.
+	 *
+	 * @return string Instance key.
+	 */
+	final protected function get_options_instance_key() {
+		static $instance;
+		return $instance ?? (
+			$instance = $this->get_option( '_instance' )
+				?: \wp_generate_password( 29, false )
+					. mt_rand( 12, 98 )
+					. mt_rand( 1, 9 ) // Remove likelihood of leading zeros.
+		);
+	}
+
+	/**
 	 * Verifies integrity of the options.
 	 *
 	 * @since 1.0.0
@@ -228,7 +247,7 @@ class Core {
 
 		return $memo = hash_equals(
 			$this->hash_options( $options ),
-			(string) \get_option( 'tsfem_i_' . $this->get_option( '_instance' ) )
+			(string) \get_option( "tsfem_i_{$this->get_options_instance_key()}" )
 		);
 	}
 
@@ -1211,10 +1230,8 @@ class Core {
 	 */
 	final protected function validate_extensions_checksum( $checksum ) {
 
-		$required = [ 'hash', 'matches', 'type' ];
-
 		// If the required keys aren't found, bail.
-		if ( ! $this->has_required_array_keys( $checksum, $required ) ) {
+		if ( ! $this->has_required_array_keys( $checksum, [ 'hash', 'matches', 'type' ] ) ) {
 			return -1;
 		} elseif ( ! hash_equals( $checksum['matches'][ $checksum['type'] ], $checksum['hash'] ) ) {
 			return -2;
@@ -1241,9 +1258,8 @@ class Core {
 
 		$last = 0;
 
-		foreach ( Extensions::get( 'extensions_list' ) as $slug => $data ) {
+		foreach ( Extensions::get( 'extensions_list' ) as $slug => $data )
 			$order[ $slug ] = ( $last = $last + 10 );
-		}
 
 		Extensions::reset();
 
@@ -1413,7 +1429,7 @@ class Core {
 	 * @since 1.5.0
 	 *
 	 * @param array $input The input with possible keys.
-	 * @param array $keys The wanted keys, e.g. ['key','key2']
+	 * @param array $keys The desired keys, e.g. ['key','key2']
 	 * @return array The $input array with only indexes from $keys.
 	 */
 	final public function filter_keys( $input, $keys ) {

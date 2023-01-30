@@ -205,7 +205,7 @@ class AccountActivation extends Panes {
 			'activation_email'  => '',
 			'_activation_level' => 'Free',
 			'_activated'        => 'Activated',
-			'_instance'         => $this->get_activation_instance(),
+			'_instance'         => $this->get_options_instance_key(),
 			'_instance_version' => '2.0', // If not in database, assume 1.0
 		];
 	}
@@ -286,6 +286,7 @@ class AccountActivation extends Panes {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 Added margin of error handling.
+	 * @since 2.6.1 Now ignores margin of error on instance failure to prevent a soft lockout.
 	 * @TODO lower margin of error if server maintains stable. Well, we had a 99.991% uptime in 2018 =/
 	 *
 	 * @param bool $moe       Whether to allow a margin of error.
@@ -295,7 +296,7 @@ class AccountActivation extends Panes {
 	 */
 	protected function do_deactivation( $moe = false, $downgrade = false ) {
 
-		if ( $moe ) {
+		if ( $moe && $this->get_option( '_instance' ) ) {
 			$expire = $this->get_option( 'moe' ) ?: time() + DAY_IN_SECONDS * 3;
 			if ( $expire >= time() || $expire < ( time() - DAY_IN_SECONDS * 7 ) ) {
 				$this->update_option( 'moe', time() + DAY_IN_SECONDS * 3 );
@@ -416,7 +417,7 @@ class AccountActivation extends Panes {
 			++$status; // 1
 			if ( 'active' !== $response['status_check'] ) break;
 			++$status; // 2
-			if ( $this->get_activation_instance() !== ( $response['_instance'] ?? null ) ) break;
+			if ( $this->get_options_instance_key() !== ( $response['_instance'] ?? null ) ) break;
 			++$status; // 3
 			if ( $this->get_current_site_domain() !== ( $response['activation_domain'] ?? -1 ) ) break;
 			++$status; // 4
@@ -480,7 +481,7 @@ class AccountActivation extends Panes {
 			];
 		}
 
-		$response = $this->handle_request( 'status', $args );
+		$response = $this->handle_activation_request( 'status', $args );
 		$success  = false;
 
 		if ( $response )
