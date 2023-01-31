@@ -79,9 +79,14 @@ TODO add "reset instance" button -- also visible when using constant activation
 * **Other:** Modernized code.
 * **Other:** New translations are available. TODO update POT
 
+TODO test validity XML for symbols.php on mobile and gecko
+
 **Updated extensions:**
 
+* [Focus at version 1.5.3](https://theseoframework.com/extensions/focus/#changelog)
+* [Honeypot at version 2.0.1](https://theseoframework.com/extensions/honeypot/#changelog)
 * [AMP at version 1.2.1](https://theseoframework.com/extensions/amp/#changelog)
+* [Transport at version 1.1.0](https://theseoframework.com/extensions/trasnport/#changelog)
 * [Monitor at version 1.2.9](https://theseoframework.com/extensions/monitor/#changelog)
 
 = 2.6.0 - Mobile SEO =
