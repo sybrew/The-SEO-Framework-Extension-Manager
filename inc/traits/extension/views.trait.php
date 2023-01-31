@@ -55,7 +55,6 @@ trait Extension_Views {
 		foreach ( $__args as $__k => $__v ) $$__k = $__v;
 		unset( $__k, $__v, $__args );
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$_secret = $this->create_view_secret( uniqid( '', true ) );
 
 		include $this->_get_view_location( $view );

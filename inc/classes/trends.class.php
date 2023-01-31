@@ -90,7 +90,7 @@ final class Trends {
 			return $output;
 
 		// Google Webmasters official blog feed.
-		$feed_url = 'https://www.blogger.com/feeds/32069983/posts/default';
+		$feed_url = 'https://feeds.feedburner.com/blogspot/amDG';
 
 		$http_args = [
 			'timeout'     => 7,
@@ -112,100 +112,63 @@ final class Trends {
 		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
 		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
-		if ( empty( $xml->entry ) ) {
+		if ( empty( $xml->channel->item ) ) {
 			// Retry in hour when server is down.
 			\set_transient( $transient_name, '', HOUR_IN_SECONDS );
 			return '';
 		}
-
-		$entry = $xml->entry;
-		unset( $xml );
 
 		$output   = '';
 		$a_output = [];
 
 		$tsf = \tsf();
 
-		$max = 15;
+		$max = 6;
 		$i   = 0;
-		foreach ( $entry as $object ) :
+		foreach ( $xml->channel->item as $obj ) :
+			// phpcs:disable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- XML, not my fault.
 
 			if ( $i >= $max )
 				break;
 
-			if ( ! isset( $object->category ) || ! \is_object( $object->category ) )
+			// A little too many defence clauses -- I tried to combine them as best I could.
+			if ( ! isset( $obj->title, $obj->link, $obj->description, $obj->pubDate ) )
 				continue;
 
-			$found = false;
-			// Filter terms.
-			foreach ( $object->category as $category ) :
-				// PHP7+ must convert to array...
-				$term = (array) $category;
-
-				$term = ! empty( $term['@attributes']['term'] ) ? $term['@attributes']['term'] : '';
-				if ( $term && \in_array( $term, [ 'search results', 'crawling and indexing', 'general tips' ], true ) ) {
-					$found = true;
-					break;
-				}
-				continue;
-			endforeach;
-			unset( $category );
-			if ( ! $found )
+			$link = \esc_url( strtok( $obj->link->__toString(), '#' ) );
+			if ( ! $link )
 				continue;
 
-			$link = '';
-			// Fetch link.
-			foreach ( $object->link as $link_object ) :
-				// PHP7+ must convert to array...
-				$link_object = (array) $link_object;
-
-				$type = ! empty( $link_object['@attributes']['type'] ) ? $link_object['@attributes']['type'] : '';
-				if ( 'text/html' === $type ) {
-					$rel = ! empty( $link_object['@attributes']['rel'] ) ? $link_object['@attributes']['rel'] : '';
-					if ( \in_array( $rel, [ 'self', 'alternate' ], true ) ) {
-
-						$link = ! empty( $link_object['@attributes']['href'] ) ? $link_object['@attributes']['href'] : '';
-
-						if ( $link )
-							$link = strtok( $link, '#' );
-
-						break;
-					}
-				}
-			endforeach;
-			unset( $link_object );
-			if ( empty( $link ) )
-				continue;
-
-			// @note: $object->updated also exists.
-			$date = isset( $object->published ) ? $object->published->__toString() : '';
-			$date = $date ? '<time>' . \date_i18n( \get_option( 'date_format' ), strtotime( $date ) ) . '</time>' : '';
-
-			$title = isset( $object->title ) ? $object->title->__toString() : '';
-			$title = $title ? $tsf->escape_title( $title ) : '';
-
+			$title = $tsf->escape_title( $obj->title->__toString() );
 			if ( ! $title )
 				continue;
 
-			$content = isset( $object->content ) ? $object->content->__toString() : '';
-			$content = $content ? \wp_strip_all_tags( $content ) : '';
-			unset( $object );
+			// Let's not advertise.
+			if ( false !== stripos( "$link$title", 'conference' )
+			|| false !== stripos( "$link$title", 'thanks' )
+			|| false !== stripos( "$link$title", 'live' )
+			|| false !== stripos( "$link$title", 'highlights' )
+			) continue;
 
-			$content = $tsf->trim_excerpt( $content, 0, 300 );
-			$content = $tsf->escape_description( $content );
+			$date = strtotime( $obj->pubDate->__toString() );
+			if ( ! $date )
+				continue;
+
+			$description = $tsf->trim_excerpt( $obj->description->__toString(), 0, 234 ); // Magic number, because why not.
+			$description = $tsf->escape_description( $description );
+			if ( ! $description )
+				continue;
 
 			// No need for translations, it's English only.
-			$title = sprintf(
-				'<h4><a href="%s" target=_blank rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
-				\esc_url( $link, [ 'https', 'http' ] ),
-				$title
-			);
-
 			$_output = sprintf(
 				'<div class="tsfem-feed-entry tsfem-flex tsfem-flex-nowrap"><div class="tsfem-feed-top tsfem-flex tsfem-flex-row tsfem-flex-nogrow tsfem-flex-space tsfem-flex-nowrap">%s%s</div><div class=tsfem-feed-content>%s</div></div>',
-				$title,
-				$date,
-				$content
+				sprintf(
+					'<h4><a href="%s" target=_blank rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
+					\esc_url( $link, [ 'https', 'http' ] ),
+					$title
+				),
+				'<time>' . \date_i18n( \get_option( 'date_format' ), $date ) . '</time>',
+				$description
 			);
 
 			// Maintain full list for transient / non-AJAX.
@@ -215,6 +178,7 @@ final class Trends {
 
 			unset( $_output );
 			$i++;
+			// phpcs:enable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		endforeach;
 
 		\set_transient( $transient_name, $output, DAY_IN_SECONDS * 2 );

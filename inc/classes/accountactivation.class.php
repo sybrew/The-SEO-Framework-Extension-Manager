@@ -361,7 +361,7 @@ class AccountActivation extends Panes {
 			case 3:
 				// Domain mismatch. Everything else is OK. Don't downgrade to Free.
 				// User gets notified via the CP pane on certain actions and can not perform API actions.
-				$this->update_option( 'requires_domain_transfer', true );
+				$this->update_option( '_requires_domain_transfer', true );
 				break;
 
 			case 4:

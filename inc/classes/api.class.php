@@ -197,7 +197,6 @@ class API extends Core {
 	 */
 	final protected function set_api_endpoint_type( $type = null ) {
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- parser doesn't recognize reference funcs.
 		$endpoint = &$this->get_api_endpoint_type();
 
 		if ( $type ) {

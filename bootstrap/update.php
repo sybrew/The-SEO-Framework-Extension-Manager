@@ -29,6 +29,9 @@ namespace TSF_Extension_Manager;
  * Checks whether the WP installation blocks external requests.
  * Shows notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant
  *
+ * If you must, you can disable this notice by implementing this snippet:
+ * `remove_action( 'admin_notices', 'TSF_Extension_Manager\\_check_external_blocking' );`
+ *
  * @since 2.0.0
  * @access private
  */
@@ -79,10 +82,8 @@ function _check_external_blocking() {
  */
 function _hook_plugins_api( $res, $action, $args ) {
 
-	if ( 'plugin_information' !== $action
-	|| empty( $args->slug )
-	|| TSF_EXTENSION_MANAGER_PLUGIN_SLUG !== $args->slug
-	) return $res;
+	if ( 'plugin_information' !== $action || TSF_EXTENSION_MANAGER_PLUGIN_SLUG !== ( $args->slug ?? '' ) )
+		return $res;
 
 	if ( ! \wp_http_supports( [ 'ssl' ] ) ) {
 		return new \WP_Error(

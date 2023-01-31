@@ -536,7 +536,7 @@ class Panes extends API {
 	 */
 	protected function get_transfer_domain_form() {
 
-		if ( ! $this->get_option( 'requires_domain_transfer' )
+		if ( ! $this->get_option( '_requires_domain_transfer' )
 		  || ! $this->is_connected_user()
 		  || ! $this->are_options_valid()
 		) return '';

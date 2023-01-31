@@ -3,15 +3,15 @@ Location: https://theseoframework.com/extensions/transport/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension migrates plugin SEO metadata from Yoast SEO and Rank Math to The SEO Framework.
+This extension migrates plugin SEO metadata from Yoast SEO, Rank Math, and SEOPress to The SEO Framework.
 
 ## Overview
 
 ### Import with ease
 
-Used another WordPress SEO plugin, like Yoast SEO or Rank Math, before you found that The SEO Framework is a better fit? Now you can finally migrate all your meticulously crafted post and term metadata.
+Used another WordPress SEO plugin, like Yoast SEO, Rank Math, or SEOPress, before you found that The SEO Framework is a better fit? Now you can finally migrate all your meticulously crafted post and term metadata.
 
-#### Transform '%%currentdate%%' to ‘[tsfep-gimmick type="date" format="Y-m-d g:i a"]’
+#### Transform '%%currentdate%%' to ‘[tsfep-gimmick type="date" format="F j, Y"]’
 
 The importer not only moves your old metadata but also transforms: Complex and difficult-to-understand syntax becomes human-readable.
 You can learn more about what data is transformed at the [FAQ](#faq/what-data-is-transformed).
@@ -456,6 +456,7 @@ Many duplicated tags, some of which don't work reliably in SEOPress.
 
 [tsfep-release time="-1"]
 
+* Second beta release.
 * **Added**: SEOPress transport support. Including:
 	* Migration of titles, descriptions, visibility options, Open Graph, Twitter, redirections, and primary terms.
 	* Support for all posts, pages, custom post types, and all terms like categories and tags.
@@ -469,6 +470,7 @@ Many duplicated tags, some of which don't work reliably in SEOPress.
 	* Documented at [FAQ](#faq/rank-math-transformations).
 * **Fixed:** When an existing post title is already present of The SEO Framework, a title present in another plugin will no longer cause Transport to check the blogname removal option.
 * **Fixed:** The number of transformations and deletions in titles are now correctly added to the totals in the log.
+* **Fixed:** Term cache clearing now works during title and description transformation. This feature is redundant, but the bug caused PHP notices being logged after term data was requested.
 
 ### 1.0.0
 

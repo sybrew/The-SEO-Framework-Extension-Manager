@@ -226,7 +226,7 @@ final class LoadAdmin extends AdminPages {
 				break;
 
 			case $this->request_name['transfer-domain']:
-				$this->delete_option( 'requires_domain_transfer' );
+				$this->delete_option( '_requires_domain_transfer' );
 
 				// We store the API server's known domain in this value.
 				$this->delete_option( '_remote_subscription_status' );
@@ -340,7 +340,7 @@ final class LoadAdmin extends AdminPages {
 		}
 
 		$result = isset( $_POST[ $this->nonce_name ] )
-			? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+			? \wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] )
 			: false;
 
 		if ( ! $result ) {

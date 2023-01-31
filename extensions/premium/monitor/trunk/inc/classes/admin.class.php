@@ -414,10 +414,10 @@ final class Admin extends Api {
 		}
 
 		$result = isset( $_POST[ $this->nonce_name ] )
-				? \wp_verify_nonce( \wp_unslash( $_POST[ $this->nonce_name ] ), $this->nonce_action[ $key ] )
+				? \wp_verify_nonce( $_POST[ $this->nonce_name ], $this->nonce_action[ $key ] )
 				: false;
 
-		if ( false === $result ) {
+		if ( ! $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 1019001 => '' ] );
 			\tsf()->admin_redirect( $this->monitor_page_slug );

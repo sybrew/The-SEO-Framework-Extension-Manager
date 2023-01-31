@@ -337,8 +337,8 @@ final class ListEdit {
 		$sections = [];
 
 		foreach ( $registered_sections as $index => $args ) :
-			empty( $active_section_keys[ $index ] ) or
-				$sections[ $index ] = $args;
+			empty( $active_section_keys[ $index ] )
+				or $sections[ $index ] = $args;
 		endforeach;
 
 		// TODO We need to differentiate between post and term!
@@ -362,8 +362,8 @@ final class ListEdit {
 		$sections = [];
 
 		foreach ( $registered_sections as $index => $args ) :
-			empty( $active_section_keys[ $index ] ) or
-				$sections[ $index ] = $args;
+			empty( $active_section_keys[ $index ] )
+				or $sections[ $index ] = $args;
 		endforeach;
 
 		$this->output_view( \tsfem()->get_view_location( 'listedit/bulk' ), compact( 'sections', 'post_type', 'taxonomy' ) );

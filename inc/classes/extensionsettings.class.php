@@ -491,7 +491,6 @@ final class ExtensionSettings {
 	 */
 	private function get_save_all_button() {
 		return '';
-		// TODO var_dump()
 		// phpcs:disable
 		return sprintf(
 			'<button type=submit name=tsf-extension-manager-extension-settings form=tsf-extension-manager-extension-settings class="tsfem-button-primary tsfem-button-primary-bright tsfem-button-upload" onclick="tsfemForm.saveAll()">%s</button>',

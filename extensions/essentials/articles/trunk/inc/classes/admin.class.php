@@ -600,10 +600,8 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\ListEdit::activate_quick_section( 'structure' );
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$pm_index = $this->pm_index;
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$post_meta = [
 			'type' => [
 				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),
@@ -641,10 +639,8 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\ListEdit::activate_bulk_section( 'structure' );
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$pm_index = $this->pm_index;
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- forwarded to include...
 		$post_meta = [
 			'type' => [
 				'label'   => \__( 'Article Type', 'the-seo-framework-extension-manager' ),

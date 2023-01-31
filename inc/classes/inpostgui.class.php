@@ -339,8 +339,8 @@ final class InpostGUI {
 	 */
 	public static function _verify_nonce( $post_id, $post ) {
 
-		if ( ( empty( $_POST[ static::NONCE_NAME ] ) ) // Input var OK.
-		|| ( ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION ) ) // Input var, sanitization OK.
+		if ( ( empty( $_POST[ static::NONCE_NAME ] ) )
+		|| ( ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION ) )
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
 		) return;
 
@@ -355,7 +355,7 @@ final class InpostGUI {
 		if ( ! \wp_is_post_revision( $post ) )
 			static::$save_access_state |= TSFEM_INPOST_NO_REVISION;
 
-		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? \wp_unslash( $_POST[ static::META_PREFIX ] ) : null; // Input var, sanitization OK.
+		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? \wp_unslash( $_POST[ static::META_PREFIX ] ) : null;
 
 		/**
 		 * Runs after nonce and possibly interfering actions have been verified.
@@ -420,8 +420,8 @@ final class InpostGUI {
 		$active_tab_keys = static::$active_tab_keys;
 
 		foreach ( $registered_tabs as $index => $args ) :
-			empty( $active_tab_keys[ $index ] ) or
-				$tabs[ $index ] = $args;
+			empty( $active_tab_keys[ $index ] )
+				or $tabs[ $index ] = $args;
 		endforeach;
 
 		return $tabs;
@@ -470,7 +470,6 @@ final class InpostGUI {
 
 		unset( $_key, $_val, $args );
 
-		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Includes.
 		static::$include_secret = $_secret = mt_rand() . uniqid( '', true );
 		include $file;
 		static::$include_secret = null;

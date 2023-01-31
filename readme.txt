@@ -42,7 +42,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 == Changelog ==
 
 TODO add RTL support for _print_tsf_nag_installer_styles (regression)
-TODO fix tsf dependency in _check_external_blocking
 TODO align AMP's get_social_metadata() with TSF's output handling? This might incur deprecation of some filters.
 TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
 TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
@@ -53,7 +52,7 @@ TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
 
 TODO add save all button. -> Basically run through all forms and save them, and send message from "saved for one extension" to "saved for X (slug)."
-TODO copyright 2022 -> 2023
+	-> get_save_all_button()
 
 TODO make $notice_count visible on SEO menu, not only subitem.
 
@@ -66,12 +65,17 @@ TODO add "reset instance" button -- also visible when using constant activation
 * **Added:** When you move WordPress between domains, you can now easily switch the registered domain with us without needing to reactivate extensions. A red button is presented under "Account and Actions" when a transfer is detected.
 	* This is especially handy for multisite domain transfers.
 	* TODO This won't work for switching between development, staging, and production environments, unless the file paths are identical.
-* **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks. New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services. You can reconnect after disconnecting without losing data. This check performs entirely locally.
+* **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks.
+	* New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services.
 	* Only with a new installation, downgrading to an earlier version can cause the new instance to be invalidated. If you wish to downgrade, disconnect your account via Extension Manager and reconnect to set up a legacy instance key.
+	* If you disconnect, your site will be seen as a new installation, and will switch to this new system.
+	* Like before, you can reconnect after disconnecting without losing data.
+	* This check performs entirely locally.
 * **Improved:** Increased clarity about how the API connection is validated.
 * **Improved:** Notification animations are faster now, no longer cause minor text movement, and no longer cause large screen movement due to race conditions.
-* **Improved:** Optimized option handling for improved performance.
+* **Improved:** Refactored option handling for improved performance.
 * **Updated:** Now uses our v2.2 licensing API, primarily for key naming convenience.
+* **Other:** The "SEO Trends and Updates" feed now uses the relocated feed link, and sorts through it more quickly.
 * **Other:** Modernized code.
 * **Other:** New translations are available. TODO update POT
 
