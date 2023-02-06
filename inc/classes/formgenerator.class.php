@@ -865,7 +865,7 @@ final class FormGenerator {
 
 		// Escaped
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2], ! empty( $args['_md'] ) ) : '';
 
 		return sprintf(
 			'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
@@ -987,7 +987,7 @@ final class FormGenerator {
 		$title = $args['_desc'][0];
 
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2], ! empty( $args['_md'] ) ) : '';
 
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
@@ -1050,7 +1050,7 @@ final class FormGenerator {
 		$title = $args['_desc'][0];
 
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2], ! empty( $args['_md'] ) ) : '';
 
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
@@ -1064,8 +1064,8 @@ final class FormGenerator {
 
 			$collapse_args = [
 				'title'             => $fields['_desc'][0],
-				'dyn_title'         => $args['_dropdown_title_dynamic'],
-				'dyn_title_checked' => $args['_dropdown_title_checked'],
+				'dyn_title'         => $args['_dropdown_title_dynamic'] ?? '',
+				'dyn_title_checked' => $args['_dropdown_title_checked'] ?? '',
 				'id'                => $this->create_sub_field_id( $this->get_field_id(), $field_id ),
 			];
 
@@ -1243,8 +1243,8 @@ final class FormGenerator {
 
 			$collapse_args = [
 				'title'             => $_title,
-				'dyn_title'         => $args['_iterator_title_dynamic'],
-				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'dyn_title'         => $args['_iterator_title_dynamic'] ?? '',
+				'dyn_title_checked' => $args['_iterator_title_checked'] ?? '',
 				'id'                => $this->get_field_id(),
 			];
 
@@ -1297,8 +1297,8 @@ final class FormGenerator {
 
 			$collapse_args = [
 				'title'             => $_title,
-				'dyn_title'         => $args['_iterator_title_dynamic'],
-				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'dyn_title'         => $args['_iterator_title_dynamic'] ?? '',
+				'dyn_title_checked' => $args['_iterator_title_checked'] ?? '',
 				'id'                => $this->get_field_id(),
 			];
 
@@ -1348,8 +1348,8 @@ final class FormGenerator {
 
 			$collapse_args = [
 				'title'             => $_title,
-				'dyn_title'         => $args['_iterator_title_dynamic'],
-				'dyn_title_checked' => $args['_iterator_title_checked'],
+				'dyn_title'         => $args['_iterator_title_dynamic'] ?? '',
+				'dyn_title_checked' => $args['_iterator_title_checked'] ?? '',
 				'id'                => $this->get_field_id(),
 			];
 
@@ -1447,14 +1447,20 @@ final class FormGenerator {
 	 * Creates a JS and no-JS compatible description mark.
 	 *
 	 * @since 1.3.0
+	 * @since 2.6.1 Added markdown support.
 	 *
 	 * @param string $description The description.
+	 * @param bool   $use_markdown Whether to use markdown parsing.
 	 * @return string The escaped inline HTML description output.
 	 */
-	private function create_fields_sub_description( $description ) {
+	private function create_fields_sub_description( $description, $use_markdown ) {
+
+		$description = $use_markdown ? \tsf()->convert_markdown( $description ) : $description;
+
+		// make_inline_tooltip escapes.
 		return HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 			'',
-			$description,
+			strip_tags( $description ), // phpcs:ignore, WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- we don't deal with scripts here.
 			$description,
 			[ 'tsfem-dashicon', 'tsfem-unknown' ]
 		) );
@@ -1480,9 +1486,10 @@ final class FormGenerator {
 			);
 		} else {
 			$ret = '';
-			foreach ( $description as $desc ) {
+
+			foreach ( $description as $desc )
 				$ret .= $this->create_fields_description( $desc, $use_markdown );
-			}
+
 			return $ret;
 		}
 	}
@@ -1605,19 +1612,10 @@ final class FormGenerator {
 	 * @since 1.3.0
 	 *
 	 * @param string $pattern The field's pattern.
-	 *               Passed by reference to circumvent coalescing key requirements.
-	 * @param string $fallback The fallback pattern.
 	 * @return string The field's pattern.
 	 */
-	private function get_fields_pattern( &$pattern, $fallback = '' ) {
-
-		if ( $pattern )
-			return sprintf( 'pattern="%s"', $pattern );
-
-		if ( $fallback )
-			return sprintf( 'pattern="%s"', $fallback );
-
-		return '';
+	private function get_fields_pattern( $pattern ) {
+		return sprintf( 'pattern="%s"', $pattern );
 	}
 
 	/**
@@ -1641,7 +1639,8 @@ final class FormGenerator {
 				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
 				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
 
-				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
+				if ( isset( $args['_pattern'] ) )
+					$s_pattern = $this->get_fields_pattern( $args['_pattern'] );
 				break;
 
 			case 'color':
@@ -1650,8 +1649,8 @@ final class FormGenerator {
 
 			case 'tel':
 				$s_pattern = $this->get_fields_pattern(
-					$args['_pattern'],
-					'(\+|00)(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$'
+					( $args['_pattern'] ?? '' )
+						?: '(\+|00)(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$'
 				);
 				break;
 
@@ -1665,17 +1664,14 @@ final class FormGenerator {
 			case 'month':
 			case 'datetime-local':
 			case 'hidden':
-				$s_pattern = $this->get_fields_pattern( $args['_pattern'], '' );
+				if ( isset( $args['_pattern'] ) )
+					$s_pattern = $this->get_fields_pattern( $args['_pattern'] );
 				break;
 		endswitch;
 
 		// s = Escaped.
-		$s_type     = \esc_attr( $args['_type'] );
-		$s_name     = $s_id = $this->get_field_id();
-		$s_ph       = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
-		$s_range    = $s_range ?? '';
-		$s_pattern  = $s_pattern ?? '';
-		$s_required = $args['_req'] ? 'required' : '';
+		$s_type = \esc_attr( $args['_type'] );
+		$s_name = $s_id = $this->get_field_id();
 
 		return vsprintf(
 			'<div class="tsfem-%s-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
@@ -1691,10 +1687,10 @@ final class FormGenerator {
 							$s_id,
 							$s_name,
 							\esc_attr( $this->get_field_value( $args['_default'] ) ),
-							$s_range,
-							$s_pattern,
-							$s_required,
-							$s_ph,
+							$s_range ?? '',
+							$s_pattern ?? '',
+							$args['_req'] ? 'required' : '',
+							! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '',
 							isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '',
 						]
 					)
@@ -1859,7 +1855,7 @@ final class FormGenerator {
 
 		// s = escaped
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
-		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2] ) : '';
+		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2], ! empty( $args['_md'] ) ) : '';
 		$s_data = isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '';
 
 		$s_data_required = $args['_req'] ? 'data-required=1' : '';

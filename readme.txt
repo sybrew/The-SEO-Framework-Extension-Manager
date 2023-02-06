@@ -45,8 +45,6 @@ TODO add RTL support for _print_tsf_nag_installer_styles (regression)
 TODO align AMP's get_social_metadata() with TSF's output handling? This might incur deprecation of some filters.
 TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
 TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
-TODO https://github.com/sybrew/the-seo-framework/issues/590 (add three fields: Valuta, Min price, Max price; and/or a dropdown: "Cheap/OK/Expensive/Exclusive" (find proper terms)).
-TODO https://github.com/sybrew/the-seo-framework/issues/616
 
 TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
@@ -79,8 +77,6 @@ TODO add "reset instance" button -- also visible when using constant activation
 * **Other:** Modernized code.
 * **Other:** New translations are available. TODO update POT
 
-TODO test validity XML for symbols.php on mobile and gecko
-
 **Updated extensions:**
 
 * [Focus at version 1.5.3](https://theseoframework.com/extensions/focus/#changelog)
@@ -88,7 +84,8 @@ TODO test validity XML for symbols.php on mobile and gecko
 * [AMP at version 1.2.1](https://theseoframework.com/extensions/amp/#changelog)
 * [Transport at version 1.1.0](https://theseoframework.com/extensions/trasnport/#changelog)
 * [Monitor at version 1.2.9](https://theseoframework.com/extensions/monitor/#changelog)
-
+* [Local at version 1.3.0](https://theseoframework.com/extensions/local/#changelog)
+s
 = 2.6.0 - Mobile SEO =
 
 **Release date:**

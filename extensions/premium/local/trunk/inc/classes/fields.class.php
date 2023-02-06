@@ -91,9 +91,9 @@ final class Fields {
 							\__( 'For example, if a restaurant has a small shop inside or belonging to the restaurant, then set two departments.', 'the-seo-framework-extension-manager' ),
 						],
 						'_range' => [
-							0,
-							'',
-							1,
+							0, // min
+							0, // max allowed per CPU instruction set.
+							1, // step
 						],
 					],
 				],
@@ -105,7 +105,6 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'single' => 'name',
 				],
-				'_iterator_title_checked' => '',
 				'_fields' => $this->get_global_department_fields(),
 			],
 		];
@@ -213,8 +212,10 @@ final class Fields {
 						\__( 'Fill in the name of the department accurately.', 'the-seo-framework-extension-manager' ),
 						\__( 'For example, myMart and myMart Pharmacy.', 'the-seo-framework-extension-manager' ),
 					],
-					\__( 'Include the store name with the department name in the following format: <code>{store name} {department name}</code>', 'the-seo-framework-extension-manager' ),
+					/* translators: backticks are markdown for code blocks! */
+					\__( 'Include the store name with the department name in the following format: `{store name} {department name}`', 'the-seo-framework-extension-manager' ),
 				],
+				'_md' => true,
 			],
 			'@id' => [
 				'_default' => null,
@@ -266,8 +267,10 @@ final class Fields {
 				'_desc' => [
 					\__( 'Telephone number', 'the-seo-framework-extension-manager' ),
 					\__( 'This phone number meant to be the primary contact method for customers.', 'the-seo-framework-extension-manager' ),
-					\__( 'Be sure to include the country code and area code in the phone number: <code>+15555555555</code>', 'the-seo-framework-extension-manager' ),
+					/* translators: backticks are markdown for code blocks! */
+					\__( 'Be sure to include the country code and area code in the phone number: `+15555555555`', 'the-seo-framework-extension-manager' ),
 				],
+				'_md' => true,
 			],
 			'openingHoursSpecification' => [
 				'_default' => null,
@@ -281,6 +284,28 @@ final class Fields {
 					\__( 'Be sure to specify all days of the week.', 'the-seo-framework-extension-manager' ),
 				],
 				'_fields' => $this->get_opening_hours_fields(),
+			],
+			'priceRange' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 's',
+				'_req' => false,
+				'_type' => 'text',
+				'_pattern' => '^\p{Sc}{1,4}$|\p{Sc}[0-9\.]*\s*-\s*\p{Sc}?(([1-9][0-9]*(\.{0,1}[0-9]+)?)|(0\.(0[1-9]+|[1-9][0-9]*)))', // This expects unicode support. https://regex101.com/r/N3f5lF/6
+				'_desc' => [
+					\__( 'Price range', 'the-seo-framework-extension-manager' ),
+					[
+						\__( 'The price range of the items or services this department provides.', 'the-seo-framework-extension-manager' ),
+						/* translators: backticks are markdown for code blocks! */
+						\__( 'Can be a range with absolute numbers such as `$1-5`, or `$10 - $50.95`.', 'the-seo-framework-extension-manager' ),
+						/* translators: backticks are markdown for code blocks! */
+						\__( 'Can be a relative price indication, where `$` means relatively inexpensive and `$$$$` extremely expensive.', 'the-seo-framework-extension-manager' ),
+						/* translators: backticks are markdown for code blocks! */
+						\__( 'All other currency symbols are accepted. Thousand separators are not allowed, only dots may be used to specify cents.', 'the-seo-framework-extension-manager' ),
+					],
+					\__( 'Use a decimal point when working with cents; not a comma. Use a hyphen to specify a range. This field is seen as an indication, so the value may be off by a little.', 'the-seo-framework-extension-manager' ),
+				],
+				'_md' => true,
 			],
 			'image' => [
 				'_default' => [
@@ -481,9 +506,9 @@ final class Fields {
 				'_type' => 'number',
 				'_pattern' => '[0-9\.]*',
 				'_range' => [
-					-90,
-					90,
-					1e-7,
+					-90,  // min
+					90,   // max
+					1e-7, // step
 				],
 				'_desc' => [
 					\__( 'Latitude', 'the-seo-framework-extension-manager' ),
@@ -503,9 +528,9 @@ final class Fields {
 				'_type' => 'number',
 				'_pattern' => '[0-9\.]*',
 				'_range' => [
-					-180,
-					180,
-					1e-7,
+					-180, // min
+					180,  // max
+					1e-7, // step
 				],
 				'_desc' => [
 					\__( 'Longitude', 'the-seo-framework-extension-manager' ),
@@ -550,9 +575,9 @@ final class Fields {
 							\__( 'Set to 0 or leave empty if unspecified.', 'the-seo-framework-extension-manager' ),
 						],
 						'_range' => [
-							0,
-							21,
-							1,
+							0,  // min
+							50, // max
+							1,  // step
 						],
 					],
 				],
@@ -563,7 +588,6 @@ final class Fields {
 				'_iterator_title_dynamic' => [
 					'plural' => 'dayOfWeek',
 				],
-				'_iterator_title_checked' => '',
 				'_fields' => $this->get_opening_hours_action_fields(),
 			],
 		];
@@ -3564,6 +3588,81 @@ final class Fields {
 					'is-showif-listener' => '1',
 					'showif' => [
 						'department.openinghours.type' => 'open',
+					],
+				],
+			],
+			'scheduled' => [
+				'_default' => null,
+				'_edit'    => true,
+				'_ret'     => 's',
+				'_req'     => false,
+				'_type'    => 'checkbox',
+				'_desc'    => [
+					\__( 'Scheduled', 'the-seo-framework-extension-manager' ),
+					'',
+					'',
+				],
+				'_check'   => [
+					\__( 'Schedule these opening hours?', 'the-seo-framework-extension-manager' ),
+				],
+				'_data'    => [
+					'is-type-listener'     => '1',
+					'set-type-to-if-value' => [
+						'enabled'  => '1',
+						'disabled' => '0',
+					],
+					'showif-catcher'       => 'department.openinghours.scheduled',
+				],
+			],
+			'validFrom' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'date',
+				'_req' => true,
+				'_type' => 'date',
+				'_desc' => [
+					\__( 'Valid from date', 'the-seo-framework-extension-manager' ),
+					[
+						\__( 'Date from when this schedule starts.', 'the-seo-framework-extension-manager' ),
+						\__( 'This date must be before the valid through date.', 'the-seo-framework-extension-manager' ),
+					],
+					\__( 'Specify the local date.', 'the-seo-framework-extension-manager' ),
+				],
+				'_range' => [
+					'2020-01-01', // min
+					'2120-01-01', // max
+					'', // step
+				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.openinghours.scheduled' => 'enabled',
+					],
+				],
+			],
+			'validThrough' => [
+				'_default' => '',
+				'_edit' => true,
+				'_ret' => 'date',
+				'_req' => true,
+				'_type' => 'date',
+				'_desc' => [
+					\__( 'Valid through date', 'the-seo-framework-extension-manager' ),
+					[
+						\__( 'Date through when this schedule ends.', 'the-seo-framework-extension-manager' ),
+						\__( 'This date must be after the valid from date.', 'the-seo-framework-extension-manager' ),
+					],
+					\__( 'Specify the local date.', 'the-seo-framework-extension-manager' ),
+				],
+				'_range' => [
+					'2020-01-02', // min
+					'2120-01-02', // max
+					'', // step
+				],
+				'_data' => [
+					'is-showif-listener' => '1',
+					'showif' => [
+						'department.openinghours.scheduled' => 'enabled',
 					],
 				],
 			],

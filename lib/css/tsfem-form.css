@@ -85,9 +85,12 @@
 .tsfem-form-collapse-title-wrap {
 	line-height: 1.15em;
 	font-size: 1.15em;
-	padding: 0;
+	padding: 0 22px 0 0;
 	margin: 0;
 	vertical-align: middle;
+}
+body.rtl .tsfem-form-collapse-title-wrap {
+	padding: 0 0 0 22px;
 }
 
 .tsfem-form-title-icon:before {

@@ -59,71 +59,6 @@
 				"_out" : "string"
 			}
 		},
-		"@id" : {
-			"_data" : {
-				"#comment" : "Allow users to set up their own for multisite compat, use this as fallback + show change through JS.",
-				"_type" : "single",
-				"_from" : "concat",
-				"_config" : {
-					"0" : {
-						"_data" : {
-							"_type" : "single",
-							"_from" : "data",
-							"_access" : [
-								"department",
-								"$nth",
-								"name"
-							]
-						},
-						"_handlers" : {
-							"_escape" : "sanitize_key",
-							"_condition" : [
-								{
-									"_if" : "this",
-									"_op" : "empty",
-									"_do" : "set",
-									"_to" : "$it"
-								},
-								{
-									"_if" : "this",
-									"_op" : "empty",
-									"_do" : "kill_pack"
-								}
-							],
-							"_out" : "string"
-						}
-					},
-					"1" : {
-						"_data" : {
-							"_type" : "single",
-							"_from" : "default",
-							"_value" : "."
-						},
-						"_handlers" : {}
-					},
-					"2" : {
-						"_data" : {
-							"_type" : "single",
-							"_from" : "bloginfo",
-							"_access" : "url"
-						},
-						"_handlers" : {
-							"_escape" : "convert_to_host",
-							"_out" : "string"
-						}
-					}
-				}
-			},
-			"_handlers" : {
-				"_out" : "string",
-				"_escape" : "esc_url_raw",
-				"_condition" : {
-					"_if" : "this",
-					"_op" : "empty",
-					"_do" : "kill_pack"
-				}
-			}
-		},
 		"name" : {
 			"_data" : {
 				"_type" : "single",
@@ -449,6 +384,26 @@
 				]
 			}
 		},
+		"priceRange" : {
+			"_data" : {
+				"_type" : "single",
+				"_from" : "data",
+				"_access" : [
+					"department",
+					"$nth",
+					"priceRange"
+				]
+			},
+			"_handlers" : {
+				"_escape" : "sanitize_text_field",
+				"_condition" : {
+					"_if" : "this",
+					"_op" : "empty",
+					"_do" : "kill_this"
+				},
+				"_out" : "string"
+			}
+		},
 		"openingHoursSpecification" : {
 			"_data" : {
 				"_type" : "iterate",
@@ -504,6 +459,86 @@
 									"_to" : "array"
 								}
 							]
+						}
+					},
+					"validFrom" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								"$nth",
+								"openingHoursSpecification",
+								"openingHours",
+								"$nth",
+								"validFrom"
+							]
+						},
+						"_handlers" : {
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "empty",
+									"_do" : "kill_this"
+								},
+								{
+									"#" : "If no 'scheduled' is checked, kill early.",
+									"_if" : "data",
+									"_access" : [
+										"department",
+										"$nth",
+										"openingHoursSpecification",
+										"openingHours",
+										"$nth",
+										"scheduled"
+									],
+									"_op" : "!=",
+									"_value" : 1,
+									"_do" : "kill_this"
+								}
+							],
+							"_out" : "string"
+						}
+					},
+					"validThrough" : {
+						"_data" : {
+							"_type" : "single",
+							"_from" : "data",
+							"_access" : [
+								"department",
+								"$nth",
+								"openingHoursSpecification",
+								"openingHours",
+								"$nth",
+								"validThrough"
+							]
+						},
+						"_handlers" : {
+							"_escape" : "sanitize_text_field",
+							"_condition" : [
+								{
+									"_if" : "this",
+									"_op" : "empty",
+									"_do" : "kill_this"
+								},
+								{
+									"#" : "If no 'scheduled' is checked, kill early.",
+									"_if" : "data",
+									"_access" : [
+										"department",
+										"$nth",
+										"openingHoursSpecification",
+										"openingHours",
+										"$nth",
+										"scheduled"
+									],
+									"_op" : "!=",
+									"_value" : 1,
+									"_do" : "kill_this"
+								}
+							],
+							"_out" : "string"
 						}
 					},
 					"opens" : {

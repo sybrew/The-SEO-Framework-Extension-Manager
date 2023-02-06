@@ -148,7 +148,7 @@ trait Extensions_Properties {
 				'area'         => 'business',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664262329',
+				'last_updated' => '1675716878',
 				'requires'     => '5.5',
 				'tested'       => '6.1',
 				'requires_tsf' => '4.2.0',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '7295673e80bafca2a23d470eb65dff7e3a58ee58dadcfd8578a545a50ae36a04',
-			'sha1'   => 'ae98d42261294f25fb2a44db4fd4e1f378eb2454',
-			'md5'    => 'd835a638da42ce35f15e97472bb46cec',
+			'sha256' => 'cc282deafdc1f79e6f54a4728b9ac8e8e5f6e10fa20240cb11b39f5de09d0566',
+			'sha1'   => 'fd7b79808e2955a8c0f158e4f237a07dd0297220',
+			'md5'    => '03b131aa42c18dee2edc9a779c4d007e',
 		];
 	}
 

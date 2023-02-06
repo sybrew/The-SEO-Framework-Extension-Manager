@@ -122,6 +122,17 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.3.0
+
+[tsfep-release time="-1"]
+
+* **Added:** The price range of departments can now be specified.
+* **Added:** Opening hours can now be scheduled; for example, if you have a specific summer schedule.
+	* These hours won't disappear until you unset them.
+	* To support this, up to 50 schedules can be made.
+	* These fields should be adjusted manually every year according to your business' schedule.
+* **Removed:** The auto-generated `@id` field is no longer required. We removed it because it offers no benefit, and the way it was built only confused our users.
+
 ### 1.2.0
 
 [tsfep-release time="October 4th, 2022"]

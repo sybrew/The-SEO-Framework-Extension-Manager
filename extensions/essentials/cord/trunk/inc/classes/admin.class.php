@@ -82,8 +82,6 @@ final class Admin extends Core {
 					\__( 'Connect your site with various third-party analytical platforms. Cord takes care of the rest.', 'the-seo-framework-extension-manager' ),
 				],
 				'_md'                     => true,
-				'_dropdown_title_dynamic' => '',
-				'_dropdown_title_checked' => '',
 				'_fields'                 => [
 					'google_analytics' => [
 						'_default' => null,
