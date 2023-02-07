@@ -313,7 +313,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.5.3
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * **Improved:** Made status notices about lexical information less homogenous.
 

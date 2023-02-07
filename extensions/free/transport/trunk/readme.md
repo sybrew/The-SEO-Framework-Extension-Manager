@@ -454,7 +454,7 @@ Many duplicated tags, some of which don't work reliably in SEOPress.
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * Second beta release.
 * **Added**: SEOPress transport support. Including:

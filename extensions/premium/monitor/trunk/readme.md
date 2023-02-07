@@ -85,7 +85,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.9
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * **Extension:**
 	* **Fixed:** Connection errors are now forwarded correctly.

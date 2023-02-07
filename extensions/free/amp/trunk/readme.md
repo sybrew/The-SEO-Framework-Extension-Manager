@@ -72,7 +72,7 @@ add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
 
 ### 1.2.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * **Fixed:** Removed a dependency of TSF, which blocked its visibility of a method in v4.2.0.
 

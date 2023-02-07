@@ -124,14 +124,15 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ### 1.3.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * **Added:** The price range of departments can now be specified.
 * **Added:** Opening hours can now be scheduled; for example, if you have a specific summer schedule.
 	* These hours won't disappear until you unset them.
-	* To support this, up to 50 schedules can be made.
+	* To support this, from 21 schedules (3 times over 7 days), up to 50 schedules can now be made per department. This new number is quite arbitrary, but allows for enough room without breaking the performance bank.
 	* These fields should be adjusted manually every year according to your business' schedule.
 * **Removed:** The auto-generated `@id` field is no longer required. We removed it because it offers no benefit, and the way it was built only confused our users.
+	* Changes are only visible after you update Local's fields.
 
 ### 1.2.0
 

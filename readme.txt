@@ -41,28 +41,42 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+PUNTED:
 TODO add RTL support for _print_tsf_nag_installer_styles (regression)
 TODO align AMP's get_social_metadata() with TSF's output handling? This might incur deprecation of some filters.
 TODO `tsfem_error_notice_option` -> `tsfem_error_notices`
 TODO `tsf-extension-manager-settings` -> `tsfem_settings`?
-
 TODO Convert tsfem-ui/tsfem-inpost notice handler into separate class?
 	-> The one from tsfem-inpost is more advanced, allowing separate notice wraps.
-
+	-> For now, we fixed the notice bouncing for both.
 TODO add save all button. -> Basically run through all forms and save them, and send message from "saved for one extension" to "saved for X (slug)."
 	-> get_save_all_button()
-
 TODO make $notice_count visible on SEO menu, not only subitem.
+	-> We'd have to add a filter at `add_menu_link()` in TSF.
+	-> Alternatively, we could hook into late admin_menu and rewrite globals $menu.
 
-TODO add "reset instance" button -- also visible when using constant activation
-	* Only display when SOMETHING is marked invalid.
-	* This will reset the current installation API and local instances and will attempt to reconnect your account.
-	* "Otherwise, disconnect..." -> rephrase.
-		-> Transfer the license!
+= 2.6.1 =
+
+**Release date:**
+
+* February 7th, 2023
+
+**Feature highlights:**
+
+* Reduced the likelihood of random disconnects for iThemes Security users.
+* Transport now supports migration from SEOPress.
+* Local now supports price range indication and scheduled opening hours.
+* Improved overall performance by optimizing option handling and modernizing browser scripts.
+
+**Detailed log**
+
+View the [detailed v2.6.1 changelog](https://tsf.fyi/p/ TODO).
 
 * **Added:** When you move WordPress between domains, you can now easily switch the registered domain with us without needing to reactivate extensions. A red button is presented under "Account and Actions" when a transfer is detected.
 	* This is especially handy for multisite domain transfers.
-	* TODO This won't work for switching between development, staging, and production environments, unless the file paths are identical.
+	* Unlike before, this won't work for switching between development, staging, and production environments, unless the file paths are identical.
+		* We could've used a different test entirely, but that'd open our API to abuse.
+		* Feel free to forward your concerns to iThemes Security, because they couldn't explain what makes their feature so secure and [ruined it for everybody](https://twitter.com/SybreWaaijer/status/1601220130981416960).
 * **Changed:** Reduced the likelihood of random disconnects caused by iThemes Security's nonsensical option to flush security keys every two weeks.
 	* New sites no longer rely on these proper authentication keys for hashing, but now use a combination of environmental variables, like the database version and the installation location. Change any of these, and your site could disconnect from our services.
 	* Only with a new installation, downgrading to an earlier version can cause the new instance to be invalidated. If you wish to downgrade, disconnect your account via Extension Manager and reconnect to set up a legacy instance key.

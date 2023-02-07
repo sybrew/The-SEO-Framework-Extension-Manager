@@ -238,7 +238,7 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 
 ### 2.0.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="February 7th, 2023"]
 
 * **Other:** Removed the browser-deprecated "scoped" attribute from the CSS rotation method.
 
