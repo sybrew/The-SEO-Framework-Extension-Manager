@@ -335,7 +335,7 @@ h4.tsfem-form-multi-title {
 .tsfem-form-image-buttons-wrap {
 	margin-top: 1.15em;
 	margin-left: 1px;
-	vertical-align: top;
+	vertical-align: text-bottom;
 	line-height: 1.4;
 	flex-grow: 0;
 }
@@ -345,11 +345,11 @@ body.rtl .tsfem-form-image-buttons-wrap {
 }
 
 .tsfem-form-image-buttons-wrap button {
-	margin-right: 1.15em;
+	margin-right: .9em;
 }
 body.rtl .tsfem-form-image-buttons-wrap button {
 	margin-right: 0;
-	margin-left: 1.15em;
+	margin-left: .9em;
 }
 
 .tsfem-form-multi-select-wrap {

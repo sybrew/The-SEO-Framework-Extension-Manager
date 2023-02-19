@@ -344,14 +344,6 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 /* ## Buttons input.
 /*--------------------------------------*/
 
-#tsfem-page-wrap .tsf-remove-image-button, /* TEMP */
-#tsfem-page-wrap .tsf-remove-image-button:hover, /* TEMP */
-#tsfem-page-wrap .tsf-remove-image-button:active, /* TEMP */
-#tsfem-page-wrap .tsf-remove-image-button:focus, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:hover, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:active, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:focus, /* TEMP */
 .tsfem-button,
 .tsfem-button:hover,
 .tsfem-button:active,
@@ -400,10 +392,6 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	color: #dd3811;
 }
 
-#tsfem-page-wrap .tsf-set-image-button, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:hover, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:active, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:focus, /* TEMP */
 .tsfem-button-primary,
 .tsfem-button-primary:hover,
 .tsfem-button-primary:active,
@@ -412,8 +400,6 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	color: #fff;
 }
 
-#tsfem-page-wrap .tsf-set-image-button:hover, /* TEMP */
-#tsfem-page-wrap .tsf-set-image-button:focus, /* TEMP */
 .tsfem-button:hover,
 .tsfem-button:focus,
 .tsfem-button-primary:hover,
@@ -421,7 +407,6 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	box-shadow: 0 .1em .5em rgba(0,0,0,.3), 0 0 0 rgba(0,0,0,0) inset; /* 2: transition positioning */
 }
 
-#tsfem-page-wrap .tsf-set-image-button:active, /* TEMP */
 .tsfem-button:active,
 .tsfem-button-primary:active {
 	box-shadow: 0 0 .3em rgba(0,0,0,0), 0 0 .3em 0 rgba(0,0,0,.3) inset; /* 1: transition positioning */

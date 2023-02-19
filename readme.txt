@@ -41,6 +41,19 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+TODO https://www.php.net/manual/en/class.sensitiveparameter.php
+TODO GA4 support (quickly now)
+TODO set API to POST? -> Make a new revision where we handle this.
+	-> Next major update, probably.
+TODO use $_SERVER file location rather than __FILE__ for instance check (i.e., v2.1 check)
+	-> Later, defunct this if issue reports keep coming.
+	https://stackoverflow.com/questions/13771021/php-dir-or-file-symlinked
+TODO updated pot file.
+
+TODO Now requires TSF v4.2.8!
+
+TODO set suggested size at create_image_field() -- if not found, set 0?
+
 = 2.6.1 =
 
 **Release date:**
@@ -51,8 +64,8 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 * Transport now supports migration from SEOPress.
 * Local now supports price range indication and scheduled opening hours.
-* We reduced the likelihood of random disconnects for iThemes Security users.
-* And we improved overall performance by optimizing option handling and modernizing browser scripts.
+* Reduced the likelihood of random disconnects for iThemes Security users.
+* Improved overall performance by optimizing option handling and modernizing browser scripts.
 
 **Updated extensions:**
 
@@ -63,7 +76,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * [Monitor at version 1.2.9](https://theseoframework.com/extensions/monitor/#changelog)
 * [Local at version 1.3.0](https://theseoframework.com/extensions/local/#changelog)
 
-**Detailed log**
+**Detailed log:**
 
 View the [detailed v2.6.1 changelog](https://tsf.fyi/p/4055).
 

@@ -224,6 +224,7 @@ function _register_autoloader() {
  * @since 2.5.0 Now requires TSF 4.1.2+ to load.
  * @since 2.5.1 Now requires TSF 4.1.4+ to load.
  * @since 2.6.0 Now requires TSF 4.2.0+ to load.
+ * @since 2.6.2 Now requires TSF 4.2.8+ to load.
  *
  * @return bool Whether the plugin can load. Always returns false on the front-end.
  */
@@ -235,7 +236,7 @@ function can_load_class() {
 		return $can_load;
 
 	if ( \function_exists( '\\tsf' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.0', '>=' ) && \tsf()->loaded ) {
+		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.8', '>=' ) && \tsf()->loaded ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load

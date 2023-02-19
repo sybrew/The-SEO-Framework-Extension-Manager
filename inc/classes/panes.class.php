@@ -580,7 +580,7 @@ class Panes extends API {
 		} else {
 			$infos[] = \esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
 		}
-		$infos[] = \esc_html__( 'No options from extensions will be lost.', 'the-seo-framework-extension-manager' );
+		$infos[] = \esc_html__( 'Extension options will not be deleted.', 'the-seo-framework-extension-manager' );
 
 		$title = sprintf(
 			'<h4 class=tsfem-info-title>%s %s</h4>',

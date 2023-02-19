@@ -2049,7 +2049,7 @@ final class FormGenerator {
 			[
 				$this->create_field_description( $args, $s_url_id ),
 				vsprintf(
-					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap tsfem-flex tsfem-flex-row hide-if-no-tsf-js">%s</div></div>',
+					'<div class="tsfem-form-setting-input tsfem-flex">%s%s<div class="tsfem-form-image-buttons-wrap hide-if-no-tsf-js">%s</div></div>',
 					[
 						vsprintf(
 							'<input type=url id="%s" name=%s value="%s" %s %s%s%s>',
@@ -2071,7 +2071,20 @@ final class FormGenerator {
 								$s_id_value,
 							]
 						),
-						\The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [ 'id' => $s_field_id ] ),
+						\The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [
+							'id'           => $s_field_id,
+							'button_class' => [
+								'set'    => [
+									'tsfem-button',
+									'tsfem-button-primary',
+									'tsfem-button-small',
+								],
+								'remove' => [
+									'tsfem-button',
+									'tsfem-button-small',
+								],
+							]
+						] ),
 					]
 				),
 			]
