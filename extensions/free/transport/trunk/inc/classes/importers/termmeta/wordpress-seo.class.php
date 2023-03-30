@@ -67,7 +67,7 @@ final class WordPress_SEO extends Base {
 				null,
 				null,
 				[
-					'name'    => 'Yoost Term Meta',
+					'name'    => 'Yoast Term Meta',
 					'from' => [
 						[ $this, '_get_wpseo_transport_term_ids' ],
 						[ $this, '_get_wpseo_term_transport_value' ],
