@@ -132,7 +132,7 @@ final class Admin {
 				],
 			],
 			'WordPress_SEO'    => [
-				'title'     => 'Yoost SEO',
+				'title'     => 'Yoast SEO',
 				'importers' => [
 					'settings' => false, // Let's keep this at false, for now. Perhaps we want to move the homepage stuff, but that's tricky.
 					'postmeta' => [
