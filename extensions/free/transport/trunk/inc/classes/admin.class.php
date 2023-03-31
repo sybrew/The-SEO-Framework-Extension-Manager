@@ -132,7 +132,7 @@ final class Admin {
 				],
 			],
 			'WordPress_SEO'    => [
-				'title'     => 'Yoost SEO',
+				'title'     => 'Yoast SEO',
 				'importers' => [
 					'settings' => false, // Let's keep this at false, for now. Perhaps we want to move the homepage stuff, but that's tricky.
 					'postmeta' => [
@@ -425,7 +425,7 @@ final class Admin {
 								'termmeta' => \esc_html__( 'Term Metadata', 'the-seo-framework-extension-manager' ),
 							],
 							'logMessages' => [
-								/* translators: %s = plugin name, such as Yoost SEO */
+								/* translators: %s = plugin name, such as Yoast SEO */
 								'requestImport'     => \esc_html__( 'Request Importer for %s&hellip;', 'the-seo-framework-extension-manager' ),
 								'unknownError'      => \esc_html__( 'Unknown error', 'the-seo-framework-extension-manager' ),
 								'unknownErrorFull'  => \esc_html__( 'An unknown error occured. Please refresh this page and try again.', 'the-seo-framework-extension-manager' ),
