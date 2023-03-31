@@ -650,7 +650,7 @@ abstract class Core {
 	 */
 	protected function maybe_unserialize_no_class( $data ) {
 		return \is_serialized( $data )
-			? unserialize( trim( $data ), [ 'allowed_classes' => [ 'stdClass' ] ] ) // phpcs:ignore -- it fine.
+			? unserialize( trim( $data ), [ 'allowed_classes' => [ 'stdClass' ] ] ) // phpcs:ignore, WordPress.PHP.DiscouragedPHPFunctions -- it fine.
 			: $data;
 	}
 }

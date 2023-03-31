@@ -484,38 +484,39 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
-	 * @param array $placeholder Unused.
 	 * @return array : {
 	 *    string The extension slug => bool True if active
 	 * }
 	 */
-	private static function get_active_extensions( $placeholder = [] ) {
+	private static function get_active_extensions() {
 
-		static $cache = false;
+		static $memo;
 
-		if ( false !== $cache )
-			return $cache;
+		if ( isset( $memo ) )
+			return $memo;
 
-		$options    = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
-		$extensions = $options['active_extensions'] ?? [];
-
-		$is_premium_user   = self::is_premium_user();
-		$is_connected_user = self::is_connected_user();
+		$extensions = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [];
 
 		if ( TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS )
 			$extensions = array_merge( $extensions, TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
+		// Assume an extension would be active -- why else would they use this plugin?
+		// Don't add a defence clause. That should only make these calls useless right after activation.
+		$is_premium_user   = self::is_premium_user();
+		$is_connected_user = self::is_connected_user();
+
 		foreach ( $extensions as $_extension => $_active ) {
-			if ( ! $_active
-			|| ! $is_premium_user && static::is_extension_premium( $_extension )
-			|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
-			|| ( ! static::is_extension_compatible( $_extension ) )
+			if (
+				! $_active
+				|| ! $is_premium_user && static::is_extension_premium( $_extension )
+				|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
+				|| ( ! static::is_extension_compatible( $_extension ) )
 			) {
 				unset( $extensions[ $_extension ] );
 			}
 		}
 
-		return $cache = $extensions;
+		return $memo = $extensions;
 	}
 
 	/**
@@ -635,12 +636,7 @@ trait Extensions_Actions {
 		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
-		$active = static::get_active_extensions();
-
-		if ( isset( $active[ $extension['slug'] ] ) )
-			return true;
-
-		return false;
+		return isset( static::get_active_extensions()[ $extension['slug'] ] );
 	}
 
 	/**
@@ -659,10 +655,10 @@ trait Extensions_Actions {
 		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );
 
-		if ( ! $extension ) return false;
-
-		return ! ( static::determine_extension_incompatibility( $extension )
-			& ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE ) );
+		return $extension && ! (
+			static::determine_extension_incompatibility( $extension )
+			& ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE )
+		);
 	}
 
 	/**
@@ -675,10 +671,9 @@ trait Extensions_Actions {
 	 * @global string $wp_version
 	 *
 	 * @param array|string $extension The extension to check.
-	 * @param bool         $get_bits Whether to get bits or int.
 	 * @return int|null The extension compatibility bitwise integer. Null on faiure.
 	 */
-	private static function determine_extension_incompatibility( $extension, $get_bits = false ) {
+	private static function determine_extension_incompatibility( $extension ) {
 
 		if ( \is_string( $extension ) )
 			$extension = static::get_extension( $extension );

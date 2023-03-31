@@ -287,7 +287,9 @@ final class Handler {
 										'results' => $this->get_ajax_notice( false, 1060203 ),
 										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 											? \esc_html__( 'Transporting time limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-											: ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+											: (
+												$streaming ? '' : $store->get_human_readable_flush_store_to_string() . "\n"
+											) . \esc_html__( 'Transporting time limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
@@ -304,7 +306,9 @@ final class Handler {
 										'results' => $this->get_ajax_notice( false, 1060206 ),
 										'logMsg'  => $streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 											? \esc_html__( 'Process memory usage limit reached. Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
-											: ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html__( 'Process memory usage limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
+											: (
+												$streaming ? '' : $store->get_human_readable_flush_store_to_string() . "\n"
+											) . \esc_html__( 'Process memory usage limit reached. Please try again to resume.', 'the-seo-framework-extension-manager' ),
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
@@ -419,7 +423,9 @@ final class Handler {
 				'server'     => $server,
 				'poll_data'  => [
 					'results' => $this->get_ajax_notice( false, 1060204 ),
-					'logMsg'  => ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html(
+					'logMsg'  => (
+						$streaming ? '' : $store->get_human_readable_flush_store_to_string() . "\n"
+					) . \esc_html(
 						sprintf(
 							$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 								/* translators: %s = Unknown error reason */
@@ -440,14 +446,16 @@ final class Handler {
 		$this->release_transport_lock();
 
 		$seconds = \number_format_i18n( ( hrtime( true ) - $hrtimestart ) / 1e9, 1 );
-
+		// Say it takes longer than it has because there's no such thing as 0 seconds in timing _something_.
 		if ( '0.0' === $seconds ) $seconds = '0.1';
 
 		$this->_halt_server( [
 			'server'     => $server,
 			'poll_data'  => [
 				'results' => $this->get_ajax_notice( true, 1060205 ),
-				'logMsg'  => ( $streaming ? '' : $server->get_flush_store() . "\n" ) . \esc_html(
+				'logMsg'  => (
+					$streaming ? '' : $store->get_human_readable_flush_store_to_string() . "\n"
+				) . \esc_html(
 					vsprintf(
 						/* translators: 1 = seconds with 1 decimal (e.g. 4.2 seconds, 1.0 second), 2,3,4 = numbers */
 						\_n(

@@ -43,6 +43,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 TODO https://www.php.net/manual/en/class.sensitiveparameter.php
 TODO GA4 support (quickly now)
+	-> Users like this one: https://wordpress.org/plugins/duracelltomi-google-tag-manager/
 TODO set API to POST? -> Make a new revision where we handle this.
 	-> Next major update, probably.
 TODO use $_SERVER file location rather than __FILE__ for instance check (i.e., v2.1 check)
@@ -53,6 +54,11 @@ TODO updated pot file.
 TODO Now requires TSF v4.2.8!
 
 TODO set suggested size at create_image_field() -- if not found, set 0?
+
+TODO Rank Math's Index -> Force index?
+	-> How does their plugin behave on global settings change?
+
+TODO if Transport fails to transport, keep a store for next request, and initiate retrieving that store once the request finishes (transient with 2 minute timeout or something).
 
 = 2.6.1 =
 

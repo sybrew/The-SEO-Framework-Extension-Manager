@@ -205,7 +205,7 @@ final class Front extends Core {
 	 * @return string
 	 */
 	public function _articles_hook_amp_output( $output = '' ) {
-		return $output .= $this->_get_articles_json_output();
+		return $output . $this->_get_articles_json_output();
 	}
 
 	/**

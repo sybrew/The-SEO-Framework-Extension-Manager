@@ -94,6 +94,24 @@ final class Store {
 	}
 
 	/**
+	 * Clears current store and returns a string of what's been cleared.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @return array The current store.
+	 */
+	public function get_human_readable_flush_store_to_string() {
+
+		$ret = '';
+
+		foreach ( $this->get_flush_store() as $data )
+			if ( \is_string( $data ) )
+				$ret .= "$data\n";
+
+		return $ret;
+	}
+
+	/**
 	 * Clears store.
 	 *
 	 * @param int $length The allowed array length of the store. -1 is unlimited.

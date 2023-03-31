@@ -116,7 +116,6 @@ window.tsfem_e_import = function() {
 		} );
 
 		const handler = 'undefined' !== typeof( EventSource ) ? _handleEventStream : _handlePost;
-		// const handler = _handlePost;
 
 		handler(
 			'import',
@@ -158,6 +157,7 @@ window.tsfem_e_import = function() {
 	 * @param {FormData} formData The formdata to post for handle.
 	 * @param {?String}  logStart The starting log text. Expected to be escaped.
 	 * @function
+	 * @return {<Promise{resolve(message:string):void,reject(message:string):void}>}
 	 */
 	const _handleEventStream = ( handle, formData, logStart ) => new Promise( async ( resolve, reject ) => {
 
@@ -176,26 +176,29 @@ window.tsfem_e_import = function() {
 				handle,
 				formData:    formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString(),
 				logStart,
-				urlData:     { endpoint: ajaxurl, base: new URL( document.baseURI ).origin },
+				urlData:     {
+					endpoint: ajaxurl,
+					base:     new URL( document.baseURI ).origin
+				},
 				nonce:       l10n.nonce,
 				logMessages: l10n.i18n.logMessages
 			},
-			mEvent => {
-				if ( 'log' in mEvent.data ) {
-					return _log( ...mEvent.data.log );
-				}
-				if ( 'reject' in mEvent.data ) {
+			messageEvent => {
+				if ( 'log' in messageEvent.data )
+					return _log( messageEvent.data.log );
+
+				if ( 'reject' in messageEvent.data ) {
 					tsfem_worker.despawnWorker( _sseWorkerId );
-					return reject( ...mEvent.data.reject );
+					return reject( messageEvent.data.reject );
 				}
-				if ( 'resolve' in mEvent.data ) {
+				if ( 'resolve' in messageEvent.data ) {
 					tsfem_worker.freeWorker( _sseWorkerId );
-					return resolve( ...mEvent.data.resolve );
+					return resolve( messageEvent.data.resolve );
 				}
 			},
-			message => {
+			errorEvent => {
 				tsfem_worker.despawnWorker( _sseWorkerId );
-				reject( message );
+				reject( errorEvent?.message );
 			}
 		);
 	} );
@@ -224,9 +227,11 @@ window.tsfem_e_import = function() {
 				data: formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString(),
 			}
 		).done( data => {
+			console.log( data );
 			resolve( data?.results?.notice );
 			_log( data?.logMsg, 2 );
 		} ).fail( response => {
+			console.log( data );
 			reject( response.data?.results?.notice );
 			_log( response.data?.logMsg, 2 );
 		} );
@@ -241,7 +246,7 @@ window.tsfem_e_import = function() {
 	 * @access private
 	 *
 	 * @param {String}  message The message to log.
-	 * @param {Integer} newLine Whether to add newlines.
+	 * @param {Integer} newLine Number of newlines to add after message.
 	 * @function
 	 */
 	const _log = ( message, newLine ) => {

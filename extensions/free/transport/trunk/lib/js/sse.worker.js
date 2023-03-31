@@ -52,9 +52,9 @@ const retryTimeout = 5000;
  */
 const retryLimit = 3;
 
-const _log     = ( ...message ) => postMessage( { workerId, log: message } );
-const _resolve = ( ...message ) => postMessage( { workerId, resolve: message } );
-const _reject  = ( ...message ) => postMessage( { workerId, reject: message } );
+const _log     = message => postMessage( { workerId, log: message } );
+const _resolve = message => postMessage( { workerId, resolve: message } );
+const _reject  = message => postMessage( { workerId, reject: message } );
 
 onerror   = ( msg, url, lineNo, columnNo, error ) => postMessage( { workerId, error } );
 onmessage = message => {
