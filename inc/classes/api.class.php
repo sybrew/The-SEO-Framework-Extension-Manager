@@ -120,8 +120,7 @@ class API extends Core {
 				'request' => $type,
 				'api_key' => $key,
 				'email'   => $email,
-			] ),
-			WP_DEBUG
+			] )
 		);
 
 		return $response;
@@ -345,10 +344,9 @@ class API extends Core {
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @param string $response The obtained response body.
-	 * @param bool   $explain  Whether to show additional info in error messages.
-	 * @return bool True on successful response, false on failure.
+	 * @return ?bool True on successful response, false on failure, null on invalid response.
 	 */
-	final protected function handle_activation_response( $args, $response, $explain = false ) {
+	final protected function handle_activation_response( $args, $response ) {
 
 		if ( ! $response ) {
 			$this->set_error_notice( [ 301 => '' ] );
@@ -357,8 +355,7 @@ class API extends Core {
 
 		$results = json_decode( $response, true );
 
-		$_response       = '';
-		$additional_info = '';
+		$_response = '';
 
 		// If the user's already using a free account, don't deactivate.
 		$registered_free = $this->is_plugin_activated() && ! $this->is_connected_user();
@@ -373,40 +370,35 @@ class API extends Core {
 			$_response = $results;
 		}
 
-		if ( isset( $results['code'] ) ) :
-
-			$additional_info = $explain && ! empty( $results['additional info'] ) ? \esc_attr( $results['additional info'] ) : '';
-
+		if ( ! empty( $results['code'] ) ) :
 			switch ( $results['code'] ) :
-				case '100':
-					$this->set_error_notice( [ 302 => $additional_info ] );
+				case 106: // Inactive/expired subscription.
+					$this->set_error_notice( [ 308 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 105: // Mismatching license key from other data.
+					$this->set_error_notice( [ 307 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 104: // Invalid instance ID.
+					$this->set_error_notice( [ 306 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 103: // Exceeded number of activations.
+					$this->set_error_notice( [ 305 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 102: // Miscellaneous software error on TSF servers.
+					$this->set_error_notice( [ 304 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 101: // Invalid license key inputted.
+					$this->set_error_notice( [ 303 => '' ] );
+					$registered_free or $this->do_deactivation( false, true );
+					break;
+				case 100: // Unspecified error. Set $moe to true.
+					$this->set_error_notice( [ 302 => '' ] );
 					$registered_free or $this->do_deactivation( true, true );
-					break;
-				case '101':
-					$this->set_error_notice( [ 303 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				case '102':
-					$this->set_error_notice( [ 304 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				case '103':
-					$this->set_error_notice( [ 305 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				case '104':
-					$this->set_error_notice( [ 306 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				case '105':
-					$this->set_error_notice( [ 307 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				case '106':
-					$this->set_error_notice( [ 308 => $additional_info ] );
-					$registered_free or $this->do_deactivation( false, true );
-					break;
-				default:
 					break;
 			endswitch;
 		endif;

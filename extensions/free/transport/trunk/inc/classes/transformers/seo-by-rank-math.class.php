@@ -265,13 +265,16 @@ class SEO_By_Rank_Math extends Core {
 	 */
 	public static function _robots_text_to_qubit( $value ) {
 
-		// Future-proofed. TSF "only" supports 'noindex', 'nofollow', and 'noarchive'.
-		if ( \in_array( $value, [ 'noindex', 'nofollow', 'noarchive', 'noimageindex', 'nosnippet' ], true ) ) {
-			$value = 1; // Force no_robots
-		} else {
-			$value = null; // Default/unassigned
+		switch ( $value ) {
+			// Future-proofed. TSF "only" supports 'noindex', 'nofollow', and 'noarchive'.
+			case 'noindex':
+			case 'nofollow':
+			case 'noarchive':
+			case 'noimageindex':
+			case 'nosnippet':
+				return 1; // Force no_robots
 		}
 
-		return $value;
+		return null; // Default/unassigned
 	}
 }

@@ -285,12 +285,8 @@ final class AJAX extends Secure_Abstract {
 		if ( ! $input || ! \is_object( $input ) ) {
 			$send['results'] = static::$instance->get_ajax_notice( false, 17000 );
 		} else {
-			$account = self::get_property( 'account' );
-
 			$args = [
 				'request' => 'geocoding/get',
-				'email'   => $account['email'],
-				'api_key' => $account['key'],
 				'data'    => [
 					'geodata' => json_encode( $input ),
 					'locale'  => \get_user_locale(),

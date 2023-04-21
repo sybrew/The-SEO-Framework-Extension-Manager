@@ -41,6 +41,13 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+TODO transport: "These are old titles that have been imported."
+	- Create Yoast 3.x titles, upgrade to Yoast xx.whatever and create more titles. Import everything.
+	- Inspect the old data of Yoast, compare to new.
+	- https://wordpress.org/support/topic/migrates-seo-metadata/
+
+TODO get_my_account_link() cannot work in new instances..?
+
 TODO https://www.php.net/manual/en/class.sensitiveparameter.php
 TODO GA4 support (quickly now)
 	-> Users like this one: https://wordpress.org/plugins/duracelltomi-google-tag-manager/
@@ -51,9 +58,17 @@ TODO use $_SERVER file location rather than __FILE__ for instance check (i.e., v
 	https://stackoverflow.com/questions/13771021/php-dir-or-file-symlinked
 TODO updated pot file.
 
+TODO de-abstract get_subscription_status, make data public.
 TODO Now requires TSF v4.2.8!
+TODO align if-statements a la TSF:
+if ( $this->get_option( '_activated' )
+&& ( $results['d
 
 TODO set suggested size at create_image_field() -- if not found, set 0?
+
+TODO user can get stuck in this function when API mismatch:
+ - protected function handle_premium_disconnection( $args, $re
+ - Though, during the "status" check, the user will be prompted for deactivation, no?
 
 TODO Rank Math's Index -> Force index?
 	-> How does their plugin behave on global settings change?

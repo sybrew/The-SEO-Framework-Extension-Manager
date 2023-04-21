@@ -507,7 +507,7 @@ trait Extensions_Actions {
 
 		foreach ( $extensions as $_extension => $_active ) {
 			if (
-				! $_active
+				   ! $_active
 				|| ! $is_premium_user && static::is_extension_premium( $_extension )
 				|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
 				|| ( ! static::is_extension_compatible( $_extension ) )
@@ -1039,7 +1039,7 @@ trait Extensions_Actions {
 				break;
 
 			default:
-				$error_type = 'Type ' . $error['type'] . ' error.';
+				$error_type = "Type {$error['type']} error.";
 				break;
 		endswitch;
 

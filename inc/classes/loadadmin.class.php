@@ -303,7 +303,6 @@ final class LoadAdmin extends AdminPages {
 			$this->get_verification_codes( $_instance, $bits );
 			AJAX::initialize( '', $_instance, $bits );
 			AJAX::set_secret_api_key( $this->_create_protected_api_access_key( AJAX::class ) );
-			AJAX::set_account( $this->get_subscription_status() );
 		}
 	}
 

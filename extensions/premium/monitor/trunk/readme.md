@@ -83,6 +83,14 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a two-part system, changes are differentiated via Extension and API.*
 
+### 1.2.10
+
+[tsfep-release time="-1"]
+
+* **API - Our servers:**
+	* **April 21st, 2023:**
+		* **Added:** WordPress sitemaps are now crawled by the sitemap tester.
+
 ### 1.2.9
 
 [tsfep-release time="February 7th, 2023"]

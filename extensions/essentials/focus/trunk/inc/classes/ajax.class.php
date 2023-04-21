@@ -279,9 +279,11 @@ final class Ajax {
 
 					// When no inflections are returned, or if the one returned is only of the same kind as the keyword, fail.
 					// NOTE: Uses weak non-UTF8 strtolower. Users are smart enough to ignore useless data.
-					if ( ! $send['data']['inflections']
-					|| \count( $send['data']['inflections'] ) < 2
-					&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword ) ) {
+					if (
+						   ! $send['data']['inflections']
+						|| \count( $send['data']['inflections'] ) < 2
+						&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword )
+					) {
 						$send['results'] = $this->get_ajax_notice( false, 1100306 );
 					} else {
 						$send['results'] = $this->get_ajax_notice( true, 1100307 );

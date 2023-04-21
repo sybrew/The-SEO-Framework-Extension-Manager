@@ -247,38 +247,39 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 * Determines whether the account level is premium.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.2 Removed memoization.
 	 *
 	 * @return bool Whether the current account is premium.
 	 */
 	final protected static function is_premium_user() {
 
-		static $is_premium;
+		switch ( self::$account['level'] ?? '' ) {
+			case 'Enterprise':
+			case 'Premium':
+				return true;
+		}
 
-		if ( isset( $is_premium ) )
-			return $is_premium;
-
-		$level = self::$account['level'] ?? '';
-
-		return $is_premium = \in_array( $level, [ 'Enterprise', 'Premium' ], true );
+		return false;
 	}
 
 	/**
 	 * Determines whether the account level is premium or essential.
 	 *
 	 * @since 2.0.0
+	 * @since 2.6.2 Removed memoization.
 	 *
 	 * @return bool Whether the current account is API connected.
 	 */
 	final protected static function is_connected_user() {
 
-		static $is_connected;
+		switch ( self::$account['level'] ?? '' ) {
+			case 'Enterprise':
+			case 'Premium':
+			case 'Essentials':
+				return true;
+		}
 
-		if ( isset( $is_connected ) )
-			return $is_connected;
-
-		$level = self::$account['level'] ?? '';
-
-		return $is_connected = \in_array( $level, [ 'Enterprise', 'Premium', 'Essentials' ], true );
+		return false;
 	}
 
 	/**
