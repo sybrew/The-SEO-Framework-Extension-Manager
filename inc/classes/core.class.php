@@ -218,6 +218,7 @@ class Core {
 	 */
 	final protected function get_options_instance_key() {
 		static $instance;
+		// TODO PHP 7.4: ??=
 		return $instance ?? (
 			$instance = $this->get_option( '_instance' )
 				?: \wp_generate_password( 29, false )
@@ -352,29 +353,6 @@ class Core {
 	}
 
 	/**
-	 * Sends out HTML data for AJAX.
-	 *
-	 * @since 1.3.0
-	 *
-	 * @param mixed  $html The HTML that needs to be send. Must be escaped.
-	 * @param string $type The status type.
-	 */
-	final public function send_html( $html, $type = 'success' ) {
-
-		$r = $this->_clean_response_header();
-
-		if ( $r & 2 ) {
-			$this->set_status_header( 200, 'html' );
-		} else {
-			$this->set_status_header( null, 'html' );
-		}
-
-		// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- See method doc.
-		echo $html;
-		exit;
-	}
-
-	/**
 	 * Generates AJAX POST object for looping AJAX callbacks.
 	 *
 	 * Example usage includes downloading files over AJAX, which is otherwise not
@@ -491,6 +469,7 @@ class Core {
 		}
 
 		if ( $get ) {
+			// FIXME? $last isn't cleared here. Probably a foreach would be better.
 			return [ $output => $last ];
 		} else {
 			return $output;
@@ -619,17 +598,13 @@ class Core {
 
 		static $_this;
 
-		if ( null === $_this )
+		if ( ! $_this )
 			$_this = \get_class( $this );
 
-		if ( isset( $filter['function'] ) ) {
-			if ( \is_array( $filter['function'] ) ) :
-				foreach ( $filter['function'] as $k => $function ) :
-					if ( \is_object( $function ) && $function instanceof $_this )
-						unset( $GLOBALS['wp_filter'][ $key ][ $_key ] );
-				endforeach;
-			endif;
-		}
+		if ( \is_array( $filter['function'] ?? null ) )
+			foreach ( $filter['function'] as $function )
+				if ( \is_object( $function ) && $function instanceof $_this )
+					unset( $GLOBALS['wp_filter'][ $key ][ $_key ] );
 
 		return true;
 	}
@@ -942,19 +917,42 @@ class Core {
 			'salt' => '',
 		];
 
-		if ( 'options' === $scheme ) {
-			// A combobulation of various static yet unique values.
-			$values = [
-				'key'  => 'k' . ( \get_option( 'initial_db_version' ) + 1493641 ) . '+++42===',
-				'salt' => 's' . md5( \dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) )
-					. \get_option( 'the_seo_framework_initial_db_version' ) . '+++69---',
-			];
-		} else {
-			$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
-			// 'instance' picks a random key. Store in other variable so we can cache this result.
-			$_scheme = 'instance' === $scheme ? $schemes[ mt_rand( 0, \count( $schemes ) - 1 ) ] : $scheme;
+		switch ( $scheme ) {
+			case 'domain':
+				// A combobulation of various static yet less unique values.
+				$values = [
+					'key'  => 'k' . (
+						\get_option( 'initial_db_version' ) + 2219423
+					) . md5( \get_site_option( 'siteurl' ) ) . '+++42===',
+					'salt' => 's' . (
+						\get_option( 'the_seo_framework_initial_db_version' ) + 2367569
+					) . '+++69---',
+				];
+				break;
 
-			if ( \in_array( $_scheme, $schemes, true ) ) {
+			case 'options':
+				// A combobulation of various static yet unique values.
+				$values = [
+					'key'  => 'k' . ( \get_option( 'initial_db_version' ) + 1493641 ) . '+++42===',
+					'salt' => 's' . md5( \dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) )
+						. \get_option( 'the_seo_framework_initial_db_version' ) . '+++69---',
+				];
+				break;
+
+			case 'auth':
+			case 'secure_auth':
+			case 'logged_in':
+			case 'nonce':
+			case 'instance':
+				if ( 'instance' === $scheme ) {
+					$schemes = [ 'auth', 'secure_auth', 'logged_in', 'nonce' ];
+					// 'instance' picks a random key. Store in other variable so we can cache this result.
+					$_scheme = $schemes[ mt_rand( 0, \count( $schemes ) - 1 ) ];
+				} else {
+					// We reserve $scheme to cache 'instance' later. Create a copy.
+					$_scheme = $scheme;
+				}
+
 				foreach ( [ 'key', 'salt' ] as $type ) :
 					$const = strtoupper( "{$_scheme}_{$type}" );
 					if ( \defined( $const ) && \constant( $const ) ) {
@@ -970,9 +968,10 @@ class Core {
 						}
 					}
 				endforeach;
-			} else {
+				break;
+			default:
 				\wp_die( 'Invalid scheme supplied for <code>' . __METHOD__ . '</code>.' );
-			}
+				break;
 		}
 
 		return $cached_salts[ $scheme ] = "{$values['key']}{$values['salt']}";
@@ -1341,18 +1340,18 @@ class Core {
 	 * Returns subscription status from local options.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.2 Removed memoization.
 	 *
 	 * @return array Current subscription status.
 	 */
 	final protected function get_subscription_status() {
-		static $status;
-		return $status ?? ( $status = [
+		return [
 			'key'    => $this->get_option( 'api_key' ),
 			'email'  => $this->get_option( 'activation_email' ),
 			'active' => $this->get_option( '_activated' ),
 			'level'  => $this->get_option( '_activation_level' ),
 			'data'   => $this->get_option( '_remote_subscription_status' ),
-		] );
+		];
 	}
 
 	/**

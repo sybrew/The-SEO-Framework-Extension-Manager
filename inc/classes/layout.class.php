@@ -250,6 +250,7 @@ final class Layout extends Secure_Abstract {
 	 * Outputs premium support button.
 	 *
 	 * @since 1.0.0
+	 * @TODO rewrite? It's a mess.
 	 *
 	 * @return string The premium support button link.
 	 */
@@ -366,7 +367,7 @@ final class Layout extends Secure_Abstract {
 		$_warning = '';
 		$_classes = [ 'tsfem-dashicon' ];
 
-		if ( empty( $activation_domain ) || $activation_domain === $current_domain ) {
+		if ( ! isset( $activation_domain ) || $activation_domain === $current_domain ) {
 			$_classes[] = 'tsfem-success';
 		} else {
 			$_warning = \tsf()->convert_markdown(
@@ -383,7 +384,8 @@ final class Layout extends Secure_Abstract {
 		$output .= static::wrap_row_content(
 			\esc_html__( 'Valid for:', 'the-seo-framework-extension-manager' ),
 			HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
-				$activation_domain ?? $current_domain,
+				// If the response yields nothing, we cannot say for which it's valid, show a mdash.
+				( $activation_domain ?? $current_domain ) ?: '&mdash;',
 				$_warning,
 				'',
 				$_classes

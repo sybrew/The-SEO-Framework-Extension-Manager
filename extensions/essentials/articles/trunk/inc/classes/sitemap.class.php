@@ -208,6 +208,7 @@ final class Sitemap extends Core {
 	 * Returns the sitemap transient name.
 	 *
 	 * @since 2.0.0
+	 * @todo use TSF 4.2.9's get_sitemap_transient_key
 	 *
 	 * @return string The sitemap transient name.
 	 */

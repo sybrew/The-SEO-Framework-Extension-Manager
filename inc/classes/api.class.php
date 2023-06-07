@@ -159,7 +159,7 @@ class API extends Core {
 	 * @return string Domain Host.
 	 */
 	final public function get_current_site_domain() {
-		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
+		return preg_replace( '~^(https?:)?//~i', '', \esc_url( \get_home_url(), [ 'https', 'http' ] ) );
 	}
 
 	/**

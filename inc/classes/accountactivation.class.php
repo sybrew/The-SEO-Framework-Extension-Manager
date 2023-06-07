@@ -155,6 +155,7 @@ class AccountActivation extends Panes {
 	 * @since 1.0.0
 	 * @since 1.1.0 Can now also disconnect decoupled websites.
 	 * @since 2.1.0 Added the $args parameter.
+	 * @since 2.6.2 Rewritten to ease disconnecting and remove dependency on our API services on error.
 	 *
 	 * @param array $args : {
 	 *    'request'          => string The request type.
@@ -162,33 +163,34 @@ class AccountActivation extends Panes {
 	 *    'activation_email' => string The activation email used.
 	 * }
 	 * @param array $results The disconnection response.
-	 * @return bool|null True on success, false on failure. Null on invalid request.
+	 * @return bool True on success, false on failure.
 	 */
 	protected function handle_premium_disconnection( $args, $results ) {
 
-		if ( isset( $results['deactivated'] ) ) {
-			// If option has once been registered, deregister options and return activation status.
-			if ( $this->get_option( '_activated' )
-			&& ( $results['deactivated'] || ( isset( $results['activated'] ) && 'inactive' === $results['activated'] ) )
-			) {
-				$success = $this->do_deactivation( false, true );
+		$message = '';
 
-				$remaining = isset( $results['activations_remaining'] ) ? ' ' . \esc_html( $results['activations_remaining'] ) . '.' : '';
-				$message   = \esc_html__( 'API Key disconnected.', 'the-seo-framework-extension-manager' ) . $remaining;
+		// Remove deactivation was successful. Don't notify user otherwise; they couldn't care less.
+		if ( ! empty( $results['deactivated'] ) )
+			$message .= \esc_html__( 'API Key disconnected.', 'the-seo-framework-extension-manager' );
 
-				if ( ! $success )
-					$message .= ' ' . \esc_html__( 'However, something went wrong with the disconnection on this website.', 'the-seo-framework-extension-manager' );
-
+		if ( $this->get_option( '_activated' ) ) {
+			if ( $this->do_deactivation( false, true ) ) {
 				$this->set_error_notice( [ 501 => $message ] );
 				return true;
 			}
 
-			$this->set_error_notice( [ 502 => '' ] );
+			// TODO $this->kill_options() on failure?
+			// Or set a flag to allow the user to directly kill_options()?
+
+			$this->set_error_notice( [ 502 => $message ] );
 			return false;
 		}
 
-		// API server down... TODO consider still handling disconnection locally?
-		$this->set_error_notice( [ 503 => '' ] );
+		if ( empty( $results['timestamp'] ) ) {
+			// API server down and local disconnect failed.
+			$this->set_error_notice( [ 503 => '' ] );
+		}
+
 		return null;
 	}
 
@@ -196,17 +198,43 @@ class AccountActivation extends Panes {
 	 * Returns the default activation options.
 	 *
 	 * @since 2.6.1
+	 * @since 2.6.2 Now listens to constant TSF_EXTENSION_MANAGER_INSTANCE_VERSION.
 	 *
 	 * @return array The default activation options.
 	 */
 	protected function get_default_activation_options() {
+
+		switch (
+			/**
+			 * The forces plugin instance version.
+			 * This will only affect the version when the site isn't activated yet.
+			 *
+			 * @since 2.6.2
+			 * @param string The instance version to use.
+			 *               '1.0' relies on wp-config.php's AUTH_KEY and AUTH_SALT values.
+			 *               '2.0' relies on Extension Manager's folder location.
+			 *               '3.0' relies on the site URL.
+			 */
+			\defined( 'TSF_EXTENSION_MANAGER_INSTANCE_VERSION' ) ? TSF_EXTENSION_MANAGER_INSTANCE_VERSION : false
+		) {
+			case '1.0': // wp-config.php AUTH_KEY and AUTH_SALT values.
+			case '2.0': // Extension Manager's folder location.
+			case '3.0': // Site URL.
+				$instance_version = TSF_EXTENSION_MANAGER_INSTANCE_VERSION;
+				break;
+
+			default:
+				$instance_version = '3.0';
+				break;
+		}
+
 		return [
 			'api_key'           => '',
 			'activation_email'  => '',
 			'_activation_level' => 'Free',
 			'_activated'        => 'Activated',
 			'_instance'         => $this->get_options_instance_key(),
-			'_instance_version' => '2.0', // If not in database, assume 1.0
+			'_instance_version' => $instance_version, // If not set in database, assume 1.0
 		];
 	}
 

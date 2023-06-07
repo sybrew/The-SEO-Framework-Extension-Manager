@@ -50,7 +50,7 @@ if ( $tsf->the_seo_framework_debug ) {
 	echo "\n" . '<!-- System estimated current usage: ' . number_format( memory_get_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $sitemap_bridge->get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
+	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( \The_SEO_Framework\Bridges\Sitemap::get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
 	echo "\n" . '<!-- Sitemap generation time: ' . number_format( ( hrtime( true ) - $timer_start ) / 1e9, 6 ) . ' seconds -->';
 	echo "\n" . '<!-- Sitemap caching enabled: ' . ( $tsf->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
 	echo "\n" . '<!-- Sitemap transient key: ' . esc_html( $this->get_sitemap_transient_name() ) . ' -->';

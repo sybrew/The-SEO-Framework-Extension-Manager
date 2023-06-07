@@ -322,8 +322,8 @@ trait Error {
 				$type    = 'error';
 				break;
 
-			case 303:
-			case 307:
+			case 303: // license not found
+			case 307: // email/license mismatch
 				$message = sprintf(
 					/* translators: %s = My Account */
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
@@ -404,9 +404,18 @@ trait Error {
 				break;
 
 			case 501:
-			case 502:
 				$message = \esc_html__( 'Your account has been successfully deauthorized from this website.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
+				break;
+
+			case 502:
+				$message = \esc_html__( 'Failed to disconnect locally, please try again.', 'the-seo-framework-extension-manager' );
+				$type    = 'updated';
+				break;
+
+			case 504:
+				$message = \esc_html__( 'Failed to deauthorize your account from the API server, but still disconnected locally.', 'the-seo-framework-extension-manager' );
+				$type    = 'warning';
 				break;
 
 			case 601:

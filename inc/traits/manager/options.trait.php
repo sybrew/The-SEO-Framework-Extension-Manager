@@ -125,6 +125,9 @@ trait Options {
 			return false;
 		}
 
+		// Effervescently evergreen. This will stop users "deciphering" the "local instance" gimmick ad futility.
+		$options['_timestamp'] = time();
+
 		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
@@ -275,18 +278,23 @@ trait Options {
 	 * Hashes the options.
 	 *
 	 * @since 2.6.1
+	 * @since 2.6.2 Added '3.0' support.
 	 *
 	 * @param mixed $options The option data to compare hash with.
 	 * @return string The hashed options.
 	 */
 	protected function hash_options( $options ) {
 		switch ( $options['_instance_version'] ?? '1.0' ) {
+			case '3.0':
+				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
+				return $this->hash( \serialize( $options ), 'domain' );
+
 			case '2.0':
 				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 				return $this->hash( \serialize( $options ), 'options' );
 
-			default:
 			case '1.0':
+			default:
 				// phpcs:ignore -- No objects are inserted, nor is this ever unserialized.
 				return $this->hash( \serialize( $options ), 'auth' );
 		}
