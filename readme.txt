@@ -60,8 +60,6 @@ TODO use $_SERVER file location rather than __FILE__ for instance check (i.e., v
 	https://stackoverflow.com/questions/13771021/php-dir-or-file-symlinked
 TODO updated pot file.
 
-TODO notify https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/74 of workaround.
-
 TODO add to "There is no usable content, so no description could be generated.":
 	"Search engines will try to generate a description from any content it can find on this page."
 	Also make "Usable content" more clear: Usable content for generation...?
@@ -97,7 +95,7 @@ TODO
 
 * Disconnecting a Premium account when there's an issue with our servers is now possible.
 * Installing Extension Manager for the first time will now use option instance verification v3.0, which relies on the site URL instead of plugin folder location (2.0) or salt keys (1.0).
-* Constant `TSF_EXTENSION_MANAGER_INSTANCE_VERSION` is now available. This helps users with complex server setups maintain a stable and secure connection by changing to a salt key (1.0), folder location (2.0), or site URL (3.0, the new default).
+* Constant `TSF_EXTENSION_MANAGER_INSTANCE_VERSION` is now available. This helps users with complex server setups maintain a stable and secure connection by changing to a salt key (1.0), folder location (2.0), or site URL (3.0, the new default). [View details](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/74#issuecomment-1581214354).
 *
 
 = 2.6.1 =

@@ -72,17 +72,17 @@ final class Admin extends Core {
 
 		$_settings = [
 			'analytics' => [
-				'_default'                => null,
-				'_edit'                   => true,
-				'_ret'                    => '',
-				'_req'                    => false,
-				'_type'                   => 'plain_dropdown',
-				'_desc'                   => [
+				'_default' => null,
+				'_edit'    => true,
+				'_ret'     => '',
+				'_req'     => false,
+				'_type'    => 'plain_dropdown',
+				'_desc'    => [
 					'',
 					\__( 'Connect your site with various third-party analytical platforms. Cord takes care of the rest.', 'the-seo-framework-extension-manager' ),
 				],
-				'_md'                     => true,
-				'_fields'                 => [
+				'_md'      => true,
+				'_fields'  => [
 					'google_analytics' => [
 						'_default' => null,
 						'_edit'    => true,
@@ -92,8 +92,8 @@ final class Admin extends Core {
 						'_desc'    => [
 							\__( 'Google Analytics', 'the-seo-framework-extension-manager' ),
 							sprintf(
-								/* translators: %s = Tracking ID documentation link. Markdown. */
-								\__( 'Start tracking with [Google Analytics](%s) by filling in a Tracking ID.', 'the-seo-framework-extension-manager' ),
+								/* translators: %s = Measurement ID documentation link. Markdown. */
+								\__( 'Start tracking with [Google Analytics](%s) by filling in a Measurement ID.', 'the-seo-framework-extension-manager' ),
 								'https://analytics.google.com/analytics/web/'
 							),
 						],
@@ -105,57 +105,31 @@ final class Admin extends Core {
 								'_ret'     => 's',
 								'_req'     => false,
 								'_type'    => 'text',
-								'_pattern' => '\bUA-\d{4,10}-\d{1,4}\b',
+								'_pattern' => '(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{5,15})', // Google doesn't specify length, assume 5~15 (norm is 10)
 								'_desc'    => [
-									\__( 'Tracking ID', 'the-seo-framework-extension-manager' ),
+									\__( 'Measurement ID', 'the-seo-framework-extension-manager' ),
 									sprintf(
 										/* translators: %s = Tracking ID documentation link. Markdown. */
-										\__( 'Get your [Tracking ID](%s).', 'the-seo-framework-extension-manager' ),
-										'https://support.google.com/analytics/answer/1008080#GAID'
+										\__( 'Get your [Measurement ID](%s).', 'the-seo-framework-extension-manager' ),
+										'https://support.google.com/analytics/answer/12270356'
 									),
 								],
-								'_ph'      => 'UA-12345678-9',
+								'_ph'      => 'G-ABCDE1FGH23',
 								'_md'      => true,
 							],
 							'enhanced_link_attribution' => [
 								'_default' => null,
-								'_edit'    => true,
+								'_edit'    => false,
 								'_ret'     => 's',
 								'_req'     => false,
 								'_type'    => 'checkbox',
-								'_desc'    => [
-									\__( 'Enhanced Link Attribution', 'the-seo-framework-extension-manager' ),
-									sprintf(
-										/* translators: %s = Tracking ID documentation link. Markdown. */
-										\__( 'You can improve the accuracy of links clicked with [Enhanced Link Attribution](%s).', 'the-seo-framework-extension-manager' ),
-										'https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-link-attribution'
-									),
-									\__( 'Use the "Page Analytics (by Google)" browser extension for Google Chrome to analyze the information collected. Custom theme development may be required to take full advantage of this feature.', 'the-seo-framework-extension-manager' ),
-								],
-								'_check'   => [
-									\__( 'Enable Enhanced Link Attribution?', 'the-seo-framework-extension-manager' ),
-								],
-								'_md'      => true,
 							],
 							'ip_anonymization'          => [
 								'_default' => null,
-								'_edit'    => true,
+								'_edit'    => false,
 								'_ret'     => 's',
 								'_req'     => false,
 								'_type'    => 'checkbox',
-								'_desc'    => [
-									\__( 'IP Anonymization', 'the-seo-framework-extension-manager' ),
-									sprintf(
-										/* translators: %s = Tracking ID documentation link. Markdown. */
-										\__( 'You can protect the identity of your visitors through [IP anonymization](%s).', 'the-seo-framework-extension-manager' ),
-										'https://support.google.com/analytics/answer/2763052'
-									),
-									\__( 'This feature is at the cost of a slight possibility of inconsistent data.', 'the-seo-framework-extension-manager' ),
-								],
-								'_check'   => [
-									\__( 'Enable IP anonymization?', 'the-seo-framework-extension-manager' ),
-								],
-								'_md'      => true,
 							],
 						],
 					],
@@ -254,29 +228,14 @@ final class Admin extends Core {
 		foreach ( $valid_indexes as $index ) :
 			switch ( $index ) :
 				case 'google_analytics':
-					$keys = [
-						'tracking_id',
-						'enhanced_link_attribution',
-						'ip_anonymization',
-					];
-					foreach ( $keys as $key ) {
-						switch ( $key ) {
-							case 'tracking_id':
-								$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
-								if ( ! preg_match( '/^\bUA-\d{4,10}-\d{1,4}\b$/', $value[ $index ][ $key ] ) ) {
-									$value[ $index ][ $key ] = '';
-								}
-								break;
+					$key = 'tracking_id';
 
-							case 'enhanced_link_attribution':
-							case 'ip_anonymization':
-								$value[ $index ][ $key ] = \tsf()->s_one_zero( $value[ $index ][ $key ] ?? 0 );
-								break;
+					$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
 
-							default:
-								break;
-						}
-					}
+					// Google doesn't specify length, assume 5~15 (norm is 10)
+					if ( ! preg_match( '/^(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{5,15})$/', $value[ $index ][ $key ] ) )
+						$value[ $index ][ $key ] = '';
+
 					break;
 
 				case 'facebook_pixel':

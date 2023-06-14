@@ -2083,7 +2083,7 @@ final class FormGenerator {
 									'tsfem-button',
 									'tsfem-button-small',
 								],
-							]
+							],
 						] ),
 					]
 				),

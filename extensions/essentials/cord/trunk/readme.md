@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/cord/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension helps you connect your website to third-party services, like Google Universal Analytics and Facebook pixel.
+This extension helps you connect your website to third-party services, like Google Analytics and Meta Pixel.
 
 ## Overview
 
@@ -11,17 +11,17 @@ This extension helps you connect your website to third-party services, like Goog
 
 Manage third-party services for your WordPress website with ease. Activate the extension, fill in the connection keys, and you're done. Cord takes care of the rest.
 
-Cord supports the Google Analytics and Facebook pixel services. For these, you require a "Google Analytics" and "Facebook for Business" accounts, respectively.
+Cord supports the Google Analytics and Facebook Pixel services. For these, you require a "Google Analytics" and "Facebook for Business" accounts, respectively.
 
 ### Sensical Google Analytics
 
-Cord provides only the critical scripts to set up the Google Analytics connection. No data is stored or processed on your website. Google Analytics already provides the interface via their website.
+Cord provides only the critical scripts to set up the Google Analytics connection. No tracking data is stored or processed on your website. Google Analytics provides all insights via their website; where it should be.
 
-Moreover, Cord automatically fixes the search query URLs in WordPress before relaying them, so that Google Analytics knows how to sort these&mdash;without losing any data.
+Cord also automatically fixes the search query URLs in WordPress before relaying them, so that Google Analytics knows how to sort these&mdash;without losing any data.
 
-### Simplified Facebook pixel
+### Simplified Meta Pixel
 
-Cord provides exactly one field for Facebook pixel tracking. When you've filled that in, you can start tracking visitors right away for remarketing.
+Cord provides exactly one field for Facebook Pixel tracking. When you've filled that in, you can start tracking visitors right away for remarketing.
 
 ## Usage
 
@@ -35,7 +35,7 @@ First, you'll need to activate the Cord extension.
 
 Underneath the extension description, you should see a settings-link appear. You can also find the link to "Extension Settings" under "SEO" in the admin sidebar, but you may need to refresh the page first.
 
-On the Extension Settings page, you can set up the required connection information for Google Analytics and Facebook pixel.
+On the Extension Settings page, you can set up the required connection information for Google Analytics and Meta Pixel.
 
 ### Enabling Google Analytics
 
@@ -43,7 +43,9 @@ To get started with Google Analytics, follow these steps:
 
 1. Go to [Google Analytics](https://www.google.com/analytics/). Sign up with Google or log into your existing account.
 2. Set up a property. The property will represent your website.
-3. You will now see your Tracking ID at the top of the page. It should start with `UA-`.
+3. You will now see your Measurement ID at the top of the page. It should start with `G-`.
+
+If you cannot find the Measurement ID, please follow [Google's instructions](https://support.google.com/analytics/answer/12270356).
 
 [tsfep-image id="1"]
 
@@ -53,12 +55,12 @@ To get started with Google Analytics, follow these steps:
 
 When fully set up, Google Analytics will start tracking visitors and provide you event, performance, and other insights.
 
-### Enabling Facebook pixel
+### Enabling Meta Pixel
 
-To get started with Facebook pixel, you first need a Facebook for Business account.
+To get started with Meta Pixel, you first need a Meta for Business account.
 
 1. Go to Facebook's [Event Manager](https://www.facebook.com/ads/manager/pixel/facebook_pixel). Sign up with Facebook or log into your existing account tied to the business.
-2. Select "Get Started" with Facebook pixel.
+2. Select "Get Started" with Meta Pixel.
 3. Provide the pixel name. The other fields are optional.
 4. Close or cancel the installation dialog--Cord isn't listed there.
 5. At the top of the page, you should see your pixel ID.
@@ -69,7 +71,7 @@ To get started with Facebook pixel, you first need a Facebook for Business accou
 
 [tsfep-image id="4"]
 
-When fully set up, Facebook pixel will start tracking visitors and provide you with various insights for advertising.
+When fully set up, Meta Pixel will start tracking visitors and provide you with various insights for advertising.
 
 ### Privacy
 
@@ -102,19 +104,13 @@ Cord outputs the tracking script for all users--including logged-in users. Howev
 
 Yes. But we won't tell you how. Privacy is sacred.
 
-### Why isn't gtag used instead of Google Analytics?
+### Why would I choose this extension over Google's official Site Kit plugin?
 
-The global site tag (gtag) is a solution that requires an on-site developer to tailor. Although extremely powerful, the overhead required is enormous. We can't predict which actions you'd want to record. On the other hand, Google Analytics does almost everything you require for analytics out of the box--even page speed insights. And, through advanced settings in your Google Analytics dashboard, you can achieve roughly the same results.
-
-### What's Enhanced Link Attribution for Google Analytics?
-
-Some pages have multiple links that lead to the same page. When Enhanced Link Attribution is enabled, Google Analytics tries to find the nearest HTML element ID of each link that's clicked. This way, Google Analytics can approximate which link is clicked, without requiring advanced tagging.
-
-To inspect these findings, you require the [Page Analytics Chromium browser extension](https://chrome.google.com/webstore/detail/page-analytics-by-google/fnbdnhhicmebfgdgglcdacdapkcihcoh). Please note that this extension is no longer maintained. We are yet unaware of alternative solutions.
+[Site Kit by Google](https://wordpress.org/plugins/google-site-kit/) provides advanced integration for some other plugins that can help you with tracking, conversion, and advertisement campaigns. It's inefficient, tracks the plugin usage, and will slow down your site tremendously. If you just want a simple integration for tracking visitors, then this extension provides the lightweight alternative.
 
 ### Why would I choose this extension over Facebook's official plugin?
 
-[Facebook's official pixel plugin](https://wordpress.org/plugins/official-facebook-pixel/) provides advanced integration for some other plugins that can help you with advertisement campaigns. If you see no use in that, and you just want a simple integration, then this extension provides a lightweight alternative--as is such with all our solutions.
+[Facebook's official Meta Pixel plugin](https://wordpress.org/plugins/official-facebook-pixel/) provides advanced integration for some other plugins that can help you with advertisement campaigns. If you see no use in that, and you just want a simple integration, then this extension provides a lightweight alternative--as is such with all our solutions.
 
 ### What about cookie consent?
 
@@ -125,8 +121,7 @@ The extension does not create cookies itself. However, the third-party scripts C
 | Option           | Cookie name | Purpose     | Privacy                                                            | Expiry     |
 |:---------------- |:----------- |:----------- |:------------------------------------------------------------------ |:---------- |
 | Google Analytics | `_ga`       | Analytics   | [View policy](https://support.google.com/analytics/answer/6004245) | 2 years    |
-| Google Link ID   | `_gali`     | Analytics   | [View policy](https://support.google.com/analytics/answer/6004245) | 30 seconds |
-| Facebook pixel   | `_fbp`      | Remarketing | [View policy](https://www.facebook.com/about/privacy)              | Session    |
+| Facebook Pixel   | `_fbp`      | Remarketing | [View policy](https://www.facebook.com/about/privacy)              | Session    |
 
 Whether this information is useful to you depends on the laws you must (or should) follow. We're not lawyers, so we're not going to provide you a most annoying cookie consent banner. Integrate it yourself, and please make it small enough for us to ignore easily. Thank you.
 
@@ -154,17 +149,23 @@ add_action( 'init', function() {
 }, 9 );
 ```
 
-#### Specify Enhanced Link Attribution element levels
-
-Specify the maximum number of levels in the DOM to look to find an existing ID. When no element ID is found after bubbling up to the set levels, the link will be measured globally. Setting this value too high may impact browser performance when a link is clicked.
-
-```php
-add_filter( 'the_seo_framework_cord_ga_ela_id_levels', function( $levels = 5 ) {
-	return 3;
-} );
-```
-
 ## Changelog
+
+### 1.1.0
+
+[tsfep-release time="-1"]
+
+**Manual migration required:** Universal Analytics 3 is now Google Analytics 4. To migrate, please [follow these instructions](https://support.google.com/analytics/answer/10110290). To use your new Google Analytics property with Cord, you'll need to [obtain the Measurement ID](https://support.google.com/analytics/answer/12270356), and paste that ID into Extension Settings.
+
+* **Added:** Google Analytics 4 (GA4) Measurement ID is now supported.
+	* This is the most basic form; you cannot track special events via Cord, such as sale conversions. You can get those via the all-involving [Site Kit plugin](https://wordpress.org/plugins/google-site-kit/).
+	* IP Anonymization is no longer optional; but it's enabled by default for all GA4 users by Google.
+	* Enhanced Link Attribution is no longer available, this feature is no longer supported by Google.
+	* Many more features are customizable now, but they're all controlled via your Google Analytics dashboard now.
+* **Removed:** This extension will stop outputting Google Universal Analytics 3 (UA3) script on July 1st, 2023, at 7:00 AM GMT, which is when Google stops supporting UA3.
+* **Removed:** You can no longer set up UA3 via this extension.
+* **Note:** Resaving the Extension Settings will purge old Universal Analytics settings: IP Anonymization and Enhanced Link Attribution.
+* **Note:** In the next update, we'll remove all residual checks and filters from UA3.
 
 ### 1.0.0
 

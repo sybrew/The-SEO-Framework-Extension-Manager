@@ -8,8 +8,8 @@ namespace TSF_Extension_Manager\Extension\Cord;
 /**
  * Extension Name: Cord
  * Extension URI: https://theseoframework.com/extensions/cord/
- * Extension Description: The Cord extension helps you connect your website to third-party services, like Google Universal Analytics and Facebook pixel.
- * Extension Version: 1.0.0
+ * Extension Description: The Cord extension helps you connect your website to third-party services, like Google Analytics and Meta Pixel.
+ * Extension Version: 1.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -42,7 +42,7 @@ namespace TSF_Extension_Manager\Extension\Cord;
  *
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-\define( 'TSFEM_E_CORD_VERSION', '1.0.0' );
+\define( 'TSFEM_E_CORD_VERSION', '1.1.0' );
 
 /**
  * The extension database version.
