@@ -117,9 +117,13 @@ final class Front extends Core {
 			case 'G':
 				// GA4
 				echo '<link rel="dns-prefetch" href="https://www.googletagmanager.com/" />', "\n"; // Keep XHTML valid!
-				// Google doesn't use preconnect internally, are there issues? TODO figure out.
+				echo '<link rel="preconnect" href="https://www.googletagmanager.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
+				// gtag.js collects via google-analytics.com and `analytics.google.com`.
+				echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', "\n"; // Keep XHTML valid!
+				echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
 				break;
 
+			// TODO remove this once UA is phased out.
 			case 'UA':
 				// Universal Analytics 3; can be removed on July 1st, 2023.
 				if ( time() > 1688194800 ) break;
@@ -150,11 +154,13 @@ final class Front extends Core {
 				// https://developers.google.com/analytics/devguides/collection/ga4/reference/config
 				$config = [];
 
+				// TODO add field to allow multiple domains? This seems exaggeratingly redundant.
 				// https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain#automatically_link_domains
 				$home_domain   = parse_url( \tsf()->get_raw_home_canonical_url(), PHP_URL_HOST );
 				$page_location = '';
 
 				// Fix and normalize search link recognition.
+				// Is this still needed? Maybe Google will add support for this again with GA4 -- keep it.
 				if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
 					$search_query  = \get_search_query();
 					$page_location = \esc_js( \add_query_arg(
@@ -193,11 +199,12 @@ final class Front extends Core {
 				HTML;
 				// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
 				break;
+			// TODO remove this once UA is phased out.
 			case 'UA':
 				// Universal Analytics 3; can be removed on July 1st, 2023.
 				if ( time() > 1688194800 ) break;
 
-				$link    = '';
+				$link = '';
 
 				// Fix and normalize search link recognition.
 				if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {

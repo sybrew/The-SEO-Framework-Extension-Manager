@@ -270,7 +270,7 @@ final class Layout extends Secure_Abstract {
 
 		$email              = $account['email'] ?? '';
 		$key                = $account['key'] ?? '';
-		$data               = $account['data'] ?? '';
+		$data               = $account['data'] ?? [];
 		$level              = ! empty( $account['level'] ) ? $account['level'] : \__( 'Unknown', 'the-seo-framework-extension-manager' );
 		$current_domain     = $tsfem->get_current_site_domain();
 		$end_date           = '';

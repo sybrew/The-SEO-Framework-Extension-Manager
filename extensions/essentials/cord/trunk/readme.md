@@ -59,15 +59,16 @@ When fully set up, Google Analytics will start tracking visitors and provide you
 
 To get started with Meta Pixel, you first need a Meta for Business account.
 
-1. Go to Facebook's [Event Manager](https://www.facebook.com/ads/manager/pixel/facebook_pixel). Sign up with Facebook or log into your existing account tied to the business.
-2. Select "Get Started" with Meta Pixel.
-3. Provide the pixel name. The other fields are optional.
-4. Close or cancel the installation dialog--Cord isn't listed there.
-5. At the top of the page, you should see your pixel ID.
+1. Go to Facebook's [Event Manager](https://www.facebook.com/events_manager2/list/pixel/). Sign up with Facebook or log into your existing account tied to the business.
+2. Select "Connect Data Source" in the side menu.
+3. Select "Web."
+4. Provide the pixel name. The other fields are optional.
+5. Close or cancel the installation dialog -- Cord isn't listed there.
+6. At the top of the page, you should see your pixel ID.
 
 [tsfep-image id="3"]
 
-6. Click on the ID to copy it, and paste it in Cord's corresponding field on the Extension Settings page. Don't forget to hit save.
+7. Click on the ID to copy it, and paste it in Cord's corresponding field on the Extension Settings page. Don't forget to hit save.
 
 [tsfep-image id="4"]
 
@@ -153,7 +154,7 @@ add_action( 'init', function() {
 
 ### 1.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="June 21st, 2023"]
 
 **Manual migration required:** Universal Analytics 3 is now Google Analytics 4. To migrate, please [follow these instructions](https://support.google.com/analytics/answer/10110290). To use your new Google Analytics property with Cord, you'll need to [obtain the Measurement ID](https://support.google.com/analytics/answer/12270356), and paste that ID into Extension Settings.
 

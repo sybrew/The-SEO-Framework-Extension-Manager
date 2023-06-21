@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
  * Extension Name: Transport *&beta;eta*
  * Extension URI: https://theseoframework.com/extensions/transport/
  * Extension Description: The Transport extension migrates SEO metadata from other plugins to The SEO Framework.
- * Extension Version: 1.1.0
+ * Extension Version: 1.1.1
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -41,7 +41,7 @@ namespace TSF_Extension_Manager\Extension\Transport;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-\define( 'TSFEM_E_TRANSPORT_VERSION', '1.1.0' );
+\define( 'TSFEM_E_TRANSPORT_VERSION', '1.1.1' );
 
 /**
  * The extension file, absolute unix path.

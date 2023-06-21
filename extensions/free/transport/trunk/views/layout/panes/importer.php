@@ -81,7 +81,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 					);
 					?>
 				</p>
-				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload tsfem-button-disabled"><?= esc_html__( 'Import', 'the-seo-framework-extension-manager' ); ?></a>
+				<a id=tsfem-e-transport-importer-submit href=javascript:; class="tsfem-button-primary tsfem-button-upload tsfem-button-disabled"><?= esc_html__( 'Import and delete old data', 'the-seo-framework-extension-manager' ); ?></a>
 			</form>
 			<template id=tsfem-e-transport-importer-options-template style=display:none>
 				<p>

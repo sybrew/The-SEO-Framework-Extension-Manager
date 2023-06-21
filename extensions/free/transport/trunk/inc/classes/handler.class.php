@@ -445,9 +445,9 @@ final class Handler {
 		$server->poll( $store );
 		$this->release_transport_lock();
 
-		$seconds = \number_format_i18n( ( hrtime( true ) - $hrtimestart ) / 1e9, 1 );
-		// Say it takes longer than it has because there's no such thing as 0 seconds in timing _something_.
-		if ( '0.0' === $seconds ) $seconds = '0.1';
+		// Say it takes at least 0.1s because there's no such thing as 0.0s in timing _something_.
+		$seconds = ( hrtime( true ) - $hrtimestart ) / 1e9;
+		$seconds = \number_format_i18n( $seconds < 0.1 ? 0.1 : $seconds, 1 );
 
 		$this->_halt_server( [
 			'server'     => $server,

@@ -181,6 +181,7 @@ class AccountActivation extends Panes {
 
 			// TODO $this->kill_options() on failure?
 			// Or set a flag to allow the user to directly kill_options()?
+			// It can only fail when the instance is borked. TODO test?
 
 			$this->set_error_notice( [ 502 => $message ] );
 			return false;
@@ -206,8 +207,8 @@ class AccountActivation extends Panes {
 
 		switch (
 			/**
-			 * The forces plugin instance version.
-			 * This will only affect the version when the site isn't activated yet.
+			 * This forces the plugin option verification instance version, which prevents users
+			 * from sharing API information between sites.
 			 *
 			 * @since 2.6.2
 			 * @param string The instance version to use.
@@ -334,7 +335,7 @@ class AccountActivation extends Panes {
 
 		if ( $downgrade ) {
 			$options = $this->get_all_options();
-			// Activation failed, and no instance available.
+			// Activation failed, and no instance is available.
 			if ( ! $options ) return true;
 
 			// Downgrade.
@@ -345,7 +346,7 @@ class AccountActivation extends Panes {
 						'api_key'                     => '',
 						'activation_email'            => '',
 						'_activation_level'           => 'Free',
-						'_remote_subscription_status' => false,
+						'_remote_subscription_status' => [],
 					]
 				),
 				true

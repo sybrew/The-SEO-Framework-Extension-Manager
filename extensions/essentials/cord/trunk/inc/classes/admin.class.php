@@ -105,7 +105,7 @@ final class Admin extends Core {
 								'_ret'     => 's',
 								'_req'     => false,
 								'_type'    => 'text',
-								'_pattern' => '(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{5,15})', // Google doesn't specify length, assume 5~15 (norm is 10)
+								'_pattern' => '(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{4,15})', // Google doesn't specify length, assume 4~15 (norm is 10)
 								'_desc'    => [
 									\__( 'Measurement ID', 'the-seo-framework-extension-manager' ),
 									sprintf(
@@ -140,10 +140,10 @@ final class Admin extends Core {
 						'_req'     => false,
 						'_type'    => 'plain_multi',
 						'_desc'    => [
-							\__( 'Facebook Pixel', 'the-seo-framework-extension-manager' ),
+							\__( 'Meta Pixel', 'the-seo-framework-extension-manager' ),
 							sprintf(
 								/* translators: %s = Tracking ID documentation link. Markdown. */
-								\__( 'Start tracking with [Facebook pixel](%s) by filling in a Pixel ID.', 'the-seo-framework-extension-manager' ),
+								\__( 'Start tracking with [Meta pixel](%s) by filling in a Pixel ID.', 'the-seo-framework-extension-manager' ),
 								'https://www.facebook.com/business/help/952192354843755'
 							),
 						],
@@ -232,8 +232,8 @@ final class Admin extends Core {
 
 					$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
 
-					// Google doesn't specify length, assume 5~15 (norm is 10)
-					if ( ! preg_match( '/^(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{5,15})$/', $value[ $index ][ $key ] ) )
+					// Google doesn't specify length, assume 4~15 (norm is 10)
+					if ( ! preg_match( '/^(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{4,15})$/', $value[ $index ][ $key ] ) )
 						$value[ $index ][ $key ] = '';
 
 					break;

@@ -229,7 +229,7 @@ final class LoadAdmin extends AdminPages {
 				$this->delete_option( '_requires_domain_transfer' );
 
 				// We store the API server's known domain in this value.
-				$this->delete_option( '_remote_subscription_status' );
+				$this->update_option( '_remote_subscription_status', [] );
 
 				if ( $this->is_auto_activated() ) {
 					$args = [
