@@ -454,7 +454,7 @@ Many duplicated tags, some of which don't work reliably in SEOPress.
 
 ### 1.1.1
 
-[tsfep-release time="June 21st, 2023"]
+[tsfep-release time="June 22nd, 2023"]
 
 * **Note:** This extension is still in beta and will still delete data from other plugins.
 * **Fixed:** Transports now won't stop when the connection drops.

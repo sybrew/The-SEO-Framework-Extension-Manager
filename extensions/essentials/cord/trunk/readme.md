@@ -154,7 +154,7 @@ add_action( 'init', function() {
 
 ### 1.1.0
 
-[tsfep-release time="June 21st, 2023"]
+[tsfep-release time="June 22nd, 2023"]
 
 **Manual migration required:** Universal Analytics 3 is now Google Analytics 4. To migrate, please [follow these instructions](https://support.google.com/analytics/answer/10110290). To use your new Google Analytics property with Cord, you'll need to [obtain the Measurement ID](https://support.google.com/analytics/answer/12270356), and paste that ID into Extension Settings.
 

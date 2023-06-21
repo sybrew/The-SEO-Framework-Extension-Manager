@@ -45,11 +45,11 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Release date:**
 
-* June 20th, 2023
+* June 22nd, 2023
 
 **Feature highlights:**
 
-* With an aching heart, Google sunsets Universal Analytics 3 next month. Cord now supports Google Analytics 4. First,  [migrate](https://support.google.com/analytics/answer/10110290), then you can get your [Measurement ID](https://support.google.com/analytics/answer/12270356).
+* Google sunsets Universal Analytics 3 next month. Cord now supports Google Analytics 4. First, you should [migrate](https://support.google.com/analytics/answer/10110290); then, you can get your [Measurement ID](https://support.google.com/analytics/answer/12270356).
 * The SEO Framework 4.2.8 is now required, from 4.2.0 or later.
 
 **Updated extensions:**
@@ -60,12 +60,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Detailed log:**
 
-* **Added:** Constant `TSF_EXTENSION_MANAGER_INSTANCE_VERSION` is now available. This helps users with complex server setups maintain a stable and secure connection by changing to a salt key (`'1.0'`), folder location (`'2.0'`), or site URL (`'3.0'`, the new default). [View details](https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/74#issuecomment-1581214354).
-* **Changed:** Installing Extension Manager for the first time will now use option instance verification v3.0, which relies on the site URL instead of plugin folder location (2.0) or salt keys (1.0).
-* **Changed:** The SEO Framework 4.2.8 is now required, from 4.2.0 or later, because Extension Manager now relies on its latest API functionality.
-* **Improved:** When there's an issue with Extension Manager, you can now see the notification directly in the sidebar, instead of having to hover over "SEO" first.
-* **Fixed:** Resolved an issue where disconnecting accounts would fail when there's a miscommunication with our servers.
-* **Other:** New translations are available.
+View the [detailed v2.6.2 changelog](https://tsf.fyi/p/4090).
 
 = 2.6.1 =
 
