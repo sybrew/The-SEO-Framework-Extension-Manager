@@ -935,6 +935,10 @@ h4.tsfem-cp-title {
 	display: inline-block;
 }
 
+.tsfem-cp-buttons.tsfem-single-cp-button > a {
+	min-width: unset;
+}
+
 .tsfem-cp-buttons button {
 	width: 100%;
 }

@@ -327,7 +327,7 @@ trait Error {
 				$message = sprintf(
 					/* translators: %s = My Account */
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
+					$this->get_my_account_link() // can never be WCM; user isn't connected yet.
 				);
 				$type = 'error';
 				break;
@@ -383,7 +383,7 @@ trait Error {
 				$message = sprintf(
 					/* translators: %s = My Account */
 					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
+					$this->get_my_account_link() // can never be WCM; user isn't connected yet.
 				);
 				$type = 'error';
 				break;
@@ -439,35 +439,31 @@ trait Error {
 				break;
 
 			case 902:
-				$message = sprintf(
-					/* translators: %s = My Account */
-					\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
-				);
+				if ( 'wcm' === $this->get_api_endpoint_type() ) {
+					// Headless. User cannot inspect key. Edge case -- user gets disconnected right before this error.
+					$message = \esc_html__( "Your subscription instance couldn't be verified.", 'the-seo-framework-extension-manager' );
+				} else {
+					$message = sprintf(
+						/* translators: %s = My Account */
+						\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
+						$this->get_my_account_link() // this can be WCM, which is troubling.
+					);
+				}
 				$type = 'warning';
 				break;
 
 			case 904:
-				$message = sprintf(
-					\esc_html__( "Your account level has been set to Essentials. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
-				);
+				$message = \esc_html__( "Your account level has been set to Essentials. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' );
 				$type    = 'info';
 				break;
 
 			case 905:
-				$message = sprintf(
-					\esc_html__( "Your account level has been set to Premium. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
-				);
+				$message = \esc_html__( "Your account level has been set to Premium. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' );
 				$type    = 'info';
 				break;
 
 			case 906:
-				$message = sprintf(
-					\esc_html__( "Your account level has been set to Enterprise. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' ),
-					$this->get_my_account_link()
-				);
+				$message = \esc_html__( "Your account level has been set to Enterprise. Reload the page if it didn't take effect.", 'the-seo-framework-extension-manager' );
 				$type    = 'info';
 				break;
 

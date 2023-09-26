@@ -166,12 +166,20 @@ class API extends Core {
 	 * Determines the API key origin.
 	 *
 	 * @since 2.1.0
+	 * @since 2.6.3
 	 *
 	 * @param string $key The API key.
 	 * @return string The endpoint origin.
 	 */
 	final protected function get_key_endpoint_origin( $key ) {
-		return false !== stripos( $key, 'tsfeu_' ) ? 'eu' : 'global';
+
+		if ( preg_match( '/(?:^|_)tsfeu_/', $key ) )
+			return 'eu';
+
+		if ( preg_match( '/(?:^|_)tsfwm_/', $key ) )
+			return 'wcm';
+
+		return 'global';
 	}
 
 	/**
@@ -190,16 +198,25 @@ class API extends Core {
 	 * Sets the endpoint type.
 	 *
 	 * @since 2.1.0
+	 * @since 2.6.3 Now considers WCM endpoint.
 	 * @uses $this->get_api_endpoint_type()
 	 *
-	 * @param string|null $type Set to null to autodetermine. Accepts 'eu' and 'global'.
+	 * @param string|null $type Set to null to autodetermine. Accepts 'eu', 'wcm', and 'global'.
 	 */
 	final protected function set_api_endpoint_type( $type = null ) {
 
 		$endpoint = &$this->get_api_endpoint_type();
 
 		if ( $type ) {
-			$endpoint = \in_array( $type, [ 'eu', 'global' ], true ) ? $type : 'global';
+			switch ( $type ) {
+				case 'global':
+				case 'eu':
+				case 'wcm':
+					$endpoint = $type;
+					break;
+				default:
+					$endpoint = 'global';
+			}
 		} elseif ( $this->is_connected_user() ) {
 			$endpoint = $this->get_key_endpoint_origin( $this->get_subscription_status()['key'] );
 		} else {
@@ -212,6 +229,7 @@ class API extends Core {
 	 *
 	 * @since 1.0.0
 	 * @since 2.1.0 Now considers EU endpoint.
+	 * @since 2.6.3 Now considers WCM endpoint.
 	 *
 	 * @param string $path The URL Path.
 	 * @return string
@@ -221,6 +239,10 @@ class API extends Core {
 		switch ( $this->get_api_endpoint_type() ) {
 			case 'eu':
 				$uri = TSF_EXTENSION_MANAGER_PREMIUM_EU_URI;
+				break;
+
+			case 'wcm':
+				$uri = TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI;
 				break;
 
 			case 'global':

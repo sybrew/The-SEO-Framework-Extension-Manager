@@ -235,6 +235,13 @@ define( 'TSF_EXTENSION_MANAGER_PREMIUM_URI', 'https://premium.theseoframework.co
 define( 'TSF_EXTENSION_MANAGER_PREMIUM_EU_URI', 'https://eu.theseoframework.com/' );
 
 /**
+ * The Premium URI (WCM).
+ *
+ * @since 2.6.3
+ */
+define( 'TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI', 'https://wcm.theseoframework.com/' );
+
+/**
  * The extension compatibility testing values.
  *
  * @since 2.1.0

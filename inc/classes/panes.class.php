@@ -614,28 +614,38 @@ class Panes extends API {
 
 		$this->get_verification_codes( $_instance, $bits );
 
-		$title = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
-
-		Layout::initialize( 'link', $_instance, $bits );
-
-		$buttons     = [];
-		$description = [];
-
-		$buttons[1]     = Layout::get( 'public-support-button' );
-		$description[1] = \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' );
-
-		$buttons[2]     = Layout::get( 'private-support-button' );
-		$description[2] = \__( 'Questions about your account should be inquired via Private Support.', 'the-seo-framework-extension-manager' );
-
-		Layout::reset();
-
-		$content = '';
-		foreach ( $buttons as $key => $button ) {
-			$content .= sprintf(
-				'<div class=tsfem-cp-buttons>%s %s</div>',
-				$button,
-				HTML::make_inline_question_tooltip( $description[ $key ] )
+		if ( 'wcm' === $this->get_api_endpoint_type() ) {
+			$title = sprintf(
+				'<h4 class=tsfem-support-title>%s %s</h4>',
+				\esc_html__( 'Get support', 'the-seo-framework-extension-manager' ),
+				HTML::make_inline_question_tooltip( \__( 'Get support for The SEO Framework via WooCommerce.com.', 'the-seo-framework-extension-manager' ) )
 			);
+
+			$content = sprintf(
+				'<div class="tsfem-cp-buttons tsfem-single-cp-button">%s</div>',
+				$this->get_support_link( 'wcm' )
+			);
+		} else {
+			$title   = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
+			$content = '';
+
+			$buttons = [
+				[
+					'button' => $this->get_support_link( 'public' ),
+					'tt'     => \__( 'Inquire your question publicly so more people will benefit from our support.', 'the-seo-framework-extension-manager' ),
+				],
+				[
+					'button' => $this->get_support_link( 'private' ),
+					'tt'     => \__( 'Questions about your account should be inquired via Private Support.', 'the-seo-framework-extension-manager' ),
+				],
+			];
+			foreach ( $buttons as $button ) {
+				$content .= sprintf(
+					'<div class=tsfem-cp-buttons>%s %s</div>',
+					$button['button'],
+					HTML::make_inline_question_tooltip( $button['tt'] )
+				);
+			}
 		}
 
 		return sprintf(

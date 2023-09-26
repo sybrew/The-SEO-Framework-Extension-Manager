@@ -14,38 +14,30 @@ if ( $options ) {
 
 	if ( $this->is_plugin_activated() && $this->is_connected_user() ) {
 
+		$account_link_args = [
+			'class' => 'tsfem-button-primary tsfem-button-primary-dark tsfem-button-external',
+		];
+
 		$status = $this->get_subscription_status();
 
-		$account_url          = $this->get_activation_url( 'my-account/' );
-		$account_button_class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-external';
-		$account_text         = __( 'My Account', 'the-seo-framework-extension-manager' );
-		$account_title        = __( 'View account', 'the-seo-framework-extension-manager' );
-
 		if ( isset( $status['end_date'] ) ) {
-			// UTC.
-			$then            = strtotime( $status['end_date'] );
-			$in_four_weeks   = strtotime( '+6 week' );
-			$about_to_expire = $then < $in_four_weeks;
-
-			if ( $about_to_expire ) {
-				$account_button_class = 'tsfem-button tsfem-button-red tsfem-button-warning';
-				$account_title        = __( 'Extend license', 'the-seo-framework-extension-manager' );
+			// UTC -- When subscription expires in 6 weeks, warn user via red button:
+			if ( strtotime( $status['end_date'] ) < strtotime( '+6 week' ) ) {
+				$account_link_args['class'] = 'tsfem-button tsfem-button-red tsfem-button-warning';
+				$account_link_args['title'] = __( 'Manage license', 'the-seo-framework-extension-manager' );
 			}
 		}
-	} else {
-		$account_url          = $this->get_activation_url( 'shop/' );
-		$account_button_class = 'tsfem-button-primary tsfem-button-primary-bright tsfem-button-external';
-		$account_title        = '';
-		$account_text         = __( 'Get license', 'the-seo-framework-extension-manager' );
-	}
 
-	$account_link = $this->get_link( [
-		'url'     => $account_url,
-		'target'  => '_blank',
-		'class'   => $account_button_class,
-		'title'   => $account_title,
-		'content' => $account_text,
-	] );
+		$account_link = $this->get_my_account_link( $account_link_args );
+	} else {
+		$account_link = $this->get_link( [
+			'url'     => $this->get_activation_url( 'shop/' ),
+			'target'  => '_blank',
+			'class'   => 'tsfem-button-primary tsfem-button-external',
+			'title'   => '',
+			'content' => __( 'Get license', 'the-seo-framework-extension-manager' ),
+		] );
+	}
 
 	$account = "<div class=tsfem-top-account>$account_link</div>";
 	$actions = '<div class="tsfem-top-actions tsfem-flex tsfem-flex-row">' . $account . '</div>';

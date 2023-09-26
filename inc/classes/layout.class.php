@@ -100,12 +100,6 @@ final class Layout extends Secure_Abstract {
 			case 'disconnect-button':
 				return static::get_disconnect_button();
 
-			case 'public-support-button':
-				return static::get_public_support_button();
-
-			case 'private-support-button':
-				return static::get_private_support_button();
-
 			case 'account-information':
 				return static::get_account_info();
 
@@ -210,40 +204,6 @@ final class Layout extends Secure_Abstract {
 		}
 
 		return '';
-	}
-
-	/**
-	 * Outputs public support button.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return string The public support button link.
-	 */
-	private static function get_public_support_button() {
-
-		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsfem()->get_support_link( 'public' );
-		} else {
-			\tsf()->_doing_it_wrong( __METHOD__, 'The public support button only supports the link type.' );
-			return '';
-		}
-	}
-
-	/**
-	 * Outputs private support button.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return string The private support button link.
-	 */
-	private static function get_private_support_button() {
-
-		if ( 'link' === self::get_property( '_type' ) ) {
-			return \tsfem()->get_support_link( 'private' );
-		} else {
-			\tsf()->_doing_it_wrong( __METHOD__, 'The private support button only supports the link type.' );
-			return '';
-		}
 	}
 
 	/**
@@ -396,6 +356,10 @@ final class Layout extends Secure_Abstract {
 		switch ( $tsfem->get_api_endpoint_type() ) :
 			case 'eu':
 				$_ep = \__( 'TSF Europe', 'the-seo-framework-extension-manager' );
+				break;
+
+			case 'wcm':
+				$_ep = \__( 'TSF + WC', 'the-seo-framework-extension-manager' );
 				break;
 
 			default:

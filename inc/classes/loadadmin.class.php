@@ -140,11 +140,11 @@ final class LoadAdmin extends AdminPages {
 		$endpoints = [
 			TSF_EXTENSION_MANAGER_PREMIUM_URI,
 			TSF_EXTENSION_MANAGER_PREMIUM_EU_URI,
+			TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI,
 		];
 
-		foreach ( $endpoints as $endpoint ) {
+		foreach ( $endpoints as $endpoint )
 			$hosts[] = parse_url( $endpoint, PHP_URL_HOST );
-		}
 
 		if ( ! $show_notice ) {
 			foreach ( $hosts as $_host ) {
@@ -589,17 +589,38 @@ final class LoadAdmin extends AdminPages {
 	 * Generates software API My Account page HTML link.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.2 Is now public
 	 *
+	 * @param array $args optional, the link argument modifications : {
+	 *    string url
+	 *    string target
+	 *    string class
+	 *    string title
+	 *    string content
+	 * }
 	 * @return string The My Account API URL.
 	 */
-	protected function get_my_account_link() {
-		return $this->get_link( [
-			'url'     => $this->get_activation_url( 'my-account/' ),
-			'target'  => '_blank',
-			'class'   => '',
-			'title'   => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
-			'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
-		] );
+	public function get_my_account_link( $args = [] ) {
+
+		if ( 'wcm' === $this->get_api_endpoint_type() ) {
+			$defaults = [
+				'url'     => 'https://woocommerce.com/my-dashboard/',
+				'target'  => '_blank',
+				'class'   => '',
+				'title'   => \esc_attr__( 'Go to WooCommerce.com dashboard', 'the-seo-framework-extension-manager' ),
+				'content' => \esc_html__( 'WooCommerce.com Dashboard', 'the-seo-framework-extension-manager' ),
+			];
+		} else {
+			$defaults = [
+				'url'     => $this->get_activation_url( 'my-account/' ),
+				'target'  => '_blank',
+				'class'   => '',
+				'title'   => \esc_attr__( 'Go to My Account', 'the-seo-framework-extension-manager' ),
+				'content' => \esc_html__( 'My Account', 'the-seo-framework-extension-manager' ),
+			];
+		}
+
+		return $this->get_link( array_merge( $defaults, $args ) );
 	}
 
 	/**
@@ -608,28 +629,40 @@ final class LoadAdmin extends AdminPages {
 	 * @since 1.0.0
 	 * @since 2.0.0 Now goes by Private/Public
 	 *
-	 * @param string $type The support link type. Accepts 'privte' or anything else for public.
+	 * @param string $type The support link type. Accepts 'private', 'wcm', or anything else for public.
 	 * @param bool   $icon Whether to show a heart/star after the button text.
 	 * @return string The Support Link.
 	 */
 	public function get_support_link( $type = 'public', $icon = true ) {
 
-		if ( 'private' === $type ) {
-			$url = 'https://premium.theseoframework.com/support/';
+		switch ( $type ) {
+			case 'private':
+				$url = 'https://premium.theseoframework.com/support/';
 
-			$title = \__( 'Get support via mail', 'the-seo-framework-extension-manager' );
-			$text  = \__( 'Private Support', 'the-seo-framework-extension-manager' );
+				$title = \__( 'Get support via mail', 'the-seo-framework-extension-manager' );
+				$text  = \__( 'Private Support', 'the-seo-framework-extension-manager' );
 
-			$class  = 'tsfem-button';
-			$class .= $icon ? ' tsfem-button-star' : '';
-		} else {
-			$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
+				$class  = 'tsfem-button';
+				$class .= $icon ? ' tsfem-button-star' : '';
+				break;
+			case 'wcm':
+				$url = 'https://premium.theseoframework.com/support/';
 
-			$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
-			$text  = \__( 'Public Support', 'the-seo-framework-extension-manager' );
+				$title = \__( 'Get support via WooCommerce.com', 'the-seo-framework-extension-manager' );
+				$text  = \__( 'Plugin Support', 'the-seo-framework-extension-manager' );
 
-			$class  = 'tsfem-button';
-			$class .= $icon ? ' tsfem-button-love' : '';
+				$class  = 'tsfem-button';
+				$class .= $icon ? ' tsfem-button-external' : '';
+				break;
+			default:
+				$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
+
+				$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
+				$text  = \__( 'Public Support', 'the-seo-framework-extension-manager' );
+
+				$class  = 'tsfem-button';
+				$class .= $icon ? ' tsfem-button-love' : '';
+				break;
 		}
 
 		return $this->get_link( [

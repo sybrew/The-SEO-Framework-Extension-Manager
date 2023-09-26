@@ -380,11 +380,10 @@ class AccountActivation extends Panes {
 				break;
 
 			case 2:
+				$this->set_error_notice( [ 902 => '' ] );
 				// Instance failed. Set 3 day timeout.
 				// Administrator has already been notified to fix this ASAP.
 				$this->do_deactivation( true, true );
-				// @TODO notify of timeout?
-				$this->set_error_notice( [ 902 => '' ] );
 				break;
 
 			case 3:

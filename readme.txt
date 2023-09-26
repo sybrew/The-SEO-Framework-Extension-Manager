@@ -43,6 +43,29 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.6.2 =
 
+TODO remove all instances of tsf()->get_transient and tsf()->set_transient
+TODO add timestamps to notificationS?
+TODO when our server is down, causing notifications, but gets back up again, clear related notifications?
+	-> Are there any invoked in the background?
+TODO extend Articles support for "Author" for any post type that has 'author' post type support?
+
+
+**Detailed log:**
+
+* Added endpoint `wcm` (WooCommerce Marketplace).
+	* This comes with a new constant, `TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI`.
+	* Advanced users may be asked to allow communications with host `wcm.theseoframework.com`.
+* TODO Added compatibility with TSF v4.3.0.
+	* Done: tsf()->get/set_transient()
+	* Done: Sitemap transient clearing.
+		-> TODO require TSF v4.3.0+ for Articles now?
+		-> We could wait for 3 or so weeks before releasing this after 4.3.0, and align PHP/WP requirements etc.?
+* TODO Verify PHP 8.1 (and 8.2?) support.
+	-> We definitely fixed a 8.1 deprecation notice in Honeypot.
+
+
+= 2.6.2 =
+
 **Release date:**
 
 * June 22nd, 2023
