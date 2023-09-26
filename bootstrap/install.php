@@ -60,12 +60,12 @@ function _prepare_tsf_nag_installer_scripts() {
 		'updates',
 	];
 	$scriptid = 'tsfinstaller';
-	$suffix   = SCRIPT_DEBUG ? '' : '.min';
+	$suffix   = \SCRIPT_DEBUG ? '' : '.min';
 	$strings  = [
 		'slug' => 'autodescription',
 	];
 
-	\wp_register_script( $scriptid, TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$scriptid}{$suffix}.js", $deps, TSF_EXTENSION_MANAGER_VERSION, true );
+	\wp_register_script( $scriptid, \TSF_EXTENSION_MANAGER_DIR_URL . "lib/js/{$scriptid}{$suffix}.js", $deps, \TSF_EXTENSION_MANAGER_VERSION, true );
 	\wp_localize_script( $scriptid, "{$scriptid}L10n", $strings );
 
 	\add_action( 'admin_print_styles', __NAMESPACE__ . '\\_print_tsf_nag_installer_styles' );

@@ -68,7 +68,7 @@ final class Sitemap extends Core {
 		\add_filter( 'the_seo_framework_sitemap_endpoint_list', [ $this, '_register_news_sitemap_endpoint' ] );
 		\add_action( 'the_seo_framework_sitemap_schemas', [ $this, '_adjust_news_sitemap_schemas' ] );
 
-		\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_delete_news_sitemap_transient' ] );
+		\add_action( 'the_seo_framework_cleared_sitemap_transients', [ $this, '_delete_news_sitemap_transient' ] );
 
 		// Don't use action `the_seo_framework_ping_search_engines`; News Sitemaps don't have a ping threshold.
 		// Don't allow prerendering; News Sitemaps are small for a reason!
@@ -76,7 +76,7 @@ final class Sitemap extends Core {
 		if ( \tsf()->get_option( 'ping_use_cron' ) ) {
 			\add_action( 'tsf_sitemap_cron_hook', [ $this, '_ping_google_news' ] );
 		} else {
-			\add_action( 'the_seo_framework_delete_cache_sitemap', [ $this, '_ping_google_news' ] );
+			\add_action( 'the_seo_framework_cleared_sitemap_transients', [ $this, '_ping_google_news' ] );
 		}
 	}
 
@@ -185,6 +185,7 @@ final class Sitemap extends Core {
 	 * Deletes news sitemap transient.
 	 *
 	 * @since 2.0.0
+	 * @todo use TSF 4.3.0's get_sitemap_transient_key
 	 * @access private
 	 */
 	public function _delete_news_sitemap_transient() {
@@ -208,7 +209,7 @@ final class Sitemap extends Core {
 	 * Returns the sitemap transient name.
 	 *
 	 * @since 2.0.0
-	 * @todo use TSF 4.2.9's get_sitemap_transient_key
+	 * @todo use TSF 4.3.0's get_sitemap_transient_key
 	 *
 	 * @return string The sitemap transient name.
 	 */

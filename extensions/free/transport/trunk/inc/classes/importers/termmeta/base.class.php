@@ -125,7 +125,6 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 		return $metadata ? array_column( $metadata, 'meta_value', 'meta_key' ) : [];
 	}
 
-
 	/**
 	 * Transmutes separated term metdata into a single index.
 	 *

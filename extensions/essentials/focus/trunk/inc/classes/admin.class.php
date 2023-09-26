@@ -271,7 +271,7 @@ final class Admin extends Core {
 	 */
 	private function get_worker_file_location() {
 
-		$min = \tsf()->script_debug ? '' : '.min';
+		$min = \SCRIPT_DEBUG ? '' : '.min';
 
 		return \esc_url( \set_url_scheme( TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
 	}

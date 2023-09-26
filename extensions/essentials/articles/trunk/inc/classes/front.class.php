@@ -257,15 +257,14 @@ final class Front extends Core {
 
 		if ( $data ) {
 			$options  = 0;
-			$options |= JSON_UNESCAPED_SLASHES;
-			$options |= static::$tsf->script_debug ? JSON_PRETTY_PRINT : 0;
+			$options |= \JSON_UNESCAPED_SLASHES;
+			$options |= \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0;
 
 			return sprintf( '<script type="application/ld+json">%s</script>', json_encode( $data, $options ) ) . "\n";
 		}
 
 		return '';
 	}
-
 
 	/**
 	 * Generates Article data.

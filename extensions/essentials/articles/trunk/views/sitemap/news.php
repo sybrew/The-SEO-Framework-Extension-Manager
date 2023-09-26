@@ -32,6 +32,7 @@ $sitemap_news->set_option_indexes(
 );
 
 // phpcs:ignore, WordPress.Security.EscapeOutput
+// todo use TSF 4.3.0's get_sitemap_transient_key
 echo $sitemap_news->_generate_sitemap( $this->get_sitemap_transient_name() );
 
 $sitemap_bridge->output_sitemap_urlset_close_tag();

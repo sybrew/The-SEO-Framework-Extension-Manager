@@ -248,8 +248,9 @@ function _push_update( $value, $transient ) {
 
 			$raw_response = \wp_remote_post( $url, $http_args );
 
-			if ( \is_wp_error( $raw_response )
-			|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
+			if (
+				   \is_wp_error( $raw_response )
+				|| 200 != \wp_remote_retrieve_response_code( $raw_response ) // phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison
 			) {
 				$_cache = [
 					'_failure_timeout' => time() + ( MINUTE_IN_SECONDS * 10 ),

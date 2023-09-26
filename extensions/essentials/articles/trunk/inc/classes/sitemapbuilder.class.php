@@ -77,6 +77,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 * @since 2.2.0
 	 * @access private
 	 * TODO Make the transient name accessible instead of passing as argument.
+	 * @todo use TSF 4.3.0's get_sitemap_transient_key
 	 *
 	 * @param string $transient_name The sitemap transient name.
 	 * @return string The sitemap content.
@@ -86,7 +87,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
 		$_caching_enabled = $bridge->sitemap_cache_enabled();
 
-		$sitemap_content = $_caching_enabled ? \tsf()->get_transient( $transient_name ) : false;
+		$sitemap_content = $_caching_enabled ? \get_transient( $transient_name ) : false;
 
 		if ( false === $sitemap_content ) {
 			$this->prepare_generation();
@@ -97,7 +98,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			$this->news_is_regenerated = true;
 
 			if ( $_caching_enabled ) {
-				\tsf()->set_transient(
+				\set_transient(
 					$transient_name,
 					$sitemap_content,
 					HOUR_IN_SECONDS // Keep the sitemap for at most 1 hour. Will expire during post actions.
@@ -319,7 +320,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 					'news:language' => $publication['language'],
 				],
 				'news:publication_date' => static::$tsf->gmt2date( $timestamp_format, $args['news']['publication_date'] ),
-				'news:title'            => static::$tsf->escape_title( $args['news']['title'] ),
+				'news:title'            => \esc_xml( static::$tsf->escape_title( $args['news']['title'] ) ),
 			],
 		];
 
@@ -378,38 +379,6 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		}
 
 		return $url;
-	}
-
-	/**
-	 * Escapes XML entities.
-	 *
-	 * @since 2.3.1
-	 * @ignore Unused. Also, probably unsafe: Not protected against multibyte-attacks.
-	 * @link <https://www.w3.org/TR/xml/#syntax>
-	 * @link <https://www.w3.org/TR/REC-xml/#sec-external-ent>
-	 * NOTE: WordPress 5.5.0 includes a new function: esc_xml().
-	 *
-	 * @param mixed $value The value to escape.
-	 * @return string A value that's safe for XML use.
-	 */
-	private function escape_xml_entities( $value ) {
-
-		// Cache to improve performance.
-		static $s, $r;
-		if ( ! isset( $s, $r ) ) {
-			$list = [
-				'"' => '%22',
-				'&' => '%26',
-				"'" => '%27',
-				'<' => '%3C',
-				'>' => '%3E',
-			];
-
-			$s = array_keys( $list );
-			$r = array_values( $list );
-		}
-
-		return str_replace( $s, $r, $value );
 	}
 
 	/**

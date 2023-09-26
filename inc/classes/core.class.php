@@ -1410,7 +1410,7 @@ class Core {
 	/**
 	 * Sanitizes AJAX input string.
 	 * Removes NULL, converts to string, normalizes entities and escapes attributes.
-	 * Also prevents regex execution.
+	 * Also prevents JS-regex execution.
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.0 Now is public and moved to class Core.

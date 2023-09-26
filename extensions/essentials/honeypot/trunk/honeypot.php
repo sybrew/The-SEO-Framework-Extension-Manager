@@ -363,7 +363,7 @@ JS;
 
 		// Random 16 bit timer scale. This converts to string, but that's what we need for reliable JS output.
 		// 0x00FF is subtracted for we reserve 8 bits as unknown zero-offset in JS.
-		$random_scale = number_format( mt_rand( 1, 0xFF00 / $time ), 2, '.', '' );
+		$random_scale = number_format( mt_rand( 1, (int) ( 0xFF00 / $time ) ), 2, '.', '' );
 
 		// This converts to string, but that's what we need anyway for reliable JS output.
 		$random_time = number_format( $time * $random_scale, 2, '.', '' );

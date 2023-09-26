@@ -451,10 +451,9 @@ final class Admin {
 	 * @return string
 	 */
 	private function get_sse_worker_location() {
-		$min = \tsf()->script_debug ? '' : '.min';
+		$min = \SCRIPT_DEBUG ? '' : '.min';
 		return \esc_url( \set_url_scheme( TSFEM_E_TRANSPORT_DIR_URL . "lib/js/sse.worker{$min}.js" ) );
 	}
-
 
 	/**
 	 * Hooks admin actions into the TSF Extension Manager pagehook.
