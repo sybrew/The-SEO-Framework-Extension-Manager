@@ -59,7 +59,7 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @var string TSF Extension Manager Settings Field.
 	 */
-	const SETTINGS_FIELD = TSF_EXTENSION_MANAGER_SITE_OPTIONS;
+	const SETTINGS_FIELD = \TSF_EXTENSION_MANAGER_SITE_OPTIONS;
 
 	/**
 	 * Constructor, initializes WordPress actions.
@@ -68,8 +68,12 @@ class AdminPages extends AccountActivation {
 	 */
 	private function construct() {
 
-		// Nothing to do here...
-		if ( \tsf()->is_headless['settings'] ) return;
+		// Nothing to do here if headless.
+		if (
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \The_SEO_Framework\is_headless( 'settings' )
+				: \tsf()->is_headless['settings']
+		) return;
 
 		// Initialize menu links. TODO add network menu.
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
@@ -84,7 +88,6 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @since 2.0.0 Now uses \TSF_Extension_Manager\can_do_manager_settings()
 	 * @since 2.4.0 Removed security check, and offloads it to WordPress.
-	 * @uses \tsf()->is_headless
 	 * @access private
 	 *
 	 * @todo determine network activation @see core class.
@@ -108,16 +111,15 @@ class AdminPages extends AccountActivation {
 	 * @since 1.0.0
 	 * @since 1.5.2 Added TSF v3.1 compat.
 	 * @since 2.4.0 Added menu access control check for notification display.
-	 * @uses \tsf()->seo_settings_page_slug
 	 * @access private
 	 */
 	final public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \tsf()->seo_settings_page_slug,
+			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
 			'page_title'  => 'Extension Manager',
 			'menu_title'  => 'Extension Manager',
-			'capability'  => TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE,
+			'capability'  => \TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE,
 			'menu_slug'   => $this->seo_extensions_page_slug,
 			'callback'    => [ $this, '_init_extension_manager_page' ],
 		];
@@ -165,7 +167,7 @@ class AdminPages extends AccountActivation {
 	final public function get_error_notice_count() {
 
 		// We're displaying the notices now -- assume 0 are left.
-		// 'false' because we need to know this before registering the menu.
+		// secure='false' because we need to know this before registering the menu.
 		// No sensitive data is processed here.
 		if ( $this->is_tsf_extension_manager_page( false ) )
 			return 0;

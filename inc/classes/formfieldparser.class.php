@@ -93,7 +93,7 @@ final class FormFieldParser {
 
 		$items = [];
 		if ( ']' === substr( $value, -1 ) ) {
-			$items = preg_split( '/[\[\]]+/', $value, -1, PREG_SPLIT_NO_EMPTY );
+			$items = preg_split( '/[\[\]]+/', $value, -1, \PREG_SPLIT_NO_EMPTY );
 			return static::satoma( $items );
 		}
 

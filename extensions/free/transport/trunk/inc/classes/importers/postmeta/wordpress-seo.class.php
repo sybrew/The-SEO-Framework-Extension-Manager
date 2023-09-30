@@ -217,7 +217,7 @@ final class WordPress_SEO extends Base {
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function _title_transmuter( $data, &$actions, &$results ) {
 
@@ -318,7 +318,7 @@ final class WordPress_SEO extends Base {
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	public function _robots_adv_transmuter( $data, &$actions, &$results ) {
 

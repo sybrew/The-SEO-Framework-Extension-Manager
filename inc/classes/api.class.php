@@ -52,7 +52,7 @@ class API extends Core {
 	 * @return bool
 	 */
 	final public function is_auto_activated() {
-		return (bool) TSF_EXTENSION_MANAGER_API_INFORMATION;
+		return (bool) \TSF_EXTENSION_MANAGER_API_INFORMATION;
 	}
 
 	/**
@@ -238,16 +238,16 @@ class API extends Core {
 
 		switch ( $this->get_api_endpoint_type() ) {
 			case 'eu':
-				$uri = TSF_EXTENSION_MANAGER_PREMIUM_EU_URI;
+				$uri = \TSF_EXTENSION_MANAGER_PREMIUM_EU_URI;
 				break;
 
 			case 'wcm':
-				$uri = TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI;
+				$uri = \TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI;
 				break;
 
 			case 'global':
 			default:
-				$uri = TSF_EXTENSION_MANAGER_PREMIUM_URI;
+				$uri = \TSF_EXTENSION_MANAGER_PREMIUM_URI;
 				break;
 		}
 
@@ -268,7 +268,7 @@ class API extends Core {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
-		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', PHP_QUERY_RFC1738 ), [ 'https', 'http' ] );
+		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', \PHP_QUERY_RFC1738 ), [ 'https', 'http' ] );
 	}
 
 	/**
@@ -311,11 +311,11 @@ class API extends Core {
 			'api_key'  => '',
 			'instance' => $this->get_options_instance_key(),
 			'platform' => $this->get_current_site_domain(),
-			'version'  => TSF_EXTENSION_MANAGER_API_VERSION,
+			'version'  => \TSF_EXTENSION_MANAGER_API_VERSION,
 		];
 
-		if ( TSF_EXTENSION_MANAGER_DEV_API )
-			$args['dev'] = TSF_EXTENSION_MANAGER_DEV_API;
+		if ( \TSF_EXTENSION_MANAGER_DEV_API )
+			$args['dev'] = \TSF_EXTENSION_MANAGER_DEV_API;
 
 		$args = \wp_parse_args( $args, $defaults );
 

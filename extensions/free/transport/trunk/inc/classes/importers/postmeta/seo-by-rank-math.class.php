@@ -282,7 +282,7 @@ final class SEO_By_Rank_Math extends Base {
 	 * @since 1.0.0
 	 *
 	 * @param array $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 * @return array An array with existing and transport values -- if any.
 	 */
 	public function _robots_transmuter_existing( $data ) {
@@ -341,7 +341,7 @@ final class SEO_By_Rank_Math extends Base {
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	public function _robots_transmuter( $data, &$actions, &$results ) {
 
@@ -401,7 +401,7 @@ final class SEO_By_Rank_Math extends Base {
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function _purge_rank_math_twitter_if_facebook( $data, &$actions, &$results ) {
 

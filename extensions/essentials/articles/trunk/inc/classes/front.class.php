@@ -125,7 +125,7 @@ final class Front extends Core {
 		if ( \function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
 		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
-			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
+			$is_amp = \get_query_var( \AMP_QUERY_VAR, false ) !== false;
 		} else {
 			$is_amp = false;
 		}
@@ -691,8 +691,8 @@ final class Front extends Core {
 				'logo'  => [
 					'@type'  => 'ImageObject',
 					'url'    => \esc_url( $url, [ 'https', 'http' ] ),
-					'width'  => abs( filter_var( $w, FILTER_SANITIZE_NUMBER_INT ) ),
-					'height' => abs( filter_var( $h, FILTER_SANITIZE_NUMBER_INT ) ),
+					'width'  => abs( filter_var( $w, \FILTER_SANITIZE_NUMBER_INT ) ),
+					'height' => abs( filter_var( $h, \FILTER_SANITIZE_NUMBER_INT ) ),
 				],
 			],
 		];

@@ -842,7 +842,7 @@ JS;
 
 			$uid = $this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id'];
 
-			$time = $this->hardcore ? 12 * HOUR_IN_SECONDS : 5 * DAY_IN_SECONDS;
+			$time = $this->hardcore ? 12 * HOUR_IN_SECONDS : 5 * \DAY_IN_SECONDS;
 
 			/**
 			 * Set this lower if you are a prominent spam target.

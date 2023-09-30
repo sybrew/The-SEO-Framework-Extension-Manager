@@ -52,7 +52,7 @@ final class Admin extends Core {
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Views
 		 */
-		$this->view_location_base = TSFEM_E_FOCUS_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
+		$this->view_location_base = \TSFEM_E_FOCUS_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
 		$this->prepare_ajax();
 		$this->prepare_inpostgui();
@@ -207,8 +207,8 @@ final class Admin extends Core {
 				'id'       => 'tsfem-focus-inpost',
 				'type'     => 'js',
 				'name'     => 'tsfem-focus-inpost',
-				'base'     => TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
-				'ver'      => TSFEM_E_FOCUS_VERSION,
+				'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
+				'ver'      => \TSFEM_E_FOCUS_VERSION,
 				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost', 'tsfem-worker' ],
 				'autoload' => true,
 				'l10n'     => [
@@ -245,8 +245,8 @@ final class Admin extends Core {
 				'id'       => 'tsfem-focus-inpost',
 				'type'     => 'css',
 				'name'     => 'tsfem-focus-inpost',
-				'base'     => TSFEM_E_FOCUS_DIR_URL . 'lib/css/',
-				'ver'      => TSFEM_E_FOCUS_VERSION,
+				'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/css/',
+				'ver'      => \TSFEM_E_FOCUS_VERSION,
 				'deps'     => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
 				'autoload' => true,
 				'hasrtl'   => false,
@@ -273,7 +273,7 @@ final class Admin extends Core {
 
 		$min = \SCRIPT_DEBUG ? '' : '.min';
 
-		return \esc_url( \set_url_scheme( TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
+		return \esc_url( \set_url_scheme( \TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
 	}
 
 	/**
@@ -292,7 +292,7 @@ final class Admin extends Core {
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
-			'post_id'  => \tsf()->get_the_real_ID(),
+			'post_id'  => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_the_real_id() : \tsf()->get_the_real_ID(),
 			'kw'       => [
 				'label'        => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),

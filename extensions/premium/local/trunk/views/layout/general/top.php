@@ -20,7 +20,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				esc_attr( $size ),
 				sprintf(
 					'<image href="%1$s" width="%2$s" height="%2$s" />',
-					esc_url( TSFEM_E_LOCAL_DIR_URL . 'lib/images/icon.svg', [ 'https', 'http' ] ),
+					esc_url( \TSFEM_E_LOCAL_DIR_URL . 'lib/images/icon.svg', [ 'https', 'http' ] ),
 					esc_attr( $size )
 				)
 			)

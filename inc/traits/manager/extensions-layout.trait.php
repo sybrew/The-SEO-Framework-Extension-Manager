@@ -129,7 +129,7 @@ trait Extensions_Layout {
 			if ( ! isset( $extension['slug'], $extension['type'], $extension['area'] ) )
 				continue;
 
-			if ( \in_array( $extension['slug'], (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) )
+			if ( \in_array( $extension['slug'], (array) \TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) )
 				continue;
 
 			if ( ! static::get_extension_header( $extension['slug'] ) )
@@ -254,7 +254,7 @@ trait Extensions_Layout {
 	 * Builds extension button form and builds nonce. Supports both JS and no-JS.
 	 *
 	 * @since 1.0.0
-	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
+	 * @since 2.0.0 Now listens to the \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 * @uses trait TSF_Extension_Manager\Extensions_I18n
 	 *
 	 * @param string $slug     The extension slug.
@@ -280,7 +280,7 @@ trait Extensions_Layout {
 				return '';
 		endswitch;
 
-		$disabled = $disabled || \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
+		$disabled = $disabled || \array_key_exists( $slug, (array) \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		if ( $disabled ) {
 			$button = sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
@@ -451,7 +451,7 @@ trait Extensions_Layout {
 
 		$incompatibility = static::determine_extension_incompatibility( $extension );
 
-		if ( $incompatibility & ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE ) ) {
+		if ( $incompatibility & ( \TSFEM_EXTENSION_TSF_INCOMPATIBLE | \TSFEM_EXTENSION_WP_INCOMPATIBLE ) ) {
 			$compat_class  = 'tsfem-error';
 			$compat_notice = sprintf(
 				/* translators: 1: Version number, 2: Version number */
@@ -460,13 +460,13 @@ trait Extensions_Layout {
 				$extension['requires_tsf']
 			);
 			$compat_name = static::get_i18n( 'incompatible' );
-		} elseif ( $incompatibility & ( TSFEM_EXTENSION_TSF_UNTESTED | TSFEM_EXTENSION_WP_UNTESTED ) ) {
+		} elseif ( $incompatibility & ( \TSFEM_EXTENSION_TSF_UNTESTED | \TSFEM_EXTENSION_WP_UNTESTED ) ) {
 			switch ( $incompatibility ) :
-				case TSFEM_EXTENSION_TSF_UNTESTED:
+				case \TSFEM_EXTENSION_TSF_UNTESTED:
 					$compat_notice = \__( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
 					break;
 
-				case TSFEM_EXTENSION_WP_UNTESTED:
+				case \TSFEM_EXTENSION_WP_UNTESTED:
 					$compat_notice = \__( 'WordPress version is higher than tested against.', 'the-seo-framework-extension-manager' );
 					break;
 

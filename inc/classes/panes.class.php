@@ -411,7 +411,7 @@ class Panes extends API {
 						$header = Extensions::get( 'ajax_get_extension_header', $slug );
 
 						if ( ! empty( $header['MenuSlug'] ) )
-							$this->_set_ajax_menu_link( $header['MenuSlug'], TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
+							$this->_set_ajax_menu_link( $header['MenuSlug'], \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
 					endif;
 
 					$html = Extensions::get( 'ajax_get_extension_desc_footer', $slug );
@@ -478,7 +478,7 @@ class Panes extends API {
 					'expected' => $options_hash,
 					'actual'   => $options_valid
 						? $options_hash
-						: substr( $this->hash_options( \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] ) ), -4 ),
+						: substr( $this->hash_options( \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] ) ), -4 ),
 				],
 			],
 		] );

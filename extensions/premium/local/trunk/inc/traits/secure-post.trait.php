@@ -152,18 +152,18 @@ trait Secure_Post {
 		$send = [];
 
 		// Nothing to see here.
-		if ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		if ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 			return;
 
 		/**
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( ! \is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
+		if ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
-			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
+			$options = \wp_unslash( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$success = $this->update_stale_options_array_by_key( $options );
 			$this->process_all_stored_data();
 
@@ -279,14 +279,14 @@ trait Secure_Post {
 		 * there's no need to check them on each request.
 		 */
 		if ( empty( $data )
-		|| ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		|| ( ! \is_array( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		|| ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		|| ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
 		) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070200 );
 		} else {
 
-			$options = \wp_unslash( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
+			$options = \wp_unslash( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$data    = $this->pack_data( $options, true );
 
 			if ( ! $data ) {

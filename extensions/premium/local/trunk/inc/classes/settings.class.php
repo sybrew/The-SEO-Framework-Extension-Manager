@@ -107,7 +107,7 @@ final class Settings {
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Views
 		 */
-		$this->view_location_base = TSFEM_E_LOCAL_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
+		$this->view_location_base = \TSFEM_E_LOCAL_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
 		/**
 		 * Set options index.
@@ -344,8 +344,8 @@ final class Settings {
 				'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsf-media', 'tsfem-ui', 'tsfem-form' ],
 				'autoload' => true,
 				'name'     => 'tsfem-local',
-				'base'     => TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
-				'ver'      => TSFEM_E_LOCAL_VERSION,
+				'base'     => \TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
+				'ver'      => \TSFEM_E_LOCAL_VERSION,
 				'l10n'     => [
 					'name' => 'tsfem_e_localL10n',
 					'data' => [
@@ -414,7 +414,7 @@ final class Settings {
 	private function get_test_button() {
 		return sprintf(
 			'<button type=button name=tsfem-e-local-validateFormJson form="%s" class="%s">%s</button>',
-			sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
+			sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index ),
 			'hide-if-no-tsf-js tsfem-button tsfem-button-external',
 			\esc_html__( 'See Markup', 'the-seo-framework-extension-manager' )
 		);

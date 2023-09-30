@@ -406,8 +406,8 @@ final class Output {
 		if ( ! isset( $tests ) )
 			$tests = Tests::get_instance();
 
-		if ( isset( $value['requires'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['requires'], '>=' ) ) {
-			if ( isset( $value['tested'] ) && version_compare( TSFEM_E_MONITOR_VERSION, $value['tested'], '<=' ) ) {
+		if ( isset( $value['requires'] ) && version_compare( \TSFEM_E_MONITOR_VERSION, $value['requires'], '>=' ) ) {
+			if ( isset( $value['tested'] ) && version_compare( \TSFEM_E_MONITOR_VERSION, $value['tested'], '<=' ) ) {
 				$output = isset( $value['data'] ) ? $tests->{"issue_$key"}( $value['data'] ) : '';
 				if ( '' !== $output ) {
 					$content = $output['content'];

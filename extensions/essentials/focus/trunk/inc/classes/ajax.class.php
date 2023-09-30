@@ -17,7 +17,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
 	\tsfem()->_init_final_static_extension_api_access( __NAMESPACE__ . '\\Ajax', $_instance, $bits ) ?: false
 );
 
-if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
+if ( false === \TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
 	return;
 
 /**
@@ -48,7 +48,7 @@ if ( false === TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY )
  * Class TSF_Extension_Manager\Extension\Focus\Ajax
  *
  * @api extension/focus/%
- * @apikey protected TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY
+ * @apikey protected \TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY
  * @access protected
  * @since 1.0.0
  * @uses TSF_Extension_Manager\Traits
@@ -115,7 +115,7 @@ final class Ajax {
 	private function verify_api_access() {
 
 		$tsfem   = \tsfem();
-		$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
+		$post_id = filter_input( \INPUT_POST, 'post_ID', \FILTER_VALIDATE_INT );
 
 		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) {
 			if ( $tsfem->is_premium_user() ) {

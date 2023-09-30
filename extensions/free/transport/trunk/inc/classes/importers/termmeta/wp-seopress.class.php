@@ -73,7 +73,7 @@ final class WP_SEOPress extends Base {
 		$this->conversion_sets = [
 			[
 				null,
-				[ $wpdb->termmeta, THE_SEO_FRAMEWORK_TERM_OPTIONS ],
+				[ $wpdb->termmeta, \THE_SEO_FRAMEWORK_TERM_OPTIONS ],
 				null,
 				null,
 				[
@@ -230,7 +230,7 @@ final class WP_SEOPress extends Base {
 	 * @param array  $set_value The current $set_value data used for actual transmuation, passed by reference.
 	 * @param ?array $actions   The actions for and after transmuation, passed by reference.
 	 * @param ?array $results   The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function _seopress_pretransmute_redirect( $data, &$set_value, &$actions, &$results ) {
 		foreach ( $data as $_data )

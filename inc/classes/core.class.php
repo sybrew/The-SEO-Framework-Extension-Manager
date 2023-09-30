@@ -241,7 +241,7 @@ class Core {
 		static $memo;
 		if ( isset( $memo ) ) return $memo;
 
-		$options = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+		$options = \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
 		// There's nothing to verify yet during setup.
 		if ( ! $options ) return $memo = true;
@@ -524,6 +524,7 @@ class Core {
 	 */
 	final public function _maybe_die( $message = '' ) {
 
+		// secure=false because we're shutting down the plugin.
 		if ( $this->is_tsf_extension_manager_page( false ) ) {
 			// wp_die() can be filtered. Remove filters JIT.
 			\remove_all_filters( 'wp_die_ajax_handler' );
@@ -531,6 +532,7 @@ class Core {
 			\remove_all_filters( 'wp_die_handler' );
 
 			\wp_die( \esc_html( $message ) );
+			die;
 		}
 
 		// Don't spam error log.
@@ -739,7 +741,7 @@ class Core {
 			$timer += $pepper;
 		} else {
 			// It's over ninethousand! And also a prime.
-			$timer  = $this->is_64() ? time() * 9001 : PHP_INT_MAX / 9001;
+			$timer  = $this->is_64() ? time() * 9001 : \PHP_INT_MAX / 9001;
 			$pepper = mt_rand( -$timer, $timer );
 		}
 
@@ -785,13 +787,13 @@ class Core {
 			$_time = time();
 
 			// phpcs:disable, Generic.Formatting.MultipleStatementAlignment -- It'll be worse to read.
-			$_i = $this->is_64() && $_time > $_boundary ? $_time : ( PHP_INT_MAX - $_boundary ) / $_prime;
+			$_i = $this->is_64() && $_time > $_boundary ? $_time : ( \PHP_INT_MAX - $_boundary ) / $_prime;
 			$_i > 0 or $_i = ~$_i;
 			$_i = (int) $_i;
 
 			    $_i = $_i * $_prime
 			and \is_int( $_i )
-			and ( $_i + $_boundary ) < PHP_INT_MAX // if this fails, there's a precision error in PHP.
+			and ( $_i + $_boundary ) < \PHP_INT_MAX // if this fails, there's a precision error in PHP.
 			and $bit = $_bit = mt_rand( ~ $_i, $_i )
 			and $bit & 1
 			and $bit = $_bit++;
@@ -934,7 +936,7 @@ class Core {
 				// A combobulation of various static yet unique values.
 				$values = [
 					'key'  => 'k' . ( \get_option( 'initial_db_version' ) + 1493641 ) . '+++42===',
-					'salt' => 's' . md5( \dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) )
+					'salt' => 's' . md5( \dirname( \TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE ) )
 						. \get_option( 'the_seo_framework_initial_db_version' ) . '+++69---',
 				];
 				break;
@@ -1025,7 +1027,7 @@ class Core {
 
 		$plugins = \get_site_option( 'active_sitewide_plugins' );
 
-		return $network_mode = isset( $plugins[ TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
+		return $network_mode = isset( $plugins[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] );
 		// phpcs:enable
 	}
 
@@ -1193,7 +1195,7 @@ class Core {
 		if ( $_path ) {
 			$_file = str_replace(
 				[ "$_ns\\", '\\', '/', '_' ],
-				[ '', DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, '-' ],
+				[ '', \DIRECTORY_SEPARATOR, \DIRECTORY_SEPARATOR, '-' ],
 				$_class
 			);
 
@@ -1366,9 +1368,9 @@ class Core {
 	 */
 	final public function get_font_file_location( $font = '', $url = false ) {
 		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . "lib/fonts/$font";
+			return \TSF_EXTENSION_MANAGER_DIR_URL . "lib/fonts/$font";
 		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'fonts' . DIRECTORY_SEPARATOR . $font;
+			return \TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . \DIRECTORY_SEPARATOR . 'fonts' . \DIRECTORY_SEPARATOR . $font;
 		}
 	}
 
@@ -1383,9 +1385,9 @@ class Core {
 	 */
 	final public function get_image_file_location( $image = '', $url = false ) {
 		if ( $url ) {
-			return TSF_EXTENSION_MANAGER_DIR_URL . "lib/images/$image";
+			return \TSF_EXTENSION_MANAGER_DIR_URL . "lib/images/$image";
 		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $image;
+			return \TSF_EXTENSION_MANAGER_DIR_PATH . 'lib' . \DIRECTORY_SEPARATOR . 'images' . \DIRECTORY_SEPARATOR . $image;
 		}
 	}
 
@@ -1447,28 +1449,17 @@ class Core {
 	 */
 	final public function is_tsf_extension_manager_page( $secure = true ) {
 
-		static $cache;
-
-		if ( isset( $cache ) )
-			return $cache;
-
-		if ( ! \is_admin() )
-			return $cache = false;
+		if ( ! \is_admin() || empty( $this->seo_extensions_menu_page_hook ) )
+			return false;
 
 		if ( $secure ) {
-			// Don't load from $_GET request if secure.
-			if ( \did_action( 'current_screen' ) ) {
-				return $cache = \tsf()->is_menu_page( $this->seo_extensions_menu_page_hook );
-			} else {
-				// current_screen isn't set up.
-				return false;
-			}
+			return ( $GLOBALS['page_hook'] ?? null ) === $this->seo_extensions_menu_page_hook;
 		} else {
-			// Don't cache if insecure.
 			if ( \wp_doing_ajax() ) {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
-				return \tsf()->is_menu_page( $this->seo_extensions_menu_page_hook, $this->seo_extensions_page_slug );
+				return ( $GLOBALS['page_hook'] ?? null ) === $this->seo_extensions_menu_page_hook
+					|| ( $_GET['page'] ?? null ) === $this->seo_extensions_menu_page_hook; // phpcs:ignore, WordPress.Security.NonceVerification;
 			}
 		}
 	}

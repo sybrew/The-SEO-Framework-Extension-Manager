@@ -68,8 +68,8 @@ final class LoadAdmin extends AdminPages {
 	public function _check_constant_activation() {
 
 		$data = [
-			'email' => \sanitize_email( TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
-			'key'   => trim( TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
+			'email' => \sanitize_email( \TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
+			'key'   => trim( \TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
 		];
 
 		if ( $this->is_connected_user() ) {
@@ -92,7 +92,7 @@ final class LoadAdmin extends AdminPages {
 		} else {
 			$timeout = \get_transient( 'tsf-extension-manager-auto-activate-timeout' );
 			if ( $timeout ) return;
-			\set_transient( 'tsf-extension-manager-auto-activate-timeout', 1, MINUTE_IN_SECONDS * 5 );
+			\set_transient( 'tsf-extension-manager-auto-activate-timeout', 1, \MINUTE_IN_SECONDS * 5 );
 
 			$args = [
 				'activation_email' => $data['email'],
@@ -121,7 +121,7 @@ final class LoadAdmin extends AdminPages {
 		if ( ! $this->is_tsf_extension_manager_page() || ! \TSF_Extension_Manager\can_do_manager_settings() )
 			return;
 
-		if ( ! \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL )
+		if ( ! \defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! \WP_HTTP_BLOCK_EXTERNAL )
 			return;
 
 		$show_notice = ! \defined( 'WP_ACCESSIBLE_HOSTS' );
@@ -132,23 +132,23 @@ final class LoadAdmin extends AdminPages {
 			 *
 			 * @TODO maintain this well, and don't recommend it to our users.
 			 */
-			if ( false !== stristr( WP_ACCESSIBLE_HOSTS, $wildcard_host ) )
+			if ( false !== stristr( \WP_ACCESSIBLE_HOSTS, $wildcard_host ) )
 				return;
 		}
 
 		$hosts     = [];
 		$endpoints = [
-			TSF_EXTENSION_MANAGER_PREMIUM_URI,
-			TSF_EXTENSION_MANAGER_PREMIUM_EU_URI,
-			TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI,
+			\TSF_EXTENSION_MANAGER_PREMIUM_URI,
+			\TSF_EXTENSION_MANAGER_PREMIUM_EU_URI,
+			\TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI,
 		];
 
 		foreach ( $endpoints as $endpoint )
-			$hosts[] = parse_url( $endpoint, PHP_URL_HOST );
+			$hosts[] = parse_url( $endpoint, \PHP_URL_HOST );
 
 		if ( ! $show_notice ) {
 			foreach ( $hosts as $_host ) {
-				if ( false === stristr( WP_ACCESSIBLE_HOSTS, $_host ) ) {
+				if ( false === stristr( \WP_ACCESSIBLE_HOSTS, $_host ) ) {
 					/**
 					 * Users won't connect to the EU endpoint if they enter a global key.
 					 * Nevertheless, still nudge, for they might.
@@ -194,12 +194,12 @@ final class LoadAdmin extends AdminPages {
 	public function _handle_update_post() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- handle_update_nonce does this.
-		if ( empty( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
+		if ( empty( $_POST[ \TSF_EXTENSION_MANAGER_SITE_OPTIONS ]['nonce-action'] ) )
 			return;
 
 		// Post is taken and will be validated directly below.
 		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- handle_update_nonce does this.
-		$options = $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
+		$options = $_POST[ \TSF_EXTENSION_MANAGER_SITE_OPTIONS ];
 
 		// Options exist. There's no need to check again them.
 		if ( ! $this->handle_update_nonce( $options['nonce-action'], false ) )
@@ -233,8 +233,8 @@ final class LoadAdmin extends AdminPages {
 
 				if ( $this->is_auto_activated() ) {
 					$args = [
-						'api_key'          => trim( TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
-						'activation_email' => \sanitize_email( TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
+						'api_key'          => trim( \TSF_EXTENSION_MANAGER_API_INFORMATION['key'] ),
+						'activation_email' => \sanitize_email( \TSF_EXTENSION_MANAGER_API_INFORMATION['email'] ),
 					];
 				} else {
 					$args = [
@@ -288,7 +288,7 @@ final class LoadAdmin extends AdminPages {
 		endswitch;
 
 		// Adds action to the URI. It's only used to visualize what has happened.
-		$args = WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
+		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		\tsf()->admin_redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
@@ -333,8 +333,8 @@ final class LoadAdmin extends AdminPages {
 		if ( $check_post ) {
 			// If this page doesn't parse the site options, there's no need to check them on each request.
 			if ( empty( $_POST ) // input var ok
-			|| ! isset( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] )
-			|| ! \is_array( $_POST[ TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
+			|| ! isset( $_POST[ \TSF_EXTENSION_MANAGER_SITE_OPTIONS ] )
+			|| ! \is_array( $_POST[ \TSF_EXTENSION_MANAGER_SITE_OPTIONS ] ) )
 				return $validated[ $key ] = false;
 		}
 
@@ -450,7 +450,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param string $view The view file name.
 	 */
 	public function get_view_location( $view ) {
-		return TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . DIRECTORY_SEPARATOR . "$view.php";
+		return \TSF_EXTENSION_MANAGER_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR . "$view.php";
 	}
 
 	/**
@@ -461,7 +461,7 @@ final class LoadAdmin extends AdminPages {
 	 * @param string $template The template file name.
 	 */
 	public function get_template_location( $template ) {
-		return $this->get_view_location( 'template' . DIRECTORY_SEPARATOR . $template );
+		return $this->get_view_location( 'template' . \DIRECTORY_SEPARATOR . $template );
 	}
 
 	/**
@@ -708,7 +708,7 @@ final class LoadAdmin extends AdminPages {
 
 		// Add arbitrary menu contents to known menu slug.
 		$menu = [
-			'parent_slug' => \tsf()->seo_settings_page_slug,
+			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
 			'page_title'  => '1',
 			'menu_title'  => '1',
 			'capability'  => $capability,
@@ -747,7 +747,7 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @since 1.0.0
 	 * @since 1.5.1 Added "already activated" tests to prevent "x was already defined" errors.
-	 * @since 2.0.0 Now checks for the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
+	 * @since 2.0.0 Now checks for the \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
 	 * @param array $options The form/request input options.
 	 * @param bool  $ajax    Whether this is an AJAX request.
@@ -762,11 +762,11 @@ final class LoadAdmin extends AdminPages {
 		$slug = \sanitize_key( $options['extension'] );
 
 		// PHP 7 please.
-		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+		if ( \array_key_exists( $slug, (array) \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 10013, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 10013 ) : false;
 		}
-		if ( \in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+		if ( \in_array( $slug, (array) \TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
 			$ajax or $this->register_extension_state_change_notice( 10014, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 10014 ) : false;
 		}
@@ -882,7 +882,7 @@ final class LoadAdmin extends AdminPages {
 	 * Deactivates extension based on form input.
 	 *
 	 * @since 1.0.0
-	 * @since 2.0.0 Now checks for the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
+	 * @since 2.0.0 Now checks for the \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
 	 * @param array $options The form input options.
 	 * @param bool  $ajax Whether this is an AJAX request.
@@ -904,11 +904,11 @@ final class LoadAdmin extends AdminPages {
 		$slug = \sanitize_key( $options['extension'] );
 
 		// PHP 7 please.
-		if ( \array_key_exists( $slug, (array) TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
+		if ( \array_key_exists( $slug, (array) \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS ) ) {
 			$ajax or $this->register_extension_state_change_notice( 11003, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 11003 ) : false;
 		}
-		if ( \in_array( $slug, (array) TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
+		if ( \in_array( $slug, (array) \TSF_EXTENSION_MANAGER_HIDDEN_EXTENSIONS, true ) ) {
 			$ajax or $this->register_extension_state_change_notice( 11004, $slug );
 			return $ajax ? $this->get_ajax_notice( false, 11004 ) : false;
 		}

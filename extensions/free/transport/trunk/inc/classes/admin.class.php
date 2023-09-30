@@ -85,7 +85,7 @@ final class Admin {
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Views
 		 */
-		$this->view_location_base = TSFEM_E_TRANSPORT_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
+		$this->view_location_base = \TSFEM_E_TRANSPORT_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
 		$this->ajax_nonce_action = 'tsfem_e_transport_ajax';
 
@@ -99,7 +99,11 @@ final class Admin {
 		$this->error_notice_option = 'tsfem_e_transport_error_notice_option';
 
 		// Nothing to do here...
-		if ( \tsf()->is_headless['settings'] ) return;
+		if (
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \The_SEO_Framework\is_headless( 'settings' )
+				: \tsf()->is_headless['settings']
+		) return;
 
 		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
@@ -321,12 +325,11 @@ final class Admin {
 	 * SEO settings.
 	 *
 	 * @since 1.0.0
-	 * @uses \tsf()->seo_settings_page_slug.
 	 * @access private
 	 */
 	public function _add_menu_link() {
 		$this->transport_menu_page_hook = \add_submenu_page(
-			\tsf()->seo_settings_page_slug, // parent_slug
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug, // parent_slug
 			'Transport &beta;eta', // page_title
 			'Transport (&beta;eta)', // menu_title
 			TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
@@ -411,8 +414,8 @@ final class Admin {
 				'deps'     => [ 'tsf-tt', 'tsfem-worker', 'tsfem-ui' ],
 				'autoload' => true,
 				'name'     => 'tsfem-transport',
-				'base'     => TSFEM_E_TRANSPORT_DIR_URL . 'lib/js/',
-				'ver'      => TSFEM_E_TRANSPORT_VERSION,
+				'base'     => \TSFEM_E_TRANSPORT_DIR_URL . 'lib/js/',
+				'ver'      => \TSFEM_E_TRANSPORT_VERSION,
 				'l10n'     => [
 					'name' => 'tsfem_e_transportL10n',
 					'data' => [
@@ -452,7 +455,7 @@ final class Admin {
 	 */
 	private function get_sse_worker_location() {
 		$min = \SCRIPT_DEBUG ? '' : '.min';
-		return \esc_url( \set_url_scheme( TSFEM_E_TRANSPORT_DIR_URL . "lib/js/sse.worker{$min}.js" ) );
+		return \esc_url( \set_url_scheme( \TSFEM_E_TRANSPORT_DIR_URL . "lib/js/sse.worker{$min}.js" ) );
 	}
 
 	/**
@@ -499,8 +502,8 @@ final class Admin {
 	 * @return bool
 	 */
 	public function is_transport_page() {
-		// Don't load from $_GET request.
-		return \The_SEO_Framework\memo( \tsf()->is_menu_page( $this->transport_menu_page_hook ) );
+		return $this->transport_menu_page_hook
+			&& ( $GLOBALS['page_hook'] ?? null ) === $this->transport_menu_page_hook;
 	}
 
 	/**

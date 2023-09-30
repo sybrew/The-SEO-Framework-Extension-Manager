@@ -156,7 +156,11 @@ final class Tests {
 				$consult_theme_author = true;
 			} else {
 
-				$_expected_title = static::$tsf->get_title( [ 'id' => static::$tsf->get_the_front_page_ID() ] );
+				$_expected_title = static::$tsf->get_title( [
+					'id' => TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? static::$tsf->query()->get_the_front_page_id()
+						: static::$tsf->get_the_front_page_ID()
+				] );
 
 				if ( $_expected_title !== $first_found_title ) {
 					$content  = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
@@ -323,11 +327,15 @@ final class Tests {
 
 				if ( false !== $id ) {
 					if ( ! $id ) {
-						$id = static::$tsf->get_the_front_page_ID();
+						$id = TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+							? static::$tsf->query()->get_the_front_page_id()
+							: static::$tsf->get_the_front_page_ID();
 					}
 
 					$title = static::$tsf->get_title( [ 'id' => $id ] );
-					$url   = static::$tsf->create_canonical_url( [ 'id' => $id ] );
+					$url   = TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? static::$tsf->get_generated_canonical_url( [ 'id' => $id ] )
+						: static::$tsf->create_canonical_url( [ 'id' => $id ] );
 
 					$links[] = sprintf( '<a href="%s" target=_blank rel=noopener>%s</a>', $url, $title );
 				}

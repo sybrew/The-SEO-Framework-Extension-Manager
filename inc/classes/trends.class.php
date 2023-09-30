@@ -109,12 +109,12 @@ final class Trends {
 
 		$xml = \wp_remote_retrieve_body( $request );
 		// Add bitwise operators.
-		$options = LIBXML_NOCDATA | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NONET | LIBXML_NSCLEAN;
+		$options = \LIBXML_NOCDATA | \LIBXML_NOBLANKS | \LIBXML_NOWARNING | \LIBXML_NONET | \LIBXML_NSCLEAN;
 		$xml     = simplexml_load_string( $xml, 'SimpleXMLElement', $options );
 
 		if ( empty( $xml->channel->item ) ) {
 			// Retry in hour when server is down.
-			\set_transient( $transient_name, '', HOUR_IN_SECONDS );
+			\set_transient( $transient_name, '', \HOUR_IN_SECONDS );
 			return '';
 		}
 
@@ -181,7 +181,7 @@ final class Trends {
 			// phpcs:enable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		endforeach;
 
-		\set_transient( $transient_name, $output, DAY_IN_SECONDS * 2 );
+		\set_transient( $transient_name, $output, \DAY_IN_SECONDS * 2 );
 
 		return $ajax ? $a_output : $output;
 	}

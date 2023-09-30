@@ -74,7 +74,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
 	 * @param array $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
 	protected function _get_populated_term_ids( $data ) {
@@ -89,7 +89,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 			// phpcs:ignore, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $from_table/$indexes are escaped.
 			"SELECT DISTINCT `{$this->id_key}` FROM `$from_table` WHERE meta_key IN ('$indexes')"
 		);
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
 		return $item_ids ?: [];
 	}
@@ -104,7 +104,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 	 * @param array  $actions The actions for and after transmuation, passed by reference.
 	 * @param array  $results The results before and after transmuation, passed by reference.
 	 * @param ?array $cleanup The extraneous database indexes to clean up, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 * @return array|null Array if existing values are present, null otherwise.
 	 */
 	protected function _get_congealed_transport_value( $data, &$actions, &$results, &$cleanup ) {
@@ -120,7 +120,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 			"SELECT meta_key, meta_value FROM `$from_table` WHERE `{$this->id_key}` = %d AND meta_key IN ('$indexes')",
 			$data['item_id']
 		) );
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
 		return $metadata ? array_column( $metadata, 'meta_value', 'meta_key' ) : [];
 	}
@@ -134,7 +134,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 	 * @param array  $data    Any useful data pertaining to the current transmutation type.
 	 * @param ?array $actions The actions for and after transmuation, passed by reference.
 	 * @param ?array $results The results before and after transmutation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function _term_meta_transmuter( $data, &$actions, &$results ) {
 

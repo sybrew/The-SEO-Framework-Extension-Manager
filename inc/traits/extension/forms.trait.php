@@ -41,7 +41,7 @@ trait Extension_Forms {
 	 * _get_field_id() method, if the naming format needs to be different.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @access private
@@ -50,7 +50,7 @@ trait Extension_Forms {
 	 * @return string Full field name
 	 */
 	public function _get_field_name( $name ) {
-		return sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $name );
+		return sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $name );
 	}
 
 	/**
@@ -70,7 +70,7 @@ trait Extension_Forms {
 	 * Helper function that constructs id attributes for use in form fields.
 	 *
 	 * @since 1.0.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @access private
@@ -79,7 +79,7 @@ trait Extension_Forms {
 	 * @return string Full field id
 	 */
 	public function _get_field_id( $id ) {
-		return sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $id );
+		return sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $id );
 	}
 
 	/**

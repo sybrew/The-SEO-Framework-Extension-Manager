@@ -236,8 +236,8 @@ final class ListEdit {
 				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsf-le' ],
 				'autoload' => true,
 				'name'     => 'tsfem-listedit',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'l10n'     => [
 					'name' => 'tsfem_listeditL10n',
 					'data' => [],

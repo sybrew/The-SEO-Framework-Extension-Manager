@@ -194,7 +194,7 @@ final class Scoring {
 	 */
 	public function get_nearest_numeric_index_value( $a, $value ) {
 
-		ksort( $a, SORT_NUMERIC );
+		ksort( $a, \SORT_NUMERIC );
 
 		foreach ( $a as $k => $v ) {
 			if ( is_numeric( $k ) ) {

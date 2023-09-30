@@ -291,11 +291,11 @@ trait Extensions_Properties {
 		$path = static::get_extension_relative_path( $slug );
 
 		if ( $url ) {
-			$path = str_replace( DIRECTORY_SEPARATOR, '/', $path );
+			$path = str_replace( \DIRECTORY_SEPARATOR, '/', $path );
 
-			return TSF_EXTENSION_MANAGER_DIR_URL . "{$path}assets/$file";
+			return \TSF_EXTENSION_MANAGER_DIR_URL . "{$path}assets/$file";
 		} else {
-			return TSF_EXTENSION_MANAGER_DIR_PATH . "{$path}assets" . DIRECTORY_SEPARATOR . $file;
+			return \TSF_EXTENSION_MANAGER_DIR_PATH . "{$path}assets" . \DIRECTORY_SEPARATOR . $file;
 		}
 	}
 
@@ -309,7 +309,7 @@ trait Extensions_Properties {
 	 */
 	private static function get_extension_trunk_path( $slug ) {
 		if ( ! $slug ) return '';
-		return TSF_EXTENSION_MANAGER_DIR_PATH . static::get_extension_relative_path( $slug ) . 'trunk' . DIRECTORY_SEPARATOR;
+		return \TSF_EXTENSION_MANAGER_DIR_PATH . static::get_extension_relative_path( $slug ) . 'trunk' . \DIRECTORY_SEPARATOR;
 	}
 
 	/**
@@ -345,7 +345,7 @@ trait Extensions_Properties {
 		$path[ $slug ] .= $premium ? 'premium/' : ( $essentials ? 'essentials/' : 'free/' );
 		$path[ $slug ] .= $slug . '/';
 
-		$path[ $slug ] = str_replace( '/', DIRECTORY_SEPARATOR, $path[ $slug ] );
+		$path[ $slug ] = str_replace( '/', \DIRECTORY_SEPARATOR, $path[ $slug ] );
 
 		return $path[ $slug ];
 	}
@@ -482,7 +482,7 @@ trait Extensions_Actions {
 	 *      This could prevent some racing-bugs.
 	 *
 	 * @since 1.0.0
-	 * @since 2.0.0 Now listens to the TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
+	 * @since 2.0.0 Now listens to the \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS constant.
 	 *
 	 * @return array : {
 	 *    string The extension slug => bool True if active
@@ -495,10 +495,10 @@ trait Extensions_Actions {
 		if ( isset( $memo ) )
 			return $memo;
 
-		$extensions = \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [];
+		$extensions = \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [];
 
-		if ( TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS )
-			$extensions = array_merge( $extensions, TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
+		if ( \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS )
+			$extensions = array_merge( $extensions, \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		// Assume an extension would be active -- why else would they use this plugin?
 		// Don't add a defence clause. That should only make these calls useless right after activation.
@@ -657,7 +657,7 @@ trait Extensions_Actions {
 
 		return $extension && ! (
 			static::determine_extension_incompatibility( $extension )
-			& ( TSFEM_EXTENSION_TSF_INCOMPATIBLE | TSFEM_EXTENSION_WP_INCOMPATIBLE )
+			& ( \TSFEM_EXTENSION_TSF_INCOMPATIBLE | \TSFEM_EXTENSION_WP_INCOMPATIBLE )
 		);
 	}
 
@@ -687,19 +687,19 @@ trait Extensions_Actions {
 
 		$compatibility = 0;
 
-		$_tsf_version = THE_SEO_FRAMEWORK_VERSION;
+		$_tsf_version = \THE_SEO_FRAMEWORK_VERSION;
 		$_wp_version  = $GLOBALS['wp_version'];
 
 		if ( static::version_compare_lenient( $_tsf_version, $extension['requires_tsf'], '<' ) ) {
-			$compatibility |= TSFEM_EXTENSION_TSF_INCOMPATIBLE;
+			$compatibility |= \TSFEM_EXTENSION_TSF_INCOMPATIBLE;
 		} elseif ( static::version_compare_lenient( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
-			$compatibility |= TSFEM_EXTENSION_TSF_UNTESTED;
+			$compatibility |= \TSFEM_EXTENSION_TSF_UNTESTED;
 		}
 
 		if ( static::version_compare_lenient( $_wp_version, $extension['requires'], '<' ) ) {
-			$compatibility |= TSFEM_EXTENSION_WP_INCOMPATIBLE;
+			$compatibility |= \TSFEM_EXTENSION_WP_INCOMPATIBLE;
 		} elseif ( static::version_compare_lenient( $_wp_version, $extension['tested'], '>' ) ) {
-			$compatibility |= TSFEM_EXTENSION_WP_UNTESTED;
+			$compatibility |= \TSFEM_EXTENSION_WP_UNTESTED;
 		}
 
 		$cache[ $extension['slug'] ] = $compatibility;
@@ -813,7 +813,7 @@ trait Extensions_Actions {
 			\define( '_TSFEM_TEST_EXT_IS_AJAX', $ajax );
 
 			// We only want to catch a fatal/parse error.
-			static::set_error_reporting( E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR );
+			static::set_error_reporting( \E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR );
 
 			register_shutdown_function( __CLASS__ . '::_shutdown_handle_test_extension_fatal_error' );
 		}
@@ -880,7 +880,7 @@ trait Extensions_Actions {
 
 		if ( ! $json ) {
 			// json file contents are invalid.
-			throw new \Exception( 'Extension test file is invalid', E_USER_ERROR );
+			throw new \Exception( 'Extension test file is invalid', \E_USER_ERROR );
 
 			// phpcs:disable, Squiz.PHP.NonExecutableCode.Unreachable -- This won't run, and that's OK.
 			$success[] = false;
@@ -963,13 +963,13 @@ trait Extensions_Actions {
 	/**
 	 * Sets error reporting to input $val.
 	 *
-	 * Also disables commong WP_DEBUG functionality that are prone to interfere.
-	 * The WP_DEBUG functionality can not be re-enabled, currently.
+	 * Also disables commong \WP_DEBUG functionality that are prone to interfere.
+	 * The \WP_DEBUG functionality can not be re-enabled, currently.
 	 * Nevertheless, this is handled on POST as one of its final action.
 	 *
 	 * @see http://php.net/manual/en/function.error-reporting.php
 	 * @since 1.0.0
-	 * @todo Reset WP_DEBUG functionality? i.e. by caching the filters current input.
+	 * @todo Reset \WP_DEBUG functionality? i.e. by caching the filters current input.
 	 *       Probably not necessary, since we crash right after this.
 	 *
 	 * @param null|int $val The error reporting level. If null, it will reset
@@ -997,7 +997,7 @@ trait Extensions_Actions {
 			error_reporting( $val );
 
 		if ( 0 === $val ) {
-			// Also disable WP_DEBUG functions used by The SEO Framework.
+			// Also disable \WP_DEBUG functions used by The SEO Framework.
 			\add_filter( 'doing_it_wrong_trigger_error', '__return_false' );
 			\add_filter( 'deprecated_function_trigger_error', '__return_false' );
 			\add_filter( 'the_seo_framework_inaccessible_p_or_m_trigger_error', '__return_false' );
@@ -1027,14 +1027,14 @@ trait Extensions_Actions {
 		$error_type = '';
 
 		switch ( $error['type'] ) :
-			case E_ERROR:
-			case E_CORE_ERROR:
-			case E_COMPILE_ERROR:
-			case E_USER_ERROR:
+			case \E_ERROR:
+			case \E_CORE_ERROR:
+			case \E_COMPILE_ERROR:
+			case \E_USER_ERROR:
 				$error_type = 'Fatal error.';
 				break;
 
-			case E_PARSE:
+			case \E_PARSE:
 				$error_type = 'Parse error.';
 				break;
 
@@ -1182,7 +1182,7 @@ trait Extensions_Actions {
 		if ( ( ".$type" ) === substr( $file, - ( \strlen( $type ) + 1 ) ) ) {
 			switch ( \validate_file( $file ) ) :
 				case 2:
-					if ( 'WIN' !== strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
+					if ( 'WIN' !== strtoupper( substr( \PHP_OS, 0, 3 ) ) ) {
 						break;
 					}
 					// Fall through to test 0

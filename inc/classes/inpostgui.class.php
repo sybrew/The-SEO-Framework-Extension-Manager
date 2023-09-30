@@ -241,8 +241,8 @@ final class InpostGUI {
 				'type' => 'js',
 				'autoload' => false,
 				'name' => 'tsfem-inpost',
-				'base' => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'  => TSF_EXTENSION_MANAGER_VERSION,
+				'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
 				'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
 				'l10n' => [
 					'name' => 'tsfem_inpostL10n',
@@ -253,7 +253,7 @@ final class InpostGUI {
 						'isConnected' => $tsfem->is_connected_user(),
 						'locale'      => \get_locale(),
 						'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
-						'debug'       => (bool) WP_DEBUG,
+						'debug'       => (bool) \WP_DEBUG,
 						'rtl'         => (bool) \is_rtl(),
 						'i18n'        => [
 							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
@@ -274,8 +274,8 @@ final class InpostGUI {
 				'type' => 'css',
 				'autoload' => false,
 				'name' => 'tsfem-inpost',
-				'base' => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-				'ver'  => TSF_EXTENSION_MANAGER_VERSION,
+				'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+				'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
 				'deps' => [ 'tsf', 'tsf-tt' ],
 			],
 		] );
@@ -288,8 +288,8 @@ final class InpostGUI {
 				'deps'     => [],
 				'autoload' => false,
 				'name'     => 'tsfem-worker',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 			],
 		] );
 	}
@@ -344,16 +344,16 @@ final class InpostGUI {
 		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
 		) return;
 
-		static::$save_access_state = TSFEM_INPOST_IS_SECURE;
+		static::$save_access_state = \TSFEM_INPOST_IS_SECURE;
 
 		if ( ! \wp_is_post_autosave( $post ) )
-			static::$save_access_state |= TSFEM_INPOST_NO_AUTOSAVE;
+			static::$save_access_state |= \TSFEM_INPOST_NO_AUTOSAVE;
 		if ( ! \wp_doing_ajax() )
-			static::$save_access_state |= TSFEM_INPOST_NO_AJAX;
+			static::$save_access_state |= \TSFEM_INPOST_NO_AJAX;
 		if ( ! \wp_doing_cron() )
-			static::$save_access_state |= TSFEM_INPOST_NO_CRON;
+			static::$save_access_state |= \TSFEM_INPOST_NO_CRON;
 		if ( ! \wp_is_post_revision( $post ) )
-			static::$save_access_state |= TSFEM_INPOST_NO_REVISION;
+			static::$save_access_state |= \TSFEM_INPOST_NO_REVISION;
 
 		$data = ! empty( $_POST[ static::META_PREFIX ] ) ? \wp_unslash( $_POST[ static::META_PREFIX ] ) : null;
 
@@ -400,7 +400,7 @@ final class InpostGUI {
 	 */
 	public static function is_state_safe( $state ) {
 		return (bool) ( $state & (
-			TSFEM_INPOST_IS_SECURE | TSFEM_INPOST_NO_AUTOSAVE | TSFEM_INPOST_NO_AJAX | TSFEM_INPOST_NO_CRON | TSFEM_INPOST_NO_REVISION
+			TSFEM_INPOST_IS_SECURE | \TSFEM_INPOST_NO_AUTOSAVE | \TSFEM_INPOST_NO_AJAX | \TSFEM_INPOST_NO_CRON | \TSFEM_INPOST_NO_REVISION
 		) );
 	}
 

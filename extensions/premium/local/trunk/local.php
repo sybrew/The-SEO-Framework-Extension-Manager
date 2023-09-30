@@ -62,39 +62,39 @@ namespace TSF_Extension_Manager\Extension\Local;
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_LOCAL_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_LOCAL_BASE_FILE ) );
+\define( 'TSFEM_E_LOCAL_DIR_URL', \TSF_Extension_Manager\extension_dir_url( \TSFEM_E_LOCAL_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_LOCAL_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_LOCAL_BASE_FILE ) );
+\define( 'TSFEM_E_LOCAL_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( \TSFEM_E_LOCAL_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_LOCAL_PATH_CLASS', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_LOCAL_PATH_CLASS', \TSFEM_E_LOCAL_DIR_PATH . 'inc' . \DIRECTORY_SEPARATOR . 'classes' . \DIRECTORY_SEPARATOR );
 
 /**
  * The plugin trait map absolute path.
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_LOCAL_PATH_TRAIT', TSFEM_E_LOCAL_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'traits' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_LOCAL_PATH_TRAIT', \TSFEM_E_LOCAL_DIR_PATH . 'inc' . \DIRECTORY_SEPARATOR . 'traits' . \DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
  *
  * @since 1.0.0
  */
-if ( ! \tsfem()->_init_early_extension_autoloader( TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
+if ( ! \tsfem()->_init_early_extension_autoloader( \TSFEM_E_LOCAL_PATH_CLASS, 'Local', $_instance, $bits ) )
 	return;
 
-if ( TSFEM_E_LOCAL_DB_VERSION > \tsf_extension_manager_db_version( 'local' ) ) {
-	require TSFEM_E_LOCAL_DIR_PATH . 'upgrade.php';
+if ( \TSFEM_E_LOCAL_DB_VERSION > \tsf_extension_manager_db_version( 'local' ) ) {
+	require \TSFEM_E_LOCAL_DIR_PATH . 'upgrade.php';
 }
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\_local_init', 11 );
@@ -126,7 +126,7 @@ function _local_init() {
  * Requires trait files once.
  *
  * @since 1.0.0
- * @uses TSFEM_E_LOCAL_PATH_TRAIT
+ * @uses \TSFEM_E_LOCAL_PATH_TRAIT
  * @access private
  *
  * @param string $file Trait file name.
@@ -139,5 +139,5 @@ function _load_trait( $file ) {
 	if ( isset( $loaded[ $file ] ) )
 		return $loaded[ $file ];
 
-	return $loaded[ $file ] = (bool) require TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php';
+	return $loaded[ $file ] = (bool) require \TSFEM_E_LOCAL_PATH_TRAIT . $file . '.trait.php';
 }

@@ -31,8 +31,6 @@ namespace TSF_Extension_Manager;
  */
 \TSF_Extension_Manager\_load_trait( 'manager/extensions' );
 
-// phpcs:disable, Generic.Files.OneObjectStructurePerFile -- Initializes fallback dummy traits.
-
 /**
  * Require extensions layout traits depending on admin page type.
  *
@@ -40,14 +38,10 @@ namespace TSF_Extension_Manager;
  * @NOTE The following check is insecure, but the included traits are only
  *       deferred for their memory usage. Secure_Abstract prevents interaction.
  * @TODO Move trait items to own static class.
+ * TODO this is dumb. Move the layout to its own class.
+ * TODO also stop with the "security" stuff -- we made it impossible to null this plugin but at the cost of maintainability.
  */
-if ( \tsfem()->is_tsf_extension_manager_page( false ) ) {
-	\TSF_Extension_Manager\_load_trait( 'manager/extensions-layout' );
-} else {
-	// Empty dummy traits.
-	trait Extensions_Layout { }
-	trait Extensions_I18n { }
-}
+\TSF_Extension_Manager\_load_trait( 'manager/extensions-layout' );
 
 /**
  * Class TSF_Extension_Manager\Extensions.

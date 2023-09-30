@@ -171,7 +171,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 				'date_query'       => [
 					'column' => 'post_date_gmt',
 					// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.date_date -- Already rectified by TSF: gmdate === date
-					'after'  => date( 'c', time() - ( DAY_IN_SECONDS * 2.5 ) ),
+					'after'  => date( 'c', time() - ( \DAY_IN_SECONDS * 2.5 ) ),
 				],
 			]
 		);
@@ -370,12 +370,12 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 */
 	private function escape_xml_url_query( $url ) {
 
-		$q = parse_url( $url, PHP_URL_QUERY );
+		$q = parse_url( $url, \PHP_URL_QUERY );
 
 		if ( $q ) {
 			parse_str( $q, $r );
 			// Don't replace. Tokenize. The query part might be part of the URL (in some alien environment).
-			$url = strtok( $url, '?' ) . '?' . http_build_query( $r, null, '&amp;', PHP_QUERY_RFC3986 );
+			$url = strtok( $url, '?' ) . '?' . http_build_query( $r, null, '&amp;', \PHP_QUERY_RFC3986 );
 		}
 
 		return $url;

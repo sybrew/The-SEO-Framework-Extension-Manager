@@ -65,7 +65,7 @@ function _amp_init() {
 		if ( \function_exists( '\\is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
 		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
-			$is_amp = \get_query_var( AMP_QUERY_VAR, false ) !== false;
+			$is_amp = \get_query_var( \AMP_QUERY_VAR, false ) !== false;
 		}
 
 		if ( $is_amp ) {
@@ -116,8 +116,17 @@ final class Front {
 
 		\do_action( 'the_seo_framework_do_before_amp_output' );
 
-		// phpcs:ignore -- All callbacks escape their output.
-		echo "\n", $this->get_general_metadata(), $this->get_social_metadata(), $this->get_structured_metadata(), "\n";
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+
+			\add_filter( 'the_seo_framework_meta_generator_pools', function( $pools ) {
+				return array_diff( $pools, 'URI' );
+			} );
+
+			\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+		} else {
+			// phpcs:ignore -- All callbacks escape their output.
+			echo "\n", $this->get_general_metadata(), $this->get_social_metadata(), $this->get_structured_metadata(), "\n";
+		}
 
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 	}

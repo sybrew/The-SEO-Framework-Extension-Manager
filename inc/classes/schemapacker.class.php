@@ -519,7 +519,7 @@ final class SchemaPacker {
 				return \sanitize_key( $value );
 
 			case 'convert_to_host':
-				return parse_url( $value, PHP_URL_HOST ) ?: '';
+				return parse_url( $value, \PHP_URL_HOST ) ?: '';
 
 			case 'esc_url_raw':
 				return \esc_url_raw( $value, [ 'https', 'http' ] );

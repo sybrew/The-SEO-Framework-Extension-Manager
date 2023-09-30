@@ -55,8 +55,8 @@ trait UI {
 		$this->ui_hook or \tsf()->_doing_it_wrong( __METHOD__, 'You need to specify property <code>ui_hook</code>' );
 
 		// Remove WordPress footer strings.
-		\add_filter( 'admin_footer_text', '__return_empty_string', PHP_INT_MAX );
-		\add_filter( 'update_footer', '__return_empty_string', PHP_INT_MAX );
+		\add_filter( 'admin_footer_text', '__return_empty_string', \PHP_INT_MAX );
+		\add_filter( 'update_footer', '__return_empty_string', \PHP_INT_MAX );
 
 		// Prevent annoying nags (they're hidden by CSS anyway).
 		\remove_action( 'admin_notices', 'update_nag', 3 );
@@ -240,8 +240,8 @@ trait UI {
 				'deps'     => [ 'jquery', 'wp-util', 'tsf', 'tsf-tt' ],
 				'autoload' => true,
 				'name'     => 'tsfem',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'l10n'     => [
 					'name' => 'tsfemL10n',
 					'data' => [
@@ -268,8 +268,8 @@ trait UI {
 				'autoload' => true,
 				'hasrtl'   => false,
 				'name'     => 'tsfem-ui',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'inline'   => null,
 			],
 			[
@@ -278,8 +278,8 @@ trait UI {
 				'deps'     => [ 'tsfem', 'tsf' ],
 				'autoload' => true,
 				'name'     => 'tsfem-ui',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'l10n'     => [
 					'name' => 'tsfemUIL10n',
 					'data' => [],
@@ -297,8 +297,8 @@ trait UI {
 				'deps'     => [],
 				'autoload' => false,
 				'name'     => 'tsfem-worker',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 			],
 		] );
 
@@ -311,8 +311,8 @@ trait UI {
 					'autoload' => true,
 					'hasrtl'   => false,
 					'name'     => 'tsfem-manager',
-					'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-					'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+					'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+					'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 					'inline'   => null,
 				],
 				[
@@ -321,8 +321,8 @@ trait UI {
 					'deps'     => [ 'tsfem-ui' ],
 					'autoload' => true,
 					'name'     => 'tsfem-manager',
-					'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-					'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+					'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+					'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 					'l10n'     => [
 						'name' => 'tsfemManagerL10n',
 						'data' => [
@@ -363,8 +363,8 @@ trait UI {
 				'autoload' => true,
 				'hasrtl'   => false,
 				'name'     => 'tsfem-form',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'inline'   => null,
 			],
 			[
@@ -373,8 +373,8 @@ trait UI {
 				'deps'     => [ 'tsfem-ui', 'tsf-tt' ],
 				'autoload' => true,
 				'name'     => 'tsfem-form',
-				'base'     => TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => TSF_EXTENSION_MANAGER_VERSION,
+				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'l10n'     => [
 					'name' => 'tsfemFormL10n',
 					'data' => [

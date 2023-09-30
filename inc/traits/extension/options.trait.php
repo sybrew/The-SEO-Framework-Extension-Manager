@@ -50,7 +50,7 @@ final class Extensions_Options_Cache {
 	 * @since 1.0.0
 	 */
 	private static function init_options_cache() {
-		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, [] );
+		static::$options = (array) \get_option( \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, [] );
 	}
 
 	/**
@@ -127,7 +127,7 @@ final class Stale_Extensions_Options_Cache {
 	 * @since 1.3.0
 	 */
 	private static function init_options_cache() {
-		static::$options = (array) \get_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
+		static::$options = (array) \get_option( \TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, [] );
 	}
 
 	/**
@@ -328,7 +328,7 @@ trait Extension_Options {
 		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			// Update options cache on success.
@@ -364,7 +364,7 @@ trait Extension_Options {
 		$c_options                   = Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+		$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 
 		if ( $success ) {
 			// Update options cache on success.
@@ -396,9 +396,9 @@ trait Extension_Options {
 		unset( $c_options[ $this->o_index ] );
 
 		if ( [] === $c_options ) {
-			$success = \delete_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS );
+			$success = \delete_option( \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS );
 		} else {
-			$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
+			$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $c_options );
 		}
 
 		if ( $success ) {
@@ -529,7 +529,7 @@ trait Extension_Options {
 		$c_options                   = Stale_Extensions_Options_Cache::_get_options_cache();
 		$c_options[ $this->o_index ] = $options;
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
 		if ( $success ) {
 			// Update options cache on success.
@@ -566,9 +566,9 @@ trait Extension_Options {
 		$c_options[ $this->o_index ] = $options;
 
 		if ( [] === $c_options ) {
-			$success = \delete_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS );
+			$success = \delete_option( \TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS );
 		} else {
-			$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+			$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 		}
 
 		if ( $success ) {
@@ -600,7 +600,7 @@ trait Extension_Options {
 
 		unset( $c_options[ $this->o_index ] );
 
-		$success = \update_option( TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
+		$success = \update_option( \TSF_EXTENSION_MANAGER_EXTENSION_STALE_OPTIONS, $c_options, 'no' );
 
 		if ( $success ) {
 			// Update options cache on success.

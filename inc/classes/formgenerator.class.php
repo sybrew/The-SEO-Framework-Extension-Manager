@@ -164,7 +164,7 @@ final class FormGenerator {
 			 *
 			 * @see \TSF_Extension_Manager\LoadAdmin
 			 */
-			\add_action( 'tsfem_form_do_ajax_iterations', __CLASS__ . '::_output_ajax_form_its', PHP_INT_MIN );
+			\add_action( 'tsfem_form_do_ajax_iterations', __CLASS__ . '::_output_ajax_form_its', \PHP_INT_MIN );
 
 			return static::get_ajax_target_id();
 		}
@@ -260,7 +260,7 @@ final class FormGenerator {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification -- tsfem_form_prepare_ajax_iterations() is called before this, which performed user verification checks.
 		$caller = $_POST['args']['caller'];
-		$items  = preg_split( '/[\[\]]+/', $caller, -1, PREG_SPLIT_NO_EMPTY );
+		$items  = preg_split( '/[\[\]]+/', $caller, -1, \PREG_SPLIT_NO_EMPTY );
 
 		// Unset the option indexes.
 		$unset_count = $this->o_key ? 3 : 2;
@@ -556,7 +556,7 @@ final class FormGenerator {
 	 * Returns form ID attribute for form wrap.
 	 *
 	 * @since 1.3.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @uses $this->o_key
@@ -567,9 +567,9 @@ final class FormGenerator {
 	private function get_form_id() {
 
 		if ( $this->o_key ) {
-			$k = sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
+			$k = sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
 		} else {
-			$k = sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
+			$k = sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
 		}
 
 		return $k;
@@ -579,7 +579,7 @@ final class FormGenerator {
 	 * Returns field name and ID attributes for form fields.
 	 *
 	 * @since 1.3.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @uses $this->o_key
@@ -589,9 +589,9 @@ final class FormGenerator {
 	private function get_field_id() {
 
 		if ( $this->o_key ) {
-			$k = sprintf( '%s[%s][%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
+			$k = sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
 		} else {
-			$k = sprintf( '%s[%s]', TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
+			$k = sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
 		}
 
 		// Correct the length of bits, split them and put them in the right order.
@@ -618,7 +618,7 @@ final class FormGenerator {
 	 * When $what is not 'full', it will omit the option namespaces.
 	 *
 	 * @since 1.3.0
-	 * @uses TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
+	 * @uses \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS
 	 * @uses $this->o_index
 	 * @see TSF_Extension_Manager\Traits\Extension_Options
 	 * @uses $this->o_key
@@ -630,7 +630,7 @@ final class FormGenerator {
 
 		$k = [];
 		if ( 'full' === $what ) {
-			$k[] = TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS;
+			$k[] = \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS;
 			$k[] = $this->o_index;
 		}
 
@@ -1588,7 +1588,7 @@ final class FormGenerator {
 						'-$1',
 						preg_replace( '/[^a-z0-9_\-]/i', '', $k )
 					) ), // dash case.
-					htmlspecialchars( json_encode( $v, JSON_UNESCAPED_SLASHES ), ENT_COMPAT, 'UTF-8' )
+					htmlspecialchars( json_encode( $v, \JSON_UNESCAPED_SLASHES ), \ENT_COMPAT, 'UTF-8' )
 				);
 			} else {
 				$ret[] = sprintf(

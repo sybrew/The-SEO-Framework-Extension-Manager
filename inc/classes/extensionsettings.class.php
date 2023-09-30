@@ -196,19 +196,15 @@ final class ExtensionSettings {
 		 */
 		$this->error_notice_option = 'tsfem_extension_settings_error_notice_option';
 
-		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
-		\add_action( 'admin_init', [ $this, '_load_admin_actions' ], 10 );
-	}
+		// Nothing to do here if headless.
+		if (
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \The_SEO_Framework\is_headless( 'settings' )
+				: \tsf()->is_headless['settings']
+		) return;
 
-	/**
-	 * Initializes WordPress menu entry.
-	 *
-	 * @since 2.2.0
-	 * @access private
-	 */
-	public function _init_menu() {
-		if ( \TSF_Extension_Manager\can_do_extension_settings() && ! \tsf()->is_headless['settings'] )
-			\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 12 );
+		\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 12 );
+		\add_action( 'admin_init', [ $this, '_load_admin_actions' ], 10 );
 	}
 
 	/**
@@ -220,10 +216,10 @@ final class ExtensionSettings {
 	public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \tsf()->seo_settings_page_slug,
+			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
 			'page_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
 			'menu_title'  => \__( 'Extension Settings', 'the-seo-framework-extension-manager' ),
-			'capability'  => TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
+			'capability'  => \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
 			'menu_slug'   => static::$settings_page_slug,
 			'callback'    => [ $this, '_output_settings_page' ],
 		];
@@ -285,13 +281,13 @@ final class ExtensionSettings {
 		// Only store sanitized data. Thank you.
 		// This may leave stray options about. That should be resolved through the upgrader.
 		foreach ( static::$sanitize as $slug => $sanitizations ) {
-			if ( ! isset( $data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ] ) )
+			if ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ] ) )
 				continue;
 
 			foreach ( $sanitizations as $_key => $_cb ) {
 				$store[ $slug ][ $_key ] = \call_user_func(
 					$_cb,
-					$data[ TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ] ?? null
+					$data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $slug ][ $_key ] ?? null
 				);
 			}
 		}
@@ -366,7 +362,10 @@ final class ExtensionSettings {
 	 */
 	public function _do_settings_page_actions() {
 
-		if ( ! \tsf()->is_menu_page( $this->ui_hook ) ) return;
+		if (
+			   empty( $this->ui_hook )
+			|| ( $GLOBALS['page_hook'] ?? null ) !== $this->ui_hook
+		) return;
 
 		/**
 		 * @see trait TSF_Extension_Manager\Error

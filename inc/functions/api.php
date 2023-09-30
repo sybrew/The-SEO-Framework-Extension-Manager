@@ -86,7 +86,7 @@ namespace TSF_Extension_Manager {
 	 * @return bool The minimum required capability for extension management.
 	 */
 	function can_do_extension_settings() {
-		return \current_user_can( TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
+		return \current_user_can( \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
 	}
 
 	/**
@@ -101,7 +101,7 @@ namespace TSF_Extension_Manager {
 	 * @return bool
 	 */
 	function can_do_manager_settings() {
-		return \current_user_can( TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE );
+		return \current_user_can( \TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE );
 	}
 
 	/**
@@ -135,9 +135,9 @@ namespace TSF_Extension_Manager {
 		if ( isset( $loaded[ $file ] ) )
 			return $loaded[ $file ];
 
-		$_file = str_replace( '/', DIRECTORY_SEPARATOR, $file );
+		$_file = str_replace( '/', \DIRECTORY_SEPARATOR, $file );
 
-		return $loaded[ $file ] = (bool) require TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php';
+		return $loaded[ $file ] = (bool) require \TSF_EXTENSION_MANAGER_DIR_PATH_TRAIT . $_file . '.trait.php';
 	}
 
 	/**
@@ -167,7 +167,7 @@ namespace TSF_Extension_Manager {
 		if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
 			return $loaded[ $version ] = true;
 
-		return $loaded[ $version ] = (bool) require TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php';
+		return $loaded[ $version ] = (bool) require \TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php';
 	}
 
 	/**

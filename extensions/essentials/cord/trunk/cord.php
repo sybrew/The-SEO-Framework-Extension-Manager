@@ -65,33 +65,33 @@ namespace TSF_Extension_Manager\Extension\Cord;
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_CORD_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_CORD_BASE_FILE ) );
+\define( 'TSFEM_E_CORD_DIR_URL', \TSF_Extension_Manager\extension_dir_url( \TSFEM_E_CORD_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_CORD_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_CORD_BASE_FILE ) );
+\define( 'TSFEM_E_CORD_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( \TSFEM_E_CORD_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_CORD_PATH_CLASS', TSFEM_E_CORD_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_CORD_PATH_CLASS', \TSFEM_E_CORD_DIR_PATH . 'inc' . \DIRECTORY_SEPARATOR . 'classes' . \DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
  *
  * @since 1.0.0
  */
-if ( ! \tsfem()->_init_early_extension_autoloader( TSFEM_E_CORD_PATH_CLASS, 'Cord', $_instance, $bits ) )
+if ( ! \tsfem()->_init_early_extension_autoloader( \TSFEM_E_CORD_PATH_CLASS, 'Cord', $_instance, $bits ) )
 	return;
 
 // phpcs:disable -- @ignore
-// if ( TSFEM_E_CORD_DB_VERSION > \tsf_extension_manager_db_version( 'cord' ) ) {
-// 	require TSFEM_E_CORD_DIR_PATH . 'upgrade.php';
+// if ( \TSFEM_E_CORD_DB_VERSION > \tsf_extension_manager_db_version( 'cord' ) ) {
+// 	require \TSFEM_E_CORD_DIR_PATH . 'upgrade.php';
 // }
 // phpcs:enable
 

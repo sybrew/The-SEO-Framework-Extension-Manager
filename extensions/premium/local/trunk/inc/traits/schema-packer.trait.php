@@ -125,7 +125,7 @@ trait Schema_Packer {
 	 */
 	protected function get_schema() {
 
-		$schema_file = TSFEM_E_LOCAL_DIR_PATH . 'lib' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'schema.json';
+		$schema_file = \TSFEM_E_LOCAL_DIR_PATH . 'lib' . \DIRECTORY_SEPARATOR . 'schema' . \DIRECTORY_SEPARATOR . 'schema.json';
 		$timeout     = stream_context_create( [ 'http' => [ 'timeout' => 3 ] ] );
 
 		// phpcs:ignore, WordPress.WP.AlternativeFunctions, TSF.Performance.Functions -- This isn't a remote call; required.
@@ -193,8 +193,8 @@ trait Schema_Packer {
 			goto reset;
 		}
 
-		$options  = JSON_UNESCAPED_SLASHES;
-		$options |= $pretty ? JSON_PRETTY_PRINT : 0;
+		$options  = \JSON_UNESCAPED_SLASHES;
+		$options |= $pretty ? \JSON_PRETTY_PRINT : 0;
 
 		$output = json_encode( $_data, $options );
 
@@ -230,7 +230,7 @@ trait Schema_Packer {
 		$count    = $data['department']['count'] ?? 0;
 		$main_url = isset( $data['department'][1]['url'] ) ? $this->remove_scheme( $data['department'][1]['url'] ) : 1;
 
-		$json_options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION;
+		$json_options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION;
 
 		if ( $count ) {
 			$_collection = &$packer->_collector();

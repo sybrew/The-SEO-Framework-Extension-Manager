@@ -52,7 +52,7 @@ final class Admin extends Core {
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Views
 		 */
-		$this->view_location_base = TSFEM_E_ARTICLES_DIR_PATH . 'views' . DIRECTORY_SEPARATOR;
+		$this->view_location_base = \TSFEM_E_ARTICLES_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
 		$this->prepare_inpostgui();
 		$this->prepare_listedit();
@@ -158,8 +158,10 @@ final class Admin extends Core {
 	 */
 	public function _register_settings( $settings ) {
 
-		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' )
-		|| \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
+		if (
+			   \has_filter( 'the_seo_framework_articles_supported_post_types' )
+			|| \has_filter( 'the_seo_framework_articles_default_meta' )
+		) {
 			\add_action( 'tsfem_notices', [ $this, '_do_filter_upgrade_notice' ] );
 		}
 
@@ -232,7 +234,7 @@ final class Admin extends Core {
 			$this->o_index,
 			[
 				'title'    => 'Articles',
-				'logo'     => TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon.svg',
+				'logo'     => \TSFEM_E_ARTICLES_DIR_URL . 'lib/images/icon.svg',
 				'before'   => '',
 				'after'    => '',
 				'pane'     => [],
@@ -438,7 +440,7 @@ final class Admin extends Core {
 		if ( ! \is_array( $value ) )
 			$value = [];
 
-		$post_types = \tsf()->get_supported_post_types();
+		$post_types = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->post_types()->get_supported_post_types() : \tsf()->get_supported_post_types();
 
 		// TODO do we want to strip unknown entries from payload?
 		// Only sanitize known post types.
@@ -548,7 +550,7 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 
-		$post_type = \tsf()->get_admin_post_type();
+		$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_admin_post_type() : \tsf()->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
 
 		$_default = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
@@ -679,7 +681,7 @@ final class Admin extends Core {
 
 		static $default;
 		if ( ! $default ) {
-			$post_type = \tsf()->get_admin_post_type();
+			$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_admin_post_type() : \tsf()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
 			$default   = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
 		}

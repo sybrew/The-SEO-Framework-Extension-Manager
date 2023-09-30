@@ -43,7 +43,7 @@ function _init_locale( $ignore = false ) {
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,
-			\dirname( TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . DIRECTORY_SEPARATOR . 'language'
+			\dirname( \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language'
 		);
 	}
 }
@@ -58,20 +58,20 @@ function _init_locale( $ignore = false ) {
  * This is because the required traits files aren't loaded yet. The autoloader treats traits
  * as classes.
  *
- * Also defines PHP_INT_MIN when not defined. This is used further internally.
+ * Also defines \PHP_INT_MIN when not defined. This is used further internally.
  *
  * @since 1.0.0
  * @access private
- * @uses constant PHP_INT_MIN, available from PHP 7.0
+ * @uses constant \PHP_INT_MIN, available from PHP 7.0
  */
 function _protect_options() {
 
-	$current_options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+	$current_options = (array) \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 
 	\add_filter(
-		'pre_update_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS,
+		'pre_update_option_' . \TSF_EXTENSION_MANAGER_SITE_OPTIONS,
 		__NAMESPACE__ . '\\_pre_execute_protect_option',
-		PHP_INT_MIN,
+		\PHP_INT_MIN,
 		3
 	);
 
@@ -79,7 +79,7 @@ function _protect_options() {
 		\add_filter(
 			"pre_update_option_tsfem_i_{$current_options['_instance']}",
 			__NAMESPACE__ . '\\_pre_execute_protect_option',
-			PHP_INT_MIN,
+			\PHP_INT_MIN,
 			3
 		);
 }
@@ -236,7 +236,13 @@ function can_load_class() {
 		return $can_load;
 
 	if ( \function_exists( '\\tsf' ) ) {
-		if ( version_compare( THE_SEO_FRAMEWORK_VERSION, '4.2.8', '>=' ) && \tsf()->loaded ) {
+		/**
+		 * @since 2.6.3
+		 * @internal
+		 */
+		\define( 'TSF_EXTENSION_MANAGER_USE_MODERN_TSF', version_compare( \THE_SEO_FRAMEWORK_VERSION, '4.3.0', '>=' ) );
+
+		if ( version_compare( \THE_SEO_FRAMEWORK_VERSION, '4.2.8', '>=' ) && \tsf()->loaded ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load
@@ -255,7 +261,7 @@ function can_load_class() {
  * @since 1.0.0
  * @since 2.5.1 Now handles mixed-case class names.
  * @since 2.6.0 Now uses `hrtime()` instead of `microtime()`.
- * @uses TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
+ * @uses \TSF_EXTENSION_MANAGER_DIR_PATH_CLASS
  * @access private
  *
  * @NOTE 'TSF_Extension_Manager\' is a reserved namespace. Using it outside of this
@@ -269,7 +275,7 @@ function _autoload_classes( $class ) {
 	// NB It's TSF_Extension_Manager, not tsf_extension_manager!
 	if ( 0 !== strpos( strtolower( $class ), 'tsf_extension_manager\\', 0 ) ) return;
 
-	if ( WP_DEBUG ) {
+	if ( \WP_DEBUG ) {
 		/**
 		 * Prevent loading sub-namespaces when they're not initiated correctly.
 		 *
@@ -295,12 +301,12 @@ function _autoload_classes( $class ) {
 
 	if ( strpos( $file, '_abstract' ) ) {
 		$file    = str_replace( '_abstract', '.abstract', $file );
-		$rel_dir = 'abstract' . DIRECTORY_SEPARATOR;
+		$rel_dir = 'abstract' . \DIRECTORY_SEPARATOR;
 	} else {
 		$rel_dir = '';
 	}
 
-	require TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
+	require \TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
 	if ( $_bootstrap_timer ) {
 		$_t = ( hrtime( true ) - $_bootstrap_timer ) / 1e9;

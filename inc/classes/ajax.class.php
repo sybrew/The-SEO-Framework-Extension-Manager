@@ -176,7 +176,7 @@ final class AJAX extends Secure_Abstract {
 
 		if ( ! static::$_validated ) return;
 
-		$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
+		$post_id = filter_input( \INPUT_POST, 'post_ID', \FILTER_VALIDATE_INT );
 		if ( ! $post_id || ! InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) return;
 
 		if ( \check_ajax_referer( InpostGUI::JS_NONCE_ACTION, InpostGUI::JS_NONCE_NAME, false ) ) {
@@ -479,7 +479,7 @@ final class AJAX extends Secure_Abstract {
 					 * meaning the image had a title when originally uploaded or its title was edited.
 					 */
 					( $parent_basename !== $sanitized_post_title ) &&
-					( pathinfo( $parent_basename, PATHINFO_FILENAME ) !== $sanitized_post_title )
+					( pathinfo( $parent_basename, \PATHINFO_FILENAME ) !== $sanitized_post_title )
 				);
 				$use_original_description = \strlen( trim( $original_attachment->post_content ) );
 

@@ -165,7 +165,7 @@ abstract class Core {
 	 * @generator
 	 * @abstract Feel free to overwrite this method.
 	 * @global \wpdb $wpdb WordPress Database handler.
-	 * @throws \Exception With WP_DEBUG enabled, exceptions are sent to the user.
+	 * @throws \Exception With \WP_DEBUG enabled, exceptions are sent to the user.
 	 *
 	 * @yield string $key => mixed $data On sporadic intervals that could be pinged.
 	 * @return boolean True on success, false on failure.
@@ -424,7 +424,7 @@ abstract class Core {
 	 * @global \wpdb $wpdb WordPress Database handler.
 	 *
 	 * @param mixed $data Any useful data pertaining to the current transmutation type.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 * @return array Array of item ids with existing data.
 	 */
 	public function get_item_ids( $data ) {
@@ -437,7 +437,7 @@ abstract class Core {
 			"SELECT `{$this->id_key}` FROM `$from_table` WHERE meta_key = %s", // No "DISTINCT", show "skipped" and explain in FAQ what it means.
 			$from_index
 		) );
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
 		return $item_ids ?: [];
 	}
@@ -477,7 +477,7 @@ abstract class Core {
 	 * @param ?string $table The database table.
 	 * @param ?string $index The table index key.
 	 * @param ?int    $id    The table item ID for `$this->id_key`.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 * @return mixed Any data if transport values are present, null otherwise.
 	 */
 	protected function get_var( $table, $index, $id ) {
@@ -493,7 +493,7 @@ abstract class Core {
 			$id,
 			$index
 		) );
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
 		return $var;
 	}
@@ -511,7 +511,7 @@ abstract class Core {
 	 * @param array     $actions       The actions for and after transmuation, passed by reference.
 	 * @param array     $results       The results before and after transmuation, passed by reference.
 	 * @param ?array    $cleanup       The extraneous database indexes to clean up.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function transmute( $set_value, $item_id, $transfer_from, $transfer_to, &$actions, &$results, $cleanup = null ) {
 		global $wpdb;
@@ -539,7 +539,7 @@ abstract class Core {
 							'meta_key' => $from_index,
 						]
 					);
-					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+					if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				} else {
 					$results['updated'] += (int) $wpdb->update(
 						$to_table,
@@ -549,7 +549,7 @@ abstract class Core {
 							'meta_key' => $from_index,
 						]
 					);
-					if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+					if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				}
 				// Simply moved, mustn't be deleted. Should've already been false. Just in case:
 				$actions['delete'] = false;
@@ -565,7 +565,7 @@ abstract class Core {
 						'meta_value' => $set_value,
 					]
 				);
-				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+				if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 
 				$results['updated']  += $_results;
 				$results['inserted'] += $_results;
@@ -580,7 +580,7 @@ abstract class Core {
 						'meta_key' => $to_index,
 					]
 				);
-				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+				if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 				// Altered, mustn't be deleted. Should've already been false. Just in case:
 				$actions['delete'] = false;
 			}
@@ -595,7 +595,7 @@ abstract class Core {
 						'meta_key' => $from_index,
 					]
 				);
-				if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+				if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 			}
 		}
 
@@ -610,7 +610,7 @@ abstract class Core {
 					'meta_key' => $_from_index,
 				]
 			);
-			if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+			if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 		}
 	}
 
@@ -623,7 +623,7 @@ abstract class Core {
 	 * @param int       $item_id The post/term/item ID to transmute.
 	 * @param ?string[] $from    The table+index to transfer from.
 	 * @param array     $results The results before and after transmuation, passed by reference.
-	 * @throws \Exception On database error when WP_DEBUG is enabled.
+	 * @throws \Exception On database error when \WP_DEBUG is enabled.
 	 */
 	protected function delete( $item_id, $from, &$results ) {
 		global $wpdb;
@@ -637,7 +637,7 @@ abstract class Core {
 				'meta_key'    => $from_index,
 			]
 		);
-		if ( WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
+		if ( \WP_DEBUG && $wpdb->last_error ) throw new \Exception( $wpdb->last_error );
 	}
 
 	/**

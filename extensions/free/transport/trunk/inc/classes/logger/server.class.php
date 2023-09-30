@@ -234,7 +234,7 @@ final class Server {
 			$data = [ 'content' => $data ];
 
 		printf( "event: %s\nid: %s\n", \esc_html( $event ), \esc_html( $id ) );
-		echo 'data: ', json_encode( $data, JSON_FORCE_OBJECT ), "\n\n";
+		echo 'data: ', json_encode( $data, \JSON_FORCE_OBJECT ), "\n\n";
 	}
 
 	/**

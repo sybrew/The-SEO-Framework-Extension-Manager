@@ -225,7 +225,7 @@ trait Time {
 			'minutes' => [ 60, 'hours' ],
 			'hours'   => [ 24, 'days' ],
 			'days'    => [ 7, 'weeks' ],
-			'weeks'   => [ PHP_INT_MAX, 'eternity' ],
+			'weeks'   => [ \PHP_INT_MAX, 'eternity' ],
 			// Months and years are too variable for the static purpose of this method.
 		];
 

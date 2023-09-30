@@ -70,11 +70,11 @@ trait Options {
 		if ( $this->options )
 			return $this->options;
 
-		\remove_all_filters( 'pre_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-		\remove_all_filters( 'default_option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
-		\remove_all_filters( 'option_' . TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'pre_option_' . \TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'default_option_' . \TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		\remove_all_filters( 'option_' . \TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 
-		return $this->options = (array) \get_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
+		return $this->options = (array) \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
 	}
 
 	/**
@@ -128,7 +128,7 @@ trait Options {
 		// Effervescently evergreen. This will stop users "deciphering" the "local instance" gimmick ad futility.
 		$options['_timestamp'] = time();
 
-		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$success          = \update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
 		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
@@ -136,7 +136,7 @@ trait Options {
 
 			// Revert on failure.
 			if ( ! $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
+				\update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
 		}
 
 		$this->clear_options_cache();
@@ -179,7 +179,7 @@ trait Options {
 			return false;
 		}
 
-		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$success          = \update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
 		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
@@ -187,7 +187,7 @@ trait Options {
 
 			// Revert on failure.
 			if ( ! $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
+				\update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
 		}
 
 		$this->clear_options_cache();
@@ -225,7 +225,7 @@ trait Options {
 			return false;
 		}
 
-		$success          = \update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
+		$success          = \update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );
 		$instance_updated = $success && $this->set_options_instance( $options, $options['_instance'] );
 
 		if ( ! $instance_updated || ! $this->verify_option_update_instance( $kill ) ) {
@@ -233,7 +233,7 @@ trait Options {
 
 			// Revert on failure.
 			if ( ! $kill )
-				\update_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
+				\update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $existing_options );
 		}
 
 		$this->clear_options_cache();
@@ -360,7 +360,7 @@ trait Options {
 			\delete_option( "tsfem_i_$instance" );
 		}
 
-		$this->killed_options = \delete_option( TSF_EXTENSION_MANAGER_SITE_OPTIONS );
+		$this->killed_options = \delete_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS );
 		$this->clear_options_cache();
 
 		return $this->killed_options;

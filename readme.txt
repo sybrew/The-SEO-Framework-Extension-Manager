@@ -63,6 +63,7 @@ TODO extend Articles support for "Author" for any post type that has 'author' po
 * TODO Verify PHP 8.1 (and 8.2?) support.
 	-> We definitely fixed a 8.1 deprecation notice in Honeypot.
 
+TODO get_generated_canonical_url will be renamed before TSF 4.3 release.
 
 = 2.6.2 =
 

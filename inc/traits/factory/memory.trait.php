@@ -67,7 +67,7 @@ class Memory_Cache {
 
 		$limit      = trim( ini_get( 'memory_limit' ) );
 		$quantifier = strtolower( $limit[ \strlen( $limit ) - 1 ] );
-		$limit      = filter_var( $limit, FILTER_SANITIZE_NUMBER_INT );
+		$limit      = filter_var( $limit, \FILTER_SANITIZE_NUMBER_INT );
 
 		switch ( $quantifier ) {
 			case 'g':

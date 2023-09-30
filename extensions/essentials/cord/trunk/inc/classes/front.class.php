@@ -156,7 +156,9 @@ final class Front extends Core {
 
 				// TODO add field to allow multiple domains? This seems exaggeratingly redundant.
 				// https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain#automatically_link_domains
-				$home_domain   = parse_url( \tsf()->get_raw_home_canonical_url(), PHP_URL_HOST );
+				$home_domain   = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->uri()->utils()->get_site_host()
+					: parse_url( \tsf()->get_raw_home_canonical_url(), \PHP_URL_HOST );
 				$page_location = '';
 
 				// Fix and normalize search link recognition.

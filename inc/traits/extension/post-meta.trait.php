@@ -58,7 +58,7 @@ final class Extensions_Post_Meta_Cache {
 	private static function init_meta_cache( $id ) {
 		static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
 			(
-				\get_post_meta( $id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
+				\get_post_meta( $id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
 			),
 			[ 'allowed_classes' => [ 'stdClass' ] ] // Redundant.
 		);
@@ -174,7 +174,7 @@ trait Extension_Post_Meta {
 	 * @since 1.5.0
 	 */
 	final protected function reset_extension_post_meta_id() {
-		$this->set_extension_post_meta_id( \tsf()->get_the_real_ID() );
+		$this->set_extension_post_meta_id( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_the_real_id() : \tsf()->get_the_real_ID() );
 	}
 
 	/**
@@ -264,7 +264,7 @@ trait Extension_Post_Meta {
 
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
 		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
+		$success = \update_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
 			// Update meta cache on success.
@@ -304,7 +304,7 @@ trait Extension_Post_Meta {
 
 		// Addslashes here, so WordPress doesn't unslash it, whereafter unserialization fails.
 		// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
-		$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
+		$success = \update_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 
 		if ( $success ) {
 			// Update meta cache on success.
@@ -339,10 +339,10 @@ trait Extension_Post_Meta {
 		unset( $c_meta[ $this->pm_index ] );
 
 		if ( [] === $c_meta ) {
-			$success = \delete_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
+			$success = \delete_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		} else {
 			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
-			$success = \update_post_meta( $this->pm_id, TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
+			$success = \update_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
 		}
 
 		if ( $success ) {

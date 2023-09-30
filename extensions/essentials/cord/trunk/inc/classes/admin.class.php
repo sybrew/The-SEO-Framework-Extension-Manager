@@ -177,7 +177,7 @@ final class Admin extends Core {
 			$this->o_index,
 			[
 				'title'    => 'Cord',
-				'logo'     => TSFEM_E_CORD_DIR_URL . 'lib/images/icon.svg',
+				'logo'     => \TSFEM_E_CORD_DIR_URL . 'lib/images/icon.svg',
 				'before'   => '',
 				'after'    => '',
 				'pane'     => [],

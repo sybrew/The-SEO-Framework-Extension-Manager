@@ -99,7 +99,7 @@ final class Front extends Core {
 	protected function is_amp() {
 		static $memo;
 		return $memo ?? (
-			$memo = \defined( 'AMP_QUERY_VAR' ) && \get_query_var( AMP_QUERY_VAR, false ) !== false
+			$memo = \defined( 'AMP_QUERY_VAR' ) && \get_query_var( \AMP_QUERY_VAR, false ) !== false
 		);
 	}
 

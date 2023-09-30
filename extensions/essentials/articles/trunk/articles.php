@@ -55,28 +55,28 @@ namespace TSF_Extension_Manager\Extension\Articles;
  *
  * @since 2.2.0
  */
-\define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( TSFEM_E_ARTICLES_BASE_FILE ) );
+\define( 'TSFEM_E_ARTICLES_DIR_URL', \TSF_Extension_Manager\extension_dir_url( \TSFEM_E_ARTICLES_BASE_FILE ) );
 
 /**
  * The extension file relative to the plugins dir.
  *
  * @since 1.2.0
  */
-\define( 'TSFEM_E_ARTICLES_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( TSFEM_E_ARTICLES_BASE_FILE ) );
+\define( 'TSFEM_E_ARTICLES_DIR_PATH', \TSF_Extension_Manager\extension_dir_path( \TSFEM_E_ARTICLES_BASE_FILE ) );
 
 /**
  * The plugin class map absolute path.
  *
  * @since 1.2.0
  */
-\define( 'TSFEM_E_ARTICLES_PATH_CLASS', TSFEM_E_ARTICLES_DIR_PATH . 'inc' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR );
+\define( 'TSFEM_E_ARTICLES_PATH_CLASS', \TSFEM_E_ARTICLES_DIR_PATH . 'inc' . \DIRECTORY_SEPARATOR . 'classes' . \DIRECTORY_SEPARATOR );
 
 /**
  * Verify integrity and sets up autoloader.
  *
  * @since 1.2.0
  */
-if ( ! \tsfem()->_init_early_extension_autoloader( TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
+if ( ! \tsfem()->_init_early_extension_autoloader( \TSFEM_E_ARTICLES_PATH_CLASS, 'Articles', $_instance, $bits ) )
 	return;
 
 /**
