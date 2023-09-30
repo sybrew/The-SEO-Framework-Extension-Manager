@@ -157,7 +157,7 @@ final class Tests {
 			} else {
 
 				$_expected_title = static::$tsf->get_title( [
-					'id' => TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					'id' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 						? static::$tsf->query()->get_the_front_page_id()
 						: static::$tsf->get_the_front_page_ID()
 				] );
@@ -327,13 +327,13 @@ final class Tests {
 
 				if ( false !== $id ) {
 					if ( ! $id ) {
-						$id = TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						$id = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 							? static::$tsf->query()->get_the_front_page_id()
 							: static::$tsf->get_the_front_page_ID();
 					}
 
 					$title = static::$tsf->get_title( [ 'id' => $id ] );
-					$url   = TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					$url   = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 						? static::$tsf->get_generated_canonical_url( [ 'id' => $id ] )
 						: static::$tsf->create_canonical_url( [ 'id' => $id ] );
 

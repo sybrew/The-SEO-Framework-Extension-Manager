@@ -645,16 +645,7 @@ final class LoadAdmin extends AdminPages {
 				$class  = 'tsfem-button';
 				$class .= $icon ? ' tsfem-button-star' : '';
 				break;
-			case 'wcm':
-				$url = 'https://premium.theseoframework.com/support/';
-
-				$title = \__( 'Get support via WooCommerce.com', 'the-seo-framework-extension-manager' );
-				$text  = \__( 'Plugin Support', 'the-seo-framework-extension-manager' );
-
-				$class  = 'tsfem-button';
-				$class .= $icon ? ' tsfem-button-external' : '';
-				break;
-			default:
+			case 'public':
 				$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
 
 				$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
@@ -662,6 +653,24 @@ final class LoadAdmin extends AdminPages {
 
 				$class  = 'tsfem-button';
 				$class .= $icon ? ' tsfem-button-love' : '';
+				break;
+			case 'wcm-manage':
+				$url = 'https://woocommerce.com/my-account/my-subscriptions/';
+
+				$title = \__( 'Manage your subscription via WooCommerce.com', 'the-seo-framework-extension-manager' );
+				$text  = \__( 'Manage Subscription', 'the-seo-framework-extension-manager' );
+
+				$class  = 'tsfem-button';
+				$class .= $icon ? ' tsfem-button-external' : '';
+				break;
+			case 'wcm':
+				$url = 'https://premium.theseoframework.com/support/';
+
+				$title = \__( 'Get support via WooCommerce.com', 'the-seo-framework-extension-manager' );
+				$text  = \__( 'Get Plugin Support', 'the-seo-framework-extension-manager' );
+
+				$class  = 'tsfem-button';
+				$class .= $icon ? ' tsfem-button-external' : '';
 				break;
 		}
 

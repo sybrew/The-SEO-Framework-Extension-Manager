@@ -612,23 +612,24 @@ class Panes extends API {
 	 */
 	protected function get_support_buttons() {
 
-		$this->get_verification_codes( $_instance, $bits );
+		$title   = '';
+		$content = '';
 
 		if ( 'wcm' === $this->get_api_endpoint_type() ) {
 			$title = sprintf(
 				'<h4 class=tsfem-support-title>%s %s</h4>',
-				\esc_html__( 'Get support', 'the-seo-framework-extension-manager' ),
-				HTML::make_inline_question_tooltip( \__( 'Get support for The SEO Framework via WooCommerce.com.', 'the-seo-framework-extension-manager' ) )
+				\esc_html__( 'Your WooCommerce.com subscription', 'the-seo-framework-extension-manager' ),
+				HTML::make_inline_question_tooltip( \__( 'Get support for The SEO Framework and manage your subscription via WooCommerce.com.', 'the-seo-framework-extension-manager' ) )
 			);
 
-			$content = sprintf(
-				'<div class="tsfem-cp-buttons tsfem-single-cp-button">%s</div>',
-				$this->get_support_link( 'wcm' )
-			);
+			$buttons = [
+				$this->get_support_link( 'wcm' ),
+				$this->get_support_link( 'wcm-manage' ),
+			];
+
+			foreach ( $buttons as $button )
+				$content .= sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
 		} else {
-			$title   = sprintf( '<h4 class=tsfem-support-title>%s</h4>', \esc_html__( 'Get support', 'the-seo-framework-extension-manager' ) );
-			$content = '';
-
 			$buttons = [
 				[
 					'button' => $this->get_support_link( 'public' ),
