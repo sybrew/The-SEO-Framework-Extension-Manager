@@ -225,7 +225,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			$_values = [];
 
 			// @see https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
-			$_values['loc'] = static::$tsf->create_canonical_url( [ 'id' => $post_id ] );
+			$_values['loc'] = \tsf()->create_canonical_url( [ 'id' => $post_id ] );
 			// lastmod is redundant for news.
 			// changefreq is deprecated.
 			// priority is deprecated.
@@ -236,7 +236,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			// Get after <loc>. Saves some memory.
 			$post = \get_post( $post_id );
 
-			// For title, don't use `static::$tsf->get_raw_custom_field_title( [ 'id' => $post_id ] )`.
+			// For title, don't use `\tsf()->get_raw_custom_field_title( [ 'id' => $post_id ] )`.
 			// Expect the publisher to acknowledge sane defaults.
 
 			// @see https://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd
@@ -253,7 +253,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			if ( '0000-00-00 00:00:00' === $_values['news']['publication_date'] || ! \strlen( $_values['news']['title'] ) ) continue;
 
 			// Get a single image that isn't clean. Do rudimentarily cleaning later for what we actually use, saves processing power.
-			$image_details = current( static::$tsf->get_image_details( [ 'id' => $post_id ], true, 'sitemap', false ) );
+			$image_details = current( \tsf()->get_image_details( [ 'id' => $post_id ], true, 'sitemap', false ) );
 
 			// @see https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd
 			$_values['image'] = [
@@ -288,7 +288,7 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 		static $timestamp_format;
 
-		$timestamp_format = $timestamp_format ?: static::$tsf->get_timestamp_format();
+		$timestamp_format = $timestamp_format ?: \tsf()->get_timestamp_format();
 
 		static $publication;
 		if ( ! $publication ) {
@@ -300,14 +300,14 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			 */
 			$name = (string) \apply_filters(
 				'the_seo_framework_articles_name',
-				static::$tsf->get_option( 'knowledge_name' ) ?: static::$tsf->get_blogname()
+				\tsf()->get_option( 'knowledge_name' ) ?: \tsf()->get_blogname()
 			);
 
 			$locale = str_replace( '_', '-', \get_locale() );
 			$locale = preg_match( '/(zh-cn|zh-tw|[a-z]{2,3})/i', $locale, $matches ) ? $matches[1] : 'en';
 
 			$publication = [
-				'name'     => static::$tsf->escape_title( $name ),
+				'name'     => \tsf()->escape_title( $name ),
 				'language' => strtolower( $locale ), // already escaped.
 			];
 		}
@@ -319,12 +319,12 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 					'news:name'     => $publication['name'],
 					'news:language' => $publication['language'],
 				],
-				'news:publication_date' => static::$tsf->gmt2date( $timestamp_format, $args['news']['publication_date'] ),
-				'news:title'            => \esc_xml( static::$tsf->escape_title( $args['news']['title'] ) ),
+				'news:publication_date' => \tsf()->gmt2date( $timestamp_format, $args['news']['publication_date'] ),
+				'news:title'            => \esc_xml( \tsf()->escape_title( $args['news']['title'] ) ),
 			],
 		];
 
-		$image = $args['image']['loc'] ? static::$tsf->s_url_relative_to_current_scheme( $args['image']['loc'] ) : '';
+		$image = $args['image']['loc'] ? \tsf()->s_url_relative_to_current_scheme( $args['image']['loc'] ) : '';
 		if ( $image ) {
 			$data['image:image'] = [
 				'image:loc' => $this->escape_xml_url_query( $image ),

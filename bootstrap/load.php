@@ -235,14 +235,14 @@ function can_load_class() {
 	if ( isset( $can_load ) )
 		return $can_load;
 
-	if ( \function_exists( '\\tsf' ) ) {
+	if ( \did_action( 'the_seo_framework_loaded' ) ) {
 		/**
 		 * @since 2.6.3
 		 * @internal
 		 */
 		\define( 'TSF_EXTENSION_MANAGER_USE_MODERN_TSF', version_compare( \THE_SEO_FRAMEWORK_VERSION, '4.3.0', '>=' ) );
 
-		if ( version_compare( \THE_SEO_FRAMEWORK_VERSION, '4.2.8', '>=' ) && \tsf()->loaded ) {
+		if ( version_compare( \THE_SEO_FRAMEWORK_VERSION, '4.2.8', '>=' ) ) {
 			/**
 			 * @since 1.0.0
 			 * @param bool $can_load
@@ -251,7 +251,7 @@ function can_load_class() {
 		}
 	}
 
-	return $can_load = false;
+	return false;
 }
 
 /**
