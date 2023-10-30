@@ -135,22 +135,22 @@ final class InpostGUI {
 	 * Constructor. Loads all appropriate actions asynchronously.
 	 *
 	 * @TODO consider running "post type supported" calls, instead of relying on failsafes in TSF.
-	 * @see \tsf()->_init_admin_scripts(); this requires TSF 4.0+ dependency, however.
+	 * @see \tsf()->load_admin_scripts(); this requires TSF 4.0+ dependency, however.
 	 */
 	private function construct() {
 
 		$this->register_tabs();
 
 		// Scripts.
-		\add_action( 'load-post.php', [ $this, '_prepare_admin_scripts' ] );
-		\add_action( 'load-post-new.php', [ $this, '_prepare_admin_scripts' ] );
+		\add_action( 'load-post.php', [ static::class, '_prepare_admin_scripts' ] );
+		\add_action( 'load-post-new.php', [ static::class, '_prepare_admin_scripts' ] );
 
 		// Saving.
-		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_output_nonce' ], 9 );
+		\add_action( 'the_seo_framework_pre_page_inpost_box', [ static::class, '_output_nonce' ], 9 );
 		\add_action( 'save_post', [ static::class, '_verify_nonce' ], 1, 2 );
 
 		// Output.
-		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ $this, '_load_tabs' ], 10, 2 );
+		\add_filter( 'the_seo_framework_inpost_settings_tabs', [ static::class, '_load_tabs' ], 10, 2 );
 	}
 
 	/**
@@ -190,33 +190,14 @@ final class InpostGUI {
 	 *
 	 * @since 1.5.0
 	 */
-	public function _prepare_admin_scripts() {
-
-		\The_SEO_Framework\Builders\Scripts::prepare();
+	public static function _prepare_admin_scripts() {
 
 		// Enqueue default scripts.
-		\add_action( 'tsfem_inpost_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
-		// Enqueue early styles & scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, '_load_admin_scripts' ], 0 );
-
-		// Enqueue late initialized styles & scripts.
-		\add_action( 'admin_footer', [ $this, '_load_admin_scripts' ], 0 );
-	}
-
-	/**
-	 * Registers admin scripts.
-	 *
-	 * @since 2.5.0
-	 * @access private
-	 * @internal
-	 */
-	public function _load_admin_scripts() {
-		/**
-		 * @since 2.0.2
-		 * @param string $scripts The scripts builder class name.
-		 */
-		\do_action( 'tsfem_inpost_before_enqueue_scripts', \The_SEO_Framework\Builders\Scripts::class );
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->load_admin_scripts()
+			: \The_SEO_Framework\Builders\Scripts::prepare();
 	}
 
 	/**
@@ -226,72 +207,76 @@ final class InpostGUI {
 	 * @since 2.0.0 Added isConnected and userLocale
 	 * @since 2.5.0 : 1. Is now public, marked private.
 	 *                2. Now uses TSF's script loader.
+	 * @since 2.6.3 Changed hook from `tsfem_inpost_before_enqueue_scripts`
 	 * @access private
 	 * @internal
 	 *
-	 * @param string $scripts Static class name: The_SEO_Framework\Builders\Scripts
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
-	public function _register_default_scripts( $scripts ) {
+	public static function _register_default_scripts( $scripts ) {
+
 		$tsfem = \tsfem();
 
+		// see tsf()->query()->get_admin_post_id();
+		$post_id = \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 );
+
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
-		$scripts::register( [
-			[
-				'id'   => 'tsfem-inpost',
-				'type' => 'js',
-				'autoload' => false,
-				'name' => 'tsfem-inpost',
-				'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
-				'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
-				'l10n' => [
-					'name' => 'tsfem_inpostL10n',
-					'data' => [
-						'post_ID'     => (int) $GLOBALS['post']->ID,
-						'nonce'       => \current_user_can( 'edit_post', $GLOBALS['post']->ID ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
-						'isPremium'   => $tsfem->is_premium_user(),
-						'isConnected' => $tsfem->is_connected_user(),
-						'locale'      => \get_locale(),
-						'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
-						'debug'       => (bool) \WP_DEBUG,
-						'rtl'         => (bool) \is_rtl(),
-						'i18n'        => [
-							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
-							'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
-							'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
-							'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
-							'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
-							'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
-						],
+		$scripts[] = [
+			'id'   => 'tsfem-inpost',
+			'type' => 'js',
+			'autoload' => false,
+			'name' => 'tsfem-inpost',
+			'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
+			'deps' => [ 'jquery', 'tsf', 'tsf-tt' ],
+			'l10n' => [
+				'name' => 'tsfem_inpostL10n',
+				'data' => [
+					'post_ID'     => $post_id,
+					'nonce'       => \current_user_can( 'edit_post', $post_id ) ? \wp_create_nonce( static::JS_NONCE_ACTION ) : false,
+					'isPremium'   => $tsfem->is_premium_user(),
+					'isConnected' => $tsfem->is_connected_user(),
+					'locale'      => \get_locale(),
+					'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+					'debug'       => (bool) \WP_DEBUG,
+					'rtl'         => (bool) \is_rtl(),
+					'i18n'        => [
+						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
+						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
+						'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
+						'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
+						'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
+						'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
 					],
 				],
-				'tmpl' => [
-					'file' => $tsfem->get_template_location( 'inpostnotice' ),
-				],
 			],
-			[
-				'id'   => 'tsfem-inpost',
-				'type' => 'css',
-				'autoload' => false,
-				'name' => 'tsfem-inpost',
-				'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-				'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
-				'deps' => [ 'tsf', 'tsf-tt' ],
+			'tmpl' => [
+				'file' => $tsfem->get_template_location( 'inpostnotice' ),
 			],
-		] );
+		];
+		$scripts[] = [
+			'id'   => 'tsfem-inpost',
+			'type' => 'css',
+			'autoload' => false,
+			'name' => 'tsfem-inpost',
+			'base' => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+			'ver'  => \TSF_EXTENSION_MANAGER_VERSION,
+			'deps' => [ 'tsf', 'tsf-tt' ],
+		];
 		// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
 
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-worker',
-				'type'     => 'js',
-				'deps'     => [],
-				'autoload' => false,
-				'name'     => 'tsfem-worker',
-				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-			],
-		] );
+		$scripts[] = [
+			'id'       => 'tsfem-worker',
+			'type'     => 'js',
+			'deps'     => [],
+			'autoload' => false,
+			'name'     => 'tsfem-worker',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+		];
+
+		return $scripts;
 	}
 
 	/**
@@ -320,7 +305,7 @@ final class InpostGUI {
 	 * @see @package The_SEO_Framework\Classes
 	 *    method singular_inpost_box() [...] add_inpost_seo_box()
 	 */
-	public function _output_nonce() {
+	public static function _output_nonce() {
 		static::current_user_can_edit_post()
 			and \wp_nonce_field( static::NONCE_ACTION, static::NONCE_NAME, false );
 	}
@@ -414,7 +399,7 @@ final class InpostGUI {
 	 * @param array $tabs The registered tabs.
 	 * @return array $tabs The SEO Framework's tabs.
 	 */
-	public function _load_tabs( $tabs ) {
+	public static function _load_tabs( $tabs ) {
 
 		$registered_tabs = static::$tabs;
 		$active_tab_keys = static::$active_tab_keys;

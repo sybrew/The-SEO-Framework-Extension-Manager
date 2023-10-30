@@ -65,7 +65,7 @@ final class WP_SEOPress extends Base {
 				[ $wpdb->postmeta, '_seopress_titles_title' ],
 				[ $wpdb->postmeta, '_genesis_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 				[
 					'name' => 'Meta Title',
 					'to'   => [
@@ -84,25 +84,25 @@ final class WP_SEOPress extends Base {
 				[ $wpdb->postmeta, '_seopress_titles_desc' ],
 				[ $wpdb->postmeta, '_genesis_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_desc' ],
 				[ $wpdb->postmeta, '_open_graph_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_img' ],
 				[ $wpdb->postmeta, '_social_image_url' ],
 				null,
-				'\\esc_url_raw',
+				'sanitize_url',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_fb_img_attachment_id' ],
@@ -114,19 +114,19 @@ final class WP_SEOPress extends Base {
 				[ $wpdb->postmeta, '_seopress_social_twitter_title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_social_twitter_desc' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_robots_canonical' ],
 				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
 				null,
-				'\\esc_url_raw',
+				'sanitize_url',
 			],
 			[
 				[ $wpdb->postmeta, '_seopress_robots_index' ],
@@ -200,7 +200,7 @@ final class WP_SEOPress extends Base {
 				[ $wpdb->postmeta, '_seopress_redirections_value' ],
 				[ $wpdb->postmeta, 'redirect' ],
 				null,
-				'\\esc_url_raw',
+				'sanitize_url',
 			],
 			[
 				// They only support categories and product categories for they don't know how to abstract a program.

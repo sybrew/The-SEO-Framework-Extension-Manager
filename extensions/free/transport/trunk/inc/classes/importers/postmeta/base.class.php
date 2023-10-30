@@ -58,7 +58,7 @@ abstract class Base extends \TSF_Extension_Manager\Extension\Transport\Importers
 
 		$taxonomies = array_filter(
 			\get_taxonomies( [], 'objects' ),
-			static function( $t ) {
+			static function ( $t ) {
 				return ! empty( $t->hierarchical );
 			}
 		);

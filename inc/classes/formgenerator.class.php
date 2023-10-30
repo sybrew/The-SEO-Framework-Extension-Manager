@@ -7,6 +7,11 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+	get_image_uploader_form,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2017-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -1455,7 +1460,7 @@ final class FormGenerator {
 	 */
 	private function create_fields_sub_description( $description, $use_markdown ) {
 
-		$description = $use_markdown ? \tsf()->convert_markdown( $description ) : $description;
+		$description = $use_markdown ? convert_markdown( $description ) : $description;
 
 		// make_inline_tooltip escapes.
 		return HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
@@ -1479,10 +1484,10 @@ final class FormGenerator {
 	 */
 	private function create_fields_description( $description, $use_markdown ) {
 
-		if ( is_scalar( $description ) ) {
+		if ( \is_scalar( $description ) ) {
 			return sprintf(
 				'<span class=tsfem-form-option-description>%s</span>',
-				$use_markdown ? \tsf()->convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
+				$use_markdown ? convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
 			);
 		} else {
 			$ret = '';
@@ -1580,7 +1585,7 @@ final class FormGenerator {
 		$ret = [];
 
 		foreach ( $data as $k => $v ) {
-			if ( ! is_scalar( $v ) ) {
+			if ( ! \is_scalar( $v ) ) {
 				$ret[] = sprintf(
 					'data-%s="%s"',
 					strtolower( preg_replace(
@@ -2001,7 +2006,6 @@ final class FormGenerator {
 	 *
 	 * @since 1.3.0
 	 * @see TSF_Extension_Manager\Traits\UI
-	 * @see TSF_Extension_Manager\Traits\UI\register_media_scripts()
 	 * @see method TSF_Extension_Manager\AJAX\_wp_ajax_crop_image() The AJAX cropper callback.
 	 * @uses \get_upload_iframe_src()
 	 *
@@ -2071,7 +2075,7 @@ final class FormGenerator {
 								$s_id_value,
 							]
 						),
-						\The_SEO_Framework\Interpreters\Form::get_image_uploader_form( [
+						get_image_uploader_form( [
 							'id'           => $s_field_id,
 							'button_class' => [
 								'set'    => [

@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager\Extension\Focus;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	make_data_attributes,
+};
+
 if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
@@ -216,7 +220,7 @@ final class Scoring {
 	 * @return string The data attributes.
 	 */
 	public function get_data_attributes( $type ) {
-		return \The_SEO_Framework\Interpreters\HTML::make_data_attributes( [
+		return make_data_attributes( [
 			'scores'         => \tsfem()->filter_keys(
 				$this->get_template( $type ),
 				[ 'assessment', 'maxScore', 'minScore', 'phrasing', 'rating', 'scoring' ]

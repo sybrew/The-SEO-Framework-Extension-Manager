@@ -9,16 +9,15 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
-$tsf = tsf();
+// TSF_EXTENSION_MANAGER_USE_MODERN_TSF: THE_SEO_FRAMEWORK_DEBUG will become always available.
+defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG and $timer_start = hrtime( true );
 
-$tsf->the_seo_framework_debug and $timer_start = hrtime( true );
-
-$sitemap_bridge = \The_SEO_Framework\Bridges\Sitemap::get_instance();
+$registry = sitemap_registry();
 
 // $sitemap_bridge->output_sitemap_header(); // We don't want a stylesheet.
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
-$sitemap_bridge->output_sitemap_urlset_open_tag();
+$registry->output_sitemap_urlset_open_tag();
 
 $sitemap_news = new TSF_Extension_Manager\Extension\Articles\SitemapBuilder;
 /**
@@ -35,7 +34,7 @@ $sitemap_news->set_option_indexes(
 // todo use TSF 4.3.0's get_sitemap_transient_key
 echo $sitemap_news->_generate_sitemap( $this->get_sitemap_transient_name() );
 
-$sitemap_bridge->output_sitemap_urlset_close_tag();
+$registry->output_sitemap_urlset_close_tag();
 
 if ( $sitemap_news->news_is_regenerated ) {
 	echo "\n" . '<!-- ' . esc_html__( 'Sitemap is generated for this view', 'autodescription' ) . ' -->';
@@ -46,13 +45,14 @@ if ( $sitemap_news->news_is_regenerated ) {
 // Destruct class.
 $sitemap_news = null;
 
-if ( $tsf->the_seo_framework_debug ) {
+// TSF_EXTENSION_MANAGER_USE_MODERN_TSF: THE_SEO_FRAMEWORK_DEBUG will become always available.
+if ( defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG ) {
 	echo "\n" . '<!-- Site estimated current usage: ' . number_format( memory_get_usage() / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- System estimated current usage: ' . number_format( memory_get_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- Site estimated peak usage: ' . number_format( memory_get_peak_usage() / 1024 / 1024, 3 ) . ' MB -->';
 	echo "\n" . '<!-- System estimated peak usage: ' . number_format( memory_get_peak_usage( true ) / 1024 / 1024, 3 ) . ' MB -->';
-	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( \The_SEO_Framework\Bridges\Sitemap::get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
+	echo "\n" . '<!-- Freed memory prior to generation: ' . number_format( $registry->get_freed_memory( true ) / 1024, 3 ) . ' kB -->';
 	echo "\n" . '<!-- Sitemap generation time: ' . number_format( ( hrtime( true ) - $timer_start ) / 1e9, 6 ) . ' seconds -->';
-	echo "\n" . '<!-- Sitemap caching enabled: ' . ( $tsf->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
+	echo "\n" . '<!-- Sitemap caching enabled: ' . ( tsf()->get_option( 'cache_sitemap' ) ? 'yes' : 'no' ) . ' -->';
 	echo "\n" . '<!-- Sitemap transient key: ' . esc_html( $this->get_sitemap_transient_name() ) . ' -->';
 }

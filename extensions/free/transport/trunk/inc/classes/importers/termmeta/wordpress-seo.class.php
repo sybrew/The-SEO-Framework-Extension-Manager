@@ -99,15 +99,15 @@ final class WordPress_SEO extends Base {
 							'wpseo_noindex'               => [ $transformer_class, '_robots_text_to_qubit' ], // also sanitizes
 						],
 						'sanitizers' => [
-							'wpseo_title'                 => [ $tsf, 's_title_raw' ],
-							'wpseo_desc'                  => [ $tsf, 's_description_raw' ],
-							'wpseo_opengraph-title'       => [ $tsf, 's_title_raw' ],
-							'wpseo_opengraph-description' => [ $tsf, 's_description_raw' ],
-							'wpseo_opengraph-image'       => '\\esc_url_raw',
-							'wpseo_opengraph-image-id'    => '\\absint',
-							'wpseo_twitter-title'         => [ $tsf, 's_title_raw' ],
-							'wpseo_twitter-description'   => [ $tsf, 's_description_raw' ],
-							'wpseo_canonical'             => '\\esc_url_raw',
+							'wpseo_title'                 => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_desc'                  => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_opengraph-title'       => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_opengraph-description' => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_opengraph-image'       => 'sanitize_url',
+							'wpseo_opengraph-image-id'    => 'absint',
+							'wpseo_twitter-title'         => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_twitter-description'   => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'wpseo_canonical'             => 'sanitize_url',
 						],
 					],
 				],
@@ -147,7 +147,7 @@ final class WordPress_SEO extends Base {
 
 		$ids = [];
 
-		foreach ( $this->get_wpseo_taxonomy_meta() as $taxonomy => $data )
+		foreach ( $this->get_wpseo_taxonomy_meta() as $data )
 			$ids = array_merge( $ids, array_keys( $data ) );
 
 		return $ids;

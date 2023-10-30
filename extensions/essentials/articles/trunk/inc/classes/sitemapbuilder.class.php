@@ -84,8 +84,11 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 	 */
 	public function _generate_sitemap( $transient_name ) {
 
-		$bridge           = \The_SEO_Framework\Bridges\Sitemap::get_instance();
-		$_caching_enabled = $bridge->sitemap_cache_enabled();
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			$_caching_enabled = \tsf()->sitemap()->cache()->is_sitemap_cache_enabled();
+		} else {
+			$_caching_enabled = \The_SEO_Framework\Bridges\Sitemap::get_instance()->sitemap_cache_enabled();
+		}
 
 		$sitemap_content = $_caching_enabled ? \get_transient( $transient_name ) : false;
 
@@ -225,7 +228,9 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			$_values = [];
 
 			// @see https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
-			$_values['loc'] = \tsf()->create_canonical_url( [ 'id' => $post_id ] );
+			$_values['loc'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->uri()->get_generated_url( [ 'id' => $post_id ] )
+				: \tsf()->create_canonical_url( [ 'id' => $post_id ] );
 			// lastmod is redundant for news.
 			// changefreq is deprecated.
 			// priority is deprecated.
@@ -250,10 +255,14 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 				// stock_tickers is deprecated.
 			];
 
-			if ( '0000-00-00 00:00:00' === $_values['news']['publication_date'] || ! \strlen( $_values['news']['title'] ) ) continue;
+			if (
+				   '0000-00-00 00:00:00' === $_values['news']['publication_date']
+				|| ! \strlen( $_values['news']['title'] )
+			) continue;
 
-			// Get a single image that isn't clean. Do rudimentarily cleaning later for what we actually use, saves processing power.
-			$image_details = current( \tsf()->get_image_details( [ 'id' => $post_id ], true, 'sitemap', false ) );
+			// FIXME this will gather all sorts of data from the image that we do not need via merge_extra_image_details
+			// But, so does get_post()...
+			$image_details = current( \tsf()->get_image_details( [ 'id' => $post_id ], true, 'sitemap' ) );
 
 			// @see https://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd
 			$_values['image'] = [
@@ -286,10 +295,6 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 
 		if ( empty( $args['loc'] ) ) return '';
 
-		static $timestamp_format;
-
-		$timestamp_format = $timestamp_format ?: \tsf()->get_timestamp_format();
-
 		static $publication;
 		if ( ! $publication ) {
 			// @see https://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd
@@ -300,34 +305,36 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 			 */
 			$name = (string) \apply_filters(
 				'the_seo_framework_articles_name',
-				\tsf()->get_option( 'knowledge_name' ) ?: \tsf()->get_blogname()
+				\tsf()->get_option( 'knowledge_name' ) ?: (
+					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? \tsf()->data()->blog()->get_public_blog_name()
+						: \tsf()->get_blogname()
+				)
 			);
 
 			$locale = str_replace( '_', '-', \get_locale() );
 			$locale = preg_match( '/(zh-cn|zh-tw|[a-z]{2,3})/i', $locale, $matches ) ? $matches[1] : 'en';
 
 			$publication = [
-				'name'     => \tsf()->escape_title( $name ),
-				'language' => strtolower( $locale ), // already escaped.
+				'news:name'     => \esc_xml( $name ),
+				'news:language' => strtolower( $locale ),
 			];
 		}
 
 		$data = [
 			'loc'       => $this->escape_xml_url_query( $args['loc'] ),
 			'news:news' => [
-				'news:publication'      => [
-					'news:name'     => $publication['name'],
-					'news:language' => $publication['language'],
-				],
-				'news:publication_date' => \tsf()->gmt2date( $timestamp_format, $args['news']['publication_date'] ),
-				'news:title'            => \esc_xml( \tsf()->escape_title( $args['news']['title'] ) ),
+				'news:publication'      => $publication, // already escaped
+				'news:publication_date' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->format()->time()->convert_to_preferred_format( $args['news']['publication_date'] )
+					: \tsf()->gmt2date( \tsf()->get_timestamp_format(), $args['news']['publication_date'] ),
+				'news:title'            => \esc_xml( $args['news']['title'] ),
 			],
 		];
 
-		$image = $args['image']['loc'] ? \tsf()->s_url_relative_to_current_scheme( $args['image']['loc'] ) : '';
-		if ( $image ) {
+		if ( ! empty( $args['image']['loc'] ) ) {
 			$data['image:image'] = [
-				'image:loc' => $this->escape_xml_url_query( $image ),
+				'image:loc' => $this->escape_xml_url_query( $args['image']['loc'] ),
 			];
 		}
 

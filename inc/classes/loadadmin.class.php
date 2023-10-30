@@ -7,6 +7,12 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+	do_dismissible_notice,
+	redirect,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -73,6 +79,14 @@ final class LoadAdmin extends AdminPages {
 		];
 
 		if ( $this->is_connected_user() ) {
+
+			// var_dump() we need this here, but then whilst keeping the activated extensions?
+			// -> We should split the option indexes, activated extensions in one (unencrypted), and activation data in another.
+			// if ( ! $this->are_options_valid() ) {
+			// 	$this->do_deactivation();
+			//  return;
+			// }
+
 			$current = $this->get_subscription_status();
 			$equals  = array_intersect_assoc( $current, $data );
 
@@ -86,7 +100,7 @@ final class LoadAdmin extends AdminPages {
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
-				\tsf()->admin_redirect( $this->seo_extensions_page_slug );
+				redirect( $this->seo_extensions_page_slug );
 				exit;
 			}
 		} else {
@@ -102,7 +116,7 @@ final class LoadAdmin extends AdminPages {
 
 			if ( $this->is_tsf_extension_manager_page( false ) ) {
 				// Reload dashboard.
-				\tsf()->admin_redirect( $this->seo_extensions_page_slug );
+				redirect( $this->seo_extensions_page_slug );
 				exit;
 			}
 		}
@@ -161,11 +175,8 @@ final class LoadAdmin extends AdminPages {
 
 		if ( ! $show_notice ) return;
 
-		$tsf = \tsf();
-
-		// Already escaped.
-		$tsf->do_dismissible_notice(
-			$tsf->convert_markdown(
+		do_dismissible_notice(
+			convert_markdown(
 				sprintf(
 					/* translators: Markdown. %s = API URL */
 					\esc_html__(
@@ -176,10 +187,11 @@ final class LoadAdmin extends AdminPages {
 				),
 				[ 'code' ]
 			),
-			'error',
-			true,
-			false,
-			true
+			[
+				'type'   => 'error',
+				'escape' => false,
+				'inline' => true,
+			]
 		);
 	}
 
@@ -289,7 +301,7 @@ final class LoadAdmin extends AdminPages {
 
 		// Adds action to the URI. It's only used to visualize what has happened.
 		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\tsf()->admin_redirect( $this->seo_extensions_page_slug, $args );
+		redirect( $this->seo_extensions_page_slug, $args );
 		exit;
 	}
 
@@ -345,7 +357,7 @@ final class LoadAdmin extends AdminPages {
 		if ( ! $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 9001 => '' ] );
-			\tsf()->admin_redirect( $this->seo_extensions_page_slug );
+			redirect( $this->seo_extensions_page_slug );
 			exit;
 		}
 
@@ -360,8 +372,13 @@ final class LoadAdmin extends AdminPages {
 	 */
 	public function do_activation_notice() {
 
-		if ( $this->is_plugin_activated() || ! \TSF_Extension_Manager\can_do_manager_settings() || $this->is_tsf_extension_manager_page() )
+		if (
+			   $this->is_plugin_activated()
+			|| ! \TSF_Extension_Manager\can_do_manager_settings()
+			|| $this->is_tsf_extension_manager_page()
+		) {
 			return;
+		}
 
 		$url   = $this->get_admin_page_url();
 		$title = \__( 'Activate the SEO Extension Manager', 'the-seo-framework-extension-manager' );
@@ -370,7 +387,13 @@ final class LoadAdmin extends AdminPages {
 		$text        = \esc_html__( 'Your extensions are only three clicks away', 'the-seo-framework-extension-manager' );
 
 		// No a11y icon. Already escaped. Use TSF as it loads styles.
-		\tsf()->do_dismissible_notice( "$text &mdash; $notice_link", 'updated', false, false, false );
+		do_dismissible_notice(
+			"$text &mdash; $notice_link",
+			[
+				'icon'   => false,
+				'escape' => false,
+			]
+		);
 	}
 
 	/**
@@ -378,7 +401,7 @@ final class LoadAdmin extends AdminPages {
 	 * Defaults to the Extension Manager page ID.
 	 *
 	 * @since 1.0.0
-	 * @TODO change to get_setitngs_page_url() (incl. parameter for extensions?).
+	 * @TODO change to get_settings_page_url() (incl. parameter for extensions?).
 	 *       see get_seo_settings_page_url() of TSF.
 	 *
 	 * @param string $page The admin menu page slug. Defaults to TSF Extension Manager's.
@@ -535,7 +558,7 @@ final class LoadAdmin extends AdminPages {
 
 				case 'url':
 					if ( '#' !== $value )
-						$parts[] = 'href="' . \esc_attr( \esc_url_raw( $value ) ) . '"';
+						$parts[] = 'href="' . \esc_attr( \sanitize_url( $value ) ) . '"';
 					break;
 
 				case 'download':
@@ -700,7 +723,7 @@ final class LoadAdmin extends AdminPages {
 		$slug       = \sanitize_key( $slug );
 		$capability = \sanitize_key( $capability );
 
-		if ( ! $slug || ! \current_user_can( $capability ) )
+		if ( empty( $slug ) || ! \current_user_can( $capability ) )
 			return false;
 
 		static $parent_set = false;
@@ -708,7 +731,9 @@ final class LoadAdmin extends AdminPages {
 
 		if ( ! $parent_set ) {
 			// Set parent slug.
-			\tsf()->add_menu_link();
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->admin()->menu()->register_top_menu_page()
+				: \tsf()->add_menu_link();
 			$parent_set = true;
 		}
 
@@ -716,22 +741,15 @@ final class LoadAdmin extends AdminPages {
 			return $set[ $slug ];
 
 		// Add arbitrary menu contents to known menu slug.
-		$menu = [
-			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
-			'page_title'  => '1',
-			'menu_title'  => '1',
-			'capability'  => $capability,
-			'menu_slug'   => $slug,
-			'callback'    => '__return_empty_string',
-		];
-
 		return $set[ $slug ] = (bool) \add_submenu_page(
-			$menu['parent_slug'],
-			$menu['page_title'],
-			$menu['menu_title'],
-			$menu['capability'],
-			$menu['menu_slug'],
-			$menu['callback']
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
+				: \tsf()->seo_settings_page_slug,
+			'1', // page_title
+			'1', // menu_title
+			$capability,
+			$slug,
+			'__return_empty_string', // callback
 		);
 	}
 

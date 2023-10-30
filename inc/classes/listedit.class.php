@@ -124,15 +124,15 @@ final class ListEdit {
 	 * Constructor. Loads all appropriate actions asynchronously.
 	 *
 	 * @TODO consider running "post type supported" calls, instead of relying on failsafes in TSF.
-	 * @see \tsf()->_init_admin_scripts(); this requires TSF 4.0+ dependency, however.
+	 * @see \tsf()->load_admin_scripts(); this requires TSF 4.0+ dependency, however.
 	 */
 	private function construct() {
 
 		$this->register_quick_sections();
 		$this->register_bulk_sections();
 
-		// Scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, '_prepare_admin_scripts' ], 1 );
+		// Enqueue default scripts.
+		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
 		// Saving.
 		\add_action( 'save_post', [ static::class, '_verify_nonce_post' ], 1, 2 );
@@ -197,53 +197,36 @@ final class ListEdit {
 	}
 
 	/**
-	 * Prepares scripts for output on post edit screens.
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param string $hook The current admin hook.
-	 */
-	public function _prepare_admin_scripts( $hook ) {
-
-		if ( ! \in_array( $hook, [ 'edit.php', 'edit-tags.php' ], true ) )
-			return;
-
-		$this->register_default_scripts();
-
-		/**
-		 * Does action 'tsfem_listedit_enqueue_scripts'
-		 *
-		 * Use this hook to enqueue scripts on the post edit screens.
-		 *
-		 * @since 2.5.0
-		 * @param string $class The static class caller name.
-		 * @param string $hook  The current page hook.
-		 */
-		\do_action_ref_array( 'tsfem_listedit_enqueue_scripts', [ static::class, $hook ] );
-	}
-
-	/**
 	 * Registers default inpost scripts.
 	 *
-	 * @since 2.5.0
-	 * @since 2.0.0 Added isConnected and userLocale
+	 * @since 2.6.3
+	 *
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
-	private function register_default_scripts() {
-		\The_SEO_Framework\Builders\Scripts::register(
-			[
-				'id'       => 'tsfem-listedit',
-				'type'     => 'js',
-				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsf-le' ],
-				'autoload' => true,
-				'name'     => 'tsfem-listedit',
-				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-				'l10n'     => [
-					'name' => 'tsfem_listeditL10n',
-					'data' => [],
-				],
-			]
-		);
+	public static function _register_default_scripts( $scripts ) {
+
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			if ( ! \tsf()->query()->is_wp_lists_edit() ) return $scripts;
+		} else {
+			if ( ! \tsf()->is_wp_lists_edit() ) return $scripts;
+		}
+
+		$scripts[] = [
+			'id'       => 'tsfem-listedit',
+			'type'     => 'js',
+			'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsf-le' ],
+			'autoload' => true,
+			'name'     => 'tsfem-listedit',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+			'l10n'     => [
+				'name' => 'tsfem_listeditL10n',
+				'data' => [],
+			],
+		];
+
+		return $scripts;
 	}
 
 	/**

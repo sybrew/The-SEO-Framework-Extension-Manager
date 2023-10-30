@@ -3,14 +3,14 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework. Right from your WordPress dashboard.
- * Version: 2.6.3-dev-5
+ * Version: 2.6.3-dev-6
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: the-seo-framework-extension-manager
  * Domain Path: /language
- * Requires at least: 5.5
- * Requires PHP: 7.3.0
+ * Requires at least: 5.9
+ * Requires PHP: 7.4.0
  * GitHub Plugin URI: https://github.com/sybrew/The-SEO-Framework-Extension-Manager
  *
  * @package TSF_Extension_Manager\Bootstrap
@@ -37,9 +37,8 @@ defined( 'ABSPATH' ) or die;
 
 /**
  * @NOTE This file MUST be written according to WordPress's minimum PHP requirements.
- *       Which is PHP 5.2.
- * When we only support WordPress 5.2+, it'll be PHP 5.6.
- * When we only support WordPress 6.9?+, it'll be PHP 7.1.
+ *       Which is PHP 5.6.
+ * TODO This will become PHP 7.0 in WP 6.3?
  */
 
 /**
@@ -47,7 +46,7 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '2.6.2' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '2.6.3' );
 
 /**
  * The plugin's database version.
@@ -88,6 +87,9 @@ require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
 
 // Load internal functions file.
 require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'internal.php';
+
+// Load internal functions file.
+require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'transition.php';
 
 // Prepare plugin upgrader before the plugin loads.
 if ( tsf_extension_manager_db_version() < TSF_EXTENSION_MANAGER_DB_VERSION )

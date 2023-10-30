@@ -113,7 +113,7 @@ trait Schema_Packer {
 	 * @return string The URL without scheme.
 	 */
 	protected function remove_scheme( $url ) {
-		return str_ireplace( [ 'https://', 'http://' ], '', \esc_url_raw( $url, [ 'https', 'http' ] ) );
+		return str_ireplace( [ 'https://', 'http://' ], '', \sanitize_url( $url, [ 'https', 'http' ] ) );
 	}
 
 	/**

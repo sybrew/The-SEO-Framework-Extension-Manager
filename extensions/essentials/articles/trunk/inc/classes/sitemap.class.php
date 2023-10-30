@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	sitemap_registry,
+};
+
 if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
@@ -97,7 +101,7 @@ final class Sitemap extends Core {
 	 *      'callback' => callable The callback for the sitemap output.
 	 *                             Tip: You can pass arbitrary indexes. Prefix them with an underscore to ensure forward compatibility.
 	 *                             Tip: In the callback, use
-	 *                                  `\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_sitemap_endpoint_list()[$sitemap_id]`
+	 *                                  `\tsf()->sitemap()->registry()->get_sitemap_endpoint_list()[$sitemap_id]`
 	 *                                  It returns the arguments you've passed in this filter; including your arbitrary indexes.
 	 *      'robots'   => bool     Whether the endpoint should be mentioned in the robots.txt file.
 	 *   }
@@ -138,7 +142,9 @@ final class Sitemap extends Core {
 		$this->doing_news_sitemap = true;
 
 		// Remove output, if any.
-		\tsf()->clean_response_header();
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
 
 		if ( ! headers_sent() ) {
 			\status_header( 200 );
@@ -200,7 +206,7 @@ final class Sitemap extends Core {
 	 */
 	public function _ping_google_news() {
 		$pingurl = 'https://www.google.com/ping?sitemap=' . rawurlencode(
-			\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'news' )
+			sitemap_registry()->get_expected_sitemap_endpoint_url( 'news' )
 		);
 		\wp_safe_remote_get( $pingurl, [ 'timeout' => 3 ] );
 	}

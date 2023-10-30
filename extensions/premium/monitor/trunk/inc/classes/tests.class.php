@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+};
+
 if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
@@ -37,22 +41,6 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  */
 final class Tests {
 	use \TSF_Extension_Manager\Construct_Core_Static_Final_Instance;
-
-	/**
-	 * @since 1.0.0
-	 * @var \The_SEO_Framework\Load TSF's class instance.
-	 */
-	private static $tsf;
-
-	/**
-	 * The constructor.
-	 *
-	 * @since 1.0.0
-	 * @override See Trait \TSF_Extension_Manager\Construct_Core_Static_Final_Instance.
-	 */
-	private function __construct() {
-		static::$tsf = \tsf();
-	}
 
 	/**
 	 * Handles unapproachable invoked methods.
@@ -95,13 +83,13 @@ final class Tests {
 			$state    = 'warning';
 
 			if ( empty( $data['static'] ) ) {
-				$content .= $this->wrap_info( static::$tsf->convert_markdown(
+				$content .= $this->wrap_info( convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'No `favicon.ico` file was found in the root directory of your website. Web browsers automatically try to call this file; so, you should add one to prevent 404 hits and improve website performance.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
 				) );
 			} else {
-				$content .= $this->wrap_info( static::$tsf->convert_markdown(
+				$content .= $this->wrap_info( convert_markdown(
 					\esc_html__( 'A `favicon.ico` file was found in the root directory of your website. This is good, because it prevents 404 hits to your website.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
 				) );
@@ -156,17 +144,18 @@ final class Tests {
 				$consult_theme_author = true;
 			} else {
 
-				$_expected_title = static::$tsf->get_title( [
+				$_expected_title = \tsf()->get_title( [
 					'id' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-						? static::$tsf->query()->get_the_front_page_id()
-						: static::$tsf->get_the_front_page_ID()
+						? \tsf()->query()->get_the_front_page_id()
+						: \tsf()->get_the_front_page_ID(),
 				] );
 
-				if ( $_expected_title !== $first_found_title ) {
+				// Encoding type isn't important here, since we only perform a comparison.
+				if ( html_entity_decode( $_expected_title ) !== html_entity_decode( $first_found_title ) ) {
 					$content  = $this->wrap_info( \esc_html__( 'The homepage title is not as expected. You should activate the Title Fix extension.', 'the-seo-framework-extension-manager' ) );
 					$content .= $this->wrap_info(
 						sprintf(
-							static::$tsf->convert_markdown(
+							convert_markdown(
 								/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 								\esc_html__( 'Found: `%s`', 'the-seo-framework-extension-manager' ),
 								[ 'code' ]
@@ -176,7 +165,7 @@ final class Tests {
 					);
 					$content .= $this->wrap_info(
 						sprintf(
-							static::$tsf->convert_markdown(
+							convert_markdown(
 								/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 								\esc_html__( 'Expected: `%s`', 'the-seo-framework-extension-manager' ),
 								[ 'code' ]
@@ -328,14 +317,14 @@ final class Tests {
 				if ( false !== $id ) {
 					if ( ! $id ) {
 						$id = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-							? static::$tsf->query()->get_the_front_page_id()
-							: static::$tsf->get_the_front_page_ID();
+							? \tsf()->query()->get_the_front_page_id()
+							: \tsf()->get_the_front_page_ID();
 					}
 
-					$title = static::$tsf->get_title( [ 'id' => $id ] );
+					$title = \tsf()->get_title( [ 'id' => $id ] );
 					$url   = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-						? static::$tsf->get_generated_canonical_url( [ 'id' => $id ] )
-						: static::$tsf->create_canonical_url( [ 'id' => $id ] );
+						? \tsf()->uri()->get_generated_url( [ 'id' => $id ] )
+						: \tsf()->create_canonical_url( [ 'id' => $id ] );
 
 					$links[] = sprintf( '<a href="%s" target=_blank rel=noopener>%s</a>', $url, $title );
 				}
@@ -386,7 +375,7 @@ final class Tests {
 		if ( ! $data['located'] ) {
 			$state   = 'error';
 			$content = $this->wrap_info(
-				static::$tsf->convert_markdown(
+				convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'No `robots.txt` file has been found. Please check your server configuration.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -410,7 +399,9 @@ final class Tests {
 		}
 
 		// Cache safe.
-		$sample_tsf = static::$tsf->robots_txt();
+		$sample_tsf = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->robotstxt()->get_robots_txt()
+			: \tsf()->robots_txt();
 
 		// TSF 4.0.5 compat, remove robots.txt warning. This warning cannot be translated, so this is fine... for now.
 		// TODO see note at robots_txt() method in The SEO Framework, and adjust this for that.
@@ -423,7 +414,7 @@ final class Tests {
 		if ( $sample_tsf === $data['value'] ) {
 			$state   = 'good';
 			$content = $this->wrap_info(
-				static::$tsf->convert_markdown(
+				convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is handled correctly by The SEO Framework.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -436,7 +427,7 @@ final class Tests {
 		if ( ! file_exists( \get_home_path() . 'robots.txt' ) ) {
 			$state   = 'unknown';
 			$content = $this->wrap_info(
-				static::$tsf->convert_markdown(
+				convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is not handled by The SEO Framework.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -448,7 +439,7 @@ final class Tests {
 		static_file : {
 			$state   = 'okay';
 			$content = $this->wrap_info(
-				static::$tsf->convert_markdown(
+				convert_markdown(
 					/* translators: Backticks are markdown for <code>Text</code>. Keep the backticks. */
 					\esc_html__( 'The `robots.txt` file is static or overwritten in another way. Consider deleting the `robots.txt` file from your home directory folder because The SEO Framework handles this appropriately.', 'the-seo-framework-extension-manager' ),
 					[ 'code' ]
@@ -589,14 +580,18 @@ final class Tests {
 						}
 					else :
 						$state = 'bad';
-						// Cache safe.
-						\wp_doing_ajax() and static::$tsf->add_menu_link();
+						if ( \wp_doing_ajax() )
+							\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+								? \tsf()->admin()->menu()->register_top_menu_page()
+								: \tsf()->add_menu_link();
 						$content .= $this->wrap_info(
-							static::$tsf->convert_markdown(
+							convert_markdown(
 								sprintf(
 									/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 									\esc_html__( 'The canonical URL scheme is automatically determined. Set the preferred scheme to either HTTP or HTTPS in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-									static::$tsf->get_seo_settings_page_url()
+									\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+										? \esc_url( \menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false ) )
+										: \tsf()->get_seo_settings_page_url()
 								),
 								[ 'a' ]
 							)
@@ -616,14 +611,18 @@ final class Tests {
 					);
 				} else {
 					$state = 'bad';
-					// Cache safe.
-					\wp_doing_ajax() and static::$tsf->add_menu_link();
+					if ( \wp_doing_ajax() )
+						\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+							? \tsf()->admin()->menu()->register_top_menu_page()
+							: \tsf()->add_menu_link();
 					$content .= $this->wrap_info(
-						static::$tsf->convert_markdown(
+						convert_markdown(
 							sprintf(
 								/* translators: URLs are in markdown. %s = SEO Settings page admin URL. */
 								\esc_html__( 'The canonical URL scheme is set incorrectly. Set the preferred scheme to be detected automatically in the [General SEO settings](%s).', 'the-seo-framework-extension-manager' ),
-								static::$tsf->get_seo_settings_page_url()
+								\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+									? \esc_url( \menu_page_url( \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG, false ) )
+									: \tsf()->get_seo_settings_page_url()
 							),
 							[ 'a' ]
 						)

@@ -105,7 +105,7 @@ final class Admin extends Core {
 								'_ret'     => 's',
 								'_req'     => false,
 								'_type'    => 'text',
-								'_pattern' => '(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{4,15})', // Google doesn't specify length, assume 4~15 (norm is 10)
+								'_pattern' => '\bG-[A-Z0-9]{4,15}', // Google doesn't specify length, assume 4~15 (norm is 10)
 								'_desc'    => [
 									\__( 'Measurement ID', 'the-seo-framework-extension-manager' ),
 									sprintf(
@@ -233,7 +233,7 @@ final class Admin extends Core {
 					$value[ $index ][ $key ] = trim( $value[ $index ][ $key ] ?? '' );
 
 					// Google doesn't specify length, assume 4~15 (norm is 10)
-					if ( ! preg_match( '/^(\bUA-\d{4,10}-\d{1,4}\b)|(\bG-[A-Z0-9]{4,15})$/', $value[ $index ][ $key ] ) )
+					if ( ! preg_match( '/^\bG-[A-Z0-9]{4,15}$/', $value[ $index ][ $key ] ) )
 						$value[ $index ][ $key ] = '';
 
 					break;

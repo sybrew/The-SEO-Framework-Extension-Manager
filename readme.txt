@@ -1,11 +1,11 @@
 === The SEO Framework - Extension Manager ===
 Contributors: Cybr
 Tags: seo, extensions, local, keyword, articles, monitor, modules, schema, honeypot, amp, title, the seo framework
-Requires at least: 5.5
-Tested up to: 6.2
+Requires at least: 5.9
+Tested up to: 6.4
 Requires PHP: 7.3.0
 Requires TSF: 4.2.8
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -41,29 +41,39 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-= 2.6.2 =
+= 2.6.3 =
 
-TODO remove all instances of tsf()->get_transient and tsf()->set_transient
 TODO add timestamps to notificationS?
 TODO when our server is down, causing notifications, but gets back up again, clear related notifications?
 	-> Are there any invoked in the background?
 TODO extend Articles support for "Author" for any post type that has 'author' post type support?
 
+**Important release notes:**
+
+* Henceforth, Extension Manager requires **The SEO Framework v4.2.8 or higher**, **PHP 7.4.0 or higher**, and **WordPress 5.9 or higher**.
 
 **Detailed log:**
 
 * Added endpoint `wcm` (WooCommerce Marketplace).
 	* This comes with a new constant, `TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI`.
 	* Advanced users may be asked to allow communications with host `wcm.theseoframework.com`.
-* TODO Added compatibility with TSF v4.3.0.
+* Added compatibility with TSF v5.0.0.
 	* Done: tsf()->get/set_transient()
 	* Done: Sitemap transient clearing.
 		-> TODO require TSF v4.3.0+ for Articles now?
 		-> We could wait for 3 or so weeks before releasing this after 4.3.0, and align PHP/WP requirements etc.?
 * TODO Verify PHP 8.1 (and 8.2?) support.
 	-> We definitely fixed a 8.1 deprecation notice in Honeypot.
+* Actions `tsfem_inpost_before_enqueue_scripts`, `tsfem_listedit_enqueue_scripts`, `tsfem_before_enqueue_scripts` are no longer invoked.
+	* Use filter `the_seo_framework_scripts` instead.
 
-TODO get_generated_canonical_url will be renamed before TSF 4.3 release.
+TODO clear the var_dump()
+
+**Updated extensions:**
+
+* [Cord at version 1.1.0](https://theseoframework.com/extensions/cord/#changelog)
+* [Transport at version 1.1.1](https://theseoframework.com/extensions/transport/#changelog)
+* [Monitor at version 1.2.10](https://theseoframework.com/extensions/monitor/#changelog)
 
 = 2.6.2 =
 

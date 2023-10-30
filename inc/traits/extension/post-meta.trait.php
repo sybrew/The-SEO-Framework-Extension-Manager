@@ -174,7 +174,11 @@ trait Extension_Post_Meta {
 	 * @since 1.5.0
 	 */
 	final protected function reset_extension_post_meta_id() {
-		$this->set_extension_post_meta_id( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_the_real_id() : \tsf()->get_the_real_ID() );
+		$this->set_extension_post_meta_id(
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->query()->get_the_real_id()
+				: \tsf()->get_the_real_ID()
+		);
 	}
 
 	/**

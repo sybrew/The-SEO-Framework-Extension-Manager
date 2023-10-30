@@ -6,13 +6,18 @@
 
 namespace TSF_Extension_Manager\Extension\Articles;
 
-/**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\InpostGUI as InpostGUI;
-use \TSF_Extension_Manager\InpostHTML as InpostHTML;
+use function \TSF_Extension_Manager\Transition\{
+	make_info,
+};
+
+use \TSF_Extension_Manager\{
+	InpostGUI,
+	InpostHTML,
+};
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and InpostGUI::verify( $_secret ) or die;
+
+// phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 
 create_type_field:;
 	$type_title = sprintf(
@@ -21,7 +26,7 @@ create_type_field:;
 	);
 	$type_info  = sprintf(
 		'<div>%s</div>',
-		\The_SEO_Framework\Interpreters\HTML::make_info(
+		make_info(
 			$post_meta['type']['label']['desc'],
 			$post_meta['type']['label']['link'],
 			false

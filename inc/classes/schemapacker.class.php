@@ -456,9 +456,8 @@ final class SchemaPacker {
 
 		$value = '';
 		// Not invoking a generator. Data does not yield, but return.
-		foreach ( ( $this->pack( $schema ) ) as $k => $v ) {
+		foreach ( ( $this->pack( $schema ) ) as $v )
 			$value .= $v;
-		}
 
 		return $value;
 	}
@@ -522,7 +521,8 @@ final class SchemaPacker {
 				return parse_url( $value, \PHP_URL_HOST ) ?: '';
 
 			case 'esc_url_raw':
-				return \esc_url_raw( $value, [ 'https', 'http' ] );
+			case 'sanitize_url':
+				return \sanitize_url( $value, [ 'https', 'http' ] );
 
 			default:
 			case 'sanitize_text_field':

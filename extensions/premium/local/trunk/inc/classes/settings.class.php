@@ -292,7 +292,7 @@ final class Settings {
 	 */
 	private function init_tsfem_ui() {
 
-		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_local_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ $this, '_register_local_scripts' ], 10, 3 );
 
 		// Add something special for Vivaldi & Android.
 		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
@@ -314,51 +314,43 @@ final class Settings {
 	 * @access private
 	 * @internal
 	 *
-	 * @param string $scripts The scripts builder class name.
+	 * @param array  $scripts  The default CSS and JS loader settings.
+	 * @param string $registry The \The_SEO_Framework\Admin\Script\Registry registry class name.
+	 * @param string $loader   The \The_SEO_Framework\Admin\Script\Loader loader class name.
+	 * @return array More CSS and JS loaders.
 	 */
-	public function _register_local_scripts( $scripts ) {
+	public function _register_local_scripts( $scripts, $registry, $loader ) {
 
-		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
+		$loader::prepare_media_scripts();
 
-		/**
-		 * Registers form scripts.
-		 *
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->register_form_scripts( $scripts );
-
-		/**
-		 * Registers media scripts.
-		 *
-		 * @see trait TSF_Extension_Manager\UI
-		 */
-		$this->register_media_scripts( $scripts );
+		$scripts[] = $this->get_form_scripts( $scripts );
+		$scripts[] = $loader::get_media_scripts();
 
 		// Normally, we load this as a dependency. But, Local has no CSS (that's dependent).
-		$scripts::enqueue_known_script( 'tsf', 'css' );
+		// $registry::enqueue_known_script( 'tsf', 'css' );
 
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-local',
-				'type'     => 'js',
-				'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsf-media', 'tsfem-ui', 'tsfem-form' ],
-				'autoload' => true,
-				'name'     => 'tsfem-local',
-				'base'     => \TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
-				'ver'      => \TSFEM_E_LOCAL_VERSION,
-				'l10n'     => [
-					'name' => 'tsfem_e_localL10n',
-					'data' => [
-						// This won't ever run when the user can't. But, sanity.
-						'nonce' => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ) : '',
-						'i18n'  => [
-							'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
-							'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
-						],
+		$scripts[] = [
+			'id'       => 'tsfem-local',
+			'type'     => 'js',
+			'deps'     => [ 'wp-util', 'tsf', 'tsf-tt', 'tsf-media', 'tsfem-ui', 'tsfem-form' ],
+			'autoload' => true,
+			'name'     => 'tsfem-local',
+			'base'     => \TSFEM_E_LOCAL_DIR_URL . 'lib/js/',
+			'ver'      => \TSFEM_E_LOCAL_VERSION,
+			'l10n'     => [
+				'name' => 'tsfem_e_localL10n',
+				'data' => [
+					// This won't ever run when the user can't. But, sanity.
+					'nonce' => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-local-ajax-nonce' ) : '',
+					'i18n'  => [
+						'fixForm'       => \esc_html__( 'Please correct the form fields before validating the markup.', 'the-seo-framework-extension-manager' ),
+						'testNewWindow' => \esc_html__( 'The markup tester will be opened in a new window.', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
-		] );
+		];
+
+		return $scripts;
 	}
 
 	/**

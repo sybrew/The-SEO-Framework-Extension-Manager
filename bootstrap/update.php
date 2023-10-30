@@ -7,6 +7,11 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+	do_dismissible_notice,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2018-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -49,9 +54,7 @@ function _check_external_blocking() {
 			// We rely on TSF here but it might not be available. Still, not outputting this notice does not harm.
 			if ( ! \function_exists( '\\tsf' ) ) return;
 
-			$tsf = \tsf();
-
-			$notice = $tsf->convert_markdown(
+			$notice = convert_markdown(
 				sprintf(
 					/* translators: Markdown. %s = Update API URL */
 					\esc_html__(
@@ -62,7 +65,13 @@ function _check_external_blocking() {
 				),
 				[ 'code' ]
 			);
-			$tsf->do_dismissible_notice( $notice, 'error', true, false );
+			do_dismissible_notice(
+				$notice,
+				[
+					'type'   => 'error',
+					'escape' => false,
+				]
+			);
 		}
 	}
 }
@@ -165,6 +174,7 @@ function _clear_update_cache() {
  * We use pre_* because WP's object cache would otherwise prevent the second run
  * as it won't detect changes.
  *
+ * @hook pre_set_site_transient_update_plugins PHP_INT_MAX
  * @since 2.0.0
  * @since 2.0.2 Added more cache, because some sites disable transients completely...
  * @since 2.4.0 Can now fetch required (and available) locale files.
@@ -173,11 +183,10 @@ function _clear_update_cache() {
  * @access private
  * @see WP Core \wp_update_plugins()
  *
- * @param mixed  $value     Site transient value.
- * @param string $transient Transient name.
+ * @param mixed $value Site transient value.
  * @return mixed $value
  */
-function _push_update( $value, $transient ) {
+function _push_update( $value ) {
 
 	unset(
 		$value->checked[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ],

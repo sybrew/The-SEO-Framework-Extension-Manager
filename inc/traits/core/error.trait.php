@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	do_dismissible_notice,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -80,11 +84,15 @@ trait Error {
 			return;
 		}
 
-		$tsf = \tsf();
-
-		// Already escaped.
 		foreach ( $notices as $notice )
-			$tsf->do_dismissible_notice( $notice['message'], $notice['type'], true, false, true );
+			do_dismissible_notice(
+				$notice['message'],
+				[
+					'type'   => $notice['type'],
+					'escape' => false,
+					'inline' => true,
+				]
+			);
 
 		$this->unset_error_notice_option();
 	}
@@ -154,7 +162,7 @@ trait Error {
 
 		if ( \is_array( $option ) ) {
 			$key = key( $option );
-		} elseif ( is_scalar( $option ) ) {
+		} elseif ( \is_scalar( $option ) ) {
 			$key = $option;
 		}
 

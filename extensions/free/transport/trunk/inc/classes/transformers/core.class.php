@@ -7,6 +7,11 @@ namespace TSF_Extension_Manager\Extension\Transport\Transformers;
 
 \defined( 'TSFEM_E_TRANSPORT_VERSION' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	sanitize_metadata_content,
+	clamp_sentence,
+};
+
 /**
  * Transport extension for The SEO Framework
  * copyright (C) 2022-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -133,13 +138,14 @@ abstract class Core {
 	 */
 	private function __construct() {
 
-		// TODO improve performance for PHP 7.4 using ??=.
-		self::$tsf = \tsf();
-
 		static::reset_replacements();
 
-		// TODO improve performance for PHP 7.4 using ??=.
-		self::$persistent_cache['separator']   = self::$tsf->s_description_raw( self::$tsf->get_separator() );
+		// TODO improve performance for PHP 7.4 using ??=. -> Why though?
+		self::$persistent_cache['separator']   = sanitize_metadata_content(
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->title()->get_separator()
+				: \tsf()->get_separator()
+		);
 		self::$persistent_cache['q_separator'] = preg_quote( self::$persistent_cache['separator'], '/' );
 
 		self::$persistent_cache['date_format'] = \get_option( 'date_format' );
@@ -677,9 +683,13 @@ abstract class Core {
 		if ( ! empty( self::$post->post_password ) ) return '';
 
 		return self::$post_cache['excerpt']
-			?? self::$post_cache['excerpt'] = self::$tsf->s_excerpt_raw(
-				self::$tsf->fetch_excerpt( self::$post )
-			);
+			?? self::$post_cache['excerpt'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->format()->html()->extract_content(
+					\tsf()->description()->excerpt()->get_post_excerpt( [ 'id' => self::$post->ID ] )
+				)
+				: \tsf()->s_excerpt_raw(
+					\tsf()->fetch_excerpt( self::$post )
+				);
 	}
 
 	/**
@@ -696,9 +706,11 @@ abstract class Core {
 		if ( ! empty( self::$post->post_password ) ) return '';
 
 		return self::$post_cache['excerpt_short']
-			?? self::$post_cache['excerpt_short'] = self::$tsf->trim_excerpt(
+			?? self::$post_cache['excerpt_short'] = clamp_sentence(
 				static::get_post_excerpt(),
-				self::$tsf->get_input_guidelines()['description']['search']['chars']['goodUpper']
+				\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->guidelines()->get_text_size_guidelines()['description']['search']['chars']['goodUpper']
+					: \tsf()->get_input_guidelines()['description']['search']['chars']['goodUpper']
 			);
 	}
 
@@ -787,10 +799,9 @@ abstract class Core {
 		if ( 'post' !== self::$main_object_type ) return '';
 
 		return self::$post_cache['post_type_plural_name']
-			?? self::$post_cache['post_type_plural_name'] = self::$tsf->get_post_type_label(
-				self::$post->post_type,
-				false
-			);
+			?? self::$post_cache['post_type_plural_name'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->post_type()->get_label( self::$post->post_type, false )
+				: \tsf()->get_post_type_label( self::$post->post_type, false );
 	}
 
 	/**
@@ -805,10 +816,9 @@ abstract class Core {
 		if ( 'post' !== self::$main_object_type ) return '';
 
 		return self::$post_cache['post_type_singular_name']
-			?? self::$post_cache['post_type_singular_name'] = self::$tsf->get_post_type_label(
-				self::$post->post_type,
-				true
-			);
+			?? self::$post_cache['post_type_singular_name'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->post_type()->get_label( self::$post->post_type, true )
+				: \tsf()->get_post_type_label( self::$post->post_type, true );
 	}
 
 	/**
@@ -898,7 +908,13 @@ abstract class Core {
 
 		return self::$term_cache['title']
 			?? self::$term_cache['title'] = (
-				self::$term ? self::$tsf->get_generated_single_term_title( self::$term ) : ''
+				self::$term
+					? (
+						\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+							? \tsf()->title()->get_term_title( self::$term )
+							: \tsf()->get_generated_single_term_title( self::$term )
+					)
+					: ''
 			);
 	}
 

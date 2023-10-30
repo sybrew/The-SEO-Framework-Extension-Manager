@@ -114,20 +114,29 @@ final class Front {
 	 */
 	public function do_output_hook() {
 
+		/**
+		 * @since 1.0.0
+		 */
 		\do_action( 'the_seo_framework_do_before_amp_output' );
 
 		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			// Our URI outputs do not pertain to AMP. AMP takes care of this.
+			\add_filter(
+				'the_seo_framework_meta_generator_pools',
+				static function ( $pools ) {
+					return array_diff( $pools, [ 'URI' ] );
+				}
+			);
 
-			\add_filter( 'the_seo_framework_meta_generator_pools', function( $pools ) {
-				return array_diff( $pools, 'URI' );
-			} );
-
-			\The_SEO_Framework\Front\Meta\Head::print_wrap_and_tags();
+			\tsf()->print_seo_meta_tags();
 		} else {
 			// phpcs:ignore -- All callbacks escape their output.
 			echo "\n", $this->get_general_metadata(), $this->get_social_metadata(), $this->get_structured_metadata(), "\n";
 		}
 
+		/**
+		 * @since 1.0.0
+		 */
 		\do_action( 'the_seo_framework_do_after_amp_output' );
 	}
 
@@ -145,6 +154,7 @@ final class Front {
 	 * Data is taken from The SEO Framework.
 	 *
 	 * @since 1.0.1
+	 * @deprecated Remove if we only support TSF 4.3+
 	 *
 	 * @return string The general metadata.
 	 */
@@ -158,12 +168,13 @@ final class Front {
 	 *
 	 * @since 1.0.1
 	 * @since 1.0.2 Added filters.
+	 * @deprecated Remove if we only support TSF 4.3+
 	 *
 	 * @return string The social metadata.
 	 */
 	protected function get_social_metadata() {
 
-		$tsf = \tsf();
+		$tsf = \tsf(); // tsf OK
 
 		/**
 		 * Adds content before the output.
@@ -200,7 +211,7 @@ final class Front {
 		 */
 		$after = (string) \apply_filters( 'the_seo_framework_amp_pro', '' );
 
-		return $before . $output . $after;
+		return "{$before}{$output}{$after}";
 	}
 
 	/**
@@ -208,6 +219,7 @@ final class Front {
 	 * Data is taken from The SEO Framework.
 	 *
 	 * @since 1.2.0
+	 * @deprecated Remove if we only support TSF 4.3+
 	 *
 	 * @return string The structured metadata.
 	 */

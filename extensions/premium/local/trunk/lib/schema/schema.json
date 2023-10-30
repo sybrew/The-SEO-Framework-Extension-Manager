@@ -50,7 +50,7 @@
 				]
 			},
 			"_handlers" : {
-				"_escape" : "esc_url_raw",
+				"_escape" : "sanitize_url",
 				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
@@ -301,7 +301,7 @@
 				]
 			},
 			"_handlers" : {
-				"_escape" : "esc_url_raw",
+				"_escape" : "sanitize_url",
 				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
@@ -341,7 +341,7 @@
 				]
 			},
 			"_handlers" : {
-				"_escape" : "esc_url_raw",
+				"_escape" : "sanitize_url",
 				"_condition" : {
 					"_if" : "this",
 					"_op" : "empty",
@@ -725,7 +725,7 @@
 										]
 									},
 									"_handlers" : {
-										"_escape" : "esc_url_raw",
+										"_escape" : "sanitize_url",
 										"_condition" : {
 											"_if" : "this",
 											"_op" : "empty",

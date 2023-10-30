@@ -8,6 +8,10 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+};
+
 ?>
 <div class=tsfem-connect-option>
 	<div class=tsfem-connect-text>
@@ -19,7 +23,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 				<p>
 				<?php
 				// phpcs:disable, WordPress.Security.EscapeOutput -- Already escaped.
-				echo tsf()->convert_markdown(
+				echo convert_markdown(
 					sprintf(
 						/* translators: %s = URL to privacy policy */
 						esc_html__( 'This is a small introductory excerpt of our privacy policy. For full details, view our [Privacy Policy](%s).', 'the-seo-framework-extension-manager' ),

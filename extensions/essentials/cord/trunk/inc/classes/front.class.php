@@ -112,25 +112,14 @@ final class Front extends Core {
 
 		$tracking_id = \esc_js( trim( $this->get_option( 'analytics' )['google_analytics']['tracking_id'] ) );
 
-		// Get first few chars before '-'.
-		switch ( strtok( $tracking_id, '-' ) ) {
-			case 'G':
-				// GA4
-				echo '<link rel="dns-prefetch" href="https://www.googletagmanager.com/" />', "\n"; // Keep XHTML valid!
-				echo '<link rel="preconnect" href="https://www.googletagmanager.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
-				// gtag.js collects via google-analytics.com and `analytics.google.com`.
-				echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', "\n"; // Keep XHTML valid!
-				echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
-				break;
+		// Get first few chars before '-'. Only G-tag (GA4) is supported now.
+		if ( 'G' !== strtok( $tracking_id, '-' ) ) return;
 
-			// TODO remove this once UA is phased out.
-			case 'UA':
-				// Universal Analytics 3; can be removed on July 1st, 2023.
-				if ( time() > 1688194800 ) break;
-				echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', "\n"; // Keep XHTML valid!
-				echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
-				break;
-		}
+		echo '<link rel="dns-prefetch" href="https://www.googletagmanager.com/" />', "\n"; // Keep XHTML valid!
+		echo '<link rel="preconnect" href="https://www.googletagmanager.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
+		// gtag.js collects via google-analytics.com and `analytics.google.com`.
+		echo '<link rel="dns-prefetch" href="https://www.google-analytics.com/" />', "\n"; // Keep XHTML valid!
+		echo '<link rel="preconnect" href="https://www.google-analytics.com/" crossorigin="anonymous" />', "\n"; // Keep XHTML valid!
 	}
 
 	/**
@@ -148,103 +137,58 @@ final class Front extends Core {
 		$options     = $this->get_option( 'analytics' )['google_analytics'];
 		$tracking_id = \esc_js( trim( $options['tracking_id'] ) );
 
-		// Get first few chars before '-'.
-		switch ( strtok( $tracking_id, '-' ) ) {
-			case 'G':
-				// https://developers.google.com/analytics/devguides/collection/ga4/reference/config
-				$config = [];
+		// Get first few chars before '-'. Only G-tag (GA4) is supported now.
+		if ( 'G' !== strtok( $tracking_id, '-' ) ) return;
 
-				// TODO add field to allow multiple domains? This seems exaggeratingly redundant.
-				// https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain#automatically_link_domains
-				$home_domain   = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-					? \tsf()->uri()->utils()->get_site_host()
-					: parse_url( \tsf()->get_raw_home_canonical_url(), \PHP_URL_HOST );
-				$page_location = '';
+		// https://developers.google.com/analytics/devguides/collection/ga4/reference/config
+		$config = [];
 
-				// Fix and normalize search link recognition.
-				// Is this still needed? Maybe Google will add support for this again with GA4 -- keep it.
-				if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
-					$search_query  = \get_search_query();
-					$page_location = \esc_js( \add_query_arg(
-						[ 's' => rawurlencode( $search_query ) ],
-						\get_search_link( $search_query )
-					) );
-				}
+		// TODO add field to allow multiple domains? This seems exaggeratingly redundant.
+		// https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain#automatically_link_domains
+		$page_location = '';
+		$home_domain   = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->uri()->utils()->get_site_host()
+			: parse_url( \tsf()->get_raw_home_canonical_url(), \PHP_URL_HOST );
 
-				if ( $home_domain )
-					$config['linker']['domains'] = [ $home_domain ];
-
-				if ( $page_location )
-					$config['page_location'] = $page_location;
-
-				// Don't array_filter -- false may also be a value.
-				$config = json_encode( $config );
-
-				// GA4
-				$script = <<<JS
-					window.dataLayer = window.dataLayer || [];
-					function gtag() {
-						dataLayer.push( arguments )
-					}
-					gtag( 'js', new Date );
-
-					gtag( 'config', '{$tracking_id}', $config );
-				JS;
-
-				$script = $this->minify_script( $script );
-
-				// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
-				// Keep XHTML valid!
-				echo <<<HTML
-					<script async="async" src="https://www.googletagmanager.com/gtag/js?id={$tracking_id}"></script>
-					<script>$script</script>
-				HTML;
-				// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
-				break;
-			// TODO remove this once UA is phased out.
-			case 'UA':
-				// Universal Analytics 3; can be removed on July 1st, 2023.
-				if ( time() > 1688194800 ) break;
-
-				$link = '';
-
-				// Fix and normalize search link recognition.
-				if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
-					$search_q = \get_search_query();
-					$rel_s_q  = \set_url_scheme( \get_search_link( $search_q ), 'relative' );
-					$link     = \esc_js( "$rel_s_q?s=" . rawurlencode( $search_q ) );
-				}
-
-				// Removed option. Read from stale or use defaults otherwise.
-				$ip_anonymization          = (int) (bool) ( $options['ip_anonymization'] ?? true );
-				$enhanced_link_attribution = (int) (bool) ( $options['enhanced_link_attribution'] ?? false );
-				/**
-				 * @since 1.0.0
-				 * @param int $ela_id_levels The number of levels to look for an ID for Enhanced Link Attribution.
-				 *                           The higher the number, the slower your site. It does not necessarily mean more accurate.
-				 *                           The accuracy depends on how your theme is constructed. 5 is a nice balance for WordPress.
-				 */
-				$ela_id_levels = (int) \apply_filters( 'the_seo_framework_cord_ga_ela_id_levels', 5 );
-
-				// 'ga' expects itself to be registered globally in the window...
-				$script = <<<JS
-					window.ga = window.ga || function() {
-						( ga.q = ga.q || [] ).push( arguments )
-					};
-					ga.l =+ new Date;
-					ga( 'create', '{$tracking_id}', 'auto' );
-					{$ip_anonymization} && ga( 'set', 'anonymizeIp', true );
-					{$enhanced_link_attribution} && ga( 'require', 'linkid', { levels: {$ela_id_levels} } );
-					'{$link}'.length ? ga( 'send', 'pageview', '{$link}' ) : ga( 'send', 'pageview' );
-				JS;
-
-				$script = $this->minify_script( $script );
-
-				// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo "<script>$script</script>\n";
-				// phpcs:ignore, WordPress.WP.EnqueuedResources.NonEnqueuedScript
-				echo '<script async="async" src="https://www.google-analytics.com/analytics.js"></script>', "\n"; // Keep XHTML valid!
+		// Fix and normalize search link recognition.
+		// Is this still needed? Maybe Google will add support for this again with GA4 -- keep it.
+		if ( \is_search() && $GLOBALS['wp_rewrite']->get_search_permastruct() ) {
+			$search_query  = \get_search_query();
+			$page_location = \esc_js( \add_query_arg(
+				[ 's' => rawurlencode( $search_query ) ],
+				\get_search_link( $search_query )
+			) );
 		}
+
+		if ( $home_domain )
+			$config['linker']['domains'] = [ $home_domain ];
+
+		if ( $page_location )
+			$config['page_location'] = $page_location;
+
+		// Don't array_filter -- false may also be a value.
+		$config = json_encode( $config );
+
+		// GA4
+		$script = <<<JS
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push( arguments )
+			}
+			gtag( 'js', new Date );
+
+			gtag( 'config', '{$tracking_id}', $config );
+		JS;
+
+		$script = $this->minify_script( $script );
+
+		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
+		// Keep XHTML valid!
+		echo <<<HTML
+			<script async="async" src="https://www.googletagmanager.com/gtag/js?id={$tracking_id}"></script>
+			<script>$script</script>
+		HTML;
+		// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
 	}
 
 	/**

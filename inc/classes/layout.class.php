@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -330,7 +334,7 @@ final class Layout extends Secure_Abstract {
 		if ( ! isset( $activation_domain ) || $activation_domain === $current_domain ) {
 			$_classes[] = 'tsfem-success';
 		} else {
-			$_warning = \tsf()->convert_markdown(
+			$_warning = convert_markdown(
 				sprintf(
 					/* translators: `%s` = domain with markdown backtics */
 					\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, disconnect the account and reconnect.', 'the-seo-framework-extension-manager' ),

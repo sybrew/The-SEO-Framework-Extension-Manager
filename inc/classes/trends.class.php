@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	clamp_sentence,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -121,8 +125,6 @@ final class Trends {
 		$output   = '';
 		$a_output = [];
 
-		$tsf = \tsf();
-
 		$max = 6;
 		$i   = 0;
 		foreach ( $xml->channel->item as $obj ) :
@@ -139,23 +141,23 @@ final class Trends {
 			if ( ! $link )
 				continue;
 
-			$title = $tsf->escape_title( $obj->title->__toString() );
+			$title = $obj->title->__toString();
 			if ( ! $title )
 				continue;
 
 			// Let's not advertise.
-			if ( false !== stripos( "$link$title", 'conference' )
-			|| false !== stripos( "$link$title", 'thanks' )
-			|| false !== stripos( "$link$title", 'live' )
-			|| false !== stripos( "$link$title", 'highlights' )
+			if (
+				   false !== stripos( "$link$title", 'conference' )
+				|| false !== stripos( "$link$title", 'thanks' )
+				|| false !== stripos( "$link$title", 'live' )
+				|| false !== stripos( "$link$title", 'highlights' )
 			) continue;
 
 			$date = strtotime( $obj->pubDate->__toString() );
 			if ( ! $date )
 				continue;
 
-			$description = $tsf->trim_excerpt( $obj->description->__toString(), 0, 234 ); // Magic number, because why not.
-			$description = $tsf->escape_description( $description );
+			$description = clamp_sentence( $obj->description->__toString(), 0, 234 ); // Magic number, because why not.
 			if ( ! $description )
 				continue;
 
@@ -165,10 +167,10 @@ final class Trends {
 				sprintf(
 					'<h4><a href="%s" target=_blank rel="nofollow noopener noreferrer" title="Read more...">%s</a></h4>',
 					\esc_url( $link, [ 'https', 'http' ] ),
-					$title
+					\esc_html( $title ),
 				),
 				'<time>' . \date_i18n( \get_option( 'date_format' ), $date ) . '</time>',
-				$description
+				\esc_html( $description ),
 			);
 
 			// Maintain full list for transient / non-AJAX.

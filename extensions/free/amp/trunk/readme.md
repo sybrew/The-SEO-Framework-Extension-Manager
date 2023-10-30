@@ -50,21 +50,19 @@ For more information, please visit:
 
 ## Developers
 
-### Filters
+### Actions
 
 Here you can find the available filters for AMP.
 
 #### Add meta content
 
-Add your own meta data, with either `the_seo_framework_amp_pre` (before) or `the_seo_framework_amp_pro` (after).
+Add your own meta data, with either `the_seo_framework_do_before_amp_output` (before) or `the_seo_framework_do_after_amp_output` (after).
 
 ```php
-add_filter( 'the_seo_framework_amp_pro', function( $output = '' ) {
+add_action( 'the_seo_framework_do_before_amp_output', function() {
 
-	// Add your own meta tags. Don't overwrite $output!
-	$output .= '&amp;lt;meta name="author" content="John Doe" /&amp;gt;' . PHP_EOL;
-
-	return $output;
+	// Add your own meta tags.
+	echo '&amp;lt;meta name="author" content="John Doe" /&amp;gt;' . PHP_EOL;
 } );
 ```
 

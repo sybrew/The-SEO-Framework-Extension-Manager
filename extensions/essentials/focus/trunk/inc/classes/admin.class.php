@@ -54,30 +54,12 @@ final class Admin extends Core {
 		 */
 		$this->view_location_base = \TSFEM_E_FOCUS_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
-		$this->prepare_ajax();
-		$this->prepare_inpostgui();
-	}
-
-	/**
-	 * Prepares inpost AJAX callbacks.
-	 *
-	 * @since 1.0.0
-	 */
-	private function prepare_ajax() {
 		\wp_doing_ajax() and Ajax::_init( $this );
-	}
-
-	/**
-	 * Prepares inpost GUI.
-	 *
-	 * @since 1.0.0
-	 */
-	private function prepare_inpostgui() {
 
 		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		\add_action( 'tsfem_inpost_before_enqueue_scripts', [ $this, '_enqueue_inpost_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ $this, '_register_inpost_scripts' ] );
 
 		// Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
@@ -186,14 +168,20 @@ final class Admin extends Core {
 	 * @since 1.0.0
 	 * @since 1.2.0 Now passes the isGutenbergPage data property.
 	 * @since 1.5.0 No longer passes isGutenbergPage property; rely on tsfPost instead.
+	 * @since
 	 * @access private
 	 * @uses The_SEO_Framework\Builders\Scripts
 	 *
-	 * @param string $scripts Static class name: The_SEO_Framework\Builders\Scripts
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
-	public function _enqueue_inpost_scripts( $scripts ) {
+	public function _register_inpost_scripts( $scripts ) {
 
-		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			if ( ! \tsf()->query()->is_post_edit() ) return $scripts;
+		} else {
+			if ( ! \tsf()->is_post_edit() ) return $scripts;
+		}
 
 		/**
 		 * @since 1.5.0
@@ -202,64 +190,67 @@ final class Admin extends Core {
 		 */
 		$interval = (int) \apply_filters( 'the_seo_framework_focus_auto_interval', 45000 );
 
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-focus-inpost',
-				'type'     => 'js',
-				'name'     => 'tsfem-focus-inpost',
-				'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
-				'ver'      => \TSFEM_E_FOCUS_VERSION,
-				'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost', 'tsfem-worker' ],
-				'autoload' => true,
-				'l10n'     => [
-					'name' => 'tsfem_e_focusInpostL10n',
-					'data' => [
-						'nonce'              => \current_user_can( 'edit_post', $GLOBALS['post']->ID )
-							? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' )
-							: false,
-						'focusElements'      => $this->get_focus_elements(),
-						'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
-						'languageSupported'  => [
-							'any'         => $this->is_language_supported( 'any' ),
-							'inflections' => $this->is_language_supported( 'inflections' ),
-							'synonyms'    => $this->is_language_supported( 'synonyms' ),
-						],
-						'language'           => \get_locale(),
-						'i18n'               => [
-							'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
-							'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
-						],
-						'scripts'            => [
-							'parserWorker' => $this->get_worker_file_location(),
-						],
-						'settings'           => [
-							'analysisInterval' => $interval,
-						],
+		// see tsf()->query()->get_admin_post_id();
+		$post_id = \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 );
+
+		$scripts[] = [
+			'id'       => 'tsfem-focus-inpost',
+			'type'     => 'js',
+			'name'     => 'tsfem-focus-inpost',
+			'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/js/',
+			'ver'      => \TSFEM_E_FOCUS_VERSION,
+			'deps'     => [ 'jquery', 'tsf', 'tsf-tt', 'tsfem-inpost', 'tsfem-worker' ],
+			'autoload' => true,
+			'l10n'     => [
+				'name' => 'tsfem_e_focusInpostL10n',
+				'data' => [
+					'nonce'              => \current_user_can( 'edit_post', $post_id )
+						? \wp_create_nonce( 'tsfem-e-focus-inpost-nonce' )
+						: false,
+					'focusElements'      => $this->get_focus_elements(),
+					'defaultLexicalForm' => json_encode( $this->default_lexical_form ),
+					'languageSupported'  => [
+						'any'         => $this->is_language_supported( 'any' ),
+						'inflections' => $this->is_language_supported( 'inflections' ),
+						'synonyms'    => $this->is_language_supported( 'synonyms' ),
 					],
-				],
-				'tmpl'     => [
-					'file' => $this->_get_view_location( 'inpost/js-templates' ),
-				],
-			],
-			[
-				'id'       => 'tsfem-focus-inpost',
-				'type'     => 'css',
-				'name'     => 'tsfem-focus-inpost',
-				'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/css/',
-				'ver'      => \TSFEM_E_FOCUS_VERSION,
-				'deps'     => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
-				'autoload' => true,
-				'hasrtl'   => false,
-				'inline'   => [
-					'.tsfem-e-focus-content-loader-bar' => [
-						'background:{{$color_accent}}',
+					'language'           => \get_locale(),
+					'i18n'               => [
+						'noExampleAvailable' => \__( 'No example available.', 'the-seo-framework-extension-manager' ),
+						'parseFailure'       => \__( 'A parsing failure occurred.', 'the-seo-framework-extension-manager' ),
 					],
-					'.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-item' => [
-						'color:{{$color}}',
+					'scripts'            => [
+						'parserWorker' => $this->get_worker_file_location(),
+					],
+					'settings'           => [
+						'analysisInterval' => $interval,
 					],
 				],
 			],
-		] );
+			'tmpl'     => [
+				'file' => $this->_get_view_location( 'inpost/js-templates' ),
+			],
+		];
+		$scripts[] = [
+			'id'       => 'tsfem-focus-inpost',
+			'type'     => 'css',
+			'name'     => 'tsfem-focus-inpost',
+			'base'     => \TSFEM_E_FOCUS_DIR_URL . 'lib/css/',
+			'ver'      => \TSFEM_E_FOCUS_VERSION,
+			'deps'     => [ 'tsf', 'tsf-tt', 'tsfem-inpost' ],
+			'autoload' => true,
+			'hasrtl'   => false,
+			'inline'   => [
+				'.tsfem-e-focus-content-loader-bar' => [
+					'background:{{$color_accent}}',
+				],
+				'.tsfem-e-focus-collapse-header:hover .tsfem-e-focus-arrow-item' => [
+					'color:{{$color}}',
+				],
+			],
+		];
+
+		return $scripts;
 	}
 
 	/**
@@ -292,7 +283,9 @@ final class Admin extends Core {
 
 		$post_meta = [
 			'pm_index' => $this->pm_index,
-			'post_id'  => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_the_real_id() : \tsf()->get_the_real_ID(),
+			'post_id'  => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->query()->get_the_real_id()
+				: \tsf()->get_the_real_ID(),
 			'kw'       => [
 				'label'        => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),

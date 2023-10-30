@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	is_headless,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -69,11 +73,7 @@ class AdminPages extends AccountActivation {
 	private function construct() {
 
 		// Nothing to do here if headless.
-		if (
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \The_SEO_Framework\is_headless( 'settings' )
-				: \tsf()->is_headless['settings']
-		) return;
+		if ( is_headless( 'settings' ) ) return;
 
 		// Initialize menu links. TODO add network menu.
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
@@ -116,7 +116,9 @@ class AdminPages extends AccountActivation {
 	final public function _add_menu_link() {
 
 		$menu = [
-			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
+			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
+				: \tsf()->seo_settings_page_slug,
 			'page_title'  => 'Extension Manager',
 			'menu_title'  => 'Extension Manager',
 			'capability'  => \TSF_EXTENSION_MANAGER_MAIN_ADMIN_ROLE,
@@ -127,8 +129,11 @@ class AdminPages extends AccountActivation {
 		if ( \TSF_Extension_Manager\can_do_manager_settings() ) {
 			$notice_count = $this->get_error_notice_count();
 
-			if ( $notice_count )
-				$menu['menu_title'] .= \tsf()->get_admin_menu_issue_badge( $notice_count );
+			if ( $notice_count ) {
+				$menu['menu_title'] .= \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->admin()->menu()->get_issue_badge( $notice_count )
+					: \tsf()->get_admin_menu_issue_badge( $notice_count );
+			}
 		}
 
 		$this->seo_extensions_menu_page_hook = \add_submenu_page(

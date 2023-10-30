@@ -90,6 +90,7 @@ final class Server {
 	private function construct() {
 
 		foreach (
+			// TODO ignore this? see https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/76#issuecomment-1598668879
 			preg_split( '/\s*,\s*/', $this->get_headers()['accept'] ?? '' )
 			as $mime
 		) {
@@ -132,7 +133,9 @@ final class Server {
 			9999
 		);
 
-		\tsf()->clean_response_header();
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
 
 		// Disable. With it enabled it would otherwise cause double-output.
 		ob_implicit_flush( false );
@@ -168,8 +171,7 @@ final class Server {
 	 */
 	public function poll( $store ) {
 
-		if ( ! static::$supports_stream ) return false;
-		if ( connection_aborted() ) return false;
+		if ( ! static::$supports_stream || connection_aborted() ) return false;
 
 		while ( ob_get_length() ) ob_end_clean();
 
@@ -189,8 +191,7 @@ final class Server {
 	 */
 	public function flush( $forcepad = false ) {
 
-		if ( ! static::$supports_stream ) return false;
-		if ( connection_aborted() ) return false;
+		if ( ! static::$supports_stream || connection_aborted() ) return false;
 
 		static::$buffersize += ob_get_length();
 
@@ -258,13 +259,13 @@ final class Server {
 	/**
 	 * Customizes WP Die handler for event streams.
 	 *
+	 * @hook wp_die_ajax_handler 9999
 	 * @since 1.0.0
 	 *
 	 * @param string $message The (HTML) die message.
 	 * @param string $title   The page title. Might be empty.
-	 * @param array  $args    Arguments to control behavior. Ignored, for now.
 	 */
-	public function _wp_die_handler( $message, $title = '', $args = [] ) {
+	public function _wp_die_handler( $message, $title = '' ) {
 		$this->send(
 			'WordPress exit: ' . \wp_strip_all_tags( trim( "$title: $message", ': ' ) ),
 			-1,

@@ -63,7 +63,7 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_yoast_wpseo_title' ],
 				[ $wpdb->postmeta, '_genesis_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 				[
 					'name'    => 'Meta Title',
 					'to'      => [
@@ -82,49 +82,49 @@ final class WordPress_SEO extends Base {
 				[ $wpdb->postmeta, '_yoast_wpseo_metadesc' ],
 				[ $wpdb->postmeta, '_genesis_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-title' ],
 				[ $wpdb->postmeta, '_open_graph_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-description' ],
 				[ $wpdb->postmeta, '_open_graph_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-image' ],
 				[ $wpdb->postmeta, '_social_image_url' ],
 				null,
-				'\\esc_url_raw',
+				'sanitize_url',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_opengraph-image-id' ],
 				[ $wpdb->postmeta, '_social_image_id' ],
 				null,
-				'\\absint',
+				'absint',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-title' ],
 				[ $wpdb->postmeta, '_twitter_title' ],
 				[ $transformer_class, '_title_syntax' ],
-				[ $tsf, 's_title_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_twitter-description' ],
 				[ $wpdb->postmeta, '_twitter_description' ],
 				[ $transformer_class, '_description_syntax' ],
-				[ $tsf, 's_description_raw' ],
+				'TSF_Extension_Manager\Transition\sanitize_metadata_content',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_canonical' ],
 				[ $wpdb->postmeta, '_genesis_canonical_uri' ],
 				null,
-				'\\esc_url_raw',
+				'sanitize_url',
 			],
 			[
 				[ $wpdb->postmeta, '_yoast_wpseo_meta-robots-noindex' ],
@@ -201,7 +201,7 @@ final class WordPress_SEO extends Base {
 					[ $wpdb->postmeta, "_yoast_wpseo_primary_{$_taxonomy}" ],
 					[ $wpdb->postmeta, "_primary_term_{$_taxonomy}" ],
 					null,
-					'\\absint',
+					'absint',
 				]
 			);
 		}

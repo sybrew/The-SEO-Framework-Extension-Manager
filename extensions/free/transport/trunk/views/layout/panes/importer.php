@@ -8,6 +8,11 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+	make_data_attributes,
+};
+
 ?>
 <div class=tsfem-pane-inner-wrap id=tsfem-e-transport-importer-wrap>
 	<div class="tsfem-e-transport-importer tsfem-flex tsfem-flex-row tsfem-flex-nogrow hide-if-tsf-js">
@@ -20,8 +25,8 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 		<div class=tsfem-pane-section>
 			<h4 class=tsfem-form-title><?= esc_html__( 'Create a database backup!', 'the-seo-framework-extension-manager' ); ?></h4>
 			<span class=description><?=
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- tsf()->convert_markdown escapes.
-			tsf()->convert_markdown(
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- convert_markdown escapes.
+			convert_markdown(
 				sprintf(
 					/* translators: %s = URL to backup documentation. Asterisks are markdown! */
 					esc_html__( 'The importer updates index keys in the database of this WordPress installation. **Old data will be deleted** and some data will be transformed. The Transport extension actively logs all transactions on your screen and will halt transportation on failure. **Always make a backup before importing** in case you need to undo the transport. [Learn about WordPress backups](%s).', 'the-seo-framework-extension-manager' ),
@@ -48,7 +53,7 @@ defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_
 						[
 							esc_attr( $importer ),
 							$_selected && $_available ? 'selected' : ( $_available ? '' : 'disabled' ),
-							The_SEO_Framework\Interpreters\HTML::make_data_attributes( $data ),
+							make_data_attributes( $data ),
 							esc_html( $data['title'] ),
 						]
 					);

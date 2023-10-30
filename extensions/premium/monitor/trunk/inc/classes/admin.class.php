@@ -7,6 +7,11 @@ namespace TSF_Extension_Manager\Extension\Monitor;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	is_headless,
+	redirect,
+};
+
 /**
  * Verify integrity and sets up API secret.
  *
@@ -204,11 +209,7 @@ final class Admin extends Api {
 		$this->o_index = 'monitor';
 
 		// Nothing to do here if headless.
-		if (
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \The_SEO_Framework\is_headless( 'settings' )
-				: \tsf()->is_headless['settings']
-		) return;
+		if ( is_headless( 'settings' ) ) return;
 
 		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_add_menu_link' ], 100 );
@@ -241,23 +242,15 @@ final class Admin extends Api {
 	 * @access private
 	 */
 	public function _add_menu_link() {
-
-		$menu = [
-			'parent_slug' => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug,
-			'page_title'  => 'Monitor',
-			'menu_title'  => 'Monitor',
-			'capability'  => \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
-			'menu_slug'   => $this->monitor_page_slug,
-			'callback'    => [ $this, '_init_monitor_page' ],
-		];
-
 		$this->monitor_menu_page_hook = \add_submenu_page(
-			$menu['parent_slug'],
-			$menu['page_title'],
-			$menu['menu_title'],
-			$menu['capability'],
-			$menu['menu_slug'],
-			$menu['callback']
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
+				: \tsf()->seo_settings_page_slug,
+			'Monitor', // page_title
+			'Monitor', // menu_title
+			\TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
+			$this->monitor_page_slug, // menu_slug
+			[ $this, '_init_monitor_page' ] // callback
 		);
 	}
 
@@ -360,7 +353,7 @@ final class Admin extends Api {
 		endswitch;
 
 		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
-		\tsf()->admin_redirect( $this->monitor_page_slug, $args );
+		redirect( $this->monitor_page_slug, $args );
 		exit;
 
 		// phpcs:enable, WordPress.Security.NonceVerification
@@ -410,7 +403,7 @@ final class Admin extends Api {
 		if ( ! $result ) {
 			// Nonce failed. Set error notice and reload.
 			$this->set_error_notice( [ 1019001 => '' ] );
-			\tsf()->admin_redirect( $this->monitor_page_slug );
+			redirect( $this->monitor_page_slug );
 			exit;
 		}
 
@@ -652,7 +645,10 @@ final class Admin extends Api {
 
 				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 					// Initialize menu hooks.
-					\tsf()->add_menu_link();
+					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? \tsf()->admin()->menu()->register_top_menu_page()
+						: \tsf()->add_menu_link();
+
 					$this->_add_menu_link();
 
 					$send['html'] = $this->get_site_fix_fields();
@@ -679,7 +675,7 @@ final class Admin extends Api {
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
-		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_monitor_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ $this, '_register_monitor_scripts' ] );
 
 		$this->init_ui();
 	}
@@ -692,43 +688,42 @@ final class Admin extends Api {
 	 * @access private
 	 * @internal
 	 *
-	 * @param string $scripts The scripts builder class name.
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
 	public function _register_monitor_scripts( $scripts ) {
 
-		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
-
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-monitor',
-				'type'     => 'css',
-				'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
-				'autoload' => true,
-				'hasrtl'   => true,
-				'name'     => 'tsfem-monitor',
-				'base'     => \TSFEM_E_MONITOR_DIR_URL . 'lib/css/',
-				'ver'      => \TSFEM_E_MONITOR_VERSION,
-				'inline'   => null,
-			],
-			[
-				'id'       => 'tsfem-monitor',
-				'type'     => 'js',
-				'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
-				'autoload' => true,
-				'name'     => 'tsfem-monitor',
-				'base'     => \TSFEM_E_MONITOR_DIR_URL . 'lib/js/',
-				'ver'      => \TSFEM_E_MONITOR_VERSION,
-				'l10n'     => [
-					'name' => 'tsfem_e_monitorL10n',
-					'data' => [
-						// This won't ever run when the user can't. But, sanity.
-						'nonce'                => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ) : '',
-						'remote_data_timeout'  => $this->get_remote_data_timeout(),
-						'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
-					],
+		$scripts[] = [
+			'id'       => 'tsfem-monitor',
+			'type'     => 'css',
+			'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
+			'autoload' => true,
+			'hasrtl'   => true,
+			'name'     => 'tsfem-monitor',
+			'base'     => \TSFEM_E_MONITOR_DIR_URL . 'lib/css/',
+			'ver'      => \TSFEM_E_MONITOR_VERSION,
+			'inline'   => null,
+		];
+		$scripts[] = [
+			'id'       => 'tsfem-monitor',
+			'type'     => 'js',
+			'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
+			'autoload' => true,
+			'name'     => 'tsfem-monitor',
+			'base'     => \TSFEM_E_MONITOR_DIR_URL . 'lib/js/',
+			'ver'      => \TSFEM_E_MONITOR_VERSION,
+			'l10n'     => [
+				'name' => 'tsfem_e_monitorL10n',
+				'data' => [
+					// This won't ever run when the user can't. But, sanity.
+					'nonce'                => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( 'tsfem-e-monitor-ajax-nonce' ) : '',
+					'remote_data_timeout'  => $this->get_remote_data_timeout(),
+					'remote_crawl_timeout' => $this->get_remote_crawl_timeout(),
 				],
 			],
-		] );
+		];
+
+		return $scripts;
 	}
 
 	/**

@@ -50,8 +50,6 @@ final class WP_SEOPress extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\WP_SEOPress::get_instance()
 		);
 
-		$tsf = \tsf();
-
 		/**
 		 * NOTE: I considered making a separate transaction for each term meta entry
 		 * from SEOPress, and merge each new value into the "existing" serialized
@@ -159,16 +157,16 @@ final class WP_SEOPress extends Base {
 							'_seopress_robots_archive'       => [ $transformer_class, '_robots_qubit' ], // also sanitizes
 						],
 						'sanitizers' => [
-							'_seopress_titles_title'                => [ $tsf, 's_title_raw' ],
-							'_seopress_titles_desc'                 => [ $tsf, 's_description_raw' ],
-							'_seopress_social_fb_title'             => [ $tsf, 's_title_raw' ],
-							'_seopress_social_fb_desc'              => [ $tsf, 's_description_raw' ],
-							'_seopress_social_fb_img'               => '\\esc_url_raw',
-							'_seopress_social_fb_img_attachment_id' => '\\absint',
-							'_seopress_social_twitter_title'        => [ $tsf, 's_title_raw' ],
-							'_seopress_social_twitter_desc'         => [ $tsf, 's_description_raw' ],
-							'_seopress_robots_canonical'            => '\\esc_url_raw',
-							'_seopress_redirections_value'          => '\\esc_url_raw',
+							'_seopress_titles_title'                => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_titles_desc'                 => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_social_fb_title'             => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_social_fb_desc'              => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_social_fb_img'               => 'sanitize_url',
+							'_seopress_social_fb_img_attachment_id' => 'absint',
+							'_seopress_social_twitter_title'        => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_social_twitter_desc'         => 'TSF_Extension_Manager\Transition\sanitize_metadata_content',
+							'_seopress_robots_canonical'            => 'sanitize_url',
+							'_seopress_redirections_value'          => 'sanitize_url',
 						],
 						'cleanup' => [
 							[ $wpdb->termmeta, '_seopress_titles_title' ],

@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager\Extension\Transport;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	is_headless,
+};
+
 if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
@@ -99,11 +103,7 @@ final class Admin {
 		$this->error_notice_option = 'tsfem_e_transport_error_notice_option';
 
 		// Nothing to do here...
-		if (
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \The_SEO_Framework\is_headless( 'settings' )
-				: \tsf()->is_headless['settings']
-		) return;
+		if ( is_headless( 'settings' ) ) return;
 
 		// Initialize menu links
 		\add_action( 'admin_menu', [ $this, '_init_menu' ] );
@@ -328,11 +328,14 @@ final class Admin {
 	 * @access private
 	 */
 	public function _add_menu_link() {
+
 		$this->transport_menu_page_hook = \add_submenu_page(
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \THE_SEO_FRAMEWORK_SITE_OPTIONS_SLUG : \tsf()->seo_settings_page_slug, // parent_slug
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
+				: \tsf()->seo_settings_page_slug,
 			'Transport &beta;eta', // page_title
 			'Transport (&beta;eta)', // menu_title
-			TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
+			\TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE,
 			$this->transport_page_slug, // menu_slug
 			[ $this, '_init_transport_page' ] // callback
 		);
@@ -388,7 +391,7 @@ final class Admin {
 		 */
 		$this->ui_hook = $this->transport_menu_page_hook;
 
-		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_transport_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ $this, '_register_transport_scripts' ] );
 
 		$this->init_ui();
 	}
@@ -401,49 +404,48 @@ final class Admin {
 	 * @access private
 	 * @internal
 	 *
-	 * @param string $scripts The scripts builder class name.
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
 	public function _register_transport_scripts( $scripts ) {
 
-		if ( \TSF_Extension_Manager\has_run( __METHOD__ ) ) return;
-
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-transport',
-				'type'     => 'js',
-				'deps'     => [ 'tsf-tt', 'tsfem-worker', 'tsfem-ui' ],
-				'autoload' => true,
-				'name'     => 'tsfem-transport',
-				'base'     => \TSFEM_E_TRANSPORT_DIR_URL . 'lib/js/',
-				'ver'      => \TSFEM_E_TRANSPORT_VERSION,
-				'l10n'     => [
-					'name' => 'tsfem_e_transportL10n',
-					'data' => [
-						// This won't ever run when the user can't. But, sanity.
-						'nonce'   => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( $this->ajax_nonce_action ) : '',
-						'i18n'    => [
-							'optionNames' => [
-								'settings' => \esc_html__( 'SEO Settings', 'the-seo-framework-extension-manager' ),
-								'postmeta' => \esc_html__( 'Post Metadata', 'the-seo-framework-extension-manager' ),
-								'termmeta' => \esc_html__( 'Term Metadata', 'the-seo-framework-extension-manager' ),
-							],
-							'logMessages' => [
-								/* translators: %s = plugin name, such as Yoast SEO */
-								'requestImport'     => \esc_html__( 'Request Importer for %s&hellip;', 'the-seo-framework-extension-manager' ),
-								'unknownError'      => \esc_html__( 'Unknown error', 'the-seo-framework-extension-manager' ),
-								'unknownErrorFull'  => \esc_html__( 'An unknown error occured. Please refresh this page and try again.', 'the-seo-framework-extension-manager' ),
-								/* translators: %d = Seconds */
-								'retryCountdown'    => \esc_html__( 'Retrying in %d&hellip;', 'the-seo-framework-extension-manager' ),
-								'retryLimitReached' => \esc_html__( 'Automated retry limit reached.', 'the-seo-framework-extension-manager' ),
-							],
+		$scripts[] = [
+			'id'       => 'tsfem-transport',
+			'type'     => 'js',
+			'deps'     => [ 'tsf-tt', 'tsfem-worker', 'tsfem-ui' ],
+			'autoload' => true,
+			'name'     => 'tsfem-transport',
+			'base'     => \TSFEM_E_TRANSPORT_DIR_URL . 'lib/js/',
+			'ver'      => \TSFEM_E_TRANSPORT_VERSION,
+			'l10n'     => [
+				'name' => 'tsfem_e_transportL10n',
+				'data' => [
+					// This won't ever run when the user can't. But, sanity.
+					'nonce'   => \TSF_Extension_Manager\can_do_extension_settings() ? \wp_create_nonce( $this->ajax_nonce_action ) : '',
+					'i18n'    => [
+						'optionNames' => [
+							'settings' => \esc_html__( 'SEO Settings', 'the-seo-framework-extension-manager' ),
+							'postmeta' => \esc_html__( 'Post Metadata', 'the-seo-framework-extension-manager' ),
+							'termmeta' => \esc_html__( 'Term Metadata', 'the-seo-framework-extension-manager' ),
 						],
-						'scripts' => [
-							'sseWorker' => $this->get_sse_worker_location(),
+						'logMessages' => [
+							/* translators: %s = plugin name, such as Yoast SEO */
+							'requestImport'     => \esc_html__( 'Request Importer for %s&hellip;', 'the-seo-framework-extension-manager' ),
+							'unknownError'      => \esc_html__( 'Unknown error', 'the-seo-framework-extension-manager' ),
+							'unknownErrorFull'  => \esc_html__( 'An unknown error occured. Please refresh this page and try again.', 'the-seo-framework-extension-manager' ),
+							/* translators: %d = Seconds */
+							'retryCountdown'    => \esc_html__( 'Retrying in %d&hellip;', 'the-seo-framework-extension-manager' ),
+							'retryLimitReached' => \esc_html__( 'Automated retry limit reached.', 'the-seo-framework-extension-manager' ),
 						],
+					],
+					'scripts' => [
+						'sseWorker' => $this->get_sse_worker_location(),
 					],
 				],
 			],
-		] );
+		];
+
+		return $scripts;
 	}
 
 	/**

@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	convert_markdown,
+};
+
 /**
  * The SEO Framework - Extension Manager plugin
  * Copyright (C) 2016-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
@@ -198,7 +202,7 @@ trait Extensions_Layout {
 			'<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>',
 			sprintf(
 				'<h4 class=tsfem-extension-title>%s</h4>',
-				\tsf()->convert_markdown(
+				convert_markdown(
 					\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
 					[ 'strong', 'em' ]
 				)
@@ -351,7 +355,7 @@ trait Extensions_Layout {
 	private static function make_extension_list_description( $extension ) {
 
 		$description = static::get_extension_header( $extension['slug'] )['Description'];
-		$description = \tsf()->convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
+		$description = convert_markdown( \esc_html( $description ), [ 'strong', 'em', 'a' ] );
 
 		$footer = static::get_extension_description_footer( $extension );
 
@@ -391,7 +395,7 @@ trait Extensions_Layout {
 		// Make extension version element.
 		$items['version'] = sprintf( '<span class=tsfem-extension-description-version>%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
-			\tsf()->convert_markdown( $data['Version'], [ 'strong', 'em' ] )
+			convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
 
 		// Make extension compatibility element.

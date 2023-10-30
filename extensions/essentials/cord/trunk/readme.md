@@ -140,7 +140,7 @@ N.B. This does not work with page-caching plugins. When a page-caching plugin is
 add_action( 'init', function() {
 
 	// This is an arbitrary example cookie.
-	$consented = ! empty( $_COOKIE['_example_cookie_consent'] );
+	$consented = $_COOKIE['_example_cookie_consent'] ?? false;
 
 	if ( ! $consented ) {
 		// No Cookie consent has been given. Disable tracking.
@@ -151,6 +151,13 @@ add_action( 'init', function() {
 ```
 
 ## Changelog
+
+### 1.1.1
+
+[tsfep-release time="-1"]
+
+* **Removed:** All traces of legacy UA3 support. Only GA4 is supported now.
+	* To migrate, please [follow these instructions](https://support.google.com/analytics/answer/10110290).
 
 ### 1.1.0
 

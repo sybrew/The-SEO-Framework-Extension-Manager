@@ -9,11 +9,14 @@ namespace TSF_Extension_Manager\Extension\Focus;
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 // phpcs:disable, WordPress.WP.GlobalVariablesOverride -- This isn't the global scope.
 
-/**
- * @package TSF_Extension_Manager\Classes
- */
-use \TSF_Extension_Manager\InpostGUI as InpostGUI;
-use \TSF_Extension_Manager\InpostHTML as InpostHTML;
+use function \TSF_Extension_Manager\Transition\{
+	make_info,
+};
+
+use \TSF_Extension_Manager\{
+	InpostGUI,
+	InpostHTML,
+};
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and InpostGUI::verify( $_secret ) or die;
 
@@ -27,7 +30,7 @@ create_analysis_field:;
 	$focus_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['kw']['label']['title'] );
 	$focus_info  = sprintf(
 		'<div>%s</div>',
-		\The_SEO_Framework\Interpreters\HTML::make_info(
+		make_info(
 			$post_meta['kw']['label']['desc'],
 			$post_meta['kw']['label']['link'],
 			false

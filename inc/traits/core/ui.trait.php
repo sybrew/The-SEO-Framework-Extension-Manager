@@ -187,33 +187,17 @@ trait UI {
 	 *
 	 * @since 2.0.2
 	 */
-	final protected function enqueue_admin_scripts() {
-
-		\The_SEO_Framework\Builders\Scripts::prepare();
+	final protected static function enqueue_admin_scripts() {
 
 		// Enqueue default scripts.
-		\add_action( 'tsfem_before_enqueue_scripts', [ $this, '_register_default_scripts' ] );
+		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
-		// Enqueue early styles & scripts.
-		\add_action( 'admin_enqueue_scripts', [ $this, '_load_admin_scripts' ], 0 );
+		// Load all TSF scripts.
+		\add_filter( 'the_seo_framework_register_scripts', '__return_true' );
 
-		// Enqueue late initialized styles & scripts.
-		\add_action( 'admin_footer', [ $this, '_load_admin_scripts' ], 0 );
-	}
-
-	/**
-	 * Registers admin scripts.
-	 *
-	 * @since 2.0.2
-	 * @access private
-	 * @internal
-	 */
-	final public function _load_admin_scripts() {
-		/**
-		 * @since 2.0.2
-		 * @param string $scripts The scripts builder class name.
-		 */
-		\do_action( 'tsfem_before_enqueue_scripts', \The_SEO_Framework\Builders\Scripts::class );
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->load_admin_scripts()
+			: \The_SEO_Framework\Builders\Scripts::prepare();
 	}
 
 	/**
@@ -221,120 +205,115 @@ trait UI {
 	 * Also registers TSF scripts, for TT (tooltip) support.
 	 *
 	 * @since 2.0.2
+	 * @since 2.6.3 Changed hook from `tsfem_before_enqueue_scripts`
 	 * @access private
 	 * @internal
 	 *
-	 * @param string $scripts The scripts builder class name.
+	 * @param array $scripts The default CSS and JS loader settings.
+	 * @return array More CSS and JS loaders.
 	 */
-	final public function _register_default_scripts( $scripts ) {
+	final public static function _register_default_scripts( $scripts ) {
 
-		if ( has_run( __METHOD__ ) ) return;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->load_admin_scripts() : \tsf()->init_admin_scripts();
 
-		\tsf()->init_admin_scripts();
 		$tsfem = \tsfem();
 
-		$scripts::register( [
-			[
-				'id'       => 'tsfem',
-				'type'     => 'js',
-				'deps'     => [ 'jquery', 'wp-util', 'tsf', 'tsf-tt' ],
-				'autoload' => true,
-				'name'     => 'tsfem',
-				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-				'l10n'     => [
-					'name' => 'tsfemL10n',
-					'data' => [
-						'nonce'         => \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-nonce' ) : '',
-						'insecureNonce' => \TSF_Extension_Manager\can_do_extension_settings() || \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-insecure-nonce' ) : '',
-						'i18n'          => [
-							'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
-							'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
-							'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
-							'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
-							'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
-							'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
-						],
+		$scripts[] = [
+			'id'       => 'tsfem',
+			'type'     => 'js',
+			'deps'     => [ 'jquery', 'wp-util', 'tsf', 'tsf-tt' ],
+			'autoload' => true,
+			'name'     => 'tsfem',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+			'l10n'     => [
+				'name' => 'tsfemL10n',
+				'data' => [
+					'nonce'         => \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-nonce' ) : '',
+					'insecureNonce' => \TSF_Extension_Manager\can_do_extension_settings() || \TSF_Extension_Manager\can_do_manager_settings() ? \wp_create_nonce( 'tsfem-ajax-insecure-nonce' ) : '',
+					'i18n'          => [
+						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
+						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),
+						'TimeoutError'    => \esc_html__( 'Timeout: Server took too long to respond.', 'the-seo-framework-extension-manager' ),
+						'BadRequest'      => \esc_html__( "Bad request: The server can't handle the request.", 'the-seo-framework-extension-manager' ),
+						'FatalError'      => \esc_html__( 'A fatal error occurred on the server.', 'the-seo-framework-extension-manager' ),
+						'ParseError'      => \esc_html__( 'A parsing error occurred in your browser.', 'the-seo-framework-extension-manager' ),
 					],
 				],
 			],
-		] );
+		];
 
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-ui',
+		$scripts[] = [
+			'id'       => 'tsfem-ui',
+			'type'     => 'css',
+			'deps'     => [ 'tsf' ],
+			'autoload' => true,
+			'hasrtl'   => false,
+			'name'     => 'tsfem-ui',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+			'inline'   => null,
+		];
+		$scripts[] = [
+			'id'       => 'tsfem-ui',
+			'type'     => 'js',
+			'deps'     => [ 'tsfem', 'tsf' ],
+			'autoload' => true,
+			'name'     => 'tsfem-ui',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+			'l10n'     => [
+				'name' => 'tsfemUIL10n',
+				'data' => [],
+			],
+			'tmpl'     => [
+				'file' => $tsfem->get_template_location( 'fbtopnotice' ),
+			],
+		];
+
+		$scripts[] = [
+			'id'       => 'tsfem-worker',
+			'type'     => 'js',
+			'deps'     => [],
+			'autoload' => false,
+			'name'     => 'tsfem-worker',
+			'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
+			'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
+		];
+
+		if ( $tsfem->is_tsf_extension_manager_page() ) {
+			$scripts[] = [
+				'id'       => 'tsfem-manager',
 				'type'     => 'css',
-				'deps'     => [ 'tsf' ],
+				'deps'     => [ 'tsfem-ui' ],
 				'autoload' => true,
 				'hasrtl'   => false,
-				'name'     => 'tsfem-ui',
+				'name'     => 'tsfem-manager',
 				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
 				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'inline'   => null,
-			],
-			[
-				'id'       => 'tsfem-ui',
+			];
+			$scripts[] = [
+				'id'       => 'tsfem-manager',
 				'type'     => 'js',
-				'deps'     => [ 'tsfem', 'tsf' ],
+				'deps'     => [ 'tsfem-ui' ],
 				'autoload' => true,
-				'name'     => 'tsfem-ui',
+				'name'     => 'tsfem-manager',
 				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
 				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
 				'l10n'     => [
-					'name' => 'tsfemUIL10n',
-					'data' => [],
-				],
-				'tmpl'     => [
-					'file' => $tsfem->get_template_location( 'fbtopnotice' ),
-				],
-			],
-		] );
-
-		$scripts::register( [
-			[
-				'id'       => 'tsfem-worker',
-				'type'     => 'js',
-				'deps'     => [],
-				'autoload' => false,
-				'name'     => 'tsfem-worker',
-				'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-				'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-			],
-		] );
-
-		if ( $tsfem->is_tsf_extension_manager_page() ) {
-			$scripts::register( [
-				[
-					'id'       => 'tsfem-manager',
-					'type'     => 'css',
-					'deps'     => [ 'tsfem-ui' ],
-					'autoload' => true,
-					'hasrtl'   => false,
-					'name'     => 'tsfem-manager',
-					'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/css/',
-					'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-					'inline'   => null,
-				],
-				[
-					'id'       => 'tsfem-manager',
-					'type'     => 'js',
-					'deps'     => [ 'tsfem-ui' ],
-					'autoload' => true,
-					'name'     => 'tsfem-manager',
-					'base'     => \TSF_EXTENSION_MANAGER_DIR_URL . 'lib/js/',
-					'ver'      => \TSF_EXTENSION_MANAGER_VERSION,
-					'l10n'     => [
-						'name' => 'tsfemManagerL10n',
-						'data' => [
-							'i18n' => [
-								'Activate'   => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
-								'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
-							],
+					'name' => 'tsfemManagerL10n',
+					'data' => [
+						'i18n' => [
+							'Activate'   => \esc_html__( 'Activate', 'the-seo-framework-extension-manager' ),
+							'Deactivate' => \esc_html__( 'Deactivate', 'the-seo-framework-extension-manager' ),
 						],
 					],
 				],
-			] );
+			];
 		}
+
+		return $scripts;
 	}
 
 	/**
@@ -343,19 +322,15 @@ trait UI {
 	 * Should only be used by extensions, not the manager!
 	 *
 	 * @since 1.3.0
-	 * @since 2.0.2 : 1. Now uses TSF's Scripts module.
-	 *                2. Now returns void
+	 * @since 2.0.2 1. Now uses TSF's Scripts module.
+	 *              2. Now returns void
 	 * @since 2.4.0 The access level for nonce generation now controlled via another constant.
+	 * @since 2.6.3 Changed from a setter to a getter.
 	 * @access protected
 	 * @internal
-	 *
-	 * @param string $scripts The scripts builder class name.
 	 */
-	final protected function register_form_scripts( $scripts ) {
-
-		if ( has_run( __METHOD__ ) ) return;
-
-		$scripts::register( [
+	final protected function get_form_scripts() {
+		return [
 			[
 				'id'       => 'tsfem-form',
 				'type'     => 'css',
@@ -418,27 +393,7 @@ trait UI {
 				// ],
 				// phpcs:enable
 			],
-		] );
-	}
-
-	/**
-	 * Registers Media CSS and JS scripts.
-	 * Also enqueues WordPress's media scripts.
-	 *
-	 * @since 1.3.0
-	 * @since 2.0.2 : 1. Now uses TSF's Scripts module.
-	 *                2. Now returns void.
-	 * @access protected
-	 * @internal
-	 *
-	 * @param string $scripts The scripts builder class name.
-	 */
-	final protected function register_media_scripts( $scripts ) {
-
-		if ( has_run( __METHOD__ ) ) return;
-
-		\The_SEO_Framework\Bridges\Scripts::prepare_media_scripts();
-		$scripts::register( \The_SEO_Framework\Bridges\Scripts::get_media_scripts() );
+		];
 	}
 
 	/**

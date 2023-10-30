@@ -14,7 +14,7 @@ namespace TSF_Extension_Manager\Extension\Focus;
  */
 use \TSF_Extension_Manager\InpostGUI as InpostGUI;
 
-\defined( 'THE_SEO_FRAMEWORK_PRESENT' ) and \The_SEO_Framework\Builders\Scripts::verify( $_secret ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 ?>
 <script type=text/html id=tmpl-tsfem-e-focus-nofocus>

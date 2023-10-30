@@ -7,6 +7,10 @@ namespace TSF_Extension_Manager\Extension\Articles;
 
 \defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	sitemap_registry,
+};
+
 if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
@@ -54,20 +58,6 @@ final class Admin extends Core {
 		 */
 		$this->view_location_base = \TSFEM_E_ARTICLES_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
-		$this->prepare_inpostgui();
-		$this->prepare_listedit();
-		$this->prepare_settings();
-
-		\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 9, 2 );
-	}
-
-	/**
-	 * Prepares inpost GUI.
-	 *
-	 * @since 1.2.0
-	 */
-	private function prepare_inpostgui() {
-
 		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
@@ -75,14 +65,6 @@ final class Admin extends Core {
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );
 
 		\add_action( 'tsfem_inpostgui_verified_nonce', [ $this, '_save_meta' ], 10, 3 );
-	}
-
-	/**
-	 * Prepares list edit.
-	 *
-	 * @since 2.1.0
-	 */
-	private function prepare_listedit() {
 
 		\TSF_Extension_Manager\ListEdit::prepare();
 
@@ -93,19 +75,13 @@ final class Admin extends Core {
 
 		\add_action( 'tsfem_quick_edit_verified_nonce', [ $this, '_save_meta_quick_edit' ], 10, 2 );
 		\add_action( 'tsfem_bulk_edit_verified_nonce', [ $this, '_save_meta_bulk_edit' ], 10, 2 );
-	}
-
-	/**
-	 * Prepares settings GUI.
-	 *
-	 * @since 2.0.0
-	 */
-	private function prepare_settings() {
 
 		\TSF_Extension_Manager\ExtensionSettings::prepare();
 
 		\add_action( 'tsfem_register_settings_fields', [ $this, '_register_settings' ] );
 		\add_action( 'tsfem_register_settings_sanitization', [ $this, '_register_sanitization' ] );
+
+		\add_filter( 'display_post_states', [ $this, '_add_post_state' ], 9, 2 );
 	}
 
 	/**
@@ -158,21 +134,11 @@ final class Admin extends Core {
 	 */
 	public function _register_settings( $settings ) {
 
-		if (
-			   \has_filter( 'the_seo_framework_articles_supported_post_types' )
-			|| \has_filter( 'the_seo_framework_articles_default_meta' )
-		) {
-			\add_action( 'tsfem_notices', [ $this, '_do_filter_upgrade_notice' ] );
-		}
-
 		$_settings = [
 			'post_types' => $this->generate_post_type_settings(),
 		];
 
 		if ( static::is_organization() ) {
-
-			$tsf = \tsf();
-
 			$_settings += [
 				'news_sitemap' => [
 					'_default' => null,
@@ -188,14 +154,14 @@ final class Admin extends Core {
 								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
 								'https://theseoframework.com/extensions/articles/#faq'
 							) . (
-								$tsf->get_option( 'sitemaps_output' )
+								\tsf()->get_option( 'sitemaps_output' )
 								? ''
 								: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
 							),
 							$this->get_option( 'news_sitemap' ) ? sprintf(
 								'[%s](%s)',
 								\__( 'View the news sitemap.', 'the-seo-framework-extension-manager' ),
-								\The_SEO_Framework\Bridges\Sitemap::get_instance()->get_expected_sitemap_endpoint_url( 'news' )
+								sitemap_registry()->get_expected_sitemap_endpoint_url( 'news' )
 							) : '',
 						],
 						\__( 'The Google News sitemap will list all news articles and annotate them accordingly for Google News.', 'the-seo-framework-extension-manager' ),
@@ -210,7 +176,7 @@ final class Admin extends Core {
 						'url' => '',
 						'id'  => '',
 					],
-					'_ph'       => $tsf->get_option( 'knowledge_logo_url' ) ?: '',
+					'_ph'       => \tsf()->get_option( 'knowledge_logo_url' ) ?: '',
 					'_edit'     => true,
 					'_ret'      => 'image',
 					'_req'      => false,
@@ -335,8 +301,9 @@ final class Admin extends Core {
 			$fields['default_type']['_select'][] = $_select_item;
 		endforeach;
 
-		$tsf        = \tsf();
-		$post_types = $tsf->get_supported_post_types();
+		$post_types = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->post_type()->get_all_supported()
+			: \tsf()->get_supported_post_types();
 
 		$settings = [];
 
@@ -354,7 +321,9 @@ final class Admin extends Core {
 				'_req'     => false,
 				'_type'    => 'multi_placeholder',
 				'_desc'    => [
-					$tsf->get_post_type_label( $post_type, false ),
+					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? \tsf()->post_type()->get_label( $post_type, false )
+						: \tsf()->get_post_type_label( $post_type, false ),
 					$post_type_desc_i18n,
 				],
 				'_fields'  => $fields,
@@ -378,34 +347,6 @@ final class Admin extends Core {
 			],
 			'_dropdown_title_checked' => \__( 'Supported', 'the-seo-framework-extension-manager' ),
 		];
-	}
-
-	/**
-	 * Adds settings page warning for Articles.
-	 *
-	 * @since 2.0.0
-	 * @access private
-	 */
-	public function _do_filter_upgrade_notice() {
-
-		if ( \has_filter( 'the_seo_framework_articles_supported_post_types' ) ) {
-			\tsf()->do_dismissible_notice(
-				'Filter <code>the_seo_framework_articles_supported_post_types</code> is deprecated. Please remove it and use the settings below instead.',
-				'error',
-				true,
-				false,
-				true
-			);
-		}
-		if ( \has_filter( 'the_seo_framework_articles_default_meta' ) ) {
-			\tsf()->do_dismissible_notice(
-				'Filter <code>the_seo_framework_articles_default_meta</code> is deprecated. Please remove it and use the settings below instead.',
-				'error',
-				true,
-				false,
-				true
-			);
-		}
 	}
 
 	/**
@@ -440,12 +381,14 @@ final class Admin extends Core {
 		if ( ! \is_array( $value ) )
 			$value = [];
 
-		$post_types = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->post_types()->get_supported_post_types() : \tsf()->get_supported_post_types();
+		$post_types = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->post_type()->get_all_supported()
+			: \tsf()->get_supported_post_types();
 
 		// TODO do we want to strip unknown entries from payload?
 		// Only sanitize known post types.
 		foreach ( $post_types as $type ) {
-			if ( ! isset( $value[ $type ] ) ) continue;
+			if ( empty( $value[ $type ] ) ) continue;
 
 			// This is definitely not an Article type.
 			if ( 'attachment' === $type ) continue;
@@ -484,7 +427,7 @@ final class Admin extends Core {
 	 */
 	public static function _sanitize_option_logo( $values ) {
 
-		$url = isset( $values['url'] ) ? \esc_url_raw( $values['url'] ) : '';
+		$url = isset( $values['url'] ) ? \sanitize_url( $values['url'] ) : '';
 		$id  = isset( $values['id'] ) ? \absint( $values['id'] ) : 0;
 
 		if ( ! $url || ! $id ) {
@@ -524,14 +467,20 @@ final class Admin extends Core {
 
 		static $supported;
 
-		if ( isset( $supported ) ) return $supported;
+		if ( empty( $post_type ) )
+			$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->query()->get_admin_post_type()
+				: \tsf()->get_admin_post_type();
 
-		$tsf = \tsf();
+		if ( isset( $supported[ $post_type ] ) ) return $supported[ $post_type ];
 
-		$post_type = $post_type ?: $tsf->get_admin_post_type();
-		$settings  = $this->get_option( 'post_types' );
-
-		return $supported = ! empty( $settings[ $post_type ]['enabled'] ) && $tsf->is_post_type_supported( $post_type );
+		return $supported[ $post_type ] =
+			! empty( $this->get_option( 'post_types' )[ $post_type ]['enabled'] )
+			&& (
+				\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->post_type()->is_supported( $post_type )
+					: \tsf()->is_post_type_supported( $post_type )
+			);
 	}
 
 	/**
@@ -550,8 +499,10 @@ final class Admin extends Core {
 
 		\TSF_Extension_Manager\InpostGUI::activate_tab( 'structure' );
 
-		$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_admin_post_type() : \tsf()->get_admin_post_type();
 		$settings  = $this->get_option( 'post_types' );
+		$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->query()->get_admin_post_type()
+			: \tsf()->get_admin_post_type();
 
 		$_default = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
 
@@ -681,7 +632,9 @@ final class Admin extends Core {
 
 		static $default;
 		if ( ! $default ) {
-			$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->query()->get_admin_post_type() : \tsf()->get_admin_post_type();
+			$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->query()->get_admin_post_type()
+				: \tsf()->get_admin_post_type();
 			$settings  = $this->get_option( 'post_types' );
 			$default   = static::filter_article_type( $settings[ $post_type ]['default_type'] ?? 'Article' );
 		}

@@ -268,7 +268,10 @@ class API extends Core {
 
 		$api_url = \add_query_arg( 'wc-api', 'tsfem-software-api', $this->get_activation_url() );
 
-		return \esc_url_raw( $api_url . '&' . http_build_query( $args, '', '&', \PHP_QUERY_RFC1738 ), [ 'https', 'http' ] );
+		return \sanitize_url(
+			$api_url . '&' . http_build_query( $args, '', '&', \PHP_QUERY_RFC1738 ),
+			[ 'https', 'http' ]
+		);
 	}
 
 	/**

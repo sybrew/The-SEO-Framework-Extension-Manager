@@ -55,43 +55,19 @@ class Core {
 		\TSF_Extension_Manager\Construct_Core_Interface;
 
 	/**
-	 * @since 2.1.1
-	 * @var \The_SEO_Framework\Load $tsf
-	 */
-	protected static $tsf;
-
-	/**
 	 * Child constructor.
 	 *
 	 * @since 1.2.0
 	 */
 	private function construct() {
-
-		if ( ! isset( static::$tsf ) )
-			static::$tsf = \tsf();
-
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
 		 */
 		$this->pm_index = 'articles';
 		/**
-		 * @since 1.2.0
-		 * @since 2.0.0 Deprecated
-		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings page.
 		 * @see trait TSF_Extension_Manager\Extension_Post_Meta
-		 * @deprecated
-		 * @param array $pm_defaults The default post meta settings.
 		 */
-		$this->pm_defaults = (array) \apply_filters( 'the_seo_framework_articles_default_meta', [] );
-
-		/**
-		 * @since 1.4.0
-		 * @since 2.0.0 Deprecated
-		 * @since 2.0.2 The default value is emptied, as it conflicted with the settings page.
-		 * @deprecated
-		 * @param array $post_types The supported post types.
-		 */
-		$filtered_post_types = (array) \apply_filters( 'the_seo_framework_articles_supported_post_types', [] );
+		$this->pm_defaults = [];
 
 		/**
 		 * @see trait TSF_Extension_Manager\Extension_Options
@@ -110,16 +86,6 @@ class Core {
 				'id'  => 0,
 			],
 		];
-
-		foreach ( $filtered_post_types as $post_type ) {
-			$this->o_defaults['post_types'][ $post_type ] = [
-				'enabled'      => 1,
-				'default_type' => static::filter_article_type( $this->pm_defaults['type'] ?? 'Article' ),
-			];
-		}
-
-		// Deprecated. Unset.
-		unset( $this->pm_defaults['type'] );
 	}
 
 	/**
@@ -131,7 +97,7 @@ class Core {
 	 */
 	protected static function is_organization() {
 		static $is;
-		return $is ?? ( $is = 'organization' === static::$tsf->get_option( 'knowledge_type' ) );
+		return $is ?? ( $is = 'organization' === \tsf()->get_option( 'knowledge_type' ) );
 	}
 
 	/**
