@@ -158,7 +158,7 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( $response->data->error ?? '' ) :
+				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100102 );
 						break;
@@ -180,7 +180,7 @@ final class Ajax {
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100103 );
 						break;
-				endswitch;
+				}
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100104 );
 			} else {
@@ -244,7 +244,7 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( $response->data->error ?? '' ) :
+				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100302 );
 						break;
@@ -265,8 +265,7 @@ final class Ajax {
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100304 );
-						break;
-				endswitch;
+				}
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100305 );
 			} else {
@@ -334,7 +333,7 @@ final class Ajax {
 			$response = json_decode( $response );
 
 			if ( empty( $response->success ) ) {
-				switch ( $response->data->error ?? '' ) :
+				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
 						$send['results'] = $this->get_ajax_notice( false, 1100202 );
 						break;
@@ -355,8 +354,7 @@ final class Ajax {
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100203 );
-						break;
-				endswitch;
+				}
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100204 );
 			} else {

@@ -152,7 +152,7 @@ final class Core {
 		// TODO Allow user to (auto/optionally) send data to us, for us to showcase how many comments are blocked?
 		// Attach unique ID to each user sending it? Must be unique from TSFEM activation ID, though.
 		foreach ( $shuffle as $honeypot ) {
-			switch ( $honeypot ) :
+			switch ( $honeypot ) {
 				case 0:
 					$this->output_css_honeypot();
 					break;
@@ -170,7 +170,7 @@ final class Core {
 					break;
 				default:
 					break 2;
-			endswitch;
+			}
 		}
 	}
 
@@ -204,7 +204,7 @@ final class Core {
 
 		$i = 0;
 		do {
-			switch ( ++$i ) :
+			switch ( ++$i ) {
 				case 1:
 					$this->check_css_field( $approved );
 					break;
@@ -227,7 +227,7 @@ final class Core {
 
 				default:
 					break 2;
-			endswitch;
+			}
 		} while ( 'spam' !== $approved );
 
 		return $approved;
@@ -684,7 +684,7 @@ JS;
 	 */
 	private function get_text( $what = '' ) {
 
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'js_placeholder':
 				/**
 				 * @since 1.0.0
@@ -717,13 +717,9 @@ JS;
 					\__( 'Comment for robots', 'the-seo-framework-extension-manager' )
 				);
 				break;
+		}
 
-			default:
-				$text = '';
-				break;
-		endswitch;
-
-		return $text;
+		return $text ?? '';
 	}
 
 	/**

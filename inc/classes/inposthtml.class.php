@@ -130,7 +130,7 @@ final class InpostHTML {
 
 		$id = $id ? "id=$id" : '';
 
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'block':
 				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s</div>', $id, $content );
 				break;
@@ -191,10 +191,7 @@ final class InpostHTML {
 			// 	$content = sprintf( '<div class=tsf-checkbox-wrapper>%s</div>', $content );
 			// 	break;
 			// phpcs:enable
-
-			default:
-				break;
-		endswitch;
+		}
 
 		return $content;
 	}

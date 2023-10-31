@@ -38,7 +38,7 @@ output_scores:;
 		\esc_attr( $scoring->key ),
 		$has_keyword ? '' : 'style=display:none'
 	);
-	foreach ( $scoring->get_template() as $type => $args ) :
+	foreach ( $scoring->get_template() as $type => $args ) {
 		// All output below should already be escaped.
 		vprintf(
 			'<span id=%s class="%s" %s>%s%s</span>',
@@ -69,5 +69,5 @@ output_scores:;
 			\esc_attr( $scoring->get_id( $type ) ),
 			\esc_attr( $scoring->get_value( $type ) )
 		);
-	endforeach;
+	}
 	echo '</div>'; // END tsfem-e-focus-scores-wrap;

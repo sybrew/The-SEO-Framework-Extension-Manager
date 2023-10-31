@@ -295,7 +295,7 @@ final class AJAX extends Secure_Abstract {
 						$data['status'] = $data['status'] ?? null;
 
 						if ( 'OK' !== $data['status'] ) {
-							switch ( $data['status'] ) :
+							switch ( $data['status'] ) {
 								// @link https://developers.google.com/maps/documentation/geocoding/overview#reverse-response
 								case 'ZERO_RESULTS':
 									$send['results'] = static::$instance->get_ajax_notice( false, 17004 );
@@ -344,7 +344,7 @@ final class AJAX extends Secure_Abstract {
 									// Undefined error.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
 									break;
-							endswitch;
+							}
 						} else {
 							$send['results'] = static::$instance->get_ajax_notice( false, 17012 );
 							$send['geodata'] = $data;
@@ -438,7 +438,7 @@ final class AJAX extends Secure_Abstract {
 		if ( ! $cropped || \is_wp_error( $cropped ) )
 			\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
 
-		switch ( $context ) :
+		switch ( $context ) {
 			case 'tsfem-image':
 				/**
 				 * Fires before a cropped image is saved.
@@ -518,8 +518,7 @@ final class AJAX extends Secure_Abstract {
 
 			default:
 				\wp_send_json_error( [ 'message' => \esc_js( \__( 'Image could not be processed.', 'the-seo-framework-extension-manager' ) ) ] );
-				break;
-		endswitch;
+		}
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
 

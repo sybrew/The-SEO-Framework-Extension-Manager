@@ -217,7 +217,7 @@ final class LoadAdmin extends AdminPages {
 		if ( ! $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
-		switch ( $options['nonce-action'] ) :
+		switch ( $options['nonce-action'] ) {
 			case $this->request_name['activate-key']:
 				if ( $this->is_auto_activated() ) break;
 				$args = [
@@ -297,7 +297,7 @@ final class LoadAdmin extends AdminPages {
 			default:
 				$this->set_error_notice( [ 708 => '' ] );
 				break;
-		endswitch;
+		}
 
 		// Adds action to the URI. It's only used to visualize what has happened.
 		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
@@ -543,8 +543,8 @@ final class LoadAdmin extends AdminPages {
 		unset( $args['content'] );
 		$parts = [];
 
-		foreach ( $args as $type => $value ) :
-			switch ( $type ) :
+		foreach ( $args as $type => $value ) {
+			switch ( $type ) {
 				case 'class':
 				case 'title':
 				case 'rel':
@@ -574,12 +574,8 @@ final class LoadAdmin extends AdminPages {
 					foreach ( $value as $k => $v ) {
 						$parts[] = sprintf( 'data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
 					}
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return sprintf( '<a %s>%s</a>', implode( ' ', $parts ), \esc_html( $content ) );
 	}
@@ -807,8 +803,8 @@ final class LoadAdmin extends AdminPages {
 		$checksum = Extensions::get( 'extensions_checksum' );
 		$result   = $this->validate_extensions_checksum( $checksum );
 
-		if ( true !== $result ) :
-			switch ( $result ) :
+		if ( true !== $result ) {
+			switch ( $result ) {
 				case -1:
 					// No checksum found.
 					$ajax or $this->set_error_notice( [ 10001 => '' ] );
@@ -823,8 +819,8 @@ final class LoadAdmin extends AdminPages {
 					// Method mismatch error. Unknown error.
 					$ajax or $this->set_error_notice( [ 10003 => '' ] );
 					return $ajax ? $this->get_ajax_notice( false, 10003 ) : false;
-			endswitch;
-		endif;
+			}
+		}
 
 		$status = Extensions::validate_extension_activation();
 
@@ -832,7 +828,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) { // Extension and license == Premium/Essentials OK.
-				switch ( $this->validate_remote_subscription_license() ) :
+				switch ( $this->validate_remote_subscription_license() ) {
 					case 6: // Enterprise.
 					case 5: // Premium.
 					case 4: // Essentials.
@@ -848,7 +844,7 @@ final class LoadAdmin extends AdminPages {
 					default: // ???
 						$ajax or $this->set_error_notice( [ 10004 => '' ] );
 						return $ajax ? $this->get_ajax_notice( false, 10004 ) : false;
-				endswitch;
+				}
 			}
 
 			$test = $this->test_extension( $slug, $ajax );
@@ -868,7 +864,7 @@ final class LoadAdmin extends AdminPages {
 			}
 		endif;
 
-		switch ( $status['case'] ) :
+		switch ( $status['case'] ) {
 			case 1:
 				// No slug set.
 				$code = 10007;
@@ -898,7 +894,7 @@ final class LoadAdmin extends AdminPages {
 				// Unknown case.
 				$code = 10011;
 				break;
-		endswitch;
+		}
 
 		$ajax or $this->register_extension_state_change_notice( $code, $slug );
 

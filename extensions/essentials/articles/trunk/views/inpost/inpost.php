@@ -38,7 +38,7 @@ create_type_field:;
 	$type_option_value = $post_meta['type']['option']['value'];
 
 	$type_select_fields = '';
-	foreach ( $post_meta['type']['option']['select_values'] as $_value => $_name ) :
+	foreach ( $post_meta['type']['option']['select_values'] as $_value => $_name ) {
 		$_selected = $_value === $type_option_value ? ' selected=selected' : '';
 
 		$type_select_fields .= sprintf(
@@ -47,7 +47,7 @@ create_type_field:;
 			$_selected,
 			\esc_html( $_name )
 		);
-	endforeach;
+	}
 
 	$type_field = vsprintf(
 		'<select name=%s id=%s>%s</select>',

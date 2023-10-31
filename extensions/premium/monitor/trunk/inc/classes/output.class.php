@@ -119,7 +119,7 @@ final class Output {
 		$content = $this->parse_content( $key, $value, $type );
 
 		if ( $content ) {
-			switch ( $type ) :
+			switch ( $type ) {
 				case 'issues':
 					$name   = $this->get_entry_title( $key, $type );
 					$prefix = $this->get_entry_state_icon( $key, $type );
@@ -130,7 +130,7 @@ final class Output {
 
 				default:
 					return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
-			endswitch;
+			}
 		}
 
 		return '';
@@ -290,7 +290,7 @@ final class Output {
 	 */
 	protected function parse_defined_icon_state( $state = '' ) {
 
-		switch ( $state ) :
+		switch ( $state ) {
 			case 'good':
 			case 'okay':
 			case 'warning':
@@ -300,8 +300,7 @@ final class Output {
 
 			default:
 				$state = 'unknown';
-				break;
-		endswitch;
+		}
 
 		return $state;
 	}
@@ -317,9 +316,9 @@ final class Output {
 	 */
 	protected function parse_title( $key, $type ) {
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'issues':
-				switch ( $key ) :
+				switch ( $key ) {
 					case 'title':
 						$title = \__( 'Titles', 'the-seo-framework-extension-manager' );
 						break 2;
@@ -354,14 +353,14 @@ final class Output {
 
 					default:
 						// Falls back to underlying default.
-						break 1;
-				endswitch;
+						break;
+				}
 				// No break to fall back to default.
 
 			default:
 				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );
-				break 1;
-		endswitch;
+				break;
+		}
 
 		return $title ?? '';
 	}
@@ -378,14 +377,10 @@ final class Output {
 	 */
 	protected function parse_content( $key, $value, $type ) {
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'issues':
 				$content = $this->parse_issues_content( $key, $value );
-				break;
-
-			default:
-				break;
-		endswitch;
+		}
 
 		return $content ?? '';
 	}

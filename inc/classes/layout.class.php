@@ -64,10 +64,9 @@ final class Layout extends Secure_Abstract {
 		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
-
 			self::set( '_wpaction' );
 
-			switch ( $type ) :
+			switch ( $type ) {
 				case 'form':
 				case 'link':
 				case 'list':
@@ -78,8 +77,7 @@ final class Layout extends Secure_Abstract {
 				default:
 					self::reset();
 					self::invoke_invalid_type( __METHOD__ );
-					break;
-			endswitch;
+			}
 		}
 	}
 
@@ -100,7 +98,7 @@ final class Layout extends Secure_Abstract {
 			return false;
 		}
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'disconnect-button':
 				return static::get_disconnect_button();
 
@@ -115,8 +113,7 @@ final class Layout extends Secure_Abstract {
 
 			default:
 				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
-				break;
-		endswitch;
+		}
 
 		return false;
 	}
@@ -273,7 +270,7 @@ final class Layout extends Secure_Abstract {
 			$valid_options ? 'tsfem-success' : 'tsfem-error',
 		];
 
-		switch ( $level ) :
+		switch ( $level ) {
 			case 'Enterprise':
 				$_level = \__( 'Enterprise', 'the-seo-framework-extension-manager' );
 				break;
@@ -294,8 +291,7 @@ final class Layout extends Secure_Abstract {
 				$_level   = $level;
 				$_class   = array_diff( $_class, [ 'tsfem-error', 'tsfem-success' ] );
 				$_class[] = 'tsfem-error';
-				break;
-		endswitch;
+		}
 
 		if ( isset( $data['timestamp'], $data['divider'] ) ) {
 			/**
@@ -357,7 +353,7 @@ final class Layout extends Secure_Abstract {
 			false
 		);
 
-		switch ( $tsfem->get_api_endpoint_type() ) :
+		switch ( $tsfem->get_api_endpoint_type() ) {
 			case 'eu':
 				$_ep = \__( 'TSF Europe', 'the-seo-framework-extension-manager' );
 				break;
@@ -369,8 +365,7 @@ final class Layout extends Secure_Abstract {
 			default:
 			case 'global':
 				$_ep = \__( 'TSF global', 'the-seo-framework-extension-manager' );
-				break;
-		endswitch;
+		}
 
 		$output .= static::wrap_row_content(
 			\esc_html__( 'API endpoint:', 'the-seo-framework-extension-manager' ),

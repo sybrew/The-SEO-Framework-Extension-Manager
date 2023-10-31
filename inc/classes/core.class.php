@@ -305,7 +305,7 @@ class Core {
 	 */
 	final public function set_status_header( $code = 200, $type = '' ) {
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'json':
 				header( 'Content-Type: application/json; charset=' . \get_option( 'blog_charset' ) );
 				break;
@@ -313,8 +313,7 @@ class Core {
 			case 'html':
 			default:
 				header( 'Content-Type: text/html; charset=' . \get_option( 'blog_charset' ) );
-				break;
-		endswitch;
+		}
 
 		if ( $code )
 			\status_header( $code );
@@ -569,10 +568,9 @@ class Core {
 
 		$properties = array_merge( $class_vars, $other_vars );
 
-		foreach ( $properties as $property => $value ) :
+		foreach ( $properties as $property => $value )
 			if ( isset( $this->$property ) )
 				$this->$property = \is_array( $this->$property ) ? [] : null;
-		endforeach;
 
 		array_walk( $GLOBALS['wp_filter'], [ $this, 'stop_class_filters' ] );
 		$this->__destruct();
@@ -955,7 +953,7 @@ class Core {
 					$_scheme = $scheme;
 				}
 
-				foreach ( [ 'key', 'salt' ] as $type ) :
+				foreach ( [ 'key', 'salt' ] as $type ) {
 					$const = strtoupper( "{$_scheme}_{$type}" );
 					if ( \defined( $const ) && \constant( $const ) ) {
 						$values[ $type ] = \constant( $const );
@@ -969,11 +967,10 @@ class Core {
 							$values[ $type ] = \wp_salt( $_scheme );
 						}
 					}
-				endforeach;
+				}
 				break;
 			default:
 				\wp_die( 'Invalid scheme supplied for <code>' . __METHOD__ . '</code>.' );
-				break;
 		}
 
 		return $cached_salts[ $scheme ] = "{$values['key']}{$values['salt']}";

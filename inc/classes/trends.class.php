@@ -55,16 +55,14 @@ final class Trends {
 
 		\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'feed':
 				return static::prototype_trends();
-
 			case 'ajax_feed':
 				return static::prototype_trends( true );
+		}
 
-			default:
-				return '';
-		endswitch;
+		return '';
 	}
 
 	/**
@@ -127,23 +125,19 @@ final class Trends {
 
 		$max = 6;
 		$i   = 0;
-		foreach ( $xml->channel->item as $obj ) :
+		foreach ( $xml->channel->item as $obj ) {
 			// phpcs:disable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- XML, not my fault.
-
-			if ( $i >= $max )
-				break;
+			if ( $i >= $max ) break;
 
 			// A little too many defence clauses -- I tried to combine them as best I could.
 			if ( ! isset( $obj->title, $obj->link, $obj->description, $obj->pubDate ) )
 				continue;
 
 			$link = \esc_url( strtok( $obj->link->__toString(), '#' ) );
-			if ( ! $link )
-				continue;
+			if ( ! $link ) continue;
 
 			$title = $obj->title->__toString();
-			if ( ! $title )
-				continue;
+			if ( ! $title ) continue;
 
 			// Let's not advertise.
 			if (
@@ -154,12 +148,10 @@ final class Trends {
 			) continue;
 
 			$date = strtotime( $obj->pubDate->__toString() );
-			if ( ! $date )
-				continue;
+			if ( ! $date ) continue;
 
 			$description = clamp_sentence( $obj->description->__toString(), 0, 234 ); // Magic number, because why not.
-			if ( ! $description )
-				continue;
+			if ( ! $description ) continue;
 
 			// No need for translations, it's English only.
 			$_output = sprintf(
@@ -181,7 +173,7 @@ final class Trends {
 			unset( $_output );
 			$i++;
 			// phpcs:enable, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		endforeach;
+		}
 
 		\set_transient( $transient_name, $output, \DAY_IN_SECONDS * 2 );
 

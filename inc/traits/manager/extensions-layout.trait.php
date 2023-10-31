@@ -269,7 +269,7 @@ trait Extensions_Layout {
 	private static function get_extension_button_form( $slug = '', $type = '', $disabled = false ) {
 
 		// This pattern can't be unseen. Let's just keep it this way until further notice.
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'activate':
 				$nonce_key = 'activate-ext';
 				$text      = static::get_i18n( 'activate' );
@@ -282,7 +282,7 @@ trait Extensions_Layout {
 				break;
 			default:
 				return '';
-		endswitch;
+		}
 
 		$disabled = $disabled || \array_key_exists( $slug, (array) \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
@@ -465,7 +465,7 @@ trait Extensions_Layout {
 			);
 			$compat_name = static::get_i18n( 'incompatible' );
 		} elseif ( $incompatibility & ( \TSFEM_EXTENSION_TSF_UNTESTED | \TSFEM_EXTENSION_WP_UNTESTED ) ) {
-			switch ( $incompatibility ) :
+			switch ( $incompatibility ) {
 				case \TSFEM_EXTENSION_TSF_UNTESTED:
 					$compat_notice = \__( 'The SEO Framework version is higher than tested against.', 'the-seo-framework-extension-manager' );
 					break;
@@ -476,8 +476,7 @@ trait Extensions_Layout {
 
 				default:
 					$compat_notice = \__( 'WordPress and The SEO Framework versions are higher than tested against.', 'the-seo-framework-extension-manager' );
-					break;
-			endswitch;
+			}
 
 			$compat_class   = 'tsfem-unknown';
 			$compat_name    = static::get_i18n( 'compatible' );

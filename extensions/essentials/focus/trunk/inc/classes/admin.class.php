@@ -347,17 +347,15 @@ final class Admin extends Core {
 		$this->set_extension_post_meta_id( $post->ID );
 
 		$store = [];
-		foreach ( $data[ $this->pm_index ] as $key => $value ) :
+		foreach ( $data[ $this->pm_index ] as $key => $value ) {
 			switch ( $key ) {
 				case 'kw':
 					$store[ $key ] = $this->sanitize_keyword_data( (array) $value );
-					break;
-
-				default:
-					break;
 			}
-			if ( \is_null( $store[ $key ] ) ) unset( $store[ $key ] );
-		endforeach;
+
+			if ( \is_null( $store[ $key ] ) )
+				unset( $store[ $key ] );
+		}
 
 		if ( $store ) {
 			foreach ( $store as $key => $value )
@@ -415,7 +413,8 @@ final class Admin extends Core {
 	 * @return string|null The sanitized value.
 	 */
 	private function sanitize_keyword_data_by_type( $type, $value ) {
-		switch ( $type ) :
+
+		switch ( $type ) {
 			case 'keyword':
 				$value = \sanitize_text_field( $value );
 				break;
@@ -457,8 +456,7 @@ final class Admin extends Core {
 
 			default:
 				unset( $value );
-				break;
-		endswitch;
+		}
 
 		return $value ?? null;
 	}

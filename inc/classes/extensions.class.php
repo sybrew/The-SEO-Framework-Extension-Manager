@@ -67,18 +67,14 @@ final class Extensions extends Secure_Abstract {
 	 */
 	private static function set_up_variables() {
 
-		switch ( self::get_property( '_type' ) ) :
+		switch ( self::get_property( '_type' ) ) {
 			case 'overview':
 			case 'activation':
 			case 'list':
 			case 'load':
 			case 'ajax_layout':
 				static::$extensions = static::get_extensions();
-				break;
-
-			default:
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -101,7 +97,7 @@ final class Extensions extends Secure_Abstract {
 
 		self::set( '_wpaction' );
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'overview':
 			case 'activation':
 			case 'list':
@@ -119,8 +115,7 @@ final class Extensions extends Secure_Abstract {
 			default:
 				self::reset();
 				self::invoke_invalid_type( __METHOD__ );
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -141,7 +136,7 @@ final class Extensions extends Secure_Abstract {
 			return false;
 		}
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'layout_content':
 				return static::get_layout_content();
 
@@ -162,8 +157,7 @@ final class Extensions extends Secure_Abstract {
 
 			default:
 				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct get type.' );
-				break;
-		endswitch;
+		}
 
 		return false;
 	}
@@ -179,15 +173,11 @@ final class Extensions extends Secure_Abstract {
 
 		if ( ! self::verify_instance() ) return;
 
-		switch ( self::get_property( '_type' ) ) :
+		switch ( self::get_property( '_type' ) ) {
 			case 'activation':
 			case 'ajax':
 				static::$current_slug = isset( static::$extensions[ $slug ] ) ? $slug : '';
-				break;
-
-			default:
-				break;
-		endswitch;
+		}
 	}
 
 	/**

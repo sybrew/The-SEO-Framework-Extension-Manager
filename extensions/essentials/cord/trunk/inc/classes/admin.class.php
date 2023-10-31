@@ -225,8 +225,8 @@ final class Admin extends Core {
 			'google_analytics',
 			'facebook_pixel',
 		];
-		foreach ( $valid_indexes as $index ) :
-			switch ( $index ) :
+		foreach ( $valid_indexes as $index ) {
+			switch ( $index ) {
 				case 'google_analytics':
 					$key = 'tracking_id';
 
@@ -245,13 +245,8 @@ final class Admin extends Core {
 
 					if ( ! preg_match( '/^[0-9]+$/', $value[ $index ][ $key ] ) )
 						$value[ $index ][ $key ] = '';
-
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return $value;
 	}

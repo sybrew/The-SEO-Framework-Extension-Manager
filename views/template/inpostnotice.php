@@ -36,7 +36,7 @@ $tsfem = tsfem();
 </script>
 <?php
 
-foreach ( [ 'updated', 'warning', 'error' ] as $type ) :
+foreach ( [ 'updated', 'warning', 'error' ] as $type ) {
 	?>
 <script type=text/html id=tmpl-tsfem-inpost-notice-<?= esc_attr( $type ) ?>>
 	<?php
@@ -52,4 +52,4 @@ foreach ( [ 'updated', 'warning', 'error' ] as $type ) :
 	?>
 </script>
 	<?php
-endforeach;
+}

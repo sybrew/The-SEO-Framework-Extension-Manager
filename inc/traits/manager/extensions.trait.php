@@ -931,21 +931,19 @@ trait Extensions_Actions {
 		$success     = [];
 
 		// Get follow-up verification instance.
-		foreach ( \tsfem()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) :
+		foreach ( \tsfem()->_yield_verification_instance( 2, $_instance, $bits ) as $verification ) {
 
 			$bits      = $verification['bits'];
 			$_instance = $verification['instance'];
 
-			switch ( $yield_count ) :
+			switch ( $yield_count ) {
 				case 0:
 					$success[] = static::include_extension( $file, $_instance, $bits );
 					// Continue to default for counting.
-
 				default:
 					$yield_count++;
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		return ! \in_array( false, $success, true );
 	}
@@ -1026,7 +1024,7 @@ trait Extensions_Actions {
 		$error      = error_get_last();
 		$error_type = '';
 
-		switch ( $error['type'] ) :
+		switch ( $error['type'] ) {
 			case \E_ERROR:
 			case \E_CORE_ERROR:
 			case \E_COMPILE_ERROR:
@@ -1040,8 +1038,7 @@ trait Extensions_Actions {
 
 			default:
 				$error_type = "Type {$error['type']} error.";
-				break;
-		endswitch;
+		}
 
 		$error['message'] = static::clean_error_message( $error['message'], $error );
 
@@ -1180,7 +1177,7 @@ trait Extensions_Actions {
 	private static function validate_file( $file, $type = 'php' ) {
 
 		if ( ( ".$type" ) === substr( $file, - ( \strlen( $type ) + 1 ) ) ) {
-			switch ( \validate_file( $file ) ) :
+			switch ( \validate_file( $file ) ) {
 				case 2:
 					if ( 'WIN' !== strtoupper( substr( \PHP_OS, 0, 3 ) ) ) {
 						break;
@@ -1189,9 +1186,7 @@ trait Extensions_Actions {
 				case 0:
 					// phpcs:ignore, TSF.Performance.Functions.PHP -- necessary call.
 					return file_exists( $file );
-				default:
-					break;
-			endswitch;
+			}
 		}
 
 		return false;

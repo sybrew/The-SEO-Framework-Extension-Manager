@@ -55,7 +55,7 @@ create_analysis_field:;
 			InpostHTML::wrap_flex( 'content-open', '' );
 				InpostHTML::notification_area( 'tsfem-e-focus-analysis-notification-area' );
 				$i = 0;
-				foreach ( $keyword_meta as $id => $values ) :
+				foreach ( $keyword_meta as $id => $values ) {
 					\call_user_func(
 						$template_cb,
 						[
@@ -126,7 +126,7 @@ create_analysis_field:;
 							],
 						]
 					);
-				endforeach;
+				}
 			InpostHTML::wrap_flex( 'content-close', '' );
 		InpostHTML::wrap_flex( 'block-close', '' );
 	// phpcs:enable, Generic.WhiteSpace.ScopeIndent.IncorrectExact

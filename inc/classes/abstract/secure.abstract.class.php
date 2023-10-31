@@ -139,10 +139,9 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		$class_vars = get_class_vars( __CLASS__ );
 
-		foreach ( $class_vars as $property => $value ) :
+		foreach ( $class_vars as $property => $value )
 			if ( isset( self::$$property ) )
 				self::$$property = \is_array( self::$$property ) ? [] : null;
-		endforeach;
 	}
 
 	/**
@@ -155,7 +154,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	 */
 	final protected static function set( $type, $value = '' ) {
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case '_wpaction':
 				self::$_wpaction = \current_action();
 				break;
@@ -172,8 +171,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 			default:
 				static::invoke_invalid_type( __METHOD__ );
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -188,7 +186,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 		if ( ! self::verify_instance() ) return;
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'nonce_name':
 			case 'request_name':
 			case 'nonce_action':
@@ -197,8 +195,7 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 
 			default:
 				static::invoke_invalid_type( __METHOD__ );
-				break;
-		endswitch;
+		}
 	}
 
 	/**

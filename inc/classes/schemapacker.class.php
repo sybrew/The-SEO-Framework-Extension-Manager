@@ -513,7 +513,7 @@ final class SchemaPacker {
 			return $value;
 		}
 
-		switch ( $how ) :
+		switch ( $how ) {
 			case 'sanitize_key':
 				return \sanitize_key( $value );
 
@@ -527,7 +527,7 @@ final class SchemaPacker {
 			default:
 			case 'sanitize_text_field':
 				return \sanitize_text_field( $value );
-		endswitch;
+		}
 	}
 
 	/**
@@ -715,7 +715,7 @@ final class SchemaPacker {
 	 */
 	private function convert( $value, $to ) {
 
-		switch ( $to ) :
+		switch ( $to ) {
 			case 'string':
 				return (string) $value;
 
@@ -736,6 +736,6 @@ final class SchemaPacker {
 
 			default:
 				return $value;
-		endswitch;
+		}
 	}
 }

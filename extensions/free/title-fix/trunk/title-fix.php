@@ -143,7 +143,7 @@ final class Core {
 
 		static $_sequence = 0;
 
-		switch ( $_sequence ) :
+		switch ( $_sequence ) {
 			case 0:
 				/**
 				 * First run.
@@ -174,11 +174,7 @@ final class Core {
 				 */
 				\add_action( 'wp_head', [ $this, 'maybe_start_ob' ], 9999 );
 				\add_action( 'get_footer', [ $this, 'maybe_rewrite_title' ], -1 );
-				break;
-
-			default:
-				break;
-		endswitch;
+		}
 
 		$_sequence++;
 	}

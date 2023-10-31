@@ -158,7 +158,7 @@ final class Front extends Core {
 	 */
 	private function invalidate( $what = 'both' ) {
 
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'both':
 				$this->is_json_valid['amp'] = $this->is_json_valid['nonamp'] = false;
 				break;
@@ -169,8 +169,7 @@ final class Front extends Core {
 
 			case 'nonamp':
 				$this->is_json_valid['nonamp'] = false;
-				break;
-		endswitch;
+		}
 	}
 
 	/**

@@ -322,7 +322,7 @@ final class Admin extends Api {
 		if ( ! $this->handle_update_nonce( $options['nonce-action'], false ) )
 			return;
 
-		switch ( $options['nonce-action'] ) :
+		switch ( $options['nonce-action'] ) {
 			case $this->request_name['connect']:
 				$this->api_register_site();
 				break;
@@ -349,8 +349,7 @@ final class Admin extends Api {
 
 			default:
 				$this->set_error_notice( [ 1010101 => '' ] );
-				break;
-		endswitch;
+		}
 
 		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		redirect( $this->monitor_page_slug, $args );
@@ -487,7 +486,7 @@ final class Admin extends Api {
 						// There's possibly new data found. This should certainly be true with statistics.
 						$api = $this->api_get_remote_data( true );
 
-						switch ( $api['code'] ) :
+						switch ( $api['code'] ) {
 							case 1010602:
 							case 1010603:
 								$type = 'requires_fix';
@@ -495,8 +494,7 @@ final class Admin extends Api {
 
 							default:
 								$type = $api['success'] ? 'success' : 'failure';
-								break;
-						endswitch;
+						}
 
 						$status = [
 							'content' => [
@@ -574,7 +572,7 @@ final class Admin extends Api {
 						// Crawl can be requested.
 						$api = $this->api_request_crawl( true );
 
-						switch ( $api['code'] ) :
+						switch ( $api['code'] ) {
 							case 1010504:
 								$type = 'yield_unchanged';
 								break;
@@ -586,8 +584,7 @@ final class Admin extends Api {
 
 							default:
 								$type = $api['success'] ? 'success' : 'failure';
-								break;
-						endswitch;
+						}
 
 						// Get new timeout.
 						$current_timeout = $this->get_remote_crawl_timeout();
@@ -954,7 +951,7 @@ final class Admin extends Api {
 		];
 
 		$options = [];
-		foreach ( $time_settings as $id => $args ) :
+		foreach ( $time_settings as $id => $args ) {
 			$_options = [];
 			foreach ( $args['options']['values'] as $_value ) {
 				$_options[] = vsprintf(
@@ -993,10 +990,10 @@ final class Admin extends Api {
 					]
 				),
 			];
-		endforeach;
+		}
 
 		$_rows = '';
-		foreach ( $options as $id => $_fields ) :
+		foreach ( $options as $id => $_fields ) {
 			$_rows .= \TSF_Extension_Manager\Layout::wrap_row_content(
 				HTML::wrap_inline_tooltip( HTML::make_inline_tooltip(
 					\esc_html( $time_settings[ $id ]['title'] ),
@@ -1011,7 +1008,7 @@ final class Admin extends Api {
 				),
 				false
 			);
-		endforeach;
+		}
 
 		$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
 

@@ -186,8 +186,8 @@ final class Handler {
 						continue 2;
 				}
 
-				foreach ( ( new $_class )->import() as $handle => $data ) :
-					switch ( $handle ) :
+				foreach ( ( new $_class )->import() as $handle => $data ) {
+					switch ( $handle ) {
 						case 'currentItemId':
 							[ $item_id, $total_items, $item_iterator ] = $data;
 							$store->store(
@@ -402,17 +402,14 @@ final class Handler {
 							$store->store( 'Debug:' );
 							// phpcs:ignore, WordPress.PHP.DevelopmentFunctions -- Exactly.
 							$store->store( \esc_html( print_r( $data, true ) ) );
-							break;
-						default:
-							break;
-					endswitch;
+					}
 
 					if ( $streaming ) {
 						$streaming = $server->poll( $store );
 					} else {
 						$store->clear_store( 0x400 ); // log 1k rows max
 					}
-				endforeach;
+				}
 			}
 		} catch ( \Exception $e ) {
 

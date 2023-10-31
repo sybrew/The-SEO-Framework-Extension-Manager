@@ -324,9 +324,10 @@ final class InpostGUI {
 	 */
 	public static function _verify_nonce( $post_id, $post ) {
 
-		if ( ( empty( $_POST[ static::NONCE_NAME ] ) )
-		|| ( ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION ) )
-		|| ( ! \current_user_can( 'edit_post', $post->ID ) )
+		if (
+			   empty( $_POST[ static::NONCE_NAME ] )
+			|| ! \wp_verify_nonce( $_POST[ static::NONCE_NAME ], static::NONCE_ACTION )
+			|| ! \current_user_can( 'edit_post', $post->ID )
 		) return;
 
 		static::$save_access_state = \TSFEM_INPOST_IS_SECURE;
@@ -385,7 +386,11 @@ final class InpostGUI {
 	 */
 	public static function is_state_safe( $state ) {
 		return (bool) ( $state & (
-			TSFEM_INPOST_IS_SECURE | \TSFEM_INPOST_NO_AUTOSAVE | \TSFEM_INPOST_NO_AJAX | \TSFEM_INPOST_NO_CRON | \TSFEM_INPOST_NO_REVISION
+			  TSFEM_INPOST_IS_SECURE
+			| \TSFEM_INPOST_NO_AUTOSAVE
+			| \TSFEM_INPOST_NO_AJAX
+			| \TSFEM_INPOST_NO_CRON
+			| \TSFEM_INPOST_NO_REVISION
 		) );
 	}
 
@@ -404,10 +409,9 @@ final class InpostGUI {
 		$registered_tabs = static::$tabs;
 		$active_tab_keys = static::$active_tab_keys;
 
-		foreach ( $registered_tabs as $index => $args ) :
+		foreach ( $registered_tabs as $index => $args )
 			empty( $active_tab_keys[ $index ] )
 				or $tabs[ $index ] = $args;
-		endforeach;
 
 		return $tabs;
 	}

@@ -310,8 +310,8 @@ final class Tests {
 
 		$links = [];
 
-		foreach ( $data as $value ) :
-			if ( isset( $value['value'] ) && false === $value['value'] ) :
+		foreach ( $data as $value ) {
+			if ( isset( $value['value'] ) && false === $value['value'] ) {
 				$id = isset( $value['post_id'] ) ? (int) $value['post_id'] : false;
 
 				if ( false !== $id ) {
@@ -328,8 +328,8 @@ final class Tests {
 
 					$links[] = sprintf( '<a href="%s" target=_blank rel=noopener>%s</a>', $url, $title );
 				}
-			endif;
-		endforeach;
+			}
+		}
 
 		// Links are filled in with erroneous pages.
 		if ( ! $links ) {
@@ -526,7 +526,7 @@ final class Tests {
 			goto end;
 		}
 
-		switch ( $data['https_type'] ) :
+		switch ( $data['https_type'] ) {
 			case 1:
 				// Forced HTTPS
 				$content         .= $this->wrap_info(
@@ -555,8 +555,7 @@ final class Tests {
 				);
 				$state            = 'warning';
 				$_expected_scheme = 'http';
-				break;
-		endswitch;
+		}
 
 		if ( empty( $data['canonical_url'] ) ) :
 			$state    = 'warning';

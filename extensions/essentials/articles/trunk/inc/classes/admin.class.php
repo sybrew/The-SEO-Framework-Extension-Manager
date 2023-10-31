@@ -269,8 +269,8 @@ final class Admin extends Core {
 			],
 		];
 
-		foreach ( static::get_available_article_types() as $_type ) :
-			switch ( $_type ) :
+		foreach ( static::get_available_article_types() as $_type ) {
+			switch ( $_type ) {
 				case 'disabled':
 					$_select_item = [
 						'disabled',
@@ -294,12 +294,9 @@ final class Admin extends Core {
 						'BlogPosting',
 						\__( 'Blog Posting', 'the-seo-framework-extension-manager' ),
 					];
-					break;
-				default:
-					break;
-			endswitch;
+			}
 			$fields['default_type']['_select'][] = $_select_item;
-		endforeach;
+		}
 
 		$post_types = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 			? \tsf()->post_type()->get_all_supported()
@@ -666,16 +663,12 @@ final class Admin extends Core {
 		$this->set_extension_post_meta_id( $post->ID );
 
 		$store = [];
-		foreach ( (array) $data[ $this->pm_index ] as $key => $value ) :
-			switch ( $key ) :
+		foreach ( (array) $data[ $this->pm_index ] as $key => $value ) {
+			switch ( $key ) {
 				case 'type':
 					$store[ $key ] = static::_sanitize_option_article_type( $value );
-					break;
-
-				default:
-					break;
-			endswitch;
-		endforeach;
+			}
+		}
 
 		foreach ( $store as $key => $value )
 			$this->update_post_meta( $key, $value );
@@ -698,17 +691,14 @@ final class Admin extends Core {
 
 			if ( empty( $data[ $this->pm_index ] ) ) return;
 
-			foreach ( (array) $data[ $this->pm_index ] as $key => $value ) :
-				switch ( $key ) :
+			foreach ( (array) $data[ $this->pm_index ] as $key => $value ) {
+				switch ( $key ) {
 					case 'type':
-						if ( 'nochange' === $value ) continue 2;
-						$store[ $key ] = static::_sanitize_option_article_type( $value );
-						break;
-
-					default:
-						break;
-				endswitch;
-			endforeach;
+						if ( 'nochange' !== $value ) {
+							$store[ $key ] = static::_sanitize_option_article_type( $value );
+						}
+				}
+			}
 		}
 
 		// Unlike the post-edit saving, we don't reset the data, just overwrite what's given.
@@ -743,16 +733,12 @@ final class Admin extends Core {
 		$this->set_extension_post_meta_id( $post->ID );
 
 		$store = [];
-		foreach ( $data[ $this->pm_index ] as $key => $value ) :
+		foreach ( $data[ $this->pm_index ] as $key => $value ) {
 			switch ( $key ) {
 				case 'type':
 					$store[ $key ] = static::_sanitize_option_article_type( $value );
-					break;
-
-				default:
-					break;
 			}
-		endforeach;
+		}
 
 		if ( ! $store ) {
 			// Delete everything. Using defaults.

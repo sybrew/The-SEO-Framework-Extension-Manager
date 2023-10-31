@@ -367,15 +367,14 @@ final class Admin {
 		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( $this->ajax_nonce_action, 'nonce', false ) )
 			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1069001 ) ], 'failure' ); // nice
 
-		switch ( $_REQUEST['handle'] ?? null ) :
+		switch ( $_REQUEST['handle'] ?? null ) {
 			case 'import':
 				( new Handler )->_import( $this->get_importers() );
 				break;
 
 			default:
 				\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1060106 ) ], 'failure' );
-				break;
-		endswitch;
+		}
 	}
 	/**
 	 * Initializes user interface styles, scripts and footer.

@@ -221,7 +221,7 @@ trait Error {
 
 		$args = array_merge( $defaults, $args );
 
-		switch ( $args['type'] ) :
+		switch ( $args['type'] ) {
 			case 'error':
 				$status_i18n = \esc_html__( 'Error code:', 'the-seo-framework-extension-manager' );
 				break;
@@ -234,8 +234,7 @@ trait Error {
 			case 'info':
 			case 'updated':
 				$status_i18n = \esc_html__( 'Status code:', 'the-seo-framework-extension-manager' );
-				break;
-		endswitch;
+		}
 
 		/* translators: 1: 'Error code:', 2: The error code. */
 		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $code );
@@ -272,7 +271,7 @@ trait Error {
 	 */
 	protected function get_error_notice_by_key( $key, $get_type = true ) {
 
-		switch ( $key ) :
+		switch ( $key ) {
 			case -1:
 				// Placeholder error. See TSF_Extension_Manager\_wp_ajax_get_dismissible_notice()
 				$message = 'Undefined error. Check other messages.';
@@ -799,8 +798,7 @@ trait Error {
 			case 1010605:
 				$message = \esc_html__( 'An unknown error occurred. Contact the plugin author if this error keeps coming back.', 'the-seo-framework-extension-manager' );
 				$type    = 'error';
-				break;
-		endswitch;
+		}
 
 		return $get_type ? compact( 'message', 'type' ) : $message;
 	}

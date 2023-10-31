@@ -368,7 +368,7 @@ class AccountActivation extends Panes {
 
 		$status = $this->validate_remote_subscription_license();
 
-		switch ( $status ) :
+		switch ( $status ) {
 			case 0:
 				// Already free or couldn't reach API.
 				break;
@@ -411,8 +411,7 @@ class AccountActivation extends Panes {
 				( $this->get_option( '_activation_level' ) !== 'Enterprise' )
 					and $this->update_option( '_activation_level', 'Enterprise' )
 						and $this->set_error_notice( [ 906 => '' ] );
-				break;
-		endswitch;
+		}
 
 		return $status;
 	}

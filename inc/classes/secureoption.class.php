@@ -58,7 +58,7 @@ final class SecureOption extends Secure_Abstract {
 		if ( ! $type ) {
 			\tsf()->_doing_it_wrong( __METHOD__, 'You must specify an initialization type.' );
 		} else {
-			switch ( $type ) :
+			switch ( $type ) {
 				case 'update_option':
 					\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
 					self::set( '_type', $type );
@@ -71,8 +71,7 @@ final class SecureOption extends Secure_Abstract {
 				default:
 					self::reset();
 					self::invoke_invalid_type( __METHOD__ );
-					break;
-			endswitch;
+			}
 		}
 	}
 
@@ -101,7 +100,7 @@ final class SecureOption extends Secure_Abstract {
 	 */
 	public static function set_update_instance( $instance, $bits ) {
 
-		switch ( self::get_property( '_type' ) ) :
+		switch ( self::get_property( '_type' ) ) {
 			case 'update_option':
 				static::$_instance = [ $instance, $bits ];
 				return true;
@@ -109,8 +108,7 @@ final class SecureOption extends Secure_Abstract {
 			default:
 				self::reset();
 				\tsf()->_doing_it_wrong( __METHOD__, 'You must specify a correct instance type.' );
-				break;
-		endswitch;
+		}
 
 		return false;
 	}

@@ -84,7 +84,7 @@ class API extends Core {
 			return false;
 		}
 
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'status':
 			case 'activation':
 				break;
@@ -105,7 +105,7 @@ class API extends Core {
 			default:
 				$this->set_error_notice( [ 104 => '' ] );
 				return false;
-		endswitch;
+		}
 
 		$key   = trim( $args['api_key'] );
 		$email = \sanitize_email( $args['activation_email'] );
@@ -395,8 +395,8 @@ class API extends Core {
 			$_response = $results;
 		}
 
-		if ( ! empty( $results['code'] ) ) :
-			switch ( $results['code'] ) :
+		if ( ! empty( $results['code'] ) ) {
+			switch ( $results['code'] ) {
 				case 106: // Inactive/expired subscription.
 					$this->set_error_notice( [ 308 => '' ] );
 					$registered_free or $this->do_deactivation( false, true );
@@ -425,8 +425,8 @@ class API extends Core {
 					$this->set_error_notice( [ 302 => '' ] );
 					$registered_free or $this->do_deactivation( true, true );
 					break;
-			endswitch;
-		endif;
+			}
+		}
 
 		return $_response;
 	}

@@ -377,16 +377,13 @@ final class FormGenerator {
 	 * @return void|mixed The private property.
 	 */
 	public function get( $what = '' ) {
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'bits':
 				return $this->bits;
 
 			case 'max_it':
 				return $this->max_it;
-
-			default:
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -421,7 +418,7 @@ final class FormGenerator {
 	 */
 	private function get_form_wrap( $what, $url, $validator ) {
 
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'start':
 				return vsprintf(
 					'<form action="%s" method=post id="%s" enctype=multipart/form-data class="tsfem-form%s" autocomplete=off data-form-type=other>',
@@ -434,10 +431,7 @@ final class FormGenerator {
 
 			case 'end':
 				return '</form>';
-
-			default:
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -472,7 +466,7 @@ final class FormGenerator {
 	 */
 	private function get_form_button( $what, $name ) {
 
-		switch ( $what ) :
+		switch ( $what ) {
 			case 'submit':
 				return vsprintf(
 					'<button type=submit name="%1$s" form="%1$s" class="tsfem-button-primary tsfem-button-upload hide-if-no-tsf-js">%2$s</button>',
@@ -481,10 +475,7 @@ final class FormGenerator {
 						\esc_html( $name ),
 					]
 				);
-
-			default:
-				break;
-		endswitch;
+		}
 	}
 
 	/**
@@ -906,7 +897,7 @@ final class FormGenerator {
 
 		$this->clean_desc_index( $args['_desc'] );
 
-		switch ( $args['_type'] ) :
+		switch ( $args['_type'] ) {
 			case 'multi':
 				return $this->create_fields_multi( $args );
 
@@ -968,10 +959,7 @@ final class FormGenerator {
 
 			case 'image':
 				return $this->create_image_field( $args );
-
-			default:
-				return '';
-		endswitch;
+		}
 
 		return '';
 	}
@@ -1157,9 +1145,7 @@ final class FormGenerator {
 	 */
 	private function fields_iterator( $args, $type = 'echo' ) {
 
-		$o = '';
-
-		switch ( $type ) :
+		switch ( $type ) {
 			case 'echo':
 				$this->output_fields_iterator( $args );
 				break;
@@ -1169,14 +1155,10 @@ final class FormGenerator {
 				break;
 
 			case 'get':
-				$o = $this->get_fields_iterator( $args );
-				break;
+				return $this->get_fields_iterator( $args );
+		}
 
-			default:
-				break;
-		endswitch;
-
-		return $o;
+		return '';
 	}
 
 	/**
@@ -1633,7 +1615,7 @@ final class FormGenerator {
 	 */
 	private function create_input_field_by_type( $args ) {
 
-		switch ( $args['_type'] ) :
+		switch ( $args['_type'] ) {
 			case 'date':
 			case 'number':
 			case 'range':
@@ -1672,7 +1654,7 @@ final class FormGenerator {
 				if ( isset( $args['_pattern'] ) )
 					$s_pattern = $this->get_fields_pattern( $args['_pattern'] );
 				break;
-		endswitch;
+		}
 
 		// s = Escaped.
 		$s_type = \esc_attr( $args['_type'] );
@@ -1787,12 +1769,12 @@ final class FormGenerator {
 
 		static $_level = 0;
 
-		if ( null !== $selected && '' !== $selected && [] !== $selected ) :
+		if ( null !== $selected && '' !== $selected && [] !== $selected ) {
 
 			// Convert $selected to array.
 			$a_selected = (array) $selected;
 
-			foreach ( $select as $args ) :
+			foreach ( $select as $args ) {
 
 				if ( $_level ) {
 					// Multilevel isn't supported by Chrome, for instance, yet.
@@ -1815,9 +1797,9 @@ final class FormGenerator {
 				} else {
 					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 				}
-			endforeach;
-		else :
-			foreach ( $select as $args ) :
+			}
+		} else {
+			foreach ( $select as $args ) {
 
 				if ( $_level ) {
 					// Multilevel isn't supported by Chrome, for instance, yet.
@@ -1836,8 +1818,8 @@ final class FormGenerator {
 				} else {
 					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
 				}
-			endforeach;
-		endif;
+			}
+		}
 	}
 
 	/**
@@ -1951,8 +1933,10 @@ final class FormGenerator {
 
 		yield '<ul class=tsfem-form-multi-a11y-wrap>';
 
-		foreach ( $select as $args ) :
+		foreach ( $select as $args ) {
+
 			$this->iterate();
+
 			if ( isset( $args[2] ) ) {
 				// Level up.
 				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
@@ -1993,7 +1977,7 @@ final class FormGenerator {
 					);
 				}
 			}
-		endforeach;
+		}
 
 		yield '</ul>';
 	}
