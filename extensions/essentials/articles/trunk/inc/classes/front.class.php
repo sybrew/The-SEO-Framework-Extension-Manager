@@ -125,7 +125,7 @@ final class Front extends Core {
 		if ( isset( $is_amp ) )
 			return $is_amp;
 
-		if ( \function_exists( '\\is_amp_endpoint' ) ) {
+		if ( \function_exists( 'is_amp_endpoint' ) ) {
 			$is_amp = \is_amp_endpoint();
 		} elseif ( \defined( 'AMP_QUERY_VAR' ) ) {
 			$is_amp = \get_query_var( \AMP_QUERY_VAR, false ) !== false;
@@ -769,7 +769,7 @@ final class Front extends Core {
 		$_resized_file = \image_make_intermediate_size( $_file, $size['width'], $size['height'], false );
 
 		if ( $_resized_file ) {
-			if ( ! \function_exists( '\\wp_generate_attachment_metadata' ) )
+			if ( ! \function_exists( 'wp_generate_attachment_metadata' ) )
 				require_once ABSPATH . 'wp-admin/includes/image.php';
 
 			$_data   = \wp_generate_attachment_metadata( $attachment_id, $_file );

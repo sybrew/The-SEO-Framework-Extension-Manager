@@ -59,6 +59,6 @@ function _do_critical_core_upgrade( $upgrader ) {
 			// no break, do moar upgrades;
 
 		default:
-			$upgrader->_register_upgrade( 'core', \TSF_EXTENSION_MANAGER_DB_VERSION, '\\__return_true' );
+			$upgrader->_register_upgrade( 'core', \TSF_EXTENSION_MANAGER_DB_VERSION, '__return_true' );
 	}
 }

@@ -59,7 +59,7 @@ final class Admin extends Core {
 		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 
-		\add_action( 'the_seo_framework_scripts', [ $this, '_register_inpost_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ $this, '_register_inpost_scripts' ] );
 
 		// Called late because we need to access the meta object after current_screen.
 		\add_action( 'the_seo_framework_pre_page_inpost_box', [ $this, '_prepare_inpost_views' ] );

@@ -390,7 +390,7 @@ final class Admin {
 		 */
 		$this->ui_hook = $this->transport_menu_page_hook;
 
-		\add_action( 'the_seo_framework_scripts', [ $this, '_register_transport_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ $this, '_register_transport_scripts' ] );
 
 		$this->init_ui();
 	}

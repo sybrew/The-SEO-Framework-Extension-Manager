@@ -167,7 +167,7 @@ class SEO_By_Rank_Math extends Core {
 			'tags', // Rank Math has two tags, this one is advanced.
 		];
 
-		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
+		static::$prefix_preserve_preg_quoted = implode( '|', array_map( 'preg_quote', static::$prefix_preserve ) );
 	}
 
 	/**

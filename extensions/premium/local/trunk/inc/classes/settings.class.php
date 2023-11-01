@@ -292,7 +292,7 @@ final class Settings {
 	 */
 	private function init_tsfem_ui() {
 
-		\add_action( 'the_seo_framework_scripts', [ $this, '_register_local_scripts' ], 10, 3 );
+		\add_filter( 'the_seo_framework_scripts', [ $this, '_register_local_scripts' ], 10, 3 );
 
 		// Add something special for Vivaldi & Android.
 		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );

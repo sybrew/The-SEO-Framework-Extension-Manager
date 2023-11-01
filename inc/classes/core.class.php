@@ -418,7 +418,7 @@ class Core {
 			],
 		];
 
-		return \map_deep( $post, '\\esc_js' );
+		return \map_deep( $post, 'esc_js' );
 	}
 
 	/**

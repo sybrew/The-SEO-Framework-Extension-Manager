@@ -58,5 +58,5 @@ function _do_admin_upgrade( $upgrader ) {
 		);
 	}
 
-	$upgrader->_register_upgrade( 'local', \TSFEM_E_LOCAL_DB_VERSION, '\\__return_true' );
+	$upgrader->_register_upgrade( 'local', \TSFEM_E_LOCAL_DB_VERSION, '__return_true' );
 }

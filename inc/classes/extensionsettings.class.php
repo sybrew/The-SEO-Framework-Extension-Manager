@@ -362,7 +362,7 @@ final class ExtensionSettings {
 			|| ( $GLOBALS['page_hook'] ?? null ) !== $this->ui_hook
 		) return;
 
-		\add_action( 'the_seo_framework_scripts', [ $this, '_register_scripts' ], 10, 3 );
+		\add_filter( 'the_seo_framework_scripts', [ $this, '_register_scripts' ], 10, 3 );
 
 		// Add something special for Vivaldi & Android.
 		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );

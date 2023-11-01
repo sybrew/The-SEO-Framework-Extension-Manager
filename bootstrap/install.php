@@ -37,7 +37,7 @@ function _prepare_tsf_installer() {
 	if ( ! \current_user_can( 'install_plugins' ) ) return;
 	if ( 'update.php' === $GLOBALS['pagenow'] ) return;
 
-	if ( ! \function_exists( '\\get_plugins' ) )
+	if ( ! \function_exists( 'get_plugins' ) )
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	$plugins = \get_plugins();
@@ -69,8 +69,8 @@ function _prepare_tsf_nag_installer_scripts() {
 	\wp_localize_script( $scriptid, "{$scriptid}L10n", $strings );
 
 	\add_action( 'admin_print_styles', __NAMESPACE__ . '\\_print_tsf_nag_installer_styles' );
-	\add_action( 'admin_footer', '\\wp_print_request_filesystem_credentials_modal' );
-	\add_action( 'admin_footer', '\\wp_print_admin_notice_templates' );
+	\add_action( 'admin_footer', 'wp_print_request_filesystem_credentials_modal' );
+	\add_action( 'admin_footer', 'wp_print_admin_notice_templates' );
 
 	\wp_enqueue_style( 'plugin-install' );
 	\wp_enqueue_script( $scriptid );

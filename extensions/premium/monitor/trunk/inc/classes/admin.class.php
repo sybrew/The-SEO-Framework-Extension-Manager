@@ -672,7 +672,7 @@ final class Admin extends Api {
 		 */
 		$this->ui_hook = $this->monitor_menu_page_hook;
 
-		\add_action( 'the_seo_framework_scripts', [ $this, '_register_monitor_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ $this, '_register_monitor_scripts' ] );
 
 		$this->init_ui();
 	}

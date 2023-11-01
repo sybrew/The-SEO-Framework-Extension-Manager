@@ -124,7 +124,7 @@ class WordPress_SEO extends Core {
 			'cf_',      // Custom field name.
 		];
 
-		static::$prefix_preserve_preg_quoted = implode( '|', array_map( '\\preg_quote', static::$prefix_preserve ) );
+		static::$prefix_preserve_preg_quoted = implode( '|', array_map( 'preg_quote', static::$prefix_preserve ) );
 	}
 
 	/**

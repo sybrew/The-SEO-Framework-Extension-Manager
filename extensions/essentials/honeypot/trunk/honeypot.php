@@ -581,7 +581,7 @@ JS;
 		 * @todo make option.
 		 * @param bool $hardcore
 		 */
-		$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', ! WP_CACHE );
+		$this->hardcore = (bool) \apply_filters( 'the_seo_framework_honeypot_hardcore', ! \WP_CACHE );
 	}
 
 	/**

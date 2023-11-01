@@ -132,7 +132,7 @@ final class ListEdit {
 		$this->register_bulk_sections();
 
 		// Enqueue default scripts.
-		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
 		// Saving.
 		\add_action( 'save_post', [ static::class, '_verify_nonce_post' ], 1, 2 );

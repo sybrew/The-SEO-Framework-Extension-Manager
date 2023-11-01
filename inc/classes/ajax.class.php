@@ -462,7 +462,7 @@ final class AJAX extends Secure_Abstract {
 				$url              = str_replace( $parent_basename, $cropped_basename, $parent_url );
 
 				// phpcs:ignore, WordPress.PHP.NoSilencedErrors -- See https://core.trac.wordpress.org/ticket/42480
-				$size       = \function_exists( '\\wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
+				$size       = \function_exists( 'wp_getimagesize' ) ? \wp_getimagesize( $cropped ) : @getimagesize( $cropped );
 				$image_type = $size['mime'] ?? 'image/jpeg';
 
 				// Get the original image's post to pre-populate the cropped image.

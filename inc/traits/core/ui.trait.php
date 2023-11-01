@@ -190,14 +190,15 @@ trait UI {
 	final protected static function enqueue_admin_scripts() {
 
 		// Enqueue default scripts.
-		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
-		// Load all TSF scripts.
+		// Load all modern TSF scripts.
 		\add_filter( 'the_seo_framework_register_scripts', '__return_true' );
 
-		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-			? \tsf()->load_admin_scripts()
-			: \The_SEO_Framework\Builders\Scripts::prepare();
+		if ( ! \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			\The_SEO_Framework\Builders\Scripts::prepare();
+			\tsf()->init_admin_scripts();
+		}
 	}
 
 	/**
@@ -213,8 +214,6 @@ trait UI {
 	 * @return array More CSS and JS loaders.
 	 */
 	final public static function _register_default_scripts( $scripts ) {
-
-		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF ? \tsf()->load_admin_scripts() : \tsf()->init_admin_scripts();
 
 		$tsfem = \tsfem();
 

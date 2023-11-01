@@ -171,7 +171,7 @@ function _init_tsf_extension_manager() {
 		 * @since 1.5.0
 		 */
 		\do_action( 'tsfem_extensions_initialized' );
-	} elseif ( ! \function_exists( '\\tsf' ) ) {
+	} elseif ( ! \function_exists( 'tsf' ) ) {
 		/**
 		 * Nothing is loaded at this point; not even The SEO Framework.
 		 *

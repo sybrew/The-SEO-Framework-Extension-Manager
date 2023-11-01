@@ -193,11 +193,15 @@ final class InpostGUI {
 	public static function _prepare_admin_scripts() {
 
 		// Enqueue default scripts.
-		\add_action( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
+		\add_filter( 'the_seo_framework_scripts', [ static::class, '_register_default_scripts' ] );
 
-		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-			? \tsf()->load_admin_scripts()
-			: \The_SEO_Framework\Builders\Scripts::prepare();
+		// Load all modern TSF scripts.
+		\add_filter( 'the_seo_framework_register_scripts', '__return_true' );
+
+		if ( ! \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			\The_SEO_Framework\Builders\Scripts::prepare();
+			\tsf()->init_admin_scripts();
+		}
 	}
 
 	/**
@@ -238,7 +242,7 @@ final class InpostGUI {
 					'isPremium'   => $tsfem->is_premium_user(),
 					'isConnected' => $tsfem->is_connected_user(),
 					'locale'      => \get_locale(),
-					'userLocale'  => \function_exists( '\\get_user_locale' ) ? \get_user_locale() : \get_locale(),
+					'userLocale'  => \function_exists( 'get_user_locale' ) ? \get_user_locale() : \get_locale(),
 					'debug'       => (bool) \WP_DEBUG,
 					'rtl'         => (bool) \is_rtl(),
 					'i18n'        => [
