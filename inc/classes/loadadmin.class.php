@@ -80,7 +80,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( $this->is_connected_user() ) {
 
-			// var_dump() we need this here, but then whilst keeping the activated extensions?
+			// Future: we need this here, but then whilst keeping the activated extensions?
 			// -> We should split the option indexes, activated extensions in one (unencrypted), and activation data in another.
 			// if ( ! $this->are_options_valid() ) {
 			// 	$this->do_deactivation();

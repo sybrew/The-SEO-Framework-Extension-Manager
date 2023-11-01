@@ -268,7 +268,7 @@ final class Front extends Core {
 				| \JSON_HEX_AMP
 				| \JSON_UNESCAPED_UNICODE
 				| \JSON_INVALID_UTF8_IGNORE
-				| \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0,
+				| ( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 ),
 			);
 
 			return sprintf(
@@ -598,7 +598,7 @@ final class Front extends Core {
 
 		$post = $this->get_current_post();
 
-		if ( ! $post ) {
+		if ( empty( $post->post_author ) ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}

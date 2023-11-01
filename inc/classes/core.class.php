@@ -490,28 +490,6 @@ class Core {
 	}
 
 	/**
-	 * Checks whether the variable is set and passes it back.
-	 * If the value isn't set, it will set it to the fallback variable.
-	 *
-	 * Basically, a PHP < 7 wrapper for null coalescing.
-	 *
-	 * It will also return the value so it can be used in a return statement.
-	 *
-	 * Example: `$v = $v ?? $f` becomes `coalesce_var( $v, $f )`
-	 * The fallback value must always be set, so performance benefits thereof aren't present.
-	 *
-	 * @link http://php.net/manual/en/migration70.new-features.php#migration70.new-features.null-coalesce-op
-	 * @since 1.2.0
-	 *
-	 * @param mixed $v The variable that's maybe set. Passed by reference.
-	 * @param mixed $f The fallback variable. Default null.
-	 * @return mixed
-	 */
-	final public function coalesce_var( &$v = null, $f = null ) {
-		return $v ?? ( $v = $f );
-	}
-
-	/**
 	 * Performs wp_die on TSF Extension Manager Page.
 	 * Destructs class otherwise.
 	 *

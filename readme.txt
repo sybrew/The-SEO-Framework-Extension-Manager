@@ -43,37 +43,26 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.6.3 =
 
-TODO add timestamps to notificationS?
-TODO when our server is down, causing notifications, but gets back up again, clear related notifications?
-	-> Are there any invoked in the background?
-TODO extend Articles support for "Author" for any post type that has 'author' post type support?
-
 **Important release notes:**
 
 * Henceforth, Extension Manager requires **The SEO Framework v4.2.8 or higher**, **PHP 7.4.0 or higher**, and **WordPress 5.9 or higher**.
+* We recommend installing this update before upgrading to The SEO Framework v5.0 to prevent deprecation notices.
 
 **Detailed log:**
 
+* Added compatibility with TSF v5.0.0.
 * Added endpoint `wcm` (WooCommerce Marketplace).
 	* This comes with a new constant, `TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI`.
 	* Advanced users may be asked to allow communications with host `wcm.theseoframework.com`.
-* Added compatibility with TSF v5.0.0.
-	* Done: tsf()->get/set_transient()
-	* Done: Sitemap transient clearing.
-		-> TODO require TSF v4.3.0+ for Articles now?
-		-> We could wait for 3 or so weeks before releasing this after 4.3.0, and align PHP/WP requirements etc.?
-* TODO Verify PHP 8.1 (and 8.2?) support.
-	-> We definitely fixed a 8.1 deprecation notice in Honeypot.
+* Resolved all deprecation notices with PHP 8.1.
 * Actions `tsfem_inpost_before_enqueue_scripts`, `tsfem_listedit_enqueue_scripts`, `tsfem_before_enqueue_scripts` are no longer invoked.
 	* Use filter `the_seo_framework_scripts` instead.
 
-TODO clear the var_dump()
-
 **Updated extensions:**
 
-* [Cord at version 1.1.0](https://theseoframework.com/extensions/cord/#changelog)
-* [Transport at version 1.1.1](https://theseoframework.com/extensions/transport/#changelog)
-* [Monitor at version 1.2.10](https://theseoframework.com/extensions/monitor/#changelog)
+* [Articles at version 2.3.0](https://theseoframework.com/extensions/articles/#changelog)
+* [Cord at version 1.1.1](https://theseoframework.com/extensions/cord/#changelog)
+* [Monitor at version 1.2.11](https://theseoframework.com/extensions/monitor/#changelog)
 
 = 2.6.2 =
 
