@@ -200,12 +200,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const updateActiveFocusAreas = area => {
 
-		/**
-		 * @param {!Object} elements : {
-		 *   'area' => [ selector => string type 'append|dominate' ]
-		 * }
-		 */
-		const elements = focusRegistry;
+		console.log( focusRegistry, activeFocusAreas );
 
 		let areas        = activeFocusAreas,
 			types        = {},
@@ -214,7 +209,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			keys         = [];
 
 		const update = _area => {
-			types        = elements[ _area ];
+			types        = focusRegistry[ _area ];
 			hasDominant  = false;
 			lastDominant = '';
 			keys         = [];
@@ -249,7 +244,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 
 		if ( area ) {
-			if ( typeof elements[ area ] === 'undefined' ) {
+			if ( typeof focusRegistry[ area ] === 'undefined' ) {
 				unset( area );
 			} else {
 				update( area );
@@ -257,7 +252,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		} else {
 			// Filter elements. The input is expected.
 			let _area;
-			for ( _area in elements ) {
+			for ( _area in focusRegistry ) {
 				update( _area );
 			}
 		}
@@ -853,7 +848,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					case 1100305: // Empty response.
 
 					case 1100308: // Sybre messed up and forgot to code in inflection response.
-						// Ignore.
+						// Ignore: Try setting one anyway.
 						break;
 
 					default:
@@ -867,12 +862,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					lexicalForm = lexicalFormField.value,
 					lexicalData = lexicalDataField.value,
 					lexicalWord = '',
-					words       = [];
+					words       = [ keyword ]; // Always set keyword as a registered and active inflection.
 
 				// get Lexical form, push with keyword when the words don't match.
 				lexicalWord = JSON.parse( lexicalData )?.[ lexicalForm ].value.toLowerCase();
-				words.push( keyword );
-				if ( keyword !== lexicalWord ) {
+				if ( lexicalWord && keyword !== lexicalWord ) {
 					words.push( lexicalWord );
 				} else {
 					// No new word to work with. Reject.
@@ -1905,8 +1899,10 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		if ( ! assessments || assessments !== Object( assessments ) ) {
 			assessments = [];
 		}
-		if ( ! assessments[ contentType ]
-		|| assessments[ contentType ] !== Object( assessments[ contentType ] ) ) {
+		if (
+			   ! assessments[ contentType ]
+			|| assessments[ contentType ] !== Object( assessments[ contentType ] )
+		) {
 			assessments[ contentType ] = [];
 		}
 		if ( checkerWrap.id ) {
@@ -1921,7 +1917,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		activeAssessments = assessments;
 	}
 
-	let changeListenersBuffers = {}, changeListenerFlags = {};
+	let changeListenersBuffers = {},
+		changeListenerFlags    = {};
 	/**
 	 * Resets change listeners for analysis on the available content elements.
 	 *

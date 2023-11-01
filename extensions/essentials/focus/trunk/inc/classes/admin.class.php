@@ -284,7 +284,7 @@ final class Admin extends Core {
 		$post_meta = [
 			'pm_index' => $this->pm_index,
 			'post_id'  => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \tsf()->query()->get_the_real_id()
+				? \tsf()->query()->get_the_real_admin_id()
 				: \tsf()->get_the_real_ID(),
 			'kw'       => [
 				'label'        => [

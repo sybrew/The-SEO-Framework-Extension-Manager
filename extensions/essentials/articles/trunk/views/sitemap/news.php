@@ -9,6 +9,10 @@
 
 defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) and $this->_verify_include_secret( $_secret ) or die;
 
+use function \TSF_Extension_Manager\Transition\{
+	sitemap_registry,
+};
+
 // TSF_EXTENSION_MANAGER_USE_MODERN_TSF: THE_SEO_FRAMEWORK_DEBUG will become always available.
 defined( 'THE_SEO_FRAMEWORK_DEBUG' ) && THE_SEO_FRAMEWORK_DEBUG and $timer_start = hrtime( true );
 

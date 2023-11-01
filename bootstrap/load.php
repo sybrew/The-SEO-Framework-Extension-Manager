@@ -272,8 +272,10 @@ function can_load_class() {
  */
 function _autoload_classes( $class ) {
 
+	$class = strtolower( $class );
+
 	// NB It's TSF_Extension_Manager, not tsf_extension_manager!
-	if ( 0 !== strpos( strtolower( $class ), 'tsf_extension_manager\\', 0 ) ) return;
+	if ( ! str_starts_with( $class, 'tsf_extension_manager\\' ) ) return;
 
 	if ( \WP_DEBUG ) {
 		/**
@@ -288,18 +290,13 @@ function _autoload_classes( $class ) {
 			return;
 	}
 
-	static $_timenow = true;
-	// Prevent running two timers at once, restart timing once done loading batch.
-	if ( $_timenow ) {
-		$_bootstrap_timer = hrtime( true );
-		$_timenow         = false;
-	} else {
-		$_bootstrap_timer = 0;
-	}
+	static $_timer;
 
-	$file = str_replace( 'tsf_extension_manager\\', '', strtolower( $class ) );
+	$_timer ??= hrtime( true );
 
-	if ( strpos( $file, '_abstract' ) ) {
+	$file = str_replace( 'tsf_extension_manager\\', '', $class );
+
+	if ( str_contains( $file, '_abstract' ) ) {
 		$file    = str_replace( '_abstract', '.abstract', $file );
 		$rel_dir = 'abstract' . \DIRECTORY_SEPARATOR;
 	} else {
@@ -308,10 +305,11 @@ function _autoload_classes( $class ) {
 
 	require \TSF_EXTENSION_MANAGER_DIR_PATH_CLASS . "{$rel_dir}{$file}.class.php";
 
-	if ( $_bootstrap_timer ) {
-		$_t = ( hrtime( true ) - $_bootstrap_timer ) / 1e9;
+	if ( isset( $_timer ) ) {
+		// When the class extends, the last class in the stack will reach this first.
+		// All classes before cannot reach this any more.
+		$_t = ( hrtime( true ) - $_timer ) / 1e9;
 		\The_SEO_Framework\_bootstrap_timer( $_t );
 		\TSF_Extension_Manager\_bootstrap_timer( $_t );
-		$_timenow = true;
 	}
 }

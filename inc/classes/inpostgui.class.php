@@ -198,9 +198,10 @@ final class InpostGUI {
 		// Load all modern TSF scripts.
 		\add_filter( 'the_seo_framework_register_scripts', '__return_true' );
 
+		// Load all old TSF scripts.
 		if ( ! \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
 			\The_SEO_Framework\Builders\Scripts::prepare();
-			\tsf()->init_admin_scripts();
+			\add_action( 'admin_enqueue_scripts', [ \tsf(), 'init_admin_scripts' ], 0, 1 ); // Already loaded, but just in case.
 		}
 	}
 

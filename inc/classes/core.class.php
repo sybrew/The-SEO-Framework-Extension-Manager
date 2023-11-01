@@ -1143,6 +1143,7 @@ class Core {
 		if ( 0 !== strpos( $class, 'tsf_extension_manager\\extension\\', 0 ) )
 			return;
 
+		// Wait, can this even? var_dump() remove this nonsense.
 		static $loaded = [];
 
 		if ( isset( $loaded[ $class ] ) )
@@ -1153,14 +1154,9 @@ class Core {
 			return false;
 		}
 
-		static $_timenow = true;
+		static $_timer;
 
-		if ( $_timenow ) {
-			$_bootstrap_timer = hrtime( true );
-			$_timenow         = false;
-		} else {
-			$_bootstrap_timer = 0;
-		}
+		$_timer ??= hrtime( true );
 
 		$_class = str_replace( 'tsf_extension_manager\\extension\\', '', $class );
 		$_ns    = substr( $_class, 0, strpos( $_class, '\\' ) );
@@ -1186,11 +1182,12 @@ class Core {
 			$loaded[ $class ] = false;
 		}
 
-		if ( $_bootstrap_timer ) {
-			$_t = ( hrtime( true ) - $_bootstrap_timer ) / 1e9; // ns to s
+		if ( isset( $_timer ) ) {
+			// When the class extends, the last class in the stack will reach this first.
+			// All classes before cannot reach this any more.
+			$_t = ( hrtime( true ) - $_timer ) / 1e9;
 			\The_SEO_Framework\_bootstrap_timer( $_t );
 			\TSF_Extension_Manager\_bootstrap_timer( $_t );
-			$_timenow = true;
 		}
 
 		return $loaded[ $class ];
