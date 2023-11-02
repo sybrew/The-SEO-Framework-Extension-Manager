@@ -518,11 +518,11 @@ final class SchemaPacker {
 				return \sanitize_key( $value );
 
 			case 'convert_to_host':
-				return parse_url( $value, \PHP_URL_HOST ) ?: '';
+				return \is_string( $value ) ? ( parse_url( $value, \PHP_URL_HOST ) ?: '' ) : '';
 
 			case 'esc_url_raw':
 			case 'sanitize_url':
-				return \sanitize_url( $value, [ 'https', 'http' ] );
+				return \is_string( $value ) ? \sanitize_url( $value, [ 'https', 'http' ] ) : '';
 
 			default:
 			case 'sanitize_text_field':

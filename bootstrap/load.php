@@ -311,5 +311,6 @@ function _autoload_classes( $class ) {
 		$_t = ( hrtime( true ) - $_timer ) / 1e9;
 		\The_SEO_Framework\_bootstrap_timer( $_t );
 		\TSF_Extension_Manager\_bootstrap_timer( $_t );
+		$_timer = null;
 	}
 }

@@ -1143,12 +1143,6 @@ class Core {
 		if ( 0 !== strpos( $class, 'tsf_extension_manager\\extension\\', 0 ) )
 			return;
 
-		// Wait, can this even? var_dump() remove this nonsense.
-		static $loaded = [];
-
-		if ( isset( $loaded[ $class ] ) )
-			return $loaded[ $class ];
-
 		if ( $this->_has_died() ) {
 			$this->create_class_alias( $class );
 			return false;
@@ -1172,14 +1166,12 @@ class Core {
 
 			$this->get_verification_codes( $_instance, $bits );
 
-			$loaded[ $class ] = require "{$_path}{$_file}.class.php";
+			require "{$_path}{$_file}.class.php";
 		} else {
 			\tsf()->_doing_it_wrong( __METHOD__, 'Class <code>' . \esc_html( $class ) . '</code> has not been registered.' );
 
 			// Prevent fatal errors.
 			$this->create_class_alias( $class );
-
-			$loaded[ $class ] = false;
 		}
 
 		if ( isset( $_timer ) ) {
@@ -1188,9 +1180,8 @@ class Core {
 			$_t = ( hrtime( true ) - $_timer ) / 1e9;
 			\The_SEO_Framework\_bootstrap_timer( $_t );
 			\TSF_Extension_Manager\_bootstrap_timer( $_t );
+			$_timer = null;
 		}
-
-		return $loaded[ $class ];
 	}
 
 	/**

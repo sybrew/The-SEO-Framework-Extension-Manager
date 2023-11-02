@@ -43,10 +43,17 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 = 2.6.3 =
 
+* November 2nd, 2023
+
 **Important release notes:**
 
-* Henceforth, Extension Manager requires **The SEO Framework v4.2.8 or higher**, **PHP 7.4.0 or higher**, and **WordPress 5.9 or higher**.
-* We recommend installing this update before upgrading to The SEO Framework v5.0 to prevent deprecation notices.
+* Extension Manager now requires **PHP 7.4.0 or higher** and **WordPress 5.9 or higher**.
+* We recommend installing this update before upgrading to The SEO Framework v5.0.0 to ensure a smooth upgrade.
+
+**Feature highlights:**
+
+* Added compatibility with the upcoming TSF v5.0.0 update.
+* Added WooCommerce Marketplace UI support. You can now get a [Premium Subscription via WooCommerce Marketplace](https://woo.com/products/the-seo-framework-premium/).
 
 **Detailed log:**
 
