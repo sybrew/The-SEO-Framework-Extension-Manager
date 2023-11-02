@@ -55,21 +55,15 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 * Added compatibility with the upcoming TSF v5.0.0 update.
 * Added WooCommerce Marketplace UI support. You can now get a [Premium Subscription via WooCommerce Marketplace](https://woo.com/products/the-seo-framework-premium/).
 
-**Detailed log:**
-
-* Added compatibility with TSF v5.0.0.
-* Added endpoint `wcm` (WooCommerce Marketplace).
-	* This comes with a new constant, `TSF_EXTENSION_MANAGER_PREMIUM_WCM_URI`.
-	* Advanced users may be asked to allow communications with host `wcm.theseoframework.com`.
-* Resolved all deprecation notices with PHP 8.1.
-* Actions `tsfem_inpost_before_enqueue_scripts`, `tsfem_listedit_enqueue_scripts`, `tsfem_before_enqueue_scripts` are no longer invoked.
-	* Use filter `the_seo_framework_scripts` instead.
-
 **Updated extensions:**
 
 * [Articles at version 2.3.0](https://theseoframework.com/extensions/articles/#changelog)
 * [Cord at version 1.1.1](https://theseoframework.com/extensions/cord/#changelog)
 * [Monitor at version 1.2.11](https://theseoframework.com/extensions/monitor/#changelog)
+
+**Detailed log:**
+
+View the [detailed v2.6.3 changelog](https://tsf.fyi/p/4123).
 
 = 2.6.2 =
 

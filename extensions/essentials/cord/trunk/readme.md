@@ -154,7 +154,7 @@ add_action( 'init', function() {
 
 ### 1.1.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 2nd, 2023"]
 
 * **Removed:** All traces of legacy UA3 support. Only GA4 is supported now.
 	* To migrate from UA3, please [follow these instructions](https://support.google.com/analytics/answer/10110290).

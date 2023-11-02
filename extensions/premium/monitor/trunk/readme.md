@@ -85,10 +85,10 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.11
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 2nd, 2023"]
 
 * **Extension:**
-	* **Fixed:** No longer conflicts with TSF debugging features.
+	* **Fixed:** No longer conflicts with The SEO Framework's debugging features.
 
 ### 1.2.10
 
