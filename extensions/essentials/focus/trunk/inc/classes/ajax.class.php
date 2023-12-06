@@ -117,7 +117,7 @@ final class Ajax {
 		$tsfem   = \tsfem();
 		$post_id = filter_input( \INPUT_POST, 'post_ID', \FILTER_VALIDATE_INT );
 
-		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) {
+		if ( $post_id && \TSF_Extension_Manager\InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) { // var_dump()
 			if ( $tsfem->is_premium_user() ) {
 				if ( \check_ajax_referer( 'tsfem-e-focus-inpost-nonce', 'nonce', false ) ) {
 					return true;

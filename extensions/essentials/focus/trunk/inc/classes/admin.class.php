@@ -394,12 +394,9 @@ final class Admin extends Core {
 			return null;
 
 		// Fills missing data to maintain consistency.
-		foreach ( [ 0, 1, 2 ] as $k ) {
-			// PHP 7.4: ??=
-			if ( ! isset( $output[ $k ] ) ) {
-				$output[ $k ] = $this->pm_defaults['kw'][ $k ];
-			}
-		}
+		foreach ( [ 0, 1, 2 ] as $k )
+			$output[ $k ] ??= $this->pm_defaults['kw'][ $k ];
+
 		return $output ?: null;
 	}
 

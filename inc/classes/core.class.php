@@ -218,13 +218,10 @@ class Core {
 	 */
 	final protected function get_options_instance_key() {
 		static $instance;
-		// TODO PHP 7.4: ??=
-		return $instance ?? (
-			$instance = $this->get_option( '_instance' )
-				?: \wp_generate_password( 29, false )
-					. mt_rand( 12, 98 )
-					. mt_rand( 1, 9 ) // Remove likelihood of leading zeros.
-		);
+		return $instance ??= $this->get_option( '_instance' )
+			?: \wp_generate_password( 29, false )
+				. mt_rand( 12, 98 )
+				. mt_rand( 1, 9 ); // Remove likelihood of leading zeros.
 	}
 
 	/**

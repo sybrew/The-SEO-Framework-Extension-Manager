@@ -41,6 +41,15 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+TODO fix bug in Focus for new posts without an ID (bug in Gutenberg, also affected TSF's image uploader...)
+	-> marked with var_dump()
+TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?
+
+TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
+	-> Report it to Brent and them. This is not for us to fix, but iThemes.
+
+TODO add support for WooCommerce checkout in Cord, so we can report sale data.
+
 = 2.6.3 =
 
 * November 2nd, 2023
