@@ -712,8 +712,8 @@ final class Front extends Core {
 				'logo'  => [
 					'@type'  => 'ImageObject',
 					'url'    => \esc_url( $url, [ 'https', 'http' ] ),
-					'width'  => abs( filter_var( $w, \FILTER_SANITIZE_NUMBER_INT ) ),
-					'height' => abs( filter_var( $h, \FILTER_SANITIZE_NUMBER_INT ) ),
+					'width'  => abs( (int) filter_var( $w, \FILTER_SANITIZE_NUMBER_INT ) ),
+					'height' => abs( (int) filter_var( $h, \FILTER_SANITIZE_NUMBER_INT ) ),
 				],
 			],
 		];

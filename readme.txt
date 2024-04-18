@@ -41,14 +41,59 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+TODO Important!!! delete_site_transient( 'update_plugins' );
+	-- Working with a fresh copy of the transient makes our plugin crash, no?
+		- See email from "delivery".
+
+TODO load an unmodified $wp_version for extension compatibility tests -- we got 5 reports already.
+
+TODO for Articles, use tsf()->format()->time() functionality.
+TODO for Articles, remove pinging. (also remove from docs, but state in changelog)
+
 TODO fix bug in Focus for new posts without an ID (bug in Gutenberg, also affected TSF's image uploader...)
 	-> marked with var_dump()
 TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?
+	do the var_dump()
 
 TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
 	-> Report it to Brent and them. This is not for us to fix, but iThemes.
 
 TODO add support for WooCommerce checkout in Cord, so we can report sale data.
+
+TODO the is_json_valid() calls are duplicated, no?
+
+TODO get_article_published_date and get_article_modified_date show gmdate('c') instead of the preference in TSF.
+
+TODO for Articles, only display the Article type if it's non-default?
+
+TODO for Focus, add extra support for WC's "short description" (aka excerpt)?
+
+TODO for Monitor, when a site isn't registered with us, tell the user about it.
+	-> To test, register, then delete from (or modify) DB.
+	-> Currently, we send the generic 'failure' response.
+		-> We could say the site isn't registered... but wouldn't this open the gate for spammers?
+			-> Then again, the service is proxied and requires various secrets to align before responding.
+
+TODO for Focus, when no inflections/synonyms are found, fill in the word itself?!
+	-> Try "tyre" -> Noun: tyre.
+
+TODO Make "site keys not valid" warning site-wide, instead of only Extension Manager page.
+
+TODO: For Honeypot Timer, add a JS script that updates the timer when the page loads.
+	-> If no JS, just keep the server-timer.
+	-> If emptied -> fail!
+	-> Use the same method PHP uses.
+
+= 2.6.4 =
+
+**Feature highlights:**
+
+* Honeypot now tests against fast commenters that accelerate time.
+
+**Updated extensions:**
+
+* [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
+
 
 = 2.6.3 =
 

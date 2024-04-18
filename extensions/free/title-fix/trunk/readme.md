@@ -3,22 +3,20 @@ Location: https://theseoframework.com/extensions/title-fix/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This extension makes sure your title output is as configured. Even if your theme is doing it wrong.
+This extension makes sure your meta title output is as configured. Even if your theme is doing it wrong.
 
 ## Overview
 
 ### Broken WordPress standards
 
-WordPress themes have final control of the title. Far too often, theme authors opted in for "pretty" titles, rather than semantic titles.
+10 years ago, [WordPress introduced a modern title tag standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/). Still, not all themes have implemented this.
 
-This created various issues.
+Themes without the modern standard may opt in for "pretty" titles, rather than semantic titles. This creates various issues.
 
-Firstly, titles shouldn't be pretty; they should be unique. This is a fundamental part of SEO as it creates distinction.
-Secondly, the way WordPress used to handle titles was vague at best. This prevents plugins, among The SEO Framework, from altering the title correctly.
+First, titles shouldn't be pretty; they should be unique. This is a fundamental part of SEO as it creates distinction.
+Second, the way WordPress used to handle titles was vague at best. This prevents plugins, among The SEO Framework, from altering the title correctly.
 
-To prevent these issues from happening, new WordPress themes in the WordPress.org repository must follow [a more modern standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/).
-
-Not all themes have been updated accordingly, and the Title Fix extension will solve that for you.
+The Title Fix extension will solve these issues by finding and replacing the title tag.
 
 ### Is this extension for you?
 
@@ -30,8 +28,9 @@ Otherwise, this extension won't have any effect.
 
 The SEO Framework can detect incorrect usage of the title output. It tries to resolve this automatically, but sometimes that isn't enough.
 
-When the extension is active, it automatically looks for the title in your page's source and overwrites it when found.
-All this happens before your pages are sent to the page visitor or crawler, in less than 2 milliseconds.
+Title Fix scans the HTML response output buffer for the title. It overwrites the title when found before the page is sent to the visitor, all within a millisecond.
+
+This extension doesn't have settings and doesn't store anything. Deactivation will resume default title output behavior.
 
 ## Usage
 

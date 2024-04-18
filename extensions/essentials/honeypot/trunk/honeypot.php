@@ -8,8 +8,8 @@ namespace TSF_Extension_Manager\Extension\Honeypot;
 /**
  * Extension Name: Honeypot
  * Extension URI: https://theseoframework.com/extensions/honeypot/
- * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate using five lightweight yet powerful methods that won't leak data from your site.
- * Extension Version: 2.0.1
+ * Extension Description: The Honeypot extension catches comment spammers with a 99.99% catch-rate using six lightweight yet powerful methods that won't leak data from your site.
+ * Extension Version: 2.1.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -21,7 +21,7 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
 
 /**
  * Honeypot extension for The SEO Framework
- * Copyright (C) 2017-2023 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
+ * Copyright (C) 2017-2024 Sybre Waaijer, CyberWire (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -41,7 +41,7 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  *
  * @since 1.0.0
  */
-\define( 'TSFEM_E_HONEYPOT_VERSION', '2.0.1' );
+\define( 'TSFEM_E_HONEYPOT_VERSION', '2.1.0' );
 
 \add_action( 'plugins_loaded', __NAMESPACE__ . '\\honeypot_init', 11 );
 /**
@@ -103,6 +103,12 @@ final class Core {
 	private $nonce_length = 20;
 
 	/**
+	 * @since 2.1.0
+	 * @var float The default comment delay time.
+	 */
+	private $comment_delay = 5.33;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 1.0.0
@@ -126,6 +132,20 @@ final class Core {
 	}
 
 	/**
+	 * Escapes input names.
+	 *
+	 * @since 2.1.0
+	 * @param string $name The input name.
+	 * @return string The escaped input name.
+	 */
+	private function esc_input_name( $name ) {
+
+		preg_match( '/[A-Za-z][a-zA-Z0-9\[\]_\-@]*/', $name, $matches );
+
+		return $matches[0] ?? '';
+	}
+
+	/**
 	 * Generates and outputs honeypot comment field within the comment forms.
 	 *
 	 * @since 1.0.0
@@ -144,13 +164,9 @@ final class Core {
 		if ( ! $setup )
 			return;
 
-		$shuffle = range( 0, 4 );
+		$shuffle = range( 0, 5 );
 		shuffle( $shuffle );
 
-		// TODO log number of times a comment gets caught by X type? (and 'since' record?)
-		// That'd be 'fun' and 'interesting' for the user. That's it, though.
-		// TODO Allow user to (auto/optionally) send data to us, for us to showcase how many comments are blocked?
-		// Attach unique ID to each user sending it? Must be unique from TSFEM activation ID, though.
 		foreach ( $shuffle as $honeypot ) {
 			switch ( $honeypot ) {
 				case 0:
@@ -168,8 +184,8 @@ final class Core {
 				case 4:
 					$this->output_timer_honeypot();
 					break;
-				default:
-					break 2;
+				case 5:
+					$this->output_timestamp_honeypot();
 			}
 		}
 	}
@@ -202,27 +218,26 @@ final class Core {
 
 		$this->setup_post_check_properties();
 
-		$i = 0;
+		$i = -1;
 		do {
 			switch ( ++$i ) {
-				case 1:
+				case 0:
 					$this->check_css_field( $approved );
 					break;
-
-				case 2:
+				case 1:
 					$this->check_css_rotation_fields( $approved );
 					break;
-
-				case 3:
+				case 2:
 					$this->check_js_field( $approved );
 					break;
-
-				case 4:
+				case 3:
 					$this->check_nonce_rotation_field( $approved );
 					break;
-
-				case 5:
+				case 4:
 					$this->check_timer_field( $approved );
+					break;
+				case 5:
+					$this->check_timestamp_field( $approved );
 					break;
 
 				default:
@@ -243,7 +258,7 @@ final class Core {
 	 */
 	private function output_css_honeypot() {
 		printf(
-			'<p style="display:none;"><input type="text" name="%1$s" value=""></p>', // Keep XHTML valid!
+			'<p style="display:none;"><input type="text" name="%s" value=""></p>', // Keep XHTML valid!
 			\esc_attr( $this->hp_properties['css_input_name'] )
 		);
 	}
@@ -286,9 +301,9 @@ final class Core {
 	private function output_js_honeypot() {
 
 		$items = [
-			'wrapper_id' => \sanitize_key( $this->hp_properties['js_rotate_wrapper_id'] ),
-			'input_name' => \sanitize_key( $this->hp_properties['js_input_name'] ),
-			'input_id'   => \sanitize_key( $this->hp_properties['js_rotate_input_id'] ),
+			'wrapper_id' => \esc_attr( $this->hp_properties['js_rotate_wrapper_id'] ),
+			'input_name' => $this->esc_input_name( $this->hp_properties['js_input_name'] ),
+			'input_id'   => \esc_attr( $this->hp_properties['js_rotate_input_id'] ),
 			'label_i18n' => \esc_html( $this->hp_properties['js_input_label_i18n'] ),
 			'ph_i18n'    => \esc_attr( $this->hp_properties['js_input_placeholder_i18n'] ),
 			'value_i18n' => \esc_textarea( $this->hp_properties['js_input_value_i18n'] ),
@@ -303,9 +318,10 @@ final class Core {
 			JSON_FORCE_OBJECT
 		);
 
+		// Source: /js.js
 		$script = <<<JS
-(a=>{let b=document.getElementById(a.i),c=document.getElementById(a.w);b&&c&&(b.value="",c.style.display="none")})($php_values);
-JS;
+			(a=>{let b=document.getElementById(a.i),c=document.getElementById(a.w);b&&c&&(b.value="",c.style.display="none")})($php_values);
+			JS;
 
 		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already taken care of.
 		vprintf(
@@ -336,17 +352,16 @@ JS;
 	 * @since 1.0.0
 	 */
 	private function output_nonce_honeypot() {
-		vprintf(
-			'<input type="hidden" name="%1$s" value="%2$s">', // Keep XHTML valid!
-			[
-				\sanitize_key( $this->hp_properties['nonce_input_name'] ),
-				\esc_attr( $this->hp_properties['nonce_rotated_input_value'] ),
-			]
+		printf(
+			'<input type="hidden" name="%s" value="%s">', // Keep XHTML valid!
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- this escapes.
+			$this->esc_input_name( $this->hp_properties['nonce_input_name'] ),
+			\esc_attr( $this->hp_properties['nonce_rotated_input_value'] ),
 		);
 	}
 
 	/**
-	 * Outputs timer honeypot.
+	 * Outputs GPU timer honeypot.
 	 *
 	 * This input field forwards random, mangled floating point numbers.
 	 *
@@ -359,7 +374,7 @@ JS;
 		 * @todo make option.
 		 * @param float $time
 		 */
-		$time = (float) \apply_filters( 'the_seo_framework_honeypot_countdown_time', 5.33 );
+		$time = (float) \apply_filters( 'the_seo_framework_honeypot_countdown_time', $this->comment_delay );
 
 		// Random 16 bit timer scale. This converts to string, but that's what we need for reliable JS output.
 		// 0x00FF is subtracted for we reserve 8 bits as unknown zero-offset in JS.
@@ -368,7 +383,7 @@ JS;
 		// This converts to string, but that's what we need anyway for reliable JS output.
 		$random_time = number_format( $time * $random_scale, 2, '.', '' );
 
-		$input_name = \sanitize_key( $this->hp_properties['timer_input_name'] );
+		$input_name = $this->esc_input_name( $this->hp_properties['timer_input_name'] );
 
 		// All values have been sanitized!
 		$php_values = json_encode(
@@ -382,8 +397,8 @@ JS;
 
 		// Can we make this even smaller without losing functionality? Unpacked source: /timer.js
 		$script = <<<JS
-(a=>{let b,c,d=document.getElementsByName(a.n)[0],e=255*(1-Math.random()),f=f=>{void 0===b&&(b=f),c=f-b,c<1e3*(+a.t/+a.s)?(d.value=+a.t+e-c/1e3,g()):d.value=""},g=()=>setTimeout(()=>requestAnimationFrame(f),100+200*Math.random());d&&(d.value=+a.t+e,g())})($php_values);
-JS;
+			(a=>{let b,c,d=document.getElementsByName(a.n)[0],e=255*(1-Math.random()),f=f=>{void 0===b&&(b=f),c=f-b,c<1e3*(+a.t/+a.s)?(d.value=+a.t+e-c/1e3,g()):d.value=""},g=()=>setTimeout(()=>requestAnimationFrame(f),100+200*Math.random());d&&(d.value=+a.t+e,g())})($php_values);
+			JS;
 
 		// phpcs:disable, WordPress.Security.EscapeOutput.OutputNotEscaped -- Already taken care of.
 		vprintf(
@@ -397,6 +412,33 @@ JS;
 	}
 
 	/**
+	 * Outputs timestamp honeypot.
+	 *
+	 * This input field forwards random, mangled floating point numbers.
+	 *
+	 * @since 2.0.0
+	 */
+	private function output_timestamp_honeypot() {
+
+		/**
+		 * @since 2.1.0
+		 * @todo make option.
+		 * @param float $delay
+		 */
+		$delay = (float) \apply_filters( 'the_seo_framework_honeypot_timestamp_wait', $this->comment_delay );
+
+		// TODO make option?
+		$base = 20;
+
+		printf(
+			'<input type="hidden" name="%s" value="%s">', // Keep XHTML valid!
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- this escapes.
+			$this->esc_input_name( $this->hp_properties['timestamp_input_name'] ),
+			\esc_attr( base_convert( round( ( microtime( true ) + $delay ) * $base ), 10, $base ) . ':' . dechex( $base ) ),
+		);
+	}
+
+	/**
 	 * Checks the static CSS input field that ought to be empty.
 	 *
 	 * @since 1.0.0
@@ -405,10 +447,10 @@ JS;
 	 */
 	private function check_css_field( &$approved ) {
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
 
 		// Perform same sanitization during display.
-		$_field = \esc_attr( $this->hp_properties['css_input_name'] );
+		$_field = $this->esc_input_name( $this->hp_properties['css_input_name'] );
 
 		// Check if input is set.
 		if ( ! empty( $_POST[ $_field ] ) ) {
@@ -428,25 +470,21 @@ JS;
 	 */
 	private function check_css_rotation_fields( &$approved ) {
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
-
-		// Perform same sanitization during display.
-		$fields = \map_deep(
+		foreach (
 			[
 				$this->hp_properties['css_rotate_input_name'],
 				$this->hp_properties['css_rotate_input_name_previous'],
-			],
-			'\\esc_attr'
-		);
-		foreach ( $fields as $input ) {
-			if ( ! empty( $_POST[ $input ] ) ) {
+			]
+			as $input
+		) {
+			// Perform same sanitization during display.
+			// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
+			if ( ! empty( $_POST[ $this->esc_input_name( $input ) ] ) ) {
 				// Empty check failed.
 				$approved = 'spam';
 				break;
 			}
 		}
-
-		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -457,19 +495,12 @@ JS;
 	 * @param string|int $approved The current approval state. Passed by reference.
 	 */
 	private function check_js_field( &$approved ) {
-
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
-
 		// Perform same sanitization as displayed.
-		$_field = \sanitize_key( $this->hp_properties['js_input_name'] );
-
-		// Check if input is set.
-		if ( ! empty( $_POST[ $_field ] ) ) {
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
+		if ( ! empty( $_POST[ $this->esc_input_name( $this->hp_properties['js_input_name'] ) ] ) ) {
 			// Empty check failed.
 			$approved = 'spam';
 		}
-
-		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -483,12 +514,12 @@ JS;
 	 */
 	private function check_nonce_rotation_field( &$approved ) {
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
 
 		// Perform same sanitization as displayed.
-		$_field = \sanitize_key( $this->hp_properties['nonce_input_name'] );
+		$_field = $this->esc_input_name( $this->hp_properties['nonce_input_name'] );
 
-		if ( empty( $_POST[ $_field ] ) ) {
+		if ( empty( $_POST[ $_field ] ) || ! \is_scalar( $_POST[ $_field ] ) ) {
 			$approved = 'spam';
 			return;
 		}
@@ -526,13 +557,44 @@ JS;
 	 * @param string|int $approved The current approval state. Passed by reference.
 	 */
 	private function check_timer_field( &$approved ) {
+		// Perform same sanitization as displayed.
+		// phpcs:ignore, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
+		if ( ! empty( $_POST[ $this->esc_input_name( $this->hp_properties['timer_input_name'] ) ] ) )
+			$approved = 'spam';
+	}
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No data is processed.
+	/**
+	 * Checks the input fields that ought to be just a few seconds ago.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string|int $approved The current approval state. Passed by reference.
+	 */
+	private function check_timestamp_field( &$approved ) {
+
+		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- No POST data is stored.
 
 		// Perform same sanitization as displayed.
-		$_field = \sanitize_key( $this->hp_properties['timer_input_name'] );
+		$_field = $this->esc_input_name( $this->hp_properties['timestamp_input_name'] );
 
-		if ( ! empty( $_POST[ $_field ] ) )
+		if ( empty( $_POST[ $_field ] ) || ! \is_string( $_POST[ $_field ] ) ) {
+			$approved = 'spam';
+			return;
+		}
+
+		[ $time, $base ] = array_pad( explode( ':', $_POST[ $_field ] ), 2, 0 );
+
+		$base = is_numeric( $base ) ? hexdec( $base ) : 0;
+
+		if ( empty( $base ) ) {
+			$approved = 'spam';
+			return;
+		}
+
+		$time = base_convert( $time, $base, 10 ) / $base;
+
+		// If timestamp is incorrect, or not enough time has passed, assume spam.
+		if ( empty( $time ) || time() < $time )
 			$approved = 'spam';
 
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
@@ -619,7 +681,7 @@ JS;
 
 				/**
 				 * Preventing /wp-comments-post.php and other POST injection.
-				 * Value must be filled in.
+				 * Value must be filled in and decipherable.
 				 */
 				'nonce_input_name'                   =>
 					$this->get_static_hashed_field_name( 11, true ) . 'N' . $this->get_static_hashed_field_name( 12 ),
@@ -634,6 +696,13 @@ JS;
 				 */
 				'timer_input_name' =>
 					$this->get_static_hashed_field_name( 11, true ) . 'T' . $this->get_static_hashed_field_name( 12, true ),
+
+				/**
+				 * Preventing any browser commenting instantly.
+				 * Value must be a ciphered timestamp.
+				 */
+				'timestamp_input_name' =>
+					$this->get_static_hashed_field_name( 11 ) . 'S' . $this->get_static_hashed_field_name( 12 ), // Restart, but risk machine learning
 			];
 			// phpcs:enable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned
 			return true;
@@ -796,9 +865,9 @@ JS;
 	 */
 	private function get_static_hashed_field_name( $length = 24, $flip = false ) {
 
-		static $hash = '';
+		static $hash;
 
-		if ( ! \strlen( $hash ) )
+		if ( ! isset( $hash ) )
 			$hash = $this->hex_to_62_trim( \tsfem()->_get_uid_hash(
 				$this->get_id() . '+' . __METHOD__ . '+' . $GLOBALS['blog_id']
 			) );

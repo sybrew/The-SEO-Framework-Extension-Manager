@@ -3,7 +3,7 @@ Location: https://theseoframework.com/extensions/honeypot/
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-This privacy-focussed extension catches comment spammers with a 99.99% catch-rate using five lightweight yet powerful methods that won't leak data from your site.
+This privacy-focussed extension catches comment spammers with a 99.99% catch-rate using six lightweight yet powerful methods that won't leak data from your site.
 
 ## Overview
 
@@ -35,7 +35,8 @@ Only a human that uses a modern browser can pass these tests:
 1. Randomized CSS-hidden fields using HTML5 and time-limited IDs. Targets the same bots as above, but other bots that scrape comment forms for postponed abuse will also get caught.
 1. Randomized JavaScript. Most bots don't use a real browser that supports JavaScript, so they'll fail this test. Humans that don't use JavaScript are asked kindly to empty a field.
 1. Verification nonces. With this, bots can no longer abuse easily exposed endpoints in WordPress to leave comments.
-1. GPU timers. The bot must actually render the page to pass this test, blocking spam from many emulated browsers.
+1. GPU timer. The bot must actually render the page to pass this test, blocking spam from many emulated browsers.
+1. Timestamp. Bots can speed up GPU timers, but they can't speed up this one. Fast typers will pass this enciphered timestamp test, but faster bots won't.
 
 All five methods are entirely randomized and use secure authentication methods, so no robot can learn how to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**. Now you can finally uninstall and delete Akismet.
 
@@ -234,7 +235,35 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 } );
 ```
 
+There's also another timestamp that uses this tuned delay value.
+
+```php
+add_filter( 'the_seo_framework_honeypot_timestamp_wait', function( $time = 5.33 ) {
+	/**
+	 * This is the minimum time a visitor has to wait before submitting a comment on your site.
+	 * This will then be ciphered and added as a value to a hidden comment field.
+	 *
+	 * If the time hasn't passed since the page was first generated, the submitted comment is automatically rejected.
+	 *
+	 * Higher than 10 seconds is not recommended, as advanced users might copy and paste
+	 * the comment from a failed (crashed) page-state.
+	 *
+	 * Floating points merely add entropy based on microtime: 5.33 may result in 5 or 6 seconds wait time.
+	 * This value shouldn't be used to fend off human commenters.
+	 *
+	 * Below is the default value.
+	 */
+	return 5.33; // seconds
+} );
+```
+
 ## Changelog
+
+### 2.1.0
+
+[tsfep-release time="-1"]
+
+* **Added:** Added a new ciphered server-sided timestamp test to counter speedhacks bypassing the GPU timer.
 
 ### 2.0.1
 

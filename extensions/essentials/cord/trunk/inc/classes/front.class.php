@@ -178,7 +178,7 @@ final class Front extends Core {
 			gtag( 'js', new Date );
 
 			gtag( 'config', '{$tracking_id}', $config );
-		JS;
+			JS;
 
 		$script = $this->minify_script( $script );
 
@@ -187,7 +187,7 @@ final class Front extends Core {
 		echo <<<HTML
 			<script async="async" src="https://www.googletagmanager.com/gtag/js?id={$tracking_id}"></script>
 			<script>$script</script>
-		HTML;
+			HTML;
 		// phpcs:enable, WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.WP.EnqueuedResources.NonEnqueuedScript
 	}
 
@@ -219,11 +219,11 @@ final class Front extends Core {
 			!function(f,b,e,v,n,t,s) {
 				if ( f.fbq ) return;
 				n = f.fbq = function() {
-					n.callMethod?n.callMethod.apply( n, arguments ) : n.queue.push( arguments )
+					n.callMethod ? n.callMethod.apply( n, arguments ) : n.queue.push( arguments )
 				};
 				t = b.createElement( e );
 
-				if ( !f._fbq )
+				if ( ! f._fbq )
 					f._fbq = n;
 
 				n.push    = n;
@@ -239,14 +239,14 @@ final class Front extends Core {
 
 			fbq( 'init', '{$pixel_id_js}' );
 			fbq( 'track', 'PageView' );
-JS;
+			JS;
 
 		$script = $this->minify_script( $script );
 
 		// Keep XHTML valid!
 		$noscript = <<<NOJS
 			<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={$pixel_id_attr}&ev=PageView&noscript=1" />
-NOJS;
+			NOJS;
 
 		$noscript = str_replace( [ "\n", "\t" ], '', $noscript );
 
@@ -270,6 +270,7 @@ NOJS;
 		// Get omni-spaced first!
 		$s_and_r = [
 			' ? '  => '?',
+			' ! '  => '!',
 			' :'   => ':',
 			': '   => ':',
 			' = '  => '=',
