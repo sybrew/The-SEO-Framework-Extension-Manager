@@ -80,6 +80,7 @@ function _check_external_blocking() {
 /**
  * Filters the plugin API to bind to The SEO Framework's own updater service.
  *
+ * @hook plugins_api PHP_INT_MAX
  * @since 2.0.0
  * @access private
  * @see WP Core plugins_api()
@@ -159,6 +160,7 @@ function _hook_plugins_api( $res, $action, $args ) {
  * Clears the updater cache after a plugin's been updated.
  * This prevents incorrect updater version storing.
  *
+ * @hook upgrader_process_complete 10
  * @since 2.0.0
  * @access private
  */
@@ -183,16 +185,85 @@ function _clear_update_cache() {
  * @access private
  * @see WP Core \wp_update_plugins()
  *
- * @param mixed $value Site transient value.
+ * @param mixed $value Site transient value. Expected to be \stdClass.
  * @return mixed $value
  */
 function _push_update( $value ) {
 
+	// $value is broken by some plugin. We can't fix this. Bail.
+	if ( ! \is_object( $value ) )
+		return $value;
+
+	// Clear old data from w.org update API, even if we bail early, this plugin won't be fetching a outdated w.org files.
 	unset(
 		$value->checked[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ],
 		$value->response[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ],
 		$value->no_update[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ]
 	);
+
+	$update_data = get_plugin_update_data();
+
+	if ( ! $update_data )
+		return $value;
+
+	// The filter may be
+	$value->checked      ??= [];
+	$value->no_update    ??= [];
+	$value->response     ??= [];
+	$value->translations ??= [];
+
+	$this_plugin = \get_plugins()[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
+
+	// We're only checking this plugin. This type of merge needs expansion in a bulk-updater.
+	$value->checked[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $this_plugin['Version'];
+
+	if ( isset( $update_data['no_update'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) )
+		$value->no_update[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $update_data['no_update'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
+
+	// This should be an "else" of "no_update"--but our server already mitigates that.
+	if ( isset( $update_data['plugins'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) )
+		$value->response[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $update_data['plugins'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
+
+	if ( ! empty( $update_data['translations'] ) )
+		$value->translations = array_merge( $value->translations, $update_data['translations'] );
+
+	return $value;
+}
+
+/**
+ * Gets the plugin update according to the "update_plugins_{$hostname}" filter.
+ *
+ * @since 2.6.4
+ *
+ * @return array|false {
+ *     The plugin update data with the latest details. Default false.
+ *
+ *     @type string $id           Optional. ID of the plugin for update purposes, should be a URI
+ *                                specified in the `Update URI` header field.
+ *     @type string $slug         Slug of the plugin.
+ *     @type string $version      The version of the plugin.
+ *     @type string $url          The URL for details of the plugin.
+ *     @type string $package      Optional. The update ZIP for the plugin.
+ *     @type string $tested       Optional. The version of WordPress the plugin is tested against.
+ *     @type string $requires_php Optional. The version of PHP which the plugin requires.
+ *     @type bool   $autoupdate   Optional. Whether the plugin should automatically update.
+ *     @type array  $icons        Optional. Array of plugin icons.
+ *     @type array  $banners      Optional. Array of plugin banners.
+ *     @type array  $banners_rtl  Optional. Array of plugin RTL banners.
+ *     @type array  $translations {
+ *         Optional. List of translation updates for the plugin.
+ *
+ *         @type string $language   The language the translation update is for.
+ *         @type string $version    The version of the plugin this translation is for.
+ *                                  This is not the version of the language file.
+ *         @type string $updated    The update timestamp of the translation file.
+ *                                  Should be a date in the `YYYY-MM-DD HH:MM:SS` format.
+ *         @type string $package    The ZIP location containing the translation update.
+ *         @type string $autoupdate Whether the translation should be automatically installed.
+ *     }
+ * }
+ */
+function get_plugin_update_data() {
 
 	static $runtimecache;
 
@@ -205,7 +276,7 @@ function _push_update( $value ) {
 
 		if ( isset( $cache['_failure_timeout'] ) ) {
 			if ( $cache['_failure_timeout'] > time() )
-				return $value;
+				return false;
 
 			$cache = [];
 		}
@@ -266,7 +337,7 @@ function _push_update( $value ) {
 				];
 				\update_site_option( \TSF_EXTENSION_MANAGER_UPDATER_CACHE, $_cache );
 
-				return $value;
+				return false;
 			}
 
 			$response = json_decode( \wp_remote_retrieve_body( $raw_response ), true );
@@ -294,25 +365,5 @@ function _push_update( $value ) {
 		$runtimecache = $cache;
 	}
 
-	// We're only checking this plugin. This type of merge needs expansion in a bulk-updater.
-	$value->checked[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $this_plugin['Version'];
-	if ( isset( $cache['no_update'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
-		// TODO Core considers changing this. @see \wp_update_plugins().
-		$value->no_update[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['no_update'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
-	}
-	// This should be an "else" of "no_update"--but our server already mitigates that.
-	if ( isset( $cache['plugins'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] ) ) {
-		$value->response[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ] = $cache['plugins'][ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ];
-	}
-
-	if ( ! empty( $cache['translations'] ) ) {
-		if ( isset( $value->translations ) ) {
-			$value->translations = array_merge( $value->translations, $cache['translations'] );
-		} else {
-			// Somehow, the API server sent back an empty response...? This shouldn't be possible, maybe a bug at api.w.org?
-			$value->translations = $cache['translations'];
-		}
-	}
-
-	return $value;
+	return $cache;
 }
