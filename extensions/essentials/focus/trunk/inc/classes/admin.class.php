@@ -190,8 +190,9 @@ final class Admin extends Core {
 		 */
 		$interval = (int) \apply_filters( 'the_seo_framework_focus_auto_interval', 45000 );
 
-		// see tsf()->query()->get_admin_post_id();
-		$post_id = \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 );
+		$post_id = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->query()->get_the_real_admin_id()
+			: \tsf()->get_the_real_admin_id();
 
 		$scripts[] = [
 			'id'       => 'tsfem-focus-inpost',
@@ -285,7 +286,7 @@ final class Admin extends Core {
 			'pm_index' => $this->pm_index,
 			'post_id'  => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 				? \tsf()->query()->get_the_real_admin_id()
-				: \tsf()->get_the_real_ID(),
+				: \tsf()->get_the_real_admin_id(),
 			'kw'       => [
 				'label'        => [
 					'title' => \__( 'Subject Analysis', 'the-seo-framework-extension-manager' ),

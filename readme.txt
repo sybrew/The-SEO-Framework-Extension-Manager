@@ -47,8 +47,6 @@ TODO Important!!! delete_site_transient( 'update_plugins' );
 
 TODO load an unmodified $wp_version for extension compatibility tests -- we got 5 reports already.
 
-TODO fix bug in Focus for new posts without an ID (bug in Gutenberg, also affected TSF's image uploader...)
-	-> marked with var_dump()
 TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?
 	do the var_dump()
 
@@ -83,7 +81,7 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 **Feature highlights:**
 
 * Honeypot now tests against fast commenters that accelerate time.
-* Focus now works as intended with the latest Block Editor.
+* Focus can now make API calls again when creating a new post using the latest Block Editor.
 
 **Detailed log:**
 
@@ -96,7 +94,9 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 
 * [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
 * [Focus at version 2.0.0](https://theseoframework.com/extensions/focus/#changelog)
-	-> TODO We need to add an "select all" button (next to "Choose inflections" and "Choose synonyms") and add a dicitionary service badge.
+	-> TODO We need to add an "select all" button (next to "Choose inflections" and "Choose synonyms")
+	-> add a dicitionary service badge.
+	-> Fix "tyre" / Noun "tyre" fill.
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.6.3 =

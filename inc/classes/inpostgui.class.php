@@ -223,8 +223,9 @@ final class InpostGUI {
 
 		$tsfem = \tsfem();
 
-		// see tsf()->query()->get_admin_post_id();
-		$post_id = \absint( $_GET['post'] ?? $_GET['post_id'] ?? 0 );
+		$post_id = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->query()->get_the_real_admin_id()
+			: \tsf()->get_the_real_admin_id();
 
 		// phpcs:disable, WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned -- it's alligned well enough.
 		$scripts[] = [
@@ -245,7 +246,6 @@ final class InpostGUI {
 					'locale'      => \get_locale(),
 					'userLocale'  => \function_exists( 'get_user_locale' ) ? \get_user_locale() : \get_locale(),
 					'debug'       => (bool) \WP_DEBUG,
-					'rtl'         => (bool) \is_rtl(),
 					'i18n'        => [
 						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),

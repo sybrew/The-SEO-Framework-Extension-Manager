@@ -315,6 +315,8 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 [tsfep-release time="-1"]
 
+* **Improved:** WordPress 6.5 removed the pointer cursor from labels. To make it clear again that inflections and synonyms are clickable, they now display a tiny border on-hover to indicate this affordance.
+* **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
 
 ### 1.5.3
