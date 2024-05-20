@@ -311,6 +311,12 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ## Changelog
 
+### 1.5.4
+
+[tsfep-release time="-1"]
+
+* **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
+
 ### 1.5.3
 
 [tsfep-release time="February 7th, 2023"]

@@ -427,7 +427,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 		const showFailure = () => {
 			// Store realScore in input for saving (which is 0).
-			let input = document.querySelector( `input[name="${rater.id}"]` );
+			// let input = document.querySelector( `input[name="${rater.id}"]` );
 
 			// Gets description based on nearest threshold value.
 			let description = rater.querySelector( '.tsfem-e-focus-assessment-description' ),
@@ -2267,21 +2267,20 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			contentStore.triggerAnalysis();
 		}
 		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
-			const debouncer = lodash.debounce( updateContent, 500 );
+			const debouncer = tsfem_inpost.debounce( updateContent, 500 );
 
 			let isTyping = false,
 				editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
 
-			if ( 'function' === typeof editor.isTyping ) {
+			if ( 'function' === typeof editor.isTyping )
 				isTyping = editor.isTyping();
-			}
 
 			if ( isTyping ) {
 				// Don't process and lag when typing, just show that the data is invalidated.
 				setAllRatersOf( 'pageContent', 'unknown' );
 				debouncer( content );
 			} else {
-				debouncer.cancel(); // Cancel original debouncer.
+				debouncer().cancel(); // Cancel original debouncer.
 				updateContent( content ); // Set content immediately.
 			}
 		} );
@@ -2299,17 +2298,11 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const patchClassicEditor = () => {
 
-		const MutationObserver =
-			   window.MutationObserver
-			|| window.WebKitMutationObserver
-			|| window.MozMutationObserver;
-		// const interval = 3000;
-
 		/**
 		 * Observes page URL changes.
 		 * @see [...]\wp-admin\post.js:editPermalink()
 		 */
-		(()=>{
+		( () => {
 			if ( typeof l10n.focusElements.pageUrl === 'undefined' ) return;
 
 			let listenNode = document.getElementById( 'edit-slug-box' );
@@ -2327,34 +2320,34 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				}
 			}
 
-			new MutationObserver( mutationsList => {
+			new MutationObserver( () => {
 				updatePageUrlRegistry();
 				resetAnalysisChangeListeners( 'pageUrl' );
 				$( '#sample-permalink' ).trigger( analysisChangeEvents( 'pageUrl' ).get( 'trigger' ) );
 			} ).observe( listenNode, { childList: true, subtree: true } );
-		})();
+		} )();
 
 		/**
 		 * Add extra change event listeners on '#content' for tinyMCE.
 		 * @see [...]\wp-admin\editor.js:initialize()
 		 */
-		(() => {
+		( () => {
 			if ( typeof tinyMCE === 'undefined' || typeof tinyMCE.on !== 'function' )
 				return;
 
 			let loaded = false;
 
 			tinyMCE.on( 'addEditor', event => {
-				if ( loaded ) return;
-				if ( event.editor.id !== 'content' ) return;
+				if ( loaded || event.editor.id !== 'content' ) return;
+
 				loaded = true; // prevent further checks.
 
 				updateActiveFocusAreas( 'pageContent' );
 				resetAnalysisChangeListeners( 'pageContent' );
 
 				let buffers = {},
-					editor = tinyMCE.get( 'content' ),
-					buffering = false,
+					editor     = tinyMCE.get( 'content' ),
+					buffering  = false,
 					setUnknown = false;
 
 				editor.on( 'Dirty', event => {
@@ -2377,7 +2370,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					}, 1000 );
 				} );
 			} );
-		})();
+		} )();
 	}
 
 	/**

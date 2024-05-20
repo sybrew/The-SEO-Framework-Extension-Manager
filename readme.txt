@@ -83,6 +83,7 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 **Feature highlights:**
 
 * Honeypot now tests against fast commenters that accelerate time.
+* Focus now works as intended with the latest Block Editor.
 
 **Detailed log:**
 
@@ -94,6 +95,8 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 **Updated extensions:**
 
 * [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
+* [Focus at version 2.0.0](https://theseoframework.com/extensions/focus/#changelog)
+	-> TODO We need to add an "select all" button (next to "Choose inflections" and "Choose synonyms") and add a dicitionary service badge.
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.6.3 =
