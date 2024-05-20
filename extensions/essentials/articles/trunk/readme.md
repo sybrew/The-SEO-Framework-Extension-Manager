@@ -33,9 +33,9 @@ Articles automatically fetches all inferred information from your pages and outp
 
 ### It comes with a Google News Sitemap
 
-Get your news articles indexed ASAP with the Google News sitemap brought by Articles. This sitemap populates automatically, and whenever you publish a new article, Articles automatically notifies Google News.
+Get your news articles indexed ASAP with the Google News sitemap brought by Articles. To get started, visit the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
-To get started, visit the [Google News Publishing Center](https://publishercenter.google.com/publications).
+This special sitemap is small, populates automatically, its location is added to the `/robots.txt` output, and Google crawls it periodically. Be sure to [submit it to Google Search Console](https://support.google.com/webmasters/answer/7451001).
 
 ## Usage
 
@@ -144,23 +144,23 @@ Some settings are hidden when your website represents a person, instead of an or
 When enabled, you can find your news sitemap at `/sitemap-news.xml`. For example: `https://example.com/sitemap-news.xml`. If that endpoint doesn't work, try `https://example.com/news-sitemap.xml`.
 Please note that your site must be verified with Google News before you can benefit from the sitemap. You can get started at the [Google News Publishing Center](https://publishercenter.google.com/publications).
 
-This feature extends The SEO Framework's sitemap; therefore, **The SEO Framework's optimized sitemap must be enabled.**
+This feature uses The SEO Framework's sitemap loader; therefore, **The SEO Framework's optimized sitemap must be enabled.**
 
 ### Where do I submit a Google News sitemap?
 
-You can submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap).
+You should submit your Google News sitemap via Google Search Console. For more information, see Google's publisher documentation on [Google News Sitemaps](https://developers.google.com/search/docs/crawling-indexing/sitemaps/news-sitemap).
 
 ### The Google News sitemap is empty!
 
 The Google News sitemap will only be populated with Articles assigned the "News Article" Article Type. You can adjust the Article Type on a per-post basis for supported post types under "Structure."
 
-[Google News sitemaps documentation](https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap) states that articles older than two days should be removed. Articles extension uses a grace period of 2.5 days.
+[Google News sitemaps documentation](https://developers.google.com/search/docs/crawling-indexing/sitemaps/news-sitemap) states that articles older than two days should be removed. Articles extension uses a grace period of 2.5 days.
 
 If you have not published a News Article in the past two and a half days, the sitemap will be empty.
 
 ### Does Bing support the Google News sitemap?
 
-No. Please visit the [Bing News PubHub](https://pubhub.bing.com/) for more information.
+No. Please visit the [Bing PubHub Guidelines for Publishers](https://www.bing.com/webmasters/help/pubhub-publisher-guidelines-32ce5239) for more information.
 
 ## Developers
 
@@ -259,6 +259,9 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 [tsfep-release time="-1"]
 
 * **Improved:** Removed redundant output validity checks; in turn, this improves performance.
+* **Removed:** Pinging of the Google News sitemap is no longer supported. They now crawl your sitemap periodically.
+	* Google can find your News Sitemap's location via your `/robots.txt` file. But, to be certain they catch it, also [submit the sitemap to Google Search Console](https://support.google.com/webmasters/answer/7451001).
+	* To learn more, see https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping.
 
 ### 2.3.0
 
