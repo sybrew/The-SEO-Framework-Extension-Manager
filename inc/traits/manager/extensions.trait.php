@@ -213,7 +213,7 @@ trait Extensions_Properties {
 				'area'         => 'theme',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1572496812',
+				'last_updated' => '1716208521',
 				'requires'     => '5.9',
 				'tested'       => '6.6',
 				'requires_tsf' => '4.2.8',
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '0adf606fe9fde5da22219d8243d6e81153defe52bb092115e56cb484acb552a6',
-			'sha1'   => 'a37df15c0ee811cf8b8154d798fb38b45df46328',
-			'md5'    => '0558f5a050f9579ccccff01a4ff0a43a',
+			'sha256' => 'd0cc85bb9ccf998afeef481557f243e695fa248ae10670377ab33e3a70fcb4c2',
+			'sha1'   => 'a35fcbfaa173e06e0351375c4438433ffd729488',
+			'md5'    => 'f7d232203fc57fc6d899f9c9df84ec5a',
 		];
 	}
 

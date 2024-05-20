@@ -121,8 +121,9 @@ final class Core {
 		/**
 		 * Only do something if the theme is doing it wrong. Or when the filter has been applied.
 		 * Requires initial load after theme switch.
+		 * i.e., we test if the theme has registered 'title-tag' support.
 		 */
-		if ( ! $this->current_theme_supports_title_tag() ) :
+		if ( empty( $GLOBALS['_wp_theme_features']['title-tag'] ) ) :
 			// Start loader.
 			$this->loader();
 
@@ -266,10 +267,8 @@ final class Core {
 
 		// Let's use regex.
 		if ( 1 === preg_match( '/<title.*?<\/title>/is', $content, $matches ) ) {
-			$title_tag = $matches[0] ?? null;
-
-			if ( isset( $title_tag ) ) {
-				$this->replace_title_tag( $title_tag, $content );
+			if ( isset( $matches[0] ) ) {
+				$this->replace_title_tag( $matches[0], $content );
 				$this->title_found_and_flushed = true;
 				return;
 			}
@@ -297,19 +296,6 @@ final class Core {
 			'<title>' . \tsf()->get_title() . '</title>' . $this->indicator(),
 			$content
 		);
-	}
-
-	/**
-	 * Checks a theme's support for title-tag.
-	 *
-	 * @since 1.0.0
-	 * @since 1.2.0 Removed caching.
-	 * @global $_wp_theme_features
-	 *
-	 * @return bool True if the theme supports the title tag, false otherwise.
-	 */
-	public function current_theme_supports_title_tag() {
-		return ! empty( $GLOBALS['_wp_theme_features']['title-tag'] );
 	}
 
 	/**
