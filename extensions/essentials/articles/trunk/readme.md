@@ -254,6 +254,12 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ## Changelog
 
+### 2.3.1
+
+[tsfep-release time="-1"]
+
+* **Improved:** Removed redundant output validity checks; in turn, this improves performance.
+
 ### 2.3.0
 
 [tsfep-release time="November 2nd, 2023"]

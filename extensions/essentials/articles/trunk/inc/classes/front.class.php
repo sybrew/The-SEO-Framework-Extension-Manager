@@ -389,9 +389,6 @@ final class Front extends Core {
 	 */
 	private function get_article_main_entity() {
 
-		if ( ! $this->is_json_valid() )
-			return [];
-
 		$url = \tsf()->get_canonical_url();
 
 		if ( ! $url ) {
@@ -423,9 +420,6 @@ final class Front extends Core {
 	 * @return array The Article's Headline.
 	 */
 	private function get_article_headline() {
-
-		if ( ! $this->is_json_valid() )
-			return [];
 
 		$id = $this->get_current_id();
 
@@ -460,9 +454,6 @@ final class Front extends Core {
 	 * @return array The Article's Image
 	 */
 	private function get_article_image() {
-
-		if ( ! $this->is_json_valid() )
-			return [];
 
 		/**
 		 * @since 1.4.0
@@ -534,9 +525,6 @@ final class Front extends Core {
 	 */
 	private function get_article_published_date() {
 
-		if ( ! $this->is_json_valid() )
-			return [];
-
 		$post = $this->get_current_post();
 
 		if ( ! $post ) {
@@ -565,9 +553,6 @@ final class Front extends Core {
 	 */
 	private function get_article_modified_date() {
 
-		if ( ! $this->is_json_valid() )
-			return [];
-
 		$post = $this->get_current_post();
 
 		if ( ! $post )
@@ -592,9 +577,6 @@ final class Front extends Core {
 	 * @return array The Article's Author
 	 */
 	private function get_article_author() {
-
-		if ( ! $this->is_json_valid() )
-			return [];
 
 		$post = $this->get_current_post();
 
@@ -643,9 +625,6 @@ final class Front extends Core {
 	 * @return array The Article's Publisher
 	 */
 	private function get_article_publisher() {
-
-		if ( ! $this->is_json_valid() )
-			return [];
 
 		if ( ! static::is_organization() ) {
 			$this->invalidate( 'amp' );
@@ -733,9 +712,6 @@ final class Front extends Core {
 	 * @return array The Article's Description
 	 */
 	private function get_article_description() {
-
-		if ( ! $this->is_json_valid() )
-			return [];
 
 		$description = \esc_attr( \tsf()->get_description() );
 

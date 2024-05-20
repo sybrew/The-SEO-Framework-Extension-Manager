@@ -58,13 +58,10 @@ TODO do not disconnect sites when the subscription expires, but downgrade them t
 TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
 	-> Report it to Brent and them. This is not for us to fix, but iThemes.
 
-TODO add support for WooCommerce checkout in Cord, so we can report sale data.
-
-TODO the is_json_valid() calls are duplicated, no?
-
 TODO get_article_published_date and get_article_modified_date show gmdate('c') instead of the preference in TSF.
 
-TODO for Articles, only display the Article type if it's non-default?
+TODO for Articles, only display the Article post state type if it's non-default?
+	-> We can't, because we have the "Disabled" type, i.e., "no articles" -- this is conveyed by not showing the Article type.
 
 TODO for Focus, add extra support for WC's "short description" (aka excerpt)?
 
@@ -90,10 +87,17 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 
 * Honeypot now tests against fast commenters that accelerate time.
 
+**Detailed log:**
+
+* **Changed:**
+	* The update API is now engaged unconditionally. We found that users still accidentally downgraded to the WordPress.org version, this ought to prevent that.
+* **Fixed:**
+	* Resolved an issue where the plugin updater could cause a fatal error.
+
 **Updated extensions:**
 
+* [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
-
 
 = 2.6.3 =
 
