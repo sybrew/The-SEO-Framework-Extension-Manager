@@ -47,8 +47,6 @@ TODO Important!!! delete_site_transient( 'update_plugins' );
 
 TODO load an unmodified $wp_version for extension compatibility tests -- we got 5 reports already.
 
-TODO for Articles, use tsf()->format()->time() functionality.
-
 TODO fix bug in Focus for new posts without an ID (bug in Gutenberg, also affected TSF's image uploader...)
 	-> marked with var_dump()
 TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?

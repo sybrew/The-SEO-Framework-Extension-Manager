@@ -258,6 +258,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 [tsfep-release time="-1"]
 
+* **Improved:** The article time notation now honors TSF's timestamp settings. This requires TSF v5.0 or later.
 * **Improved:** Removed redundant output validity checks; in turn, this improves performance.
 * **Removed:** Pinging of the Google News sitemap is no longer supported. They now crawl your sitemap periodically.
 	* Google can find your News Sitemap's location via your `/robots.txt` file. But, to be certain they catch it, also [submit the sitemap to Google Search Console](https://support.google.com/webmasters/answer/7451001).

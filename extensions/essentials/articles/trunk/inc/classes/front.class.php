@@ -56,6 +56,18 @@ final class Front extends Core {
 	private $image_size_name = 'tsfem-e-articles-logo-rect';
 
 	/**
+	 * @since 2.3.1
+	 * @var int The current query's ID.
+	 */
+	private $query_id = 0;
+
+	/**
+	 * @since 2.3.1
+	 * @var ?\WP_Post The current query's post.
+	 */
+	private $query_post = null;
+
+	/**
 	 * The constructor, initialize plugin.
 	 *
 	 * @since 1.0.0
@@ -77,14 +89,14 @@ final class Front extends Core {
 	public function _init_articles_output() {
 
 		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
-			if ( ! \tsf()->query()->is_singular() || \tsf()->query()->utils()->is_query_exploited() ) return;
+			$tsf_query = \tsf()->query();
+			if ( ! $tsf_query->is_singular() || $tsf_query->utils()->is_query_exploited() ) return;
+			$post_type = $tsf_query->get_post_type_real_id();
 		} else {
-			if ( ! \tsf()->is_singular() || \tsf()->is_query_exploited() ) return;
+			$tsf = \tsf();
+			if ( ! $tsf->is_singular() || $tsf->is_query_exploited() ) return;
+			$post_type = $tsf->get_post_type_real_ID();
 		}
-
-		$post_type = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-			? \tsf()->query()->get_post_type_real_id()
-			: \tsf()->get_post_type_real_ID();
 
 		if ( empty( $this->get_option( 'post_types' )[ $post_type ]['enabled'] ) ) return;
 
@@ -173,30 +185,6 @@ final class Front extends Core {
 	}
 
 	/**
-	 * Returns current WP_Post object.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return object WP_Post
-	 */
-	private function get_current_post() {
-		static $post;
-		return $post ?? $post = \get_post( $this->get_current_id() );
-	}
-
-	/**
-	 * Returns current WP_Query object ID.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return int Queried Object ID.
-	 */
-	private function get_current_id() {
-		static $id;
-		return $id ?? ( $id = \get_queried_object_id() );
-	}
-
-	/**
 	 * Outputs the AMP Articles script.
 	 *
 	 * @since 1.0.0
@@ -237,6 +225,10 @@ final class Front extends Core {
 
 		$data = [];
 
+		// Don't use TSF's filtered "real ID".
+		$this->query_id   = \get_queried_object_id();
+		$this->query_post = \get_post( $this->article_id );
+
 		foreach ( $this->generate_articles_json_output() as $entry ) {
 			if ( $entry )
 				$data[] = $entry;
@@ -258,14 +250,11 @@ final class Front extends Core {
 		);
 
 		if ( $data ) {
-			// akin to The_SEO_Framework\Data\Filter\Escape::json_encode_html
+			// akin to The_SEO_Framework\Data\Filter\Escape::json_encode_script
 			$schema = json_encode(
 				$data,
 				\JSON_UNESCAPED_SLASHES
 				| \JSON_HEX_TAG
-				| \JSON_HEX_APOS
-				| \JSON_HEX_QUOT
-				| \JSON_HEX_AMP
 				| \JSON_UNESCAPED_UNICODE
 				| \JSON_INVALID_UTF8_IGNORE
 				| ( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 ),
@@ -284,10 +273,9 @@ final class Front extends Core {
 	 * Generates Article data.
 	 *
 	 * @since 2.2.1
-	 * @access private
 	 * @generator
 	 */
-	protected function generate_articles_json_output() {
+	private function generate_articles_json_output() {
 		yield $this->get_article_context();
 		yield $this->get_article_type();
 		yield $this->get_article_main_entity();
@@ -421,11 +409,9 @@ final class Front extends Core {
 	 */
 	private function get_article_headline() {
 
-		$id = $this->get_current_id();
-
 		$title = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-			? \tsf()->title()->get_bare_generated_title( [ 'id' => $id ] )
-			: \tsf()->get_raw_generated_title( [ 'id' => $id ] );
+			? \tsf()->title()->get_bare_generated_title( [ 'id' => $this->query_id ] )
+			: \tsf()->get_raw_generated_title( [ 'id' => $this->query_id ] );
 
 		// This does not consider UTF-8 support. However, the regex that will always run will.
 		if ( \strlen( $title ) > 110 ) {
@@ -525,18 +511,20 @@ final class Front extends Core {
 	 */
 	private function get_article_published_date() {
 
-		$post = $this->get_current_post();
-
-		if ( ! $post ) {
+		if ( ! $this->query_post ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}
 
-		$i = strtotime( $post->post_date_gmt );
-
-		return [
-			'datePublished' => \esc_attr( gmdate( 'c', $i ) ),
-		];
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			return [
+				'datePublished' => \tsf()->data()->post()->get_published_time( $this->query_id ),
+			];
+		} else {
+			return [
+				'datePublished' => gmdate( 'c', strtotime( $this->query_post->post_date_gmt ) ),
+			];
+		}
 	}
 
 	/**
@@ -553,16 +541,18 @@ final class Front extends Core {
 	 */
 	private function get_article_modified_date() {
 
-		$post = $this->get_current_post();
-
-		if ( ! $post )
+		if ( ! $this->query_post )
 			return [];
 
-		$i = strtotime( $post->post_modified_gmt );
-
-		return [
-			'dateModified' => \esc_attr( gmdate( 'c', $i ) ),
-		];
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			return [
+				'dateModified' => \tsf()->data()->post()->get_modified_time( $this->query_id ),
+			];
+		} else {
+			return [
+				'dateModified' => gmdate( 'c', strtotime( $this->query_post->post_modified_gmt ) ),
+			];
+		}
 	}
 
 	/**
@@ -578,7 +568,7 @@ final class Front extends Core {
 	 */
 	private function get_article_author() {
 
-		$post = $this->get_current_post();
+		$post = $this->query_post;
 
 		if ( empty( $post->post_author ) ) {
 			$this->invalidate( 'amp' );
@@ -588,7 +578,7 @@ final class Front extends Core {
 		$author = \get_userdata( $post->post_author );
 		$name   = $author->display_name ?? '';
 
-		if ( ! $name ) {
+		if ( ! \strlen( $name ) ) {
 			$this->invalidate( 'amp' );
 			return [];
 		}
@@ -596,17 +586,19 @@ final class Front extends Core {
 		$data = [
 			'author' => [
 				'@type' => 'Person',
-				'name'  => \esc_html( $name ),
+				'name'  => $name,
 			],
 		];
 
 		// TODO remove me? See comment at The_SEO_Framework\Meta\Schema\Entities\Author
+		// -> Next version when we merge with TSF's Graph.
+		// already sanitized
 		$url = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 			? \tsf()->uri()->get_author_url( $post->post_author )
 			: \tsf()->get_author_canonical_url( $post->post_author );
 
 		if ( $url )
-			$data['author']['url'] = \esc_url( $url );
+			$data['author']['url'] = $url;
 
 		return $data;
 	}
@@ -644,6 +636,8 @@ final class Front extends Core {
 				: \tsf()->get_blogname()
 		);
 
+		// TODO use current( tsf()->meta->image()->get_image_details( [ 'id' => 0 ], true, 'organization' ) )?
+		// Requires modern TSF.
 		$_default_img_id = (int) $this->get_option( 'logo' )['id'] ?: (int) \tsf()->get_option( 'knowledge_logo_id' ) ?: \get_option( 'site_icon' );
 		/**
 		 * @since 1.0.0
@@ -684,15 +678,16 @@ final class Front extends Core {
 			return [];
 		}
 
+		// TODO: Add logo caption and filesize. See The_SEO_Framework\Meta\Schema\Entities\Organization.
 		return [
 			'publisher' => [
 				'@type' => 'Organization',
-				'name'  => \esc_attr( $name ),
+				'name'  => $name,
 				'logo'  => [
 					'@type'  => 'ImageObject',
-					'url'    => \esc_url( $url, [ 'https', 'http' ] ),
-					'width'  => abs( (int) filter_var( $w, \FILTER_SANITIZE_NUMBER_INT ) ),
-					'height' => abs( (int) filter_var( $h, \FILTER_SANITIZE_NUMBER_INT ) ),
+					'url'    => \sanitize_url( $url, [ 'https', 'http' ] ),
+					'width'  => \absint( $w ),
+					'height' => \absint( $h ),
 				],
 			],
 		];
@@ -713,15 +708,15 @@ final class Front extends Core {
 	 */
 	private function get_article_description() {
 
-		$description = \esc_attr( \tsf()->get_description() );
+		$description = \tsf()->get_description();
 
-		if ( ! $description ) {
+		if ( ! \strlen( $description ) ) {
 			// Optional.
 			return [];
 		}
 
 		return [
-			'description' => \esc_attr( $description ),
+			'description' => $description,
 		];
 	}
 
