@@ -55,9 +55,6 @@ TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_a
 
 TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
-TODO for Focus, when no inflections/synonyms are found, fill in the word itself?!
-	-> Try "tyre" -> Noun: tyre.
-
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
 	-> To test, register, then delete from (or modify) DB.
 	-> Currently, we send the generic 'failure' response.

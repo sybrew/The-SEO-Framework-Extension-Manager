@@ -323,6 +323,9 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
 * **Fixed:** Resolved an issue during typing, the parser wouldn't refresh assessments for 10 seconds due to a race condition after clearing worker events to save memory.
 * **Fixed:** Resolved an issue when either inflections or synonyms are available, but not both, the parser would crash and the word selection would appear broken after saving and reloading the page. This fix is applied retroactively.
+* **Fixed:** Resolved an issue when no synonyms and inflections are found, the dictionary editor would still show up. Now, it will not be available.
+* **Fixed:** Inflections that are a homonym of the keyword in a different case is now correctly preselected. This ties in with the API change below.
+* **API (for all versions):** 2024-06-05: We now filter duplicated words from inflections and synonyms in a case-insensitive manner. Focus also parses content without case sensitivity, so duplicated words wouldn't be helpful.
 
 ### 1.5.3
 

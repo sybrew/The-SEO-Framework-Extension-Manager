@@ -272,19 +272,20 @@ final class Ajax {
 				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->inflections ) ) {
-					$type = 'success'; // The API responded as intended, although the data may not be useful.
-
 					$send['data']['inflections'] = $_data->inflections ?: [];
 
 					// When no inflections are returned, or if the one returned is only of the same kind as the keyword, fail.
 					// NOTE: Uses weak non-UTF8 strtolower. Users are smart enough to ignore useless data.
 					if (
 						   ! $send['data']['inflections']
-						|| \count( $send['data']['inflections'] ) < 2
-						&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword )
+						|| (
+							   \count( $send['data']['inflections'] ) < 2
+							&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword )
+						)
 					) {
 						$send['results'] = $this->get_ajax_notice( false, 1100306 );
 					} else {
+						$type            = 'success';
 						$send['results'] = $this->get_ajax_notice( true, 1100307 );
 					}
 				} else {

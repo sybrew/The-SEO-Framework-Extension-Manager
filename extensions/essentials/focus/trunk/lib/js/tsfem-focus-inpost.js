@@ -882,7 +882,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					words       = [ keyword ]; // Always set keyword as a registered and active inflection.
 
 				// get Lexical form, push with keyword when the words don't match.
-				lexicalWord = JSON.parse( lexicalData )?.[ lexicalForm ].value.toLowerCase();
+				lexicalWord = JSON.parse( lexicalData )?.[ lexicalForm ]?.value.toLowerCase();
 				if ( lexicalWord && keyword !== lexicalWord ) {
 					words.push( lexicalWord );
 				} else {
@@ -943,16 +943,23 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						Promise.allSettled( [ fetchInflections(), fetchSynonyms() ] ).then( results => {
 							lexicalSelector.dataset.prev = lexicalSelector.value;
 
-							if ( 'fulfilled' !== results[0].status ) {
-								clearData( idPrefix, 'inflections' );
-							} else if ( 'fulfilled' !== results[1].status ) {
+							if ( 'fulfilled' !== results[0].status && 'fulfilled' !== results[1].status ) {
+								setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
 								clearData( idPrefix, 'definition' );
+								clearData( idPrefix, 'inflections' );
 								clearData( idPrefix, 'synonyms' );
-							}
+							} else {
+								if ( 'fulfilled' !== results[0].status ) { // fetchInflections.
+									clearData( idPrefix, 'inflections' );
+								} else if ( 'fulfilled' !== results[1].status ) { // fetchSynonyms.
+									clearData( idPrefix, 'definition' );
+									clearData( idPrefix, 'synonyms' );
+								}
 
-							populateDefinitionSelector( idPrefix );
-							refillSubjectSelection( idPrefix );
-							setEditButton( idPrefix ).to( 'enabled, edit, checked, display' );
+								populateDefinitionSelector( idPrefix );
+								refillSubjectSelection( idPrefix );
+								setEditButton( idPrefix ).to( 'enabled, edit, checked, display' );
+							}
 						} ).catch( () => {
 							// FIXME: Notify user the query got reset to previous?... if dataset.prev is not 0?
 							setDefinition( lexicalSelector.dataset.prev || 0 );
@@ -982,12 +989,12 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @param {string} idPrefix
 	 */
 	const populateDefinitionSelector = idPrefix => {
-		let synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
-			synonyms      = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
+		const synonymHolder = getSubElementById( idPrefix, 'synonym_data' ),
+			  synonyms      = synonymHolder.value && JSON.parse( synonymHolder.value ) || {};
 
-		let definitionDropdown      = getSubElementById( idPrefix, 'definition_dropdown' ),
-			definitionSelection     = getSubElementById( idPrefix, 'definition_selection' ),
-			definitionDropdownClone = definitionDropdown.cloneNode( true );
+		const definitionDropdown      = getSubElementById( idPrefix, 'definition_dropdown' ),
+			  definitionSelection     = getSubElementById( idPrefix, 'definition_selection' ),
+			  definitionDropdownClone = definitionDropdown.cloneNode( true );
 
 		// Removes all previous options.
 		for ( let _i = definitionDropdownClone.options.length; _i--; ) {
@@ -1005,7 +1012,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		definitionDropdown.value         = definitionSelection.value;
 		definitionDropdown.selectedIndex = +definitionSelection.value;
 
-		let definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
+		const definitionSelector = getSubElementById( idPrefix, 'definition_selector' );
 		if ( definitionDropdown.options.length ) {
 			// Make selected index show up.
 			document.querySelector( `[data-for="${definitionDropdown.id}"]` )
@@ -1696,26 +1703,27 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			const subjectTemplate = wp.template( 'tsfem-e-focus-subject-item' );
 
 			// There's always just one form of inflections in latin.
-			let inflections = inflectionHolder.value && JSON.parse( inflectionHolder.value )?.[0]?.inflections || [];
+			const inflections = inflectionHolder.value && JSON.parse( inflectionHolder.value )?.[0]?.inflections || [];
 			// A little bit trickier, because they might or might not be available.
-			let synonyms = synonymHolder.value && JSON.parse( synonymHolder.value )?.[ +definitionSelection.value ]?.synonyms || [];
+			const synonyms = synonymHolder.value && JSON.parse( synonymHolder.value )?.[ +definitionSelection.value ]?.synonyms || [];
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity    = 0;
 
-			let activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
-				activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' ),
-				kw                = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase();
+			const activeInflections = getSubElementById( idPrefix, 'active_inflections' ).value.split( ',' ),
+				  activeSynonyms    = getSubElementById( idPrefix, 'active_synonyms' ).value.split( ',' ),
+				  kw                = getSubElementById( idPrefix, 'keyword' ).value.toLowerCase();
 
 			// Can error; point of headache, let's forgo it.
 			// kw                = getSubElementById( idPrefix, 'keyword' ).value.toLocaleLowerCase( l10n.language );
 
-			let html = '',
+			let html   = '',
 				prefix = createSubId( idPrefix, 'inflection' ),
-				isKw = false;
+				isKw   = false;
+
 			// We need the keys... but they're sequential?
 			for ( let i in inflections ) {
-				isKw = inflections[ i ] === kw;
+				isKw = inflections[ i ].toLowerCase() === kw;
 				html += subjectTemplate( {
 					id:       createSubId( prefix, i ),
 					value:    inflections[ i ],
@@ -1810,8 +1818,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			const activeInflections = getSubElementById( idPrefix, 'active_inflections' );
 
 			if ( activeInflections?.value ) {
-				let inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value,
-					inflections    = JSON.parse( inflectionData )?.[0].inflections;
+				const inflectionData = getSubElementById( idPrefix, 'inflection_data' ).value,
+					  inflections    = JSON.parse( inflectionData )?.[0].inflections;
 
 				activeInflections.value.split( ',' ).forEach( i => {
 					ret.push( inflections[ +i ] );
@@ -1830,8 +1838,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				  selectedDefinition = getSubElementById( idPrefix, 'definition_selection' );
 
 			if ( activeSynonyms?.value ) {
-				let synonymData = getSubElementById( idPrefix, 'synonym_data' ).value,
-					synonyms    = JSON.parse( synonymData )?.[ +selectedDefinition.value ].synonyms;
+				const synonyms = JSON.parse( getSubElementById( idPrefix, 'synonym_data' ).value )?.[ +selectedDefinition.value ].synonyms;
 
 				activeSynonyms.value.split( ',' ).forEach( i => {
 					ret.push( synonyms[ +i ] );
@@ -2473,7 +2480,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					} else {
 						clearData( idPrefix, 'lexical' );
 					}
-					if ( +lexicalSelector.value ) {
+
+					if (
+						   +lexicalSelector.value
+						&& (
+							   JSON.parse( getSubElementById( idPrefix, 'inflection_data' ).value )?.length
+							|| JSON.parse( getSubElementById( idPrefix, 'synonym_data' ).value )?.length
+						)
+					) {
 						// Prepare edit button.
 						setEditButton( idPrefix ).to( 'enabled' );
 
