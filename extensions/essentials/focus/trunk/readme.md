@@ -316,8 +316,10 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 [tsfep-release time="-1"]
 
 * **Improved:** WordPress 6.5 removed the pointer cursor from labels. To make it clear again that inflections and synonyms are clickable, they now display a tiny border on-hover to indicate this affordance.
+* **Improved:** WooCommerce's "Product short description" is now considered for subject assessments. The "Product short description" is considered to be placed before the "Product description."
 * **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
+* **Fixed:** Resolved an issue during typing, the parser wouldn't refresh assessments for 10 seconds due to a race condition after clearing worker events to save memory.
 
 ### 1.5.3
 
@@ -417,7 +419,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 * **Improved:** The JS version requirements are upgraded, and as such, all known Unicode punctuation can be excluded correctly.
 * **Improved:** The subject density rater is now more accurate, as it removes more redundant information than before.
 * **Fixed:** Purposeless keywords are no longer (incorrectly) parsed, like an emoji or a dot.
-* **Fixed:** The rater is no longer affected by race conditions, which might cause it to display old information.
+* **Fixed:** The rater is no longer affected by race conditions, which could've caused it to display old information.
 
 ### 1.2.0
 

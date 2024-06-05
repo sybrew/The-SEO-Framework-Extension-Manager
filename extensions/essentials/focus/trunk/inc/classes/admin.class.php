@@ -122,8 +122,9 @@ final class Admin extends Core {
 						// NOTE: Can't reliably fetch Gutenberg's from DOM. That's why we use a fill.
 					],
 					'pageContent'    => [
-						'#content'                 => 'append', // Classic Editor
-						'#tsfem-focus-gbc-content' => 'append', // Gutenberg fill
+						'.post-type-product #excerpt' => 'append', // WooCommerce Short Description (shown before content).
+						'#content'                    => 'append', // Classic Editor
+						'#tsfem-focus-gbc-content'    => 'append', // Gutenberg fill
 						// NOTE: Can't reliably fetch Gutenberg's from DOM. That's why we use a fill.
 					],
 					'seoTitle'       => [

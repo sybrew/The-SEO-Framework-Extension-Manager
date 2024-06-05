@@ -200,8 +200,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const updateActiveFocusAreas = area => {
 
-		console.log( focusRegistry, activeFocusAreas );
-
 		let areas        = activeFocusAreas,
 			types        = {},
 			hasDominant  = false,
@@ -321,7 +319,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			setTimeout( async () => {
 
 				await (
-					tsfem_worker.getWorker( workerId )
+					   tsfem_worker.getWorker( workerId )
 					|| tsfem_worker.spawnWorker( l10n.scripts.parserWorker, workerId )
 				);
 
@@ -336,17 +334,22 @@ window.tsfem_e_focus_inpost = function( $ ) {
 							getCharCount: 'p' === data.scoring.type, // p stands for "percent", which is relative.
 						},
 					}
-				).then( data => {
-					inflectionCount     = data.inflectionCount;
-					synonymCount        = data.synonymCount;
-					inflectionCharCount = data.inflectionCharCount;
-					synonymCharCount    = data.synonymCharCount;
-					contentCharCount    = data.contentCharCount;
+				).then(
+					data => {
+						inflectionCount     = data.inflectionCount;
+						synonymCount        = data.synonymCount;
+						inflectionCharCount = data.inflectionCharCount;
+						synonymCharCount    = data.synonymCharCount;
+						contentCharCount    = data.contentCharCount;
 
-					resolve();
-				} ).catch( message => { // NOTE: Parameters aren't set as intended?
-					reject();
-				} );
+						resolve();
+					}
+				).catch(
+					message => {
+						tsfem_inpostL10n.debug && console.log( message );
+						reject();
+					}
+				);
 			} );
 		} );
 
@@ -1951,33 +1954,36 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			} );
 		}
 		const listener = event => {
-			if ( typeof activeAssessments[ event.data.type ] === 'undefined' ) return;
+
+			const type = event.data.type;
+
+			if ( typeof activeAssessments[ type ] === 'undefined' ) return;
 
 			// let key = event.target.id || event.target.name || event.target.classList.join('');
-			clearTimeout( changeListenersBuffers[ event.data.type ] );
+			clearTimeout( changeListenersBuffers[ type ] );
 
 			// Show the world it's unknown, maintaining a caching flag.
 			// Don't revert this flag here when this event is done. The state remains unknown on failure!
-			if ( ! changeListenerFlags[ event.data.type ] ) {
+			if ( ! changeListenerFlags[ type ] ) {
 				setTimeout( () => tsfem_inpost.setIconClass(
 					document.querySelectorAll(
-						`[data-assessment-type="${event.data.type}"] .tsfem-e-focus-assessment-rating`
+						`[data-assessment-type="${type}"] .tsfem-e-focus-assessment-rating`
 					),
-					'unknown'
+					'unknown',
 				), 0 );
-				changeListenerFlags[ event.data.type ] = true;
+				changeListenerFlags[ type ] = true;
 			}
 
-			changeListenersBuffers[ event.data.type ] = setTimeout( () => {
-				triggerChangeListener( event.data.type );
-				changeListenerFlags[ event.data.type ] = false;
+			changeListenersBuffers[ type ] = setTimeout( () => {
+				triggerChangeListener( type );
+				changeListenerFlags[ type ] = false;
 			}, 1500 );
 		}
 		const reset = type => {
 			let changeEventName = analysisChangeEvents( type ).get( 'names' );
 			$( activeFocusAreas[ type ].join( ', ' ) )
 				.off( changeEventName )
-				.on( changeEventName, { 'type' : type }, listener );
+				.on( changeEventName, { type }, listener );
 		}
 
 		if ( type ) {
@@ -2246,16 +2252,22 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		const linkStore    = blockEditorStore( 'link' );
 		const contentStore = blockEditorStore( 'content' );
 
-		$document.on( 'tsf-updated-gutenberg-title', ( event, title ) => {
-			titleStore.fill( title );
-			titleStore.triggerAnalysis();
-		} );
+		$document.on(
+			'tsf-updated-gutenberg-title',
+			( event, title ) => {
+				titleStore.fill( title );
+				titleStore.triggerAnalysis();
+			},
+		);
 		titleStore.setup( 'pageTitle' );
 
-		$document.on( 'tsf-updated-gutenberg-link', ( event, link ) => {
-			linkStore.fill( link );
-			linkStore.triggerAnalysis();
-		} );
+		$document.on(
+			'tsf-updated-gutenberg-link',
+			( event, link ) => {
+				linkStore.fill( link );
+				linkStore.triggerAnalysis();
+			},
+		);
 		linkStore.setup();
 
 		/**
@@ -2266,24 +2278,27 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			contentStore.fill( content );
 			contentStore.triggerAnalysis();
 		}
-		$document.on( 'tsf-updated-gutenberg-content', ( event, content ) => {
-			const debouncer = tsfem_inpost.debounce( updateContent, 500 );
+		$document.on(
+			'tsf-updated-gutenberg-content',
+			( event, content ) => {
+				const debouncer = tsfem_inpost.debounce( updateContent, 500 );
 
-			let isTyping = false,
-				editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
+				let isTyping = false,
+					editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
 
-			if ( 'function' === typeof editor.isTyping )
-				isTyping = editor.isTyping();
+				if ( 'function' === typeof editor.isTyping )
+					isTyping = editor.isTyping();
 
-			if ( isTyping ) {
-				// Don't process and lag when typing, just show that the data is invalidated.
-				setAllRatersOf( 'pageContent', 'unknown' );
-				debouncer( content );
-			} else {
-				debouncer().cancel(); // Cancel original debouncer.
-				updateContent( content ); // Set content immediately.
-			}
-		} );
+				if ( isTyping ) {
+					// Don't process and lag when typing, just show that the data is invalidated.
+					setAllRatersOf( 'pageContent', 'unknown' );
+					debouncer( content );
+				} else {
+					debouncer().cancel(); // Cancel original debouncer.
+					updateContent( content ); // Set content immediately.
+				}
+			},
+		);
 		contentStore.setup();
 	}
 
@@ -2335,41 +2350,60 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			if ( typeof tinyMCE === 'undefined' || typeof tinyMCE.on !== 'function' )
 				return;
 
-			let loaded = false;
+			let loaded = {
+				editor: false,
+				excerpt: false,
+			};
 
-			tinyMCE.on( 'addEditor', event => {
-				if ( loaded || event.editor.id !== 'content' ) return;
-
-				loaded = true; // prevent further checks.
-
-				updateActiveFocusAreas( 'pageContent' );
-				resetAnalysisChangeListeners( 'pageContent' );
-
-				let buffers = {},
-					editor     = tinyMCE.get( 'content' ),
-					buffering  = false,
-					setUnknown = false;
-
-				editor.on( 'Dirty', event => {
-					if ( ! setUnknown ) {
-						setAllRatersOf( 'pageContent', 'unknown' );
-						setUnknown = true;
+			tinyMCE.on(
+				'addEditor',
+				event => {
+					switch ( event.editor.id ) {
+						case 'content':
+						case 'excerpt':
+							if ( loaded[ event.editor.id ] ) return;
+							break;
+						default:
+							return;
 					}
-				} );
-				editor.on( 'GetContent', event => {
-					clearTimeout( buffers['GetContent'] );
-					if ( ! buffering && editor.isDirty() ) {
-						setAllRatersOf( 'pageContent', 'loading' );
-						buffering = true;
+
+					updateActiveFocusAreas( 'pageContent' );
+					resetAnalysisChangeListeners( 'pageContent' );
+
+					let buffers    = {},
+						editor     = tinyMCE.get( event.editor.id ),
+						buffering  = false,
 						setUnknown = false;
-					}
-					buffers['GetContent'] = setTimeout( () => {
-						editor.isDirty() || $( '#content' ).trigger( analysisChangeEvents( 'pageContent' ).get( 'trigger' ) );
-						buffering = false;
-						setUnknown = false;
-					}, 1000 );
-				} );
-			} );
+
+					editor.on(
+						'Dirty',
+						() => {
+							if ( ! setUnknown ) {
+								setAllRatersOf( 'pageContent', 'unknown' );
+								setUnknown = true;
+							}
+						}
+					);
+					editor.on(
+						'GetContent',
+						() => {
+							clearTimeout( buffers['GetContent'] );
+							if ( ! buffering && editor.isDirty() ) {
+								setAllRatersOf( 'pageContent', 'loading' );
+								buffering = true;
+								setUnknown = false;
+							}
+							buffers['GetContent'] = setTimeout( () => {
+								editor.isDirty() || $( `#${event.editor.id}` ).trigger( analysisChangeEvents( 'pageContent' ).get( 'trigger' ) );
+								buffering = false;
+								setUnknown = false;
+							}, 1000 );
+						}
+					);
+
+					loaded[ event.editor.id ] = true;
+				},
+			);
 		} )();
 	}
 
@@ -2511,7 +2545,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		load: () => {
 			document.body.addEventListener( 'tsf-onload', _prepareUI );
 			document.body.addEventListener( 'tsf-ready', _onReady );
-		}
+		},
 	}, {
 		/**
 		 * Copies internal public variables to tsfem_e_focus_inpost for public access.
