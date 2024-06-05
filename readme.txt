@@ -53,12 +53,7 @@ TODO do not disconnect sites when the subscription expires, but downgrade them t
 TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
 	-> Report it to Brent and them. This is not for us to fix, but iThemes.
 
-TODO get_article_published_date and get_article_modified_date show gmdate('c') instead of the preference in TSF.
-
-TODO for Articles, only display the Article post state type if it's non-default?
-	-> We can't, because we have the "Disabled" type, i.e., "no articles" -- this is conveyed by not showing the Article type.
-
-TODO for Focus, add extra support for WC's "short description" (aka excerpt)?
+TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
 	-> To test, register, then delete from (or modify) DB.
@@ -76,6 +71,15 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 	-> If emptied -> fail!
 	-> Use the same method PHP uses.
 
+TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
+
+TODO Fix this in Focus:
+	-> Keyword "SPECIAL" (note capital)
+	-> Noun: special
+	-> Select all inflections.
+	-> Save immediately and reload page
+	-> Inflections are gone.
+
 = 2.6.4 =
 
 **Feature highlights:**
@@ -89,6 +93,7 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 	* The update API is now engaged unconditionally. We found that users still accidentally downgraded to the WordPress.org version, this ought to prevent that.
 * **Fixed:**
 	* Resolved an issue where the plugin updater could cause a fatal error.
+	* Resolved an issue where extension post-metadata could be double-unserialized by another plugin or store incoherent data on extraction failure.
 
 **Updated extensions:**
 
@@ -97,6 +102,7 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 	-> TODO We need to add an "select all" button (next to "Choose inflections" and "Choose synonyms")
 	-> add a dicitionary service badge.
 	-> Fix "tyre" / Noun "tyre" fill.
+	-> Fix "service" / Noun "service" store.
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
 
 = 2.6.3 =

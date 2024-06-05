@@ -94,6 +94,7 @@ const escapeRegex = str => str.replace( /[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\
  * See <https://github.com/tc39/proposal-regexp-unicode-property-escapes?tab=readme-ov-file#unicode-aware-version-of-w-1>.
  * This translates to `[^\p{L}\p{M}\p{Nd}\p{Pc}\p{Join_Control}]`.
  * This translates to `\P{XID_Continue}`.
+ * This translates to `\P{XIDC}`.
  *
  * @since 1.3.0
  * @since 1.5.4 We now default to the Unicode detection built in the browser.
@@ -103,8 +104,8 @@ const escapeRegex = str => str.replace( /[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\
  * @param {string} str
  * @return {string}
  */
-const bewilderRegexNonWords = str => /^(\P{XID_Continue})*(.*?)(\P{XID_Continue})*$/.exec(
-	str.replace( /\P{XID_Continue}+/gu, '\\P{XID_Continue}' )
+const bewilderRegexNonWords = str => /^(\P{XIDC})*(.*?)(\P{XIDC})*$/.exec(
+	str.replace( /\P{XIDC}+/gu, '\\P{XIDC}' )
 )[2];
 
 /**

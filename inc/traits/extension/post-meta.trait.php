@@ -51,17 +51,24 @@ final class Extensions_Post_Meta_Cache {
 	 * Initializes the meta cache.
 	 *
 	 * @since 1.5.0
+	 * @since 2.6.4 Now conditionally unserializes to prevent plugin conflicts.
 	 *
 	 * @param int $id The Post ID.
 	 * @return void
 	 */
 	private static function init_meta_cache( $id ) {
-		static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
-			(
-				\get_post_meta( $id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true ) ?: serialize( [] ) // phpcs:ignore -- serializing simple array.
-			),
-			[ 'allowed_classes' => [ 'stdClass' ] ] // Redundant.
-		);
+
+		$meta = \get_post_meta( $id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, true );
+
+		if ( \is_array( $meta ) ) {
+			// A caching plugin pre-unserialized our data. https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/44
+			static::$meta[ $id ] = $meta;
+		} else {
+			static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
+				\is_serialized( $meta ) ? $meta : 'a:0:{}', // If not serialized, empty the data so we won't store [0=>false].
+				[ 'allowed_classes' => [ 'stdClass' ] ] // Redundant.
+			);
+		}
 	}
 
 	/**
@@ -336,17 +343,17 @@ trait Extension_Post_Meta {
 		// Prepare meta cache.
 		$c_meta = Extensions_Post_Meta_Cache::_get_meta_cache( $this->pm_id );
 
-		// If index is non existent, return true.
+		// If index is non-existent, return success.
 		if ( ! isset( $c_meta[ $this->pm_index ] ) )
 			return true;
 
 		unset( $c_meta[ $this->pm_index ] );
 
-		if ( [] === $c_meta ) {
-			$success = \delete_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
-		} else {
+		if ( $c_meta ) {
 			// phpcs:ignore -- Security check OK, this is a serialization of an array, sub-unserialization can't happen in our code.
 			$success = \update_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META, addslashes( serialize( $c_meta ) ) );
+		} else {
+			$success = \delete_post_meta( $this->pm_id, \TSF_EXTENSION_MANAGER_EXTENSION_POST_META );
 		}
 
 		if ( $success ) {
