@@ -36,7 +36,7 @@ $tsfem = \tsfem();
 			if ( $is_premium && $language_supported ) {
 				// This field isn't POSTed, so we can safely remove it.
 				printf(
-					'<select id=%s value="%s" class="%s" disabled>%s</select>',
+					'<select id=%s value="%s" class="%s" disabled title="%s">%s</select>',
 					\esc_attr( $post_input['lexical_form']['selector_id'] ),
 					\esc_attr( $post_input['lexical_form']['value'] ),
 					\esc_attr( implode(
@@ -47,6 +47,7 @@ $tsfem = \tsfem();
 							'tsfem-e-focus-requires-javascript',
 						]
 					) ),
+					\esc_attr__( 'Select lexical form', 'the-seo-framework-extension-manager' ),
 					\TSF_Extension_Manager\HTML::make_sequential_dropdown_option_list(
 						$post_input['lexical_data']['value'],
 						$post_input['lexical_form']['value'] ?: ''
@@ -186,12 +187,13 @@ $tsfem = \tsfem();
 							sprintf(
 								'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
 								'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s" tabindex=0></span>',
-								'<select id=%1$s name=%1$s class=hidden value="%2$s"></select>'
+								'<select id=%1$s name=%1$s class=hidden value="%2$s" title="%3$s"></select>'
 							),
 						]
 					),
 					\esc_attr( $post_input['definition_selection']['selector_id'] ),
-					\esc_attr( $post_input['definition_selection']['value'] )
+					\esc_attr( $post_input['definition_selection']['value'] ),
+					\esc_attr__( 'Select homonymous example', 'the-seo-framework-extension-manager' ),
 				);
 				?>
 				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['inflections'] ) ?>>

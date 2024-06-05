@@ -104,7 +104,7 @@ const escapeRegex = str => str.replace( /[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\
  * @param {string} str
  * @return {string}
  */
-const bewilderRegexNonWords = str => /^(\P{XIDC})*(.*?)(\P{XIDC})*$/.exec(
+const bewilderRegexNonWords = str => /^(\\P{XIDC})*(.*?)(\\P{XIDC})*$/.exec(
 	str.replace( /\P{XIDC}+/gu, '\\P{XIDC}' )
 )[2];
 

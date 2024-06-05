@@ -63,11 +63,13 @@ final class Extensions_Post_Meta_Cache {
 		if ( \is_array( $meta ) ) {
 			// A caching plugin pre-unserialized our data. https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/44
 			static::$meta[ $id ] = $meta;
-		} else {
+		} elseif ( \is_serialized( $meta ) ) {
 			static::$meta[ $id ] = (array) unserialize( // phpcs:ignore -- Security check OK, full serialization happened prior, can't execute sub-items.
-				\is_serialized( $meta ) ? $meta : 'a:0:{}', // If not serialized, empty the data so we won't store [0=>false].
-				[ 'allowed_classes' => [ 'stdClass' ] ] // Redundant.
+				$meta,
+				[ 'allowed_classes' => [ 'stdClass' ] ],
 			);
+		} else {
+			static::$meta[ $id ] = [];
 		}
 	}
 

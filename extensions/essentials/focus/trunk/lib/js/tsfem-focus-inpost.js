@@ -41,16 +41,30 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	/**
 	 * @since 1.0.0
 	 * @access private
-	 * @const l10n The l10n parameters set in PHP to var.
+	 * @const {Object} l10n The l10n parameters set in PHP to var.
 	 */
 	const l10n = tsfem_e_focusInpostL10n;
 
 	/**
 	 * @since 1.0.0
 	 * @access private
-	 * @const noticeArea The notice area ID to place notices in.
+	 * @const {String} noticeArea The notice area ID to place notices in.
 	 */
 	const noticeArea = '#tsfem-e-focus-analysis-notification-area';
+
+	/**
+	 * @since 1.5.4
+	 * @access private
+	 * @const {Integer} typingDelay The debouncing time to finalize a selection after typing.
+	 */
+	const updateSelectorTime = 1500;
+
+	/**
+	 * @since 1.5.4
+	 * @access private
+	 * @const {Integer} updateContentTime The debouncing time to reassess content after typing.
+	 */
+	const updateContentTime = 500;
 
 	/**
 	 * @since 1.0.0
@@ -952,7 +966,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						clearData( idPrefix, 'synonyms' );
 					}
 				}
-			}, 1500 );
+			}, updateSelectorTime );
 		}
 		run();
 	}
@@ -1313,14 +1327,13 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const setKeywordEntryListeners = () => {
 
-		let keywordBuffer  = {},
-			keywordTimeout = 1500;
+		let keywordBuffer  = {};
 
 		let barSmoothness = 3,
 			superSmooth   = true,
 			barWidth      = {},
 			barBuffer     = {},
-			barTimeout    = keywordTimeout / ( 100 * barSmoothness );
+			barTimeout    = updateSelectorTime / ( 100 * barSmoothness );
 
 		// Add a little to make it visually "faster".
 		if ( superSmooth )
@@ -1393,7 +1406,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				clearInterval( barBuffer[ idPrefix ] );
 				doKeywordEntry( event );
 				barStop( idPrefix, bar );
-			}, keywordTimeout );
+			}, updateSelectorTime );
 		}
 
 		keywordEntries.forEach( el => {
@@ -1657,7 +1670,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						setActiveSynonyms( idPrefix );
 						break;
 				}
-			}, 1500 );
+			}, updateSelectorTime );
 		}
 		const resetElementListeners = ( idPrefix, type ) => {
 			$( getSubElementById( idPrefix, type ) ).find( 'input' )
@@ -1683,9 +1696,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			const subjectTemplate = wp.template( 'tsfem-e-focus-subject-item' );
 
 			// There's always just one form of inflections in latin.
-			let inflections = inflectionHolder.value && JSON.parse( inflectionHolder.value )?.[0].inflections || [];
+			let inflections = inflectionHolder.value && JSON.parse( inflectionHolder.value )?.[0]?.inflections || [];
 			// A little bit trickier, because they might or might not be available.
-			let synonyms = synonymHolder.value && JSON.parse( synonymHolder.value )?.[ +definitionSelection.value ].synonyms || [];
+			let synonyms = synonymHolder.value && JSON.parse( synonymHolder.value )?.[ +definitionSelection.value ]?.synonyms || [];
 
 			inflectionEntries.style.opacity = 0;
 			synonymEntries.style.opacity    = 0;
@@ -1977,7 +1990,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			changeListenersBuffers[ type ] = setTimeout( () => {
 				triggerChangeListener( type );
 				changeListenerFlags[ type ] = false;
-			}, 1500 );
+			}, updateSelectorTime );
 		}
 		const reset = type => {
 			let changeEventName = analysisChangeEvents( type ).get( 'names' );
@@ -2281,7 +2294,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		$document.on(
 			'tsf-updated-gutenberg-content',
 			( event, content ) => {
-				const debouncer = tsfem_inpost.debounce( updateContent, 500 );
+				const debouncer = tsfem_inpost.debounce( updateContent, updateContentTime );
 
 				let isTyping = false,
 					editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
@@ -2370,8 +2383,9 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					updateActiveFocusAreas( 'pageContent' );
 					resetAnalysisChangeListeners( 'pageContent' );
 
+					const editor = tinyMCE.get( event.editor.id );
+
 					let buffers    = {},
-						editor     = tinyMCE.get( event.editor.id ),
 						buffering  = false,
 						setUnknown = false;
 
@@ -2380,6 +2394,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						() => {
 							if ( ! setUnknown ) {
 								setAllRatersOf( 'pageContent', 'unknown' );
+								buffering  = false;
 								setUnknown = true;
 							}
 						}
@@ -2393,11 +2408,14 @@ window.tsfem_e_focus_inpost = function( $ ) {
 								buffering = true;
 								setUnknown = false;
 							}
-							buffers['GetContent'] = setTimeout( () => {
-								editor.isDirty() || $( `#${event.editor.id}` ).trigger( analysisChangeEvents( 'pageContent' ).get( 'trigger' ) );
-								buffering = false;
-								setUnknown = false;
-							}, 1000 );
+							buffers['GetContent'] = setTimeout(
+								() => {
+									editor.isDirty() || $( `#${event.editor.id}` ).trigger( analysisChangeEvents( 'pageContent' ).get( 'trigger' ) );
+									buffering = false;
+									setUnknown = false;
+								},
+								updateContentTime,
+							);
 						}
 					);
 

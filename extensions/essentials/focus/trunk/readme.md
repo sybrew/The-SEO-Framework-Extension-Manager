@@ -317,9 +317,12 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 * **Improved:** WordPress 6.5 removed the pointer cursor from labels. To make it clear again that inflections and synonyms are clickable, they now display a tiny border on-hover to indicate this affordance.
 * **Improved:** WooCommerce's "Product short description" is now considered for subject assessments. The "Product short description" is considered to be placed before the "Product description."
+* **Improved:** Added screen reader titles to selection fields.
+* **Improved:** Classic Editor's parsing delay has been cut in half (from 1 second to 0.5 seconds) because it's prone to wait a while already after typing before relaying updates.
 * **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
 * **Fixed:** Resolved an issue during typing, the parser wouldn't refresh assessments for 10 seconds due to a race condition after clearing worker events to save memory.
+* **Fixed:** Resolved an issue when either inflections or synonyms are available, but not both, the parser would crash and the word selection would appear broken after saving and reloading the page. This fix is applied retroactively.
 
 ### 1.5.3
 

@@ -55,14 +55,14 @@ TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_a
 
 TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
+TODO for Focus, when no inflections/synonyms are found, fill in the word itself?!
+	-> Try "tyre" -> Noun: tyre.
+
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
 	-> To test, register, then delete from (or modify) DB.
 	-> Currently, we send the generic 'failure' response.
 		-> We could say the site isn't registered... but wouldn't this open the gate for spammers?
 			-> Then again, the service is proxied and requires various secrets to align before responding.
-
-TODO for Focus, when no inflections/synonyms are found, fill in the word itself?!
-	-> Try "tyre" -> Noun: tyre.
 
 TODO Make "site keys not valid" warning site-wide, instead of only Extension Manager page.
 
@@ -72,13 +72,6 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 	-> Use the same method PHP uses.
 
 TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
-
-TODO Fix this in Focus:
-	-> Keyword "SPECIAL" (note capital)
-	-> Noun: special
-	-> Select all inflections.
-	-> Save immediately and reload page
-	-> Inflections are gone.
 
 = 2.6.4 =
 
