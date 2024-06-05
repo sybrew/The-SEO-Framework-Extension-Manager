@@ -113,7 +113,7 @@ window.tsfem_e_local = {
 
 			response = tsf.convertJSONResponse( response );
 
-			if ( tsf.l10n.states.debug ) console.log( response );
+			tsf.l10n.states.debug && console.log( response );
 
 			let data = response?.data,
 				type = response?.type;
