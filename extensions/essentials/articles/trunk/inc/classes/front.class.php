@@ -227,7 +227,7 @@ final class Front extends Core {
 
 		// Don't use TSF's filtered "real ID".
 		$this->query_id   = \get_queried_object_id();
-		$this->query_post = \get_post( $this->article_id );
+		$this->query_post = \get_post( $this->query_id );
 
 		foreach ( $this->generate_articles_json_output() as $entry ) {
 			if ( $entry )

@@ -26,17 +26,28 @@ if ( \tsfem()->_blocked_extension_file( $_instance, $bits[1] ) ) return;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// phpcs:disable, Generic.Files.OneObjectStructurePerFile.MultipleFound -- transition from TSF v4.x to 5.x
+
+if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+	// phpcs:ignore, Squiz.Commenting.ClassComment.Missing
+	abstract class SitemapBuilderTransition extends \The_SEO_Framework\Sitemap\Optimized\Main {}
+} else {
+	// phpcs:ignore, Squiz.Commenting.ClassComment.Missing, Generic.Classes.DuplicateClassName.Found
+	abstract class SitemapBuilderTransition extends \The_SEO_Framework\Builders\Sitemap\Main {};
+}
+
 /**
  * Class TSF_Extension_Manager\Extension\Articles\SitemapBuilder
  *
  * Builds the Google News sitemap.
  *
  * @since 2.0.0
+ * @since 2.3.1 Now (temporarily) extends a transition class.
  * @access private
  * @uses TSF_Extension_Manager\Traits
  * @final
  */
-final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
+final class SitemapBuilder extends SitemapBuilderTransition {
 	use \TSF_Extension_Manager\Extension_Options,
 		\TSF_Extension_Manager\Extension_Post_Meta;
 
@@ -161,7 +172,9 @@ final class SitemapBuilder extends \The_SEO_Framework\Builders\Sitemap\Main {
 		$_args = \apply_filters(
 			'the_seo_framework_sitemap_articles_news_sitemap_query_args',
 			[
-				'posts_per_page'   => $this->get_sitemap_post_limit(),
+				'posts_per_page'   => \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->sitemap()->utils()->get_sitemap_post_limit()
+					: $this->get_sitemap_post_limit(),
 				'post_type'        => $post_types,
 				'orderby'          => 'date',
 				'order'            => 'DESC',

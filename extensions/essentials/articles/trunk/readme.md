@@ -263,6 +263,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 * **Removed:** Pinging of the Google News sitemap is no longer supported. They now crawl your sitemap periodically.
 	* Google can find your News Sitemap's location via your `/robots.txt` file. But, to be certain they catch it, also [submit the sitemap to Google Search Console](https://support.google.com/webmasters/answer/7451001).
 	* To learn more, see https://developers.google.com/search/blog/2023/06/sitemaps-lastmod-ping.
+* **Fixed:** Resolved outstanding deprecation notices with TSF v5.0+ when accessing the Google News sitemap.
 
 ### 2.3.0
 
