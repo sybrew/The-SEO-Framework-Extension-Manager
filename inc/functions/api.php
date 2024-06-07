@@ -161,10 +161,13 @@ namespace TSF_Extension_Manager {
 			return $loaded[ $version ] = false;
 		}
 
+		// include an unmodified $wp_version
+		include \ABSPATH . \WPINC . '/version.php';
+
 		/**
 		 * @global string $wp_version
 		 */
-		if ( version_compare( $GLOBALS['wp_version'], $version, '>=' ) )
+		if ( version_compare( $wp_version, $version, '>=' ) )
 			return $loaded[ $version ] = true;
 
 		return $loaded[ $version ] = (bool) require \TSF_EXTENSION_MANAGER_DIR_PATH_COMPAT . 'wp-' . $version . '.php';

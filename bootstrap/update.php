@@ -108,7 +108,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 	$url       = \TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
 	$http_args = [
 		'timeout'    => 15,
-		'user-agent' => "WordPress/$wp_version; " . \PHP_VERSION_ID . '; ' . \home_url( '/' ),
+		'user-agent' => "WordPress/$wp_version; " . \PHP_VERSION_ID . '; ' . \home_url( '/' ), // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- included
 		'body'       => [
 			'action'  => $action,
 			'request' => serialize( $args ), // phpcs:ignore -- Object injection is mitigated at the request server.
@@ -201,12 +201,13 @@ function _push_update( $value ) {
 		$value->no_update[ \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ]
 	);
 
+	// phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- scoped function.
 	$update_data = get_plugin_update_data();
 
 	if ( ! $update_data )
 		return $value;
 
-	// The filter may be
+	// The filter may be invoked before $value is set. https://core.trac.wordpress.org/ticket/61055
 	$value->checked      ??= [];
 	$value->no_update    ??= [];
 	$value->response     ??= [];

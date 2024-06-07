@@ -45,8 +45,6 @@ TODO Important!!! delete_site_transient( 'update_plugins' );
 	-- Working with a fresh copy of the transient makes our plugin crash, no?
 		- See email from "delivery".
 
-TODO load an unmodified $wp_version for extension compatibility tests -- we got 5 reports already.
-
 TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?
 	do the var_dump()
 
@@ -70,6 +68,8 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 
 TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
 
+TODO do the constant \.
+
 = 2.6.4 =
 
 **Feature highlights:**
@@ -81,6 +81,8 @@ TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
 
 * **Changed:**
 	* The update API is now engaged unconditionally. We found that users still accidentally downgraded to the WordPress.org version, this ought to prevent that.
+* **Improved:**
+	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
 * **Fixed:**
 	* Resolved an issue where the plugin updater could cause a fatal error.
 	* Resolved an issue where extension post-metadata could be double-unserialized by another plugin or store incoherent data on extraction failure.

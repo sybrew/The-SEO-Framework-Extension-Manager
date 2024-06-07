@@ -667,6 +667,7 @@ trait Extensions_Actions {
 	 *
 	 * @since 2.1.0
 	 * @since 2.3.1 Now compares leniently.
+	 * @since 2.6.4 Now includes an unmodified $wp_version parameter.
 	 * @uses static::version_compare_lenient()
 	 * @global string $wp_version
 	 *
@@ -687,18 +688,27 @@ trait Extensions_Actions {
 
 		$compatibility = 0;
 
-		$_tsf_version = \THE_SEO_FRAMEWORK_VERSION;
-		$_wp_version  = $GLOBALS['wp_version'];
+		static $version_cache;
 
-		if ( static::version_compare_lenient( $_tsf_version, $extension['requires_tsf'], '<' ) ) {
+		if ( empty( $version_cache ) ) {
+			// include an unmodified $wp_version
+			include \ABSPATH . \WPINC . '/version.php';
+
+			$version_cache = [
+				'tsf' => \THE_SEO_FRAMEWORK_VERSION,
+				'wp'  => $wp_version, // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- included
+			];
+		}
+
+		if ( static::version_compare_lenient( $version_cache['tsf'], $extension['requires_tsf'], '<' ) ) {
 			$compatibility |= \TSFEM_EXTENSION_TSF_INCOMPATIBLE;
-		} elseif ( static::version_compare_lenient( $_tsf_version, $extension['tested_tsf'], '>' ) ) {
+		} elseif ( static::version_compare_lenient( $version_cache['tsf'], $extension['tested_tsf'], '>' ) ) {
 			$compatibility |= \TSFEM_EXTENSION_TSF_UNTESTED;
 		}
 
-		if ( static::version_compare_lenient( $_wp_version, $extension['requires'], '<' ) ) {
+		if ( static::version_compare_lenient( $version_cache['wp'], $extension['requires'], '<' ) ) {
 			$compatibility |= \TSFEM_EXTENSION_WP_INCOMPATIBLE;
-		} elseif ( static::version_compare_lenient( $_wp_version, $extension['tested'], '>' ) ) {
+		} elseif ( static::version_compare_lenient( $version_cache['wp'], $extension['tested'], '>' ) ) {
 			$compatibility |= \TSFEM_EXTENSION_WP_UNTESTED;
 		}
 
