@@ -245,7 +245,6 @@ final class InpostGUI {
 					'isConnected' => $tsfem->is_connected_user(),
 					'locale'      => \get_locale(),
 					'userLocale'  => \function_exists( 'get_user_locale' ) ? \get_user_locale() : \get_locale(),
-					'debug'       => (bool) \WP_DEBUG,
 					'i18n'        => [
 						'InvalidResponse' => \esc_html__( 'Received invalid AJAX response.', 'the-seo-framework-extension-manager' ),
 						'UnknownError'    => \esc_html__( 'An unknown error occurred.', 'the-seo-framework-extension-manager' ),

@@ -360,7 +360,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					}
 				).catch(
 					message => {
-						tsfem_inpostL10n.debug && console.log( message );
+						tsf.l10n.states.debug && console.log( message );
 						reject();
 					}
 				);
@@ -2295,26 +2295,28 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @param {string} content
 		 */
 		const updateContent = content => {
+			console.log( content );
 			contentStore.fill( content );
 			contentStore.triggerAnalysis();
 		}
+
+		const debounceUpdateContent = tsfem_inpost.debounce( content => updateContent( content ), updateContentTime );
+
+		let canTestTyping = void 0,
+			editor        = void 0;
 		$document.on(
 			'tsf-updated-gutenberg-content',
 			( event, content ) => {
-				const debouncer = tsfem_inpost.debounce( updateContent, updateContentTime );
 
-				let isTyping = false,
-					editor   = wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
+				editor        ??= wp.data.select( 'core/block-editor' ) || wp.data.select( 'core/editor' );
+				canTestTyping ??= 'function' === typeof editor.isTyping;
 
-				if ( 'function' === typeof editor.isTyping )
-					isTyping = editor.isTyping();
-
-				if ( isTyping ) {
+				if ( canTestTyping && editor.isTyping() ) {
 					// Don't process and lag when typing, just show that the data is invalidated.
 					setAllRatersOf( 'pageContent', 'unknown' );
-					debouncer( content );
+					debounceUpdateContent( content );
 				} else {
-					debouncer().cancel(); // Cancel original debouncer.
+					debounceUpdateContent().cancel(); // Cancel original debouncer.
 					updateContent( content ); // Set content immediately.
 				}
 			},
