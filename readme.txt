@@ -41,15 +41,15 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-TODO Important!!! delete_site_transient( 'update_plugins' );
-	-- Working with a fresh copy of the transient makes our plugin crash, no?
-		- See email from "delivery".
-
-TODO do not disconnect sites when the subscription expires, but downgrade them to free instead. Increase retry time incrementally by up to one a week?
-	do the var_dump()
+TODO do not disconnect sites when the subscription expires, but downgrade them to free instead.
+	Increase retry time incrementally by up to one a week?
+	-> do the var_dump() for constant activations
+TODO remove the clearing of options, but default to "free" instead?
 
 TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
 	-> Report it to Brent and them. This is not for us to fix, but iThemes.
+		-> Couldn't trace the cause.
+		-> Try testing the plugin live.
 
 TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
@@ -59,7 +59,7 @@ TODO for Monitor, when a site isn't registered with us, tell the user about it.
 		-> We could say the site isn't registered... but wouldn't this open the gate for spammers?
 			-> Then again, the service is proxied and requires various secrets to align before responding.
 
-TODO Make "site keys not valid" warning site-wide, instead of only Extension Manager page.
+TODO Make "No valid license key was supplied" warning site-wide, instead of only Extension Manager page.
 
 TODO: For Honeypot Timer, add a JS script that updates the timer when the page loads.
 	-> If no JS, just keep the server-timer.
@@ -70,7 +70,19 @@ TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
 
 TODO do the constant \.
 
-= 2.6.4 =
+TODO when regaining focus on the post editor, Focus runs all the "45 second" scans at once.
+	-> Let's test it at 0.1s and see if it spams and lags out the computer.
+
+TODO trends are displaying escaped HTML.
+	-> Just hide the pane until we can do something useful with it?
+		-> Remove it altogether. Let's start removing cruft, get it over with.
+
+TODO when visiting the Extension Manager page, the notice notifyer isn't counted down
+	-> Can this even be fixed?
+
+= 2.7.0 =
+
+* June TODOth, 2024
 
 **Feature highlights:**
 
@@ -79,8 +91,11 @@ TODO do the constant \.
 
 **Detailed log:**
 
+* **The plugin database version is now at `2700`.**
+* **Note:** Downgrading to an earlier version of this plugin might cause all extensions to become deactivated.
 * **Changed:**
-	* The update API is now engaged unconditionally. We found that users still accidentally downgraded to the WordPress.org version, this ought to prevent that.
+	* We decoupled the active extensions option from the API activation options. This means that extensions will no longer be deactivated after a full disconnect (e.g., after site migration).
+	* The update API is now engaged even if WordPress is not checking this specific plugin. We found that users still accidentally downgraded to the WordPress.org version because of Core issues [44118](https://core.trac.wordpress.org/ticket/44118) and [61055](https://core.trac.wordpress.org/ticket/61055).
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
 * **Fixed:**
@@ -91,11 +106,13 @@ TODO do the constant \.
 
 * [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
 * [Focus at version 2.0.0](https://theseoframework.com/extensions/focus/#changelog)
-	-> TODO We need to add an "select all" button (next to "Choose inflections" and "Choose synonyms")
+	-> TODO We need to add a "select all" button (next to "Choose inflections" and "Choose synonyms")
 	-> add a dicitionary service badge.
-	-> Fix "tyre" / Noun "tyre" fill.
-	-> Fix "service" / Noun "service" store.
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
+
+**Detailed log:**
+
+View the [detailed v2.7.0 changelog](https://tsf.fyi/p/ TODO).
 
 = 2.6.3 =
 

@@ -577,8 +577,6 @@ class Panes extends API {
 
 		if ( $this->is_connected_user() ) {
 			$infos[] = \esc_html__( 'This will free up your site limit.', 'the-seo-framework-extension-manager' );
-		} else {
-			$infos[] = \esc_html__( 'This will deactivate all extensions.', 'the-seo-framework-extension-manager' );
 		}
 		$infos[] = \esc_html__( 'Extension options will not be deleted.', 'the-seo-framework-extension-manager' );
 

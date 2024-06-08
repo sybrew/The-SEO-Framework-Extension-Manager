@@ -2295,7 +2295,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		 * @param {string} content
 		 */
 		const updateContent = content => {
-			console.log( content );
 			contentStore.fill( content );
 			contentStore.triggerAnalysis();
 		}

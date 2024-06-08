@@ -514,7 +514,7 @@ final class InpostGUI {
 	 * @param int|float $priority The priority of the view. A lower value results in an earlier output.
 	 */
 	public static function register_view( $file, $args = [], $tab = 'advanced', $priority = 10 ) {
-		// Prevent excessive static calls and write directly to var.
+		// Remit FETCH_STATIC_PROP_R opcode calls every time we'd otherwise use static::$views hereinafter.
 		$_views =& static::$views;
 
 		if ( ! isset( $_views[ $tab ] ) )

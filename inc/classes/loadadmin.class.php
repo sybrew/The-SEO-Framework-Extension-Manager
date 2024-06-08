@@ -80,6 +80,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( $this->is_connected_user() ) {
 
+			// var_dump() fix me
 			// Future: we need this here, but then whilst keeping the activated extensions?
 			// -> We should split the option indexes, activated extensions in one (unencrypted), and activation data in another.
 			// if ( ! $this->are_options_valid() ) {
@@ -1062,6 +1063,7 @@ final class LoadAdmin extends AdminPages {
 	 * Disables or enables an extension through options.
 	 *
 	 * @since 1.0.0
+	 * @since 2.6.4 No longer handles site options.
 	 *
 	 * @param string $slug The extension slug.
 	 * @param bool   $enable Whether to enable or disable the extension.
@@ -1069,13 +1071,10 @@ final class LoadAdmin extends AdminPages {
 	 */
 	protected function update_extension( $slug, $enable = false ) {
 
-		$extensions = $this->get_option( 'active_extensions' ) ?: [];
+		$extensions = (array) \get_option( \TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, [] );
 
 		$extensions[ $slug ] = (bool) $enable;
 
-		// Kill options on failure when enabling.
-		$kill = $enable;
-
-		return $this->update_option( 'active_extensions', $extensions, $kill );
+		return \update_option( TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, $extensions );
 	}
 }

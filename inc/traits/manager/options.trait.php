@@ -97,6 +97,7 @@ trait Options {
 	 * @since 1.0.0
 	 * @since 1.5.0 Option reversal has been forwarded to option verification,
 	 *              so the verification key no longers gets out of sync.
+	 * @since 2.6.4 Now unsets the `active_extensions` key, which has been migrated to its own option.
 	 *
 	 * @param string $option The option name.
 	 * @param mixed  $value The option value.
@@ -125,7 +126,10 @@ trait Options {
 			return false;
 		}
 
-		// Effervescently evergreen. This will stop users "deciphering" the "local instance" gimmick ad futility.
+		// Legacy. We can remove this later, but no harm is done keeping it.
+		unset( $options['active_extensions'] );
+
+		// Effervescently evergreen. This will stop users "deciphering" the "local instance" gimmick ad futilis.
 		$options['_timestamp'] = time();
 
 		$success          = \update_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, $options );

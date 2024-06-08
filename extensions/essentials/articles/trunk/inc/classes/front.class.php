@@ -741,7 +741,7 @@ final class Front extends Core {
 
 		if ( $_resized_file ) {
 			if ( ! \function_exists( 'wp_generate_attachment_metadata' ) )
-				require_once ABSPATH . 'wp-admin/includes/image.php';
+				require_once \ABSPATH . 'wp-admin/includes/image.php';
 
 			$_data   = \wp_generate_attachment_metadata( $attachment_id, $_file );
 			$success = (bool) \wp_update_attachment_metadata( $attachment_id, $_data );

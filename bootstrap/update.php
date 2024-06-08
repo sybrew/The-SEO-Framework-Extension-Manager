@@ -103,7 +103,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 	}
 
 	// include an unmodified $wp_version
-	include ABSPATH . WPINC . '/version.php';
+	include \ABSPATH . \WPINC . '/version.php';
 
 	$url       = \TSF_EXTENSION_MANAGER_DL_URI . 'get/info/1.0/';
 	$http_args = [
@@ -284,7 +284,7 @@ function get_plugin_update_data() {
 
 		if ( empty( $cache['_tsfem_delay_updater'] ) || $cache['_tsfem_delay_updater'] < time() ) {
 			// include an unmodified $wp_version
-			include ABSPATH . WPINC . '/version.php';
+			include \ABSPATH . \WPINC . '/version.php';
 
 			$url = \TSF_EXTENSION_MANAGER_DL_URI . 'get/update/1.1/';
 
@@ -313,9 +313,6 @@ function get_plugin_update_data() {
 				$translations = [];
 			}
 
-			$options    = \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] );
-			$extensions = $options['active_extensions'] ?? [];
-
 			$http_args = [
 				'timeout'    => 7, // WordPress generously sets 30 seconds when doing cron to check all plugins, but we only check 1 plugin.
 				'user-agent' => "WordPress/$wp_version; " . \PHP_VERSION_ID . '; ' . \home_url( '/' ), // phpcs:ignore, VariableAnalysis
@@ -323,7 +320,7 @@ function get_plugin_update_data() {
 					'plugins'      => json_encode( $plugins ),
 					'translations' => json_encode( $translations ),
 					'locales'      => json_encode( $locales ),
-					'extensions'   => json_encode( $extensions ),
+					'extensions'   => json_encode( \get_option( \TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, [] ) ),
 				],
 			];
 

@@ -170,6 +170,13 @@ define( 'TSF_EXTENSION_MANAGER_EXTENSIONS_PATH', TSF_EXTENSION_MANAGER_DIR_PATH 
 define( 'TSF_EXTENSION_MANAGER_SITE_OPTIONS', 'tsf-extension-manager-settings' );
 
 /**
+ * The plugin options base name.
+ *
+ * @since 1.0.0
+ */
+define( 'TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS', 'tsf-extension-manager-active-extensions' );
+
+/**
  * The extension options base name.
  *
  * @since 1.0.0

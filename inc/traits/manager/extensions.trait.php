@@ -495,7 +495,7 @@ trait Extensions_Actions {
 		if ( isset( $memo ) )
 			return $memo;
 
-		$extensions = \get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [];
+		$extensions = \get_option( \TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, [] );
 
 		if ( \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS )
 			$extensions = array_merge( $extensions, \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );

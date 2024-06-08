@@ -28,7 +28,7 @@ namespace TSF_Extension_Manager;
 
 // Note to self: We use "critical" here because it runs before extensions are loaded.
 // We should not attach to other hooks because we must upgrade in sequence.
-// We shouldn't have called it "critical", "plugin" vs "extension" instead. TODO Fixme?
+// We shouldn't have called it "critical", but "plugin" vs "extension" instead. TODO Fixme?
 // We should also abandon the "admin" vs "always" upgrader? Not loading some parts of the admin might make some migrations difficult, however.
 
 \add_action( 'tsfem_prepare_critical_upgrade', __NAMESPACE__ . '\\_do_critical_core_upgrade', 0, 1 );
@@ -51,14 +51,27 @@ function _do_critical_core_upgrade( $upgrader ) {
 			$upgrader->_register_upgrade(
 				'core',
 				'2500',
-				function( $version ) {
+				function ( $version ) {
 					// Declare success when the option doesn't exist or is succesfully deleted.
 					return ! \get_option( 'tsfem_tested_environment_version' ) || \delete_option( 'tsfem_tested_environment_version' );
 				}
 			);
 			// no break, do moar upgrades;
-
+		case $version < 2700:
+			$upgrader->_register_upgrade(
+				'core',
+				'2700',
+				function ( $version ) {
+					// Declare success when the option doesn't exist or is succesfully deleted.
+					return \update_option(
+						\TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS,
+						\get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [],
+					);
+				}
+			);
+			// no break, do moar upgrades;
 		default:
+			// TODO add "thank you for upgrading" notice?
 			$upgrader->_register_upgrade( 'core', \TSF_EXTENSION_MANAGER_DB_VERSION, '__return_true' );
 	}
 }

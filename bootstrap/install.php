@@ -38,7 +38,7 @@ function _prepare_tsf_installer() {
 	if ( 'update.php' === $GLOBALS['pagenow'] ) return;
 
 	if ( ! \function_exists( 'get_plugins' ) )
-		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		require_once \ABSPATH . 'wp-admin/includes/plugin.php';
 
 	$plugins = \get_plugins();
 
