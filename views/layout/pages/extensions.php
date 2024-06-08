@@ -32,19 +32,3 @@ $this->_do_pane_wrap(
 		'ajax_id'  => 'tsfem-actions-ajax',
 	]
 );
-
-if ( function_exists( 'simplexml_load_string' ) ) {
-	$this->_do_pane_wrap(
-		__( 'SEO Trends and Updates', 'the-seo-framework-extension-manager' ),
-		$this->get_seo_trends_and_updates_overview(),
-		[
-			'full'     => false,
-			'collapse' => true,
-			'move'     => true,
-			'push'     => true,
-			'pane_id'  => 'tsfem-feed-pane',
-			'ajax'     => true,
-			'ajax_id'  => 'tsfem-feed-ajax',
-		]
-	);
-}

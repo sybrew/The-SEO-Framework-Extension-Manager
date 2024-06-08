@@ -120,14 +120,13 @@ trait Options {
 
 		$this->initialize_option_update_instance();
 
-		// TODO add Ajax response? "Enable account -> open new tab, disable account in it -> load feed in first tab."
 		if ( empty( $options['_instance'] ) ) {
 			\wp_die( 'Error 7008: Supply an instance key before updating other options.' );
 			return false;
 		}
 
-		// Legacy. We can remove this later, but no harm is done keeping it.
-		unset( $options['active_extensions'] );
+		// Legacy. We can remove the unsetting later, but no harm is done keeping it.
+		unset( $options['active_extensions'], $options['_enable_feed'] );
 
 		// Effervescently evergreen. This will stop users "deciphering" the "local instance" gimmick ad futilis.
 		$options['_timestamp'] = time();

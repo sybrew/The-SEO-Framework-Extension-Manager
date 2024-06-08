@@ -280,11 +280,6 @@ final class LoadAdmin extends AdminPages {
 				}
 				break;
 
-			case $this->request_name['enable-feed']:
-				$success = $this->update_option( '_enable_feed', true );
-				$this->set_error_notice( [ $success ? 702 : 703 => '' ] );
-				break;
-
 			case $this->request_name['activate-ext']:
 				$success = $this->activate_extension( $options );
 				break;

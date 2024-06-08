@@ -430,11 +430,6 @@ trait Error {
 				$type    = 'updated';
 				break;
 
-			case 702:
-				$message = \esc_html__( 'The feed has been enabled.', 'the-seo-framework-extension-manager' );
-				$type    = 'updated';
-				break;
-
 			case 801:
 				$message = \esc_html__( 'Successfully deactivated.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';

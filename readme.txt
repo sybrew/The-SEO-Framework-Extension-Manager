@@ -73,15 +73,13 @@ TODO do the constant \.
 TODO when regaining focus on the post editor, Focus runs all the "45 second" scans at once.
 	-> Let's test it at 0.1s and see if it spams and lags out the computer.
 
-TODO trends are displaying escaped HTML.
-	-> Just hide the pane until we can do something useful with it?
-		-> Remove it altogether. Let's start removing cruft, get it over with.
-
 TODO when visiting the Extension Manager page, the notice notifyer isn't counted down
 	-> Can this even be fixed? Maybe only when counting down to 0.
 		-> Though, this issue could actually help users understand that the notifyer badge is for notifications...
 
 TODO update pot file.
+
+TODO test if TSF's installer still works with WP 6.5
 
 = 2.7.0 =
 
@@ -101,6 +99,10 @@ TODO update pot file.
 	* The update API is now engaged even if WordPress is not checking this specific plugin. We found that users still accidentally downgraded to the WordPress.org version because of Core issues [44118](https://core.trac.wordpress.org/ticket/44118) and [61055](https://core.trac.wordpress.org/ticket/61055).
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
+* **Removed:**
+	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.
+		* The transient data for this (`tsfem_latest_seo_feed`) will be cleaned up automatically by WordPress.
+		* The option `_enable_feed` will disappear when the next API status request is made (or another change is made to the account).
 * **Fixed:**
 	* Resolved an issue where the plugin updater could cause a fatal error.
 	* Resolved an issue where extension post-metadata could be double-unserialized by another plugin or store incoherent data on extraction failure.

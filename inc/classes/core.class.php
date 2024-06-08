@@ -92,7 +92,6 @@ class Core {
 			'activate-free'     => 'activate-free',
 			'deactivate'        => 'deactivate',
 			'transfer-domain'   => 'transfer-domain',
-			'enable-feed'       => 'enable-feed',
 
 			// Extensions.
 			'activate-ext'      => 'activate-ext',
@@ -108,7 +107,6 @@ class Core {
 			'activate-external' => 'tsfem_nonce_action_external_account',
 			'deactivate'        => 'tsfem_nonce_action_deactivate_account',
 			'transfer-domain'   => 'tsfem_nonce_action_transfer_domain',
-			'enable-feed'       => 'tsfem_nonce_action_feed',
 
 			// Extensions.
 			'activate-ext'      => 'tsfem_nonce_action_activate_ext',
