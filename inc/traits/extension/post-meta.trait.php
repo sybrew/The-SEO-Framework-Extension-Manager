@@ -51,7 +51,7 @@ final class Extensions_Post_Meta_Cache {
 	 * Initializes the meta cache.
 	 *
 	 * @since 1.5.0
-	 * @since 2.6.4 Now conditionally unserializes to prevent plugin conflicts.
+	 * @since 2.7.0 Now conditionally unserializes to prevent plugin conflicts.
 	 *
 	 * @param int $id The Post ID.
 	 * @return void

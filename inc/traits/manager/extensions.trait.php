@@ -667,7 +667,7 @@ trait Extensions_Actions {
 	 *
 	 * @since 2.1.0
 	 * @since 2.3.1 Now compares leniently.
-	 * @since 2.6.4 Now includes an unmodified $wp_version parameter.
+	 * @since 2.7.0 Now includes an unmodified $wp_version parameter.
 	 * @uses static::version_compare_lenient()
 	 * @global string $wp_version
 	 *

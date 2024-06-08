@@ -234,7 +234,7 @@ function _push_update( $value ) {
 /**
  * Gets the plugin update according to the "update_plugins_{$hostname}" filter.
  *
- * @since 2.6.4
+ * @since 2.7.0
  *
  * @return array|false {
  *     The plugin update data with the latest details. Default false.

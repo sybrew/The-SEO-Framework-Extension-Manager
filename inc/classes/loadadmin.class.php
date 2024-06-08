@@ -69,6 +69,8 @@ final class LoadAdmin extends AdminPages {
 	 * Tries activating the account via a contstant.
 	 *
 	 * @since 2.0.0
+	 * @since 2.7.0 1. Now automatically disconnects when the options aren't valid. This allows for automatic reconnection.
+	 *              2. Reduced the reconnection timeout from 5 to 3 minutes.
 	 * @access private
 	 */
 	public function _check_constant_activation() {
@@ -79,14 +81,10 @@ final class LoadAdmin extends AdminPages {
 		];
 
 		if ( $this->is_connected_user() ) {
-
-			// var_dump() fix me
-			// Future: we need this here, but then whilst keeping the activated extensions?
-			// -> We should split the option indexes, activated extensions in one (unencrypted), and activation data in another.
-			// if ( ! $this->are_options_valid() ) {
-			// 	$this->do_deactivation();
-			//  return;
-			// }
+			if ( ! $this->are_options_valid() ) {
+				$this->do_deactivation();
+				return;
+			}
 
 			$current = $this->get_subscription_status();
 			$equals  = array_intersect_assoc( $current, $data );
@@ -107,7 +105,7 @@ final class LoadAdmin extends AdminPages {
 		} else {
 			$timeout = \get_transient( 'tsf-extension-manager-auto-activate-timeout' );
 			if ( $timeout ) return;
-			\set_transient( 'tsf-extension-manager-auto-activate-timeout', 1, \MINUTE_IN_SECONDS * 5 );
+			\set_transient( 'tsf-extension-manager-auto-activate-timeout', 1, \MINUTE_IN_SECONDS * 3 );
 
 			$args = [
 				'activation_email' => $data['email'],
@@ -1063,7 +1061,7 @@ final class LoadAdmin extends AdminPages {
 	 * Disables or enables an extension through options.
 	 *
 	 * @since 1.0.0
-	 * @since 2.6.4 No longer handles site options.
+	 * @since 2.7.0 Now uses a new option key.
 	 *
 	 * @param string $slug The extension slug.
 	 * @param bool   $enable Whether to enable or disable the extension.

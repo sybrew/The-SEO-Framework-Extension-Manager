@@ -481,7 +481,11 @@ trait Error {
 			case 7002:
 			case 7101:
 			case 7102:
-				$message = \esc_html__( 'An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account at "Account and Actions" and try again.', 'the-seo-framework-extension-manager' );
+				if ( \defined( 'TSF_EXTENSION_MANAGER_API_INFORMATION' ) ) {
+					$message = \esc_html__( 'An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive.', 'the-seo-framework-extension-manager' );
+				} else {
+					$message = \esc_html__( 'An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account at "Account and Actions" and try again.', 'the-seo-framework-extension-manager' );
+				}
 				$type    = 'error';
 				break;
 

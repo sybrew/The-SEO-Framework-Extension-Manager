@@ -78,7 +78,10 @@ TODO trends are displaying escaped HTML.
 		-> Remove it altogether. Let's start removing cruft, get it over with.
 
 TODO when visiting the Extension Manager page, the notice notifyer isn't counted down
-	-> Can this even be fixed?
+	-> Can this even be fixed? Maybe only when counting down to 0.
+		-> Though, this issue could actually help users understand that the notifyer badge is for notifications...
+
+TODO update pot file.
 
 = 2.7.0 =
 
@@ -101,6 +104,11 @@ TODO when visiting the Extension Manager page, the notice notifyer isn't counted
 * **Fixed:**
 	* Resolved an issue where the plugin updater could cause a fatal error.
 	* Resolved an issue where extension post-metadata could be double-unserialized by another plugin or store incoherent data on extraction failure.
+	* Resolved an issue where API activation via a constant (`TSF_EXTENSION_MANAGER_API_INFORMATION`) could cause a site to get stuck in instance verification failure. Now, the site disconnects and reconnects automatically.
+		* This should happen immediately, but there is a timeout of 3 minutes when this keeps recurring. Then, those who can manage Extension Manager can manually enter "Free" mode.
+		* The site will upgrade automatically after 3 minutes, regardless of whether it's was set manually into "Free" mode.
+			-> TODO when reconnecting, get_active_extensions() still purports that the extensions are deactivated. Refreshing the page will resolve the issue -- however, this may appear confusing for the user. We should update the cache somehow (this requires a refactor akin to how we handle post/option plugin data in TSF => Make issue)
+				-> Or, we could check the order of operation. Manual activation doesn't have this problem.
 
 **Updated extensions:**
 
