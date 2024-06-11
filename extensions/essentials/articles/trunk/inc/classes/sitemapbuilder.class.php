@@ -411,7 +411,11 @@ final class SitemapBuilder extends SitemapBuilderTransition {
 	 */
 	private function is_post_eligible( $post_id ) {
 
-		if ( ! $this->is_post_included_in_sitemap( $post_id ) ) return false;
+		if ( \TSF_EXTENSION_MANAGER_USE_MODERN_TSF ) {
+			if ( ! \tsf()->sitemap()->utils()->is_post_included_in_sitemap( $post_id ) ) return false;
+		} else {
+			if ( ! $this->is_post_included_in_sitemap( $post_id ) ) return false;
+		}
 
 		$this->set_extension_post_meta_id( $post_id );
 

@@ -60,9 +60,6 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 
 TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
 
-TODO when regaining focus on the post editor, Focus runs all the "45 second" scans at once.
-	-> Let's test it at 0.1s and see if it spams and lags out the computer.
-
 TODO when visiting the Extension Manager page, the notice notifyer isn't counted down
 	-> Can this even be fixed? Maybe only when counting down to 0.
 		-> Though, this issue could actually help users understand that the notifyer badge is for notifications...
@@ -70,9 +67,11 @@ TODO when visiting the Extension Manager page, the notice notifyer isn't counted
 TODO update pot file.
 
 TODO test if TSF's installer still works with WP 6.5
-
-TODO convert tsfem.worker to a Map?
-	-> It's already quite perfect at the moment, tbf.
+	-> Yes, but slowly for some reason (might be a fluke, tested 1x).
+	-> Also, the installer buttons don't "sync" when installed via the tickbox, but this is a non-issue.
+		-> Solve in next update?
+			-> Does this only affect the plugin activation page?
+		-> Remove the "install" button and only show "view details" instead? This will be a bit more intuitive and familiar for the user.
 
 TODO fn()=>;
 TODO array_key_first()/array_key_last()
