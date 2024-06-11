@@ -1092,7 +1092,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
-	let analysisIntervals = {};
+	const analysisIntervals = new Map();
 	/**
 	 * Loops over analysis in a set interval.
 	 *
@@ -1108,22 +1108,16 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	const setAnalysisInterval = idPrefix => {
 		return {
 			to: state => {
-				switch( state ) {
+				switch ( state ) {
 					case 'disabled':
-						if ( idPrefix in analysisIntervals ) {
-							clearInterval( analysisIntervals[ idPrefix ] );
-							delete analysisIntervals[ idPrefix ];
-						}
+						clearInterval( analysisIntervals.get( idPrefix ) );
+						analysisIntervals.set( idPrefix, void 0 );
 						break;
-
 					case 'enabled':
-						setAnalysisInterval( idPrefix ).to( 'disabled' );
-						if ( l10n.settings.analysisInterval > 4999 )
-							analysisIntervals[ idPrefix ] = setInterval( () => triggerAllAnalysis( idPrefix ), l10n.settings.analysisInterval );
-						break;
-
-					default:
-						break;
+						if ( l10n.settings.analysisInterval > 4999 ) {
+							clearInterval( analysisIntervals.get( idPrefix ) );
+							analysisIntervals.set( idPrefix, setInterval( triggerAllAnalysis, l10n.settings.analysisInterval, idPrefix ) );
+						}
 				}
 			}
 		}
@@ -1407,7 +1401,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 			clearTimeout( keywordBuffer[ idPrefix ] );
 			barStop( idPrefix, bar );
 
-			barBuffer[ idPrefix ] = setInterval( () => barGo( idPrefix, bar ), barTimeout );
+			barBuffer[ idPrefix ] = setInterval( barGo, barTimeout, idPrefix, bar );
 
 			keywordBuffer[ idPrefix ] = setTimeout( () => {
 				clearInterval( barBuffer[ idPrefix ] );
@@ -2019,7 +2013,7 @@ window.tsfem_e_focus_inpost = function( $ ) {
 		}
 	}
 
-	let triggerAllBuffer = {};
+	const triggerAllBuffer = new Map();
 	/**
 	 * Triggers all analysis.
 	 *
@@ -2041,23 +2035,29 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 */
 	const triggerAllAnalysis = idPrefix => {
 		idPrefix ||= 0;
-		clearTimeout( triggerAllBuffer[ idPrefix ] );
-		triggerAllBuffer[ idPrefix ] = setTimeout( () => {
-			if ( idPrefix ) {
-				const subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
-				if ( subScores?.length ) {
-					tsfem_inpost.promiseLoop( subScores, item => doCheck( item ), 150 );
-				} else {
-					setEvaluationVisuals( idPrefix ).to( 'error' );
-				}
-			} else {
-				let _type;
-				for ( _type in activeFocusAreas ) {
-					$( activeFocusAreas[ _type ].join( ', ' ) )
-						.trigger( analysisChangeEvents( _type ).get( 'trigger' ) );
-				}
-			}
-		}, 1000 );
+		clearTimeout( triggerAllBuffer.get( idPrefix ) );
+		triggerAllBuffer.set(
+			idPrefix,
+			setTimeout(
+				() => {
+					if ( idPrefix ) {
+						const subScores = getSubElementById( idPrefix, 'scores' )?.querySelectorAll( '.tsfem-e-focus-assessment-wrap[data-assess="1"]' );
+						if ( subScores?.length ) {
+							tsfem_inpost.promiseLoop( subScores, item => doCheck( item ), 150 );
+						} else {
+							setEvaluationVisuals( idPrefix ).to( 'error' );
+						}
+					} else {
+						let _type;
+						for ( _type in activeFocusAreas ) {
+							$( activeFocusAreas[ _type ].join( ', ' ) )
+								.trigger( analysisChangeEvents( _type ).get( 'trigger' ) );
+						}
+					}
+				},
+				1000,
+			)
+		);
 	}
 
 	/**

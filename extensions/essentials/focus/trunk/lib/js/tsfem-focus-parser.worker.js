@@ -220,7 +220,7 @@ const countChars = str => {
 	str = str.match( /(?=([^<>]+))\1(?=<|$)/gi );
 	str = str && str.join( ' ' ) || '';
 	// Strip duplicated spaces.
-	str = str.replace( /\s+/giu, ' ' );
+	str = str.replace( /\s+/gu, ' ' );
 	return +str.length || 0;
 }
 const countWords = ( word, contentMatch ) => {

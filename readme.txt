@@ -43,10 +43,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 TODO do not disconnect sites when the subscription expires, but downgrade them to free instead.
 	Increase retry time incrementally by up to one a week?
-	-> do the var_dump() for constant activations
 TODO remove the clearing of options, but default to "free" instead?
-
-TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
 	-> To test, register, then delete from (or modify) DB.
