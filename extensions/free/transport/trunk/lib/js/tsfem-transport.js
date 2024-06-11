@@ -227,11 +227,9 @@ window.tsfem_e_import = function() {
 				data: formData && ( new URLSearchParams( [ ...formData.entries() ] ) ).toString(),
 			}
 		).done( data => {
-			console.log( data );
 			resolve( data?.results?.notice );
 			_log( data?.logMsg, 2 );
 		} ).fail( response => {
-			console.log( data );
 			reject( response.data?.results?.notice );
 			_log( response.data?.logMsg, 2 );
 		} );

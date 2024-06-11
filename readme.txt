@@ -46,11 +46,6 @@ TODO do not disconnect sites when the subscription expires, but downgrade them t
 	-> do the var_dump() for constant activations
 TODO remove the clearing of options, but default to "free" instead?
 
-TODO figure out why iThemes Sync (Solid Central) is loading the admin after is_admin() was false (and then true).
-	-> Report it to Brent and them. This is not for us to fix, but iThemes.
-		-> Couldn't trace the cause.
-		-> Try testing the plugin live.
-
 TODO for Focus, if they set a word with a SPACE, send a notification when a word isn't found: "Check your spelling OR try a single word. Learn more about this [here](https://theseoframework.com/extensions/focus/#faq/are-phrases-supported)."
 
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
@@ -68,8 +63,6 @@ TODO: For Honeypot Timer, add a JS script that updates the timer when the page l
 
 TODO figure out why TSFEM crashes on post-save (keyword email: Andy).
 
-TODO do the constant \.
-
 TODO when regaining focus on the post editor, Focus runs all the "45 second" scans at once.
 	-> Let's test it at 0.1s and see if it spams and lags out the computer.
 
@@ -81,13 +74,24 @@ TODO update pot file.
 
 TODO test if TSF's installer still works with WP 6.5
 
+TODO convert tsfem.worker to a Map?
+	-> It's already quite perfect at the moment, tbf.
+
+TODO fn()=>;
+TODO array_key_first()/array_key_last()
+TODO hrtime()
+TODO ??=
+TODO ??
+	-> see https://github.com/sybrew/the-seo-framework/issues/608
+TODO , function\( => function ( )
+
 = 2.7.0 =
 
 * June TODOth, 2024
 
 **Feature highlights:**
 
-* Honeypot now tests against fast commenters that accelerate time.
+* Honeypot now tests against fast commenters that accelerate time virtually.
 * Focus can now make API calls again when creating a new post using the latest Block Editor.
 
 **Detailed log:**
@@ -115,9 +119,10 @@ TODO test if TSF's installer still works with WP 6.5
 **Updated extensions:**
 
 * [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
-* [Focus at version 2.0.0](https://theseoframework.com/extensions/focus/#changelog)
+* [Focus at version 1.6.0](https://theseoframework.com/extensions/focus/#changelog)
 	-> TODO We need to add a "select all" button (next to "Choose inflections" and "Choose synonyms")
 	-> add a dicitionary service badge.
+	-> Make it 2.0.0 if we add the select all button, otherwise 1.6
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
 
 **Detailed log:**

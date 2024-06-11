@@ -97,7 +97,7 @@ final class Ajax {
 	private function get_api_response( $type, $data ) {
 		return \tsfem()->_get_protected_api_response(
 			$this,
-			TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY,
+			\TSFEM_E_FOCUS_AJAX_API_ACCESS_KEY,
 			[
 				'request' => "extension/focus/$type",
 				'data'    => $data,
@@ -160,7 +160,14 @@ final class Ajax {
 			if ( empty( $response->success ) ) {
 				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
-						$send['results'] = $this->get_ajax_notice( false, 1100102 );
+						// $keyword is trimmed via `s_ajax_string`
+						// Note that JS converts Unicode spacing to ASCII, so if the dictionary API includes more languages, we may need to adjust.
+						if ( preg_match( '/[\p{Z}\h\v]/', $keyword ) ) {
+							// Suggest not using spaces.
+							$send['results'] = $this->get_ajax_notice( false, 1100111 );
+						} else {
+							$send['results'] = $this->get_ajax_notice( false, 1100102 );
+						}
 						break;
 
 					case 'REQUEST_LIMIT_REACHED':

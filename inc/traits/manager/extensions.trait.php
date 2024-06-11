@@ -72,8 +72,8 @@ trait Extensions_Properties {
 		 * and have cost me literally thousands of hours to get where they are now.
 		 *
 		 * Coding is extremely difficult, as you might know (why else are you reading
-		 * this?), so build something positive from those skills! Become an awesome
-		 * part of this awesome WordPress.org community :). Or build your own :D.
+		 * this?), so build something positive with those skills! Become an awesome
+		 * part of this awesome WordPress.org community :). Go build your own :D.
 		 */
 		return [
 			'focus'     => [

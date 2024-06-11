@@ -70,7 +70,7 @@ class Api extends Data {
 
 		$response = \tsfem()->_get_protected_api_response(
 			$this,
-			TSFEM_E_MONITOR_API_ACCESS_KEY,
+			\TSFEM_E_MONITOR_API_ACCESS_KEY,
 			array_merge(
 				$args,
 				[

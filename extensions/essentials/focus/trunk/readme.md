@@ -319,6 +319,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 * **Improved:** WooCommerce's "Product short description" is now considered for subject assessments. The "Product short description" is considered to be placed before the "Product description."
 * **Improved:** Added screen reader titles to selection fields.
 * **Improved:** Classic Editor's parsing delay has been cut in half (from 1 second to 0.5 seconds) because it's prone to wait a while already after typing before relaying updates.
+* **Improved:** When a dictionary lookup fails and you use a space, we now tell you about using [single or compound words only](#faq/are-phrases-supported).
 * **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
 * **Fixed:** Resolved an issue during typing, the parser wouldn't refresh assessments for 10 seconds due to a race condition after clearing worker events to save memory.

@@ -1068,6 +1068,6 @@ final class LoadAdmin extends AdminPages {
 
 		$extensions[ $slug ] = (bool) $enable;
 
-		return \update_option( TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, $extensions );
+		return \update_option( \TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS, $extensions );
 	}
 }
