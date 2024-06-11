@@ -316,22 +316,29 @@ class AccountActivation extends Panes {
 	 * @since 1.0.0
 	 * @since 2.0.0 Added margin of error handling.
 	 * @since 2.6.1 Now ignores margin of error on instance failure to prevent a soft lockout.
-	 * @TODO lower margin of error if server maintains stable. Well, we had a 99.991% uptime in 2018 =/
 	 *
-	 * @param bool $moe       Whether to allow a margin of error.
-	 *                        May happen once every 7 days for 3 days.
+	 * @param bool $grace     Whether to allow a grace period of 7 days.
 	 * @param bool $downgrade Whether to downgrade to Free, or disconnect completely.
 	 * @return bool True on success. False on failure.
 	 */
-	protected function do_deactivation( $moe = false, $downgrade = false ) {
+	protected function do_deactivation( $grace = false, $downgrade = false ) {
 
-		if ( $moe && $this->get_option( '_instance' ) ) {
-			$expire = $this->get_option( 'moe' ) ?: time() + \DAY_IN_SECONDS * 3;
-			if ( $expire >= time() || $expire < ( time() - \DAY_IN_SECONDS * 7 ) ) {
-				$this->update_option( 'moe', time() + \DAY_IN_SECONDS * 3 );
+		if ( $grace && $this->get_option( '_instance' ) ) {
+
+			$this->update_option( '_activation_level', 'Free' );
+
+			$expire = $this->get_option( 'license_grace' );
+
+			if ( ! $expire ) {
+				$this->update_option( 'license_grace', time() + \DAY_IN_SECONDS * 7 );
+				return false;
+			} elseif ( $expire > time() ) {
 				return false;
 			}
 		}
+
+		// Grace expired or not permitted.
+		$this->delete_option( 'license_grace' );
 
 		if ( $downgrade ) {
 			$options = $this->get_all_options();
@@ -362,83 +369,23 @@ class AccountActivation extends Panes {
 	 * @since 1.3.0
 	 * @see $this->validate_remote_subscription_license();
 	 *
+	 * @param bool $silent Whether to emit errors.
 	 * @return int $this->validate_remote_subscription_license();
 	 */
-	protected function revalidate_subscription() {
-
-		$status = $this->validate_remote_subscription_license();
-
-		switch ( $status ) {
-			case 0:
-				// Already free or couldn't reach API.
-				break;
-
-			case 1:
-				// Used to be premium. Bummer.
-				$this->set_error_notice( [ 901 => '' ] );
-				$this->update_option( '_activation_level', 'Free' );
-				break;
-
-			case 2:
-				$this->set_error_notice( [ 902 => '' ] );
-				// Instance failed. Set 3 day timeout.
-				// Administrator has already been notified to fix this ASAP.
-				$this->do_deactivation( true, true );
-				break;
-
-			case 3:
-				// Domain mismatch. Everything else is OK. Don't downgrade to Free.
-				// User gets notified via the CP pane on certain actions and can not perform API actions.
-				$this->update_option( '_requires_domain_transfer', true );
-				break;
-
-			case 4:
-				// Everything's superb. Remote upgrade/downgrade.
-				( $this->get_option( '_activation_level' ) !== 'Essentials' )
-					and $this->update_option( '_activation_level', 'Essentials' )
-						and $this->set_error_notice( [ 904 => '' ] );
-				break;
-
-			case 5:
-				// Everything's Premium. Remote upgrade/downgrade.
-				( $this->get_option( '_activation_level' ) !== 'Premium' )
-					and $this->update_option( '_activation_level', 'Premium' )
-						and $this->set_error_notice( [ 905 => '' ] );
-				break;
-
-			case 6:
-				// Everything's Enterprise. Remote upgrade.
-				( $this->get_option( '_activation_level' ) !== 'Enterprise' )
-					and $this->update_option( '_activation_level', 'Enterprise' )
-						and $this->set_error_notice( [ 906 => '' ] );
-		}
-
-		return $status;
-	}
-
-	/**
-	 * Validates local subscription status against remote through an API request.
-	 *
-	 * @since 1.0.0
-	 * @since 1.3.0 Now returns an integer.
-	 * @since 2.0.0 Our API no longer uses 'extra'.
-	 *
-	 * @return int : {
-	 *   0 : Not subscribed / API failure.
-	 *   1 : Local connected user.
-	 *   2 : Local connected user. Remote connected User.
-	 *   3 : Local connected user. Remote connected User. Instance verified.
-	 *   4 : Local connected user. Remote connected User. Instance verified. Domain verified.
-	 *   5 : Local connected user. Remote connected User. Instance verified. Domain verified. Premium verified.
-	 *   6 : Local connected user. Remote connected User. Instance verified. Domain verified. Enterprise verified.
-	 * }
-	 */
-	protected function validate_remote_subscription_license() {
+	protected function revalidate_subscription( $silent = false ) {
 
 		$response = $this->update_remote_subscription_status();
 
 		$status = 0;
-
+		/**
+		 * 0 : Not subscribed / API failure.
+		 * 1 : Local connected user.
+		 * 2 : Local connected user. Remote connected User.
+		 * 3 : Local connected user. Remote connected User. Instance verified.
+		 * 4 : Local connected user. Remote connected User. Instance verified. Domain verified.
+		 * 5 : Local connected user. Remote connected User. Instance verified. Domain verified. Premium verified.
+		 * 6 : Local connected user. Remote connected User. Instance verified. Domain verified. Enterprise verified.
+		 */
 		while ( true ) {
 			if ( ! isset( $response['status_check'] ) ) break;
 			++$status; // 1
@@ -454,6 +401,60 @@ class AccountActivation extends Panes {
 			++$status; // 6
 
 			break;
+		}
+
+		switch ( $status ) {
+			case 0:
+				// Already free or couldn't reach API.
+				break;
+
+			case 1:
+				// Used to be premium. Bummer.
+				$silent or $this->set_error_notice( [ 901 => '' ] );
+				$this->do_deactivation( true, true );
+				break;
+
+			case 2:
+				$silent or $this->set_error_notice( [ 902 => '' ] );
+				// Remote instance failed. Allow grace, but no API.
+				// Administrator has already been notified to fix this ASAP.
+				$this->do_deactivation( true, true );
+				break;
+
+			case 3:
+				// Domain mismatch. Everything else is OK. Don't downgrade to Free.
+				// User gets notified via the CP pane on certain actions and can not perform API actions.
+				$this->update_option( '_requires_domain_transfer', true );
+				break;
+
+			case 4:
+				// Everything's superb. Remote upgrade/downgrade.
+				if ( $this->get_option( '_activation_level' ) !== 'Essentials' ) {
+					if ( $this->update_option( '_activation_level', 'Essentials' ) )
+						$silent or $this->set_error_notice( [ 904 => '' ] );
+
+					$this->delete_option( 'license_grace' );
+				}
+				break;
+
+			case 5:
+				// Everything's Premium. Remote upgrade/downgrade.
+				if ( $this->get_option( '_activation_level' ) !== 'Premium' ) {
+					if ( $this->update_option( '_activation_level', 'Premium' ) )
+						$silent or $this->set_error_notice( [ 905 => '' ] );
+
+					$this->delete_option( 'license_grace' );
+				}
+				break;
+
+			case 6:
+				// Everything's Enterprise. Remote upgrade/downgrade.
+				if ( $this->get_option( '_activation_level' ) !== 'Enterprise' ) {
+					if ( $this->update_option( '_activation_level', 'Enterprise' ) )
+						$silent or $this->set_error_notice( [ 906 => '' ] );
+
+					$this->delete_option( 'license_grace' );
+				}
 		}
 
 		return $status;
@@ -474,7 +475,8 @@ class AccountActivation extends Panes {
 	 */
 	protected function update_remote_subscription_status( $args = null ) {
 
-		if ( null === $args && ! $this->is_connected_user() )
+		// When in license grace period, try to reconnect if not deemed connected.
+		if ( null === $args && ! $this->is_connected_user() && ! $this->get_option( 'license_grace' ) )
 			return false;
 
 		$status = $this->get_option( '_remote_subscription_status' ) ?: [
@@ -484,7 +486,7 @@ class AccountActivation extends Panes {
 
 		if ( isset( $status['status']['status_check'] ) && 'active' !== $status['status']['status_check'] ) {
 			// Updates at most every 1 minute.
-			$divider = \MINUTE_IN_SECONDS;
+			$divider = \MINUTE_IN_SECONDS * 2;
 		} else {
 			// Updates at most every 5 minutes.
 			$divider = \MINUTE_IN_SECONDS * 5;

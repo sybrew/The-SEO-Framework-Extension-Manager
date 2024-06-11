@@ -41,10 +41,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-TODO do not disconnect sites when the subscription expires, but downgrade them to free instead.
-	Increase retry time incrementally by up to one a week?
-TODO remove the clearing of options, but default to "free" instead?
-
 TODO for Monitor, when a site isn't registered with us, tell the user about it.
 	-> To test, register, then delete from (or modify) DB.
 	-> Currently, we send the generic 'failure' response.
@@ -81,6 +77,8 @@ TODO ??
 	-> see https://github.com/sybrew/the-seo-framework/issues/608
 TODO , function\( => function ( )
 
+TODO CyberWire => CyberWire B.V.
+
 = 2.7.0 =
 
 * June TODOth, 2024
@@ -96,9 +94,15 @@ TODO , function\( => function ( )
 * **Note:** Downgrading to an earlier version of this plugin might cause all extensions to become deactivated.
 * **Changed:**
 	* We decoupled the active extensions option from the API activation options. This means that extensions will no longer be deactivated after a full disconnect (e.g., after site migration).
-	* The update API is now engaged even if WordPress is not checking this specific plugin. We found that users still accidentally downgraded to the WordPress.org version because of Core issues [44118](https://core.trac.wordpress.org/ticket/44118) and [61055](https://core.trac.wordpress.org/ticket/61055).
+	* The update API now engages even if WordPress is not checking this specific plugin. We found that users still accidentally downgraded to the WordPress.org version because of Core issues [44118](https://core.trac.wordpress.org/ticket/44118) and [61055](https://core.trac.wordpress.org/ticket/61055).
+	* When your subscription expires or is pending, you no longer need to reconnect manually, but there's now a grace period of 7 days for Extension Manager to reconnect automatically.
+		* Once this grace period is passed, your account will need to be upgraded manually again.
+		* Automatic reconnecting is tried every 2 minutes.
+		* You are also offered to manually switch the license key during this grace period.
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
+	* Modernized critical JavaScript code, slightly improving browser interaction performance.
+	* TODO Modernized PHP code, slightly improving server response times.
 * **Removed:**
 	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.
 		* The transient data for this (`tsfem_latest_seo_feed`) will be cleaned up automatically by WordPress.
@@ -111,6 +115,7 @@ TODO , function\( => function ( )
 		* The site will upgrade automatically after 3 minutes, regardless of whether it's was set manually into "Free" mode.
 			-> TODO when reconnecting, get_active_extensions() still purports that the extensions are deactivated. Refreshing the page will resolve the issue -- however, this may appear confusing for the user. We should update the cache somehow (this requires a refactor akin to how we handle post/option plugin data in TSF => Make issue)
 				-> Or, we could check the order of operation. Manual activation doesn't have this problem.
+					-> Automated reconnection does have this problem via revalidate_subscription (grace)
 
 **Updated extensions:**
 

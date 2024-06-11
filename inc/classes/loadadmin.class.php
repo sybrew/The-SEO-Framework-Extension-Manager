@@ -281,11 +281,11 @@ final class LoadAdmin extends AdminPages {
 				break;
 
 			case $this->request_name['activate-ext']:
-				$success = $this->activate_extension( $options );
+				$this->activate_extension( $options );
 				break;
 
 			case $this->request_name['deactivate-ext']:
-				$success = $this->deactivate_extension( $options );
+				$this->deactivate_extension( $options );
 				break;
 
 			default:
@@ -822,7 +822,7 @@ final class LoadAdmin extends AdminPages {
 
 		if ( $status['success'] ) :
 			if ( 2 === $status['case'] ) { // Extension and license == Premium/Essentials OK.
-				switch ( $this->validate_remote_subscription_license() ) {
+				switch ( $this->revalidate_subscription( true ) ) {
 					case 6: // Enterprise.
 					case 5: // Premium.
 					case 4: // Essentials.
@@ -834,6 +834,9 @@ final class LoadAdmin extends AdminPages {
 
 					case 2: // Disconnected from API.
 					case 1: // Connected user, but verification failed.
+						$ajax or $this->set_error_notice( [ 10016 => '' ] );
+						return $ajax ? $this->get_ajax_notice( false, 10016 ) : false;
+
 					case 0: // Free user.
 					default: // ???
 						$ajax or $this->set_error_notice( [ 10004 => '' ] );

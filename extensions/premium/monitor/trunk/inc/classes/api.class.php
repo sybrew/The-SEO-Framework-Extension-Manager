@@ -260,10 +260,6 @@ class Api extends Data {
 				$ajax or $this->set_error_notice( [ 1010509 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010509 ) : false;
 
-			case 'failure':
-				$ajax or $this->set_error_notice( [ 1010501 => '' ] );
-				return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
-
 			case 'site expired':
 				$this->update_option( 'site_requires_fix', true );
 				$ajax or $this->set_error_notice( [ 1010502 => '' ] );
@@ -278,6 +274,11 @@ class Api extends Data {
 				$this->set_remote_crawl_timeout();
 				$ajax or $this->set_error_notice( [ 1010504 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010504 ) : false;
+
+			default:
+			case 'failure':
+				$ajax or $this->set_error_notice( [ 1010501 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010501 ) : false;
 		}
 
 		$success = $this->set_remote_crawl_timeout();

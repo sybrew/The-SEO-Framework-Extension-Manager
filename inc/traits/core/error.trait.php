@@ -481,7 +481,7 @@ trait Error {
 				} else {
 					$message = \esc_html__( 'An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account at "Account and Actions" and try again.', 'the-seo-framework-extension-manager' );
 				}
-				$type    = 'error';
+				$type = 'error';
 				break;
 
 			// IT'S OVER NINE THOUSAAAAAAAAAAAAAAAAAAAAAAND!!one!1!!
@@ -528,6 +528,7 @@ trait Error {
 				break;
 
 			case 10015:
+			case 10016:
 				$message = \esc_html__( "This domain isn't connected to the API. Transfer the license and try again.", 'the-seo-framework-extension-manager' );
 				$type    = 'error';
 				break;
