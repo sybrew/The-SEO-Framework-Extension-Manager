@@ -97,7 +97,8 @@ trait Options {
 	 * @since 1.0.0
 	 * @since 1.5.0 Option reversal has been forwarded to option verification,
 	 *              so the verification key no longers gets out of sync.
-	 * @since 2.7.0 Now unsets the `active_extensions` key, which has been migrated to its own option.
+	 * @since 2.7.0 1. Now unsets the `active_extensions` key, which has been migrated to its own option.
+	 *              2. Now unsets the `_enable_feed` key, which is no longer supported.
 	 *
 	 * @param string $option The option name.
 	 * @param mixed  $value The option value.

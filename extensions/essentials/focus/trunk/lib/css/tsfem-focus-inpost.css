@@ -204,20 +204,16 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	border-radius: 3px;
 }
 
-.tsfem-e-focus-highlight-subject-checkbox:hover + label,
-.tsfem-e-focus-edit-subject-checkbox:hover + label,
-.tsfem-e-focus-highlight-subject-checkbox:focus + label,
-.tsfem-e-focus-edit-subject-checkbox:focus + label {
+.tsfem-e-focus-highlight-subject-checkbox:is(:hover, :focus) + label,
+.tsfem-e-focus-edit-subject-checkbox:is(:hover, :focus) + label {
 	box-shadow: 0 0 0 0 rgba(0,0,0,.25) inset, 0 0 3px 1px rgba(0,0,0,.25);
 }
 .tsfem-e-focus-highlight-subject-checkbox:checked + label,
 .tsfem-e-focus-edit-subject-checkbox:checked + label {
 	box-shadow: 0 1px 3px 1px rgba(0,0,0,.25) inset, 0 0 0 0 rgba(0,0,0,.25);
 }
-.tsfem-e-focus-highlight-subject-checkbox:checked:hover + label,
-.tsfem-e-focus-edit-subject-checkbox:checked:hover + label,
-.tsfem-e-focus-highlight-subject-checkbox:checked:focus + label,
-.tsfem-e-focus-edit-subject-checkbox:checked:focus + label {
+.tsfem-e-focus-highlight-subject-checkbox:checked:is(:hover, :focus) + label,
+.tsfem-e-focus-edit-subject-checkbox:checked:is(:hover, :focus) + label {
 	box-shadow: 0 1px 3px 1px rgba(0,0,0,.25) inset, 0 0 0 1px rgba(0,0,0,.25);
 }
 
@@ -231,8 +227,10 @@ input[type="checkbox"].tsfem-e-focus-collapse-checkbox:checked:after {
 	color: inherit;
 }
 
-input[type="checkbox"].tsfem-e-focus-edit-subject-checkbox,
-input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox {
+input[type="checkbox"]:is(
+	.tsfem-e-focus-edit-subject-checkbox,
+	.tsfem-e-focus-highlight-subject-checkbox
+) {
 	position: absolute;
 	width: 0;
 	height: 0;
@@ -246,8 +244,10 @@ input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox {
 	appearance: none;
 }
 
-input[type="checkbox"].tsfem-e-focus-edit-subject-checkbox:checked:after,
-input[type="checkbox"].tsfem-e-focus-highlight-subject-checkbox:checked:after {
+input[type="checkbox"]:is(
+	.tsfem-e-focus-edit-subject-checkbox,
+	.tsfem-e-focus-highlight-subject-checkbox
+):checked:after {
 	content: none;
 }
 

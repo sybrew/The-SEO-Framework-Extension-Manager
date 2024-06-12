@@ -7,10 +7,7 @@
 /* ## Notices: Core + self.
 /*--------------------------------------*/
 /* "margin: 1.2% 0 0" Edge/Firefox inline margins issue */
-#tsfem-page-wrap .notice,
-#tsfem-page-wrap .error,
-#tsfem-page-wrap .warning,
-#tsfem-page-wrap .tsf-notice {
+#tsfem-page-wrap :is(.notice, .error, .warning, .tsf-notice) {
 	display: block;
 	margin: 1.2vw .6vw 0;
 	box-shadow: 0 0.1em 0.4em rgba(0, 0, 0, .18);
@@ -319,24 +316,26 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 /* ## Normalize input.
 /*--------------------------------------*/
 
-#tsfem-page-wrap input[type=text]:focus,
-#tsfem-page-wrap input[type=search]:focus,
-#tsfem-page-wrap input[type=radio]:focus,
-#tsfem-page-wrap input[type=tel]:focus,
-#tsfem-page-wrap input[type=time]:focus,
-#tsfem-page-wrap input[type=url]:focus,
-#tsfem-page-wrap input[type=week]:focus,
-#tsfem-page-wrap input[type=password]:focus,
-#tsfem-page-wrap input[type=checkbox]:focus,
-#tsfem-page-wrap input[type=color]:focus,
-#tsfem-page-wrap input[type=date]:focus,
-#tsfem-page-wrap input[type=datetime]:focus,
-#tsfem-page-wrap input[type=datetime-local]:focus,
-#tsfem-page-wrap input[type=email]:focus,
-#tsfem-page-wrap input[type=month]:focus,
-#tsfem-page-wrap input[type=number]:focus,
-#tsfem-page-wrap select:focus,
-#tsfem-page-wrap textarea:focus {
+#tsfem-page-wrap :is(
+	input[type=text],
+	input[type=search],
+	input[type=radio],
+	input[type=tel],
+	input[type=time],
+	input[type=url],
+	input[type=week],
+	input[type=password],
+	input[type=checkbox],
+	input[type=color],
+	input[type=date],
+	input[type=datetime],
+	input[type=datetime-local],
+	input[type=email],
+	input[type=month],
+	input[type=number],
+	select,
+	textarea
+):focus {
 	border-color: #057f9c;
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
 }
@@ -345,13 +344,9 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 /*--------------------------------------*/
 
 .tsfem-button,
-.tsfem-button:hover,
-.tsfem-button:active,
-.tsfem-button:focus,
+.tsfem-button:is(:hover, :active, :focus),
 .tsfem-button-primary,
-.tsfem-button-primary:hover,
-.tsfem-button-primary:active,
-.tsfem-button-primary:focus {
+.tsfem-button-primary:is(:hover, :active, :focus) {
 	display: inline-block;
 	box-shadow: 0 0 0.3em rgba(0,0,0,0), 0 0 0 rgba(0,0,0,0) inset;
 	filter: none;
@@ -380,30 +375,23 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 }
 
 .tsfem-button,
-.tsfem-button:hover,
-.tsfem-button:active,
-.tsfem-button:focus {
+.tsfem-button:is(:hover, :active, :focus) {
 	color: #666;
 }
 
 .tsfem-button-red,
-.tsfem-button-red:hover,
-.tsfem-button-red:focus {
+.tsfem-button-red:is(:hover, :focus) {
 	color: #dd3811;
 }
 
 .tsfem-button-primary,
-.tsfem-button-primary:hover,
-.tsfem-button-primary:active,
-.tsfem-button-primary:focus {
+.tsfem-button-primary:is(:hover, :active, :focus)  {
 	background: #05809e;
 	color: #fff;
 }
 
-.tsfem-button:hover,
-.tsfem-button:focus,
-.tsfem-button-primary:hover,
-.tsfem-button-primary:focus {
+.tsfem-button:is(:hover, :focus),
+.tsfem-button-primary:is(:hover, :focus) {
 	box-shadow: 0 .1em .5em rgba(0,0,0,.3), 0 0 0 rgba(0,0,0,0) inset; /* 2: transition positioning */
 }
 
@@ -414,22 +402,18 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 }
 
 .tsfem-button-small,
-.tsfem-button-small:hover,
-.tsfem-button-small:active,
-.tsfem-button-small:focus {
+.tsfem-button-small:is(:hover, :active, :focus) {
 	font-size: .9em;
 	padding: .5em 1em;
 }
 
 .tsfem-button-primary-bright,
-.tsfem-button-primary-bright:hover,
-.tsfem-button-primary-bright:focus {
+.tsfem-button-primary-bright:is(:hover, :focus) {
 	background: #0ebfe9;
 }
 
 .tsfem-button-primary-dark,
-.tsfem-button-primary-dark:hover,
-.tsfem-button-primary-dark:focus {
+.tsfem-button-primary-dark:is(:hover, :focus) {
 	background: #535353;
 }
 
@@ -627,22 +611,10 @@ body.rtl .tsfem-button-loading:after {
 
 /* ## Disabled Buttons.
 /*--------------------------------------*/
-.tsfem-button:disabled,
-.tsfem-button:disabled:hover,
-.tsfem-button:disabled:active,
-.tsfem-button:disabled:focus,
-.tsfem-button-primary:disabled,
-.tsfem-button-primary:disabled:hover,
-.tsfem-button-primary:disabled:active,
-.tsfem-button-primary:disabled:focus,
+.tsfem-button:is(:disabled, :disabled:hover, :disabled:active, :disabled:focus),
+.tsfem-button-primary:is(:disabled, :disabled:hover, :disabled:active, :disabled:focus),
 .tsfem-button-disabled,
-.tsfem-button-disabled:hover,
-.tsfem-button-disabled:active,
-.tsfem-button-disabled:focus,
-.tsfem-button-disabled:disabled,
-.tsfem-button-disabled:disabled:focus,
-.tsfem-button-disabled:disabled:hover,
-.tsfem-button-disabled:disabled:active {
+.tsfem-button-disabled:is(:hover, :active, :focus, :disabled, :disabled:focus, :disabled:hover, :disabled:active) {
 	background: #ddd;
 	color: #aaa;
 	font-weight: 400;
@@ -654,6 +626,7 @@ body.rtl .tsfem-button-loading:after {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	transition: none;
 }
 
 /* # Start Panes.
@@ -844,9 +817,7 @@ body.rtl .tsfem-button-loading:after {
 	margin-right: .75ch;
 }
 
-.tsfem-pane-content h4.tsfem-status-title,
-.tsfem-pane-content h5.tsfem-status-title,
-.tsfem-pane-content h6.tsfem-status-title {
+.tsfem-pane-content :is(h4, h5, h6).tsfem-status-title {
 	margin: 0;
 }
 
@@ -902,12 +873,14 @@ body.rtl .tsfem-pane-footer-wrap > *:nth-last-child(n+2) {
 	font-weight: 600;
 }
 
-h4.tsfem-form-title,
-h4.tsfem-info-title,
-h4.tsfem-status-title,
-h4.tsfem-support-title,
-h4.tsfem-action-title,
-h4.tsfem-cp-title {
+h4:is(
+	.tsfem-form-title,
+	.tsfem-info-title,
+	.tsfem-status-title,
+	.tsfem-support-title,
+	.tsfem-action-title,
+	.tsfem-cp-title
+) {
 	padding: 0;
 	margin: 0 0 1em;
 	font-size: 1.16em;

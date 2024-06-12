@@ -695,7 +695,7 @@ final class Admin extends Api {
 			'type'     => 'css',
 			'deps'     => [ 'tsf-tt', 'tsfem-ui' ],
 			'autoload' => true,
-			'hasrtl'   => true,
+			'hasrtl'   => false,
 			'name'     => 'tsfem-monitor',
 			'base'     => \TSFEM_E_MONITOR_DIR_URL . 'lib/css/',
 			'ver'      => \TSFEM_E_MONITOR_VERSION,

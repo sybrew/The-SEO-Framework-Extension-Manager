@@ -76,6 +76,8 @@ TODO ??=
 TODO ??
 	-> see https://github.com/sybrew/the-seo-framework/issues/608
 TODO , function\( => function ( )
+TODO leading breaks
+	-> Make sniff?
 
 TODO CyberWire => CyberWire B.V.
 
@@ -101,7 +103,8 @@ TODO CyberWire => CyberWire B.V.
 		* You are also offered to manually switch the license key during this grace period.
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
-	* Modernized critical JavaScript code, slightly improving browser interaction performance.
+	* We modernized critical JavaScript code, slightly improving browser interaction performance.
+	* We modernized CSS code, slightly reducing the file sizes.
 	* TODO Modernized PHP code, slightly improving server response times.
 * **Removed:**
 	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.

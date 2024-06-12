@@ -312,21 +312,22 @@ h4.tsfem-form-multi-title {
 	margin-bottom: 0;
 }
 
-.tsfem-form-validate .tsfem-form-setting-input input[type=text],
-.tsfem-form-validate .tsfem-form-setting-input input[type=password],
-.tsfem-form-validate .tsfem-form-setting-input input[type=tel],
-.tsfem-form-validate .tsfem-form-setting-input input[type=url],
-.tsfem-form-validate .tsfem-form-setting-input input[type=search],
-.tsfem-form-validate .tsfem-form-setting-input input[type=time],
-.tsfem-form-validate .tsfem-form-setting-input input[type=week],
-.tsfem-form-validate .tsfem-form-setting-input input[type=month],
-.tsfem-form-validate .tsfem-form-setting-input input[type=date],
-.tsfem-form-validate .tsfem-form-setting-input input[type=number],
-.tsfem-form-validate .tsfem-form-setting-input input[type=range],
-.tsfem-form-validate .tsfem-form-setting-input input[type=color],
-.tsfem-form-validate .tsfem-form-setting-input input[type=hidden],
-.tsfem-form-setting-input select,
-.tsfem-form-setting-input textarea {
+.tsfem-form-validate .tsfem-form-setting-input input:is(
+	[type=text],
+	[type=password],
+	[type=tel],
+	[type=url],
+	[type=search],
+	[type=time],
+	[type=week],
+	[type=month],
+	[type=date],
+	[type=number],
+	[type=range],
+	[type=color],
+	[type=hidden]
+),
+.tsfem-form-setting-input :is(select, textarea) {
 	display: inline-block;
 	width: 100%;
 	max-width: unset;
@@ -430,59 +431,65 @@ body.rtl .tsfem-form-checkbox-required {
 input[type=checkbox]
 input[type=radio]
 */
-.tsfem-form-validate .tsfem-form-setting-input input[type=text]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=password]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=tel]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=url]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=search]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=time]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=week]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=month]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=date]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=number]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=range]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid,
-.tsfem-form-validate .tsfem-form-setting-input select:invalid,
-.tsfem-form-validate .tsfem-form-setting-input textarea:invalid,
+.tsfem-form-validate .tsfem-form-setting-input :is(
+	input[type=text],
+	input[type=password],
+	input[type=tel],
+	input[type=url],
+	input[type=search],
+	input[type=time],
+	input[type=week],
+	input[type=month],
+	input[type=date],
+	input[type=number],
+	input[type=range],
+	input[type=color],
+	input[type=hidden],
+	select,
+	textarea
+):invalid,
 .tsfem-form-validate .tsfem-form-multi-invalid {
 	border-left: 3px solid #d14b44;
 }
 
-.tsfem-form-validate .tsfem-form-setting-input input[type=text]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=password]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=tel]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=url]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=search]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=time]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=week]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=month]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=date]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=number]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=range]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=color]:valid,
-.tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:valid,
-.tsfem-form-validate .tsfem-form-setting-input select:valid,
-.tsfem-form-validate .tsfem-form-setting-input textarea:valid,
+.tsfem-form-validate .tsfem-form-setting-input :is(
+	input[type=text],
+	input[type=password],
+	input[type=tel],
+	input[type=url],
+	input[type=search],
+	input[type=time],
+	input[type=week],
+	input[type=month],
+	input[type=date],
+	input[type=number],
+	input[type=range],
+	input[type=color],
+	input[type=hidden],
+	select,
+	textarea
+):valid,
 .tsfem-form-validate .tsfem-form-multi-valid {
 	border-left: 3px solid #008964;
 }
 
 /** Override tsfem-ui.css... */
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=text]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=password]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=tel]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=url]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=search]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=time]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=week]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=month]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=date]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=number]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=range]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=color]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input input[type=hidden]:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input select:invalid:focus,
-#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input textarea:invalid:focus {
+#tsfem-page-wrap .tsfem-form-validate .tsfem-form-setting-input :is(
+	input[type=text],
+	input[type=password],
+	input[type=tel],
+	input[type=url],
+	input[type=search],
+	input[type=time],
+	input[type=week],
+	input[type=month],
+	input[type=date],
+	input[type=number],
+	input[type=range],
+	input[type=color],
+	input[type=hidden],
+	select,
+	textarea
+):invalid:focus {
 	border-color: #0ebfe9;
 }

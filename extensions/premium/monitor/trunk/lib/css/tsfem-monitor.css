@@ -103,6 +103,11 @@
 	margin-right: 2px;
 }
 
+body.rtl .tsfem-e-monitor-title-icon:before {
+	margin-right: unset;
+	margin-left: 2px;
+}
+
 .tsfem-e-monitor-icon-good {
 	color: #0cc34b;
 }
@@ -131,6 +136,12 @@
 	content: "\f147";
 	margin-left: -2px;
 	margin-right: 4px;
+}
+
+body.rtl .tsfem-e-monitor-title-icon-okay:before,
+body.rtl .tsfem-e-monitor-title-icon-good:before {
+	margin-left: 4px;
+	margin-right: -2px;
 }
 
 .tsfem-e-monitor-title-icon-warning:before {
@@ -169,21 +180,38 @@
 	background: currentColor;
 }
 
+body.rtl .tsfem-e-monitor-collapse-icon:before,
+body.rtl .tsfem-e-monitor-collapse-icon:after {
+	left: unset;
+	right: .5em;
+}
+
 .tsfem-e-monitor-collapse-icon:before {
 	transform: translate(-4px, 0) rotate(-45deg);
 }
-
 .tsfem-e-monitor-collapse-icon:after {
 	transform: rotate(45deg);
 }
-
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:before {
 	transform: translate(-4px, 0) rotate(45deg);
 }
-
 .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:after {
 	transform: rotate(-45deg);
 }
+
+body.rtl .tsfem-e-monitor-collapse-icon:before {
+	transform: rotate(-45deg);
+}
+body.rtl .tsfem-e-monitor-collapse-icon:after {
+	transform: translate(4px, 0) rotate(45deg);
+}
+body.rtl .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:before {
+	transform: rotate(45deg);
+}
+body.rtl .tsfem-e-monitor-collapse > input[type="checkbox"]:checked + .tsfem-e-monitor-collapse-header .tsfem-e-monitor-collapse-icon:after {
+	transform: translate(4px, 0) rotate(-45deg);
+}
+
 
 .tsfem-e-monitor-collapse-content {
 	margin: 0 auto;
