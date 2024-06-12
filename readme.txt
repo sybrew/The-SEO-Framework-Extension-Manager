@@ -78,8 +78,6 @@ TODO use TSF's memo API?
 
 TODO deJquerify as much as possible.
 
-TODO CyberWire => CyberWire B.V.
-
 FIXME: Keyword with a space in between can no longer be found in the content/title (test test).
 
 = 2.7.0 =
@@ -120,6 +118,8 @@ FIXME: Keyword with a space in between can no longer be found in the content/tit
 			-> TODO when reconnecting, get_active_extensions() still purports that the extensions are deactivated. Refreshing the page will resolve the issue -- however, this may appear confusing for the user. We should update the cache somehow (this requires a refactor akin to how we handle post/option plugin data in TSF => Make issue)
 				-> Or, we could check the order of operation. Manual activation doesn't have this problem.
 					-> Automated reconnection does have this problem via revalidate_subscription (grace)
+* **Other:**
+	* Another year has turned. So, we updated all files' copyright coverage.
 
 **Updated extensions:**
 
