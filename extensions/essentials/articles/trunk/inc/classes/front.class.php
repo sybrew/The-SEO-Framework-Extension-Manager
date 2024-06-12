@@ -416,8 +416,7 @@ final class Front extends Core {
 		// This does not consider UTF-8 support. However, the regex that will always run will.
 		if ( \strlen( $title ) > 110 ) {
 			preg_match( '/.{0,110}([^\P{Po}\'\"]|\p{Z}|$){1}/su', trim( $title ), $matches );
-			$title = isset( $matches[0] ) ? ( $matches[0] ?: '' ) : '';
-			$title = trim( $title );
+			$title = trim( $matches[0] ?? '' ?: '' );
 		}
 
 		if ( ! $title ) {

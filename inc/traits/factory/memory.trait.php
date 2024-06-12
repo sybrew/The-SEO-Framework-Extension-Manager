@@ -65,6 +65,7 @@ class Memory_Cache {
 
 		if ( isset( $memo ) ) return $memo;
 
+		// Do not condense; we need to extract the quantifier and then parse int.
 		$limit      = trim( ini_get( 'memory_limit' ) );
 		$quantifier = strtolower( $limit[-1] );
 		$limit      = filter_var( $limit, \FILTER_SANITIZE_NUMBER_INT );

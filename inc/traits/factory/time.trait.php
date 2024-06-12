@@ -231,8 +231,9 @@ trait Time {
 		while ( $x_remaining ) {
 			$_threshold = $scale_table[ $x_scale ][0];
 
-			if ( $x_remaining >= $_threshold                       // > vs >= is 24 hours vs 1 day.
-			&& ( ! $precise || ( \count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
+			if (
+				   $x_remaining >= $_threshold                          // > vs >= is 24 hours vs 1 day.
+				&& ( ! $precise || ( \count( $times ) < $scales - 1 ) ) // -1 as we're adding another to reach this.
 			) {
 				if ( $x_remaining % $_threshold ) {
 					// Calculate current and next time scale.

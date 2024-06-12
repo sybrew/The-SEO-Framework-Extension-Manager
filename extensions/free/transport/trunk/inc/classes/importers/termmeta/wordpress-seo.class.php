@@ -132,7 +132,7 @@ final class WordPress_SEO extends Base {
 	 */
 	private function get_wpseo_taxonomy_meta() {
 		static $data;
-		return $data ?? ( $data = \get_option( 'wpseo_taxonomy_meta' ) ?: [] );
+		return $data ??= \get_option( 'wpseo_taxonomy_meta' ) ?: [];
 	}
 
 	/**

@@ -239,15 +239,15 @@ trait Secure_Post {
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
-		if ( \wp_doing_ajax() ) :
-			if ( \TSF_Extension_Manager\can_do_extension_settings() ) :
+		if ( \wp_doing_ajax() ) {
+			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
 					$this->send_ajax_form_json_validation();
 				}
-			endif;
+			}
 
 			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
-		endif;
+		}
 
 		exit;
 	}

@@ -297,8 +297,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_blog_description() {
-		return self::$persistent_cache['blog_description']
-			?? self::$persistent_cache['blog_description'] = trim( \get_bloginfo( 'description', 'display' ) );
+		return self::$persistent_cache['blog_description'] ??= trim( \get_bloginfo( 'description', 'display' ) );
 	}
 
 	/**
@@ -309,8 +308,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_blog_name() {
-		return self::$persistent_cache['blog_name']
-			?? self::$persistent_cache['blog_name'] = trim( \get_bloginfo( 'name', 'display' ) );
+		return self::$persistent_cache['blog_name'] ??= trim( \get_bloginfo( 'name', 'display' ) );
 	}
 
 	/**
@@ -321,8 +319,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_date() {
-		return self::$persistent_cache['current_date']
-			?? self::$persistent_cache['current_date'] = \date_i18n( self::$persistent_cache['date_format'] );
+		return self::$persistent_cache['current_date'] ??= \date_i18n( self::$persistent_cache['date_format'] );
 	}
 
 	/**
@@ -333,8 +330,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_day() {
-		return self::$persistent_cache['current_day']
-			?? self::$persistent_cache['current_day'] = \date_i18n( 'j' );
+		return self::$persistent_cache['current_day'] ??= \date_i18n( 'j' );
 	}
 
 	/**
@@ -345,8 +341,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_month() {
-		return self::$persistent_cache['current_month']
-			?? self::$persistent_cache['current_month'] = \date_i18n( 'F' );
+		return self::$persistent_cache['current_month'] ??= \date_i18n( 'F' );
 	}
 
 	/**
@@ -357,8 +352,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_month_number() {
-		return self::$persistent_cache['current_month_n']
-			?? self::$persistent_cache['current_month_n'] = \date_i18n( 'n' );
+		return self::$persistent_cache['current_month_n'] ??= \date_i18n( 'n' );
 	}
 
 	/**
@@ -369,8 +363,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_month_short() {
-		return self::$persistent_cache['current_month_M']
-			?? self::$persistent_cache['current_month_M'] = \date_i18n( 'M' );
+		return self::$persistent_cache['current_month_M'] ??= \date_i18n( 'M' );
 	}
 
 	/**
@@ -381,8 +374,7 @@ abstract class Core {
 	 * @return string
 	 */
 	protected static function get_current_year() {
-		return self::$persistent_cache['current_year']
-			?? self::$persistent_cache['current_year'] = \date_i18n( 'Y' );
+		return self::$persistent_cache['current_year'] ??= \date_i18n( 'Y' );
 	}
 
 	/**
@@ -415,11 +407,10 @@ abstract class Core {
 		if ( 'term' === self::$main_object_type )
 			return self::$term->name ?? '';
 
-		return self::$post_cache['all_term_names'][ $type ]
-			?? self::$post_cache['all_term_names'][ $type ] = self::_get_term_fields(
-				self::$post->ID,
-				$type
-			);
+		return self::$post_cache['all_term_names'][ $type ] ??= self::_get_term_fields(
+			self::$post->ID,
+			$type
+		);
 	}
 
 	/**
@@ -480,11 +471,10 @@ abstract class Core {
 		if ( 'term' === self::$main_object_type )
 			return self::$term->name ?? '';
 
-		return self::$post_cache['first_term_name'][ $type ]
-			?? self::$post_cache['first_term_name'][ $type ] = self::_get_first_term_field(
-				self::$post->ID,
-				$type
-			);
+		return self::$post_cache['first_term_name'][ $type ] ??= self::_get_first_term_field(
+			self::$post->ID,
+			$type
+		);
 	}
 
 	/**
@@ -628,8 +618,7 @@ abstract class Core {
 		if ( 'post' !== self::$main_object_type ) return '';
 		if ( ! empty( self::$post->post_password ) || '' === self::$post->post_content ) return '';
 
-		return self::$post_cache['content']
-			?? self::$post_cache['content'] = \wp_strip_all_tags( \strip_shortcodes( self::$post->post_content ) );
+		return self::$post_cache['content'] ??= \wp_strip_all_tags( \strip_shortcodes( self::$post->post_content ) );
 	}
 
 	/**
@@ -647,12 +636,10 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return $match;
 
-		return self::$post_cache['date']
-			?? self::$post_cache['date'] = (
-				empty( self::$post->post_date )
-					? ''
-					: \date_i18n( self::$persistent_cache['date_format'], strtotime( self::$post->post_date ) )
-			);
+		return self::$post_cache['date'] ??=
+			empty( self::$post->post_date )
+				? ''
+				: \date_i18n( self::$persistent_cache['date_format'], strtotime( self::$post->post_date ) );
 	}
 
 	/**
@@ -666,8 +653,7 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['day']
-			?? self::$post_cache['day'] = \get_the_date( 'd', self::$post->ID );
+		return self::$post_cache['day'] ??= \get_the_date( 'd', self::$post->ID );
 	}
 
 	/**
@@ -682,8 +668,8 @@ abstract class Core {
 		if ( 'post' !== self::$main_object_type ) return '';
 		if ( ! empty( self::$post->post_password ) ) return '';
 
-		return self::$post_cache['excerpt']
-			?? self::$post_cache['excerpt'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+		return self::$post_cache['excerpt'] ??=
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 				? \tsf()->format()->html()->extract_content(
 					\tsf()->description()->excerpt()->get_post_excerpt( [ 'id' => self::$post->ID ] )
 				)
@@ -705,13 +691,12 @@ abstract class Core {
 		if ( 'post' !== self::$main_object_type ) return '';
 		if ( ! empty( self::$post->post_password ) ) return '';
 
-		return self::$post_cache['excerpt_short']
-			?? self::$post_cache['excerpt_short'] = clamp_sentence(
-				static::get_post_excerpt(),
-				\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-					? \tsf()->guidelines()->get_text_size_guidelines()['description']['search']['chars']['goodUpper']
-					: \tsf()->get_input_guidelines()['description']['search']['chars']['goodUpper']
-			);
+		return self::$post_cache['excerpt_short'] ??= clamp_sentence(
+			static::get_post_excerpt(),
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+				? \tsf()->guidelines()->get_text_size_guidelines()['description']['search']['chars']['goodUpper']
+				: \tsf()->get_input_guidelines()['description']['search']['chars']['goodUpper']
+		);
 	}
 
 	/**
@@ -725,12 +710,10 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['modified_date']
-			?? self::$post_cache['modified_date'] = (
-				empty( self::$post->post_modified )
-					? ''
-					: \date_i18n( self::$persistent_cache['date_format'], strtotime( self::$post->post_modified ) )
-			);
+		return self::$post_cache['modified_date'] ??=
+			empty( self::$post->post_modified )
+				? ''
+				: \date_i18n( self::$persistent_cache['date_format'], strtotime( self::$post->post_modified ) );
 	}
 
 	/**
@@ -744,8 +727,7 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['month']
-			?? self::$post_cache['month'] = \get_the_date( 'F', self::$post->ID );
+		return self::$post_cache['month'] ??= \get_the_date( 'F', self::$post->ID );
 	}
 
 	/**
@@ -783,8 +765,7 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['permalink']
-			?? self::$post_cache['permalink'] = \get_permalink( 'post' );
+		return self::$post_cache['permalink'] ??= \get_permalink( 'post' );
 	}
 
 	/**
@@ -798,10 +779,9 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['post_type_plural_name']
-			?? self::$post_cache['post_type_plural_name'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \tsf()->post_type()->get_label( self::$post->post_type, false )
-				: \tsf()->get_post_type_label( self::$post->post_type, false );
+		return self::$post_cache['post_type_plural_name'] ??= \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->post_type()->get_label( self::$post->post_type, false )
+			: \tsf()->get_post_type_label( self::$post->post_type, false );
 	}
 
 	/**
@@ -815,8 +795,8 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['post_type_singular_name']
-			?? self::$post_cache['post_type_singular_name'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+		return self::$post_cache['post_type_singular_name'] ??=
+			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 				? \tsf()->post_type()->get_label( self::$post->post_type, true )
 				: \tsf()->get_post_type_label( self::$post->post_type, true );
 	}
@@ -856,8 +836,7 @@ abstract class Core {
 
 		if ( 'post' !== self::$main_object_type ) return '';
 
-		return self::$post_cache['year']
-			?? self::$post_cache['year'] = \get_the_date( 'Y', self::$post->ID );
+		return self::$post_cache['year'] ??= \get_the_date( 'Y', self::$post->ID );
 	}
 
 	/**
@@ -886,10 +865,9 @@ abstract class Core {
 			self::set_term_from_current_post();
 
 		// This might have HTML and shortcodes while it shouldn't.
-		return self::$term_cache['description']
-			?? self::$term_cache['description'] = (
-				self::$term ? \wp_strip_all_tags( self::$term->description ?? '' ) : ''
-			);
+		return self::$term_cache['description'] ??= (
+			self::$term ? \wp_strip_all_tags( self::$term->description ?? '' ) : ''
+		);
 	}
 
 	/**
@@ -906,16 +884,14 @@ abstract class Core {
 		if ( 'post' === self::$main_object_type )
 			self::set_term_from_current_post();
 
-		return self::$term_cache['title']
-			?? self::$term_cache['title'] = (
-				self::$term
-					? (
-						\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-							? \tsf()->title()->get_term_title( self::$term )
-							: \tsf()->get_generated_single_term_title( self::$term )
-					)
-					: ''
-			);
+		return self::$term_cache['title'] ??=
+			self::$term
+				? (
+					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+						? \tsf()->title()->get_term_title( self::$term )
+						: \tsf()->get_generated_single_term_title( self::$term )
+				)
+				: '';
 	}
 
 	/**

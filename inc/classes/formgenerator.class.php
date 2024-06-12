@@ -1372,8 +1372,7 @@ final class FormGenerator {
 	 */
 	private function get_collapse_wrap( $what, $args = [] ) {
 
-		if ( 'start' === $what ) :
-
+		if ( 'start' === $what ) {
 			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
 
 			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
@@ -1420,12 +1419,17 @@ final class FormGenerator {
 
 			$content_start = '<div class=tsfem-form-collapse-content>';
 
-			return sprintf( '<div class=tsfem-form-collapse %s>%s%s%s', $s_id, $checkbox, $header, $content_start );
-			; // phpcs:ignore -- Added to prevent breaking alternative if/elseif control. PHP bug?
-		elseif ( 'end' === $what ) :
+			return sprintf(
+				'<div class=tsfem-form-collapse %s>%s%s%s',
+				$s_id,
+				$checkbox,
+				$header,
+				$content_start
+			);
+		} elseif ( 'end' === $what ) {
 			// ok.
 			return '</div></div>';
-		endif;
+		}
 
 		return '';
 	}
@@ -1532,9 +1536,9 @@ final class FormGenerator {
 	 *              Passed by reference.
 	 */
 	private function clean_desc_index( array &$desc ) {
-		$desc[0] = $desc[0] ?? '';
-		$desc[1] = $desc[1] ?? '';
-		$desc[2] = $desc[2] ?? '';
+		$desc[0] ??= '';
+		$desc[1] ??= '';
+		$desc[2] ??= '';
 	}
 
 	/**
@@ -1548,8 +1552,8 @@ final class FormGenerator {
 	 *              Passed by reference.
 	 */
 	private function clean_range_index( array &$range ) {
-		$range[0] = isset( $range[0] ) ? (string) $range[0] : '';
-		$range[1] = isset( $range[1] ) ? (string) $range[1] : '';
+		$range[0] = (string) ( $range[0] ?? '' );
+		$range[1] = (string) ( $range[1] ?? '' );
 		$range[2] = isset( $range[2] ) ? (string) rtrim( rtrim( sprintf( '%.10F', $range[2] ), '0' ), '.' ) : '';
 	}
 

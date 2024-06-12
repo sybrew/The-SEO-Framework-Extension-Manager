@@ -123,7 +123,7 @@ final class Core {
 		 * Requires initial load after theme switch.
 		 * i.e., we test if the theme has registered 'title-tag' support.
 		 */
-		if ( empty( $GLOBALS['_wp_theme_features']['title-tag'] ) ) :
+		if ( empty( $GLOBALS['_wp_theme_features']['title-tag'] ) ) {
 			// Start loader.
 			$this->loader();
 
@@ -132,7 +132,7 @@ final class Core {
 			 * Might prevent AJAX issues, if any.
 			 */
 			\add_action( 'shutdown', [ $this, 'stop_ob' ], 0 );
-		endif;
+		}
 	}
 
 	/**

@@ -74,29 +74,13 @@ TODO make a separate loader specifically when TSF is inactive (load installer + 
 		-> Here, we can freely assume TSF is available.
 	-> We already do this, but it's not as clear as can be.
 
-TODO array_key_first()/array_key_last()
-TODO ??=
-TODO ??
-	-> see https://github.com/sybrew/the-seo-framework/issues/608
-TODO leading breaks
-	-> Make sniff?
-
-TODO if : => {}
-TODO elseif : => {}
-TODO while :
-TODO switch :
-
-TODO
-if ( $x_remaining >= $_threshold
-&& ( ! $precis
-  V
-if (
-	   $x_remaining >= $_threshold
-	&& ( ! $precis
+TODO use TSF's memo API?
 
 TODO deJquerify as much as possible.
 
 TODO CyberWire => CyberWire B.V.
+
+FIXME: Keyword with a space in between can no longer be found in the content/title (test test).
 
 = 2.7.0 =
 

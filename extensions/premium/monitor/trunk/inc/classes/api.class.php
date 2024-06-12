@@ -119,9 +119,12 @@ class Api extends Data {
 			return false;
 		}
 
-		$response = $response['data'];
+		$response = $response['data'] ?? [];
 
 		switch ( $response['status'] ) {
+			case 'success':
+				break;
+
 			case 'REQUEST_LIMIT_REACHED':
 				$this->set_error_notice( [ 1010306 => '' ] );
 				return false;
@@ -130,6 +133,7 @@ class Api extends Data {
 				$this->set_error_notice( [ 1010307 => '' ] );
 				return false;
 
+			default:
 			case 'failure':
 				$this->set_error_notice( [ 1010301 => '' ] );
 				return false;
@@ -181,11 +185,14 @@ class Api extends Data {
 			return false;
 		}
 
-		$response = $response['data'];
+		$response = $response['data'] ?? [];
 
 		// NOTE: Do not delete data on failure -- the user won't get new data anyway;
 		// this bypasses timeouts for "instant data" and lags their site.
 		switch ( $response['status'] ) {
+			case 'success':
+				break;
+
 			case 'REQUEST_LIMIT_REACHED':
 				$this->set_error_notice( [ 1010404 => '' ] );
 				return false;
@@ -194,6 +201,7 @@ class Api extends Data {
 				$this->set_error_notice( [ 1010405 => '' ] );
 				return false;
 
+			default:
 			case 'failure':
 				$this->set_error_notice( [ 1010401 => '' ] );
 				return false;
@@ -248,9 +256,12 @@ class Api extends Data {
 			return $ajax ? $response : false;
 		}
 
-		$response = $response['data'];
+		$response = $response['data'] ?? [];
 
 		switch ( $response['status'] ) {
+			case 'success':
+				break;
+
 			case 'REQUEST_LIMIT_REACHED':
 				$this->set_remote_crawl_timeout();
 				$ajax or $this->set_error_notice( [ 1010508 => '' ] );
@@ -330,9 +341,12 @@ class Api extends Data {
 			return $ajax ? $response : false;
 		}
 
-		$response = $response['data'];
+		$response = $response['data'] ?? [];
 
 		switch ( $response['status'] ) {
+			case 'success':
+				break;
+
 			case 'REQUEST_LIMIT_REACHED':
 				$this->set_remote_crawl_timeout();
 				$ajax or $this->set_error_notice( [ 1010608 => '' ] );
@@ -429,9 +443,12 @@ class Api extends Data {
 			return $ajax ? $response : false;
 		}
 
-		$response = $response['data'];
+		$response = $response['data'] ?? [];
 
 		switch ( $response['status'] ) {
+			case 'success':
+				break;
+
 			case 'REQUEST_LIMIT_REACHED':
 				$this->set_remote_crawl_timeout();
 				$ajax or $this->set_error_notice( [ 1010806 => '' ] );
@@ -440,10 +457,6 @@ class Api extends Data {
 			case 'LICENSE_TOO_LOW':
 				$ajax or $this->set_error_notice( [ 1010807 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010807 ) : false;
-
-			case 'failure':
-				$ajax or $this->set_error_notice( [ 1010801 => '' ] );
-				return $ajax ? $this->get_ajax_notice( false, 1010801 ) : false;
 
 			case 'site expired':
 				$this->update_option( 'site_requires_fix', true );
@@ -454,6 +467,11 @@ class Api extends Data {
 				$this->update_option( 'site_marked_inactive', true );
 				$ajax or $this->set_error_notice( [ 1010803 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010803 ) : false;
+
+			default:
+			case 'failure':
+				$ajax or $this->set_error_notice( [ 1010801 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010801 ) : false;
 		}
 
 		$success = [];

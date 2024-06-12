@@ -635,14 +635,14 @@ class Core {
 	 */
 	final public function _yield_verification_instance( $count, &$instance, &$bits ) {
 
-		if ( $this->_verify_instance( $instance, $bits[1] ) ) :
-			for ( $i = 0; $i < $count; $i++ ) :
+		if ( $this->_verify_instance( $instance, $bits[1] ) ) {
+			for ( $i = 0; $i < $count; $i++ ) {
 				yield [
 					'bits'     => $_bits = $this->get_bits(),
 					'instance' => $this->get_verification_instance( $_bits[1] ),
 				];
-			endfor;
-		endif;
+			}
+		}
 	}
 
 	/**

@@ -171,41 +171,41 @@ $tsfem = \tsfem();
 	<div class=tsfem-e-focus-collapse-content-wrap id=<?= \esc_attr( $wrap_ids['content'] ) ?>>
 		<div class=tsfem-e-focus-content-loader><div class=tsfem-e-focus-content-loader-bar></div></div>
 		<div class=tsfem-e-focus-collapse-content>
-			<?php if ( $is_premium ) : ?>
-			<div class=tsfem-e-focus-subject id=<?= \esc_attr( $wrap_ids['edit'] ) ?> style=display:none>
-				<?php
-				printf(
-					vsprintf(
-						'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s>%s%s</div>',
-						[
-							\esc_attr( $action_ids['definition_selector'] ),
-							sprintf(
-								'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
-								// It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
-								\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
-							),
-							sprintf(
-								'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
-								'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s" tabindex=0></span>',
-								'<select id=%1$s name=%1$s class=hidden value="%2$s" title="%3$s"></select>'
-							),
-						]
-					),
-					\esc_attr( $post_input['definition_selection']['selector_id'] ),
-					\esc_attr( $post_input['definition_selection']['value'] ),
-					\esc_attr__( 'Select homonymous example', 'the-seo-framework-extension-manager' ),
-				);
-				?>
-				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['inflections'] ) ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose inflections', 'the-seo-framework-extension-manager' ); ?></h2>
-					<div class=tsfem-e-focus-subject-selection></div>
+			<?php if ( $is_premium ) { ?>
+				<div class=tsfem-e-focus-subject id=<?= \esc_attr( $wrap_ids['edit'] ) ?> style=display:none>
+					<?php
+					printf(
+						vsprintf(
+							'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s>%s%s</div>',
+							[
+								\esc_attr( $action_ids['definition_selector'] ),
+								sprintf(
+									'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
+									// It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
+									\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
+								),
+								sprintf(
+									'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
+									'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s" tabindex=0></span>',
+									'<select id=%1$s name=%1$s class=hidden value="%2$s" title="%3$s"></select>'
+								),
+							]
+						),
+						\esc_attr( $post_input['definition_selection']['selector_id'] ),
+						\esc_attr( $post_input['definition_selection']['value'] ),
+						\esc_attr__( 'Select homonymous example', 'the-seo-framework-extension-manager' ),
+					);
+					?>
+					<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['inflections'] ) ?>>
+						<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose inflections', 'the-seo-framework-extension-manager' ); ?></h2>
+						<div class=tsfem-e-focus-subject-selection></div>
+					</div>
+					<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['synonyms'] ) ?>>
+						<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
+						<div class=tsfem-e-focus-subject-selection></div>
+					</div>
 				</div>
-				<div class="tsfem-e-focus-subject-selections-wrap tsf-flex" id=<?= \esc_attr( $wrap_ids['synonyms'] ) ?>>
-					<h2 class=tsfem-e-focus-subject-selection-title><?= \esc_html__( 'Choose synonyms', 'the-seo-framework-extension-manager' ); ?></h2>
-					<div class=tsfem-e-focus-subject-selection></div>
-				</div>
-			</div>
-			<?php endif; ?>
+			<?php } ?>
 			<div class=tsfem-e-focus-evaluation id=<?= \esc_attr( $wrap_ids['evaluate'] ) ?>>
 				<?php
 				$this->output_score_template( compact( 'is_premium', 'has_keyword', 'sub_scores' ) );

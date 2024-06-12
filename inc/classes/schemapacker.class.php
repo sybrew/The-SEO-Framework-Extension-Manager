@@ -669,11 +669,11 @@ final class SchemaPacker {
 				return null;
 
 			case 'set':
-				if ( '$it' === $c->_to ) :
+				if ( '$it' === $c->_to ) {
 					return $this->it;
-				elseif ( '$level' === $c->_to ) :
+				} elseif ( '$level' === $c->_to ) {
 					return $this->level;
-				endif;
+				}
 				return $c->_to;
 
 			case 'current':

@@ -404,7 +404,7 @@ final class Layout extends Secure_Abstract {
 			);
 		}
 
-		if ( $end_date ) :
+		if ( $end_date ) {
 			$date_until = strtotime( $end_date );
 			$now        = time();
 
@@ -451,9 +451,9 @@ final class Layout extends Secure_Abstract {
 				) ),
 				false
 			);
-		endif;
+		}
 
-		if ( $payment_date ) :
+		if ( $payment_date ) {
 			$date_until = strtotime( $payment_date );
 			$now        = time();
 
@@ -491,7 +491,7 @@ final class Layout extends Secure_Abstract {
 			) );
 
 			$output .= static::wrap_row_content( \esc_html__( 'Payment due in:', 'the-seo-framework-extension-manager' ), $payment_in, false );
-		endif;
+		}
 
 		$output .= static::wrap_row_content(
 			\esc_html__( 'API instance:', 'the-seo-framework-extension-manager' ),

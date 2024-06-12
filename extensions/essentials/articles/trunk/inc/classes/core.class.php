@@ -97,7 +97,7 @@ class Core {
 	 */
 	protected static function is_organization() {
 		static $is;
-		return $is ?? ( $is = 'organization' === \tsf()->get_option( 'knowledge_type' ) );
+		return $is ??= 'organization' === \tsf()->get_option( 'knowledge_type' );
 	}
 
 	/**

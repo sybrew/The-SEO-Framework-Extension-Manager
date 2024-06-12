@@ -537,11 +537,11 @@ final class Core {
 		$_tick  = 0;
 		$_input = substr( $_POST[ $_field ], 0, $this->nonce_length );
 
-		if ( hash_equals( $_nonces[0], $_input ) ) :
+		if ( hash_equals( $_nonces[0], $_input ) ) {
 			$_tick = 1;
-		elseif ( hash_equals( $_nonces[1], $_input ) ) :
+		} elseif ( hash_equals( $_nonces[1], $_input ) ) {
 			$_tick = 2;
-		endif;
+		}
 
 		if ( $_tick < 1 )
 			$approved = 'spam';

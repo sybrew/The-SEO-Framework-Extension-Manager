@@ -557,15 +557,15 @@ final class Tests {
 				$_expected_scheme = 'http';
 		}
 
-		if ( empty( $data['canonical_url'] ) ) :
+		if ( empty( $data['canonical_url'] ) ) {
 			$state    = 'warning';
 			$content .= $this->wrap_info(
 				\esc_html__( 'No canonical URL is found.', 'the-seo-framework-extension-manager' )
 			);
-		elseif ( ! empty( $data['canonical_url_scheme'] ) ) :
-			if ( $_test_alt ) :
-				if ( ! empty( $data['canonical_url_scheme_alt'] ) ) :
-					if ( $data['canonical_url_scheme'] === $data['canonical_url_scheme_alt'] ) :
+		} elseif ( ! empty( $data['canonical_url_scheme'] ) ) {
+			if ( $_test_alt ) {
+				if ( ! empty( $data['canonical_url_scheme_alt'] ) ) {
+					if ( $data['canonical_url_scheme'] === $data['canonical_url_scheme_alt'] ) {
 						if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
 							$state    = 'good';
 							$content .= $this->wrap_info(
@@ -577,7 +577,7 @@ final class Tests {
 								\esc_html__( 'Both versions of your site point to the insecure version. Is this intended?', 'the-seo-framework-extension-manager' )
 							);
 						}
-					else :
+					} else {
 						$state = 'bad';
 						if ( \wp_doing_ajax() )
 							\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
@@ -595,14 +595,14 @@ final class Tests {
 								[ 'a' ]
 							)
 						);
-					endif;
-				else :
+					}
+				} else {
 					$state    = 'bad';
 					$content .= $this->wrap_info(
 						\esc_html__( 'No canonical URL is found on the HTTPS version of your site.', 'the-seo-framework-extension-manager' )
 					);
-				endif;
-			else :
+				}
+			} else {
 				if ( $_expected_scheme === $data['canonical_url_scheme'] ) {
 					// Don't change state.
 					$content .= $this->wrap_info(
@@ -627,13 +627,13 @@ final class Tests {
 						)
 					);
 				}
-			endif;
-		else :
+			}
+		} else {
 			$state    = 'bad';
 			$content .= $this->wrap_info(
 				\esc_html__( 'The canonical URL does not seem to have a set scheme; so, the URL is invalid. The active theme, another plugin or an external service might be interfering.', 'the-seo-framework-extension-manager' )
 			);
-		endif;
+		}
 
 		if ( ! $content )
 			$content = $this->wrap_info( $this->no_issue_found() );
@@ -680,10 +680,10 @@ final class Tests {
 	 */
 	protected function no_issue_found() {
 		static $memo;
-		return $memo ?? ( $memo = sprintf(
+		return $memo ??= sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No issues have been found.', 'the-seo-framework-extension-manager' )
-		) );
+		);
 	}
 
 	/**
@@ -695,10 +695,10 @@ final class Tests {
 	 */
 	protected function no_data_found() {
 		static $memo;
-		return $memo ?? ( $memo = sprintf(
+		return $memo ??= sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'No data has been found on this issue.', 'the-seo-framework-extension-manager' )
-		) );
+		);
 	}
 
 	/**
@@ -710,9 +710,9 @@ final class Tests {
 	 */
 	protected function small_sample_disclaimer() {
 		static $memo;
-		return $memo ?? ( $memo = sprintf(
+		return $memo ??= sprintf(
 			'<span class=tsfem-description>%s</span>',
 			\esc_html__( 'This has been evaluated with a small sample size.', 'the-seo-framework-extension-manager' )
-		) );
+		);
 	}
 }

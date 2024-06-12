@@ -818,7 +818,7 @@ final class LoadAdmin extends AdminPages {
 
 		Extensions::reset();
 
-		if ( $status['success'] ) :
+		if ( $status['success'] ) {
 			if ( 2 === $status['case'] ) { // Extension and license == Premium/Essentials OK.
 				switch ( $this->revalidate_subscription( true ) ) {
 					case 6: // Enterprise.
@@ -857,7 +857,7 @@ final class LoadAdmin extends AdminPages {
 				$ajax or $this->set_error_notice( [ 10006 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 10006 ) : false;
 			}
-		endif;
+		}
 
 		switch ( $status['case'] ) {
 			case 1:
