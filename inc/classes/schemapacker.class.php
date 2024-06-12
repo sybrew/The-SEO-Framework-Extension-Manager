@@ -312,9 +312,6 @@ final class SchemaPacker {
 
 				case 'kill_this':
 					continue 2;
-
-				default:
-					break;
 			}
 
 			isset( $key, $data ) and $_[ $key ] = $data;
@@ -361,7 +358,6 @@ final class SchemaPacker {
 
 			case 'iterate':
 				$value = $this->make_iteration( $schema );
-				break;
 		}
 
 		if ( isset( $schema->_handlers->_escape ) )
@@ -434,14 +430,9 @@ final class SchemaPacker {
 
 			case 'concat':
 				$value = $this->concat( $schema->_data->_config );
-				break;
-
-			default:
-				$value = null;
-				break;
 		}
 
-		return $value;
+		return $value ?? null;
 	}
 
 	/**
@@ -665,14 +656,9 @@ final class SchemaPacker {
 
 			case 'type_not':
 				$action = \gettype( $v ) !== $c->_value;
-				break;
-
-			default:
-				$action = false;
-				break;
 		}
 
-		if ( ! $action )
+		if ( empty( $action ) )
 			return $value;
 
 		switch ( $c->_do ) {

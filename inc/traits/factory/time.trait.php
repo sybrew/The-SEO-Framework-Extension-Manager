@@ -228,7 +228,7 @@ trait Time {
 			// Months and years are too variable for the static purpose of this method.
 		];
 
-		while ( $x_remaining ) :
+		while ( $x_remaining ) {
 			$_threshold = $scale_table[ $x_scale ][0];
 
 			if ( $x_remaining >= $_threshold                       // > vs >= is 24 hours vs 1 day.
@@ -255,7 +255,7 @@ trait Time {
 				// No need to try upcoming scales, save processing power.
 				break;
 			}
-		endwhile;
+		}
 
 		$out = '';
 

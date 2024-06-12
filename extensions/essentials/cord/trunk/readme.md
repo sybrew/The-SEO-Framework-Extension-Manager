@@ -137,7 +137,7 @@ Here you can find the available filters for Cord.
 N.B. This does not work with page-caching plugins. When a page-caching plugin is used, this script may lead to sporadic disabling or enabling tracking for all visitors. Some caching plugins can provide different pages based on the cookies provided, however.
 
 ```php
-add_action( 'init', function() {
+add_action( 'init', function () {
 
 	// This is an arbitrary example cookie.
 	$consented = $_COOKIE['_example_cookie_consent'] ?? false;

@@ -1653,7 +1653,6 @@ final class FormGenerator {
 			case 'hidden':
 				if ( isset( $args['_pattern'] ) )
 					$s_pattern = $this->get_fields_pattern( $args['_pattern'] );
-				break;
 		}
 
 		// s = Escaped.

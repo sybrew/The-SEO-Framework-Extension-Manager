@@ -36,7 +36,7 @@
  * @constructor
  * @param {!jQuery} $ jQuery object.
  */
-window.tsfem_e_focus_inpost = function( $ ) {
+window.tsfem_e_focus_inpost = function ( $ ) {
 
 	/**
 	 * @since 1.0.0
@@ -138,9 +138,8 @@ window.tsfem_e_focus_inpost = function( $ ) {
 	 * @return {(Object)} The sorted map.
 	 */
 	const sortMap = obj => {
-		Object.keys( obj ).sort( ( a, b ) => {
-			return Object.keys( a )[0] - Object.keys( b )[0];
-		} );
+
+		Object.keys( obj ).sort( ( a, b ) => Object.keys( a )[0] - Object.keys( b )[0] );
 
 		return obj;
 	}
@@ -410,7 +409,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 					realScore = calcRealDensityScore( scoring, density );
 					// endScore = calcEndDensityScore( realScore, scoring.max, scoring.min, scoring.penalty );
-					break;
 			}
 
 			// Store realScore in input for saving.
@@ -599,30 +597,28 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				lexicalSelector.selectedIndex = 0;
 			}
 		}
-		const getLexicalForms = ( idPrefix, keyword ) => {
-			return tsfem_inpost.doAjax(
-				{
-					method:   'POST',
-					url:      ajaxurl,
-					dataType: 'json',
-					data: {
-						action: 'tsfem_e_focus_get_lexicalforms',
-						nonce:   l10n.nonce,
-						post_ID: tsfem_inpost.postID,
-						args:    {
-							keyword,
-							language: l10n.language,
-						},
+		const getLexicalForms = ( idPrefix, keyword ) => tsfem_inpost.doAjax(
+			{
+				method:   'POST',
+				url:      ajaxurl,
+				dataType: 'json',
+				data: {
+					action: 'tsfem_e_focus_get_lexicalforms',
+					nonce:   l10n.nonce,
+					post_ID: tsfem_inpost.postID,
+					args:    {
+						keyword,
+						language: l10n.language,
 					},
-					timeout:  15000,
-					async:    true,
 				},
-				{
-					noticeArea,
-					premium: true
-				}
-			);
-		}
+				timeout:  15000,
+				async:    true,
+			},
+			{
+				noticeArea,
+				premium: true
+			}
+		);
 
 		getLexicalForms( idPrefix, keyword ).then( data => {
 			setLexicalFormSelectionFields( data.forms );
@@ -745,7 +741,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 				clearInflections();
 				clearSynonyms();
 				clearRatings();
-				break;
 		}
 	}
 
@@ -922,7 +917,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 					default:
 						reject();
-						break;
 				}
 			} );
 		} );
@@ -1057,7 +1051,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						default:
 						case 'disabled':
 							disable( lexicalSelector );
-							break;
 					}
 				}
 			}
@@ -1219,7 +1212,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					default:
 					case 'error':
 						show = '.tsfem-e-focus-something-wrong-wrap';
-						break;
 				}
 				set( show );
 			}
@@ -1282,8 +1274,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 
 					case 'display':
 						editToggle.dispatchEvent( new CustomEvent( 'tsfem-e-focus-display-editor' ) );
-						break;
-					default:break;
 				}
 			} );
 		} };
@@ -1669,7 +1659,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 						break;
 					case 'synonyms':
 						setActiveSynonyms( idPrefix );
-						break;
 				}
 			}, updateSelectorTime );
 		}
@@ -2210,9 +2199,6 @@ window.tsfem_e_focus_inpost = function( $ ) {
 					break;
 				case 'content':
 					assessment = 'pageContent';
-					break;
-				default:
-					break;
 			}
 
 			return assessment;

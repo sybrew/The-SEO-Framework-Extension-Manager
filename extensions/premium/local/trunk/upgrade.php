@@ -44,11 +44,11 @@ function _do_admin_upgrade( $upgrader ) {
 		$upgrader->_register_upgrade(
 			'local',
 			'1100',
-			function( $version ) {
+			function ( $version ) {
 				// Defer: If it crashes, nothing happens.
 				\add_action(
 					'shutdown',
-					function() {
+					function () {
 						\TSF_Extension_Manager\Extension\Local\Settings::get_instance()->_reprocess_all_stored_data();
 					}
 				);

@@ -78,7 +78,6 @@ class Memory_Cache {
 				// No break. Run next calculation.
 			case 'k':
 				$limit *= 1024;
-				break;
 		}
 
 		return $memo = $limit;

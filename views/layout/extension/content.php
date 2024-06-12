@@ -13,11 +13,7 @@ $_settings = static::$settings;
 
 uasort(
 	$_settings,
-	function( $a, $b ) {
-		// PHP 7+ Spaceship would be nice.
-		if ( $a['priority'] === $b['priority'] ) return 0;
-		return $a['priority'] > $b['priority'] ? 1 : -1;
-	}
+	fn ( $a, $b ) => $a['priority'] <=> $b['priority']
 );
 
 $_tsfem = tsfem();

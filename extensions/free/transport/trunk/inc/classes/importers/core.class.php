@@ -152,7 +152,7 @@ abstract class Core {
 	 * @return string|string[] The escaped variable. Returns array if array was inputted.
 	 */
 	final protected static function esc_sql_in( $var ) {
-		if ( ! is_scalar( $var ) )
+		if ( ! \is_scalar( $var ) )
 			$var = array_filter( (array) $var, 'is_scalar' );
 
 		return \esc_sql( $var );

@@ -127,10 +127,8 @@ final class Server {
 
 		\add_filter(
 			'wp_die_ajax_handler',
-			function() {
-				return [ $this, '_wp_die_handler' ];
-			},
-			9999
+			fn() => [ $this, '_wp_die_handler' ],
+			9999,
 		);
 
 		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF

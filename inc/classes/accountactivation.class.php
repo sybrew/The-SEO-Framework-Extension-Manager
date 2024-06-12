@@ -226,7 +226,6 @@ class AccountActivation extends Panes {
 
 			default:
 				$instance_version = '3.0';
-				break;
 		}
 
 		return [

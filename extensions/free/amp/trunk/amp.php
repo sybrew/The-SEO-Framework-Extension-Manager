@@ -123,9 +123,7 @@ final class Front {
 			// Our URI outputs do not pertain to AMP. AMP takes care of this.
 			\add_filter(
 				'the_seo_framework_meta_generator_pools',
-				static function ( $pools ) {
-					return array_diff( $pools, [ 'URI' ] );
-				}
+				static fn( $pools ) => array_diff( $pools, [ 'URI' ] ),
 			);
 
 			\tsf()->print_seo_meta_tags();

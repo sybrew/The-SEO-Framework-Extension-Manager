@@ -785,7 +785,6 @@ final class Core {
 					'the_seo_framework_honeypot_label',
 					\__( 'Comment for robots', 'the-seo-framework-extension-manager' )
 				);
-				break;
 		}
 
 		return $text ?? '';

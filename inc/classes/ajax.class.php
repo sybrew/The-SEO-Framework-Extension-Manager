@@ -343,7 +343,6 @@ final class AJAX extends Secure_Abstract {
 								default:
 									// Undefined error.
 									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
-									break;
 							}
 						} else {
 							$send['results'] = static::$instance->get_ajax_notice( false, 17012 );

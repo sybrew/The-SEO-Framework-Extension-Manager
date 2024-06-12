@@ -290,7 +290,6 @@ final class LoadAdmin extends AdminPages {
 
 			default:
 				$this->set_error_notice( [ 708 => '' ] );
-				break;
 		}
 
 		// Adds action to the URI. It's only used to visualize what has happened.
@@ -684,7 +683,6 @@ final class LoadAdmin extends AdminPages {
 
 				$class  = 'tsfem-button';
 				$class .= $icon ? ' tsfem-button-external' : '';
-				break;
 		}
 
 		return $this->get_link( [
@@ -890,7 +888,6 @@ final class LoadAdmin extends AdminPages {
 			default:
 				// Unknown case.
 				$code = 10011;
-				break;
 		}
 
 		$ajax or $this->register_extension_state_change_notice( $code, $slug );

@@ -22,9 +22,7 @@ use \TSF_Extension_Manager\{
 
 $option_index = InpostGUI::get_option_key( $post_meta['kw']['option_index'], $post_meta['pm_index'] );
 
-$make_option_id = function( $id, $key ) use ( $option_index ) {
-	return sprintf( '%s[%s][%s]', $option_index, $id, $key );
-};
+$make_option_id = fn( $id, $key ) => sprintf( '%s[%s][%s]', $option_index, $id, $key );
 
 create_analysis_field:;
 	$focus_title = sprintf( '<div><strong>%s</strong></div>', $post_meta['kw']['label']['title'] );

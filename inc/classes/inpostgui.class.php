@@ -31,7 +31,7 @@ namespace TSF_Extension_Manager;
  * @see EOF. Because of the autoloader and trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
-$_load_inpostgui_class = function() {
+$_load_inpostgui_class = function () {
 	new InpostGUI(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 

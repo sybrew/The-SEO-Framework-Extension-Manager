@@ -248,7 +248,6 @@ class API extends Core {
 			case 'global':
 			default:
 				$uri = \TSF_EXTENSION_MANAGER_PREMIUM_URI;
-				break;
 		}
 
 		return $uri . ltrim( $path, ' \\/' );
@@ -424,7 +423,6 @@ class API extends Core {
 				case 100: // Unspecified error. Set $moe to true.
 					$this->set_error_notice( [ 302 => '' ] );
 					$registered_free or $this->do_deactivation( true, true );
-					break;
 			}
 		}
 

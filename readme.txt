@@ -69,15 +69,32 @@ TODO test if TSF's installer still works with WP 6.5
 			-> Does this only affect the plugin activation page?
 		-> Remove the "install" button and only show "view details" instead? This will be a bit more intuitive and familiar for the user.
 
-TODO fn()=>;
+TODO make a separate loader specifically when TSF is inactive (load installer + updater).
+	-> And only when TSF is active and at the right version, load the main plugin.
+		-> Here, we can freely assume TSF is available.
+	-> We already do this, but it's not as clear as can be.
+
 TODO array_key_first()/array_key_last()
-TODO hrtime()
 TODO ??=
 TODO ??
 	-> see https://github.com/sybrew/the-seo-framework/issues/608
-TODO , function\( => function ( )
 TODO leading breaks
 	-> Make sniff?
+
+TODO if : => {}
+TODO elseif : => {}
+TODO while :
+TODO switch :
+
+TODO
+if ( $x_remaining >= $_threshold
+&& ( ! $precis
+  V
+if (
+	   $x_remaining >= $_threshold
+	&& ( ! $precis
+
+TODO deJquerify as much as possible.
 
 TODO CyberWire => CyberWire B.V.
 

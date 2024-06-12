@@ -129,21 +129,21 @@ Most robots don't know that they need to clear this field. Real visitors should.
 The fields are self-explanatory, translatable, and you're free to change them.
 
 ```php
-add_filter( 'the_seo_framework_honeypot_label', function( $text = '' ) {
+add_filter( 'the_seo_framework_honeypot_label', function ( $text = '' ) {
 	// Text displayed above the input, as a label.
 	return __( 'Comments for robots', 'the-seo-framework-extension-manager' );
 } );
 ```
 
 ```php
-add_filter( 'the_seo_framework_honeypot_input', function( $text = '' ) {
+add_filter( 'the_seo_framework_honeypot_input', function ( $text = '' ) {
 	// Text displayed that asks the visitor to clear the field.
 	return __( "Please remove this comment to prove you're human.", 'the-seo-framework-extension-manager' );
 } );
 ```
 
 ```php
-add_filter( 'the_seo_framework_honeypot_placeholder', function( $text = '' ) {
+add_filter( 'the_seo_framework_honeypot_placeholder', function ( $text = '' ) {
 	// Text displayed when the visitor clears the field.
 	return __( 'You are human!', 'the-seo-framework-extension-manager' );
 } );
@@ -158,14 +158,14 @@ When the "hardcore"-mode is enabled, field names and values are rotated more oft
 These values have been carefully tuned and shouldn't have to be changed.
 
 ```php
-add_filter( 'the_seo_framework_honeypot_hardcore', function( $hardcore = true ) {
+add_filter( 'the_seo_framework_honeypot_hardcore', function ( $hardcore = true ) {
 	// Toggle hardcore mode. Below is the default value.
 	return ! WP_CACHE;
 } );
 ```
 
 ```php
-add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) {
+add_filter( 'the_seo_framework_honeypot_field_scale', function ( $scale = 3600 ) {
 	/**
 	 * This filter only works when hardcore-mode is enabled. Otherwise, unique
 	 * IDs are created on a per-page basis, which is used indefinitely.
@@ -185,7 +185,7 @@ add_filter( 'the_seo_framework_honeypot_field_scale', function( $scale = 3600 ) 
 ```
 
 ```php
-add_filter( 'the_seo_framework_honeypot_nonce_scale', function( $scale = 43200, $hardcore = true ) {
+add_filter( 'the_seo_framework_honeypot_nonce_scale', function ( $scale = 43200, $hardcore = true ) {
 	/**
 	 * This is the minimum time a visitor has to submit a comment on your site.
 	 * The maximum time is twice the value returned.
@@ -215,7 +215,7 @@ This means the timer should not need tweaking to accommodate slow servers or the
 This value has been carefully tuned and shouldn't need changing.
 
 ```php
-add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 ) {
+add_filter( 'the_seo_framework_honeypot_countdown_time', function ( $time = 5.33 ) {
 	/**
 	 * This is the minimum time a visitor has to wait before submitting a comment on your site.
 	 * A random floating-point number between 0 and 1 is added to this number. The number
@@ -238,7 +238,7 @@ add_filter( 'the_seo_framework_honeypot_countdown_time', function( $time = 5.33 
 There's also another timestamp that uses this tuned delay value.
 
 ```php
-add_filter( 'the_seo_framework_honeypot_timestamp_wait', function( $time = 5.33 ) {
+add_filter( 'the_seo_framework_honeypot_timestamp_wait', function ( $time = 5.33 ) {
 	/**
 	 * This is the minimum time a visitor has to wait before submitting a comment on your site.
 	 * This will then be ciphered and added as a value to a hidden comment field.

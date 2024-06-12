@@ -42,7 +42,7 @@ namespace TSF_Extension_Manager;
  * @see EOF. Because of the trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
-$_load_upgrader_class = function() {
+$_load_upgrader_class = function () {
 	new Upgrader(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 

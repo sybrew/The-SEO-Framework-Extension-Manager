@@ -234,7 +234,6 @@ class WordPress_SEO extends Core {
 			default:
 			case 0:
 				$value = null; // Default/unassigned
-				break;
 		}
 
 		return $value;

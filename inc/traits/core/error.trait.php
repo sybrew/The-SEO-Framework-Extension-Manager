@@ -745,7 +745,7 @@ trait Error {
 				break;
 
 			case 1100111:
-				$message = \esc_html__( 'No definitions found. Check your spelling and try to use simple or compound words only.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'No definitions found. Check your spelling and consider using simple or compound words only.', 'the-seo-framework-extension-manager' );
 				$type    = 'warning';
 				break;
 

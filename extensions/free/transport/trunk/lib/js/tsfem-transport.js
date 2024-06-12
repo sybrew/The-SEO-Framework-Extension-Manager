@@ -35,7 +35,7 @@
  *
  * @constructor
  */
-window.tsfem_e_import = function() {
+window.tsfem_e_import = function () {
 
 	/**
 	 * @since 1.0.0
@@ -80,7 +80,6 @@ window.tsfem_e_import = function() {
 				break;
 			case 'end':
 				tsfem.updatedResponse( loggerLoaderQuery, success, notice );
-				break;
 		}
 	}
 

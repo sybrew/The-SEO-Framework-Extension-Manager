@@ -33,7 +33,7 @@ namespace TSF_Extension_Manager;
  * @see EOF. Because of the autoloader and trait calling, we can't do it before the class is read.
  * @link https://bugs.php.net/bug.php?id=75771
  */
-$_load_listedit_class = function() {
+$_load_listedit_class = function () {
 	new ListEdit(); // phpcs:ignore, TSF.Performance.Opcodes.ShouldHaveNamespaceEscape -- correct scope.
 };
 

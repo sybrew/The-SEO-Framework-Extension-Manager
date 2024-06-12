@@ -171,7 +171,7 @@ Here you can find the available filters for Articles.
 #### Adjust the output data
 
 ```php
-add_filter( 'the_seo_framework_articles_data', function( $data ) {
+add_filter( 'the_seo_framework_articles_data', function ( $data ) {
 
 	// Overwrite the author input.
 	$data['author'] = [
@@ -211,7 +211,7 @@ add_filter( 'the_seo_framework_articles_data', function( $data ) {
 *Note that images are required for AMP.*
 
 ```php
-add_filter( 'the_seo_framework_articles_images', function( $images ) {
+add_filter( 'the_seo_framework_articles_images', function ( $images ) {
 
 	// Add an image. Make sure it's an array first!
 	$images   = (array) $images;
@@ -240,7 +240,7 @@ add_filter( 'the_seo_framework_articles_images', function( $images ) {
 *The `$args` parameter is an array that should be compatible with `WP_Query`. [View all parameters properties](https://developer.wordpress.org/reference/classes/wp_query/#parameters).*
 
 ```php
-add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', function( $args ) {
+add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', function ( $args ) {
 
 	// Remove the date query, forcing all posts to be considered, instead of just from the past 2.5 days.
 	unset( $args['date_query'] );

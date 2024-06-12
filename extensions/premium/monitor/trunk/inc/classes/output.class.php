@@ -350,16 +350,11 @@ final class Output {
 					case 'moresoon':
 						$title = \__( 'More coming soon!', 'the-seo-framework-extension-manager' );
 						break 2;
-
-					default:
-						// Falls back to underlying default.
-						break;
 				}
 				// No break to fall back to default.
 
 			default:
 				$title = ucwords( str_replace( [ '-', '_' ], ' ', $key ) );
-				break;
 		}
 
 		return $title ?? '';

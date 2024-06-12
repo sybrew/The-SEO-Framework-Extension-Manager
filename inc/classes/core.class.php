@@ -169,21 +169,16 @@ class Core {
 		$checksum = Extensions::get( 'extensions_checksum' );
 		$result   = $this->validate_extensions_checksum( $checksum );
 
-		if ( true !== $result ) :
-			switch ( $result ) {
-				case -2:
-					// Failed checksum.
-					$this->set_error_notice( [ 2002 => '' ] );
-					break;
-
-				case -1:
-					// No extensions have ever been active...
-					break;
+		if ( true !== $result ) {
+			// -2: failed checksum, -1: no extensions have ever been active.
+			if ( -2 === $result ) {
+				// Failed checksum.
+				$this->set_error_notice( [ 2002 => '' ] );
 			}
 
 			Extensions::reset();
 			return $loaded = false;
-		endif;
+		}
 
 		$extensions = Extensions::get( 'active_extensions_list' );
 

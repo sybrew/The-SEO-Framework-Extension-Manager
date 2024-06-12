@@ -240,7 +240,7 @@ Here you can find the available filters for Focus.
 #### Adjust supported focus elements
 
 ```php
-add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
+add_filter( 'the_seo_framework_focus_elements', function ( $elements ) {
 
 	// Add an overriding (dominating) element for pageTitle.
 	$elements['pageTitle'] += [ '#my-element > input' => 'dominate' ];
@@ -260,7 +260,7 @@ add_filter( 'the_seo_framework_focus_elements', function( $elements ) {
 _Note: When you set this value lower than 5000, the auto-parser will be disabled._
 
 ```php
-add_filter( 'the_seo_framework_focus_auto_interval', function( $interval ) {
+add_filter( 'the_seo_framework_focus_auto_interval', function ( $interval ) {
 	return 10000; // Set to 10 seconds. Default is 45000 (ms, equals 45s).
 } );
 ```

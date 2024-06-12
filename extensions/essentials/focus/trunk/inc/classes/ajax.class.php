@@ -186,7 +186,6 @@ final class Ajax {
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
 						$send['results'] = $this->get_ajax_notice( false, 1100103 );
-						break;
 				}
 			} elseif ( ! isset( $response->data ) ) {
 				$send['results'] = $this->get_ajax_notice( false, 1100104 );
