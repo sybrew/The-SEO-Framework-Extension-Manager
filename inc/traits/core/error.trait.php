@@ -598,7 +598,7 @@ trait Error {
 
 			case 1010305:
 			case 1010506:
-				$message = \esc_html__( 'Crawl has been requested successfully. It can take up to three minutes to be processed.', 'the-seo-framework-extension-manager' );
+				$message = \esc_html__( 'Crawl has been requested successfully. It can take up to two minutes to be processed.', 'the-seo-framework-extension-manager' );
 				$type    = 'updated';
 				break;
 

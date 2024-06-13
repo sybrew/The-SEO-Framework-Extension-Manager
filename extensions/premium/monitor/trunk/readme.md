@@ -91,9 +91,11 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 * **API - Our servers:**
 	* **June 13th, 2024:**
+		* **Improved:** Scheduled tasks are now performed twice as often.
 		* **Fixed:** When a site is deleted due to inactivity, reconnecting is now possible.
 		* **Fixed:** We found that not all site data was purged in the past, so we manually truncated the databases. You may find that recrawling is necessary.
 * **Extension:**
+	* **Improved:** To accomodate the increased frequency of scheduled tasks, we halved all wait times for crawls requesting and data fetching.
 	* **Fixed:** API errors are handled more gracefully.
 	* **Fixed:** Resolved an issue where not all actions invoked a reconnection resolution when required.
 

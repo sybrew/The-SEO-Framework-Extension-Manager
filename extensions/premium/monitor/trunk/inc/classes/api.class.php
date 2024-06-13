@@ -570,14 +570,14 @@ class Api extends Data {
 
 	/**
 	 * Returns the remote data fetch timeout buffer.
-	 * Currently yields 93 seconds timeout.
+	 * Currently yields 46 seconds timeout.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return int The timeout buffer.
 	 */
 	protected function get_remote_data_buffer() {
-		return 93;
+		return 46;
 	}
 
 	/**
@@ -621,7 +621,7 @@ class Api extends Data {
 
 	/**
 	 * Returns the remote data crawl timeout buffer.
-	 * Currently yields 63 seconds timeout.
+	 * Currently yields 31 seconds timeout.
 	 *
 	 * @since 1.0.0
 	 * @todo Fine-tune this, maybe get remote response on next cron?
@@ -630,7 +630,7 @@ class Api extends Data {
 	 * @return int The timeout buffer.
 	 */
 	protected function get_request_next_crawl_buffer() {
-		return 63;
+		return 31;
 	}
 
 	/**
