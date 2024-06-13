@@ -41,12 +41,6 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-TODO for Monitor, when a site isn't registered with us, tell the user about it.
-	-> To test, register, then delete from (or modify) DB.
-	-> Currently, we send the generic 'failure' response.
-		-> We could say the site isn't registered... but wouldn't this open the gate for spammers?
-			-> Then again, the service is proxied and requires various secrets to align before responding.
-
 TODO Make "No valid license key was supplied" warning site-wide, instead of only Extension Manager page.
 
 TODO: For Honeypot Timer, add a JS script that updates the timer when the page loads.
@@ -129,6 +123,7 @@ FIXME: Keyword with a space in between can no longer be found in the content/tit
 	-> add a dicitionary service badge.
 	-> Make it 2.0.0 if we add the select all button, otherwise 1.6
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
+* [Monitor at version 1.2.12](https://theseoframework.com/extensions/monitor/#changelog)
 
 **Detailed log:**
 

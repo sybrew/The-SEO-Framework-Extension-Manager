@@ -356,10 +356,6 @@ class Api extends Data {
 				$ajax or $this->set_error_notice( [ 1010609 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010609 ) : false;
 
-			case 'failure':
-				$ajax or $this->set_error_notice( [ 1010601 => '' ] );
-				return $ajax ? $this->get_ajax_notice( false, 1010601 ) : false;
-
 			case 'site expired':
 				$this->update_option( 'site_requires_fix', true );
 				$ajax or $this->set_error_notice( [ 1010602 => '' ] );
@@ -369,6 +365,11 @@ class Api extends Data {
 				$this->update_option( 'site_marked_inactive', true );
 				$ajax or $this->set_error_notice( [ 1010603 => '' ] );
 				return $ajax ? $this->get_ajax_notice( false, 1010603 ) : false;
+
+			default:
+			case 'failure':
+				$ajax or $this->set_error_notice( [ 1010601 => '' ] );
+				return $ajax ? $this->get_ajax_notice( false, 1010601 ) : false;
 		}
 
 		/**

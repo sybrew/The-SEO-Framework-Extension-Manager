@@ -7,7 +7,7 @@ This extension keeps track of your website's SEO optimizations and statistics.
 
 ## Overview
 
-### Let us look
+### Let us take a look
 
 Maintaining a WordPress website isn't easy. Before you start, you must find a suitable theme, useful plugins, and then set them all up.
 
@@ -37,6 +37,8 @@ This helps us validate your website's integrity, so we know it's your website co
 
 When crawling, Monitor looks at your website as any other visitor would, or could.
 And, when you disconnect your site from our services, all crawled data will be erased.
+
+We remove all data we crawled from your site automatically after 90 days of inactivity.
 
 ## Usage
 
@@ -82,6 +84,18 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 ## Changelog
 
 *Because Monitor is a two-part system, changes are differentiated via Extension and API.*
+
+### 1.2.12
+
+[tsfep-release time="-1"]
+
+* **API - Our servers:**
+	* **June 13th, 2024:**
+		* **Fixed:** When a site is deleted due to inactivity, reconnecting is now possible.
+		* **Fixed:** We found that not all site data was purged in the past, so we manually truncated the databases. You may find that recrawling is necessary.
+* **Extension:**
+	* **Fixed:** API errors are handled more gracefully.
+	* **Fixed:** Resolved an issue where not all actions invoked a reconnection resolution when required.
 
 ### 1.2.11
 
