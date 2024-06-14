@@ -937,6 +937,7 @@ window.tsfem_e_focus_inpost = function ( $ ) {
 						Promise.allSettled( [ fetchInflections(), fetchSynonyms() ] ).then( results => {
 							lexicalSelector.dataset.prev = lexicalSelector.value;
 
+							// 0 = inflections, 1 = synonyms
 							if ( 'fulfilled' !== results[0].status && 'fulfilled' !== results[1].status ) {
 								setEditButton( idPrefix ).to( 'unchecked, disabled, edit' );
 								clearData( idPrefix, 'definition' );

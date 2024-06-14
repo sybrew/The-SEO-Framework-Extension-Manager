@@ -104,8 +104,8 @@ const escapeRegex = str => str.replace( /[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\
  * @param {string} str
  * @return {string}
  */
-const bewilderRegexNonWords = str => /^(\\P{XIDC})*(.*?)(\\P{XIDC})*$/.exec(
-	str.replace( /\P{XIDC}+/gu, '\\P{XIDC}' )
+const bewilderRegexNonWords = str => /^(\P{XIDC})*(.*?)(\P{XIDC})*$/.exec(
+	str.replace( /\P{XIDC}+/gu, '\\P{XIDC}+' )
 )[2];
 
 /**
@@ -237,9 +237,10 @@ const countWords = ( word, contentMatch ) => {
 		// Split Regex's flags from the expression.
 		pReg = /\/(.*)\/(.*)/.exec( regex[ i ] );
 
+		// FIXME: unicode code smell
 		contentMatch = contentMatch.match( new RegExp(
-			pReg[1].replace( /\{\{kw\}\}/g, sWord ), // Replace {{kw}} with the keyword, if any.
-			pReg[2]                                  // flag.
+			pReg[1].replace( /\{\{kw\}\}/g, sWord ),          // Replace {{kw}} with the keyword, if any. Constructor string method.
+			pReg[2].includes( 'u' ) ? pReg[2] : `${pReg[2]}u` // Flag. Force u modifier because of bewilderRegexNonWords.
 		) );
 
 		// Stop if there's no content, or when this is the last iteration.

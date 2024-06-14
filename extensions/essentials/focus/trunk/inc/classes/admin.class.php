@@ -264,9 +264,15 @@ final class Admin extends Core {
 	 */
 	private function get_worker_file_location() {
 
-		$min = \SCRIPT_DEBUG ? '' : '.min';
+		if ( \SCRIPT_DEBUG ) {
+			$min = '';
+			$ext = '?' . uniqid( hrtime( true ) );
+		} else {
+			$min = '.min';
+			$ext = '';
+		}
 
-		return \esc_url( \set_url_scheme( \TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js" ) );
+		return \esc_url( \set_url_scheme( \TSFEM_E_FOCUS_DIR_URL . "lib/js/tsfem-focus-parser.worker{$min}.js$ext" ) );
 	}
 
 	/**

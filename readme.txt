@@ -72,7 +72,8 @@ TODO use TSF's memo API?
 
 TODO deJquerify as much as possible.
 
-FIXME: Keyword with a space in between can no longer be found in the content/title (test test).
+TODO require tsf and tsfem dependencies for all scripts
+	-> This eases debugging, e.g. via tsf.l10n.states.debug.
 
 = 2.7.0 =
 
@@ -97,8 +98,8 @@ FIXME: Keyword with a space in between can no longer be found in the content/tit
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
 	* We modernized critical JavaScript code, slightly improving browser interaction performance.
-	* We modernized CSS code, slightly reducing the file sizes.
-	* TODO Modernized PHP code, slightly improving server response times.
+	* We modernized some CSS code, slightly reducing the plugin file sizes.
+	* We modernized some PHP code, slightly improving server response times.
 * **Removed:**
 	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.
 		* The transient data for this (`tsfem_latest_seo_feed`) will be cleaned up automatically by WordPress.
@@ -109,9 +110,6 @@ FIXME: Keyword with a space in between can no longer be found in the content/tit
 	* Resolved an issue where API activation via a constant (`TSF_EXTENSION_MANAGER_API_INFORMATION`) could cause a site to get stuck in instance verification failure. Now, the site disconnects and reconnects automatically.
 		* This should happen immediately, but there is a timeout of 3 minutes when this keeps recurring. Then, those who can manage Extension Manager can manually enter "Free" mode.
 		* The site will upgrade automatically after 3 minutes, regardless of whether it's was set manually into "Free" mode.
-			-> TODO when reconnecting, get_active_extensions() still purports that the extensions are deactivated. Refreshing the page will resolve the issue -- however, this may appear confusing for the user. We should update the cache somehow (this requires a refactor akin to how we handle post/option plugin data in TSF => Make issue)
-				-> Or, we could check the order of operation. Manual activation doesn't have this problem.
-					-> Automated reconnection does have this problem via revalidate_subscription (grace)
 * **Other:**
 	* Another year has turned. So, we updated all files' copyright coverage.
 
