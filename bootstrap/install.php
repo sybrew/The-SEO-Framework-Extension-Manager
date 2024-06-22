@@ -109,8 +109,8 @@ function _nag_install_tsf() {
 			'plugin'    => $plugin_slug,
 			'from'      => 'plugins',
 			'TB_iframe' => 'true',
-			'width'     => 600,
-			'height'    => 550,
+			'width'     => '600',
+			'height'    => '550',
 		],
 		\network_admin_url( 'plugin-install.php' )
 	);

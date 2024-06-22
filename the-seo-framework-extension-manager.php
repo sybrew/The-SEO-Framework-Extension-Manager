@@ -3,7 +3,7 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework. Right from your WordPress dashboard.
- * Version: 2.7.0-dev-30
+ * Version: 2.7.0-dev-31
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
@@ -77,9 +77,6 @@ require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'define.php';
 
 // Load plugin API file.
 require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
-
-// Load internal functions file.
-require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'internal.php';
 
 // Load TSF v5.0 transition functions file.
 require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'transition.php';

@@ -75,6 +75,15 @@ TODO deJquerify as much as possible.
 TODO require tsf and tsfem dependencies for all scripts
 	-> This eases debugging, e.g. via tsf.l10n.states.debug.
 
+TODO remove uptime monitoring toggles, it never would've worked out anyway.
+
+TODO the "logo guidelines" link needs updating.
+	-> Just add an entry to our FAQ instead, Google's site keeps updating and it's annoying.
+
+TODO myMart and myMart Pharmacy isn't clear, they should be separated.
+	-> Remove the brackets in `{store name} {department name}`,
+		-> and make it `store name` OR `store name department name`
+
 = 2.7.0 =
 
 * June TODOth, 2024
