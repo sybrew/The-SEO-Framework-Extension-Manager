@@ -5,12 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-\defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
-
-use function \TSF_Extension_Manager\Transition\{
-	convert_markdown,
-	do_dismissible_notice,
-};
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -30,6 +25,10 @@ use function \TSF_Extension_Manager\Transition\{
  */
 
 \add_action( 'admin_notices', __NAMESPACE__ . '\\_check_external_blocking' );
+\add_filter( 'plugins_api', __NAMESPACE__ . '\\_hook_plugins_api', \PHP_INT_MAX, 3 );
+\add_action( 'upgrader_process_complete', __NAMESPACE__ . '\\_clear_update_cache' );
+\add_filter( 'pre_set_site_transient_update_plugins', __NAMESPACE__ . '\\_push_update', \PHP_INT_MAX, 2 );
+
 /**
  * Checks whether the WP installation blocks external requests.
  * Shows notice if external requests are blocked through the WP_HTTP_BLOCK_EXTERNAL constant
@@ -37,6 +36,7 @@ use function \TSF_Extension_Manager\Transition\{
  * If you must, you can disable this notice by implementing this snippet:
  * `remove_action( 'admin_notices', 'TSF_Extension_Manager\\_check_external_blocking' );`
  *
+ * @hook admin_notices 10
  * @since 2.0.0
  * @access private
  */
@@ -54,29 +54,37 @@ function _check_external_blocking() {
 			// We rely on TSF here but it might not be available. Still, not outputting this notice does not harm.
 			if ( ! \function_exists( 'tsf' ) ) return;
 
-			$notice = convert_markdown(
-				sprintf(
-					/* translators: Markdown. %s = Update API URL */
-					\esc_html__(
-						'This website is blocking external requests, this means it will not be able to connect to The SEO Framework update services. Please add `%s` to `WP_ACCESSIBLE_HOSTS` to keep the Extension Manager plugin up-to-date and secure.',
-						'the-seo-framework-extension-manager'
-					),
-					\esc_html( $host )
+			$notice = sprintf(
+				/* translators: Markdown. %s = Update API URL */
+				\esc_html__(
+					'This website is blocking external requests, this means it will not be able to connect to The SEO Framework update services. Please add `%s` to `WP_ACCESSIBLE_HOSTS` to keep the Extension Manager plugin up-to-date and secure.',
+					'the-seo-framework-extension-manager'
 				),
-				[ 'code' ]
+				\esc_html( $host ),
 			);
-			do_dismissible_notice(
-				$notice,
-				[
-					'type'   => 'error',
-					'escape' => false,
-				]
-			);
+
+			// See tsf()->markdown()'s code() (private func).
+			preg_match_all( '/`([^`]+)`/', $notice, $matches, \PREG_SET_ORDER );
+
+			foreach ( $matches as $match ) {
+				$notice = str_replace(
+					$match[0],
+					sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
+					$notice,
+				);
+			}
+
+			// TODO consider using wp_admin_notice() (WP 6.4+)
+			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- $notice is escaped.
+			echo <<<HTML
+			<div class="notice notice-warning is-dismissible">
+				<p>$notice</p>
+			</div>
+			HTML;
 		}
 	}
 }
 
-\add_filter( 'plugins_api', __NAMESPACE__ . '\\_hook_plugins_api', \PHP_INT_MAX, 3 );
 /**
  * Filters the plugin API to bind to The SEO Framework's own updater service.
  *
@@ -155,7 +163,6 @@ function _hook_plugins_api( $res, $action, $args ) {
 	return $res;
 }
 
-\add_action( 'upgrader_process_complete', __NAMESPACE__ . '\\_clear_update_cache' );
 /**
  * Clears the updater cache after a plugin's been updated.
  * This prevents incorrect updater version storing.
@@ -168,7 +175,6 @@ function _clear_update_cache() {
 	\update_site_option( \TSF_EXTENSION_MANAGER_UPDATER_CACHE, [] );
 }
 
-\add_filter( 'pre_set_site_transient_update_plugins', __NAMESPACE__ . '\\_push_update', \PHP_INT_MAX, 2 );
 /**
  * Push values into the update_plugins site transient.
  * This allows for multisite network updates.

@@ -164,9 +164,7 @@ namespace TSF_Extension_Manager {
 		// include an unmodified $wp_version
 		include \ABSPATH . \WPINC . '/version.php';
 
-		/**
-		 * @global string $wp_version
-		 */
+		// phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- $wp_version is included.
 		if ( version_compare( $wp_version, $version, '>=' ) )
 			return $loaded[ $version ] = true;
 

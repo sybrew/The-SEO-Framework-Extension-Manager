@@ -5,7 +5,7 @@
 
 namespace TSF_Extension_Manager;
 
-\defined( 'TSF_EXTENSION_MANAGER_PLUGIN_BASE_FILE' ) or die;
+\defined( 'TSF_EXTENSION_MANAGER_PRESENT' ) or die;
 
 /**
  * The SEO Framework - Extension Manager plugin
@@ -24,7 +24,8 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\add_action( 'tsfem_needs_the_seo_framework', __NAMESPACE__ . '\\_prepare_tsf_installer' );
+\add_action( 'admin_init', __NAMESPACE__ . '\\_prepare_tsf_installer' );
+
 /**
  * Prepares scripts for TSF "WP v4.6 Shiny Updates" installation.
  *

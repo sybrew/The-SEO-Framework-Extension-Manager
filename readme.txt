@@ -84,6 +84,10 @@ TODO myMart and myMart Pharmacy isn't clear, they should be separated.
 	-> Remove the brackets in `{store name} {department name}`,
 		-> and make it `store name` OR `store name department name`
 
+TODO trailing commas
+
+TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
+
 = 2.7.0 =
 
 * June TODOth, 2024
