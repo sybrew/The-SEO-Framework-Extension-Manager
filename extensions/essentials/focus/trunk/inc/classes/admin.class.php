@@ -54,8 +54,6 @@ final class Admin extends Core {
 		 */
 		$this->view_location_base = \TSFEM_E_FOCUS_DIR_PATH . 'views' . \DIRECTORY_SEPARATOR;
 
-		\wp_doing_ajax() and Ajax::_init( $this );
-
 		// Prepares InpostGUI's class for nonce checking.
 		\TSF_Extension_Manager\InpostGUI::prepare();
 

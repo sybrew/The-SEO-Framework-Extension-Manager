@@ -362,10 +362,12 @@ final class Admin {
 	 */
 	public function _wp_ajax_transport() {
 
-		if ( ! \wp_doing_ajax() ) exit;
-
-		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( $this->ajax_nonce_action, 'nonce', false ) )
-			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1069001 ) ], 'failure' ); // nice
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( $this->ajax_nonce_action, 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1069001 ) ] ); // nice
+		}
 
 		switch ( $_REQUEST['handle'] ?? null ) {
 			case 'import':
@@ -373,7 +375,7 @@ final class Admin {
 				break;
 
 			default:
-				\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1060106 ) ], 'failure' );
+				\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1060106 ) ] );
 		}
 	}
 	/**

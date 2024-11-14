@@ -579,10 +579,12 @@ final class Tests {
 						}
 					} else {
 						$state = 'bad';
+
 						if ( \wp_doing_ajax() )
 							\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 								? \tsf()->admin()->menu()->register_top_menu_page()
 								: \tsf()->add_menu_link();
+
 						$content .= $this->wrap_info(
 							convert_markdown(
 								sprintf(
@@ -610,10 +612,12 @@ final class Tests {
 					);
 				} else {
 					$state = 'bad';
+
 					if ( \wp_doing_ajax() )
 						\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 							? \tsf()->admin()->menu()->register_top_menu_page()
 							: \tsf()->add_menu_link();
+
 					$content .= $this->wrap_info(
 						convert_markdown(
 							sprintf(

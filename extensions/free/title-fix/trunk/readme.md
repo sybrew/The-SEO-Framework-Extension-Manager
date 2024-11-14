@@ -9,7 +9,7 @@ This extension makes sure your meta title output is as configured. Even if your 
 
 ### Broken WordPress standards
 
-10 years ago, [WordPress introduced a modern title tag standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/). Still, not all themes have implemented this.
+Over 10 years ago, [WordPress introduced a modern title tag standard](https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/). Still, not all themes have implemented this.
 
 Themes without the modern standard may opt in for "pretty" titles, rather than semantic titles. This creates various issues.
 

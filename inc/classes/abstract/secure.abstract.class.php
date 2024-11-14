@@ -227,20 +227,6 @@ abstract class Secure_Abstract implements Secure_Static_Abstracts {
 	}
 
 	/**
-	 * Sets secret API key.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param string $api_key The secret API key.
-	 */
-	final public static function set_secret_api_key( $api_key ) {
-
-		if ( ! self::verify_instance() ) return;
-
-		self::set( 'secret_api_key', $api_key );
-	}
-
-	/**
 	 * Determines whether the account level is premium.
 	 *
 	 * @since 1.0.0

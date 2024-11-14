@@ -34,63 +34,8 @@ namespace TSF_Extension_Manager;
  * @access private
  * @final
  */
-final class AJAX extends Secure_Abstract {
+final class AJAX {
 	use Error;
-
-	/**
-	 * We don't rely fully on Secure_Abstract, such as action verification;
-	 * this is in conflict of the abstract nature of WordPress's AJAX.
-	 *
-	 * As such, we use this.
-	 *
-	 * @since 2.1.0
-	 * @var bool Whether the instance is validated.
-	 */
-	private static $_validated = false; // phpcs:ignore -- internal
-
-	/**
-	 * @since 2.1.0
-	 * @var null|AJAX The class instance.
-	 */
-	private static $instance;
-
-	/**
-	 * Initializes class variables. Always use reset when done with this class.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param string $type     Unused. The instance type.
-	 * @param string $instance Required. The instance key. Passed by reference.
-	 * @param array  $bits     Required. The instance bits. Passed by reference.
-	 */
-	public static function initialize( $type, &$instance = '', &$bits = [] ) {
-
-		self::reset();
-
-		// REVIEW me, always. Bypasses internal security checks.
-		self::set( '_wpaction' );
-		self::set( '_type', 'generic' );
-
-		\tsfem()->_verify_instance( $instance, $bits[1] ) or die;
-
-		static::$_validated = true;
-		static::$instance   = new static;
-
-		static::load_actions();
-	}
-
-	/**
-	 * Returns false, unused.
-	 *
-	 * @since 2.1.0
-	 * @ignore
-	 *
-	 * @param string $type Determines what to get.
-	 * @return bool false
-	 */
-	public static function get( $type ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis
-		return false;
-	}
 
 	/**
 	 * Loads actions.
@@ -98,7 +43,7 @@ final class AJAX extends Secure_Abstract {
 	 * @since 2.1.0
 	 * @access private
 	 */
-	private static function load_actions() {
+	public static function load_actions() {
 
 		// Ajax listener for error notice catching.
 		\add_action( 'wp_ajax_tsfem_get_dismissible_notice', [ static::class, '_wp_ajax_get_dismissible_notice' ] );
@@ -134,18 +79,18 @@ final class AJAX extends Secure_Abstract {
 	 */
 	public static function _wp_ajax_get_dismissible_notice() {
 
-		if ( ! static::$_validated ) return;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
+
 		if ( ! ( \TSF_Extension_Manager\can_do_manager_settings() || \TSF_Extension_Manager\can_do_extension_settings() ) )
-			return;
+			\wp_send_json_error();
 
-		if ( \check_ajax_referer( 'tsfem-ajax-insecure-nonce', 'nonce', false ) )
-			$notice_data = static::build_ajax_dismissible_notice();
+		if ( ! \check_ajax_referer( 'tsfem-ajax-insecure-nonce', 'nonce', false ) )
+			\wp_send_json_error();
 
-		\tsfem()->send_json(
-			$notice_data ?? [],
-			$notice_data['type'] ?? 'failure'
-		);
-		exit;
+		// Though we say success, it may still result in a "failure" notice!
+		\wp_send_json_success( static::build_ajax_dismissible_notice(), 200 );
 	}
 
 	/**
@@ -159,20 +104,20 @@ final class AJAX extends Secure_Abstract {
 	 */
 	public static function _wp_ajax_inpost_get_dismissible_notice() {
 
-		if ( ! static::$_validated ) return;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
 
 		$post_id = filter_input( \INPUT_POST, 'post_ID', \FILTER_VALIDATE_INT );
-		if ( ! $post_id || ! InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) ) return;
 
-		if ( \check_ajax_referer( InpostGUI::JS_NONCE_ACTION, InpostGUI::JS_NONCE_NAME, false ) ) {
-			$notice_data = static::build_ajax_dismissible_notice();
-		}
+		if ( ! $post_id || ! InpostGUI::current_user_can_edit_post( \absint( $post_id ) ) )
+			\wp_send_json_error();
 
-		\tsfem()->send_json(
-			$notice_data ?? [],
-			$notice_data['type'] ?? 'failure'
-		);
-		exit;
+		if ( ! \check_ajax_referer( InpostGUI::JS_NONCE_ACTION, InpostGUI::JS_NONCE_NAME, false ) )
+			\wp_send_json_error();
+
+		// Though we say success, it may still result in a "failure" notice!
+		\wp_send_json_success( static::build_ajax_dismissible_notice(), 200 );
 	}
 
 	/**
@@ -186,10 +131,15 @@ final class AJAX extends Secure_Abstract {
 	 */
 	public static function _wp_ajax_tsfemForm_iterate() {
 
-		if ( ! static::$_validated ) return;
-		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
-			\tsfem()->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9002 ) ], 'failure' );
-			exit;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
+
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 9002 ) ] );
 		}
 
 		/**
@@ -223,16 +173,19 @@ final class AJAX extends Secure_Abstract {
 	 */
 	public static function _wp_ajax_tsfemForm_save() {
 
-		if ( ! static::$_validated ) return;
-		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
-			\tsfem()->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9003 ) ], 'failure' );
-			exit;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
+
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 9003 ) ] );
 		}
 
-		if ( empty( $_POST['data'] ) ) {
-			\tsfem()->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 17100 ) ], 'failure' );
-			exit;
-		}
+		if ( empty( $_POST['data'] ) )
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 17100 ) ] );
 
 		/**
 		 * Allows callers to save POST data.
@@ -255,11 +208,15 @@ final class AJAX extends Secure_Abstract {
 	 */
 	public static function _wp_ajax_tsfemForm_get_geocode() {
 
-		if ( ! static::$_validated ) return;
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->headers()->clean_response_header()
+			: \tsf()->clean_response_header();
 
-		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false ) ) {
-			\tsfem()->send_json( [ 'results' => static::$instance->get_ajax_notice( false, 9004 ) ], 'failure' );
-			exit;
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-form-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 9004 ) ] );
 		}
 
 		$send = [];
@@ -268,7 +225,7 @@ final class AJAX extends Secure_Abstract {
 		$input = isset( $_POST['input'] ) ? json_decode( \wp_unslash( $_POST['input'] ) ) : '';
 
 		if ( ! $input || ! \is_object( $input ) ) {
-			$send['results'] = static::$instance->get_ajax_notice( false, 17000 );
+			$send['notice'] = static::$instance->get_ajax_notice( false, 17000 );
 		} else {
 			$args = [
 				'request' => 'geocoding/get',
@@ -282,120 +239,82 @@ final class AJAX extends Secure_Abstract {
 			$response = json_decode( $response );
 
 			if ( ! isset( $response->success ) ) {
-				$send['results'] = static::$instance->get_ajax_notice( false, 17001 );
+				$send['notice'] = static::$instance->get_ajax_notice( false, 17001 );
 			} else {
 				if ( ! isset( $response->data ) ) {
-					$send['results'] = static::$instance->get_ajax_notice( false, 17002 );
+					$send['notice'] = static::$instance->get_ajax_notice( false, 17002 );
 				} else {
 					$data = json_decode( $response->data, true );
 
 					if ( ! $data ) {
-						$send['results'] = static::$instance->get_ajax_notice( false, 17003 );
+						$send['notice'] = static::$instance->get_ajax_notice( false, 17003 );
 					} else {
-						$data['status'] = $data['status'] ?? null;
+						$data['status'] ??= null;
 
 						if ( 'OK' !== $data['status'] ) {
 							switch ( $data['status'] ) {
 								// @link https://developers.google.com/maps/documentation/geocoding/overview#reverse-response
 								case 'ZERO_RESULTS':
-									$send['results'] = static::$instance->get_ajax_notice( false, 17004 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17004 );
 									break;
 
 								case 'OVER_QUERY_LIMIT':
 									// This should never be invoked.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17005 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17005 );
 									break;
 
 								case 'REQUEST_DENIED':
 									// This should never be invoked.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17006 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17006 );
 									break;
 
 								case 'INVALID_REQUEST':
 									// Data is missing.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17007 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17007 );
 									break;
 
 								case 'UNKNOWN_ERROR':
 									// Remote Geocoding API error. Try again...
-									$send['results'] = static::$instance->get_ajax_notice( false, 17008 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17008 );
 									break;
 
 								case 'TIMEOUT':
 									// Too many consecutive requests.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17009 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17009 );
 									break;
 
 								case 'RATE_LIMIT':
 									// Too many requests in the last period.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17010 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17010 );
 									break;
 
 								case 'REQUEST_LIMIT_REACHED':
 									// License request limit reached.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17013 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17013 );
 									break;
 
 								case 'LICENSE_TOO_LOW':
-									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17011 );
 									break;
 
 								default:
 									// Undefined error.
-									$send['results'] = static::$instance->get_ajax_notice( false, 17011 );
+									$send['notice'] = static::$instance->get_ajax_notice( false, 17011 );
 							}
 						} else {
-							$send['results'] = static::$instance->get_ajax_notice( false, 17012 );
+							$send['notice']  = static::$instance->get_ajax_notice( false, 17012 );
 							$send['geodata'] = $data;
-							$_type           = 'success';
+							$send['success'] = true;
 						}
 					}
 				}
 			}
 		}
 
-		\tsfem()->send_json( $send, $_type ?? 'failure' );
-		exit;
-	}
+		$send['notice']  ??= $send['notice'] ?? static::$instance->get_ajax_notice( false, 17100 );
+		$send['success'] ??= false;
 
-	/**
-	 * Builds AJAX notices.
-	 *
-	 * WARNING: This method has WEAK access control prior being called. Do not store data!
-	 *
-	 * @since 1.5.0
-	 * @uses trait TSF_Extension_Manager\Error
-	 * @access private
-	 */
-	private static function build_ajax_dismissible_notice() {
-
-		// phpcs:disable, WordPress.Security.NonceVerification -- Caller must check for this.
-		$data = [];
-
-		$data['key'] = (int) $_POST['tsfem-notice-key'] ?? false;
-		if ( $data['key'] ) {
-			$notice = static::$instance->get_error_notice( $data['key'] );
-
-			if ( \is_array( $notice ) ) {
-				// If it has a custom message (already stored in browser), then don't output the notice message.
-				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
-
-				$data['notice'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-					? \tsf()->admin()->notice()->generate_notice(
-						$msg,
-						[
-							'type'   => $notice['type'],
-							'escape' => false,
-							'inline' => true,
-						]
-					)
-					: \tsf()->generate_dismissible_notice( $msg, $notice['type'], true, false, true );
-				$data['type']   = $notice['type'];
-			}
-		}
-		// phpcs:enable, WordPress.Security.NonceVerification
-
-		return $data;
+		\wp_send_json( $send );
 	}
 
 	/**
@@ -412,8 +331,6 @@ final class AJAX extends Secure_Abstract {
 	 * @see The SEO Framework's companion method `wp_ajax_crop_image()`.
 	 */
 	public static function _wp_ajax_crop_image() {
-
-		if ( ! static::$_validated ) return;
 
 		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
 			? \tsf()->headers()->clean_response_header()
@@ -520,7 +437,47 @@ final class AJAX extends Secure_Abstract {
 		}
 
 		\wp_send_json_success( \wp_prepare_attachment_for_js( $attachment_id ) );
+	}
 
-		exit;
+	/**
+	 * Builds AJAX notices.
+	 *
+	 * WARNING: This method has WEAK access control prior being called. Do not store data!
+	 *
+	 * @since 1.5.0
+	 * @uses trait TSF_Extension_Manager\Error
+	 * @access private
+	 */
+	private static function build_ajax_dismissible_notice() {
+
+		// phpcs:disable, WordPress.Security.NonceVerification -- Caller must check for this.
+		$data = [];
+
+		$data['key'] = (int) ( $_POST['tsfem-notice-key'] ?? 0 );
+
+		if ( $data['key'] ) {
+			$notice = Error::get_error_notice( $data['key'] ); // var_dump() decouple the error?
+
+			if ( \is_array( $notice ) ) {
+				// If it has a custom message (already stored in browser), then don't output the notice message.
+				$msg = ! empty( $_POST['tsfem-notice-has-msg'] ) ? $notice['before'] : $notice['message'];
+
+				$data['noticeElement'] = \TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->admin()->notice()->generate_notice(
+						$msg,
+						[
+							'type'   => $notice['type'],
+							'escape' => false,
+							'inline' => true,
+						]
+					)
+					: \tsf()->generate_dismissible_notice( $msg, $notice['type'], true, false, true );
+
+				$data['noticeType'] = $notice['noticeType'];
+			}
+		}
+		// phpcs:enable, WordPress.Security.NonceVerification
+
+		return $data;
 	}
 }

@@ -119,7 +119,7 @@ window.tsfem_e_import = function () {
 		handler(
 			'import',
 			formData,
-			( new Date() ).toLocaleTimeString() + " :: " + l10n.i18n.logMessages.requestImport.replace(
+			( new Date() ).toLocaleTimeString() + ' :: ' + l10n.i18n.logMessages.requestImport.replace(
 				'%s',
 				form.querySelector( `[value="${formData.get( `${formNs}[choosePlugin]` )}"]` )?.dataset.title
 			)

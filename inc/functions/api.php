@@ -285,6 +285,7 @@ namespace TSF_Extension_Manager {
 	 * Builds AJAX error notice and returns it.
 	 *
 	 * @since 1.5.0
+	 * @since 2.7.0 Renamed the 'notice' index to 'message'.
 	 *
 	 * @param bool   $success The success status, either boolean, int, or other.
 	 * @param string $notice  The error notice displayed to the user.
@@ -293,7 +294,7 @@ namespace TSF_Extension_Manager {
 	 *                        Defaults to $success state: 'success'/'error'
 	 * @return array {
 	 *    'success' => mixed $success,
-	 *    'notice'  => string $notice,
+	 *    'message' => string $notice,
 	 *    'code'    => int $code,
 	 *    'type'    => string $type
 	 * }
@@ -301,7 +302,7 @@ namespace TSF_Extension_Manager {
 	function get_ajax_notice( $success = false, $notice = '', $code = -1, $type = '' ) {
 		return [
 			'success' => $success,
-			'notice'  => $notice,
+			'message' => $notice,
 			'code'    => \intval( $code ),
 			'type'    => $type ?: ( $success ? 'success' : 'error' ),
 		];

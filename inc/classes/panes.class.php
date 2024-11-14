@@ -109,41 +109,40 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_tsfem_update_extension() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_manager_settings() ) {
-
-			$case = '';
-			$slug = '';
-
-			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-				// As data is passed to UNIX/IIS for file existence, strip as much as possible.
-				$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
-				$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
-			}
-
-			if ( $case && $slug ) {
-				$options = [
-					'extension' => $slug,
-				];
-
-				if ( 'activate' === $case ) {
-					$results = $this->activate_extension( $options, true );
-					$type    = 'success';
-				} elseif ( 'deactivate' === $case ) {
-					$results = $this->deactivate_extension( $options, true );
-					$type    = 'success';
-				} else {
-					$results = $this->get_ajax_notice( false, 10101 );
-				}
-			} else {
-				$results = $this->get_ajax_notice( false, 10102 );
-			}
-
-			$data = compact( 'slug', 'case' );
-
-			$this->send_json( compact( 'results', 'data' ), $type ?? 'failure' );
+		if (
+			   ! \TSF_Extension_Manager\can_do_manager_settings()
+			|| \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => $this->get_ajax_notice( false, 10102 ) ] );
 		}
 
-		exit;
+		$send = [];
+
+		// As data is passed to UNIX/IIS for file existence, strip as much as possible.
+		$slug = $this->s_ajax_string( $_POST['slug'] ?? '' );
+		$case = $this->s_ajax_string( $_POST['case'] ?? '' );
+
+		$send['slug'] = $slug;
+		$send['case'] = $case;
+
+		switch ( $slug ? $case : false ) {
+			case 'activate':
+				// Always send success due to asynchronicity (another tab could already have activated).
+				$send['notice']  = $this->activate_extension( [ 'extension' => $slug ], true ) ?: null;
+				$send['success'] = true;
+				break;
+			case 'deactivate':
+				// Always send success due to asynchronicity (another tab could already have deactivated).
+				$send['notice']  = $this->deactivate_extension( [ 'extension' => $slug ], true ) ?: null;
+				$send['success'] = true;
+				break;
+			default:
+				$send['notice'] = $this->get_ajax_notice( false, 10101 );
+		}
+
+		$send['success'] ??= false;
+
+		\wp_send_json( $send );
 	}
 
 	/**
@@ -157,50 +156,67 @@ class Panes extends API {
 	 */
 	final public function _wp_ajax_tsfem_update_extension_desc_footer() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_manager_settings() ) {
-
-			$slug = '';
-			$case = '';
-
-			if ( \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) ) {
-				// As data is passed to UNIX/IIS for file existence, strip as much as possible.
-				$slug = isset( $_POST['slug'] ) ? $this->s_ajax_string( $_POST['slug'] ) : ''; // Input var, sanitization OK.
-				$case = isset( $_POST['case'] ) ? $this->s_ajax_string( $_POST['case'] ) : ''; // Input var, sanitization OK.
-			}
-
-			if ( $slug && $case ) {
-				// Tell the plugin we're on the correct page.
-				$this->ajax_is_tsf_extension_manager_page( true );
-
-				$this->get_verification_codes( $_instance, $bits );
-
-				Extensions::initialize( 'ajax_layout', $_instance, $bits );
-
-				if ( 'activate' === $case ) {
-					// Check for menu slug in order to add it.
-					$header = Extensions::get( 'ajax_get_extension_header', $slug );
-
-					if ( ! empty( $header['MenuSlug'] ) )
-						$this->_set_ajax_menu_link( $header['MenuSlug'], \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE );
-				}
-
-				$html = Extensions::get( 'ajax_get_extension_desc_footer', $slug );
-
-				Extensions::reset();
-			}
-
-			if ( isset( $html ) ) {
-				$data = $html;
-				$type = 'success';
-			} else {
-				$data = '';
-				$type = 'error';
-			}
-
-			$this->send_json( $data, $type );
+		if (
+			   ! \TSF_Extension_Manager\can_do_manager_settings()
+			|| \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error();
 		}
 
-		exit;
+		$send = [];
+
+		// As data is passed to UNIX/IIS for file existence, strip as much as possible.
+		$slug = $this->s_ajax_string( $_POST['slug'] ?? '' );
+		$case = $this->s_ajax_string( $_POST['case'] ?? '' );
+
+		if ( $slug && $case ) {
+			// Tell the plugin we're on the correct page. We require this to conditionally load certain traits.
+			$this->ajax_is_tsf_extension_manager_page( true ); // TODO figure how to comment me and clean is_tsf_extension_manager_page
+
+			$this->get_verification_codes( $_instance, $bits );
+
+			Extensions::initialize( 'ajax_layout', $_instance, $bits );
+
+			// Check for menu slug in extension header, so we can add a link to the footer.
+			if ( 'activate' === $case ) {
+				$header = Extensions::get( 'ajax_get_extension_header', $slug );
+
+				if ( ! empty( $header['MenuSlug'] ) ) {
+					$menu_slug = \sanitize_key( $header['MenuSlug'] );
+
+					if ( $menu_slug && \current_user_can( \TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE ) ) {
+						// (untested) If the extension is already activated, these will add duplicated menu callbacks:
+						// one from the plugin/extension, one from this. This is inconsequential.
+
+						// Register parent slug.
+						\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+							? \tsf()->admin()->menu()->register_top_menu_page()
+							: \tsf()->add_menu_link();
+
+						// Add arbitrary menu contents to known menu slug.
+						\add_submenu_page(
+							\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+								? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
+								: \tsf()->seo_settings_page_slug,
+							'1', // page_title
+							'1', // menu_title
+							\TSF_EXTENSION_MANAGER_EXTENSION_ADMIN_ROLE, // capability
+							$menu_slug, // slug
+							'__return_empty_string', // callback
+						);
+					}
+				}
+			}
+
+			$send['html']    = Extensions::get( 'ajax_get_extension_desc_footer', $slug );
+			$send['success'] = true;
+
+			Extensions::reset();
+		}
+
+		$send['success'] ??= false;
+
+		\wp_send_json( $send );
 	}
 
 	/**

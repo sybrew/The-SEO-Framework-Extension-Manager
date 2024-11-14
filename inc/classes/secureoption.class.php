@@ -155,20 +155,16 @@ final class SecureOption extends Secure_Abstract {
 			$value = $old_value;
 
 			if ( \wp_doing_ajax() ) {
-				$notice = \esc_html__(
-					"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
-					'the-seo-framework-extension-manager'
-				);
-
-				\tsfem()->send_json(
-					[
-						'results' => \TSF_Extension_Manager\get_ajax_notice( false, $notice, -1 ),
-					],
-					'failure'
-				);
-
-				\wp_die();
-				return;
+				\wp_send_json_error( [
+					'notice' => \TSF_Extension_Manager\get_ajax_notice(
+						false,
+						\esc_html__(
+							"Options have been altered outside of this plugin's scope. Please deactivate your account and try again.",
+							'the-seo-framework-extension-manager'
+						),
+						-1,
+					),
+				] );
 			}
 		}
 

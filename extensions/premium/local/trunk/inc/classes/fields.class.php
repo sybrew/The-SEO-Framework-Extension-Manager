@@ -297,9 +297,9 @@ final class Fields {
 					[
 						\__( 'The price range of the items or services this department provides.', 'the-seo-framework-extension-manager' ),
 						/* translators: backticks are markdown for code blocks! */
-						\__( 'Can be a range with absolute numbers such as `$1-5`, or `$10 - $50.95`.', 'the-seo-framework-extension-manager' ),
+						\__( 'This can be a range of absolute numbers such as `$1-5`, or `$10 - $50.95`.', 'the-seo-framework-extension-manager' ),
 						/* translators: backticks are markdown for code blocks! */
-						\__( 'Can be a relative price indication, where `$` means relatively inexpensive and `$$$$` extremely expensive.', 'the-seo-framework-extension-manager' ),
+						\__( 'This can be a relative pricing indication, where `$` means relatively inexpensive compared to similar businesses, and `$$$$` extremely expensive.', 'the-seo-framework-extension-manager' ),
 						/* translators: backticks are markdown for code blocks! */
 						\__( 'All other currency symbols are accepted. Thousand separators are not allowed, only dots may be used to specify cents.', 'the-seo-framework-extension-manager' ),
 					],

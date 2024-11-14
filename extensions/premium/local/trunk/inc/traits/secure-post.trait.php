@@ -151,33 +151,34 @@ trait Secure_Post {
 
 		$send = [];
 
-		// Nothing to see here.
-		if ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			return;
-
 		/**
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
-			$type            = 'failure';
-			$send['results'] = $this->get_ajax_notice( false, 1070100 );
+		if (
+				! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ] )
+			|| ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ?? null )
+		) {
+			$send['notice'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
 			$options = \wp_unslash( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$success = $this->update_stale_options_array_by_key( $options );
+
+			// Always process.
 			$this->process_all_stored_data();
 
 			if ( ! $success ) {
-				$type            = 'failure';
-				$send['results'] = $this->get_ajax_notice( false, 1070101 );
+				$send['notice'] = $this->get_ajax_notice( false, 1070101 );
 			} else {
-				$type            = 'success';
-				$send['results'] = $this->get_ajax_notice( true, 1070102 );
+				$send['notice']  = $this->get_ajax_notice( true, 1070102 );
 				$send['sdata']   = $this->get_stale_option( key( $options ) );
+				$send['success'] = true;
 			}
 		}
 
-		\tsfem()->send_json( $send, $type ?? 'failure' );
+		$send['success'] ??= false;
+
+		\wp_send_json( $send );
 	}
 
 	/**
@@ -239,17 +240,14 @@ trait Secure_Post {
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
-		if ( \wp_doing_ajax() ) {
-			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
-				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
-					$this->send_ajax_form_json_validation();
-				}
-			}
-
-			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
+		if (
+			   \TSF_Extension_Manager\can_do_extension_settings()
+			&& \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false )
+		) {
+			$this->send_ajax_form_json_validation();
 		}
 
-		exit;
+		\wp_send_json_error( [ 'notice' => $this->get_ajax_notice( false, 1079001 ) ] );
 	}
 
 	/**
@@ -266,10 +264,8 @@ trait Secure_Post {
 	 */
 	private function send_ajax_form_json_validation() {
 
-		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
-
+		// phpcs:ignore, WordPress.Security.NonceVerification -- Caller must check for this.
 		$post_data = $_POST['data'] ?? '';
-
 		parse_str( $post_data, $data );
 
 		$send = [];
@@ -278,29 +274,27 @@ trait Secure_Post {
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( empty( $data )
-		|| ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		|| ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		if (
+			   ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ] )
+			|| ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ?? null )
 		) {
-			$type            = 'failure';
-			$send['results'] = $this->get_ajax_notice( false, 1070200 );
+			$send['notice'] = $this->get_ajax_notice( false, 1070200 );
 		} else {
-
 			$options = \wp_unslash( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] );
 			$data    = $this->pack_data( $options, true );
 
 			if ( ! $data ) {
-				$type            = 'failure';
-				$send['results'] = $this->get_ajax_notice( false, 1070201 );
+				$send['notice'] = $this->get_ajax_notice( false, 1070201 );
 			} else {
-				$type            = 'success';
-				$send['results'] = $this->get_ajax_notice( true, 1070202 );
+				$send['notice']  = $this->get_ajax_notice( true, 1070202 );
 				$send['tdata']   = '<script type="application/ld+json">' . "\n$data\n" . '</script>'; // This goes to Google for preview.
+				$send['success'] = true;
 			}
 		}
 
-		\tsfem()->send_json( $send, $type ?? 'failure' );
+		$send['success'] ??= false;
 
+		\wp_send_json( $send );
 		// phpcs:enable, WordPress.Security.NonceVerification.Missing
 	}
 }

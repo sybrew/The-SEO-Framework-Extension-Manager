@@ -1058,13 +1058,10 @@ trait Extensions_Actions {
 
 		if ( \wp_doing_ajax() ) {
 			// TODO send slug?
-			\tsfem()->send_json(
-				[
-					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
-					'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
-				],
-				'failure'
-			);
+			\wp_send_json_error( [
+				'notice'      => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
+				'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
+			] );
 		} else {
 			$error_notice .= '<br>' . \esc_html__( 'Extension has not been activated.', 'the-seo-framework-extension-manager' );
 			$error_notice .= "<p><strong>Error message:</strong> <br>$advanced_error_notice</p>";

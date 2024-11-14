@@ -418,42 +418,41 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_update_settings() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
-			$tsfem  = \tsfem();
-			$option = '';
-			$send   = [];
-			if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-				// Option is cleaned and requires unpacking.
-				$option = isset( $_POST['option'] ) ? $tsfem->s_ajax_string( $_POST['option'] ) : ''; // Sanitization, input var OK.
-				$value  = isset( $_POST['value'] ) ? \absint( $_POST['value'] ) : 0;                  // Input var OK.
-			} else {
-				$send['results'] = $this->get_ajax_notice( false, 1019002 );
-			}
-
-			if ( $option ) {
-				// Unpack option.
-				$_option = \TSF_Extension_Manager\FormFieldParser::get_last_value( \TSF_Extension_Manager\FormFieldParser::umatosa( $option ) );
-				$options = [
-					$_option => $value,
-				];
-
-				$response = $this->api_update_remote_settings( $options, true );
-
-				// Get new options, regardless of response.
-				foreach ( [ 'uptime_setting', 'performance_setting' ] as $setting ) {
-					$send['settings'][ $setting ] = $this->get_option( $setting, 0 );
-				}
-
-				$type            = empty( $response['success'] ) ? 'failure' : 'success';
-				$send['results'] = $response;
-			} else {
-				$send['results'] = $this->get_ajax_notice( false, 1010702 );
-			}
-
-			$tsfem->send_json( $send, $type ?? 'failure' );
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1019002 ) ] );
 		}
 
-		exit;
+		$option = \tsfem()->s_ajax_string( $_POST['option'] ?? '' );
+		$value  = \absint( $_POST['value'] ?? 0 );
+
+		$send = [];
+
+		if ( $option ) {
+			// Unpack option, get index name.
+			$_option = \TSF_Extension_Manager\FormFieldParser::get_last_value(
+				\TSF_Extension_Manager\FormFieldParser::umatosa( $option )
+			);
+			$options = [
+				$_option => $value,
+			];
+
+			$response = $this->api_update_remote_settings( $options, true );
+
+			// Get new options, regardless of response.
+			foreach ( [ 'uptime_setting', 'performance_setting' ] as $setting ) {
+				$send['settings'][ $setting ] = $this->get_option( $setting, 0 );
+			}
+
+			// Don't detail this on failure. It is not important now, and this feature may disappear.
+			$send['success'] = ! empty( $response['success'] );
+		} else {
+			$send['notice'] = $this->get_ajax_notice( false, 1010702 );
+		}
+
+		\wp_send_json( $send );
 	}
 
 	/**
@@ -461,85 +460,64 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.6 The extension access level is now controlled via another constant.
-	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	public function _wp_ajax_fetch_data() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
-
-			if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-				$status = [
-					'content' => null,
-					'type'    => 'unknown',
-					'notice'  => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-				];
-			} else {
-				$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0; // Input var OK.
-
-				$current_timeout = $this->get_remote_data_timeout();
-
-				if (
-						$this->is_remote_data_expired()
-					|| ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout
-				) {
-					// There's possibly new data found. This should certainly be true with statistics.
-					$api = $this->api_get_remote_data( true );
-
-					switch ( $api['code'] ) {
-						case 1010602:
-						case 1010603:
-							$type = 'requires_fix';
-							break;
-
-						default:
-							$type = $api['success'] ? 'success' : 'failure';
-					}
-
-					$status = [
-						'content' => [
-							'issues'   => $this->ajax_get_issues_data(),
-							'lc'       => $this->get_last_crawled_field(),
-							'settings' => [
-								'uptime_setting'      => $this->get_option( 'uptime_setting', 0 ),
-								'performance_setting' => $this->get_option( 'performance_setting', 0 ),
-							],
-						],
-						'type'    => $type,
-						'notice'  => $api['notice'],
-						'code'    => $api['code'],
-						// Get new timeout.
-						'timeout' => $current_timeout = $this->get_remote_data_timeout(),
-					];
-				} else {
-					// No new data has been found.
-					$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
-					$status  = [
-						'content' => null,
-						'type'    => 'yield_unchanged',
-						'notice'  => $this->get_try_again_notice( $seconds ),
-						'timeout' => $current_timeout,
-					];
-				}
-			}
-
-			if ( \WP_DEBUG ) {
-				$response = [
-					'status'   => $status,
-					'timeout'  => [
-						'old' => $timeout ?? null,
-						'new' => $current_timeout ?? null,
-					],
-					'response' => isset( $api ) ? [ 'response' => $api ] : [],
-				];
-			} else {
-				$response = [ 'status' => $status ];
-			}
-
-			\tsfem()->send_json( $response, null );
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1017001 ) ] );
 		}
 
-		exit;
+		$timeout         = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0; // Input var OK.
+		$current_timeout = $this->get_remote_data_timeout();
+
+		if (
+			   $this->is_remote_data_expired()
+			|| ( $timeout + $this->get_remote_data_buffer() ) < $current_timeout
+		) {
+			// There's possibly new data found. This should certainly be true with statistics.
+			$api = $this->api_get_remote_data( true );
+
+			switch ( $api['code'] ) {
+				case 1010602:
+				case 1010603:
+					$type = 'requires_fix';
+					break;
+
+				default:
+					$type = $api['success'] ? 'success' : 'failure';
+			}
+
+			$send = [
+				'content' => [
+					'issues'   => $this->ajax_get_issues_data(),
+					'lc'       => $this->get_last_crawled_field(),
+					'settings' => [
+						'uptime_setting'      => $this->get_option( 'uptime_setting', 0 ),
+						'performance_setting' => $this->get_option( 'performance_setting', 0 ),
+					],
+				],
+				'type'    => $type,
+				'notice'  => $api['notice'],
+				'code'    => $api['code'],
+				// Get new timeout.
+				'timeout' => $current_timeout = $this->get_remote_data_timeout(),
+			];
+		} else {
+			// No new data has been found.
+			$seconds = $current_timeout + $this->get_remote_data_buffer() - time();
+			$send    = [
+				'content' => null,
+				'type'    => 'yield_unchanged',
+				'notice'  => $this->get_try_again_notice( $seconds ),
+				'timeout' => $current_timeout,
+			];
+		}
+
+		\wp_send_json_success( $send );
 	}
 
 	/**
@@ -547,83 +525,61 @@ final class Admin extends Api {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.6 The extension access level is now controlled via another constant.
-	 * @TODO update to newer ajax handler.
 	 * @access private
 	 */
 	public function _wp_ajax_request_crawl() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
-
-			$timeout = null;
-
-			if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-				$status = [
-					'type'   => 'unknown',
-					'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
-				];
-			} else {
-				$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0; // Input var OK.
-
-				$current_timeout = $this->get_remote_crawl_timeout();
-
-				if (
-					   $this->can_request_next_crawl()
-					|| ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout
-				) {
-					// Crawl can be requested.
-					$api = $this->api_request_crawl( true );
-
-					switch ( $api['code'] ) {
-						case 1010504:
-							$type = 'yield_unchanged';
-							break;
-
-						case 1010502:
-						case 1010503:
-							$type = 'requires_fix';
-							break;
-
-						default:
-							$type = $api['success'] ? 'success' : 'failure';
-					}
-
-					// Get new timeout.
-					$current_timeout = $this->get_remote_crawl_timeout();
-
-					$status = [
-						'type'    => $type,
-						'code'    => $api['code'],
-						'notice'  => $api['notice'],
-						'timeout' => $current_timeout,
-					];
-				} else {
-					// Crawl has already been requested recently.
-					$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
-					$status  = [
-						'type'    => 'yield_unchanged',
-						'notice'  => $this->get_try_again_notice( $seconds ),
-						'timeout' => $current_timeout,
-					];
-				}
-			}
-
-			if ( \WP_DEBUG ) {
-				$response = [
-					'status'   => $status,
-					'timeout'  => [
-						'old' => $timeout ?? null,
-						'new' => $current_timeout ?? null,
-					],
-					'response' => isset( $api ) ? [ 'response' => $api ] : [],
-				];
-			} else {
-				$response = [ 'status' => $status ];
-			}
-
-			\tsfem()->send_json( $response, null );
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1016001 ) ] );
 		}
 
-		exit;
+		$timeout         = \absint( $_POST['remote_crawl_timeout'] ?? 0 );
+		$current_timeout = $this->get_remote_crawl_timeout();
+
+		if (
+			   $this->can_request_next_crawl()
+			|| ( $timeout + $this->get_request_next_crawl_buffer() ) < $current_timeout
+		) {
+			// Crawl can be requested.
+			$api = $this->api_request_crawl( true );
+
+			switch ( $api['code'] ) {
+				case 1010504:
+					$type = 'yield_unchanged';
+					break;
+
+				case 1010502:
+				case 1010503:
+					$type = 'requires_fix';
+					break;
+
+				default:
+					$type = $api['success'] ? 'success' : 'failure';
+			}
+
+			// Get new timeout.
+			$current_timeout = $this->get_remote_crawl_timeout();
+
+			$status = [
+				'type'    => $type,
+				'code'    => $api['code'],
+				'notice'  => $api['notice'],
+				'timeout' => $current_timeout,
+			];
+		} else {
+			// Crawl has already been requested recently.
+			$seconds = $current_timeout + $this->get_request_next_crawl_buffer() - time();
+			$send    = [
+				'type'    => 'yield_unchanged',
+				'notice'  => $this->get_try_again_notice( $seconds ),
+				'timeout' => $current_timeout,
+			];
+		}
+
+		\wp_send_json_success( $send );
 	}
 
 	/**
@@ -635,27 +591,21 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_get_requires_fix() {
 
-		if ( \wp_doing_ajax() ) {
-			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
-
-				$send = [];
-
-				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					// Initialize menu hooks.
-					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-						? \tsf()->admin()->menu()->register_top_menu_page()
-						: \tsf()->add_menu_link();
-
-					$this->_add_menu_link();
-
-					$send['html'] = $this->get_site_fix_fields();
-				}
-
-				\tsfem()->send_json( $send, null );
-			}
+		if (
+			   ! \TSF_Extension_Manager\can_do_extension_settings()
+			|| ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false )
+		) {
+			\wp_send_json_error( [ 'notice' => static::$instance->get_ajax_notice( false, 1018001 ) ] );
 		}
 
-		exit;
+		// Initialize menu hooks.
+		\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+			? \tsf()->admin()->menu()->register_top_menu_page()
+			: \tsf()->add_menu_link();
+
+		$this->_add_menu_link();
+
+		\wp_send_json_success( [ 'html' => $this->get_site_fix_fields() ] );
 	}
 
 	/**

@@ -71,6 +71,15 @@ TODO make a separate loader specifically when TSF is inactive (load installer + 
 TODO use TSF's memo API?
 
 TODO deJquerify as much as possible.
+	TODO definitely replace tsf-updated-gutenberg-
+
+TODO for transport, write the log to wp-content (in chunks?).
+	-> Do this even when not sending data to the browser.
+	-> Make a link to download the logs?
+		-> And to delete them?
+			-> Use a default format. Be wary of path traversal.
+
+TODO remove _init_final_static_extension_api_access.
 
 TODO require tsf and tsfem dependencies for all scripts
 	-> This eases debugging, e.g. via tsf.l10n.states.debug.
@@ -87,8 +96,26 @@ TODO myMart and myMart Pharmacy isn't clear, they should be separated.
 TODO trailing commas
 
 TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
+	-> is_wp_version_compatible() doesn't use an unadulterated version of wp_version
+		-> https://core.trac.wordpress.org/ticket/61781
+TODO wp_get_wp_version() is now available for $wp_version.
+	-> This is WP 6.7+. Just add TODOs or make a helper function to bridge this (if ! function_exists('wp_get_wp_version')...)
 
-= 2.7.0 =
+TODO indexnow, when?
+	-> https://theseoframework.com/changelog/5-0-5/
+
+TODO for Articles, exclude the default post state. If the article type is disabled, we should state "no article type" or similar.
+	-> edge case.
+
+TODO use `PHP_INT_SIZE === 4 ? 32 : 64` for bit testing?
+
+TODO this will be 3.0.0... so, you know, update 2.7.0 -> 3.0.0
+
+TODO considering writing out how we're going to add automated internal linking.
+	-> We could preemptively write links in the articles as they're being written. This opens the doors for special processing.
+	-> Alternatively, we could dynamically add them after the article is written. This must then be super lenient.
+
+= 3.0.0 =
 
 * June TODOth, 2024
 
@@ -97,10 +124,21 @@ TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
 * Honeypot now tests against fast commenters that accelerate time virtually.
 * Focus can now make API calls again when creating a new post using the latest Block Editor.
 
+**Tip:**
+This update comes with updated browser styles and scripts. Not all browsers get these for you; so, you may get unexpected errors. Try a different browser, or clear your favorite browser's cache. That ought to fix it immediately.
+
+These keyboard shortcuts should help you with that. Visit the page giving errors, and hit:
+
+- Safari Mac: <span class="nowrap"><kbd>CMD ⌘</kbd>+<kbd>OPTION ⌥</kbd>+<kbd>R</kbd></span>
+- Chrome/Firefox Mac: <span class="nowrap"><kbd>CMD ⌘</kbd>+<kbd>SHIFT ⇧</kbd>+<kbd>R</kbd></span>
+- Windows: <span class="nowrap"><kbd>CTRL ^</kbd>+<kbd>SHIFT ⇧</kbd>+<kbd>R</kbd></span>
+- Linux: <kbd>CTRL ^</kbd>+<kbd>Alt ⌥</kbd>+<kbd>T</kbd>, good luck.
+
 **Detailed log:**
 
 * **The plugin database version is now at `2700`.**
 * **Note:** Downgrading to an earlier version of this plugin might cause all extensions to become deactivated.
+* **Note:** We overhauled how we handle AJAX notices. The scripts in your browser may be outdated after updating.
 * **Changed:**
 	* We decoupled the active extensions option from the API activation options. This means that extensions will no longer be deactivated after a full disconnect (e.g., after site migration).
 	* The update API now engages even if WordPress is not checking this specific plugin. We found that users still accidentally downgraded to the WordPress.org version because of Core issues [44118](https://core.trac.wordpress.org/ticket/44118) and [61055](https://core.trac.wordpress.org/ticket/61055).

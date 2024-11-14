@@ -288,7 +288,7 @@ final class ExtensionSettings {
 		}
 
 		if ( empty( $store ) )
-			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 18101 ) ], 'failure' );
+			\wp_send_json_error( [ 'notice' => $this->get_ajax_notice( false, 18101 ) ] );
 
 		$success = [];
 
@@ -312,41 +312,26 @@ final class ExtensionSettings {
 			if ( \in_array( true, $success, true ) ) {
 				// Some data got saved.
 				// TODO do something with the failures (when we implement a save-all button).
-				\tsfem()->send_json(
-					[
-						'results' => $this->get_ajax_notice( false, 18102 ),
-						'data'    => $data,
-					],
-					'failure'
-				);
+				\wp_send_json_error( [
+					'notice' => $this->get_ajax_notice( false, 18102 ),
+					'data'   => $data,
+				] );
 			} else {
-				\tsfem()->send_json(
-					[
-						'results' => $this->get_ajax_notice( false, 18103 ),
-						'data'    => $data,
-					],
-					'failure'
-				);
+				// No data got saved.
+				\wp_send_json_error( [
+					'notice' => $this->get_ajax_notice( false, 18103 ),
+					'data'   => $data,
+				] );
 			}
 		}
 
-		if ( \count( $success ) > 1 ) {
-			\tsfem()->send_json(
-				[
-					'results' => $this->get_ajax_notice( true, 18104 ),
-					'data'    => $data,
-				],
-				'success'
-			);
-		} else {
-			\tsfem()->send_json(
-				[
-					'results' => $this->get_ajax_notice( true, 18105 ),
-					'data'    => $data,
-				],
-				'success'
-			);
-		}
+		\wp_send_json_success( [
+			'notice' => $this->get_ajax_notice(
+				false,
+				\count( $success ) > 1 ? 18104 : 18105,
+			),
+			'data'   => $data,
+		] );
 	}
 
 	/**

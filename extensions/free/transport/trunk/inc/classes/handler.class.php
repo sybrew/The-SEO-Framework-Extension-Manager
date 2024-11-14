@@ -71,7 +71,16 @@ final class Handler {
 	 * @since 1.0.0
 	 *
 	 * @TODO add better comment... this is private scope, so eh.
-	 * @param array $args Data containing reason et al.
+	 * @param array $args Data containing reason: {
+	 *   Logger\Server $server     : The logger server object,
+	 *   array         $poll_data  : An array of poll data : {
+	 *       array  $notice : The error notice array,
+	 *       string $logMsg : A message to show in the logged,
+	 *     }
+	 *   string        $logger_uid : The logged unique ID,
+	 *   string        $event      : The halting event name,
+	 *   bool          $success    : The halting event type,
+	 * }
 	 */
 	private function _halt_server( $args ) {
 		if ( $args['server']->is_streaming() ) {
@@ -79,7 +88,10 @@ final class Handler {
 			$args['server']->flush();
 			exit;
 		} else {
-			\tsfem()->send_json( $args['poll_data'], $args['type'] );
+			\wp_send_json( [
+				'data'    => $args['poll_data'],
+				'success' => $args['success'],
+			] );
 		}
 	}
 
@@ -115,7 +127,7 @@ final class Handler {
 					'poll_data'  => [ 'results' => $this->get_ajax_notice( false, 1060200 ) ],
 					'logger_uid' => $logger_uid,
 					'event'      => 'tsfem-e-transport-failure',
-					'type'       => 'failure',
+					'success'    => false,
 				] );
 
 			if ( ! isset( $supported_importers[ $import_settings['choosePlugin'] ?? '' ] ) )
@@ -124,7 +136,7 @@ final class Handler {
 					'poll_data'  => [ 'results' => $this->get_ajax_notice( false, 1060201 ) ],
 					'logger_uid' => $logger_uid,
 					'event'      => 'tsfem-e-transport-failure',
-					'type'       => 'failure',
+					'success'    => false,
 				] );
 		}
 
@@ -138,7 +150,7 @@ final class Handler {
 					'poll_data'  => [ 'results' => $this->get_ajax_notice( false, 1060202 ) ],
 					'logger_uid' => $logger_uid,
 					'event'      => 'tsfem-e-transport-locked',
-					'type'       => 'failure',
+					'success'    => false,
 				] );
 
 			// Register this AFTER the lock is set. Otherwise, it may clear the lock in another thread.
@@ -293,7 +305,7 @@ final class Handler {
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
-									'type'       => 'failure',
+									'success'    => false,
 								] );
 							}
 
@@ -312,7 +324,7 @@ final class Handler {
 									],
 									'logger_uid' => $logger_uid,
 									'event'      => 'tsfem-e-transport-timeout',
-									'type'       => 'failure',
+									'success'    => false,
 								] );
 							}
 							break;
@@ -435,7 +447,7 @@ final class Handler {
 				],
 				'logger_uid' => $logger_uid,
 				'event'      => 'tsfem-e-transport-crash',
-				'type'       => 'failure',
+				'success'    => false,
 			] );
 		}
 
@@ -481,7 +493,7 @@ final class Handler {
 			],
 			'logger_uid' => $logger_uid,
 			'event'      => 'tsfem-e-transport-done',
-			'type'       => 'success',
+			'success'    => true,
 		] );
 		exit;
 	}

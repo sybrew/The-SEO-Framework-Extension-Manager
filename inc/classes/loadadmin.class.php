@@ -62,7 +62,8 @@ final class LoadAdmin extends AdminPages {
 		\add_action( 'admin_init', [ $this, '_handle_update_post' ] );
 
 		// Listener for AJAX.
-		\add_action( 'admin_init', [ $this, '_prepare_admin_ajax' ] );
+		if ( \wp_doing_ajax() )
+			AJAX::load_actions();
 	}
 
 	/**
@@ -296,19 +297,6 @@ final class LoadAdmin extends AdminPages {
 		$args = \WP_DEBUG ? [ 'did-' . $options['nonce-action'] => 'true' ] : [];
 		redirect( $this->seo_extensions_page_slug, $args );
 		exit;
-	}
-
-	/**
-	 * Loads AJAX actions.
-	 *
-	 * @since 2.1.0
-	 */
-	public function _prepare_admin_ajax() {
-		if ( \wp_doing_ajax() ) {
-			$this->get_verification_codes( $_instance, $bits );
-			AJAX::initialize( '', $_instance, $bits );
-			AJAX::set_secret_api_key( $this->_create_protected_api_access_key( AJAX::class ) );
-		}
 	}
 
 	/**
@@ -695,69 +683,6 @@ final class LoadAdmin extends AdminPages {
 	}
 
 	/**
-	 * Sets admin menu links so the pages can be safely used within AJAX.
-	 *
-	 * Does not forge a callback function, instead, the callback returns an empty string.
-	 *
-	 * @since 1.2.0
-	 * @access private
-	 *
-	 * @param string $slug       The menu slug. Required.
-	 * @param string $capability The menu's required access capability.
-	 * @return bool True on success, false on failure.
-	 */
-	public function _set_ajax_menu_link( $slug, $capability = 'manage_options' ) {
-
-		$slug       = \sanitize_key( $slug );
-		$capability = \sanitize_key( $capability );
-
-		if ( empty( $slug ) || ! \current_user_can( $capability ) )
-			return false;
-
-		static $parent_set = false;
-		static $set        = [];
-
-		if ( ! $parent_set ) {
-			// Set parent slug.
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \tsf()->admin()->menu()->register_top_menu_page()
-				: \tsf()->add_menu_link();
-			$parent_set = true;
-		}
-
-		if ( isset( $set[ $slug ] ) )
-			return $set[ $slug ];
-
-		// Add arbitrary menu contents to known menu slug.
-		return $set[ $slug ] = (bool) \add_submenu_page(
-			\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-				? \tsf()->admin()->menu()->get_top_menu_args()['menu_slug'] // parent_slug
-				: \tsf()->seo_settings_page_slug,
-			'1', // page_title
-			'1', // menu_title
-			$capability,
-			$slug,
-			'__return_empty_string', // callback
-		);
-	}
-
-	/**
-	 * Determines if TSFEM AJAX has determined the correct page.
-	 *
-	 * @since 1.0.0
-	 * @NOTE Warning: Only set after valid nonce verification pass.
-	 *
-	 * @param bool $set If true, it registers the AJAX page.
-	 * @return bool True if set, false otherwise.
-	 */
-	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
-
-		static $memo = false;
-
-		return $set ? $memo = true : $memo;
-	}
-
-	/**
 	 * Activates extension based on form input.
 	 *
 	 * @since 1.0.0
@@ -766,8 +691,9 @@ final class LoadAdmin extends AdminPages {
 	 *
 	 * @param array $options The form/request input options.
 	 * @param bool  $ajax    Whether this is an AJAX request.
-	 * @return bool|string False on invalid input or on activation failure.
-	 *         String on success or AJAX.
+	 * @return bool|array|string False on invalid input or on activation failure.
+	 *                           Array on AJAX.
+	 *                           String on non-AJAX success.
 	 */
 	protected function activate_extension( $options, $ajax = false ) {
 

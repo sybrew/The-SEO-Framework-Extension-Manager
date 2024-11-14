@@ -125,9 +125,7 @@ final class Ajax {
 			}
 		}
 
-		$results = $this->get_ajax_notice( false, 1109001 );
-		$tsfem->send_json( compact( 'results' ), 'failure' );
-		exit;
+		\wp_send_json_error( [ 'notice' => $this->get_ajax_notice( false, 1109001 ) ] );
 	}
 
 	/**
@@ -152,7 +150,7 @@ final class Ajax {
 
 		if ( ! \strlen( $keyword ) || ! $language ) {
 			// How in the...
-			$send['results'] = $this->get_ajax_notice( false, 1100101 );
+			$send['notice'] = $this->get_ajax_notice( false, 1100101 );
 		} else {
 			$response = $this->get_api_response( 'lexicalform', compact( 'keyword', 'language' ) );
 			$response = json_decode( $response );
@@ -164,55 +162,57 @@ final class Ajax {
 						// Note that JS converts Unicode spacing to ASCII, so if the dictionary API includes more languages, we may need to adjust.
 						if ( preg_match( '/[\p{Z}\h\v]/', $keyword ) ) {
 							// Suggest not using spaces.
-							$send['results'] = $this->get_ajax_notice( false, 1100111 );
+							$send['notice'] = $this->get_ajax_notice( false, 1100111 );
 						} else {
-							$send['results'] = $this->get_ajax_notice( false, 1100102 );
+							$send['notice'] = $this->get_ajax_notice( false, 1100102 );
 						}
 						break;
 
 					case 'REQUEST_LIMIT_REACHED':
-						$send['results'] = $this->get_ajax_notice( false, 1100108 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100108 );
 						break;
 
 					case 'LANGUAGE_SUPPORT_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100109 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100109 );
 						break;
 
 					case 'LICENSE_TOO_LOW':
-						$send['results'] = $this->get_ajax_notice( false, 1100110 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100110 );
 						break;
 
 					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100103 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100103 );
 				}
 			} elseif ( ! isset( $response->data ) ) {
-				$send['results'] = $this->get_ajax_notice( false, 1100104 );
+				$send['notice'] = $this->get_ajax_notice( false, 1100104 );
 			} else {
 				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->forms ) ) {
 
-					$type = 'success'; // The API responded as intended, although the data may not be useful.
+					$send['success'] = true; // The API responded as intended, although the data may not be useful.
 
 					$send['data']['forms'] = $_data->forms ?: [];
 
 					if ( ! $send['data']['forms'] ) {
-						$send['results'] = $this->get_ajax_notice( false, 1100105 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100105 );
 					} else {
-						$send['results'] = $this->get_ajax_notice( true, 1100106 );
+						$send['notice'] = $this->get_ajax_notice( true, 1100106 );
 					}
 				} else {
 					if ( isset( $_data->error ) )
 						$send['data']['error'] = $_data->error;
 
-					$send['results'] = $this->get_ajax_notice( false, 1100107 );
+					$send['notice'] = $this->get_ajax_notice( false, 1100107 );
 				}
 			}
 		}
 
-		$tsfem->send_json( $send, $type ?? 'failure' );
+		$send['success'] ??= false;
+
+		\wp_send_json( $send );
 
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
@@ -241,7 +241,7 @@ final class Ajax {
 
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
 			// How in the...
-			$send['results'] = $this->get_ajax_notice( false, 1100301 );
+			$send['notice'] = $this->get_ajax_notice( false, 1100301 );
 		} else {
 			$keyword = $form['value'];
 			$form    = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
@@ -252,28 +252,28 @@ final class Ajax {
 			if ( empty( $response->success ) ) {
 				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
-						$send['results'] = $this->get_ajax_notice( false, 1100302 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100302 );
 						break;
 
 					case 'REQUEST_LIMIT_REACHED':
-						$send['results'] = $this->get_ajax_notice( false, 1100303 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100303 );
 						break;
 
 					case 'LANGUAGE_SUPPORT_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100309 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100309 );
 						break;
 
 					case 'LICENSE_TOO_LOW':
-						$send['results'] = $this->get_ajax_notice( false, 1100310 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100310 );
 						break;
 
 					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100304 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100304 );
 				}
 			} elseif ( ! isset( $response->data ) ) {
-				$send['results'] = $this->get_ajax_notice( false, 1100305 );
+				$send['notice'] = $this->get_ajax_notice( false, 1100305 );
 			} else {
 				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
@@ -289,22 +289,23 @@ final class Ajax {
 							&& strtolower( $send['data']['inflections'][0] ) === strtolower( $keyword )
 						)
 					) {
-						$send['results'] = $this->get_ajax_notice( false, 1100306 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100306 );
 					} else {
-						$type            = 'success';
-						$send['results'] = $this->get_ajax_notice( true, 1100307 );
+						$send['success'] = true;
+						$send['notice']  = $this->get_ajax_notice( true, 1100307 );
 					}
 				} else {
 					if ( isset( $_data->error ) )
 						$send['data']['error'] = $_data->error;
 
-					$send['results'] = $this->get_ajax_notice( false, 1100308 );
+					$send['notice'] = $this->get_ajax_notice( false, 1100308 );
 				}
 			}
 		}
 
-		$tsfem->send_json( $send, $type ?? 'failure' );
+		$send['success'] ??= false;
 
+		\wp_send_json( $send );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 
@@ -332,7 +333,7 @@ final class Ajax {
 
 		if ( ! $tsfem->has_required_array_keys( $form, $form_keys ) || ! $language ) {
 			// How in the...
-			$send['results'] = $this->get_ajax_notice( false, 1100201 );
+			$send['notice'] = $this->get_ajax_notice( false, 1100201 );
 		} else {
 			$form = json_encode( $tsfem->filter_keys( $form, $form_keys ) );
 
@@ -342,52 +343,54 @@ final class Ajax {
 			if ( empty( $response->success ) ) {
 				switch ( $response->data->error ?? '' ) {
 					case 'WORD_NOT_FOUND':
-						$send['results'] = $this->get_ajax_notice( false, 1100202 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100202 );
 						break;
 
 					case 'REQUEST_LIMIT_REACHED':
-						$send['results'] = $this->get_ajax_notice( false, 1100208 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100208 );
 						break;
 
 					case 'LANGUAGE_SUPPORT_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100209 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100209 );
 						break;
 
 					case 'LICENSE_TOO_LOW':
-						$send['results'] = $this->get_ajax_notice( false, 1100210 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100210 );
 						break;
 
 					default:
 					case 'REMOTE_API_BODY_ERROR':
 					case 'REMOTE_API_ERROR':
-						$send['results'] = $this->get_ajax_notice( false, 1100203 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100203 );
 				}
 			} elseif ( ! isset( $response->data ) ) {
-				$send['results'] = $this->get_ajax_notice( false, 1100204 );
+				$send['notice'] = $this->get_ajax_notice( false, 1100204 );
 			} else {
 				$_data = \is_string( $response->data ) ? json_decode( $response->data ) : (object) $response->data;
 
 				if ( isset( $_data->synonyms ) ) {
-					$type = 'success'; // The API responded as intended, although the data may not be useful.
+					// The API responded as intended, although the data may not be useful.
+					$send['success'] = true;
 
 					$send['data']['synonyms'] = $_data->synonyms ?: [];
 
 					if ( ! $send['data']['synonyms'] ) {
-						$send['results'] = $this->get_ajax_notice( false, 1100205 );
+						$send['notice'] = $this->get_ajax_notice( false, 1100205 );
 					} else {
-						$send['results'] = $this->get_ajax_notice( true, 1100206 );
+						$send['notice'] = $this->get_ajax_notice( true, 1100206 );
 					}
 				} else {
 					if ( isset( $_data->error ) )
 						$send['data']['error'] = $_data->error;
 
-					$send['results'] = $this->get_ajax_notice( false, 1100207 );
+					$send['notice'] = $this->get_ajax_notice( false, 1100207 );
 				}
 			}
 		}
 
-		$tsfem->send_json( $send, $type ?? 'failure' );
+		$send['success'] ??= false;
 
+		\wp_send_json( $send );
 		// phpcs:enable, WordPress.Security.NonceVerification
 	}
 }

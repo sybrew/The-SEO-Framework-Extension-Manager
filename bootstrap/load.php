@@ -43,7 +43,6 @@ function _init_locale( $ignore = false ) {
 	static $has_loaded = false;
 
 	if ( ! $has_loaded && ( \is_admin() || $ignore ) ) {
-
 		\load_plugin_textdomain(
 			'the-seo-framework-extension-manager',
 			false,

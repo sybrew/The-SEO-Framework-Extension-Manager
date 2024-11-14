@@ -156,7 +156,7 @@ class Core {
 		}
 
 		// Some AJAX functions require Extension layout traits to be loaded.
-		if ( \is_admin() && \wp_doing_ajax() ) {
+		if ( \wp_doing_ajax() ) {
 			// This should not ever be a security issue. However, sanity.
 			if ( \TSF_Extension_Manager\can_do_manager_settings() && \check_ajax_referer( 'tsfem-ajax-nonce', 'nonce', false ) )
 				$this->ajax_is_tsf_extension_manager_page( true );
@@ -240,175 +240,6 @@ class Core {
 			$this->hash_options( $options ),
 			(string) \get_option( "tsfem_i_{$this->get_options_instance_key()}" )
 		);
-	}
-
-	/**
-	 * Destroys output buffer and headers, if any.
-	 *
-	 * To be used with AJAX to clear any PHP errors or dumps.
-	 * This works best when php.ini directive "output_buffering" is set to "1".
-	 *
-	 * @since 1.0.0
-	 * @since 1.2.0 : 0. Renamed from _clean_ajax_response_header().
-	 *                1. Now clears all levels, rather than only one.
-	 *                2. Now removes all headers previously set.
-	 *                3. Now returns a numeric value. From 0 to 3.
-	 * @access private
-	 *
-	 * @return int (bitwise) : {
-	 *    0 = 00 : Did nothing.
-	 *    1 = 01 : Cleared PHP output buffer.
-	 *    2 = 10 : Cleared HTTP headers.
-	 *    3 = 11 : Did 1 and 2.
-	 * }
-	 */
-	final public function _clean_response_header() {
-
-		$retval = 0;
-		$i      = 0;
-
-		$level = ob_get_level();
-		if ( $level ) {
-			while ( $level-- ) ob_end_clean();
-			$retval |= 2 ** $i;
-		}
-
-		$i++;
-
-		// wp_ajax sets required headers early.
-		if ( ! headers_sent() ) {
-			header_remove();
-			$retval |= 2 ** $i;
-		}
-
-		return $retval;
-	}
-
-	/**
-	 * Sets status header.
-	 *
-	 * @since 1.2.0
-	 * @uses status_header(): https://developer.wordpress.org/reference/functions/status_header/
-	 *
-	 * @param bool   $code The status code.
-	 * @param string $type The header type.
-	 */
-	final public function set_status_header( $code = 200, $type = '' ) {
-
-		switch ( $type ) {
-			case 'json':
-				header( 'Content-Type: application/json; charset=' . \get_option( 'blog_charset' ) );
-				break;
-
-			case 'html':
-			default:
-				header( 'Content-Type: text/html; charset=' . \get_option( 'blog_charset' ) );
-		}
-
-		if ( $code )
-			\status_header( $code );
-	}
-
-	/**
-	 * Sends out JSON data for AJAX.
-	 *
-	 * Sends JSON object as integer. When it's -1, it's uncertain if the response
-	 * is actually JSON encoded. When it's 1, we can safely assume it's JSON.
-	 *
-	 * @since 1.2.0
-	 * @since 2.6.0 Now outputs boolean key 'success' if $type is of 'success'.
-	 * @TODO set a standard for $data, i.e. [ 'results'=>[],'html'=>"", etc. ];
-	 *
-	 * @param mixed  $data The data that needs to be send.
-	 * @param string $type The status type.
-	 */
-	final public function send_json( $data, $type = 'success' ) {
-
-		$json = -1;
-
-		$r = $this->_clean_response_header();
-
-		if ( $r & 2 ) {
-			$this->set_status_header( 200, 'json' );
-			$json = 1;
-		} else {
-			$this->set_status_header( null, 'json' );
-		}
-
-		$success = 'success' === $type;
-
-		echo json_encode( compact( 'data', 'type', 'json', 'success' ) );
-		exit;
-	}
-
-	/**
-	 * Generates AJAX POST object for looping AJAX callbacks.
-	 *
-	 * Example usage includes downloading files over AJAX, which is otherwise not
-	 * possible.
-	 *
-	 * Includes enforced nonce security. However, the user capability allowance
-	 * MUST be determined beforehand.
-	 * Note that the URL can't be generated if the menu pages aren't set.
-	 *
-	 * @since 1.2.0
-	 * @since 2.4.0 Added nonce capability requirement, extra sanity for when the caller fails to do so.
-	 * @access private
-	 * @ignore unused. Leftover from the dumped release of Transporter (old version).
-	 *
-	 * @param array $args - Required : {
-	 *    'options_key'   => string The extension options key,
-	 *    'options_index' => string The extension options index,
-	 *    'menu_slug'     => string The extension options menu slug,
-	 *    'nonce_name'    => string The extension POST actions nonce name,
-	 *    'request_name'  => string The extension desired POST action request index key name,
-	 *    'nonce_action'  => string The extesnion desired POST action request full name,
-	 *    'capability'    => string The extesnion desired user capability,
-	 * }
-	 * @return array|bool False on failure; array containing the jQuery.post object.
-	 */
-	final public function _get_ajax_post_object( $args ) {
-
-		$required = [
-			'options_key',
-			'options_index',
-			'menu_slug',
-			'nonce_name',
-			'request_name',
-			'nonce_action',
-			'capability',
-		];
-
-		// If the required keys aren't found, bail.
-		if ( ! $this->has_required_array_keys( $args, $required ) )
-			return false;
-
-		$url = \menu_page_url( $args['menu_slug'], false );
-
-		if ( ! $url )
-			return false;
-
-		$args = [
-			'options_key'   => \sanitize_key( $args['options_key'] ),
-			'options_index' => \sanitize_key( $args['options_index'] ),
-			'nonce_name'    => \sanitize_key( $args['nonce_name'] ),
-		];
-
-		$post = [
-			'url'    => $url,
-			'method' => 'post',
-			'data'   => [
-				$args['options_key'] => [
-					$args['options_index'] => [
-						'nonce-action' => $args['request_name'],
-					],
-				],
-				$args['nonce_name']  => \current_user_can( $required['capability'] ) ? \wp_create_nonce( $args['nonce_action'] ) : '',
-				'_wp_http_referer'   => \esc_attr( \wp_unslash( $_SERVER['REQUEST_URI'] ) ), // input var & sanitization ok.
-			],
-		];
-
-		return \map_deep( $post, 'esc_js' );
 	}
 
 	/**
@@ -1415,5 +1246,21 @@ class Core {
 					|| ( $_GET['page'] ?? null ) === $this->seo_extensions_menu_page_hook; // phpcs:ignore, WordPress.Security.NonceVerification;
 			}
 		}
+	}
+
+	/**
+	 * Determines if TSFEM AJAX has determined the correct page.
+	 *
+	 * @since 1.0.0
+	 * @NOTE Warning: Only set after valid nonce verification pass.
+	 *
+	 * @param bool $set If true, it registers the AJAX page.
+	 * @return bool True if set, false otherwise.
+	 */
+	protected function ajax_is_tsf_extension_manager_page( $set = false ) {
+
+		static $memo = false;
+
+		return $set ? $memo = true : $memo;
 	}
 }
