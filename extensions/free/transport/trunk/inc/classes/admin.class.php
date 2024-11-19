@@ -494,9 +494,6 @@ final class Admin {
 		 */
 		$this->init_errors();
 
-		// Add something special for Vivaldi & Android.
-		\add_action( 'admin_head', [ \tsfem(), '_output_theme_color_meta' ], 0 );
-
 		return true;
 	}
 	/**

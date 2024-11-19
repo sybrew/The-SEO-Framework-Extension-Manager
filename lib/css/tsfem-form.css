@@ -61,11 +61,11 @@
 }
 
 .tsfem-form-collapse-header-good .tsfem-form-collapse-icon {
-	color: #0cc34b;
+	color: #00a32a;
 }
 
 .tsfem-form-collapse-header-error .tsfem-form-collapse-icon {
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsfem-form-collapse-header:hover,
@@ -113,7 +113,7 @@ body.rtl .tsfem-form-title-icon:before {
 
 .tsfem-form-title-icon-okay:before,
 .tsfem-form-title-icon-good:before {
-	color: #0cc34b;
+	color: #00a32a;
 	font-size: 1.1em;
 	content: "\f147";
 	margin-left: -2px;
@@ -127,7 +127,7 @@ body.rtl .tsfem-form-title-icon-good:before {
 
 .tsfem-form-title-icon-okay:before,
 .tsfem-form-title-icon-warning:before {
-	color: #ffa01b;
+	color: #ffae00;
 }
 .tsfem-form-title-icon-warning:before {
 	content: "\f227";
@@ -135,7 +135,7 @@ body.rtl .tsfem-form-title-icon-good:before {
 
 .tsfem-form-title-icon-error:before,
 .tsfem-form-title-icon-bad:before {
-	color: #dd3811;
+	color: #d63638;
 	content: "\f227";
 }
 .tsfem-form-title-icon-error:before {
@@ -402,7 +402,7 @@ body.rtl .tsfem-form-multi-a11y-wrap .tsfem-form-multi-a11y-wrap {
 }
 
 .tsfem-form-iterator-timer-invalid span {
-	background: #d14b44;
+	background: #d63638;
 }
 
 /**------------------------------------
@@ -449,7 +449,7 @@ input[type=radio]
 	textarea
 ):invalid,
 .tsfem-form-validate .tsfem-form-multi-invalid {
-	border-left: 3px solid #d14b44;
+	border-left: 3px solid #d63638;
 }
 
 .tsfem-form-validate .tsfem-form-setting-input :is(

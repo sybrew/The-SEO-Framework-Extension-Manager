@@ -336,7 +336,7 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 	select,
 	textarea
 ):focus {
-	border-color: #057f9c;
+	border-color: #2271b1;
 	box-shadow: 0 0 2px rgba(66,144,183,.8);
 }
 
@@ -381,7 +381,7 @@ body.rtl #tsfem-top-wrap .tsfem-title .tsfem-logo > svg {
 
 .tsfem-button-red,
 .tsfem-button-red:is(:hover, :focus) {
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsfem-button-primary,
@@ -692,7 +692,7 @@ body.rtl .tsfem-button-loading:after {
 
 #tsfem-connect-wrap h3 {
 	font-size: 1.66em;
-	color: #057f9c;
+	color: #2271b1;
 	font-weight: 400;
 }
 
@@ -806,7 +806,7 @@ body.rtl .tsfem-button-loading:after {
 
 .tsfem-pane-header h3 {
 	font-size: 1.33em;
-	color: #057f9c;
+	color: #2271b1;
 	font-weight: 400;
 	justify-content: flex-start;
 	width: max-content;
@@ -885,7 +885,7 @@ h4:is(
 	margin: 0 0 1em;
 	font-size: 1.16em;
 	font-weight: 400;
-	color: #057f9c;
+	color: #2271b1;
 }
 
 .tsfem-cp-buttons {
@@ -962,13 +962,13 @@ h4:is(
 .tsfem-dashicon.tsfem-error:after,
 .tsfem-ajax.tsfem-error:after {
 	content: "\f158";
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsfem-dashicon.tsfem-success:after,
 .tsfem-ajax.tsfem-success:after {
 	content: "\f147";
-	color: #0cc34b;
+	color: #00a32a;
 }
 
 .tsfem-dashicon.tsfem-unknown:after,
@@ -979,17 +979,17 @@ h4:is(
 
 .tsfem-dashicon.tsfem-warning:after {
 	content: "\f227";
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-dashicon.tsfem-edit:after {
 	content: "\f464";
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-dashicon.tsfem-close:after {
 	content: "\f158";
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 @keyframes tsfem-spin {
@@ -1114,7 +1114,7 @@ h4:is(
 	padding: 0;
 	font-size: 1.4em;
 	line-height: 1.2em;
-	color: #057f9c;
+	color: #2271b1;
 	font-weight: 400;
 }
 
@@ -1227,7 +1227,7 @@ body.rtl .tsfem-modal-dismiss {
 }
 
 .tsfem-modal-dismiss:hover {
-	color: #d14b44;
+	color: #d63638;
 }
 
 .tsfem-modal-dismiss:before {

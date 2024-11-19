@@ -222,9 +222,6 @@ class AdminPages extends AccountActivation {
 		 */
 		$this->revalidate_subscription();
 
-		// Add something special for Vivaldi and Android.
-		\add_action( 'admin_head', [ $this, '_output_theme_color_meta' ], 0 );
-
 		// We don't want other plugins crashing this... Output early.
 		\add_action( 'tsfem_content', [ $this, '_output_symbols' ], 0 );
 
@@ -302,17 +299,6 @@ class AdminPages extends AccountActivation {
 	 */
 	final public function _output_em_footer() {
 		$this->get_view( 'layout/general/footer' );
-	}
-
-	/**
-	 * Outputs theme color meta tag for Vivaldi and mobile browsers.
-	 * Does not always work. So many browser bugs... It's just fancy.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	final public function _output_theme_color_meta() {
-		$this->get_view( 'layout/general/meta' );
 	}
 
 	/**

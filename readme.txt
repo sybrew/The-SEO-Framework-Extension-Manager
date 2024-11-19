@@ -56,18 +56,6 @@ TODO when visiting the Extension Manager page, the notice notifyer isn't counted
 
 TODO update pot file.
 
-TODO test if TSF's installer still works with WP 6.5
-	-> Yes, but slowly for some reason (might be a fluke, tested 1x).
-	-> Also, the installer buttons don't "sync" when installed via the tickbox, but this is a non-issue.
-		-> Solve in next update?
-			-> Does this only affect the plugin activation page?
-		-> Remove the "install" button and only show "view details" instead? This will be a bit more intuitive and familiar for the user.
-
-TODO make a separate loader specifically when TSF is inactive (load installer + updater).
-	-> And only when TSF is active and at the right version, load the main plugin.
-		-> Here, we can freely assume TSF is available.
-	-> We already do this, but it's not as clear as can be.
-
 TODO use TSF's memo API?
 
 TODO deJquerify as much as possible.
@@ -87,7 +75,7 @@ TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
 
 = 2.7.0 =
 
-* June TODOth, 2024
+* November 19th, 2024
 
 **Feature highlights:**
 
@@ -105,6 +93,7 @@ TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
 		* Once this grace period is passed, your account will need to be upgraded manually again.
 		* Automatic reconnecting is tried every 2 minutes.
 		* You are also offered to manually switch the license key during this grace period.
+	* We've updated the color scheme slightly to be more aligned with modern WordPress and The SEO Framework v5.1.
 * **Improved:**
 	* We changed the WordPress version compatibility test by using an unmodified variable, instead of one plugins can alter.
 	* We modernized critical JavaScript code, slightly improving browser interaction performance.

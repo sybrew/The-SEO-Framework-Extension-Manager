@@ -24,30 +24,30 @@
 }
 
 .tsfem-e-inpost-icon-good {
-	color: #0cc34b;
+	color: #00a32a;
 }
 
 .tsfem-e-inpost-icon-okay,
 .tsfem-e-inpost-icon-warning {
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-e-inpost-icon-warning {
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-e-inpost-icon-bad,
 .tsfem-e-inpost-icon-error {
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsfem-e-inpost-icon-unknown,
 .tsfem-e-inpost-icon-loading {
-	color: #057f9c;
+	color: #2271b1;
 }
 
 .tsfem-e-inpost-icon-edit {
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-e-inpost-icon-okay:after,

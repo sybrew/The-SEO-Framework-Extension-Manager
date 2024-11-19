@@ -109,25 +109,21 @@ body.rtl .tsfem-e-monitor-title-icon:before {
 }
 
 .tsfem-e-monitor-icon-good {
-	color: #0cc34b;
+	color: #00a32a;
 }
 
 .tsfem-e-monitor-icon-okay,
 .tsfem-e-monitor-icon-warning {
-	color: #ffa01b;
-}
-
-.tsfem-e-monitor-icon-warning {
-	color: #ffa01b;
+	color: #ffae00;
 }
 
 .tsfem-e-monitor-icon-bad,
 .tsfem-e-monitor-icon-error {
-	color: #dd3811;
+	color: #d63638;
 }
 
 .tsfem-e-monitor-icon-unknown {
-	color: #057f9c;
+	color: #2271b1;
 }
 
 .tsfem-e-monitor-title-icon-okay:before,
