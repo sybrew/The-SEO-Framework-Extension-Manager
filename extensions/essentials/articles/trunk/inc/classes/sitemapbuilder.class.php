@@ -143,9 +143,9 @@ final class SitemapBuilder extends SitemapBuilderTransition {
 		$timestamp = (bool) \apply_filters( 'the_seo_framework_sitemap_timestamp', true );
 
 		if ( $timestamp ) {
-			$content .= sprintf(
+			$content .= \sprintf(
 				'<!-- %s -->',
-				sprintf(
+				\sprintf(
 					/* translators: %s = timestamp */
 					\esc_html__( 'Sitemap is generated on %s', 'autodescription' ),
 					\current_time( 'Y-m-d H:i:s \G\M\T' )

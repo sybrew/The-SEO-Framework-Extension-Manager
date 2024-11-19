@@ -112,6 +112,7 @@ TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
 	* We modernized some PHP code, slightly improving server response times.
 	* We changed the load sequence of the plugin to remove action overhead. It now loads at `init`, instead of `plugins_loaded`.
 		* Simultaneously, it resolves a deprecation notice with WordPress 6.7, which may be [reverted in 6.7.1](https://core.trac.wordpress.org/ticket/62462).
+	* Added PHP 8.4 OPcache optimizations.
 * **Removed:**
 	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.
 		* The transient data for this (`tsfem_latest_seo_feed`) will be cleaned up automatically by WordPress.

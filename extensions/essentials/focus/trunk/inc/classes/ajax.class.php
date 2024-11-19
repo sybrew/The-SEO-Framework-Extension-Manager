@@ -127,7 +127,6 @@ final class Ajax {
 
 		$results = $this->get_ajax_notice( false, 1109001 );
 		$tsfem->send_json( compact( 'results' ), 'failure' );
-		exit;
 	}
 
 	/**

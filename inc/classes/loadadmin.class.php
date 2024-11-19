@@ -176,7 +176,7 @@ final class LoadAdmin extends AdminPages {
 
 		do_dismissible_notice(
 			convert_markdown(
-				sprintf(
+				\sprintf(
 					/* translators: Markdown. %s = API URL */
 					\esc_html__(
 						'This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`.',
@@ -565,12 +565,12 @@ final class LoadAdmin extends AdminPages {
 
 				case 'data':
 					foreach ( $value as $k => $v ) {
-						$parts[] = sprintf( 'data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
+						$parts[] = \sprintf( 'data-%s="%s"', \esc_attr( $k ), \esc_attr( $v ) );
 					}
 			}
 		}
 
-		return sprintf( '<a %s>%s</a>', implode( ' ', $parts ), \esc_html( $content ) );
+		return \sprintf( '<a %s>%s</a>', implode( ' ', $parts ), \esc_html( $content ) );
 	}
 
 	/**
@@ -948,9 +948,9 @@ final class LoadAdmin extends AdminPages {
 	 */
 	protected function register_extension_state_change_notice( $code, $slug ) {
 		$this->set_error_notice( [
-			$code => sprintf(
+			$code => \sprintf(
 				'<strong><em>(%s)</em></strong>',
-				sprintf(
+				\sprintf(
 					/* translators: %s = extension slug */
 					\esc_html__( 'Extension slug: %s', 'the-seo-framework-extension-manager' ),
 					$slug

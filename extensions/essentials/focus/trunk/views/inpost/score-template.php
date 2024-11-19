@@ -46,18 +46,18 @@ output_scores:;
 				\esc_attr( $scoring->get_id( $type ) ),
 				'tsfem-e-focus-assessment-wrap tsf-flex',
 				$scoring->get_data_attributes( $type ), // phpcs:ignore, WordPress.Security.EscapeOutput -- already escaped.
-				sprintf(
+				\sprintf(
 					'<span class=tsfem-e-focus-assessment-title-wrap>%s%s</span>',
-					sprintf(
+					\sprintf(
 						'<span class="tsfem-e-focus-assessment-rating tsfem-e-inpost-icon %s"></span>',
 						\esc_attr( $scoring->get_icon_class( $type ) )
 					),
-					sprintf(
+					\sprintf(
 						'<strong class=tsfem-e-focus-assessment-title>%s</strong>',
 						\esc_html( $scoring->get_title( $type ) )
 					)
 				),
-				sprintf(
+				\sprintf(
 					'<span class=tsfem-e-focus-assessment-description>%s</span>',
 					\esc_html( $scoring->get_description( $type ) )
 				),

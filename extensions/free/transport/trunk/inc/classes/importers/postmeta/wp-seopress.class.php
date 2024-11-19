@@ -50,8 +50,6 @@ final class WP_SEOPress extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\WP_SEOPress::get_instance()
 		);
 
-		$tsf = \tsf();
-
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]

@@ -538,7 +538,7 @@ final class InpostGUI {
 	 * @return string The option prefix.
 	 */
 	public static function get_option_key( $option, $index ) {
-		return sprintf( '%s[%s][%s]', static::META_PREFIX, $index, $option );
+		return \sprintf( '%s[%s][%s]', static::META_PREFIX, $index, $option );
 	}
 }
 

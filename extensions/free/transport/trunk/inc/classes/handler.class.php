@@ -192,7 +192,7 @@ final class Handler {
 							[ $item_id, $total_items, $item_iterator ] = $data;
 							$store->store(
 								\esc_html(
-									sprintf(
+									\sprintf(
 										/* translators: 1 = item number, 2 = total items, 3 = item ID */
 										\__( 'Processing item %1$d of %2$d. (ID: %3$d)', 'the-seo-framework-extension-manager' ),
 										$item_iterator,
@@ -323,7 +323,7 @@ final class Handler {
 							$store->store( '&nbsp;' );
 							$store->store(
 								\esc_html(
-									sprintf(
+									\sprintf(
 										/* translators: 1,2 = data location. */
 										\__( 'Starting import from "%1$s" to "%2$s".', 'the-seo-framework-extension-manager' ),
 										$from[1],
@@ -337,7 +337,7 @@ final class Handler {
 							$store->store( '&nbsp;' );
 							$store->store(
 								\esc_html(
-									sprintf(
+									\sprintf(
 										/* translators: %s = unique identifier name */
 										\__( 'Starting transmutation of "%s".', 'the-seo-framework-extension-manager' ),
 										$name
@@ -350,7 +350,7 @@ final class Handler {
 							$store->store( '&nbsp;' );
 							$store->store(
 								\esc_html(
-									sprintf(
+									\sprintf(
 										/* translators: %s = data location */
 										\__( 'Starting deletion of "%s".', 'the-seo-framework-extension-manager' ),
 										$from[1]
@@ -362,7 +362,7 @@ final class Handler {
 							[ $total_items ] = $data;
 							$store->store(
 								\esc_html(
-									sprintf(
+									\sprintf(
 										/* translators: %d = number of items found. */
 										\_n(
 											'Found %d item.',
@@ -423,7 +423,7 @@ final class Handler {
 					'logMsg'  => (
 						$streaming ? '' : $store->get_human_readable_flush_store_to_string() . "\n"
 					) . \esc_html(
-						sprintf(
+						\sprintf(
 							$streaming && ( $_REQUEST['retryAllowed'] ?? 0 )
 								/* translators: %s = Unknown error reason */
 								? \__( 'Server stopped execution. Reason: "%s". Automatically restarting (total numbers might decrease)&hellip;', 'the-seo-framework-extension-manager' )
@@ -467,7 +467,7 @@ final class Handler {
 							$skipped,
 							$failed,
 						]
-					) . "\n" . sprintf(
+					) . "\n" . \sprintf(
 						/* translators: %d = number */
 						\_n(
 							'Deleted %d old entry.',

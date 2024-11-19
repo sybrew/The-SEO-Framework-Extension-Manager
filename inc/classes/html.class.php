@@ -95,7 +95,7 @@ final class HTML {
 	public static function make_inline_tooltip( $content, $title, $title_html = '', $classes = [] ) {
 
 		$title      = \esc_attr( \wp_strip_all_tags( $title ) );
-		$title_html = $title_html ? sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
+		$title_html = $title_html ? \sprintf( 'data-desc="%s"', \esc_attr( \esc_html( $title_html ) ) ) : '';
 
 		$tabindex = false;
 
@@ -135,7 +135,7 @@ final class HTML {
 		$selected = (string) $selected;
 		foreach ( $options as $entry ) {
 			$value = \esc_attr( $entry['value'] );
-			$out  .= sprintf(
+			$out  .= \sprintf(
 				'<option value="%s"%s>%s</option>',
 				$value,
 				$value === $selected ? ' selected' : '',

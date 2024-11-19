@@ -145,14 +145,14 @@ trait Extensions_Layout {
 
 			$class = static::is_extension_active( $extension ) ? 'tsfem-extension-activated' : 'tsfem-extension-deactivated';
 
-			$entry = sprintf(
+			$entry = \sprintf(
 				'<div class=tsfem-extension-entry-inner><div class="tsfem-extension-entry tsfem-flex tsfem-flex-noshrink tsfem-flex-row %s" id="%s">%s</div></div>',
 				$class,
 				\esc_attr( $id . '-extension-entry' ),
 				$wrap
 			);
 
-			$output .= sprintf( '<div class=tsfem-extension-entry-wrap>%s</div>', $entry );
+			$output .= \sprintf( '<div class=tsfem-extension-entry-wrap>%s</div>', $entry );
 		}
 
 		return $output;
@@ -172,13 +172,13 @@ trait Extensions_Layout {
 	private static function make_extension_list_icon( $extension, $size = '100' ) {
 
 		if ( ! empty( $extension['slug'] ) ) {
-			$icon = sprintf(
+			$icon = \sprintf(
 				'<svg class=tsfem-extension-entry-icon alt="extension icon" width=%1$s height=%1$s><use href=#tsfem-logo-%2$s></use></svg>',
 				\esc_attr( $size ),
 				\esc_attr( $extension['slug'] )
 			);
 		} else {
-			$icon = sprintf(
+			$icon = \sprintf(
 				'<image href="%1$s" width="%2$s" height="%2$s" alt="extension fallback icon" />',
 				\esc_url( \tsfem()->get_image_file_location( 'exticon-fallback.svg', true ), [ 'https', 'http' ] ),
 				\esc_attr( $size )
@@ -198,9 +198,9 @@ trait Extensions_Layout {
 	 */
 	private static function make_extension_list_about( $extension ) {
 
-		$header = sprintf(
+		$header = \sprintf(
 			'<div class="tsfem-extension-header tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>',
-			sprintf(
+			\sprintf(
 				'<h4 class=tsfem-extension-title>%s</h4>',
 				convert_markdown(
 					\esc_html( static::get_extension_header( $extension['slug'] )['Name'] ),
@@ -210,9 +210,9 @@ trait Extensions_Layout {
 			'<h5 class=tsfem-extension-type>' . \esc_html( static::get_i18n( $extension['type'] ) ) . '</h5>'
 		);
 
-		$subheader = sprintf(
+		$subheader = \sprintf(
 			'<div class="tsfem-extension-subheader tsfem-flex tsfem-flex-row tsfem-flex-noshrink">%s%s</div>',
-			sprintf(
+			\sprintf(
 				'<span class="tsfem-extension-party %s" title="%s"></span>',
 				'first' === $extension['party'] ? 'tsfem-extension-first-party-icon' : 'tsfem-extension-third-party-icon',
 				\esc_attr( 'first' === $extension['party'] ? static::get_i18n( 'first-party' ) : static::get_i18n( 'third-party' ) )
@@ -246,7 +246,7 @@ trait Extensions_Layout {
 		foreach ( $buttons as $button )
 			$buttons_output .= static::get_extension_button_form( $extension['slug'], $button['type'], $button['disabled'] );
 
-		$buttons_output = sprintf(
+		$buttons_output = \sprintf(
 			'<div class="tsfem-extension-actions-wrap tsfem-flex tsfem-flex-row tsfem-flex-nogrowshrink">%s</div>',
 			$buttons_output
 		);
@@ -287,7 +287,7 @@ trait Extensions_Layout {
 		$disabled = $disabled || \array_key_exists( $slug, (array) \TSF_EXTENSION_MANAGER_FORCED_EXTENSIONS );
 
 		if ( $disabled ) {
-			$button = sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
+			$button = \sprintf( '<span class="%s tsfem-button-disabled">%s</span>', $s_class, \esc_html( $text ) );
 		} else {
 
 			static $memo;
@@ -307,18 +307,18 @@ trait Extensions_Layout {
 				$nonce        = $tsfem->_get_nonce_field( self::$nonce_action[ $nonce_key ], self::$nonce_name, true );
 				$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name[ $nonce_key ] );
 
-				$extension = sprintf(
+				$extension = \sprintf(
 					'<input type=hidden name="%s" value="%s">',
 					$memo['input_name'],
 					$s_slug
 				);
-				$submit    = sprintf(
+				$submit    = \sprintf(
 					'<input type=submit name=submit id="tsfem-activate-submit[%s]" class="%s" value="%s">',
 					$s_slug,
 					$s_class,
 					\esc_attr( $text )
 				);
-				$nojs      = sprintf(
+				$nojs      = \sprintf(
 					'<form action="%s" method=post id="tsfem-activate-form[%s]" class=hide-if-tsf-js autocomplete=off data-form-type=other>%s</form>',
 					$memo['admin_url'],
 					$s_slug,
@@ -326,7 +326,7 @@ trait Extensions_Layout {
 				);
 
 			js:;
-				$js = sprintf(
+				$js = \sprintf(
 					'<button type=button id="tsfem-activate[%s]" class="hide-if-no-tsf-js %s" data-slug="%s" data-case="%s">%s</button>',
 					$s_slug,
 					$s_class,
@@ -339,7 +339,7 @@ trait Extensions_Layout {
 				$button = $nojs . $js;
 		}
 
-		return sprintf( '<div class="tsfem-extension-action tsfem-flex tsfem-flex-row">%s</div>', $button );
+		return \sprintf( '<div class="tsfem-extension-action tsfem-flex tsfem-flex-row">%s</div>', $button );
 	}
 
 	/**
@@ -360,10 +360,10 @@ trait Extensions_Layout {
 		$footer = static::get_extension_description_footer( $extension );
 
 		// Put it all together.
-		$content  = sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
+		$content  = \sprintf( '<div class=tsfem-extension-description-header><span>%s</span></div>', $description );
 		$content .= $footer;
 
-		$output = sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
+		$output = \sprintf( '<div class="tsfem-extension-description tsfem-flex tsfem-flex-space">%s</div>', $content );
 
 		return $output;
 	}
@@ -389,11 +389,11 @@ trait Extensions_Layout {
 		// MAYBE: Make extension author element. (move link to what's already shown?)
 		//	$author = $data['Author'];
 		//	$author_url = $data['AuthorURI'];
-		//	$author = sprintf( '<a href="%s" target=_blank rel="nofollow noopener noreferrer" class=tsfem-extension-description-author title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
+		//	$author = \sprintf( '<a href="%s" target=_blank rel="nofollow noopener noreferrer" class=tsfem-extension-description-author title="%s">%s</a>', \esc_url( $author_url, [ 'https', 'http' ] ), \esc_attr( static::get_i18n( 'visit-author' ) ), \esc_html( $author ) );
 		// phpcs:enable
 
 		// Make extension version element.
-		$items['version'] = sprintf( '<span class=tsfem-extension-description-version>%s %s</span>',
+		$items['version'] = \sprintf( '<span class=tsfem-extension-description-version>%s %s</span>',
 			\esc_html( static::get_i18n( 'version' ) ),
 			convert_markdown( $data['Version'], [ 'strong', 'em' ] )
 		);
@@ -416,7 +416,7 @@ trait Extensions_Layout {
 		$_out = implode( ' | ', $items );
 
 		if ( $wrap ) {
-			$footer = sprintf( '<div class=tsfem-extension-description-footer>%s</div>', $_out );
+			$footer = \sprintf( '<div class=tsfem-extension-description-footer>%s</div>', $_out );
 		} else {
 			$footer = $_out;
 		}
@@ -457,7 +457,7 @@ trait Extensions_Layout {
 
 		if ( $incompatibility & ( \TSFEM_EXTENSION_TSF_INCOMPATIBLE | \TSFEM_EXTENSION_WP_INCOMPATIBLE ) ) {
 			$compat_class  = 'tsfem-error';
-			$compat_notice = sprintf(
+			$compat_notice = \sprintf(
 				/* translators: 1: Version number, 2: Version number */
 				\__( 'WordPress %1$s and The SEO Framework %2$s are required.', 'the-seo-framework-extension-manager' ),
 				$extension['requires'],

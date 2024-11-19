@@ -48,8 +48,6 @@ final class WordPress_SEO extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\WordPress_SEO::get_instance()
 		);
 
-		$tsf = \tsf();
-
 		/**
 		 * [ $from_table, $from_index ]
 		 * [ $to_table, $to_index ]

@@ -108,7 +108,7 @@ $tsfem = \tsfem();
 					vsprintf(
 						'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 						[
-							sprintf(
+							\sprintf(
 								'<input type=checkbox id=%s class="tsfem-e-focus-edit-subject-checkbox tsf-input-not-saved" value=1 disabled>',
 								\esc_attr( $action_ids['subject_edit'] )
 							),
@@ -143,7 +143,7 @@ $tsfem = \tsfem();
 			// 	vsprintf(
 			// 		'%s<label for=%s class="%s" title="%s" data-desc="%s"></label>',
 			// 		[
-			// 			sprintf(
+			// 			\sprintf(
 			// 				'<input type=checkbox id=%s class="tsfem-e-focus-highlight-subject-checkbox tsf-input-not-saved" value=1 disabled>',
 			// 				\esc_attr( $action_ids['highlighter'] )
 			// 			),
@@ -179,12 +179,12 @@ $tsfem = \tsfem();
 							'<div id=%s class="tsfem-e-focus-definition-selection-holder tsf-flex" data-option-id=%%1$s>%s%s</div>',
 							[
 								\esc_attr( $action_ids['definition_selector'] ),
-								sprintf(
+								\sprintf(
 									'<strong class=tsfem-e-focus-definition-selection-title>%s</strong>',
 									// It's syntactically homographic, but that might trigger complications due to the pronouncedly nature...
 									\esc_html__( 'Choose homonymous example:', 'the-seo-framework-extension-manager' )
 								),
-								sprintf(
+								\sprintf(
 									'<div class=tsfem-e-focus-definition-selection-tool>%s%s</div>',
 									'<span class="tsfem-e-focus-definition-editor tsfem-e-inpost-icon tsfem-e-inpost-icon-edit" data-for="%1$s" tabindex=0></span>',
 									'<select id=%1$s name=%1$s class=hidden value="%2$s" title="%3$s"></select>'

@@ -149,7 +149,7 @@ final class Admin extends Core {
 					'_desc'    => [
 						\__( 'Google News Sitemap', 'the-seo-framework-extension-manager' ),
 						[
-							sprintf(
+							\sprintf(
 								/* translators: %s = Articles FAQ link. Markdown. */
 								\__( 'For more information, please refer to the [Articles FAQ](%s).', 'the-seo-framework-extension-manager' ),
 								'https://theseoframework.com/extensions/articles/#faq'
@@ -158,7 +158,7 @@ final class Admin extends Core {
 								? ''
 								: ' ' . \__( 'To use this feature, you must enable the optimized sitemap of The SEO Framework.', 'the-seo-framework-extension-manager' )
 							),
-							$this->get_option( 'news_sitemap' ) ? sprintf(
+							$this->get_option( 'news_sitemap' ) ? \sprintf(
 								'[%s](%s)',
 								\__( 'View the news sitemap.', 'the-seo-framework-extension-manager' ),
 								sitemap_registry()->get_expected_sitemap_endpoint_url( 'news' )

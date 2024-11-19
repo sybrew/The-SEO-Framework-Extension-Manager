@@ -57,7 +57,7 @@ class Panes extends API {
 	 * @return string The escaped account actions overview.
 	 */
 	protected function get_extensions_actions_overview() {
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-pane-inner-wrap tsfem-actions-wrap">%s</div>',
 			vsprintf(
 				'<div class="tsfem-actions tsfem-flex">%s%s%s%s%s</div>',
@@ -92,11 +92,11 @@ class Panes extends API {
 		Extensions::set_account( $this->get_subscription_status() );
 
 		$content = Extensions::get( 'layout_content' );
-		$content = sprintf( '<div class=tsfem-extensions-overview-content>%s</div>', $content );
+		$content = \sprintf( '<div class=tsfem-extensions-overview-content>%s</div>', $content );
 
 		Extensions::reset();
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-extensions-wrap">%s</div>', $content );
+		return \sprintf( '<div class="tsfem-pane-inner-wrap tsfem-extensions-wrap">%s</div>', $content );
 	}
 
 	/**
@@ -217,7 +217,7 @@ class Panes extends API {
 		if ( $this->is_connected_user() )
 			$infos[] = \esc_html__( 'This information is updated every few minutes, infrequently.', 'the-seo-framework-extension-manager' );
 
-		$title = sprintf(
+		$title = \sprintf(
 			'<h4 class=tsfem-info-title>%s %s</h4>',
 			\esc_html__( 'Account information', 'the-seo-framework-extension-manager' ),
 			( $infos
@@ -256,7 +256,7 @@ class Panes extends API {
 
 		Layout::reset();
 
-		return sprintf( '<div class="tsfem-account-info tsfem-pane-section">%s%s</div>', $title, $output );
+		return \sprintf( '<div class="tsfem-account-info tsfem-pane-section">%s%s</div>', $title, $output );
 	}
 
 	/**
@@ -291,9 +291,9 @@ class Panes extends API {
 
 		Layout::reset();
 
-		$title = sprintf( '<h4 class=tsfem-form-title>%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
+		$title = \sprintf( '<h4 class=tsfem-form-title>%s</h4>', \esc_html__( 'Upgrade your account', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-cp-buttons tsfem-cp-buttons tsfem-pane-section">%s%s</div>', $title, $form );
+		return \sprintf( '<div class="tsfem-cp-buttons tsfem-cp-buttons tsfem-pane-section">%s%s</div>', $title, $form );
 	}
 
 	/**
@@ -310,7 +310,7 @@ class Panes extends API {
 		  || ! $this->are_options_valid()
 		) return '';
 
-		$title = sprintf(
+		$title = \sprintf(
 			'<h4 class=tsfem-form-title>%s</h4>',
 			\esc_html__( 'Transfer domain', 'the-seo-framework-extension-manager' )
 		);
@@ -324,7 +324,7 @@ class Panes extends API {
 		$form = Layout::get( 'transfer-domain-button' );
 		Layout::reset();
 
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-domain-transfer tsfem-pane-section tsfem-cp-buttons">%s%s</div>',
 			$title,
 			$form
@@ -349,7 +349,7 @@ class Panes extends API {
 		}
 		$infos[] = \esc_html__( 'Extension options will not be deleted.', 'the-seo-framework-extension-manager' );
 
-		$title = sprintf(
+		$title = \sprintf(
 			'<h4 class=tsfem-info-title>%s %s</h4>',
 			\esc_html__( 'Disconnect account', 'the-seo-framework-extension-manager' ),
 			HTML::make_inline_question_tooltip( implode( ' ', $infos ), implode( '<br>', $infos ) )
@@ -363,7 +363,7 @@ class Panes extends API {
 		$button = Layout::get( 'disconnect-button' );
 		Layout::reset();
 
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>',
 			$title,
 			$button
@@ -383,7 +383,7 @@ class Panes extends API {
 		$content = '';
 
 		if ( 'wcm' === $this->get_api_endpoint_type() ) {
-			$title = sprintf(
+			$title = \sprintf(
 				'<h4 class=tsfem-support-title>%s %s</h4>',
 				\esc_html__( 'Your WooCommerce.com subscription', 'the-seo-framework-extension-manager' ),
 				HTML::make_inline_question_tooltip( \__( 'Get support for The SEO Framework and manage your subscription via WooCommerce.com.', 'the-seo-framework-extension-manager' ) )
@@ -395,7 +395,7 @@ class Panes extends API {
 			];
 
 			foreach ( $buttons as $button )
-				$content .= sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
+				$content .= \sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
 		} else {
 			$buttons = [
 				[
@@ -408,7 +408,7 @@ class Panes extends API {
 				],
 			];
 			foreach ( $buttons as $button ) {
-				$content .= sprintf(
+				$content .= \sprintf(
 					'<div class=tsfem-cp-buttons>%s %s</div>',
 					$button['button'],
 					HTML::make_inline_question_tooltip( $button['tt'] )
@@ -416,7 +416,7 @@ class Panes extends API {
 			}
 		}
 
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-account-support tsfem-pane-section">%s%s</div>',
 			$title,
 			$content

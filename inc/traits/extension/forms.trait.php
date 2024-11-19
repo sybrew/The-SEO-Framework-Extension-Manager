@@ -50,7 +50,7 @@ trait Extension_Forms {
 	 * @return string Full field name
 	 */
 	public function _get_field_name( $name ) {
-		return sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $name );
+		return \sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $name );
 	}
 
 	/**
@@ -79,7 +79,7 @@ trait Extension_Forms {
 	 * @return string Full field id
 	 */
 	public function _get_field_id( $id ) {
-		return sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $id );
+		return \sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $id );
 	}
 
 	/**
@@ -149,7 +149,7 @@ trait Extension_Forms {
 	 * @return string Hidden form action input.
 	 */
 	public function _get_nonce_action_field( $request_name ) {
-		return sprintf(
+		return \sprintf(
 			'<input type=hidden name="%s" value="%s">',
 			$this->_get_field_name( 'nonce-action' ),
 			\esc_attr( $this->request_name[ $request_name ] )
@@ -184,10 +184,10 @@ trait Extension_Forms {
 	 */
 	public function _get_submit_button( $name, $title = '', $class = '' ) {
 
-		$title = $title ? sprintf( ' title="%s" ', \esc_attr( $title ) ) : '';
-		$class = $class ? sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class=tsfem-button-primary';
+		$title = $title ? \sprintf( ' title="%s" ', \esc_attr( $title ) ) : '';
+		$class = $class ? \sprintf( ' class="%s"', \esc_attr( $class ) ) : ' class=tsfem-button-primary';
 
-		return sprintf(
+		return \sprintf(
 			'<button type=submit name=submit %s%s>%s</button>',
 			$class,
 			$title,
@@ -272,7 +272,7 @@ trait Extension_Forms {
 				return '';
 			}
 
-			$output .= sprintf(
+			$output .= \sprintf(
 				'<form action="%s" method=post id=%s class="hide-if-tsf-js %s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( $url, [ 'https', 'http' ] ),
 				\esc_attr( $items['id'] ),
@@ -280,7 +280,7 @@ trait Extension_Forms {
 				$form
 			);
 
-			$button = sprintf(
+			$button = \sprintf(
 				'<a id=%s class="hide-if-no-tsf-js %s" href=javascript:; title="%s">%s</a>',
 				\esc_attr( $items['ajax-id'] ),
 				\esc_attr( $items['ajax-class'] ),
@@ -290,7 +290,7 @@ trait Extension_Forms {
 
 			$output .= $button;
 		} else {
-			$output .= sprintf(
+			$output .= \sprintf(
 				'<form action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( $url, [ 'https', 'http' ] ),
 				\esc_attr( $items['id'] ),

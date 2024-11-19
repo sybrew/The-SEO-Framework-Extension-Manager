@@ -534,7 +534,7 @@ final class ListEdit {
 	 * @return string The option prefix.
 	 */
 	public static function get_quick_option_key( $option, $index ) {
-		return sprintf( '%s[%s][%s]', static::META_PREFIX_QUICK, $index, $option );
+		return \sprintf( '%s[%s][%s]', static::META_PREFIX_QUICK, $index, $option );
 	}
 
 	/**
@@ -549,7 +549,7 @@ final class ListEdit {
 	 * @return string The option prefix.
 	 */
 	public static function get_bulk_option_key( $option, $index ) {
-		return sprintf( '%s[%s][%s]', static::META_PREFIX_BULK, $index, $option );
+		return \sprintf( '%s[%s][%s]', static::META_PREFIX_BULK, $index, $option );
 	}
 }
 

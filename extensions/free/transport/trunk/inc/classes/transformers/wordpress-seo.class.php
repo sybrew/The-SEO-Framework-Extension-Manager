@@ -199,7 +199,7 @@ class WordPress_SEO extends Core {
 			} elseif (
 				   ! \in_array( $type, static::$preserve, true )
 				&& ! preg_match(
-					sprintf( '/^(%s)/', static::$prefix_preserve_preg_quoted ),
+					\sprintf( '/^(%s)/', static::$prefix_preserve_preg_quoted ),
 					$type
 				)
 			) {

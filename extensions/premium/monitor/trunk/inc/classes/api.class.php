@@ -529,7 +529,7 @@ class Api extends Data {
 	 * @param int $seconds The seconds to try again in.
 	 */
 	protected function get_try_again_notice( $seconds ) {
-		return sprintf(
+		return \sprintf(
 			/* translators: %s = numeric seconds. */
 			\esc_html( \_n( 'Try again in %s second.', 'Try again in %s seconds.', $seconds, 'the-seo-framework-extension-manager' ) ),
 			(int) $seconds

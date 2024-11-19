@@ -20,11 +20,11 @@ use \TSF_Extension_Manager\{
 // phpcs:disable, VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- includes.
 
 create_type_field:;
-	$type_title = sprintf(
+	$type_title = \sprintf(
 		'<div><strong>%s</strong></div>',
 		$post_meta['type']['label']['title']
 	);
-	$type_info  = sprintf(
+	$type_info  = \sprintf(
 		'<div>%s</div>',
 		make_info(
 			$post_meta['type']['label']['desc'],
@@ -41,7 +41,7 @@ create_type_field:;
 	foreach ( $post_meta['type']['option']['select_values'] as $_value => $_name ) {
 		$_selected = $_value === $type_option_value ? ' selected=selected' : '';
 
-		$type_select_fields .= sprintf(
+		$type_select_fields .= \sprintf(
 			'<option value="%s"%s>%s</option>',
 			\esc_attr( $_value ),
 			$_selected,

@@ -1414,7 +1414,7 @@ class Core {
 				return $this->ajax_is_tsf_extension_manager_page();
 			} else {
 				return ( $GLOBALS['page_hook'] ?? null ) === $this->seo_extensions_menu_page_hook
-					|| ( $_GET['page'] ?? null ) === $this->seo_extensions_menu_page_hook; // phpcs:ignore, WordPress.Security.NonceVerification;
+					|| ( $_GET['page'] ?? null ) === $this->seo_extensions_menu_page_hook; // phpcs:ignore, WordPress.Security.NonceVerification
 			}
 		}
 	}

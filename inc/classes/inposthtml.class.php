@@ -132,11 +132,11 @@ final class InpostHTML {
 
 		switch ( $what ) {
 			case 'block':
-				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s</div>', $id, $content );
+				$content = \sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
 			case 'label':
-				$content = sprintf(
+				$content = \sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 							<div class="tsf-flex-setting-label-item tsf-flex">
@@ -151,7 +151,7 @@ final class InpostHTML {
 
 			case 'label-input':
 				$for or \tsf()->_doing_it_wrong( __METHOD__, 'Set the <code>$for</code> (3rd) parameter.' );
-				$content = sprintf(
+				$content = \sprintf(
 					'<div class="tsf-flex-setting-label tsf-flex" %s>
 						<div class="tsf-flex-setting-label-inner-wrap tsf-flex">
 							<label for="%s" class="tsf-flex-setting-label-item tsf-flex">
@@ -167,16 +167,16 @@ final class InpostHTML {
 
 			case 'input':
 			case 'content':
-				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s</div>', $id, $content );
+				$content = \sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s</div>', $id, $content );
 				break;
 
 			case 'block-open':
-				$content = sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s', $id, $content );
+				$content = \sprintf( '<div class="tsf-flex-setting tsf-flex" %s>%s', $id, $content );
 				break;
 
 			case 'input-open':
 			case 'content-open':
-				$content = sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s', $id, $content );
+				$content = \sprintf( '<div class="tsf-flex-setting-input tsf-flex" %s>%s', $id, $content );
 				break;
 
 			case 'block-close':
@@ -188,7 +188,7 @@ final class InpostHTML {
 			// phpcs:disable
 			// Not used.
 			// case 'checkbox':
-			// 	$content = sprintf( '<div class=tsf-checkbox-wrapper>%s</div>', $content );
+			// 	$content = \sprintf( '<div class=tsf-checkbox-wrapper>%s</div>', $content );
 			// 	break;
 			// phpcs:enable
 		}

@@ -811,13 +811,13 @@ final class Admin extends Api {
 			$output = Output::get_instance()->_build_pane_html( $issues, 'issues' );
 
 		if ( ! $output ) {
-			$output = sprintf(
+			$output = \sprintf(
 				'<div class=tsfem-e-monitor-issues-wrap-line><h4 class=tsfem-status-title>%s</h4></div>',
 				$this->get_string_no_data_found()
 			);
 		}
 
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">%s</div>', $output );
+		return \sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-issues-wrap">%s</div>', $output );
 	}
 
 	/**
@@ -840,7 +840,7 @@ final class Admin extends Api {
 
 		if ( empty( $data['info'] ) ) {
 			$found = false;
-			$data  = sprintf(
+			$data  = \sprintf(
 				'<div class=tsfem-e-monitor-issues-wrap-line><h4 class=tsfem-status-title>%s</h4></div>',
 				$this->get_string_no_data_found()
 			);
@@ -860,7 +860,7 @@ final class Admin extends Api {
 	 * @return string The parsed Control Panel overview HTML data.
 	 */
 	protected function get_cp_overview() {
-		return sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap">%s</div>', $this->get_cp_output() );
+		return \sprintf( '<div class="tsfem-pane-inner-wrap tsfem-e-monitor-cp-wrap">%s</div>', $this->get_cp_output() );
 	}
 
 	/**
@@ -871,7 +871,7 @@ final class Admin extends Api {
 	 * @return string The Control Panel pane output.
 	 */
 	protected function get_cp_output() {
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-e-monitor-cp tsfem-flex">%s</div>',
 			$this->get_account_information()
 				. $this->get_site_actions_view()
@@ -889,7 +889,7 @@ final class Admin extends Api {
 	 */
 	protected function get_site_actions_view() {
 
-		$title   = sprintf( '<h4 class=tsfem-cp-title>%s</h4>', \esc_html__( 'Actions', 'the-seo-framework-extension-manager' ) );
+		$title   = \sprintf( '<h4 class=tsfem-cp-title>%s</h4>', \esc_html__( 'Actions', 'the-seo-framework-extension-manager' ) );
 		$content = '';
 
 		$buttons = [
@@ -898,9 +898,9 @@ final class Admin extends Api {
 		];
 
 		foreach ( $buttons as $button )
-			$content .= sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
+			$content .= \sprintf( '<div class=tsfem-cp-buttons>%s</div>', $button );
 
-		return sprintf( '<div class="tsfem-e-monitor-cp-actions tsfem-pane-section">%s%s</div>', $title, $content );
+		return \sprintf( '<div class="tsfem-e-monitor-cp-actions tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -912,12 +912,12 @@ final class Admin extends Api {
 	 */
 	protected function get_site_settings_view() {
 
-		$title = sprintf( '<h4 class=tsfem-cp-title>%s</h4>', \esc_html__( 'Settings', 'the-seo-framework-extension-manager' ) );
+		$title = \sprintf( '<h4 class=tsfem-cp-title>%s</h4>', \esc_html__( 'Settings', 'the-seo-framework-extension-manager' ) );
 
 		$content = '';
 		$form_id = 'tsfem-e-monitor-update-settings';
 
-		$content .= sprintf(
+		$content .= \sprintf(
 			'<p><small>%s</small></p>',
 			\esc_html__( 'These settings are in development. Enable these to participate in the beta tests.', 'the-seo-framework-extension-manager' )
 		);
@@ -1010,7 +1010,7 @@ final class Admin extends Api {
 			);
 		}
 
-		$content .= sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
+		$content .= \sprintf( '<div class="tsfem-flex-account-setting-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $_rows );
 
 		$nonce_action = $this->_get_nonce_action_field( 'update' );
 		$nonce        = $this->_get_nonce_field( 'update' );
@@ -1021,7 +1021,7 @@ final class Admin extends Api {
 			'tsfem-button-primary tsfem-button-cloud'
 		);
 
-		$content .= sprintf(
+		$content .= \sprintf(
 			'<form action=%s method=post id=%s class="%s" autocomplete=off data-form-type=other>%s</form>',
 			\menu_page_url( $this->monitor_page_slug, false ),
 			$form_id,
@@ -1029,7 +1029,7 @@ final class Admin extends Api {
 			$nonce_action . $nonce . $submit
 		);
 
-		return sprintf( '<div class="tsfem-e-monitor-cp-settings tsfem-pane-section">%s%s</div>', $title, $content );
+		return \sprintf( '<div class="tsfem-e-monitor-cp-settings tsfem-pane-section">%s%s</div>', $title, $content );
 	}
 
 	/**
@@ -1123,13 +1123,13 @@ final class Admin extends Api {
 	 */
 	protected function get_account_data_fields() {
 
-		$title   = sprintf( '<h4 class=tsfem-info-title>%s</h4>', \esc_html__( 'Overview', 'the-seo-framework-extension-manager' ) );
+		$title   = \sprintf( '<h4 class=tsfem-info-title>%s</h4>', \esc_html__( 'Overview', 'the-seo-framework-extension-manager' ) );
 		$content = '';
 
 		$domain  = \tsfem()->get_current_site_domain();
 		$_domain = $this->get_expected_domain();
 		$class   = $_domain === $domain ? 'tsfem-success' : 'tsfem-error';
-		$domain  = sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
+		$domain  = \sprintf( '<span class="tsfem-dashicon %s">%s</span>', \esc_attr( $class ), \esc_html( $_domain ) );
 
 		$content .= \TSF_Extension_Manager\Layout::wrap_row_content(
 			\esc_html__( 'Connected site:', 'the-seo-framework-extension-manager' ),
@@ -1142,10 +1142,10 @@ final class Admin extends Api {
 			false
 		);
 
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-account-info tsfem-pane-section">%s%s</div>',
 			$title,
-			sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $content )
+			\sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $content )
 		);
 	}
 
@@ -1166,7 +1166,7 @@ final class Admin extends Api {
 			? static::get_rectified_date_i18n( 'F j, Y, g:i A (\G\M\TP)', $last_crawl )
 			: \__( 'No completed crawl has been recorded yet.', 'the-seo-framework-extension-manager' );
 
-		return sprintf(
+		return \sprintf(
 			'<time class="tsfem-dashicon tsf-tooltip-item %s" id=tsfem-e-monitor-last-crawled datetime=%s title="%s">%s</time>',
 			\esc_attr( $class ),
 			\esc_attr( gmdate( 'c', $last_crawl ) ),
@@ -1196,13 +1196,13 @@ final class Admin extends Api {
 				$description = \esc_html__( 'The instance ID of your site does not match the remote server.', 'the-seo-framework-extension-manager' );
 			}
 
-			$title = sprintf( '<h4 class=tsfem-info-title>%s</h4>', $title );
+			$title = \sprintf( '<h4 class=tsfem-info-title>%s</h4>', $title );
 
 			$output  = '';
-			$output .= sprintf( '<p class=tsfem-description>%s</p>', $description );
+			$output .= \sprintf( '<p class=tsfem-description>%s</p>', $description );
 			$output .= $this->get_fix_button();
 
-			return sprintf( '<div class="tsfem-account-fix tsfem-pane-section">%s%s</div>', $title, $output );
+			return \sprintf( '<div class="tsfem-account-fix tsfem-pane-section">%s%s</div>', $title, $output );
 		}
 
 		return '';
@@ -1260,11 +1260,11 @@ final class Admin extends Api {
 		];
 
 		$switcher = '<div class=tsfem-switch-button-container-wrap><div class=tsfem-switch-button-container>'
-						. sprintf(
+						. \sprintf(
 							'<input type=checkbox id="%s-action" value=1 />',
 							$s_field_id
 						)
-						. sprintf(
+						. \sprintf(
 							'<label for="%s-action" title="%s" class="tsfem-button tsfem-button-flag">%s</label>',
 							$s_field_id,
 							\esc_attr( $i18n['da_ays'] ),
@@ -1281,15 +1281,15 @@ final class Admin extends Api {
 						)
 					. '</div></div>';
 
-		$button = sprintf(
+		$button = \sprintf(
 			'<form name=deactivate action="%s" method=post id=tsfem-e-monitor-disconnect-form autocomplete=off data-form-type=other>%s</form>',
 			\menu_page_url( $this->monitor_page_slug, false ),
 			$nonce_action . $nonce . $switcher
 		);
 
-		$title = sprintf( '<h4 class=tsfem-info-title>%s</h4>', \esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
+		$title = \sprintf( '<h4 class=tsfem-info-title>%s</h4>', \esc_html__( 'Disconnect site', 'the-seo-framework-extension-manager' ) );
 
-		return sprintf( '<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>', $title, $button );
+		return \sprintf( '<div class="tsfem-account-disconnect tsfem-pane-section">%s%s</div>', $title, $button );
 	}
 
 	/**

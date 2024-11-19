@@ -56,7 +56,7 @@ final class Output {
 		foreach ( $this->generate_pane_info_list( $data, $type ) as $info_entry )
 			$info .= $info_entry;
 
-		return $info ? sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info ) : '';
+		return $info ? \sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $info ) : '';
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class Output {
 					return $this->build_collapsable_entry( $title, $content, $key, $this->get_entry_state( $key, $type ) );
 
 				default:
-					return sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
+					return \sprintf( '<div class="tsfem-flex tsfem-flex-row">%s</div>', $content );
 			}
 		}
 
@@ -153,25 +153,25 @@ final class Output {
 		static $count = 0;
 		$count++;
 
-		$checkbox_id = sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
+		$checkbox_id = \sprintf( 'tsfem-e-monitor-collapse-checkbox-%s', $count );
 
 		return vsprintf(
 			'<div class=tsfem-e-monitor-collapse%s>%s%s%s</div>',
 			[
-				$id ? sprintf( ' id="tsfem-e-monitor-collapse[%s]"', \esc_attr( $id ) ) : '',
-				sprintf( '<input type=checkbox id="%s" checked>', $checkbox_id ),
+				$id ? \sprintf( ' id="tsfem-e-monitor-collapse[%s]"', \esc_attr( $id ) ) : '',
+				\sprintf( '<input type=checkbox id="%s" checked>', $checkbox_id ),
 				vsprintf(
 					'<label class="tsfem-e-monitor-collapse-header tsfem-flex tsfem-flex-row tsfem-flex-nowrap tsfem-flex-nogrow tsfem-flex-space" for="%s">%s%s</label>',
 					[
 						$checkbox_id,
-						sprintf( '<h3 class=tsfem-e-monitor-collapse-title>%s</h3>', $title ),
-						sprintf(
+						\sprintf( '<h3 class=tsfem-e-monitor-collapse-title>%s</h3>', $title ),
+						\sprintf(
 							'<span class="tsfem-e-monitor-collapse-icon tsfem-e-monitor-icon-%s"></span>',
 							$this->parse_defined_icon_state( $icon_state )
 						),
 					]
 				),
-				sprintf( '<div class=tsfem-e-monitor-collapse-content>%s</div>', $content ),
+				\sprintf( '<div class=tsfem-e-monitor-collapse-content>%s</div>', $content ),
 			]
 		);
 	}
@@ -261,7 +261,7 @@ final class Output {
 
 		$state = $this->parse_defined_icon_state( $state );
 
-		return sprintf(
+		return \sprintf(
 			'<span class="tsfem-e-monitor-title-icon tsfem-e-monitor-icon-%1$s tsfem-e-monitor-title-icon-%1$s"></span>',
 			\esc_attr( $state )
 		);

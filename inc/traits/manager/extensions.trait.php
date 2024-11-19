@@ -1060,7 +1060,7 @@ trait Extensions_Actions {
 			\tsfem()->send_json(
 				[
 					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
-					'fatal_error' => sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
+					'fatal_error' => \sprintf( '<strong>Error message:</strong> %s', $advanced_error_notice ),
 				],
 				'failure'
 			);

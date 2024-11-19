@@ -237,10 +237,10 @@ trait Error {
 		}
 
 		/* translators: 1: 'Error code:', 2: The error code. */
-		$status = sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $code );
+		$status = \sprintf( \esc_html__( '%1$s %2$s', 'the-seo-framework-extension-manager' ), $status_i18n, $code );
 
 		/* translators: %s = Error code */
-		$before = sprintf( \__( '<strong>%s</strong> &mdash;', 'the-seo-framework-extension-manager' ), $status );
+		$before = \sprintf( \__( '<strong>%s</strong> &mdash;', 'the-seo-framework-extension-manager' ), $status );
 
 		/* translators: 1: Error code, 2: Error message, 3: Additional info */
 		$output = vsprintf( \esc_html__( '%1$s %2$s %3$s', 'the-seo-framework-extension-manager' ),
@@ -331,7 +331,7 @@ trait Error {
 
 			case 303: // license not found
 			case 307: // email/license mismatch
-				$message = sprintf(
+				$message = \sprintf(
 					/* translators: %s = My Account */
 					\esc_html__( 'Invalid API license key. Login to the %s page to find a valid API License Key.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link() // can never be WCM; user isn't connected yet.
@@ -387,7 +387,7 @@ trait Error {
 				break;
 
 			case 305:
-				$message = sprintf(
+				$message = \sprintf(
 					/* translators: %s = My Account */
 					\esc_html__( 'Exceeded maximum number of activations. Login to the %s page to manage your sites.', 'the-seo-framework-extension-manager' ),
 					$this->get_my_account_link() // can never be WCM; user isn't connected yet.
@@ -445,7 +445,7 @@ trait Error {
 					// Headless. User cannot inspect key. Edge case -- user gets disconnected right before this error.
 					$message = \esc_html__( "Your subscription instance couldn't be verified.", 'the-seo-framework-extension-manager' );
 				} else {
-					$message = sprintf(
+					$message = \sprintf(
 						/* translators: %s = My Account */
 						\esc_html__( "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected.", 'the-seo-framework-extension-manager' ),
 						$this->get_my_account_link() // this can be WCM, which is troubling.

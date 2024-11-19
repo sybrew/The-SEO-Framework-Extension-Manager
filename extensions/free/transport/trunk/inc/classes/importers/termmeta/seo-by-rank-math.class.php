@@ -50,8 +50,6 @@ final class SEO_By_Rank_Math extends Base {
 			\TSF_Extension_Manager\Extension\Transport\Transformers\SEO_By_Rank_Math::get_instance()
 		);
 
-		$tsf = \tsf();
-
 		/**
 		 * NOTE: I considered making a separate transaction for each term meta entry
 		 * from Rank Math, and merge each new value into the "existing" serialized

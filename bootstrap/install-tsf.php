@@ -115,18 +115,18 @@ function _nag_install_tsf() {
 		],
 		\network_admin_url( 'plugin-install.php' )
 	);
-	$tsf_details_link = sprintf(
+	$tsf_details_link = \sprintf(
 		'<a href="%1$s" id=tsfem-tsf-tb class="thickbox open-plugin-details-modal button button-small" aria-label="%2$s">%3$s</a>',
 		\esc_url( $details_url ),
 		/* translators: %s: Plugin name */
-		\esc_attr( sprintf( \__( 'Learn more about %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
+		\esc_attr( \sprintf( \__( 'Learn more about %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
 		\esc_html__( 'View plugin details', 'the-seo-framework-extension-manager' )
 	);
-	$nag = sprintf(
+	$nag = \sprintf(
 		/* translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details. */
 		\esc_html__( '%1$s requires %2$s plugin to function. %3$s', 'the-seo-framework-extension-manager' ),
-		sprintf( '<strong>%s</strong>', 'Extension Manager' ),
-		sprintf( '<strong>%s</strong>', \esc_html( $tsf_text ) ),
+		\sprintf( '<strong>%s</strong>', 'Extension Manager' ),
+		\sprintf( '<strong>%s</strong>', \esc_html( $tsf_text ) ),
 		$tsf_details_link
 	);
 
@@ -150,13 +150,13 @@ function _nag_install_tsf() {
 		),
 		"install-plugin_$plugin_slug"
 	);
-	$install_action    = sprintf(
+	$install_action    = \sprintf(
 		'<a href="%1$s" id=tsfem-tsf-install class="install-now button button-small button-primary" data-slug="%2$s" data-name="%3$s" aria-label="%4$s">%5$s</a>',
 		\esc_url( $install_nonce_url ),
 		\esc_attr( $plugin_slug ),
 		\esc_attr( $tsf_text ),
 		/* translators: %s: The SEO Framework */
-		\esc_attr( sprintf( \__( 'Install %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
+		\esc_attr( \sprintf( \__( 'Install %s', 'the-seo-framework-extension-manager' ), $tsf_text ) ),
 		\esc_html__( 'Install Now', 'the-seo-framework-extension-manager' )
 	);
 

@@ -444,7 +444,7 @@ final class Admin extends Core {
 						// Convert to float, have 2 f decimals, trim trailing zeros, trim trailing dots, convert to string.
 						// 2x rtrim: first trim trailing 0's, then trim remainder . (if any);
 						// don't trim both at the same time, otherwise 90.0 -> 9, instead of 90.0 -> 90
-						$value[ $_t ] = (string) ( rtrim( rtrim( sprintf( '%.2F', (float) $_v ), '0' ), '.' ) ?: 0 );
+						$value[ $_t ] = (string) ( rtrim( rtrim( \sprintf( '%.2F', (float) $_v ), '0' ), '.' ) ?: 0 );
 					}
 				}
 				break;

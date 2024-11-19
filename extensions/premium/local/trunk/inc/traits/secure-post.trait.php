@@ -151,15 +151,14 @@ trait Secure_Post {
 
 		$send = [];
 
-		// Nothing to see here.
-		if ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-			return;
-
 		/**
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
+		if (
+			   ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ], $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			|| ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+		) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
@@ -239,17 +238,13 @@ trait Secure_Post {
 	 */
 	public function _prepare_ajax_form_json_validation() {
 
-		if ( \wp_doing_ajax() ) {
-			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
-				if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
-					$this->send_ajax_form_json_validation();
-				}
+		if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
+			if ( \check_ajax_referer( 'tsfem-e-local-ajax-nonce', 'nonce', false ) ) {
+				$this->send_ajax_form_json_validation();
 			}
-
-			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
 		}
 
-		exit;
+		\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1079001 ) ], 'failure' );
 	}
 
 	/**

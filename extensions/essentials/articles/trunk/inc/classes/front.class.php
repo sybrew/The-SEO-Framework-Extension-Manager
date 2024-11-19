@@ -260,7 +260,7 @@ final class Front extends Core {
 				| ( \SCRIPT_DEBUG ? \JSON_PRETTY_PRINT : 0 ),
 			);
 
-			return sprintf(
+			return \sprintf(
 				'<script type="application/ld+json">%s</script>',
 				$schema
 			) . "\n";

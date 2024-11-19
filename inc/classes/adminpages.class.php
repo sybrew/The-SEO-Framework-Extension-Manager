@@ -445,7 +445,7 @@ class AdminPages extends AccountActivation {
 	 * @return string Full field name.
 	 */
 	final public function _get_field_name( $name ) {
-		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $name );
+		return \sprintf( '%s[%s]', self::SETTINGS_FIELD, $name );
 	}
 
 	/**
@@ -471,7 +471,7 @@ class AdminPages extends AccountActivation {
 	 * @return string Full field id.
 	 */
 	final public function _get_field_id( $id ) {
-		return sprintf( '%s[%s]', self::SETTINGS_FIELD, $id );
+		return \sprintf( '%s[%s]', self::SETTINGS_FIELD, $id );
 	}
 
 	/**

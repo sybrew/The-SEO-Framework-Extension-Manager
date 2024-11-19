@@ -54,7 +54,7 @@ function _check_external_blocking() {
 			// We rely on TSF here but it might not be available. Still, not outputting this notice does not harm.
 			if ( ! \function_exists( 'tsf' ) ) return;
 
-			$notice = sprintf(
+			$notice = \sprintf(
 				/* translators: Markdown. %s = Update API URL */
 				\esc_html__(
 					'This website is blocking external requests, this means it will not be able to connect to The SEO Framework update services. Please add `%s` to `WP_ACCESSIBLE_HOSTS` to keep the Extension Manager plugin up-to-date and secure.',
@@ -69,7 +69,7 @@ function _check_external_blocking() {
 			foreach ( $matches as $match ) {
 				$notice = str_replace(
 					$match[0],
-					sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
+					\sprintf( '<code>%s</code>', \esc_html( $match[1] ) ),
 					$notice,
 				);
 			}
@@ -126,7 +126,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 	$request = \wp_remote_post( $url, $http_args );
 
 	if ( \is_wp_error( $request ) ) {
-		$error_message = sprintf(
+		$error_message = \sprintf(
 			/* translators: %1$s: API url, %2$s: support URL */
 			\__( 'An unexpected error occurred. Something may be wrong with %1$s or this server&#8217;s configuration. If you continue to have problems, please <a href="%2$s">contact us</a>.', 'the-seo-framework-extension-manager' ),
 			\esc_url( \TSF_EXTENSION_MANAGER_DL_URI ),
@@ -150,7 +150,7 @@ function _hook_plugins_api( $res, $action, $args ) {
 		} elseif ( ! \is_object( $res ) ) {
 			$res = new \WP_Error(
 				'plugins_api_failed',
-				sprintf(
+				\sprintf(
 					/* translators: %s: support forums URL */
 					\__( 'An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href="%s">contact us</a>.', 'the-seo-framework-extension-manager' ),
 					'https://theseoframework.com/contact/'

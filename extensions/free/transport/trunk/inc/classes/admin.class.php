@@ -125,7 +125,7 @@ final class Admin {
 	private function get_importers() {
 		return [
 			''                 => [
-				'title'     => sprintf(
+				'title'     => \sprintf(
 					'&mdash; %s &mdash;',
 					\__( 'Select plugin', 'the-seo-framework-extension-manager' )
 				),
@@ -361,8 +361,6 @@ final class Admin {
 	 * @return void If nonce failed.
 	 */
 	public function _wp_ajax_transport() {
-
-		if ( ! \wp_doing_ajax() ) exit;
 
 		if ( ! \TSF_Extension_Manager\can_do_extension_settings() || ! \check_ajax_referer( $this->ajax_nonce_action, 'nonce', false ) )
 			\tsfem()->send_json( [ 'results' => $this->get_ajax_notice( false, 1069001 ) ], 'failure' ); // nice

@@ -44,7 +44,7 @@ function _do_admin_upgrade( $upgrader ) {
 		$upgrader->_register_upgrade(
 			'local',
 			'1100',
-			function ( $version ) {
+			function ( $version ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- hint
 				// Defer: If it crashes, nothing happens.
 				\add_action(
 					'shutdown',

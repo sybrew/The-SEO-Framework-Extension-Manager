@@ -154,7 +154,7 @@ final class Layout extends Secure_Abstract {
 							. $button
 						. '</div></div>';
 
-			$output = sprintf(
+			$output = \sprintf(
 				'<form name=deactivate action="%s" method=post id=tsfem-deactivation-form autocomplete=off data-form-type=other>%s</form>',
 				\esc_url( $tsfem->get_admin_page_url() ),
 				$nonce_action . $nonce . $switcher
@@ -179,7 +179,7 @@ final class Layout extends Secure_Abstract {
 
 			$tsfem = \tsfem();
 
-			$description = sprintf(
+			$description = \sprintf(
 				'<p>%s</p>',
 				\esc_html__( 'The domain of this site does not match the stored connection. You can transfer the license to this domain to regain API access.', 'the-seo-framework-extension-manager' )
 			);
@@ -187,12 +187,12 @@ final class Layout extends Secure_Abstract {
 			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['transfer-domain'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['transfer-domain'], self::$nonce_name, true, false );
 
-			$submit = sprintf(
+			$submit = \sprintf(
 				'<button type=submit name=submit id=tsfem-transfer-domain-submit class="tsfem-button tsfem-button-red tsfem-button-cloud">%s</button>',
 				\esc_attr__( 'Transfer domain', 'the-seo-framework-extension-manager' )
 			);
 
-			return $description . sprintf(
+			return $description . \sprintf(
 				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_attr( self::$request_name['transfer-domain'] ),
 				\esc_url( $tsfem->get_admin_page_url() ),
@@ -304,7 +304,7 @@ final class Layout extends Secure_Abstract {
 			$next_check_min = round( ( floor( $data['timestamp'] * $data['divider'] ) - time() ) / 60 );
 
 			if ( $next_check_min > 0 ) {
-				$level_desc = sprintf(
+				$level_desc = \sprintf(
 					/* translators: %u = minutes number */
 					\_n( 'Next check is scheduled in %u minute.', 'Next check is scheduled in %u minutes.', $next_check_min, 'the-seo-framework-extension-manager' ),
 					$next_check_min
@@ -331,7 +331,7 @@ final class Layout extends Secure_Abstract {
 			$_classes[] = 'tsfem-success';
 		} else {
 			$_warning = convert_markdown(
-				sprintf(
+				\sprintf(
 					/* translators: `%s` = domain with markdown backtics */
 					\esc_html__( 'The domain `%s` does not match the registered domain. If your website is accessible on multiple domains, switch to the registered domain. Otherwise, disconnect the account and reconnect.', 'the-seo-framework-extension-manager' ),
 					$current_domain
@@ -431,7 +431,7 @@ final class Layout extends Secure_Abstract {
 				$expires_in = \__( 'Less than two months', 'the-seo-framework-extension-manager' );
 			} else {
 				/* translators: %d = months number */
-				$expires_in = sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
+				$expires_in = \sprintf( \__( 'About %d months', 'the-seo-framework-extension-manager' ), round( $difference / MONTH_IN_SECONDS ) );
 			}
 
 			// phpcs:ignore, WordPress.DateTime.RestrictedFunctions.date_date -- Date is fetched from another server.
@@ -475,7 +475,7 @@ final class Layout extends Secure_Abstract {
 			} else {
 				$n = round( $difference / MONTH_IN_SECONDS );
 				/* translators: %d = months number */
-				$payment_in = sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
+				$payment_in = \sprintf( \_n( 'About %d month', 'About %d months', $n, 'the-seo-framework-extension-manager' ), $n );
 			}
 
 			$end_date_i18n = $payment_date ? static::get_rectified_date_i18n( 'F j, Y, g:i A (\G\M\TP)', $date_until ) : '';
@@ -533,7 +533,7 @@ final class Layout extends Secure_Abstract {
 		end:;
 
 		// Wrap tooltips here.
-		return sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
+		return \sprintf( '<div class="tsfem-flex-account-info-rows tsfem-flex tsfem-flex-nogrowshrink">%s</div>', $output );
 	}
 
 	/**
@@ -554,9 +554,9 @@ final class Layout extends Secure_Abstract {
 			$content = \esc_html( $content );
 		}
 
-		$output = sprintf( '<div class=tsfem-row-info-title>%s</div><div class=tsfem-row-info-value>%s</div>', $title, $content );
+		$output = \sprintf( '<div class=tsfem-row-info-title>%s</div><div class=tsfem-row-info-value>%s</div>', $title, $content );
 
-		return sprintf( '<div class="tsfem-row-info tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>', $output );
+		return \sprintf( '<div class="tsfem-row-info tsfem-flex tsfem-flex-row tsfem-flex-space tsfem-flex-noshrink">%s</div>', $output );
 	}
 
 	/**
@@ -571,14 +571,14 @@ final class Layout extends Secure_Abstract {
 		if ( 'form' === self::get_property( '_type' ) ) {
 			$tsfem = \tsfem();
 
-			$input = sprintf(
+			$input = \sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
 				$tsfem->_get_field_id( 'key' ),
 				$tsfem->_get_field_name( 'key' ),
 				\esc_attr__( 'License key', 'the-seo-framework-extension-manager' )
 			);
 
-			$input .= sprintf(
+			$input .= \sprintf(
 				'<input id="%s" name=%s type=text size=15 class="regular-text code tsfem-flex tsfem-flex-row" placeholder="%s">',
 				$tsfem->_get_field_id( 'email' ),
 				$tsfem->_get_field_name( 'email' ),
@@ -588,14 +588,14 @@ final class Layout extends Secure_Abstract {
 			$nonce_action = $tsfem->_get_nonce_action_field( self::$request_name['activate-key'] );
 			$nonce        = \wp_nonce_field( self::$nonce_action['activate-key'], self::$nonce_name, true, false );
 
-			$submit = sprintf(
+			$submit = \sprintf(
 				'<input type=submit name=submit id=tsfem-account-upgrade-submit class=tsfem-button-primary value="%s">',
 				\esc_attr__( 'Use this key', 'the-seo-framework-extension-manager' )
 			);
 
 			$form = $input . $nonce_action . $nonce . $submit;
 
-			return sprintf(
+			return \sprintf(
 				'<form class="tsfem-flex tsfem-flex-nowrap" name="%s" action="%s" method=post id="%s" class="%s" autocomplete=off data-form-type=other>%s</form>',
 				\esc_attr( self::$request_name['activate-key'] ),
 				\esc_url( $tsfem->get_admin_page_url() ),

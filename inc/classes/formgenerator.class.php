@@ -220,7 +220,7 @@ final class FormGenerator {
 	 */
 	private static function get_ajax_iteration_start() {
 		// Careful, smart logic. Will return 1 if not set.
-		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
+		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks
 		return \absint( ! isset( $_POST['args']['previousIt'] ) ?: $_POST['args']['previousIt'] );
 	}
 
@@ -233,7 +233,7 @@ final class FormGenerator {
 	 * @return int <unsigned> (R>=0) $i The new iteration value. 0 if $_POST is not set.
 	 */
 	private static function get_ajax_iteration_amount() {
-		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks.
+		// phpcs:ignore, WordPress.Security.NonceVerification -- _wp_ajax_tsfemForm_iterate() is called hereafter, performing user verification checks
 		return \absint( $_POST['args']['newIt'] ?? 0 );
 	}
 
@@ -563,9 +563,9 @@ final class FormGenerator {
 	private function get_form_id() {
 
 		if ( $this->o_key ) {
-			$k = sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
+			$k = \sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
 		} else {
-			$k = sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
+			$k = \sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
 		}
 
 		return $k;
@@ -585,21 +585,21 @@ final class FormGenerator {
 	private function get_field_id() {
 
 		if ( $this->o_key ) {
-			$k = sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
+			$k = \sprintf( '%s[%s][%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index, $this->o_key );
 		} else {
-			$k = sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
+			$k = \sprintf( '%s[%s]', \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS, $this->o_index );
 		}
 
 		// Correct the length of bits, split them and put them in the right order.
-		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
-		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
+		$_f     = \sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$levels = array_reverse( str_split( \sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;
 		foreach ( $levels as $b ) {
-			$k = sprintf( '%s[%s]', $k, $this->sanitize_id( $this->level_names[ $i ] ) );
+			$k = \sprintf( '%s[%s]', $k, $this->sanitize_id( $this->level_names[ $i ] ) );
 			// Only grab iterators, they start at 2 as the iteration caller is 1.
 			if ( $b > 1 ) {
-				$k = sprintf( '%s[%d]', $k, bindec( $b ) - 1 );
+				$k = \sprintf( '%s[%d]', $k, bindec( $b ) - 1 );
 			}
 			++$i;
 		}
@@ -634,8 +634,8 @@ final class FormGenerator {
 			$k[] = $this->o_key;
 
 		// Correct the length of bits, split them and put them in the right order.
-		$_f     = sprintf( '%%0%db', ( $this->level * $this->bits ) );
-		$levels = array_reverse( str_split( sprintf( $_f, $this->it ), $this->bits ) );
+		$_f     = \sprintf( '%%0%db', ( $this->level * $this->bits ) );
+		$levels = array_reverse( str_split( \sprintf( $_f, $this->it ), $this->bits ) );
 
 		$i = 0;
 		foreach ( $levels as $b ) {
@@ -664,7 +664,7 @@ final class FormGenerator {
 	 * @return string Full field ID/name attribute.
 	 */
 	private function create_sub_field_id( $id, $key ) {
-		return sprintf( '%s[%s]', $id, $key );
+		return \sprintf( '%s[%s]', $id, $key );
 	}
 
 	/**
@@ -863,7 +863,7 @@ final class FormGenerator {
 		$s_desc = $args['_desc'][1] ? $this->create_fields_description( $args['_desc'][1], ! empty( $args['_md'] ) ) : '';
 		$s_more = $args['_desc'][2] ? $this->create_fields_sub_description( $args['_desc'][2], ! empty( $args['_md'] ) ) : '';
 
-		return sprintf(
+		return \sprintf(
 			'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 			vsprintf(
 				'<div class="tsfem-form-setting-label-inner-wrap tsfem-flex">%s%s</div>',
@@ -872,8 +872,8 @@ final class FormGenerator {
 						'<label for="%s" class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></label>',
 						[
 							$id,
-							sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-							sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+							\sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+							\sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 						]
 					),
 					$s_desc,
@@ -994,7 +994,7 @@ final class FormGenerator {
 			[
 				$s_type,
 				$s_data,
-				sprintf(
+				\sprintf(
 					'<div class="%s-label tsfem-flex" id="%s">%s</div>',
 					$s_type,
 					$this->get_field_id(),
@@ -1005,15 +1005,15 @@ final class FormGenerator {
 							$title ? vsprintf(
 								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+									\sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+									\sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							) : '',
 							$s_desc,
 						]
 					)
 				),
-				sprintf(
+				\sprintf(
 					'<div class="%s-input tsfem-flex">%s</div>',
 					$s_type,
 					$this->get_fields( $args['_fields'] )
@@ -1083,7 +1083,7 @@ final class FormGenerator {
 			[
 				$s_type,
 				$s_data,
-				sprintf(
+				\sprintf(
 					'<div class="%s-label tsfem-flex" id="%s">%s</div>',
 					$s_type,
 					$this->get_field_id(),
@@ -1094,15 +1094,15 @@ final class FormGenerator {
 							! $plain && $title ? vsprintf(
 								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+									\sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+									\sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							) : '',
 							$s_desc,
 						]
 					)
 				),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap %s-input tsfem-flex" id="%s-wrapper">%s</div>',
 					$s_type,
 					$wrap_id,
@@ -1224,7 +1224,7 @@ final class FormGenerator {
 
 		for ( $it = 0; $it < $count; $it++ ) {
 			// PHP automatically checks if sprintf is meaningful.
-			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+			$_title = $it ? \sprintf( $_it_title, $it + 1 ) : \sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
 
@@ -1278,7 +1278,7 @@ final class FormGenerator {
 
 		for ( $it = $start; $it < $amount; $it++ ) {
 			// PHP automatically checks if sprintf is meaningful.
-			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+			$_title = $it ? \sprintf( $_it_title, $it + 1 ) : \sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
 
@@ -1329,7 +1329,7 @@ final class FormGenerator {
 		$_fields = '';
 		for ( $it = 0; $it < $count; $it++ ) {
 			// PHP automatically checks if sprintf is meaningful.
-			$_title = $it ? sprintf( $_it_title, $it + 1 ) : sprintf( $_it_title_main, $it + 1 );
+			$_title = $it ? \sprintf( $_it_title, $it + 1 ) : \sprintf( $_it_title_main, $it + 1 );
 
 			$this->iterate();
 
@@ -1348,11 +1348,11 @@ final class FormGenerator {
 		return vsprintf(
 			'<div class=tsfem-form-iterator-setting>%s%s</div>',
 			[
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-iterator-selector-wrap tsfem-flex tsfem-flex-noshrink">%s</div>',
 					$selector
 				),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-collapse-wrap tsfem-form-collapse-sub-wrap" id="%s-wrapper">%s</div>',
 					$wrap_id,
 					$_fields
@@ -1373,10 +1373,10 @@ final class FormGenerator {
 	private function get_collapse_wrap( $what, $args = [] ) {
 
 		if ( 'start' === $what ) {
-			$s_id = $args['id'] ? sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
+			$s_id = $args['id'] ? \sprintf( 'id="tsfem-form-collapse-%s"', $args['id'] ) : '';
 
-			$checkbox_id = sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
-			$checkbox    = sprintf( '<input type=checkbox id="%s" class=tsfem-form-collapse-checkbox checked>', $checkbox_id );
+			$checkbox_id = \sprintf( 'tsfem-form-collapse-checkbox-%s', $args['id'] );
+			$checkbox    = \sprintf( '<input type=checkbox id="%s" class=tsfem-form-collapse-checkbox checked>', $checkbox_id );
 
 			$args['dyn_title'] = (array) $args['dyn_title'];
 
@@ -1399,7 +1399,7 @@ final class FormGenerator {
 				'<h3 class=tsfem-form-collapse-title-wrap>%s%s</h3>',
 				[
 					'<span class="tsfem-form-title-icon tsfem-form-title-icon-unknown"></span>',
-					sprintf(
+					\sprintf(
 						'<span class=tsfem-form-collapse-title>%s</span>',
 						\esc_html( $args['title'] )
 					),
@@ -1419,7 +1419,7 @@ final class FormGenerator {
 
 			$content_start = '<div class=tsfem-form-collapse-content>';
 
-			return sprintf(
+			return \sprintf(
 				'<div class=tsfem-form-collapse %s>%s%s%s',
 				$s_id,
 				$checkbox,
@@ -1471,7 +1471,7 @@ final class FormGenerator {
 	private function create_fields_description( $description, $use_markdown ) {
 
 		if ( \is_scalar( $description ) ) {
-			return sprintf(
+			return \sprintf(
 				'<span class=tsfem-form-option-description>%s</span>',
 				$use_markdown ? convert_markdown( \esc_html( $description ) ) : \esc_html( $description )
 			);
@@ -1554,7 +1554,7 @@ final class FormGenerator {
 	private function clean_range_index( array &$range ) {
 		$range[0] = (string) ( $range[0] ?? '' );
 		$range[1] = (string) ( $range[1] ?? '' );
-		$range[2] = isset( $range[2] ) ? (string) rtrim( rtrim( sprintf( '%.10F', $range[2] ), '0' ), '.' ) : '';
+		$range[2] = isset( $range[2] ) ? (string) rtrim( rtrim( \sprintf( '%.10F', $range[2] ), '0' ), '.' ) : '';
 	}
 
 	/**
@@ -1572,7 +1572,7 @@ final class FormGenerator {
 
 		foreach ( $data as $k => $v ) {
 			if ( ! \is_scalar( $v ) ) {
-				$ret[] = sprintf(
+				$ret[] = \sprintf(
 					'data-%s="%s"',
 					strtolower( preg_replace(
 						'/([A-Z])/',
@@ -1582,7 +1582,7 @@ final class FormGenerator {
 					htmlspecialchars( json_encode( $v, \JSON_UNESCAPED_SLASHES ), \ENT_COMPAT, 'UTF-8' )
 				);
 			} else {
-				$ret[] = sprintf(
+				$ret[] = \sprintf(
 					'data-%s="%s"',
 					strtolower( preg_replace(
 						'/([A-Z])/',
@@ -1606,7 +1606,7 @@ final class FormGenerator {
 	 * @return string The field's pattern.
 	 */
 	private function get_fields_pattern( $pattern ) {
-		return sprintf( 'pattern="%s"', $pattern );
+		return \sprintf( 'pattern="%s"', $pattern );
 	}
 
 	/**
@@ -1626,9 +1626,9 @@ final class FormGenerator {
 				$this->clean_range_index( $args['_range'] );
 
 				$s_range  = '';
-				$s_range .= '' !== $args['_range'][0] ? sprintf( 'min=%s', $args['_range'][0] ) : '';
-				$s_range .= '' !== $args['_range'][1] ? sprintf( ' max=%s', $args['_range'][1] ) : '';
-				$s_range .= '' !== $args['_range'][2] ? sprintf( ' step=%s', $args['_range'][2] ) : '';
+				$s_range .= '' !== $args['_range'][0] ? \sprintf( 'min=%s', $args['_range'][0] ) : '';
+				$s_range .= '' !== $args['_range'][1] ? \sprintf( ' max=%s', $args['_range'][1] ) : '';
+				$s_range .= '' !== $args['_range'][2] ? \sprintf( ' step=%s', $args['_range'][2] ) : '';
 
 				if ( isset( $args['_pattern'] ) )
 					$s_pattern = $this->get_fields_pattern( $args['_pattern'] );
@@ -1668,7 +1668,7 @@ final class FormGenerator {
 			[
 				$s_type,
 				$this->create_field_description( $args, $s_id ),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<input type=%s id="%s" name=%s value="%s" %s %s %s %s %s>',
@@ -1680,7 +1680,7 @@ final class FormGenerator {
 							$s_range ?? '',
 							$s_pattern ?? '',
 							$args['_req'] ? 'required' : '',
-							! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '',
+							! empty( $args['_ph'] ) ? \sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '',
 							isset( $args['_data'] ) ? $this->get_fields_data( $args['_data'] ) : '',
 						]
 					)
@@ -1711,7 +1711,7 @@ final class FormGenerator {
 			[
 				$args['_type'], // Doesn't need escaping.
 				$this->create_field_description( $args, $s_id ),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<select id="%s" name=%s %s %s %s>%s</select>',
@@ -1791,14 +1791,14 @@ final class FormGenerator {
 
 				if ( isset( $args[2] ) ) {
 					// Level up.
-					yield sprintf( '<optgroup label="%s">', $args[1] );
-					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
+					yield \sprintf( '<optgroup label="%s">', $args[1] );
+					yield \sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 					++$_level;
 					yield $this->get_select_options( $args[2], $_next, $multiple );
 					--$_level;
 					yield '</optgroup>';
 				} else {
-					yield sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
+					yield \sprintf( '<option value="%s"%s>%s</option>', $args[0], $s_selected, $args[1] );
 				}
 			}
 		} else {
@@ -1812,14 +1812,14 @@ final class FormGenerator {
 
 				if ( isset( $args[2] ) ) {
 					// Level up.
-					yield sprintf( '<optgroup label="%s">', $args[1] );
-					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+					yield \sprintf( '<optgroup label="%s">', $args[1] );
+					yield \sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
 					++$_level;
 					yield $this->get_select_options( $args[2] );
 					--$_level;
 					yield '</optgroup>';
 				} else {
-					yield sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
+					yield \sprintf( '<option value="%s">%s</option>', $args[0], $args[1] );
 				}
 			}
 		}
@@ -1854,7 +1854,7 @@ final class FormGenerator {
 			'<div class="tsfem-select-multi-a11y-field-wrapper tsfem-form-setting tsfem-flex" %s>%s%s</div>',
 			[
 				$s_data,
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-setting-label tsfem-flex">%s</div>',
 					vsprintf(
 						'<div class="tsfem-form-select-multi-a11y-label-inner-wrap tsfem-flex">%s%s</div>',
@@ -1862,15 +1862,15 @@ final class FormGenerator {
 							vsprintf(
 								'<div class="tsfem-form-setting-label-item tsfem-flex"><span class="%s">%s</span></div>',
 								[
-									sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
-									sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
+									\sprintf( 'tsfem-form-option-title%s', ( $s_desc ? ' tsfem-form-option-has-description' : '' ) ),
+									\sprintf( '<strong>%s</strong> %s', \esc_html( $title ), $s_more ),
 								]
 							),
 							$s_desc,
 						]
 					)
 				),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<div class="tsfem-form-multi-select-wrap %s" id="%s" %s>%s</div>',
@@ -1942,16 +1942,16 @@ final class FormGenerator {
 
 			if ( isset( $args[2] ) ) {
 				// Level up.
-				yield sprintf( '<li><strong>%s</strong></li>', $args[1] );
+				yield \sprintf( '<li><strong>%s</strong></li>', $args[1] );
 				if ( [] !== $selected && \in_array( $args[0], $selected, true ) ) {
-					yield sprintf(
+					yield \sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
 						$this->get_field_id(),
 						$args[0],
 						$args[1]
 					);
 				} else {
-					yield sprintf(
+					yield \sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>',
 						$this->get_field_id(),
 						$args[0],
@@ -1965,14 +1965,14 @@ final class FormGenerator {
 				yield '</li>';
 			} else {
 				if ( [] !== $selected && \in_array( $args[0], $selected, true ) ) {
-					yield sprintf(
+					yield \sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s" checked>%3$s</label></li>',
 						$this->get_field_id(),
 						$args[0],
 						$args[1]
 					);
 				} else {
-					yield sprintf(
+					yield \sprintf(
 						'<li><label><input type=checkbox name="%1$s" id="%1$s" value="%2$s">%3$s</label></li>',
 						$this->get_field_id(),
 						$args[0],
@@ -2008,7 +2008,7 @@ final class FormGenerator {
 		$s_id_name  = $this->get_sub_field_id( 'id' );
 		$s_id_id    = "{$s_field_id}-id";
 
-		$s_url_ph    = ! empty( $args['_ph'] ) ? sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
+		$s_url_ph    = ! empty( $args['_ph'] ) ? \sprintf( 'placeholder="%s"', \esc_attr( $args['_ph'] ) ) : '';
 		$s_url_value = \esc_url(
 			$this->get_field_value_by_key(
 				$this->get_raw_sub_field_id( 'url', 'associative' ),
@@ -2102,7 +2102,7 @@ final class FormGenerator {
 			'<div class="tsfem-checkbox-field-wrapper tsfem-form-setting tsfem-flex">%s%s</div>',
 			[
 				$this->create_field_description( $args, $s_id ),
-				sprintf(
+				\sprintf(
 					'<div class="tsfem-form-setting-input tsfem-flex">%s</div>',
 					vsprintf(
 						'<label class=tsfem-form-checkbox-settings-content-label><input type=checkbox id="%s" name=%s value=1 %s %s %s> %s</label>',

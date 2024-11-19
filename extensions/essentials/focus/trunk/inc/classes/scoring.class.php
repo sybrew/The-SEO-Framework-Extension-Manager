@@ -100,7 +100,7 @@ final class Scoring {
 	 * @return string
 	 */
 	public function get_id( $type ) {
-		return sprintf( '%s[%s]', $this->key, $type );
+		return \sprintf( '%s[%s]', $this->key, $type );
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class Scoring {
 	 * @return string The assessment's score value.
 	 */
 	public function sanitize( $score ) {
-		return (string) ( rtrim( rtrim( sprintf( '%.2F', (float) $score ), '0' ), '.' ) ?: 0 );
+		return (string) ( rtrim( rtrim( \sprintf( '%.2F', (float) $score ), '0' ), '.' ) ?: 0 );
 	}
 
 	/**
