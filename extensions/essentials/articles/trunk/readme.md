@@ -256,6 +256,12 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ### 2.3.1
 
+[tsfep-release time="November 20th, 2024"]
+
+* **Fixed:** Resolved an issue where the Google News sitemap was no longer loaded.
+
+### 2.3.1
+
 [tsfep-release time="November 19th, 2024"]
 
 * **Improved:** The article time notation now honors TSF's timestamp settings. This requires TSF v5.0 or later.

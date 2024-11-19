@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager\Extension\Local;
  * Extension Name: Local
  * Extension URI: https://theseoframework.com/extensions/local/
  * Extension Description: The Local extension lets you set up important local business information for search engines to consume.
- * Extension Version: 1.2.0
+ * Extension Version: 1.3.0
  * Extension Author: Sybre Waaijer
  * Extension Author URI: https://cyberwire.nl/
  * Extension License: GPLv3
@@ -41,7 +41,7 @@ namespace TSF_Extension_Manager\Extension\Local;
  * @since 1.0.0
  * NOTE: The presence does NOT guarantee the extension is loaded!!!
  */
-\define( 'TSFEM_E_LOCAL_VERSION', '1.2.0' );
+\define( 'TSFEM_E_LOCAL_VERSION', '1.3.0' );
 
 /**
  * The extension database version.

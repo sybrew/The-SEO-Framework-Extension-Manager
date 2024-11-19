@@ -41,6 +41,26 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
+= 2.7.1 =
+
+**Release date:**
+
+* November 20th, 2024
+
+**Feature highlights:**
+
+* This minor update squashes two ugly bugs that were introduced in the previous release.
+
+**Updated extensions:**
+
+* [Articles at version 2.3.2](https://theseoframework.com/extensions/articles/#changelog)
+
+**Detailed log:**
+
+* **Fixed:**
+	* TODO Resolved an issue where Extension Settings couldn't save for Articles or Cord when Local was active.
+	* Resolved an issue where Local wasn't marked as version 1.3.0 in the Extension Manager.
+
 = 2.7.0 - Sane SEO =
 
 **Release date:**
@@ -89,12 +109,12 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Updated extensions:**
 
-* [AMP at version 1.3.0](https://theseoframework.com/extensions/articles/#changelog)
+* [AMP at version 1.3.0](https://theseoframework.com/extensions/amp/#changelog)
 * [Articles at version 2.3.1](https://theseoframework.com/extensions/articles/#changelog)
 * [Honeypot at version 2.1.0](https://theseoframework.com/extensions/honeypot/#changelog)
 * [Focus at version 1.6.0](https://theseoframework.com/extensions/focus/#changelog)
 * [Monitor at version 1.2.12](https://theseoframework.com/extensions/monitor/#changelog)
-* [Title Fix at version 1.3.0](https://theseoframework.com/extensions/articles/#changelog)
+* [Title Fix at version 1.3.0](https://theseoframework.com/extensions/title-fix/#changelog)
 
 **Detailed log:**
 
