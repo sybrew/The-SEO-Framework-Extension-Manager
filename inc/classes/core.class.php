@@ -561,6 +561,8 @@ class Core {
 	 */
 	final protected function stop_class_filters( $current_filter, $key ) {
 
+		$current_filter = (array) $current_filter;
+
 		$_key   = key( $current_filter );
 		$filter = reset( $current_filter );
 

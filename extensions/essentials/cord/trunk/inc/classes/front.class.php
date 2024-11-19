@@ -46,55 +46,37 @@ final class Front extends Core {
 
 		$a_options = $this->get_option( 'analytics' );
 
-		if ( ! empty( $a_options['google_analytics']['tracking_id'] ) )
-			\add_action( 'init', [ $this, '_prepare_google_analytics_output' ] );
+		if ( ! empty( $a_options['google_analytics']['tracking_id'] ) ) {
+			/**
+			 * This filter is great for GDPR cookie consent, where you can dynamically enable
+			 * the analytics script based on visitor preferences.
+			 *
+			 * @since 1.0.0
+			 * @param bool $enabled
+			 */
+			if ( \apply_filters( 'the_seo_framework_cord_ga_enabled', true ) ) {
+				// TODO use filter 'wp_resource_hints' instead? This allows collapsing to unique resource URIs.
+				\add_action( 'wp_head', [ $this, '_output_google_analytics_preconnect_links' ], 0 );
 
-		if ( ! empty( $a_options['facebook_pixel']['pixel_id'] ) )
-			\add_action( 'init', [ $this, '_prepare_facebook_pixel_output' ] );
-	}
-
-	/**
-	 * Prepares Google Anlytics output.
-	 *
-	 * @since 1.0.0
-	 */
-	public function _prepare_google_analytics_output() {
-
-		/**
-		 * This filter is great for GDPR cookie consent, where you can dynamically enable
-		 * the analytics script based on visitor preferences.
-		 *
-		 * @since 1.0.0
-		 * @param bool $enabled
-		 */
-		if ( \apply_filters( 'the_seo_framework_cord_ga_enabled', true ) ) {
-			// TODO use filter 'wp_resource_hints' instead? This allows collapsing to unique resource URIs.
-			\add_action( 'wp_head', [ $this, '_output_google_analytics_preconnect_links' ], 0 );
-
-			\add_action( 'wp_body_open', [ $this, '_output_google_analytics_tracking' ], 0 );
-			\add_action( 'wp_footer', [ $this, '_output_google_analytics_tracking' ], 0 );
+				\add_action( 'wp_body_open', [ $this, '_output_google_analytics_tracking' ], 0 );
+				\add_action( 'wp_footer', [ $this, '_output_google_analytics_tracking' ], 0 );
+			}
 		}
-	}
 
-	/**
-	 * Prepares Facebook pixel output.
-	 *
-	 * @since 1.0.0
-	 */
-	public function _prepare_facebook_pixel_output() {
+		if ( ! empty( $a_options['facebook_pixel']['pixel_id'] ) ) {
+			/**
+			 * This filter is great for GDPR cookie consent, where you can dynamically enable
+			 * the analytics script based on visitor preferences.
+			 *
+			 * @since 1.0.0
+			 * @param bool $enabled
+			 */
+			if ( \apply_filters( 'the_seo_framework_cord_fbp_enabled', true ) ) {
+				// Don't set preconnection. The Facebook pixel script is based on a connection and cookie.
 
-		/**
-		 * This filter is great for GDPR cookie consent, where you can dynamically enable
-		 * the analytics script based on visitor preferences.
-		 *
-		 * @since 1.0.0
-		 * @param bool $enabled
-		 */
-		if ( \apply_filters( 'the_seo_framework_cord_fbp_enabled', true ) ) {
-			// Don't set preconnection. The Facebook pixel script is based on a connection and cookie.
-
-			// It must be outputted in the header, because the Facebook script needs to initialize itself before first paint.
-			\add_action( 'wp_head', [ $this, '_output_facebook_pixel_tracking' ], 99 );
+				// It must be outputted in the header, because the Facebook script needs to initialize itself before first paint.
+				\add_action( 'wp_head', [ $this, '_output_facebook_pixel_tracking' ], 99 );
+			}
 		}
 	}
 

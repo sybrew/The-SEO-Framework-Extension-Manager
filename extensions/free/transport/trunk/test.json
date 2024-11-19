@@ -2,9 +2,6 @@
 	"slug" : "transport",
 	"namespace" : "\\TSF_Extension_Manager\\Extension\\Transport",
 	"test" : {
-		"_base" : "transport.php",
-		"Admin" : [
-			"inc/classes/admin.class.php"
-		]
+		"_base" : "transport.php"
 	}
 }

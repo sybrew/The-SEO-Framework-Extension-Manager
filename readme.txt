@@ -77,9 +77,6 @@ TODO require tsf and tsfem dependencies for all scripts
 
 TODO remove uptime monitoring toggles, it never would've worked out anyway.
 
-TODO the "logo guidelines" link needs updating.
-	-> Just add an entry to our FAQ instead, Google's site keeps updating and it's annoying.
-
 TODO myMart and myMart Pharmacy isn't clear, they should be separated.
 	-> Remove the brackets in `{store name} {department name}`,
 		-> and make it `store name` OR `store name department name`
@@ -113,6 +110,8 @@ TODO we can use is_wp_version_compatible() and is_php_version_compatible() now.
 	* We modernized critical JavaScript code, slightly improving browser interaction performance.
 	* We modernized some CSS code, slightly reducing the plugin file sizes.
 	* We modernized some PHP code, slightly improving server response times.
+	* We changed the load sequence of the plugin to remove action overhead. It now loads at `init`, instead of `plugins_loaded`.
+		* Simultaneously, it resolves a deprecation notice with WordPress 6.7, which may be [reverted in 6.7.1](https://core.trac.wordpress.org/ticket/62462).
 * **Removed:**
 	* "SEO Trends and Updates" are no longer available. We had different plans for what would've been displayed (i.e., our own news feed), but it devolved into a marketing channel for Google unintentionally.
 		* The transient data for this (`tsfem_latest_seo_feed`) will be cleaned up automatically by WordPress.

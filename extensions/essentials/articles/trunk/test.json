@@ -2,14 +2,6 @@
 	"slug" : "articles",
 	"namespace" : "\\TSF_Extension_Manager\\Extension\\Articles",
 	"test" : {
-		"_base" : "articles.php",
-		"Admin" : [
-			"inc/classes/core.class.php",
-			"inc/classes/admin.class.php"
-		],
-		"Sitemap" : [
-			"inc/classes/core.class.php",
-			"inc/classes/sitemap.class.php"
-		]
+		"_base" : "articles.php"
 	}
 }

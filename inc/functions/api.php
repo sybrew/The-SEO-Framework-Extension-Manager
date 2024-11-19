@@ -274,6 +274,7 @@ namespace TSF_Extension_Manager {
 	 */
 	function load_upgrader() {
 		static $_loaded;
+
 		if ( $_loaded ) return;
 
 		require \TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrader.class.php';

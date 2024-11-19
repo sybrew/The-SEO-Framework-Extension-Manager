@@ -46,6 +46,13 @@ There is no setup required, and no options are available.
 
 ## Changelog
 
+### 1.3.0
+
+[tsfep-release time="-1"]
+
+* **Dev:** The extension file ands its classes are now loaded independently.
+* **Dev:** The main extension class is now called `TSF_Extension_Manager\Extension\Title_Fix\Front`, instead of `TSF_Extension_Manager\Extension\Title_Fix\Core`.
+
 ### 1.2.1
 
 [tsfep-release time="November 5th, 2019"]

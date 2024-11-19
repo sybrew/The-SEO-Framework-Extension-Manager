@@ -1,7 +1,6 @@
 <?php
 /**
- * The opportunity for doing mischief is found a hundred times a day,
- * and of doing good once in a year.
+ * The only thing necessary for the triumph of evil is for good men to do nothing.
  *
- * - François-Marie "Voltaire" Arouet
+ * - Edmund Burke
  */

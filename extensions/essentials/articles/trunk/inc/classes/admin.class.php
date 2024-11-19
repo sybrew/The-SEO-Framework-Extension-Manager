@@ -184,12 +184,7 @@ final class Admin extends Core {
 					'_readonly' => true,
 					'_desc'     => [
 						\__( 'Publisher Logo', 'the-seo-framework-extension-manager' ),
-						sprintf(
-							/* translators: %s = Logo guidelines link. Markdown. */
-							\__( 'Please refer to the [logo guidelines](%s).', 'the-seo-framework-extension-manager' ),
-							'https://developers.google.com/search/docs/advanced/structured-data/article#logo-guidelines'
-						),
-						\__( 'The logo must be a horizontally wide rectangle, not a square, and at least 60px high.', 'the-seo-framework-extension-manager' ),
+						\__( 'The logo must be at least 112px by 112px and should look how you intend it to on a purely white background.', 'the-seo-framework-extension-manager' ),
 					],
 					'_md'       => true,
 				],

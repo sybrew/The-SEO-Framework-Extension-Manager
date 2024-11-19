@@ -96,6 +96,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 		* **Fixed:** We found that not all site data was purged in the past, so we manually truncated the databases. You may find that recrawling is necessary.
 * **Extension:**
 	* **Improved:** To accomodate the increased frequency of scheduled tasks, we halved all wait times for crawls requesting and data fetching.
+	* **Improved:** When registering the site, the data timeout is set to prevent immediate fetching of data that doesn't exist.
 	* **Fixed:** API errors are handled more gracefully.
 	* **Fixed:** Resolved an issue where not all actions invoked a reconnection resolution when required.
 

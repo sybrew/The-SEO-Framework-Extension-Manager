@@ -2,11 +2,6 @@
 	"slug" : "monitor",
 	"namespace" : "\\TSF_Extension_Manager\\Extension\\Monitor",
 	"test" : {
-		"_base" : "monitor.php",
-		"Admin" : [
-			"inc/classes/data.class.php",
-			"inc/classes/api.class.php",
-			"inc/classes/admin.class.php"
-		]
+		"_base" : "monitor.php"
 	}
 }

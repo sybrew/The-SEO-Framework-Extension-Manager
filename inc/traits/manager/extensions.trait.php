@@ -85,9 +85,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1716207115',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'articles'  => [
 				'slug'         => 'articles',
@@ -98,9 +98,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1716196485',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'transport' => [
 				'slug'         => 'transport',
@@ -111,9 +111,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1687363584',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'honeypot'  => [
 				'slug'         => 'honeypot',
@@ -122,11 +122,11 @@ trait Extensions_Properties {
 				'area'         => 'anti-spam',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1664173453',
+				'last_updated' => '1731979506',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'cord'      => [
 				'slug'         => 'cord',
@@ -137,9 +137,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1698798295',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'local'     => [
 				'slug'         => 'local',
@@ -150,9 +150,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1675716878',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'amp'       => [
 				'slug'         => 'amp',
@@ -161,11 +161,11 @@ trait Extensions_Properties {
 				'area'         => 'general',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1675763035',
+				'last_updated' => '1731979291',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'monitor'   => [
 				'slug'         => 'monitor',
@@ -174,11 +174,11 @@ trait Extensions_Properties {
 				'area'         => 'syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1718279710',
+				'last_updated' => '1731979291',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'incognito' => [
 				'slug'         => 'incognito',
@@ -189,9 +189,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'origin'    => [
 				'slug'         => 'origin',
@@ -202,9 +202,9 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 			'title-fix' => [
 				'slug'         => 'title-fix',
@@ -213,11 +213,11 @@ trait Extensions_Properties {
 				'area'         => 'theme',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1716208521',
+				'last_updated' => '1731979291',
 				'requires'     => '5.9',
-				'tested'       => '6.6',
+				'tested'       => '6.7',
 				'requires_tsf' => '4.2.8',
-				'tested_tsf'   => '5.0.6',
+				'tested_tsf'   => '5.1.0',
 			],
 		];
 	}
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '1ef444849d43ac023f1998d19cb45c1704b8dfe905c92f4a7da2a165530937c7',
-			'sha1'   => 'df9fbe5b96e00df1f54b871fb2a1cf5297eec5f4',
-			'md5'    => '3b5f08d1dcc08cecd490de7f1c39aa20',
+			'sha256' => 'dfce375a1e864c85f778f04658c5cc09609f19b4df0396660b33cbf648a894f6',
+			'sha1'   => '103e38db18d208c247ba7551b403fa231c1d5621',
+			'md5'    => '7e6f1a4bce501000d48b16157f85365a',
 		];
 	}
 
@@ -902,7 +902,7 @@ trait Extensions_Actions {
 		$tests     = empty( $json->test ) ? [] : (array) $json->test;
 
 		foreach ( $tests as $_class => $_file ) {
-			// Base file is already tested.
+			// Base file is already tested at basetest.
 			if ( '_base' === $_class )
 				continue;
 
@@ -1057,7 +1057,6 @@ trait Extensions_Actions {
 		$advanced_error_notice = \esc_html( $error['message'] ) . ' in file <strong>' . \esc_html( $error['file'] ) . '</strong> on line <strong>' . \esc_html( $error['line'] ) . '</strong>.';
 
 		if ( \wp_doing_ajax() ) {
-			// TODO send slug?
 			\tsfem()->send_json(
 				[
 					'results'     => \TSF_Extension_Manager\get_ajax_notice( false, $error_notice, 10005 ),
@@ -1155,24 +1154,26 @@ trait Extensions_Actions {
 	 * @since 1.0.0
 	 * @since 2.2.0 Now allows for persistent shared-class tests (thanks to _once).
 	 * @since 2.5.1 Added memoization, speeds up loading.
+	 * @since 2.7.0 Now tests for strict false on inclusion return.
 	 *
 	 * @param string $file      The extension file to include.
 	 * @param string $_instance The verification instance. Propagates to inclusion file. Passed by reference.
 	 * @param array  $bits      The verification instance bits. Propagates to inclusion file. Passed by reference.
-	 * @return bool True on success, false on failure.
+	 * @return true
 	 */
 	private static function include_extension( $file, &$_instance, &$bits ) { // phpcs:ignore, VariableAnalysis.CodeAnalysis -- includes
 
-		static $loaded = [];
+		static $included = [];
 
-		if ( isset( $loaded[ $file ] ) ) {
+		if ( isset( $included[ $file ] ) ) {
 			// Tick the instance for we bypass inclusion.
 			\tsfem()->_verify_instance( $_instance, $bits[1] );
 
-			return $loaded[ $file ];
+			return $included[ $file ];
 		}
 
-		return $loaded[ $file ] = (bool) include $file;
+		// Allow `return;` but not return false;
+		return $included[ $file ] = false !== include $file;
 	}
 
 	/**

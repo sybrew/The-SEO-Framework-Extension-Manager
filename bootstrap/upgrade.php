@@ -24,14 +24,17 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\TSF_Extension_Manager\load_upgrader();
-
 // Note to self: We use "critical" here because it runs before extensions are loaded.
 // We should not attach to other hooks because we must upgrade in sequence.
 // We shouldn't have called it "critical", but "plugin" vs "extension" instead. TODO Fixme?
 // We should also abandon the "admin" vs "always" upgrader? Not loading some parts of the admin might make some migrations difficult, however.
 
+// Hook into upgrader first.
 \add_action( 'tsfem_prepare_critical_upgrade', __NAMESPACE__ . '\\_do_critical_core_upgrade', 0, 1 );
+
+// The load upgrader.
+\TSF_Extension_Manager\load_upgrader();
+
 /**
  * Upgrades the core plugin database before the plugin runs.
  *

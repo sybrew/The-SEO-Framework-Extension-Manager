@@ -45,36 +45,10 @@ final class Front extends Core {
 	 * @since 1.0.0
 	 */
 	private function construct() {
-		\add_action( 'the_seo_framework_do_before_output', [ $this, '_init' ], 10 );
-		\add_action( 'the_seo_framework_do_before_amp_output', [ $this, '_init' ], 10 );
-	}
+		\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_local_json' ] );
 
-	/**
-	 * Initializes front-end hooks.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 */
-	public function _init() {
-		if ( $this->is_amp() ) {
-			// Initialize output in The SEO Framework's front-end AMP meta object.
-			\add_action( 'the_seo_framework_amp_pro', [ $this, '_local_hook_amp_output' ] );
-		} else {
-			\add_action( 'the_seo_framework_after_meta_output', [ $this, '_output_local_json' ] );
-		}
-	}
-
-	/**
-	 * Outputs the AMP Local script.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @param string $output The current AMP pro output.
-	 * @return string The added local script.
-	 */
-	public function _local_hook_amp_output( $output = '' ) {
-		return $output .= $this->_get_local_json_output();
+		if ( ! \TSF_EXTENSION_MANAGER_USE_MODERN_TSF )
+			\add_action( 'the_seo_framework_do_after_amp_output', [ $this, '_output_local_json' ] );
 	}
 
 	/**

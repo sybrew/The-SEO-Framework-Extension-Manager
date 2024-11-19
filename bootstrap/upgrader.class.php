@@ -104,8 +104,8 @@ final class Upgrader {
 		$this->increase_available_memory();
 
 		// These are not available to extensions.
-		\add_action( 'plugins_loaded', [ $this, '_load_critical_hook' ], 0 );
-		\add_action( 'plugins_loaded', [ $this, '_parse_critical' ], 1 );
+		$this->_load_critical_hook();
+		$this->_parse_critical();
 
 		\add_action( 'tsfem_extensions_initialized', [ $this, '_load_hooks' ], 10 );
 		\add_action( 'tsfem_extensions_initialized', [ $this, '_parse' ], 11 );

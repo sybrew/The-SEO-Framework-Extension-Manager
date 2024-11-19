@@ -78,26 +78,5 @@ namespace TSF_Extension_Manager\Extension\Focus;
 if ( ! \tsfem()->_init_early_extension_autoloader( \TSFEM_E_FOCUS_PATH_CLASS, 'Focus', $_instance, $bits ) )
 	return;
 
-\add_action( 'admin_init', __NAMESPACE__ . '\\_focus_init', 10 );
-/**
- * Initializes the extension.
- *
- * @since 1.0.0
- * @access private
- *
- * @return bool True if class is loaded.
- */
-function _focus_init() {
-
-	static $loaded;
-
-	if ( isset( $loaded ) )
-		return $loaded;
-
-	if ( \is_admin() ) {
-		new Admin;
-		$loaded = true;
-	}
-
-	return $loaded = (bool) $loaded;
-}
+if ( \is_admin() )
+	new Admin;

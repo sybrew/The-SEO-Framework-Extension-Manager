@@ -67,6 +67,12 @@ add_action( 'the_seo_framework_do_before_amp_output', function () {
 
 ## Changelog
 
+### 1.3.0
+
+[tsfep-release time="-1"]
+
+* **Dev:** The extension file ands its classes are now loaded independently.
+
 ### 1.2.1
 
 [tsfep-release time="February 7th, 2023"]

@@ -156,6 +156,8 @@ class Api extends Data {
 		$success[] = $this->set_remote_crawl_timeout();
 		$success[] = $this->update_option( 'site_requires_fix', false );
 		$success[] = $this->update_option( 'site_marked_inactive', false );
+		// Also set a data timeout to prevent immediate fetching resulting in no useful data.
+		$success[] = $this->set_remote_data_timeout();
 
 		if ( \in_array( false, $success, true ) ) {
 			$this->set_error_notice( [ 1010303 => '' ] );

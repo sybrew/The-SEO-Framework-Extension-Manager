@@ -95,27 +95,8 @@ if ( ! \tsfem()->_init_early_extension_autoloader( \TSFEM_E_CORD_PATH_CLASS, 'Co
 // }
 // phpcs:enable
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_cord_init', 11 );
-/**
- * Initializes the extension.
- *
- * @since 1.0.0
- * @access private
- *
- * @return bool True if class is loaded.
- */
-function _cord_init() {
-
-	static $loaded;
-
-	if ( isset( $loaded ) )
-		return $loaded;
-
-	if ( \is_admin() ) {
-		new Admin;
-	} else {
-		new Front;
-	}
-
-	return $loaded = true;
+if ( \is_admin() ) {
+	new Admin;
+} else {
+	new Front;
 }

@@ -2,10 +2,6 @@
 	"slug" : "focus",
 	"namespace" : "\\TSF_Extension_Manager\\Extension\\Focus",
 	"test" : {
-		"_base" : "focus.php",
-		"Admin" : [
-			"inc/classes/core.class.php",
-			"inc/classes/admin.class.php"
-		]
+		"_base" : "focus.php"
 	}
 }

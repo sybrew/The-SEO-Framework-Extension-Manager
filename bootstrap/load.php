@@ -24,45 +24,22 @@ namespace TSF_Extension_Manager;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_init_locale', 4 );
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\_load_tsfem', 5 );
-
-/**
- * Loads plugin locale: 'the-seo-framework-extension-manager'
- * Locale folder: the-seo-framework-extension-manager/language/
- *
- * @hook plugins_loaded 4
- * @since 1.0.0
- * @access private
- *
- * @param bool $ignore Whether to load locale outside of the admin area.
- * @return void Early if already loaded.
- */
-function _init_locale( $ignore = false ) {
-
-	static $has_loaded = false;
-
-	if ( ! $has_loaded && ( \is_admin() || $ignore ) ) {
-
-		\load_plugin_textdomain(
-			'the-seo-framework-extension-manager',
-			false,
-			\dirname( \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
-		);
-
-		$has_loaded = true;
-	}
-}
+\add_action( 'init', __NAMESPACE__ . '\\_load_tsfem', 0 );
 
 /**
  * Loads the plugin.
  *
- * @hook plugins_loaded 5
+ * @hook init 0
  * @since 2.7.0
  * @access private
- * @uses constant \PHP_INT_MIN, available from PHP 7.0
  */
 function _load_tsfem() {
+
+	\load_plugin_textdomain(
+		'the-seo-framework-extension-manager',
+		false,
+		\dirname( \TSF_EXTENSION_MANAGER_PLUGIN_BASENAME ) . \DIRECTORY_SEPARATOR . 'language',
+	);
 
 	if ( ! \function_exists( 'tsf' ) ) {
 		if ( \is_admin() )
@@ -70,16 +47,14 @@ function _load_tsfem() {
 		return;
 	}
 
-	// Prepare plugin upgrader before the plugin loads.
+	// Prepare plugin upgrader before the plugin loads. TODO: Make downgrading possible.
 	if ( \tsf_extension_manager_db_version() < \TSF_EXTENSION_MANAGER_DB_VERSION )
 		require \TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'upgrade.php';
 
 	\TSF_Extension_Manager\_protect_options();
 	\TSF_Extension_Manager\_register_autoloader();
 
-	_init_tsf_extension_manager();
-	// TODO var_Dump() next pass:
-	// \add_action( 'the_seo_framework_loaded', __NAMESPACE__ . '\\_init_tsf_extension_manager', 0 );
+	\add_action( 'the_seo_framework_init', __NAMESPACE__ . '\\_init_tsf_extension_manager', 0 );
 }
 
 /**
@@ -91,11 +66,10 @@ function _load_tsfem() {
  * This is because the required traits files aren't loaded yet. The autoloader treats traits
  * as classes.
  *
- * Also defines \PHP_INT_MIN when not defined. This is used further internally.
+ * TODO remove this. It's stupid. We need a better way to store the API key, such as oAuth.
  *
  * @since 1.0.0
  * @access private
- * @uses constant \PHP_INT_MIN, available from PHP 7.0
  */
 function _protect_options() {
 
@@ -152,16 +126,9 @@ function _pre_execute_protect_option( $new_value, $old_value, $option ) {
  * Also directly initializes extensions after the class constructors have run.
  * This will allow all extensions and functions to run exactly after The SEO Framework has been initialized.
  *
- * Priority 6: Use anything above 6, or any action later than plugins_loaded and
- *             you can access the class and functions. Failing to do so will perform wp_die().
- *             This makes sure The SEO Framework has been initialized correctly as well.
- *             So you can use function `tsf()` at all times.
- *
- * Performs wp_die() when called prior to action `plugins_loaded`.
- *
- * @hook the_seo_framework_loaded 0
+ * @hook the_seo_framework_init 0
  * @since 1.0.0
- * @since 2.7.0 Moved from plugins_loaded 6 to the_seo_framework_loaded (init 0).
+ * @since 2.7.0 Moved from plugins_loaded 6 to the_seo_framework_init (init 0).
  * @access private
  * @factory
  *
