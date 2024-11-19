@@ -311,14 +311,14 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ## Changelog
 
-### 1.5.4
+### 1.6.0
 
 [tsfep-release time="-1"]
 
 * **Improved:** WordPress 6.5 removed the pointer cursor from labels. To make it clear again that inflections and synonyms are clickable, they now display a tiny border on-hover to indicate this affordance.
 * **Improved:** WooCommerce's "Product short description" is now considered for subject assessments. The "Product short description" is considered to be placed before the "Product description."
 * **Improved:** Added screen reader titles to selection fields.
-* **Improved:** Classic Editor's parsing delay has been cut in half (from 1 second to 0.5 seconds) because it's prone to wait a while already after typing before relaying updates.
+* **Improved:** Classic Editor's parsing delay has been cut in half (from 1 second to 0.5 seconds) because it's prone to already wait a while after typing before relaying updates.
 * **Improved:** When a dictionary lookup fails and you use a space, we now tell you about using [single or compound words only](#faq/are-phrases-supported).
 * **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
 * **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
@@ -326,7 +326,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 * **Fixed:** Resolved an issue when either inflections or synonyms are available, but not both, the parser would crash and the word selection would appear broken after saving and reloading the page. This fix is applied retroactively.
 * **Fixed:** Resolved an issue when no synonyms and inflections are found, the dictionary editor would still show up. Now, it will not be available.
 * **Fixed:** Inflections that are a homonym of the keyword in a different case is now correctly preselected. This ties in with the API change below.
-* **API (for all versions):** 2024-06-05: We now filter duplicated words from inflections and synonyms in a case-insensitive manner. Focus also parses content without case sensitivity, so duplicated words wouldn't be helpful.
+* **API (for all versions):** 2024-06-05: We now filter duplicated words from inflections and synonyms in a case-insensitive manner. Focus also parses content without case sensitivity, so duplicated words wouldn't be helpful anyway.
 
 ### 1.5.3
 

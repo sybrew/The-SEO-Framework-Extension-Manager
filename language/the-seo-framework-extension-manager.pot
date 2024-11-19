@@ -1,15 +1,15 @@
-# Copyright (C) 2023 The SEO Framework Team
+# Copyright (C) 2024 The SEO Framework Team
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: The SEO Framework - Extension Manager 2.6.3\n"
+"Project-Id-Version: The SEO Framework - Extension Manager 2.7.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/The-SEO-Framework-Extension-Manager\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-06T22:04:15+00:00\n"
+"POT-Creation-Date: 2024-11-19T05:26:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: the-seo-framework-extension-manager\n"
@@ -35,68 +35,68 @@ msgid "https://theseoframework.com/"
 msgstr ""
 
 #. translators: %s: Plugin name
-#: bootstrap/install.php:121
+#: bootstrap/install-tsf.php:122
 msgid "Learn more about %s"
 msgstr ""
 
-#: bootstrap/install.php:122
+#: bootstrap/install-tsf.php:123
 msgid "View plugin details"
 msgstr ""
 
 #. translators: 1 = Extension Manager, 2 = The SEO Framework, 3 = View plugin details.
-#: bootstrap/install.php:126
+#: bootstrap/install-tsf.php:127
 msgid "%1$s requires %2$s plugin to function. %3$s"
 msgstr ""
 
 #. translators: %s: The SEO Framework
-#: bootstrap/install.php:158
+#: bootstrap/install-tsf.php:159
 msgid "Install %s"
 msgstr ""
 
-#: bootstrap/install.php:159
+#: bootstrap/install-tsf.php:160
 msgid "Install Now"
 msgstr ""
 
 #. translators: Markdown. %s = Update API URL
-#: bootstrap/update.php:60
+#: bootstrap/update.php:59
 msgid "This website is blocking external requests, this means it will not be able to connect to The SEO Framework update services. Please add `%s` to `WP_ACCESSIBLE_HOSTS` to keep the Extension Manager plugin up-to-date and secure."
 msgstr ""
 
-#: bootstrap/update.php:100
+#: bootstrap/update.php:109
 msgid "This website does not support secure connections. This means \"The SEO Framework - Extension Manager\" can not be updated."
 msgstr ""
 
 #. translators: %1$s: API url, %2$s: support URL
-#: bootstrap/update.php:122
+#: bootstrap/update.php:131
 msgid "An unexpected error occurred. Something may be wrong with %1$s or this server&#8217;s configuration. If you continue to have problems, please <a href=\"%2$s\">contact us</a>."
 msgstr ""
 
 #. translators: %s: support forums URL
-#: bootstrap/update.php:146
+#: bootstrap/update.php:155
 msgid "An unexpected error occurred. Something may be wrong with TheSEOFramework.com or this server&#8217;s configuration. If you continue to have problems, please <a href=\"%s\">contact us</a>."
 msgstr ""
 
 #: extensions/essentials/articles/trunk/inc/classes/admin.class.php:112
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:283
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:521
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:560
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:601
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:278
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:516
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:555
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:596
 msgid "Article"
 msgstr ""
 
 #: extensions/essentials/articles/trunk/inc/classes/admin.class.php:113
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:289
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:522
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:561
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:602
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:284
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:517
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:556
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:597
 msgid "News Article"
 msgstr ""
 
 #: extensions/essentials/articles/trunk/inc/classes/admin.class.php:114
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:295
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:523
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:562
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:603
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:290
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:518
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:557
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:598
 msgid "Blog Posting"
 msgstr ""
 
@@ -129,65 +129,60 @@ msgstr ""
 msgid "Publisher Logo"
 msgstr ""
 
-#. translators: %s = Logo guidelines link. Markdown.
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:189
-msgid "Please refer to the [logo guidelines](%s)."
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:187
+msgid "The logo must be at least 112px by 112px and should look how you intend it to on a purely white background."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:192
-msgid "The logo must be a horizontally wide rectangle, not a square, and at least 60px high."
-msgstr ""
-
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:235
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:230
 msgid "Enable Post Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:240
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:235
 msgid "Enable article markup support?"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:258
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:253
 msgid "Default Article Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:260
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:255
 msgid "This setting can be overwritten on a per-page basis. Changing this setting does not affect pages that have a type already stored."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:277
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:520
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:559
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:600
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:272
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:515
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:554
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:595
 msgid "&mdash; Disabled &mdash;"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:307
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:302
 msgid "Adjust article settings for this post type."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:337
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:332
 msgid "Post Type Settings"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:338
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:333
 msgid "Article markup should only be applied to content that is ephemeral and may be subject to change, like an opinionated blog post, a news article, or a research document. Timeless content, such as a contact, product, or about page, should not have the article markup."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:339
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:334
 msgid "Be mindful of the post types you enable. For instance, a product, app, recipe, or an event page should not always be recognized as an article."
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:345
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:340
 msgid "Supported"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:510
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:557
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:596
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:505
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:552
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:591
 msgid "Article Type"
 msgstr ""
 
-#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:511
+#: extensions/essentials/articles/trunk/inc/classes/admin.class.php:506
 msgid "Set the article type."
 msgstr ""
 
@@ -231,19 +226,19 @@ msgstr ""
 msgid "Get your [Pixel ID](%s)."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:219
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:221
 msgid "No example available."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:220
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:222
 msgid "A parsing failure occurred."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:291
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:299
 msgid "Subject Analysis"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:292
+#: extensions/essentials/focus/trunk/inc/classes/admin.class.php:300
 msgid "Set subjects and learn how you can improve their focus."
 msgstr ""
 
@@ -379,31 +374,39 @@ msgstr ""
 msgid "Keyword..."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:93
-msgid "Adjust subject inflections and synonyms."
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:50
+msgid "Select lexical form"
 msgstr ""
 
 #: extensions/essentials/focus/trunk/views/inpost/focus-template.php:94
+msgid "Adjust subject inflections and synonyms."
+msgstr ""
+
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:95
 msgid "The current site language has no support for lexical adjustments."
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:124
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:125
 msgid "Adjusting the subject requires JavaScript"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:164
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:165
 msgid "View analysis"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:184
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:185
 msgid "Choose homonymous example:"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:198
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:196
+msgid "Select homonymous example"
+msgstr ""
+
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:200
 msgid "Choose inflections"
 msgstr ""
 
-#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:202
+#: extensions/essentials/focus/trunk/views/inpost/focus-template.php:204
 msgid "Choose synonyms"
 msgstr ""
 
@@ -427,15 +430,15 @@ msgstr ""
 msgid "Something went wrong evaluating the subject."
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:695
+#: extensions/essentials/honeypot/trunk/inc/classes/front.class.php:721
 msgid "You are human!"
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:706
+#: extensions/essentials/honeypot/trunk/inc/classes/front.class.php:732
 msgid "Please empty this comment field to prove you're human."
 msgstr ""
 
-#: extensions/essentials/honeypot/trunk/honeypot.php:717
+#: extensions/essentials/honeypot/trunk/inc/classes/front.class.php:743
 msgid "Comment for robots"
 msgstr ""
 
@@ -443,53 +446,53 @@ msgstr ""
 msgid "Select plugin"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:426
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:424
 msgid "SEO Settings"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:427
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:425
 msgid "Post Metadata"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:428
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:426
 msgid "Term Metadata"
 msgstr ""
 
 #. translators: %s = plugin name, such as Yoast SEO
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:432
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:430
 msgid "Request Importer for %s&hellip;"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:433
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:431
 msgid "Unknown error"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:434
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:432
 msgid "An unknown error occured. Please refresh this page and try again."
 msgstr ""
 
 #. translators: %d = Seconds
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:436
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:434
 msgid "Retrying in %d&hellip;"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:437
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:435
 msgid "Automated retry limit reached."
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:581
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:582
 msgid "Copied!"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:582
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:583
 msgid "Failed to copy"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:583
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:584
 msgid "Copy log"
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/admin.class.php:588
+#: extensions/free/transport/trunk/inc/classes/admin.class.php:589
 msgid "Scroll to bottom"
 msgstr ""
 
@@ -592,11 +595,11 @@ msgid_plural "Deleted %d old entries."
 msgstr[0] ""
 msgstr[1] ""
 
-#: extensions/free/transport/trunk/inc/classes/importers/termmeta/wordpress-seo.class.php:296
+#: extensions/free/transport/trunk/inc/classes/importers/termmeta/wordpress-seo.class.php:294
 msgid "Cleanup: Deleted old term meta successfully."
 msgstr ""
 
-#: extensions/free/transport/trunk/inc/classes/importers/termmeta/wordpress-seo.class.php:301
+#: extensions/free/transport/trunk/inc/classes/importers/termmeta/wordpress-seo.class.php:299
 msgid "Cleanup: Failed to delete old term meta."
 msgstr ""
 
@@ -829,12 +832,12 @@ msgstr ""
 
 #. translators: backticks are markdown for code blocks!
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:300
-msgid "Can be a range with absolute numbers such as `$1-5`, or `$10 - $50.95`."
+msgid "This can be a range of absolute numbers such as `$1-5`, or `$10 - $50.95`."
 msgstr ""
 
 #. translators: backticks are markdown for code blocks!
 #: extensions/premium/local/trunk/inc/classes/fields.class.php:302
-msgid "Can be a relative price indication, where `$` means relatively inexpensive and `$$$$` extremely expensive."
+msgid "This can be a relative pricing indication, where `$` means relatively inexpensive compared to similar businesses, and `$$$$` extremely expensive."
 msgstr ""
 
 #. translators: backticks are markdown for code blocks!
@@ -2953,21 +2956,21 @@ msgstr ""
 msgid "Delivery through download"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:346
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:343
 msgid "Please correct the form fields before validating the markup."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:347
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:344
 msgid "The markup tester will be opened in a new window."
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:377
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:374
 #: extensions/premium/local/trunk/views/layout/general/top.php:33
-#: inc/classes/extensionsettings.class.php:519
+#: inc/classes/extensionsettings.class.php:516
 msgid "Save"
 msgstr ""
 
-#: extensions/premium/local/trunk/inc/classes/settings.class.php:411
+#: extensions/premium/local/trunk/inc/classes/settings.class.php:408
 msgid "See Markup"
 msgstr ""
 
@@ -2996,141 +2999,141 @@ msgstr ""
 msgid "All input data will be disclosed. So, if you wish to withold any data from the public, do not fill it in."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:478
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:564
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:472
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:559
 msgid "Something went wrong. Please reload the page."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:892
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:887
 msgid "Actions"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:915
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:910
 #: inc/traits/manager/extensions-layout.trait.php:71
 msgid "Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:922
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:917
 msgid "These settings are in development. Enable these to participate in the beta tests."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:925
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:920
 msgid "Disabled"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:928
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:923
 msgid "Uptime monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:929
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:924
 msgid "Set how often you want Monitor to test your website for availability."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:940
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:935
 msgid "Performance monitoring:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:941
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:936
 msgid "Set how often you want Monitor to test your website for performance."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1019
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1014
 msgid "Update Settings"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1046
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1041
 msgid "Fetch Data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1047
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1042
 msgid "Request Monitor to send you the latest data"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1048
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1043
 msgid "Get the latest data of your website from Monitor."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1080
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1075
 msgid "Request Crawl"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1081
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1076
 msgid "Request Monitor to re-crawl this website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1082
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1077
 msgid "If your website has recently been updated, ask Monitor to re-crawl your site. This can take up to three minutes."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1126
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1121
 #: inc/traits/manager/extensions-layout.trait.php:68
 msgid "Overview"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1135
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1130
 msgid "Connected site:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1140
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1135
 msgid "Last crawled:"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1162
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1157
 msgid "Never"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1167
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1162
 msgid "No completed crawl has been recorded yet."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1191
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1186
 msgid "Reconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1194
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1189
 msgid "Your website has been marked inactive."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1196
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1191
 msgid "The instance ID of your site does not match the remote server."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1222
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1217
 msgid "Request Reactivation"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1223
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1218
 msgid "Request Monitor to reconnect your website"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1257
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1252
 #: inc/classes/layout.class.php:138
 msgid "Disconnect"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1258
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1253
 #: inc/classes/layout.class.php:139
 msgid "Are you sure?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1259
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1254
 msgid "Disconnect site?"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1290
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1285
 msgid "Disconnect site"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1304
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1299
 msgid "No processable data was found. Try fetching new data."
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1316
+#: extensions/premium/monitor/trunk/inc/classes/admin.class.php:1311
 msgid "Coming soon!"
 msgstr ""
 
 #. translators: %s = numeric seconds.
-#: extensions/premium/monitor/trunk/inc/classes/api.class.php:512
+#: extensions/premium/monitor/trunk/inc/classes/api.class.php:534
 msgid "Try again in %s second."
 msgid_plural "Try again in %s seconds."
 msgstr[0] ""
@@ -3168,7 +3171,7 @@ msgstr ""
 msgid "More coming soon!"
 msgstr ""
 
-#: extensions/premium/monitor/trunk/inc/classes/output.class.php:428
+#: extensions/premium/monitor/trunk/inc/classes/output.class.php:423
 msgid "The Extension Manager needs to be updated to interpret this data."
 msgstr ""
 
@@ -3431,8 +3434,8 @@ msgstr ""
 msgid "API Key disconnected."
 msgstr ""
 
-#: inc/classes/ajax.class.php:439
-#: inc/classes/ajax.class.php:520
+#: inc/classes/ajax.class.php:438
+#: inc/classes/ajax.class.php:519
 msgid "Image could not be processed."
 msgstr ""
 
@@ -3441,7 +3444,7 @@ msgstr ""
 msgid "Extension Settings"
 msgstr ""
 
-#: inc/classes/extensionsettings.class.php:489
+#: inc/classes/extensionsettings.class.php:486
 msgid "Save All"
 msgstr ""
 
@@ -3457,32 +3460,32 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:250
+#: inc/classes/inpostgui.class.php:249
 #: inc/traits/core/ui.trait.php:235
 msgid "Received invalid AJAX response."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:251
+#: inc/classes/inpostgui.class.php:250
 #: inc/traits/core/ui.trait.php:236
 msgid "An unknown error occurred."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:252
+#: inc/classes/inpostgui.class.php:251
 #: inc/traits/core/ui.trait.php:237
 msgid "Timeout: Server took too long to respond."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:253
+#: inc/classes/inpostgui.class.php:252
 #: inc/traits/core/ui.trait.php:238
 msgid "Bad request: The server can't handle the request."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:254
+#: inc/classes/inpostgui.class.php:253
 #: inc/traits/core/ui.trait.php:239
 msgid "A fatal error occurred on the server."
 msgstr ""
 
-#: inc/classes/inpostgui.class.php:255
+#: inc/classes/inpostgui.class.php:254
 #: inc/traits/core/ui.trait.php:240
 msgid "A parsing error occurred in your browser."
 msgstr ""
@@ -3496,7 +3499,7 @@ msgid "The domain of this site does not match the stored connection. You can tra
 msgstr ""
 
 #: inc/classes/layout.class.php:192
-#: inc/classes/panes.class.php:546
+#: inc/classes/panes.class.php:315
 msgid "Transfer domain"
 msgstr ""
 
@@ -3696,152 +3699,112 @@ msgid "Advanced SEO Settings"
 msgstr ""
 
 #. translators: Markdown. %s = API URL
-#: inc/classes/loadadmin.class.php:182
+#: inc/classes/loadadmin.class.php:181
 msgid "This website is blocking external requests, this means it will not be able to connect to the API services. Please add `%s` to `WP_ACCESSIBLE_HOSTS`."
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:384
+#: inc/classes/loadadmin.class.php:377
 msgid "Activate the SEO Extension Manager"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:387
+#: inc/classes/loadadmin.class.php:380
 msgid "Your extensions are only three clicks away"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:538
+#: inc/classes/loadadmin.class.php:531
 msgid "No valid URL was supplied."
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:629
+#: inc/classes/loadadmin.class.php:622
 msgid "Go to WooCommerce.com dashboard"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:630
+#: inc/classes/loadadmin.class.php:623
 msgid "WooCommerce.com Dashboard"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:637
+#: inc/classes/loadadmin.class.php:630
 msgid "Go to My Account"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:638
+#: inc/classes/loadadmin.class.php:631
 msgid "My Account"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:661
+#: inc/classes/loadadmin.class.php:654
 msgid "Get support via mail"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:662
+#: inc/classes/loadadmin.class.php:655
 msgid "Private Support"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:670
+#: inc/classes/loadadmin.class.php:663
 msgid "File an issue with us"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:671
+#: inc/classes/loadadmin.class.php:664
 msgid "Public Support"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:679
+#: inc/classes/loadadmin.class.php:672
 msgid "Manage your subscription via WooCommerce.com"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:680
+#: inc/classes/loadadmin.class.php:673
 msgid "Manage Subscription"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:688
+#: inc/classes/loadadmin.class.php:681
 msgid "Get support via WooCommerce.com"
 msgstr ""
 
-#: inc/classes/loadadmin.class.php:689
+#: inc/classes/loadadmin.class.php:682
 msgid "Get Plugin Support"
 msgstr ""
 
 #. translators: %s = extension slug
-#: inc/classes/loadadmin.class.php:961
+#: inc/classes/loadadmin.class.php:955
 msgid "Extension slug: %s"
 msgstr ""
 
-#: inc/classes/panes.class.php:137
-#: inc/classes/panes.class.php:169
-msgid "Unfortunately, your server can't process this request as of yet."
-msgstr ""
-
-#: inc/classes/panes.class.php:142
-#: inc/classes/panes.class.php:179
-msgid "There are no trends and updates to report yet."
-msgstr ""
-
-#. translators: %s = "Google Webmaster Central Blog"
-#: inc/classes/panes.class.php:236
-msgid "The feed is acquired from %s."
-msgstr ""
-
-#: inc/classes/panes.class.php:239
-msgid "Google's Privacy Policy"
-msgstr ""
-
-#. translators: %s = "Google's Privacy Policy"
-#: inc/classes/panes.class.php:243
-msgid "Read %s."
-msgstr ""
-
-#: inc/classes/panes.class.php:248
-msgid "The feed has been disabled to protect your privacy."
-msgstr ""
-
-#: inc/classes/panes.class.php:251
-msgid "You may choose to enable the feed. Once enabled, it can not be disabled."
-msgstr ""
-
-#: inc/classes/panes.class.php:268
-msgid "Enable feed?"
-msgstr ""
-
-#: inc/classes/panes.class.php:449
+#: inc/classes/panes.class.php:218
 msgid "This information is updated every few minutes, infrequently."
 msgstr ""
 
-#: inc/classes/panes.class.php:453
+#: inc/classes/panes.class.php:222
 msgid "Account information"
 msgstr ""
 
-#: inc/classes/panes.class.php:525
+#: inc/classes/panes.class.php:294
 msgid "Upgrade your account"
 msgstr ""
 
-#: inc/classes/panes.class.php:579
+#: inc/classes/panes.class.php:348
 msgid "This will free up your site limit."
 msgstr ""
 
-#: inc/classes/panes.class.php:581
-msgid "This will deactivate all extensions."
-msgstr ""
-
-#: inc/classes/panes.class.php:583
+#: inc/classes/panes.class.php:350
 msgid "Extension options will not be deleted."
 msgstr ""
 
-#: inc/classes/panes.class.php:587
+#: inc/classes/panes.class.php:354
 msgid "Disconnect account"
 msgstr ""
 
-#: inc/classes/panes.class.php:621
+#: inc/classes/panes.class.php:388
 msgid "Your WooCommerce.com subscription"
 msgstr ""
 
-#: inc/classes/panes.class.php:622
+#: inc/classes/panes.class.php:389
 msgid "Get support for The SEO Framework and manage your subscription via WooCommerce.com."
 msgstr ""
 
-#: inc/classes/panes.class.php:636
+#: inc/classes/panes.class.php:403
 msgid "Inquire your question publicly so more people will benefit from our support."
 msgstr ""
 
-#: inc/classes/panes.class.php:640
+#: inc/classes/panes.class.php:407
 msgid "Questions about your account should be inquired via Private Support."
 msgstr ""
 
@@ -3959,64 +3922,64 @@ msgid "Enjoy your free extensions!"
 msgstr ""
 
 #: inc/traits/core/error.trait.php:434
-msgid "The feed has been enabled."
-msgstr ""
-
-#: inc/traits/core/error.trait.php:439
 msgid "Successfully deactivated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:444
+#: inc/traits/core/error.trait.php:439
 msgid "Your subscription has expired or has been deactivated remotely."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:451
+#: inc/traits/core/error.trait.php:446
 msgid "Your subscription instance couldn't be verified."
 msgstr ""
 
 #. translators: %s = My Account
-#: inc/traits/core/error.trait.php:455
+#: inc/traits/core/error.trait.php:450
 msgid "Your subscription instance couldn't be verified. Login to the %s page and verify if this site is still connected."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:463
+#: inc/traits/core/error.trait.php:458
 msgid "Your account level has been set to Essentials. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:468
+#: inc/traits/core/error.trait.php:463
 msgid "Your account level has been set to Premium. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:473
+#: inc/traits/core/error.trait.php:468
 msgid "Your account level has been set to Enterprise. Reload the page if it didn't take effect."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:484
+#: inc/traits/core/error.trait.php:480
+msgid "An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive."
+msgstr ""
+
+#: inc/traits/core/error.trait.php:482
 msgid "An error occured while verifying the options. The local instance is out of sync and enabled extensions are now inactive. If this error keeps coming back, please disconnect your account at \"Account and Actions\" and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:498
+#: inc/traits/core/error.trait.php:497
 msgid "User verification failed. Please try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:505
+#: inc/traits/core/error.trait.php:504
 msgid "Extension list has been tampered with. Please reinstall this plugin and try again."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:510
-#: inc/traits/manager/extensions.trait.php:1045
+#: inc/traits/core/error.trait.php:509
+#: inc/traits/manager/extensions.trait.php:1055
 msgid "Extension is not compatible with your server configuration."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:516
+#: inc/traits/core/error.trait.php:515
 msgid "Extension has been successfully activated."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:521
+#: inc/traits/core/error.trait.php:520
 msgid "Extension was already activated in another browser instance."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:527
+#: inc/traits/core/error.trait.php:526
 msgid "Can't touch this."
 msgstr ""
 
@@ -4065,7 +4028,7 @@ msgid "Data has just been updated."
 msgstr ""
 
 #: inc/traits/core/error.trait.php:601
-msgid "Crawl has been requested successfully. It can take up to three minutes to be processed."
+msgid "Crawl has been requested successfully. It can take up to two minutes to be processed."
 msgstr ""
 
 #: inc/traits/core/error.trait.php:606
@@ -4164,27 +4127,31 @@ msgstr ""
 msgid "No definitions found. Check your spelling."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:749
+#: inc/traits/core/error.trait.php:748
+msgid "No definitions found. Check your spelling and consider using simple or compound words only."
+msgstr ""
+
+#: inc/traits/core/error.trait.php:754
 msgid "No inflections found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:755
+#: inc/traits/core/error.trait.php:760
 msgid "No synonyms found."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:760
+#: inc/traits/core/error.trait.php:765
 msgid "Lexical forms received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:765
+#: inc/traits/core/error.trait.php:770
 msgid "Synonyms received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:770
+#: inc/traits/core/error.trait.php:775
 msgid "Inflections received."
 msgstr ""
 
-#: inc/traits/core/error.trait.php:799
+#: inc/traits/core/error.trait.php:804
 msgid "An unknown error occurred. Contact the plugin author if this error keeps coming back."
 msgstr ""
 
@@ -4352,13 +4319,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: Greater time, 2: Smaller time
-#: inc/traits/factory/time.trait.php:272
+#: inc/traits/factory/time.trait.php:273
 msgctxt "5 minutes and 3 seconds"
 msgid "%1$s and %2$s"
 msgstr ""
 
 #. translators: 1: Greater time, 2: Smaller time
-#: inc/traits/factory/time.trait.php:279
+#: inc/traits/factory/time.trait.php:280
 msgctxt "7 hours, 8 minutes [and...]"
 msgid "%1$s, %2$s"
 msgstr ""
@@ -4428,7 +4395,7 @@ msgstr ""
 msgid "Compatible with the current versions of WordPress and The SEO Framework."
 msgstr ""
 
-#: inc/traits/manager/extensions.trait.php:1059
+#: inc/traits/manager/extensions.trait.php:1068
 msgid "Extension has not been activated."
 msgstr ""
 
@@ -4490,10 +4457,6 @@ msgstr ""
 
 #: views/layout/pages/extensions.php:24
 msgid "Account and Actions"
-msgstr ""
-
-#: views/layout/pages/extensions.php:38
-msgid "SEO Trends and Updates"
 msgstr ""
 
 #: views/template/fbtopnotice.php:17
