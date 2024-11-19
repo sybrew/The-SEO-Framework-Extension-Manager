@@ -98,7 +98,7 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 **Detailed log:**
 
-View the [detailed v2.7.0 changelog](https://tsf.fyi/p/ TODO).
+View the [detailed v2.7.0 changelog](https://tsf.fyi/p/4306/).
 
 = Full changelog =
 
