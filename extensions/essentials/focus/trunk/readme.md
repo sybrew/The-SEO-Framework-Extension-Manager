@@ -313,7 +313,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.6.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 19th, 2024"]
 
 * **Improved:** WordPress 6.5 removed the pointer cursor from labels. To make it clear again that inflections and synonyms are clickable, they now display a tiny border on-hover to indicate this affordance.
 * **Improved:** WooCommerce's "Product short description" is now considered for subject assessments. The "Product short description" is considered to be placed before the "Product description."

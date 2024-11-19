@@ -269,7 +269,7 @@ add_filter( 'the_seo_framework_honeypot_timestamp_wait', function ( $time = 5.33
 
 ### 2.1.0
 
-[tsfep-release time="-1"]
+[tsfep-release time="November 19th, 2024"]
 
 * **Added:** Added a new ciphered server-sided timestamp test to counter speedhacks bypassing the GPU timer.
 
