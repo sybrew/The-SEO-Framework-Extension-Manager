@@ -418,7 +418,7 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_update_settings() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 			$tsfem  = \tsfem();
 			$option = '';
 			$send   = [];
@@ -466,7 +466,7 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_fetch_data() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 
 			if ( ! \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 				$status = [
@@ -552,7 +552,7 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_request_crawl() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_extension_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 
 			$timeout = null;
 
@@ -635,24 +635,22 @@ final class Admin extends Api {
 	 */
 	public function _wp_ajax_get_requires_fix() {
 
-		if ( \wp_doing_ajax() ) {
-			if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_extension_settings() ) {
 
-				$send = [];
+			$send = [];
 
-				if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
-					// Initialize menu hooks.
-					\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
-						? \tsf()->admin()->menu()->register_top_menu_page()
-						: \tsf()->add_menu_link();
+			if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
+				// Initialize menu hooks.
+				\TSF_EXTENSION_MANAGER_USE_MODERN_TSF
+					? \tsf()->admin()->menu()->register_top_menu_page()
+					: \tsf()->add_menu_link();
 
-					$this->_add_menu_link();
+				$this->_add_menu_link();
 
-					$send['html'] = $this->get_site_fix_fields();
-				}
-
-				\tsfem()->send_json( $send, null );
+				$send['html'] = $this->get_site_fix_fields();
 			}
+
+			\tsfem()->send_json( $send, null );
 		}
 
 		exit;

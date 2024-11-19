@@ -108,7 +108,6 @@ window.tsfem_e_local = {
 			},
 			processData: true,
 			timeout: 14000,
-			async: true,
 		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );

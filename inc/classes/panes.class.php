@@ -109,7 +109,7 @@ class Panes extends API {
 	 */
 	public function _wp_ajax_tsfem_update_extension() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_manager_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_manager_settings() ) {
 
 			$case = '';
 			$slug = '';
@@ -157,7 +157,7 @@ class Panes extends API {
 	 */
 	final public function _wp_ajax_tsfem_update_extension_desc_footer() {
 
-		if ( \wp_doing_ajax() && \TSF_Extension_Manager\can_do_manager_settings() ) {
+		if ( \TSF_Extension_Manager\can_do_manager_settings() ) {
 
 			$slug = '';
 			$case = '';

@@ -109,7 +109,6 @@ window.tsfem_e_monitor = {
 				remote_crawl_timeout: tsfem_e_monitor.rCrawlTimeout,
 			},
 			timeout: 10000,
-			async: true,
 		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );
@@ -200,7 +199,6 @@ window.tsfem_e_monitor = {
 				'remote_data_timeout' : tsfem_e_monitor.rDataTimeout,
 			},
 			timeout: 15000,
-			async: true,
 		} ).done( response => {
 
 			response = tsf.convertJSONResponse( response );

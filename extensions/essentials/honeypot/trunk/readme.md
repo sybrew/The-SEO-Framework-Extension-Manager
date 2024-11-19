@@ -25,9 +25,9 @@ This extension protects all WordPress themes and plugins that implement the defa
 
 Honeypot also has an unmeasurably low footprint on server memory and CPU usage, it adds roughly 1kB to your pages.
 
-### Five powerful methods, zero false positives
+### Six powerful methods, zero false positives
 
-Robots leave spammy comments via various techniques, and Honeypot counters almost all of them by adding five powerful barriers to your site.
+Robots leave spammy comments via various techniques, and Honeypot counters almost all of them by adding six powerful barriers to your site.
 
 Only a human that uses a modern browser can pass these tests:
 
@@ -38,11 +38,11 @@ Only a human that uses a modern browser can pass these tests:
 1. GPU timer. The bot must actually render the page to pass this test, blocking spam from many emulated browsers.
 1. Timestamp. Bots can speed up GPU timers, but they can't speed up this one. Fast typers will pass this enciphered timestamp test, but faster bots won't.
 
-All five methods are entirely randomized and use secure authentication methods, so no robot can learn how to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**. Now you can finally uninstall and delete Akismet.
+All six methods are entirely randomized and use secure authentication methods, so no robot can learn how to bypass Honeypot. These methods combined block a broad spectrum of robot spamming techniques. Hence, Honeypot has a **99.99% catch-rate**. Now you can finally uninstall and delete Akismet.
 
 ## FAQ
 
-### How do the five methods help me?
+### How do the six methods help me?
 
 Below you find an overview of each method implemented in Honeypot.
 
@@ -89,6 +89,14 @@ Robots that can bypass the other four methods are most definitely using a virtua
 The timer works using JavaScript's animation frame-timers: the timer starts counting after the form is loaded and continues to do so only when the page is active. If the robot opens a new browser-tab and still sends a comment, Honeypot will block it.
 
 This field is unique per site and per page ID. The field's value will change as it counts down using pseudorandom numbers to throw off countdown detection. The frame-timer runs sporadically between 3.33~10Hz to nullify any performance penalty.
+
+### Sixth method: Timestamp
+
+The Timestamp honeypot is a server-sided test that uses a ciphered timestamp, the output is the current time plus 5.33 seconds. This timestamp is created when the page is requested and is then added as a hidden field to the comment form.
+
+When the visitor submits a comment, the timestamp is deciphered and checked against the current time. If the time hasn't passed since the page was first generated, the submitted comment is automatically rejected.
+
+This field won't work with caching plugins because cached pages can be much older than 5.33 seconds, leading to the use of an outdated timestamp that passes the test automatically.
 
 ## Usage
 
