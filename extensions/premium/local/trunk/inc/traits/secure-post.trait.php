@@ -137,6 +137,7 @@ trait Secure_Post {
 	 *
 	 * @NOTE: Nonce and user capabilities MUST be validated before calling this.
 	 *
+	 * @hook tsfem_form_do_ajax_save 10
 	 * @since 1.0.0
 	 * @since 1.1.4 Now strips slashes from POST.
 	 * @uses trait \TSF_Extension_Manager\Extension_Options
@@ -146,8 +147,14 @@ trait Secure_Post {
 	public function _do_ajax_form_save() {
 
 		// phpcs:ignore, WordPress.Security.NonceVerification -- Already done at _wp_ajax_tsfemForm_save()
-		$post_data = $_POST['data'] ?? '';
-		parse_str( $post_data, $data );
+		parse_str( $_POST['data'] ?? '', $data );
+
+		if ( ! isset(
+			$data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ],
+			$data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ],
+		) ) {
+			return;
+		}
 
 		$send = [];
 
@@ -155,10 +162,7 @@ trait Secure_Post {
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if (
-			   ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ], $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
-			|| ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
-		) {
+		if ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) ) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070100 );
 		} else {
@@ -262,10 +266,7 @@ trait Secure_Post {
 	private function send_ajax_form_json_validation() {
 
 		// phpcs:disable, WordPress.Security.NonceVerification.Missing -- Caller must check for this.
-
-		$post_data = $_POST['data'] ?? '';
-
-		parse_str( $post_data, $data );
+		parse_str( $_POST['data'] ?? '', $data );
 
 		$send = [];
 
@@ -273,9 +274,10 @@ trait Secure_Post {
 		 * If this page doesn't parse the site options,
 		 * there's no need to check them on each request.
 		 */
-		if ( empty( $data )
-		|| ( ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
-		|| ( ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] ) )
+		if (
+			   empty( $data )
+			|| ! isset( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
+			|| ! \is_array( $data[ \TSF_EXTENSION_MANAGER_EXTENSION_OPTIONS ][ $this->o_index ] )
 		) {
 			$type            = 'failure';
 			$send['results'] = $this->get_ajax_notice( false, 1070200 );

@@ -122,6 +122,13 @@ Also, when department URLs are filled in, then each specific department's data w
 
 ## Changelog
 
+### 1.3.1
+
+[tsfep-release time="November 20th, 2024"]
+
+* **Fixed:** Resolved an issue where this extension's saving sequence interfered with other extensions.
+	* This was caused by an undocummented change in this extension of Extension Manager 2.7.
+
 ### 1.3.0
 
 [tsfep-release time="February 7th, 2023"]

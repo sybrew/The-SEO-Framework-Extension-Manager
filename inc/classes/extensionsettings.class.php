@@ -252,6 +252,7 @@ final class ExtensionSettings {
 	 * Action is called in TSF_Extension_Manager\LoadAdmin::_wp_ajax_tsfemForm_save().
 	 * It has already checked referrer and capability.
 	 *
+	 * @hook tsfem_form_do_ajax_save 20
 	 * @since 2.2.0
 	 * @access private
 	 * @see \TSF_Extension_Manager\FormGenerator
@@ -268,8 +269,7 @@ final class ExtensionSettings {
 		\do_action( 'tsfem_register_settings_sanitization', static::class );
 
 		// phpcs:ignore, WordPress.Security.NonceVerification -- Already done at _wp_ajax_tsfemForm_save()
-		$post_data = $_POST['data'] ?? '';
-		parse_str( $post_data, $data );
+		parse_str( $_POST['data'] ?? '', $data );
 
 		$store = [];
 

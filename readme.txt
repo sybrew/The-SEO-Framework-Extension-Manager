@@ -54,11 +54,12 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 **Updated extensions:**
 
 * [Articles at version 2.3.2](https://theseoframework.com/extensions/articles/#changelog)
+* [Local at version 1.3.1](https://theseoframework.com/extensions/local/#changelog)
 
 **Detailed log:**
 
 * **Fixed:**
-	* TODO Resolved an issue where Extension Settings couldn't save for Articles or Cord when Local was active.
+	* Resolved an issue where Extension Settings couldn't save for Articles or Cord when Local was active.
 	* Resolved an issue where Local wasn't marked as version 1.3.0 in the Extension Manager.
 
 = 2.7.0 - Sane SEO =

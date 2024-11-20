@@ -235,7 +235,7 @@ add_filter( 'the_seo_framework_articles_images', function ( $images ) {
 } );
 ```
 
-### Adjust the sitemap generation arguments
+#### Adjust the sitemap generation arguments
 
 *The `$args` parameter is an array that should be compatible with `WP_Query`. [View all parameters properties](https://developer.wordpress.org/reference/classes/wp_query/#parameters).*
 
@@ -254,7 +254,7 @@ add_filter( 'the_seo_framework_sitemap_articles_news_sitemap_query_args', functi
 
 ## Changelog
 
-### 2.3.1
+### 2.3.2
 
 [tsfep-release time="November 20th, 2024"]
 
