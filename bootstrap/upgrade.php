@@ -55,7 +55,7 @@ function _do_critical_core_upgrade( $upgrader ) {
 				'core',
 				'2500',
 				function ( $version ) {
-					// Declare success when the option doesn't exist or is succesfully deleted.
+					// Declare success when the option doesn't exist or is successfully deleted.
 					return ! \get_option( 'tsfem_tested_environment_version' ) || \delete_option( 'tsfem_tested_environment_version' );
 				}
 			);
@@ -65,7 +65,7 @@ function _do_critical_core_upgrade( $upgrader ) {
 				'core',
 				'2700',
 				function ( $version ) {
-					// Declare success when the option doesn't exist or is succesfully deleted.
+					// Declare success when the option doesn't exist or is successfully deleted.
 					return \update_option(
 						\TSF_EXTENSION_MANAGER_ACTIVE_EXTENSIONS_OPTIONS,
 						\get_option( \TSF_EXTENSION_MANAGER_SITE_OPTIONS, [] )['active_extensions'] ?? [],

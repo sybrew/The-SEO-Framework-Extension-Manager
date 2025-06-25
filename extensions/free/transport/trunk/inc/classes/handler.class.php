@@ -233,17 +233,17 @@ final class Handler {
 										);
 									} else {
 										$store->store(
-											\esc_html__( 'Data transformed succesfully.', 'the-seo-framework-extension-manager' )
+											\esc_html__( 'Data transformed successfully.', 'the-seo-framework-extension-manager' )
 										);
 									}
 								} else {
 									if ( $results['inserted'] ) {
 										$store->store(
-											\esc_html__( 'Data inserted succesfully.', 'the-seo-framework-extension-manager' )
+											\esc_html__( 'Data inserted successfully.', 'the-seo-framework-extension-manager' )
 										);
 									} else {
 										$store->store(
-											\esc_html__( 'Data imported succesfully.', 'the-seo-framework-extension-manager' )
+											\esc_html__( 'Data imported successfully.', 'the-seo-framework-extension-manager' )
 										);
 									}
 								}
