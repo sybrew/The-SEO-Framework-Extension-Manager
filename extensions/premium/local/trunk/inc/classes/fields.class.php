@@ -291,7 +291,7 @@ final class Fields {
 				'_ret' => 's',
 				'_req' => false,
 				'_type' => 'text',
-				'_pattern' => '^\p{Sc}{1,4}$|\p{Sc}[0-9\.]*\s*-\s*\p{Sc}?(([1-9][0-9]*(\.{0,1}[0-9]+)?)|(0\.(0[1-9]+|[1-9][0-9]*)))', // This expects unicode support. https://regex101.com/r/N3f5lF/6
+				'_pattern' => '^\p{Sc}{1,4}$|\p{Sc}[0-9\.]*\s*-\s*\p{Sc}?(([1-9][0-9]*(\.{0,1}[0-9]+)?)|(0\.(0[1-9]+|[1-9][0-9]*)))', // This expects unicode support. https://regex101.com/r/N3f5lF/7
 				'_desc' => [
 					\__( 'Price range', 'the-seo-framework-extension-manager' ),
 					[

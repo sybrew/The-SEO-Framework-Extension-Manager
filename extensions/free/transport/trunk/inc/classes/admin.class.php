@@ -453,6 +453,7 @@ final class Admin {
 	 * @return string
 	 */
 	private function get_sse_worker_location() {
+
 		if ( \SCRIPT_DEBUG ) {
 			$min = '';
 			$ext = '?' . uniqid( hrtime( true ) );
@@ -460,6 +461,7 @@ final class Admin {
 			$min = '.min';
 			$ext = '';
 		}
+
 		return \esc_url( \set_url_scheme( \TSFEM_E_TRANSPORT_DIR_URL . "lib/js/sse.worker{$min}.js$ext" ) );
 	}
 

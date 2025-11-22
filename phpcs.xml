@@ -30,7 +30,7 @@
 		<properties>
 			<!-- these values are prefixed with an underscore... which they strip during assertion =.= -->
 			<!-- <property name="customPropertiesWhitelist" type="array" value="_MAIN,_OPTIONS"/> -->
-			<property name="customPropertiesWhitelist" type="array" value="MAIN,OPTIONS"/>
+			<property name="allowed_custom_properties" type="array" value="MAIN,OPTIONS"/>
 		</properties>
 	</rule>
 

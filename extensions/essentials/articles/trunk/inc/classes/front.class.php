@@ -246,7 +246,7 @@ final class Front extends Core {
 		 */
 		$data = \apply_filters(
 			'the_seo_framework_articles_data',
-			$this->get_article_data()
+			$this->get_article_data(),
 		);
 
 		if ( $data ) {
@@ -262,7 +262,7 @@ final class Front extends Core {
 
 			return \sprintf(
 				'<script type="application/ld+json">%s</script>',
-				$schema
+				$schema,
 			) . "\n";
 		}
 

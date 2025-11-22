@@ -421,8 +421,8 @@ final class Admin extends Api {
 			$send   = [];
 			if ( \check_ajax_referer( 'tsfem-e-monitor-ajax-nonce', 'nonce', false ) ) {
 				// Option is cleaned and requires unpacking.
-				$option = isset( $_POST['option'] ) ? $tsfem->s_ajax_string( $_POST['option'] ) : ''; // Sanitization, input var OK.
-				$value  = isset( $_POST['value'] ) ? \absint( $_POST['value'] ) : 0;                  // Input var OK.
+				$option = isset( $_POST['option'] ) ? $tsfem->s_ajax_string( $_POST['option'] ) : '';
+				$value  = isset( $_POST['value'] ) ? \absint( $_POST['value'] ) : 0;
 			} else {
 				$send['results'] = $this->get_ajax_notice( false, 1019002 );
 			}
@@ -472,7 +472,7 @@ final class Admin extends Api {
 					'notice'  => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 				];
 			} else {
-				$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0; // Input var OK.
+				$timeout = isset( $_POST['remote_data_timeout'] ) ? \absint( $_POST['remote_data_timeout'] ) : 0;
 
 				$current_timeout = $this->get_remote_data_timeout();
 
@@ -559,7 +559,7 @@ final class Admin extends Api {
 					'notice' => \esc_html__( 'Something went wrong. Please reload the page.', 'the-seo-framework-extension-manager' ),
 				];
 			} else {
-				$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0; // Input var OK.
+				$timeout = isset( $_POST['remote_crawl_timeout'] ) ? \absint( $_POST['remote_crawl_timeout'] ) : 0;
 
 				$current_timeout = $this->get_remote_crawl_timeout();
 

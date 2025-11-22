@@ -229,8 +229,8 @@ class WP_SEOPress extends Core {
 					]
 				);
 			} elseif (
-				! \in_array( $type, static::$preserve, true ) &&
-				! preg_match(
+				   ! \in_array( $type, static::$preserve, true )
+				&& ! preg_match(
 					\sprintf( '/^(%s)/', static::$prefix_preserve_preg_quoted ),
 					$type
 				)

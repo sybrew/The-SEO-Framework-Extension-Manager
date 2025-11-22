@@ -209,13 +209,9 @@ In this case, consider throwing an inflection into your content. Even though the
 When the content parser experiences any error, the rater shows this generic message. Most likely, your computer may be restraint in processing power in combination with page builders. This issue resolves automatically, as the parser reassesses its data every 45 seconds, or whenever the related content is updated.
 
 ### Are page builders supported?
-Focus supports most page builders. However, page builders that rely on shortcodes may give incorrect assessments for the "introduction" and "subject density" ratings.
-This is because shortcodes are parsed as readable content, instead of HTML constructors; the parser is yet unable to discern the shortcode's behavior without context.
 
-These page builders may be affected by this issue:
-
-- Divi Builder
-- WPBakery Page Builder (Visual Composer)
+Focus supports many popular builders. However, page builders that rely on shortcodes or store data not via default post content fields will give incorrect assessments for the "introduction" and "subject density" ratings.
+This is because Focus is built to interpret HTML but not complex page builder's abstractions. The parser is yet unable to discern a page builder's behavior without context.
 
 These builders work as intended:
 
@@ -223,9 +219,22 @@ These builders work as intended:
 - Elementor
 - Page Builder by SiteOrigin
 - Gutenberg
-- WordPress 5.0+ Block Editor
+- WordPress's Block Editor
+- Classic Editor
 
-We're working on an update to improve accuracy for the affected page builders.
+These page builders may be affected by this issue, and Focus will not give an accurate rating:
+
+- Divi Builder
+- WPBakery Page Builder (Visual Composer)
+
+These plugins are untested, and may or may not work:
+
+- Brizy
+- Oxygen Builder
+- Thrive Architect
+- Breakdance
+
+We're working on an update to improve accuracy for the affected page builders. But first, the developers of the page builders should provide a compatibility layer for Focus to work correctly, such as a method to fetch the edited content in HTML output format. If this is available, [please contact us](https://theseoframework.com/support/contact/), and we'll work on integrating it.
 
 ### (Legacy) What does "Essentials+" stand for?
 
@@ -310,6 +319,12 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 ```
 
 ## Changelog
+
+### 1.6.1
+
+[tsfep-release time="-1"]
+
+* **Improved:** Inflections and synonyms now also show a pointer cursor on-hover to indicate they're clickable.
 
 ### 1.6.0
 

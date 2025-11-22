@@ -378,6 +378,7 @@ body.rtl .tsfem-e-focus-assessment-rating {
 	flex: 0 1 auto;
 }
 
+.tsfem-e-focus-subject-item,
 .tsfem-e-focus-definition-editor {
 	cursor: pointer;
 }

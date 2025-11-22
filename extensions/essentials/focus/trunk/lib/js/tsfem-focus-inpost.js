@@ -55,7 +55,7 @@ window.tsfem_e_focus_inpost = function ( $ ) {
 	/**
 	 * @since 1.5.4
 	 * @access private
-	 * @const {Integer} typingDelay The debouncing time to finalize a selection after typing.
+	 * @const {Integer} updateSelectorTime The debouncing time to finalize a selection after typing.
 	 */
 	const updateSelectorTime = 1500;
 

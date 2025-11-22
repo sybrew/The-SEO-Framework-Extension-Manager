@@ -46,8 +46,9 @@ window.tsfem_e_import = function () {
 
 	const _enableButtons = disable => {
 		disable ||= false;
+
 		[
-			'importer-submit'
+			'importer-submit',
 		].forEach( buttonName => {
 			const button = document.getElementById( `tsfem-e-transport-${buttonName}` );
 			button.classList.toggle( 'tsfem-button-disabled', disable );

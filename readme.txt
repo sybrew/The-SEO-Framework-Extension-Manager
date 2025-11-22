@@ -2,7 +2,7 @@
 Contributors: Cybr
 Tags: seo, extensions, keyword, schema, honeypot
 Requires at least: 5.9
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4.0
 Requires TSF: 4.2.8
 Stable tag: 2.7.1
@@ -40,6 +40,12 @@ Learn [how to contribute](https://tsf.fyi/contributing).
 Please refer to [the installation instructions on our website](https://kb.theseoframework.com/kb/how-to-install-the-extension-manager/).
 
 == Changelog ==
+
+TODO add a new table for connected sites, deprecate connection data.
+TODO when someone hits their API limit (with Focus), they get error 1100103, and not a proper request limit reached notice (REQUEST_LIMIT_REACHED).
+	- Response: {"success":false,"data":"{\"error\":\"REQUEST_LIMIT_REACHED\"}","timestamp":1756324832}
+TODO align "API key" and "license key" terminology across all extensions and the website.
+	-> We should use "License key" everywhere, also on our website.
 
 = 2.7.1 =
 

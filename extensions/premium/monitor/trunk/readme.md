@@ -85,6 +85,14 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 *Because Monitor is a two-part system, changes are differentiated via Extension and API.*
 
+### 1.2.13
+
+[tsfep-release time="-1"]
+
+* **API - Our servers:**
+	* **July 22nd, 2025:**
+		* **Fixed:** Large HTML DOM pages are now handled correctly, preventing false negatives in the title and description meta tag checks.
+
 ### 1.2.12
 
 [tsfep-release time="November 19th, 2024"]

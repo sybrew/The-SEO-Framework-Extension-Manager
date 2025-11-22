@@ -155,7 +155,7 @@ final class Handler {
 
 			$ini_max_execution_time = (int) ini_get( 'max_execution_time' );
 
-			if ( 0 !== $ini_max_execution_time )
+			if ( 0 !== $ini_max_execution_time && \function_exists( 'set_time_limit' ) )
 				set_time_limit( max( $ini_max_execution_time, $timeout ) );
 
 			$time_limit = ini_get( 'max_input_time' );

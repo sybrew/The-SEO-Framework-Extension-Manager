@@ -75,12 +75,13 @@ function _check_external_blocking() {
 			}
 
 			// TODO consider using wp_admin_notice() (WP 6.4+)
-			// phpcs:ignore, WordPress.Security.EscapeOutput.OutputNotEscaped -- $notice is escaped.
+			// phpcs:disable, WordPress.Security.EscapeOutput -- $notice is escaped.
 			echo <<<HTML
 			<div class="notice notice-warning is-dismissible">
 				<p>$notice</p>
 			</div>
 			HTML;
+			// phpcs:enable, WordPress.Security.EscapeOutput
 		}
 	}
 }
