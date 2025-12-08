@@ -23,6 +23,7 @@
  * Text Domain: the-seo-framework-extension-manager
  * Domain Path: /language
  * Requires at least: 5.9
+ * Tested up to: 6.9
  * Requires PHP: 7.4.0
  */
 
