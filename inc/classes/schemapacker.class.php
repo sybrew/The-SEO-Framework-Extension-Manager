@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2017 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2017 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -115,7 +115,7 @@ final class SchemaPacker {
 	public function __construct( $data, $schema ) {
 
 		if ( ! isset( $schema->_OPTIONS, $schema->_MAIN ) )
-			return false;
+			return;
 
 		$this->data =& $data;
 		$o          = $schema->_OPTIONS;
@@ -126,8 +126,6 @@ final class SchemaPacker {
 		$this->max_it = 2 ** $this->bits;
 
 		$this->schema = $schema->_MAIN;
-
-		return true;
 	}
 
 	/**
@@ -598,7 +596,7 @@ final class SchemaPacker {
 
 		switch ( $c->_op ) {
 			case '==':
-				// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- that's the whole idea.
+				// phpcs:ignore, Universal.Operators.StrictComparisons.LooseNotEqual -- that's the whole idea.
 				$action = $v == $c->_value;
 				break;
 
@@ -607,7 +605,7 @@ final class SchemaPacker {
 				break;
 
 			case '!=':
-				// phpcs:ignore, WordPress.PHP.StrictComparisons.LooseComparison -- that's the whole idea.
+				// phpcs:ignore, Universal.Operators.StrictComparisons.LooseNotEqual -- that's the whole idea.
 				$action = $v != $c->_value;
 				break;
 

@@ -9,7 +9,7 @@ namespace TSF_Extension_Manager;
 
 /**
  * The SEO Framework - Extension Manager plugin
- * Copyright (C) 2018 - 2024 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
+ * Copyright (C) 2018 - 2025 Sybre Waaijer, CyberWire B.V. (https://cyberwire.nl/)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published
@@ -41,6 +41,9 @@ namespace TSF_Extension_Manager;
  * @access private
  */
 function _check_external_blocking() {
+
+	if ( \defined( 'Troy\Client\ABSPATH' ) )
+		return;
 
 	if ( ! \current_user_can( 'update_plugins' ) ) return;
 
@@ -100,6 +103,9 @@ function _check_external_blocking() {
  * @return object|\WP_Error  The result object on success, \WP_Error on failure.
  */
 function _hook_plugins_api( $res, $action, $args ) {
+
+	if ( \defined( 'Troy\Client\ABSPATH' ) )
+		return $res;
 
 	if ( 'plugin_information' !== $action || \TSF_EXTENSION_MANAGER_PLUGIN_SLUG !== ( $args->slug ?? '' ) )
 		return $res;
@@ -196,6 +202,9 @@ function _clear_update_cache() {
  * @return mixed $value
  */
 function _push_update( $value ) {
+
+	if ( \defined( 'Troy\Client\ABSPATH' ) )
+		return $value;
 
 	// $value is broken by some plugin. We can't fix this. Bail.
 	if ( ! \is_object( $value ) )

@@ -41,11 +41,18 @@ Please refer to [the installation instructions on our website](https://kb.theseo
 
 == Changelog ==
 
-TODO add a new table for connected sites, deprecate connection data.
-TODO when someone hits their API limit (with Focus), they get error 1100103, and not a proper request limit reached notice (REQUEST_LIMIT_REACHED).
-	- Response: {"success":false,"data":"{\"error\":\"REQUEST_LIMIT_REACHED\"}","timestamp":1756324832}
-TODO align "API key" and "license key" terminology across all extensions and the website.
-	-> We should use "License key" everywhere, also on our website.
+= 2.7.2 =
+
+**Release date:**
+
+* December 8th, 2025
+
+**Feature highlights:**
+
+* Minor improvements and bug fixes to keep things running smoothly.
+* Added support for our [new update infrastructure](https://deploytroy.org/blog/official-release/).
+	* Current users will stay with the old update system until we notify them about the switch.
+	* New users will automatically use the new update system.
 
 = 2.7.1 =
 
