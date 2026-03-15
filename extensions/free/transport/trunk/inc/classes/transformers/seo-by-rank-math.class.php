@@ -44,6 +44,14 @@ class SEO_By_Rank_Math extends Core {
 	protected static $replacements = [];
 
 	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string[] The non-replacement types.
+	 */
+	protected static $preserve = [];
+
+	/**
 	 * @since 1.0.0
 	 * @override Prevent writing to self.
 	 * @see parent::reset_replacements()

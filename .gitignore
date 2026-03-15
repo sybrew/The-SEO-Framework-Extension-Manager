@@ -22,3 +22,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+## Local folder (track folder, ignore contents)
+/.local/*
+!/.local/.gitkeep

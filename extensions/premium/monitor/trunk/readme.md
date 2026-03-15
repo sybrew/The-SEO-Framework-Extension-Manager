@@ -87,7 +87,7 @@ If you just initiated a crawl request, you might receive outdated or incorrect d
 
 ### 1.2.13
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 8th, 2025"]
 
 * **API - Our servers:**
 	* **July 22nd, 2025:**

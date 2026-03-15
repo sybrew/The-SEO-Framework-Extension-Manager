@@ -16,13 +16,13 @@
  * Plugin Name: The SEO Framework - Extension Manager
  * Plugin URI: https://theseoframework.com/extension-manager/
  * Description: Add more powerful SEO features to The SEO Framework. Right from your WordPress dashboard.
- * Version: 2.7.2
+ * Version: 3.0.0-dev-1
  * Author: The SEO Framework Team
  * Author URI: https://theseoframework.com/
  * License: GPLv3
  * Text Domain: the-seo-framework-extension-manager
  * Domain Path: /language
- * Requires at least: 5.9
+ * Requires at least: 6.7
  * Tested up to: 6.9
  * Requires PHP: 7.4.0
  */
@@ -51,14 +51,14 @@ defined( 'ABSPATH' ) or die;
  *
  * @since 1.0.0
  */
-define( 'TSF_EXTENSION_MANAGER_VERSION', '2.7.2' );
+define( 'TSF_EXTENSION_MANAGER_VERSION', '3.0.0' );
 
 /**
  * The plugin's database version.
  *
  * @since 1.5.0
  */
-define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '2700' );
+define( 'TSF_EXTENSION_MANAGER_DB_VERSION', '2730' );
 
 /**
  * The plugin file, absolute unix path.
@@ -92,6 +92,10 @@ require TSF_EXTENSION_MANAGER_DIR_PATH_FUNCTION . 'api.php';
 
 // Load plugin updater.
 require \TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'update.php';
+
+// Load Troy Client migration notice (v2.7.3 -> v3.0.0).
+if ( is_admin() )
+	require \TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'troy-notice.php';
 
 // Load plugin.
 require TSF_EXTENSION_MANAGER_BOOTSTRAP_PATH . 'load.php';

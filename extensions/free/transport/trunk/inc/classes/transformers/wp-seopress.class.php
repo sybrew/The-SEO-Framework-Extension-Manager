@@ -44,6 +44,14 @@ class WP_SEOPress extends Core {
 	protected static $replacements = [];
 
 	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string[] The non-replacement types.
+	 */
+	protected static $preserve = [];
+
+	/**
 	 * @since 1.1.0
 	 * @override Prevent writing to self.
 	 * @see parent::reset_replacements()

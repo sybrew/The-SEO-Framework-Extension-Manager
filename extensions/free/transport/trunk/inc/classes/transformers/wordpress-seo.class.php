@@ -36,6 +36,38 @@ class WordPress_SEO extends Core {
 	use \TSF_Extension_Manager\Construct_Core_Static_Unique_Instance_Master;
 
 	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var array[string:callable] The replacement types by name.
+	 */
+	protected static $replacements = [];
+
+	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string[] The non-replacement types.
+	 */
+	protected static $preserve = [];
+
+	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string[] The non-replacement types' prefixes.
+	 */
+	protected static $prefix_preserve = [];
+
+	/**
+	 * @since 1.1.2
+	 * @override Prevent writing to self.
+	 * @see parent::reset_replacements()
+	 * @var string The non-replacement types' prefixes, quoted for regex.
+	 */
+	protected static $prefix_preserve_preg_quoted = '';
+
+	/**
 	 * Resets replacement values, if needed.
 	 *
 	 * NOTE: When overriding, you're likely also overriding self::$properties:

@@ -60,7 +60,7 @@ trait Extensions_Properties {
 		 * @access private
 		 * Don't hijack this <3
 		 *
-		 * Please stay on a moral highground and let everyone keep and have the
+		 * Please stay on a moral high ground and let everyone keep and have the
 		 * best of the best. I (Sybre Waaijer) try my hardest to keep everything up
 		 * to date! This is state of the art software, for everyone.
 		 * The extensions are open source, so feel free to use and learn from that
@@ -83,9 +83,9 @@ trait Extensions_Properties {
 				'area'         => 'audit, content, keywords',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1716207115',
+				'last_updated' => '1765221914',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -98,7 +98,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1732059998',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -111,7 +111,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1687363584',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -124,7 +124,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1731979506',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -137,7 +137,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1698798295',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -150,7 +150,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1732058931',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -163,7 +163,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1731979291',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -174,9 +174,9 @@ trait Extensions_Properties {
 				'area'         => 'syntax',
 				'author'       => 'Sybre Waaijer',
 				'party'        => 'first',
-				'last_updated' => '1731979291',
+				'last_updated' => '1765221914',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -189,7 +189,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1515109560',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -202,7 +202,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1541601833',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -215,7 +215,7 @@ trait Extensions_Properties {
 				'party'        => 'first',
 				'last_updated' => '1731979291',
 				'requires'     => '5.9',
-				'tested'       => '6.7',
+				'tested'       => '6.9',
 				'requires_tsf' => '4.2.8',
 				'tested_tsf'   => '5.1.0',
 			],
@@ -235,9 +235,9 @@ trait Extensions_Properties {
 	 */
 	private static function get_external_extensions_checksum() {
 		return [
-			'sha256' => '493894ade1034929652a57986b75e570c2eea2b8acff8d2b368a7a632e0be454',
-			'sha1'   => '55269d30baf6fa7d85684e4bc553551982c00d96',
-			'md5'    => 'e625d21f770c11c3a9364d731e6912ef',
+			'sha256' => 'db07a46b4a47f573e9c7d9976cecac4baf8b1ca37ba2e17bea793c72cd45a40a',
+			'sha1'   => '5235578994feec29291e2753d8fc999e19c83bdd',
+			'md5'    => '3d332874d677a7563dd0d33a1040e8e5',
 		];
 	}
 
@@ -508,7 +508,7 @@ trait Extensions_Actions {
 		foreach ( $extensions as $_extension => $_active ) {
 			if (
 				   ! $_active
-				|| ! $is_premium_user && static::is_extension_premium( $_extension )
+				|| ( ! $is_premium_user && static::is_extension_premium( $_extension ) )
 				|| ( ! $is_connected_user && static::is_extension_essentials( $_extension ) )
 				|| ( ! static::is_extension_compatible( $_extension ) )
 			) {
@@ -672,7 +672,7 @@ trait Extensions_Actions {
 	 * @global string $wp_version
 	 *
 	 * @param array|string $extension The extension to check.
-	 * @return int|null The extension compatibility bitwise integer. Null on faiure.
+	 * @return int|null The extension compatibility bitwise integer. Null on failure.
 	 */
 	private static function determine_extension_incompatibility( $extension ) {
 

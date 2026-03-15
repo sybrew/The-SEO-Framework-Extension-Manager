@@ -73,8 +73,62 @@ function _do_critical_core_upgrade( $upgrader ) {
 				}
 			);
 			// no break, do moar upgrades;
+		case $version < 2730:
+			$upgrader->_register_upgrade(
+				'core',
+				'2730',
+				__NAMESPACE__ . '\\_upgrade_2730_register_troy_notice',
+			);
+			// no break, do moar upgrades;
 		default:
 			// TODO add "thank you for upgrading" notice?
 			$upgrader->_register_upgrade( 'core', \TSF_EXTENSION_MANAGER_DB_VERSION, '__return_true' );
 	}
+}
+
+/**
+ * Registers the Troy Client migration notice.
+ *
+ * @since 2.7.3
+ *
+ * @param int $version The current database version.
+ * @return bool True on success.
+ */
+function _upgrade_2730_register_troy_notice( $version ) {
+
+	// Troy Client already active -- no notice needed.
+	if ( \defined( 'Troy\Client\ABSPATH' ) )
+		return true;
+
+	// TSF v5.0+ required for the persistent notice API.
+	if ( ! version_compare( \THE_SEO_FRAMEWORK_VERSION, '5.0.0', '>=' ) )
+		return true;
+
+	\The_SEO_Framework\Admin\Notice\Persistent::register_notice(
+		\sprintf(
+			/* translators: 1 = Extension Manager version, 2 = Link to KB article */
+			\esc_html__(
+				'Starting from Extension Manager %1$s, updates will be handled by Troy Client. This improves privacy (no domain tracking) and reliability (updates work even if Extension Manager is inactive). Troy Client will be installed automatically when you update. %2$s',
+				'the-seo-framework-extension-manager'
+			),
+			'<strong>3.0.0</strong>',
+			\sprintf(
+				'<a href="%s" target=_blank rel="noreferrer noopener">%s</a>',
+				'https://kb.theseoframework.com/kb/what-is-troy-client/',
+				\esc_html__( 'Learn more', 'the-seo-framework-extension-manager' )
+			),
+		),
+		'tsfem-troy-migration',
+		[
+			'type'   => 'info',
+			'escape' => false,
+		],
+		[
+			'excl_screens' => [ 'update', 'update-core', 'plugins', 'plugin-install' ],
+			'capability'   => 'update_plugins',
+			'count'        => 42,
+		],
+	);
+
+	return true;
 }

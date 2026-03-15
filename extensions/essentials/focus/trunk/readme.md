@@ -34,7 +34,7 @@ There are many ways to write in a language. With a Premium subscription, you can
 So, after you fill in a keyword, Focus connects to our API services and provides you with related synonyms and inflections.
 With those, Focus can rate your content more accurately.
 
-The synonyms provided make up for great writing suggestions. Utilizing those synonyms increases your chances to be found, too.
+The provided synonyms make for great writing suggestions. Utilizing those synonyms increases your chances to be found, too.
 
 [tsfep-image id="2"]
 
@@ -322,7 +322,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 
 ### 1.6.1
 
-[tsfep-release time="-1"]
+[tsfep-release time="December 8th, 2025"]
 
 * **Improved:** Inflections and synonyms now also show a pointer cursor on-hover to indicate they're clickable.
 
@@ -336,7 +336,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 * **Improved:** Classic Editor's parsing delay has been cut in half (from 1 second to 0.5 seconds) because it's prone to already wait a while after typing before relaying updates.
 * **Improved:** When a dictionary lookup fails and you use a space, we now tell you about using [single or compound words only](#faq/are-phrases-supported).
 * **Fixed:** Resolved an issue where API requests didn't resolve when creating a new posts via the Block Editor (this regressed in WordPress 6.4).
-* **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyser no longer automatically updated.
+* **Fixed:** Resolved an issue where a dependency was missing from the Block Editor (lodash), the analyzer no longer automatically updated.
 * **Fixed:** Resolved an issue during typing, the parser wouldn't refresh assessments for 10 seconds due to a race condition after clearing worker events to save memory.
 * **Fixed:** Resolved an issue when either inflections or synonyms are available, but not both, the parser would crash and the word selection would appear broken after saving and reloading the page. This fix is applied retroactively.
 * **Fixed:** Resolved an issue when no synonyms and inflections are found, the dictionary editor would still show up. Now, it will not be available.
@@ -388,7 +388,7 @@ document.addEventListener( 'tsfem-focus-gutenberg-content-store-setup', () => {
 	* `tsfem-focus-gutenberg-${type}-store-trigger-read`
 	* Tip: Via `tsfem_e_focus_inpost.blockEditorStore()` you can mutate the storage content before it's read.
 	* Awesome: You don't have to worry about infinite loops; if you call any event, the extension prevents invoking subsequent events until the event is resolved synchronously.
-	* Laconicly documented at [developers](#developers). These API features have been introduced to accomodate extreme edge-cases. Hire a developer at [our partners at Codeable](https://codeable.io/partners/the-seo-framework/).
+	* Laconically documented at [developers](#developers). These API features have been introduced to accommodate extreme edge-cases.
 * **Improved:** If the primary subject has a keyword stored, its analyzer will be opened on-load.
 * **Fixed:** Addressed various race condition issues with the upcoming jQuery 3.5.1.
 * **Fixed:** Addressed various layout issues with WordPress 5.6.

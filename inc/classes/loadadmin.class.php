@@ -660,9 +660,9 @@ final class LoadAdmin extends AdminPages {
 				$class .= $icon ? ' tsfem-button-star' : '';
 				break;
 			case 'public':
-				$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/issues/new/choose';
+				$url = 'https://github.com/sybrew/The-SEO-Framework-Extension-Manager/discussions';
 
-				$title = \__( 'File an issue with us', 'the-seo-framework-extension-manager' );
+				$title = \__( 'Start a discussion with us', 'the-seo-framework-extension-manager' );
 				$text  = \__( 'Public Support', 'the-seo-framework-extension-manager' );
 
 				$class  = 'tsfem-button';

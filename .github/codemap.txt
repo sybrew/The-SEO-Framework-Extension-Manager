@@ -1,0 +1,429 @@
+The SEO Framework - Extension Manager Codebase Map
+====================================================
+
+WordPress plugin extending The SEO Framework with additional SEO features.
+Manages extension activation, licensing, and provides shared infrastructure for extensions.
+Requires PHP 7.4+, WordPress 6.7+, The SEO Framework 4.2.8+. Text domain: the-seo-framework-extension-manager.
+
+Files named index.php are direct-access guards (empty PHP files).
+Files ending in .min.js or .min.css are minified mirrors of their source counterparts.
+
+
+Root
+----
+.editorconfig                   Editor config: tabs (4-wide), LF endings, final newline
+.gitattributes                  Line-ending normalization, binary markers, export-ignore rules for dev files
+.gitignore                      Ignores archives, logs, local data, OS artifacts
+the-seo-framework-extension-manager.php   Main plugin file: header metadata, version/DB constants, loads bootstrap chain
+composer.json                   Composer manifest: PHP/WP dependencies and dev tooling
+cspell.json                     CSpell dictionary with project-specific allowed words
+index.php                       Empty direct-access guard
+license.txt                     GNU General Public License v3
+phpcs.xml                       PHP_CodeSniffer ruleset for the TSFEM coding standard
+README.md                       Minimal readme linking to the Extension Manager overview page
+readme.txt                      WordPress.org plugin readme (description, FAQ, installation, changelog)
+security.txt                    Security disclosure info pointing to GitHub Security Advisories
+TODOS                           Developer-facing roadmap and known issues (future cleanup, API changes, extension plans)
+
+.github/
+	codemap.txt                   This file
+	CONTRIBUTING.md               Contribution guidelines
+	copilot-instructions.md       Repository coding standards and conventions for AI assistants
+	ISSUE_TEMPLATE/               Issue templates for bugs, enhancements, feature requests, support, and security
+
+
+Bootstrap (bootstrap/)
+----------------------
+Initialization sequence: main plugin file loads define.php, API functions, update.php,
+troy-notice.php (admin only), and load.php. load.php hooks into init to verify TSF presence,
+run upgrades, register the autoloader, and instantiate the plugin facade.
+
+define.php                      Defines all environmental constants: paths, option keys, URIs, capability roles, API config, bitmask flags
+load.php                        Core loader: hooks init to check TSF presence, register autoloader, run upgrades, protect options, instantiate plugin
+install-tsf.php                 Admin nag/installer for The SEO Framework when not installed; uses Shiny Updates for AJAX plugin install
+troy-notice.php                 Handles Troy Client migration notice cleanup when Troy Client is detected
+update.php                      Plugin self-updater: checks dl.theseoframework.com for updates, injects into plugins_api and update transients
+upgrade.php                     Database migration runner: registers version-specific upgrade callbacks for the Upgrader class
+upgrader.class.php              Upgrader class: manages plugin and extension DB migrations, version tracking per member, sequential callback execution
+
+
+Classes (inc/classes/)
+----------------------
+Core class hierarchy (admin): Core > API > Panes > AccountActivation > AdminPages > LoadAdmin
+Core class hierarchy (front): Core > LoadFront
+Secure_Abstract family: Secure_Abstract > Extensions, Layout, SecureOption, AJAX
+All classes use the TSF_Extension_Manager namespace.
+
+abstract/
+	secure.abstract.class.php     Abstract singleton base providing secure nonce and instance verification for sensitive operations
+
+core.class.php                  Core plugin class: nonce handling, option management, error reporting; uses Options and Error traits
+alias.class.php                 Empty stub class absorbing method calls when the plugin has died; all magic methods return null/false
+api.class.php                   API communication for license activation, deactivation, and status checks against the remote server
+ajax.class.php                  AJAX handler for account activation/deactivation, extension toggling, and extension settings updates
+extensions.class.php            Extension listing, activation, deactivation, and layout rendering with secure instance verification
+extensionsettings.class.php     Extension settings layout: registers settings pages, handles form output, sanitization, and defaults
+adminpages.class.php            Registers admin menu pages and initializes admin-page-specific WordPress actions
+accountactivation.class.php     License activation/deactivation workflows: remote listener, form-based, free activation, domain transfer
+formfieldparser.class.php       Utility for parsing HTML form field structures to/from PHP arrays (multidimensional key conversion)
+formgenerator.class.php         Generates HTML settings forms for extensions from structured schema definitions with nested iteration
+html.class.php                  Static HTML utility: tooltips, question-mark help icons, dropdown option lists
+inpostgui.class.php             Registers and outputs in-post editor GUI elements (tabs, fields, nonces) for extensions
+inposthtml.class.php            Static utility for wrapping inpost GUI elements in flex-based HTML structures
+layout.class.php                Outputs layout elements (forms, links, lists) via secure abstract verification pattern
+listedit.class.php              Registers and renders quick-edit and bulk-edit GUI elements for extensions in post list tables
+loadadmin.class.php             Admin facade: bootstraps activation notices, API checks, constant-based activation, POST handling, AJAX
+loadfront.class.php             Front-end facade: minimal class extending Core with empty constructor
+panes.class.php                 Renders the extensions overview pane: account info, domain transfer, upgrade forms, extension listing
+schemapacker.class.php          Packs Schema.org JSON-LD structured data from user input using schema layout definitions
+secureoption.class.php          Verifies option update operations via instance-based verification on pre_update_option filters
+
+
+Traits (inc/traits/)
+--------------------
+Shared trait files used across the plugin and extensions.
+
+core/
+	error.trait.php               Error notice storage, retrieval, formatting, and dismissible admin display
+	overload.trait.php            15 traits enforcing class instantiation patterns (singleton, static-only, final, facade, visibility)
+	ui.trait.php                  Admin page UI: script/style initialization, page layout wrappers, header/pane/footer rendering
+
+extension/
+	forms.trait.php               HTML form field generation helpers for extensions: field names, IDs, nonces, submit/action buttons
+	options.trait.php             Per-extension options CRUD stored in a shared WP option, with stale (non-autoloaded) option support
+	post-meta.trait.php           Per-extension post metadata CRUD stored in a single serialized post meta key
+	views.trait.php               Secure view-file inclusion mechanism for extensions with shared secret validation
+
+factory/
+	memory.trait.php              Memory limit management: reads PHP memory limit, can increase it, checks free memory availability
+	time.trait.php                I18n-aware time formatting: human-readable "time ago", rectified dates, time-unit scaling
+
+manager/
+	extensions-layout.trait.php   Extension list UI rendering: icons, about sections, activation buttons, compatibility indicators
+	extensions.trait.php          Master extension registry, activation/deactivation logic, checksum validation, compatibility checks
+	options.trait.php             Core site options management with irreversible per-request caching and instance-based verification
+
+
+Functions (inc/functions/)
+--------------------------
+api.php                         Public API entry points: tsf_extension_manager()/tsfem() accessors, capability checks, trait/compat loaders, bootstrap timer, path utilities
+transition.php                  TSF v4/v5 compatibility shim functions bridging API differences; removed once TSF v5.0+ is minimum
+
+
+Compatibility (inc/compat/)
+---------------------------
+Currently empty directory (index.php guard only).
+
+
+Views (views/)
+--------------
+PHP view templates rendered by admin pages and UI components.
+
+forms/
+	free.php                      POST form for activating the free/no-license-key mode
+	get.php                       Stub form template for external signup redirect (unused)
+	key.php                       POST form with license key and email inputs for premium API key activation
+
+layout/
+	general/
+		footer.php                Branded page footer with randomly selected positive motto
+		pane.php                  Reusable collapsible/movable pane wrapper with configurable size, logo, AJAX container
+		top.php                   Top header bar with page title, account/license link, and About popover
+	pages/
+		activation.php            Plugin activation page with sections for API key, license key, and free activation
+		extensions.php            Extensions management page composing the overview and account/actions panes
+		symbols.php               Hidden SVG symbol sheet containing all extension logo icons for inline use
+	extension/
+		content.php               Iterates registered extension settings and renders each as a pane with a form
+		footer.php                Branded footer for the Extension Settings page
+		pane.php                  Individual extension settings pane containing a dynamically generated form
+		top.php                   Header with TSF logo and "Extension Settings" title
+
+listedit/
+	bulk.php                      Fieldset sections for WordPress bulk-edit, iterating registered extension sections
+	quick.php                     Fieldset sections for WordPress quick-edit, iterating registered extension sections
+
+template/
+	fbtopnotice.php               JS template for a fallback top-of-page error notice
+	inpostnotice.php              JS templates for inpost dismissible notices (5xx errors, updates, warnings, errors)
+
+
+JavaScript (lib/js/)
+--------------------
+Client-side scripts for admin interfaces. Each .js file has a corresponding .min.js minified version.
+
+tsfem.js                        Core JS module: shared utilities, AJAX nonces, DOM helpers, common functions across all TSFEM pages
+tsfem-form.js                   Dynamic extension settings form generation, iteration, collapsible fields, AJAX submission
+tsfem-inpost.js                 Inpost extension UI: AJAX save/load of extension meta, tabs, notices, premium state
+tsfem-listedit.js               Post list table quick-edit and bulk-edit integration, restoring inline extension field values
+tsfem-manager.js                Extension Manager main page: extension activation/deactivation toggles and UI interactions
+tsfem-ui.js                     Shared manager UI components: switcher buttons, modal dialogs, AJAX loaders, notifications
+tsfem-worker.js                 Web Worker management API: spawning, messaging, and tracking background workers for extensions
+tsfinstaller.js                 Hooks into WordPress plugin updater to handle installing/activating TSF from within TSFEM
+
+
+CSS (lib/css/)
+--------------
+Stylesheets for admin interfaces. Each .css file has a corresponding .min.css minified version.
+
+tsfem-form.css                  Extension settings form UI: collapsible sections, multi-setting inputs, form layout
+tsfem-inpost.css                Inpost extension UI: notification areas, dashicon status icons, flex wrappers
+tsfem-manager.css               Extensions overview/manager page: extension entry cards, layout, grid spacing
+tsfem-ui.css                    Core UI: normalization, notice styling, layout structure, general component theming
+
+
+Images (lib/images/)
+--------------------
+exticon-fallback.svg            Fallback icon for extensions without a custom icon
+tsflogo.svg                     The SEO Framework logo used in admin page headers
+
+
+Language (language/)
+--------------------
+the-seo-framework-extension-manager.pot   POT translation template for the the-seo-framework-extension-manager text domain
+
+
+Extensions (extensions/)
+========================
+Extensions are organized by tier: essentials (bundled), free, and premium.
+Each extension has an assets/ directory (icon, index guard) and a trunk/ directory
+containing the extension code. Extensions follow a common pattern: a bootstrap PHP file
+defining constants and loading context-specific classes (admin/front/sitemap).
+
+
+Essentials Extensions
+---------------------
+
+Articles (extensions/essentials/articles/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adds Article structured data (JSON-LD) and a Google News sitemap to posts.
+
+trunk/
+	articles.php                  Bootstrap: defines version/path constants, loads admin/front/sitemap classes
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	inc/classes/
+		core.class.php            Base class with post-meta and extension-options traits
+		admin.class.php           Admin: extension settings UI, sitemap registry integration, extension views
+		front.class.php           Front: outputs Article JSON-LD structured data on posts (AMP and non-AMP)
+		sitemap.class.php         Registers and manages the Google News sitemap endpoint via TSF's sitemap registry
+		sitemapbuilder.class.php  Builds the Google News XML sitemap output, extending TSF's sitemap builder
+	lib/images/
+		icon.svg                  Extension icon
+	views/
+		inpost/
+			inpost.php            Inpost meta box fields for article type (NewsArticle, BlogPosting) and genre selection
+		list/
+			quickedit.php         Quick-edit inline select for article structured data type
+			bulkedit.php          Bulk-edit inline select for article structured data type
+		sitemap/
+			news.php              Google News XML sitemap output template
+
+Cord (extensions/essentials/cord/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Connects a site to third-party analytics services (Google Analytics, Meta Pixel, etc.).
+
+trunk/
+	cord.php                      Bootstrap: defines constants, loads admin/front classes
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	inc/classes/
+		core.class.php            Base class with extension-options trait for tracking configuration
+		admin.class.php           Admin: settings page for configuring tracking IDs and analytics options
+		front.class.php           Front: outputs tracking scripts on the front end based on stored options
+	lib/images/
+		icon.svg                  Extension icon (also icon-29x29px.png, icon-58x58px.png raster versions)
+
+Focus (extensions/essentials/focus/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Guides content writing with focus keywords, inflections, synonyms, and SEO scoring.
+
+trunk/
+	focus.php                     Bootstrap: defines constants, loads admin/ajax classes
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	inc/classes/
+		core.class.php            Base class with post-meta trait for keyword/scoring storage, default lexical forms
+		admin.class.php           Admin: renders focus keyword analysis UI in the post editor, loads views
+		ajax.class.php            AJAX: handles API requests for keyword analysis data with secure key verification
+		scoring.class.php         Scoring template and evaluation logic for focus keyword analysis
+	lib/
+		css/
+			tsfem-focus-inpost.css          Styles for the Focus inpost keyword analysis UI
+		js/
+			tsfem-focus-inpost.js           Keyword interpretation, scoring display, and inpost UI logic
+			tsfem-focus-parser.worker.js    Web Worker for background content parsing (inflections, synonyms)
+	views/inpost/
+		inpost.php                Main inpost view: focus keyword input fields and scoring/audit UI
+		focus-template.php        Collapsible focus keyword analysis panel template
+		score-template.php        Individual scoring criteria template
+		js-templates.php          JS script templates for dynamic focus UI elements
+
+Honeypot (extensions/essentials/honeypot/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Catches comment and WooCommerce checkout spam using six lightweight honeypot methods.
+Context-aware via CONTEXT_SUPPORTS constant (comments, woocommerce-checkout).
+
+trunk/
+	honeypot.php                  Bootstrap: defines constants, loads front class
+	readme.md                     Extension readme
+	inc/classes/
+		front.class.php           Front: implements honeypot spam-catching logic with dynamic validation, hidden fields
+	js.js                         Inline JS: hides the honeypot trap field and clears its value for real users
+	timer.js                      Inline JS: timer-based honeypot detecting bots that submit too quickly
+
+
+Free Extensions
+---------------
+
+AMP (extensions/free/amp/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Binds TSF's SEO output to AMP plugin pages.
+
+trunk/
+	amp.php                       Bootstrap: defines constants, loads front class
+	readme.md                     Extension readme
+	inc/classes/
+		front.class.php           Front: hooks into amp_post_template_head to output TSF meta tags on AMP pages
+
+Incognito (extensions/free/incognito/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hides all TSF development indicators from HTML output.
+
+trunk/
+	incognito.php                 Single-file extension: removes HTML comments, title indicator, sitemap attribution
+
+Origin (extensions/free/origin/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Redirects attachment pages to their parent post or file URL.
+
+trunk/
+	origin.php                    Single-file extension: performs 301 redirects from attachment pages
+
+Title Fix (extensions/free/title-fix/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ensures HTML title output matches TSF's configuration when themes handle it incorrectly.
+
+trunk/
+	title-fix.php                 Bootstrap: defines constants, loads front class
+	readme.md                     Extension readme
+	inc/classes/
+		front.class.php           Front: uses output buffering to capture and replace the title tag with TSF's
+
+Transport (extensions/free/transport/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Migrates SEO metadata from other plugins (Yoast, Rank Math, SEOPress) into TSF.
+
+trunk/
+	transport.php                 Bootstrap: defines constants, loads admin class (beta)
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	inc/classes/
+		admin.class.php           Admin: import UI with plugin selection and import controls, headless mode check
+		handler.class.php         Executes import/migration callbacks with memory management for large batches
+		importers/
+			core.class.php        Abstract core importer: defines conversion schema (from/to fields, transformers)
+			postmeta/
+				base.class.php              Abstract base for post meta importers, configured for postmeta table
+				seo-by-rank-math.class.php  Rank Math post meta importer
+				wordpress-seo.class.php     Yoast SEO post meta importer
+				wp-seopress.class.php       SEOPress post meta importer
+			termmeta/
+				base.class.php              Abstract base for term meta importers, configured for termmeta table
+				seo-by-rank-math.class.php  Rank Math term meta importer
+				wordpress-seo.class.php     Yoast SEO term meta importer
+				wp-seopress.class.php       SEOPress term meta importer
+		transformers/
+			core.class.php        Abstract core transformer: data sanitization methods converting source values to TSF format
+			seo-by-rank-math.class.php  Rank Math data transformers
+			wordpress-seo.class.php     Yoast SEO data transformers
+			wp-seopress.class.php       SEOPress data transformers
+		logger/
+			store.class.php       In-memory logging store with unique identifier for tracking import operations
+			server.class.php      Streaming log output to the client during import with support detection
+	lib/
+		images/
+			icon.svg              Extension icon
+		js/
+			tsfem-transport.js    Transport admin UI: plugin selection, import controls, progress display
+			sse.worker.js         Server-Sent Events worker for streaming import progress
+	views/layout/
+		general/
+			top.php               Transport page header
+			footer.php            Transport page footer
+		pages/
+			transport.php         Main transport page layout
+		panes/
+			importer.php          Import configuration and execution pane
+			logger.php            Import log display pane
+
+
+Premium Extensions
+------------------
+
+Local (extensions/premium/local/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Outputs Local Business structured data (Schema.org JSON-LD) for search engines.
+
+trunk/
+	local.php                     Bootstrap: defines constants and own DB version, loads admin/front classes
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	upgrade.php                   Database schema upgrades for the Local extension (versioned migration callbacks)
+	inc/
+		classes/
+			core.class.php        Base class with extension-options trait for local business configuration
+			admin.class.php       Admin: registers Local admin page with headless mode support
+			front.class.php       Front: outputs Local Business JSON-LD via the_seo_framework_after_meta_output
+			fields.class.php      All Local Business form field templates based on Google's structured data spec
+			settings.class.php    Secure POST processing, error handling, and settings UI for Local
+		traits/
+			schema-packer.trait.php   Schema.org JSON-LD packing/serialization logic with float precision handling
+			secure-post.trait.php     Secure POST request handling: nonce verification, capability checks, sanitization
+	lib/
+		images/
+			icon.svg              Extension icon (also icon-29x29px.png, icon-58x58px.png raster versions)
+		js/
+			tsfem-local.js        Local admin UI: settings form interaction and dynamic field handling
+		schema/
+			schema.json           JSON definition of schema.org field hierarchy, types, and conditional handlers
+	views/layout/
+		general/
+			top.php               Local page header
+			footer.php            Local page footer
+		pages/
+			local.php             Main Local page layout
+			settings.php          Local settings page layout
+
+Monitor (extensions/premium/monitor/)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tracks website SEO optimizations and statistics via an external monitoring service.
+
+trunk/
+	monitor.php                   Bootstrap: defines constants, loads admin/front classes
+	readme.md                     Extension readme
+	test.json                     Test configuration for extension validation
+	inc/classes/
+		admin.class.php           Admin: Monitor page, API key verification, connection management, data display
+		api.class.php             API communication with the Monitor service, request handling, integrity verification
+		data.class.php            Monitor data management (options/transients) with class integrity verification
+		front.class.php           Front: placeholder class with empty constructor (no current front-end output)
+		output.class.php          Parses Monitor data into HTML pane overviews for the admin dashboard
+		tests.class.php           Evaluates Monitor data against SEO criteria with markdown-formatted output
+	lib/
+		css/
+			tsfem-monitor.css     Styles for the Monitor admin dashboard
+		images/
+			icon.svg              Extension icon (also icon-29x29px.png, icon-58x58px.png raster versions)
+		js/
+			tsfem-monitor.js      Monitor admin UI: dashboard interaction, data refresh, connection controls
+	views/
+		forms/
+			connect.php           Monitor service connection form
+		layout/
+			general/
+				top.php           Monitor page header
+				footer.php        Monitor page footer
+			pages/
+				connect.php       Monitor connection page layout
+				monitor.php       Main Monitor dashboard page layout

@@ -174,12 +174,12 @@ window.tsfem_e_local = {
 	},
 
 	/**
-	 * Initialises all aspects of the scripts.
+	 * Initializes all aspects of the scripts.
 	 *
 	 * Generally ordered with stuff that inserts new elements into the DOM first,
 	 * then stuff that triggers an event on existing DOM elements when ready,
 	 * followed by stuff that triggers an event only on user interaction. This
-	 * keeps any screen jumping from occuring later on.
+	 * keeps any screen jumping from occurring later on.
 	 *
 	 * @since 1.0.0
 	 * @access private
